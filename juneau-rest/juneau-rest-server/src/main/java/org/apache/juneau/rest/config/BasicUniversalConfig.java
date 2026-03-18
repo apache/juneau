@@ -36,6 +36,7 @@ import org.apache.juneau.soap.*;
 import org.apache.juneau.yaml.*;
 import org.apache.juneau.toml.*;
 import org.apache.juneau.ini.*;
+import org.apache.juneau.parquet.*;
 import org.apache.juneau.proto.*;
 import org.apache.juneau.markdown.*;
 import org.apache.juneau.uon.*;
@@ -165,6 +166,7 @@ import org.apache.juneau.xml.*;
 		YamlSerializer.class,
 		TomlSerializer.class,
 		IniSerializer.class,
+		ParquetSerializer.class,
 		ProtoSerializer.class,
 		MarkdownSerializer.class
 	},
@@ -189,6 +191,7 @@ import org.apache.juneau.xml.*;
 		YamlParser.class,
 		TomlParser.class,
 		IniParser.class,
+		ParquetParser.class,
 		ProtoParser.class,
 		MarkdownParser.class
 	}

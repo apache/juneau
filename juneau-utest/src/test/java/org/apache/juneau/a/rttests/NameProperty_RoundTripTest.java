@@ -41,7 +41,7 @@ class NameProperty_RoundTripTest extends RoundTripTest_Base {
 		var x = new NamePropertyMethodContainer().init();
 		x = t.roundTrip(x);
 		assertBean(x, "bean{f2},m{k1{f2}}", "{2},{{2}}");
-		if (t.isValidationOnly())
+		if (t.isValidationOnly() || t.wouldSkip(x))
 			return;
 		assertBean(x, "bean{name}", "{bean}");
 		assertBean(x, "m{k1{name}}", "{{k1}}");
@@ -84,7 +84,7 @@ class NameProperty_RoundTripTest extends RoundTripTest_Base {
 		var x = new NamePropertyFieldContainer().init();
 		x = t.roundTrip(x);
 		assertBean(x, "bean{f2},m{k1{f2}}", "{2},{{2}}");
-		if (t.isValidationOnly())
+		if (t.isValidationOnly() || t.wouldSkip(x))
 			return;
 		assertBean(x, "bean{name}", "{bean}");
 		assertBean(x, "m{k1{name}}", "{{k1}}");

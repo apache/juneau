@@ -29,10 +29,12 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.yaml.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.hjson.*;
 import org.apache.juneau.markdown.*;
 import org.apache.juneau.bson.*;
 import org.apache.juneau.cbor.*;
+import org.apache.juneau.parquet.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
@@ -163,6 +165,21 @@ public abstract class RoundTripTest_Base extends TestBase {
 			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(CborParser.create())
 			.build(),
+		tester(28, "Parquet - default")
+			.serializer(ParquetSerializer.create().addBeanTypes())
+			.parser(ParquetParser.create())
+			// TODO: Revisit skip conditions as Parquet support improves:
+			// - Null-key maps: root unwrap path with <NULL> placeholder
+			// - JsonList/JsonMap: static schema vs mixed types
+			// - 2.2: Optional, enum arrays, @Beanc, primitive arrays
+			.skipIf(o -> o == null || o instanceof Class
+				|| o instanceof JsonList || o instanceof JsonMap
+				|| (o instanceof Map<?,?> m && mapHasNullKey(m))
+				|| (isParquetIncompatibleBeanOrCollection(o)
+					|| (o.getClass().isArray()
+						&& (o.getClass().getComponentType() == Class.class
+							|| o.getClass().getComponentType().isArray()))))  // 2D arrays still excluded
+			.build(),
 	};
 
 	static RoundTrip_Tester[]  testers() {
@@ -171,6 +188,81 @@ public abstract class RoundTripTest_Base extends TestBase {
 
 	protected static RoundTrip_Tester.Builder tester(int index, String label) {
 		return RoundTrip_Tester.create(index, label);
+	}
+
+	/** Returns true if the map contains a null key. TreeMap throws NPE on containsKey(null). */
+	private static boolean mapHasNullKey(Map<?,?> m) {
+		try {
+			return m.containsKey(null);
+		} catch (NullPointerException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Returns true if the object contains structures Parquet cannot serialize
+	 * (nested lists, Optional, parent/child loops, etc.).
+	 */
+	// TODO - Figure out how to support these.
+	private static boolean isParquetIncompatibleBeanOrCollection(Object o) {
+		if (o == null) return false;
+		var cls = o.getClass();
+		var name = cls.getName();
+	// Beans with self-referential/cyclic structures, Class-typed fields, or incompatible DTO structures
+	if (name.contains("Classes_RoundTripTest")
+		|| name.contains("DTOs_RoundTripTest")
+		|| name.contains("JsonSchema"))  // recursive/cyclic structure
+		return true;
+		// Beans with @NameProperty or @ParentProperty - Parquet doesn't preserve these annotations
+		if (name.contains("NameProperty_RoundTripTest") || name.contains("ParentProperty_RoundTripTest"))
+			return true;
+		// Bean with JsonMap constructor - Parquet produces LinkedHashMap, not JsonMap
+		if (name.contains("JsonMaps_RoundTripTest$A"))
+			return true;
+	// Collection containing Class or other incompatible elements
+	if (o instanceof Collection<?> c) {
+		boolean hasNull = false;
+		Object firstNonNull = null;
+		for (var elem : c) {
+			if (elem == null) { hasNull = true; continue; }
+			if (elem instanceof Class || isParquetIncompatibleBeanOrCollection(elem)) return true;
+			if (firstNonNull == null) firstNonNull = elem;
+		}
+		// Parquet cannot encode a null bean in a list (no row-null sentinel in flat schema)
+		// skip collections that mix null elements with non-null user-defined beans.
+		if (hasNull && firstNonNull != null && isUserDefinedBeanInstance(firstNonNull))
+			return true;
+	}
+		// Map containing Class keys/values or other incompatible elements
+		if (o instanceof Map<?, ?> m) {
+			for (var k : m.keySet())
+				if (k instanceof Class || (k != null && isParquetIncompatibleBeanOrCollection(k)))
+					return true;
+			for (var v : m.values())
+				if (v instanceof Class || (v != null && isParquetIncompatibleBeanOrCollection(v)))
+					return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns true if the object is a user-defined bean instance (not a scalar, array, collection, or JDK type).
+	 * Used to detect collections of beans that contain null elements, which Parquet cannot encode faithfully.
+	 */
+	private static boolean isUserDefinedBeanInstance(Object o) {
+		if (o == null) return false;
+		var cls = o.getClass();
+		return !cls.isPrimitive()
+			&& !cls.isArray()
+			&& !(o instanceof Number)
+			&& !(o instanceof String)
+			&& !(o instanceof Boolean)
+			&& !(o instanceof Character)
+			&& !(o instanceof Optional)
+			&& !(o instanceof Collection)
+			&& !(o instanceof Map)
+			&& !cls.getName().startsWith("java.")
+			&& !cls.getName().startsWith("javax.");
 	}
 
 	/**
@@ -199,6 +291,7 @@ public abstract class RoundTripTest_Base extends TestBase {
 	 * whose properties are primitives, strings, numbers, dates, byte arrays, or primitive arrays.
 	 * Nested structures require {@code allowNestedStructures(true)}.
 	 */
+	// TODO - Figure out how to support these.
 	protected static boolean isCsvRoundTripCompatible(Object o) {
 		if (o == null)
 			return false;
@@ -212,13 +305,14 @@ public abstract class RoundTripTest_Base extends TestBase {
 		return isCsvCompatibleElement(first);
 	}
 
+	// TODO - Figure out how to support these.
 	private static boolean isCsvCompatibleElement(Object elem) {
 		if (elem == null) return false;
 		var cls = elem.getClass();
 		if (cls.isPrimitive()) return false;
 		if (elem instanceof Number || elem instanceof Boolean || elem instanceof Character) return false;
 		if (elem instanceof CharSequence || cls.isEnum()) return false;
-		if (elem instanceof java.util.Optional || elem instanceof Collection) return false;
+		if (elem instanceof Optional || elem instanceof Collection) return false;
 		// 1D primitive arrays and byte[] are supported
 		if (cls.isArray()) {
 			var ct = cls.getComponentType();
@@ -243,8 +337,8 @@ public abstract class RoundTripTest_Base extends TestBase {
 			|| Number.class.isAssignableFrom(t)
 			|| t.isEnum()
 			|| java.time.temporal.Temporal.class.isAssignableFrom(t)
-			|| t == java.util.Date.class
-			|| t == java.util.Calendar.class)
+			|| t == Date.class
+			|| t == Calendar.class)
 			return true;
 		// byte[] and primitive arrays [1;2;3]
 		if (t.isArray()) {

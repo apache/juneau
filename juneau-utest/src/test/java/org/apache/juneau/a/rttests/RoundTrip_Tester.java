@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.Predicate;
 
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -75,9 +76,9 @@ public class RoundTrip_Tester {
 		private Class<?>[] annotatedClasses = a();
 		public Builder annotatedClasses(Class<?>...value) { annotatedClasses = value; return this; }
 
-		private java.util.function.Predicate<Object> skipIf;
+		private Predicate<Object> skipIf;
 		/** Skip round-trip when the predicate returns true for the test object. */
-		public Builder skipIf(java.util.function.Predicate<Object> value) { skipIf = value; return this; }
+		public Builder skipIf(Predicate<Object> value) { skipIf = value; return this; }
 
 		private boolean ignoreErrors;
 		/** If true, silently return the original object when the round-trip throws any exception. */
@@ -95,7 +96,7 @@ public class RoundTrip_Tester {
 	protected boolean returnOriginalObject;
 	private boolean validateXml;
 	public boolean debug;
-	private java.util.function.Predicate<Object> skipIf;
+	private Predicate<Object> skipIf;
 	private boolean ignoreErrors;
 
 	private RoundTrip_Tester(Builder b) {
@@ -169,6 +170,11 @@ public class RoundTrip_Tester {
 
 	public boolean isValidationOnly() {
 		return returnOriginalObject;
+	}
+
+	/** Returns true if this tester would skip the given object (roundTrip returns original unchanged). */
+	public boolean wouldSkip(Object o) {
+		return skipIf != null && skipIf.test(o);
 	}
 
 	public <T> Object serialize(T object, Serializer s) throws Exception {

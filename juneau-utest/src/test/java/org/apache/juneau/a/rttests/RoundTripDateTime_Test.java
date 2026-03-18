@@ -40,6 +40,7 @@ import org.apache.juneau.toml.*;
 import org.apache.juneau.hjson.*;
 import org.apache.juneau.hocon.*;
 import org.apache.juneau.ini.*;
+import org.apache.juneau.parquet.*;
 import org.apache.juneau.proto.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -213,6 +214,11 @@ class RoundTripDateTime_Test extends TestBase {
 		tester(39, "Hocon - default")
 			.serializer(HoconSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HoconParser.create())
+			.build(),
+		tester(40, "Parquet - default")
+			.serializer(ParquetSerializer.create().addBeanTypes())
+			.parser(ParquetParser.create())
+			.returnOriginalObject()
 			.build(),
 	};
 

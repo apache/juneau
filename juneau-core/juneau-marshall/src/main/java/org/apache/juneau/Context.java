@@ -41,6 +41,7 @@ import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.markdown.annotation.*;
 import org.apache.juneau.msgpack.annotation.*;
 import org.apache.juneau.oapi.annotation.*;
+import org.apache.juneau.parquet.annotation.*;
 import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.plaintext.annotation.*;
 import org.apache.juneau.proto.annotation.*;
@@ -418,6 +419,7 @@ public abstract class Context {
 		 * 	<li class ='ja'>{@link MsgPackConfig}
 		 * 	<li class ='ja'>{@link OpenApiConfig}
 		 * 	<li class ='ja'>{@link ParserConfig}
+		 * 	<li class ='ja'>{@link ParquetConfig}
 		 * 	<li class ='ja'>{@link ProtoConfig}
 		 * 	<li class ='ja'>{@link PlainTextConfig}
 		 * 	<li class ='ja'>{@link SerializerConfig}

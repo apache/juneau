@@ -38,6 +38,7 @@ import org.apache.juneau.yaml.*;
 import org.apache.juneau.toml.*;
 import org.apache.juneau.hjson.*;
 import org.apache.juneau.markdown.*;
+import org.apache.juneau.parquet.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -173,12 +174,14 @@ class RoundTripMaps_Test extends TestBase {
 		tester(29, "Yaml - default")
 			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(YamlParser.create())
-			.skipIf(o -> o instanceof java.util.HashMap)
+			// TODO: Revisit when YamlParser round-trips HashMap with null keys (see YamlParser javadoc)
+			.skipIf(HashMap.class::isInstance)
 			.build(),
 		tester(30, "Toml - default")
 			.serializer(TomlSerializer.create())
 			.parser(TomlParser.create())
-			.skipIf(o -> o instanceof java.util.HashMap || (o instanceof java.util.Map m && !m.isEmpty() && !(m.keySet().iterator().next() instanceof String)))
+			// TODO: Revisit when TomlParser supports HashMap and maps with non-String keys
+			.skipIf(o -> o instanceof HashMap || (o instanceof Map<?,?> m && !m.isEmpty() && !(m.keySet().iterator().next() instanceof String)))
 			.build(),
 		tester(31, "Csv - default")
 			.serializer(CsvSerializer.create().keepNullProperties())
@@ -188,7 +191,8 @@ class RoundTripMaps_Test extends TestBase {
 		tester(32, "Markdown - default")
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create())
-			.skipIf(o -> o instanceof java.util.HashMap)
+			// TODO: Revisit when MarkdownParser round-trips HashMap with null keys
+			.skipIf(HashMap.class::isInstance)
 			.build(),
 		tester(33, "Hjson - default")
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
@@ -203,10 +207,21 @@ class RoundTripMaps_Test extends TestBase {
 			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(CborParser.create())
 			.build(),
+		tester(36, "Parquet - default")
+			.serializer(ParquetSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(ParquetParser.create())
+			// TODO: Revisit when Parquet supports all map key types (see isParquetMapWithUnsupportedKeys)
+			.skipIf(RoundTripMaps_Test::isParquetMapWithUnsupportedKeys)
+			.build(),
 	};
 
 	static RoundTrip_Tester[]  testers() {
 		return TESTERS;
+	}
+
+	private static boolean isParquetMapWithUnsupportedKeys(Object o) {
+		// Parquet supports all map key types (Date, Calendar, Enum, null via nullKeyString)
+		return false;
 	}
 
 	protected static RoundTrip_Tester.Builder tester(int index, String label) {

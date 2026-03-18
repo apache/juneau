@@ -1485,9 +1485,12 @@ public class BeanSession extends ContextSession {
 					}
 				}
 				if (nn(builder)) {
-					var m = toBeanMap(builder.create(this, to));
-					m.load(value2);
-					return builder.build(this, m.getBean(), to);
+					var created = builder.create(this, to);
+					if (created != null) {
+						var m = toBeanMap(created);
+						m.load(value2);
+						return builder.build(this, m.getBean(), to);
+					}
 				}
 				return newBeanMap(tc).load(value2).getBean();
 			}

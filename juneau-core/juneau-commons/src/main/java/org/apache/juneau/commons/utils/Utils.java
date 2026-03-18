@@ -2306,5 +2306,4 @@ public class Utils {
 	public static <E> Set<E> nullIfEmpty(Set<E> val) {
 		return e(val) ? null : val;
 	}
-
 }

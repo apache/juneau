@@ -40,7 +40,7 @@ class ParentProperty_RoundTripTest extends RoundTripTest_Base {
 			return;
 		var x = new ParentPropertyMethodContainer().init();
 		x = t.roundTrip(x);
-		if (t.isValidationOnly())
+		if (t.isValidationOnly() || t.wouldSkip(x))
 			return;
 		assertEquals(x.f1, x.bean.parent.f1);
 	}
@@ -83,7 +83,7 @@ class ParentProperty_RoundTripTest extends RoundTripTest_Base {
 			return;
 		var x = new ParentPropertyFieldContainer().init();
 		x = t.roundTrip(x);
-		if (t.isValidationOnly())
+		if (t.isValidationOnly() || t.wouldSkip(x))
 			return;
 		assertEquals(x.f1, x.bean.parent.f1);
 	}

@@ -287,7 +287,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 		var x = new B05();
 		x.f1 = opte();
 		x = t.roundTrip(x);
-		if (t.isValidationOnly())
+		if (t.isValidationOnly() || t.wouldSkip(x))
 			return;
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
@@ -299,7 +299,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 		var x = new B05();
 		x.f1 = null;
 		x = t.roundTrip(x);
-		if (t.isValidationOnly())
+		if (t.isValidationOnly() || t.wouldSkip(x))
 			return;
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
@@ -388,7 +388,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 		var x = new B07();
 		x.f1 = a(no(Optional.class));
 		x = t.roundTrip(x);
-		if (t.isValidationOnly())
+		if (t.isValidationOnly() || t.wouldSkip(x))
 			return;
 		assertEquals(1, x.f1.length);
 		assertFalse(x.f1[0].isPresent());

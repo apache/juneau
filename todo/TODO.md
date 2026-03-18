@@ -24,3 +24,12 @@ Figure out why this needs a cast:
 - RestResponse needs a setSerializer() command.
 
 - Upgrade to Jena 6.0
+
+- Verify that you can add @BeanIgnore on a private field with getters/setters.
+- RestClient needs a getRootUrl to see how it's set.
+- RestClient rootUrl should allow for a supplier to be used.
+- On RestClient when logging with FULL, calling RestREsponse.getContent().asString() causes a stream closed exception.
+- Possibility of adding convenience classes for okhttp3.mockwebserver.Dispatcher?
+
+- BeanMap.containsKey not working correctly on non-existent properties?
+- Duration.ofDays(7) serialized in hours?
