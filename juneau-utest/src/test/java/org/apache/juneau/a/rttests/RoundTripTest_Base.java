@@ -169,16 +169,13 @@ public abstract class RoundTripTest_Base extends TestBase {
 			.serializer(ParquetSerializer.create().addBeanTypes())
 			.parser(ParquetParser.create())
 			// TODO: Revisit skip conditions as Parquet support improves:
-			// - Null-key maps: root unwrap path with <NULL> placeholder
 			// - JsonList/JsonMap: static schema vs mixed types
-			// - 2.2: Optional, enum arrays, @Beanc, primitive arrays
-			.skipIf(o -> o == null || o instanceof Class
-				|| o instanceof JsonList || o instanceof JsonMap
-				|| (o instanceof Map<?,?> m && mapHasNullKey(m))
-				|| (isParquetIncompatibleBeanOrCollection(o)
-					|| (o.getClass().isArray()
-						&& (o.getClass().getComponentType() == Class.class
-							|| o.getClass().getComponentType().isArray()))))  // 2D arrays still excluded
+			// TODO: Revisit skip conditions as Parquet support improves:
+			// - JsonList/JsonMap: static schema vs mixed types
+			// - 2D arrays: Parquet has no nested array support
+			.skipIf(o -> o instanceof JsonList || o instanceof JsonMap
+				|| (o != null && isParquetIncompatibleBeanOrCollection(o))
+				|| (o != null && o.getClass().isArray() && o.getClass().getComponentType().isArray()))
 			.build(),
 	};
 
@@ -188,15 +185,6 @@ public abstract class RoundTripTest_Base extends TestBase {
 
 	protected static RoundTrip_Tester.Builder tester(int index, String label) {
 		return RoundTrip_Tester.create(index, label);
-	}
-
-	/** Returns true if the map contains a null key. TreeMap throws NPE on containsKey(null). */
-	private static boolean mapHasNullKey(Map<?,?> m) {
-		try {
-			return m.containsKey(null);
-		} catch (NullPointerException e) {
-			return false;
-		}
 	}
 
 	/**
