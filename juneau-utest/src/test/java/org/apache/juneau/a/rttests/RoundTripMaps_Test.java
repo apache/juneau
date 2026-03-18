@@ -204,18 +204,11 @@ class RoundTripMaps_Test extends TestBase {
 		tester(36, "Parquet - default")
 			.serializer(ParquetSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(ParquetParser.create())
-			// TODO: Revisit when Parquet supports all map key types (see isParquetMapWithUnsupportedKeys)
-			.skipIf(RoundTripMaps_Test::isParquetMapWithUnsupportedKeys)
 			.build(),
 	};
 
 	static RoundTrip_Tester[]  testers() {
 		return TESTERS;
-	}
-
-	private static boolean isParquetMapWithUnsupportedKeys(Object o) {
-		// Parquet supports all map key types (Date, Calendar, Enum, null via nullKeyString)
-		return false;
 	}
 
 	protected static RoundTrip_Tester.Builder tester(int index, String label) {
