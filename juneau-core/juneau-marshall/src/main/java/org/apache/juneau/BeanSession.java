@@ -1200,6 +1200,10 @@ public class BeanSession extends ContextSession {
 				var fc = swap.getSwapClass();
 				if (nc.isAssignableFrom(tc) && fc.isAssignableFrom(value.getClass()))
 					return (T)swap.unswap(this, value, to);
+				if (nc.isAssignableFrom(tc) && Map.class.isAssignableFrom(fc.inner()) && value instanceof Map) {
+					value = convertToMemberType(null, value, fc.inner());
+					return (T)swap.unswap(this, value, to);
+				}
 				var fcm = getClassMeta(fc);
 				if (fcm.isNumber() && value instanceof Number value2) {
 					value = convertToMemberType(null, value2, fc.inner());

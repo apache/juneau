@@ -169,10 +169,12 @@ public class ParquetParserSession extends InputStreamParserSession {
 				return (T)convertToType(list, type);
 			}
 			if (type.isCollection()) {
-				var coll = type.newInstance();
+				Object coll = type.newInstance();
+				if (coll == null)
+					coll = new ArrayList<>();
 				if (inner != null)
 					((Collection<Object>)coll).add(convertToType(prepareMapForBean(inner, type.getElementType()), type.getElementType()));
-				return coll;
+				return (T)coll;
 			}
 			return (T)convertToType(prepareMapForBean(inner, type), type);
 		}
@@ -914,7 +916,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 		var listBeanColumns = groupListBeanColumns(columnData.keySet(), elementType);
 		var mapColumns = groupMapColumns(columnData.keySet());
 		for (int i = 0; i < numRows; i++) {
-			var row = new LinkedHashMap<String,Object>();
+			var row = new JsonMap();
 			for (var e : columnData.entrySet()) {
 				var fullPath = e.getKey();
 				var rowRelPath = rowRelativePath(fullPath);
@@ -1033,7 +1035,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 		int listSize = firstList.size();
 		var result = new ArrayList<>(listSize);
 		for (int j = 0; j < listSize; j++) {
-			var elemMap = new LinkedHashMap<String,Object>();
+			var elemMap = new JsonMap();
 			for (var col : columnsInGroup) {
 				var colValues = columnData.get(col.fullPath());
 				var rowList = (colValues != null && rowIndex < colValues.size()) ? colValues.get(rowIndex) : null;

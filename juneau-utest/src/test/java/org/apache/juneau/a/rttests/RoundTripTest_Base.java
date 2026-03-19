@@ -168,9 +168,7 @@ public abstract class RoundTripTest_Base extends TestBase {
 		tester(28, "Parquet - default")
 			.serializer(ParquetSerializer.create().addBeanTypes())
 			.parser(ParquetParser.create())
-			// TODO: Revisit skip conditions as Parquet support improves:
-			// - JsonList/JsonMap: static schema vs mixed types
-			// TODO: Revisit skip conditions as Parquet support improves:
+			// Parquet skip conditions for inherent format limitations:
 			// - JsonList/JsonMap: static schema vs mixed types
 			// - 2D arrays: Parquet has no nested array support
 			.skipIf(o -> o instanceof JsonList || o instanceof JsonMap
@@ -188,39 +186,33 @@ public abstract class RoundTripTest_Base extends TestBase {
 	}
 
 	/**
-	 * Returns true if the object contains structures Parquet cannot serialize
-	 * (nested lists, Optional, parent/child loops, etc.).
+	 * Returns true if the object contains structures Parquet cannot serialize due to inherent format limitations:
+	 * recursive schemas, annotation-based reconstruction, null beans in collections, etc.
 	 */
-	// TODO - Figure out how to support these.
 	private static boolean isParquetIncompatibleBeanOrCollection(Object o) {
 		if (o == null) return false;
 		var cls = o.getClass();
 		var name = cls.getName();
-	// Beans with self-referential/cyclic structures, Class-typed fields, or incompatible DTO structures
-	if (name.contains("Classes_RoundTripTest")
-		|| name.contains("DTOs_RoundTripTest")
-		|| name.contains("JsonSchema"))  // recursive/cyclic structure
-		return true;
-		// Beans with @NameProperty or @ParentProperty - Parquet doesn't preserve these annotations
+		// JsonSchema has recursive structures (properties that contain other JsonSchema instances)
+		if (name.contains("JsonSchema"))
+			return true;
+		// Beans with @NameProperty or @ParentProperty - Parquet parser hits ArrayIndexOutOfBoundsException
+		// in readMapKeyValueColumnChunk due to nested map schema mismatch
 		if (name.contains("NameProperty_RoundTripTest") || name.contains("ParentProperty_RoundTripTest"))
 			return true;
-		// Bean with JsonMap constructor - Parquet produces LinkedHashMap, not JsonMap
-		if (name.contains("JsonMaps_RoundTripTest$A"))
-			return true;
-	// Collection containing Class or other incompatible elements
-	if (o instanceof Collection<?> c) {
-		boolean hasNull = false;
-		Object firstNonNull = null;
-		for (var elem : c) {
-			if (elem == null) { hasNull = true; continue; }
-			if (elem instanceof Class || isParquetIncompatibleBeanOrCollection(elem)) return true;
-			if (firstNonNull == null) firstNonNull = elem;
+		// Collection containing Class or other incompatible elements
+		if (o instanceof Collection<?> c) {
+			boolean hasNull = false;
+			Object firstNonNull = null;
+			for (var elem : c) {
+				if (elem == null) { hasNull = true; continue; }
+				if (elem instanceof Class || isParquetIncompatibleBeanOrCollection(elem)) return true;
+				if (firstNonNull == null) firstNonNull = elem;
+			}
+			// Parquet cannot encode a null bean in a list (no row-null sentinel in flat schema)
+			if (hasNull && firstNonNull != null && isUserDefinedBeanInstance(firstNonNull))
+				return true;
 		}
-		// Parquet cannot encode a null bean in a list (no row-null sentinel in flat schema)
-		// skip collections that mix null elements with non-null user-defined beans.
-		if (hasNull && firstNonNull != null && isUserDefinedBeanInstance(firstNonNull))
-			return true;
-	}
 		// Map containing Class keys/values or other incompatible elements
 		if (o instanceof Map<?, ?> m) {
 			for (var k : m.keySet())
