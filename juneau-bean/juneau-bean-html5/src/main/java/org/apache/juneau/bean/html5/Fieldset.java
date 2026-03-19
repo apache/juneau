@@ -49,7 +49,7 @@ import org.apache.juneau.annotation.*;
  * 		<jsm>legend</jsm>(<js>"Contact Details"</js>),
  * 		<jsm>input</jsm>(<js>"email"</js>).name(<js>"email"</js>).placeholder(<js>"Email"</js>),
  * 		<jsm>input</jsm>(<js>"tel"</js>).name(<js>"phone"</js>).placeholder(<js>"Phone"</js>)
- * 	)._class(<js>"form-group"</js>);
+ * 	).class_(<js>"form-group"</js>);
  * </p>
  *
  * <p>

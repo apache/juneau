@@ -37,7 +37,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Definition with styling</jc>
  * 	Dfn <jv>styled</jv> = <jsm>dfn</jsm>(<js>"CSS"</js>)
- * 		._class(<js>"term"</js>);
+ * 		.class_(<js>"term"</js>);
  *
  * 	<jc>// Definition in a sentence</jc>
  * 	P <jv>sentence</jv> = <jsm>p</jsm>(
@@ -49,7 +49,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Definition with complex content</jc>
  * 	Dfn <jv>complex</jv> = <jsm>dfn</jsm>(
  * 		<js>"JavaScript"</js>,
- * 		<jsm>span</jsm>()._class(<js>"abbrev"</js>).children(<js>" (JS)"</js>)
+ * 		<jsm>span</jsm>().class_(<js>"abbrev"</js>).children(<js>" (JS)"</js>)
  * 	);
  *
  * 	<jc>// Definition with title</jc>

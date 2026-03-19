@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Var with styling</jc>
  * 	Var <jv>styled</jv> = <jsm>var</jsm>(<js>"userName"</js>)
- * 		._class(<js>"variable"</js>);
+ * 		.class_(<js>"variable"</js>);
  *
  * 	<jc>// Var with complex content</jc>
  * 	Var <jv>complex</jv> = <jsm>var</jsm>(

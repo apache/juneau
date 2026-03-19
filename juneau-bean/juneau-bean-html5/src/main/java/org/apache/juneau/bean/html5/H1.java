@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// H1 with styling</jc>
  * 	H1 <jv>styled</jv> = <jsm>h1</jsm>(<js>"About Our Company"</js>)
- * 		._class(<js>"page-title"</js>);
+ * 		.class_(<js>"page-title"</js>);
  *
  * 	<jc>// H1 with complex content</jc>
  * 	H1 <jv>complex</jv> = <jsm>h1</jsm>(
@@ -59,7 +59,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// H1 with multiple elements</jc>
  * 	H1 <jv>multiple</jv> = <jsm>h1</jsm>(
  * 		<js>"Chapter 1: "</js>,
- * 		<jsm>span</jsm>()._class(<js>"chapter-title"</js>).children(<js>"Getting Started"</js>),
+ * 		<jsm>span</jsm>().class_(<js>"chapter-title"</js>).children(<js>"Getting Started"</js>),
  * 		<js>" "</js>,
  * 		<jsm>small</jsm>(<js>"(Beginner Level)"</js>)
  * 	);

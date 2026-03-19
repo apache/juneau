@@ -64,7 +64,7 @@ import org.apache.juneau.annotation.*;
  * 		<js>"Contact us at:"</js>,
  * 		<jsm>br</jsm>(),
  * 		<jsm>a</jsm>(<js>"mailto:info@company.com"</js>, <js>"info@company.com"</js>)
- * 	)._class(<js>"contact-info"</js>);
+ * 	).class_(<js>"contact-info"</js>);
  *
  * 	<jc>// Address with multiple contact methods</jc>
  * 	Address <jv>multiple</jv> = <jsm>address</jsm>(

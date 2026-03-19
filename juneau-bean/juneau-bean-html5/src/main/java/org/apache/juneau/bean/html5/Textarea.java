@@ -50,7 +50,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Textarea with styling and behavior</jc>
  * 	Textarea <jv>styled</jv> = <jsm>textarea</jsm>(<js>"feedback"</js>)
- * 		._class(<js>"large-textarea"</js>)
+ * 		.class_(<js>"large-textarea"</js>)
  * 		.rows(6)
  * 		.cols(60)
  * 		.placeholder(<js>"Please provide your feedback..."</js>)

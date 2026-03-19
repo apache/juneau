@@ -37,7 +37,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Data cell with styling</jc>
  * 	Td <jv>styled</jv> = <jsm>td</jsm>(<js>"Important Data"</js>)
- * 		._class(<js>"highlight"</js>);
+ * 		.class_(<js>"highlight"</js>);
  *
  * 	<jc>// Data cell spanning multiple columns</jc>
  * 	Td <jv>colspan</jv> = <jsm>td</jsm>(<js>"Spans 2 columns"</js>)

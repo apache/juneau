@@ -48,7 +48,7 @@ import org.apache.juneau.annotation.*;
  * 	Link <jv>preload</jv> = <jsm>link</jsm>()
  * 		.rel(<js>"preload"</js>)
  * 		.href(<js>"/fonts/myfont.woff2"</js>)
- * 		._as(<js>"font"</js>)
+ * 		.as_(<js>"font"</js>)
  * 		.type(<js>"font/woff2"</js>)
  * 		.crossorigin(<js>"anonymous"</js>);
  *
@@ -109,6 +109,38 @@ public class Link extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Link class_(String value) {
 		super.class_(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-as">as</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the type of content being loaded by a {@code rel="preload"} or {@code rel="modulepreload"} link.
+	 * This allows the browser to prioritize resource loading appropriately.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"audio"</js> - Audio file</li>
+	 * 	<li><js>"document"</js> - HTML document</li>
+	 * 	<li><js>"fetch"</js> - Resource fetched by fetch or XHR</li>
+	 * 	<li><js>"font"</js> - Font file</li>
+	 * 	<li><js>"image"</js> - Image file</li>
+	 * 	<li><js>"script"</js> - JavaScript file</li>
+	 * 	<li><js>"style"</js> - CSS stylesheet</li>
+	 * 	<li><js>"video"</js> - Video file</li>
+	 * 	<li><js>"worker"</js> - Web worker script</li>
+	 * </ul>
+	 *
+	 * @param value The type of content being loaded.
+	 * @return This object.
+	 */
+	@SuppressWarnings({
+		"java:S100" // Method name uses underscore suffix for consistency with other keyword-escape methods
+	})
+	public Link as_(String value) {
+		attr("as", value);
 		return this;
 	}
 

@@ -41,7 +41,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Meter with styling</jc>
  * 	Meter <jv>styled</jv> = <jsm>meter</jsm>()
- * 		._class(<js>"progress-meter"</js>)
+ * 		.class_(<js>"progress-meter"</js>)
  * 		.value(75)
  * 		.min(0)
  * 		.max(100);

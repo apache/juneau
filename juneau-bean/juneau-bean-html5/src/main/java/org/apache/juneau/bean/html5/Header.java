@@ -55,7 +55,7 @@ import org.apache.juneau.annotation.*;
  * 	Header <jv>styled</jv> = <jsm>header</jsm>(
  * 		<jsm>h1</jsm>(<js>"Styled Header"</js>),
  * 		<jsm>p</jsm>(<js>"A beautifully styled header"</js>)
- * 	)._class(<js>"page-header"</js>);
+ * 	).class_(<js>"page-header"</js>);
  *
  * 	<jc>// Header with logo and navigation</jc>
  * 	Header <jv>withLogo</jv> = <jsm>header</jsm>(
@@ -83,11 +83,11 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Header with multiple sections</jc>
  * 	Header <jv>multiSection</jv> = <jsm>header</jsm>(
- * 		<jsm>div</jsm>()._class(<js>"header-top"</js>).children(
+ * 		<jsm>div</jsm>().class_(<js>"header-top"</js>).children(
  * 			<jsm>p</jsm>(<js>"Call us: (555) 123-4567"</js>),
  * 			<jsm>p</jsm>(<js>"Email: info@company.com"</js>)
  * 		),
- * 		<jsm>div</jsm>()._class(<js>"header-main"</js>).children(
+ * 		<jsm>div</jsm>().class_(<js>"header-main"</js>).children(
  * 			<jsm>h1</jsm>(<js>"Company Name"</js>),
  * 			<jsm>p</jsm>(<js>"Your trusted partner"</js>)
  * 		)

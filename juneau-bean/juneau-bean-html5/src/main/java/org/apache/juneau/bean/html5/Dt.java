@@ -37,12 +37,12 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Term with styling</jc>
  * 	Dt <jv>styled</jv> = <jsm>dt</jsm>(<js>"CSS"</js>)
- * 		._class(<js>"term"</js>);
+ * 		.class_(<js>"term"</js>);
  *
  * 	<jc>// Term with complex content</jc>
  * 	Dt <jv>complex</jv> = <jsm>dt</jsm>(
  * 		<js>"JavaScript"</js>,
- * 		<jsm>span</jsm>()._class(<js>"abbrev"</js>).children(<js>" (JS)"</js>)
+ * 		<jsm>span</jsm>().class_(<js>"abbrev"</js>).children(<js>" (JS)"</js>)
  * 	);
  *
  * 	<jc>// Term with links</jc>
@@ -62,8 +62,8 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Term with multiple elements</jc>
  * 	Dt <jv>multiple</jv> = <jsm>dt</jsm>(
  * 		<js>"Responsive Design"</js>,
- * 		<jsm>span</jsm>()._class(<js>"new"</js>).children(<js>" (New)"</js>),
- * 		<jsm>span</jsm>()._class(<js>"popular"</js>).children(<js>" (Popular)"</js>)
+ * 		<jsm>span</jsm>().class_(<js>"new"</js>).children(<js>" (New)"</js>),
+ * 		<jsm>span</jsm>().class_(<js>"popular"</js>).children(<js>" (Popular)"</js>)
  * 	);
  * </p>
  *

@@ -51,7 +51,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Time with styling</jc>
  * 	Time <jv>styled</jv> = <jsm>time</jsm>(<js>"Event Date: January 15, 2024"</js>)
  * 		.datetime(<js>"2024-01-15"</js>)
- * 		._class(<js>"event-date"</js>);
+ * 		.class_(<js>"event-date"</js>);
  *
  * 	<jc>// Time with timezone</jc>
  * 	Time <jv>timezone</jv> = <jsm>time</jsm>(<js>"2:30 PM EST on January 15, 2024"</js>)

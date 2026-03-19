@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// I with styling</jc>
  * 	I <jv>styled</jv> = <jsm>i</jsm>(<js>"Styled italic text"</js>)
- * 		._class(<js>"emphasis"</js>);
+ * 		.class_(<js>"emphasis"</js>);
  *
  * 	<jc>// I with complex content</jc>
  * 	I <jv>complex</jv> = <jsm>i</jsm>(

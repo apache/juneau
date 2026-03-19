@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Ins with styling</jc>
  * 	Ins <jv>styled</jv> = <jsm>ins</jsm>(<js>"Styled inserted text"</js>)
- * 		._class(<js>"insertion"</js>);
+ * 		.class_(<js>"insertion"</js>);
  *
  * 	<jc>// Ins with complex content</jc>
  * 	Ins <jv>complex</jv> = <jsm>ins</jsm>(

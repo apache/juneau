@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Rp with styling</jc>
  * 	Rp <jv>styled</jv> = <jsm>rp</jsm>(<js>")"</js>)
- * 		._class(<js>"ruby-paren"</js>);
+ * 		.class_(<js>"ruby-paren"</js>);
  *
  * 	<jc>// Rp with complex content</jc>
  * 	Rp <jv>complex</jv> = <jsm>rp</jsm>(

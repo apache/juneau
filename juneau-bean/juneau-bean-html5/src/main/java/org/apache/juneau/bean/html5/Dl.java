@@ -48,7 +48,7 @@ import org.apache.juneau.annotation.*;
  * 		<jsm>dd</jsm>(<js>"Application Programming Interface"</js>),
  * 		<jsm>dt</jsm>(<js>"DOM"</js>),
  * 		<jsm>dd</jsm>(<js>"Document Object Model"</js>)
- * 	)._class(<js>"glossary"</js>);
+ * 	).class_(<js>"glossary"</js>);
  *
  * 	<jc>// Description list with multiple descriptions</jc>
  * 	Dl <jv>multiple</jv> = <jsm>dl</jsm>(

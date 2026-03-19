@@ -31,7 +31,7 @@ class Html5BasicTest extends TestBase {
 				"Name:", input("text"), br(),
 				"Email:", input("text"), br(),
 				"X:", keygen().name("X"),
-				label("label")._for("Name")
+				label("label").for_("Name")
 			)
 		);
 

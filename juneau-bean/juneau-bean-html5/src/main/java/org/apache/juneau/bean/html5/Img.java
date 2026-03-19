@@ -45,7 +45,7 @@ import org.apache.juneau.annotation.*;
  * 		.alt(<js>"Company Logo"</js>)
  * 		.width(<js>"200"</js>)
  * 		.height(<js>"100"</js>)
- * 		._class(<js>"logo"</js>);
+ * 		.class_(<js>"logo"</js>);
  *
  * 	<jc>// Image with CORS and image map</jc>
  * 	Img <jv>img3</jv> = <jsm>img</jsm>()

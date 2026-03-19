@@ -44,8 +44,8 @@ import org.apache.juneau.annotation.*;
  * 		<jsm>div</jsm>(
  * 			<jsm>h3</jsm>(<js>"Item Title"</js>),
  * 			<jsm>p</jsm>(<js>"Item description"</js>)
- * 		)._class(<js>"item"</js>)
- * 	)._class(<js>"item-template"</js>);
+ * 		).class_(<js>"item"</js>)
+ * 	).class_(<js>"item-template"</js>);
  *
  * 	<jc>// Template with complex content</jc>
  * 	Template <jv>complex</jv> = <jsm>template</jsm>(
@@ -63,7 +63,7 @@ import org.apache.juneau.annotation.*;
  * 	Template withId = template()
  * 		.id("user-card-template")
  * 		.children(
- * 			div()._class("user-card")
+ * 			div().class_("user-card")
  * 				.children(
  * 					img().src("/avatar.jpg").alt("User Avatar"),
  * 					h3().children("User Name"),
@@ -75,7 +75,7 @@ import org.apache.juneau.annotation.*;
  * 	Template styled2 = template()
  * 		.style("display: none;")
  * 		.children(
- * 			div()._class("modal")
+ * 			div().class_("modal")
  * 				.children(
  * 					h2().children("Modal Title"),
  * 					p().children("Modal content")
@@ -85,12 +85,12 @@ import org.apache.juneau.annotation.*;
  * 	// Template with multiple elements
  * 	Template multiple = template()
  * 		.children(
- * 			div()._class("product-card")
+ * 			div().class_("product-card")
  * 				.children(
  * 					img().src("/product.jpg").alt("Product Image"),
  * 					h3().children("Product Name"),
  * 					p().children("Product Description"),
- * 					span()._class("price").children("$99.99"),
+ * 					span().class_("price").children("$99.99"),
  * 					button().children("Add to Cart")
  * 				)
  * 		);
@@ -98,7 +98,7 @@ import org.apache.juneau.annotation.*;
  * 	// Template with form
  * 	Template withForm = template()
  * 		.children(
- * 			form()._class("comment-form")
+ * 			form().class_("comment-form")
  * 				.children(
  * 					textarea().placeholder("Enter your comment"),
  * 					button().type("submit").children("Submit Comment")

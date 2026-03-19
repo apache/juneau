@@ -43,7 +43,7 @@ import org.apache.juneau.annotation.*;
  * 	B <jv>name</jv> = <jsm>b</jsm>(<js>"Dr. Jane Smith"</js>);
  *
  * 	<jc>// Stylistic offset without emphasis</jc>
- * 	B <jv>offset</jv> = <jsm>b</jsm>(<js>"Important note"</js>)._class(<js>"highlight"</js>);
+ * 	B <jv>offset</jv> = <jsm>b</jsm>(<js>"Important note"</js>).class_(<js>"highlight"</js>);
  *
  * 	<jc>// Text that needs visual distinction</jc>
  * 	B <jv>distinct</jv> = <jsm>b</jsm>(<js>"User ID: 12345"</js>);
@@ -58,7 +58,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Bold text with styling</jc>
  * 	B <jv>styled</jv> = <jsm>b</jsm>(<js>"Amazing Widget"</js>)
- * 		._class(<js>"product-name"</js>)
+ * 		.class_(<js>"product-name"</js>)
  * 		.style(<js>"color: blue;"</js>);
  * </p>
  *

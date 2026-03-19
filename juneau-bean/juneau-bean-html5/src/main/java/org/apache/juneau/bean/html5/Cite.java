@@ -39,7 +39,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Citation with styling</jc>
  * 	Cite <jv>styled</jv> = <jsm>cite</jsm>(<js>"To Kill a Mockingbird"</js>)
- * 		._class(<js>"book-title"</js>);
+ * 		.class_(<js>"book-title"</js>);
  *
  * 	<jc>// Citation in a sentence</jc>
  * 	P <jv>sentence</jv> = <jsm>p</jsm>(

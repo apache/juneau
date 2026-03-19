@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Figure caption with styling</jc>
  * 	Figcaption <jv>styled</jv> = <jsm>figcaption</jsm>(<js>"Chart showing sales data for Q1 2024."</js>)
- * 		._class(<js>"image-caption"</js>);
+ * 		.class_(<js>"image-caption"</js>);
  *
  * 	<jc>// Figure caption with complex content</jc>
  * 	Figcaption <jv>complex</jv> = <jsm>figcaption</jsm>(

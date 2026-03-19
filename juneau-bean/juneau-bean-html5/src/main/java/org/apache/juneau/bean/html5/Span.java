@@ -34,20 +34,20 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Text with highlighted portion</jc>
  * 	Span <jv>highlight</jv> = <jsm>span</jsm>(<js>"This is highlighted text"</js>)
- * 		._class(<js>"highlight"</js>);
+ * 		.class_(<js>"highlight"</js>);
  *
  * 	<jc>// Text with multiple styled portions</jc>
  * 	Span <jv>styled</jv> = <jsm>span</jsm>(
  * 		<js>"Normal text "</js>,
- * 		<jsm>span</jsm>(<js>"bold text"</js>)._class(<js>"bold"</js>),
+ * 		<jsm>span</jsm>(<js>"bold text"</js>).class_(<js>"bold"</js>),
  * 		<js>" and "</js>,
- * 		<jsm>span</jsm>(<js>"italic text"</js>)._class(<js>"italic"</js>)
+ * 		<jsm>span</jsm>(<js>"italic text"</js>).class_(<js>"italic"</js>)
  * 	);
  *
  * 	<jc>// Text with clickable portion</jc>
  * 	Span <jv>clickable</jv> = <jsm>span</jsm>(
  * 		<js>"Click "</js>,
- * 		<jsm>span</jsm>(<js>"here"</js>)._class(<js>"link"</js>).onclick(<js>"showDetails()"</js>),
+ * 		<jsm>span</jsm>(<js>"here"</js>).class_(<js>"link"</js>).onclick(<js>"showDetails()"</js>),
  * 		<js>" for more information"</js>
  * 	);
  *

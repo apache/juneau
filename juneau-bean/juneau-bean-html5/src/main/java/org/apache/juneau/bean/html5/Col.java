@@ -41,7 +41,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Column with styling</jc>
  * 	Col <jv>styled</jv> = <jsm>col</jsm>()
- * 		._class(<js>"highlight-column"</js>)
+ * 		.class_(<js>"highlight-column"</js>)
  * 		.style(<js>"background-color: #f0f0f0;"</js>);
  *
  * 	<jc>// Column with width</jc>
@@ -60,7 +60,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Column with multiple attributes</jc>
  * 	Col <jv>complex</jv> = <jsm>col</jsm>()
  * 		.span(2)
- * 		._class(<js>"data-column"</js>)
+ * 		.class_(<js>"data-column"</js>)
  * 		.style(<js>"width: 150px; text-align: right;"</js>)
  * 		.title(<js>"Numeric data column"</js>);
  * </p>

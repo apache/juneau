@@ -39,7 +39,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Output with form association</jc>
  * 	Output <jv>output2</jv> = <jsm>output</jsm>(<js>"0"</js>)
  * 		.name(<js>"sum"</js>)
- * 		._for(<js>"num1 num2"</js>);
+ * 		.for_(<js>"num1 num2"</js>);
  *
  * 	<jc>// Output in a calculation form</jc>
  * 	Form <jv>calcForm</jv> = <jsm>form</jsm>(
@@ -47,13 +47,13 @@ import org.apache.juneau.annotation.*;
  * 		<jsm>span</jsm>(<js>" + "</js>),
  * 		<jsm>input</jsm>(<js>"number"</js>).name(<js>"num2"</js>).id(<js>"num2"</js>).value(<js>"0"</js>),
  * 		<jsm>span</jsm>(<js>" = "</js>),
- * 		<jsm>output</jsm>(<js>"0"</js>).name(<js>"sum"</js>)._for(<js>"num1 num2"</js>)
+ * 		<jsm>output</jsm>(<js>"0"</js>).name(<js>"sum"</js>).for_(<js>"num1 num2"</js>)
  * 	);
  *
  * 	<jc>// Output with styling</jc>
  * 	Output <jv>output3</jv> = <jsm>output</jsm>(<js>"Ready for calculation"</js>)
  * 		.name(<js>"display"</js>)
- * 		._class(<js>"result-display"</js>);
+ * 		.class_(<js>"result-display"</js>);
  * </p>
  *
  * <p>
@@ -108,9 +108,9 @@ public class Output extends HtmlElementMixed {
 	 * @return This object.
 	 */
 	@SuppressWarnings({
-		"java:S100" // Method name uses underscore prefix to avoid Java keyword conflict
+		"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
 	})
-	public Output _for(String value) {
+	public Output for_(String value) {
 		attr("for", value);
 		return this;
 	}

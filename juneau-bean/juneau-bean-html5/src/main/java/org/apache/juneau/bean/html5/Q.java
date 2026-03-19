@@ -47,7 +47,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Quotation with styling</jc>
  * 	Q <jv>q3</jv> = <jsm>q</jsm>(<js>"Innovation distinguishes between a leader and a follower."</js>)
- * 		._class(<js>"highlighted-quote"</js>)
+ * 		.class_(<js>"highlighted-quote"</js>)
  * 		.cite(<js>"https://example.com/author"</js>);
  * </p>
  *

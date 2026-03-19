@@ -43,7 +43,7 @@ class RestOp_Returns_Test extends TestBase {
 	public static class A {
 		@RestGet public Accepted accepted() { return ACCEPTED; }
 		@RestGet public AlreadyReported alreadyReported() { return ALREADY_REPORTED; }
-		@RestGet(path="/continue") public Continue _continue() { return CONTINUE; }
+		@RestGet(path="/continue") public Continue continue_() { return CONTINUE; }
 		@RestGet public Created created() { return CREATED; }
 		@RestGet public EarlyHints earlyHints() { return EARLY_HINTS; }
 		@RestGet public Found found() { return FOUND; }

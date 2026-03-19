@@ -52,7 +52,7 @@ import org.apache.juneau.annotation.*;
  * 		<jsm>td</jsm>(<js>"Product A"</js>),
  * 		<jsm>td</jsm>(<js>"100"</js>),
  * 		<jsm>td</jsm>(<js>"$10.00"</js>)
- * 	)._class(<js>"highlight-row"</js>);
+ * 	).class_(<js>"highlight-row"</js>);
  *
  * 	<jc>// Table row with click handler</jc>
  * 	Tr <jv>clickable</jv> = <jsm>tr</jsm>(

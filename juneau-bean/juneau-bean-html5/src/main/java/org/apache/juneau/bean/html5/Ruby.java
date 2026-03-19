@@ -44,7 +44,7 @@ import org.apache.juneau.annotation.*;
  * 	Ruby <jv>styled</jv> = <jsm>ruby</jsm>(
  * 		<jsm>rb</jsm>(<js>"日本語"</js>),
  * 		<jsm>rt</jsm>(<js>"にほんご"</js>)
- * 	)._class(<js>"ruby-annotation"</js>);
+ * 	).class_(<js>"ruby-annotation"</js>);
  *
  * 	<jc>// Ruby with complex content</jc>
  * 	Ruby <jv>complex</jv> = <jsm>ruby</jsm>(

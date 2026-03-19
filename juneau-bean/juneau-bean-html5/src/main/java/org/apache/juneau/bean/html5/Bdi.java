@@ -44,7 +44,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// User-generated content</jc>
  * 	Bdi <jv>userContent</jv> = <jsm>bdi</jsm>(<js>"This is a comment in Arabic: مرحبا"</js>)
- * 		._class(<js>"user-comment"</js>);
+ * 		.class_(<js>"user-comment"</js>);
  *
  * 	<jc>// Names in different scripts</jc>
  * 	Bdi <jv>name</jv> = <jsm>bdi</jsm>(<js>"محمد أحمد"</js>);
@@ -54,7 +54,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Styled bidirectional text</jc>
  * 	Bdi <jv>styled</jv> = <jsm>bdi</jsm>(<js>"نص باللغة العربية"</js>)
- * 		._class(<js>"bidi-text"</js>)
+ * 		.class_(<js>"bidi-text"</js>)
  * 		.style(<js>"direction: rtl;"</js>);
  * </p>
  *

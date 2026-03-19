@@ -28,8 +28,8 @@ class Continue_Test extends TestBase {
 	@Rest
 	public static class A {
 		@RestGet public Continue a1() { return CONTINUE; }
-		@RestGet public Continue a2() { return _continue().setContent("foo"); }
-		@RestGet public Continue a3() { return _continue().setHeader2("A","bar"); }
+		@RestGet public Continue a2() { return continue_().setContent("foo"); }
+		@RestGet public Continue a3() { return continue_().setHeader2("A","bar"); }
 	}
 
 	@Test void a01_basic() throws Exception {

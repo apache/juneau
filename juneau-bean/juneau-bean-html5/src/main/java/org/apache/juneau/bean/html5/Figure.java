@@ -51,7 +51,7 @@ import org.apache.juneau.annotation.*;
  * 	Figure <jv>styled</jv> = <jsm>figure</jsm>(
  * 		<jsm>img</jsm>(<js>"/charts/sales.png"</js>, <js>"Sales Chart"</js>),
  * 		<jsm>figcaption</jsm>(<js>"Monthly sales data for 2024."</js>)
- * 	)._class(<js>"chart-figure"</js>);
+ * 	).class_(<js>"chart-figure"</js>);
  *
  * 	<jc>// Figure with multiple elements</jc>
  * 	Figure <jv>complex</jv> = <jsm>figure</jsm>(

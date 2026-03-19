@@ -41,7 +41,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Progress with styling</jc>
  * 	Progress <jv>styled</jv> = <jsm>progress</jsm>()
- * 		._class(<js>"file-upload-progress"</js>)
+ * 		.class_(<js>"file-upload-progress"</js>)
  * 		.value(75)
  * 		.max(100);
  *

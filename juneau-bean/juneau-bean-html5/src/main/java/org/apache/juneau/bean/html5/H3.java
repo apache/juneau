@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// H3 with styling</jc>
  * 	H3 <jv>styled</jv> = <jsm>h3</jsm>(<js>"Advanced Settings"</js>)
- * 		._class(<js>"subsection-title"</js>);
+ * 		.class_(<js>"subsection-title"</js>);
  *
  * 	<jc>// H3 with complex content</jc>
  * 	H3 <jv>complex</jv> = <jsm>h3</jsm>(
@@ -59,7 +59,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// H3 with multiple elements</jc>
  * 	H3 <jv>multiple</jv> = <jsm>h3</jsm>(
  * 		<js>"3.1 "</js>,
- * 		<jsm>span</jsm>()._class(<js>"step-title"</js>).children(<js>"Installation"</js>),
+ * 		<jsm>span</jsm>().class_(<js>"step-title"</js>).children(<js>"Installation"</js>),
  * 		<js>" "</js>,
  * 		<jsm>small</jsm>(<js>"(5 minutes)"</js>)
  * 	);

@@ -887,7 +887,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 					"Name:", input("text"), br(),
 					"Email:", input("text"), br(),
 					"X:", keygen().name("X"),
-					label("label")._for("Name")
+					label("label").for_("Name")
 				)
 			)
 		)
@@ -1301,7 +1301,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			form("testform",
 				0,input("range").id("a").value(50),
 				"+",input("number").id("b").value(50),
-				"=",output().name("x")._for("a b")
+				"=",output().name("x").for_("a b")
 			).oninput("x.value=parseInt(a.value)+parseInt(b.value)")
 		)
 			.json("{_type:'form',a:{action:'testform',oninput:'x.value=parseInt(a.value)+parseInt(b.value)'},c:[0,{_type:'input',a:{type:'range',id:'a',value:50}},'+',{_type:'input',a:{type:'number',id:'b',value:50}},'=',{_type:'output',a:{name:'x','for':'a b'}}]}")

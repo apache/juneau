@@ -47,7 +47,7 @@ import org.apache.juneau.annotation.*;
  * 		<jsm>option</jsm>(<js>"us"</js>, <js>"United States"</js>),
  * 		<jsm>option</jsm>(<js>"ca"</js>, <js>"Canada"</js>),
  * 		<jsm>option</jsm>(<js>"mx"</js>, <js>"Mexico"</js>)
- * 	)._class(<js>"country-list"</js>);
+ * 	).class_(<js>"country-list"</js>);
  *
  * 	<jc>// Datalist with multiple options</jc>
  * 	Datalist <jv>multiple</jv> = <jsm>datalist</jsm>(<js>"fruits"</js>,

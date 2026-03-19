@@ -39,7 +39,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Rt with styling</jc>
  * 	Rt <jv>styled</jv> = <jsm>rt</jsm>(<js>"にほんご"</js>)
- * 		._class(<js>"ruby-text"</js>);
+ * 		.class_(<js>"ruby-text"</js>);
  *
  * 	<jc>// Rt with complex content</jc>
  * 	Rt <jv>complex</jv> = <jsm>rt</jsm>(

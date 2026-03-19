@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Mark with styling</jc>
  * 	Mark <jv>styled</jv> = <jsm>mark</jsm>(<js>"Styled highlighted text"</js>)
- * 		._class(<js>"highlight"</js>);
+ * 		.class_(<js>"highlight"</js>);
  *
  * 	<jc>// Mark with complex content</jc>
  * 	Mark <jv>complex</jv> = <jsm>mark</jsm>(

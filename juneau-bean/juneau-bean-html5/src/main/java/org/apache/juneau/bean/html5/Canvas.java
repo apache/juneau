@@ -43,7 +43,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Canvas with styling</jc>
  * 	Canvas <jv>styled</jv> = <jsm>canvas</jsm>(500, 400)
  * 		.id(<js>"drawingCanvas"</js>)
- * 		._class(<js>"canvas-element"</js>)
+ * 		.class_(<js>"canvas-element"</js>)
  * 		.style(<js>"border: 1px solid #ccc;"</js>);
  *
  * 	<jc>// Canvas with event handlers</jc>

@@ -46,20 +46,20 @@ import org.apache.juneau.annotation.*;
  * 		<jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>, <js>"Home"</js>)),
  * 		<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>)),
  * 		<jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
- * 	)._class(<js>"nav-menu"</js>);
+ * 	).class_(<js>"nav-menu"</js>);
  *
  * 	<jc>// Feature list</jc>
  * 	Ul <jv>features</jv> = <jsm>ul</jsm>(
  * 		<jsm>li</jsm>(<js>"Fast performance"</js>),
  * 		<jsm>li</jsm>(<js>"Easy to use"</js>),
  * 		<jsm>li</jsm>(<js>"24/7 support"</js>)
- * 	)._class(<js>"feature-list"</js>);
+ * 	).class_(<js>"feature-list"</js>);
  *
  * 	<jc>// List with styling</jc>
  * 	Ul <jv>styled</jv> = <jsm>ul</jsm>(
  * 		<jsm>li</jsm>(<js>"Styled item 1"</js>),
  * 		<jsm>li</jsm>(<js>"Styled item 2"</js>)
- * 	)._class(<js>"custom-list"</js>).style(<js>"list-style-type: square;"</js>);
+ * 	).class_(<js>"custom-list"</js>).style(<js>"list-style-type: square;"</js>);
  *
  * 	<jc>// Nested list</jc>
  * 	Ul <jv>nested</jv> = <jsm>ul</jsm>(

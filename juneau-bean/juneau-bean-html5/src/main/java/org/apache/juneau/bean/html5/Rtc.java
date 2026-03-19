@@ -44,7 +44,7 @@ import org.apache.juneau.annotation.*;
  * 	Rtc <jv>styled</jv> = <jsm>rtc</jsm>(
  * 		<jsm>rt</jsm>(<js>"にほんご"</js>),
  * 		<jsm>rt</jsm>(<js>"Japanese language"</js>)
- * 	)._class(<js>"ruby-text-container"</js>);
+ * 	).class_(<js>"ruby-text-container"</js>);
  *
  * 	<jc>// Rtc with complex content</jc>
  * 	Rtc <jv>complex</jv> = <jsm>rtc</jsm>(

@@ -37,7 +37,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Table caption with styling</jc>
  * 	Caption <jv>styled</jv> = <jsm>caption</jsm>(<js>"Employee Directory"</js>)
- * 		._class(<js>"table-title"</js>);
+ * 		.class_(<js>"table-title"</js>);
  *
  * 	<jc>// Table caption with complex content</jc>
  * 	Caption <jv>complex</jv> = <jsm>caption</jsm>(
@@ -60,7 +60,7 @@ import org.apache.juneau.annotation.*;
  * 		<js>"📊 "</js>,
  * 		<js>"Financial Summary"</js>,
  * 		<js>" "</js>,
- * 		<jsm>span</jsm>()._class(<js>"icon"</js>).children(<js>"💰"</js>)
+ * 		<jsm>span</jsm>().class_(<js>"icon"</js>).children(<js>"💰"</js>)
  * 	);
  *
  * 	<jc>// Table caption with multiple lines</jc>

@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Legend with styling</jc>
  * 	Legend <jv>styled</jv> = <jsm>legend</jsm>(<js>"Contact Details"</js>)
- * 		._class(<js>"form-legend"</js>);
+ * 		.class_(<js>"form-legend"</js>);
  *
  * 	<jc>// Legend with complex content</jc>
  * 	Legend <jv>complex</jv> = <jsm>legend</jsm>(
@@ -59,7 +59,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Legend with multiple elements</jc>
  * 	Legend <jv>multiple</jv> = <jsm>legend</jsm>(
  * 		<js>"Section 1: "</js>,
- * 		<jsm>span</jsm>(<js>"User Details"</js>)._class(<js>"section-title"</js>),
+ * 		<jsm>span</jsm>(<js>"User Details"</js>).class_(<js>"section-title"</js>),
  * 		<js>" "</js>,
  * 		<jsm>small</jsm>(<js>"(All fields required)"</js>)
  * 	);

@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Samp with styling</jc>
  * 	Samp <jv>styled</jv> = <jsm>samp</jsm>(<js>"$ npm install"</js>)
- * 		._class(<js>"console-output"</js>);
+ * 		.class_(<js>"console-output"</js>);
  *
  * 	<jc>// Samp with complex content</jc>
  * 	Samp <jv>complex</jv> = <jsm>samp</jsm>(

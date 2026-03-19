@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Li with styling</jc>
  * 	Li <jv>styled</jv> = <jsm>li</jsm>(<js>"Styled list item"</js>)
- * 		._class(<js>"list-item"</js>);
+ * 		.class_(<js>"list-item"</js>);
  *
  * 	<jc>// Li with complex content</jc>
  * 	Li <jv>complex</jv> = <jsm>li</jsm>(
@@ -59,7 +59,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Li with multiple elements</jc>
  * 	Li <jv>multiple</jv> = <jsm>li</jsm>(
  * 		<js>"Step 1: "</js>,
- * 		<jsm>span</jsm>(<js>"Complete the form"</js>)._class(<js>"step-title"</js>),
+ * 		<jsm>span</jsm>(<js>"Complete the form"</js>).class_(<js>"step-title"</js>),
  * 		<js>" "</js>,
  * 		<jsm>small</jsm>(<js>"(Required)"</js>)
  * 	);

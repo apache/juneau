@@ -34,7 +34,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Paragraph with styling</jc>
  * 	P <jv>styled</jv> = <jsm>p</jsm>(<js>"This paragraph has custom styling."</js>)
- * 		._class(<js>"lead"</js>);
+ * 		.class_(<js>"lead"</js>);
  *
  * 	<jc>// Paragraph with mixed content</jc>
  * 	P <jv>mixed</jv> = <jsm>p</jsm>(
@@ -55,7 +55,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Paragraph with ID and class</jc>
  * 	P <jv>withAttrs</jv> = <jsm>p</jsm>(<js>"Important notice"</js>)
  * 		.id(<js>"notice"</js>)
- * 		._class(<js>"alert alert-warning"</js>);
+ * 		.class_(<js>"alert alert-warning"</js>);
  *
  * 	<jc>// Paragraph with inline styles</jc>
  * 	P <jv>withStyle</jv> = <jsm>p</jsm>(<js>"Styled paragraph"</js>)

@@ -58,7 +58,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// With styling</jc>
  * 	Kbd <jv>styled</jv> = <jsm>kbd</jsm>(<js>"Enter"</js>)
- * 		._class(<js>"key-highlight"</js>)
+ * 		.class_(<js>"key-highlight"</js>)
  * 		.title(<js>"Press Enter to submit"</js>);
  *
  * 	<jc>// Multiple key sequence</jc>

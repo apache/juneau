@@ -62,7 +62,7 @@ import org.apache.juneau.annotation.*;
  * 				<jsm>th</jsm>(<js>"Department"</js>)
  * 			)
  * 		)
- * 	)._class(<js>"data-table"</js>).border(1);
+ * 	).class_(<js>"data-table"</js>).border(1);
  *
  * 	<jc>// Table with multiple sections</jc>
  * 	Table complex = new Table()

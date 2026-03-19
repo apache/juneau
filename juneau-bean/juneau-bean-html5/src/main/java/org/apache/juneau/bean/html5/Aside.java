@@ -40,7 +40,7 @@ import org.apache.juneau.annotation.*;
  * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/article2"</js>, <js>"Article 2"</js>)),
  * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/article3"</js>, <js>"Article 3"</js>))
  * 		)
- * 	)._class(<js>"sidebar"</js>);
+ * 	).class_(<js>"sidebar"</js>);
  *
  * 	<jc>// Pull quote</jc>
  * 	Aside <jv>pullQuote</jv> = <jsm>aside</jsm>(
@@ -48,21 +48,21 @@ import org.apache.juneau.annotation.*;
  * 			<js>"The best way to predict the future is to create it."</js>,
  * 			<jsm>footer</jsm>(<js>"— Peter Drucker"</js>)
  * 		)
- * 	)._class(<js>"pull-quote"</js>);
+ * 	).class_(<js>"pull-quote"</js>);
  *
  * 	<jc>// Advertisement</jc>
  * 	Aside <jv>advertisement</jv> = <jsm>aside</jsm>(
  * 		<jsm>h4</jsm>(<js>"Sponsored Content"</js>),
  * 		<jsm>p</jsm>(<js>"Check out our latest product!"</js>),
  * 		<jsm>a</jsm>(<js>"/product"</js>, <js>"Learn More"</js>)
- * 	)._class(<js>"advertisement"</js>);
+ * 	).class_(<js>"advertisement"</js>);
  *
  * 	<jc>// Author bio</jc>
  * 	Aside <jv>authorBio</jv> = <jsm>aside</jsm>(
  * 		<jsm>h3</jsm>(<js>"About the Author"</js>),
  * 		<jsm>p</jsm>(<js>"John Doe is a web developer with 10 years of experience..."</js>),
  * 		<jsm>a</jsm>(<js>"/author/john-doe"</js>, <js>"Read more articles"</js>)
- * 	)._class(<js>"author-bio"</js>);
+ * 	).class_(<js>"author-bio"</js>);
  *
  * 	<jc>// Navigation menu</jc>
  * 	Aside <jv>navigation</jv> = <jsm>aside</jsm>(
@@ -73,7 +73,7 @@ import org.apache.juneau.annotation.*;
  * 				<jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
  * 			)
  * 		)
- * 	)._class(<js>"navigation"</js>);
+ * 	).class_(<js>"navigation"</js>);
  *
  * 	<jc>// Glossary or definitions</jc>
  * 	Aside <jv>glossary</jv> = <jsm>aside</jsm>(
@@ -84,7 +84,7 @@ import org.apache.juneau.annotation.*;
  * 			<jsm>dt</jsm>(<js>"CSS"</js>),
  * 			<jsm>dd</jsm>(<js>"Cascading Style Sheets"</js>)
  * 		)
- * 	)._class(<js>"glossary"</js>);
+ * 	).class_(<js>"glossary"</js>);
  * </p>
  *
  * <p>

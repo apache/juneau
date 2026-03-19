@@ -43,7 +43,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Strong text with styling</jc>
  * 	Strong <jv>styled</jv> = <jsm>strong</jsm>(<js>"Critical system error detected!"</js>)
- * 		._class(<js>"alert"</js>);
+ * 		.class_(<js>"alert"</js>);
  *
  * 	<jc>// Strong text in a sentence</jc>
  * 	Strong <jv>sentence</jv> = <jsm>strong</jsm>(<js>"The deadline is tomorrow."</js>);

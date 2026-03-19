@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Data with styling</jc>
  * 	Data <jv>styled</jv> = <jsm>data</jsm>(<js>"USD"</js>, <js>"US Dollar"</js>)
- * 		._class(<js>"currency"</js>);
+ * 		.class_(<js>"currency"</js>);
  *
  * 	<jc>// Data in a sentence</jc>
  * 	P <jv>sentence</jv> = <jsm>p</jsm>(
@@ -50,12 +50,12 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Data with complex content</jc>
  * 	Data <jv>complex</jv> = <jsm>data</jsm>(<js>"2024-01-15"</js>,
  * 		<js>"January 15, 2024"</js>,
- * 		<jsm>span</jsm>()._class(<js>"date"</js>).children(<js>" (Monday)"</js>)
+ * 		<jsm>span</jsm>().class_(<js>"date"</js>).children(<js>" (Monday)"</js>)
  * 	);
  *
  * 	<jc>// Data with multiple attributes</jc>
  * 	Data <jv>multiple</jv> = <jsm>data</jsm>(<js>"SKU-12345"</js>, <js>"SKU: 12345"</js>)
- * 		._class(<js>"product-sku"</js>)
+ * 		.class_(<js>"product-sku"</js>)
  * 		.title(<js>"Product SKU"</js>);
  *
  * 	<jc>// Data with ID</jc>

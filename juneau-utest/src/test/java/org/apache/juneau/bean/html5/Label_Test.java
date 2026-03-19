@@ -26,7 +26,7 @@ class Label_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Label x = label()
-			._for("a")
+			.for_("a")
 			.form("b")
 			.class_("c")
 			.accesskey("d")

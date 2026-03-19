@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// H6 with styling</jc>
  * 	H6 <jv>styled</jv> = <jsm>h6</jsm>(<js>"Retry Attempts"</js>)
- * 		._class(<js>"micro-heading"</js>);
+ * 		.class_(<js>"micro-heading"</js>);
  *
  * 	<jc>// H6 with complex content</jc>
  * 	H6 <jv>complex</jv> = <jsm>h6</jsm>(
@@ -59,7 +59,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// H6 with multiple elements</jc>
  * 	H6 <jv>multiple</jv> = <jsm>h6</jsm>(
  * 		<js>"6.1.1 "</js>,
- * 		<jsm>span</jsm>()._class(<js>"micro-title"</js>).children(<js>"Max Retries"</js>),
+ * 		<jsm>span</jsm>().class_(<js>"micro-title"</js>).children(<js>"Max Retries"</js>),
  * 		<js>" "</js>,
  * 		<jsm>small</jsm>(<js>"(Range: 1-10)"</js>)
  * 	);

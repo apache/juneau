@@ -68,7 +68,7 @@ import org.apache.juneau.annotation.*;
  * 		<jsm>footer</jsm>(
  * 			<jsm>p</jsm>(<js>"Tags: "</js>, <jsm>a</jsm>(<js>"/tag/css"</js>, <js>"CSS"</js>), <js>", "</js>, <jsm>a</jsm>(<js>"/tag/grid"</js>, <js>"Grid"</js>))
  * 		)
- * 	)._class(<js>"forum-post"</js>);
+ * 	).class_(<js>"forum-post"</js>);
  *
  * 	<jc>// Product review</jc>
  * 	Article <jv>review</jv> = <jsm>article</jsm>(

@@ -49,7 +49,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Styled bidirectional text</jc>
  * 	Bdo <jv>styled</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"نص باللغة العربية"</js>)
- * 		._class(<js>"bidi-text"</js>)
+ * 		.class_(<js>"bidi-text"</js>)
  * 		.style(<js>"color: blue;"</js>);
  *
  * 	<jc>// Numbers with explicit direction</jc>

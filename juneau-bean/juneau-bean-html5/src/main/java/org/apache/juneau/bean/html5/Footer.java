@@ -48,7 +48,7 @@ import org.apache.juneau.annotation.*;
  * 	Footer <jv>styled</jv> = <jsm>footer</jsm>(
  * 		<jsm>p</jsm>(<js>"© 2024 My Company"</js>),
  * 		<jsm>p</jsm>(<js>"Privacy Policy | Terms of Service"</js>)
- * 	)._class(<js>"page-footer"</js>);
+ * 	).class_(<js>"page-footer"</js>);
  *
  * 	<jc>// Footer with navigation</jc>
  * 	Footer <jv>withNav</jv> = <jsm>footer</jsm>(
@@ -79,11 +79,11 @@ import org.apache.juneau.annotation.*;
  * 		<jsm>div</jsm>(
  * 			<jsm>p</jsm>(<js>"© 2024 My Company"</js>),
  * 			<jsm>p</jsm>(<js>"Privacy Policy | Terms of Service"</js>)
- * 		)._class(<js>"footer-content"</js>),
+ * 		).class_(<js>"footer-content"</js>),
  * 		<jsm>div</jsm>(
  * 			<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>),
  * 			<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>)
- * 		)._class(<js>"footer-links"</js>)
+ * 		).class_(<js>"footer-links"</js>)
  * 	);
  * </p>
  *

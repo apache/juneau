@@ -47,7 +47,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Subscript with styling</jc>
  * 	Sub <jv>styled</jv> = <jsm>sub</jsm>(<js>"n"</js>)
- * 		._class(<js>"subscript"</js>);
+ * 		.class_(<js>"subscript"</js>);
  *
  * 	<jc>// Multiple subscripts</jc>
  * 	Sub <jv>multiple</jv> = <jsm>sub</jsm>(

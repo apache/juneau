@@ -68,7 +68,7 @@ import org.apache.juneau.annotation.*;
  * 	Video <jv>styled</jv> = <jsm>video</jsm>()
  * 		.src("presentation.mp4")
  * 		.controls(true)
- * 		._class("video-player")
+ * 		.class_("video-player")
  * 		.style("border: 2px solid #ccc; border-radius: 8px;");
  *
  * 	// Video with event handlers

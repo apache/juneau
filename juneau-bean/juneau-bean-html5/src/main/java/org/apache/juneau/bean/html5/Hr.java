@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// HR with styling</jc>
  * 	Hr <jv>styled</jv> = <jsm>hr</jsm>()
- * 		._class(<js>"section-divider"</js>)
+ * 		.class_(<js>"section-divider"</js>)
  * 		.style(<js>"border: 2px solid #ccc; margin: 20px 0;"</js>);
  *
  * 	<jc>// HR with ID</jc>
@@ -51,7 +51,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// HR with multiple attributes</jc>
  * 	Hr <jv>complex</jv> = <jsm>hr</jsm>()
- * 		._class(<js>"fancy-divider"</js>)
+ * 		.class_(<js>"fancy-divider"</js>)
  * 		.style(<js>"border: none; height: 3px; background: linear-gradient(to right, #ff6b6b, #4ecdc4); margin: 40px 0;"</js>);
  *
  * 	<jc>// HR with accessibility</jc>
@@ -61,7 +61,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// HR with custom styling</jc>
  * 	Hr <jv>custom</jv> = <jsm>hr</jsm>()
- * 		._class(<js>"custom-hr"</js>)
+ * 		.class_(<js>"custom-hr"</js>)
  * 		.style(<js>"border: none; height: 1px; background-color: #e0e0e0; margin: 15px 0;"</js>);
  * </p>
  *

@@ -37,7 +37,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Definition with styling</jc>
  * 	Dd <jv>styled</jv> = <jsm>dd</jsm>(<js>"A programming language for web development."</js>)
- * 		._class(<js>"definition"</js>);
+ * 		.class_(<js>"definition"</js>);
  *
  * 	<jc>// Definition with complex content</jc>
  * 	Dd <jv>complex</jv> = <jsm>dd</jsm>(

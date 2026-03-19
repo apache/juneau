@@ -33,7 +33,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Label with explicit association</jc>
  * 	Label <jv>label1</jv> = <jsm>label</jsm>(<js>"Username:"</js>)
- * 		._for(<js>"username"</js>);
+ * 		.for_(<js>"username"</js>);
  *
  * 	<jc>// Label wrapping form control</jc>
  * 	Label <jv>label2</jv> = <jsm>label</jsm>(
@@ -43,13 +43,13 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Label with form association</jc>
  * 	Label <jv>label3</jv> = <jsm>label</jsm>(<js>"Email Address:"</js>)
- * 		._for(<js>"email"</js>)
+ * 		.for_(<js>"email"</js>)
  * 		.form(<js>"contactForm"</js>);
  *
  * 	<jc>// Label with styling</jc>
  * 	Label <jv>label4</jv> = <jsm>label</jsm>(<js>"Password:"</js>)
- * 		._for(<js>"password"</js>)
- * 		._class(<js>"required"</js>);
+ * 		.for_(<js>"password"</js>)
+ * 		.class_(<js>"required"</js>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -93,9 +93,9 @@ public class Label extends HtmlElementMixed {
 	 * @return This object.
 	 */
 	@SuppressWarnings({
-		"java:S100" // Method name uses underscore prefix to avoid Java keyword conflict
+		"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
 	})
-	public Label _for(String value) {
+	public Label for_(String value) {
 		attr("for", value);
 		return this;
 	}

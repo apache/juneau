@@ -53,7 +53,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Header cell with styling</jc>
  * 	Th <jv>styled</jv> = <jsm>th</jsm>(<js>"Status"</js>)
- * 		._class(<js>"header-cell"</js>);
+ * 		.class_(<js>"header-cell"</js>);
  *
  * 	<jc>// Header cell with complex content</jc>
  * 	Th <jv>complex</jv> = <jsm>th</jsm>(

@@ -47,7 +47,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Superscript with styling</jc>
  * 	Sup <jv>styled</jv> = <jsm>sup</jsm>(<js>"n"</js>)
- * 		._class(<js>"superscript"</js>);
+ * 		.class_(<js>"superscript"</js>);
  *
  * 	<jc>// Multiple superscripts</jc>
  * 	Sup <jv>multiple</jv> = <jsm>sup</jsm>(

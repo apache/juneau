@@ -66,7 +66,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Styled line break</jc>
  * 	Br <jv>styled</jv> = <jsm>br</jsm>()
- * 		._class(<js>"line-break"</js>)
+ * 		.class_(<js>"line-break"</js>)
  * 		.style(<js>"margin: 10px 0;"</js>);
  *
  * 	<jc>// Multiple line breaks</jc>

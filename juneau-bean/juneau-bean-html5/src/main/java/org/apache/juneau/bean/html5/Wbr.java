@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Wbr with styling</jc>
  * 	Wbr <jv>styled</jv> = <jsm>wbr</jsm>()
- * 		._class(<js>"word-break"</js>);
+ * 		.class_(<js>"word-break"</js>);
  *
  * 	<jc>// Wbr with ID</jc>
  * 	Wbr <jv>withId</jv> = <jsm>wbr</jsm>()

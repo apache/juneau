@@ -49,14 +49,14 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Column group with styling</jc>
  * 	Colgroup <jv>styled</jv> = <jsm>colgroup</jsm>()
- * 		._class(<js>"header-columns"</js>)
+ * 		.class_(<js>"header-columns"</js>)
  * 		.style(<js>"background-color: #f0f0f0;"</js>);
  *
  * 	<jc>// Column group with multiple columns</jc>
  * 	Colgroup <jv>multiple</jv> = <jsm>colgroup</jsm>(
- * 		<jsm>col</jsm>()._class(<js>"name-column"</js>).style(<js>"width: 200px;"</js>),
- * 		<jsm>col</jsm>()._class(<js>"age-column"</js>).style(<js>"width: 100px;"</js>),
- * 		<jsm>col</jsm>()._class(<js>"city-column"</js>).style(<js>"width: 150px;"</js>)
+ * 		<jsm>col</jsm>().class_(<js>"name-column"</js>).style(<js>"width: 200px;"</js>),
+ * 		<jsm>col</jsm>().class_(<js>"age-column"</js>).style(<js>"width: 100px;"</js>),
+ * 		<jsm>col</jsm>().class_(<js>"city-column"</js>).style(<js>"width: 150px;"</js>)
  * 	);
  *
  * 	<jc>// Column group with alignment</jc>

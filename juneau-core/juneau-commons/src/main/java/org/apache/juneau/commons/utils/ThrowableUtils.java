@@ -27,6 +27,32 @@ import org.apache.juneau.commons.settings.*;
 
 /**
  * Various utility methods for creating and working with throwables.
+ *
+ * <p>
+ * All factory methods in this class (e.g. {@link #illegalArg(String, Object...)}, {@link #rex(String, Object...)},
+ * {@link #bex(String, Object...)}, etc.) route through an internal {@code log()} method that checks the
+ * {@code juneau.enableVerboseExceptions} system property.  When that property is set to {@code true}, the
+ * created exception's stack trace is printed to stderr immediately at the point of creation, even if the
+ * exception is later caught and swallowed.
+ *
+ * <h5 class='section'>Example — enabling at startup:</h5>
+ * <p class='bjava'>
+ * 	System.<jsf>setProperty</jsf>(<js>"juneau.enableVerboseExceptions"</js>, <js>"true"</js>);
+ * </p>
+ *
+ * <h5 class='section'>Example — enabling for a single test thread:</h5>
+ * <p class='bjava'>
+ * 	Settings.<jsm>get</jsm>().setLocal(<js>"juneau.enableVerboseExceptions"</js>, <js>"true"</js>);
+ * 	<jk>try</jk> {
+ * 		<jc>// ... code under test ...</jc>
+ * 	} <jk>finally</jk> {
+ * 		Settings.<jsm>get</jsm>().clearLocal();
+ * 	}
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsUtils">juneau-commons - Utils Package</a>
+ * </ul>
  */
 public class ThrowableUtils {
 

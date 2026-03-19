@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// H5 with styling</jc>
  * 	H5 <jv>styled</jv> = <jsm>h5</jsm>(<js>"Timeout Configuration"</js>)
- * 		._class(<js>"detail-heading"</js>);
+ * 		.class_(<js>"detail-heading"</js>);
  *
  * 	<jc>// H5 with complex content</jc>
  * 	H5 <jv>complex</jv> = <jsm>h5</jsm>(
@@ -59,7 +59,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// H5 with multiple elements</jc>
  * 	H5 <jv>multiple</jv> = <jsm>h5</jsm>(
  * 		<js>"5.1.1 "</js>,
- * 		<jsm>span</jsm>()._class(<js>"param-title"</js>).children(<js>"Max Connections"</js>),
+ * 		<jsm>span</jsm>().class_(<js>"param-title"</js>).children(<js>"Max Connections"</js>),
  * 		<js>" "</js>,
  * 		<jsm>small</jsm>(<js>"(Default: 10)"</js>)
  * 	);

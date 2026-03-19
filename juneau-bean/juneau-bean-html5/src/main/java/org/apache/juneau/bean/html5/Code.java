@@ -37,7 +37,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Code with styling</jc>
  * 	Code <jv>styled</jv> = <jsm>code</jsm>(<js>"getElementById"</js>)
- * 		._class(<js>"inline-code"</js>);
+ * 		.class_(<js>"inline-code"</js>);
  *
  * 	<jc>// Code in a sentence</jc>
  * 	P <jv>sentence</jv> = <jsm>p</jsm>(

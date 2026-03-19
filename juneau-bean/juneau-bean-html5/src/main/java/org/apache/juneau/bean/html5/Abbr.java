@@ -46,7 +46,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Abbreviation with styling</jc>
  * 	Abbr <jv>styled</jv> = <jsm>abbr</jsm>(<js>"JavaScript Object Notation"</js>, <js>"JSON"</js>)
- * 		._class(<js>"abbreviation"</js>);
+ * 		.class_(<js>"abbreviation"</js>);
  *
  * 	<jc>// Multiple abbreviations in text</jc>
  * 	Abbr <jv>multiple</jv> = <jsm>abbr</jsm>()

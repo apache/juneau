@@ -41,7 +41,7 @@ import org.apache.juneau.annotation.*;
  * 	Section <jv>styled</jv> = <jsm>section</jsm>(
  * 		<jsm>h2</jsm>(<js>"Features"</js>),
  * 		<jsm>p</jsm>(<js>"Here are the key features of our product."</js>)
- * 	)._class(<js>"content-section"</js>);
+ * 	).class_(<js>"content-section"</js>);
  *
  * 	<jc>// Section with complex content</jc>
  * 	Section <jv>complex</jv> = <jsm>section</jsm>(

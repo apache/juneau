@@ -55,7 +55,7 @@ import org.apache.juneau.annotation.*;
  * 			<jsm>td</jsm>(<js>"100"</js>),
  * 			<jsm>td</jsm>(<js>"$10.00"</js>)
  * 		)
- * 	)._class(<js>"data-rows"</js>);
+ * 	).class_(<js>"data-rows"</js>);
  *
  * 	<jc>// Table body with multiple rows</jc>
  * 	Tbody <jv>multiple</jv> = <jsm>tbody</jsm>(

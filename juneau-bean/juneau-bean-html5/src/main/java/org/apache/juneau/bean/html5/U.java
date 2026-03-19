@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// U with styling</jc>
  * 	U <jv>styled</jv> = <jsm>u</jsm>(<js>"Styled underlined text"</js>)
- * 		._class(<js>"underlined"</js>);
+ * 		.class_(<js>"underlined"</js>);
  *
  * 	<jc>// U with complex content</jc>
  * 	U <jv>complex</jv> = <jsm>u</jsm>(

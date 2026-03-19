@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Noscript with styling</jc>
  * 	Noscript <jv>styled</jv> = <jsm>noscript</jsm>(<js>"JavaScript is required for this page to function properly."</js>)
- * 		._class(<js>"noscript-message"</js>);
+ * 		.class_(<js>"noscript-message"</js>);
  *
  * 	<jc>// Noscript with complex content</jc>
  * 	Noscript <jv>complex</jv> = <jsm>noscript</jsm>(

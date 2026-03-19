@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// H4 with styling</jc>
  * 	H4 <jv>styled</jv> = <jsm>h4</jsm>(<js>"Environment Variables"</js>)
- * 		._class(<js>"sub-subsection-title"</js>);
+ * 		.class_(<js>"sub-subsection-title"</js>);
  *
  * 	<jc>// H4 with complex content</jc>
  * 	H4 <jv>complex</jv> = <jsm>h4</jsm>(
@@ -59,7 +59,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// H4 with multiple elements</jc>
  * 	H4 <jv>multiple</jv> = <jsm>h4</jsm>(
  * 		<js>"4.1.1 "</js>,
- * 		<jsm>span</jsm>()._class(<js>"detail-title"</js>).children(<js>"Connection Pool"</js>),
+ * 		<jsm>span</jsm>().class_(<js>"detail-title"</js>).children(<js>"Connection Pool"</js>),
  * 		<js>" "</js>,
  * 		<jsm>small</jsm>(<js>"(Advanced)"</js>)
  * 	);

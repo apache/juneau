@@ -49,7 +49,7 @@ import org.apache.juneau.annotation.*;
  * 			<jsm>td</jsm>(<js>"Grand Total"</js>),
  * 			<jsm>td</jsm>(<js>"$3,000"</js>)
  * 		)
- * 	)._class(<js>"table-footer"</js>);
+ * 	).class_(<js>"table-footer"</js>);
  *
  * 	<jc>// Table footer with multiple rows</jc>
  * 	Tfoot <jv>multiple</jv> = <jsm>tfoot</jsm>(

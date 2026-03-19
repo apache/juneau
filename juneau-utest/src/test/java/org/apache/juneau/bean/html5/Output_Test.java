@@ -26,7 +26,7 @@ class Output_Test extends TestBase {
 
 	@Test void a01_basicSetters() {
 		Output x = output()
-			._for("a")
+			.for_("a")
 			.form("b")
 			.name("c")
 			.class_("d")

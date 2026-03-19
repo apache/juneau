@@ -43,7 +43,7 @@ import org.apache.juneau.annotation.*;
  * 	Main <jv>styled</jv> = <jsm>main</jsm>(
  * 		<jsm>h1</jsm>(<js>"About Us"</js>),
  * 		<jsm>p</jsm>(<js>"Learn more about our company and mission."</js>)
- * 	)._class(<js>"main-content"</js>);
+ * 	).class_(<js>"main-content"</js>);
  *
  * 	<jc>// Main with complex content</jc>
  * 	Main <jv>complex</jv> = <jsm>main</jsm>(

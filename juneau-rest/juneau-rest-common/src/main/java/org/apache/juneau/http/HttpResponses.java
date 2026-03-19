@@ -313,9 +313,9 @@ public class HttpResponses {
 	 * @return A new bean.
 	 */
 	@SuppressWarnings({
-		"java:S100" // Method name uses underscore prefix to avoid Java keyword conflict
+		"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
 	})
-	public static final Continue _continue() {
+	public static final Continue continue_() {
 		return new Continue();
 	}
 

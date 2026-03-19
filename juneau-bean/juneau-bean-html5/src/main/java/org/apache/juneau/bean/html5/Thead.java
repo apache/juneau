@@ -50,7 +50,7 @@ import org.apache.juneau.annotation.*;
  * 			<jsm>th</jsm>(<js>"Price"</js>),
  * 			<jsm>th</jsm>(<js>"Stock"</js>)
  * 		)
- * 	)._class(<js>"table-header"</js>);
+ * 	).class_(<js>"table-header"</js>);
  *
  * 	<jc>// Table header with multiple rows</jc>
  * 	Thead <jv>multiple</jv> = <jsm>thead</jsm>(

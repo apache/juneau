@@ -54,7 +54,7 @@ import org.apache.juneau.annotation.*;
  * 			<jsm>title</jsm>(<js>"Página en Español"</js>)
  * 		),
  * 		<jsm>body</jsm>(<js>"¡Hola, Mundo!"</js>)
- * 	).lang(<js>"es"</js>)._class(<js>"no-js"</js>);
+ * 	).lang(<js>"es"</js>).class_(<js>"no-js"</js>);
  * </p>
  *
  * <p>

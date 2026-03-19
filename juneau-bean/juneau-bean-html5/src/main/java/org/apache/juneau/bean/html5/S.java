@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// S with styling</jc>
  * 	S <jv>styled</jv> = <jsm>s</jsm>(<js>"This information is outdated"</js>)
- * 		._class(<js>"outdated"</js>);
+ * 		.class_(<js>"outdated"</js>);
  *
  * 	<jc>// S with complex content</jc>
  * 	S <jv>complex</jv> = <jsm>s</jsm>(

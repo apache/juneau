@@ -43,7 +43,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * 	<jc>// Pre with styling</jc>
  * 	Pre <jv>styled</jv> = <jsm>pre</jsm>(<js>"function hello() {\n  return 'Hello World';\n}"</js>)
- * 		._class(<js>"code-block"</js>);
+ * 		.class_(<js>"code-block"</js>);
  *
  * 	<jc>// Pre with complex content</jc>
  * 	Pre <jv>complex</jv> = <jsm>pre</jsm>(
@@ -66,14 +66,14 @@ import org.apache.juneau.xml.annotation.*;
  * 	<jc>// Pre with multiple elements</jc>
  * 	Pre <jv>multiple</jv> = <jsm>pre</jsm>(
  * 		<js>"Line 1: "</js>,
- * 		<jsm>span</jsm>(<js>"function"</js>)._class(<js>"keyword"</js>),
+ * 		<jsm>span</jsm>(<js>"function"</js>).class_(<js>"keyword"</js>),
  * 			" ",
- * 			new Span()._class("function-name").children("example"),
+ * 			new Span().class_("function-name").children("example"),
  * 			"() {\n",
  * 			"Line 2:   ",
- * 			new Span()._class("keyword").children("return"),
+ * 			new Span().class_("keyword").children("return"),
  * 			" ",
- * 			new Span()._class("string").children("'Hello'"),
+ * 			new Span().class_("string").children("'Hello'"),
  * 			";\n",
  * 			"Line 3: }"
  * 		);

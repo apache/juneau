@@ -47,7 +47,7 @@ import org.apache.juneau.annotation.*;
  * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/services"</js>, <js>"Services"</js>)),
  * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/support"</js>, <js>"Support"</js>))
  * 		)
- * 	)._class(<js>"main-navigation"</js>);
+ * 	).class_(<js>"main-navigation"</js>);
  *
  * 	<jc>// Nav with complex content</jc>
  * 	Nav <jv>complex</jv> = <jsm>nav</jsm>(

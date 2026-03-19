@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Div with styling</jc>
  * 	Div <jv>styled</jv> = <jsm>div</jsm>()
- * 		._class(<js>"container"</js>)
+ * 		.class_(<js>"container"</js>)
  * 		.style(<js>"padding: 20px; background-color: #f0f0f0;"</js>);
  *
  * 	<jc>// Div with multiple children</jc>
@@ -50,10 +50,10 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Div with complex content</jc>
  * 	Div <jv>complex</jv> = <jsm>div</jsm>(
- * 		<jsm>div</jsm>()._class(<js>"card-header"</js>).children(<js>"Card Title"</js>),
- * 		<jsm>div</jsm>()._class(<js>"card-body"</js>).children(<js>"Card content"</js>),
- * 		<jsm>div</jsm>()._class(<js>"card-footer"</js>).children(<js>"Card footer"</js>)
- * 	)._class(<js>"card"</js>);
+ * 		<jsm>div</jsm>().class_(<js>"card-header"</js>).children(<js>"Card Title"</js>),
+ * 		<jsm>div</jsm>().class_(<js>"card-body"</js>).children(<js>"Card content"</js>),
+ * 		<jsm>div</jsm>().class_(<js>"card-footer"</js>).children(<js>"Card footer"</js>)
+ * 	).class_(<js>"card"</js>);
  *
  * 	<jc>// Div with ID</jc>
  * 	Div <jv>withId</jv> = <jsm>div</jsm>(<js>"Main content area"</js>)
@@ -61,8 +61,8 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Div with styling</jc>
  * 	Div <jv>styled2</jv> = <jsm>div</jsm>(
- * 		<jsm>div</jsm>()._class(<js>"left-column"</js>).children(<js>"Left content"</js>),
- * 		<jsm>div</jsm>()._class(<js>"right-column"</js>).children(<js>"Right content"</js>)
+ * 		<jsm>div</jsm>().class_(<js>"left-column"</js>).children(<js>"Left content"</js>),
+ * 		<jsm>div</jsm>().class_(<js>"right-column"</js>).children(<js>"Right content"</js>)
  * 	).style(<js>"display: flex; justify-content: space-between;"</js>);
  *
  * 	<jc>// Div with event handlers</jc>

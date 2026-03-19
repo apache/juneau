@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Button with custom styling and click handler</jc>
  * 	Button <jv>btn2</jv> = <jsm>button</jsm>()
  * 		.type(<js>"button"</js>)
- * 		._class(<js>"btn btn-primary"</js>)
+ * 		.class_(<js>"btn btn-primary"</js>)
  * 		.onclick(<js>"handleClick()"</js>)
  * 		.text(<js>"Click Me"</js>);
  *
@@ -54,7 +54,7 @@ import org.apache.juneau.annotation.*;
  * 	Button <jv>btn4</jv> = <jsm>button</jsm>()
  * 		.type(<js>"button"</js>)
  * 		.children(
- * 			<jsm>span</jsm>()._class(<js>"icon"</js>).text(<js>"📧"</js>),
+ * 			<jsm>span</jsm>().class_(<js>"icon"</js>).text(<js>"📧"</js>),
  * 			<jsm>span</jsm>().text(<js>"Send Email"</js>)
  * 		);
  * </p>

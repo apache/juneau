@@ -66,7 +66,7 @@ import org.apache.juneau.annotation.*;
  * 		.src(<js>"/media/movie.mp4"</js>)
  * 		.controls(<jk>true</jk>)
  * 		.children(
- * 			<jsm>track</jsm>(<js>"/media/subtitles-en.vtt"</js>, <js>"subtitles"</js>).srclang(<js>"en"</js>).label(<js>"English"</js>)._default(<jk>true</jk>),
+ * 			<jsm>track</jsm>(<js>"/media/subtitles-en.vtt"</js>, <js>"subtitles"</js>).srclang(<js>"en"</js>).label(<js>"English"</js>).default_(<jk>true</jk>),
  * 			<jsm>track</jsm>(<js>"/media/subtitles-es.vtt"</js>, <js>"subtitles"</js>).srclang(<js>"es"</js>).label(<js>"Español"</js>),
  * 			<jsm>track</jsm>(<js>"/media/subtitles-fr.vtt"</js>, <js>"subtitles"</js>).srclang(<js>"fr"</js>).label(<js>"Français"</js>)
  * 		);
@@ -133,7 +133,7 @@ public class Track extends HtmlElementVoid {
 	@SuppressWarnings({
 		"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
 	})
-	public Track default_(String value) {
+	public Track default_(Object value) {
 		attr("default", value);
 		return this;
 	}

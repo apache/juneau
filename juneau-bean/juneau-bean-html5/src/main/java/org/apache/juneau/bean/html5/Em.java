@@ -38,7 +38,7 @@ import org.apache.juneau.annotation.*;
  *
  * 	<jc>// Emphasis with styling</jc>
  * 	Em <jv>styled</jv> = <jsm>em</jsm>(<js>"critical"</js>)
- * 		._class(<js>"highlight"</js>);
+ * 		.class_(<js>"highlight"</js>);
  *
  * 	<jc>// Emphasis in a sentence</jc>
  * 	P <jv>sentence</jv> = <jsm>p</jsm>(
@@ -50,7 +50,7 @@ import org.apache.juneau.annotation.*;
  * 	<jc>// Emphasis with complex content</jc>
  * 	Em <jv>complex</jv> = <jsm>em</jsm>(
  * 		<js>"must"</js>,
- * 		<jsm>span</jsm>()._class(<js>"not"</js>).children(<js>" not"</js>),
+ * 		<jsm>span</jsm>().class_(<js>"not"</js>).children(<js>" not"</js>),
  * 		<js>" be ignored"</js>
  * 	);
  *
