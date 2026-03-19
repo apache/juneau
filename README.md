@@ -308,7 +308,7 @@ Juneau is packed with features that may not be obvious at first. Users are encou
 * Lots of up-to-date documentation and examples
 * Minimal library dependencies:
    * juneau-marshall, juneau-bean-atom, juneau-bean-common, juneau-bean-html5, juneau-bean-jsonschema, juneau-bean-openapi-v3, juneau-svl, juneau-config - No external dependencies. Entirely self-contained.
-   * juneau-marshall-rdf - Optional RDF support. Requires Apache Jena 2.7.1+.
+   * juneau-marshall-rdf - Optional RDF support. Requires Apache Jena 5.6.0+.
    * juneau-rest-server - Any Servlet 3.1.0+ container.
    * juneau-rest-client - Apache HttpClient 4.5+.
 * Built on top of Servlet and Apache HttpClient APIs that allow you to use the newest HTTP/2 features such as request/response multiplexing and server push.

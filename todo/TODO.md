@@ -12,7 +12,7 @@
 - Need an easier way to specify this header:
 Content-Disposition: attachment; filename="example.pdf"
 
-Figure out why this needs a cast:
+- Figure out why this needs a cast:
 	private static final Json5 JSON5_LENIENT = new Json5(Json5Serializer.DEFAULT, (Json5Parser)Json5Parser.create().ignoreUnknownBeanProperties().build());
 
 - A comprehensive plan for handling large data sets using Suppliers and Consumers?
@@ -23,8 +23,6 @@ Figure out why this needs a cast:
 
 - RestResponse needs a setSerializer() command.
 
-- Upgrade to Jena 6.0
-
 - Verify that you can add @BeanIgnore on a private field with getters/setters.
 - RestClient needs a getRootUrl to see how it's set.
 - RestClient rootUrl should allow for a supplier to be used.
@@ -33,3 +31,4 @@ Figure out why this needs a cast:
 
 - BeanMap.containsKey not working correctly on non-existent properties?
 - Duration.ofDays(7) serialized in hours?
+- Combine OptionalSupplier and ResettableSupplier into a single class and call it Memoizer?
