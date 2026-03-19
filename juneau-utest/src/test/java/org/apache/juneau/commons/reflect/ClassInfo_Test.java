@@ -4273,5 +4273,45 @@ public class ClassInfo_Test extends TestBase {
 		assertSame(service, bean.injectedService, "PostConstruct should see injected field");
 		assertTrue(bean.postConstructCalled, "PostConstruct should be called after all injection");
 	}
+
+	//====================================================================================================
+	// findGetter() / findSetter()
+	//====================================================================================================
+
+	public static class B038_FindGetterSetterBean {
+		private String name;
+		private boolean active;
+
+		public String getName() { return name; }
+		public void setName(String value) { this.name = value; }
+		public boolean isActive() { return active; }
+	}
+
+	@Test
+	void b038_findGetter() {
+		var ci = ClassInfo.of(B038_FindGetterSetterBean.class);
+
+		var getter = ci.findGetter("name");
+		assertTrue(getter.isPresent());
+		assertEquals("getName", getter.get().getName());
+
+		var isGetter = ci.findGetter("active");
+		assertTrue(isGetter.isPresent());
+		assertEquals("isActive", isGetter.get().getName());
+
+		assertFalse(ci.findGetter("nonExistent").isPresent());
+	}
+
+	@Test
+	void b039_findSetter() {
+		var ci = ClassInfo.of(B038_FindGetterSetterBean.class);
+
+		var setter = ci.findSetter("name");
+		assertTrue(setter.isPresent());
+		assertEquals("setName", setter.get().getName());
+
+		assertFalse(ci.findSetter("active").isPresent());   // no setActive method
+		assertFalse(ci.findSetter("nonExistent").isPresent());
+	}
 }
 

@@ -406,6 +406,41 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this method follows the Java Bean getter convention.
+	 *
+	 * <p>
+	 * A getter is a public no-argument method whose name starts with {@code get} (with a non-void return type)
+	 * or {@code is} (with a {@code boolean}/{@link Boolean} return type).
+	 *
+	 * @return <jk>true</jk> if this method is a bean getter.
+	 */
+	public boolean isGetter() {
+		var n = inner.getName();
+		if (getParameterCount() != 0)
+			return false;
+		if (n.startsWith("get") && n.length() > 3)
+			return !getReturnType().is(Void.TYPE);
+		if (n.startsWith("is") && n.length() > 2) {
+			var rt = getReturnType();
+			return rt.is(Boolean.TYPE) || rt.is(Boolean.class);
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method follows the Java Bean setter convention.
+	 *
+	 * <p>
+	 * A setter is a method whose name starts with {@code set} and accepts exactly one argument.
+	 *
+	 * @return <jk>true</jk> if this method is a bean setter.
+	 */
+	public boolean isSetter() {
+		var n = inner.getName();
+		return n.startsWith("set") && n.length() > 3 && getParameterCount() == 1;
+	}
+
+	/**
 	 * Returns the generic return type of this method as a {@link ClassInfo} object.
 	 *
 	 * @return The generic return type of this method.

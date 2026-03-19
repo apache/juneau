@@ -1015,5 +1015,53 @@ class MethodInfo_Test extends TestBase {
 		var method = ClassInfo.of(TestMethodClass.class).getPublicMethod(x -> x.hasName("method1") && x.hasParameterTypes(TestService.class)).get();
 		assertThrows(ExecutableException.class, () -> method.inject(beanStore, instance));
 	}
+
+	//====================================================================================================
+	// isGetter()
+	//====================================================================================================
+
+	public static class A042_IsGetterBean {
+		public String getString() { return null; }
+		public boolean isActive() { return false; }
+		public Boolean isBoxedBoolean() { return false; }
+		public void getVoid() {}
+		public String get() { return null; }
+		public boolean is() { return false; }
+		public void foo() {}
+	}
+
+	@Test
+	void a042_isGetter() throws NoSuchMethodException {
+		var c = A042_IsGetterBean.class;
+		assertTrue(MethodInfo.of(c.getMethod("getString")).isGetter());       // get + non-void return
+		assertTrue(MethodInfo.of(c.getMethod("isActive")).isGetter());        // is + boolean return
+		assertTrue(MethodInfo.of(c.getMethod("isBoxedBoolean")).isGetter());  // is + Boolean return
+		assertFalse(MethodInfo.of(c.getMethod("getVoid")).isGetter());        // get + void return
+		assertFalse(MethodInfo.of(c.getMethod("get")).isGetter());            // "get" alone — too short
+		assertFalse(MethodInfo.of(c.getMethod("is")).isGetter());             // "is" alone — too short
+		assertFalse(MethodInfo.of(c.getMethod("foo")).isGetter());            // no getter prefix
+	}
+
+	//====================================================================================================
+	// isSetter()
+	//====================================================================================================
+
+	public static class A043_IsSetterBean {
+		public void setName(String value) {}
+		public void set() {}
+		public void setMulti(String a, String b) {}
+		public String getName() { return null; }
+		public void foo(String value) {}
+	}
+
+	@Test
+	void a043_isSetter() throws NoSuchMethodException {
+		var c = A043_IsSetterBean.class;
+		assertTrue(MethodInfo.of(c.getMethod("setName", String.class)).isSetter());               // set + one param
+		assertFalse(MethodInfo.of(c.getMethod("set")).isSetter());                                 // "set" alone — too short
+		assertFalse(MethodInfo.of(c.getMethod("setMulti", String.class, String.class)).isSetter()); // set + two params
+		assertFalse(MethodInfo.of(c.getMethod("getName")).isSetter());                             // wrong prefix
+		assertFalse(MethodInfo.of(c.getMethod("foo", String.class)).isSetter());                   // no setter prefix
+	}
 }
 

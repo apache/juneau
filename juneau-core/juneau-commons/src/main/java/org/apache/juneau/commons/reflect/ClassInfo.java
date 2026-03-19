@@ -1668,6 +1668,47 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	}
 
 	/**
+	 * Finds a public getter method for the specified bean property name.
+	 *
+	 * <p>
+	 * Matches any public no-argument method named {@code get<PropertyName>} with a non-void return type,
+	 * or {@code is<PropertyName>} with a {@code boolean}/{@link Boolean} return type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Find the getter for the "name" property on MyBean</jc>
+	 * 	Optional&lt;MethodInfo&gt; <jv>getter</jv> = ClassInfo.<jsm>info</jsm>(MyBean.<jk>class</jk>).findGetter(<js>"name"</js>);
+	 * 	<jv>getter</jv>.ifPresent(<jv>m</jv> -&gt; System.<jsf>out</jsf>.println(<jv>m</jv>.getName()));  <jc>// "getName"</jc>
+	 * </p>
+	 *
+	 * @param propertyName The bean property name (e.g. <js>"name"</js> to match {@code getName()} or {@code isName()}).
+	 * @return The matching getter method, or an empty {@link Optional} if not found.
+	 */
+	public Optional<MethodInfo> findGetter(String propertyName) {
+		return getPublicMethod(m -> m.isGetter() && m.getPropertyName().equals(propertyName));
+	}
+
+	/**
+	 * Finds a public setter method for the specified bean property name.
+	 *
+	 * <p>
+	 * Matches any public single-argument method named {@code set<PropertyName>}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Find the setter for the "name" property on MyBean</jc>
+	 * 	Optional&lt;MethodInfo&gt; <jv>setter</jv> = ClassInfo.<jsm>info</jsm>(MyBean.<jk>class</jk>).findSetter(<js>"name"</js>);
+	 * 	<jv>setter</jv>.ifPresent(<jv>m</jv> -&gt; System.<jsf>out</jsf>.println(<jv>m</jv>.getName()));  <jc>// "setName"</jc>
+	 * </p>
+	 *
+	 * @param propertyName The bean property name (e.g. <js>"name"</js> to match {@code setName(X)}).
+	 * @return The matching setter method, or an empty {@link Optional} if not found.
+	 */
+	public Optional<MethodInfo> findSetter(String propertyName) {
+		return getPublicMethod(m -> m.isSetter() && m.getPropertyName().equals(propertyName));
+	}
+
+	/**
 	 * Returns all public methods on this class and parent classes.
 	 *
 	 * <p>
