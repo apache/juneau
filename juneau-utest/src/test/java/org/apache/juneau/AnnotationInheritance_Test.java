@@ -77,7 +77,7 @@ class AnnotationInheritance_Test extends TestBase {
 	@Test
 	void a02_beanp_propertyName_roundTrip() {
 		// Verify parsing also works with inherited property name
-		var bean = JsonParser.DEFAULT.parse("{v:'hello'}", A1_Child.class);
+		var bean = Json5Parser.DEFAULT.parse("{v:'hello'}", A1_Child.class);
 		assertBean(bean, "value", "hello");
 	}
 

@@ -764,7 +764,7 @@ class RestClient_Config_BeanContext_Test extends TestBase {
 		}
 		public static A28 fromString(String foo) throws ParseException {
 			var x = new A28();
-			x.foo = JsonParser.DEFAULT.parse(foo,int.class);
+			x.foo = Json5Parser.DEFAULT.parse(foo,int.class);
 			return x;
 		}
 	}

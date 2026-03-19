@@ -55,7 +55,7 @@ class Rest_PredefinedStatusCodes_Test extends TestBase {
 	// Bad Request (400)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(parsers=JsonParser.class)
+	@Rest(parsers=Json5Parser.class)
 	public static class B {
 		@RestPut
 		public String a(@Content B1 in) {

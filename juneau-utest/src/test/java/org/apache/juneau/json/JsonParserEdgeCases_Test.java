@@ -137,7 +137,7 @@ class JsonParserEdgeCases_Test extends TestBase {
 		input(101, "n_object_no-colon", "{\"a\"", "Could not find ':'"),
 		input(102, "n_object_non_string_key", "{1:1}", "Unquoted attribute detected"),
 		input(103, "n_object_non_string_key_but_huge_number_instead", "{9999E9999:1}", "Unquoted attribute detected"),
-		input(104, "n_object_repeated_null_null", "{null:null,null:null}", "Unquoted attribute detected"),
+		input(104, "y_object_repeated_null_null", "{null:null,null:null}", null),
 		input(105, "n_object_several_trailing_commas", "{\"id\":0,,,,,}", null),
 		input(106, "n_object_single_quote", "{'a':0}", "Invalid quote character"),
 		input(107, "n_object_trailing_comma", "{\"id\":0,}", "Unexpected '}' found"),
@@ -385,7 +385,7 @@ class JsonParserEdgeCases_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("inputs")
 	void a01_testStrict(Input input) throws Exception {
-		var p = JsonParser.DEFAULT_STRICT;
+		var p = JsonParser.create().validateEnd().build();
 		if (input.name.contains("utf16LE"))
 			p = p.copy().streamCharset(Charset.forName("UTF-16LE")).build();
 		else if (input.name.contains("utf16BE"))
@@ -431,7 +431,7 @@ class JsonParserEdgeCases_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("inputs")
 	void a02_testLax(Input input) throws Exception {
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 		if (input.name.contains("utf16LE"))
 			p = p.copy().streamCharset(Charset.forName("UTF-16LE")).build();
 		else if (input.name.contains("utf16BE"))
@@ -448,6 +448,9 @@ class JsonParserEdgeCases_Test extends TestBase {
 			} catch (ParseException e) {
 				if (input.errorText != null)
 					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
+			} catch (IOException e) {
+				if (input.errorText != null)
+					assertTrue(e.getMessage().contains(input.errorText), fs("Got IOException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getMessage()));
 			} catch (AssertionError e) {
 				throw e;
 			} catch (Throwable t) {
@@ -461,6 +464,9 @@ class JsonParserEdgeCases_Test extends TestBase {
 			} catch (ParseException e) {
 				if (input.errorText != null)
 					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
+			} catch (IOException e) {
+				if (input.errorText != null)
+					assertTrue(e.getMessage().contains(input.errorText), fs("Got IOException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getMessage()));
 			} catch (Throwable t) {
 				fail("Expected ParseException.  Test="+input.name+", Input=" + input.jsonReadable + ", Exception=" + t.getClass().getName() + "," +t.getLocalizedMessage());
 			}

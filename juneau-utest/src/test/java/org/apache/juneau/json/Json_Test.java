@@ -37,8 +37,8 @@ class Json_Test extends TestBase{
 		var m = new LinkedHashMap<String,Object>();
 		var l = new LinkedList<>();
 
-		var s1 = JsonSerializer.create().json5().keepNullProperties().build();
-		var s2 = JsonSerializer.create().simpleAttrs().keepNullProperties().build();
+		var s1 = Json5Serializer.create().keepNullProperties().build();
+		var s2 = JsonSerializer.create().keepNullProperties().build();
 
 		// Null keys and values
 		m.clear();
@@ -50,23 +50,23 @@ class Json_Test extends TestBase{
 		// String = ["]
 		m.clear();
 		m.put("x", "[\"]");
-		assertEquals("{x:\"[\\\"]\"}", s2.serialize(m));
+		assertEquals("{\"x\":\"[\\\"]\"}",  s2.serialize(m));
 		// String = [\"]
 		m.clear();
 		m.put("x", "[\\\"]");
-		assertEquals("{x:\"[\\\\\\\"]\"}", s2.serialize(m));
+		assertEquals("{\"x\":\"[\\\\\\\"]\"}",  s2.serialize(m));
 
 		// String = [\w[\w\-\.]{3,}\w]
 		m.clear();
 		var r = "\\w[\\w\\-\\.]{3,}\\w";
 		m.put("x", r);
-		assertEquals("{x:\"\\\\w[\\\\w\\\\-\\\\.]{3,}\\\\w\"}", s2.serialize(m));
+		assertEquals("{\"x\":\"\\\\w[\\\\w\\\\-\\\\.]{3,}\\\\w\"}", s2.serialize(m));
 		assertEquals(r, JsonMap.ofJson(s2.serialize(m)).getString("x"));
 
 		// String = [foo\bar]
 		m.clear();
 		m.put("x", "foo\\bar");
-		assertEquals("{x:\"foo\\\\bar\"}", s2.serialize(m));
+		assertEquals("{\"x\":\"foo\\\\bar\"}", s2.serialize(m));
 
 		m.clear();
 		m.put("null", null);
@@ -107,7 +107,7 @@ class Json_Test extends TestBase{
 	// Validate various backslashes in strings.
 	//====================================================================================================
 	@Test void a03_backslashesInStrings() throws Exception {
-		var s = JsonSerializer.create().simpleAttrs().keepNullProperties().build();
+		var s = JsonSerializer.create().keepNullProperties().build();
 
 		// [\\]
 		var r = "\\";
@@ -179,7 +179,7 @@ class Json_Test extends TestBase{
 		var s = Json5Serializer.DEFAULT;
 		var r = s.serialize(JsonMap.of("f1", "x'x\"x"));
 		assertEquals("{f1:'x\\'x\"x'}", r);
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 		assertEquals("x'x\"x", p.parse(r, JsonMap.class).getString("f1"));
 	}
 
@@ -188,7 +188,7 @@ class Json_Test extends TestBase{
 	//====================================================================================================
 	@Test void a07_wrapperAttrAnnotationOnBean() throws Exception {
 		var s = Json5Serializer.DEFAULT;
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 
 		var t = A.create();
 		var r = s.serialize(t);
@@ -218,7 +218,7 @@ class Json_Test extends TestBase{
 
 	@Test void a08_wrapperAttrAnnotationOnBean_usingConfig() throws Exception {
 		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(A2Config.class).build();
-		var p = JsonParser.DEFAULT.copy().applyAnnotations(A2Config.class).build();
+		var p = Json5Parser.DEFAULT.copy().applyAnnotations(A2Config.class).build();
 
 		var t = A2.create();
 		var r = s.serialize(t);
@@ -255,7 +255,7 @@ class Json_Test extends TestBase{
 	//====================================================================================================
 	@Test void a09_wrapperAttrAnnotationOnNonBean() throws Exception {
 		var s = Json5Serializer.DEFAULT;
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 
 		var t = B.create();
 		var r = s.serialize(t);
@@ -296,7 +296,7 @@ class Json_Test extends TestBase{
 
 	@Test void a10_wrapperAttrAnnotationOnNonBean_usingConfig() throws Exception {
 		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(B2Config.class).build();
-		var p = JsonParser.DEFAULT.copy().applyAnnotations(B2Config.class).build();
+		var p = Json5Parser.DEFAULT.copy().applyAnnotations(B2Config.class).build();
 
 		var t = B2.create();
 		var r = s.serialize(t);

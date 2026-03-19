@@ -316,7 +316,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			var example = sType.getExample(this, jpSession());
 			if (nn(example)) {
 				try {
-					return JsonParser.DEFAULT.parse(toJson(example), Object.class);
+					return Json5Parser.DEFAULT.parse(toJson(example), Object.class);
 				} catch (ParseException e) {
 					throw new SerializeException(e);
 				}
@@ -327,7 +327,8 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 	@SuppressWarnings({
 		"java:S1168",    // TODO: null when type ignored. Consider empty schema.
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S3776", // Cognitive complexity acceptable for schema generation over type categories
+		"java:S6541", // Brain Method — unified getSchema branching over serializers/types is intentional
 		"rawtypes", // Raw types necessary for generic type handling
 		"unchecked", // Type erasure requires unchecked casts
 	})

@@ -103,7 +103,7 @@ public class Config extends Context implements ConfigEventListener {
 			mods(XorEncodeMod.INSTANCE);
 			multiLineValuesOnSeparateLines = env("Config.multiLineValuesOnSeparateLines", false);
 			name = env("Config.name", "Configuration.cfg");
-			parser = JsonParser.DEFAULT;
+			parser = Json5Parser.DEFAULT;
 			readOnly = env("Config.readOnly", false);
 			serializer = Json5Serializer.DEFAULT;
 			store = FileStore.DEFAULT;

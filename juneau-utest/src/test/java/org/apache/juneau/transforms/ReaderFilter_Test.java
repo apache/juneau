@@ -37,7 +37,7 @@ class ReaderFilter_Test extends TestBase {
 	// testJson
 	//====================================================================================================
 	@Test void a01_json() throws Exception {
-		var s = JsonSerializer.create().json5().swaps(ParsedReaderSwap.Json.class).build();
+		var s = Json5Serializer.create().swaps(ParsedReaderSwap.Json.class).build();
 		var r = reader("{foo:'bar',baz:'quz'}");
 		var m = new HashMap<>();
 		m.put("X", r);

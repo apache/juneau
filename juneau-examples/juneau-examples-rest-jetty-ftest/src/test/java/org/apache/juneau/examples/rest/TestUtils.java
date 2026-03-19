@@ -30,24 +30,20 @@ import org.junit.*;
 public class TestUtils {
 
 	// @formatter:off
-	private static JsonSerializer js = JsonSerializer.create()
-		.json5()
+	private static JsonSerializer js = Json5Serializer.create()
 		.keepNullProperties()
 		.build();
 
-	private static JsonSerializer jsSorted = JsonSerializer.create()
-		.json5()
+	private static JsonSerializer jsSorted = Json5Serializer.create()
 		.sortCollections()
 		.sortMaps()
 		.keepNullProperties()
 		.build();
 
-	private static JsonSerializer js2 = JsonSerializer.create()
-		.json5()
+	private static JsonSerializer js2 = Json5Serializer.create()
 		.build();
 
-	private static JsonSerializer js3 = JsonSerializer.create()
-		.json5()
+	private static JsonSerializer js3 = Json5Serializer.create()
 		.sortProperties()
 		.build();
 	// @formatter:on

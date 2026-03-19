@@ -66,146 +66,150 @@ class RoundTripTransformBeans_Test extends TestBase {
 			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.build(),
-		tester(2, "Json - lax")
-			.serializer(JsonSerializer.create().json5().keepNullProperties().addBeanTypes().addRootType())
+		tester(2, "Json - readable")
+			.serializer(JsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.build(),
-		tester(3, "Json - lax, readable")
-			.serializer(JsonSerializer.create().json5().ws().keepNullProperties().addBeanTypes().addRootType())
-			.parser(JsonParser.create())
+		tester(3, "Json5 - default")
+			.serializer(Json5Serializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(Json5Parser.create())
 			.build(),
-		tester(4, "Xml - namespaces, validation, readable")
+		tester(4, "Json5 - readable")
+			.serializer(Json5Serializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(Json5Parser.create())
+			.build(),
+		tester(5, "Xml - namespaces, validation, readable")
 			.serializer(XmlSerializer.create().ns().sq().keepNullProperties().addNamespaceUrisToRoot().useWhitespace().addBeanTypes().addRootType())
 			.parser(XmlParser.create())
 			.validateXmlWhitespace()
 			.validateXml()
 			.build(),
-		tester(5, "Xml - no namespaces, validation")
+		tester(6, "Xml - no namespaces, validation")
 			.serializer(XmlSerializer.create().sq().keepNullProperties().addBeanTypes().addRootType())
 			.parser(XmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester(6, "Html - default")
+		tester(7, "Html - default")
 			.serializer(HtmlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HtmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester(7, "Html - readable")
+		tester(8, "Html - readable")
 			.serializer(HtmlSerializer.create().sq().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HtmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester(8, "Html - with key/value headers")
+		tester(9, "Html - with key/value headers")
 			.serializer(HtmlSerializer.create().addKeyValueTableHeaders().addBeanTypes().addRootType())
 			.parser(HtmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester(9, "Uon - default")
+		tester(10, "Uon - default")
 			.serializer(UonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UonParser.create())
 			.build(),
-		tester(10, "Uon - readable")
+		tester(11, "Uon - readable")
 			.serializer(UonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UonParser.create())
 			.build(),
-		tester(11, "Uon - encoded")
+		tester(12, "Uon - encoded")
 			.serializer(UonSerializer.create().encoding().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UonParser.create().decoding())
 			.build(),
-		tester(12, "UrlEncoding - default")
+		tester(13, "UrlEncoding - default")
 			.serializer(UrlEncodingSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UrlEncodingParser.create())
 			.build(),
-		tester(13, "UrlEncoding - readable")
+		tester(14, "UrlEncoding - readable")
 			.serializer(UrlEncodingSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UrlEncodingParser.create())
 			.build(),
-		tester(14, "UrlEncoding - expanded params")
+		tester(15, "UrlEncoding - expanded params")
 			.serializer(UrlEncodingSerializer.create().expandedParams().addBeanTypes().addRootType())
 			.parser(UrlEncodingParser.create().expandedParams())
 			.build(),
-		tester(15, "MsgPack")
+		tester(16, "MsgPack")
 			.serializer(MsgPackSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MsgPackParser.create())
 			.build(),
-		tester(16, "RdfXml")
+		tester(17, "RdfXml")
 			.serializer(RdfXmlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfXmlParser.create())
 			.build(),
-		tester(17, "RdfThrift")
+		tester(18, "RdfThrift")
 			.serializer(RdfThriftSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfThriftParser.create())
 			.build(),
-		tester(18, "RdfProto")
+		tester(19, "RdfProto")
 			.serializer(RdfProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfProtoParser.create())
 			.build(),
-		tester(19, "RdfXmlAbbrev")
+		tester(20, "RdfXmlAbbrev")
 			.serializer(RdfXmlAbbrevSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfXmlParser.create())
 			.build(),
-		tester(20, "RdfTurtle")
+		tester(21, "RdfTurtle")
 			.serializer(TurtleSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(TurtleParser.create())
 			.build(),
-		tester(21, "RdfN3")
+		tester(22, "RdfN3")
 			.serializer(N3Serializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(N3Parser.create())
 			.build(),
-		tester(22, "RdfNtriple")
+		tester(23, "RdfNtriple")
 			.serializer(NTripleSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(NTripleParser.create())
 			.build(),
-		tester(23, "RdfNquads")
+		tester(24, "RdfNquads")
 			.serializer(NQuadsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(NQuadsParser.create())
 			.build(),
-		tester(24, "RdfTrig")
+		tester(25, "RdfTrig")
 			.serializer(TriGSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(TriGParser.create())
 			.build(),
-		tester(25, "RdfJsonLd")
+		tester(26, "RdfJsonLd")
 			.serializer(JsonLdSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonLdParser.create())
 			.build(),
-		tester(26, "RdfJson")
+		tester(27, "RdfJson")
 			.serializer(RdfJsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfJsonParser.create())
 			.build(),
-		tester(27, "RdfTriX")
+		tester(28, "RdfTriX")
 			.serializer(TriXSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(TriXParser.create())
 			.build(),
-		tester(28, "Json schema")
+		tester(29, "Json schema")
 			.serializer(JsonSchemaSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.returnOriginalObject()
 			.build(),
-		tester(29, "Yaml - default")
+		tester(30, "Yaml - default")
 			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(YamlParser.create())
 			.build(),
-		tester(30, "Csv - default")
+		tester(31, "Csv - default")
 			.serializer(CsvSerializer.create().keepNullProperties())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()
 			.build(),
-		tester(31, "Markdown - default")
+		tester(32, "Markdown - default")
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create())
 			.skipIf(o -> o instanceof A)  // byte[][] not yet serialized as Base64 in inline JSON5
 			.build(),
-		tester(32, "Hjson - default")
+		tester(33, "Hjson - default")
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HjsonParser.create())
 			.skipIf(o -> o instanceof A)  // byte[][] not yet serialized as Base64 in inline JSON5
 			.build(),
-		tester(33, "Jcs - default")
+		tester(34, "Jcs - default")
 			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
 			.skipIf(o -> o instanceof A)  // byte[][] not yet serialized as Base64 in inline JSON5
 			.build(),
-		tester(34, "Cbor - default")
+		tester(35, "Cbor - default")
 			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(CborParser.create())
 			.build(),
@@ -498,8 +502,8 @@ class RoundTripTransformBeans_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a07_surrogates(RoundTrip_Tester t) throws Exception {
-		var s = JsonSerializer.create().json5().swaps(D2.class).build();
-		var p = JsonParser.create().swaps(D2.class).build();
+		var s = Json5Serializer.create().swaps(D2.class).build();
+		var p = Json5Parser.create().swaps(D2.class).build();
 		var x = D1.create();
 
 		var r = (Object)s.serialize(x);
@@ -541,7 +545,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 	@MethodSource("testers")
 	void a08_surrogatesThroughAnnotation(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT;
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 		var x = E1.create();
 
 		var r = (Object)s.serialize(x);
@@ -584,7 +588,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 	@MethodSource("testers")
 	void a09_surrogatesThroughAnnotation_usingConfig(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
-		var p = JsonParser.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
+		var p = Json5Parser.DEFAULT.copy().applyAnnotations(E1cConfig.class).build();
 		var x = E1c.create();
 
 		var r = (Object)s.serialize(x);
@@ -649,7 +653,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 	@MethodSource("testers")
 	void a10_swapOnPrivateField(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT;
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 
 		var x = F1.create();
 
@@ -684,7 +688,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 	@MethodSource("testers")
 	void a11_swapOnPrivateField_usingConfig(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(F1cConfig.class).build();
-		var p = JsonParser.DEFAULT.copy().applyAnnotations(F1cConfig.class).build();
+		var p = Json5Parser.DEFAULT.copy().applyAnnotations(F1cConfig.class).build();
 
 		var x = F1c.create();
 
@@ -718,7 +722,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 	@MethodSource("testers")
 	void a12_swapOnPrivateField_Inherited(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT;
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 
 		var x = F2.create();
 
@@ -756,7 +760,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 	@MethodSource("testers")
 	void a13_swapOnPrivateField_Inherited_usingConfig(RoundTrip_Tester t) throws Exception {
 		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(F2ac.class).build();
-		var p = JsonParser.DEFAULT.copy().applyAnnotations(F2ac.class).build();
+		var p = Json5Parser.DEFAULT.copy().applyAnnotations(F2ac.class).build();
 
 		var x = F2.create();
 

@@ -1510,12 +1510,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder strict() {
-			super.strict();
-			return this;
-		}
-
 		/**
 		 * Suppress logging on this client.
 		 *

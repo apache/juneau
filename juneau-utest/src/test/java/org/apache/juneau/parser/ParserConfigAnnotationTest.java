@@ -62,7 +62,6 @@ class ParserConfigAnnotationTest extends TestBase {
 		fileCharset="$X{US-ASCII}",
 		streamCharset="$X{US-ASCII}",
 		listener=AA.class,
-		strict="$X{true}",
 		trimStrings="$X{true}",
 		unbuffered="$X{true}"
 	)
@@ -77,7 +76,6 @@ class ParserConfigAnnotationTest extends TestBase {
 		check("US-ASCII", x.getFileCharset());
 		check("US-ASCII", x.getStreamCharset());
 		check("AA", x.getListener());
-		check("true", x.isStrict());
 		check("true", x.isTrimStrings());
 		check("true", x.isUnbuffered());
 	}
@@ -89,7 +87,6 @@ class ParserConfigAnnotationTest extends TestBase {
 		check("HEX", x.getBinaryFormat());
 		check("1", x.getDebugOutputLines());
 		check("AA", x.getListener());
-		check("true", x.isStrict());
 		check("true", x.isTrimStrings());
 		check("true", x.isUnbuffered());
 	}
@@ -110,7 +107,6 @@ class ParserConfigAnnotationTest extends TestBase {
 		check(Charset.defaultCharset().toString(), x.getFileCharset());
 		check("UTF-8", x.getStreamCharset());
 		check(null, x.getListener());
-		check("false", x.isStrict());
 		check("false", x.isTrimStrings());
 		check("false", x.isUnbuffered());
 	}
@@ -122,7 +118,6 @@ class ParserConfigAnnotationTest extends TestBase {
 		check("HEX", x.getBinaryFormat());
 		check("5", x.getDebugOutputLines());
 		check(null, x.getListener());
-		check("false", x.isStrict());
 		check("false", x.isTrimStrings());
 		check("false", x.isUnbuffered());
 	}
@@ -142,7 +137,6 @@ class ParserConfigAnnotationTest extends TestBase {
 		check(Charset.defaultCharset().toString(), x.getFileCharset());
 		check("UTF-8", x.getStreamCharset());
 		check(null, x.getListener());
-		check("false", x.isStrict());
 		check("false", x.isTrimStrings());
 		check("false", x.isUnbuffered());
 	}
@@ -154,7 +148,6 @@ class ParserConfigAnnotationTest extends TestBase {
 		check("HEX", x.getBinaryFormat());
 		check("5", x.getDebugOutputLines());
 		check(null, x.getListener());
-		check("false", x.isStrict());
 		check("false", x.isTrimStrings());
 		check("false", x.isUnbuffered());
 	}

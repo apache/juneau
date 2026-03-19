@@ -39,7 +39,7 @@ class ProxyBeanTest extends TestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		var a = JsonParser.DEFAULT.parse("{foo:1}", A.class);
+		var a = Json5Parser.DEFAULT.parse("{foo:1}", A.class);
 		assertEquals(1, a.getFoo());
 		a = XmlParser.DEFAULT.parse("<object><foo>1</foo></object>", A.class);
 		assertEquals(1, a.getFoo());

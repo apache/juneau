@@ -610,12 +610,6 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder json5() {
-			super.json5();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder keepNullProperties() {
 			super.keepNullProperties();
 			return this;
@@ -696,18 +690,6 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		@Override /* Overridden from Builder */
 		public Builder quoteCharOverride(char value) {
 			super.quoteCharOverride(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder simpleAttrs() {
-			super.simpleAttrs();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder simpleAttrs(boolean value) {
-			super.simpleAttrs(value);
 			return this;
 		}
 
@@ -936,42 +918,10 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		}
 	}
 
-	/** Default serializer, single quotes, simple mode. */
-	public static class Simple extends JsonSchemaSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public Simple(Builder builder) {
-			super(builder.simpleAttrs().quoteChar('\''));
-		}
-	}
-
-	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static class SimpleReadable extends JsonSchemaSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public SimpleReadable(Builder builder) {
-			super(builder.simpleAttrs().quoteChar('\'').useWhitespace());
-		}
-	}
-
 	/** Default serializer, all default settings.*/
 	public static final JsonSchemaSerializer DEFAULT = new JsonSchemaSerializer(create());
 	/** Default serializer, all default settings.*/
 	public static final JsonSchemaSerializer DEFAULT_READABLE = new Readable(create());
-
-	/** Default serializer, single quotes, simple mode. */
-	public static final JsonSchemaSerializer DEFAULT_SIMPLE = new Simple(create());
-
-	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final JsonSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(create());
 
 	/**
 	 * Creates a new builder for this object.

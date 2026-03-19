@@ -78,8 +78,8 @@ import org.apache.juneau.parser.*;
  * 	<jc>// Parse into an untyped map</jc>
  * 	JsonMap <jv>map</jv> = ProtoParser.<jsf>DEFAULT</jsf>.parse(<jv>input</jv>, JsonMap.<jk>class</jk>);
  *
- * 	<jc>// Create a strict-mode parser</jc>
- * 	ProtoParser <jv>parser</jv> = ProtoParser.<jsm>create</jsm>().strict().build();
+ * 	<jc>// Create a parser with validate-end enabled</jc>
+ * 	ProtoParser <jv>parser</jv> = ProtoParser.<jsm>create</jsm>().build();
  * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>input</jv>, MyBean.<jk>class</jk>);
  * </p>
  *

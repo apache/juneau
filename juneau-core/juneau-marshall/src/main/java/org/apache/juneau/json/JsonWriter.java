@@ -178,8 +178,6 @@ public class JsonWriter extends SerializerWriter {
 		 */
 		boolean doConvert = ! simpleAttrs;		// Always convert when not in lax mode.
 
-		// If the attribute is null, it must always be printed as null without quotes.
-		// Technically, this isn't part of the JSON spec, but it does allow for null key values.
 		if (s == null) {
 			s = "null";
 			doConvert = false;

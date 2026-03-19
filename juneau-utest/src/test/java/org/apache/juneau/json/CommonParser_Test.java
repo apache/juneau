@@ -37,7 +37,7 @@ class CommonParser_Test extends TestBase {
 	// testFromSerializer
 	//====================================================================================================
 	@Test void a01_fromSerializer() throws Exception {
-		var p = JsonParser.create().beanDictionary(A1.class).build();
+		var p = Json5Parser.create().beanDictionary(A1.class).build();
 
 		var m = (Map)p.parse("{a:1}", Object.class);
 		assertEquals(1, m.get("a"));
@@ -108,12 +108,12 @@ class CommonParser_Test extends TestBase {
 	// Correct handling of unknown properties.
 	//====================================================================================================
 	@Test void a02_correctHandlingOfUnknownProperties() throws Exception {
-		var p = JsonParser.create().ignoreUnknownBeanProperties().build();
+		var p = Json5Parser.create().ignoreUnknownBeanProperties().build();
 		var in = "{a:1,unknown:3,b:2}";
 		var b = p.parse(in, B.class);
 		assertEquals(1, b.a);
 		assertEquals(2, b.b);
-		assertThrows(ParseException.class, ()->JsonParser.DEFAULT.parse(in, B.class));
+		assertThrows(ParseException.class, ()->Json5Parser.DEFAULT.parse(in, B.class));
 	}
 
 	public static class B {
@@ -124,7 +124,7 @@ class CommonParser_Test extends TestBase {
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
 	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 		var json = "{ints:[1,2,3],beans:[{a:1,b:2}]}";
 		var t = p.parse(json, C.class);
 		assertSize(3, t.getInts());
@@ -143,7 +143,7 @@ class CommonParser_Test extends TestBase {
 	// Parser listeners.
 	//====================================================================================================
 	@Test void a04_parserListeners() throws Exception {
-		var p = JsonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
+		var p = Json5Parser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 		var json = "{a:1,unknownProperty:\"/foo\",b:2}";
 		p.parse(json, B.class);
 		assertSize(1, MyParserListener.events);

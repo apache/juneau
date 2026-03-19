@@ -330,7 +330,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		var output = out.getRawOutput();
 		if (output instanceof JsonWriter output2)
 			return output2;
-		var w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), isSimpleAttrs(), isTrimStrings(), getUriResolver());
+		var w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), false, isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
@@ -354,16 +354,6 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
 	 */
 	protected final boolean isEscapeSolidus() { return ctx.isEscapeSolidus(); }
-
-	/**
-	 * Simple JSON attributes.
-	 *
-	 * @see JsonSerializer.Builder#simpleAttrs()
-	 * @return
-	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
-	 * 	<br>Otherwise, they are always quoted.
-	 */
-	protected final boolean isSimpleAttrs() { return ctx.isSimpleAttrs(); }
 
 	/**
 	 * Workhorse method.

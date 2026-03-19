@@ -435,7 +435,7 @@ class BeanMap_Test extends TestBase {
 		m.put("b", new D2());
 		assertEquals("default", t.b.s);
 
-		var p = JsonParser.create().beanDictionary(D2.class).build();
+		var p = Json5Parser.create().beanDictionary(D2.class).build();
 		m.put("lb1", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertBean(t, "lb1{class{simpleName}},lb1{0{class{simpleName}}},lb1{0{s}}", "{{JsonList}},{{{D2}}},{{foobar}}");
 
@@ -478,7 +478,7 @@ class BeanMap_Test extends TestBase {
 		m.put("b", new D2c());
 		assertBean(t.b, "s", "default");
 
-		var p = JsonParser.create().beanDictionary(D2c.class).applyAnnotations(D1cConfig.class).build();
+		var p = Json5Parser.create().beanDictionary(D2c.class).applyAnnotations(D1cConfig.class).build();
 		m.put("lb1", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertBean(t, "lb1{class{simpleName}},lb1{0{class{simpleName}}},lb1{0{s}}", "{{JsonList}},{{{D2c}}},{{foobar}}");
 
@@ -538,7 +538,7 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 	@Test void a08_invokeMethod() throws Exception {
 		var t5 = new F();
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 		var m = bc.toBeanMap(t5);
 		ObjectIntrospector.create(t5, p).invokeMethod("doSetAProperty(java.lang.String)", "['baz']");
 		assertEquals("baz", m.get("prop"));
@@ -643,7 +643,7 @@ class BeanMap_Test extends TestBase {
 		assertBean(t7, "enum1,enum2", "TWO,THREE");
 
 		// Create instance directly from JSON.
-		var p = JsonParser.create().beanDictionary(H.class).build();
+		var p = Json5Parser.create().beanDictionary(H.class).build();
 		t7 = (H)p.parse("{_type:'H',enum1:'THREE',enum2:'ONE'}", Object.class);
 		assertEquals("{_type:'H',enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
 		assertBean(t7, "enum1,enum2", "THREE,ONE");
@@ -872,11 +872,11 @@ class BeanMap_Test extends TestBase {
 
 		// JSON
 		var json = "{baz:789,foo:123,bar:456}";
-		var p = (ReaderParser)JsonParser.create().ignoreUnknownBeanProperties().build();
+		var p = (ReaderParser)Json5Parser.create().ignoreUnknownBeanProperties().build();
 		var t = p.parse(json, O.class);
 		assertBean(t, "foo", "123");
 
-		assertThrows(Exception.class, ()->JsonParser.DEFAULT.parse(json, O.class));
+		assertThrows(Exception.class, ()->Json5Parser.DEFAULT.parse(json, O.class));
 
 		// XML
 		var xml = "<object><baz type='number'>789</baz><foo type='number'>123</foo><bar type='number'>456</bar></object>";
@@ -1586,7 +1586,7 @@ class BeanMap_Test extends TestBase {
 		assertEquals("{a:'a',b:'b'}", r);
 
 		// Make sure setters are used if present.
-		t = JsonParser.DEFAULT.parse(r, U.class);
+		t = Json5Parser.DEFAULT.parse(r, U.class);
 		assertEquals("b(setter)", t.b);
 	}
 
@@ -1620,7 +1620,7 @@ class BeanMap_Test extends TestBase {
 		assertEquals("{a:'a',b:'b'}", r);
 
 		// Make sure setters are used if present.
-		t = JsonParser.DEFAULT.copy().applyAnnotations(Uc.class).build().parse(r, Uc.class);
+		t = Json5Parser.DEFAULT.copy().applyAnnotations(Uc.class).build().parse(r, Uc.class);
 		assertEquals("b(setter)", t.b);
 	}
 
@@ -1717,7 +1717,7 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 	@Test void a38_overriddenPropertyTypes() {
 		var s = Json5Serializer.DEFAULT;
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 
 		var t1 = X1.create();
 		var r = s.serialize(t1);

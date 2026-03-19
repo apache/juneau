@@ -32,7 +32,11 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Serializes POJO models to JSON.
+ * Serializes POJO models to RFC 8259 JSON.
+ *
+ * <p>
+ * Produces strict JSON with double-quoted strings by default. For JSON5-style output (single quotes,
+ * etc.), use {@link Json5Serializer}.
  *
  * <h5 class='topic'>Media types</h5>
  * <p>
@@ -116,7 +120,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
-
+ * 	<li class='link'>{@link Json5Serializer} - For JSON5-style output (single quotes, etc.)
  * </ul>
  */
 @SuppressWarnings({
@@ -128,7 +132,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	// Property name constants
 	private static final String PROP_addBeanTypesJson = "addBeanTypesJson";
 	private static final String PROP_escapeSolidus = "escapeSolidus";
-	private static final String PROP_simpleAttrs = "simpleAttrs";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
@@ -142,7 +145,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 		private boolean addBeanTypesJson;
 		private boolean escapeSolidus;
-		private boolean simpleAttrs;
 
 		/**
 		 * Constructor, default settings.
@@ -152,7 +154,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			accept("application/json,text/json");
 			addBeanTypesJson = env("JsonSerializer.addBeanTypes", false);
 			escapeSolidus = env("JsonSerializer.escapeSolidus", false);
-			simpleAttrs = env("JsonSerializer.simpleAttrs", false);
 		}
 
 		/**
@@ -165,7 +166,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			addBeanTypesJson = copyFrom.addBeanTypesJson;
 			escapeSolidus = copyFrom.escapeSolidus;
-			simpleAttrs = copyFrom.simpleAttrs;
 		}
 
 		/**
@@ -178,7 +178,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			addBeanTypesJson = copyFrom.addBeanTypesJson;
 			escapeSolidus = copyFrom.escapeSolidus;
-			simpleAttrs = copyFrom.simpleAttrs;
 		}
 
 		@Override /* Overridden from Builder */
@@ -560,8 +559,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			return HashKey.of(
 				super.hashKey(),
 				addBeanTypesJson,
-				escapeSolidus,
-				simpleAttrs
+				escapeSolidus
 			);
 			// @formatter:on
 		}
@@ -636,22 +634,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		public Builder interfaces(java.lang.Class<?>...value) {
 			super.interfaces(value);
 			return this;
-		}
-
-		/**
-		 * Simple JSON mode and single quote.
-		 *
-		 * <p>
-		 * Shortcut for calling <c>simple().sq()</c>.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder json5() {
-			return simpleAttrs().sq();
 		}
 
 		@Override /* Overridden from Builder */
@@ -735,90 +717,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		@Override /* Overridden from Builder */
 		public Builder quoteCharOverride(char value) {
 			super.quoteCharOverride(value);
-			return this;
-		}
-
-		/**
-		 * Simple JSON attributes mode.
-		 *
-		 * <p>
-		 * If enabled, JSON attribute names will only be quoted when necessary.
-		 * <br>Otherwise, they are always quoted.
-		 *
-		 * <p>
-		 * Attributes do not need to be quoted when they conform to the following:
-		 * <ol class='spaced-list'>
-		 * 	<li>They start with an ASCII character or <js>'_'</js>.
-		 * 	<li>They contain only ASCII characters or numbers or <js>'_'</js>.
-		 * 	<li>They are not one of the following reserved words:
-		 * 		<p class='bcode'>
-		 * 	arguments, break, case, catch, class, const, continue, debugger, default,
-		 * 	delete, do, else, enum, eval, export, extends, false, finally, for, function,
-		 * 	if, implements, import, in, instanceof, interface, let, new, null, package,
-		 * 	private, protected, public, return, static, super, switch, this, throw,
-		 * 	true, try, typeof, var, void, while, with, undefined, yield
-		 * 		</p>
-		 * </ol>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a JSON serializer in normal mode.</jc>
-		 * 	WriterSerializer <jv>serializer1</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.build();
-		 *
-		 * 	<jc>// Create a JSON serializer in simple mode.</jc>
-		 * 	WriterSerializer <jv>serializer2</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.simpleAttrs()
-		 * 		.build();
-		 *
-		 * 	JsonMap <jv>myMap</jv> = JsonMap.<jsm>of</jsm>(
-		 * 		<js>"foo"</js>, <js>"x1"</js>,
-		 * 		<js>"_bar"</js>, <js>"x2"</js>,
-		 * 		<js>" baz "</js>, <js>"x3"</js>,
-		 * 		<js>"123"</js>, <js>"x4"</js>,
-		 * 		<js>"return"</js>, <js>"x5"</js>,
-		 * 		<js>""</js>, <js>"x6"</js>
-		 *  );
-		 *
-		 * 	<jc>// Produces:</jc>
-		 * 	<jc>// {</jc>
-		 * 	<jc>// 	"foo": "x1"</jc>
-		 * 	<jc>// 	"_bar": "x2"</jc>
-		 * 	<jc>// 	" baz ": "x3"</jc>
-		 * 	<jc>// 	"123": "x4"</jc>
-		 * 	<jc>// 	"return": "x5"</jc>
-		 * 	<jc>// 	"": "x6"</jc>
-		 * 	<jc>// }</jc>
-		 * 	String <jv>json1</jv> = <jv>serializer1</jv>.serialize(<jv>myMap</jv>);
-		 *
-		 * 	<jc>// Produces:</jc>
-		 * 	<jc>// {</jc>
-		 * 	<jc>// 	foo: "x1"</jc>
-		 * 	<jc>// 	_bar: "x2"</jc>
-		 * 	<jc>// 	" baz ": "x3"</jc>
-		 * 	<jc>// 	"123": "x4"</jc>
-		 * 	<jc>// 	"return": "x5"</jc>
-		 * 	<jc>// 	"": "x6"</jc>
-		 * 	<jc>// }</jc>
-		 * 	String <jv>json2</jv> = <jv>serializer2</jv>.serialize(<jv>myMap</jv>);
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder simpleAttrs() {
-			return simpleAttrs(true);
-		}
-
-		/**
-		 * Same as {@link #simpleAttrs()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder simpleAttrs(boolean value) {
-			simpleAttrs = value;
 			return this;
 		}
 
@@ -1028,25 +926,9 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		}
 	}
 
-	/**
-	 * Default serializer, single quotes, simple mode, with whitespace and recursion detection.
-	 * Note that recursion detection introduces a small performance penalty.
-	 */
-	public static class ReadableSafe extends JsonSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public ReadableSafe(Builder builder) {
-			super(builder.simpleAttrs().useWhitespace().detectRecursions());
-		}
-	}
-
 	/** Default serializer, all default settings.*/
 	public static final JsonSerializer DEFAULT = new JsonSerializer(create());
-	/** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleAttrs() simple mode}, sorted bean properties. */
+	/** Default serializer, sorted bean properties. */
 	public static final JsonSerializer DEFAULT_SORTED = new JsonSerializer(create().sortProperties());
 
 	/** Default serializer, all default settings.*/
@@ -1063,7 +945,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 	protected final boolean addBeanTypesJson;
 	protected final boolean escapeSolidus;
-	protected final boolean simpleAttrs;
 
 	private final boolean addBeanTypes2;
 	private final Map<BeanPropertyMeta,JsonBeanPropertyMeta> jsonBeanPropertyMetas = new ConcurrentHashMap<>();
@@ -1080,7 +961,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		super(builder);
 		addBeanTypesJson = builder.addBeanTypesJson;
 		escapeSolidus = builder.escapeSolidus;
-		simpleAttrs = builder.simpleAttrs;
 
 		addBeanTypes2 = addBeanTypesJson || super.isAddBeanTypes();
 	}
@@ -1150,21 +1030,10 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 */
 	protected final boolean isEscapeSolidus() { return escapeSolidus; }
 
-	/**
-	 * Simple JSON mode.
-	 *
-	 * @see Builder#simpleAttrs()
-	 * @return
-	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
-	 * 	<br>Otherwise, they are always quoted.
-	 */
-	protected final boolean isSimpleAttrs() { return simpleAttrs; }
-
 	@Override /* Overridden from WriterSerializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(PROP_addBeanTypesJson, addBeanTypesJson)
-			.a(PROP_escapeSolidus, escapeSolidus)
-			.a(PROP_simpleAttrs, simpleAttrs);
+			.a(PROP_escapeSolidus, escapeSolidus);
 	}
 }

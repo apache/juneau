@@ -34,8 +34,8 @@ class Common_Test extends TestBase {
 	// Trim nulls from beans
 	//====================================================================================================
 	@Test void a01_trimNullsFromBeans() throws Exception {
-		var s = JsonSerializer.create().json5();
-		var p = JsonParser.DEFAULT;
+		var s = Json5Serializer.create();
+		var p = Json5Parser.DEFAULT;
 		var t1 = A.create();
 
 		var r = s.build().serialize(t1);
@@ -64,8 +64,8 @@ class Common_Test extends TestBase {
 	// Trim empty maps
 	//====================================================================================================
 	@Test void a02_trimEmptyMaps() throws Exception {
-		var s = JsonSerializer.create().json5();
-		var p = JsonParser.DEFAULT;
+		var s = Json5Serializer.create();
+		var p = Json5Parser.DEFAULT;
 		var t1 = B.create();
 		var r = s.build().serialize(t1);
 
@@ -95,8 +95,8 @@ class Common_Test extends TestBase {
 	// Trim empty lists
 	//====================================================================================================
 	@Test void a03_trimEmptyLists() throws Exception {
-		var s = JsonSerializer.create().json5();
-		var p = JsonParser.DEFAULT;
+		var s = Json5Serializer.create();
+		var p = Json5Parser.DEFAULT;
 		var t1 = C.create();
 		var r = s.build().serialize(t1);
 
@@ -126,8 +126,8 @@ class Common_Test extends TestBase {
 	// Trim empty arrays
 	//====================================================================================================
 	@Test void a04_trimEmptyArrays() throws Exception {
-		var s = JsonSerializer.create().json5();
-		var p = JsonParser.DEFAULT;
+		var s = Json5Serializer.create();
+		var p = Json5Parser.DEFAULT;
 		var t1 = D.create();
 		var r = s.build().serialize(t1);
 
@@ -203,7 +203,7 @@ class Common_Test extends TestBase {
 	//====================================================================================================
 	@Test void a07_uRIAttr() throws Exception {
 		var s = Json5Serializer.DEFAULT;
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 
 		var t = new G();
 		t.uri = new URI("http://uri");
@@ -227,7 +227,7 @@ class Common_Test extends TestBase {
 	// Recursion
 	//====================================================================================================
 	@Test void a08_recursion() throws Exception {
-		var s = JsonSerializer.create().json5().maxDepth(Integer.MAX_VALUE);
+		var s = Json5Serializer.create().maxDepth(Integer.MAX_VALUE);
 
 		var r1 = new R1();
 		var r2 = new R2();
@@ -267,7 +267,7 @@ class Common_Test extends TestBase {
 	// Basic bean
 	//====================================================================================================
 	@Test void a09_basicBean() throws Exception {
-		var s = JsonSerializer.create().json5().keepNullProperties().sortProperties().build();
+		var s = Json5Serializer.create().keepNullProperties().sortProperties().build();
 
 		var a = new J();
 		a.setF1("J");
@@ -301,7 +301,7 @@ class Common_Test extends TestBase {
 
 	@Test
 	void a10_beanpFormat() throws Exception {
-		var s = JsonSerializer.create().json5().sortProperties().build();
+		var s = Json5Serializer.create().sortProperties().build();
 
 		var bean = new K();
 		var json = s.serialize(bean);

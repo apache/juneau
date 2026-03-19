@@ -213,7 +213,7 @@ public class ObjectRest {
 		return a2;
 	}
 
-	private ReaderParser parser = JsonParser.DEFAULT;
+	private ReaderParser parser = Json5Parser.DEFAULT;
 
 	final BeanSession session;
 
@@ -247,7 +247,7 @@ public class ObjectRest {
 	public ObjectRest(Object o, ReaderParser parser) {
 		this.session = parser == null ? BeanContext.DEFAULT_SESSION : parser.getBeanContext().getSession();
 		if (parser == null)
-			parser = JsonParser.DEFAULT;
+			parser = Json5Parser.DEFAULT;
 		this.parser = parser;
 		this.root = new JsonNode(null, null, o, session.object());
 	}

@@ -74,7 +74,7 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 
 		/** Constructor */
 		public Json() {
-			super(JsonParser.DEFAULT);
+			super(Json5Parser.DEFAULT);
 		}
 	}
 

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 })
 class PojoExamplesTest extends TestBase {
 
-	private final JsonParserSession session = JsonParser.DEFAULT.getSession();
+	private final JsonParserSession session = Json5Parser.DEFAULT.getSession();
 
 	//====================================================================================================
 	// test BEAN_examples

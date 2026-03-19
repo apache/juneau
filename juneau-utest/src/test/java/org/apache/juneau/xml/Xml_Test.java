@@ -45,21 +45,21 @@ class Xml_Test extends TestBase {
 
 		var json1 = """
 			{
-				name: "John Smith",
+				name: 'John Smith',
 				address: {
-					streetAddress: "21 2nd Street",
-					city: "New York",
-					state: "NY",
+					streetAddress: '21 2nd Street',
+					city: 'New York',
+					state: 'NY',
 					postalCode: 10021
 				},
 				phoneNumbers: [
-					"212 555-1111",
-					"212 555-2222"
+					'212 555-1111',
+					'212 555-2222'
 				],
 				additionalInfo: null,
 				remote: false,
 				height: 62.4,
-				"fico score": " > 640"
+				'fico score': ' > 640'
 			}""";
 
 		var xml1 = """
@@ -83,10 +83,10 @@ class Xml_Test extends TestBase {
 			""";
 
 		var m = (JsonMap) XmlParser.DEFAULT.parse(xml1, Object.class);
-		var json2 = JsonSerializer.create().simpleAttrs().ws().keepNullProperties().build().serialize(m);
+		var json2 = Json5Serializer.create().ws().keepNullProperties().build().serialize(m);
 		assertEquals(json1, json2);
 
-		m = (JsonMap) JsonParser.DEFAULT.parse(json1, Object.class);
+		m = (JsonMap) Json5Parser.DEFAULT.parse(json1, Object.class);
 		var xml2 = XmlSerializer.create().sq().ws()
 			.keepNullProperties()
 			.build()
@@ -138,7 +138,7 @@ class Xml_Test extends TestBase {
 			</object>
 			""";
 
-		var m = (JsonMap) JsonParser.DEFAULT.parse(json1, Object.class);
+		var m = (JsonMap) Json5Parser.DEFAULT.parse(json1, Object.class);
 		var r = XmlSerializer.create().ns().sq().ws()
 			.addNamespaceUrisToRoot()
 			.defaultNamespace(Namespace.of("http://www.apache.org"))

@@ -30,7 +30,7 @@ class ParserGenerics_Test extends TestBase {
 	// Test generic maps
 	//====================================================================================================
 	@Test void a01_map() throws Exception {
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 
 		var t = "{foo:{bar:'baz'}}";
 		var r1 = p.parse(t, TestMap1.class);
@@ -51,7 +51,7 @@ class ParserGenerics_Test extends TestBase {
 	// Test generic maps
 	//====================================================================================================
 	@Test void a02_collection() throws Exception {
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 
 		var t = "[{foo:{bar:'baz'}}]";
 		var r1 = p.parse(t, TestCollection1.class);

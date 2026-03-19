@@ -32,7 +32,12 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
 
 /**
- * Parses any valid JSON text into a POJO model.
+ * Parses any valid RFC 8259 JSON text into a POJO model.
+ *
+ * <p>
+ * This parser strictly enforces RFC 8259 JSON syntax. Double-quoted strings only; single-quoted strings,
+ * comments, trailing commas, and unquoted keys are rejected. For JSON5 syntax (single quotes, comments,
+ * etc.), use {@link Json5Parser}.
  *
  * <h5 class='topic'>Media types</h5>
  * <p>
@@ -44,18 +49,7 @@ import org.apache.juneau.parser.*;
  * time that it takes the built-in Java DOM parsers to parse equivalent XML.
  *
  * <p>
- * This parser handles all valid JSON syntax.
- * In addition, when strict mode is disable, the parser also handles the following:
- * <ul class='spaced-list'>
- * 	<li>
- * 		Javascript comments (both {@code /*} and {@code //}) are ignored.
- * 	<li>
- * 		Both single and double quoted strings.
- * 	<li>
- * 		Automatically joins concatenated strings (e.g. <code><js>"aaa"</js> + <js>'bbb'</js></code>).
- * 	<li>
- * 		Unquoted attributes and values.
- * </ul>
+ * This parser handles all valid RFC 8259 JSON syntax.
  *
  * <p>
  * Also handles negative, decimal, hexadecimal, octal, and double numbers, including exponential notation.
@@ -72,7 +66,7 @@ import org.apache.juneau.parser.*;
  * 	<li>
  * 		JSON arrays (<js>"[...]"</js>) are converted to {@link JsonList JsonLists}.
  * 	<li>
- * 		JSON string literals (<js>"'xyz'"</js>) are converted to {@link String Strings}.
+ * 		JSON string literals (<js>"\"xyz\""</js>) are converted to {@link String Strings}.
  * 	<li>
  * 		JSON numbers (<js>"123"</js>, including octal/hexadecimal/exponential notation) are converted to
  * 		{@link Integer Integers}, {@link Long Longs}, {@link Float Floats}, or {@link Double Doubles} depending on
@@ -81,8 +75,6 @@ import org.apache.juneau.parser.*;
  * 		JSON booleans (<js>"false"</js>) are converted to {@link Boolean Booleans}.
  * 	<li>
  * 		JSON nulls (<js>"null"</js>) are converted to <jk>null</jk>.
- * 	<li>
- * 		Input consisting of only whitespace or JSON comments are converted to <jk>null</jk>.
  * </ul>
  *
  * <p>
@@ -101,11 +93,7 @@ import org.apache.juneau.parser.*;
  * 	<li>
  * 		<js>"null"</js> - Returns <jk>null</jk>.
  * 	<li>
- * 		<js>"'xxx'"</js> - Converted to a {@link String}.
- * 	<li>
- * 		<js>"\"xxx\""</js> - Converted to a {@link String}.
- * 	<li>
- * 		<js>"'xxx' + \"yyy\""</js> - Converted to a concatenated {@link String}.
+ * 		<js>"\"xxx\""</js> - Converted to a {@link String} (double quotes only).
  * </ul>
  *
  * <p>
@@ -130,7 +118,7 @@ import org.apache.juneau.parser.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
-
+ * 	<li class='link'>{@link Json5Parser} - For JSON5 syntax (single quotes, comments, etc.)
  * </ul>
  */
 @SuppressWarnings({
@@ -593,18 +581,6 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder strict() {
-			super.strict();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder strict(boolean value) {
-			super.strict(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
@@ -732,23 +708,8 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 	}
 
-	/** Default parser, strict mode. */
-	public static class Strict extends JsonParser {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public Strict(Builder builder) {
-			super(builder.strict().validateEnd());
-		}
-	}
-
 	/** Default parser, all default settings.*/
 	public static final JsonParser DEFAULT = new JsonParser(create());
-	/** Default parser, all default settings.*/
-	public static final JsonParser DEFAULT_STRICT = new JsonParser.Strict(create());
 
 	/**
 	 * Creates a new builder for this object.

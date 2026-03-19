@@ -50,112 +50,116 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 			.serializer(JsonSerializer.create().addBeanTypes().addRootType())
 			.parser(JsonParser.create().disableInterfaceProxies())
 			.build(),
-		tester(2, "JsonSerializer.DEFAULT_SIMPLE/JsonParser.DEFAULT")
-			.serializer(JsonSerializer.create().json5().addBeanTypes().addRootType())
+		tester(2, "Json - readable")
+			.serializer(JsonSerializer.create().ws().addBeanTypes().addRootType())
 			.parser(JsonParser.create().disableInterfaceProxies())
 			.build(),
-		tester(3, "JsonSerializer.DEFAULT_SQ/JsonParser.DEFAULT")
-			.serializer(JsonSerializer.create().json5().addBeanTypes().addRootType())
-			.parser(JsonParser.create().disableInterfaceProxies())
+		tester(3, "Json5 - default")
+			.serializer(Json5Serializer.create().addBeanTypes().addRootType())
+			.parser(Json5Parser.create().disableInterfaceProxies())
 			.build(),
-		tester(4, "XmlSerializer.DEFAULT/XmlParser.DEFAULT")
+		tester(4, "Json5 - readable")
+			.serializer(Json5Serializer.create().ws().addBeanTypes().addRootType())
+			.parser(Json5Parser.create().disableInterfaceProxies())
+			.build(),
+		tester(5, "XmlSerializer.DEFAULT/XmlParser.DEFAULT")
 			.serializer(XmlSerializer.create().addBeanTypes().addRootType())
 			.parser(XmlParser.create().disableInterfaceProxies())
 			.validateXmlWhitespace()
 			.validateXml()
 			.build(),
-		tester(5, "HtmlSerializer.DEFAULT/HtmlParser.DEFAULT")
+		tester(6, "HtmlSerializer.DEFAULT/HtmlParser.DEFAULT")
 			.serializer(HtmlSerializer.create().addBeanTypes().addRootType())
 			.parser(HtmlParser.create().disableInterfaceProxies())
 			.validateXmlWhitespace()
 			.build(),
-		tester(6, "UonSerializer.DEFAULT_ENCODING/UonParser.DEFAULT_DECODING")
+		tester(7, "UonSerializer.DEFAULT_ENCODING/UonParser.DEFAULT_DECODING")
 			.serializer(UonSerializer.create().encoding().addBeanTypes().addRootType())
 			.parser(UonParser.create().decoding().disableInterfaceProxies())
 			.build(),
-		tester(7, "UonSerializer.DEFAULT/UonParser.DEFAULT")
+		tester(8, "UonSerializer.DEFAULT/UonParser.DEFAULT")
 			.serializer(UonSerializer.create().addBeanTypes().addRootType())
 			.parser(UonParser.create().disableInterfaceProxies())
 			.build(),
-		tester(8, "UrlEncodingSerializer.DEFAULT/UrlEncodingParser.DEFAULT")
+		tester(9, "UrlEncodingSerializer.DEFAULT/UrlEncodingParser.DEFAULT")
 			.serializer(UrlEncodingSerializer.create().addBeanTypes().addRootType())
 			.parser(UrlEncodingParser.create().disableInterfaceProxies())
 			.build(),
-		tester(9, "MsgPackSerializer.DEFAULT/MsgPackParser.DEFAULT")
+		tester(10, "MsgPackSerializer.DEFAULT/MsgPackParser.DEFAULT")
 			.serializer(MsgPackSerializer.create().addBeanTypes().addRootType())
 			.parser(MsgPackParser.create().disableInterfaceProxies())
 			.build(),
-		tester(10, "RdfXml - default")
+		tester(11, "RdfXml - default")
 			.serializer(RdfXmlSerializer.create().addBeanTypes().addRootType())
 			.parser(RdfXmlParser.create().disableInterfaceProxies())
 			.build(),
-		tester(11, "RdfThrift - default")
+		tester(12, "RdfThrift - default")
 			.serializer(RdfThriftSerializer.create().addBeanTypes().addRootType())
 			.parser(RdfThriftParser.create().disableInterfaceProxies())
 			.build(),
-		tester(12, "RdfProto - default")
+		tester(13, "RdfProto - default")
 			.serializer(RdfProtoSerializer.create().addBeanTypes().addRootType())
 			.parser(RdfProtoParser.create().disableInterfaceProxies())
 			.build(),
-		tester(13, "RdfXmlAbbrev - default")
+		tester(14, "RdfXmlAbbrev - default")
 			.serializer(RdfXmlAbbrevSerializer.create().addBeanTypes().addRootType())
 			.parser(RdfXmlParser.create().disableInterfaceProxies())
 			.build(),
-		tester(14, "RdfTurtle - default")
+		tester(15, "RdfTurtle - default")
 			.serializer(TurtleSerializer.create().addBeanTypes().addRootType())
 			.parser(TurtleParser.create().disableInterfaceProxies())
 			.build(),
-		tester(15, "RdfN3 - default")
+		tester(16, "RdfN3 - default")
 			.serializer(N3Serializer.create().addBeanTypes().addRootType())
 			.parser(N3Parser.create().disableInterfaceProxies())
 			.build(),
-		tester(16, "RdfNtriple - default")
+		tester(17, "RdfNtriple - default")
 			.serializer(NTripleSerializer.create().addBeanTypes().addRootType())
 			.parser(NTripleParser.create().disableInterfaceProxies())
 			.build(),
-		tester(17, "RdfNquads - default")
+		tester(18, "RdfNquads - default")
 			.serializer(NQuadsSerializer.create().addBeanTypes().addRootType())
 			.parser(NQuadsParser.create().disableInterfaceProxies())
 			.build(),
-		tester(18, "RdfTrig - default")
+		tester(19, "RdfTrig - default")
 			.serializer(TriGSerializer.create().addBeanTypes().addRootType())
 			.parser(TriGParser.create().disableInterfaceProxies())
 			.build(),
-		tester(19, "RdfJsonLd - default")
+		tester(20, "RdfJsonLd - default")
 			.serializer(JsonLdSerializer.create().addBeanTypes().addRootType())
 			.parser(JsonLdParser.create().disableInterfaceProxies())
 			.build(),
-		tester(20, "RdfJson - default")
+		tester(21, "RdfJson - default")
 			.serializer(RdfJsonSerializer.create().addBeanTypes().addRootType())
 			.parser(RdfJsonParser.create().disableInterfaceProxies())
 			.build(),
-		tester(21, "RdfTriX - default")
+		tester(22, "RdfTriX - default")
 			.serializer(TriXSerializer.create().addBeanTypes().addRootType())
 			.parser(TriXParser.create().disableInterfaceProxies())
 			.build(),
-		tester(22, "Yaml - default")
+		tester(23, "Yaml - default")
 			.serializer(YamlSerializer.create().addBeanTypes().addRootType())
 			.parser(YamlParser.create().disableInterfaceProxies())
 			.build(),
-		tester(23, "Csv - default")
+		tester(24, "Csv - default")
 			.serializer(CsvSerializer.create())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()
 			.build(),
-		tester(24, "Markdown - default")
+		tester(25, "Markdown - default")
 			.serializer(MarkdownSerializer.create().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create().disableInterfaceProxies())
 			.build(),
-		tester(25, "Hjson - default")
+		tester(26, "Hjson - default")
 			.serializer(HjsonSerializer.create().ws().addBeanTypes().addRootType())
 			.parser(HjsonParser.create().disableInterfaceProxies())
 			.build(),
-		tester(26, "Jcs - default")
+		tester(27, "Jcs - default")
 			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create().disableInterfaceProxies())
 			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
 			.build(),
-		tester(27, "Cbor - default")
+		tester(28, "Cbor - default")
 			.serializer(CborSerializer.create().addBeanTypes().addRootType())
 			.parser(CborParser.create().disableInterfaceProxies())
 			.build(),

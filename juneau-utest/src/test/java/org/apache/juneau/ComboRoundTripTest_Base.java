@@ -100,6 +100,72 @@ public abstract class ComboRoundTripTest_Base extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// JSON5
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a14_serializeJson5(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("json5");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a15_parseJson5(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("json5");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a16_verifyJson5(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("json5");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// JSON5 - 't' property
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a17_serializeJson5T(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("json5T");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a18_parseJson5T(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("json5T");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a19_verifyJson5T(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("json5T");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// JSON5 - Readable
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a37_serializeJson5R(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("json5R");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a38_parseJson5R(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("json5R");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a39_verifyJson5R(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("json5R");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// JSONL
 	//-----------------------------------------------------------------------------------------------------------------
 

@@ -354,7 +354,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public JsonList(CharSequence json) throws ParseException {
-		this(json, JsonParser.DEFAULT);
+		this(json, Json5Parser.DEFAULT);
 	}
 
 	/**
@@ -371,7 +371,7 @@ public class JsonList extends LinkedList<Object> {
 	public JsonList(CharSequence in, Parser p) throws ParseException {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		if (p == null)
-			p = JsonParser.DEFAULT;
+			p = Json5Parser.DEFAULT;
 		if (nn(in))
 			p.parseIntoCollection(in, this, bs().object());
 	}
@@ -405,7 +405,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public JsonList(Reader json) throws ParseException {
-		parse(json, JsonParser.DEFAULT);
+		parse(json, Json5Parser.DEFAULT);
 	}
 
 	/**
@@ -554,7 +554,7 @@ public class JsonList extends LinkedList<Object> {
 	 */
 	public Object cast(ClassMeta<?> cm) {
 		try {
-			return JsonParser.DEFAULT.parse(Json5Serializer.DEFAULT.serialize(this), cm);
+			return Json5Parser.DEFAULT.parse(Json5Serializer.DEFAULT.serialize(this), cm);
 		} catch (ParseException | SerializeException e) {
 			throw toRex(e);
 		}
@@ -1034,7 +1034,7 @@ public class JsonList extends LinkedList<Object> {
 
 	private void parse(Reader r, Parser p) throws ParseException {
 		if (p == null)
-			p = JsonParser.DEFAULT;
+			p = Json5Parser.DEFAULT;
 		p.parseIntoCollection(r, this, bs().object());
 	}
 

@@ -42,7 +42,7 @@ class RestClient_Config_Parser_Test extends TestBase {
 	}
 
 	@Test void a02_parser_strict() {
-		assertThrowsWithMessage(Exception.class, "Unquoted attribute detected.", ()->MockRestClient.create(A.class).json().strict().build().post("/echoBody",reader("{f:1}")).run().getContent().as(A2.class));
+		assertThrowsWithMessage(Exception.class, "Unquoted attribute detected.", ()->MockRestClient.create(A.class).json().build().post("/echoBody",reader("{f:1}")).run().getContent().as(A2.class));
 	}
 
 	public static class A3 {

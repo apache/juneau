@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 
 class StreamableSerializationTest extends TestBase {
 
-	static final JsonSerializer JSON = JsonSerializer.create().json5().build();
+	static final JsonSerializer JSON = Json5Serializer.create().build();
 	static final XmlSerializer XML = XmlSerializer.create().sq().ns().build();
 	static final UonSerializer UON = UonSerializer.DEFAULT;
 	static final HtmlSerializer HTML = HtmlSerializer.create().sq().build();

@@ -260,7 +260,7 @@ public class ReaderParserSession extends ParserSession {
 	})
 	@Override /* Overridden from ParserSesson */
 	public final ParserPipe createPipe(Object input) {
-		return setPipe(new ParserPipe(input, isDebug(), ctx.isStrict(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), streamCharset, fileCharset));
+		return setPipe(new ParserPipe(input, isDebug(), true, ctx.isAutoCloseStreams(), ctx.isUnbuffered(), streamCharset, fileCharset));
 	}
 
 	/**

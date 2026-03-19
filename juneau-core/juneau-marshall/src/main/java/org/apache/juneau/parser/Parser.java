@@ -147,7 +147,6 @@ public class Parser extends BeanContextable {
 	private static final String PROP_autoCloseStreams = "autoCloseStreams";
 	private static final String PROP_debugOutputLines = "debugOutputLines";
 	private static final String PROP_listener = "listener";
-	private static final String PROP_strict = "strict";
 	private static final String PROP_trimStrings = "trimStrings";
 	private static final String PROP_unbuffered = "unbuffered";
 
@@ -157,7 +156,6 @@ public class Parser extends BeanContextable {
 	public static class Builder extends BeanContextable.Builder {
 
 		private boolean autoCloseStreams;
-		private boolean strict;
 		private boolean trimStrings;
 		private boolean unbuffered;
 		private Class<? extends ParserListener> listener;
@@ -169,7 +167,6 @@ public class Parser extends BeanContextable {
 		 */
 		protected Builder() {
 			autoCloseStreams = env("Parser.autoCloseStreams", false);
-			strict = env("Parser.strict", false);
 			trimStrings = env("Parser.trimStrings", false);
 			unbuffered = env("Parser.unbuffered", false);
 			debugOutputLines = env("Parser.debugOutputLines", 5);
@@ -185,7 +182,6 @@ public class Parser extends BeanContextable {
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
 			autoCloseStreams = copyFrom.autoCloseStreams;
-			strict = copyFrom.strict;
 			trimStrings = copyFrom.trimStrings;
 			unbuffered = copyFrom.unbuffered;
 			debugOutputLines = copyFrom.debugOutputLines;
@@ -201,7 +197,6 @@ public class Parser extends BeanContextable {
 		protected Builder(Parser copyFrom) {
 			super(copyFrom);
 			autoCloseStreams = copyFrom.autoCloseStreams;
-			strict = copyFrom.strict;
 			trimStrings = copyFrom.trimStrings;
 			unbuffered = copyFrom.unbuffered;
 			debugOutputLines = copyFrom.debugOutputLines;
@@ -562,7 +557,6 @@ public class Parser extends BeanContextable {
 			return HashKey.of(
 				super.hashKey(),
 				autoCloseStreams,
-				strict,
 				trimStrings,
 				unbuffered,
 				debugOutputLines,
@@ -729,74 +723,6 @@ public class Parser extends BeanContextable {
 		@Override /* Overridden from Builder */
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			super.stopClass(on, value);
-			return this;
-		}
-
-		/**
-		 * Strict mode.
-		 *
-		 * <p>
-		 * When enabled, strict mode for the parser is enabled.
-		 *
-		 * <p>
-		 * Strict mode can mean different things for different parsers.
-		 *
-		 * <table class='styled'>
-		 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
-		 * 	<tr>
-		 * 		<td>All reader-based parsers</td>
-		 * 		<td>
-		 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
-		 * 			Otherwise, malformed input is ignored.
-		 * 		</td>
-		 * 	</tr>
-		 * 	<tr>
-		 * 		<td>{@link JsonParser}</td>
-		 * 		<td>
-		 * 			When enabled, throws exceptions on the following invalid JSON syntax:
-		 * 			<ul>
-		 * 				<li>Unquoted attributes.
-		 * 				<li>Missing attribute values.
-		 * 				<li>Concatenated strings.
-		 * 				<li>Javascript comments.
-		 * 				<li>Numbers and booleans when Strings are expected.
-		 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
-		 * 			</ul>
-		 * 		</td>
-		 * 	</tr>
-		 * </table>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a parser using strict mode.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.strict()
-		 * 		.build();
-		 *
-		 * 	<jc>// Use it.</jc>
-		 * 	<jk>try</jk> {
-		 * 		String <jv>json</jv> = <js>"{unquotedAttr:'value'}"</js>;
-		 * 		<jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
-		 * 	} <jk>catch</jk> (ParseException <jv>e</jv>) {
-		 * 		<jsm>assertTrue</jsm>(<jv>e</jv>.getMessage().contains(<js>"Unquoted attribute detected."</js>);
-		 * 	}
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder strict() {
-			return strict(true);
-		}
-
-		/**
-		 * Same as {@link #strict()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder strict(boolean value) {
-			strict = value;
 			return this;
 		}
 
@@ -1004,7 +930,6 @@ public class Parser extends BeanContextable {
 	}
 
 	protected final boolean autoCloseStreams;
-	protected final boolean strict;
 	protected final boolean trimStrings;
 	protected final boolean unbuffered;
 	protected final int debugOutputLines;
@@ -1024,7 +949,6 @@ public class Parser extends BeanContextable {
 		consumes = builder.consumes;
 		debugOutputLines = builder.debugOutputLines;
 		listener = builder.listener;
-		strict = builder.strict;
 		trimStrings = builder.trimStrings;
 		unbuffered = builder.unbuffered;
 
@@ -1426,15 +1350,6 @@ public class Parser extends BeanContextable {
 	protected final boolean isAutoCloseStreams() { return autoCloseStreams; }
 
 	/**
-	 * Strict mode.
-	 *
-	 * @see Parser.Builder#strict()
-	 * @return
-	 * 	<jk>true</jk> if strict mode for the parser is enabled.
-	 */
-	protected final boolean isStrict() { return strict; }
-
-	/**
 	 * Trim parsed strings.
 	 *
 	 * @see Parser.Builder#trimStrings()
@@ -1459,7 +1374,6 @@ public class Parser extends BeanContextable {
 			.a(PROP_autoCloseStreams, autoCloseStreams)
 			.a(PROP_debugOutputLines, debugOutputLines)
 			.a(PROP_listener, listener)
-			.a(PROP_strict, strict)
 			.a(PROP_trimStrings, trimStrings)
 			.a(PROP_unbuffered, unbuffered);
 	}

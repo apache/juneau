@@ -1,6 +1,8 @@
 # TODO
 
 
+- **TODO-1** Package and test split for JSON-family APIs: The Json, Json5, and Jcs serializers and parsers should live in separate packages. Tests under `org.apache.juneau.json` should be split into matching packages and duplicated for each language (Json / Json5 / Jcs).
+
 - Investigate navlinks URL generation issue: Either "request:?Accept=text/json&plainText=true" should be supported, or "request:/?Accept=text/json&plainText=true" should not append '/' to the request URL. Currently, "request:/?Accept=..." generates URLs like "http://localhost:5000/rest/db/request:?Accept=..." which is incorrect.
 - Update REST server API to use new BeanStore2.
 - Make sure @Beanp("*") works on plain fields.

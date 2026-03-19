@@ -107,6 +107,9 @@ public class ComboRoundTrip_Tester<T> {
 		public Builder<T> json(String value) { expected.put("json", value); return this; }
 		public Builder<T> jsonT(String value) { expected.put("jsonT", value); return this; }
 		public Builder<T> jsonR(String value) { expected.put("jsonR", value); return this; }
+		public Builder<T> json5(String value) { expected.put("json5", value); return this; }
+		public Builder<T> json5T(String value) { expected.put("json5T", value); return this; }
+		public Builder<T> json5R(String value) { expected.put("json5R", value); return this; }
 		public Builder<T> jsonl(String value) { expected.put("jsonl", value); return this; }
 		public Builder<T> xml(String value) { expected.put("xml", value); return this; }
 		public Builder<T> xmlT(String value) { expected.put("xmlT", value); return this; }
@@ -161,6 +164,8 @@ public class ComboRoundTrip_Tester<T> {
 	private final Map<String,String> expected;
 	private final Map<String,Serializer> serializers = map();
 	private final Map<String,Parser> parsers = map();
+	/** Used for {@link #testParseJsonEquivalency(String)}; matches {@link #serializers}{@code .get("json")}. */
+	private final JsonSerializer jsonForEquivalency;
 	private final Function<T,T> postConvert;
 
 	private ComboRoundTrip_Tester(Builder<T> b) {
@@ -173,9 +178,12 @@ public class ComboRoundTrip_Tester<T> {
 		skipTest = b.skipTest;
 		exceptionMsg = b.exceptionMsg;
 
-		serializers.put("json", create(b, Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType()));
-		serializers.put("jsonT", create(b, JsonSerializer.create().json5().typePropertyName("t").addBeanTypes().addRootType()));
-		serializers.put("jsonR", create(b, Json5Serializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
+		serializers.put("json", create(b, JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType()));
+		serializers.put("jsonT", create(b, JsonSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("jsonR", create(b, JsonSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
+		serializers.put("json5", create(b, Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType()));
+		serializers.put("json5T", create(b, Json5Serializer.create().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("json5R", create(b, Json5Serializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 		serializers.put("jsonl", create(b, JsonlSerializer.create().keepNullProperties().addBeanTypes().addRootType()));
 		serializers.put("xml", create(b, XmlSerializer.DEFAULT_SQ.copy().addBeanTypes().addRootType()));
 		serializers.put("xmlT", create(b, XmlSerializer.create().sq().typePropertyName("t").addBeanTypes().addRootType()));
@@ -219,6 +227,9 @@ public class ComboRoundTrip_Tester<T> {
 		parsers.put("json", create(b, JsonParser.DEFAULT.copy()));
 		parsers.put("jsonT", create(b, JsonParser.create().typePropertyName("t")));
 		parsers.put("jsonR", create(b, JsonParser.DEFAULT.copy()));
+		parsers.put("json5", create(b, Json5Parser.DEFAULT.copy()));
+		parsers.put("json5T", create(b, Json5Parser.create().typePropertyName("t")));
+		parsers.put("json5R", create(b, Json5Parser.DEFAULT.copy()));
 		parsers.put("jsonl", create(b, JsonlParser.create()));
 		parsers.put("xml", create(b, XmlParser.DEFAULT.copy()));
 		parsers.put("xmlT", create(b, XmlParser.create().typePropertyName("t")));
@@ -258,17 +269,29 @@ public class ComboRoundTrip_Tester<T> {
 		parsers.put("toml", create(b, TomlParser.DEFAULT.copy()));
 		parsers.put("ini", create(b, IniParser.DEFAULT.copy()));
 		parsers.put("markdown", create(b, MarkdownParser.create()));
+
+		jsonForEquivalency = (JsonSerializer) serializers.get("json");
 	}
 
-	private Serializer create(Builder<?> tb, Serializer.Builder sb) {
+	private void applySerializerBuilderContext(Builder<?> tb, Serializer.Builder sb) {
 		tb.serializerApply.accept(sb);
 		sb.swaps(tb.swaps);
 		tb.applies.forEach(x -> {
 			if (x.getA().equals(BeanContext.Builder.class))
 				sb.beanContext((Consumer<BeanContext.Builder>) x.getB());
-			else if (x.getA().isInstance(sb))
+		});
+	}
+
+	private void applySerializerBuilderSubtypeApplies(Builder<?> tb, Serializer.Builder sb) {
+		tb.applies.forEach(x -> {
+			if (!x.getA().equals(BeanContext.Builder.class) && x.getA().isInstance(sb))
 				sb.asSubtype(Serializer.Builder.class).ifPresent((Consumer<Serializer.Builder>) x.getB());
 		});
+	}
+
+	private Serializer create(Builder<?> tb, Serializer.Builder sb) {
+		applySerializerBuilderContext(tb, sb);
+		applySerializerBuilderSubtypeApplies(tb, sb);
 		return sb.build();
 	}
 
@@ -370,7 +393,6 @@ public class ComboRoundTrip_Tester<T> {
 
 	public void testParseJsonEquivalency(String testName) throws Exception {
 		var s = serializers.get(testName);
-		var js = (WriterSerializer)serializers.get("json");
 		var exp = expected.get("json");
 		var p = parsers.get(testName);
 		try {
@@ -378,7 +400,7 @@ public class ComboRoundTrip_Tester<T> {
 
 			var r = s.serializeToString(in.get());
 			var o = p.parse(r, type);
-			r = js.serialize(o);
+			r = jsonForEquivalency.serialize(o);
 			assertEquals(exp, r, fs("{0}/{1} parse-normal failed on JSON equivalency", label, testName));
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)

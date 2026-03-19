@@ -90,7 +90,7 @@ public class ObjectIntrospector {
 	 */
 	public ObjectIntrospector(Object object, ReaderParser parser) {
 		if (parser == null)
-			parser = JsonParser.DEFAULT;
+			parser = Json5Parser.DEFAULT;
 		this.object = object;
 		this.parser = parser;
 	}

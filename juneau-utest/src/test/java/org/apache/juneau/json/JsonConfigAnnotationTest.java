@@ -47,7 +47,6 @@ class JsonConfigAnnotationTest extends TestBase {
 	@JsonConfig(
 		addBeanTypes="$X{true}",
 		escapeSolidus="$X{true}",
-		simpleAttrs="$X{true}",
 		validateEnd="$X{true}"
 	)
 	static class A {}
@@ -58,7 +57,6 @@ class JsonConfigAnnotationTest extends TestBase {
 		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEscapeSolidus());
-		check("true", x.isSimpleAttrs());
 	}
 
 	@Test void basicParser() {
@@ -80,7 +78,6 @@ class JsonConfigAnnotationTest extends TestBase {
 		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
-		check("false", x.isSimpleAttrs());
 	}
 
 	@Test void noValuesParser() {
@@ -101,7 +98,6 @@ class JsonConfigAnnotationTest extends TestBase {
 		var x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
-		check("false", x.isSimpleAttrs());
 	}
 
 	@Test void noAnnotationParser() {

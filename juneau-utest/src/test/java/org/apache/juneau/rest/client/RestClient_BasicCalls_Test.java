@@ -109,7 +109,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a05_put_bodyString() throws Exception {
-		client().build().put("/bean","{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
+		client().build().put("/bean","{\"f\":1}",APPLICATION_JSON).run().assertContent("{f:1}");
 		client().build().put("/bean").contentString("{f:1}").json5().run().assertContent("{f:1}");
 		client().build().put("/bean").contentString("").json5().run().assertContent("{f:0}");
 		client().build().put("/bean").contentString(null).json5().run().assertContent("null");
@@ -126,7 +126,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 		var x = client().build();
 		for (var url : urls) {
 			x.put(url,bean).run().assertContent("{f:1}");
-			x.put(url,"{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
+			x.put(url,"{\"f\":1}",APPLICATION_JSON).run().assertContent("{f:1}");
 			x.put(url).content(bean).run().assertContent("{f:1}");
 		}
 	}
@@ -141,7 +141,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 			parts("f","1")
 		);
 		for (var body : bodies) {
-			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().put("/bean",body).run().assertContent("{f:1}");
+			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : ContentType.of("application/json5")).build().put("/bean",body).run().assertContent("{f:1}");
 		}
 	}
 
@@ -151,7 +151,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a09_post_stringBody() throws Exception {
-		client().build().post("/bean","{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
+		client().build().post("/bean","{\"f\":1}",APPLICATION_JSON).run().assertContent("{f:1}");
 	}
 
 	@Test void a10_post_exhaustiveUrls() throws Exception {
@@ -165,7 +165,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 		var x = client().build();
 		for (var url : urls) {
 			x.post(url,bean).run().assertContent("{f:1}");
-			x.post(url,"{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
+			x.post(url,"{\"f\":1}",APPLICATION_JSON).run().assertContent("{f:1}");
 			x.post(url).content(bean).run().assertContent("{f:1}");
 		}
 	}
@@ -180,7 +180,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 			parts("f","1")
 		);
 		for (var body : bodies) {
-			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().post("/bean",body).run().assertContent("{f:1}");
+			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : ContentType.of("application/json5")).build().post("/bean",body).run().assertContent("{f:1}");
 		}
 	}
 
@@ -294,7 +294,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a23_patch_fromString() throws Exception {
-		client().build().patch("/bean","{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
+		client().build().patch("/bean","{\"f\":1}",APPLICATION_JSON).run().assertContent("{f:1}");
 	}
 
 	@Test void a24_patch_exhaustiveBodyTypes() throws Exception {
@@ -308,7 +308,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 		);
 		var x = client().build();
 		for (var body : bodies) {
-			x.patch("/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent("{f:1}");
+			x.patch("/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : ContentType.of("application/json5")).run().assertContent("{f:1}");
 		}
 	}
 
@@ -342,7 +342,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 		);
 		var x = client().build();
 		for (var body : bodies) {
-			x.request("patch","/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent("{f:1}");
+			x.request("patch","/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : ContentType.of("application/json5")).run().assertContent("{f:1}");
 		}
 	}
 

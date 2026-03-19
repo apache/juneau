@@ -540,18 +540,6 @@ public class YamlParser extends ReaderParser {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder strict() {
-			super.strict();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder strict(boolean value) {
-			super.strict(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;

@@ -30,8 +30,8 @@ import org.junit.jupiter.api.*;
 public class JsonSchema_Test extends TestBase {
 
 	@Test void a01_schema1() throws Exception {
-		var s = JsonSerializer.create().json5().ws().sortProperties().build();
-		var p = JsonParser.DEFAULT;
+		var s = Json5Serializer.create().ws().sortProperties().build();
+		var p = Json5Parser.DEFAULT;
 
 		var expected = """
 			{
@@ -121,8 +121,8 @@ public class JsonSchema_Test extends TestBase {
 	}
 
 	@Test void a02_schema2() throws Exception {
-		var s = JsonSerializer.create().json5().ws().sortProperties().build();
-		var p = JsonParser.DEFAULT;
+		var s = Json5Serializer.create().ws().sortProperties().build();
+		var p = Json5Parser.DEFAULT;
 
 		var expected = """
 			{
@@ -155,8 +155,8 @@ public class JsonSchema_Test extends TestBase {
 	}
 
 	@Test void a03_toString() throws Exception {
-		var s = JsonSerializer.create().json5().ws().sortProperties().build();
-		var p = JsonParser.DEFAULT;
+		var s = Json5Serializer.create().ws().sortProperties().build();
+		var p = Json5Parser.DEFAULT;
 
 		var expected = """
 			{

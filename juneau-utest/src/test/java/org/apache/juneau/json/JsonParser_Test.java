@@ -30,7 +30,6 @@ import org.junit.jupiter.api.*;
 class JsonParser_Test extends TestBase {
 
 	private static final JsonParser p = JsonParser.DEFAULT;
-	private static final JsonParser sp = JsonParser.DEFAULT_STRICT;
 
 	//====================================================================================================
 	// Test invalid input
@@ -41,39 +40,16 @@ class JsonParser_Test extends TestBase {
 
 	@Test void a02_nonExistentAttribute() throws Exception {
 		var json = "{foo:,bar:}";
-		var m = p.parse(json, JsonMap.class);
+		var m = Json5Parser.DEFAULT.parse(json, JsonMap.class);
 		assertEquals("{foo:null,bar:null}", m.toString());
 	}
 
-	@Test void a03_nonStringAsString() throws Exception {
-		var json = "123";
-		var s = p.parse(json, String.class);
-
-		// Strict mode does not allow unquoted values.
-		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->sp.parse("123", String.class));
-
-		assertEquals("123", s);
-
-		json = " 123 ";
-		// Strict mode does not allow unquoted values.
-		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->sp.parse(" 123 ", String.class));
-
-		s = p.parse(json, String.class);
-		assertEquals("123", s);
-
-		json = "{\"fa\":123}";
-		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->sp.parse("{\"fa\":123}", A.class));
-
-		var a = p.parse(json, A.class);
-		assertEquals("123", a.fa);
-
-		json = " { \"fa\" : 123 } ";
-		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->sp.parse(" { \"fa\" : 123 } ", A.class));
-
-		a = p.parse(json, A.class);
-		assertEquals("123", a.fa);
-
-		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->sp.parse("'123'", String.class));
+	@Test void a03_nonStringAsString() {
+		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.parse("123", String.class));
+		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.parse(" 123 ", String.class));
+		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.parse("{\"fa\":123}", A.class));
+		assertThrowsWithMessage(Exception.class, "Did not find quote character", ()->p.parse(" { \"fa\" : 123 } ", A.class));
+		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p.parse("'123'", String.class));
 	}
 
 	public static class A {
@@ -81,21 +57,20 @@ class JsonParser_Test extends TestBase {
 	}
 
 	@Test void a04_strictMode() {
-		var p2 = sp;
-		assertThrowsWithMessage(Exception.class, "Missing value detected.", ()->p2.parse("{\"foo\":,\"bar\":}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p2.parse("{\"foo\":'bar'}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p2.parse("{'foo':\"bar\"}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "Unquoted attribute detected.", ()->p2.parse("{foo:\"bar\"}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "String concatenation detected.", ()->p2.parse("{\"foo\":\"bar\"+\"baz\"}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "String concatenation detected.", ()->p2.parse("{\"foo\":\"bar\" + \"baz\"}", JsonMap.class));
-		assertThrowsWithMessage(Exception.class, "Javascript comment detected.", ()->p2.parse("{\"foo\":/*comment*/\"bar\"}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "Missing value detected.", ()->p.parse("{\"foo\":,\"bar\":}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p.parse("{\"foo\":'bar'}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "Invalid quote character", ()->p.parse("{'foo':\"bar\"}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "Unquoted attribute detected.", ()->p.parse("{foo:\"bar\"}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "String concatenation detected.", ()->p.parse("{\"foo\":\"bar\"+\"baz\"}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "String concatenation detected.", ()->p.parse("{\"foo\":\"bar\" + \"baz\"}", JsonMap.class));
+		assertThrowsWithMessage(Exception.class, "Javascript comment detected.", ()->p.parse("{\"foo\":/*comment*/\"bar\"}", JsonMap.class));
 	}
 
 	/**
 	 * JSON numbers and booleans should be representable as strings and converted accordingly.
 	 */
 	@Test void a05_primitivesAsStrings() throws Exception {
-		var p2 = JsonParser.DEFAULT;
+		var p2 = Json5Parser.DEFAULT;
 		var s = Json5Serializer.DEFAULT;
 
 		var json = "{f01:'1',f02:'1',f03:'true',f04:'true',f05:'1',f06:'1',f07:'1',f08:'1',f09:'1',f10:'1'}";
@@ -124,72 +99,25 @@ class JsonParser_Test extends TestBase {
 	// testInvalidJsonNumbers
 	// Lax parser allows octal and hexadecimal numbers.  Strict parser does not.
 	//====================================================================================================
-	@Test void a06_invalidJsonNumbers() throws Exception {
-		var p1 = JsonParser.DEFAULT;
-		var p2 = JsonParser.DEFAULT_STRICT;
+	@Test void a06_invalidJsonNumbers() {
+		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.parse("\"\"", Number.class));
+		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.parse("0123", Number.class));
+		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.parse("-0123", Number.class));
+		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.parse("0x123", Number.class));
+		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p.parse("-0x123", Number.class));
+	}
 
-		// Lax allows blank strings interpreted as 0, strict does not.
-		var s = "\"\"";
-		var r = p1.parse(s, Number.class);
-		assertEquals(0, r.intValue());
-		assertTrue(r instanceof Integer);
-		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p2.parse("\"\"", Number.class));
-
-		// Either should allow 0 or -0.
-		s = "0";
-		r = p1.parse(s, Number.class);
-		assertEquals(0, r.intValue());
-		assertTrue(r instanceof Integer);
-		r = p2.parse(s, Number.class);
-		assertEquals(0, r.intValue());
-		assertTrue(r instanceof Integer);
-
-		s = "-0";
-		r = p1.parse(s, Number.class);
-		assertEquals(0, r.intValue());
-		assertTrue(r instanceof Integer);
-		r = p2.parse(s, Number.class);
-		assertEquals(0, r.intValue());
-		assertTrue(r instanceof Integer);
-
-		// Lax allows 0123 and -0123, strict does not.
-		s = "0123";
-		r = p1.parse(s, Number.class);
-		assertEquals(0123, r.intValue());
-		assertTrue(r instanceof Integer);
-		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p2.parse("0123", Number.class));
-		s = "-0123";
-		r = p1.parse(s, Number.class);
-		assertEquals(-0123, r.intValue());
-		assertTrue(r instanceof Integer);
-		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p2.parse("-0123", Number.class));
-
-		// Lax allows 0x123 and -0x123, strict does not.
-		s = "0x123";
-		r = p1.parse(s, Number.class);
-		assertEquals(0x123, r.intValue());
-		assertTrue(r instanceof Integer);
-		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p2.parse("0x123", Number.class));
-		s = "-0x123";
-		r = p1.parse(s, Number.class);
-		assertEquals(-0x123, r.intValue());
-		assertTrue(r instanceof Integer);
-		assertThrowsWithMessage(Exception.class, "Invalid JSON number", ()->p2.parse("-0x123", Number.class));
+	@Test void a06b_validJsonNumbers() throws Exception {
+		assertEquals(0, p.parse("0", Number.class).intValue());
+		assertEquals(0, p.parse("-0", Number.class).intValue());
 	}
 
 	//====================================================================================================
 	// testUnquotedStrings
 	// Lax parser allows unquoted strings if POJO can be converted from a string.
 	//====================================================================================================
-	@Test void a07_unquotedStrings() throws Exception {
-		var p1 = JsonParser.DEFAULT;
-		var p2 = JsonParser.DEFAULT_STRICT;
-
-		var s = "foobar";
-		var c = p1.parse(s, C.class);
-		assertEquals("f=foobar", c.toString());
-
-		assertThrows(ParseException.class, ()->p2.parse(s, C.class));
+	@Test void a07_unquotedStrings() {
+		assertThrows(ParseException.class, ()->p.parse("foobar", C.class));
 	}
 
 	public static class C {
@@ -210,7 +138,7 @@ class JsonParser_Test extends TestBase {
 	// Validates PARSER_autoCloseStreams.
 	//====================================================================================================
 	@Test void a08_streamsAutoClose() throws Exception {
-		var p2 = JsonParser.DEFAULT.copy().autoCloseStreams().build();
+		var p2 = Json5Parser.DEFAULT.copy().autoCloseStreams().build();
 		var r = reader("{foo:'bar'}{baz:'qux'}");
 
 		var x = p2.parse(r, JsonMap.class);
@@ -223,7 +151,7 @@ class JsonParser_Test extends TestBase {
 	// Validates that readers are not closed so that we can read streams of POJOs.
 	//====================================================================================================
 	@Test void a09_multipleObjectsInStream() throws Exception {
-		var p2 = JsonParser.create().unbuffered().build();
+		var p2 = Json5Parser.create().unbuffered().build();
 		var r = reader("{foo:'bar'}{baz:'qux'}");
 
 		var x = (Object)p2.parse(r, JsonMap.class);

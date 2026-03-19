@@ -591,29 +591,29 @@ class UriResolution_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a1_jsonSerialize(Tester t) throws Exception {
-		var s = JsonSerializer.create().json5().uriContext(t.input.context).uriResolution(t.input.resolution).uriRelativity(t.input.relativity).build();
+		var s = Json5Serializer.create().uriContext(t.input.context).uriResolution(t.input.resolution).uriRelativity(t.input.relativity).build();
 		t.testSerialize(s, t.results.json, new TestURI());
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a1c_jsonSerialize_usingConfig(Tester t) throws Exception {
-		var s = JsonSerializer.create().json5().uriContext(t.input.context).uriResolution(t.input.resolution).uriRelativity(t.input.relativity).applyAnnotations(TestURIc.Config.class).build();
+		var s = Json5Serializer.create().uriContext(t.input.context).uriResolution(t.input.resolution).uriRelativity(t.input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		t.testSerialize(s, t.results.json, new TestURIc());
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a2_testJsonParse(Tester t) throws Exception {
-		var s = JsonSerializer.create().json5().uriContext(t.input.context).uriResolution(t.input.resolution).uriRelativity(t.input.relativity).build();
-		t.testParse(s, JsonParser.DEFAULT, new TestURI());
+		var s = Json5Serializer.create().uriContext(t.input.context).uriResolution(t.input.resolution).uriRelativity(t.input.relativity).build();
+		t.testParse(s, Json5Parser.DEFAULT, new TestURI());
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a2c_testJsonParse_usingConfig(Tester t) throws Exception {
-		var s = JsonSerializer.create().json5().uriContext(t.input.context).uriResolution(t.input.resolution).uriRelativity(t.input.relativity).applyAnnotations(TestURIc.Config.class).build();
-		t.testParse(s, JsonParser.DEFAULT.copy().applyAnnotations(TestURIc.class).build(), new TestURIc());
+		var s = Json5Serializer.create().uriContext(t.input.context).uriResolution(t.input.resolution).uriRelativity(t.input.relativity).applyAnnotations(TestURIc.Config.class).build();
+		t.testParse(s, Json5Parser.DEFAULT.copy().applyAnnotations(TestURIc.class).build(), new TestURIc());
 	}
 
 	@ParameterizedTest

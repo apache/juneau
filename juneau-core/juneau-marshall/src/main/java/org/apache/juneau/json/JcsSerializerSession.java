@@ -219,7 +219,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 		var output = out.getRawOutput();
 		if (output instanceof JcsWriter w)
 			return w;
-		var w = new JcsWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), isSimpleAttrs(), isTrimStrings(), getUriResolver());
+		var w = new JcsWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), false, isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}

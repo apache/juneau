@@ -114,9 +114,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	private static final String MSG_unexpectedValueFound = MESSAGES.getString("unexpectedValueFound");
 	private static final String MSG_unexpectedValue2 = MESSAGES.getString("unexpectedValue2");
 
-	private static final JsonSerializer JSON = JsonSerializer.create().json5().build();
+	private static final JsonSerializer JSON = Json5Serializer.create().build();
 
-	private static final JsonSerializer JSON_SORTED = JsonSerializer.create().json5().sortProperties().sortCollections().sortMaps().build();
+	private static final JsonSerializer JSON_SORTED = Json5Serializer.create().sortProperties().sortCollections().sortMaps().build();
 
 	private final T value;
 

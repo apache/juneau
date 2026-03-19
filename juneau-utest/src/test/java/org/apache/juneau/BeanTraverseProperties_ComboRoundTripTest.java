@@ -31,9 +31,12 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 
 	private static final ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "BEANTRAVERSE_initialDepth", A.class, new A().init())
-			.json("{f:1}")
-			.jsonT("{f:1}")
-			.jsonR("\t\t{\n\t\t\tf: 1\n\t\t}")
+			.json5("{f:1}")
+			.json5T("{f:1}")
+			.json5R("\t\t{\n\t\t\tf: 1\n\t\t}")
+			.json("{\"f\":1}")
+			.jsonT("{\"f\":1}")
+			.jsonR("\t\t{\n\t\t\t\"f\": 1\n\t\t}")
 			.xml("<object><f>1</f></object>")
 			.xmlT("<object><f>1</f></object>")
 			.xmlR("\t\t<object>\n\t\t\t<f>1</f>\n\t\t</object>\n")
@@ -52,6 +55,9 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.apply(BeanTraverseContext.Builder.class, x -> x.initialDepth(2))
 			.build(),
 		tester(2, "BEANTRAVERSE_detectRecursions", B.class, new B().initRecursion())
+			.json5("x")
+			.json5T("x")
+			.json5R("x")
 			.json("x")
 			.jsonT("x")
 			.jsonR("x")
@@ -74,6 +80,9 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.exceptionMsg("Recursion occurred")
 			.build(),
 		tester(3, "BEANTRAVERSE_ignoreRecursions", B.class, new B().initRecursion())
+			.json5("{}")
+			.json5T("{}")
+			.json5R("{\n}")
 			.json("{}")
 			.jsonT("{}")
 			.jsonR("{\n}")
@@ -95,6 +104,9 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.apply(BeanTraverseContext.Builder.class, Builder::ignoreRecursions)
 			.build(),
 		tester(4, "BEANTRAVERSE_maxDepth", B.class, new B().initA())
+			.json5("{}")
+			.json5T("{}")
+			.json5R("{\n}")
 			.json("{}")
 			.jsonT("{}")
 			.jsonR("{\n}")

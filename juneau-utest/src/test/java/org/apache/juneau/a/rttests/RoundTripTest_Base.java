@@ -50,93 +50,97 @@ public abstract class RoundTripTest_Base extends TestBase {
 			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.build(),
-		tester(2, "Json - lax")
-			.serializer(JsonSerializer.create().json5().keepNullProperties().addBeanTypes().addRootType())
+		tester(2, "Json - readable")
+			.serializer(JsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.build(),
-		tester(3, "Json - lax, readable")
-			.serializer(JsonSerializer.create().json5().ws().keepNullProperties().addBeanTypes().addRootType())
-			.parser(JsonParser.create())
+		tester(3, "Json5 - default")
+			.serializer(Json5Serializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(Json5Parser.create())
 			.build(),
-		tester(4, "Jsonl - default")
+		tester(4, "Json5 - readable")
+			.serializer(Json5Serializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
+			.parser(Json5Parser.create())
+			.build(),
+		tester(5, "Jsonl - default")
 			.serializer(JsonlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonlParser.create())
 			.build(),
-		tester(5, "Xml - namespaces, validation, readable")
+		tester(6, "Xml - namespaces, validation, readable")
 			.serializer(XmlSerializer.create().ns().sq().keepNullProperties().addNamespaceUrisToRoot().useWhitespace().addBeanTypes().addRootType())
 			.parser(XmlParser.create())
 			.validateXmlWhitespace()
 			.validateXml()
 			.build(),
-		tester(6, "Xml - no namespaces, validation")
+		tester(7, "Xml - no namespaces, validation")
 			.serializer(XmlSerializer.create().sq().keepNullProperties().addBeanTypes().addRootType())
 			.parser(XmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester(7, "Html - default")
+		tester(8, "Html - default")
 			.serializer(HtmlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HtmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester(8, "Html - readable")
+		tester(9, "Html - readable")
 			.serializer(HtmlSerializer.create().sq().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HtmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester(9, "Html - with key/value headers")
+		tester(10, "Html - with key/value headers")
 			.serializer(HtmlSerializer.create().addKeyValueTableHeaders().addBeanTypes().addRootType())
 			.parser(HtmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester(10, "Uon - default")
+		tester(11, "Uon - default")
 			.serializer(UonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UonParser.create())
 			.build(),
-		tester(11, "Uon - readable")
+		tester(12, "Uon - readable")
 			.serializer(UonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UonParser.create())
 			.build(),
-		tester(12, "Uon - encoded")
+		tester(13, "Uon - encoded")
 			.serializer(UonSerializer.create().encoding().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UonParser.create().decoding())
 			.build(),
-		tester(13, "UrlEncoding - default")
+		tester(14, "UrlEncoding - default")
 			.serializer(UrlEncodingSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UrlEncodingParser.create())
 			.build(),
-		tester(14, "UrlEncoding - readable")
+		tester(15, "UrlEncoding - readable")
 			.serializer(UrlEncodingSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(UrlEncodingParser.create())
 			.build(),
-		tester(15, "UrlEncoding - expanded params")
+		tester(16, "UrlEncoding - expanded params")
 			.serializer(UrlEncodingSerializer.create().expandedParams().addBeanTypes().addRootType())
 			.parser(UrlEncodingParser.create().expandedParams())
 			.build(),
-		tester(16, "MsgPack")
+		tester(17, "MsgPack")
 			.serializer(MsgPackSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MsgPackParser.create())
 			.build(),
-		tester(17, "RdfXml")
+		tester(18, "RdfXml")
 			.serializer(RdfXmlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfXmlParser.create())
 			.build(),
-		tester(18, "RdfThrift")
+		tester(19, "RdfThrift")
 			.serializer(RdfThriftSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfThriftParser.create())
 			.build(),
-		tester(19, "RdfProto")
+		tester(20, "RdfProto")
 			.serializer(RdfProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfProtoParser.create())
 			.build(),
-		tester(20, "Json schema")
+		tester(21, "Json schema")
 			.serializer(JsonSchemaSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.returnOriginalObject()
 			.build(),
-		tester(21, "Yaml - default")
+		tester(22, "Yaml - default")
 			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(YamlParser.create())
 			.build(),
-		tester(22, "Csv - default")
+		tester(23, "Csv - default")
 			.serializer(CsvSerializer.create().keepNullProperties())
 			// CSV serialization is validated here without parsing (returnOriginalObject), analogous
 			// to the JSON schema tester.  Full CSV round-trip tests are in CsvParser_Test.
@@ -144,28 +148,28 @@ public abstract class RoundTripTest_Base extends TestBase {
 			.skipIf(o -> !isCsvSerializableInput(o))
 			.returnOriginalObject()
 			.build(),
-		tester(23, "Markdown - default")
+		tester(24, "Markdown - default")
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create())
 			.build(),
-		tester(24, "Hjson - default")
+		tester(25, "Hjson - default")
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HjsonParser.create())
 			.build(),
-		tester(25, "Jcs - default")
+		tester(26, "Jcs - default")
 			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
 			.build(),
-		tester(26, "Bson - default")
+		tester(27, "Bson - default")
 			.serializer(BsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(BsonParser.create())
 			.build(),
-		tester(27, "Cbor - default")
+		tester(28, "Cbor - default")
 			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(CborParser.create())
 			.build(),
-		tester(28, "Parquet - default")
+		tester(29, "Parquet - default")
 			.serializer(ParquetSerializer.create().addBeanTypes())
 			.parser(ParquetParser.create())
 			// Parquet skip conditions for inherent format limitations:

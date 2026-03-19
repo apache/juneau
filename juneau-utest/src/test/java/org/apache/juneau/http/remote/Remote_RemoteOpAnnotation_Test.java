@@ -189,7 +189,7 @@ class Remote_RemoteOpAnnotation_Test extends TestBase {
 	}
 
 	@Test void c01_returnTypes_json() throws Exception {
-		var x = MockRestClient.buildJson(C.class).getRemote(C1.class);
+		var x = MockRestClient.buildJson5(C.class).getRemote(C1.class);
 		assertEquals("foo",x.postX1("foo"));
 		assertEquals("'foo'",read(x.postX2("foo").getEntity().getContent()));
 		assertEquals("'foo'",read(x.postX3("foo")));

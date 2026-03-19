@@ -41,7 +41,7 @@ class IgnoredClasses_Test extends TestBase {
 	//====================================================================================================
 	@Test void a02_ignorePackages() throws Exception {
 		var a = new A();
-		var s = JsonSerializer.create().json5();
+		var s = Json5Serializer.create();
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));
 		s.notBeanPackages("org.apache.juneau");
 		assertEquals("'isNotBean'", s.build().serialize(a));

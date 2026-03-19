@@ -94,7 +94,7 @@ public class RestClient_Marshalls_Test extends TestBase {
 		x11.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html+stripped").run().assertStatus(200).getContent().as(Bean.class).check();
 
 		// With override
-		x1.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
+		x1.post("/a01",bean).json().header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
 	}
 
 	@Test void a02_singleLanguages_perRequest() throws Exception {
@@ -114,7 +114,7 @@ public class RestClient_Marshalls_Test extends TestBase {
 
 	@Test void a03_noLanguages() throws Exception {
 		var x = client().build();
-		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").content("{f:1}").run().assertStatus(200).assertContent("{\"f\":1}");
+		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").content("{\"f\":1}").run().assertStatus(200).assertContent("{\"f\":1}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

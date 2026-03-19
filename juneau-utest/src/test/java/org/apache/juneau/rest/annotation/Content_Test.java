@@ -48,7 +48,7 @@ class Content_Test extends TestBase {
 	// @Body on parameter
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=Json5Serializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class, defaultAccept="text/json")
 	public static class A {
 		@RestPut(path="/String")
 		public String a(@Content String b) {
@@ -423,7 +423,7 @@ class Content_Test extends TestBase {
 	// @Body on POJO
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=Json5Serializer.class, parsers=JsonParser.class, defaultAccept="application/json")
+	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class, defaultAccept="application/json")
 	public static class B {
 		@RestPut(path="/StringTransform")
 		public B1 a(B1 b) {
@@ -648,7 +648,7 @@ class Content_Test extends TestBase {
 	// Complex POJOs
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=Json5Serializer.class, parsers=JsonParser.class, defaultAccept="application/json")
+	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class, defaultAccept="application/json")
 	public static class E {
 		@RestPut(path="/B")
 		public XBeans.XB a(@Content XBeans.XB b) {
@@ -684,7 +684,7 @@ class Content_Test extends TestBase {
 			.assertContent(expected);
 	}
 
-	@Rest(serializers=Json5Serializer.class, parsers=JsonParser.class, defaultAccept="application/json")
+	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class, defaultAccept="application/json")
 	@Bean(on="A,B,C",sort=true)
 	@UrlEncoding(on="C",expandedParams=true)
 	public static class E2 {
@@ -726,7 +726,7 @@ class Content_Test extends TestBase {
 	// Form POSTS with @Body parameter
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
+	@Rest(serializers=JsonSerializer.class,parsers=Json5Parser.class)
 	public static class F {
 		@RestPost(path="/*")
 		public Reader a(
@@ -885,7 +885,7 @@ class Content_Test extends TestBase {
 	// Test behavior of @Body(required=true).
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
+	@Rest(serializers=JsonSerializer.class,parsers=Json5Parser.class)
 	public static class I {
 		@RestPost
 		public XBeans.XB a(@Content @Schema(r=true) XBeans.XB content) {
@@ -923,7 +923,7 @@ class Content_Test extends TestBase {
 	// Optional body parameter.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(serializers=Json5Serializer.class,parsers=JsonParser.class)
+	@Rest(serializers=Json5Serializer.class,parsers=Json5Parser.class)
 	public static class J {
 		@RestPost
 		public Object a(@Content Optional<Integer> body) {

@@ -78,7 +78,6 @@ public class ParserConfigAnnotation {
 			bool(a.autoCloseStreams()).ifPresent(b::autoCloseStreams);
 			integer(a.debugOutputLines(), "debugOutputLines").ifPresent(b::debugOutputLines);
 			type(a.listener()).ifPresent(b::listener);
-			bool(a.strict()).ifPresent(b::strict);
 			bool(a.trimStrings()).ifPresent(b::trimStrings);
 			bool(a.unbuffered()).ifPresent(b::unbuffered);
 		}

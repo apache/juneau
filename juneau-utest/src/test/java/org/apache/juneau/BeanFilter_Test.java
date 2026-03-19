@@ -32,7 +32,7 @@ class BeanFilter_Test extends TestBase {
 	//====================================================================================================
 	@Test void a01_subTypes() throws Exception {
 		var s = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();
-		var p = JsonParser.DEFAULT;
+		var p = Json5Parser.DEFAULT;
 
 		var a1 = new A1();
 		a1.f1 = "f1";
@@ -88,7 +88,7 @@ class BeanFilter_Test extends TestBase {
 
 	@Test void a02_subTypes_usingConfig() throws Exception {
 		var s = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().applyAnnotations(EConfig.class).build();
-		var p = JsonParser.create().applyAnnotations(EConfig2.class).build();
+		var p = Json5Parser.create().applyAnnotations(EConfig2.class).build();
 
 		var e1 = new E1();
 		e1.f1 = "f1";
@@ -151,7 +151,7 @@ class BeanFilter_Test extends TestBase {
 	// Test parent class used as filter
 	//====================================================================================================
 	@Test void a03_parentClassFilter() throws Exception {
-		var s = JsonSerializer.create().json5().interfaces(C1.class).build();
+		var s = Json5Serializer.create().interfaces(C1.class).build();
 
 		var c1 = new C2();
 		var r = s.serialize(c1);
@@ -175,7 +175,7 @@ class BeanFilter_Test extends TestBase {
 	// Test non-static parent class used as filter
 	//====================================================================================================
 	@Test void a04_parentClassFilter2() throws Exception {
-		var s = JsonSerializer.create().json5().interfaces(D1.class).build();
+		var s = Json5Serializer.create().interfaces(D1.class).build();
 
 		var d1 = new D2();
 		var r = s.serialize(d1);

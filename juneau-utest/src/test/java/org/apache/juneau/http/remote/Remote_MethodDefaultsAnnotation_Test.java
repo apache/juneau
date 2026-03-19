@@ -52,19 +52,19 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void a01_headerDefaults_providedValue() {
-		var x = MockRestClient.buildJson(A.class).getRemote(A1.class);
+		var x = MockRestClient.buildJson5(A.class).getRemote(A1.class);
 		assertEquals("Foo=customFoo,Bar=customBar", x.x1("customFoo", "customBar"));
 	}
 
 	@Test
 	void a02_headerDefaults_nullValue() {
-		var x = MockRestClient.buildJson(A.class).getRemote(A1.class);
+		var x = MockRestClient.buildJson5(A.class).getRemote(A1.class);
 		assertEquals("Foo=defaultFoo,Bar=customBar", x.x1(null, "customBar"));
 	}
 
 	@Test
 	void a03_headerDefaults_bothNull() {
-		var x = MockRestClient.buildJson(A.class).getRemote(A1.class);
+		var x = MockRestClient.buildJson5(A.class).getRemote(A1.class);
 		assertEquals("Foo=defaultFoo,Bar=null", x.x1(null, null));
 	}
 
@@ -78,7 +78,7 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void a04_headerDefaults_multipleDefaults() {
-		var x = MockRestClient.buildJson(A.class).getRemote(A2.class);
+		var x = MockRestClient.buildJson5(A.class).getRemote(A2.class);
 		assertEquals("Foo=defaultFoo,Bar=defaultBar", x.x1(null, null));
 		assertEquals("Foo=customFoo,Bar=defaultBar", x.x1("customFoo", null));
 		assertEquals("Foo=defaultFoo,Bar=customBar", x.x1(null, "customBar"));
@@ -106,13 +106,13 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void b01_queryDefaults_providedValue() {
-		var x = MockRestClient.buildJson(B.class).getRemote(B1.class);
+		var x = MockRestClient.buildJson5(B.class).getRemote(B1.class);
 		assertEquals("foo=customFoo,bar=customBar", x.x1("customFoo", "customBar"));
 	}
 
 	@Test
 	void b02_queryDefaults_nullValue() {
-		var x = MockRestClient.buildJson(B.class).getRemote(B1.class);
+		var x = MockRestClient.buildJson5(B.class).getRemote(B1.class);
 		assertEquals("foo=defaultFoo,bar=customBar", x.x1(null, "customBar"));
 	}
 
@@ -126,7 +126,7 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void b03_queryDefaults_multipleDefaults() {
-		var x = MockRestClient.buildJson(B.class).getRemote(B2.class);
+		var x = MockRestClient.buildJson5(B.class).getRemote(B2.class);
 		assertEquals("foo=defaultFoo,bar=defaultBar", x.x1(null, null));
 		assertEquals("foo=customFoo,bar=defaultBar", x.x1("customFoo", null));
 		assertEquals("foo=defaultFoo,bar=customBar", x.x1(null, "customBar"));
@@ -153,13 +153,13 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void c01_formDataDefaults_providedValue() {
-		var x = MockRestClient.buildJson(C.class).getRemote(C1.class);
+		var x = MockRestClient.buildJson5(C.class).getRemote(C1.class);
 		assertEquals("foo=customFoo,bar=customBar", x.x1("customFoo", "customBar"));
 	}
 
 	@Test
 	void c02_formDataDefaults_nullValue() {
-		var x = MockRestClient.buildJson(C.class).getRemote(C1.class);
+		var x = MockRestClient.buildJson5(C.class).getRemote(C1.class);
 		assertEquals("foo=defaultFoo,bar=customBar", x.x1(null, "customBar"));
 	}
 
@@ -173,7 +173,7 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void c03_formDataDefaults_multipleDefaults() {
-		var x = MockRestClient.buildJson(C.class).getRemote(C2.class);
+		var x = MockRestClient.buildJson5(C.class).getRemote(C2.class);
 		assertEquals("foo=defaultFoo,bar=defaultBar", x.x1(null, null));
 		assertEquals("foo=customFoo,bar=defaultBar", x.x1("customFoo", null));
 	}
@@ -200,7 +200,7 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void d01_pathDefaults_providedValue() {
-		var x = MockRestClient.buildJson(D.class).getRemote(D1.class);
+		var x = MockRestClient.buildJson5(D.class).getRemote(D1.class);
 		assertEquals("foo=customFoo,bar=customBar", x.x1("customFoo", "customBar"));
 	}
 
@@ -225,13 +225,13 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void e01_contentDefaults_providedValue() {
-		var x = MockRestClient.buildJson(E.class).getRemote(E1.class);
+		var x = MockRestClient.buildJson5(E.class).getRemote(E1.class);
 		assertEquals("content={foo:'customBar'}", x.x1("{foo:'customBar'}"));
 	}
 
 	@Test
 	void e02_contentDefaults_nullValue() {
-		var x = MockRestClient.buildJson(E.class).getRemote(E1.class);
+		var x = MockRestClient.buildJson5(E.class).getRemote(E1.class);
 		assertEquals("content={foo:'defaultBar'}", x.x1(null));
 	}
 
@@ -244,7 +244,7 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void e03_contentDefaults_noParameter() {
-		var x = MockRestClient.buildJson(E.class).getRemote(E2.class);
+		var x = MockRestClient.buildJson5(E.class).getRemote(E2.class);
 		assertEquals("content={foo:'defaultBar'}", x.x1());
 	}
 
@@ -281,7 +281,7 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void f01_combinedDefaults_allNull() {
-		var x = MockRestClient.buildJson(F.class).getRemote(F1.class);
+		var x = MockRestClient.buildJson5(F.class).getRemote(F1.class);
 		assertEquals(
 			"queryParam=defaultQuery,HeaderParam=defaultHeader,content=defaultContent",
 			x.x1(null, null, null)
@@ -290,7 +290,7 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void f02_combinedDefaults_allProvided() {
-		var x = MockRestClient.buildJson(F.class).getRemote(F1.class);
+		var x = MockRestClient.buildJson5(F.class).getRemote(F1.class);
 		assertEquals(
 			"queryParam=customQuery,HeaderParam=customHeader,content=customContent",
 			x.x1("customQuery", "customHeader", "customContent")
@@ -299,7 +299,7 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void f03_combinedDefaults_mixed() {
-		var x = MockRestClient.buildJson(F.class).getRemote(F1.class);
+		var x = MockRestClient.buildJson5(F.class).getRemote(F1.class);
 		assertEquals(
 			"queryParam=defaultQuery,HeaderParam=customHeader,content=customContent",
 			x.x1(null, "customHeader", "customContent")
@@ -332,20 +332,20 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void g01_parameterDefaults_bothNull() {
-		var x = MockRestClient.buildJson(G.class).getRemote(G1.class);
+		var x = MockRestClient.buildJson5(G.class).getRemote(G1.class);
 		assertEquals("Foo=paramDefaultFoo,bar=paramDefaultBar", x.x1(null, null));
 	}
 
 	@Test
 	void g02_parameterDefaults_oneProvided() {
-		var x = MockRestClient.buildJson(G.class).getRemote(G1.class);
+		var x = MockRestClient.buildJson5(G.class).getRemote(G1.class);
 		assertEquals("Foo=customFoo,bar=paramDefaultBar", x.x1("customFoo", null));
 		assertEquals("Foo=paramDefaultFoo,bar=customBar", x.x1(null, "customBar"));
 	}
 
 	@Test
 	void g03_parameterDefaults_bothProvided() {
-		var x = MockRestClient.buildJson(G.class).getRemote(G1.class);
+		var x = MockRestClient.buildJson5(G.class).getRemote(G1.class);
 		assertEquals("Foo=customFoo,bar=customBar", x.x1("customFoo", "customBar"));
 	}
 
@@ -370,14 +370,14 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void h01_parameterOverridesMethod_nullValue() {
-		var x = MockRestClient.buildJson(H.class).getRemote(H1.class);
+		var x = MockRestClient.buildJson5(H.class).getRemote(H1.class);
 		// Parameter-level default should take precedence
 		assertEquals("param=paramDefault", x.x1(null));
 	}
 
 	@Test
 	void h02_parameterOverridesMethod_providedValue() {
-		var x = MockRestClient.buildJson(H.class).getRemote(H1.class);
+		var x = MockRestClient.buildJson5(H.class).getRemote(H1.class);
 		assertEquals("param=customValue", x.x1("customValue"));
 	}
 
@@ -401,13 +401,13 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void i01_contentParameterDefault_nullValue() {
-		var x = MockRestClient.buildJson(I.class).getRemote(I1.class);
+		var x = MockRestClient.buildJson5(I.class).getRemote(I1.class);
 		assertEquals("content={paramDefault:true}", x.x1(null));
 	}
 
 	@Test
 	void i02_contentParameterDefault_providedValue() {
-		var x = MockRestClient.buildJson(I.class).getRemote(I1.class);
+		var x = MockRestClient.buildJson5(I.class).getRemote(I1.class);
 		assertEquals("content={custom:true}", x.x1("{custom:true}"));
 	}
 
@@ -421,7 +421,7 @@ class Remote_MethodDefaultsAnnotation_Test {
 
 	@Test
 	void i03_contentParameterOverridesMethod() {
-		var x = MockRestClient.buildJson(I.class).getRemote(I2.class);
+		var x = MockRestClient.buildJson5(I.class).getRemote(I2.class);
 		assertEquals("content={paramDefault:true}", x.x1(null));
 	}
 }

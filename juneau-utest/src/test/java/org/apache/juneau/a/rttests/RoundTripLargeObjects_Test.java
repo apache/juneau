@@ -51,121 +51,125 @@ class RoundTripLargeObjects_Test extends TestBase {
 	private static final int SIZE_PARAM = 20000;
 
 	private static final RoundTrip_Tester[] TESTERS = {
-		tester(1, "Json DEFAULT")
+		tester(1, "Json - default")
 			.serializer(JsonSerializer.create().keepNullProperties())
 			.parser(JsonParser.create())
 			.build(),
-		tester(2, "Json5 DEFAULT")
+		tester(2, "Json - readable")
+			.serializer(JsonSerializer.create().ws().keepNullProperties())
+			.parser(JsonParser.create())
+			.build(),
+		tester(3, "Json5 - default")
 			.serializer(Json5Serializer.create().keepNullProperties())
 			.parser(Json5Parser.create())
 			.build(),
-		tester(3, "Json DEFAULT_SQ")
-			.serializer(JsonSerializer.create().json5().keepNullProperties())
-			.parser(JsonParser.create())
+		tester(4, "Json5 - readable")
+			.serializer(Json5Serializer.create().ws().keepNullProperties())
+			.parser(Json5Parser.create())
 			.build(),
-		tester(4, "Xml DEFAULT w/namespaces,validation")
+		tester(5, "Xml DEFAULT w/namespaces,validation")
 			.serializer(XmlSerializer.create().sq().ns().keepNullProperties().addNamespaceUrisToRoot().useWhitespace())
 			.parser(XmlParser.create())
 			.validateXml()
 			.validateXmlWhitespace()
 			.build(),
-		tester(5, "Xml DEFAULT wo/namespaces,validation")
+		tester(6, "Xml DEFAULT wo/namespaces,validation")
 			.serializer(XmlSerializer.create().sq().keepNullProperties())
 			.parser(XmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester(6, "Html")
+		tester(7, "Html")
 			.serializer(HtmlSerializer.create().keepNullProperties())
 			.parser(HtmlParser.create())
 			.validateXmlWhitespace()
 			.build(),
-		tester(7, "UrlEncoding")
+		tester(8, "UrlEncoding")
 			.serializer(UrlEncodingSerializer.create().keepNullProperties())
 			.parser(UrlEncodingParser.create())
 			.build(),
-		tester(8, "Uon")
+		tester(9, "Uon")
 			.serializer(UonSerializer.create().keepNullProperties())
 			.parser(UonParser.create())
 			.build(),
-		tester(9, "MsgPack")
+		tester(10, "MsgPack")
 			.serializer(MsgPackSerializer.create().keepNullProperties())
 			.parser(MsgPackParser.create())
 			.build(),
-		tester(10, "RdfXml")
+		tester(11, "RdfXml")
 			.serializer(RdfXmlSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfXmlParser.create())
 			.build(),
-		tester(11, "RdfThrift")
+		tester(12, "RdfThrift")
 			.serializer(RdfThriftSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfThriftParser.create())
 			.build(),
-		tester(12, "RdfProto")
+		tester(13, "RdfProto")
 			.serializer(RdfProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfProtoParser.create())
 			.build(),
-		tester(13, "RdfXmlAbbrev")
+		tester(14, "RdfXmlAbbrev")
 			.serializer(RdfXmlAbbrevSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfXmlParser.create())
 			.build(),
-		tester(14, "RdfTurtle")
+		tester(15, "RdfTurtle")
 			.serializer(TurtleSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(TurtleParser.create())
 			.build(),
-		tester(15, "RdfN3")
+		tester(16, "RdfN3")
 			.serializer(N3Serializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(N3Parser.create())
 			.build(),
-		tester(16, "RdfNtriple")
+		tester(17, "RdfNtriple")
 			.serializer(NTripleSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(NTripleParser.create())
 			.build(),
-		tester(17, "RdfNquads")
+		tester(18, "RdfNquads")
 			.serializer(NQuadsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(NQuadsParser.create())
 			.build(),
-		tester(18, "RdfTrig")
+		tester(19, "RdfTrig")
 			.serializer(TriGSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(TriGParser.create())
 			.build(),
-		tester(19, "RdfJsonLd")
+		tester(20, "RdfJsonLd")
 			.serializer(JsonLdSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonLdParser.create())
 			.build(),
-		tester(20, "RdfJson")
+		tester(21, "RdfJson")
 			.serializer(RdfJsonSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(RdfJsonParser.create())
 			.build(),
-		tester(21, "RdfTriX")
+		tester(22, "RdfTriX")
 			.serializer(TriXSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(TriXParser.create())
 			.build(),
-		tester(22, "Yaml - default")
+		tester(23, "Yaml - default")
 			.serializer(YamlSerializer.create().keepNullProperties())
 			.parser(YamlParser.create())
 			.build(),
-		tester(23, "Toml - default")
+		tester(24, "Toml - default")
 			.serializer(TomlSerializer.create())
 			.parser(TomlParser.create())
 			.build(),
-		tester(24, "Csv - default")
+		tester(25, "Csv - default")
 			.serializer(CsvSerializer.create().keepNullProperties())
 			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
 			.returnOriginalObject()
 			.build(),
-		tester(25, "Markdown - default")
+		tester(26, "Markdown - default")
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create())
 			.build(),
-		tester(26, "Hjson - default")
+		tester(27, "Hjson - default")
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())
 			.parser(HjsonParser.create())
 			.build(),
-		tester(27, "Jcs - default")
+		tester(28, "Jcs - default")
 			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(JsonParser.create())
 			.skipIf(o -> o instanceof Double d && (d.isNaN() || d.isInfinite()))
 			.build(),
-		tester(28, "Cbor - default")
+		tester(29, "Cbor - default")
 			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(CborParser.create())
 			.build()

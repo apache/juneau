@@ -74,7 +74,7 @@ class ObjectRest_Test extends TestBase {
 		model.put("/person1", p);
 
 		// Make sure it got stored correctly.
-		var serializer = JsonSerializer.create().json5().addRootType().build();
+		var serializer = Json5Serializer.create().addRootType().build();
 		assertEquals("{person1:{name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}}", serializer.serialize(model.getRootObject()));
 
 		// Get the original Person object back.
@@ -97,7 +97,7 @@ class ObjectRest_Test extends TestBase {
 		assertEquals(expectedValue, s);
 
 		// Parse it back to Java objects.
-		p = (Person)JsonParser.create().beanDictionary(Person.class).build().parse(s, Object.class);
+		p = (Person)Json5Parser.create().beanDictionary(Person.class).build().parse(s, Object.class);
 		expectedValue = "city B";
 		s = p.addresses[1].city;
 		assertEquals(expectedValue, s);
@@ -118,7 +118,7 @@ class ObjectRest_Test extends TestBase {
 		model.put("addresses/0", new Address("street D", "city D", "state D", 12345, false));
 		model.put("addresses/1", new Address("street E", "city E", "state E", 12345, false));
 		model.put("addresses/2", new Address("street F", "city F", "state F", 12345, false));
-		serializer = JsonSerializer.create().json5().build();
+		serializer = Json5Serializer.create().build();
 		s = serializer.serialize(p);
 		expectedValue = "{name:'some name',age:123,addresses:[{street:'street D',city:'city D',state:'state D',zip:12345,isCurrent:false},{street:'street E',city:'city E',state:'state E',zip:12345,isCurrent:false},{street:'street F',city:'city F',state:'state F',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
@@ -266,7 +266,7 @@ class ObjectRest_Test extends TestBase {
 	// PojoRest(Object,ReaderParser)
 	//====================================================================================================
 	@Test void c01_constructors() {
-		var model = ObjectRest.create(new AddressBook(), JsonParser.DEFAULT);
+		var model = ObjectRest.create(new AddressBook(), Json5Parser.DEFAULT);
 
 		// Try adding a person to the address book.
 		var billClinton = new Person("Bill Clinton", 65,
@@ -734,7 +734,7 @@ class ObjectRest_Test extends TestBase {
 		var model = ObjectRest.create(new AddressBook().init());
 		assertEquals("Person(name=Bill Clinton,age=65)", model.invokeMethod("0", "toString", ""));
 
-		model = ObjectRest.create(new AddressBook().init(), JsonParser.DEFAULT);
+		model = ObjectRest.create(new AddressBook().init(), Json5Parser.DEFAULT);
 		assertEquals("Person(name=Bill Clinton,age=65)", model.invokeMethod("0", "toString", ""));
 		assertEquals("NY", model.invokeMethod("0/addresses/0/state", "toString", ""));
 		assertNull(model.invokeMethod("1", "toString", ""));

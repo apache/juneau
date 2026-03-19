@@ -44,9 +44,12 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 
 	private static final ComboSerialize_Tester<?>[] TESTERS = {
 		tester(1, "TestMediaTypeLiterals", TestMediaTypeLiterals::new)
-			.json("'JSON'")
-			.jsonT("'JSON'")
-			.jsonR("'JSON'")
+			.json("\"JSON\"")
+			.jsonT("\"JSON\"")
+			.jsonR("\"JSON\"")
+			.json5("'JSON'")
+			.json5T("'JSON'")
+			.json5R("'JSON'")
 			.xml("<string>XML</string>")
 			.xmlT("<string>XML</string>")
 			.xmlR("<string>XML</string>\n")
@@ -64,9 +67,12 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.msgPackT("A74D53475041434B")
 			.build(),
 		tester(2, "TestMediaTypePatterns", TestMediaTypePatterns::new)
-			.json("'JSON'")
-			.jsonT("'JSON'")
-			.jsonR("'JSON'")
+			.json("\"JSON\"")
+			.jsonT("\"JSON\"")
+			.jsonR("\"JSON\"")
+			.json5("'JSON'")
+			.json5T("'JSON'")
+			.json5R("'JSON'")
 			.xml("<string>XML</string>")
 			.xmlT("<string>XML</string>")
 			.xmlR("<string>XML</string>\n")
@@ -84,9 +90,12 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.msgPackT("A74D53475041434B")
 			.build(),
 		tester(3, "TestMediaTypePatternsReversed", TestMediaTypePatternsReversed::new)
-			.json("'JSON'")
-			.jsonT("'JSON'")
-			.jsonR("'JSON'")
+			.json("\"JSON\"")
+			.jsonT("\"JSON\"")
+			.jsonR("\"JSON\"")
+			.json5("'JSON'")
+			.json5T("'JSON'")
+			.json5R("'JSON'")
 			.xml("<string>XML</string>")
 			.xmlT("<string>XML</string>")
 			.xmlR("<string>XML</string>\n")
@@ -104,9 +113,12 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.msgPackT("A74D53475041434B")
 			.build(),
 		tester(4, "TestMediaTypePatternsMulti", TestMediaTypePatternsMulti::new)
-			.json("'JSON'")
-			.jsonT("'JSON'")
-			.jsonR("'JSON'")
+			.json("\"JSON\"")
+			.jsonT("\"JSON\"")
+			.jsonR("\"JSON\"")
+			.json5("'JSON'")
+			.json5T("'JSON'")
+			.json5R("'JSON'")
 			.xml("<string>XML</string>")
 			.xmlT("<string>XML</string>")
 			.xmlR("<string>XML</string>\n")
@@ -125,9 +137,12 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.build(),
 		// In this case, "text/xml" should NOT match "text/xml+rdf".
 		tester(5, "TestMediaTypePatternsPartial1", TestMediaTypePatternsPartial1::new)
-			.json("'JSON'")
-			.jsonT("'JSON'")
-			.jsonR("'JSON'")
+			.json("\"JSON\"")
+			.jsonT("\"JSON\"")
+			.jsonR("\"JSON\"")
+			.json5("'JSON'")
+			.json5T("'JSON'")
+			.json5R("'JSON'")
 			.xml("<string>XML</string>")
 			.xmlT("<string>XML</string>")
 			.xmlR("<string>XML</string>\n")
@@ -146,9 +161,12 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.build(),
 		// In this case, "text/xml+rdf" should NOT match "text/xml".
 		tester(6, "TestMediaTypePatternsPartial2", TestMediaTypePatternsPartial2::new)
-			.json("'foo'")
-			.jsonT("'foo'")
-			.jsonR("'foo'")
+			.json("\"foo\"")
+			.jsonT("\"foo\"")
+			.jsonR("\"foo\"")
+			.json5("'foo'")
+			.json5T("'foo'")
+			.json5R("'foo'")
 			.xml("<string>foo</string>")
 			.xmlT("<string>foo</string>")
 			.xmlR("<string>foo</string>\n")
@@ -167,9 +185,12 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.build(),
 		// XML and RDF serializers.
 		tester(7, "TestMediaTypePatternsXmlPlus", TestMediaTypePatternsXmlPlus::new)
-			.json("'foo'")
-			.jsonT("'foo'")
-			.jsonR("'foo'")
+			.json("\"foo\"")
+			.jsonT("\"foo\"")
+			.jsonR("\"foo\"")
+			.json5("'foo'")
+			.json5T("'foo'")
+			.json5R("'foo'")
 			.xml("<string>XML</string>")
 			.xmlT("<string>XML</string>")
 			.xmlR("<string>XML</string>\n")
@@ -188,9 +209,12 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.build(),
 		// XML and RDF serializers.
 		tester(8, "TestMediaTypePatternsXmlPlusReversed", TestMediaTypePatternsXmlPlusReversed::new)
-			.json("'foo'")
-			.jsonT("'foo'")
-			.jsonR("'foo'")
+			.json("\"foo\"")
+			.jsonT("\"foo\"")
+			.jsonR("\"foo\"")
+			.json5("'foo'")
+			.json5T("'foo'")
+			.json5R("'foo'")
 			.xml("<string>XML</string>")
 			.xmlT("<string>XML</string>")
 			.xmlR("<string>XML</string>\n")
@@ -209,9 +233,12 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.build(),
 		// RDF serializer.
 		tester(9, "TestMediaTypePatternsRdfPlus", TestMediaTypePatternsRdfPlus::new)
-			.json("'foo'")
-			.jsonT("'foo'")
-			.jsonR("'foo'")
+			.json("\"foo\"")
+			.jsonT("\"foo\"")
+			.jsonR("\"foo\"")
+			.json5("'foo'")
+			.json5T("'foo'")
+			.json5R("'foo'")
 			.xml("<string>foo</string>")
 			.xmlT("<string>foo</string>")
 			.xmlR("<string>foo</string>\n")
@@ -232,6 +259,9 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.json("foo")
 			.jsonT("foo")
 			.jsonR("foo")
+			.json5("foo")
+			.json5T("foo")
+			.json5R("foo")
 			.xml("foo")
 			.xmlT("foo")
 			.xmlR("foo\n")
@@ -252,6 +282,9 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.json("JSON")
 			.jsonT("JSON")
 			.jsonR("JSON")
+			.json5("JSON")
+			.json5T("JSON")
+			.json5R("JSON")
 			.xml("XML")
 			.xmlT("XML")
 			.xmlR("XML\n")
@@ -272,6 +305,9 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.json("JSON")
 			.jsonT("JSON")
 			.jsonR("JSON")
+			.json5("JSON")
+			.json5T("JSON")
+			.json5R("JSON")
 			.xml("XML")
 			.xmlT("XML")
 			.xmlR("XML\n")
@@ -292,6 +328,9 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.json("TEMPLATE")
 			.jsonT("TEMPLATE")
 			.jsonR("TEMPLATE")
+			.json5("TEMPLATE")
+			.json5T("TEMPLATE")
+			.json5R("TEMPLATE")
 			.xml("TEMPLATE")
 			.xmlT("TEMPLATE")
 			.xmlR("TEMPLATE\n")
@@ -312,6 +351,9 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.json("JSON")
 			.jsonT("JSON")
 			.jsonR("JSON")
+			.json5("JSON")
+			.json5T("JSON")
+			.json5R("JSON")
 			.xml("XML")
 			.xmlT("XML")
 			.xmlR("XML\n")
@@ -332,6 +374,9 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.json("SWAPPED")
 			.jsonT("SWAPPED")
 			.jsonR("SWAPPED")
+			.json5("SWAPPED")
+			.json5T("SWAPPED")
+			.json5R("SWAPPED")
 			.xml("SWAPPED")
 			.xmlT("SWAPPED")
 			.xmlR("SWAPPED\n")
@@ -349,9 +394,12 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			.msgPackT("81A16601")
 			.build(),
 		tester(16, "BeanB", BeanB::new)
-			.json("{f:1}")
-			.jsonT("{f:1}")
-			.jsonR("{\n\tf: 1\n}")
+			.json("{\"f\":1}")
+			.jsonT("{\"f\":1}")
+			.jsonR("{\n\t\"f\": 1\n}")
+			.json5("{f:1}")
+			.json5T("{f:1}")
+			.json5R("{\n\tf: 1\n}")
 			.xml("<object><f>1</f></object>")
 			.xmlT("<object><f>1</f></object>")
 			.xmlR("<object>\n\t<f>1</f>\n</object>\n")
@@ -374,7 +422,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 		return TESTERS;
 	}
 
-	@Swap(value=SwapJson.class, mediaTypes={"application/json5"})
+	@Swap(value=SwapJson.class, mediaTypes={"application/json","application/json5"})
 	@Swap(value=SwapXml.class, mediaTypes={"text/xml"})
 	@Swap(value=SwapHtml.class, mediaTypes={"text/html"})
 	@Swap(value=SwapUon.class, mediaTypes={"text/uon"})
@@ -383,7 +431,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	@Swap(value=SwapRdfXml.class, mediaTypes={"text/xml+rdf"})
 	public static class TestMediaTypeLiterals {}
 
-	@Swap(value=SwapJson.class, mediaTypes={"*/json5"})
+	@Swap(value=SwapJson.class, mediaTypes={"*/json","*/json5"})
 	@Swap(value=SwapXml.class, mediaTypes={"*/xml"})
 	@Swap(value=SwapHtml.class, mediaTypes={"*/html"})
 	@Swap(value=SwapUon.class, mediaTypes={"*/uon"})
@@ -398,10 +446,10 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	@Swap(value=SwapUon.class, mediaTypes={"*/uon"})
 	@Swap(value=SwapHtml.class, mediaTypes={"*/html"})
 	@Swap(value=SwapXml.class, mediaTypes={"*/xml"})
-	@Swap(value=SwapJson.class, mediaTypes={"*/json5"})
+	@Swap(value=SwapJson.class, mediaTypes={"*/json","*/json5"})
 	public static class TestMediaTypePatternsReversed {}
 
-	@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json5","*/bar"})
+	@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json","*/json5","*/bar"})
 	@Swap(value=SwapXml.class, mediaTypes={"*/foo","*/xml","*/bar"})
 	@Swap(value=SwapHtml.class, mediaTypes={"*/foo","*/html","*/bar"})
 	@Swap(value=SwapUon.class, mediaTypes={"*/foo","*/uon","*/bar"})
@@ -410,7 +458,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	@Swap(value=SwapRdfXml.class, mediaTypes={"*/foo","*/xml+rdf","*/bar"})
 	public static class TestMediaTypePatternsMulti {}
 
-	@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json5","*/bar"})
+	@Swap(value=SwapJson.class, mediaTypes={"*/foo","*/json","*/json5","*/bar"})
 	@Swap(value=SwapXml.class, mediaTypes={"*/foo","*/xml","*/bar"})
 	@Swap(value=SwapHtml.class, mediaTypes={"*/foo","*/html","*/bar"})
 	public static class TestMediaTypePatternsPartial1 {
@@ -501,7 +549,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	@Swap(impl=TemplateSwap.class,template="foo")
 	public static class TestTemplate {}
 
-	@Swap(value=TemplateSwap.class, mediaTypes={"*/json5"}, template="JSON")
+	@Swap(value=TemplateSwap.class, mediaTypes={"*/json","*/json5"}, template="JSON")
 	@Swap(value=TemplateSwap.class, mediaTypes={"*/xml"}, template="XML")
 	@Swap(value=TemplateSwap.class, mediaTypes={"*/html"}, template="HTML")
 	@Swap(value=TemplateSwap.class, mediaTypes={"*/uon"}, template="UON")
@@ -529,7 +577,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class TemplateSwapJson extends TemplateSwap {
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.ofAll("*/json5");
+			return MediaType.ofAll("*/json", "*/json5");
 		}
 		@Override
 		public String withTemplate() {
@@ -619,7 +667,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 		}
 		@Override
 		public MediaType[] forMediaTypes() {
-			return MediaType.ofAll("*/json5");
+			return MediaType.ofAll("*/json", "*/json5");
 		}
 		@Override
 		public String withTemplate() {
@@ -711,7 +759,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 		}
 	}
 
-	@Swap(value=BeanSwap.class, mediaTypes={"*/json5"})
+	@Swap(value=BeanSwap.class, mediaTypes={"*/json","*/json5"})
 	@Swap(value=BeanSwap.class, mediaTypes={"*/xml"})
 	@Swap(value=BeanSwap.class, mediaTypes={"*/html"})
 	public static class BeanA {

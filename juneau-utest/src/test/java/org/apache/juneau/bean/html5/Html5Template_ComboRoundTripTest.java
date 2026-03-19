@@ -38,9 +38,12 @@ class Html5Template_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
 	private static final ComboRoundTrip_Tester<?>[] TESTERS = {
 		tester(1, "FormTemplate-1", FormTemplate.class, new FormTemplate("http://myaction", 123, true))
-			.json("{a:{action:'http://myaction'},c:[{_type:'input',a:{type:'text',name:'v1',value:123}},{_type:'input',a:{type:'text',name:'v2',value:true}}]}")
-			.jsonT("{a:{action:'http://myaction'},c:[{t:'input',a:{type:'text',name:'v1',value:123}},{t:'input',a:{type:'text',name:'v2',value:true}}]}")
-			.jsonR("{\n\ta: {\n\t\taction: 'http://myaction'\n\t},\n\tc: [\n\t\t{\n\t\t\t_type: 'input',\n\t\t\ta: {\n\t\t\t\ttype: 'text',\n\t\t\t\tname: 'v1',\n\t\t\t\tvalue: 123\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t_type: 'input',\n\t\t\ta: {\n\t\t\t\ttype: 'text',\n\t\t\t\tname: 'v2',\n\t\t\t\tvalue: true\n\t\t\t}\n\t\t}\n\t]\n}")
+			.json5("{a:{action:'http://myaction'},c:[{_type:'input',a:{type:'text',name:'v1',value:123}},{_type:'input',a:{type:'text',name:'v2',value:true}}]}")
+			.json5T("{a:{action:'http://myaction'},c:[{t:'input',a:{type:'text',name:'v1',value:123}},{t:'input',a:{type:'text',name:'v2',value:true}}]}")
+			.json5R("{\n\ta: {\n\t\taction: 'http://myaction'\n\t},\n\tc: [\n\t\t{\n\t\t\t_type: 'input',\n\t\t\ta: {\n\t\t\t\ttype: 'text',\n\t\t\t\tname: 'v1',\n\t\t\t\tvalue: 123\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t_type: 'input',\n\t\t\ta: {\n\t\t\t\ttype: 'text',\n\t\t\t\tname: 'v2',\n\t\t\t\tvalue: true\n\t\t\t}\n\t\t}\n\t]\n}")
+			.json("{\"a\":{\"action\":\"http://myaction\"},\"c\":[{\"_type\":\"input\",\"a\":{\"type\":\"text\",\"name\":\"v1\",\"value\":123}},{\"_type\":\"input\",\"a\":{\"type\":\"text\",\"name\":\"v2\",\"value\":true}}]}")
+			.jsonT("{\"a\":{\"action\":\"http://myaction\"},\"c\":[{\"t\":\"input\",\"a\":{\"type\":\"text\",\"name\":\"v1\",\"value\":123}},{\"t\":\"input\",\"a\":{\"type\":\"text\",\"name\":\"v2\",\"value\":true}}]}")
+			.jsonR("{\n\t\"a\": {\n\t\t\"action\": \"http://myaction\"\n\t},\n\t\"c\": [\n\t\t{\n\t\t\t\"_type\": \"input\",\n\t\t\t\"a\": {\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"name\": \"v1\",\n\t\t\t\t\"value\": 123\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"_type\": \"input\",\n\t\t\t\"a\": {\n\t\t\t\t\"type\": \"text\",\n\t\t\t\t\"name\": \"v2\",\n\t\t\t\t\"value\": true\n\t\t\t}\n\t\t}\n\t]\n}")
 			.xml("<form action='http://myaction'><input type='text' name='v1' value='123'/><input type='text' name='v2' value='true'/></form>")
 			.xmlT("<form action='http://myaction'><input type='text' name='v1' value='123'/><input type='text' name='v2' value='true'/></form>")
 			.xmlR("<form action='http://myaction'><input type='text' name='v1' value='123'/><input type='text' name='v2' value='true'/></form>\n")

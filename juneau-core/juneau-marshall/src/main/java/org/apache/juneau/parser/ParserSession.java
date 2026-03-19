@@ -1041,15 +1041,6 @@ public class ParserSession extends BeanSession {
 	protected final boolean isAutoCloseStreams() { return ctx.isAutoCloseStreams(); }
 
 	/**
-	 * Strict mode.
-	 *
-	 * @see Parser.Builder#strict()
-	 * @return
-	 * 	<jk>true</jk> if strict mode for the parser is enabled.
-	 */
-	protected final boolean isStrict() { return ctx.isStrict(); }
-
-	/**
 	 * Trim parsed strings.
 	 *
 	 * @see Parser.Builder#trimStrings()

@@ -108,46 +108,6 @@ public @interface JsonConfig {
 	int rank() default 0;
 
 	/**
-	 * Simple JSON attribute mode.
-	 *
-	 * <p>
-	 * If <js>"true"</js>, JSON attribute names will only be quoted when necessary.
-	 * <br>Otherwise, they are always quoted.
-	 *
-	 * <p>
-	 * Attributes do not need to be quoted when they conform to the following:
-	 * <ol class='spaced-list'>
-	 * 	<li>They start with an ASCII character or <js>'_'</js>.
-	 * 	<li>They contain only ASCII characters or numbers or <js>'_'</js>.
-	 * 	<li>They are not one of the following reserved words:
-	 * 		<p class='bcode'>
-	 * 	arguments, break, case, catch, class, const, continue, debugger, default,
-	 * 	delete, do, else, enum, eval, export, extends, false, finally, for, function,
-	 * 	if, implements, import, in, instanceof, interface, let, new, null, package,
-	 * 	private, protected, public, return, static, super, switch, this, throw,
-	 * 	true, try, typeof, var, void, while, with, undefined, yield
-	 * 		</p>
-	 * </ol>
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#simpleAttrs()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String simpleAttrs() default "";
-
-	/**
 	 * Validate end.
 	 *
 	 * <p>

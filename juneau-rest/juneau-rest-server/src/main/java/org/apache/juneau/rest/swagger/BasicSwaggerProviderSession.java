@@ -182,7 +182,7 @@ public class BasicSwaggerProviderSession {
 	private final Messages mb;
 
 	private final VarResolverSession vr;
-	private final JsonParser jp = JsonParser.create().ignoreUnknownBeanProperties().build();
+	private final JsonParser jp = Json5Parser.create().ignoreUnknownBeanProperties().build();
 
 	private final JsonSchemaGeneratorSession js;
 
@@ -272,13 +272,13 @@ public class BasicSwaggerProviderSession {
 					.appendIf(nem, SWAGGER_contact,
 						merge(
 							info.getMap(SWAGGER_contact),
-							toMap(r.contact(), "@Swagger(contact) on class {0}", c)
+							toMap(r.contact())
 						)
 					)
 					.appendIf(nem, SWAGGER_license,
 						merge(
 							info.getMap(SWAGGER_license),
-							toMap(r.license(), "@Swagger(license) on class {0}", c)
+							toMap(r.license())
 						)
 					);
 			}
@@ -287,7 +287,7 @@ public class BasicSwaggerProviderSession {
 				.appendIf(nem, SWAGGER_externalDocs,
 					merge(
 						omSwagger.getMap(SWAGGER_externalDocs),
-						toMap(r.externalDocs(), "@Swagger(externalDocs) on class {0}", c)
+						toMap(r.externalDocs())
 					)
 				)
 				.appendIf(nec, SWAGGER_tags,
@@ -443,7 +443,7 @@ public class BasicSwaggerProviderSession {
 				merge(
 					op.getMap(SWAGGER_externalDocs),
 					parseMap(mb.findFirstString(mn + ".externalDocs"), "Messages/externalDocs on class {0} method {1}", c, m),
-					toMap(ms.externalDocs(), "@OpSwagger(externalDocs) on class {0} method {1}", c, m)
+					toMap(ms.externalDocs())
 				)
 			);
 
@@ -1205,7 +1205,7 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(ol);
 	}
 
-	private JsonMap toMap(Contact a, String _location, Object..._locationArgs) {
+	private JsonMap toMap(Contact a) {
 		if (ContactAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::ne;
@@ -1218,7 +1218,7 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private JsonMap toMap(ExternalDocs a, String _location, Object..._locationArgs) {
+	private JsonMap toMap(ExternalDocs a) {
 		if (ExternalDocsAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::ne;
@@ -1230,7 +1230,7 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private JsonMap toMap(License a, String _location, Object..._locationArgs) {
+	private JsonMap toMap(License a) {
 		if (LicenseAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::ne;
@@ -1250,7 +1250,7 @@ public class BasicSwaggerProviderSession {
 		om
 			.appendIf(ne, SWAGGER_name, resolve(a.name()))
 			.appendIf(ne, SWAGGER_description, resolve(joinnl(a.description())))
-			.appendIf(nem, SWAGGER_externalDocs, merge(om.getMap(SWAGGER_externalDocs), toMap(a.externalDocs(), location, locationArgs)));
+			.appendIf(nem, SWAGGER_externalDocs, merge(om.getMap(SWAGGER_externalDocs), toMap(a.externalDocs())));
 		// @formatter:on
 		return nullIfEmpty(om);
 	}

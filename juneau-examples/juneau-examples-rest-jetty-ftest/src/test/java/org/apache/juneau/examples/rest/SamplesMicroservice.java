@@ -47,7 +47,7 @@ public class SamplesMicroservice {
 			Locale.setDefault(Locale.US);
 			microservice = JettyMicroservice.create().workingDir("../juneau-examples-rest-jetty").configName("juneau-examples-rest-jetty.cfg").servlet(RootResources.class).build();
 			microserviceURI = microservice.start().getURI();
-			defaultClient = client().json().build();
+			defaultClient = client().json5().build();
 			defaultClientPlaintext = client().plainText().build();
 			return true;
 		} catch (Throwable e) {

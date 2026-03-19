@@ -1061,7 +1061,8 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
+	"resource",  // Resource management handled externally
+	"java:S106",  // System.err is the intentional default fallback for the configurable console PrintStream
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 })
 public class RestClient extends BeanContextable implements HttpClient, Closeable {
@@ -3951,7 +3952,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
 		 * 		.parser(JsonParser.<jk>class</jk>)
-		 * 		.strict()  <jc>// Enable strict mode on JsonParser.</jc>
 		 * 		.build();
 		 * </p>
 		 *
@@ -3987,7 +3987,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<jc>// Create a client that uses a predefined JSON parser for response bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>)
+		 * 		.parser(JsonParser.<jsf>DEFAULT</jsf>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -4036,7 +4036,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
 		 * 		.parser(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>)
-		 * 		.strict()  <jc>// Enable strict mode on parsers.</jc>
 		 * 		.build();
 		 * </p>
 		 *
@@ -4078,7 +4077,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>, XmlParser.<jsf>DEFAULT</jsf>)
+		 * 		.parser(JsonParser.<jsf>DEFAULT</jsf>, XmlParser.<jsf>DEFAULT</jsf>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -5318,71 +5317,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			return this;
 		}
 
-		/**
-		 * <i><l>Parser</l> configuration property:&emsp;</i>  Strict mode.
-		 *
-		 * <p>
-		 * When enabled, strict mode for the parser is enabled.
-		 *
-		 * <p>
-		 * Strict mode can mean different things for different parsers.
-		 *
-		 * <table class='styled'>
-		 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
-		 * 	<tr>
-		 * 		<td>All reader-based parsers</td>
-		 * 		<td>
-		 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
-		 * 			Otherwise, malformed input is ignored.
-		 * 		</td>
-		 * 	</tr>
-		 * 	<tr>
-		 * 		<td>{@link JsonParser}</td>
-		 * 		<td>
-		 * 			When enabled, throws exceptions on the following invalid JSON syntax:
-		 * 			<ul>
-		 * 				<li>Unquoted attributes.
-		 * 				<li>Missing attribute values.
-		 * 				<li>Concatenated strings.
-		 * 				<li>Javascript comments.
-		 * 				<li>Numbers and booleans when Strings are expected.
-		 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
-		 * 			</ul>
-		 * 		</td>
-		 * 	</tr>
-		 * </table>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with JSON parser using strict mode.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.strict()
-		 * 		.build();
-		 *
-		 * 	<jc>// Try to parse some bad JSON.</jc>
-		 * 	<jk>try</jk> {
-		 * 		<jv>client</jv>
-		 * 			.get(<js>"/pathToBadJson"</js>)
-		 * 			.run()
-		 * 			.getContent().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
-		 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
-		 * 		<jc>// Handle exception.</jc>
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#strict()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder strict() {
-			parsers().forEach(org.apache.juneau.parser.Parser.Builder::strict);
-			return this;
-		}
-
 		@Override /* Overridden from Builder */
 		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
@@ -6477,13 +6411,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			} else if (state == S4) {
 				if (! isWhitespace(c)) {
 					mark = i;
-				// State machine requires state transition to S5, SonarLint reports false positive
-				@SuppressWarnings({
-					"java:S1854",  // State machine requires state transition to S5
-					"java:S1481",  // unused variable intentional; assignment is for side effect (state = S5)
-					"unused"       // Eclipse/Java compiler warning for unused variable
-				})
-				var unused = (state = S5);
+					state = S5;
 				}
 			} else /* (state == S5) */ {
 				if (isWhitespace(c)) {
@@ -6541,7 +6469,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			ExecutorService es = executorService.get();
 			if (nn(es) && executorServiceShutdownOnClose)
 				es.shutdown();
-		} catch (@SuppressWarnings("unused") Exception t) {}
+		} catch (@SuppressWarnings("unused") Exception t) { /* Suppress close/shutdown exceptions during cleanup */ }
 		if (nn(creationStack))
 			closedStack = Thread.currentThread().getStackTrace();
 	}
@@ -6883,7 +6811,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public RestRequest formPost(Object uri, Object body) throws RestCallException {
 		var req = request(op("POST", uri, NO_BODY));
 		try {
-			if (body instanceof Supplier body2)
+			if (body instanceof Supplier<?> body2)
 				body = body2.get();
 			if (body instanceof NameValuePair body2)
 				return req.content(new UrlEncodedFormEntity(l(body2)));
@@ -8222,14 +8150,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		try {
 			Object ret = null;
-			@SuppressWarnings({
-				"java:S1854" // res is assigned in all branches before use, SonarLint false positive
-			})
-			RestResponse res;
+				RestResponse res;
 			rc.rethrow(RuntimeException.class);
 			rom.forEachException(rc::rethrow);
 			if (ror.getReturnValue() == RemoteReturn.NONE) {
-				res = rc.complete();
+				rc.complete();
 			} else if (ror.getReturnValue() == RemoteReturn.STATUS) {
 				res = rc.complete();
 				int returnCode = res.getStatusCode();

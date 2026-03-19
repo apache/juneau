@@ -33,10 +33,10 @@ class Visibility_Test extends TestBase {
 	// testVisibility
 	//====================================================================================================
 	@Test void a01_classDefault() throws Exception {
-		var s1 = JsonSerializer.create().json5().sortProperties().disableBeansRequireSomeProperties();
-		var s2 = JsonSerializer.create().json5().sortProperties().disableBeansRequireSomeProperties().beanClassVisibility(PROTECTED);
-		var s3 = JsonSerializer.create().json5().sortProperties().disableBeansRequireSomeProperties().beanClassVisibility(Visibility.DEFAULT);
-		var s4 = JsonSerializer.create().json5().sortProperties().disableBeansRequireSomeProperties().beanClassVisibility(PRIVATE);
+		var s1 = Json5Serializer.create().sortProperties().disableBeansRequireSomeProperties();
+		var s2 = Json5Serializer.create().sortProperties().disableBeansRequireSomeProperties().beanClassVisibility(PROTECTED);
+		var s3 = Json5Serializer.create().sortProperties().disableBeansRequireSomeProperties().beanClassVisibility(Visibility.DEFAULT);
+		var s4 = Json5Serializer.create().sortProperties().disableBeansRequireSomeProperties().beanClassVisibility(PRIVATE);
 
 		var a1 = A1.create();
 

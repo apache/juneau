@@ -149,6 +149,12 @@ public class HjsonParser extends ReaderParser implements HjsonMetaProvider {
 		public Builder copy() {
 			return new Builder(this);
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
 	}
 
 	/** Default parser. */

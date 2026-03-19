@@ -122,6 +122,17 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
     * Bump spring.version from 4.0.1 to 4.0.3 #308, #316.
     * Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.1 to 3.15.0 #314.
     * Bump jetty.version from 12.1.5 to 12.1.7 #312, #319.
+    * JsonSerializer and JsonParser now strictly enforce RFC 8259 JSON (double quotes only).
+      Single-quoted JSON is rejected by JsonParser. Use Json5Serializer and Json5Parser for
+      JSON5 syntax (single quotes, trailing commas, comments, etc.).
+    * JsonSerializer.json5() and JsonParser.Strict have been removed. Use Json5Serializer
+      and Json5Parser directly for JSON5 support.
+    * BeanContext.beanToStringSerializer now uses Json5Serializer for toString() output
+      (more human-readable with single quotes).
+    * ComboRoundTripTest framework now distinguishes json vs json5; use json()/json5()
+      builder methods on ComboRoundTrip_Tester accordingly.
+    * juneau-examples-rest-jetty-ftest: SamplesMicroservice and RootResourcesTest now use
+      Json5Parser to match server output (RootResources uses quoteChar="'" for testing).
 
 ** New Features - Direct Iterator/Iterable/Stream/Enumeration Serialization
 

@@ -333,7 +333,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public JsonMap(CharSequence json) throws ParseException {
-		this(json, JsonParser.DEFAULT);
+		this(json, Json5Parser.DEFAULT);
 	}
 
 	/**
@@ -350,7 +350,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public JsonMap(CharSequence in, Parser p) throws ParseException {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		if (p == null)
-			p = JsonParser.DEFAULT;
+			p = Json5Parser.DEFAULT;
 		if (ne(in))
 			p.parseIntoMap(in, this, bs().string(), bs().object());
 	}
@@ -394,7 +394,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public JsonMap(Reader json) throws ParseException {
-		parse(json, JsonParser.DEFAULT);
+		parse(json, Json5Parser.DEFAULT);
 	}
 
 	/**
@@ -1633,7 +1633,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public void putJson(String key, String json) throws ParseException {
-		this.put(key, JsonParser.DEFAULT.parse(json, Object.class));
+		this.put(key, Json5Parser.DEFAULT.parse(json, Object.class));
 	}
 
 	/**
@@ -1899,7 +1899,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 	private void parse(Reader r, Parser p) throws ParseException {
 		if (p == null)
-			p = JsonParser.DEFAULT;
+			p = Json5Parser.DEFAULT;
 		p.parseIntoMap(r, this, bs().string(), bs().object());
 	}
 }

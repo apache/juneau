@@ -92,6 +92,9 @@ public class ComboSerialize_Tester<T> {
 		public Builder<T> json(String value) { expected.put("json", value); return this; }
 		public Builder<T> jsonT(String value) { expected.put("jsonT", value); return this; }
 		public Builder<T> jsonR(String value) { expected.put("jsonR", value); return this; }
+		public Builder<T> json5(String value) { expected.put("json5", value); return this; }
+		public Builder<T> json5T(String value) { expected.put("json5T", value); return this; }
+		public Builder<T> json5R(String value) { expected.put("json5R", value); return this; }
 		public Builder<T> jsonl(String value) { expected.put("jsonl", value); return this; }
 		public Builder<T> xml(String value) { expected.put("xml", value); return this; }
 		public Builder<T> xmlT(String value) { expected.put("xmlT", value); return this; }
@@ -151,9 +154,12 @@ public class ComboSerialize_Tester<T> {
 		skipTest = b.skipTest;
 		exceptionMsg = b.exceptionMsg;
 
-		serializers.put("json", create(b, Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType()));
-		serializers.put("jsonT", create(b, Json5Serializer.create().json5().typePropertyName("t").addBeanTypes().addRootType()));
-		serializers.put("jsonR", create(b, Json5Serializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
+		serializers.put("json", create(b, JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType()));
+		serializers.put("jsonT", create(b, JsonSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("jsonR", create(b, JsonSerializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
+		serializers.put("json5", create(b, Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType()));
+		serializers.put("json5T", create(b, Json5Serializer.create().typePropertyName("t").addBeanTypes().addRootType()));
+		serializers.put("json5R", create(b, Json5Serializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 		serializers.put("jsonl", create(b, JsonlSerializer.create().keepNullProperties().addBeanTypes().addRootType()));
 		serializers.put("xml", create(b, XmlSerializer.DEFAULT_SQ.copy().addBeanTypes().addRootType()));
 		serializers.put("xmlT", create(b, XmlSerializer.create().sq().typePropertyName("t").addBeanTypes().addRootType()));

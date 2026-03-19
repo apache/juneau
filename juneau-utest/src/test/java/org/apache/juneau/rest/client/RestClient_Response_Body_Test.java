@@ -106,7 +106,7 @@ class RestClient_Response_Body_Test extends TestBase {
 
 	@Test void a02_overrideParser() throws Exception {
 		var x = client().build();
-		var b = x.post("/echo",bean).run().getContent().parser(JsonParser.DEFAULT).as(ABean.class);
+		var b = x.post("/echo",bean).run().getContent().parser(Json5Parser.DEFAULT).as(ABean.class);
 		assertBean(b, "f", "1");
 		assertThrowsWithMessage(Exception.class, "ParseError at [row,col]:[1,1]", ()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).as(ABean.class));
 		assertThrowsWithMessage(Exception.class, "ParseError at [row,col]:[1,1]", ()->x.post("/echo",bean).run().getContent().parser(XmlParser.DEFAULT).assertValue().as(ABean.class));

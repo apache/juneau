@@ -66,13 +66,12 @@ public class JsonConfigurationExample {
 		 *	id: 'a'
 		 * }
 		 */
-		var configurableJson =JsonSerializer
-			.create()  // Create a JsonSerializer.Builder
-			.simpleAttrs()  // Simple mode
+		var configurableJson = Json5Serializer
+			.create()  // Create a Json5Serializer.Builder
 			.ws()  // Use whitespace
 			.sq()  // Use single quotes
 			.build()
-			.serialize(aPojo);  // Create a JsonSerializer
+			.serialize(aPojo);  // Create a Json5Serializer
 
 		Logger.getLogger(JsonConfigurationExample.class).info(configurableJson);
 

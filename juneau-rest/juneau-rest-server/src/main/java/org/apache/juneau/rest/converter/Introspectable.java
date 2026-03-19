@@ -74,7 +74,7 @@ public class Introspectable implements RestConverter {
 			var swap = bs.getClassMetaForObject(o).getSwap(bs);
 			if (nn(swap))
 				o = swap.swap(bs, o);
-			return ObjectIntrospector.create(o, JsonParser.DEFAULT).invokeMethod(method, args);
+			return ObjectIntrospector.create(o, Json5Parser.DEFAULT).invokeMethod(method, args);
 		} catch (Exception e) {
 			return new InternalServerError(e, "Error occurred trying to invoke method: {0}", lm(e));
 		}

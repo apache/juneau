@@ -178,7 +178,6 @@ public class JsonParserSession extends ReaderParserSession {
 	}
 
 	private static final AsciiSet decChars = AsciiSet.create().ranges("0-9").build();
-	private static final AsciiSet VALID_BARE_CHARS = AsciiSet.create().range('A', 'Z').range('a', 'z').range('0', '9').chars("$_-.").build();
 
 	/**
 	 * Creates a new builder for this object.
@@ -232,14 +231,9 @@ public class JsonParserSession extends ReaderParserSession {
 			skipWrapperAttrStart(r, wrapperAttr);
 		int c = r.peek();
 		if (c == -1) {
-			if (isStrict())
-				throw new ParseException(this, "Empty input.");
-			// Let o be null.
+			onEmptyInput();
 		} else if ((c == ',' || c == '}' || c == ']')) {
-			if (isStrict())
-				throw new ParseException(this, "Missing value detected.");
-			// Handle bug in Cognos 10.2.1 that can product non-existent values.
-			// Let o be null;
+			onMissingValue();
 		} else if (c == 'n') {
 			parseKeyword("null", r);
 		} else if (sType.isObject()) {
@@ -310,7 +304,7 @@ public class JsonParserSession extends ReaderParserSession {
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			else
 				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
-		} else if (sType.canCreateNewInstanceFromString(outer) && ! isStrict()) {
+		} else if (sType.canCreateNewInstanceFromString(outer) && canCoerceNonStringToString()) {
 			o = sType.newInstanceFromString(outer, parseString(r));
 		} else {
 			throw new ParseException(this, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''", sType, (char)c);
@@ -347,25 +341,15 @@ public class JsonParserSession extends ReaderParserSession {
 	 * Parse a JSON attribute from the character array at the specified position, then
 	 * set the position marker to the last character in the field name.
 	 */
-	private String parseFieldName(ParserReader r) throws IOException, ParseException {
+	protected String parseFieldName(ParserReader r) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
 			return parseString(r);
-		if (isStrict())
-			throw new ParseException(this, "Unquoted attribute detected.");
-		if (! VALID_BARE_CHARS.contains(c))
-			throw new ParseException(this, "Could not find the start of the field name.");
-		r.mark();
-		// Look for whitespace.
-		while (c != -1) {
-			c = r.read();
-			if (! VALID_BARE_CHARS.contains(c)) {
-				r.unread();
-				var s = r.getMarked().intern();
-				return s.equals("null") ? null : s;
-			}
+		if (c == 'n') {
+			parseKeyword("null", r);
+			return null;
 		}
-		throw new ParseException(this, "Could not find the end of the field name.");
+		throw new ParseException(this, "Unquoted attribute detected.");
 	}
 
 	@SuppressWarnings({
@@ -448,13 +432,13 @@ public class JsonParserSession extends ReaderParserSession {
 			}
 			if (state == S1)
 				throw new ParseException(this, "Expected '{' at beginning of JSON object.");
-			if (state == S2)
+			else if (state == S2)
 				throw new ParseException(this, "Could not find attribute name on JSON object.");
-			if (state == S3)
+			else if (state == S3)
 				throw new ParseException(this, "Could not find ':' following attribute name on JSON object.");
-			if (state == S4)
+			else if (state == S4)
 				throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
-			if (state == S5)
+			else if (state == S5)
 				throw new ParseException(this, "Could not find '}' marking end of JSON object.");
 		} finally {
 			unmark();
@@ -465,7 +449,7 @@ public class JsonParserSession extends ReaderParserSession {
 
 	@SuppressWarnings({
 		"java:S1168",    // Compiler-satisfying return: all paths return l or throw. S1168 flags null returns; here null is unreachable.
-		"java:S135",     // Multiple break statements necessary for state machine error handling
+		"java:S135",     // Multiple break statements necessary for state machine error machine
 		"java:S2583",    // State variables persist across loop iterations
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
@@ -521,11 +505,11 @@ public class JsonParserSession extends ReaderParserSession {
 		}
 		if (state == S1)
 			throw new ParseException(this, "Expected '[' at beginning of JSON array.");
-		if (state == S2)
+		else if (state == S2)
 			throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
-		if (state == S3)
+		else if (state == S3)
 			throw new ParseException(this, "Expected ',' or ']'.");
-		if (state == S4)
+		else if (state == S4)
 			throw new ParseException(this, "Unexpected trailing comma in array.");
 
 		return null;  // Unreachable.
@@ -605,15 +589,15 @@ public class JsonParserSession extends ReaderParserSession {
 		}
 		if (state == S1)
 			throw new ParseException(this, "Expected '{' at beginning of JSON object.");
-		if (state == S2)
+		else if (state == S2)
 			throw new ParseException(this, "Could not find attribute name on JSON object.");
-		if (state == S3)
+		else if (state == S3)
 			throw new ParseException(this, "Could not find ':' following attribute name on JSON object.");
-		if (state == S4)
+		else if (state == S4)
 			throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
-		if (state == S5)
+		else if (state == S5)
 			throw new ParseException(this, "Could not find '}' marking end of JSON object.");
-		if (state == S6)
+		else if (state == S6)
 			throw new ParseException(this, "Unexpected '}' found in JSON object.");
 
 		return null; // Unreachable.
@@ -623,7 +607,7 @@ public class JsonParserSession extends ReaderParserSession {
 	 * Looks for the keywords true, false, or null.
 	 * Throws an exception if any of these keywords are not found at the specified position.
 	 */
-	private void parseKeyword(String keyword, ParserReader r) throws IOException, ParseException {
+	protected void parseKeyword(String keyword, ParserReader r) throws IOException, ParseException {
 		try {
 			String s = r.read(keyword.length());
 			if (s.equals(keyword))
@@ -634,7 +618,7 @@ public class JsonParserSession extends ReaderParserSession {
 		}
 	}
 
-	private Number parseNumber(ParserReader r, Class<? extends Number> type) throws IOException, ParseException {
+	protected Number parseNumber(ParserReader r, Class<? extends Number> type) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
 			return parseNumber(r, parseString(r), type);
@@ -644,43 +628,31 @@ public class JsonParserSession extends ReaderParserSession {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for number parsing logic
 	})
-	private Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
+	protected Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
 
-		// JSON has slightly different number rules from Java.
-		// Strict mode enforces these different rules, lax does not.
-		if (isStrict()) {
+		if (s.isEmpty())
+			throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
 
-			// Lax allows blank strings to represent 0.
-			// Strict does not allow blank strings.
-			if (s.isEmpty())
-				throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
-
-			// Need to weed out octal and hexadecimal formats:  0123,-0123,0x123,-0x123.
-			// Don't weed out 0 or -0.
-			var isNegative = false;
-			var c = s.charAt(0);
-			if (c == '-') {
-				isNegative = true;
-				c = (s.length() == 1 ? 'x' : s.charAt(1));
-			}
-
-			// JSON doesn't allow '.123' and '-.123'.
-			if (c == '.')
-				throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
-
-			// '01' is not a valid number, but '0.1', '0e1', '0e+1' are valid.
-			if (c == '0' && s.length() > (isNegative ? 2 : 1)) {
-				var c2 = s.charAt((isNegative ? 2 : 1));
-				if (c2 != '.' && c2 != 'e' && c2 != 'E')
-					throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
-			}
-
-			// JSON doesn't allow '1.' or '0.e1'.
-			var i = s.indexOf('.');
-			if (i != -1 && (s.length() == (i + 1) || ! decChars.contains(s.charAt(i + 1))))
-				throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
-
+		var isNegative = false;
+		var c = s.charAt(0);
+		if (c == '-') {
+			isNegative = true;
+			c = (s.length() == 1 ? 'x' : s.charAt(1));
 		}
+
+		if (c == '.')
+			throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
+
+		if (c == '0' && s.length() > (isNegative ? 2 : 1)) {
+			var c2 = s.charAt((isNegative ? 2 : 1));
+			if (c2 != '.' && c2 != 'e' && c2 != 'E')
+				throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
+		}
+
+		var i = s.indexOf('.');
+		if (i != -1 && (s.length() == (i + 1) || ! decChars.contains(s.charAt(i + 1))))
+			throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
+
 		return StringUtils.parseNumber(s, type);
 	}
 
@@ -694,21 +666,19 @@ public class JsonParserSession extends ReaderParserSession {
 		"java:S3776", // Cognitive complexity acceptable for parser state machine
 		"java:S135" // Multiple break statements necessary for state machine error handling
 	})
-	private String parseString(ParserReader r) throws IOException, ParseException {
+	protected String parseString(ParserReader r) throws IOException, ParseException {
 		r.mark();
-		int qc = r.read();		// The quote character being used (" or ')
-		if (qc != '"' && isStrict()) {
-			String msg = (qc == '\'' ? "Invalid quote character \"{0}\" being used." : "Did not find quote character marking beginning of string.  Character=\"{0}\"");
+		int qc = r.read();
+		if (qc != '"') {
+			var msg = (qc == '\'' ? "Invalid quote character \"{0}\" being used." : "Did not find quote character marking beginning of string.  Character=\"{0}\"");
 			throw new ParseException(this, msg, (char)qc);
 		}
-		final boolean isQuoted = (qc == '\'' || qc == '"');
 		String s = null;
 		boolean isInEscape = false;
 		int c = 0;
 		while (c != -1) {
 			c = r.read();
-			// Strict syntax requires that all control characters be escaped.
-			if (isStrict() && c <= 0x1F)
+			if (c <= 0x1F)
 				throw new ParseException(this, "Unescaped control character encountered: ''0x{0}''", String.format("%04X", c));
 			if (isInEscape) {
 				// @formatter:off
@@ -740,35 +710,19 @@ public class JsonParserSession extends ReaderParserSession {
 				if (c == '\\') {
 					isInEscape = true;
 					r.delete();
-				} else if (isQuoted) {
-					if (c == qc) {
-						s = r.getMarked(1, -1);
-						break;
-					}
-				} else {
-					// Unquoted string ends on delimiter, whitespace, or EOF
-					if (c == ',' || c == '}' || c == ']' || isWhitespace(c) || c == -1) {
-						s = r.getMarked(0, c == -1 ? 0 : -1);
-						if (c != -1)
-							r.unread();
-						break;
-					}
+				} else if (c == qc) {
+					s = r.getMarked(1, -1);
+					break;
 				}
 			}
 		}
 		if (s == null)
 			throw new ParseException(this, "Could not find expected end character ''{0}''.", (char)qc);
 
-		// Look for concatenated string (i.e. whitespace followed by +).
 		skipCommentsAndSpace(r);
-		if (r.peek() == '+') {
-			if (isStrict())
-				throw new ParseException(this, "String concatenation detected.");
-			@SuppressWarnings("unused") int ignored = r.read();
-			skipCommentsAndSpace(r);
-			s += parseString(r);
-		}
-		return trim(s); // End of input reached.
+		if (r.peek() == '+')
+			throw new ParseException(this, "String concatenation detected.");
+		return trim(s);
 	}
 
 	/*
@@ -778,14 +732,12 @@ public class JsonParserSession extends ReaderParserSession {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for comment parsing logic
 	})
-	private void skipComments(ParserReader r) throws ParseException, IOException {
+	protected void skipComments(ParserReader r) throws ParseException, IOException {
 		int c = r.read();
-		//  "/* */" style comments
 		if (c == '*') {
 			while (c != -1)
 				if ((c = r.read()) == '*' && (c = r.read()) == '/')
 					return;
-			//  "//" style comments
 		} else if (c == '/') {
 			while (c != -1) {
 				c = r.read();
@@ -796,24 +748,14 @@ public class JsonParserSession extends ReaderParserSession {
 		throw new ParseException(this, "Open ended comment.");
 	}
 
-	/*
-	 * Doesn't actually parse anything, but moves the position beyond any whitespace or comments.
-	 * If positionOnNext is 'true', then the cursor will be set to the point immediately after
-	 * the comments and whitespace.  Otherwise, the cursor will be set to the last position of
-	 * the comments and whitespace.
-	 */
-	private void skipCommentsAndSpace(ParserReader r) throws IOException, ParseException {
+	protected void skipCommentsAndSpace(ParserReader r) throws IOException, ParseException {
 		int c = 0;
 		while ((c = r.read()) != -1) {
 			if (! isWhitespace(c)) {
-				if (c == '/') {
-					if (isStrict())
-						throw new ParseException(this, "Javascript comment detected.");
-					skipComments(r);
-				} else {
-					r.unread();
-					return;
-				}
+				if (c == '/')
+					throw new ParseException(this, "Javascript comment detected.");
+				r.unread();
+				return;
 			}
 		}
 	}
@@ -827,9 +769,7 @@ public class JsonParserSession extends ReaderParserSession {
 		while ((c = r.read()) != -1) {
 			if (! isWhitespace(c)) {
 				if (c == '/') {
-					if (isStrict())
-						throw new ParseException(this, "Javascript comment detected.");
-					skipComments(r);
+					throw new ParseException(this, "Javascript comment detected.");
 				} else if (c == '}') {
 					return;
 				} else {
@@ -885,12 +825,10 @@ public class JsonParserSession extends ReaderParserSession {
 		}
 		if (state == S1)
 			throw new ParseException(this, "Expected '{' at beginning of JSON object.");
-		if (state == S2)
+		else if (state == S2)
 			throw new ParseException(this, "Could not find attribute name on JSON object.");
-		if (state == S3)
+		else
 			throw new ParseException(this, "Could not find ':' following attribute name on JSON object.");
-		if (state == S4)
-			throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
 	}
 
 	/*
@@ -954,9 +892,7 @@ public class JsonParserSession extends ReaderParserSession {
 	protected boolean isCommentOrWhitespace(int cp) {
 		if (cp == '/')
 			return true;
-		if (isStrict())
-			return cp <= 0x20 && (cp == 0x09 || cp == 0x0A || cp == 0x0D || cp == 0x20);
-		return Character.isWhitespace(cp);
+		return cp <= 0x20 && (cp == 0x09 || cp == 0x0A || cp == 0x0D || cp == 0x20);
 	}
 
 	/**
@@ -973,16 +909,39 @@ public class JsonParserSession extends ReaderParserSession {
 	 * Returns <jk>true</jk> if the specified character is whitespace.
 	 *
 	 * <p>
-	 * The definition of whitespace is different for strict vs lax mode.
-	 * Strict mode only interprets 0x20 (space), 0x09 (tab), 0x0A (line feed) and 0x0D (carriage return) as whitespace.
-	 * Lax mode uses {@link Character#isWhitespace(int)} to make the determination.
+	 * Only 0x20 (space), 0x09 (tab), 0x0A (line feed) and 0x0D (carriage return) are considered whitespace.
 	 *
 	 * @param cp The codepoint.
 	 * @return <jk>true</jk> if the specified character is whitespace.
 	 */
 	protected boolean isWhitespace(int cp) {
-		if (isStrict())
-			return cp <= 0x20 && (cp == 0x09 || cp == 0x0A || cp == 0x0D || cp == 0x20);
-		return Character.isWhitespace(cp);
+		return cp <= 0x20 && (cp == 0x09 || cp == 0x0A || cp == 0x0D || cp == 0x20);
+	}
+
+	/**
+	 * Hook called when empty input is detected in {@code parseAnything()}.
+	 *
+	 * @throws ParseException Always in strict mode.
+	 */
+	protected void onEmptyInput() throws ParseException {
+		throw new ParseException(this, "Empty input.");
+	}
+
+	/**
+	 * Hook called when a missing value is detected in {@code parseAnything()}.
+	 *
+	 * @throws ParseException Always in strict mode.
+	 */
+	protected void onMissingValue() throws ParseException {
+		throw new ParseException(this, "Missing value detected.");
+	}
+
+	/**
+	 * Returns whether non-string types can be coerced to strings using {@code newInstanceFromString()}.
+	 *
+	 * @return Always {@code false} for standard JSON.
+	 */
+	protected boolean canCoerceNonStringToString() {
+		return false;
 	}
 }

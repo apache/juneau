@@ -155,7 +155,7 @@ public class RestUtils {
 	 * @throws ParseException If the string appears to be JSON but contains invalid JSON syntax.
 	 */
 	public static Object parseIfJson(String value) throws ParseException {
-		return isProbablyJson(value) ? JsonParser.DEFAULT.parse(value, Object.class) : value;
+		return isProbablyJson(value) ? Json5Parser.DEFAULT.parse(value, Object.class) : value;
 	}
 
 	/**
