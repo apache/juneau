@@ -1564,8 +1564,8 @@ This document serves as the definitive guide for unit testing in the Apache June
 ### Location
 When asked to "add to the release notes", this refers to the current release file located at:
 - `/docs/pages/release-notes/<VERSION>.md`
-- **Current version**: `9.2.0`
-- **Current file**: `/docs/pages/release-notes/9.2.0.md`
+- **Current version**: `9.2.1`
+- **Current file**: `/docs/pages/release-notes/9.2.1.md`
 
 ### Structure
 Release notes are organized into two main sections:

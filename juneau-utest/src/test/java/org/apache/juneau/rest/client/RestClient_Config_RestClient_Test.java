@@ -482,6 +482,19 @@ class RestClient_Config_RestClient_Test extends TestBase {
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 	}
 
+	@Test void a17_getRootUrl() {
+		var c = client().rootUrl("https://foo").build();
+		assertEquals("https://foo", c.getRootUrl());
+	}
+
+	@Test void a18_rootUrl_supplier() {
+		var url = new String[]{"https://host1"};
+		var c = client().rootUrl(() -> url[0]).build();
+		assertEquals("https://host1", c.getRootUrl());
+		url[0] = "https://host2";
+		assertEquals("https://host2", c.getRootUrl());
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------

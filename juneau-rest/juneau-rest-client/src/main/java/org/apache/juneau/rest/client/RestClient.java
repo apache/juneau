@@ -1116,7 +1116,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		private Predicate<Integer> errorCodes = x -> x <= 0 || x >= 400;
 		private PrintStream console;
 		private SerializerSet.Builder serializers;
-		private String rootUrl;
+		private Supplier<String> rootUrl;
 		private UrlEncodingSerializer.Builder urlEncodingSerializer;
 		List<RestCallInterceptor> interceptors;
 
@@ -2391,7 +2391,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return The root URI defined for this client.
 		 */
-		public String getRootUri() { return rootUrl; }
+		public String getRootUri() { return rootUrl != null ? rootUrl.get() : null; }
+
+		/**
+		 * Returns the root URL supplier set on this builder.
+		 *
+		 * @return The root URL supplier, or <jk>null</jk> if not set.
+		 */
+		public Supplier<String> getRootUrlSupplier() { return rootUrl; }
 
 		/**
 		 * Appends a header to all requests.
@@ -4759,8 +4766,58 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				rootUrl = null;
 			else if (s.indexOf("://") == -1)
 				throw rex("Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL.", value);
-			else
-				rootUrl = s;
+			else {
+				final var url = s;
+				rootUrl = () -> url;
+			}
+			return this;
+		}
+
+		/**
+		 * Sets the root URL using a supplier, allowing the URL to be computed dynamically at request time.
+		 *
+		 * <p>
+		 * The supplier is called on every request, so the URL can change between requests.
+		 * No build-time validation is performed; invalid values will surface as errors when requests are made.
+		 *
+		 * <p>
+		 * Three common patterns are supported:
+		 * <ul>
+		 * 	<li>
+		 * 		<b>Swappable reference</b> &mdash; Use an {@link java.util.concurrent.atomic.AtomicReference AtomicReference}
+		 * 		when you need to point the client at a different host at any time:
+		 * 		<p class='bjava'>
+		 * 			AtomicReference&lt;String&gt; <jv>urlRef</jv> = <jk>new</jk> AtomicReference&lt;&gt;(<js>"https://host1"</js>);
+		 * 			RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().rootUrl(<jv>urlRef</jv>::get).build();
+		 *
+		 * 			<jc>// Switch to a different host at runtime.</jc>
+		 * 			<jv>urlRef</jv>.set(<js>"https://host2"</js>);
+		 * 		</p>
+		 * 	<li>
+		 * 		<b>Refreshable cached value</b> &mdash; Use {@link org.apache.juneau.commons.function.Memoizer Memoizer}
+		 * 		(via {@link org.apache.juneau.commons.utils.Utils#memoizer(java.util.function.Supplier) Utils.memoizer()})
+		 * 		when computing the URL is expensive (e.g. service discovery) and you want it cached until explicitly refreshed:
+		 * 		<p class='bjava'>
+		 * 			Memoizer&lt;String&gt; <jv>url</jv> = <jsm>memoizer</jsm>(() -&gt; serviceDiscovery.<jsm>findUrl</jsm>(<js>"my-service"</js>));
+		 * 			RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().rootUrl(<jv>url</jv>).build();
+		 *
+		 * 			<jc>// Force re-evaluation on the next request (e.g. after a failover).</jc>
+		 * 			<jv>url</jv>.reset();
+		 * 		</p>
+		 * 	<li>
+		 * 		<b>Purely dynamic</b> &mdash; Use a plain lambda when the URL must be re-evaluated on every request:
+		 * 		<p class='bjava'>
+		 * 			RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().rootUrl(() -&gt; config.<jsm>getRootUrl</jsm>()).build();
+		 * 		</p>
+		 * </ul>
+		 *
+		 * @param value
+		 * 	A supplier that returns the root URI to prefix to relative URI strings.
+		 * 	<br>Can be <jk>null</jk> (no root URL will be set).
+		 * @return This object.
+		 */
+		public Builder rootUrl(Supplier<String> value) {
+			rootUrl = value;
 			return this;
 		}
 
@@ -6286,7 +6343,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	private final RestCallHandler callHandler;
 	private StackTraceElement[] closedStack;
 	private final StackTraceElement[] creationStack;
-	private final String rootUrl;
+	private final Supplier<String> rootUrl;
 	private final boolean executorServiceShutdownOnClose;
 	private final boolean logToConsole;
 	private final AtomicBoolean isClosed = new AtomicBoolean(false);
@@ -6343,6 +6400,15 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
 
 		init();
+	}
+
+	/**
+	 * Returns the root URL set on this client.
+	 *
+	 * @return The root URL, or <jk>null</jk> if not set.
+	 */
+	public String getRootUrl() {
+		return rootUrl != null ? rootUrl.get() : null;
 	}
 
 	/**
@@ -7049,7 +7115,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public <T> T getRemote(Class<T> interfaceClass, Object rootUrl, Serializer serializer, Parser parser) {
 
 		if (rootUrl == null)
-			rootUrl = this.rootUrl;
+			rootUrl = this.rootUrl != null ? this.rootUrl.get() : null;
 
 		final String restUrl2 = trimSlashes(emptyIfNull(rootUrl));
 
@@ -7310,9 +7376,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			var rm = new RrpcInterfaceMeta(interfaceClass, "");
 			var path = rm.getPath();
 			if (path.indexOf("://") == -1) {
-				if (isEmpty(rootUrl))
+				var rootUrlValue = rootUrl != null ? rootUrl.get() : null;
+				if (isEmpty(rootUrlValue))
 					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote interface.");
-				path = trimSlashes(rootUrl) + '/' + path;
+				path = trimSlashes(rootUrlValue) + '/' + path;
 			}
 			uri = path;
 		}
@@ -8079,7 +8146,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			.a(PROP_partParser, partParser)
 			.a(PROP_partSerializer, partSerializer)
 			.a(PROP_queryData, queryData)
-			.a(PROP_rootUrl, rootUrl);
+			.a(PROP_rootUrl, rootUrl != null ? rootUrl.get() : null);
 	}
 
 	/**
@@ -8107,7 +8174,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				"RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
-		var req = createRequest(toUri(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
+		var req = createRequest(toUri(op.getUri(), rootUrl != null ? rootUrl.get() : null), op.getMethod(), op.hasContent());
 
 		onCallInit(req);
 

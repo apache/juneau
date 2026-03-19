@@ -1833,9 +1833,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			var restBean = builder.restBean;
 			var contextPath = builder.contextPath;
 			var servletPath = builder.servletPath;
-			var rootUrl = builder.getRootUri();
-			if (rootUrl == null)
-				rootUrl = "http://localhost";
 
 			var c = restBean instanceof Class restBean2 ? (Class<?>)restBean2 : restBean.getClass();
 			if (! restContexts.containsKey(c)) {
@@ -1859,10 +1856,16 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			if (servletPath == null)
 				servletPath = toValidContextPath(restBeanCtx.getFullPath());
 
-			rootUrl = rootUrl + emptyIfNull(contextPath) + emptyIfNull(servletPath);
+			final var suffix = emptyIfNull(contextPath) + emptyIfNull(servletPath);
+			final var existingSupplier = builder.getRootUrlSupplier();
+			if (existingSupplier != null) {
+				// Compose a new supplier that appends the fixed path suffix to whatever the original supplier returns.
+				builder.rootUrl(() -> existingSupplier.get() + suffix);
+			} else {
+				builder.rootUrl("http://localhost" + suffix);
+			}
 
 			builder.servletPath = servletPath;
-			builder.rootUrl(rootUrl);
 			return builder;
 		} catch (Exception e) {
 			throw new ConfigException(e, "Could not initialize MockRestClient");

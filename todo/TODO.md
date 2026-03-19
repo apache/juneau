@@ -5,7 +5,7 @@
 - Update REST server API to use new BeanStore2.
 - Make sure @Beanp("*") works on plain fields.
 - Need an easier way to specify this header:
-Content-Disposition: attachment; filename="example.pdf"
+    Content-Disposition: attachment; filename="example.pdf"
 
 - Figure out why this needs a cast:
 	private static final Json5 JSON5_LENIENT = new Json5(Json5Serializer.DEFAULT, (Json5Parser)Json5Parser.create().ignoreUnknownBeanProperties().build());
@@ -19,8 +19,6 @@ Content-Disposition: attachment; filename="example.pdf"
 - RestResponse needs a setSerializer() command.
 
 - Verify that you can add @BeanIgnore on a private field with getters/setters.
-- RestClient needs a getRootUrl to see how it's set.
-- RestClient rootUrl should allow for a supplier to be used.
 - On RestClient when logging with FULL, calling RestREsponse.getContent().asString() causes a stream closed exception.
 - Possibility of adding convenience classes for okhttp3.mockwebserver.Dispatcher?
 
