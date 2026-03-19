@@ -111,7 +111,7 @@ public class AnnotationInfo<T extends Annotation> {
 
 	private T a;  // Effectively final
 
-	private final Supplier<List<MethodInfo>> methods = mem(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(info(a.annotationType()), m)).toList());
+	private final Supplier<List<MethodInfo>> methods = memoize(() -> stream(a.annotationType().getMethods()).map(m -> MethodInfo.of(info(a.annotationType()), m)).toList());
 	private final Supplier<String> toString;  // String representation with annotation type, location, and values.
 
 	/**
@@ -124,7 +124,7 @@ public class AnnotationInfo<T extends Annotation> {
 		this.annotatable = on;  // TODO - Shouldn't allow null.
 		this.a = assertArgNotNull(ARG_a, a);
 		this.rank = findRank(a);
-		this.toString = mem(this::findToString);
+		this.toString = memoize(this::findToString);
 	}
 
 	/**

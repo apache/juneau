@@ -27,14 +27,14 @@ import org.junit.jupiter.api.*;
 	"cast", // Explicit cast needed for type testing
 	"java:S2925" // Thread.sleep intentional for concurrency/race condition tests
 })
-class ResettableSupplier_Test extends TestBase {
+class Memoizer_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
 		var callCount = new AtomicInteger();
-		ResettableSupplier<String> supplier = new ResettableSupplier<>(() -> {
+		Memoizer<String> supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return "result";
 		});
@@ -50,7 +50,7 @@ class ResettableSupplier_Test extends TestBase {
 
 	@Test void a02_returnsNull() {
 		var callCount = new AtomicInteger();
-		ResettableSupplier<String> supplier = new ResettableSupplier<>(() -> {
+		Memoizer<String> supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return null;
 		});
@@ -66,7 +66,7 @@ class ResettableSupplier_Test extends TestBase {
 
 	@Test void a03_reset() {
 		var callCount = new AtomicInteger();
-		ResettableSupplier<String> supplier = new ResettableSupplier<>(() -> {
+		Memoizer<String> supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return "result" + callCount.get();
 		});
@@ -93,7 +93,7 @@ class ResettableSupplier_Test extends TestBase {
 
 	@Test void a04_multipleResets() {
 		var callCount = new AtomicInteger();
-		ResettableSupplier<Integer> supplier = new ResettableSupplier<>(() -> {
+		Memoizer<Integer> supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return callCount.get();
 		});
@@ -110,7 +110,7 @@ class ResettableSupplier_Test extends TestBase {
 
 	@Test void a05_resetBeforeFirstCall() {
 		var callCount = new AtomicInteger();
-		ResettableSupplier<String> supplier = new ResettableSupplier<>(() -> {
+		Memoizer<String> supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return "result";
 		});
@@ -126,7 +126,7 @@ class ResettableSupplier_Test extends TestBase {
 	@Test
 	void a06_threadSafety_raceCondition() throws InterruptedException {
 		var callCount = new AtomicInteger();
-		ResettableSupplier<String> supplier = new ResettableSupplier<>(() -> {
+		Memoizer<String> supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			// Simulate some work to increase chance of race condition
 			try {
@@ -171,7 +171,7 @@ class ResettableSupplier_Test extends TestBase {
 	@Test
 	void a07_resetAndGetConcurrently() throws InterruptedException {
 		var callCount = new AtomicInteger();
-		ResettableSupplier<Integer> supplier = new ResettableSupplier<>(() -> {
+		Memoizer<Integer> supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return callCount.get();
 		});
@@ -212,7 +212,7 @@ class ResettableSupplier_Test extends TestBase {
 
 	@Test void a08_set() {
 		var callCount = new AtomicInteger();
-		ResettableSupplier<String> supplier = new ResettableSupplier<>(() -> {
+		Memoizer<String> supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return "computed";
 		});
@@ -244,7 +244,7 @@ class ResettableSupplier_Test extends TestBase {
 
 	@Test void a09_setNull() {
 		var callCount = new AtomicInteger();
-		ResettableSupplier<String> supplier = new ResettableSupplier<>(() -> {
+		Memoizer<String> supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return "computed";
 		});
@@ -268,25 +268,25 @@ class ResettableSupplier_Test extends TestBase {
 	// isSupplied()
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void b01_isSupplied_notCalled() {
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		assertTrue(supplier.isSupplied()); // Not called yet
 	}
 
 	@Test void b02_isSupplied_afterGet() {
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		supplier.get();
 		assertFalse(supplier.isSupplied()); // Has been called
 	}
 
 	@Test void b03_isSupplied_afterReset() {
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		supplier.get();
 		supplier.reset();
 		assertTrue(supplier.isSupplied()); // Reset, so not supplied anymore
 	}
 
 	@Test void b04_isSupplied_afterSet() {
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		supplier.set("injected");
 		assertFalse(supplier.isSupplied()); // Has a value (even if set directly)
 	}
@@ -296,7 +296,7 @@ class ResettableSupplier_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void c01_copy_notCalled() {
 		var callCount = new AtomicInteger();
-		var supplier = new ResettableSupplier<>(() -> {
+		var supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return "value" + callCount.get();
 		});
@@ -309,7 +309,7 @@ class ResettableSupplier_Test extends TestBase {
 
 	@Test void c02_copy_afterGet() {
 		var callCount = new AtomicInteger();
-		var supplier = new ResettableSupplier<>(() -> {
+		var supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return "value" + callCount.get();
 		});
@@ -322,7 +322,7 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	@Test void c03_copy_independent() {
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		var copy = supplier.copy();
 
 		// Copy is independent
@@ -331,23 +331,23 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// map() - overridden to return ResettableSupplier
+	// map() - overridden to return Memoizer
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void d01_map_present() {
-		var supplier = new ResettableSupplier<>(() -> "hello");
+		var supplier = new Memoizer<>(() -> "hello");
 		var mapped = supplier.map(String::length);
 		assertEquals(5, mapped.get());
 	}
 
 	@Test void d02_map_empty() {
-		var supplier = new ResettableSupplier<>(() -> (String)null);
+		var supplier = new Memoizer<>(() -> (String)null);
 		var mapped = supplier.map(String::length);
 		assertNull(mapped.get());
 	}
 
 	@Test void d03_map_cached() {
 		var callCount = new AtomicInteger();
-		var supplier = new ResettableSupplier<>(() -> {
+		var supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return "hello";
 		});
@@ -363,7 +363,7 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	@Test void d04_map_independent() {
-		var supplier = new ResettableSupplier<>(() -> "hello");
+		var supplier = new Memoizer<>(() -> "hello");
 		var mapped = supplier.map(String::length);
 
 		// Reset original
@@ -373,29 +373,29 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// filter() - overridden to return ResettableSupplier
+	// filter() - overridden to return Memoizer
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void e01_filter_matches() {
-		var supplier = new ResettableSupplier<>(() -> "hello");
+		var supplier = new Memoizer<>(() -> "hello");
 		var filtered = supplier.filter(s -> s.length() > 3);
 		assertEquals("hello", filtered.get());
 	}
 
 	@Test void e02_filter_noMatch() {
-		var supplier = new ResettableSupplier<>(() -> "hi");
+		var supplier = new Memoizer<>(() -> "hi");
 		var filtered = supplier.filter(s -> s.length() > 3);
 		assertNull(filtered.get());
 	}
 
 	@Test void e03_filter_empty() {
-		var supplier = new ResettableSupplier<>(() -> (String)null);
+		var supplier = new Memoizer<>(() -> (String)null);
 		var filtered = supplier.filter(s -> s.length() > 3);
 		assertNull(filtered.get());
 	}
 
 	@Test void e04_filter_cached() {
 		var callCount = new AtomicInteger();
-		var supplier = new ResettableSupplier<>(() -> {
+		var supplier = new Memoizer<>(() -> {
 			callCount.incrementAndGet();
 			return "hello";
 		});
@@ -411,33 +411,33 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// OptionalSupplier methods
+	// NullableSupplier methods
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void f01_isPresent() {
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		assertTrue(supplier.isPresent());
 		assertFalse(supplier.isEmpty());
 	}
 
 	@Test void f02_isEmpty() {
-		var supplier = new ResettableSupplier<>(() -> null);
+		var supplier = new Memoizer<>(() -> null);
 		assertFalse(supplier.isPresent());
 		assertTrue(supplier.isEmpty());
 	}
 
 	@Test void f03_orElse() {
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		assertEquals("value", supplier.orElse("default"));
 	}
 
 	@Test void f04_orElse_empty() {
-		var supplier = new ResettableSupplier<>(() -> null);
+		var supplier = new Memoizer<>(() -> null);
 		assertEquals("default", supplier.orElse("default"));
 	}
 
 	@Test void f05_orElseGet() {
 		var callCount = new AtomicInteger();
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		var result = supplier.orElseGet(() -> {
 			callCount.incrementAndGet();
 			return "default";
@@ -448,7 +448,7 @@ class ResettableSupplier_Test extends TestBase {
 
 	@Test void f06_orElseGet_empty() {
 		var callCount = new AtomicInteger();
-		var supplier = new ResettableSupplier<>(() -> null);
+		var supplier = new Memoizer<>(() -> null);
 		var result = supplier.orElseGet(() -> {
 			callCount.incrementAndGet();
 			return "default";
@@ -458,25 +458,25 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	@Test void f07_orElseThrow() {
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		assertEquals("value", supplier.orElseThrow(() -> new RuntimeException("should not throw")));
 	}
 
 	@Test void f08_orElseThrow_empty() {
-		var supplier = new ResettableSupplier<>(() -> null);
+		var supplier = new Memoizer<>(() -> null);
 		assertThrows(RuntimeException.class, () -> supplier.orElseThrow(() -> new RuntimeException("expected")));
 	}
 
 	@Test void f09_ifPresent() {
 		var callCount = new AtomicInteger();
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		supplier.ifPresent(s -> callCount.incrementAndGet());
 		assertEquals(1, callCount.get());
 	}
 
 	@Test void f10_ifPresent_empty() {
 		var callCount = new AtomicInteger();
-		var supplier = new ResettableSupplier<>(() -> null);
+		var supplier = new Memoizer<>(() -> null);
 		supplier.ifPresent(s -> callCount.incrementAndGet());
 		assertEquals(0, callCount.get());
 	}
@@ -484,7 +484,7 @@ class ResettableSupplier_Test extends TestBase {
 	@Test void f11_ifPresentOrElse() {
 		var presentCount = new AtomicInteger();
 		var emptyCount = new AtomicInteger();
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		supplier.ifPresentOrElse(
 			s -> presentCount.incrementAndGet(),
 			emptyCount::incrementAndGet
@@ -496,7 +496,7 @@ class ResettableSupplier_Test extends TestBase {
 	@Test void f12_ifPresentOrElse_empty() {
 		var presentCount = new AtomicInteger();
 		var emptyCount = new AtomicInteger();
-		var supplier = new ResettableSupplier<>(() -> null);
+		var supplier = new Memoizer<>(() -> null);
 		supplier.ifPresentOrElse(
 			s -> presentCount.incrementAndGet(),
 			emptyCount::incrementAndGet
@@ -506,28 +506,27 @@ class ResettableSupplier_Test extends TestBase {
 	}
 
 	@Test void f13_toOptional() {
-		var supplier = new ResettableSupplier<>(() -> "value");
+		var supplier = new Memoizer<>(() -> "value");
 		var optional = supplier.toOptional();
 		assertTrue(optional.isPresent());
 		assertEquals("value", optional.get());
 	}
 
 	@Test void f14_toOptional_empty() {
-		var supplier = new ResettableSupplier<>(() -> null);
+		var supplier = new Memoizer<>(() -> null);
 		var optional = supplier.toOptional();
 		assertFalse(optional.isPresent());
 	}
 
 	@Test void f15_flatMap() {
-		var supplier = new ResettableSupplier<>(() -> "hello");
-		var mapped = supplier.flatMap(s -> OptionalSupplier.ofNullable(s.length()));
+		var supplier = new Memoizer<>(() -> "hello");
+		var mapped = supplier.flatMap(s -> NullableSupplier.ofNullable(s.length()));
 		assertEquals(5, mapped.get());
 	}
 
 	@Test void f16_flatMap_empty() {
-		var supplier = new ResettableSupplier<>(() -> (String)null);
-		var mapped = supplier.flatMap(s -> OptionalSupplier.ofNullable(s.length()));
+		var supplier = new Memoizer<>(() -> (String)null);
+		var mapped = supplier.flatMap(s -> NullableSupplier.ofNullable(s.length()));
 		assertNull(mapped.get());
 	}
 }
-

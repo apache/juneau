@@ -92,12 +92,11 @@ public class Parquet extends StreamMarshaller {
 	 * @param <T> The element type.
 	 * @param input The Parquet bytes.
 	 * @param type The type.
-	 * @param args Type arguments.
 	 * @return The parsed list.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> to(byte[] input, Type type, Type... args) throws ParseException {
+	public static <T> List<T> to(byte[] input, Type type) throws ParseException {
 		return (List<T>) DEFAULT.read(input, List.class, type);
 	}
 

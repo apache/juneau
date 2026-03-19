@@ -49,6 +49,8 @@ import org.apache.juneau.parser.*;
 })
 public class MarkdownParserSession extends ReaderParserSession {
 
+	private static final String CONST_type = "_type";
+
 	final String nullValue;
 	private JsonParser json5Parser;
 
@@ -301,6 +303,9 @@ public class MarkdownParserSession extends ReaderParserSession {
 	 * @return The parsed bean, map, or other object.
 	 * @throws ParseException If parsing fails.
 	 */
+	@SuppressWarnings({
+		"java:S135" // Two continue statements needed: skip short rows and skip _type row
+	})
 	protected Object parseKeyValueTable(List<String> headers, List<String> dataLines, ClassMeta<?> eType, Object outer) throws ParseException {
 
 		// For types with ObjectSwaps or that can't be populated via BeanMap property-setting,
@@ -319,7 +324,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 			ClassMeta<?> actualType = eType;
 			for (var line : dataLines) {
 				var cells = splitTableRow(line);
-				if (cells.size() >= 2 && cells.get(0).equals("_type")) {
+				if (cells.size() >= 2 && CONST_type.equals(cells.get(0))) {
 					var typeName = cells.get(1);
 					var registry = eType.getBeanRegistry();
 					var resolved = registry != null ? registry.getClassMeta(typeName) : null;
@@ -336,7 +341,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 				var key = cells.get(0);
 
 				// Skip _type row - it was used for type resolution above
-				if (key.equals("_type"))
+				if (CONST_type.equals(key))
 					continue;
 
 				var rawVal = cells.get(1);
@@ -470,7 +475,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 
 		// Check if there's a _type column and resolve the actual type using the bean registry
 		ClassMeta<?> actualType = eType;
-		int typeColIndex = headers.indexOf("_type");
+		int typeColIndex = headers.indexOf(CONST_type);
 		if (typeColIndex >= 0 && typeColIndex < cells.size()) {
 			var typeName = cells.get(typeColIndex);
 			if (typeName != null && !typeName.isEmpty()) {
@@ -497,7 +502,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 			var m = new JsonMap(this);
 			for (var i = 0; i < headers.size(); i++) {
 				var header = headers.get(i);
-				if (header.equals("_type"))
+				if (CONST_type.equals(header))
 					continue;
 				var val = i < cells.size() ? cells.get(i) : null;
 				m.put(header, parseCellValue(val, object(), null));
@@ -510,7 +515,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 			var m = newBeanMap(outer, actualType.inner());
 			for (var i = 0; i < headers.size(); i++) {
 				var header = headers.get(i);
-				if (header.equals("_type"))
+				if (CONST_type.equals(header))
 					continue;
 				var rawVal = i < cells.size() ? cells.get(i) : null;
 				var pm = m.getPropertyMeta(header);
@@ -534,7 +539,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 			var valueType = actualType.getValueType() != null ? actualType.getValueType() : object();
 			for (var i = 0; i < headers.size(); i++) {
 				var header = headers.get(i);
-				if (header.equals("_type"))
+				if (CONST_type.equals(header))
 					continue;
 				var key = convertAttrToType(map, header, keyType);
 				var rawVal = i < cells.size() ? cells.get(i) : null;
@@ -647,9 +652,9 @@ public class MarkdownParserSession extends ReaderParserSession {
 			// Auto-detect type
 			if ("true".equals(val)) return (T) Boolean.TRUE;
 			if ("false".equals(val)) return (T) Boolean.FALSE;
-			try { return (T) Integer.valueOf(val); } catch (@SuppressWarnings("unused") NumberFormatException ignored) {}
-			try { return (T) Long.valueOf(val); } catch (@SuppressWarnings("unused") NumberFormatException ignored) {}
-			try { return (T) Double.valueOf(val); } catch (@SuppressWarnings("unused") NumberFormatException ignored) {}
+			try { return (T) Integer.valueOf(val); } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not int, try next */ }
+			try { return (T) Long.valueOf(val); } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not long, try next */ }
+			try { return (T) Double.valueOf(val); } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not double, treat as string */ }
 			return (T) val;
 		}
 
@@ -678,9 +683,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 		if (type.getSwap(this) != null)
 			return true;
 		// If not a bean (no public properties), can't use BeanMap approach
-		if (!type.isBean())
-			return true;
-		return false;
+		return !type.isBean();
 	}
 
 	/**
@@ -704,9 +707,9 @@ public class MarkdownParserSession extends ReaderParserSession {
 		// Booleans and numbers don't need quoting
 		if ("true".equals(cell) || "false".equals(cell))
 			return cell;
-		try { Integer.parseInt(cell); return cell; } catch (@SuppressWarnings("unused") NumberFormatException ignored) {}
-		try { Long.parseLong(cell); return cell; } catch (@SuppressWarnings("unused") NumberFormatException ignored) {}
-		try { Double.parseDouble(cell); return cell; } catch (@SuppressWarnings("unused") NumberFormatException ignored) {}
+		try { Integer.parseInt(cell); return cell; } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not int, try next */ }
+		try { Long.parseLong(cell); return cell; } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not long, try next */ }
+		try { Double.parseDouble(cell); return cell; } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not double, quote as string */ }
 		// String: single-quote with escaping for JSON5
 		return "'" + cell.replace("\\", "\\\\").replace("'", "\\'") + "'";
 	}
@@ -731,7 +734,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 			if (!first) sb.append(",");
 			first = false;
 			sb.append(header).append(":");
-			if ("_type".equals(header)) {
+			if (CONST_type.equals(header)) {
 				// Keep _type as a quoted string so the JSON5 parser can resolve it
 				sb.append(cell == null ? "null" : "'" + cell + "'");
 			} else {
@@ -757,7 +760,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 			if (!first) sb.append(",");
 			first = false;
 			sb.append(key).append(":");
-			if ("_type".equals(key)) {
+			if (CONST_type.equals(key)) {
 				sb.append(val == null ? "null" : "'" + val + "'");
 			} else {
 				sb.append(cellToJson5(val));
@@ -803,7 +806,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 			}
 			i++;
 		}
-		if (sb.length() > 0 || !result.isEmpty())
+		if (!sb.isEmpty() || !result.isEmpty())
 			result.add(sb.toString().trim());
 		return result;
 	}

@@ -22,13 +22,13 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.Optional;
 import java.util.function.*;
 
-import org.apache.juneau.commons.function.ResettableSupplier;
+import org.apache.juneau.commons.function.Memoizer;
 
 /**
- * A resettable supplier that provides convenience methods for type conversion.
+ * A memoizer that provides convenience methods for type conversion.
  *
  * <p>
- * This class extends {@link ResettableSupplier} to provide methods to convert the string value
+ * This class extends {@link Memoizer} to provide methods to convert the string value
  * to various types, similar to the {@link StringSetting#asInteger()}, {@link StringSetting#asBoolean()}, etc. methods.
  *
  * <h5 class='section'>Example:</h5>
@@ -47,7 +47,7 @@ import org.apache.juneau.commons.function.ResettableSupplier;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class Setting<T> extends ResettableSupplier<T> {
+public class Setting<T> extends Memoizer<T> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_supplier = "supplier";

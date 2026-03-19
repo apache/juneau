@@ -504,7 +504,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param b The builder to copy fields from.
 	 */
 	protected BeanPropertyMeta(Builder b) {
-		annotations = mem(this::findAnnotations);
+		annotations = memoize(this::findAnnotations);
 		bc = b.bc;
 		beanMeta = b.beanMeta;
 		beanRegistry = b.beanRegistry;

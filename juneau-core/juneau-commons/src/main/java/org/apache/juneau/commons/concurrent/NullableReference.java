@@ -43,7 +43,7 @@ import java.util.function.*;
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
  * 	<jc>// Create an empty reference</jc>
- * 	OptionalReference&lt;String&gt; <jv>ref</jv> = OptionalReference.<jsm>empty</jsm>();
+ * 	NullableReference&lt;String&gt; <jv>ref</jv> = NullableReference.<jsm>empty</jsm>();
  *
  * 	<jc>// Set a value atomically</jc>
  * 	<jv>ref</jv>.set(<js>"value"</js>);
@@ -69,7 +69,7 @@ import java.util.function.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link AtomicReference} - Base class providing atomic operations
  * 	<li class='jc'>{@link Optional} - Java's Optional class
- * 	<li class='jc'>{@link org.apache.juneau.commons.function.OptionalSupplier} - Similar functionality for suppliers
+ * 	<li class='jc'>{@link org.apache.juneau.commons.function.NullableSupplier} - Similar functionality for suppliers
  * </ul>
  *
  * @param <V> The type of value held by this reference.
@@ -77,7 +77,7 @@ import java.util.function.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class OptionalReference<V> extends AtomicReference<V> {
+public class NullableReference<V> extends AtomicReference<V> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_action = "action";
@@ -90,35 +90,35 @@ public class OptionalReference<V> extends AtomicReference<V> {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Creates an empty OptionalReference with an initial value of <jk>null</jk>.
+	 * Creates an empty NullableReference with an initial value of <jk>null</jk>.
 	 *
 	 * @param <V> The value type.
-	 * @return A new empty OptionalReference.
+	 * @return A new empty NullableReference.
 	 */
-	public static <V> OptionalReference<V> empty() {
-		return new OptionalReference<>(null);
+	public static <V> NullableReference<V> empty() {
+		return new NullableReference<>(null);
 	}
 
 	/**
-	 * Creates an OptionalReference with the specified initial value.
+	 * Creates an NullableReference with the specified initial value.
 	 *
 	 * @param <V> The value type.
 	 * @param initialValue The initial value. Can be <jk>null</jk>.
-	 * @return A new OptionalReference with the specified value.
+	 * @return A new NullableReference with the specified value.
 	 */
-	public static <V> OptionalReference<V> of(V initialValue) {
-		return new OptionalReference<>(initialValue);
+	public static <V> NullableReference<V> of(V initialValue) {
+		return new NullableReference<>(initialValue);
 	}
 
 	/**
-	 * Creates an OptionalReference with the specified initial value (alias for {@link #of(Object)}).
+	 * Creates an NullableReference with the specified initial value (alias for {@link #of(Object)}).
 	 *
 	 * @param <V> The value type.
 	 * @param initialValue The initial value. Can be <jk>null</jk>.
-	 * @return A new OptionalReference with the specified value.
+	 * @return A new NullableReference with the specified value.
 	 */
-	public static <V> OptionalReference<V> ofNullable(V initialValue) {
-		return new OptionalReference<>(initialValue);
+	public static <V> NullableReference<V> ofNullable(V initialValue) {
+		return new NullableReference<>(initialValue);
 	}
 
 	/**
@@ -126,14 +126,14 @@ public class OptionalReference<V> extends AtomicReference<V> {
 	 *
 	 * @param initialValue The initial value. Can be <jk>null</jk>.
 	 */
-	public OptionalReference(V initialValue) {
+	public NullableReference(V initialValue) {
 		super(initialValue);
 	}
 
 	/**
 	 * Default constructor (initializes to <jk>null</jk>).
 	 */
-	public OptionalReference() {
+	public NullableReference() {
 		super();
 	}
 
@@ -156,45 +156,45 @@ public class OptionalReference<V> extends AtomicReference<V> {
 	}
 
 	/**
-	 * If a value is present, applies the provided mapping function to it and returns an OptionalReference describing the result.
+	 * If a value is present, applies the provided mapping function to it and returns an NullableReference describing the result.
 	 *
 	 * @param <U> The type of the result of the mapping function.
 	 * @param mapper A mapping function to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return An OptionalReference describing the result of applying a mapping function to the value, if a value is present, otherwise an empty OptionalReference.
+	 * @return An NullableReference describing the result of applying a mapping function to the value, if a value is present, otherwise an empty NullableReference.
 	 */
-	public <U> OptionalReference<U> map(Function<? super V, ? extends U> mapper) {
+	public <U> NullableReference<U> map(Function<? super V, ? extends U> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		V value = get();
-		return nn(value) ? OptionalReference.of(mapper.apply(value)) : OptionalReference.empty();
+		return nn(value) ? NullableReference.of(mapper.apply(value)) : NullableReference.empty();
 	}
 
 	/**
-	 * If a value is present, returns the result of applying the given OptionalReference-bearing mapping function to the value, otherwise returns an empty OptionalReference.
+	 * If a value is present, returns the result of applying the given NullableReference-bearing mapping function to the value, otherwise returns an empty NullableReference.
 	 *
-	 * @param <U> The type parameter to the OptionalReference returned by the mapping function.
+	 * @param <U> The type parameter to the NullableReference returned by the mapping function.
 	 * @param mapper A mapping function to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return The result of applying an OptionalReference-bearing mapping function to the value, if a value is present, otherwise an empty OptionalReference.
+	 * @return The result of applying an NullableReference-bearing mapping function to the value, if a value is present, otherwise an empty NullableReference.
 	 */
-	public <U> OptionalReference<U> flatMap(Function<? super V, ? extends OptionalReference<? extends U>> mapper) {
+	public <U> NullableReference<U> flatMap(Function<? super V, ? extends NullableReference<? extends U>> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		V value = get();
 		if (nn(value)) {
-			OptionalReference<? extends U> result = mapper.apply(value);
-			return result != null ? OptionalReference.ofNullable(result.get()) : OptionalReference.empty();
+			NullableReference<? extends U> result = mapper.apply(value);
+			return result != null ? NullableReference.ofNullable(result.get()) : NullableReference.empty();
 		}
-		return OptionalReference.empty();
+		return NullableReference.empty();
 	}
 
 	/**
-	 * If a value is present, and the value matches the given predicate, returns an OptionalReference describing the value, otherwise returns an empty OptionalReference.
+	 * If a value is present, and the value matches the given predicate, returns an NullableReference describing the value, otherwise returns an empty NullableReference.
 	 *
 	 * @param predicate A predicate to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return An OptionalReference describing the value if a value is present and the value matches the given predicate, otherwise an empty OptionalReference.
+	 * @return An NullableReference describing the value if a value is present and the value matches the given predicate, otherwise an empty NullableReference.
 	 */
-	public OptionalReference<V> filter(Predicate<? super V> predicate) {
+	public NullableReference<V> filter(Predicate<? super V> predicate) {
 		assertArgNotNull(ARG_predicate, predicate);
 		V value = get();
-		return (nn(value) && predicate.test(value)) ? OptionalReference.of(value) : OptionalReference.empty();
+		return (nn(value) && predicate.test(value)) ? NullableReference.of(value) : NullableReference.empty();
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class OptionalReference<V> extends AtomicReference<V> {
 	}
 
 	/**
-	 * Converts this OptionalReference to an {@link Optional}.
+	 * Converts this NullableReference to an {@link Optional}.
 	 *
 	 * @return An Optional containing the value if present, otherwise an empty Optional.
 	 */

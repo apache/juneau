@@ -152,24 +152,24 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final Cache<Class<?>,ObjectSwap<?,?>> childUnswapMap;              // Maps swap subclasses to ObjectSwaps.
 	private final Supplier<String> beanDictionaryName;                             // The dictionary name of this class if it has one.
 	private final Supplier<ClassMeta<?>> elementType;                          // If ARRAY or COLLECTION, the element class type.
-	private final OptionalSupplier<String> example;                            // Example JSON.
-	private final OptionalSupplier<FieldInfo> exampleField;                    // The @Example-annotated field (if it has one).
-	private final OptionalSupplier<MethodInfo> exampleMethod;                  // The example() or @Example-annotated method (if it has one).
+	private final NullableSupplier<String> example;                            // Example JSON.
+	private final NullableSupplier<FieldInfo> exampleField;                    // The @Example-annotated field (if it has one).
+	private final NullableSupplier<MethodInfo> exampleMethod;                  // The example() or @Example-annotated method (if it has one).
 	private final Supplier<BidiMap<Object,String>> enumValues;
 	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
-	private final OptionalSupplier<MethodInfo> fromStringMethod;               // Static fromString(String) or equivalent method
-	private final OptionalSupplier<ClassInfoTyped<? extends T>> implClass;     // The implementation class to use if this is an interface.
+	private final NullableSupplier<MethodInfo> fromStringMethod;               // Static fromString(String) or equivalent method
+	private final NullableSupplier<ClassInfoTyped<? extends T>> implClass;     // The implementation class to use if this is an interface.
 	private final Supplier<KeyValueTypes> keyValueTypes;                        // Key and value types for MAP types.
-	private final OptionalSupplier<MarshalledFilter> marshalledFilter;
+	private final NullableSupplier<MarshalledFilter> marshalledFilter;
 	private final Supplier<Property<T,Object>> nameProperty;                   // The method to set the name on an object (if it has one).
-	private final OptionalSupplier<ConstructorInfo> noArgConstructor;          // The no-arg constructor for this class (if it has one).
+	private final NullableSupplier<ConstructorInfo> noArgConstructor;          // The no-arg constructor for this class (if it has one).
 	private final Supplier<Property<T,Object>> parentProperty;                 // The method to set the parent on an object (if it has one).
 	private final Cache<String,Optional<?>> properties;
 	private final Mutater<String,T> stringMutater;
-	private final OptionalSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
+	private final NullableSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
 	private final Supplier<List<ObjectSwap<T,?>>> swaps;                       // The object POJO swaps associated with this bean (if it has any).
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
-	private final OptionalSupplier<BeanMeta.BeanMetaValue<T>> beanMeta;
+	private final NullableSupplier<BeanMeta.BeanMetaValue<T>> beanMeta;
 
 	private record KeyValueTypes(ClassMeta<?> keyType, ClassMeta<?> valueType) {
 		Optional<ClassMeta<?>> optKeyType() { return opt(keyType()); }
@@ -254,27 +254,27 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			cat.set(INPUTSTREAM);
 		}
 
-		beanMeta = mem(this::findBeanMeta);
-		builderSwap = mem(this::findBuilderSwap);
+		beanMeta = memoize(this::findBeanMeta);
+		builderSwap = memoize(this::findBuilderSwap);
 		childSwapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(this::findSwap).build();
-		childSwaps = mem(this::findChildSwaps);
+		childSwaps = memoize(this::findChildSwaps);
 		childUnswapMap = Cache.<Class<?>,ObjectSwap<?,?>>create().supplier(this::findUnswap).build();
-		beanDictionaryName = mem(this::findBeanDictionaryName);
-		elementType = mem(this::findElementType);
-		enumValues = mem(this::findEnumValues);
-		example = mem(this::findExample);
-		exampleField = mem(this::findExampleField);
-		exampleMethod = mem(this::findExampleMethod);
-		fromStringMethod = mem(this::findFromStringMethod);
-		implClass = mem(this::findImplClass);
-		keyValueTypes = mem(this::findKeyValueTypes);
-		marshalledFilter = mem(this::findMarshalledFilter);
-		nameProperty = mem(this::findNameProperty);
-		noArgConstructor = mem(this::findNoArgConstructor);
-		parentProperty = mem(this::findParentProperty);
+		beanDictionaryName = memoize(this::findBeanDictionaryName);
+		elementType = memoize(this::findElementType);
+		enumValues = memoize(this::findEnumValues);
+		example = memoize(this::findExample);
+		exampleField = memoize(this::findExampleField);
+		exampleMethod = memoize(this::findExampleMethod);
+		fromStringMethod = memoize(this::findFromStringMethod);
+		implClass = memoize(this::findImplClass);
+		keyValueTypes = memoize(this::findKeyValueTypes);
+		marshalledFilter = memoize(this::findMarshalledFilter);
+		nameProperty = memoize(this::findNameProperty);
+		noArgConstructor = memoize(this::findNoArgConstructor);
+		parentProperty = memoize(this::findParentProperty);
 		properties = Cache.<String,Optional<?>>create().build();
-		stringConstructor = mem(this::findStringConstructor);
-		swaps = mem(this::findSwaps);
+		stringConstructor = memoize(this::findStringConstructor);
+		swaps = memoize(this::findSwaps);
 
 		this.args = null;
 		this.stringMutater = Mutaters.get(String.class, inner());
@@ -298,30 +298,30 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	ClassMeta(List<ClassMeta<?>> args) {
 		super((Class<T>)Object[].class);
 		this.args = args;
-		this.childSwaps = mem(this::findChildSwaps);
+		this.childSwaps = memoize(this::findChildSwaps);
 		this.childSwapMap = null;
 		this.childUnswapMap = null;
 		this.cat = new Categories().set(ARGS);
 		this.beanContext = null;
-		this.elementType = mem(this::findElementType);
-		this.keyValueTypes = mem(this::findKeyValueTypes);
-		this.beanMeta = mem(this::findBeanMeta);
-		this.swaps = mem(this::findSwaps);
+		this.elementType = memoize(this::findElementType);
+		this.keyValueTypes = memoize(this::findKeyValueTypes);
+		this.beanMeta = memoize(this::findBeanMeta);
+		this.swaps = memoize(this::findSwaps);
 		this.stringMutater = null;
-		this.fromStringMethod = mem(this::findFromStringMethod);
-		this.exampleMethod = mem(this::findExampleMethod);
-		this.parentProperty = mem(this::findParentProperty);
-		this.nameProperty = mem(this::findNameProperty);
-		this.exampleField = mem(this::findExampleField);
-		this.noArgConstructor = mem(this::findNoArgConstructor);
+		this.fromStringMethod = memoize(this::findFromStringMethod);
+		this.exampleMethod = memoize(this::findExampleMethod);
+		this.parentProperty = memoize(this::findParentProperty);
+		this.nameProperty = memoize(this::findNameProperty);
+		this.exampleField = memoize(this::findExampleField);
+		this.noArgConstructor = memoize(this::findNoArgConstructor);
 		this.properties = Cache.<String,Optional<?>>create().build();
-		this.stringConstructor = mem(this::findStringConstructor);
-		this.marshalledFilter = mem(this::findMarshalledFilter);
-		this.builderSwap = mem(this::findBuilderSwap);
-		this.example = mem(this::findExample);
-		this.implClass = mem(this::findImplClass);
-		this.enumValues = mem(this::findEnumValues);
-		this.beanDictionaryName = mem(this::findBeanDictionaryName);
+		this.stringConstructor = memoize(this::findStringConstructor);
+		this.marshalledFilter = memoize(this::findMarshalledFilter);
+		this.builderSwap = memoize(this::findBuilderSwap);
+		this.example = memoize(this::findExample);
+		this.implClass = memoize(this::findImplClass);
+		this.enumValues = memoize(this::findEnumValues);
+		this.beanDictionaryName = memoize(this::findBeanDictionaryName);
 	}
 
 	/**
@@ -338,8 +338,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.cat = mainType.cat;
 		this.fromStringMethod = mainType.fromStringMethod;
 		this.beanContext = mainType.beanContext;
-		this.elementType = elementType != null ? mem(()->elementType) : mainType.elementType;
-		this.keyValueTypes = (keyType != null || valueType != null) ? mem(()->new KeyValueTypes(keyType, valueType)) : mainType.keyValueTypes;
+		this.elementType = elementType != null ? memoize(()->elementType) : mainType.elementType;
+		this.keyValueTypes = (keyType != null || valueType != null) ? memoize(()->new KeyValueTypes(keyType, valueType)) : mainType.keyValueTypes;
 		this.beanMeta = mainType.beanMeta;
 		this.swaps = mainType.swaps;
 		this.exampleMethod = mainType.exampleMethod;

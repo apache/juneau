@@ -118,13 +118,13 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		this.declaringClass = declaringClass;
 		this.inner = inner;
 		this.isConstructor = inner instanceof Constructor;
-		this.parameters = mem(this::findParameters);
-		this.parameterTypes = mem(() -> getParameters().stream().map(ParameterInfo::getParameterType).toList());
-		this.exceptions = mem(() -> stream(inner.getExceptionTypes()).map(ClassInfo::of).map(ClassInfo.class::cast).toList());
-		this.declaredAnnotations = mem(() -> stream(inner.getDeclaredAnnotations()).flatMap(AnnotationUtils::streamRepeated).map(a -> ai((Annotatable)this, a)).toList());
-		this.nameShort = mem(() -> f("{0}({1})", getNameSimple(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
-		this.nameFull = mem(this::findNameFull);
-		this.toString = mem(this::findToString);
+		this.parameters = memoize(this::findParameters);
+		this.parameterTypes = memoize(() -> getParameters().stream().map(ParameterInfo::getParameterType).toList());
+		this.exceptions = memoize(() -> stream(inner.getExceptionTypes()).map(ClassInfo::of).map(ClassInfo.class::cast).toList());
+		this.declaredAnnotations = memoize(() -> stream(inner.getDeclaredAnnotations()).flatMap(AnnotationUtils::streamRepeated).map(a -> ai((Annotatable)this, a)).toList());
+		this.nameShort = memoize(() -> f("{0}({1})", getNameSimple(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
+		this.nameFull = memoize(this::findNameFull);
+		this.toString = memoize(this::findToString);
 	}
 
 	/**

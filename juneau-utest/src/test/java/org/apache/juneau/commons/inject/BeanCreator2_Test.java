@@ -2180,7 +2180,7 @@ class BeanCreator2_Test extends TestBase {
 	/**
 	 * Tests converting BeanCreator2 to Supplier interfaces:
 	 * - asSupplier() conversion
-	 * - asResettableSupplier() with caching
+	 * - asMemoizer() with caching
 	 * - Optional-like methods on suppliers
 	 * - Supplier reset behavior
 	 */
@@ -2212,35 +2212,35 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests converting BeanCreator2 to a ResettableSupplier.
+		 * Tests converting BeanCreator2 to a Memoizer.
 		 */
 		@Test
-		void h03_asResettableSupplier() {
-			var supplier = bc(SimpleBean.class).asResettableSupplier();
+		void h03_asMemoizer() {
+			var supplier = bc(SimpleBean.class).asMemoizer();
 
 			var bean = supplier.get();
 			assertInstanceOf(SimpleBean.class, bean);
 		}
 
 		/**
-		 * Tests that asResettableSupplier() caches the bean instance across multiple get() calls.
+		 * Tests that asMemoizer() caches the bean instance across multiple get() calls.
 		 */
 		@Test
-		void h04_asResettableSupplierCachesResult() {
-			var supplier = bc(SimpleBean.class).asResettableSupplier();
+		void h04_asMemoizerCachesResult() {
+			var supplier = bc(SimpleBean.class).asMemoizer();
 
 			var bean1 = supplier.get();
 			var bean2 = supplier.get();
 
-			assertSame(bean1, bean2, "ResettableSupplier should cache the result");
+			assertSame(bean1, bean2, "Memoizer should cache the result");
 		}
 
 		/**
-		 * Tests that reset() on ResettableSupplier forces recreation of the bean instance.
+		 * Tests that reset() on Memoizer forces recreation of the bean instance.
 		 */
 		@Test
-		void h05_asResettableSupplierResetRecreates() {
-			var supplier = bc(SimpleBean.class).asResettableSupplier();
+		void h05_asMemoizerResetRecreates() {
+			var supplier = bc(SimpleBean.class).asMemoizer();
 
 			var bean1 = supplier.get();
 			supplier.reset();
@@ -2250,15 +2250,15 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that post-create hooks are only called once per cached instance in ResettableSupplier.
+		 * Tests that post-create hooks are only called once per cached instance in Memoizer.
 		 */
 		@Test
-		void h07_asResettableSupplierWithPostCreateHooks() {
+		void h07_asMemoizerWithPostCreateHooks() {
 			var hookCallCount = IntegerValue.create();
 
 			var supplier = bc(SimpleBean.class)
 				.postCreateHook(b -> hookCallCount.increment())
-				.asResettableSupplier();
+				.asMemoizer();
 
 			supplier.get();
 			assertEquals(1, hookCallCount.get());
@@ -2274,13 +2274,13 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that ResettableSupplier respects the cached() mode of the creator.
+		 * Tests that Memoizer respects the cached() mode of the creator.
 		 */
 		@Test
-		void h08_asResettableSupplierWithCached() {
+		void h08_asMemoizerWithCached() {
 			var creator = bc(SimpleBean.class).cached();
 
-			var supplier = creator.asResettableSupplier();
+			var supplier = creator.asMemoizer();
 
 			var bean1 = supplier.get();
 			var bean2 = creator.run();
@@ -2299,13 +2299,13 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests Optional-like methods (isPresent, isEmpty, map) on ResettableSupplier.
+		 * Tests Optional-like methods (isPresent, isEmpty, map) on Memoizer.
 		 */
 		@Test
-		void h09_asResettableSupplierOptionalMethods() {
-			var supplier = bc(SimpleBean.class).asResettableSupplier();
+		void h09_asMemoizerOptionalMethods() {
+			var supplier = bc(SimpleBean.class).asMemoizer();
 
-			// Test Optional-like methods inherited from OptionalSupplier
+			// Test Optional-like methods inherited from NullableSupplier
 			assertTrue(supplier.isPresent());
 
 			var mapped = supplier.map(b -> b.getClass().getSimpleName());
@@ -3522,7 +3522,7 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that getBeanSubTypes() caches results using ResettableSupplier (protected method test).
+		 * Tests that getBeanSubTypes() caches results using Memoizer (protected method test).
 		 */
 		@Test
 		void p08_getBeanSubTypesIsCached() {
@@ -3571,7 +3571,7 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that getBuilderType() caches results using ResettableSupplier (protected method test).
+		 * Tests that getBuilderType() caches results using Memoizer (protected method test).
 		 */
 		@Test
 		void p12_getBuilderTypeIsCached() {
@@ -3627,7 +3627,7 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that getBuilderTypes() caches results using ResettableSupplier (protected method test).
+		 * Tests that getBuilderTypes() caches results using Memoizer (protected method test).
 		 */
 		@Test
 		void p16_getBuilderTypesIsCached() {

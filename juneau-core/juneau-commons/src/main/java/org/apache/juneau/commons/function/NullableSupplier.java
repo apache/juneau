@@ -23,17 +23,17 @@ import java.util.*;
 import java.util.function.*;
 
 /**
- * Combines the features of {@link Supplier} and {@link Optional} into a single class.
+ * A {@link Supplier} whose value may be null, with Optional-like null-safe query methods.
  *
  * <p>
  * This interface extends {@link Supplier} and provides convenience methods for working with potentially null values,
  * similar to {@link Optional}. The key difference is that this interface is lazy - the value is only computed when
- * {@link #get()} is called, and the Optional-like methods operate on that computed value.
+ * {@link #get()} is called, and the null-safe methods operate on that computed value.
  *
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
  * 	<li>Extends Supplier - can be used anywhere a Supplier is expected
- * 	<li>Optional-like API - provides isPresent(), isEmpty(), map(), orElse(), etc.
+ * 	<li>Null-safe API - provides isPresent(), isEmpty(), map(), orElse(), etc.
  * 	<li>Lazy evaluation - value is only computed when get() is called
  * 	<li>Null-safe - handles null values gracefully
  * </ul>
@@ -41,7 +41,7 @@ import java.util.function.*;
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
  * 	<jc>// Create from a supplier</jc>
- * 	OptionalSupplier&lt;String&gt; <jv>supplier</jv> = OptionalSupplier.<jsm>of</jsm>(() -&gt; <js>"value"</js>);
+ * 	NullableSupplier&lt;String&gt; <jv>supplier</jv> = NullableSupplier.<jsm>of</jsm>(() -&gt; <js>"value"</js>);
  *
  * 	<jc>// Check if value is present</jc>
  * 	<jk>if</jk> (<jv>supplier</jv>.isPresent()) {
@@ -49,7 +49,7 @@ import java.util.function.*;
  * 	}
  *
  * 	<jc>// Map the value</jc>
- * 	OptionalSupplier&lt;Integer&gt; <jv>length</jv> = <jv>supplier</jv>.map(String::length);
+ * 	NullableSupplier&lt;Integer&gt; <jv>length</jv> = <jv>supplier</jv>.map(String::length);
  *
  * 	<jc>// Get value or default</jc>
  * 	String <jv>result</jv> = <jv>supplier</jv>.orElse(<js>"default"</js>);
@@ -66,7 +66,7 @@ import java.util.function.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public interface OptionalSupplier<T> extends Supplier<T> {
+public interface NullableSupplier<T> extends Supplier<T> {
 
 	/** Argument name constant for assertArgNotNull. */
 	static final String ARG_action = "action";
@@ -84,35 +84,35 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	static final String ARG_supplier = "supplier";
 
 	/**
-	 * Creates an OptionalSupplier from a Supplier.
+	 * Creates a NullableSupplier from a Supplier.
 	 *
 	 * @param <T> The value type.
 	 * @param supplier The supplier. Must not be <jk>null</jk>.
-	 * @return A new OptionalSupplier instance.
+	 * @return A new NullableSupplier instance.
 	 */
-	public static <T> OptionalSupplier<T> of(Supplier<T> supplier) {
+	public static <T> NullableSupplier<T> of(Supplier<T> supplier) {
 		assertArgNotNull(ARG_supplier, supplier);
 		return supplier::get;
 	}
 
 	/**
-	 * Creates an OptionalSupplier that always returns the specified value.
+	 * Creates a NullableSupplier that always returns the specified value.
 	 *
 	 * @param <T> The value type.
 	 * @param value The value to return. Can be <jk>null</jk>.
-	 * @return A new OptionalSupplier instance.
+	 * @return A new NullableSupplier instance.
 	 */
-	public static <T> OptionalSupplier<T> ofNullable(T value) {
+	public static <T> NullableSupplier<T> ofNullable(T value) {
 		return () -> value;
 	}
 
 	/**
-	 * Creates an empty OptionalSupplier that always returns <jk>null</jk>.
+	 * Creates an empty NullableSupplier that always returns <jk>null</jk>.
 	 *
 	 * @param <T> The value type.
-	 * @return A new OptionalSupplier instance that always returns <jk>null</jk>.
+	 * @return A new NullableSupplier instance that always returns <jk>null</jk>.
 	 */
-	public static <T> OptionalSupplier<T> empty() {
+	public static <T> NullableSupplier<T> empty() {
 		return () -> null;
 	}
 
@@ -135,13 +135,13 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	}
 
 	/**
-	 * If a value is present, applies the provided mapping function to it and returns an OptionalSupplier describing the result.
+	 * If a value is present, applies the provided mapping function to it and returns a NullableSupplier describing the result.
 	 *
 	 * @param <U> The type of the result of the mapping function.
 	 * @param mapper A mapping function to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return An OptionalSupplier describing the result of applying a mapping function to the value of this OptionalSupplier, if a value is present, otherwise an empty OptionalSupplier.
+	 * @return A NullableSupplier describing the result of applying a mapping function to the value of this NullableSupplier, if a value is present, otherwise an empty NullableSupplier.
 	 */
-	default <U> OptionalSupplier<U> map(Function<? super T, ? extends U> mapper) {
+	default <U> NullableSupplier<U> map(Function<? super T, ? extends U> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		return () -> {
 			T value = get();
@@ -150,18 +150,18 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	}
 
 	/**
-	 * If a value is present, returns the result of applying the given OptionalSupplier-bearing mapping function to the value, otherwise returns an empty OptionalSupplier.
+	 * If a value is present, returns the result of applying the given NullableSupplier-bearing mapping function to the value, otherwise returns an empty NullableSupplier.
 	 *
-	 * @param <U> The type parameter to the OptionalSupplier returned by the mapping function.
+	 * @param <U> The type parameter to the NullableSupplier returned by the mapping function.
 	 * @param mapper A mapping function to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return The result of applying an OptionalSupplier-bearing mapping function to the value of this OptionalSupplier, if a value is present, otherwise an empty OptionalSupplier.
+	 * @return The result of applying a NullableSupplier-bearing mapping function to the value of this NullableSupplier, if a value is present, otherwise an empty NullableSupplier.
 	 */
-	default <U> OptionalSupplier<U> flatMap(Function<? super T, ? extends OptionalSupplier<? extends U>> mapper) {
+	default <U> NullableSupplier<U> flatMap(Function<? super T, ? extends NullableSupplier<? extends U>> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		return () -> {
 			T value = get();
 			if (nn(value)) {
-				OptionalSupplier<? extends U> result = mapper.apply(value);
+				NullableSupplier<? extends U> result = mapper.apply(value);
 				return result != null ? result.get() : null;
 			}
 			return null;
@@ -169,12 +169,12 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	}
 
 	/**
-	 * If a value is present, and the value matches the given predicate, returns an OptionalSupplier describing the value, otherwise returns an empty OptionalSupplier.
+	 * If a value is present, and the value matches the given predicate, returns a NullableSupplier describing the value, otherwise returns an empty NullableSupplier.
 	 *
 	 * @param predicate A predicate to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return An OptionalSupplier describing the value of this OptionalSupplier if a value is present and the value matches the given predicate, otherwise an empty OptionalSupplier.
+	 * @return A NullableSupplier describing the value of this NullableSupplier if a value is present and the value matches the given predicate, otherwise an empty NullableSupplier.
 	 */
-	default OptionalSupplier<T> filter(Predicate<? super T> predicate) {
+	default NullableSupplier<T> filter(Predicate<? super T> predicate) {
 		assertArgNotNull(ARG_predicate, predicate);
 		return () -> {
 			T value = get();
@@ -250,7 +250,7 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 	}
 
 	/**
-	 * Converts this OptionalSupplier to an {@link Optional}.
+	 * Converts this NullableSupplier to an {@link Optional}.
 	 *
 	 * @return An Optional containing the value if present, otherwise an empty Optional.
 	 */
@@ -258,4 +258,3 @@ public interface OptionalSupplier<T> extends Supplier<T> {
 		return opt(get());
 	}
 }
-

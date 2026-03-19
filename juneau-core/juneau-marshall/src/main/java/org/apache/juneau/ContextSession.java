@@ -64,7 +64,7 @@ public abstract class ContextSession {
 		private Boolean debug;
 		private boolean unmodifiable;
 		private Context ctx;
-		private ResettableSupplier<LinkedHashMap<String,Object>> properties;
+		private Memoizer<LinkedHashMap<String,Object>> properties;
 
 		/**
 		 * Constructor.
@@ -74,7 +74,7 @@ public abstract class ContextSession {
 		 */
 		protected Builder(Context ctx) {
 			this.ctx = assertArgNotNull(ARG_ctx, ctx);
-			this.properties = memr(LinkedHashMap::new);
+			this.properties = memoizer(LinkedHashMap::new);
 		}
 
 		/**

@@ -114,7 +114,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * The supplier can be reset for testing purposes using {@link #resetDisableParamNameDetection()}.
 	 */
-	static final ResettableSupplier<Boolean> DISABLE_PARAM_NAME_DETECTION = memr(() -> Boolean.getBoolean("juneau.disableParamNameDetection"));
+	static final Memoizer<Boolean> DISABLE_PARAM_NAME_DETECTION = memoizer(() -> Boolean.getBoolean("juneau.disableParamNameDetection"));
 
 	/**
 	 * Creates a ParameterInfo wrapper for the specified parameter.
@@ -159,9 +159,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations;  // All annotations declared directly on this parameter.
 	private final Supplier<List<ParameterInfo>> matchingParameters;  // Matching parameters in parent methods.
 
-	private final ResettableSupplier<String> resolvedName = memr(this::findNameInternal);  // Resolved name from @Name annotation or bytecode.
+	private final Memoizer<String> resolvedName = memoizer(this::findNameInternal);  // Resolved name from @Name annotation or bytecode.
 
-	private final ResettableSupplier<String> resolvedQualifier = memr(this::findQualifierInternal);  // Resolved qualifier from @Named or @Qualifier annotation.
+	private final Memoizer<String> resolvedQualifier = memoizer(this::findQualifierInternal);  // Resolved qualifier from @Named or @Qualifier annotation.
 
 	private final Supplier<String> toString;  // String representation with modifiers, type, name, and varargs flag.
 
@@ -185,9 +185,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		this.inner = inner;
 		this.index = index;
 		this.type = type;
-		this.annotations = mem(() -> stream(inner.getAnnotations()).flatMap(AnnotationUtils::streamRepeated).map(a -> ai(this, a)).toList());
-		this.matchingParameters = mem(this::findMatchingParameters);
-		this.toString = mem(this::findToString);
+		this.annotations = memoize(() -> stream(inner.getAnnotations()).flatMap(AnnotationUtils::streamRepeated).map(a -> ai(this, a)).toList());
+		this.matchingParameters = memoize(this::findMatchingParameters);
+		this.toString = memoize(this::findToString);
 	}
 
 	/**

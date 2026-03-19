@@ -3625,7 +3625,7 @@ public class BeanContext extends Context {
 		return !((x >= '0' && x <= '9') && (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1));
 	}
 
-	private final OptionalSupplier<WriterSerializer> beanToStringSerializer;
+	private final NullableSupplier<WriterSerializer> beanToStringSerializer;
 	private final BeanRegistry beanRegistry;
 	private final BeanSession defaultSession;
 	private final boolean beanMapPutReturnsOldValue;
@@ -3738,7 +3738,7 @@ public class BeanContext extends Context {
 
 		beanRegistry = new BeanRegistry(this, null, list());
 		defaultSession = createSession().unmodifiable().build();
-		beanToStringSerializer = mem(() -> JsonSerializer.create().beanContext(this).sq().simpleAttrs().build());
+		beanToStringSerializer = memoize(() -> JsonSerializer.create().beanContext(this).sq().simpleAttrs().build());
 	}
 
 	/**

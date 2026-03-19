@@ -27,14 +27,14 @@ import java.util.function.*;
  * A thread-safe supplier that caches the result of the first call and supports resetting the cache.
  *
  * <p>
- * This class extends {@link OptionalSupplier} to provide both standard {@link Supplier#get()} functionality
+ * This class extends {@link NullableSupplier} to provide both standard {@link Supplier#get()} functionality
  * and a {@link #reset()} method to clear the cache, forcing recomputation on the next call to {@link #get()}.
- * It also inherits all Optional-like convenience methods from {@link OptionalSupplier}.
+ * It also inherits all Optional-like convenience methods from {@link NullableSupplier}.
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
- * 	<jc>// Create a resettable supplier</jc>
- * 	ResettableSupplier&lt;String&gt; <jv>supplier</jv> = <jk>new</jk> ResettableSupplier&lt;&gt;(() -&gt; expensiveComputation());
+ * 	<jc>// Create a memoizer</jc>
+ * 	Memoizer&lt;String&gt; <jv>supplier</jv> = <jk>new</jk> Memoizer&lt;&gt;(() -&gt; expensiveComputation());
  *
  * 	<jc>// First call computes and caches</jc>
  * 	String <jv>result1</jv> = <jv>supplier</jv>.get();
@@ -64,13 +64,13 @@ import java.util.function.*;
  * 	<li>The cached value can be <jk>null</jk> if the supplier returns <jk>null</jk>.
  * 	<li>After reset, the next get() will recompute the value.
  * 	<li>This is particularly useful for testing when configuration changes and cached values need to be recalculated.
- * 	<li>Inherits all Optional-like methods from {@link OptionalSupplier} (isPresent(), isEmpty(), map(), orElse(), etc.).
+ * 	<li>Inherits all Optional-like methods from {@link NullableSupplier} (isPresent(), isEmpty(), map(), orElse(), etc.).
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jm'>{@link org.apache.juneau.commons.utils.Utils#memr(Supplier)}
- * 	<li class='jc'>{@link OptionalSupplier} - Base interface providing Optional-like methods
+ * 	<li class='jm'>{@link org.apache.juneau.commons.utils.Utils#memoizer(Supplier)}
+ * 	<li class='jc'>{@link NullableSupplier} - Base interface providing Optional-like methods
  * </ul>
  *
  * @param <T> The type of value supplied.
@@ -78,8 +78,7 @@ import java.util.function.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-// TODO - Rename to Memoizer
-public class ResettableSupplier<T> implements OptionalSupplier<T> {
+public class Memoizer<T> implements NullableSupplier<T> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_mapper = "mapper";
@@ -94,7 +93,7 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 	 *
 	 * @param supplier The underlying supplier to call when computing values.  Must not be <jk>null</jk>.
 	 */
-	public ResettableSupplier(Supplier<T> supplier) {
+	public Memoizer(Supplier<T> supplier) {
 		this.supplier = assertArgNotNull(ARG_supplier, supplier);
 	}
 
@@ -144,8 +143,8 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Create a supplier</jc>
-	 * 	ResettableSupplier&lt;String&gt; <jv>supplier</jv> = <jk>new</jk> ResettableSupplier&lt;&gt;(() -&gt; <js>"computed"</js>);
+	 * 	<jc>// Create a memoizer</jc>
+	 * 	Memoizer&lt;String&gt; <jv>supplier</jv> = <jk>new</jk> Memoizer&lt;&gt;(() -&gt; <js>"computed"</js>);
 	 *
 	 * 	<jc>// Set a value directly without invoking the supplier</jc>
 	 * 	<jv>supplier</jv>.<jsm>set</jsm>(<js>"injected"</js>);
@@ -181,58 +180,58 @@ public class ResettableSupplier<T> implements OptionalSupplier<T> {
 	}
 
 	/**
-	 * Creates a copy of this supplier.
+	 * Creates a copy of this memoizer.
 	 *
 	 * <p>
 	 * If a value has been cached, the copy will use a supplier that returns that cached value.
 	 * If no value has been cached yet, the copy will use the original supplier.
 	 *
-	 * @return A new {@link ResettableSupplier} instance with the same state as this supplier.
+	 * @return A new {@link Memoizer} instance with the same state as this memoizer.
 	 */
 	@SuppressWarnings({
 		"java:S2789" // null check on Optional is intentional - AtomicReference uses null to represent "not initialized" state
 	})
-	public ResettableSupplier<T> copy() {
+	public Memoizer<T> copy() {
 		Optional<T> o = cache.get();
 		if (o == null)
-			return new ResettableSupplier<>(supplier);
-		return new ResettableSupplier<>(o::get);
+			return new Memoizer<>(supplier);
+		return new Memoizer<>(o::get);
 	}
 
 	/**
-	 * If a value is present, applies the provided mapping function to it and returns a ResettableSupplier describing the result.
+	 * If a value is present, applies the provided mapping function to it and returns a Memoizer describing the result.
 	 *
 	 * <p>
-	 * The returned ResettableSupplier maintains its own cache, independent of this supplier.
-	 * Resetting the mapped supplier does not affect this supplier, and vice versa.
+	 * The returned Memoizer maintains its own cache, independent of this memoizer.
+	 * Resetting the mapped memoizer does not affect this memoizer, and vice versa.
 	 *
 	 * @param <U> The type of the result of the mapping function.
 	 * @param mapper A mapping function to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return A ResettableSupplier describing the result of applying a mapping function to the value of this ResettableSupplier, if a value is present, otherwise an empty ResettableSupplier.
+	 * @return A Memoizer describing the result of applying a mapping function to the value of this Memoizer, if a value is present, otherwise an empty Memoizer.
 	 */
 	@Override
-	public <U> ResettableSupplier<U> map(Function<? super T, ? extends U> mapper) {
+	public <U> Memoizer<U> map(Function<? super T, ? extends U> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
-		return new ResettableSupplier<>(() -> {
+		return new Memoizer<>(() -> {
 			T value = get();
 			return nn(value) ? mapper.apply(value) : null;
 		});
 	}
 
 	/**
-	 * If a value is present, and the value matches the given predicate, returns a ResettableSupplier describing the value, otherwise returns an empty ResettableSupplier.
+	 * If a value is present, and the value matches the given predicate, returns a Memoizer describing the value, otherwise returns an empty Memoizer.
 	 *
 	 * <p>
-	 * The returned ResettableSupplier maintains its own cache, independent of this supplier.
-	 * Resetting the filtered supplier does not affect this supplier, and vice versa.
+	 * The returned Memoizer maintains its own cache, independent of this memoizer.
+	 * Resetting the filtered memoizer does not affect this memoizer, and vice versa.
 	 *
 	 * @param predicate A predicate to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return A ResettableSupplier describing the value of this ResettableSupplier if a value is present and the value matches the given predicate, otherwise an empty ResettableSupplier.
+	 * @return A Memoizer describing the value of this Memoizer if a value is present and the value matches the given predicate, otherwise an empty Memoizer.
 	 */
 	@Override
-	public ResettableSupplier<T> filter(Predicate<? super T> predicate) {
+	public Memoizer<T> filter(Predicate<? super T> predicate) {
 		assertArgNotNull(ARG_predicate, predicate);
-		return new ResettableSupplier<>(() -> {
+		return new Memoizer<>(() -> {
 			T value = get();
 			return (nn(value) && predicate.test(value)) ? value : null;
 		});

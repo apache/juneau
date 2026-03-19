@@ -219,7 +219,7 @@ public class Settings {
 		 * @param supplier The supplier for the global store.  Must not be <c>null</c>.  Can supply null to disable global store.
 		 * @return This builder for method chaining.
 		 */
-		public Builder globalStore(OptionalSupplier<SettingStore> supplier) {
+		public Builder globalStore(NullableSupplier<SettingStore> supplier) {
 			this.globalStoreSupplier = assertArgNotNull(ARG_supplier, supplier);
 			return this;
 		}
@@ -230,7 +230,7 @@ public class Settings {
 		 * @param supplier The supplier for the local store. Must not be <c>null</c>.
 		 * @return This builder for method chaining.
 		 */
-		public Builder localStore(OptionalSupplier<SettingStore> supplier) {
+		public Builder localStore(NullableSupplier<SettingStore> supplier) {
 			this.localStoreSupplier = assertArgNotNull(ARG_supplier, supplier);
 			return this;
 		}
@@ -330,7 +330,7 @@ public class Settings {
 		return INSTANCE;
 	}
 
-	private final ResettableSupplier<SettingStore> globalStore;
+	private final Memoizer<SettingStore> globalStore;
 	@SuppressWarnings({
 		"java:S5164" // Cleanup method provided: cleanup()
 	})
@@ -342,7 +342,7 @@ public class Settings {
 	 * Constructor.
 	 */
 	private Settings(Builder builder) {
-		this.globalStore = memr(builder.globalStoreSupplier);
+		this.globalStore = memoizer(builder.globalStoreSupplier);
 		this.localStore = ThreadLocal.withInitial(builder.localStoreSupplier);
 		this.sources = new CopyOnWriteArrayList<>(builder.sources);
 		this.toTypeFunctions = new ConcurrentHashMap<>(builder.customTypeFunctions);

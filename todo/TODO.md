@@ -8,7 +8,6 @@
 - Update REST server API to use new BeanStore2.
 - ClassInfo should have a findGetter(String propertyName) convenience method.
 - Make sure @Beanp("*") works on plain fields.
-- Rename ResettableSupplier to Memoizer
 - Need an easier way to specify this header:
 Content-Disposition: attachment; filename="example.pdf"
 
@@ -31,4 +30,3 @@ Content-Disposition: attachment; filename="example.pdf"
 
 - BeanMap.containsKey not working correctly on non-existent properties?
 - Duration.ofDays(7) serialized in hours?
-- Combine OptionalSupplier and ResettableSupplier into a single class and call it Memoizer?

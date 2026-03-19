@@ -32,7 +32,7 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.OptionalSupplier;
+import org.apache.juneau.commons.function.NullableSupplier;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
@@ -350,7 +350,7 @@ public class BeanMeta<T> {
 	private BeanConstructor beanConstructor;                                   // The constructor for this bean.
 	private final BeanContext beanContext;                                     // The bean context that created this metadata object.
 	private final BeanFilter beanFilter;                                       // Optional bean filter associated with the target class.
-	private final OptionalSupplier<InvocationHandler> beanProxyInvocationHandler;  // The invocation handler for this bean (if it's an interface).
+	private final NullableSupplier<InvocationHandler> beanProxyInvocationHandler;  // The invocation handler for this bean (if it's an interface).
 	private final Supplier<BeanRegistry> beanRegistry;                         // The bean registry for this bean.
 	private final Supplier<List<ClassInfo>> classHierarchy;                    // List of all classes traversed in the class hierarchy.
 	private final ClassMeta<T> classMeta;                                      // The target class type that this meta object describes.
@@ -401,8 +401,8 @@ public class BeanMeta<T> {
 		implClassConstructor = opt(implClass).map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null);
 		fluentSetters = beanContext.isFindFluentSetters() || (nn(bf) && bf.isFluentSetters());
 		stopClass = opt(bf).map(x -> x.getStopClass()).orElse(info(Object.class));
-		beanRegistry = mem(this::findBeanRegistry);
-		classHierarchy = mem(this::findClassHierarchy);
+		beanRegistry = memoize(this::findBeanRegistry);
+		classHierarchy = memoize(this::findClassHierarchy);
 		beanConstructor = findBeanConstructor();
 
 		// Local variables for initialization
@@ -603,8 +603,8 @@ public class BeanMeta<T> {
 		dynaProperty = dynaPropertyValue.get();
 		sortProperties = sortPropertiesTemp;
 		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(beanContext.string()).beanRegistry(beanRegistry.get()).build();
-		dictionaryName = mem(this::findDictionaryName);
-		beanProxyInvocationHandler = mem(()->beanContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
+		dictionaryName = memoize(this::findDictionaryName);
+		beanProxyInvocationHandler = memoize(()->beanContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
 	}
 
 	@SuppressWarnings({

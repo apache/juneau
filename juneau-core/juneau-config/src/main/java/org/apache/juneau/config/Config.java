@@ -435,10 +435,10 @@ public class Config extends Context implements ConfigEventListener {
 	}
 
 	// Use set(T)/reset() for testing.
-	static final ResettableSupplier<Boolean> DISABLE_AUTO_SYSTEM_PROPS = memr(() -> Boolean.getBoolean("juneau.disableAutoSystemProps"));
+	static final Memoizer<Boolean> DISABLE_AUTO_SYSTEM_PROPS = memoizer(() -> Boolean.getBoolean("juneau.disableAutoSystemProps"));
 
 	// Use set(T)/reset() for testing.
-	static final ResettableSupplier<Config> SYSTEM_DEFAULT = memr(Config::findSystemDefault);
+	static final Memoizer<Config> SYSTEM_DEFAULT = memoizer(Config::findSystemDefault);
 
 	/**
 	 * Creates a new builder for this object.

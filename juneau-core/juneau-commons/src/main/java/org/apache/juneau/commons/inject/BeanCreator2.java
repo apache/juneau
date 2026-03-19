@@ -153,7 +153,7 @@ import org.apache.juneau.commons.reflect.*;
  * <h5 class='section'>Caching:</h5>
  * <p>
  * By default, each call to {@link #run()} creates a new bean instance. To enable caching, call {@link #cached()}.
- * When caching is enabled, bean instances are cached using {@link ResettableSupplier}, so multiple calls to {@link #run()}
+ * When caching is enabled, bean instances are cached using {@link Memoizer}, so multiple calls to {@link #run()}
  * will return the same instance unless {@link #reset()} is called or configuration changes. Explicit implementations set via
  * {@link #implementation(Object)} and explicit builder instances set via {@link #builder(Object)} are preserved
  * across resets.
@@ -253,7 +253,7 @@ public class BeanCreator2<T> {
 	private final BasicBeanStore2 store;
 	private final ClassInfoTyped<T> beanType;
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock();
-	private final OptionalReference<List<String>> debug = OptionalReference.empty();
+	private final NullableReference<List<String>> debug = NullableReference.empty();
 	private static final Logger logger = Logger.getLogger(BeanCreator2.class);
 
 	private ClassInfoTyped<? extends T> beanSubType;
@@ -270,11 +270,11 @@ public class BeanCreator2<T> {
 	private final String name;
 	private boolean cached = false;
 
-	private ResettableSupplier<ClassInfo> builderType = memr(() -> findBuilderType());
-	private ResettableSupplier<List<ClassInfo>> builderTypes = memr(() -> findBuilderTypes());
-	private ResettableSupplier<List<ClassInfo>> beanSubTypes = memr(() -> findBeanSubTypes());
-	private ResettableSupplier<Object> builder = memr(() -> findBuilder());
-	private ResettableSupplier<T> beanImpl = memr(() -> findBeanImpl());
+	private Memoizer<ClassInfo> builderType = memoizer(() -> findBuilderType());
+	private Memoizer<List<ClassInfo>> builderTypes = memoizer(() -> findBuilderTypes());
+	private Memoizer<List<ClassInfo>> beanSubTypes = memoizer(() -> findBeanSubTypes());
+	private Memoizer<Object> builder = memoizer(() -> findBuilder());
+	private Memoizer<T> beanImpl = memoizer(() -> findBeanImpl());
 
 	/**
 	 * Constructor.
@@ -359,7 +359,7 @@ public class BeanCreator2<T> {
 	 * 	<li class='note'>If a fallback is registered via {@link #fallback(Supplier)},
 	 * 		it will be used before returning empty, so this method will only return empty if both
 	 * 		normal creation AND fallback fail.
-	 * 	<li class='note'>The created bean is cached via {@link ResettableSupplier}, so subsequent calls return the same instance
+	 * 	<li class='note'>The created bean is cached via {@link Memoizer}, so subsequent calls return the same instance
 	 * 		unless {@link #reset()} is called or configuration changes.
 	 * 	<li class='note'>Post-creation hooks are still executed if creation succeeds.
 	 * 	<li class='note'>Other exceptions (e.g., from post-creation hooks or fallback suppliers) are NOT caught
@@ -401,11 +401,11 @@ public class BeanCreator2<T> {
 	}
 
 	/**
-	 * Converts this creator into a resettable supplier.
+	 * Converts this creator into a memoizer.
 	 *
 	 * <p>
-	 * A {@link ResettableSupplier} caches the result of the first {@link ResettableSupplier#get()} call
-	 * and returns that cached value for subsequent calls. The {@link ResettableSupplier#reset()} method
+	 * A {@link Memoizer} caches the result of the first {@link Memoizer#get()} call
+	 * and returns that cached value for subsequent calls. The {@link Memoizer#reset()} method
 	 * can be used to clear the cache, forcing the bean to be recreated on the next get() call.
 	 *
 	 * <p>
@@ -413,21 +413,21 @@ public class BeanCreator2<T> {
 	 * with updated dependencies.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>The returned {@link ResettableSupplier} is thread-safe.
-	 * 	<li class='note'>Each call to {@link ResettableSupplier#get()} after a reset() will invoke
+	 * 	<li class='note'>The returned {@link Memoizer} is thread-safe.
+	 * 	<li class='note'>Each call to {@link Memoizer#get()} after a reset() will invoke
 	 * 		{@link #run()}, which may trigger dependency injection and post-creation hooks.
-	 * 	<li class='note'>The supplier inherits all Optional-like methods from {@link OptionalSupplier}.
+	 * 	<li class='note'>The memoizer inherits all Optional-like methods from {@link NullableSupplier}.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Create a resettable supplier for a bean with dependencies</jc>
+	 * 	<jc>// Create a memoizer for a bean with dependencies</jc>
 	 * 	BeanStore <jv>store</jv> = <jk>new</jk> BasicBeanStore2(<jk>null</jk>);
 	 * 	<jv>store</jv>.addBean(String.<jk>class</jk>, <js>"initial"</js>);
 	 *
-	 * 	ResettableSupplier&lt;MyBean&gt; <jv>supplier</jv> = BeanCreator2
+	 * 	Memoizer&lt;MyBean&gt; <jv>supplier</jv> = BeanCreator2
 	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>store</jv>)
-	 * 		.asResettableSupplier();
+	 * 		.asMemoizer();
 	 *
 	 * 	<jc>// First call creates and caches the bean</jc>
 	 * 	MyBean <jv>bean1</jv> = <jv>supplier</jv>.get();
@@ -447,8 +447,8 @@ public class BeanCreator2<T> {
 	 *
 	 * @return A resettable supplier that caches the created bean until reset.
 	 */
-	public ResettableSupplier<T> asResettableSupplier() {
-		return new ResettableSupplier<>(this::run);
+	public Memoizer<T> asMemoizer() {
+		return new Memoizer<>(this::run);
 	}
 
 	/**
@@ -666,7 +666,7 @@ public class BeanCreator2<T> {
 	 * Enables caching mode.
 	 *
 	 * <p>
-	 * When caching mode is enabled, bean instances are cached using {@link ResettableSupplier},
+	 * When caching mode is enabled, bean instances are cached using {@link Memoizer},
 	 * so multiple calls to {@link #run()} will return the same instance unless {@link #reset()} is called
 	 * or configuration changes.
 	 *
@@ -822,7 +822,7 @@ public class BeanCreator2<T> {
 	 * 		If bean creation succeeds normally, the fallback is never called.
 	 * 	<li class='note'>Fallbacks are checked after all normal creation attempts (builders, factory methods, constructors).
 	 * 	<li class='note'>The fallback-provided instance will have post-creation hooks executed on it.
-	 * 	<li class='note'>If the fallback is used, that instance is cached via {@link ResettableSupplier} and returned on subsequent calls
+	 * 	<li class='note'>If the fallback is used, that instance is cached via {@link Memoizer} and returned on subsequent calls
 	 * 		unless {@link #reset()} is called or configuration changes.
 	 * 	<li class='note'>Only one fallback can be registered. Subsequent calls to this method will replace
 	 * 		the previous fallback.
@@ -980,7 +980,7 @@ public class BeanCreator2<T> {
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>Returns an empty list if {@link #debug()} was not called or if no creation has been attempted.
 	 * 	<li class='note'>The log is reset at the beginning of each {@link #run()} call.
-	 * 	<li class='note'>Since {@link #run()} uses a cached {@link ResettableSupplier}, the log reflects only the first creation
+	 * 	<li class='note'>Since {@link #run()} uses a cached {@link Memoizer}, the log reflects only the first creation
 	 * 		(subsequent calls return the cached instance unless {@link #reset()} is called).
 	 * 	<li class='note'>The returned list is unmodifiable.
 	 * </ul>
@@ -1039,7 +1039,7 @@ public class BeanCreator2<T> {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>Hooks are executed every time {@link #run()} is called. Since {@link #run()} uses a cached
-	 * 		{@link ResettableSupplier}, hooks are only executed once unless {@link #reset()} is called.
+	 * 		{@link Memoizer}, hooks are only executed once unless {@link #reset()} is called.
 	 * 	<li class='note'>Hooks are executed after dependency injection, so all {@code @Inject} fields and methods
 	 * 		will have been populated before the hook runs.
 	 * 	<li class='note'>Hooks can be used for custom initialization logic, logging, wrapping beans with proxies,

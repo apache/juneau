@@ -25,9 +25,9 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link OptionalReference}.
+ * Tests for {@link NullableReference}.
  */
-class OptionalReference_Test extends TestBase {
+class NullableReference_Test extends TestBase {
 
 	//====================================================================================================
 	// Static factory methods
@@ -35,7 +35,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void a01_empty() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		assertNotNull(ref);
 		assertNull(ref.get());
 		assertTrue(ref.isEmpty());
@@ -44,7 +44,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void a02_of_withValue() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		assertNotNull(ref);
 		assertEquals("test", ref.get());
 		assertTrue(ref.isPresent());
@@ -53,7 +53,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void a03_of_withNull() {
-		var ref = OptionalReference.of(null);
+		var ref = NullableReference.of(null);
 		assertNotNull(ref);
 		assertNull(ref.get());
 		assertTrue(ref.isEmpty());
@@ -62,7 +62,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void a04_ofNullable_withValue() {
-		var ref = OptionalReference.ofNullable("test");
+		var ref = NullableReference.ofNullable("test");
 		assertNotNull(ref);
 		assertEquals("test", ref.get());
 		assertTrue(ref.isPresent());
@@ -70,7 +70,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void a05_ofNullable_withNull() {
-		var ref = OptionalReference.ofNullable(null);
+		var ref = NullableReference.ofNullable(null);
 		assertNotNull(ref);
 		assertNull(ref.get());
 		assertTrue(ref.isEmpty());
@@ -82,7 +82,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void b01_constructor_default() {
-		var ref = new OptionalReference<String>();
+		var ref = new NullableReference<String>();
 		assertNotNull(ref);
 		assertNull(ref.get());
 		assertTrue(ref.isEmpty());
@@ -90,7 +90,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void b02_constructor_withInitialValue() {
-		var ref = new OptionalReference<>("initial");
+		var ref = new NullableReference<>("initial");
 		assertNotNull(ref);
 		assertEquals("initial", ref.get());
 		assertTrue(ref.isPresent());
@@ -98,7 +98,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void b03_constructor_withNull() {
-		var ref = new OptionalReference<String>(null);
+		var ref = new NullableReference<String>(null);
 		assertNotNull(ref);
 		assertNull(ref.get());
 		assertTrue(ref.isEmpty());
@@ -110,25 +110,25 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void c01_isPresent_withValue() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		assertTrue(ref.isPresent());
 	}
 
 	@Test
 	void c02_isPresent_withNull() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		assertFalse(ref.isPresent());
 	}
 
 	@Test
 	void c03_isEmpty_withValue() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		assertFalse(ref.isEmpty());
 	}
 
 	@Test
 	void c04_isEmpty_withNull() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		assertTrue(ref.isEmpty());
 	}
 
@@ -138,7 +138,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void d01_map_withValue() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		var mapped = ref.map(String::toUpperCase);
 		assertNotNull(mapped);
 		assertEquals("TEST", mapped.get());
@@ -147,7 +147,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void d02_map_withNull() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		var mapped = ref.map(String::toUpperCase);
 		assertNotNull(mapped);
 		assertTrue(mapped.isEmpty());
@@ -156,7 +156,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void d03_map_returnsNull() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		var mapped = ref.map(s -> (String)null);
 		assertNotNull(mapped);
 		assertTrue(mapped.isEmpty());
@@ -165,7 +165,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void d04_map_chaining() {
-		var ref = OptionalReference.of(5);
+		var ref = NullableReference.of(5);
 		var result = ref.map(i -> i * 2).map(i -> i + 1).map(Object::toString);
 		assertEquals("11", result.get());
 		assertTrue(result.isPresent());
@@ -177,8 +177,8 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void e01_flatMap_withValue() {
-		var ref = OptionalReference.of("test");
-		var flatMapped = ref.flatMap(s -> OptionalReference.of(s.toUpperCase()));
+		var ref = NullableReference.of("test");
+		var flatMapped = ref.flatMap(s -> NullableReference.of(s.toUpperCase()));
 		assertNotNull(flatMapped);
 		assertEquals("TEST", flatMapped.get());
 		assertTrue(flatMapped.isPresent());
@@ -186,23 +186,23 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void e02_flatMap_withNull() {
-		var ref = OptionalReference.<String>empty();
-		var flatMapped = ref.flatMap(s -> OptionalReference.of(s.toUpperCase()));
+		var ref = NullableReference.<String>empty();
+		var flatMapped = ref.flatMap(s -> NullableReference.of(s.toUpperCase()));
 		assertNotNull(flatMapped);
 		assertTrue(flatMapped.isEmpty());
 	}
 
 	@Test
 	void e03_flatMap_returnsEmpty() {
-		var ref = OptionalReference.of("test");
-		var flatMapped = ref.flatMap(s -> OptionalReference.<String>empty());
+		var ref = NullableReference.of("test");
+		var flatMapped = ref.flatMap(s -> NullableReference.<String>empty());
 		assertNotNull(flatMapped);
 		assertTrue(flatMapped.isEmpty());
 	}
 
 	@Test
 	void e04_flatMap_returnsNull() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		var flatMapped = ref.flatMap(s -> null);
 		assertNotNull(flatMapped);
 		assertTrue(flatMapped.isEmpty());
@@ -214,7 +214,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void f01_filter_matches() {
-		var ref = OptionalReference.of(5);
+		var ref = NullableReference.of(5);
 		var filtered = ref.filter(i -> i > 0);
 		assertNotNull(filtered);
 		assertEquals(5, filtered.get());
@@ -223,7 +223,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void f02_filter_doesNotMatch() {
-		var ref = OptionalReference.of(5);
+		var ref = NullableReference.of(5);
 		var filtered = ref.filter(i -> i < 0);
 		assertNotNull(filtered);
 		assertTrue(filtered.isEmpty());
@@ -231,7 +231,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void f03_filter_withNull() {
-		var ref = OptionalReference.<Integer>empty();
+		var ref = NullableReference.<Integer>empty();
 		var filtered = ref.filter(i -> i > 0);
 		assertNotNull(filtered);
 		assertTrue(filtered.isEmpty());
@@ -243,21 +243,21 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void g01_orElse_withValue() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		var result = ref.orElse("default");
 		assertEquals("test", result);
 	}
 
 	@Test
 	void g02_orElse_withNull() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		var result = ref.orElse("default");
 		assertEquals("default", result);
 	}
 
 	@Test
 	void g03_orElse_withNullDefault() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		var result = ref.orElse(null);
 		assertNull(result);
 	}
@@ -268,21 +268,21 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void h01_orElseGet_withValue() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		var result = ref.orElseGet(() -> "default");
 		assertEquals("test", result);
 	}
 
 	@Test
 	void h02_orElseGet_withNull() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		var result = ref.orElseGet(() -> "default");
 		assertEquals("default", result);
 	}
 
 	@Test
 	void h03_orElseGet_supplierNotCalledWhenPresent() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		var callCount = new AtomicInteger(0);
 		var result = ref.orElseGet(() -> {
 			callCount.incrementAndGet();
@@ -298,20 +298,20 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void i01_orElseThrow_withValue() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		var result = ref.orElseThrow(() -> new RuntimeException("should not throw"));
 		assertEquals("test", result);
 	}
 
 	@Test
 	void i02_orElseThrow_withNull() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		assertThrows(RuntimeException.class, () -> ref.orElseThrow(() -> new RuntimeException("expected")));
 	}
 
 	@Test
 	void i03_orElseThrow_withNull_correctMessage() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		var exception = assertThrows(RuntimeException.class, () -> ref.orElseThrow(() -> new RuntimeException("expected message")));
 		assertEquals("expected message", exception.getMessage());
 	}
@@ -322,7 +322,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void j01_ifPresent_withValue() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		var called = new boolean[]{false};
 		ref.ifPresent(v -> called[0] = true);
 		assertTrue(called[0]);
@@ -330,7 +330,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void j02_ifPresent_withNull() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		var called = new boolean[]{false};
 		ref.ifPresent(v -> called[0] = true);
 		assertFalse(called[0]);
@@ -338,7 +338,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void j03_ifPresent_receivesCorrectValue() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		var received = new String[1];
 		ref.ifPresent(v -> received[0] = v);
 		assertEquals("test", received[0]);
@@ -350,7 +350,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void k01_ifPresentOrElse_withValue() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		var presentCalled = new boolean[]{false};
 		var emptyCalled = new boolean[]{false};
 		ref.ifPresentOrElse(
@@ -363,7 +363,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void k02_ifPresentOrElse_withNull() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		var presentCalled = new boolean[]{false};
 		var emptyCalled = new boolean[]{false};
 		ref.ifPresentOrElse(
@@ -380,7 +380,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void l01_toOptional_withValue() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		var optional = ref.toOptional();
 		assertNotNull(optional);
 		assertTrue(optional.isPresent());
@@ -389,7 +389,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void l02_toOptional_withNull() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		var optional = ref.toOptional();
 		assertNotNull(optional);
 		assertFalse(optional.isPresent());
@@ -401,7 +401,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void m01_set() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		ref.set("new");
 		assertEquals("new", ref.get());
 		assertTrue(ref.isPresent());
@@ -409,7 +409,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void m02_set_null() {
-		var ref = OptionalReference.of("test");
+		var ref = NullableReference.of("test");
 		ref.set(null);
 		assertNull(ref.get());
 		assertTrue(ref.isEmpty());
@@ -417,7 +417,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void m03_getAndSet() {
-		var ref = OptionalReference.of("old");
+		var ref = NullableReference.of("old");
 		var oldValue = ref.getAndSet("new");
 		assertEquals("old", oldValue);
 		assertEquals("new", ref.get());
@@ -425,7 +425,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void m04_compareAndSet_success() {
-		var ref = OptionalReference.of("old");
+		var ref = NullableReference.of("old");
 		var success = ref.compareAndSet("old", "new");
 		assertTrue(success);
 		assertEquals("new", ref.get());
@@ -433,7 +433,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void m05_compareAndSet_failure() {
-		var ref = OptionalReference.of("old");
+		var ref = NullableReference.of("old");
 		var success = ref.compareAndSet("wrong", "new");
 		assertFalse(success);
 		assertEquals("old", ref.get());
@@ -441,7 +441,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void m06_compareAndSet_null() {
-		var ref = OptionalReference.of("old");
+		var ref = NullableReference.of("old");
 		var success = ref.compareAndSet("old", null);
 		assertTrue(success);
 		assertNull(ref.get());
@@ -450,7 +450,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void m07_compareAndSet_fromNull() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		var success = ref.compareAndSet(null, "new");
 		assertTrue(success);
 		assertEquals("new", ref.get());
@@ -459,7 +459,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void m08_updateAndGet() {
-		var ref = OptionalReference.of(5);
+		var ref = NullableReference.of(5);
 		var result = ref.updateAndGet(i -> i * 2);
 		assertEquals(10, result);
 		assertEquals(10, ref.get());
@@ -467,7 +467,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void m09_getAndUpdate() {
-		var ref = OptionalReference.of(5);
+		var ref = NullableReference.of(5);
 		var result = ref.getAndUpdate(i -> i * 2);
 		assertEquals(5, result);
 		assertEquals(10, ref.get());
@@ -475,7 +475,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void m10_accumulateAndGet() {
-		var ref = OptionalReference.of(5);
+		var ref = NullableReference.of(5);
 		var result = ref.accumulateAndGet(3, (x, y) -> x + y);
 		assertEquals(8, result);
 		assertEquals(8, ref.get());
@@ -483,7 +483,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void m11_getAndAccumulate() {
-		var ref = OptionalReference.of(5);
+		var ref = NullableReference.of(5);
 		var result = ref.getAndAccumulate(3, (x, y) -> x + y);
 		assertEquals(5, result);
 		assertEquals(8, ref.get());
@@ -495,7 +495,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void n01_concurrentSet() throws InterruptedException {
-		var ref = OptionalReference.<Integer>empty();
+		var ref = NullableReference.<Integer>empty();
 		var threadCount = 10;
 		var iterations = 1000;
 		var threads = new Thread[threadCount];
@@ -533,7 +533,7 @@ class OptionalReference_Test extends TestBase {
 		// Test compareAndSet with concurrent access
 		// AtomicReference.compareAndSet uses reference equality (==), not value equality
 		// This test verifies that compareAndSet works correctly when multiple threads try to update
-		var ref = OptionalReference.of("initial");
+		var ref = NullableReference.of("initial");
 		var threadCount = 10;
 		var iterations = 100;
 		var threads = new Thread[threadCount];
@@ -574,7 +574,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void n03_concurrentMap() throws InterruptedException {
-		var ref = OptionalReference.of(0);
+		var ref = NullableReference.of(0);
 		var threadCount = 5;
 		var iterations = 100;
 		var threads = new Thread[threadCount];
@@ -604,7 +604,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void o01_chainingOperations() {
-		var ref = OptionalReference.of(5);
+		var ref = NullableReference.of(5);
 		var result = ref
 			.map(i -> i * 2)
 			.filter(i -> i > 5)
@@ -615,7 +615,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void o02_chainingOperations_empty() {
-		var ref = OptionalReference.of(5);
+		var ref = NullableReference.of(5);
 		var result = ref
 			.map(i -> i * 2)
 			.filter(i -> i > 20)
@@ -626,7 +626,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void o03_optionalLikeUsage() {
-		var ref = OptionalReference.<String>empty();
+		var ref = NullableReference.<String>empty();
 		var result = ref
 			.map(String::toUpperCase)
 			.orElseGet(() -> "DEFAULT");
@@ -635,7 +635,7 @@ class OptionalReference_Test extends TestBase {
 
 	@Test
 	void o04_atomicUpdateWithOptionalMethods() {
-		var ref = OptionalReference.of(10);
+		var ref = NullableReference.of(10);
 		ref.updateAndGet(i -> i * 2);
 		var result = ref
 			.filter(i -> i > 15)

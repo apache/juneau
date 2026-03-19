@@ -662,12 +662,12 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// mem(Supplier<T>)
+	// memoize(Supplier<T>)
 	//====================================================================================================
 	@Test
 	void a036_memoize() {
 		var callCount = new AtomicInteger(0);
-		var supplier = mem(() -> {
+		var supplier = memoize(() -> {
 			callCount.incrementAndGet();
 			return "result";
 		});
@@ -683,12 +683,12 @@ class Utils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// memr(Supplier<T>)
+	// memoizer(Supplier<T>)
 	//====================================================================================================
 	@Test
 	void a037_memoizeResettable() {
 		var callCount = new AtomicInteger(0);
-		var supplier = memr(() -> {
+		var supplier = memoizer(() -> {
 			callCount.incrementAndGet();
 			return "result";
 		});

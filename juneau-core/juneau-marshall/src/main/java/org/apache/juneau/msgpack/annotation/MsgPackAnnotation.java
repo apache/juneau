@@ -189,6 +189,16 @@ public class MsgPackAnnotation {
 		public String[] description() {
 			return description;
 		}
+
+		@Override /* Overridden from Object */
+		public boolean equals(java.lang.Object o) {
+			return super.equals(o);
+		}
+
+		@Override /* Overridden from Object */
+		public int hashCode() {
+			return super.hashCode();
+		}
 	}
 
 	/** Default value */

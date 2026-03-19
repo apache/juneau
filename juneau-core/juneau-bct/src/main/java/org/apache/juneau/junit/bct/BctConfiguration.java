@@ -94,7 +94,7 @@ public class BctConfiguration {
 	}
 
 	// Thread-local memoized supplier for default converter (defaults to BasicBeanConverter.DEFAULT)
-	private static final ThreadLocal<ResettableSupplier<BeanConverter>> CONVERTER_SUPPLIER = ThreadLocal.withInitial(() -> memr(() -> BasicBeanConverter.DEFAULT));
+	private static final ThreadLocal<Memoizer<BeanConverter>> CONVERTER_SUPPLIER = ThreadLocal.withInitial(() -> memoizer(() -> BasicBeanConverter.DEFAULT));
 
 	/**
 	 * Configuration property name for enabling map sorting in BCT assertions.

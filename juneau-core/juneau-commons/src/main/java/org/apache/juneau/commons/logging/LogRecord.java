@@ -71,7 +71,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 	private static final String KEY_threadid = "threadid";
 	private static final String KEY_exception = "exception";
 
-	private transient Supplier<Optional<StackTraceElement>> source = mem(()->findSource());
+	private transient Supplier<Optional<StackTraceElement>> source = memoize(()->findSource());
 
 	/**
 	 * Constructor.
@@ -113,7 +113,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 	@Override
 	public String getSourceClassName() {
 		if (source == null)
-			source = mem(()->findSource());
+			source = memoize(()->findSource());
 		return source.get().map(x -> x.getClassName()).orElse(null);
 	}
 
@@ -125,7 +125,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 	@Override
 	public String getSourceMethodName() {
 		if (source == null)
-			source = mem(()->findSource());
+			source = memoize(()->findSource());
 		return source.get().map(x -> x.getMethodName()).orElse(null);
 	}
 

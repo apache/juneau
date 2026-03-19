@@ -798,7 +798,7 @@ class Settings_Test extends TestBase {
 	void r01_localStore() {
 		// Test that localStore() method can be called on the builder
 		var settings = Settings.create()
-			.localStore(OptionalSupplier.of(MapStore::new))
+			.localStore(NullableSupplier.of(MapStore::new))
 			.build();
 		// Verify it works by setting a local value
 		settings.setLocal(TEST_PROP, "test-value");
@@ -814,7 +814,7 @@ class Settings_Test extends TestBase {
 	void s01_setGlobal_whenGlobalStoreDisabled() {
 		// Create Settings with null global store (disabled)
 		var settings = Settings.create()
-			.globalStore(OptionalSupplier.empty())
+			.globalStore(NullableSupplier.empty())
 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
 			.addSource(Settings.SYSTEM_ENV_SOURCE)
 			.build();
@@ -829,7 +829,7 @@ class Settings_Test extends TestBase {
 	void s02_unsetGlobal_whenGlobalStoreDisabled() {
 		// Create Settings with null global store (disabled)
 		var settings = Settings.create()
-			.globalStore(OptionalSupplier.empty())
+			.globalStore(NullableSupplier.empty())
 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
 			.addSource(Settings.SYSTEM_ENV_SOURCE)
 			.build();
@@ -844,7 +844,7 @@ class Settings_Test extends TestBase {
 	void s03_clearGlobal_whenGlobalStoreDisabled() {
 		// Create Settings with null global store (disabled)
 		var settings = Settings.create()
-			.globalStore(OptionalSupplier.empty())
+			.globalStore(NullableSupplier.empty())
 			.addSource(Settings.SYSTEM_PROPERTY_SOURCE)
 			.addSource(Settings.SYSTEM_ENV_SOURCE)
 			.build();

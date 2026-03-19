@@ -1390,7 +1390,7 @@ public class Utils {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Create a memoizing supplier</jc>
-	 * 	Supplier&lt;ExpensiveObject&gt; <jv>supplier</jv> = mem(() -&gt; <jk>new</jk> ExpensiveObject());
+	 * 	Supplier&lt;ExpensiveObject&gt; <jv>supplier</jv> = memoize(() -&gt; <jk>new</jk> ExpensiveObject());
 	 *
 	 * 	<jc>// First call computes and caches the value</jc>
 	 * 	ExpensiveObject <jv>obj1</jv> = <jv>supplier</jv>.get();
@@ -1421,7 +1421,7 @@ public class Utils {
 	@SuppressWarnings({
 		"java:S2789" // null check on Optional is intentional - AtomicReference uses null to represent "not initialized" state
 	})
-	public static <T> OptionalSupplier<T> mem(Supplier<T> supplier) {
+	public static <T> NullableSupplier<T> memoize(Supplier<T> supplier) {
 		assertArgNotNull(ARG_supplier, supplier);
 
 		var cache = new AtomicReference<Optional<T>>();
@@ -1440,15 +1440,15 @@ public class Utils {
 	}
 
 	/**
-	 * Creates a resettable memoizing supplier that caches the result of the first call and optionally allows resetting.
+	 * Creates a memoizing supplier that caches the result of the first call and supports resetting.
 	 *
 	 * <p>
-	 * This is similar to {@link #mem(Supplier)}, but returns a {@link ResettableSupplier} that supports
+	 * This is similar to {@link #memoize(Supplier)}, but returns a {@link Memoizer} that supports
 	 * clearing the cached value, forcing recomputation on the next call.
 	 *
 	 * <h5 class='section'>Usage:</h5>
 	 * <p class='bjava'>
-	 * 	ResettableSupplier&lt;String&gt; <jv>supplier</jv> = Utils.<jsm>memr</jsm>(() -&gt; expensiveComputation());
+	 * 	Memoizer&lt;String&gt; <jv>supplier</jv> = Utils.<jsm>memr</jsm>(() -&gt; expensiveComputation());
 	 *
 	 * 	<jc>// First call computes and caches</jc>
 	 * 	String <jv>result1</jv> = <jv>supplier</jv>.get();
@@ -1463,13 +1463,13 @@ public class Utils {
 	 *
 	 * <h5 class='section'>Thread Safety:</h5>
 	 * <p>
-	 * The returned supplier is thread-safe for both {@link ResettableSupplier#get()} and
-	 * {@link ResettableSupplier#reset()} operations. If multiple threads call get() simultaneously
+	 * The returned supplier is thread-safe for both {@link Memoizer#get()} and
+	 * {@link Memoizer#reset()} operations. If multiple threads call get() simultaneously
 	 * after a reset, the supplier may be invoked multiple times, but only one result will be cached.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jc'>{@link ResettableSupplier}
+	 * 	<li class='jc'>{@link Memoizer}
 	 * </ul>
 	 *
 	 * @param <T> The type of value supplied.
@@ -1477,9 +1477,9 @@ public class Utils {
 	 * @return A thread-safe resettable memoizing wrapper around the supplier.
 	 * @throws NullPointerException if supplier is <jk>null</jk>.
 	 */
-	public static <T> ResettableSupplier<T> memr(Supplier<T> supplier) {
+	public static <T> Memoizer<T> memoizer(Supplier<T> supplier) {
 		assertArgNotNull(ARG_supplier, supplier);
-		return new ResettableSupplier<>(supplier);
+		return new Memoizer<>(supplier);
 	}
 
 	/**
