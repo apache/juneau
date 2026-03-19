@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.markdown.*;
 import org.apache.juneau.parquet.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -41,12 +40,6 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void a01_basic(RoundTrip_Tester t) throws Exception {
 		if (t.isValidationOnly())
-			return;
-		// TODO - Skip Markdown - inline JSON5 trimStrings behavior needs investigation
-		if (t.getSerializer() instanceof MarkdownSerializer)
-			return;
-		// TODO - Skip Parquet - copy() returns Serializer.Builder incompatible with ParquetSerializer constructor
-		if (t.getSerializer() instanceof ParquetSerializer)
 			return;
 		var s = t.getSerializer();
 		var p = t.getParser();
@@ -68,19 +61,23 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 		a = p2.parse(s.serialize(in), JsonMap.class);
 		assertEquals(json(a), json(e));
 
-		in = new JsonList("[' foo ', {' foo ': ' bar '}]");
-		e = new JsonList("['foo',{foo:'bar'}]");
-		a = p.parse(s2.serialize(in), JsonList.class);
-		assertEquals(json(a), json(e));
-		a = p2.parse(s.serialize(in), JsonList.class);
-		assertEquals(json(a), json(e));
+		// Skip Parquet for mixed-type JsonList and bean with JsonList/JsonMap properties.
+		// Parquet's static schema cannot represent mixed-type collections (string + map in same list).
+		if (!(s instanceof ParquetSerializer)) {
+			in = new JsonList("[' foo ', {' foo ': ' bar '}]");
+			e = new JsonList("['foo',{foo:'bar'}]");
+			a = p.parse(s2.serialize(in), JsonList.class);
+			assertEquals(json(a), json(e));
+			a = p2.parse(s.serialize(in), JsonList.class);
+			assertEquals(json(a), json(e));
 
-		in = new A().init1();
-		e = new A().init2();
-		a = p.parse(s2.serialize(in), A.class);
-		assertEquals(json(a), json(e));
-		a = p2.parse(s.serialize(in), A.class);
-		assertEquals(json(a), json(e));
+			in = new A().init1();
+			e = new A().init2();
+			a = p.parse(s2.serialize(in), A.class);
+			assertEquals(json(a), json(e));
+			a = p2.parse(s.serialize(in), A.class);
+			assertEquals(json(a), json(e));
+		}
 	}
 
 	public static class A {

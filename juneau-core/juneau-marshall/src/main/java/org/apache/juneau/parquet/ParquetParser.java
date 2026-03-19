@@ -128,6 +128,11 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 		nullKeyString = builder.nullKeyString;
 	}
 
+	@Override /* Overridden from Context */
+	public Builder copy() {
+		return new Builder(this);
+	}
+
 	@Override
 	public ParquetParserSession.Builder createSession() {
 		return ParquetParserSession.create(this);

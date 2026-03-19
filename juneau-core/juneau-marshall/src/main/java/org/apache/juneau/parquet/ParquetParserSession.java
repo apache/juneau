@@ -446,12 +446,13 @@ public class ParquetParserSession extends InputStreamParserSession {
 		for (var cc : firstGroup.columns()) {
 			var path = String.join(".", cc.pathInSchema());
 			List<Object> values;
+			var trim = isTrimStrings();
 			if (isListColumnPath(path))
-				values = readListColumnChunk(fileBytes, cc, numRows);
+				values = readListColumnChunk(fileBytes, cc, numRows, trim);
 			else if (isMapKeyValueColumnPath(path))
-				values = readMapKeyValueColumnChunk(fileBytes, cc, numRows);
+				values = readMapKeyValueColumnChunk(fileBytes, cc, numRows, trim);
 			else
-				values = readColumnChunk(fileBytes, cc, numRows, schemaRepetition);
+				values = readColumnChunk(fileBytes, cc, numRows, schemaRepetition, trim);
 			columnData.put(path, values);
 		}
 		if (parquetDebug()) {
@@ -507,7 +508,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 		return idx < 0 ? listColumnPath : listColumnPath.substring(0, idx);
 	}
 
-	private static List<Object> readListColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows) throws ParseException {
+	private static List<Object> readListColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, boolean trimStrings) throws ParseException {
 		try {
 			var path = String.join(".", cc.pathInSchema());
 			var rowRelPath = rowRelativePath(path);
@@ -584,7 +585,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 				int def = defDecoder.readInt();
 				Object val;
 				if (def >= maxDef) {
-					val = readValue(valueReader, cc.type());
+					val = readValue(valueReader, cc.type(), trimStrings);
 				} else {
 					val = null;
 				}
@@ -710,7 +711,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 	private static final int MAP_MAX_DEF = 2;
 	private static final int MAP_MAX_REP = 1;
 
-	private static List<Object> readMapKeyValueColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows) throws ParseException {
+	private static List<Object> readMapKeyValueColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, boolean trimStrings) throws ParseException {
 		try {
 			int maxDef = MAP_MAX_DEF;
 			int maxRep = MAP_MAX_REP;
@@ -783,7 +784,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 				int def = defDecoder.readInt();
 				Object val;
 				if (def >= maxDef) {
-					val = readValue(valueReader, cc.type());
+					val = readValue(valueReader, cc.type(), trimStrings);
 				} else {
 					val = null;
 				}
@@ -827,7 +828,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 		return result;
 	}
 
-	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String, Integer> schemaRepetition) throws ParseException {
+	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String, Integer> schemaRepetition, boolean trimStrings) throws ParseException {
 		try {
 			int off = (int)cc.dataPageOffset();
 			var bais = new ByteArrayInputStream(fileBytes, off, fileBytes.length - off);
@@ -876,7 +877,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 			var reader = new ParquetColumnReader(decompressed, valuesToRead, maxDefLevel);
 			var values = new ArrayList<>();
 			while (reader.hasNext()) {
-				values.add(readValue(reader, cc.type()));
+				values.add(readValue(reader, cc.type(), trimStrings));
 			}
 			if (parquetDebug())
 				parquetDebugLog("readColumnChunk values: path=" + path + " values=" + values);
@@ -886,7 +887,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 		}
 	}
 
-	private static Object readValue(ParquetColumnReader reader, int type) throws IOException {
+	private static Object readValue(ParquetColumnReader reader, int type, boolean trimStrings) throws IOException {
 		reader.advance();
 		if (reader.isNull())
 			return null;
@@ -896,9 +897,15 @@ public class ParquetParserSession extends InputStreamParserSession {
 			case TYPE_INT64 -> reader.readInt64();
 			case TYPE_FLOAT -> reader.readFloat();
 			case TYPE_DOUBLE -> reader.readDouble();
-			case TYPE_BYTE_ARRAY -> reader.readByteArrayAsString();
+			case TYPE_BYTE_ARRAY -> {
+				var s = reader.readByteArrayAsString();
+				yield trimStrings && s != null ? s.trim() : s;
+			}
 			case TYPE_FIXED_LEN_BYTE_ARRAY -> reader.readFixedLenByteArray(16);
-			default -> reader.readByteArrayAsString();
+			default -> {
+				var s = reader.readByteArrayAsString();
+				yield trimStrings && s != null ? s.trim() : s;
+			}
 		};
 	}
 
@@ -917,6 +924,8 @@ public class ParquetParserSession extends InputStreamParserSession {
 				var values = e.getValue();
 				var v = i < values.size() ? values.get(i) : null;
 				var path = isListColumnPath(fullPath) ? listProp : rowRelPath;
+				if (isTrimStrings())
+					path = path.trim();
 				setByPath(row, path, v);
 			}
 			for (var e : listBeanColumns.entrySet()) {

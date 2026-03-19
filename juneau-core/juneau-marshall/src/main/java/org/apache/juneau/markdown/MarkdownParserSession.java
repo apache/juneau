@@ -593,8 +593,12 @@ public class MarkdownParserSession extends ReaderParserSession {
 	 * Returns a Json5Parser that shares this session's bean context (swaps, implClasses, dictionary).
 	 */
 	private JsonParser getJson5Parser() {
-		if (json5Parser == null)
-			json5Parser = Json5Parser.create().beanContext((BeanContext) getContext()).build();
+		if (json5Parser == null) {
+			var b = Json5Parser.create().beanContext((BeanContext) getContext());
+			if (isTrimStrings())
+				b = b.trimStrings();
+			json5Parser = b.build();
+		}
 		return json5Parser;
 	}
 

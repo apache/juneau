@@ -239,6 +239,11 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		nullKeyString = builder.nullKeyString;
 	}
 
+	@Override /* Overridden from Context */
+	public Builder copy() {
+		return new Builder(this);
+	}
+
 	@Override
 	public ParquetSerializerSession.Builder createSession() {
 		return ParquetSerializerSession.create(this);

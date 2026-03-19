@@ -194,7 +194,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 				// Replace null keys with the null-key sentinel so they survive as a named column in the schema.
 				var swappedMap = new LinkedHashMap<>();
 				for (var e : m.entrySet()) {
-					var key = e.getKey() == null ? ctx.nullKeyString : e.getKey();
+					var key = e.getKey() == null ? ctx.nullKeyString : trim(e.getKey());
 					var val = e.getValue();
 					if (val != null)
 						val = applySwap(val, getClassMetaForObject(val));
@@ -444,7 +444,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 		}
 		if (key instanceof Enum<?> e)
 			return ctx.getBeanContext().isUseEnumNames() ? e.name() : e.toString();
-		return String.valueOf(generalize(key, getClassMetaForObject(key)));
+		return trim(String.valueOf(generalize(key, getClassMetaForObject(key))));
 	}
 
 	private List<FlattenedEntry> extractFlattenedListValues(List<?> rows, String path) throws SerializeException {
@@ -735,7 +735,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 		if (v instanceof byte[] b)
 			return b;
 		if (v instanceof String s)
-			return s.getBytes(StandardCharsets.UTF_8);
+			return trim(s).getBytes(StandardCharsets.UTF_8);
 		if (v instanceof Enum<?> e)
 			return (ctx.getBeanContext().isUseEnumNames() ? e.name() : e.toString()).getBytes(StandardCharsets.UTF_8);
 		if (v instanceof Duration d)
