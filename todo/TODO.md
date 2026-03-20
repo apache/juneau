@@ -13,8 +13,6 @@
   - prop1,prop2,prop3
 - Need a better way to define serializer config values (e.g. useWhitespace) arguments through REST (Additional headers?  Content-Type modifications?)
 
-- RestResponse needs a setSerializer() command.
-
 - On RestClient when logging with FULL, calling RestREsponse.getContent().asString() causes a stream closed exception.
 - Possibility of adding convenience classes for okhttp3.mockwebserver.Dispatcher?
 

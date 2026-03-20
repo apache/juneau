@@ -90,6 +90,7 @@ import jakarta.servlet.http.*;
  * 			<li class='jm'>{@link RestResponse#sendRedirect(String) sendRedirect(String)}
  * 			<li class='jm'>{@link RestResponse#setContentSchema(HttpPartSchema) setContentSchema(HttpPartSchema)}
  * 			<li class='jm'>{@link RestResponse#setContent(Object) setOutput(Object)}
+ * 			<li class='jm'>{@link RestResponse#setSerializer(Serializer) setSerializer(Serializer)}
  * 			<li class='jm'>{@link RestResponse#setResponseBeanMeta(ResponseBeanMeta) setResponseBeanMeta(ResponseBeanMeta)}
  * 			<li class='jm'>{@link RestResponse#setException(Throwable) setException(Throwable)}
  * 		</ul>
@@ -616,6 +617,29 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 */
 	public RestResponse setContentSchema(HttpPartSchema schema) {
 		this.contentSchema = opt(schema);
+		return this;
+	}
+
+	/**
+	 * Forces the {@link Serializer} used to serialize the response body set via {@link #setContent(Object)} (or an
+	 * equivalent return from the REST method), instead of choosing one from the <c>Accept</c> header.
+	 *
+	 * <p>
+	 * {@link org.apache.juneau.rest.processor.SerializedPojoProcessor} uses {@link #getSerializerMatch()}, which
+	 * returns a {@link SerializerMatch} built from this serializer when non-<jk>null</jk>.
+	 *
+	 * <p>
+	 * <c>Content-Type</c> is still applied by the response processor: it prefers {@link #getMediaType()} if set, then
+	 * the match media type, then {@link Serializer#getResponseContentType()}. Call {@link #setContentType(String)} (or
+	 * another header setter) if you need a specific type before serialization runs.
+	 *
+	 * @param value The serializer to use. Can be <jk>null</jk> to clear the override and use normal <c>Accept</c>
+	 * 	negotiation on the next {@link #getSerializerMatch()} call.
+	 * @return This object.
+	 */
+	public RestResponse setSerializer(Serializer value) {
+		serializer = value;
+		serializerMatch = null;
 		return this;
 	}
 
