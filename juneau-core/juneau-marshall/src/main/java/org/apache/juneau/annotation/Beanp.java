@@ -127,6 +127,11 @@ public @interface Beanp {
 	 *
 	 * <h5 class='topic'>Dynamic beans</h5>
 	 * <p>
+	 * On a <strong>field</strong> whose type is not a {@link Map}, <js>"*"</js> does not create a dynamic property:
+	 * the property name is the field name (same as omitting {@code name}/{@code value}), while other attributes on
+	 * this annotation (e.g. {@link #format()}, {@link #swap()}) still apply.
+	 * </p>
+	 * <p>
 	 * The bean property named <js>"*"</js> is the designated "dynamic property" which allows for "extra" bean
 	 * properties not otherwise defined.
 	 * This is similar in concept to the Jackson <ja>@JsonGetterAll</ja> and <ja>@JsonSetterAll</ja> annotations.

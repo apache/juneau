@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.html.AsideFloat.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.juneau.commons.lang.*;
@@ -39,6 +40,7 @@ import org.apache.juneau.commons.utils.*;
 @SuppressWarnings({
 	"resource", // Resource management handled externally
 	"java:S112", // Generic exception thrown; template methods throw Exception for subclass flexibility
+	"java:S1192", // HTML tag names (e.g. aside, section) repeated in template; constants would obscure markup
 })
 public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
@@ -57,6 +59,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 			return (java.lang.reflect.Array.getLength(o) == 0);
 		return o.toString().isEmpty();
 	}
+
+	/** Lowercase marshall URI schemes recognized in bare <code>key: href</code> navlinks in {@link #nav}. */
+	private static final List<String> MARSHALL_URI_NAVLINK_SCHEMES = List.of("request", "servlet", "context");
 
 	@Override /* Overridden from HtmlDocTemplate */
 	public void writeTo(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
@@ -331,6 +336,18 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 					var i = l.indexOf(':');
 					var key = l.substring(0, i);
 					var val = l.substring(i + 1).trim();
+					// Bare "request:/?q", "request:?q", "servlet:...", "context:..." were split so key was the scheme
+					// and val lost the scheme; resolveUri then saw /? or ? only and browsers turned "request:?q" into a
+					// bogus path segment. Rejoin to a full marshall URI when val is path/query/fragment only.
+					var scheme = MARSHALL_URI_NAVLINK_SCHEMES.stream()
+						.filter(sch -> sch.equalsIgnoreCase(key))
+						.findFirst()
+						.orElse(null);
+					if (scheme != null && ! val.isEmpty()) {
+						var c0 = val.charAt(0);
+						if (c0 == '/' || c0 == '?' || c0 == '#')
+							val = scheme + ':' + val;
+					}
 					if (val.startsWith("<"))
 						w.nl(4).appendln(5, val);
 					else

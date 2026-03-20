@@ -454,6 +454,7 @@ public class BeanMeta<T> {
 						.filter(Objects::nonNull)
 						.findFirst()
 						.orElse(propertyNamer.getPropertyName(x.getName()));
+					name = resolveBeanFieldPropertyName(x, name, propertyNamer);
 					if (nn(name)) {
 						normalProps.computeIfAbsent(name, n->BeanPropertyMeta.builder(this, n)).setField(x);
 					}
@@ -1025,6 +1026,29 @@ public class BeanMeta<T> {
 		return new BeanConstructor(opte(), liste());
 	}
 
+	/**
+	 * Resolves the bean property name for a field when {@link Beanp @Beanp} or {@link Name @Name} supplies
+	 * <js>"*"</js>.
+	 *
+	 * <p>
+	 * On a {@link Map} field, <js>"*"</js> remains the dyna-property name. On any other field type, <js>"*"</js> is
+	 * treated like an unnamed {@code @Beanp} (apply other attributes) but the property name is taken from the field
+	 * (via {@link PropertyNamer#getPropertyName(String)}).
+	 * </p>
+	 *
+	 * @param x Field being registered.
+	 * @param nameFromAnnotations Name from {@code @Beanp}/{@code @Name}, or already-resolved default from the field name.
+	 * @param propertyNamer Namer for raw field names.
+	 * @return Property key to use in {@link BeanMeta}.
+	 */
+	private static String resolveBeanFieldPropertyName(FieldInfo x, String nameFromAnnotations, PropertyNamer propertyNamer) {
+		if (! "*".equals(nameFromAnnotations))
+			return nameFromAnnotations;
+		if (x.getFieldType().isAssignableTo(Map.class))
+			return "*";
+		return propertyNamer.getPropertyName(x.getName());
+	}
+
 	/*
 	 * Finds all bean fields in the class hierarchy.
 	 *
@@ -1430,6 +1454,7 @@ public class BeanMeta<T> {
 					.filter(Objects::nonNull)
 					.findFirst()
 					.orElse(propertyNamer.getPropertyName(x.getName()));
+				name = resolveBeanFieldPropertyName(x, name, propertyNamer);
 				if (nn(name))
 					s.add(name);
 			}
