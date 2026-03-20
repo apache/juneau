@@ -17,6 +17,7 @@
 package org.apache.juneau.annotation;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json5.*;
@@ -119,5 +120,45 @@ class BeanIgnore_Test extends TestBase {
 
 	@Test void a04_beanIgnoreOnBean_usingConfig() {
 		assertSerialized(new Bc(), Json5Serializer.DEFAULT.copy().applyAnnotations(B1cConfig.class).build(), "{f2:2,f3:'xxx',f4:'xxx'}");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// @BeanIgnore on private field: suppress accessor pair from bean metadata (default + JavaBean introspector)
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class PrivateFieldIgnoredWithAccessors {
+		public String visible = "ok";
+
+		@BeanIgnore(ignoreAccessors = true)
+		private String foo = "secret";
+
+		public String getVisible() {
+			return visible;
+		}
+
+		public void setVisible(String value) {
+			visible = value;
+		}
+
+		public String getFoo() {
+			return foo;
+		}
+
+		public void setFoo(String value) {
+			foo = value;
+		}
+	}
+
+	@Test void a05_beanIgnoreOnPrivateFieldSuppressesGetterProperty() {
+		var bm = BeanContext.DEFAULT.getBeanMeta(PrivateFieldIgnoredWithAccessors.class);
+		assertFalse(bm.getProperties().containsKey("foo"), () -> "properties: " + bm.getProperties().keySet());
+		assertJson("{visible:'ok'}", new PrivateFieldIgnoredWithAccessors());
+	}
+
+	@Test void a06_beanIgnoreOnPrivateField_suppressedWithJavaBeanIntrospector() {
+		var bc = BeanContext.create().useJavaBeanIntrospector().build();
+		var s = Json5Serializer.DEFAULT.copy().beanContext(bc).build();
+		assertFalse(bc.getBeanMeta(PrivateFieldIgnoredWithAccessors.class).getProperties().containsKey("foo"));
+		assertEquals("{visible:'ok'}", s.serialize(new PrivateFieldIgnoredWithAccessors()));
 	}
 }

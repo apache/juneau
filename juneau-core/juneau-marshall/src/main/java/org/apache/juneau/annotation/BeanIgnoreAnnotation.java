@@ -40,7 +40,7 @@ public class BeanIgnoreAnnotation {
 	private BeanIgnoreAnnotation() {}
 
 	/**
-	 * Applies targeted {@link BeanIgnore} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Applies targeted {@link BeanIgnore} annotations to a {@link BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<BeanIgnore,BeanContext.Builder> {
 
@@ -83,7 +83,7 @@ public class BeanIgnoreAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	@SuppressWarnings({
@@ -92,6 +92,7 @@ public class BeanIgnoreAnnotation {
 	public static class Builder extends AppliedAnnotationObject.BuilderTMFC {
 
 		private String[] description = {};
+		private boolean ignoreAccessors;
 
 		/**
 		 * Constructor.
@@ -117,6 +118,17 @@ public class BeanIgnoreAnnotation {
 		 */
 		public Builder description(String...value) {
 			description = value;
+			return this;
+		}
+
+		/**
+		 * Sets {@link BeanIgnore#ignoreAccessors()}.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder ignoreAccessors(boolean value) {
+			ignoreAccessors = value;
 			return this;
 		}
 
@@ -191,15 +203,22 @@ public class BeanIgnoreAnnotation {
 	private static class Object extends AppliedOnClassAnnotationObject implements BeanIgnore {
 
 		private final String[] description;
+		private final boolean ignoreAccessors;
 
 		Object(BeanIgnoreAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
+			this.ignoreAccessors = b.ignoreAccessors;
 		}
 
 		@Override /* Overridden from BeanIgnore */
 		public String[] description() {
 			return description;
+		}
+
+		@Override /* Overridden from BeanIgnore */
+		public boolean ignoreAccessors() {
+			return ignoreAccessors;
 		}
 	}
 
@@ -214,7 +233,7 @@ public class BeanIgnoreAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static BeanIgnore copy(BeanIgnore a, VarResolverSession r) {
-		return create().on(r.resolve(a.on())).onClass(a.onClass()).build();
+		return create().on(r.resolve(a.on())).onClass(a.onClass()).ignoreAccessors(a.ignoreAccessors()).build();
 	}
 
 	/**

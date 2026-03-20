@@ -294,7 +294,7 @@ public class BasicSwaggerProviderSession {
 				.appendIf(nec, SWAGGER_tags,
 					merge(
 						omSwagger.getList(SWAGGER_tags),
-						toList(r.tags(), "@Swagger(tags) on class {0}", c)
+						toList(r.tags())
 					)
 				);
 		}
@@ -1197,12 +1197,12 @@ public class BasicSwaggerProviderSession {
 		return JsonMap.ofJson(s);
 	}
 
-	private JsonList toList(Tag[] aa, String location, Object...locationArgs) {
+	private JsonList toList(Tag[] aa) {
 		if (aa.length == 0)
 			return null;
 		var ol = new JsonList();
 		for (var a : aa)
-			ol.add(toMap(a, location, locationArgs));
+			ol.add(toMap(a));
 		return nullIfEmpty(ol);
 	}
 
@@ -1243,7 +1243,7 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private JsonMap toMap(Tag a, String location, Object...locationArgs) {
+	private JsonMap toMap(Tag a) {
 		var om = JsonMap.create();
 		Predicate<String> ne = Utils::ne;
 		Predicate<Map<?,?>> nem = Utils::ne;

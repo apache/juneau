@@ -21,6 +21,9 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.commons.reflect.Visibility;
+
 /**
  * Ignore classes, fields, and methods from being interpreted as bean or bean components.
  *
@@ -30,6 +33,9 @@ import java.lang.annotation.*;
  * 	<li>Classes - Forces bean-like classes to be treated as non-beans.
  * 	<li>Methods - Forces getters/setters to be ignored.
  * 	<li>Fields - Forces bean fields to be ignored.
+ * 	<li>
+ * 		Fields — Use {@link #ignoreAccessors()} to also exclude matching JavaBean accessors from bean metadata (see
+ * 		{@link #ignoreAccessors()}).
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
@@ -62,10 +68,23 @@ public @interface BeanIgnore {
 	String[] description() default {};
 
 	/**
+	 * When <jk>true</jk> and this annotation is on a <jk>field</jk>, JavaBean accessors (<c>getX</c>/<c>setX</c>,
+	 * <c>isX</c>) for the same logical property are also excluded from bean metadata.
+	 *
+	 * <p>
+	 * Default is <jk>false</jk>: {@code @BeanIgnore} on a field only excludes the field from field-based discovery;
+	 * accessors can still expose the property (for example when {@link BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility} is {@link Visibility#NONE NONE}). Set to <jk>true</jk> to
+	 * omit the property from serialization and parsing while keeping accessors for other frameworks.
+	 *
+	 * @return The annotation value.
+	 */
+	boolean ignoreAccessors() default false;
+
+	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields/constructors.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field/constructor.
+	 * Used in conjunction with {@link BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field/constructor.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields/constructors.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>

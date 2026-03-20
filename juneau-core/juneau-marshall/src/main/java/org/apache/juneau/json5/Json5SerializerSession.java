@@ -34,11 +34,18 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource", // Pipe writer is wrapped by JsonWriter; caller/pipe owns lifecycle (same as JsonSerializerSession)
+	"java:S110" // Inheritance depth acceptable for Json5 serializer session hierarchy (matches JsonSerializerSession)
+})
 public class Json5SerializerSession extends JsonSerializerSession {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S110" // Inheritance depth acceptable for Builder extends JsonSerializerSession.Builder hierarchy
+	})
 	public static class Builder extends JsonSerializerSession.Builder {
 
 		/**

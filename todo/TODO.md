@@ -7,9 +7,6 @@
 - Need an easier way to specify this header:
     Content-Disposition: attachment; filename="example.pdf"
 
-- Figure out why this needs a cast:
-	private static final Json5 JSON5_LENIENT = new Json5(Json5Serializer.DEFAULT, (Json5Parser)Json5Parser.create().ignoreUnknownBeanProperties().build());
-
 - A comprehensive plan for handling large data sets using Suppliers and Consumers?
 
 - CSV format supports property names in headers (make sure it can work with Suppliers and Consumers above)
@@ -18,9 +15,7 @@
 
 - RestResponse needs a setSerializer() command.
 
-- Verify that you can add @BeanIgnore on a private field with getters/setters.
 - On RestClient when logging with FULL, calling RestREsponse.getContent().asString() causes a stream closed exception.
 - Possibility of adding convenience classes for okhttp3.mockwebserver.Dispatcher?
 
-- BeanMap.containsKey not working correctly on non-existent properties?
 - Duration.ofDays(7) serialized in hours?

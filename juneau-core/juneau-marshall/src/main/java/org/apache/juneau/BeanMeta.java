@@ -442,15 +442,8 @@ public class BeanMeta<T> {
 					bi = Introspector.getBeanInfo(c2.inner(), stopClass.inner());
 				else
 					bi = Introspector.getBeanInfo(c2.inner(), null);
-				if (nn(bi)) {
-					for (var pd : bi.getPropertyDescriptors()) {
-						var builder = normalProps.computeIfAbsent(pd.getName(), n -> BeanPropertyMeta.builder(this, n));
-						if (pd.getReadMethod() != null)
-							builder.setGetter(info(pd.getReadMethod()));
-						if (pd.getWriteMethod() != null)
-							builder.setSetter(info(pd.getWriteMethod()));
-					}
-				}
+				if (nn(bi))
+					mergeJavaBeanPropertyDescriptorsIntoNormalProps(bi, normalProps, propertyNamer);
 
 			} else /* Use 'better' introspection */ {
 
@@ -477,12 +470,11 @@ public class BeanMeta<T> {
 
 					if (x.methodType == GETTER) {
 						// Two getters.  Pick the best.
-						if (nn(bpm.getter)) {
-							if (! ap.has(Beanp.class, mi) && ap.has(Beanp.class, bpm.getter)) {
-								m = bpm.getter.inner();  // @Beanp annotated method takes precedence.
-							} else if (m.getName().startsWith("is") && bpm.getter.getNameSimple().startsWith("get")) {
-								m = bpm.getter.inner();  // getX() overrides isX().
-							}
+						if (nn(bpm.getter)
+							&& ((! ap.has(Beanp.class, mi) && ap.has(Beanp.class, bpm.getter))
+								|| (m.getName().startsWith("is") && bpm.getter.getNameSimple().startsWith("get")))) {
+							// @Beanp on existing getter takes precedence; else getX() overrides isX().
+							m = bpm.getter.inner();
 						}
 						bpm.setGetter(info(m));
 					}
@@ -1123,6 +1115,7 @@ public class BeanMeta<T> {
 		var ci = classMeta;
 		var v = beanContext.getBeanMethodVisibility();
 		var pn = opt(beanFilter).map(x -> x.getPropertyNamer()).orElse(beanContext.getPropertyNamer());
+		var suppressedFromBeanIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(pn);
 
 		classHierarchy.get().stream().forEach(c2 -> {
 			for (var m : c2.getDeclaredMethods()) {
@@ -1214,7 +1207,7 @@ public class BeanMeta<T> {
 				if (methodType != UNKNOWN) {
 					if (nn(bpName) && ! bpName.isEmpty())
 						n = bpName;
-					if (nn(n))
+					if (nn(n) && ! suppressedFromBeanIgnoredFields.contains(n))
 						l.add(new BeanMethod(n, methodType, m.inner()));
 				}
 			}
@@ -1385,6 +1378,70 @@ public class BeanMeta<T> {
 			.map(Bean::typeName)
 			.findFirst()
 			.orElse(null);
+	}
+
+	/*
+	 * Merges standard JavaBeans {@link BeanInfo} property descriptors into {@code normalProps}, skipping the class
+	 * pseudo-property and logical names suppressed when {@link BeanIgnore#ignoreAccessors()} is <jk>true</jk> on a field.
+	 */
+	@SuppressWarnings({
+		"java:S135" // Two continues: skip class pseudo-property and names suppressed via @BeanIgnore(ignoreAccessors)
+	})
+	private void mergeJavaBeanPropertyDescriptorsIntoNormalProps(BeanInfo bi, Map<String,BeanPropertyMeta.Builder> normalProps,
+			PropertyNamer propertyNamer) {
+		var suppressedFromBeanIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(propertyNamer);
+		for (var pd : bi.getPropertyDescriptors()) {
+			if (PROP_class.equals(pd.getName()))
+				continue;
+			if (suppressedFromBeanIgnoredFields.contains(pd.getName()))
+				continue;
+			var builder = normalProps.computeIfAbsent(pd.getName(), n -> BeanPropertyMeta.builder(this, n));
+			if (pd.getReadMethod() != null)
+				builder.setGetter(info(pd.getReadMethod()));
+			if (pd.getWriteMethod() != null)
+				builder.setSetter(info(pd.getWriteMethod()));
+		}
+	}
+
+	/*
+	 * Property names suppressed from getter/setter discovery because a non-static field with that logical name is
+	 * annotated with {@link BeanIgnore @BeanIgnore} and {@link BeanIgnore#ignoreAccessors()} is <jk>true</jk>.
+	 *
+	 * <p>
+	 * When {@link BeanIgnore#ignoreAccessors()} is <jk>false</jk> (the default), ignored fields do not suppress
+	 * JavaBean accessors so patterns such as {@code @BeanIgnore} on a private field with a public {@code getX()} still
+	 * expose {@code x} when field visibility excludes the field.
+	 */
+	@SuppressWarnings({
+		"java:S135" // Two continues in inner loop: skip fields without @BeanIgnore or without ignoreAccessors
+	})
+	private Set<String> findSuppressedPropertyNamesFromIgnoredFields(PropertyNamer propertyNamer) {
+		var s = new HashSet<String>();
+		var ap = beanContext.getAnnotationProvider();
+		for (var c2 : classHierarchy.get()) {
+			for (var x : c2.getDeclaredFields()) {
+				if (! x.isNotStatic() || ! ap.has(BeanIgnore.class, x))
+					continue;
+				if (! fieldBeanIgnoreIgnoresAccessors(x))
+					continue;
+				var name = ap.find(x).stream()
+					.filter(x2 -> x2.isType(Beanp.class) || x2.isType(Name.class))
+					.map(BeanMeta::name)
+					.filter(Objects::nonNull)
+					.findFirst()
+					.orElse(propertyNamer.getPropertyName(x.getName()));
+				if (nn(name))
+					s.add(name);
+			}
+		}
+		return s;
+	}
+
+	private static boolean fieldBeanIgnoreIgnoresAccessors(FieldInfo x) {
+		for (var bi : x.inner().getAnnotationsByType(BeanIgnore.class))
+			if (bi.ignoreAccessors())
+				return true;
+		return false;
 	}
 
 	/*

@@ -49,7 +49,7 @@ class BeanIgnoreAnnotation_Test extends TestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,on,onClass", "[a],[b],[X1]");
+		assertBean(a1, "description,ignoreAccessors,on,onClass", "[a],false,[b],[X1]");
 	}
 
 	@Test void a02_testEquivalency() {

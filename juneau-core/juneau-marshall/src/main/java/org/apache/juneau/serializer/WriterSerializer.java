@@ -30,7 +30,6 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.json.*;
 
 /**
  * Subclass of {@link Serializer} for character-based serializers.

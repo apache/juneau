@@ -22,7 +22,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.MediaType;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.serializer.WriterSerializer.Builder;
 import org.apache.juneau.swap.*;

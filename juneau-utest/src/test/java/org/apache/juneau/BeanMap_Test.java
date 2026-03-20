@@ -1792,4 +1792,48 @@ class BeanMap_Test extends TestBase {
 		public List<String> getA() { return Collections.emptyList(); }
 		public void setA(List<String> v) { a = v; }
 	}
+
+	//====================================================================================================
+	// containsKey with plain beans vs @Beanp(name="*") dyna/extras map
+	//====================================================================================================
+
+	@Test void z01_containsKey_plainBean_unknownPropertyIsAbsent() {
+		var m = BeanContext.DEFAULT.toBeanMap(new A());
+		assertTrue(m.containsKey("i1"));
+		assertFalse(m.containsKey("noSuchProperty_xyz"));
+	}
+
+	/** Bean with a Map-backed dyna property for extra entries (see BasicBeans_Test.B). */
+	public static class DynaExtrasBean {
+		@Beanp(name = "*")
+		public Map<String, Object> extras = new LinkedHashMap<>();
+	}
+
+	@Test void z02_containsKey_dynaBean_unknownKeyNotInExtrasMap() {
+		var bean = new DynaExtrasBean();
+		var m = BeanContext.DEFAULT.toBeanMap(bean);
+		// Dyna map is empty; @Beanp(name="*") does not make arbitrary keys appear as present.
+		assertFalse(m.containsKey("notDefinedAnywhere"));
+		assertEquals(set(), m.keySet());
+	}
+
+	@Test void z03_containsKey_dynaBean_trueAfterPutIntoExtras() {
+		var bean = new DynaExtrasBean();
+		var m = BeanContext.DEFAULT.toBeanMap(bean);
+		m.put("dynamicOnly", 123);
+		assertTrue(m.containsKey("dynamicOnly"));
+		assertEquals(123, bean.extras.get("dynamicOnly"));
+	}
+
+	/**
+	 * {@link BeanMap#getPropertyMeta(String)} falls back to the dyna ("*") property meta for unknown names so that
+	 * {@link BeanMap#put(String, Object)} can route writes into the extras map; that must not imply the key exists for
+	 * {@link Map#containsKey(Object)}.
+	 */
+	@Test void z04_getPropertyMetaMayFallbackToDyna_containsKeyStillFalseForUnknownKey() {
+		var bean = new DynaExtrasBean();
+		var m = BeanContext.DEFAULT.toBeanMap(bean);
+		assertNotNull(m.getPropertyMeta("phantomKey"));
+		assertFalse(m.containsKey("phantomKey"));
+	}
 }
