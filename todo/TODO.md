@@ -2,8 +2,6 @@
 
 
 - Update REST server API to use new BeanStore2.
-- Need an easier way to specify this header:  Content-Disposition: attachment; filename="example.pdf"
-
 - A comprehensive plan for handling large data sets using Suppliers and Consumers?
 
 - CSV format supports property names in headers (make sure it can work with Suppliers and Consumers above)

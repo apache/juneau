@@ -77,6 +77,7 @@ import jakarta.servlet.http.*;
  * 			<li class='jm'>{@link RestResponse#setHeader(String,String) setHeader(String,String)}
  * 			<li class='jm'>{@link RestResponse#setMaxHeaderLength(int) setMaxHeaderLength(int)}
  * 			<li class='jm'>{@link RestResponse#setSafeHeaders() setSafeHeaders()}
+ * 			<li class='jm'>{@link RestResponse#downloadAs(String) downloadAs(String)}
  * 		</ul>
  * 		<li>Methods for setting response bodies:
  * 		<ul class='javatreec'>
@@ -711,6 +712,29 @@ public class RestResponse extends HttpServletResponseWrapper {
 			setHeader(header.getName(), header.getValue());
 		}
 		return this;
+	}
+
+	/**
+	 * Sets <l>Content-Disposition</l> to <js>attachment</js> so browsers typically download the body, using the given
+	 * suggested file name (quoted {@code filename} parameter).
+	 *
+	 * <p>
+	 * Shorthand for {@link #setHeader(Header) setHeader}({@link ContentDisposition#attachment(String)
+	 * ContentDisposition.attachment(filename)}).
+	 * </p>
+	 *
+	 * <h5 class='figure'>Example</h5>
+	 * <p class='bjava'>
+	 * 	<jv>res</jv>.downloadAs(<js>"example.pdf"</js>).setContent(<jv>pdfBytes</jv>);
+	 * </p>
+	 *
+	 * @param filename Suggested download name. Must not be <jk>null</jk>, blank, or contain CR/LF.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code filename} is invalid.
+	 * @see ContentDisposition#attachment(String)
+	 */
+	public RestResponse downloadAs(String filename) {
+		return setHeader(contentDispositionAttachment(filename));
 	}
 
 	/**

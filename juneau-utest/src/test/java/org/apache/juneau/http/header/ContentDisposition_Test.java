@@ -19,6 +19,7 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -62,6 +63,30 @@ class ContentDisposition_Test extends TestBase {
 		c.get().header(contentDisposition((String)null)).run().assertContent().isEmpty();
 		c.get().header(contentDisposition((Supplier<StringRanges>)null)).run().assertContent().isEmpty();
 		c.get().header(contentDisposition(()->null)).run().assertContent().isEmpty();
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// ContentDisposition.attachment / contentDispositionAttachment
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void b01_attachment_simpleFilename() {
+		assertEquals("attachment; filename=\"example.pdf\"", ContentDisposition.attachment("example.pdf").getValue());
+		assertEquals("attachment; filename=\"example.pdf\"", contentDispositionAttachment("example.pdf").getValue());
+	}
+
+	@Test
+	void b02_attachment_escapesQuotesAndBackslashes() {
+		assertEquals("attachment; filename=\"a\\\\b\\\"c.pdf\"", ContentDisposition.attachment("a\\b\"c.pdf").getValue());
+	}
+
+	@Test
+	void b03_attachment_rejectsNullBlankAndNewlines() {
+		assertThrowsWithMessage(IllegalArgumentException.class, "null or blank", () -> ContentDisposition.attachment(null));
+		assertThrowsWithMessage(IllegalArgumentException.class, "null or blank", () -> ContentDisposition.attachment(""));
+		assertThrowsWithMessage(IllegalArgumentException.class, "null or blank", () -> ContentDisposition.attachment("  "));
+		assertThrowsWithMessage(IllegalArgumentException.class, "CR or LF", () -> ContentDisposition.attachment("a\nb"));
+		assertThrowsWithMessage(IllegalArgumentException.class, "CR or LF", () -> ContentDisposition.attachment("a\rb"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

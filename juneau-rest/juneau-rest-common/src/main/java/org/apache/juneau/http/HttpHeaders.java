@@ -677,6 +677,21 @@ public class HttpHeaders {
 	}
 
 	/**
+	 * Creates a {@link ContentDisposition} header for a response attachment with a quoted {@code filename} parameter.
+	 *
+	 * <p>
+	 * Equivalent to {@link ContentDisposition#attachment(String)}.
+	 * </p>
+	 *
+	 * @param filename Suggested download name. Must not be <jk>null</jk>, blank, or contain CR/LF.
+	 * @return A non-<jk>null</jk> header.
+	 * @throws IllegalArgumentException If {@code filename} is invalid.
+	 */
+	public static final ContentDisposition contentDispositionAttachment(String filename) {
+		return ContentDisposition.attachment(filename);
+	}
+
+	/**
 	 * Creates a new {@link ContentEncoding} header.
 	 *
 	 * @param value

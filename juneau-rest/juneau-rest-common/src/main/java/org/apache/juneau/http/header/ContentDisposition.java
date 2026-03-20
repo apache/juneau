@@ -16,6 +16,9 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.commons.utils.StringUtils.isBlank;
+import static org.apache.juneau.commons.utils.ThrowableUtils.illegalArg;
+
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -61,6 +64,46 @@ public class ContentDisposition extends BasicStringRangesHeader {
 	private static final String NAME = "Content-Disposition";
 
 	private static final Cache<String,ContentDisposition> CACHE = Cache.of(String.class, ContentDisposition.class).build();
+
+	/**
+	 * Creates a <l>Content-Disposition</l> header for a response attachment (browser download / save-as).
+	 *
+	 * <p>
+	 * Produces <code>attachment; filename="..."</code> with the filename escaped for use inside an HTTP quoted-string
+	 * ({@code \} and {@code "} backslash-escaped). CR and LF are rejected to reduce response-splitting risk.
+	 * </p>
+	 *
+	 * <p>
+	 * For non-ASCII filenames, RFC 5987 {@code filename*} is not set; callers needing full Unicode support may build
+	 * a header value manually or extend this API later.
+	 * </p>
+	 *
+	 * @param filename Suggested download name. Must not be <jk>null</jk>, blank, or contain CR/LF.
+	 * @return A non-<jk>null</jk> header.
+	 * @throws IllegalArgumentException If {@code filename} is null, blank, or contains line breaks.
+	 */
+	public static ContentDisposition attachment(String filename) {
+		if (filename == null || isBlank(filename))
+			throw illegalArg("Attachment filename must not be null or blank.");
+		for (var i = 0; i < filename.length(); i++) {
+			var c = filename.charAt(i);
+			if (c == '\r' || c == '\n')
+				throw illegalArg("Attachment filename must not contain CR or LF characters.");
+		}
+		var escaped = escapeFilenameForQuotedString(filename);
+		return ContentDisposition.of("attachment; filename=\"" + escaped + "\"");
+	}
+
+	private static String escapeFilenameForQuotedString(String filename) {
+		var sb = new StringBuilder(filename.length() + 8);
+		for (var i = 0; i < filename.length(); i++) {
+			var c = filename.charAt(i);
+			if (c == '\\' || c == '"')
+				sb.append('\\');
+			sb.append(c);
+		}
+		return sb.toString();
+	}
 
 	/**
 	 * Static creator.
