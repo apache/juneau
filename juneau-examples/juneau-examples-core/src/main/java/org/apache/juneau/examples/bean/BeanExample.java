@@ -26,6 +26,7 @@ import java.net.*;
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 
 /**
  * Sample class which shows the usage of DTO module which is a

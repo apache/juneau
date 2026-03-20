@@ -14,40 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.json.annotation;
+package org.apache.juneau.jcs.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
-
-import java.lang.annotation.*;
-
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.jcs.*;
+import org.apache.juneau.svl.*;
 
 /**
- * Annotation for specifying config properties for {@link org.apache.juneau.json.JcsSerializer}.
- *
- * <p>
- * Used primarily for specifying bean configuration properties on REST classes and methods.
- * JCS uses fixed canonical output, so no format-specific settings; the annotation provides
- * consistency and future extensibility.
+ * Utility classes and methods for the {@link JcsConfig @JcsConfig} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785 — JSON Canonicalization Scheme</a>
  * </ul>
  */
-@Target({ TYPE, METHOD })
-@Retention(RUNTIME)
-@Inherited
-@ContextApply(JcsConfigAnnotation.SerializerApply.class)
-public @interface JcsConfig {
+public class JcsConfigAnnotation {
+
+	private JcsConfigAnnotation() {}
 
 	/**
-	 * Optional rank for this config.
-	 *
-	 * <p>
-	 * Can be used to override default ordering and application of config annotations.
-	 *
-	 * @return The annotation value.
+	 * Applies {@link JcsConfig} annotations to a {@link JcsSerializer.Builder}.
 	 */
-	int rank() default 0;
+	public static class SerializerApply extends AnnotationApplier<JcsConfig,JcsSerializer.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public SerializerApply(VarResolverSession vr) {
+			super(JcsConfig.class, JcsSerializer.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<JcsConfig> ai, JcsSerializer.Builder b) {
+			// No-op: JCS uses fixed canonical output; annotation provides consistency and future extensibility
+		}
+	}
 }

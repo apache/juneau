@@ -21,8 +21,14 @@
  * Includes support for:
  * <ul>
  * 	<li>{@link org.apache.juneau.json.JsonSerializer} - Standard JSON serialization
- * 	<li>{@link org.apache.juneau.json.Json5Serializer} - JSON5 (simplified) serialization
- * 	<li>{@link org.apache.juneau.json.JcsSerializer} - JCS (RFC 8785) canonical JSON for hashing and signing
+ * 	<li>{@link org.apache.juneau.json.JsonSchemaSerializer} - JSON Schema serialization
+ * </ul>
+ * </p>
+ * <p>
+ * See also:
+ * <ul>
+ * 	<li>{@link org.apache.juneau.json5.Json5Serializer} - JSON5 (simplified) serialization
+ * 	<li>{@link org.apache.juneau.jcs.JcsSerializer} - JCS (RFC 8785) canonical JSON for hashing and signing
  * </ul>
  * </p>
  */

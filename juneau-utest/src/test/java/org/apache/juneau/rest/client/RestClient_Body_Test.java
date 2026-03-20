@@ -153,7 +153,7 @@ class RestClient_Body_Test extends TestBase {
 		client().build().post("/",x1).run()
 			.assertHeader("X-Content-Length").isNull()
 			.assertHeader("X-Content-Encoding").isNull()
-			.assertHeader("X-Content-Type").is("application/json5")
+			.assertHeader("X-Content-Type").is("application/json")
 			.assertHeader("X-Transfer-Encoding").is("chunked")  // Because content length is -1.
 		;
 
@@ -177,7 +177,7 @@ class RestClient_Body_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).json5();
+		return MockRestClient.create(A.class).json();
 	}
 
 	private static Header header(String name, Object val) {

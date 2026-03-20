@@ -29,6 +29,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.json5.Json5Parser;
 import org.apache.juneau.parser.*;
 
 /**

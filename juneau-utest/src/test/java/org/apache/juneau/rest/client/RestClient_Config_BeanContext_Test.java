@@ -27,7 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.MediaType;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
@@ -75,8 +75,8 @@ class RestClient_Config_BeanContext_Test extends TestBase {
 		x2.get("/checkQuery").queryData("foo",new A1()).run().assertContent("foo=f%3D1").assertContent().asString().asUrlDecode().is("foo=f=1");
 		x1.formPost("/checkFormData").formData("foo",new A1()).run().assertContent("foo=O1");
 		x2.formPost("/checkFormData").formData("foo",new A1()).run().assertContent("foo=f%3D1").assertContent().asString().asUrlDecode().is("foo=f=1");
-		x1.get("/checkHeader").header("foo",new A1()).header("Check","foo").run().assertContent("['O1']");
-		x2.get("/checkHeader").header("foo",new A1()).header("Check","foo").run().assertContent("['f=1']");
+		x1.get("/checkHeader").header("foo",new A1()).header("Check","foo").run().assertContent("[\"O1\"]");
+		x2.get("/checkHeader").header("foo",new A1()).header("Check","foo").run().assertContent("[\"f=1\"]");
 	}
 
 	public static class A2a {

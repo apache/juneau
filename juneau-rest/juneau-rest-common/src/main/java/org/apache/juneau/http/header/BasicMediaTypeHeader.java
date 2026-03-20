@@ -24,6 +24,7 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.Json5Serializer;
 
 /**
  * Category of headers that consist of a single parameterized string value.
@@ -253,7 +254,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * 		comparing media type.
 	 * 		<ul>
 	 * 			<li>We want the {@link JsonSerializer} (<js>"text/json"</js>) class to be able to handle requests for <js>"text/json+foo"</js>.
-	 * 			<li>We want to make sure {@link org.apache.juneau.json.Json5Serializer} (<js>"text/json5"</js>) does not handle
+	 * 			<li>We want to make sure {@link Json5Serializer} (<js>"text/json5"</js>) does not handle
 	 * 				requests for <js>"text/json"</js>.
 	 * 		</ul>
 	 * 		More token matches should result in a higher match number.

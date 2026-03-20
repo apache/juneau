@@ -81,6 +81,8 @@ import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
+import org.apache.juneau.jcs.*;
 import org.apache.juneau.jsonl.*;
 import org.apache.juneau.markdown.*;
 import org.apache.juneau.marshaller.*;

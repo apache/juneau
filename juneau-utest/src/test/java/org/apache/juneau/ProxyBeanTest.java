@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.uon.*;

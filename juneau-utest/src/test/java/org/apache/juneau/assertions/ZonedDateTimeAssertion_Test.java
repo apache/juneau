@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 class ZonedDateTimeAssertion_Test extends TestBase {

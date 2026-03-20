@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 class StringAssertion_Test extends TestBase {

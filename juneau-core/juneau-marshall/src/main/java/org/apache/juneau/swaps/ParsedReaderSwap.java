@@ -23,6 +23,7 @@ import java.io.*;
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.uon.*;

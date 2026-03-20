@@ -34,6 +34,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 
 /**
  * Generates JSON-schema metadata about POJOs.

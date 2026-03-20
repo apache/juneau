@@ -83,47 +83,47 @@ public class RestClient_Headers_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_header_String_Object() throws Exception {
-		checkFooClient().header("Foo","bar").build().get("/headers").run().assertContent("['bar']");
-		checkFooClient().build().get("/headers").header("Foo","baz").run().assertContent("['baz']");
-		checkFooClient().header("Foo","bar").build().get("/headers").header("Foo","baz").run().assertContent("['bar','baz']");
-		checkFooClient().headers(header("Foo",bean,null)).build().get("/headers").header("Foo",bean).run().assertContent("['f=1','f=1']");
+		checkFooClient().header("Foo","bar").build().get("/headers").run().assertContent("[\"bar\"]");
+		checkFooClient().build().get("/headers").header("Foo","baz").run().assertContent("[\"baz\"]");
+		checkFooClient().header("Foo","bar").build().get("/headers").header("Foo","baz").run().assertContent("[\"bar\",\"baz\"]");
+		checkFooClient().headers(header("Foo",bean,null)).build().get("/headers").header("Foo",bean).run().assertContent("[\"f=1\",\"f=1\"]");
 		checkFooClient().headers(header("Foo",null,null)).build().get("/headers").header("Foo",null).run().assertContent("[]");
 	}
 
 	@Test void a02_header_String_Object_Schema() throws Exception {
 		var l1 = l("bar","baz");
 		var l2 = l("qux","quux");
-		checkFooClient().headers(header("Foo",l1,T_ARRAY_PIPES)).build().get("/headers").header(header("Foo",l2,T_ARRAY_PIPES)).run().assertContent("['bar|baz','qux|quux']");
+		checkFooClient().headers(header("Foo",l1,T_ARRAY_PIPES)).build().get("/headers").header(header("Foo",l2,T_ARRAY_PIPES)).run().assertContent("[\"bar|baz\",\"qux|quux\"]");
 	}
 
 	@Test void a03_header_Header() throws Exception {
-		checkFooClient().headers(header("Foo","bar")).build().get("/headers").header(header("Foo","baz")).run().assertContent("['bar','baz']");
-		checkFooClient().headers(stringHeader("Foo","bar")).build().get("/headers").header(stringHeader("Foo","baz")).run().assertContent("['bar','baz']");
+		checkFooClient().headers(header("Foo","bar")).build().get("/headers").header(header("Foo","baz")).run().assertContent("[\"bar\",\"baz\"]");
+		checkFooClient().headers(stringHeader("Foo","bar")).build().get("/headers").header(stringHeader("Foo","baz")).run().assertContent("[\"bar\",\"baz\"]");
 	}
 
 	@Test void a08_header_String_Supplier() throws Exception {
 		var s = MutableSupplier.of("foo");
 		var x = checkFooClient().headers(header("Foo",s,null)).build();
-		x.get("/headers").header("Foo",s).run().assertContent("['foo','foo']");
+		x.get("/headers").header("Foo",s).run().assertContent("[\"foo\",\"foo\"]");
 		s.set("bar");
-		x.get("/headers").header("Foo",s).run().assertContent("['bar','bar']");
+		x.get("/headers").header("Foo",s).run().assertContent("[\"bar\",\"bar\"]");
 	}
 
 	@Test void a09_headers_String_Object_Schema_Serializer() throws Exception {
-		checkFooClient().headers(header("Foo",bean,null).serializer(FakeWriterSerializer.X)).build().get("/headers").run().assertContent("['x{f:1}x']");
+		checkFooClient().headers(header("Foo",bean,null).serializer(FakeWriterSerializer.X)).build().get("/headers").run().assertContent("[\"x{f:1}x\"]");
 	}
 
 	@Test void a10_headers_String_Supplier_Schema() throws Exception {
 		var s = MutableSupplier.of(a("foo","bar"));
 		var x = checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES)).build();
-		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("['foo|bar','foo|bar']");
+		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("[\"foo|bar\",\"foo|bar\"]");
 		s.set(a("bar","baz"));
-		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("['bar|baz','bar|baz']");
+		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("[\"bar|baz\",\"bar|baz\"]");
 	}
 
 	@Test void a11_headers_String_Supplier_Schema_Serializer() throws Exception {
 		var s = MutableSupplier.of(a("foo","bar"));
-		checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/headers").run().assertContent("['@(foo,bar)']");
+		checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/headers").run().assertContent("[\"@(foo,bar)\"]");
 	}
 
 	public static class A12 implements HttpPartSerializer {
@@ -145,57 +145,57 @@ public class RestClient_Headers_Test extends TestBase {
 
 	@Test void b01_standardHeaders() throws Exception {
 		checkClient("Accept").accept("text/plain").build().get("/headers").run().assertContent("['text/plain']");
-		checkClient("Accept-Charset").acceptCharset("UTF-8").build().get("/headers").run().assertContent("['UTF-8']");
-		checkClient("Client-Version").clientVersion("1").build().get("/headers").run().assertContent("['1']");
-		checkClient("Content-Type").contentType("foo").build().get("/headers").run().assertContent("['foo']");
-		checkClient("No-Trace").noTrace().build().get("/headers").run().assertContent("['true','true']");
+		checkClient("Accept-Charset").acceptCharset("UTF-8").build().get("/headers").run().assertContent("[\"UTF-8\"]");
+		checkClient("Client-Version").clientVersion("1").build().get("/headers").run().assertContent("[\"1\"]");
+		checkClient("Content-Type").contentType("foo").build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("No-Trace").noTrace().build().get("/headers").run().assertContent("[\"true\",\"true\"]");
 
 		checkClient("Accept").build().get("/headers").accept("text/plain").run().assertContent("['text/plain']");
-		checkClient("Accept-Charset").build().get("/headers").acceptCharset("UTF-8").run().assertContent("['UTF-8']");
-		checkClient("Content-Type").build().get("/headers").contentType("foo").run().assertContent("['foo']");
-		checkClient("No-Trace").build().get("/headers").noTrace().run().assertContent("['true','true']");
+		checkClient("Accept-Charset").build().get("/headers").acceptCharset("UTF-8").run().assertContent("[\"UTF-8\"]");
+		checkClient("Content-Type").build().get("/headers").contentType("foo").run().assertContent("[\"foo\"]");
+		checkClient("No-Trace").build().get("/headers").noTrace().run().assertContent("[\"true\",\"true\"]");
 	}
 
 	@Test void b02_headerBeans() throws Exception {
 		checkClient("Accept").headers(new Accept("text/plain")).build().get("/headers").run().assertContent("['text/plain']");
-		checkClient("Accept-Charset").headers(new AcceptCharset("UTF-8")).build().get("/headers").run().assertContent("['UTF-8']");
-		checkClient("Accept-Encoding").headers(new AcceptEncoding("identity")).build().get("/headers").run().assertContent("['identity']");
-		checkClient("Accept-Language").headers(new AcceptLanguage("en")).build().get("/headers").run().assertContent("['en']");
-		checkClient("Authorization").headers(new Authorization("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Cache-Control").headers(new CacheControl("none")).header("X-Expect","none").build().get("/headers").run().assertContent("['none']");
-		checkClient("Client-Version").headers(new ClientVersion("1")).build().get("/headers").run().assertContent("['1']");
-		checkClient("Connection").headers(new Connection("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Content-Length").headers(new ContentLength(123L)).build().get("/headers").run().assertContent("['123']");
-		checkClient("Content-Type").headers(new ContentType("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Date").headers(new org.apache.juneau.http.header.Date(PARSEDZONEDDATETIME)).build().get("/headers").run().assertContent("['"+PARSEDZONEDDATETIME+"']");
-		checkClient("Date").headers(new org.apache.juneau.http.header.Date(ZONEDDATETIME)).build().get("/headers").run().assertContent("['"+PARSEDZONEDDATETIME+"']");
-		checkClient("Expect").headers(new Expect("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Forwarded").headers(new Forwarded("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("From").headers(new From("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Host").headers(new Host("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("If-Match").headers(new IfMatch("\"foo\"")).build().get("/headers").run().assertContent("['\"foo\"']");
-		checkClient("If-Modified-Since").headers(new IfModifiedSince(ZONEDDATETIME)).build().get("/headers").run().assertContent("['"+PARSEDZONEDDATETIME+"']");
-		checkClient("If-Modified-Since").headers(new IfModifiedSince(PARSEDZONEDDATETIME)).build().get("/headers").run().assertContent("['"+PARSEDZONEDDATETIME+"']");
-		checkClient("If-None-Match").headers(new IfNoneMatch("\"foo\"")).build().get("/headers").run().assertContent("['\"foo\"']");
-		checkClient("If-Range").headers(new IfRange("\"foo\"")).build().get("/headers").run().assertContent("['\"foo\"']");
-		checkClient("If-Unmodified-Since").headers(new IfUnmodifiedSince(ZONEDDATETIME)).build().get("/headers").run().assertContent("['"+PARSEDZONEDDATETIME+"']");
-		checkClient("If-Unmodified-Since").headers(new IfUnmodifiedSince(PARSEDZONEDDATETIME)).build().get("/headers").run().assertContent("['"+PARSEDZONEDDATETIME+"']");
-		checkClient("Max-Forwards").headers(new MaxForwards(10)).build().get("/headers").run().assertContent("['10']");
-		checkClient("No-Trace").headers(new NoTrace("true")).build().get("/headers").run().assertContent("['true','true']");
-		checkClient("Origin").headers(new Origin("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Pragma").headers(new Pragma("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Proxy-Authorization").headers(new ProxyAuthorization("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Range").headers(new Range("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Referer").headers(new Referer("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("TE").headers(new TE("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("User-Agent").headers(new UserAgent("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Upgrade").headers(new Upgrade("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Via").headers(new Via("foo")).build().get("/headers").run().assertContent("['foo']");
-		checkClient("Warning").headers(new Warning("foo")).build().get("/headers").run().assertContent("['foo']");
+		checkClient("Accept-Charset").headers(new AcceptCharset("UTF-8")).build().get("/headers").run().assertContent("[\"UTF-8\"]");
+		checkClient("Accept-Encoding").headers(new AcceptEncoding("identity")).build().get("/headers").run().assertContent("[\"identity\"]");
+		checkClient("Accept-Language").headers(new AcceptLanguage("en")).build().get("/headers").run().assertContent("[\"en\"]");
+		checkClient("Authorization").headers(new Authorization("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Cache-Control").headers(new CacheControl("none")).header("X-Expect","none").build().get("/headers").run().assertContent("[\"none\"]");
+		checkClient("Client-Version").headers(new ClientVersion("1")).build().get("/headers").run().assertContent("[\"1\"]");
+		checkClient("Connection").headers(new Connection("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Content-Length").headers(new ContentLength(123L)).build().get("/headers").run().assertContent("[\"123\"]");
+		checkClient("Content-Type").headers(new ContentType("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Date").headers(new org.apache.juneau.http.header.Date(PARSEDZONEDDATETIME)).build().get("/headers").run().assertContent("[\""+PARSEDZONEDDATETIME+"\"]");
+		checkClient("Date").headers(new org.apache.juneau.http.header.Date(ZONEDDATETIME)).build().get("/headers").run().assertContent("[\""+PARSEDZONEDDATETIME+"\"]");
+		checkClient("Expect").headers(new Expect("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Forwarded").headers(new Forwarded("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("From").headers(new From("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Host").headers(new Host("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("If-Match").headers(new IfMatch("\"foo\"")).build().get("/headers").run().assertContent("[\"\\\"foo\\\"\"]");
+		checkClient("If-Modified-Since").headers(new IfModifiedSince(ZONEDDATETIME)).build().get("/headers").run().assertContent("[\""+PARSEDZONEDDATETIME+"\"]");
+		checkClient("If-Modified-Since").headers(new IfModifiedSince(PARSEDZONEDDATETIME)).build().get("/headers").run().assertContent("[\""+PARSEDZONEDDATETIME+"\"]");
+		checkClient("If-None-Match").headers(new IfNoneMatch("\"foo\"")).build().get("/headers").run().assertContent("[\"\\\"foo\\\"\"]");
+		checkClient("If-Range").headers(new IfRange("\"foo\"")).build().get("/headers").run().assertContent("[\"\\\"foo\\\"\"]");
+		checkClient("If-Unmodified-Since").headers(new IfUnmodifiedSince(ZONEDDATETIME)).build().get("/headers").run().assertContent("[\""+PARSEDZONEDDATETIME+"\"]");
+		checkClient("If-Unmodified-Since").headers(new IfUnmodifiedSince(PARSEDZONEDDATETIME)).build().get("/headers").run().assertContent("[\""+PARSEDZONEDDATETIME+"\"]");
+		checkClient("Max-Forwards").headers(new MaxForwards(10)).build().get("/headers").run().assertContent("[\"10\"]");
+		checkClient("No-Trace").headers(new NoTrace("true")).build().get("/headers").run().assertContent("[\"true\",\"true\"]");
+		checkClient("Origin").headers(new Origin("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Pragma").headers(new Pragma("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Proxy-Authorization").headers(new ProxyAuthorization("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Range").headers(new Range("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Referer").headers(new Referer("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("TE").headers(new TE("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("User-Agent").headers(new UserAgent("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Upgrade").headers(new Upgrade("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Via").headers(new Via("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
+		checkClient("Warning").headers(new Warning("foo")).build().get("/headers").run().assertContent("[\"foo\"]");
 	}
 
 	@Test void b03_debugHeader() throws Exception {
-		checkClient("Debug").build().get("/headers").debug().suppressLogging().run().assertContent("['true']");
+		checkClient("Debug").build().get("/headers").debug().suppressLogging().run().assertContent("[\"true\"]");
 	}
 
 	@Test void b04_dontOverrideAccept() throws Exception {
@@ -208,8 +208,8 @@ public class RestClient_Headers_Test extends TestBase {
 	}
 
 	@Test void b05_dontOverrideContentType() throws Exception {
-		checkClient("Content-Type").header("Content-Type","text/plain").build().get("/headers").run().assertContent("['text/plain']");
-		checkClient("Content-Type").header("Content-Type","text/foo").build().get("/headers").header("Content-Type","text/plain").run().assertContent("['text/foo','text/plain']");
+		checkClient("Content-Type").header("Content-Type","text/plain").build().get("/headers").run().assertContent("[\"text/plain\"]");
+		checkClient("Content-Type").header("Content-Type","text/foo").build().get("/headers").header("Content-Type","text/plain").run().assertContent("[\"text/foo\",\"text/plain\"]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -225,10 +225,10 @@ public class RestClient_Headers_Test extends TestBase {
 	}
 
 	private static RestClient.Builder checkFooClient() {
-		return MockRestClient.create(A.class).json5().header("Check","Foo");
+		return MockRestClient.create(A.class).json().header("Check","Foo");
 	}
 
 	private static RestClient.Builder checkClient(String headerToCheck) {
-		return MockRestClient.create(A.class).json5().header("Check",headerToCheck).noTrace();
+		return MockRestClient.create(A.class).json().header("Check",headerToCheck).noTrace();
 	}
 }

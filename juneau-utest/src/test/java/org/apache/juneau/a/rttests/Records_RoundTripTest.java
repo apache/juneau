@@ -22,6 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;

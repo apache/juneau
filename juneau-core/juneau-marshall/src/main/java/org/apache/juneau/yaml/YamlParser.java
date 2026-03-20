@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.json.JsonParser;
 import org.apache.juneau.parser.*;
 
 /**
@@ -43,7 +44,7 @@ import org.apache.juneau.parser.*;
  *
  * <h5 class='section'>Limitations compared to JSON</h5>
  * <p>
- * The YAML parser has some limitations when compared to {@link org.apache.juneau.json.JsonParser JsonParser}:
+ * The YAML parser has some limitations when compared to {@link JsonParser}:
  * <ul class='spaced-list'>
  * 	<li>
  * 		Maps with non-String keys ({@link Boolean}, {@link java.util.Date}, {@link java.time.temporal.Temporal},

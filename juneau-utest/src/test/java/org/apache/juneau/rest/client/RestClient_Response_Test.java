@@ -210,7 +210,7 @@ class RestClient_Response_Test extends TestBase {
 
 	@Test void d02_response_setEntity() throws Exception {
 		var x = client(D.class).build().post("/bean",bean).run();
-		x.setEntity(new StringEntity("{f:2}"));
+		x.setEntity(new StringEntity("{\"f\":2}"));
 		x.assertContent().as(ABean.class).asJson().is("{f:2}");
 	}
 
@@ -230,11 +230,11 @@ class RestClient_Response_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).json5();
+		return MockRestClient.create(A.class).json();
 	}
 
 	private static RestClient.Builder client(Class<?> c) {
-		return MockRestClient.create(c).json5();
+		return MockRestClient.create(c).json();
 	}
 
 	private static RestClient.Builder checkFooClient(Class<?> c) {

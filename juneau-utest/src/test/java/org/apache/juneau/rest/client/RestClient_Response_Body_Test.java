@@ -35,7 +35,7 @@ import org.apache.http.conn.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -101,7 +101,7 @@ class RestClient_Response_Body_Test extends TestBase {
 
 	@Test void a01_basic() throws Exception {
 		client().build().post("/echo",bean).run().assertContent().as(ABean.class).asJson().is("{f:1}");
-		client().build().post("/echo",bean).run().assertContent().asBytes().asString().is("{f:1}");
+		client().build().post("/echo",bean).run().assertContent().asBytes().asString().is("{\"f\":1}");
 	}
 
 	@Test void a02_overrideParser() throws Exception {
@@ -115,7 +115,7 @@ class RestClient_Response_Body_Test extends TestBase {
 	@Test void a03_asInputStream() throws Exception {
 		var r1 = client().build().get("/bean").run();
 		var is = r1.getContent().asInputStream();
-		assertEquals("{f:1}", toUtf8(is));
+		assertEquals("{\"f\":1}", toUtf8(is));
 		assertThrowsWithMessage(Exception.class, "Response has already been consumed.", ()->r1.getContent().asInputStream());
 
 		// Non-repeatable entity.
@@ -163,10 +163,10 @@ class RestClient_Response_Body_Test extends TestBase {
 
 	@Test void a05_asBytes() throws Exception {
 		var x = client().build().get("/bean").run().getContent().asBytes();
-		assertEquals("{f:1}", toUtf8(x));
+		assertEquals("{\"f\":1}", toUtf8(x));
 
-		x = client().build().get("/bean").run().assertContent().asBytes().asString().is("{f:1}").getContent().asBytes();
-		assertEquals("{f:1}", toUtf8(x));
+		x = client().build().get("/bean").run().assertContent().asBytes().asString().is("{\"f\":1}").getContent().asBytes();
+		assertEquals("{\"f\":1}", toUtf8(x));
 
 		assertThrowsWithMessage(Exception.class, "foo", ()->testClient().entity(new InputStreamEntity(badStream())).get().run().getContent().asBytes());
 	}
@@ -174,15 +174,15 @@ class RestClient_Response_Body_Test extends TestBase {
 	@Test void a06_pipeTo() throws Exception {
 		var baos = new ByteArrayOutputStream();
 		client().build().get("/bean").run().getContent().pipeTo(baos);
-		assertEquals("{f:1}", toUtf8(baos.toByteArray()));
+		assertEquals("{\"f\":1}", toUtf8(baos.toByteArray()));
 
 		var sw = new StringWriter();
 		client().build().get("/bean").run().getContent().pipeTo(sw);
-		assertEquals("{f:1}", sw.toString());
+		assertEquals("{\"f\":1}", sw.toString());
 
 		sw = new StringWriter();
 		client().build().get("/bean").run().getContent().pipeTo(sw,UTF8);
-		assertEquals("{f:1}", sw.toString());
+		assertEquals("{\"f\":1}", sw.toString());
 	}
 
 	public static class A7a {
@@ -317,7 +317,7 @@ class RestClient_Response_Body_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).json5();
+		return MockRestClient.create(A.class).json();
 	}
 
 	private static TestClient plainTestClient() {

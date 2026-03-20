@@ -23,6 +23,7 @@ import java.io.*;
 import java.util.regex.*;
 
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;

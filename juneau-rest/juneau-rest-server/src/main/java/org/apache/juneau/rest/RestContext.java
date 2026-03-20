@@ -2348,7 +2348,7 @@ public class RestContext extends Context {
 		 */
 		public ParserSet.Builder parsers() {
 			if (parsers == null)
-				parsers = createParsers(beanStore(), resource());
+				parsers = createParsers(beanStore(), resource != null ? resource.get() : null);
 			return parsers;
 		}
 
@@ -3175,7 +3175,7 @@ public class RestContext extends Context {
 		 */
 		public SerializerSet.Builder serializers() {
 			if (serializers == null)
-				serializers = createSerializers(beanStore(), resource());
+				serializers = createSerializers(beanStore(), resource != null ? resource.get() : null);
 			return serializers;
 		}
 
@@ -4295,14 +4295,15 @@ public class RestContext extends Context {
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
 		 * </ul>
 		 *
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
 		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
+		 * @param resourceInstance
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * 	<br>Can be <jk>null</jk> when <jk>init</jk> has not been called yet.
 		 * @return A new parser group sub-builder.
 		 */
-		protected ParserSet.Builder createParsers(BasicBeanStore beanStore, Supplier<?> resource) {
+		protected ParserSet.Builder createParsers(BasicBeanStore beanStore, Object resourceInstance) {
 
 			// Default value.
 			Value<ParserSet.Builder> v = Value.of(ParserSet.create(beanStore));
@@ -4314,7 +4315,8 @@ public class RestContext extends Context {
 			beanStore.getBean(ParserSet.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] ParserSet xxx(<args>)
-			new BeanCreateMethodFinder<>(ParserSet.class, resource.get(), beanStore).addBean(ParserSet.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
+			if (resourceInstance != null)
+				new BeanCreateMethodFinder<>(ParserSet.class, resourceInstance, beanStore).addBean(ParserSet.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4741,14 +4743,15 @@ public class RestContext extends Context {
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
 		 * </ul>
 		 *
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
 		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
+		 * @param resourceInstance
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * 	<br>Can be <jk>null</jk> when <jk>init</jk> has not been called yet.
 		 * @return A new serializer group sub-builder.
 		 */
-		protected SerializerSet.Builder createSerializers(BasicBeanStore beanStore, Supplier<?> resource) {
+		protected SerializerSet.Builder createSerializers(BasicBeanStore beanStore, Object resourceInstance) {
 
 			// Default value.
 			Value<SerializerSet.Builder> v = Value.of(SerializerSet.create(beanStore));
@@ -4760,7 +4763,8 @@ public class RestContext extends Context {
 			beanStore.getBean(SerializerSet.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] SerializerSet xxx(<args>)
-			new BeanCreateMethodFinder<>(SerializerSet.class, resource.get(), beanStore).addBean(SerializerSet.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
+			if (resourceInstance != null)
+				new BeanCreateMethodFinder<>(SerializerSet.class, resourceInstance, beanStore).addBean(SerializerSet.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}

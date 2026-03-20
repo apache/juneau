@@ -20,6 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.annotation.*;
 

@@ -32,6 +32,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;

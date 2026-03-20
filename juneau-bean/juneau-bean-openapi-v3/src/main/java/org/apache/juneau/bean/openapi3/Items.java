@@ -28,7 +28,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 
 /**
  * A limited subset of JSON-Schema's items object.

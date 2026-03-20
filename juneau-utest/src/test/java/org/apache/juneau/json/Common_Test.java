@@ -34,18 +34,18 @@ class Common_Test extends TestBase {
 	// Trim nulls from beans
 	//====================================================================================================
 	@Test void a01_trimNullsFromBeans() throws Exception {
-		var s = Json5Serializer.create();
-		var p = Json5Parser.DEFAULT;
+		var s = JsonSerializer.create();
+		var p = JsonParser.DEFAULT;
 		var t1 = A.create();
 
 		var r = s.build().serialize(t1);
-		assertEquals("{s2:'s2'}", r);
+		assertEquals("{\"s2\":\"s2\"}", r);
 		var t2 = p.parse(r, A.class);
 		assertEquals(json(t2), json(t1));
 
 		s.keepNullProperties();
 		r = s.build().serialize(t1);
-		assertEquals("{s1:null,s2:'s2'}", r);
+		assertEquals("{\"s1\":null,\"s2\":\"s2\"}", r);
 		t2 = p.parse(r, A.class);
 		assertEquals(json(t2), json(t1));
 	}
@@ -64,18 +64,18 @@ class Common_Test extends TestBase {
 	// Trim empty maps
 	//====================================================================================================
 	@Test void a02_trimEmptyMaps() throws Exception {
-		var s = Json5Serializer.create();
-		var p = Json5Parser.DEFAULT;
+		var s = JsonSerializer.create();
+		var p = JsonParser.DEFAULT;
 		var t1 = B.create();
 		var r = s.build().serialize(t1);
 
-		assertEquals("{f1:{},f2:{f2a:null,f2b:{s2:'s2'}}}", r);
+		assertEquals("{\"f1\":{},\"f2\":{\"f2a\":null,\"f2b\":{\"s2\":\"s2\"}}}", r);
 		var t2 = p.parse(r, B.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyMaps();
 		r = s.build().serialize(t1);
-		assertEquals("{f2:{f2a:null,f2b:{s2:'s2'}}}", r);
+		assertEquals("{\"f2\":{\"f2a\":null,\"f2b\":{\"s2\":\"s2\"}}}", r);
 		t2 = p.parse(r, B.class);
 		assertNull(t2.f1);
 	}
@@ -95,18 +95,18 @@ class Common_Test extends TestBase {
 	// Trim empty lists
 	//====================================================================================================
 	@Test void a03_trimEmptyLists() throws Exception {
-		var s = Json5Serializer.create();
-		var p = Json5Parser.DEFAULT;
+		var s = JsonSerializer.create();
+		var p = JsonParser.DEFAULT;
 		var t1 = C.create();
 		var r = s.build().serialize(t1);
 
-		assertEquals("{f1:[],f2:[null,{s2:'s2'}]}", r);
+		assertEquals("{\"f1\":[],\"f2\":[null,{\"s2\":\"s2\"}]}", r);
 		var t2 = p.parse(r, C.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
-		assertEquals("{f2:[null,{s2:'s2'}]}", r);
+		assertEquals("{\"f2\":[null,{\"s2\":\"s2\"}]}", r);
 		t2 = p.parse(r, C.class);
 		assertNull(t2.f1);
 	}
@@ -126,18 +126,18 @@ class Common_Test extends TestBase {
 	// Trim empty arrays
 	//====================================================================================================
 	@Test void a04_trimEmptyArrays() throws Exception {
-		var s = Json5Serializer.create();
-		var p = Json5Parser.DEFAULT;
+		var s = JsonSerializer.create();
+		var p = JsonParser.DEFAULT;
 		var t1 = D.create();
 		var r = s.build().serialize(t1);
 
-		assertEquals("{f1:[],f2:[null,{s2:'s2'}]}", r);
+		assertEquals("{\"f1\":[],\"f2\":[null,{\"s2\":\"s2\"}]}", r);
 		var t2 = p.parse(r, D.class);
 		assertEquals(json(t2), json(t1));
 
 		s.trimEmptyCollections();
 		r = s.build().serialize(t1);
-		assertEquals("{f2:[null,{s2:'s2'}]}", r);
+		assertEquals("{\"f2\":[null,{\"s2\":\"s2\"}]}", r);
 		t2 = p.parse(r, D.class);
 		assertNull(t2.f1);
 	}
@@ -157,11 +157,11 @@ class Common_Test extends TestBase {
 	// @Beanp.bpi annotation.
 	//====================================================================================================
 	@Test void a05_beanPropertyProperies() throws Exception {
-		var s = Json5Serializer.DEFAULT;
+		var s = JsonSerializer.DEFAULT;
 		var t = new E1();
 		var r = s.serialize(t);
 
-		assertEquals("{x1:{f1:1},x2:{f1:1},x3:[{f1:1}],x4:[{f1:1}],x5:[{f1:1}],x6:[{f1:1}]}", r);
+		assertEquals("{\"x1\":{\"f1\":1},\"x2\":{\"f1\":1},\"x3\":[{\"f1\":1}],\"x4\":[{\"f1\":1}],\"x5\":[{\"f1\":1}],\"x6\":[{\"f1\":1}]}", r);
 		r = s.getSchemaSerializer().serialize(t);
 		assertEquals(r.indexOf("f2"), -1);
 	}
@@ -184,13 +184,13 @@ class Common_Test extends TestBase {
 	// @Beanp.bpi annotation on list of beans.
 	//====================================================================================================
 	@Test void a06_beanPropertyProperiesOnListOfBeans() throws Exception {
-		var s = Json5Serializer.DEFAULT;
+		var s = JsonSerializer.DEFAULT;
 		var l = new LinkedList<>();
 		var t = new F();
 		t.x1.add(new F());
 		l.add(t);
 		var json = s.serialize(l);
-		assertEquals("[{x1:[{x2:2}],x2:2}]", json);
+		assertEquals("[{\"x1\":[{\"x2\":2}],\"x2\":2}]", json);
 	}
 
 	public static class F {
@@ -202,8 +202,8 @@ class Common_Test extends TestBase {
 	// Test that URLs and URIs are serialized and parsed correctly.
 	//====================================================================================================
 	@Test void a07_uRIAttr() throws Exception {
-		var s = Json5Serializer.DEFAULT;
-		var p = Json5Parser.DEFAULT;
+		var s = JsonSerializer.DEFAULT;
+		var p = JsonParser.DEFAULT;
 
 		var t = new G();
 		t.uri = new URI("http://uri");
@@ -227,7 +227,7 @@ class Common_Test extends TestBase {
 	// Recursion
 	//====================================================================================================
 	@Test void a08_recursion() throws Exception {
-		var s = Json5Serializer.create().maxDepth(Integer.MAX_VALUE);
+		var s = JsonSerializer.create().maxDepth(Integer.MAX_VALUE);
 
 		var r1 = new R1();
 		var r2 = new R2();
@@ -244,7 +244,7 @@ class Common_Test extends TestBase {
 		assertThrowsWithMessage(Exception.class, "$R1", ()->s.build().serialize(r1));
 
 		s.ignoreRecursions();
-		assertEquals("{name:'foo',r2:{name:'bar',r3:{name:'baz'}}}", s.build().serialize(r1));
+		assertEquals("{\"name\":\"foo\",\"r2\":{\"name\":\"bar\",\"r3\":{\"name\":\"baz\"}}}", s.build().serialize(r1));
 
 		// Make sure this doesn't blow up.
 		s.build().getSchemaSerializer().serialize(r1);
@@ -267,13 +267,13 @@ class Common_Test extends TestBase {
 	// Basic bean
 	//====================================================================================================
 	@Test void a09_basicBean() throws Exception {
-		var s = Json5Serializer.create().keepNullProperties().sortProperties().build();
+		var s = JsonSerializer.create().keepNullProperties().sortProperties().build();
 
 		var a = new J();
 		a.setF1("J");
 		a.setF2(100);
 		a.setF3(true);
-		assertEquals("{f1:'J',f2:100,f3:true}", s.serialize(a));
+		assertEquals("{\"f1\":\"J\",\"f2\":100,\"f3\":true}", s.serialize(a));
 	}
 
 	public static class J {
@@ -301,21 +301,21 @@ class Common_Test extends TestBase {
 
 	@Test
 	void a10_beanpFormat() throws Exception {
-		var s = Json5Serializer.create().sortProperties().build();
+		var s = JsonSerializer.create().sortProperties().build();
 
 		var bean = new K();
 		var json = s.serialize(bean);
 
 		// Verify all formatted fields are serialized correctly
-		assertTrue(json.contains("floatField:'3.14'"));
-		assertTrue(json.contains("floatWithCurrency:'$19.99'"));
-		assertTrue(json.contains("doubleField:'2.718'"));
-		assertTrue(json.contains("privateField:'9.88'"));
-		assertTrue(json.contains("intField:'00042'"));
-		assertTrue(json.contains("longField:'0000001234567890'"));
-		assertTrue(json.contains("hexField:'0xFF00FF'"));
-		assertTrue(json.contains("scientificField:'6.022e+23'") || json.contains("scientificField:'6.022E+23'"));
-		assertTrue(json.contains("name:'Test'"));
+		assertTrue(json.contains("floatField\":\"3.14\""));
+		assertTrue(json.contains("floatWithCurrency\":\"$19.99\""));
+		assertTrue(json.contains("doubleField\":\"2.718\""));
+		assertTrue(json.contains("privateField\":\"9.88\""));
+		assertTrue(json.contains("intField\":\"00042\""));
+		assertTrue(json.contains("longField\":\"0000001234567890\""));
+		assertTrue(json.contains("hexField\":\"0xFF00FF\""));
+		assertTrue(json.contains("scientificField\":\"6.022e+23\"") || json.contains("scientificField\":\"6.022E+23\""));
+		assertTrue(json.contains("name\":\"Test\""));
 	}
 
 	public static class K {

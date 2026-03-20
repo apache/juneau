@@ -27,6 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.json.JsonSerializer;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -110,7 +111,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Limitations compared to JSON</h5>
  * <p>
- * The YAML serializer has fewer configuration options than {@link org.apache.juneau.json.JsonSerializer JsonSerializer}:
+ * The YAML serializer has fewer configuration options than {@link JsonSerializer}:
  * <ul class='spaced-list'>
  * 	<li>
  * 		No compact single-line output mode; YAML is always emitted in block-style (indentation-based) format.

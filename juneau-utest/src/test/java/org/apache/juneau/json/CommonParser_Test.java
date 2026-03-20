@@ -37,18 +37,18 @@ class CommonParser_Test extends TestBase {
 	// testFromSerializer
 	//====================================================================================================
 	@Test void a01_fromSerializer() throws Exception {
-		var p = Json5Parser.create().beanDictionary(A1.class).build();
+		var p = JsonParser.create().beanDictionary(A1.class).build();
 
-		var m = (Map)p.parse("{a:1}", Object.class);
+		var m = (Map)p.parse("{\"a\":1}", Object.class);
 		assertEquals(1, m.get("a"));
-		m = (Map)p.parse("{a:1,b:\"foo bar\"}", Object.class);
+		m = (Map)p.parse("{\"a\":1,\"b\":\"foo bar\"}", Object.class);
 		assertBean(m, "a,b", "1,foo bar");
-		m = (Map)p.parse("{a:1,b:\"foo bar\",c:false}", Object.class);
+		m = (Map)p.parse("{\"a\":1,\"b\":\"foo bar\",\"c\":false}", Object.class);
 		assertBean(m, "a,c", "1,false");
-		m = (Map)p.parse(" { a : 1 , b : 'foo' , c : false } ", Object.class);
+		m = (Map)p.parse(" { \"a\" : 1 , \"b\" : \"foo\" , \"c\" : false } ", Object.class);
 		assertBean(m, "a,b,c", "1,foo,false");
 
-		m = (Map)p.parse("{x:\"org.apache.juneau.test.Person\",addresses:[{x:\"org.apache.juneau.test.Address\",city:\"city A\",state:\"state A\",street:\"street A\",zip:12345}]}", Object.class);
+		m = (Map)p.parse("{\"x\":\"org.apache.juneau.test.Person\",\"addresses\":[{\"x\":\"org.apache.juneau.test.Address\",\"city\":\"city A\",\"state\":\"state A\",\"street\":\"street A\",\"zip\":12345}]}", Object.class);
 		assertEquals("org.apache.juneau.test.Person", m.get("x"));
 		var l = (List)m.get("addresses");
 		assertNotNull(l);
@@ -56,20 +56,18 @@ class CommonParser_Test extends TestBase {
 		assertNotNull(m);
 		assertBean(m, "x,city,state,street,zip", "org.apache.juneau.test.Address,city A,state A,street A,12345");
 
-		var jl = (JsonList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
+		var jl = (JsonList)p.parse("[{\"attribute\":\"value\"},{\"attribute\":\"value\"}]", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 
 		// Verify that all the following return null.
 		assertNull(p.parse((CharSequence)null, Object.class));
-		assertNull(p.parse("", Object.class));
-		assertNull(p.parse("   ", Object.class));
-		assertNull(p.parse("   \t", Object.class));
-		assertNull(p.parse("   /*foo*/", Object.class));
-		assertNull(p.parse("   /*foo*/   ", Object.class));
-		assertNull(p.parse("   //foo   ", Object.class));
+		// JsonParser throws for empty/whitespace; Json5Parser returns null
+		assertThrows(ParseException.class, ()->p.parse("", Object.class));
+		assertThrows(ParseException.class, ()->p.parse("   ", Object.class));
+		assertThrows(ParseException.class, ()->p.parse("   \t", Object.class));
 
-		jl = (JsonList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
+		jl = (JsonList)p.parse("[{\"attribute\":\"value\"},{\"attribute\":\"value\"}]", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 
@@ -108,12 +106,12 @@ class CommonParser_Test extends TestBase {
 	// Correct handling of unknown properties.
 	//====================================================================================================
 	@Test void a02_correctHandlingOfUnknownProperties() throws Exception {
-		var p = Json5Parser.create().ignoreUnknownBeanProperties().build();
-		var in = "{a:1,unknown:3,b:2}";
+		var p = JsonParser.create().ignoreUnknownBeanProperties().build();
+		var in = "{\"a\":1,\"unknown\":3,\"b\":2}";
 		var b = p.parse(in, B.class);
 		assertEquals(1, b.a);
 		assertEquals(2, b.b);
-		assertThrows(ParseException.class, ()->Json5Parser.DEFAULT.parse(in, B.class));
+		assertThrows(ParseException.class, ()->JsonParser.DEFAULT.parse(in, B.class));
 	}
 
 	public static class B {
@@ -124,8 +122,8 @@ class CommonParser_Test extends TestBase {
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
 	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
-		var p = Json5Parser.DEFAULT;
-		var json = "{ints:[1,2,3],beans:[{a:1,b:2}]}";
+		var p = JsonParser.DEFAULT;
+		var json = "{\"ints\":[1,2,3],\"beans\":[{\"a\":1,\"b\":2}]}";
 		var t = p.parse(json, C.class);
 		assertSize(3, t.getInts());
 		assertEquals(2, t.getBeans().get(0).b);
@@ -143,11 +141,11 @@ class CommonParser_Test extends TestBase {
 	// Parser listeners.
 	//====================================================================================================
 	@Test void a04_parserListeners() throws Exception {
-		var p = Json5Parser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
-		var json = "{a:1,unknownProperty:\"/foo\",b:2}";
+		var p = JsonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
+		var json = "{\"a\":1,\"unknownProperty\":\"/foo\",\"b\":2}";
 		p.parse(json, B.class);
 		assertSize(1, MyParserListener.events);
-		assertEquals("unknownProperty, line 1, column 5", MyParserListener.events.get(0));
+		assertEquals("unknownProperty, line 1, column 7", MyParserListener.events.get(0));
 	}
 
 	public static class MyParserListener extends ParserListener {

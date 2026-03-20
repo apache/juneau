@@ -24,6 +24,7 @@ import java.io.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;

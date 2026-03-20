@@ -109,7 +109,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 	}
 
 	@Test void a01_callHandler() throws Exception {
-		client().callHandler(A1.class).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertContent("['f1','f2','baz']");
+		client().callHandler(A1.class).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertContent("[\"f1\",\"f2\",\"baz\"]");
 	}
 
 	@Test void a02_errorCodes() throws RestCallException {
@@ -253,13 +253,13 @@ class RestClient_Config_RestClient_Test extends TestBase {
 	}
 
 	@Test void a05_interceptors() throws Exception {
-		client().header("Foo","f1").interceptors(A5.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertContent("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").interceptors(A5.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertContent("[\"f1\",\"f2\",\"f3\"]").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
-		client().header("Foo","f1").interceptors(new A5()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertContent("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").interceptors(new A5()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertContent("[\"f1\",\"f2\",\"f3\"]").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
-		client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5()).header("Check","foo").header("Foo","f3").run().assertContent("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5()).header("Check","foo").header("Foo","f3").run().assertContent("[\"f1\",\"f2\",\"f3\"]").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
 		assertThrowsWithMessage(RuntimeException.class, "foo", ()->client().header("Foo","f1").interceptors(A5a.class).build().get("/checkHeader"));
@@ -461,24 +461,24 @@ class RestClient_Config_RestClient_Test extends TestBase {
 	}
 
 	@Test void a14_request_target() throws Exception {
-		client().build().get("/bean").target(new HttpHost("localhost")).run().assertContent("{f:1}");
+		client().build().get("/bean").target(new HttpHost("localhost")).run().assertContent("{\"f\":1}");
 	}
 
 	@Test void a15_request_context() throws Exception {
-		client().build().get("/bean").context(new BasicHttpContext()).run().assertContent("{f:1}");
+		client().build().get("/bean").context(new BasicHttpContext()).run().assertContent("{\"f\":1}");
 	}
 
 	@Test void a16_request_uriParts() throws Exception {
-		var uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo:bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{f:1}").getRequest().getURI();
+		var uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo:bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{\"f\":1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 
-		uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo","bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{f:1}").getRequest().getURI();
+		uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo","bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{\"f\":1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 
-		uri = client().build().get().uri("http://localhost").uri("http://foo:bar@localhost:8080/bean?foo=bar#baz").run().assertContent("{f:1}").getRequest().getURI();
+		uri = client().build().get().uri("http://localhost").uri("http://foo:bar@localhost:8080/bean?foo=bar#baz").run().assertContent("{\"f\":1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 
-		uri = client().build().get().uri(new java.net.URI(null,null,null,null)).uri(new java.net.URI("http://foo:bar@localhost:8080/bean?foo=bar#baz")).run().assertContent("{f:1}").getRequest().getURI();
+		uri = client().build().get().uri(new java.net.URI(null,null,null,null)).uri(new java.net.URI("http://foo:bar@localhost:8080/bean?foo=bar#baz")).run().assertContent("{\"f\":1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 	}
 
@@ -500,10 +500,10 @@ class RestClient_Config_RestClient_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).json5();
+		return MockRestClient.create(A.class).json();
 	}
 
 	private static RestClient.Builder client(Class<?> c) {
-		return MockRestClient.create(c).json5();
+		return MockRestClient.create(c).json();
 	}
 }

@@ -36,7 +36,7 @@ public class JsonConfigAnnotation {
 	private JsonConfigAnnotation() {}
 
 	/**
-	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.json.JsonParser.Builder}.
+	 * Applies {@link JsonConfig} annotations to a {@link JsonParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<JsonConfig,JsonParser.Builder> {
 
@@ -58,7 +58,7 @@ public class JsonConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.json.JsonSerializer.Builder}.
+	 * Applies {@link JsonConfig} annotations to a {@link JsonSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<JsonConfig,JsonSerializer.Builder> {
 

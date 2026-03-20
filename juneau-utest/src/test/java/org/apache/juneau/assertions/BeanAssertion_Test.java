@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 class BeanAssertion_Test extends TestBase {

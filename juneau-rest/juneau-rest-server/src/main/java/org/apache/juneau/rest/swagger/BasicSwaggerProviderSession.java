@@ -41,6 +41,7 @@ import org.apache.juneau.http.annotation.Contact;
 import org.apache.juneau.http.annotation.License;
 import org.apache.juneau.http.annotation.Tag;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;

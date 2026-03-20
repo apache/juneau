@@ -24,7 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;

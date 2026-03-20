@@ -90,15 +90,15 @@ class SerializedHttpEntity_Test extends TestBase {
 	}
 
 	@Test void a09_chunked() throws Exception {
-		checkHeaderClient("Transfer-Encoding").post("/",serializedEntity(ABean.get(),null).setChunked()).run().assertContent("['chunked']");
+		checkHeaderClient("Transfer-Encoding").post("/",serializedEntity(ABean.get(),null).setChunked()).run().assertContent("[\"chunked\"]");
 	}
 
 	@Test void a10_contentEncoding() throws Exception {
-		checkHeaderClient("Content-Encoding").post("/",serializedEntity(ABean.get(),null).setContentEncoding("identity")).run().assertContent("['identity']");
+		checkHeaderClient("Content-Encoding").post("/",serializedEntity(ABean.get(),null).setContentEncoding("identity")).run().assertContent("[\"identity\"]");
 	}
 
 	@Test void a12_contentType() throws Exception {
-		checkHeaderClient("Content-Type").post("/",serializedEntity(reader("foo"),null).setContentType("text/foo")).run().assertContent("['text/foo']");
+		checkHeaderClient("Content-Type").post("/",serializedEntity(reader("foo"),null).setContentType("text/foo")).run().assertContent("[\"text/foo\"]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -110,6 +110,6 @@ class SerializedHttpEntity_Test extends TestBase {
 	}
 
 	private static RestClient checkHeaderClient(String header) {
-		return MockRestClient.create(A.class).rootUrl("http://localhost/checkHeader").json5().header("Check",header).ignoreErrors().build();
+		return MockRestClient.create(A.class).rootUrl("http://localhost/checkHeader").json().header("Check",header).ignoreErrors().build();
 	}
 }

@@ -19,6 +19,7 @@ package org.apache.juneau;
 import static org.apache.juneau.TestUtils.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 /*

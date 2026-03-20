@@ -30,7 +30,7 @@ import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;

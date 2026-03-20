@@ -19,6 +19,7 @@ package org.apache.juneau.toml;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.json.JsonSerializer;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -81,7 +82,7 @@ import org.apache.juneau.serializer.*;
  * <h5 class='topic'>Limitations compared to JSON</h5>
  * <p>
  * TOML is a configuration format with a more restricted type system than JSON.
- * The following features supported by {@link org.apache.juneau.json.JsonSerializer JsonSerializer}
+ * The following features supported by {@link JsonSerializer}
  * are not available or limited in TOML:
  * </p>
  * <ul class='spaced-list'>

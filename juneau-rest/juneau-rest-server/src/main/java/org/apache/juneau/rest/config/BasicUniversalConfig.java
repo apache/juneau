@@ -23,6 +23,8 @@ import org.apache.juneau.hocon.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
+import org.apache.juneau.jcs.*;
 import org.apache.juneau.jsonl.*;
 import org.apache.juneau.bson.*;
 import org.apache.juneau.cbor.*;

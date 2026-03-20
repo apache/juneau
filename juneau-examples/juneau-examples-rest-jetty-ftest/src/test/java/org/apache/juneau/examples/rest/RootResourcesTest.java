@@ -22,7 +22,7 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;

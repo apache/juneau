@@ -35,6 +35,7 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.hjson.annotation.*;
 import org.apache.juneau.hocon.annotation.*;
 import org.apache.juneau.ini.annotation.*;
+import org.apache.juneau.jcs.annotation.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.jsonl.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
@@ -202,26 +203,26 @@ public abstract class Context {
 		 * The following is the list of annotations builders provided that can be constructed
 		 * and passed into the builder class:
 		 * <ul class='javatreec'>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeancAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanpAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.ExampleAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.NamePropertyAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.ParentPropertyAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.SwapAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.UriAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.SchemaAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.soap.annotation.SoapXmlAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.uon.annotation.UonAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncodingAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.xml.annotation.XmlAnnotation}
+		 * 	<li class='ja'>{@link BeanAnnotation}
+		 * 	<li class='ja'>{@link BeancAnnotation}
+		 * 	<li class='ja'>{@link BeanIgnoreAnnotation}
+		 * 	<li class='ja'>{@link BeanpAnnotation}
+		 * 	<li class='ja'>{@link ExampleAnnotation}
+		 * 	<li class='ja'>{@link NamePropertyAnnotation}
+		 * 	<li class='ja'>{@link ParentPropertyAnnotation}
+		 * 	<li class='ja'>{@link SwapAnnotation}
+		 * 	<li class='ja'>{@link UriAnnotation}
+		 * 	<li class='ja'>{@link CsvAnnotation}
+		 * 	<li class='ja'>{@link HtmlAnnotation}
+		 * 	<li class='ja'>{@link JsonAnnotation}
+		 * 	<li class='ja'>{@link SchemaAnnotation}
+		 * 	<li class='ja'>{@link MsgPackAnnotation}
+		 * 	<li class='ja'>{@link OpenApiAnnotation}
+		 * 	<li class='ja'>{@link PlainTextAnnotation}
+		 * 	<li class='ja'>{@link SoapXmlAnnotation}
+		 * 	<li class='ja'>{@link UonAnnotation}
+		 * 	<li class='ja'>{@link UrlEncodingAnnotation}
+		 * 	<li class='ja'>{@link XmlAnnotation}
 		 * </ul>
 		 *
 		 * <p>
@@ -402,34 +403,34 @@ public abstract class Context {
 		 * Any annotations found that themselves are annotated with {@link ContextApply} will be resolved and
 		 * applied as properties to this builder.  These annotations include:
 		 * <ul class='javatreec'>
-		 * 	<li class ='ja'>{@link BeanConfig}
-		 * 	<li class ='ja'>{@link BsonConfig}
-		 * 	<li class ='ja'>{@link CborConfig}
-		 * 	<li class ='ja'>{@link CsvConfig}
-		 * 	<li class ='ja'>{@link HtmlConfig}
-		 * 	<li class ='ja'>{@link HtmlDocConfig}
-		 * 	<li class ='ja'>{@link HjsonConfig}
-		 * 	<li class ='ja'>{@link HoconConfig}
-		 * 	<li class ='ja'>{@link IniConfig}
-		 * 	<li class ='ja'>{@link JsonConfig}
-		 * 	<li class ='ja'>{@link JsonlConfig}
-		 * 	<li class ='ja'>{@link JsonSchemaConfig}
-		 * 	<li class ='ja'>{@link JcsConfig}
-		 * 	<li class ='ja'>{@link MarkdownConfig}
-		 * 	<li class ='ja'>{@link MsgPackConfig}
-		 * 	<li class ='ja'>{@link OpenApiConfig}
-		 * 	<li class ='ja'>{@link ParserConfig}
-		 * 	<li class ='ja'>{@link ParquetConfig}
-		 * 	<li class ='ja'>{@link ProtoConfig}
-		 * 	<li class ='ja'>{@link PlainTextConfig}
-		 * 	<li class ='ja'>{@link SerializerConfig}
-		 * 	<li class ='ja'>{@link SoapXmlConfig}
-		 * 	<li class ='ja'>{@link TomlConfig}
-		 * 	<li class ='ja'>{@link UonConfig}
-		 * 	<li class ='ja'>{@link UrlEncodingConfig}
-		 * 	<li class ='ja'>{@link XmlConfig}
-		 * 	<li class ='ja'>{@link YamlConfig}
-		 * 	<li class ='ja'><c>RdfConfig</c>
+		 * 	<li class='ja'>{@link BeanConfig}
+		 * 	<li class='ja'>{@link BsonConfig}
+		 * 	<li class='ja'>{@link CborConfig}
+		 * 	<li class='ja'>{@link CsvConfig}
+		 * 	<li class='ja'>{@link HtmlConfig}
+		 * 	<li class='ja'>{@link HtmlDocConfig}
+		 * 	<li class='ja'>{@link HjsonConfig}
+		 * 	<li class='ja'>{@link HoconConfig}
+		 * 	<li class='ja'>{@link IniConfig}
+		 * 	<li class='ja'>{@link JsonConfig}
+		 * 	<li class='ja'>{@link JsonlConfig}
+		 * 	<li class='ja'>{@link JsonSchemaConfig}
+		 * 	<li class='ja'>{@link JcsConfig}
+		 * 	<li class='ja'>{@link MarkdownConfig}
+		 * 	<li class='ja'>{@link MsgPackConfig}
+		 * 	<li class='ja'>{@link OpenApiConfig}
+		 * 	<li class='ja'>{@link ParserConfig}
+		 * 	<li class='ja'>{@link ParquetConfig}
+		 * 	<li class='ja'>{@link ProtoConfig}
+		 * 	<li class='ja'>{@link PlainTextConfig}
+		 * 	<li class='ja'>{@link SerializerConfig}
+		 * 	<li class='ja'>{@link SoapXmlConfig}
+		 * 	<li class='ja'>{@link TomlConfig}
+		 * 	<li class='ja'>{@link UonConfig}
+		 * 	<li class='ja'>{@link UrlEncodingConfig}
+		 * 	<li class='ja'>{@link XmlConfig}
+		 * 	<li class='ja'>{@link YamlConfig}
+		 * 	<li class='ja'><c>RdfConfig</c>
 		 * </ul>
 		 *
 		 * <p>

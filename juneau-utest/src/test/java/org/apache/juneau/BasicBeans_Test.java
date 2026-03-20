@@ -22,7 +22,7 @@ import java.beans.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 class BasicBeans_Test extends TestBase {

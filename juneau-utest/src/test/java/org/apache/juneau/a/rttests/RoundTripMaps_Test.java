@@ -28,6 +28,8 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.cbor.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
+import org.apache.juneau.jcs.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swaps.*;

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 class ObjectAssertion_Test extends TestBase {

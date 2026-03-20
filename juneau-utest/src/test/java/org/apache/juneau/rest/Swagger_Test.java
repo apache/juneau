@@ -1865,6 +1865,6 @@ class Swagger_Test extends TestBase {
 		var o = s.getOperation("/", "get");
 
 		var ri = o.getResponse("200");
-		assertBean(ri.getExamples(), "application/json5", "{\n\tf1: 1,\n\tf2: 2\n}");
+		assertBean(ri.getExamples(), "application/json", "{\n\t\"f1\": 1,\n\t\"f2\": 2\n}");
 	}
 }

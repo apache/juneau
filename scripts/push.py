@@ -418,7 +418,7 @@ Examples:
         if not args.skip_tests:
             print(f"  {step_num}. Run tests: python3 scripts/test.py --full")
             step_num += 1
-        print(f"  {step_num}. Build and install: mvn clean package install")
+        print(f"  {step_num}. Build and install: mvn clean package install -DskipTests")
         step_num += 1
         print(f"  {step_num}. Commit changes: git add . && git commit -m \"{args.message}\"")
         step_num += 1
@@ -474,9 +474,9 @@ Examples:
         print(f"\n⏭️  Step {step_num}: Skipping tests (--skip-tests flag)")
         step_num += 1
     
-    # Step 2: Build and install
+    # Step 2: Build and install (skip tests - already run in Step 1)
     if not run_command(
-        ["mvn", "clean", "package", "install"],
+        ["mvn", "clean", "package", "install", "-DskipTests"],
         f"🏗️  Step {step_num}: Building and installing project...",
         juneau_root
     ):

@@ -31,6 +31,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 

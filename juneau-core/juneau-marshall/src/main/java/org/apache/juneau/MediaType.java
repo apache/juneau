@@ -29,6 +29,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.Json5Serializer;
 
 /**
  * Describes a single media type used in content negotiation between an HTTP client and server, as described in
@@ -381,7 +382,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * 		comparing media type.
 	 * 		<ul>
 	 * 			<li>We want the {@link JsonSerializer} (<js>"text/json"</js>) class to be able to handle requests for <js>"text/json+foo"</js>.
-	 * 			<li>We want to make sure {@link org.apache.juneau.json.Json5Serializer} (<js>"text/json5"</js>) does not handle
+	 * 			<li>We want to make sure {@link Json5Serializer} (<js>"text/json5"</js>) does not handle
 	 * 				requests for <js>"text/json"</js>.
 	 * 		</ul>
 	 * 		More token matches should result in a higher match number.

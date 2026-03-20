@@ -25,7 +25,7 @@ import java.net.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 
 /**
  * A container for retrieving JSON {@link JsonSchema} objects by URI.

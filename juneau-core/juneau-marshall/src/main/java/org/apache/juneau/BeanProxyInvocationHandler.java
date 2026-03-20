@@ -24,6 +24,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 
 /**
  * Provides an {@link InvocationHandler} for creating dynamic proxy instances of bean interfaces.

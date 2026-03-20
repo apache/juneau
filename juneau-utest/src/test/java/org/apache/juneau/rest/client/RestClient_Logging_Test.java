@@ -77,17 +77,17 @@ class RestClient_Logging_Test extends TestBase {
 			"=== REQUEST ===",
 			"POST http://localhost/bean",
 			"---request headers---",
-			"	Accept: application/json5",
+			"	Accept: application/json",
 			"---request entity---",
-			"	Content-Type: application/json5",
+			"	Content-Type: application/json",
 			"---request content---",
-			"{f:1}",
+			"{\"f\":1}",
 			"=== RESPONSE ===",
 			"HTTP/1.1 200 ",
 			"---response headers---",
-			"	Content-Type: application/json5",
+			"	Content-Type: application/json",
 			"---response content---",
-			"{f:1}",
+			"{\"f\":1}",
 			"=== END ======================================================================="
 		);
 		c.reset();
@@ -98,13 +98,13 @@ class RestClient_Logging_Test extends TestBase {
 			"=== REQUEST ===",
 			"GET http://localhost/bean",
 			"---request headers---",
-			"	Accept: application/json5",
+			"	Accept: application/json",
 			"=== RESPONSE ===",
 			"HTTP/1.1 200 ",
 			"---response headers---",
-			"	Content-Type: application/json5",
+			"	Content-Type: application/json",
 			"---response content---",
-			"{f:1}",
+			"{\"f\":1}",
 			"=== END ======================================================================="
 		);
 		c.reset();
@@ -152,17 +152,17 @@ class RestClient_Logging_Test extends TestBase {
 			"=== REQUEST ===",
 			"POST http://localhost/bean",
 			"---request headers---",
-			"	Accept: application/json5",
+			"	Accept: application/json",
 			"---request entity---",
-			"	Content-Type: application/json5",
+			"	Content-Type: application/json",
 			"---request content---",
-			"{f:1}",
+			"{\"f\":1}",
 			"=== RESPONSE ===",
 			"HTTP/1.1 200 ",
 			"---response headers---",
-			"	Content-Type: application/json5",
+			"	Content-Type: application/json",
 			"---response content---",
-			"{f:1}",
+			"{\"f\":1}",
 			"=== END ======================================================================="
 		);
 		l.assertContents().asTrimmed().asJavaStrings().isContains(
@@ -171,17 +171,17 @@ class RestClient_Logging_Test extends TestBase {
 			"=== REQUEST ===",
 			"POST http://localhost/bean",
 			"---request headers---",
-			"	Accept: application/json5",
+			"	Accept: application/json",
 			"---request entity---",
-			"	Content-Type: application/json5",
+			"	Content-Type: application/json",
 			"---request content---",
-			"{f:1}",
+			"{\"f\":1}",
 			"=== RESPONSE ===",
 			"HTTP/1.1 200 ",
 			"---response headers---",
-			"	Content-Type: application/json5",
+			"	Content-Type: application/json",
 			"---response content---",
-			"{f:1}",
+			"{\"f\":1}",
 			"=== END ======================================================================="
 		);
 	}
@@ -221,7 +221,7 @@ class RestClient_Logging_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static MockRestClient.Builder client() {
-		return MockRestClient.create(A.class).json5();
+		return MockRestClient.create(A.class).json();
 	}
 
 	private static MockRestClient.Builder clientPlain() {

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.json;
+package org.apache.juneau.jcs;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 /**

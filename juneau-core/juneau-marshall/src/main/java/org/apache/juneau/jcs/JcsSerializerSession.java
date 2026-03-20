@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.json;
+package org.apache.juneau.jcs;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -25,6 +25,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
 /**

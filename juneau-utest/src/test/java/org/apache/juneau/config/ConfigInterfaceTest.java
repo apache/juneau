@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 

@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;

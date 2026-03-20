@@ -220,59 +220,59 @@ class RestClient_Test extends TestBase {
 
 	@Test void c07_httpClient_executeHttpUriRequest() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
-		x.addHeader("Accept","text/json5");
+		x.addHeader("Accept","application/json");
 		var res = MockRestClient.create(A.class).build().execute(x);
-		assertEquals("{f:1}",read(res.getEntity().getContent()));
+		assertEquals("{\"f\":1}",read(res.getEntity().getContent()));
 	}
 
 	@Test void c08_httpClient_executeHttpHostHttpRequest() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		var target = new HttpHost("localhost");
-		x.addHeader("Accept","text/json5");
+		x.addHeader("Accept","application/json");
 		var res = MockRestClient.create(A.class).build().execute(target,x);
-		assertEquals("{f:1}",read(res.getEntity().getContent()));
+		assertEquals("{\"f\":1}",read(res.getEntity().getContent()));
 	}
 
 	@Test void c09_httpClient_executeHttpHostHttpRequestHttpContext() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
 		var target = new HttpHost("localhost");
 		var context = new BasicHttpContext();
-		x.addHeader("Accept","text/json5");
+		x.addHeader("Accept","application/json");
 		var res = MockRestClient.create(A.class).build().execute(target,x,context);
-		assertEquals("{f:1}",read(res.getEntity().getContent()));
+		assertEquals("{\"f\":1}",read(res.getEntity().getContent()));
 	}
 
 	@Test void c10_httpClient_executeResponseHandler() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
-		x.addHeader("Accept","text/json5");
+		x.addHeader("Accept","application/json");
 		var res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler());
-		assertEquals("{f:1}",res);
+		assertEquals("{\"f\":1}",res);
 	}
 
 	@Test void c11_httpClient_executeHttpUriRequestResponseHandlerHttpContext() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
-		x.addHeader("Accept","text/json5");
+		x.addHeader("Accept","application/json");
 		var res = MockRestClient.create(A.class).build().execute(x,new BasicResponseHandler(),new BasicHttpContext());
-		assertEquals("{f:1}",res);
+		assertEquals("{\"f\":1}",res);
 	}
 
 	@Test void c12_httpClient_executeHttpHostHttpRequestResponseHandlerHttpContext() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
-		x.addHeader("Accept","text/json5");
+		x.addHeader("Accept","application/json");
 		var res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler(),new BasicHttpContext());
-		assertEquals("{f:1}",res);
+		assertEquals("{\"f\":1}",res);
 	}
 
 	@Test void c13_httpClient_executeHttpHostHttpRequestResponseHandler() throws Exception {
 		var x = new HttpGet("http://localhost/bean");
-		x.addHeader("Accept","text/json5");
+		x.addHeader("Accept","application/json");
 		var res = MockRestClient.create(A.class).build().execute(new HttpHost("localhost"),x,new BasicResponseHandler());
-		assertEquals("{f:1}",res);
+		assertEquals("{\"f\":1}",res);
 	}
 
 	@Test void c14_httpClient_requestConfig() throws Exception {
 		var req = client().build().get("/bean").config(RequestConfig.custom().setMaxRedirects(1).build());
-		req.run().assertContent("{f:1}");
+		req.run().assertContent("{\"f\":1}");
 		assertEquals(1, req.getConfig().getMaxRedirects());
 	}
 
@@ -420,11 +420,11 @@ class RestClient_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).json5();
+		return MockRestClient.create(A.class).json();
 	}
 
 	private static RestClient.Builder client(Class<?> c) {
-		return MockRestClient.create(c).noTrace().json5();
+		return MockRestClient.create(c).noTrace().json();
 	}
 
 	private static Header header(String name, Object val) {

@@ -27,6 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.json5.Json5Parser;
 import org.apache.juneau.parser.*;
 
 /**
@@ -44,7 +45,7 @@ import org.apache.juneau.parser.*;
  * 	<li>2-column key/value tables are parsed as beans or {@link java.util.Map}s.
  * 	<li>Multi-column tables are parsed as {@link java.util.List}s of beans or {@link java.util.Map}s.
  * 	<li>Bulleted lists are parsed as {@link java.util.List}s.
- * 	<li>Table cells containing backtick-wrapped JSON5 values are parsed via {@link org.apache.juneau.json.Json5Parser}.
+ * 	<li>Table cells containing backtick-wrapped JSON5 values are parsed via {@link Json5Parser}.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>

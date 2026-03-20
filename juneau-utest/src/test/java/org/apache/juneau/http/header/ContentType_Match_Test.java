@@ -22,7 +22,7 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

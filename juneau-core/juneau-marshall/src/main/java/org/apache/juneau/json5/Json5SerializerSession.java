@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.json;
+package org.apache.juneau.json5;
 
+import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -79,7 +80,7 @@ public class Json5SerializerSession extends JsonSerializerSession {
 		var output = out.getRawOutput();
 		if (output instanceof JsonWriter output2)
 			return output2;
-		var w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), true, isTrimStrings(), getUriResolver());
+		var w = JsonWriter.create(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), true, isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}

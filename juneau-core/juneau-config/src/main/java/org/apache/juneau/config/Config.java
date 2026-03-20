@@ -39,6 +39,7 @@ import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;

@@ -91,6 +91,25 @@ public class JsonWriter extends SerializerWriter {
 		this.ec = escapeSolidus ? encodedChars2 : encodedChars;
 	}
 
+	/**
+	 * Creates a new JsonWriter instance.
+	 * <p>
+	 * Provided for subclasses in other packages (e.g. Json5SerializerSession) that need to create JsonWriter instances.
+	 *
+	 * @param out The writer being wrapped.
+	 * @param useWhitespace If <jk>true</jk>, tabs and spaces will be used in output.
+	 * @param maxIndent The maximum indentation level.
+	 * @param escapeSolidus If <jk>true</jk>, forward slashes should be escaped in the output.
+	 * @param quoteChar The quote character to use (i.e. <js>'\''</js> or <js>'"'</js>)
+	 * @param simpleAttrs If <jk>true</jk>, JSON attributes will only be quoted when necessary.
+	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
+	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
+	 * @return A new JsonWriter instance.
+	 */
+	public static JsonWriter create(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
+		return new JsonWriter(out, useWhitespace, maxIndent, escapeSolidus, quoteChar, simpleAttrs, trimStrings, uriResolver);
+	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter append(char c) {
 		super.append(c);

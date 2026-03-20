@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -672,7 +673,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 	 *
 	 * <p>
 	 * When this returns true, table rows and key-value tables should be converted to a JSON5 string
-	 * and parsed via {@link org.apache.juneau.json.Json5Parser} (using
+	 * and parsed via {@link Json5Parser} (using
 	 * {@link org.apache.juneau.parser.Parser#parseWithOuter}) to correctly handle swaps,
 	 * {@link org.apache.juneau.annotation.ParentProperty @ParentProperty}, and non-standard constructors.
 	 */
@@ -716,7 +717,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 
 	/**
 	 * Converts a table row (headers + cells) into a JSON5 object string, suitable for parsing via
-	 * {@link org.apache.juneau.json.Json5Parser}.
+	 * {@link Json5Parser}.
 	 *
 	 * <p>
 	 * Example: headers=["f1","f2"], cells=["a","2"] → <code>{f1:'a',f2:2}</code>

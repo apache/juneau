@@ -17,6 +17,7 @@
 package org.apache.juneau.marshaller;
 
 import org.apache.juneau.json.*;
+import org.apache.juneau.jcs.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 

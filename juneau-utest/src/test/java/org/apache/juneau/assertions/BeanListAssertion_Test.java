@@ -26,7 +26,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 class BeanListAssertion_Test extends TestBase {

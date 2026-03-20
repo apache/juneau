@@ -70,36 +70,33 @@ public class RestClient_Marshalls_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_singleLanguages() throws Exception {
-		var x1 = client().json5().build();
-		var x2 = client().json().build();
-		var x3 = client().xml().build();
-		var x4 = client().html().build();
-		var x5 = client().plainText().build();
-		var x6 = client().msgPack().build();
-		var x7 = client().uon().build();
-		var x8 = client().urlEnc().build();
-		var x9 = client().openApi().build();
-		var x10 = client().htmlDoc().build();
-		var x11 = client().htmlStrippedDoc().build();
-		x1.post("/a01",bean).header("X-Accept","application/json5").header("X-Content-Type","application/json5").run().assertStatus(200).getContent().as(Bean.class).check();
-		x2.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
-		x3.post("/a01",bean).header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertStatus(200).getContent().as(Bean.class).check();
-		x4.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertStatus(200).getContent().as(Bean.class).check();
-		x5.post("/a01",bean).header("X-Accept","text/plain").header("X-Content-Type","text/plain").run().assertStatus(200).getContent().as(Bean.class).check();
-		x6.post("/a01",bean).header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").run().assertStatus(200).getContent().as(Bean.class).check();
-		x7.post("/a01",bean).header("X-Accept","text/uon").header("X-Content-Type","text/uon").run().assertStatus(200).getContent().as(Bean.class).check();
-		x8.post("/a01",bean).header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertStatus(200).getContent().as(Bean.class).check();
-		x9.post("/a01",bean).header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertStatus(200).getContent().as(Bean.class).check();
-		x10.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertStatus(200).getContent().as(Bean.class).check();
-		x11.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html+stripped").run().assertStatus(200).getContent().as(Bean.class).check();
+		var x1 = client().json().build();
+		var x2 = client().xml().build();
+		var x3 = client().html().build();
+		var x4 = client().plainText().build();
+		var x5 = client().msgPack().build();
+		var x6 = client().uon().build();
+		var x7 = client().urlEnc().build();
+		var x8 = client().openApi().build();
+		var x9 = client().htmlDoc().build();
+		var x10 = client().htmlStrippedDoc().build();
+		x1.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
+		x2.post("/a01",bean).header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertStatus(200).getContent().as(Bean.class).check();
+		x3.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertStatus(200).getContent().as(Bean.class).check();
+		x4.post("/a01",bean).header("X-Accept","text/plain").header("X-Content-Type","text/plain").run().assertStatus(200).getContent().as(Bean.class).check();
+		x5.post("/a01",bean).header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").run().assertStatus(200).getContent().as(Bean.class).check();
+		x6.post("/a01",bean).header("X-Accept","text/uon").header("X-Content-Type","text/uon").run().assertStatus(200).getContent().as(Bean.class).check();
+		x7.post("/a01",bean).header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertStatus(200).getContent().as(Bean.class).check();
+		x8.post("/a01",bean).header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertStatus(200).getContent().as(Bean.class).check();
+		x9.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertStatus(200).getContent().as(Bean.class).check();
+		x10.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html+stripped").run().assertStatus(200).getContent().as(Bean.class).check();
 
 		// With override
-		x1.post("/a01",bean).json().header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
+		x2.post("/a01",bean).json().header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();
 	}
 
 	@Test void a02_singleLanguages_perRequest() throws Exception {
 		var x = client().build();
-		x.post("/a01",bean).header("X-Accept","application/json5").header("X-Content-Type","application/json5").json5().run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").json().run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("X-Accept","text/xml").header("X-Content-Type","text/xml").xml().run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").html().run().assertStatus(200).getContent().as(Bean.class).check();

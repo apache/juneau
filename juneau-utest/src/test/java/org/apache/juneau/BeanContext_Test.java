@@ -24,7 +24,7 @@ import java.util.TimeZone;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.settings.Settings;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 

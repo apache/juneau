@@ -14,12 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.json;
+package org.apache.juneau.json5;
 
 import java.io.*;
 
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 
 /**

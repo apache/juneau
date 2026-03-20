@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.rest.*;
 

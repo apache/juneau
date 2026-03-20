@@ -27,6 +27,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;

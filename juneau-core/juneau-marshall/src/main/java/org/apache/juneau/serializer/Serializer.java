@@ -32,6 +32,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.json5.Json5Serializer;
 import org.apache.juneau.soap.*;
 
 /**
@@ -1396,7 +1397,7 @@ public class Serializer extends BeanTraverseContext {
 	 *
 	 * <p>
 	 * This method is specified to override the content type for this serializer.
-	 * For example, the {@link org.apache.juneau.json.Json5Serializer} class returns that it handles media type
+	 * For example, the {@link Json5Serializer} class returns that it handles media type
 	 * <js>"text/json5"</js>, but returns <js>"text/json"</js> as the actual content type.
 	 * This allows clients to request specific 'flavors' of content using specialized <c>Accept</c> header values.
 	 *

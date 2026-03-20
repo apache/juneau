@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.examples.bean.atom;
 
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 
 /**
  * Atom feed JSON example.

@@ -23,6 +23,7 @@ import org.apache.juneau.commons.logging.Logger;
 
 import org.apache.juneau.examples.core.pojo.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 
 /**
  * Json configuration example.

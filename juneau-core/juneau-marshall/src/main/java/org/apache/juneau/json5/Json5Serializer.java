@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.json;
+package org.apache.juneau.json5;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
@@ -26,21 +26,26 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.json.*;
 
 /**
- * Parses any valid JSON text into a POJO model.
+ * Serializes POJO models to Simplified JSON.
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <c>Content-Type</c> types:  <bc>application/json5, text/json5</bc>
+ * Handles <c>Accept</c> types:  <bc>application/json, text/json</bc>
+ * <p>
+ * Produces <c>Content-Type</c> types:  <bc>application/json5</bc>
  *
  * <h5 class='topic'>Description</h5>
+ * <p>
+ * 	This is a JSON serializer that uses simplified notation:
+ * <ul class='spaced-list'>
+ * 	<li>Lax quoting of JSON attribute names.
+ * 	<li>Single quotes.
+ * </ul>
  *
- * Identical to {@link JsonParser} but accepts JSON5 syntax (single quotes, comments, trailing commas,
- * unquoted keys) and uses media type <bc>application/json5</bc>. Use this parser when the input may
- * contain JSON5-style syntax.
- *
- * <h5 class='figure'>Example input (Map of name/age):</h5>
+ * <h5 class='figure'>Example output (Map of name/age):</h5>
  * <p class='bjson'>
  * 	{name:<js>"Alice"</js>,age:30}
  * </p>
@@ -56,28 +61,29 @@ import org.apache.juneau.commons.reflect.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
- * 	<li class='link'>{@link JsonParser} - For strict RFC 8259 JSON only
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for Json5Parser hierarchy
+	"java:S110" // Inheritance depth acceptable
 })
-public class Json5Parser extends JsonParser {
+public class Json5Serializer extends JsonSerializer {
 
 	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends JsonParser.Builder {
+	public static class Builder extends JsonSerializer.Builder {
 
-		private static final Cache<HashKey,Json5Parser> CACHE = Cache.of(HashKey.class, Json5Parser.class).build();
+		private static final Cache<HashKey,Json5Serializer> CACHE = Cache.of(HashKey.class, Json5Serializer.class).build();
 
 		/**
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			consumes("application/json5,text/json5,application/json,text/json");
+			quoteChar('\'')
+				.produces("application/json5")
+				.accept("application/json5,text/json5,application/json;q=0.9,text/json;q=0.9");
 		}
 
 		/**
@@ -96,18 +102,60 @@ public class Json5Parser extends JsonParser {
 		 * @param copyFrom The bean to copy from.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
-		protected Builder(Json5Parser copyFrom) {
+		protected Builder(Json5Serializer copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		@Override /* Overridden from Context.Builder */
-		public Json5Parser build() {
-			return cache(CACHE).build(Json5Parser.class);
+		public Json5Serializer build() {
+			return cache(CACHE).build(Json5Serializer.class);
 		}
 
 		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder accept(String value) {
+			super.accept(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes() {
+			super.addBeanTypes();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes(boolean value) {
+			super.addBeanTypes(value);
+			return this;
+		}
+
+		@Override /* Overridden from JsonSerializer.Builder */
+		public Builder addBeanTypesJson() {
+			super.addBeanTypesJson();
+			return this;
+		}
+
+		@Override /* Overridden from JsonSerializer.Builder */
+		public Builder addBeanTypesJson(boolean value) {
+			super.addBeanTypesJson(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addRootType() {
+			super.addRootType();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addRootType(boolean value) {
+			super.addRootType(value);
+			return this;
 		}
 
 		@Override /* Overridden from Builder */
@@ -131,18 +179,6 @@ public class Json5Parser extends JsonParser {
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams() {
-			super.autoCloseStreams();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams(boolean value) {
-			super.autoCloseStreams(value);
 			return this;
 		}
 
@@ -297,12 +333,6 @@ public class Json5Parser extends JsonParser {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder consumes(String value) {
-			super.consumes(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -315,8 +345,14 @@ public class Json5Parser extends JsonParser {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder debugOutputLines(int value) {
-			super.debugOutputLines(value);
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions(boolean value) {
+			super.detectRecursions(value);
 			return this;
 		}
 
@@ -353,6 +389,18 @@ public class Json5Parser extends JsonParser {
 		@Override /* Overridden from Builder */
 		public Builder disableInterfaceProxies() {
 			super.disableInterfaceProxies();
+			return this;
+		}
+
+		@Override /* Overridden from JsonSerializer.Builder */
+		public Builder escapeSolidus() {
+			super.escapeSolidus();
+			return this;
+		}
+
+		@Override /* Overridden from JsonSerializer.Builder */
+		public Builder escapeSolidus(boolean value) {
+			super.escapeSolidus(value);
 			return this;
 		}
 
@@ -399,6 +447,18 @@ public class Json5Parser extends JsonParser {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions() {
+			super.ignoreRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions(boolean value) {
+			super.ignoreRecursions(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownBeanProperties() {
 			super.ignoreUnknownBeanProperties();
 			return this;
@@ -429,6 +489,12 @@ public class Json5Parser extends JsonParser {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder initialDepth(int value) {
+			super.initialDepth(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
 			super.interfaceClass(on, value);
 			return this;
@@ -441,7 +507,19 @@ public class Json5Parser extends JsonParser {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
+		public Builder keepNullProperties() {
+			super.keepNullProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder keepNullProperties(boolean value) {
+			super.keepNullProperties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
 			super.listener(value);
 			return this;
 		}
@@ -449,6 +527,18 @@ public class Json5Parser extends JsonParser {
 		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder maxIndent(int value) {
+			super.maxIndent(value);
 			return this;
 		}
 
@@ -471,6 +561,12 @@ public class Json5Parser extends JsonParser {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder produces(String value) {
+			super.produces(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
 			super.propertyNamer(on, value);
 			return this;
@@ -483,6 +579,42 @@ public class Json5Parser extends JsonParser {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder quoteChar(char value) {
+			super.quoteChar(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder quoteCharOverride(char value) {
+			super.quoteCharOverride(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortCollections() {
+			super.sortCollections();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortCollections(boolean value) {
+			super.sortCollections(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortMaps() {
+			super.sortMaps();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortMaps(boolean value) {
+			super.sortMaps(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder sortProperties() {
 			super.sortProperties();
 			return this;
@@ -491,6 +623,12 @@ public class Json5Parser extends JsonParser {
 		@Override /* Overridden from Builder */
 		public Builder sortProperties(java.lang.Class<?>...on) {
 			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sq() {
+			super.sq();
 			return this;
 		}
 
@@ -537,6 +675,30 @@ public class Json5Parser extends JsonParser {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder trimEmptyCollections() {
+			super.trimEmptyCollections();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder trimEmptyCollections(boolean value) {
+			super.trimEmptyCollections(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder trimEmptyMaps() {
+			super.trimEmptyMaps();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder trimEmptyMaps(boolean value) {
+			super.trimEmptyMaps(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder trimStrings() {
 			super.trimStrings();
 			return this;
@@ -573,14 +735,20 @@ public class Json5Parser extends JsonParser {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder unbuffered() {
-			super.unbuffered();
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder unbuffered(boolean value) {
-			super.unbuffered(value);
+		public Builder uriRelativity(UriRelativity value) {
+			super.uriRelativity(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uriResolution(UriResolution value) {
+			super.uriResolution(value);
 			return this;
 		}
 
@@ -596,21 +764,46 @@ public class Json5Parser extends JsonParser {
 			return this;
 		}
 
-		@Override /* Overridden from JsonParser.Builder */
-		public Builder validateEnd() {
-			super.validateEnd();
+		@Override /* Overridden from Builder */
+		public Builder useWhitespace() {
+			super.useWhitespace();
 			return this;
 		}
 
-		@Override /* Overridden from JsonParser.Builder */
-		public Builder validateEnd(boolean value) {
-			super.validateEnd(value);
+		@Override /* Overridden from Builder */
+		public Builder useWhitespace(boolean value) {
+			super.useWhitespace(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ws() {
+			super.ws();
 			return this;
 		}
 	}
 
-	/** Default parser, Accept=application/json5. */
-	public static final Json5Parser DEFAULT = new Json5Parser(create());
+	/** Default serializer, single quotes, simple mode, with whitespace. */
+	public static class Readable extends Json5Serializer {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder for this object.
+		 */
+		public Readable(Builder builder) {
+			super(builder.useWhitespace());
+		}
+	}
+
+	/** Default serializer, single quotes. */
+	public static final Json5Serializer DEFAULT = new Json5Serializer(create());
+
+	/** Default serializer, single quotes, sorted bean properties. */
+	public static final Json5Serializer DEFAULT_SORTED = new Json5Serializer(create().sortProperties());
+
+	/** Default serializer, single quotes, with whitespace. */
+	public static final Json5Serializer DEFAULT_READABLE = new Readable(create());
 
 	/**
 	 * Creates a new builder for this object.
@@ -626,7 +819,7 @@ public class Json5Parser extends JsonParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public Json5Parser(Builder builder) {
+	public Json5Serializer(Builder builder) {
 		super(builder);
 	}
 
@@ -635,8 +828,8 @@ public class Json5Parser extends JsonParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public Json5Parser(JsonParser.Builder builder) {
-		super(builder);
+	public Json5Serializer(JsonSerializer.Builder builder) {
+		super(builder.quoteChar('\''));
 	}
 
 	@Override /* Overridden from Context */
@@ -645,10 +838,10 @@ public class Json5Parser extends JsonParser {
 	}
 
 	@Override /* Overridden from Context */
-	public Json5ParserSession.Builder createSession() {
-		return Json5ParserSession.create(this);
+	public Json5SerializerSession.Builder createSession() {
+		return Json5SerializerSession.create(this);
 	}
 
 	@Override /* Overridden from Context */
-	public Json5ParserSession getSession() { return createSession().build(); }
+	public Json5SerializerSession getSession() { return createSession().build(); }
 }

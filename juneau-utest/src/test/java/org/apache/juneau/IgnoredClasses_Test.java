@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
-import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 class IgnoredClasses_Test extends TestBase {

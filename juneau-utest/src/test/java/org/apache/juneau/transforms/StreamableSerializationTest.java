@@ -25,6 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.xml.*;

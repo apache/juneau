@@ -46,14 +46,19 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Build and analyze
+      # When SONAR_TOKEN is unset (e.g. pull_request from a fork, or secret not configured),
+      # SonarCloud returns "Project not found". Run Maven verify always; scan only if token exists.
+      - name: Build (tests and coverage)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        run: mvn -B clean verify
+
+      - name: SonarCloud analysis
+        if: ${{ secrets.SONAR_TOKEN != '' }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Build with tests and coverage
-          mvn -B clean verify
-          # Run SonarCloud analysis (it will auto-detect JaCoCo reports)
           mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=apache_juneau \
             -Dsonar.organization=apache \

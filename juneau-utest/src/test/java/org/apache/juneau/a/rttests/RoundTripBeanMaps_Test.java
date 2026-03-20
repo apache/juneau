@@ -35,6 +35,8 @@ import org.apache.juneau.markdown.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
+import org.apache.juneau.jcs.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.uon.*;

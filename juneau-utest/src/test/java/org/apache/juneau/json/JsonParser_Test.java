@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.json;
 
+import org.apache.juneau.json5.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;

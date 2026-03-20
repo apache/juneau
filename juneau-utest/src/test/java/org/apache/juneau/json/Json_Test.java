@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.json.annotation.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})
