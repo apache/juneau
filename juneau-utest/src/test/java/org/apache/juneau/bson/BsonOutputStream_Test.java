@@ -28,6 +28,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link BsonOutputStream}.
  */
+@SuppressWarnings({
+	"resource" // BsonOutputStream is intentionally not closed in unit tests
+})
 class BsonOutputStream_Test extends TestBase {
 
 	@Test

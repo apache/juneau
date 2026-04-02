@@ -29,7 +29,9 @@ import org.apache.juneau.commons.reflect.*;
 /**
  * Cache of object that convert POJOs to and from common types such as strings, readers, and input streams.
  *
+ * @deprecated Use {@link org.apache.juneau.commons.conversion.Converter#INSTANCE} instead.
  */
+@Deprecated
 public class Mutaters {
 
 	/**

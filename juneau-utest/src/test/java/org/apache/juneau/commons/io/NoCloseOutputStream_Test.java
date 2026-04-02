@@ -23,6 +23,9 @@ import java.io.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // NoCloseOutputStream wrappers intentionally not closed in unit tests
+})
 class NoCloseOutputStream_Test extends TestBase {
 
 	//====================================================================================================

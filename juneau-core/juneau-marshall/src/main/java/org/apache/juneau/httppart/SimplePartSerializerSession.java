@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.httppart;
 
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.commons.conversion.BasicConverter;
 
 /**
  * Session object that lives for the duration of a single use of {@link SimplePartSerializer}.
@@ -33,6 +33,6 @@ import org.apache.juneau.reflect.*;
 public class SimplePartSerializerSession extends BaseHttpPartSerializerSession {
 	@Override /* Overridden from PartSerializer */
 	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
-		return Mutaters.toString(value);
+		return BasicConverter.INSTANCE.to(value, String.class);
 	}
 }

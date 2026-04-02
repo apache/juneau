@@ -24,6 +24,9 @@ import java.nio.charset.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Streams intentionally not closed in unit tests
+})
 class ReaderInputStream_Test extends TestBase {
 
 	//====================================================================================================

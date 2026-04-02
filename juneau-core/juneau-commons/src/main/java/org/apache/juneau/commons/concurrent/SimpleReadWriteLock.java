@@ -169,6 +169,9 @@ public class SimpleReadWriteLock extends ReentrantReadWriteLock {
 	 *
 	 * @return A new {@link SimpleLock} that holds the read lock. The lock is automatically acquired.
 	 */
+	@SuppressWarnings({
+		"resource" // Caller takes ownership of the returned lock via try-with-resources
+	})
 	public SimpleLock read() {
 		return new SimpleLock(readLock());
 	}
@@ -202,6 +205,9 @@ public class SimpleReadWriteLock extends ReentrantReadWriteLock {
 	 *
 	 * @return A new {@link SimpleLock} that holds the write lock. The lock is automatically acquired.
 	 */
+	@SuppressWarnings({
+		"resource" // Caller takes ownership of the returned lock via try-with-resources
+	})
 	public SimpleLock write() {
 		return new SimpleLock(writeLock());
 	}

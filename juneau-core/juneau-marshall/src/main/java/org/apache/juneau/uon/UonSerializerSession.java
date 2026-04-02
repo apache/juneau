@@ -30,7 +30,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.commons.conversion.BasicConverter;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
@@ -221,9 +221,9 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			var cm = getClassMetaForObject(value);
 			if (nn(cm) && (schema == null || schema.getType() == HttpPartDataType.NO_TYPE)) {
 				if (cm.isNumber() || cm.isBoolean())
-					return Mutaters.toString(value);
+					return BasicConverter.INSTANCE.to(value, String.class);
 				if (cm.isString()) {
-					var s = Mutaters.toString(value);
+					var s = BasicConverter.INSTANCE.to(value, String.class);
 					if (s.isEmpty() || ! UonUtils.needsQuotes(s))
 						return s;
 				}

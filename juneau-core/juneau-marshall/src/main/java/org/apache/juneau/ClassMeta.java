@@ -68,6 +68,7 @@ import org.apache.juneau.swap.*;
  */
 @Bean(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 @SuppressWarnings({
+	"deprecation", // Mutaters is deprecated but still used here pending full migration to Converter.INSTANCE
 	"java:S1200",  // Class has 23 dependencies, acceptable for this core reflection metadata class
 	"java:S1452"   // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, Mutater<T,?>, etc. for element/component types
 })

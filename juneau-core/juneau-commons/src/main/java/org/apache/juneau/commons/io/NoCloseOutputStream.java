@@ -79,6 +79,7 @@ public class NoCloseOutputStream extends OutputStream {
 	private static final String ARG_b = "b";
 	private static final String ARG_os = "os";
 
+	@SuppressWarnings("resource") // Intentionally not owned; this wrapper deliberately does not close the underlying stream
 	private final OutputStream os;
 
 	/**

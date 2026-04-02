@@ -177,6 +177,9 @@ public class FileReaderBuilder {
 	 * @return A new {@link Reader} for reading from the file.
 	 * @throws FileNotFoundException If the file could not be found and {@link #allowNoFile()} was not called.
 	 */
+	@SuppressWarnings({
+		"resource" // Caller takes ownership of the returned Reader
+	})
 	public Reader build() throws FileNotFoundException {
 		if (allowNoFile && (file == null || ! file.exists()))
 			return new StringReader("");

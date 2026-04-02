@@ -217,6 +217,9 @@ public class FileWriterBuilder {
 	 * @return A new {@link Writer} for writing to the file.
 	 * @throws FileNotFoundException If the file could not be created or opened for writing.
 	 */
+	@SuppressWarnings({
+		"resource" // Caller takes ownership of the returned Writer
+	})
 	public Writer build() throws FileNotFoundException {
 		assertArgNotNull(ARG_file, file);
 		var os = (OutputStream)new FileOutputStream(file, append);

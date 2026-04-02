@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.utils;
 
+import java.lang.reflect.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.commons.conversion.*;
 
@@ -54,7 +56,7 @@ import org.apache.juneau.commons.conversion.*;
 	"java:S6541", // Stateless converter, singleton for convenience
 	"java:S6542"  // Singleton required for stateless Converter; thread-safe shared instance
 })
-public class GenericConverter implements Converter {
+public class BeanContextConverter implements Converter {
 
 	/**
 	 * Singleton instance of the generic converter.
@@ -62,12 +64,12 @@ public class GenericConverter implements Converter {
 	 * <p>
 	 * This instance can be safely shared across multiple threads and reused for all conversion operations.
 	 */
-	public static final GenericConverter INSTANCE = new GenericConverter();
+	public static final BeanContextConverter INSTANCE = new BeanContextConverter();
 
 	/**
 	 * Constructor.
 	 */
-	private GenericConverter() {}
+	private BeanContextConverter() {}
 
 	/**
 	 * Converts the specified object to the specified type.
@@ -87,15 +89,34 @@ public class GenericConverter implements Converter {
 	 * 	<li>Object swap conversions
 	 * 	<li>And many more...
 	 * </ul>
+	 * @param o The object to convert.
+	 * @param type The target class type.
 	 *
 	 * @param <T> The target type to convert to.
-	 * @param type The target class type.
-	 * @param o The object to convert.
 	 * @return The converted object, or <jk>null</jk> if the input object is <jk>null</jk>.
 	 * @throws InvalidDataConversionException If the object cannot be converted to the specified type.
 	 */
 	@Override
-	public <T> T convertTo(Class<T> type, Object o) {
+	public <T> T to(Object o, Class<T> type) {
 		return BeanContext.DEFAULT_SESSION.convertToType(o, type);
+	}
+
+	/**
+	 * Converts the specified object to the specified parameterized type.
+	 *
+	 * <p>
+	 * This method delegates to the default {@link BeanContext} session for the actual conversion logic,
+	 * supporting complex parameterized types such as collections and maps.
+	 *
+	 * @param o The object to convert.
+	 * @param mainType The main type to convert to.
+	 * @param args The type parameters of the main type.
+	 * @param <T> The target type to convert to.
+	 * @return The converted object, or <jk>null</jk> if the input object is <jk>null</jk>.
+	 * @throws InvalidDataConversionException If the object cannot be converted to the specified type.
+	 */
+	@Override
+	public <T> T to(Object o, Type mainType, Type... args) {
+		return BeanContext.DEFAULT_SESSION.convertToType(o, mainType, args);
 	}
 }

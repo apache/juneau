@@ -402,7 +402,46 @@ A reusable Python script is available at `scripts/build-and-test.py` for common 
 - When you need to verify both build and tests pass
 - During iterative development to quickly test changes
 
-### 5.1. Command Execution Best Practices
+### 5.1. Coverage Script
+
+A reusable Python script is available at `scripts/coverage.py` for checking JaCoCo test coverage on any source file, package, or module.
+
+**When asked for current test coverage** on a class, package, or module, always use this script rather than manually parsing JaCoCo output.
+
+**Usage:**
+```bash
+# Coverage for an entire package
+./scripts/coverage.py juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/conversion/
+
+# Coverage for a single file
+./scripts/coverage.py juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/conversion/BasicConverter.java
+
+# Show only lines with missed branches (hide instruction-only misses)
+./scripts/coverage.py path/to/file.java --branches
+
+# Re-run tests first to refresh coverage data, then report
+./scripts/coverage.py path/to/folder/ --run
+```
+
+**What it does:**
+- Detects the Maven module automatically from the path
+- Generates a JaCoCo report using the existing `juneau-utest/target/jacoco.exec`
+- Displays branch and instruction coverage percentages with a progress bar
+- Lists every uncovered line with the number of missed branches/instructions
+
+**How coverage data works:**
+- The `.exec` file is produced by `juneau-utest` during a test run and covers all loaded classes, including those from other modules (e.g. `juneau-commons`)
+- Use `--run` when tests have changed since the last run; omit it to reuse existing data for speed
+- Report generation takes ~2 seconds; test execution adds ~10-15 seconds
+
+**Trigger phrases:** When the user says any of the following, run this script:
+- "what's the coverage on ..."
+- "show coverage for ..."
+- "current test coverage"
+- "check coverage"
+- "coverage report"
+
+### 5.3. Command Execution Best Practices
 
 **Adding Timeouts to Commands:**
 

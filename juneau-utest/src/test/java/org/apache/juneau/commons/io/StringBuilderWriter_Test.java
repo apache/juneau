@@ -23,6 +23,9 @@ import java.io.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Writers intentionally not closed in unit tests
+})
 class StringBuilderWriter_Test extends TestBase {
 
 	//====================================================================================================

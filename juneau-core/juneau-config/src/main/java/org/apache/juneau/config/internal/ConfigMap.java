@@ -482,9 +482,6 @@ public class ConfigMap implements ConfigStoreListener {
 		return this;
 	}
 
-	@SuppressWarnings({
-		"null" // Null analysis not applicable to this config listener method
-	})
 	@Override /* Overridden from ConfigStoreListener */
 	public void onChange(String newContents) {
 		ConfigEvents changes2 = null;
@@ -499,7 +496,7 @@ public class ConfigMap implements ConfigStoreListener {
 		} catch (IOException e) {
 			throw toRex(e);
 		}
-		if (nn(changes2) && ! changes2.isEmpty())
+		if (changes2 != null && ! changes2.isEmpty())
 			signal(changes2);
 	}
 

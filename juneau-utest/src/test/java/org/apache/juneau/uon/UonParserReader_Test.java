@@ -26,7 +26,8 @@ import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5961" // High assertion count acceptable in comprehensive test
+	"java:S5961", // High assertion count acceptable in comprehensive test
+	"resource" // Readers intentionally not closed in unit tests
 })
 class UonParserReader_Test extends TestBase {
 

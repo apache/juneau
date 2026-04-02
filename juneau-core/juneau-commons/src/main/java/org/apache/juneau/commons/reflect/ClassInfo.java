@@ -306,7 +306,6 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * 	The same StringBuilder for method chaining.
 	 */
 	@SuppressWarnings({
-		"null",       // Null analysis handled by runtime checks
 		"java:S3776", // Cognitive complexity acceptable for name formatting logic
 		"java:S6541"  // Synchronization not needed for local StringBuilder operations
 	})
@@ -1781,6 +1780,9 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @param name The resource name.
 	 * @return An input stream for reading the resource, or <jk>null</jk> if the resource could not be found.
 	 */
+	@SuppressWarnings({
+		"resource" // Caller takes ownership of the returned InputStream
+	})
 	public java.io.InputStream getResourceAsStream(String name) {
 		return inner == null ? null : inner.getResourceAsStream(name);
 	}

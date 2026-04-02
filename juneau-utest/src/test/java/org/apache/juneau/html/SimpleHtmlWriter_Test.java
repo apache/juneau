@@ -21,6 +21,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for SimpleHtmlWriter fluent setter overrides.
  */
+@SuppressWarnings({
+	"resource" // Writers intentionally not closed in unit tests
+})
 class SimpleHtmlWriter_Test extends TestBase {
 
 	@Test void a01_fluentChaining_tagMethods() {

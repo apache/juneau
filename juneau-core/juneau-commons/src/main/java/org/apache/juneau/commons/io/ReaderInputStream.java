@@ -84,6 +84,7 @@ public class ReaderInputStream extends InputStream {
 	private static final String ARG_encoder = "encoder";
 	private static final String ARG_reader = "reader";
 
+	@SuppressWarnings("resource") // Intentionally not owned; caller retains responsibility for closing the underlying Reader
 	private final Reader reader;
 	private final CharsetEncoder encoder;
 
@@ -121,9 +122,6 @@ public class ReaderInputStream extends InputStream {
 	 * @param charset the charset encoding.  Must not be <jk>null</jk>.
 	 * @param bufferSize the size of the input buffer in number of characters.  Must be positive.
 	 */
-	@SuppressWarnings({
-		"resource" // Reader resource managed by caller
-	})
 	public ReaderInputStream(Reader reader, Charset charset, int bufferSize) {
 		// @formatter:off
 		this(assertArgNotNull(ARG_reader, reader),

@@ -21,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Readers intentionally not closed in unit tests
+})
 class CharSequenceReader_Test extends TestBase {
 
 	//====================================================================================================

@@ -145,6 +145,9 @@ public class Logger extends java.util.logging.Logger {
 	 *
 	 * @return A LogRecordCapture instance.
 	 */
+	@SuppressWarnings({
+		"resource" // Caller takes ownership of the returned LogRecordCapture
+	})
 	public LogRecordCapture captureEvents() {
 		return new LogRecordCapture(this);
 	}

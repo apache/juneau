@@ -37,7 +37,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.commons.conversion.BasicConverter;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 
@@ -185,7 +185,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		} else {
 			t.child(tr(th("Index"), th("Type"), th("Value")));
 			for (var i = 0; i < types.length; i++) {
-				String type = Mutaters.toString(types[i]);
+				String type = BasicConverter.INSTANCE.to(types[i], String.class);
 				t.child(tr(td(i), td(type), td(input().name(String.valueOf(i)).type("text"))));
 			}
 		}

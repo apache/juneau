@@ -190,6 +190,9 @@ public class PathReaderBuilder {
 	 * @throws NoSuchFileException If the path does not exist and {@link #allowNoFile()} was not called.
 	 * @throws IOException If an I/O error occurs opening the path.
 	 */
+	@SuppressWarnings({
+		"resource" // Caller takes ownership of the returned Reader
+	})
 	public Reader build() throws IOException {
 		if (! allowNoFile && path == null) {
 			throw new IllegalStateException("No path");

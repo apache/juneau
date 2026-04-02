@@ -33,6 +33,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Tests for {@link HjsonTokenizer}.
  */
+@SuppressWarnings({
+	"resource" // ParserPipe intentionally not closed in unit tests
+})
 class HjsonTokenizer_Test extends TestBase {
 
 	private static HjsonTokenizer tokenizer(String input) {

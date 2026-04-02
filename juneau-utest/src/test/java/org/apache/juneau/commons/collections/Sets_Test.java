@@ -371,16 +371,19 @@ class Sets_Test extends TestBase {
 	void l02_elementFunction_withConverter() {
 		var converter = new org.apache.juneau.commons.conversion.Converter() {
 			@Override
-			public <T> T convertTo(Class<T> type, Object o) {
-				if (type == Integer.class && o instanceof String) {
+			public <T> T to(Object o, Class<T> type) {
+				if (type == Integer.class && o instanceof String)
 					return type.cast(Integer.parseInt((String)o));
-				}
+				return null;
+			}
+			@Override
+			public <T> T to(Object o, java.lang.reflect.Type mainType, java.lang.reflect.Type...args) {
 				return null;
 			}
 		};
 
 		var set = Sets.create(Integer.class)
-			.elementFunction(o -> converter.convertTo(Integer.class, o))
+			.elementFunction(o -> converter.to(o, Integer.class))
 			.addAny("1", "2", "3")
 			.build();
 
@@ -391,26 +394,33 @@ class Sets_Test extends TestBase {
 	void l03_elementFunction_multipleConverters() {
 		var converter1 = new org.apache.juneau.commons.conversion.Converter() {
 			@Override
-			public <T> T convertTo(Class<T> type, Object o) {
-				return null;  // Doesn't handle this
+			public <T> T to(Object o, Class<T> type) {
+				return null;
+			}
+			@Override
+			public <T> T to(Object o, java.lang.reflect.Type mainType, java.lang.reflect.Type...args) {
+				return null;
 			}
 		};
 
 		var converter2 = new org.apache.juneau.commons.conversion.Converter() {
 			@Override
-			public <T> T convertTo(Class<T> type, Object o) {
-				if (type == Integer.class && o instanceof String) {
+			public <T> T to(Object o, Class<T> type) {
+				if (type == Integer.class && o instanceof String)
 					return type.cast(Integer.parseInt((String)o));
-				}
+				return null;
+			}
+			@Override
+			public <T> T to(Object o, java.lang.reflect.Type mainType, java.lang.reflect.Type...args) {
 				return null;
 			}
 		};
 
 		var set = Sets.create(Integer.class)
 			.elementFunction(o -> {
-				Integer result = converter1.convertTo(Integer.class, o);
+				Integer result = converter1.to(o, Integer.class);
 				if (result != null) return result;
-				return converter2.convertTo(Integer.class, o);
+				return converter2.to(o, Integer.class);
 			})
 			.addAny("1", "2")
 			.build();

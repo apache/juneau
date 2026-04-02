@@ -3,6 +3,7 @@
 **/.classpath
 **/.project
 **/.settings/
+/.metadata/
 /bin/
 derby.log
 
@@ -13,7 +14,7 @@ cursor-*
 **/dependency-reduced-pom.xml
 
 # Note: Maven site generation creates target/site/ (already ignored by **/target/ above)
-/juneau.code-workspace
+**/*.code-workspace
 /create-mvn-site.log
 /coverage/
 /coverage.csv

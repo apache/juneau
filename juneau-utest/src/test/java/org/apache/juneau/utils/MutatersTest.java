@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S1172" // Unused parameters in tests are intentional
+	"java:S1172"   // Unused parameters in tests are intentional
 })
 class MutatersTest extends TestBase {
 
