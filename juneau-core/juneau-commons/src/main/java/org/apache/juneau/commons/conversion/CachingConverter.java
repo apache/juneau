@@ -58,6 +58,31 @@ public abstract class CachingConverter implements Converter {
 	private static final Conversion<?,?> NO_CONVERSION = (in, memberOf, session, args) -> null; // HTT: sentinel body is never invoked; ConcurrentHashMap prohibits null values so we use this placeholder
 
 	/**
+	 * Returns the appropriate default value for a null input to the given target type.
+	 *
+	 * <ul>
+	 * 	<li>For {@link Optional}: returns {@link Optional#empty()}, or {@code Optional.of(Optional.empty())} for
+	 * 		nested optional types such as {@code Optional<Optional<Integer>>}.
+	 * 	<li>For primitives: returns the JVM zero/false default (e.g. {@code 0} for {@code int}).
+	 * 	<li>For all other types: returns {@code null}.
+	 * </ul>
+	 *
+	 * @param type The target type.
+	 * @param args The generic type arguments (e.g. element type for {@link Optional}).
+	 * @param <T> The target type.
+	 * @return The appropriate null default.
+	 */
+	@SuppressWarnings("unchecked")
+	static <T> T nullDefault(Class<T> type, Class<?>... args) {
+		if (type == Optional.class) {
+			if (args.length > 0)
+				return (T) Optional.ofNullable(nullDefault(args[0], Arrays.copyOfRange(args, 1, args.length)));
+			return (T) Optional.empty();
+		}
+		return type.isPrimitive() ? primitiveDefault(type) : null;
+	}
+
+	/**
 	 * Returns the JVM default value for a primitive type, or <jk>null</jk> if the type is not primitive.
 	 *
 	 * <p>
@@ -176,11 +201,11 @@ public abstract class CachingConverter implements Converter {
 	@SuppressWarnings("unchecked")
 	public <T> T to(Object o, Type mainType, Type... args) {
 		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
-		if (o == null)
-			return rawType.isPrimitive() ? primitiveDefault(rawType) : null;
 		var argClasses = Stream.of(args)
 			.map(t -> (Class<?>) (t instanceof ParameterizedType pt2 ? pt2.getRawType() : t))
 			.toArray(Class[]::new);
+		if (o == null)
+			return nullDefault(rawType, argClasses);
 		var inType = o.getClass();
 		var fn = (Conversion<Object, T>) lookupConversion(inType, rawType);
 		if (fn == null)
@@ -238,11 +263,11 @@ public abstract class CachingConverter implements Converter {
 	@SuppressWarnings("unchecked")
 	public <T> T to(Object o, Object memberOf, ConverterSession session, Type mainType, Type... args) {
 		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
-		if (o == null)
-			return rawType.isPrimitive() ? primitiveDefault(rawType) : null;
 		var argClasses = Stream.of(args)
 			.map(t -> (Class<?>) (t instanceof ParameterizedType pt2 ? pt2.getRawType() : t))
 			.toArray(Class[]::new);
+		if (o == null)
+			return nullDefault(rawType, argClasses);
 		var inType = o.getClass();
 		var fn = (Conversion<Object, T>) lookupConversion(inType, rawType);
 		if (fn == null)

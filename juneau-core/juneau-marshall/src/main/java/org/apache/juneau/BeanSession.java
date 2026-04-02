@@ -1185,15 +1185,11 @@ public class BeanSession extends ContextSession implements ConverterSession {
 			to = (ClassMeta<T>)object();
 
 		try {
+			var ctxConverter = ctx.getConverter();
+
 			// Handle the case of a null value.
 			if (value == null) {
-
-				// If it's a primitive, then use the converters to get the default value for the primitive type.
-				if (to.isPrimitive())
-					return to.getPrimitiveDefault();
-
-				// Otherwise, just return null.
-				return to.isOptional() ? (T)to.getOptionalDefault() : null;
+				return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
 			}
 
 			if (to.isOptional() && (! (value instanceof Optional)))
@@ -1231,8 +1227,6 @@ public class BeanSession extends ContextSession implements ConverterSession {
 				if (nc.isAssignableFrom(from.inner()) && fc.isAssignableFrom(tc))
 					return (T)swap.swap(this, value);
 			}
-
-			var ctxConverter = ctx.getConverter();
 
 			if (to.isCharSequence() && (from.isDateOrCalendarOrTemporal() || from.isDuration()))
 				return (T) Iso8601Utils.format(value, from, getTimeZone());
