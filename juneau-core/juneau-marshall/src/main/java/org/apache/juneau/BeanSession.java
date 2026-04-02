@@ -1233,7 +1233,11 @@ public class BeanSession extends ContextSession implements ConverterSession {
 			}
 
 			var ctxConverter = ctx.getConverter();
-			if (ctxConverter != null && ctxConverter.hasCustomConversion(from.inner(), tc))
+
+			if (to.isCharSequence() && (from.isDateOrCalendarOrTemporal() || from.isDuration()))
+				return (T) Iso8601Utils.format(value, from, getTimeZone());
+
+			if (ctxConverter.hasCustomConversion(from.inner(), tc))
 				return ctxConverter.to(value, outer, this, tc);
 
 			if (to.isCharSequence() && (from.isDateOrCalendarOrTemporal() || from.isDuration()))

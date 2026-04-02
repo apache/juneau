@@ -256,9 +256,9 @@ public class BeanContext extends Context {
 		private List<ClassInfo> beanDictionary;
 		private List<Object> swaps;
 		private Set<ClassInfo> notBeanClasses;
-
 		private Set<String> notBeanPackages;
-		private ConfigurableConverter converter;
+		
+		private final ConfigurableConverter converter = new ConfigurableConverter();
 
 		/**
 		 * Constructor.
@@ -285,14 +285,14 @@ public class BeanContext extends Context {
 			ignoreInvocationExceptionsOnSetters = env("BeanContext.ignoreInvocationExceptionsOnSetters", false);
 			ignoreUnknownBeanProperties = env("BeanContext.ignoreUnknownBeanProperties", false);
 			ignoreUnknownEnumValues = env("BeanContext.ignoreUnknownEnumValues", false);
-		locale = env("BeanContext.locale").map(Locale::forLanguageTag).orElse(Locale.getDefault());
-		mediaType = env("BeanContext.mediaType").map(MediaType::of).orElse(null);
-		notBeanClasses = new TreeSet<>();
-		notBeanPackages = new TreeSet<>();
-		propertyNamer = null;
-		sortProperties = env("BeanContext.sortProperties", false);
-		swaps = list();
-		timeZone = env("BeanContext.timeZone").map(TimeZone::getTimeZone).orElse(null);
+			locale = env("BeanContext.locale").map(Locale::forLanguageTag).orElse(Locale.getDefault());
+			mediaType = env("BeanContext.mediaType").map(MediaType::of).orElse(null);
+			notBeanClasses = new TreeSet<>();
+			notBeanPackages = new TreeSet<>();
+			propertyNamer = null;
+			sortProperties = env("BeanContext.sortProperties", false);
+			swaps = list();
+			timeZone = env("BeanContext.timeZone").map(TimeZone::getTimeZone).orElse(null);
 			typePropertyName = env("BeanContext.typePropertyName", "_type");
 			useEnumNames = env("BeanContext.useEnumNames", false);
 			useJavaBeanIntrospector = env("BeanContext.useJavaBeanIntrospector", false);
@@ -314,7 +314,6 @@ public class BeanContext extends Context {
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
 			beansRequireSerializable = copyFrom.beansRequireSerializable;
 			beansRequireSettersForGetters = copyFrom.beansRequireSettersForGetters;
-			converter = copyFrom.converter;
 			disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
 			disableIgnoreMissingSetters = ! copyFrom.ignoreMissingSetters;
 			disableIgnoreTransientFields = ! copyFrom.ignoreTransientFields;
@@ -354,7 +353,6 @@ public class BeanContext extends Context {
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
 			beansRequireSerializable = copyFrom.beansRequireSerializable;
 			beansRequireSettersForGetters = copyFrom.beansRequireSettersForGetters;
-			converter = copyFrom.converter;
 			disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
 			disableIgnoreMissingSetters = copyFrom.disableIgnoreMissingSetters;
 			disableIgnoreTransientFields = copyFrom.disableIgnoreTransientFields;
@@ -427,8 +425,6 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public <I, O> Builder addConverter(Class<I> inType, Class<O> outType, Conversion<I, O> conversion) {
-			if (converter == null)
-				converter = new ConfigurableConverter();
 			converter.add(inType, outType, conversion);
 			return this;
 		}
@@ -2261,7 +2257,6 @@ public class BeanContext extends Context {
 				beanMethodVisibility,
 				beanFieldVisibility,
 				beanDictionary,
-				converter != null ? System.identityHashCode(converter) : 0,
 				swaps,
 				notBeanClasses,
 				notBeanPackages,
@@ -3747,17 +3742,17 @@ public class BeanContext extends Context {
 		var builderNotBeanClasses = new ArrayList<>(builder.notBeanClasses);
 		notBeanClasses = builderNotBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.concat(builderNotBeanClasses.stream(), DEFAULT_NOTBEAN_CLASSES.stream()).distinct().toList();
 
-	List<String> notBeanPackagesList = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.concat(notBeanPackages.stream(), DEFAULT_NOTBEAN_PACKAGES.stream()).toList();
-	LinkedHashSet<String> notBeanPackageNamesTemp = notBeanPackagesList.stream().filter(x -> ! x.endsWith(".*")).collect(Collectors.toCollection(LinkedHashSet::new));
-	notBeanPackageNames = u(notBeanPackageNamesTemp);
-	notBeanPackagePrefixes = notBeanPackagesList.stream().filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length() - 2)).toList();
+		List<String> notBeanPackagesList = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.concat(notBeanPackages.stream(), DEFAULT_NOTBEAN_PACKAGES.stream()).toList();
+		LinkedHashSet<String> notBeanPackageNamesTemp = notBeanPackagesList.stream().filter(x -> ! x.endsWith(".*")).collect(Collectors.toCollection(LinkedHashSet::new));
+		notBeanPackageNames = u(notBeanPackageNamesTemp);
+		notBeanPackagePrefixes = notBeanPackagesList.stream().filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length() - 2)).toList();
 
 		propertyNamerBean = safe(()->propertyNamer.getDeclaredConstructor().newInstance());
 
-	var objectSwapsList = new LinkedList<ObjectSwap<?,?>>();
-	swaps.forEach(x -> {
-		if (x instanceof ObjectSwap<?,?> os) {
-			objectSwapsList.add(os);
+		var objectSwapsList = new LinkedList<ObjectSwap<?,?>>();
+		swaps.forEach(x -> {
+			if (x instanceof ObjectSwap<?,?> os) {
+				objectSwapsList.add(os);
 			} else {
 				var ci = info((Class<?>)x);
 				if (ci.isAssignableTo(ObjectSwap.class))
