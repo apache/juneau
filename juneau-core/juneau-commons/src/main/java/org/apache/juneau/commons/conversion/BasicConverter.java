@@ -194,6 +194,8 @@ public class BasicConverter extends CachingConverter {
 
 		if (out.isEnum() && (c = findEnumConversion(inType, out)) != null) return c;
 
+		if (out == Optional.class && (c = findOptionalConversion(inType)) != null) return c;
+
 		if (Collection.class.isAssignableFrom(out) && (c = findCollectionConversion(inType, out)) != null) return c;
 
 		if (Map.class.isAssignableFrom(out) && (c = findMapConversion(inType, out)) != null) return c;
@@ -303,6 +305,24 @@ public class BasicConverter extends CachingConverter {
 		if (CharSequence.class.isAssignableFrom(inType))
 			return (in, memberOf, session, args) -> (O) Enum.valueOf((Class<Enum>) outType, in.toString());
 		return null;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Optional conversions
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@SuppressWarnings("unchecked")
+	private <I, O> Conversion<I, O> findOptionalConversion(Class<I> inType) {
+		return (Conversion<I, O>) (Conversion<I, Optional<?>>) (in, memberOf, session, args) -> {
+			if (in instanceof Optional<?> opt) {
+				if (args.length == 0)
+					return opt;
+				return opt.map(x -> to(x, args[0]));
+			}
+			if (args.length == 0)
+				return Optional.of(in);
+			return Optional.of(to(in, args[0]));
+		};
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

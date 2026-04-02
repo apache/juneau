@@ -158,6 +158,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final NullableSupplier<MethodInfo> fromStringMethod;               // Static fromString(String) or equivalent method
 	private final NullableSupplier<ClassInfoTyped<? extends T>> implClass;     // The implementation class to use if this is an interface.
 	private final Supplier<KeyValueTypes> keyValueTypes;                        // Key and value types for MAP types.
+	private final Supplier<Type[]> parameters;                                  // Type parameters for converter dispatch.
 	private final NullableSupplier<MarshalledFilter> marshalledFilter;
 	private final Supplier<Property<T,Object>> nameProperty;                   // The method to set the name on an object (if it has one).
 	private final NullableSupplier<ConstructorInfo> noArgConstructor;          // The no-arg constructor for this class (if it has one).
@@ -264,6 +265,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		fromStringMethod = memoize(this::findFromStringMethod);
 		implClass = memoize(this::findImplClass);
 		keyValueTypes = memoize(this::findKeyValueTypes);
+		parameters = memoize(this::findParameters);
 		marshalledFilter = memoize(this::findMarshalledFilter);
 		nameProperty = memoize(this::findNameProperty);
 		noArgConstructor = memoize(this::findNoArgConstructor);
@@ -316,6 +318,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.implClass = memoize(this::findImplClass);
 		this.enumValues = memoize(this::findEnumValues);
 		this.beanDictionaryName = memoize(this::findBeanDictionaryName);
+		this.parameters = memoize(this::findParameters);
 	}
 
 	/**
@@ -350,6 +353,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.implClass = mainType.implClass;
 		this.enumValues = mainType.enumValues;
 		this.beanDictionaryName = mainType.beanDictionaryName;
+		this.parameters = memoize(this::findParameters);
 	}
 
 	/**
@@ -777,6 +781,52 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 */
 	public ClassMeta<?> getValueType() {
 		return keyValueTypes.get().valueType();
+	}
+
+	/**
+	 * Returns the type parameters for this class as a {@link Type} array suitable for passing to
+	 * {@link org.apache.juneau.commons.conversion.Converter#to(Object, Type, Type...)}.
+	 *
+	 * <p>
+	 * The returned array depends on the kind of type:
+	 * <ul>
+	 * 	<li>{@link java.util.Map} types: {@code [keyType, valueType]}
+	 * 	<li>{@link java.util.Collection} and {@link java.util.Optional} types: {@code [elementType, elementType.getParameters()...]}
+	 * 		— the element raw class followed by the element's own parameters, recursively flattened by one level.
+	 * 	<li>All other types: empty array.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul>
+	 * 	<li><c>ClassMeta&lt;Optional&lt;Integer&gt;&gt;</c> → <c>[Integer]</c>
+	 * 	<li><c>ClassMeta&lt;List&lt;Integer&gt;&gt;</c> → <c>[Integer]</c>
+	 * 	<li><c>ClassMeta&lt;Map&lt;String,Integer&gt;&gt;</c> → <c>[String, Integer]</c>
+	 * 	<li><c>ClassMeta&lt;List&lt;Map&lt;String,Integer&gt;&gt;&gt;</c> → <c>[Map, String, Integer]</c>
+	 * </ul>
+	 *
+	 * @return The type parameters as a {@link Type} array, never <jk>null</jk>.
+	 */
+	public Type[] getParameters() { return parameters.get(); }
+
+	private Type[] findParameters() {
+		if (isMap()) {
+			var kt = getKeyType();
+			var vt = getValueType();
+			if (kt == null || vt == null)
+				return new Type[0];
+			return new Type[]{kt.inner(), vt.inner()};
+		}
+		if (isCollection() || isOptional()) {
+			var et = getElementType();
+			if (et == null)
+				return new Type[0];
+			var etParams = et.getParameters();
+			var result = new Type[1 + etParams.length];
+			result[0] = et.inner();
+			System.arraycopy(etParams, 0, result, 1, etParams.length);
+			return result;
+		}
+		return new Type[0];
 	}
 
 	/**
