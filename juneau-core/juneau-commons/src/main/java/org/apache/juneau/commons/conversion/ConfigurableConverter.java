@@ -86,6 +86,21 @@ public class ConfigurableConverter extends BasicConverter {
 		return this;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if a custom conversion has been explicitly registered for the specified type pair.
+	 *
+	 * <p>
+	 * This only checks the user-registered conversions, not the built-in {@link BasicConverter} reflection logic.
+	 *
+	 * @param inType The input type class.
+	 * @param outType The output type class.
+	 * @return <jk>true</jk> if a custom conversion exists for the specified type pair.
+	 */
+	public boolean hasCustomConversion(Class<?> inType, Class<?> outType) {
+		var inner = registered.get(inType);
+		return inner != null && inner.containsKey(outType);
+	}
+
 	@Override
 	protected <I, O> Conversion<I, O> findConversion(Class<I> inType, Class<O> outType) {
 		var inner = registered.get(inType);

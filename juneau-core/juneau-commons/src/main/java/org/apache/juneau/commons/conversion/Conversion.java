@@ -41,8 +41,10 @@ public interface Conversion<I, O> {
 	 *
 	 * @param in The input object.
 	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
+	 * @param session The converter session providing contextual objects such as {@link java.util.TimeZone} or
+	 * 	{@link java.util.Locale}, or <jk>null</jk> if no session is available.
 	 * @param args Optional type arguments for parameterized output types (e.g. element type for collections).
 	 * @return The converted object.
 	 */
-	O to(I in, Object memberOf, Class<?>... args);
+	O to(I in, Object memberOf, ConverterSession session, Class<?>... args);
 }

@@ -42,7 +42,7 @@ public class ConfigurableConverter_Test {
 
 	@Test void a01_registeredConversionIsUsed() {
 		var c = new ConfigurableConverter()
-			.add(String.class, A01_Value.class, (in, memberOf, args) -> new A01_Value(in));
+			.add(String.class, A01_Value.class, (in, memberOf, session, args) -> new A01_Value(in));
 		var result = c.to("hello", A01_Value.class);
 		assertNotNull(result);
 		assertEquals("hello", result.raw);
@@ -51,7 +51,7 @@ public class ConfigurableConverter_Test {
 	@Test void a02_registeredConversionTakesPriorityOverBuiltIn() {
 		// Integer→String has a built-in conversion; register a custom one that wraps with brackets
 		var c = new ConfigurableConverter()
-			.add(Integer.class, String.class, (in, memberOf, args) -> "[" + in + "]");
+			.add(Integer.class, String.class, (in, memberOf, session, args) -> "[" + in + "]");
 		assertEquals("[42]", c.to(42, String.class));
 	}
 
@@ -63,13 +63,13 @@ public class ConfigurableConverter_Test {
 
 	@Test void a04_nullInputReturnsNull() {
 		var c = new ConfigurableConverter()
-			.add(String.class, A01_Value.class, (in, memberOf, args) -> new A01_Value(in));
+			.add(String.class, A01_Value.class, (in, memberOf, session, args) -> new A01_Value(in));
 		assertNull(c.to(null, A01_Value.class));
 	}
 
 	@Test void a05_canConvertReturnsTrueForRegisteredType() {
 		var c = new ConfigurableConverter()
-			.add(String.class, A01_Value.class, (in, memberOf, args) -> new A01_Value(in));
+			.add(String.class, A01_Value.class, (in, memberOf, session, args) -> new A01_Value(in));
 		assertTrue(c.canConvert(String.class, A01_Value.class));
 	}
 
@@ -85,8 +85,8 @@ public class ConfigurableConverter_Test {
 
 	@Test void a08_multipleRegistrationsOnSameConverter() {
 		var c = new ConfigurableConverter()
-			.add(String.class, A01_Value.class, (in, memberOf, args) -> new A01_Value(in))
-			.add(Integer.class, A01_Value.class, (in, memberOf, args) -> new A01_Value(String.valueOf(in)));
+			.add(String.class, A01_Value.class, (in, memberOf, session, args) -> new A01_Value(in))
+			.add(Integer.class, A01_Value.class, (in, memberOf, session, args) -> new A01_Value(String.valueOf(in)));
 		assertEquals("hello", c.to("hello", A01_Value.class).raw);
 		assertEquals("42", c.to(42, A01_Value.class).raw);
 	}
@@ -101,7 +101,7 @@ public class ConfigurableConverter_Test {
 
 	@Test void a09_registrationDoesNotAffectOtherInstances() {
 		var c1 = new ConfigurableConverter()
-			.add(String.class, A09_Value.class, (in, memberOf, args) -> new A09_Value(in));
+			.add(String.class, A09_Value.class, (in, memberOf, session, args) -> new A09_Value(in));
 		var c2 = new ConfigurableConverter();
 		assertNotNull(c1.to("x", A09_Value.class));
 		assertFalse(c2.canConvert(String.class, A09_Value.class));
@@ -116,8 +116,8 @@ public class ConfigurableConverter_Test {
 		var memberOf = new Object();
 		var captured = new AtomicReference<Object>();
 		var c = new ConfigurableConverter()
-			.add(String.class, Integer.class, (in, m, args) -> { captured.set(m); return Integer.parseInt(in); });
-		c.to("42", memberOf, Integer.class);
+			.add(String.class, Integer.class, (in, m, session, args) -> { captured.set(m); return Integer.parseInt(in); });
+		c.to("42", memberOf, (ConverterSession)null, Integer.class);
 		assertSame(memberOf, captured.get());
 	}
 
@@ -144,7 +144,7 @@ public class ConfigurableConverter_Test {
 			pool.submit(() -> {
 				try {
 					latch.await();
-					c.add(String.class, C01_Value.class, (in, m, args) -> new C01_Value(in.toUpperCase()));
+					c.add(String.class, C01_Value.class, (in, m, session, args) -> new C01_Value(in.toUpperCase()));
 				} catch (Exception e) {
 					errors.incrementAndGet();
 				}
@@ -161,7 +161,7 @@ public class ConfigurableConverter_Test {
 
 	@Test void c02_concurrentConvertsAreThreadSafe() throws Exception {
 		var c = new ConfigurableConverter()
-			.add(String.class, Integer.class, (in, m, args) -> Integer.parseInt(in) * 2);
+			.add(String.class, Integer.class, (in, m, session, args) -> Integer.parseInt(in) * 2);
 		var threads = 32;
 		var latch = new CountDownLatch(1);
 		var errors = new AtomicInteger(0);

@@ -781,9 +781,9 @@ class BasicConverter_Test extends TestBase {
 	}
 
 	@Test void p01_innerClassConstructorWithMemberOf() {
-		// to(o, memberOf, Class) routes through the inner-class path in findConstructorConversion;
+		// to(o, memberOf, session, Class) routes through the inner-class path in findConstructorConversion;
 		// memberOf (this) is passed as the synthetic outer-instance parameter.
-		var x = C.to("hello", this, P01_Inner.class);
+		var x = C.to("hello", this, (ConverterSession)null, P01_Inner.class);
 		assertEquals("hello", x.value);
 	}
 
@@ -791,7 +791,7 @@ class BasicConverter_Test extends TestBase {
 		// The inner-class branch is entered (P02 has an enclosing class) but the 2-param ctor
 		// (BasicConverter_Test, String) does not exist — falls through to the 1-param check which also
 		// fails → InvalidConversionException.
-		assertThrows(InvalidConversionException.class, () -> C.to("hello", this, P02_InnerNoMatch.class));
+		assertThrows(InvalidConversionException.class, () -> C.to("hello", this, (ConverterSession)null, P02_InnerNoMatch.class));
 	}
 
 	//====================================================================================================

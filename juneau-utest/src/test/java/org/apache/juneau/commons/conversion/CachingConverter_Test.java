@@ -107,40 +107,40 @@ class CachingConverter_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// c - to(Object, Object, Class)
+	// c - to(Object, Object, ConverterSession, Class)
 	//====================================================================================================
 
 	@Test void c01_toMemberOfNullInput() {
-		assertNull(C.to(null, "ignored", String.class));
+		assertNull(C.to(null, "ignored", (ConverterSession)null, String.class));
 	}
 
 	@Test void c02_toMemberOfSameType() {
 		var s = "hello";
-		assertSame(s, C.to(s, null, String.class));
+		assertSame(s, C.to(s, null, (ConverterSession)null, String.class));
 	}
 
 	@Test void c03_toMemberOfConversion() {
-		assertEquals("42", C.to(42, null, String.class));
+		assertEquals("42", C.to(42, null, (ConverterSession)null, String.class));
 	}
 
 	@Test void c04_toMemberOfNoConversion() {
-		assertThrows(InvalidConversionException.class, () -> C.to(new StringBuilder("x"), null, java.net.URI.class));
+		assertThrows(InvalidConversionException.class, () -> C.to(new StringBuilder("x"), null, (ConverterSession)null, java.net.URI.class));
 	}
 
 	//====================================================================================================
-	// d - to(Object, Object, Type, Type...)
+	// d - to(Object, Object, ConverterSession, Type, Type...)
 	//====================================================================================================
 
 	// Sentinel used as the memberOf argument to avoid null-vs-Type overload ambiguity.
 	private static final Object D_MEMBER_OF = new Object();
 
 	@Test void d01_toMemberOfTypeNullInput() {
-		assertNull(C.to(null, D_MEMBER_OF, (Type) String.class));
+		assertNull(C.to(null, D_MEMBER_OF, (ConverterSession)null, (Type) String.class));
 	}
 
 	@Test void d02_toMemberOfTypePlainClass() {
 		// mainType is a plain Class (false branch of ParameterizedType ternary)
-		assertEquals("42", C.to(42, D_MEMBER_OF, (Type) String.class));
+		assertEquals("42", C.to(42, D_MEMBER_OF, (ConverterSession)null, (Type) String.class));
 	}
 
 	@SuppressWarnings("unused")
@@ -156,25 +156,25 @@ class CachingConverter_Test extends TestBase {
 
 	@Test void d03_toMemberOfTypeWithParameterizedType() {
 		// mainType is a ParameterizedType (true branch of ternary); raw type List is extracted
-		var result = C.to(List.of("a", "b"), D_MEMBER_OF, D03_LIST_TYPE);
+		var result = C.to(List.of("a", "b"), D_MEMBER_OF, (ConverterSession)null, D03_LIST_TYPE);
 		assertNotNull(result);
 		assertInstanceOf(List.class, result);
 	}
 
 	@Test void d04_toMemberOfTypeWithPlainClassArg() {
 		// args contains a plain Class (false branch of arg ternary)
-		var result = C.to(List.of("1", "2"), D_MEMBER_OF, (Type) List.class, (Type) Integer.class);
+		var result = C.to(List.of("1", "2"), D_MEMBER_OF, (ConverterSession)null, (Type) List.class, (Type) Integer.class);
 		assertEquals(List.of(1, 2), result);
 	}
 
 	@Test void d05_toMemberOfTypeWithParameterizedTypeArg() {
 		// args contains a ParameterizedType (true branch of arg ternary); raw type List is extracted
-		var result = C.to(List.of(List.of("a", "b")), D_MEMBER_OF, (Type) List.class, LIST_ARG_TYPE);
+		var result = C.to(List.of(List.of("a", "b")), D_MEMBER_OF, (ConverterSession)null, (Type) List.class, LIST_ARG_TYPE);
 		assertNotNull(result);
 		assertInstanceOf(List.class, result);
 	}
 
 	@Test void d06_toMemberOfTypeNoConversion() {
-		assertThrows(InvalidConversionException.class, () -> C.to(new StringBuilder("x"), D_MEMBER_OF, (Type) java.net.URI.class));
+		assertThrows(InvalidConversionException.class, () -> C.to(new StringBuilder("x"), D_MEMBER_OF, (ConverterSession)null, (Type) java.net.URI.class));
 	}
 }

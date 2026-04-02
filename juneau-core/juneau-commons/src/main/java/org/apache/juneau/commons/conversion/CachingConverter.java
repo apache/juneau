@@ -55,7 +55,7 @@ public abstract class CachingConverter implements Converter {
 	// Sentinel stored in the cache when findConversion() returns null.
 	// ConcurrentHashMap does not permit null values, so we cannot store null directly.
 	// Using this sentinel avoids re-invoking findConversion() for unconvertable type pairs.
-	private static final Conversion<?,?> NO_CONVERSION = (in, memberOf, args) -> null; // HTT: sentinel body is never invoked; ConcurrentHashMap prohibits null values so we use this placeholder
+	private static final Conversion<?,?> NO_CONVERSION = (in, memberOf, session, args) -> null; // HTT: sentinel body is never invoked; ConcurrentHashMap prohibits null values so we use this placeholder
 
 	// Two-level cache: input type -> output type -> conversion function (or NO_CONVERSION sentinel).
 	private final Map<Class<?>, Map<Class<?>, Conversion<?,?>>> conversions = new ConcurrentHashMap<>();
@@ -124,7 +124,7 @@ public abstract class CachingConverter implements Converter {
 		var fn = (Conversion<Object, T>) lookupConversion(inType, type);
 		if (fn == null)
 			throw new InvalidConversionException(inType, type);
-		return fn.to(o, null);
+		return fn.to(o, null, (ConverterSession)null);
 	}
 
 	/**
@@ -160,15 +160,19 @@ public abstract class CachingConverter implements Converter {
 		var fn = (Conversion<Object, T>) lookupConversion(inType, rawType);
 		if (fn == null)
 			throw new InvalidConversionException(inType, rawType);
-		return fn.to(o, null, argClasses);
+		return fn.to(o, null, (ConverterSession)null, argClasses);
 	}
 
 	/**
-	 * Converts the specified object to the specified type, passing the outer instance for
-	 * non-static inner class construction.
+	 * Converts the specified object to the specified type, using the given outer instance and converter session.
+	 *
+	 * <p>
+	 * The session is forwarded to the cached {@link Conversion} function so conversion lambdas can access
+	 * contextual objects such as {@link java.util.TimeZone} or {@link java.util.Locale}.
 	 *
 	 * @param o The object to convert. Can be <jk>null</jk>.
 	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
+	 * @param session The converter session providing contextual objects, or <jk>null</jk>.
 	 * @param type The target type.
 	 * @param <T> The target type.
 	 * @return The converted object, or <jk>null</jk> if the input is <jk>null</jk>.
@@ -176,7 +180,7 @@ public abstract class CachingConverter implements Converter {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T to(Object o, Object memberOf, Class<T> type) {
+	public <T> T to(Object o, Object memberOf, ConverterSession session, Class<T> type) {
 		if (o == null)
 			return null;
 		var inType = o.getClass();
@@ -185,15 +189,19 @@ public abstract class CachingConverter implements Converter {
 		var fn = (Conversion<Object, T>) lookupConversion(inType, type);
 		if (fn == null)
 			throw new InvalidConversionException(inType, type);
-		return fn.to(o, memberOf);
+		return fn.to(o, memberOf, session);
 	}
 
 	/**
-	 * Converts the specified object to the specified parameterized type, passing the outer instance for
-	 * non-static inner class construction.
+	 * Converts the specified object to the specified parameterized type, using the given outer instance and converter session.
+	 *
+	 * <p>
+	 * The session is forwarded to the cached {@link Conversion} function so conversion lambdas can access
+	 * contextual objects such as {@link java.util.TimeZone} or {@link java.util.Locale}.
 	 *
 	 * @param o The object to convert. Can be <jk>null</jk>.
 	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
+	 * @param session The converter session providing contextual objects, or <jk>null</jk>.
 	 * @param mainType The target type. May be a {@link Class} or {@link ParameterizedType}.
 	 * @param args The type arguments of the target type (e.g. element type for collections).
 	 * @param <T> The target type.
@@ -202,7 +210,7 @@ public abstract class CachingConverter implements Converter {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T to(Object o, Object memberOf, Type mainType, Type... args) {
+	public <T> T to(Object o, Object memberOf, ConverterSession session, Type mainType, Type... args) {
 		if (o == null)
 			return null;
 		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
@@ -213,6 +221,6 @@ public abstract class CachingConverter implements Converter {
 		var fn = (Conversion<Object, T>) lookupConversion(inType, rawType);
 		if (fn == null)
 			throw new InvalidConversionException(inType, rawType);
-		return fn.to(o, memberOf, argClasses);
+		return fn.to(o, memberOf, session, argClasses);
 	}
 }

@@ -51,14 +51,14 @@ class Converter_Test extends TestBase {
 		@Override public <T> T to(Object o, Type mainType, Type... args) { return BasicConverter.INSTANCE.to(o, mainType, args); }
 	};
 
-	@Test void b01_defaultToMemberOfClass() {
-		// default to(o, memberOf, Class) ignores memberOf and delegates to to(o, Class)
-		assertEquals(Integer.valueOf(42), B_STUB.to("42", new Object(), Integer.class));
+	@Test void b01_defaultToSessionClass() {
+		// default to(o, memberOf, session, Class) ignores memberOf and session and delegates to to(o, Class)
+		assertEquals(Integer.valueOf(42), B_STUB.to("42", new Object(), (ConverterSession)null, Integer.class));
 	}
 
-	@Test void b02_defaultToMemberOfType() {
-		// default to(o, memberOf, Type, Type...) ignores memberOf and delegates to to(o, Type, Type...)
-		var result = B_STUB.to(List.of("1", "2"), new Object(), (Type) List.class, new Type[]{Integer.class});
+	@Test void b02_defaultToSessionType() {
+		// default to(o, memberOf, session, Type, Type...) ignores memberOf and session and delegates to to(o, Type, Type...)
+		var result = B_STUB.to(List.of("1", "2"), new Object(), (ConverterSession)null, (Type) List.class, new Type[]{Integer.class});
 		assertEquals(List.of(1, 2), result);
 	}
 }

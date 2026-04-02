@@ -126,13 +126,14 @@ public class BeanContextConverter implements Converter {
 	 *
 	 * @param o The object to convert.
 	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
+	 * @param session The converter session, or <jk>null</jk>.
 	 * @param type The target class type.
 	 * @param <T> The target type to convert to.
 	 * @return The converted object, or <jk>null</jk> if the input object is <jk>null</jk>.
 	 * @throws InvalidDataConversionException If the object cannot be converted to the specified type.
 	 */
 	@Override
-	public <T> T to(Object o, Object memberOf, Class<T> type) {
+	public <T> T to(Object o, Object memberOf, ConverterSession session, Class<T> type) {
 		return BeanContext.DEFAULT_SESSION.convertToMemberType(memberOf, o, type);
 	}
 
@@ -142,6 +143,7 @@ public class BeanContextConverter implements Converter {
 	 *
 	 * @param o The object to convert.
 	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
+	 * @param session The converter session, or <jk>null</jk>.
 	 * @param mainType The main type to convert to.
 	 * @param args The type parameters of the main type.
 	 * @param <T> The target type to convert to.
@@ -150,7 +152,7 @@ public class BeanContextConverter implements Converter {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T to(Object o, Object memberOf, Type mainType, Type... args) {
+	public <T> T to(Object o, Object memberOf, ConverterSession session, Type mainType, Type... args) {
 		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
 		return BeanContext.DEFAULT_SESSION.convertToMemberType(memberOf, o, rawType);
 	}

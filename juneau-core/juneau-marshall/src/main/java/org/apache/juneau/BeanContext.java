@@ -33,6 +33,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
@@ -257,6 +258,7 @@ public class BeanContext extends Context {
 		private Set<ClassInfo> notBeanClasses;
 
 		private Set<String> notBeanPackages;
+		private ConfigurableConverter converter;
 
 		/**
 		 * Constructor.
@@ -312,6 +314,7 @@ public class BeanContext extends Context {
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
 			beansRequireSerializable = copyFrom.beansRequireSerializable;
 			beansRequireSettersForGetters = copyFrom.beansRequireSettersForGetters;
+			converter = copyFrom.converter;
 			disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
 			disableIgnoreMissingSetters = ! copyFrom.ignoreMissingSetters;
 			disableIgnoreTransientFields = ! copyFrom.ignoreTransientFields;
@@ -351,6 +354,7 @@ public class BeanContext extends Context {
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
 			beansRequireSerializable = copyFrom.beansRequireSerializable;
 			beansRequireSettersForGetters = copyFrom.beansRequireSettersForGetters;
+			converter = copyFrom.converter;
 			disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
 			disableIgnoreMissingSetters = copyFrom.disableIgnoreMissingSetters;
 			disableIgnoreTransientFields = copyFrom.disableIgnoreTransientFields;
@@ -395,6 +399,37 @@ public class BeanContext extends Context {
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
+			return this;
+		}
+
+		/**
+		 * Registers a custom type conversion on this context.
+		 *
+		 * <p>
+		 * User-registered conversions take priority over built-in type dispatch in
+		 * {@link BeanSession#convertToMemberType(Object, Object, ClassMeta)}, but are checked after
+		 * {@link ObjectSwap} processing.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Register a custom String-to-MyBean conversion.</jc>
+		 * 	BeanContext <jv>bc</jv> = BeanContext
+		 * 		.<jsm>create</jsm>()
+		 * 		.addConverter(String.<jk>class</jk>, MyBean.<jk>class</jk>, (<jv>in</jv>, <jv>memberOf</jv>, <jv>session</jv>, <jv>args</jv>) -&gt; MyBean.fromString(<jv>in</jv>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param <I> The input type.
+		 * @param <O> The output type.
+		 * @param inType The input type class.
+		 * @param outType The output type class.
+		 * @param conversion The conversion function.
+		 * @return This object.
+		 */
+		public <I, O> Builder addConverter(Class<I> inType, Class<O> outType, Conversion<I, O> conversion) {
+			if (converter == null)
+				converter = new ConfigurableConverter();
+			converter.add(inType, outType, conversion);
 			return this;
 		}
 
@@ -2226,6 +2261,7 @@ public class BeanContext extends Context {
 				beanMethodVisibility,
 				beanFieldVisibility,
 				beanDictionary,
+				converter != null ? System.identityHashCode(converter) : 0,
 				swaps,
 				notBeanClasses,
 				notBeanPackages,
@@ -3628,6 +3664,7 @@ public class BeanContext extends Context {
 	private final NullableSupplier<WriterSerializer> beanToStringSerializer;
 	private final BeanRegistry beanRegistry;
 	private final BeanSession defaultSession;
+	private final ConfigurableConverter converter;
 	private final boolean beanMapPutReturnsOldValue;
 	private final boolean beansRequireDefaultConstructor;
 	private final boolean beansRequireSerializable;
@@ -3685,6 +3722,7 @@ public class BeanContext extends Context {
 		beansRequireSerializable = builder.beansRequireSerializable;
 		beansRequireSettersForGetters = builder.beansRequireSettersForGetters;
 		beansRequireSomeProperties = ! builder.disableBeansRequireSomeProperties;
+		converter = builder.converter;
 		findFluentSetters = builder.findFluentSetters;
 		hashKey = builder.hashKey();
 		ignoreInvocationExceptionsOnGetters = builder.ignoreInvocationExceptionsOnGetters;
@@ -3806,6 +3844,14 @@ public class BeanContext extends Context {
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
 	public final Visibility getBeanFieldVisibility() { return beanFieldVisibility; }
+
+	/**
+	 * Returns the custom converter registered on this context, or <jk>null</jk> if none.
+	 *
+	 * @see BeanContext.Builder#addConverter(Class, Class, Conversion)
+	 * @return The custom converter, or <jk>null</jk> if no custom conversions have been registered.
+	 */
+	public final ConfigurableConverter getConverter() { return converter; }
 
 	/**
 	 * Returns the {@link BeanMeta} class for the specified class.

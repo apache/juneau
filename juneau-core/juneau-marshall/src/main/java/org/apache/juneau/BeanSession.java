@@ -36,6 +36,7 @@ import java.util.logging.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.time.*;
@@ -58,7 +59,7 @@ import org.apache.juneau.utils.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - ClassMeta<?>, ObjectSwap<?,?>, etc. for bean metadata
 })
-public class BeanSession extends ContextSession {
+public class BeanSession extends ContextSession implements ConverterSession {
 
 	// Property name constants
 	private static final String PROP_locale = "locale";
@@ -266,8 +267,11 @@ public class BeanSession extends ContextSession {
 		return 1;
 	}
 
-	private static boolean hasMutater(ClassMeta<?> from, ClassMeta<?> to) {
-		return to.hasMutaterFrom(from) || from.hasMutaterTo(to);
+	private boolean hasMutater(ClassMeta<?> from, ClassMeta<?> to) {
+		if (to.hasMutaterFrom(from) || from.hasMutaterTo(to))
+			return true;
+		var c = ctx.getConverter();
+		return c != null && c.hasCustomConversion(from.inner(), to.inner());
 	}
 
 	private static final boolean isNullOrEmpty(Object o) {
@@ -290,6 +294,14 @@ public class BeanSession extends ContextSession {
 		locale = opt(builder.locale).orElse(ctx.getLocale());
 		mediaType = opt(builder.mediaType).orElse(builder.mediaType);
 		timeZone = opt(builder.timeZone).orElse(builder.timeZone);
+	}
+
+	@Override /* ConverterSession */
+	public <T> Optional<T> get(Class<T> c) {
+		if (c == TimeZone.class) return opt(c.cast(timeZone));
+		if (c == Locale.class) return opt(c.cast(locale));
+		if (c == MediaType.class) return opt(c.cast(mediaType));
+		return opte();
 	}
 
 	/**
@@ -1219,6 +1231,10 @@ public class BeanSession extends ContextSession {
 				if (nc.isAssignableFrom(from.inner()) && fc.isAssignableFrom(tc))
 					return (T)swap.swap(this, value);
 			}
+
+			var ctxConverter = ctx.getConverter();
+			if (ctxConverter != null && ctxConverter.hasCustomConversion(from.inner(), tc))
+				return ctxConverter.to(value, outer, this, tc);
 
 			if (to.isCharSequence() && (from.isDateOrCalendarOrTemporal() || from.isDuration()))
 				return (T) Iso8601Utils.format(value, from, getTimeZone());

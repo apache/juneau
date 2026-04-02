@@ -181,7 +181,7 @@ public class BasicConverter extends CachingConverter {
 		if ((c = findSpecialConversion(inType, out)) != null) return c;
 
 		if (out.isAssignableFrom(inType) && !Collection.class.isAssignableFrom(out) && !Map.class.isAssignableFrom(out))
-			return (in, memberOf, args) -> (O) in;
+			return (in, memberOf, session, args) -> (O) in;
 
 		if (Number.class.isAssignableFrom(out) && (c = findNumberConversion(inType, out)) != null) return c;
 
@@ -224,31 +224,31 @@ public class BasicConverter extends CachingConverter {
 	}
 
 	private <I, O> Conversion<I, O> findNumberFromNumber(Class<O> outType) {
-		if (outType == Integer.class) return (in, memberOf, args) -> (O) Integer.valueOf(((Number) in).intValue());
-		if (outType == Long.class) return (in, memberOf, args) -> (O) Long.valueOf(((Number) in).longValue());
-		if (outType == Short.class) return (in, memberOf, args) -> (O) Short.valueOf(((Number) in).shortValue());
-		if (outType == Float.class) return (in, memberOf, args) -> (O) Float.valueOf(((Number) in).floatValue());
-		if (outType == Double.class) return (in, memberOf, args) -> (O) Double.valueOf(((Number) in).doubleValue());
-		if (outType == Byte.class) return (in, memberOf, args) -> (O) Byte.valueOf(((Number) in).byteValue());
-		if (outType == AtomicInteger.class) return (in, memberOf, args) -> (O) new AtomicInteger(((Number) in).intValue());
-		if (outType == AtomicLong.class) return (in, memberOf, args) -> (O) new AtomicLong(((Number) in).longValue());
+		if (outType == Integer.class) return (in, memberOf, session, args) -> (O) Integer.valueOf(((Number) in).intValue());
+		if (outType == Long.class) return (in, memberOf, session, args) -> (O) Long.valueOf(((Number) in).longValue());
+		if (outType == Short.class) return (in, memberOf, session, args) -> (O) Short.valueOf(((Number) in).shortValue());
+		if (outType == Float.class) return (in, memberOf, session, args) -> (O) Float.valueOf(((Number) in).floatValue());
+		if (outType == Double.class) return (in, memberOf, session, args) -> (O) Double.valueOf(((Number) in).doubleValue());
+		if (outType == Byte.class) return (in, memberOf, session, args) -> (O) Byte.valueOf(((Number) in).byteValue());
+		if (outType == AtomicInteger.class) return (in, memberOf, session, args) -> (O) new AtomicInteger(((Number) in).intValue());
+		if (outType == AtomicLong.class) return (in, memberOf, session, args) -> (O) new AtomicLong(((Number) in).longValue());
 		return null;
 	}
 
 	private <O> Conversion<Boolean, O> findNumberFromBoolean(Class<O> outType) {
-		if (outType == Integer.class) return (in, memberOf, args) -> (O) Integer.valueOf(in.booleanValue() ? 1 : 0);
-		if (outType == Long.class) return (in, memberOf, args) -> (O) Long.valueOf(in.booleanValue() ? 1L : 0L);
-		if (outType == Short.class) return (in, memberOf, args) -> (O) Short.valueOf(in.booleanValue() ? (short) 1 : (short) 0);
-		if (outType == Float.class) return (in, memberOf, args) -> (O) Float.valueOf(in.booleanValue() ? 1f : 0f);
-		if (outType == Double.class) return (in, memberOf, args) -> (O) Double.valueOf(in.booleanValue() ? 1d : 0d);
-		if (outType == Byte.class) return (in, memberOf, args) -> (O) Byte.valueOf(in.booleanValue() ? (byte) 1 : (byte) 0);
-		if (outType == AtomicInteger.class) return (in, memberOf, args) -> (O) new AtomicInteger(in.booleanValue() ? 1 : 0);
-		if (outType == AtomicLong.class) return (in, memberOf, args) -> (O) new AtomicLong(in.booleanValue() ? 1L : 0L);
+		if (outType == Integer.class) return (in, memberOf, session, args) -> (O) Integer.valueOf(in.booleanValue() ? 1 : 0);
+		if (outType == Long.class) return (in, memberOf, session, args) -> (O) Long.valueOf(in.booleanValue() ? 1L : 0L);
+		if (outType == Short.class) return (in, memberOf, session, args) -> (O) Short.valueOf(in.booleanValue() ? (short) 1 : (short) 0);
+		if (outType == Float.class) return (in, memberOf, session, args) -> (O) Float.valueOf(in.booleanValue() ? 1f : 0f);
+		if (outType == Double.class) return (in, memberOf, session, args) -> (O) Double.valueOf(in.booleanValue() ? 1d : 0d);
+		if (outType == Byte.class) return (in, memberOf, session, args) -> (O) Byte.valueOf(in.booleanValue() ? (byte) 1 : (byte) 0);
+		if (outType == AtomicInteger.class) return (in, memberOf, session, args) -> (O) new AtomicInteger(in.booleanValue() ? 1 : 0);
+		if (outType == AtomicLong.class) return (in, memberOf, session, args) -> (O) new AtomicLong(in.booleanValue() ? 1L : 0L);
 		return null;
 	}
 
 	private <O> Conversion<CharSequence, O> findNumberFromString(Class<O> outType) {
-		return (in, memberOf, args) -> (O) parseNumber(in.toString(), (Class<? extends Number>) outType);
+		return (in, memberOf, session, args) -> (O) parseNumber(in.toString(), (Class<? extends Number>) outType);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -257,7 +257,7 @@ public class BasicConverter extends CachingConverter {
 
 	private <I, O> Conversion<I, O> findBooleanConversion(Class<I> inType) {
 		if (Number.class.isAssignableFrom(inType))
-			return (in, memberOf, args) -> (O) Boolean.valueOf(((Number) in).intValue() != 0);
+			return (in, memberOf, session, args) -> (O) Boolean.valueOf(((Number) in).intValue() != 0);
 		return null;
 	}
 
@@ -267,12 +267,12 @@ public class BasicConverter extends CachingConverter {
 
 	private <I, O> Conversion<I, O> findCharacterConversion(Class<I> inType) {
 		if (CharSequence.class.isAssignableFrom(inType))
-			return (in, memberOf, args) -> {
+			return (in, memberOf, session, args) -> {
 				var s = in.toString();
 				return s.length() == 1 ? (O) Character.valueOf(s.charAt(0)) : null;
 			};
 		if (Number.class.isAssignableFrom(inType))
-			return (in, memberOf, args) -> (O) Character.valueOf((char) ((Number) in).intValue());
+			return (in, memberOf, session, args) -> (O) Character.valueOf((char) ((Number) in).intValue());
 		return null;
 	}
 
@@ -282,17 +282,17 @@ public class BasicConverter extends CachingConverter {
 
 	private <I> Conversion<I, String> findToStringConversion(Class<I> inType) {
 		if (inType.isArray()) {
-			if (inType == int[].class) return (in, memberOf, args) -> Arrays.toString((int[]) in);
-			if (inType == long[].class) return (in, memberOf, args) -> Arrays.toString((long[]) in);
-			if (inType == double[].class) return (in, memberOf, args) -> Arrays.toString((double[]) in);
-			if (inType == float[].class) return (in, memberOf, args) -> Arrays.toString((float[]) in);
-			if (inType == boolean[].class) return (in, memberOf, args) -> Arrays.toString((boolean[]) in);
-			if (inType == byte[].class) return (in, memberOf, args) -> Arrays.toString((byte[]) in);
-			if (inType == short[].class) return (in, memberOf, args) -> Arrays.toString((short[]) in);
-			if (inType == char[].class) return (in, memberOf, args) -> Arrays.toString((char[]) in);
-			return (in, memberOf, args) -> Arrays.deepToString((Object[]) in);
+			if (inType == int[].class) return (in, memberOf, session, args) -> Arrays.toString((int[]) in);
+			if (inType == long[].class) return (in, memberOf, session, args) -> Arrays.toString((long[]) in);
+			if (inType == double[].class) return (in, memberOf, session, args) -> Arrays.toString((double[]) in);
+			if (inType == float[].class) return (in, memberOf, session, args) -> Arrays.toString((float[]) in);
+			if (inType == boolean[].class) return (in, memberOf, session, args) -> Arrays.toString((boolean[]) in);
+			if (inType == byte[].class) return (in, memberOf, session, args) -> Arrays.toString((byte[]) in);
+			if (inType == short[].class) return (in, memberOf, session, args) -> Arrays.toString((short[]) in);
+			if (inType == char[].class) return (in, memberOf, session, args) -> Arrays.toString((char[]) in);
+			return (in, memberOf, session, args) -> Arrays.deepToString((Object[]) in);
 		}
-		return (in, memberOf, args) -> in.toString();
+		return (in, memberOf, session, args) -> in.toString();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -301,7 +301,7 @@ public class BasicConverter extends CachingConverter {
 
 	private <I, O> Conversion<I, O> findEnumConversion(Class<I> inType, Class<O> outType) {
 		if (CharSequence.class.isAssignableFrom(inType))
-			return (in, memberOf, args) -> (O) Enum.valueOf((Class<Enum>) outType, in.toString());
+			return (in, memberOf, session, args) -> (O) Enum.valueOf((Class<Enum>) outType, in.toString());
 		return null;
 	}
 
@@ -311,7 +311,7 @@ public class BasicConverter extends CachingConverter {
 
 	private <I, O> Conversion<I, O> findCollectionConversion(Class<I> inType, Class<O> outType) {
 		if (Collection.class.isAssignableFrom(inType) || inType.isArray()) {
-			return (in, memberOf, args) -> {
+			return (in, memberOf, session, args) -> {
 				var elemType = args.length > 0 ? args[0] : null;
 				if (elemType == null && !inType.isArray() && outType.isAssignableFrom(inType))
 					return (O) in;
@@ -350,7 +350,7 @@ public class BasicConverter extends CachingConverter {
 
 	private <I, O> Conversion<I, O> findMapConversion(Class<I> inType, Class<O> outType) {
 		if (Map.class.isAssignableFrom(inType)) {
-			return (in, memberOf, args) -> {
+			return (in, memberOf, session, args) -> {
 				var keyType = args.length > 0 ? args[0] : null;
 				var valType = args.length > 1 ? args[1] : null;
 				if (keyType == null && outType.isAssignableFrom(inType))
@@ -393,7 +393,7 @@ public class BasicConverter extends CachingConverter {
 						&& !canConvert(inComponentType, componentType))
 					return null;
 			}
-			return (in, memberOf, args) -> {
+			return (in, memberOf, session, args) -> {
 				if (Collection.class.isAssignableFrom(inType)) {
 					var list = (Collection<?>) in;
 					var arr = Array.newInstance(componentType, list.size());
@@ -418,13 +418,13 @@ public class BasicConverter extends CachingConverter {
 
 	private <I, O> Conversion<I, O> findSpecialConversion(Class<I> inType, Class<O> outType) {
 		if (inType == String.class && outType == TimeZone.class)
-			return (Conversion<I, O>) (Conversion<String, TimeZone>) (in, memberOf, args) -> TimeZone.getTimeZone(in);
+			return (Conversion<I, O>) (Conversion<String, TimeZone>) (in, memberOf, session, args) -> TimeZone.getTimeZone(in);
 		if (TimeZone.class.isAssignableFrom(inType) && outType == String.class)
-			return (Conversion<I, O>) (Conversion<TimeZone, String>) (in, memberOf, args) -> in.getID();
+			return (Conversion<I, O>) (Conversion<TimeZone, String>) (in, memberOf, session, args) -> in.getID();
 		if (inType == String.class && outType == Locale.class)
-			return (Conversion<I, O>) (Conversion<String, Locale>) (in, memberOf, args) -> Locale.forLanguageTag(in.replace('_', '-'));
+			return (Conversion<I, O>) (Conversion<String, Locale>) (in, memberOf, session, args) -> Locale.forLanguageTag(in.replace('_', '-'));
 		if (CharSequence.class.isAssignableFrom(inType) && outType == Boolean.class)
-			return (in, memberOf, args) -> {
+			return (in, memberOf, session, args) -> {
 				var s = in.toString();
 				if (s.isEmpty() || "null".equals(s))
 					return null;
@@ -443,7 +443,7 @@ public class BasicConverter extends CachingConverter {
 		for (var name : FACTORY_METHOD_NAMES) {
 			var opt = findStaticMethod(ci, name, inType, outType);
 			if (opt.isPresent())
-				return (in, memberOf, args) -> opt.get().invoke(null, in);
+				return (in, memberOf, session, args) -> opt.get().invoke(null, in);
 		}
 
 		// Walk the type hierarchy (superclasses then interfaces) so that e.g. InputStreamReader
@@ -453,7 +453,7 @@ public class BasicConverter extends CachingConverter {
 			for (var prefix : new String[]{"from", "for", "parse"}) {
 				var opt = findStaticMethod(ci, prefix + inName, inType, outType);
 				if (opt.isPresent())
-					return (in, memberOf, args) -> opt.get().invoke(null, in);
+					return (in, memberOf, session, args) -> opt.get().invoke(null, in);
 			}
 		}
 		for (var iface : allInterfaces(inType)) {
@@ -461,7 +461,7 @@ public class BasicConverter extends CachingConverter {
 			for (var prefix : new String[]{"from", "for", "parse"}) {
 				var opt = findStaticMethod(ci, prefix + inName, inType, outType);
 				if (opt.isPresent())
-					return (in, memberOf, args) -> opt.get().invoke(null, in);
+					return (in, memberOf, session, args) -> opt.get().invoke(null, in);
 			}
 		}
 
@@ -510,7 +510,7 @@ public class BasicConverter extends CachingConverter {
 			);
 			if (opt.isPresent()) {
 				var ctor = opt.get();
-				return (in, memberOf, args) -> ctor.newInstance(memberOf, in);
+				return (in, memberOf, session, args) -> ctor.newInstance(memberOf, in);
 			}
 		}
 
@@ -521,7 +521,7 @@ public class BasicConverter extends CachingConverter {
 		);
 		if (opt.isPresent()) {
 			var ctor = opt.get();
-			return (in, memberOf, args) -> ctor.newInstance(in);
+			return (in, memberOf, session, args) -> ctor.newInstance(in);
 		}
 		return null;
 	}
@@ -543,7 +543,7 @@ public class BasicConverter extends CachingConverter {
 		);
 		if (opt.isPresent()) {
 			var method = opt.get();
-			return (in, memberOf, args) -> method.invoke(in);
+			return (in, memberOf, session, args) -> method.invoke(in);
 		}
 		return null;
 	}
