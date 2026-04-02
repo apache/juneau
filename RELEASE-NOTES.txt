@@ -168,6 +168,61 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
       use ISO 8601 formatting for date/time/Duration types.
     * All parser sessions updated with date/time/Duration dispatch in parseAnything().
 
+** New Features - Converter Framework (juneau-commons)
+
+    * New org.apache.juneau.commons.conversion package providing a lightweight, BeanContext-free
+      type conversion framework:
+
+    * Converter interface:
+        - canConvert(Class<?> inType, Class<?> outType) - default returns true; override to restrict.
+        - to(Object o, Class<T> type) - converts o to the target class; throws InvalidConversionException
+          if no conversion path exists; returns null only when input is null.
+        - to(Object o, Type mainType, Type... args) - parameterized-type variant for generic targets
+          such as List<String> or Map<String,Integer>.
+
+    * CachingConverter abstract class:
+        - Abstract base class implementing Converter with two-level ConcurrentHashMap cache.
+        - Conversion functions are discovered once via findConversion(Class, Class) and cached for
+          all subsequent calls on the same type pair.
+        - Unconvertable type pairs are also cached (via a NO_CONVERSION sentinel) to avoid repeated
+          reflection overhead.
+        - Subclasses implement findConversion(Class<I>, Class<O>) and return a Conversion<I,O> lambda,
+          or null if no conversion is possible for that type pair.
+
+    * BasicConverter class:
+        - Concrete CachingConverter with a thread-safe BasicConverter.INSTANCE singleton.
+        - Supports a wide range of common conversions without requiring BeanContext/BeanSession:
+            - Identity / widening cast (any type to same or supertype).
+            - Numeric narrowing/widening: Number to Integer, Long, Short, Float, Double, Byte,
+              AtomicInteger, AtomicLong, and primitive equivalents.
+            - Boolean to Number (true=1, false=0) and Number to Boolean (intValue() != 0).
+            - CharSequence to Number (parsed via StringUtils.parseNumber()).
+            - CharSequence (length 1) or Number to Character.
+            - Any type to String (toString() with array support via Arrays.toString()).
+            - CharSequence to Enum (Enum.valueOf()).
+            - Collection/array to Collection subtype (copies elements; element type from args[0]).
+            - Map to Map subtype (copies entries; key/value types from args[0]/args[1]).
+            - Collection/array to array (element type from outType.getComponentType()).
+            - Special cases: String ↔ TimeZone, String ↔ Locale.
+            - Reflection-based static factory lookup:
+                fromString/valueOf/of/from/parse/create/forName/fromValue/builder(X)
+                or dynamic fromX/forX/parseX where X is the input class name.
+            - Reflection-based constructor lookup: public T(X) constructor.
+            - Instance toX() method lookup (e.g. toInteger()).
+
+    * Conversion functional interface:
+        - O to(I in, Class<?>... args) - used as the cached conversion lambda in CachingConverter.
+        - args carries type arguments for parameterized output types at call time.
+
+    * InvalidConversionException runtime exception:
+        - Thrown by Converter.to() when no conversion path exists between two types.
+        - Message format: "Cannot convert <inType> to <outType>".
+        - Callers can pre-check with canConvert() to avoid the exception.
+
+    * BeanContextConverter (renamed from GenericConverter) in org.apache.juneau.utils:
+        - Implements Converter and delegates to the default BeanContext session for type conversion.
+        - Provides access to the full Juneau framework conversion logic including bean mapping.
+
 Release Notes - Juneau - Version 9.2.0 - 2025-12-30
 
 ** Changes

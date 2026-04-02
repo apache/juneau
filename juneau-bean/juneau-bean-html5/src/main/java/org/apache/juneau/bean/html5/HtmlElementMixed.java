@@ -20,9 +20,8 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -114,10 +113,10 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @param type The class type of the node.
 	 * @param index The index of the node in the list of children.
 	 * @return The child node, or <jk>null</jk> if it doesn't exist.
-	 * @throws InvalidDataConversionException If node is not the expected type.
+	 * @throws InvalidConversionException If node is not the expected type.
 	 */
 	public <T> T getChild(Class<T> type, int index) {
-		return (children == null || children.size() <= index || index < 0 ? null : ConverterUtils.toType(children.get(index), type));
+		return (children == null || children.size() <= index || index < 0 ? null : BasicConverter.INSTANCE.to(children.get(index), type));
 	}
 
 	/**

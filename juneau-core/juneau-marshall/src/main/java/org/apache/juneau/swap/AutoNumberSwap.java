@@ -25,8 +25,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 
@@ -247,7 +247,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		if (unswapType == null)
 			throw new ParseException("No unparse methodology found for object.");
 		try {
-			Object o2 = ConverterUtils.toType(o, unswapType);
+			Object o2 = BasicConverter.INSTANCE.to(o, unswapType);
 			if (nn(unswapMethod))
 				return (T)unswapMethod.invoke(null, getMatchingArgs(unswapMethod.getParameterTypes(), session, o2));
 			if (nn(unswapConstructor))

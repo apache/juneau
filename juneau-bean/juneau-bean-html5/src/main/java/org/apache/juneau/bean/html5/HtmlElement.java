@@ -26,8 +26,8 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -177,12 +177,13 @@ public abstract class HtmlElement {
 	 * @param <T> The class type to convert this class to.
 	 * @param type
 	 * 	The class type to convert this class to.
-	 * 	See {@link ConverterUtils} for a list of supported conversion types.
+	 * 	See {@link BasicConverter} for a list of supported conversion types.
 	 * @param key The attribute name.
 	 * @return The attribute value, or <jk>null</jk> if the named attribute does not exist.
+	 * @throws InvalidConversionException If the attribute value cannot be converted to the specified type.
 	 */
 	public <T> T getAttr(Class<T> type, String key) {
-		return attrs == null ? null : ConverterUtils.toType(attrs.get(key), type);
+		return attrs == null ? null : BasicConverter.INSTANCE.to(attrs.get(key), type);
 	}
 
 	/**
