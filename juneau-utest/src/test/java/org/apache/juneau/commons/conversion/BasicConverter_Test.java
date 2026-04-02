@@ -753,7 +753,14 @@ class BasicConverter_Test extends TestBase {
 		assertNull(C.to(null, Integer.class));
 		assertNull(C.to(null, List.class));
 		assertNull(C.to(null, Map.class));
-		assertNull(C.to(null, int.class));
+		assertEquals(0, (int) C.to(null, int.class));
+		assertEquals(0L, (long) C.to(null, long.class));
+		assertEquals(0.0d, (double) C.to(null, double.class));
+		assertEquals(0.0f, (float) C.to(null, float.class));
+		assertEquals(false, (boolean) C.to(null, boolean.class));
+		assertEquals((short)0, (short) C.to(null, short.class));
+		assertEquals((byte)0, (byte) C.to(null, byte.class));
+		assertEquals('\0', (char) C.to(null, char.class));
 	}
 
 	//====================================================================================================

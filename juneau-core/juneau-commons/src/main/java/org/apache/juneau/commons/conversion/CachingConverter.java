@@ -57,6 +57,30 @@ public abstract class CachingConverter implements Converter {
 	// Using this sentinel avoids re-invoking findConversion() for unconvertable type pairs.
 	private static final Conversion<?,?> NO_CONVERSION = (in, memberOf, session, args) -> null; // HTT: sentinel body is never invoked; ConcurrentHashMap prohibits null values so we use this placeholder
 
+	/**
+	 * Returns the JVM default value for a primitive type, or <jk>null</jk> if the type is not primitive.
+	 *
+	 * <p>
+	 * This is used to satisfy {@link #to} when the input is <jk>null</jk> and the target type is a
+	 * non-boxed primitive (e.g. {@code int.class}), where returning <jk>null</jk> would be invalid.
+	 *
+	 * @param type The target type.
+	 * @param <T> The target type.
+	 * @return The JVM zero/false default, or <jk>null</jk> if {@code type} is not a primitive.
+	 */
+	@SuppressWarnings("unchecked")
+	private static <T> T primitiveDefault(Class<T> type) {
+		if (type == Integer.TYPE)   return (T) Integer.valueOf(0);
+		if (type == Long.TYPE)      return (T) Long.valueOf(0L);
+		if (type == Double.TYPE)    return (T) Double.valueOf(0.0d);
+		if (type == Float.TYPE)     return (T) Float.valueOf(0.0f);
+		if (type == Boolean.TYPE)   return (T) Boolean.FALSE;
+		if (type == Short.TYPE)     return (T) Short.valueOf((short)0);
+		if (type == Byte.TYPE)      return (T) Byte.valueOf((byte)0);
+		if (type == Character.TYPE) return (T) Character.valueOf('\0');
+		return null; // HTT: no other primitive types exist in Java
+	}
+
 	// Two-level cache: input type -> output type -> conversion function (or NO_CONVERSION sentinel).
 	private final Map<Class<?>, Map<Class<?>, Conversion<?,?>>> conversions = new ConcurrentHashMap<>();
 
@@ -110,14 +134,15 @@ public abstract class CachingConverter implements Converter {
 	 * @param o The object to convert. Can be <jk>null</jk>.
 	 * @param type The target type.
 	 * @param <T> The target type.
-	 * @return The converted object, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @return The converted object, or the primitive zero-value if the input is <jk>null</jk> and the target
+	 * 	is a primitive type, or <jk>null</jk> otherwise.
 	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T to(Object o, Class<T> type) {
 		if (o == null)
-			return null;
+			return type.isPrimitive() ? primitiveDefault(type) : null;
 		var inType = o.getClass();
 		if (inType == type)
 			return (T) o;
@@ -150,9 +175,9 @@ public abstract class CachingConverter implements Converter {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T to(Object o, Type mainType, Type... args) {
-		if (o == null)
-			return null;
 		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
+		if (o == null)
+			return rawType.isPrimitive() ? primitiveDefault(rawType) : null;
 		var argClasses = Stream.of(args)
 			.map(t -> (Class<?>) (t instanceof ParameterizedType pt2 ? pt2.getRawType() : t))
 			.toArray(Class[]::new);
@@ -175,14 +200,15 @@ public abstract class CachingConverter implements Converter {
 	 * @param session The converter session providing contextual objects, or <jk>null</jk>.
 	 * @param type The target type.
 	 * @param <T> The target type.
-	 * @return The converted object, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @return The converted object, or the primitive zero-value if the input is <jk>null</jk> and the target
+	 * 	is a primitive type, or <jk>null</jk> otherwise.
 	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T to(Object o, Object memberOf, ConverterSession session, Class<T> type) {
 		if (o == null)
-			return null;
+			return type.isPrimitive() ? primitiveDefault(type) : null;
 		var inType = o.getClass();
 		if (inType == type)
 			return (T) o;
@@ -211,9 +237,9 @@ public abstract class CachingConverter implements Converter {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T to(Object o, Object memberOf, ConverterSession session, Type mainType, Type... args) {
-		if (o == null)
-			return null;
 		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
+		if (o == null)
+			return rawType.isPrimitive() ? primitiveDefault(rawType) : null;
 		var argClasses = Stream.of(args)
 			.map(t -> (Class<?>) (t instanceof ParameterizedType pt2 ? pt2.getRawType() : t))
 			.toArray(Class[]::new);
