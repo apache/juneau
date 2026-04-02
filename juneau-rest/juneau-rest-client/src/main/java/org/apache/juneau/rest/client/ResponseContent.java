@@ -32,6 +32,7 @@ import org.apache.http.conn.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.resource.*;
@@ -257,7 +258,7 @@ public class ResponseContent implements HttpEntity {
 			var mt = MediaType.of(ct);
 
 			if ((parser == null || (mt.toString().contains("text/plain") && ! parser.canHandle(ct))) && type.hasStringMutater())
-				return type.getStringMutater().mutate(asString());
+				return BasicConverter.INSTANCE.to(asString(), type.inner());
 
 			if (nn(parser)) {
 				try (Closeable in = parser.isReaderParser() ? asReader() : asInputStream()) {
@@ -285,10 +286,10 @@ public class ResponseContent implements HttpEntity {
 			}
 
 			if (type.hasReaderMutater())
-				return type.getReaderMutater().mutate(asReader());
+				return BasicConverter.INSTANCE.to(asReader(), type.inner());
 
 			if (type.hasInputStreamMutater())
-				return type.getInputStreamMutater().mutate(asInputStream());
+				return BasicConverter.INSTANCE.to(asInputStream(), type.inner());
 
 			ct = response.getStringHeader(HEADER_ContentType).orElse(null);
 

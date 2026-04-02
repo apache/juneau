@@ -1412,8 +1412,15 @@ public class BeanSession extends ContextSession {
 			if (to.isArray()) {
 				if (from.isCollection())
 					return (T)toArray(to, (Collection)value);
-				else if (from.isArray())
-					return (T)toArray(to, l((Object[])value));
+				else if (from.isArray()) {
+					// Use reflection to build the list so primitive arrays (e.g. boolean[]) are handled correctly.
+					// Array.get() auto-boxes primitives, whereas casting to Object[] fails for primitive arrays.
+					var len = Array.getLength(value);
+					var list = new ArrayList<>(len);
+					for (var i = 0; i < len; i++)
+						list.add(Array.get(value, i));
+					return (T)toArray(to, list);
+				}
 				else if (startsWith(value.toString(), '['))
 					return (T)toArray(to, JsonList.ofJson(value.toString()).setBeanSession(this));
 				else if (to.hasMutaterFrom(from))

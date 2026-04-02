@@ -27,6 +27,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
@@ -570,15 +571,15 @@ public class RequestContent {
 		}
 
 		if (cm.hasReaderMutater())
-			return cm.getReaderMutater().mutate(getReader());
+			return BasicConverter.INSTANCE.to(getReader(), cm.inner());
 
 		if (cm.hasInputStreamMutater())
-			return cm.getInputStreamMutater().mutate(getInputStream());
+			return BasicConverter.INSTANCE.to(getInputStream(), cm.inner());
 
 		var mt = getMediaType();
 
 		if ((isEmpty(s(mt)) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
-			return cm.getStringMutater().mutate(asString());
+			return BasicConverter.INSTANCE.to(asString(), cm.inner());
 
 		var ct = req.getHeader(ContentType.class);
 		throw new UnsupportedMediaType("Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",

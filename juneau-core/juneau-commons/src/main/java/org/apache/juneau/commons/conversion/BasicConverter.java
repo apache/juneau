@@ -383,6 +383,16 @@ public class BasicConverter extends CachingConverter {
 	private <I, O> Conversion<I, O> findArrayConversion(Class<I> inType, Class<O> outType) {
 		if (Collection.class.isAssignableFrom(inType) || inType.isArray()) {
 			var componentType = outType.getComponentType();
+			// For array→array, validate that element-level conversion is possible.
+			// Skip the pre-check for Object[] — runtime elements may be of a more specific type.
+			// Collections use runtime element types so we skip the pre-check there too.
+			if (inType.isArray()) {
+				var inComponentType = inType.getComponentType();
+				if (inComponentType != componentType
+						&& inComponentType != Object.class
+						&& !canConvert(inComponentType, componentType))
+					return null;
+			}
 			return (in, memberOf, args) -> {
 				if (Collection.class.isAssignableFrom(inType)) {
 					var list = (Collection<?>) in;
@@ -436,14 +446,42 @@ public class BasicConverter extends CachingConverter {
 				return (in, memberOf, args) -> opt.get().invoke(null, in);
 		}
 
-		var inName = inType.getSimpleName();
-		for (var prefix : new String[]{"from", "for", "parse"}) {
-			var opt = findStaticMethod(ci, prefix + inName, inType, outType);
-			if (opt.isPresent())
-				return (in, memberOf, args) -> opt.get().invoke(null, in);
+		// Walk the type hierarchy (superclasses then interfaces) so that e.g. InputStreamReader
+		// can be passed to a method declared as fromReader(Reader r).
+		for (Class<?> c = inType; c != null && c != Object.class; c = c.getSuperclass()) {
+			var inName = c.getSimpleName();
+			for (var prefix : new String[]{"from", "for", "parse"}) {
+				var opt = findStaticMethod(ci, prefix + inName, inType, outType);
+				if (opt.isPresent())
+					return (in, memberOf, args) -> opt.get().invoke(null, in);
+			}
+		}
+		for (var iface : allInterfaces(inType)) {
+			var inName = iface.getSimpleName();
+			for (var prefix : new String[]{"from", "for", "parse"}) {
+				var opt = findStaticMethod(ci, prefix + inName, inType, outType);
+				if (opt.isPresent())
+					return (in, memberOf, args) -> opt.get().invoke(null, in);
+			}
 		}
 
 		return null;
+	}
+
+	private static List<Class<?>> allInterfaces(Class<?> c) {
+		var result = new ArrayList<Class<?>>();
+		for (var x = c; x != null; x = x.getSuperclass())
+			for (var iface : x.getInterfaces())
+				collectInterfaces(iface, result);
+		return result;
+	}
+
+	private static void collectInterfaces(Class<?> iface, List<Class<?>> result) {
+		if (!result.contains(iface)) {
+			result.add(iface);
+			for (var parent : iface.getInterfaces())
+				collectInterfaces(parent, result);
+		}
 	}
 
 	private Optional<MethodInfo> findStaticMethod(ClassInfo ci, String name, Class<?> inType, Class<?> outType) {
@@ -493,12 +531,14 @@ public class BasicConverter extends CachingConverter {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private <I, O> Conversion<I, O> findToXMethod(Class<I> inType, Class<O> outType) {
-		var methodName = "to" + outType.getSimpleName();
+		// Use getNameReadable() so that array types use "Array" suffix (e.g. "toStringArray" for String[]).
+		// Use equalsIgnoreCase to match Mutaters' behavior (e.g. "toByteArray" matches "tobyteArray" from byte[]).
+		var methodName = "to" + info(outType).getNameReadable();
 		var opt = info(inType).getPublicMethod(m ->
 			m.isNotStatic()
 			&& m.isNotDeprecated()
 			&& m.getParameterCount() == 0
-			&& m.hasName(methodName)
+			&& m.getNameSimple().equalsIgnoreCase(methodName)
 			&& m.hasReturnTypeParent(outType)
 		);
 		if (opt.isPresent()) {

@@ -29,6 +29,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.lang.*;
@@ -706,7 +707,7 @@ public class BasicSwaggerProviderSession {
 		} else {
 			var cm = js.getClassMeta(type);
 			if (cm.hasStringMutater()) {
-				example = cm.getStringMutater().mutate(sex);
+				example = BasicConverter.INSTANCE.to(sex, cm.inner());
 			}
 		}
 

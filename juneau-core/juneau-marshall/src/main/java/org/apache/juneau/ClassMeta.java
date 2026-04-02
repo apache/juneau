@@ -31,18 +31,17 @@ import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -68,9 +67,8 @@ import org.apache.juneau.swap.*;
  */
 @Bean(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 @SuppressWarnings({
-	"deprecation", // Mutaters is deprecated but still used here pending full migration to Converter.INSTANCE
 	"java:S1200",  // Class has 23 dependencies, acceptable for this core reflection metadata class
-	"java:S1452"   // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, Mutater<T,?>, etc. for element/component types
+	"java:S1452"   // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, etc. for element/component types
 })
 public class ClassMeta<T> extends ClassInfoTyped<T> {
 
@@ -157,7 +155,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final NullableSupplier<FieldInfo> exampleField;                    // The @Example-annotated field (if it has one).
 	private final NullableSupplier<MethodInfo> exampleMethod;                  // The example() or @Example-annotated method (if it has one).
 	private final Supplier<BidiMap<Object,String>> enumValues;
-	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
 	private final NullableSupplier<MethodInfo> fromStringMethod;               // Static fromString(String) or equivalent method
 	private final NullableSupplier<ClassInfoTyped<? extends T>> implClass;     // The implementation class to use if this is an interface.
 	private final Supplier<KeyValueTypes> keyValueTypes;                        // Key and value types for MAP types.
@@ -166,10 +163,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private final NullableSupplier<ConstructorInfo> noArgConstructor;          // The no-arg constructor for this class (if it has one).
 	private final Supplier<Property<T,Object>> parentProperty;                 // The method to set the parent on an object (if it has one).
 	private final Cache<String,Optional<?>> properties;
-	private final Mutater<String,T> stringMutater;
 	private final NullableSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
 	private final Supplier<List<ObjectSwap<T,?>>> swaps;                       // The object POJO swaps associated with this bean (if it has any).
-	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final NullableSupplier<BeanMeta.BeanMetaValue<T>> beanMeta;
 
 	private record KeyValueTypes(ClassMeta<?> keyType, ClassMeta<?> valueType) {
@@ -278,7 +273,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		swaps = memoize(this::findSwaps);
 
 		this.args = null;
-		this.stringMutater = Mutaters.get(String.class, inner());
 	}
 
 	protected ObjectSwap<?,?> findSwap(Class<?> c) {
@@ -308,7 +302,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.keyValueTypes = memoize(this::findKeyValueTypes);
 		this.beanMeta = memoize(this::findBeanMeta);
 		this.swaps = memoize(this::findSwaps);
-		this.stringMutater = null;
 		this.fromStringMethod = memoize(this::findFromStringMethod);
 		this.exampleMethod = memoize(this::findExampleMethod);
 		this.parentProperty = memoize(this::findParentProperty);
@@ -345,7 +338,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.swaps = mainType.swaps;
 		this.exampleMethod = mainType.exampleMethod;
 		this.args = null;
-		this.stringMutater = mainType.stringMutater;
 		this.parentProperty = mainType.parentProperty;
 		this.nameProperty = mainType.nameProperty;
 		this.exampleField = mainType.exampleField;
@@ -598,28 +590,13 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	/**
-	 * Returns the transform for this class for creating instances from other object types.
+	 * Returns <jk>true</jk> if this class can be instantiated from the specified input type.
 	 *
-	 * @param <I> The transform-from class.
-	 * @param c The transform-from class.
-	 * @return The transform, or <jk>null</jk> if no such transform exists.
+	 * @param c The input class type.
+	 * @return <jk>true</jk> if a conversion exists.
 	 */
-	
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type mutation/conversion for generic type mutation/conversion for generic type mutation/conversion
-		"unchecked", // Type erasure requires unchecked casts in type mutation
-	})
-	public <I> Mutater<I,T> getFromMutater(Class<I> c) {
-		Mutater t = fromMutaters.get(c);
-		if (t == Mutaters.NULL)
-			return null;
-		if (t == null) {
-			t = Mutaters.get(c, inner());
-			if (t == null)
-				t = Mutaters.NULL;
-			fromMutaters.put(c, t);
-		}
-		return t == Mutaters.NULL ? null : t;
+	public boolean canConvertFrom(Class<?> c) {
+		return BasicConverter.INSTANCE.canConvert(c, inner());
 	}
 
 	/**
@@ -632,12 +609,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return implClass.map(x -> x.getNoArgConstructor(conVis).orElse(null)).orElse(null);
 	}
 
-	/**
-	 * Returns the transform for this class for creating instances from an InputStream.
-	 *
-	 * @return The transform, or <jk>null</jk> if no such transform exists.
-	 */
-	public Mutater<InputStream,T> getInputStreamMutater() { return getFromMutater(InputStream.class); }
 
 	/**
 	 * For {@code Map} types, returns the class type of the keys of the {@code Map}.
@@ -743,12 +714,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return beanMeta.get().optBeanMeta().map(x -> x.getBeanProxyInvocationHandler()).orElse(null);
 	}
 
-	/**
-	 * Returns the transform for this class for creating instances from a Reader.
-	 *
-	 * @return The transform, or <jk>null</jk> if no such transform exists.
-	 */
-	public Mutater<Reader,T> getReaderMutater() { return getFromMutater(Reader.class); }
 
 	/**
 	 * Returns the serialized (swapped) form of this class if there is an {@link ObjectSwap} associated with it.
@@ -763,12 +728,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		return (ps == null ? this : ps.getSwapClassMeta(session));
 	}
 
-	/**
-	 * Returns the transform for this class for creating instances from a String.
-	 *
-	 * @return The transform, or <jk>null</jk> if no such transform exists.
-	 */
-	public Mutater<String,T> getStringMutater() { return stringMutater; }
 
 	/**
 	 * Returns the {@link ObjectSwap} associated with this class that's the best match for the specified session.
@@ -802,28 +761,13 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	/**
-	 * Returns the transform for this class for creating instances from other object types.
+	 * Returns <jk>true</jk> if this class can be converted to the specified output type.
 	 *
-	 * @param <O> The transform-to class.
-	 * @param c The transform-from class.
-	 * @return The transform, or <jk>null</jk> if no such transform exists.
+	 * @param c The output class type.
+	 * @return <jk>true</jk> if a conversion exists.
 	 */
-	
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type mutation/conversion
-		"unchecked", // Type erasure requires unchecked casts in type mutation
-	})
-	public <O> Mutater<T,O> getToMutater(Class<O> c) {
-		Mutater t = toMutaters.get(c);
-		if (t == Mutaters.NULL)
-			return null;
-		if (t == null) {
-			t = Mutaters.get(inner(), c);
-			if (t == null)
-				t = Mutaters.NULL;
-			toMutaters.put(c, t);
-		}
-		return t == Mutaters.NULL ? null : t;
+	public boolean canConvertTo(Class<?> c) {
+		return BasicConverter.INSTANCE.canConvert(inner(), c);
 	}
 
 	/**
@@ -838,68 +782,126 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	/**
 	 * Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.
 	 *
+	 * <p>
+	 * Only returns <jk>true</jk> for types that can be explicitly constructed from an {@link InputStream} (e.g. via a
+	 * public constructor or static factory). Excludes assignable supertypes and the generic {@code toString()} fallback.
+	 *
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.
 	 */
 	public boolean hasInputStreamMutater() {
-		return hasMutaterFrom(InputStream.class);
+		// Exclude String: BasicConverter maps InputStream→String via stream.toString() which doesn't read content.
+		// Exclude supertypes of InputStream (e.g. Object, Closeable): assignability, not an explicit transform.
+		if (inner() == String.class || inner().isAssignableFrom(InputStream.class))
+			return false;
+		return BasicConverter.INSTANCE.canConvert(InputStream.class, inner());
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class can be instantiated from the specified type.
+	 * Returns <jk>true</jk> if this class can be instantiated from the specified type via an explicit conversion.
+	 *
+	 * <p>
+	 * Same-type conversions (identity) always return <jk>true</jk>. Strict supertype relationships (where this
+	 * class is already a supertype of the source) return <jk>false</jk> — those are assignability, not explicit
+	 * transforms.
 	 *
 	 * @param c The class type to convert from.
-	 * @return <jk>true</jk> if this class can be instantiated from the specified type.
+	 * @return <jk>true</jk> if an explicit conversion from {@code c} to this type exists.
 	 */
 	public boolean hasMutaterFrom(Class<?> c) {
-		return nn(getFromMutater(c));
+		// Same type is always "convertible" (identity).
+		if (inner() == c)
+			return true;
+		// Exclude strict supertype: if this type is already a strict supertype of c, it's assignability only.
+		if (inner().isAssignableFrom(c))
+			return false;
+		// Exclude array→array: BeanSession handles those directly; BasicConverter infers
+		// array conversions from element types, which can produce false positives here.
+		if (inner().isArray() && c.isArray())
+			return false;
+		// Exclude Collections and Maps: BeanSession handles those via convertToCollectionType/convertToMapType;
+		// BasicConverter's generic collection/map conversions produce false positives (Mutaters never did these).
+		if (Collection.class.isAssignableFrom(inner()) || Map.class.isAssignableFrom(inner()))
+			return false;
+		return BasicConverter.INSTANCE.canConvert(c, inner());
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class can be instantiated from the specified type.
+	 * Returns <jk>true</jk> if this class can be instantiated from the specified type via an explicit conversion.
 	 *
 	 * @param c The class type to convert from.
-	 * @return <jk>true</jk> if this class can be instantiated from the specified type.
+	 * @return <jk>true</jk> if an explicit conversion from {@code c} to this type exists.
 	 */
 	public boolean hasMutaterFrom(ClassMeta<?> c) {
-		return nn(getFromMutater(c.inner()));
+		return hasMutaterFrom(c.inner());
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class can be transformed to the specified type.
+	 * Returns <jk>true</jk> if this class can be transformed to the specified type via an explicit conversion.
 	 *
-	 * @param c The class type to convert from.
-	 * @return <jk>true</jk> if this class can be transformed to the specified type.
+	 * <p>
+	 * Same-type conversions (identity) always return <jk>true</jk>. Cases where the target is already a strict
+	 * supertype of this class return <jk>false</jk> — those are assignability, not explicit transforms.
+	 *
+	 * @param c The class type to convert to.
+	 * @return <jk>true</jk> if an explicit conversion from this type to {@code c} exists.
 	 */
 	public boolean hasMutaterTo(Class<?> c) {
-		return nn(getToMutater(c));
+		// Same type is always "convertible" (identity).
+		if (inner() == c)
+			return true;
+		// Exclude strict supertype: if the target is already a strict supertype of this type, it's assignability only.
+		if (c.isAssignableFrom(inner()))
+			return false;
+		// Exclude array→array: BeanSession handles those directly; BasicConverter infers
+		// array conversions from element types, which can produce false positives here.
+		if (inner().isArray() && c.isArray())
+			return false;
+		// Exclude Collection/Map targets: BeanSession handles those via convertToCollectionType/convertToMapType;
+		// BasicConverter's generic collection/map conversions produce false positives (Mutaters never did these).
+		if (Collection.class.isAssignableFrom(c) || Map.class.isAssignableFrom(c))
+			return false;
+		return BasicConverter.INSTANCE.canConvert(inner(), c);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class can be transformed to the specified type.
+	 * Returns <jk>true</jk> if this class can be transformed to the specified type via an explicit conversion.
 	 *
-	 * @param c The class type to convert from.
-	 * @return <jk>true</jk> if this class can be transformed to the specified type.
+	 * @param c The class type to convert to.
+	 * @return <jk>true</jk> if an explicit conversion from this type to {@code c} exists.
 	 */
 	public boolean hasMutaterTo(ClassMeta<?> c) {
-		return nn(getToMutater(c.inner()));
+		return hasMutaterTo(c.inner());
 	}
 
 	/**
 	 * Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from a Reader.
 	 *
+	 * <p>
+	 * Only returns <jk>true</jk> for types that can be explicitly constructed from a {@link Reader} (e.g. via a
+	 * public constructor or static factory). Excludes assignable supertypes and the generic {@code toString()} fallback.
+	 *
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from a Reader.
 	 */
 	public boolean hasReaderMutater() {
-		return hasMutaterFrom(Reader.class);
+		// Exclude String: BasicConverter maps Reader→String via reader.toString() which doesn't read content.
+		// Exclude supertypes of Reader (e.g. Object, Closeable): assignability, not an explicit transform.
+		if (inner() == String.class || inner().isAssignableFrom(Reader.class))
+			return false;
+		return BasicConverter.INSTANCE.canConvert(Reader.class, inner());
 	}
 
 	/**
 	 * Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from a String.
 	 *
+	 * <p>
+	 * Delegates to {@link #hasMutaterFrom(Class)} with {@link String} as the source type, which applies the
+	 * same exclusions: supertypes of {@link String} (e.g. {@link Object}), arrays, and {@link Collection}/{@link Map}
+	 * targets are excluded because those are handled by parsers or {@code BeanSession}, not explicit string transforms.
+	 *
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from a String.
 	 */
 	public boolean hasStringMutater() {
-		return nn(stringMutater);
+		return hasMutaterFrom(String.class);
 	}
 
 	/**
@@ -1195,44 +1197,34 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public boolean isUri() { return cat != null && cat.is(URI); }
 
 	/**
-	 * Transforms the specified object into an instance of this class.
+	 * Converts the specified object into an instance of this class.
 	 *
-	 * @param o The object to transform.
-	 * @return The transformed object.
+	 * @param o The object to convert.
+	 * @return The converted object, or <jk>null</jk> if no conversion is available.
 	 */
-	
-	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked casts in type mutation
-		"rawtypes", // Raw types necessary for generic type mutation/conversion
-	})
 	public T mutateFrom(Object o) {
-		Mutater t = getFromMutater(o.getClass());
-		return (T)(t == null ? null : t.mutate(o));
+		return BasicConverter.INSTANCE.to(o, inner());
 	}
 
 	/**
-	 * Transforms the specified object into an instance of this class.
+	 * Converts the specified object to the specified output type.
 	 *
-	 * @param <O> The transform-to class.
-	 * @param o The object to transform.
-	 * @param c The class
-	 * @return The transformed object.
+	 * @param <O> The output class.
+	 * @param o The object to convert.
+	 * @param c The target class.
+	 * @return The converted object, or <jk>null</jk> if no conversion is available.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for Mutater<Object,O>.mutate
-	})
 	public <O> O mutateTo(Object o, Class<O> c) {
-		Mutater<Object,O> t = (Mutater<Object,O>)getToMutater(c);
-		return t == null ? null : t.mutate(o);
+		return BasicConverter.INSTANCE.to(o, c);
 	}
 
 	/**
-	 * Transforms the specified object into an instance of this class.
+	 * Converts the specified object to the type represented by this class meta.
 	 *
-	 * @param <O> The transform-to class.
-	 * @param o The object to transform.
-	 * @param c The class
-	 * @return The transformed object.
+	 * @param <O> The output class.
+	 * @param o The object to convert.
+	 * @param c The target class meta.
+	 * @return The converted object, or <jk>null</jk> if no conversion is available.
 	 */
 	public <O> O mutateTo(Object o, ClassMeta<O> c) {
 		return mutateTo(o, c.inner());
