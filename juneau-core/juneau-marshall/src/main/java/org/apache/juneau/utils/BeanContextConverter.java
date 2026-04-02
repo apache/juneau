@@ -119,4 +119,39 @@ public class BeanContextConverter implements Converter {
 	public <T> T to(Object o, Type mainType, Type... args) {
 		return BeanContext.DEFAULT_SESSION.convertToType(o, mainType, args);
 	}
+
+	/**
+	 * Converts the specified object to the specified type, using the given outer instance for
+	 * non-static inner class construction.
+	 *
+	 * @param o The object to convert.
+	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
+	 * @param type The target class type.
+	 * @param <T> The target type to convert to.
+	 * @return The converted object, or <jk>null</jk> if the input object is <jk>null</jk>.
+	 * @throws InvalidDataConversionException If the object cannot be converted to the specified type.
+	 */
+	@Override
+	public <T> T to(Object o, Object memberOf, Class<T> type) {
+		return BeanContext.DEFAULT_SESSION.convertToMemberType(memberOf, o, type);
+	}
+
+	/**
+	 * Converts the specified object to the specified parameterized type, using the given outer instance for
+	 * non-static inner class construction.
+	 *
+	 * @param o The object to convert.
+	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
+	 * @param mainType The main type to convert to.
+	 * @param args The type parameters of the main type.
+	 * @param <T> The target type to convert to.
+	 * @return The converted object, or <jk>null</jk> if the input object is <jk>null</jk>.
+	 * @throws InvalidDataConversionException If the object cannot be converted to the specified type.
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T to(Object o, Object memberOf, Type mainType, Type... args) {
+		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
+		return BeanContext.DEFAULT_SESSION.convertToMemberType(memberOf, o, rawType);
+	}
 }

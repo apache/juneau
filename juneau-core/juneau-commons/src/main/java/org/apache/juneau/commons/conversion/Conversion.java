@@ -40,8 +40,9 @@ public interface Conversion<I, O> {
 	 * Converts the input object to the output type.
 	 *
 	 * @param in The input object.
+	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
 	 * @param args Optional type arguments for parameterized output types (e.g. element type for collections).
 	 * @return The converted object.
 	 */
-	O to(I in, Class<?>... args);
+	O to(I in, Object memberOf, Class<?>... args);
 }

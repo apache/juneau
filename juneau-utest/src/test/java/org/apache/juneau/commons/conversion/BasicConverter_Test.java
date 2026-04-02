@@ -18,6 +18,7 @@ package org.apache.juneau.commons.conversion;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -195,7 +196,7 @@ class BasicConverter_Test extends TestBase {
 	}
 
 	@Test void f02_listToListTyped() {
-		var a = C.to(List.of("1", "2", "3"), List.class, Integer.class);
+		var a = C.to(List.of("1", "2", "3"), (Type) List.class, new Type[]{Integer.class});
 		assertNotNull(a);
 		assertEquals(3, ((List<?>) a).size());
 		assertEquals(1, ((List<?>) a).get(0));
@@ -211,7 +212,7 @@ class BasicConverter_Test extends TestBase {
 
 	@Test void f03b_arrayToTypedList() {
 		// array branch with elemType != null — covers line 326 true branch of ternary
-		var a = C.to(new String[]{"1", "2", "3"}, List.class, Integer.class);
+		var a = C.to(new String[]{"1", "2", "3"}, (Type) List.class, new Type[]{Integer.class});
 		assertNotNull(a);
 		assertEquals(List.of(1, 2, 3), a);
 	}
@@ -318,7 +319,7 @@ class BasicConverter_Test extends TestBase {
 	}
 
 	@Test void g02_mapToMapTyped() {
-		var a = C.to(Map.of(1, "100", 2, "200"), Map.class, String.class, Integer.class);
+		var a = C.to(Map.of(1, "100", 2, "200"), (Type) Map.class, new Type[]{String.class, Integer.class});
 		assertNotNull(a);
 		var map = (Map<?, ?>) a;
 		assertTrue(map.containsKey("1") || map.containsKey("2"));
@@ -369,7 +370,7 @@ class BasicConverter_Test extends TestBase {
 
 	@Test void g08_mapToAbstractMap() {
 		// Hits line 370 C=true branch (AbstractMap.class); use typed args to bypass short-circuit
-		var a = (Map<?, ?>) C.to(Map.of("a", 1), AbstractMap.class, String.class, Integer.class);
+		var a = (Map<?, ?>) C.to(Map.of("a", 1), (Type) AbstractMap.class, new Type[]{String.class, Integer.class});
 		assertNotNull(a);
 		assertInstanceOf(AbstractMap.class, a);
 		assertEquals(1, a.size());
@@ -761,5 +762,47 @@ class BasicConverter_Test extends TestBase {
 
 	@Test void o01_noConversion() {
 		assertThrows(InvalidConversionException.class, () -> C.to(new Object(), BasicConverter_Test.class));
+	}
+
+	//====================================================================================================
+	// p - Non-static inner class constructor (memberOf path)
+	//====================================================================================================
+
+	// Non-static inner class with a String constructor; the JVM synthesizes Inner(BasicConverter_Test, String).
+	public class P01_Inner {
+		public final String value;
+		public P01_Inner(String s) { this.value = s; }
+	}
+
+	// Non-static inner class whose only constructor takes a different input type (no match for String).
+	public class P02_InnerNoMatch {
+		public final int value;
+		public P02_InnerNoMatch(int n) { this.value = n; }
+	}
+
+	@Test void p01_innerClassConstructorWithMemberOf() {
+		// to(o, memberOf, Class) routes through the inner-class path in findConstructorConversion;
+		// memberOf (this) is passed as the synthetic outer-instance parameter.
+		var x = C.to("hello", this, P01_Inner.class);
+		assertEquals("hello", x.value);
+	}
+
+	@Test void p02_innerClassNoCtorMatchFallsThrough() {
+		// The inner-class branch is entered (P02 has an enclosing class) but the 2-param ctor
+		// (BasicConverter_Test, String) does not exist — falls through to the 1-param check which also
+		// fails → InvalidConversionException.
+		assertThrows(InvalidConversionException.class, () -> C.to("hello", this, P02_InnerNoMatch.class));
+	}
+
+	//====================================================================================================
+	// q - newCollection AbstractList branch
+	//====================================================================================================
+
+	@Test void q01_collectionToAbstractList() {
+		// Hits the AbstractList.class branch in newCollection, which returns a new ArrayList.
+		var result = C.to(List.of("a", "b"), (Type) AbstractList.class);
+		assertNotNull(result);
+		assertInstanceOf(List.class, result);
+		assertEquals(2, ((List<?>) result).size());
 	}
 }

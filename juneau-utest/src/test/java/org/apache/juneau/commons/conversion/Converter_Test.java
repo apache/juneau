@@ -19,6 +19,7 @@ package org.apache.juneau.commons.conversion;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -37,5 +38,27 @@ class Converter_Test extends TestBase {
 	@Test void a01_defaultCanConvertAlwaysTrue() {
 		assertTrue(STUB.canConvert(String.class, String.class));
 		assertTrue(STUB.canConvert(String.class, Integer.class));
+	}
+
+	//====================================================================================================
+	// b - default memberOf methods
+	//====================================================================================================
+
+	// Minimal converter that uses BasicConverter internally but does NOT override the memberOf overloads,
+	// so the default methods on the Converter interface are exercised directly.
+	private static final Converter B_STUB = new Converter() {
+		@Override public <T> T to(Object o, Class<T> type) { return BasicConverter.INSTANCE.to(o, type); }
+		@Override public <T> T to(Object o, Type mainType, Type... args) { return BasicConverter.INSTANCE.to(o, mainType, args); }
+	};
+
+	@Test void b01_defaultToMemberOfClass() {
+		// default to(o, memberOf, Class) ignores memberOf and delegates to to(o, Class)
+		assertEquals(Integer.valueOf(42), B_STUB.to("42", new Object(), Integer.class));
+	}
+
+	@Test void b02_defaultToMemberOfType() {
+		// default to(o, memberOf, Type, Type...) ignores memberOf and delegates to to(o, Type, Type...)
+		var result = B_STUB.to(List.of("1", "2"), new Object(), (Type) List.class, new Type[]{Integer.class});
+		assertEquals(List.of(1, 2), result);
 	}
 }

@@ -55,6 +55,25 @@ public interface Converter {
 	<T> T to(Object o, Class<T> type);
 
 	/**
+	 * Converts the specified object to the specified type, using the given outer instance for
+	 * non-static inner class construction.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> only when the input object is <jk>null</jk>.
+	 * Throws {@link InvalidConversionException} when no conversion path exists.
+	 *
+	 * @param o The object to convert.
+	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
+	 * @param type The type to convert to.
+	 * @param <T> The type to convert to.
+	 * @return The converted object, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
+	 */
+	default <T> T to(Object o, Object memberOf, Class<T> type) {
+		return to(o, type);
+	}
+
+	/**
 	 * Converts the specified object to the specified parameterized type.
 	 *
 	 * <p>
@@ -82,4 +101,24 @@ public interface Converter {
 	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
 	 */
 	<T> T to(Object o, Type mainType, Type...args);
+
+	/**
+	 * Converts the specified object to the specified parameterized type, using the given outer instance for
+	 * non-static inner class construction.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> only when the input object is <jk>null</jk>.
+	 * Throws {@link InvalidConversionException} when no conversion path exists.
+	 *
+	 * @param o The object to convert.
+	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
+	 * @param mainType The main type to convert to.
+	 * @param args The type parameters of the main type.
+	 * @param <T> The type to convert to.
+	 * @return The converted object, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
+	 */
+	default <T> T to(Object o, Object memberOf, Type mainType, Type...args) {
+		return to(o, mainType, args);
+	}
 }

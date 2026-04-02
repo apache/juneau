@@ -39,7 +39,7 @@ import java.util.stream.*;
  * 		<ja>@Override</ja>
  * 		<jk>protected</jk> &lt;I,O&gt; Conversion&lt;I,O&gt; findConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
  * 			<jk>if</jk> (inType == String.<jk>class</jk> &amp;&amp; outType == Integer.<jk>class</jk>)
- * 				<jk>return</jk> (Conversion&lt;I,O&gt;) (Conversion&lt;String,Integer&gt;) (<jv>s</jv>, <jv>args</jv>) -&gt; Integer.<jsm>valueOf</jsm>(<jv>s</jv>);
+ * 				<jk>return</jk> (Conversion&lt;I,O&gt;) (Conversion&lt;String,Integer&gt;) (<jv>s</jv>, <jv>memberOf</jv>, <jv>args</jv>) -&gt; Integer.<jsm>valueOf</jsm>(<jv>s</jv>);
  * 			<jk>return null</jk>;
  * 		}
  * 	}
@@ -55,7 +55,7 @@ public abstract class CachingConverter implements Converter {
 	// Sentinel stored in the cache when findConversion() returns null.
 	// ConcurrentHashMap does not permit null values, so we cannot store null directly.
 	// Using this sentinel avoids re-invoking findConversion() for unconvertable type pairs.
-	private static final Conversion<?,?> NO_CONVERSION = (in, args) -> null;
+	private static final Conversion<?,?> NO_CONVERSION = (in, memberOf, args) -> null; // HTT: sentinel body is never invoked; ConcurrentHashMap prohibits null values so we use this placeholder
 
 	// Two-level cache: input type -> output type -> conversion function (or NO_CONVERSION sentinel).
 	private final Map<Class<?>, Map<Class<?>, Conversion<?,?>>> conversions = new ConcurrentHashMap<>();
@@ -124,7 +124,7 @@ public abstract class CachingConverter implements Converter {
 		var fn = (Conversion<Object, T>) lookupConversion(inType, type);
 		if (fn == null)
 			throw new InvalidConversionException(inType, type);
-		return fn.to(o);
+		return fn.to(o, null);
 	}
 
 	/**
@@ -160,6 +160,59 @@ public abstract class CachingConverter implements Converter {
 		var fn = (Conversion<Object, T>) lookupConversion(inType, rawType);
 		if (fn == null)
 			throw new InvalidConversionException(inType, rawType);
-		return fn.to(o, argClasses);
+		return fn.to(o, null, argClasses);
+	}
+
+	/**
+	 * Converts the specified object to the specified type, passing the outer instance for
+	 * non-static inner class construction.
+	 *
+	 * @param o The object to convert. Can be <jk>null</jk>.
+	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
+	 * @param type The target type.
+	 * @param <T> The target type.
+	 * @return The converted object, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T to(Object o, Object memberOf, Class<T> type) {
+		if (o == null)
+			return null;
+		var inType = o.getClass();
+		if (inType == type)
+			return (T) o;
+		var fn = (Conversion<Object, T>) lookupConversion(inType, type);
+		if (fn == null)
+			throw new InvalidConversionException(inType, type);
+		return fn.to(o, memberOf);
+	}
+
+	/**
+	 * Converts the specified object to the specified parameterized type, passing the outer instance for
+	 * non-static inner class construction.
+	 *
+	 * @param o The object to convert. Can be <jk>null</jk>.
+	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
+	 * @param mainType The target type. May be a {@link Class} or {@link ParameterizedType}.
+	 * @param args The type arguments of the target type (e.g. element type for collections).
+	 * @param <T> The target type.
+	 * @return The converted object, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T to(Object o, Object memberOf, Type mainType, Type... args) {
+		if (o == null)
+			return null;
+		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
+		var argClasses = Stream.of(args)
+			.map(t -> (Class<?>) (t instanceof ParameterizedType pt2 ? pt2.getRawType() : t))
+			.toArray(Class[]::new);
+		var inType = o.getClass();
+		var fn = (Conversion<Object, T>) lookupConversion(inType, rawType);
+		if (fn == null)
+			throw new InvalidConversionException(inType, rawType);
+		return fn.to(o, memberOf, argClasses);
 	}
 }
