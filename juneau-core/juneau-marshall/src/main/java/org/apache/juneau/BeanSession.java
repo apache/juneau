@@ -1258,21 +1258,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 				} else if (isNullOrEmpty(value)) {
 					return null;
 				} else if (! hasMutater(from, to)) {
-					var s = value.toString();
-
-					var multiplier = (tc == Integer.class || tc == Short.class || tc == Long.class) ? getMultiplier(s) : 1;
-					if (multiplier != 1) {
-						s = s.substring(0, s.length() - 1).trim();
-						long l = Long.parseLong(s) * multiplier;
-						if (tc == Integer.TYPE)
-							return (T)Integer.valueOf((int)l);
-						if (tc == Short.TYPE)
-							return (T)Short.valueOf((short)l);
-						if (tc == Long.TYPE)
-							return (T)Long.valueOf(l);
-					} else {
-						return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
-					}
+					return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
 				}
 			}
 
