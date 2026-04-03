@@ -1272,34 +1272,12 @@ public class BeanSession extends ContextSession implements ConverterSession {
 							return (T)Long.valueOf(l);
 					} else {
 						return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
-//						if (tc == Integer.class)
-//							return (T)Integer.valueOf(s);
-//						if (tc == Short.class)
-//							return (T)Short.valueOf(s);
-//						if (tc == Long.class)
-//							return (T)Long.valueOf(s);
-//						if (tc == Float.class)
-//							return (T)Float.valueOf(s);
-//						if (tc == Double.class)
-//							return (T)Double.valueOf(s);
-//						if (tc == Byte.class)
-//							return (T)Byte.valueOf(s);
-//						if (tc == AtomicInteger.class)
-//							return (T)new AtomicInteger(Integer.valueOf(s));
-//						if (tc == AtomicLong.class)
-//							return (T)new AtomicLong(Long.valueOf(s));
-//						if (tc == Number.class)
-//							return (T)StringUtils.parseNumber(s, Number.class);
 					}
 				}
 			}
 
 			if (to.isChar()) {
-				if (isNullOrEmpty(value))
-					return null;
-				var s = value.toString();
-				if (s.length() == 1)
-					return (T)Character.valueOf(s.charAt(0));
+				return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
 			}
 
 			if (to.isByteArray()) {
