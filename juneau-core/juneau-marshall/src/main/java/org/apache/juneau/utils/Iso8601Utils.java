@@ -366,6 +366,10 @@ public final class Iso8601Utils {
 			var cal = GregorianCalendar.from(instant.atZone(zoneId));
 			return (T) cal;
 		}
+		if (XMLGregorianCalendar.class.isAssignableFrom(tc)) {
+			var gc = GregorianCalendar.from(instant.atZone(zoneId));
+			return (T) datatypeFactory.newXMLGregorianCalendar(gc);
+		}
 
 		return null;
 	}

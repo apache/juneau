@@ -477,7 +477,8 @@ public class YamlParserSession extends ReaderParserSession {
 	}
 
 	@SuppressWarnings({
-		"java:S1172" // eType, pMeta kept for API consistency with callers
+		"unused",    // eType, pMeta kept for API consistency with callers
+		"java:S1172" // Same as above
 	})
 	private Object convertToType(String s, ClassMeta<?> sType, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws ParseException {
 		if (sType.isObject()) {
@@ -1197,7 +1198,9 @@ public class YamlParserSession extends ReaderParserSession {
 	// Plain scalar (unquoted)
 	// ==========================================
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for plain scalar parsing
+		"unused",    // indent accepted for context but not currently used in parsing logic
+		"java:S1172", // Same as above
+		"java:S3776"  // Cognitive complexity acceptable for plain scalar parsing
 	})
 	private static String parsePlainScalar(ParserReader r, int indent) throws IOException {
 		var sb = new StringBuilder();

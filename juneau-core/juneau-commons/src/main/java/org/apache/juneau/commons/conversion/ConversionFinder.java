@@ -20,8 +20,7 @@ package org.apache.juneau.commons.conversion;
  * A pluggable strategy for discovering {@link Conversion} functions between type pairs.
  *
  * <p>
- * Implementations are registered on a {@link ConfigurableConverter} via
- * {@link ConfigurableConverter#addFinders(ConversionFinder...)} and are consulted in order before
+ * Implementations are passed to the {@link ConfigurableConverter} constructor and are consulted in order before
  * the built-in {@link BasicConverter} reflection logic.
  *
  * <p>
@@ -55,5 +54,5 @@ public interface ConversionFinder {
 	 * @param outType The output type class.
 	 * @return A {@link Conversion} function, or <jk>null</jk> if no conversion is available.
 	 */
-	Conversion<?,?> find(Class<?> inType, Class<?> outType);
+	Conversion<?,?> findConversion(Class<?> inType, Class<?> outType);
 }

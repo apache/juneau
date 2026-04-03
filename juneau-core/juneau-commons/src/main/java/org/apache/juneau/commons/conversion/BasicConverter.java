@@ -46,19 +46,21 @@ import org.apache.juneau.commons.reflect.*;
  * 		<td>{@link Number}</td>
  * 		<td>
  * 			{@link Integer}, {@link Long}, {@link Short}, {@link Float}, {@link Double}, {@link Byte},
- * 			{@link AtomicInteger}, {@link AtomicLong}, and primitive equivalents
+ * 			{@link AtomicInteger}, {@link AtomicLong}, {@link BigDecimal}, {@link BigInteger},
+ * 			and primitive equivalents
  * 		</td>
  * 		<td>Narrowing/widening numeric conversion</td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link Boolean}</td>
- * 		<td>{@link Number} types</td>
+ * 		<td>{@link Number} types (including {@link BigDecimal}, {@link BigInteger})</td>
  * 		<td><c>true=1, false=0</c></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link CharSequence}</td>
  * 		<td>{@link Number} types</td>
- * 		<td>Parsed via {@link org.apache.juneau.commons.utils.StringUtils#parseNumber(String, Class)}</td>
+ * 		<td>Parsed via {@link org.apache.juneau.commons.utils.StringUtils#parseNumber(String, Class)};
+ * 			empty string or {@code "null"} returns <jk>null</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link Number}</td>
@@ -78,12 +80,17 @@ import org.apache.juneau.commons.reflect.*;
  * 	<tr>
  * 		<td>{@link Number}</td>
  * 		<td>{@link Character}</td>
- * 		<td><c>(char) intValue()</c></td>
+ * 		<td>First character of {@code toString()} (e.g. {@code 65} → {@code '6'})</td>
  * 	</tr>
  * 	<tr>
  * 		<td>Any</td>
  * 		<td>{@link String}</td>
  * 		<td>{@link Object#toString()}, with array support via {@link Arrays#toString(Object[])}</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link CharSequence}</td>
+ * 		<td>{@code byte[]}</td>
+ * 		<td>UTF-8 encoding via {@link String#getBytes(java.nio.charset.Charset)}</td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link CharSequence}</td>
@@ -146,7 +153,8 @@ import org.apache.juneau.commons.reflect.*;
 	"rawtypes", // Raw types necessary for generic conversion dispatch
 	"unchecked", // Type erasure requires unchecked casts throughout conversion logic
 	"java:S3776", // Cognitive complexity of conversion dispatch methods is inherent to the number of supported type pairs
-	"java:S1067" // Complex boolean expressions in conversion checks reflect the natural type hierarchy
+	"java:S1067", // Complex boolean expressions in conversion checks reflect the natural type hierarchy
+	"java:S1192" // "parse" literal is used in multiple independent Sets/arrays; extracting it would reduce clarity
 })
 public class BasicConverter extends CachingConverter {
 
@@ -197,7 +205,7 @@ public class BasicConverter extends CachingConverter {
 
 		if (out.isEnum() && (c = findEnumConversion(inType, out)) != null) return c;
 
-		if (out == Optional.class && (c = findOptionalConversion(inType)) != null) return c;
+		if (out == Optional.class && (c = findOptionalConversion()) != null) return c;
 
 		if (Collection.class.isAssignableFrom(out) && (c = findCollectionConversion(inType, out)) != null) return c;
 
@@ -237,7 +245,7 @@ public class BasicConverter extends CachingConverter {
 		if (outType == Byte.class) return (in, memberOf, session, args) -> (O) Byte.valueOf(((Number) in).byteValue());
 		if (outType == AtomicInteger.class) return (in, memberOf, session, args) -> (O) new AtomicInteger(((Number) in).intValue());
 		if (outType == AtomicLong.class) return (in, memberOf, session, args) -> (O) new AtomicLong(((Number) in).longValue());
-		if (outType == BigDecimal.class) return (in, memberOf, session, args) -> (O) new BigDecimal(((Number) in).toString());
+		if (outType == BigDecimal.class) return (in, memberOf, session, args) -> (O) new BigDecimal(in.toString());
 		if (outType == BigInteger.class) return (in, memberOf, session, args) -> {
 			var n = (Number) in;
 			if (n instanceof BigDecimal bd) return (O) bd.toBigInteger();
@@ -262,7 +270,12 @@ public class BasicConverter extends CachingConverter {
 	}
 
 	private <O> Conversion<CharSequence, O> findNumberFromString(Class<O> outType) {
-		return (in, memberOf, session, args) -> (O) parseNumber(in.toString(), (Class<? extends Number>) outType);
+		return (in, memberOf, session, args) -> {
+			var s = in.toString();
+			if (s.isEmpty() || "null".equals(s))
+				return null;
+			return (O) parseNumber(s, (Class<? extends Number>) outType);
+		};
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -328,17 +341,16 @@ public class BasicConverter extends CachingConverter {
 	// Optional conversions
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked")
-	private <I, O> Conversion<I, O> findOptionalConversion(Class<I> inType) {
-		return (Conversion<I, O>) (Conversion<I, Optional<?>>) (in, memberOf, session, args) -> {
+	private <I, O> Conversion<I, O> findOptionalConversion() {
+		return (Conversion<I, O>) (Conversion<Object, Optional<?>>) (in, memberOf, session, args) -> {
 			if (in instanceof Optional<?> opt) {
 				if (args.length == 0)
 					return opt;
-				return opt.map(x -> to(x, args[0]));
+				return opt.map(x -> to(x, memberOf, session, args[0]));
 			}
 			if (args.length == 0)
 				return Optional.of(in);
-			return Optional.of(to(in, args[0]));
+			return Optional.of(to(in, memberOf, session, args[0]));
 		};
 	}
 
@@ -349,7 +361,8 @@ public class BasicConverter extends CachingConverter {
 	private <I, O> Conversion<I, O> findCollectionConversion(Class<I> inType, Class<O> outType) {
 		if (Collection.class.isAssignableFrom(inType) || inType.isArray()) {
 			return (in, memberOf, session, args) -> {
-				var elemType = args.length > 0 ? args[0] : null;
+				// Treat Object.class as "no element type" since it means untyped/raw and needs no element conversion.
+				var elemType = args.length > 0 && args[0] != Object.class ? args[0] : null;
 				if (elemType == null && !inType.isArray() && outType.isAssignableFrom(inType))
 					return (O) in;
 				var result = newCollection(outType);
@@ -388,8 +401,9 @@ public class BasicConverter extends CachingConverter {
 	private <I, O> Conversion<I, O> findMapConversion(Class<I> inType, Class<O> outType) {
 		if (Map.class.isAssignableFrom(inType)) {
 			return (in, memberOf, session, args) -> {
-				var keyType = args.length > 0 ? args[0] : null;
-				var valType = args.length > 1 ? args[1] : null;
+				// Treat Object.class as "no key/value type" since it means untyped/raw and needs no element conversion.
+				var keyType = args.length > 0 && args[0] != Object.class ? args[0] : null;
+				var valType = args.length > 1 && args[1] != Object.class ? args[1] : null;
 				if (keyType == null && outType.isAssignableFrom(inType))
 					return (O) in;
 				var result = newMap(outType);
@@ -425,7 +439,10 @@ public class BasicConverter extends CachingConverter {
 			// Collections use runtime element types so we skip the pre-check there too.
 			if (inType.isArray()) {
 				var inComponentType = inType.getComponentType();
-				if (inComponentType != componentType
+				// Primitive component types are auto-boxed by Array.get(), so skip the canConvert check.
+				// Otherwise verify that element-level conversion is possible before returning a lambda.
+				if (!inComponentType.isPrimitive()
+						&& inComponentType != componentType
 						&& inComponentType != Object.class
 						&& !canConvert(inComponentType, componentType))
 					return null;
@@ -436,13 +453,13 @@ public class BasicConverter extends CachingConverter {
 					var arr = Array.newInstance(componentType, list.size());
 					var i = 0;
 					for (var elem : list)
-						Array.set(arr, i++, to(elem, componentType));
+						Array.set(arr, i++, to(elem, memberOf, session, componentType));
 					return (O) arr;
 				}
 				var len = Array.getLength(in);
 				var arr = Array.newInstance(componentType, len);
 				for (var i = 0; i < len; i++)
-					Array.set(arr, i, to(Array.get(in, i), componentType));
+					Array.set(arr, i, to(Array.get(in, i), memberOf, session, componentType));
 				return (O) arr;
 			};
 		}
@@ -531,6 +548,9 @@ public class BasicConverter extends CachingConverter {
 			&& m.getParameterCount() == 1
 			&& m.getParameterTypes().get(0).isAssignableFrom(inType)
 			&& m.hasReturnTypeParent(outType)
+			// Exclude generic Object-param factory methods (e.g. List.of(E)) when input is not Object,
+			// since type erasure makes E appear as Object at runtime, causing false matches.
+			&& (inType == Object.class || m.getParameterTypes().get(0).inner() != Object.class)
 		);
 	}
 
@@ -595,11 +615,11 @@ public class BasicConverter extends CachingConverter {
 		var opt = info(type).getPublicConstructor(c -> c.getParameterCount() == 0);
 		if (opt.isPresent()) {
 			var ctor = opt.get();
-		try {
-			return ctor.newInstance();
-		} catch (@SuppressWarnings("unused") Exception e) { // HTT: constructor would have to throw to reach here
-			return defaultSupplier.get(); // HTT
-		}
+			try {
+				return ctor.newInstance();
+			} catch (@SuppressWarnings("unused") Exception e) { // HTT: constructor would have to throw to reach here
+				return defaultSupplier.get(); // HTT
+			}
 		}
 		return defaultSupplier.get();
 	}

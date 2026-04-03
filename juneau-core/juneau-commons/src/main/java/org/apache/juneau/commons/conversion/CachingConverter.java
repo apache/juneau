@@ -39,7 +39,7 @@ import java.util.stream.*;
  * 		<ja>@Override</ja>
  * 		<jk>protected</jk> &lt;I,O&gt; Conversion&lt;I,O&gt; findConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
  * 			<jk>if</jk> (inType == String.<jk>class</jk> &amp;&amp; outType == Integer.<jk>class</jk>)
- * 				<jk>return</jk> (Conversion&lt;I,O&gt;) (Conversion&lt;String,Integer&gt;) (<jv>s</jv>, <jv>memberOf</jv>, <jv>args</jv>) -&gt; Integer.<jsm>valueOf</jsm>(<jv>s</jv>);
+ * 				<jk>return</jk> (Conversion&lt;I,O&gt;) (Conversion&lt;String,Integer&gt;) (<jv>s</jv>, <jv>memberOf</jv>, <jv>session</jv>, <jv>args</jv>) -&gt; Integer.<jsm>valueOf</jsm>(<jv>s</jv>);
  * 			<jk>return null</jk>;
  * 		}
  * 	}
@@ -233,7 +233,7 @@ public abstract class CachingConverter implements Converter {
 	@SuppressWarnings("unchecked")
 	public <T> T to(Object o, Object memberOf, ConverterSession session, Class<T> type) {
 		if (o == null)
-			return type.isPrimitive() ? primitiveDefault(type) : null;
+			return nullDefault(type);
 		var inType = o.getClass();
 		if (inType == type)
 			return (T) o;

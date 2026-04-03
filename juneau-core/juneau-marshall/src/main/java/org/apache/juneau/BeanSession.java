@@ -18,7 +18,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -36,10 +35,7 @@ import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.time.*;
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link BeanContext}.
@@ -254,16 +250,6 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 */
 	public static final String NAME_PROPERTY_NAME = "_name";
 
-	private boolean hasMutater(ClassMeta<?> from, ClassMeta<?> to) {
-		if (to.hasMutaterFrom(from) || from.hasMutaterTo(to))
-			return true;
-		var c = ctx.getConverter();
-		return c != null && c.hasCustomConversion(from.inner(), to.inner());
-	}
-
-	private static final boolean isNullOrEmpty(Object o) {
-		return o == null || o.toString().isEmpty() || o.toString().equals("null");
-	}
 	private final BeanContext ctx;
 	private final Locale locale;
 	private final MediaType mediaType;
@@ -1162,265 +1148,21 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	@SuppressWarnings({
-		"null", // Null handling verified by context or framework
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded context; synchronization unnecessary
-	})
 	protected final <T> T convertToMemberType(Object outer, Object value, ClassMeta<T> to) throws InvalidDataConversionException {
 		if (to == null)
 			to = (ClassMeta<T>)object();
-
 		try {
-			var ctxConverter = ctx.getConverter();
-
-			// Handle the case of a null value.
-			if (value == null) {
-				return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
-			}
-
-			if (to.isOptional() && (! (value instanceof Optional)))
-				return (T)opt(convertToMemberType(outer, value, to.getElementType()));
-
-			var tc = to.inner();
-
-			// If no conversion needed, then just return the value.
-			// Don't include maps or collections, because child elements may need conversion.
-			if (tc.isInstance(value) && ! ((to.isMap() && ! to.getValueType().is(Object.class)) || ((to.isCollection() || to.isOptional()) && ! to.getElementType().isObject())))
-				return (T)value;
-
-			ObjectSwap swap = to.getSwap(this);
-			if (nn(swap)) {
-				var nc = swap.getNormalClass();
-				var fc = swap.getSwapClass();
-				if (nc.isAssignableFrom(tc) && fc.isAssignableFrom(value.getClass()))
-					return (T)swap.unswap(this, value, to);
-				if (nc.isAssignableFrom(tc) && Map.class.isAssignableFrom(fc.inner()) && value instanceof Map) {
-					value = convertToMemberType(null, value, fc.inner());
-					return (T)swap.unswap(this, value, to);
-				}
-				var fcm = getClassMeta(fc);
-				if (fcm.isNumber() && value instanceof Number value2) {
-					value = convertToMemberType(null, value2, fc.inner());
-					return (T)swap.unswap(this, value, to);
-				}
-			}
-
-			var from = getClassMetaForObject(value);
-			swap = from.getSwap(this);
-			if (nn(swap)) {
-				var nc = swap.getNormalClass();
-				var fc = swap.getSwapClass();
-				if (nc.isAssignableFrom(from.inner()) && fc.isAssignableFrom(tc))
-					return (T)swap.swap(this, value);
-			}
-
-			if (to.isCharSequence() && (from.isDateOrCalendarOrTemporal() || from.isDuration()))
-				return (T) Iso8601Utils.format(value, from, getTimeZone());
-
-			if (ctxConverter.hasCustomConversion(from.inner(), tc))
-				return ctxConverter.to(value, outer, this, tc);
-
-			if (to.isCharSequence() && (from.isDateOrCalendarOrTemporal() || from.isDuration()))
-				return (T) Iso8601Utils.format(value, from, getTimeZone());
-
-			if (to.isDateOrCalendarOrTemporal() && value instanceof CharSequence)
-				return (T) Iso8601Utils.parse(value.toString(), to, getTimeZone());
-
-			if (to.isDuration() && value instanceof CharSequence)
-				return (T) Iso8601Utils.parse(value.toString(), to, getTimeZone());
-
-			if (to.isDateOrCalendarOrTemporal() && value instanceof Number)
-				return (T) Iso8601Utils.fromEpochMillis(((Number)value).longValue(), to, getTimeZone());
-
-			if (to.isPrimitive()) {
-				return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
-			}
-
-			if (to.isNumber()) {
-				if (from.isNumber()) {
-					return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
-				} else if (from.isBoolean()) {
-					return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
-				} else if (isNullOrEmpty(value)) {
-					return null;
-				} else if (! hasMutater(from, to)) {
-					return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
-				}
-			}
-
-			if (to.isChar()) {
-				return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
-			}
-
-			if (to.isByteArray()) {
-				if (from.isInputStream() || from.isReader())
-					return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
-				if (to.hasMutaterFrom(from))
-					return to.mutateFrom(value);
-				if (from.hasMutaterTo(to))
-					return from.mutateTo(value, to);
-				return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
-			}
-
-			// Handle setting of array properties
-			if (to.isArray()) {
-				if (from.isCollection())
-					return (T)toArray(to, (Collection)value);
-				else if (from.isArray()) {
-					// Use reflection to build the list so primitive arrays (e.g. boolean[]) are handled correctly.
-					// Array.get() auto-boxes primitives, whereas casting to Object[] fails for primitive arrays.
-					var len = Array.getLength(value);
-					var list = new ArrayList<>(len);
-					for (var i = 0; i < len; i++)
-						list.add(Array.get(value, i));
-					return (T)toArray(to, list);
-				}
-				else if (startsWith(value.toString(), '['))
-					return (T)toArray(to, JsonList.ofJson(value.toString()).setBeanSession(this));
-				else if (to.hasMutaterFrom(from))
-					return to.mutateFrom(value);
-				else if (from.hasMutaterTo(to))
-					return from.mutateTo(value, to);
-				else
-					return (T)toArray(to, new JsonList((Object[])StringUtils.splita(value.toString())).setBeanSession(this));
-			}
-
-			// Target type is some sort of Map that needs to be converted.
-			if (to.isMap()) {
-				return convertToMapType(outer, value, from, to);
-			}
-
-			// Target type is some sort of Collection
-			if (to.isCollection()) {
-				return convertToCollectionType(outer, value, from, to);
-			}
-
-			if (to.isEnum()) {
-				return to.newInstanceFromString(outer, value.toString());
-			}
-
-			if (to.isString()) {
-				if (from.isByteArray()) {
-					return (T)new String((byte[])value);
-				} else if (from.isMapOrBean() || from.isCollectionOrArrayOrOptional()) {
-					var ws = ctx.getBeanToStringSerializer();
-					if (nn(ws))
-						return (T)ws.serialize(value);
-				} else if (from.is(Class.class)) {
-					return (T)((Class<?>)value).getName();
-				}
-				return (T)value.toString();
-			}
-
-			if (to.isCharSequence()) {
-				var c = value.getClass();
-				if (c.isArray()) {
-					if (c.getComponentType().isPrimitive()) {
-						var l = new JsonList(this);
-						var size = Array.getLength(value);
-						for (var i = 0; i < size; i++)
-							l.add(Array.get(value, i));
-						value = l;
-					}
-					value = new JsonList((Object[])value).setBeanSession(this);
-				}
-
-				return to.newInstanceFromString(outer, value.toString());
-			}
-
-			if (to.isBoolean()) {
-				if (from.isNumber())
-					return (T)(Boolean.valueOf(((Number)value).intValue() != 0));
-				if (isNullOrEmpty(value))
-					return null;
-				if (! hasMutater(from, to))
-					return (T)Boolean.valueOf(value.toString());
-			}
-
-			// It's a bean being initialized with a Map
-			if (to.isBean() && value instanceof Map value2) {
-				var builder = (BuilderSwap<T,Object>)to.getBuilderSwap(this);
-
-				if (value2 instanceof JsonMap m2 && builder == null) {
-					var typeName = m2.getString(getBeanTypePropertyName(to));
-					if (nn(typeName)) {
-						var cm = to.getBeanRegistry().getClassMeta(typeName);
-						if (nn(cm) && to.isAssignableFrom(cm.inner()))
-							return (T)m2.cast(cm);
-					}
-				}
-				if (nn(builder)) {
-					var created = builder.create(this, to);
-					if (created != null) {
-						var m = toBeanMap(created);
-						m.load(value2);
-						return builder.build(this, m.getBean(), to);
-					}
-				}
-				return newBeanMap(tc).load(value2).getBean();
-			}
-
-			if (to.isInputStream()) {
-				if (from.isByteArray()) {
-					var b = (byte[])value;
-					return (T)new ByteArrayInputStream(b, 0, b.length);
-				}
-				var b = value.toString().getBytes();
-				return (T)new ByteArrayInputStream(b, 0, b.length);
-			}
-
-			if (to.isReader()) {
-				if (from.isByteArray()) {
-					var b = (byte[])value;
-					return (T)new StringReader(new String(b));
-				}
-				return (T)new StringReader(value.toString());
-			}
-
-			if (to.isCalendar()) {
-				if (from.isCalendar()) {
-					var c = (Calendar)value;
-					if (value instanceof GregorianCalendar) {
-						var c2 = new GregorianCalendar(c.getTimeZone());
-						c2.setTime(c.getTime());
-						return (T)c2;
-					}
-				}
-				if (from.isDate()) {
-					var d = (Date)value;
-					if (value instanceof GregorianCalendar) {
-						var c2 = new GregorianCalendar(TimeZone.getDefault());
-						c2.setTime(d);
-						return (T)c2;
-					}
-				}
-				return (T)GregorianCalendar.from(GranularZonedDateTime.of(value.toString()).getZonedDateTime());
-			}
-
-			if (to.isDate() && to.inner() == Date.class) {
-				if (from.isCalendar())
-					return (T)((Calendar)value).getTime();
-				return (T)GregorianCalendar.from(GranularZonedDateTime.of(value.toString()).getZonedDateTime()).getTime();
-			}
-
-			if (to.hasMutaterFrom(from))
-				return to.mutateFrom(value);
-
-			if (from.hasMutaterTo(to))
-				return from.mutateTo(value, to);
-
-			if (to.isBean())
-				return newBeanMap(to.inner()).load(value.toString()).getBean();
-
-			if (to.canCreateNewInstanceFromString(outer))
-				return to.newInstanceFromString(outer, value.toString());
-
+			// If the value is already an instance of the target type and no element/value conversion is needed, return as-is.
+			// Skip this shortcut for typed maps/collections whose elements may need conversion.
+			if (value != null && to.inner().isInstance(value)
+					&& !((to.isMap() && !to.getValueType().is(Object.class)) || ((to.isCollection() || to.isOptional()) && !to.getElementType().isObject())))
+				return (T) value;
+			return ctx.getConverter().to(value, outer, this, to.innerType(), to.getParameters());
+		} catch (InvalidDataConversionException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new InvalidDataConversionException(value, to, e);
 		}
-
-		throw new InvalidDataConversionException(value, to, null);
 	}
 
 	/**
@@ -1506,84 +1248,4 @@ public class BeanSession extends ContextSession implements ConverterSession {
 		return array;
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity is acceptable for this type conversion method
-	})
-	private <T> T convertToMapType(Object outer, Object value, ClassMeta<?> from, ClassMeta<T> to) {
-		try {
-			if (from.isMap()) {
-				var m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
-				var keyType = to.getKeyType();
-				var valueType = to.getValueType();
-				((Map<?,?>)value).forEach((k, v) -> {
-					var k2 = k;
-					if (k == null) {
-						k2 = null;  // Preserve null keys (e.g. when null is used as a map key in source)
-					} else if (! keyType.isObject()) {
-						if (keyType.isString() && k.getClass() != Class.class)
-							k2 = k.toString();
-						else
-							k2 = convertToMemberType(m, k, keyType);
-					}
-					var v2 = v;
-					if (! valueType.isObject())
-						v2 = convertToMemberType(m, v, valueType);
-					m.put(k2, v2);
-				});
-				return (T)m;
-			} else if (! to.canCreateNewInstanceFromString(outer)) {
-				var m = JsonMap.ofJson(value.toString());
-				m.setBeanSession(this);
-				return convertToMemberType(outer, m, to);
-			}
-			return null;
-		} catch (Exception e) {
-			throw new InvalidDataConversionException(value.getClass(), to, e);
-		}
-	}
-
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity is acceptable for this type conversion method
-	})
-	private <T> T convertToCollectionType(Object outer, Object value, ClassMeta<?> from, ClassMeta<T> to) {
-		try {
-			Collection l;
-			if (to.canCreateNewInstance(outer)) {
-				l = (Collection)to.newInstance(outer);
-			} else if (to.isSet()) {
-				l = set();
-			} else {
-				l = new JsonList(this);
-			}
-			var elementType = to.getElementType();
-	
-			if (from.isArray()) {
-				for (var i = 0; i < Array.getLength(value); i++) {
-					var o = Array.get(value, i);
-					l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
-				}
-			} else if (from.isCollection())
-				((Collection)value).forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));
-			else if (from.isMap())
-				l.add(elementType.isObject() ? value : convertToMemberType(l, value, elementType));
-			else if (isNullOrEmpty(value))
-				return null;
-			else if (from.isString()) {
-				var s = value.toString();
-				if (isProbablyJsonArray(s, false)) {
-					var l2 = JsonList.ofJson(s);
-					l2.setBeanSession(this);
-					l2.forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));
-				} else {
-					throw new InvalidDataConversionException(value.getClass(), to, null);
-				}
-			} else
-				throw new InvalidDataConversionException(value.getClass(), to, null);
-			return (T)l;
-		} catch (InvalidDataConversionException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new InvalidDataConversionException(value.getClass(), to, e);
-		}
-	}
 }

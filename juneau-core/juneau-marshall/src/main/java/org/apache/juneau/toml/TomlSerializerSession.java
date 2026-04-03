@@ -249,6 +249,10 @@ public class TomlSerializerSession extends WriterSerializerSession {
 			w.quotedKey(key);
 	}
 
+	@SuppressWarnings({
+		"unused",       // pMeta accepted for API consistency; may be used by future format-specific logic
+		"java:S1172"    // Same as above
+	})
 	private void writeValue(TomlWriter w, Object value, ClassMeta<?> aType, BeanPropertyMeta pMeta) throws SerializeException {
 		if (value == null) {
 			w.stringValue(ctx.getNullValue());
@@ -320,6 +324,10 @@ public class TomlSerializerSession extends WriterSerializerSession {
 		writeValue(w, value, aType, null);
 	}
 
+	@SuppressWarnings({
+		"unused",       // path and type reserved for future section-header and type-aware serialization
+		"java:S1172"    // Same as above
+	})
 	private void serializeMapAsTable(TomlWriter w, String path, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		forEachEntry(map, e -> {
@@ -347,6 +355,10 @@ public class TomlSerializerSession extends WriterSerializerSession {
 		w.arrayEnd();
 	}
 
+	@SuppressWarnings({
+		"unused",       // pMeta accepted for API consistency with callers that track property context
+		"java:S1172"    // Same as above
+	})
 	private boolean isSimpleOrInlineTable(ClassMeta<?> aType, Object value, BeanPropertyMeta pMeta) throws SerializeException {
 		if (aType.isBean()) {
 			BeanMap<?> bm = toBeanMap(value);

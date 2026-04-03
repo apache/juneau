@@ -83,9 +83,6 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 
 	private static final Cache<Class,ClassInfo> CACHE = Cache.of(Class.class, ClassInfo.class).build();
 
-	/** Reusable cached ClassInfo instance for Object.class. */
-	public static final ClassInfo OBJECT = ClassInfo.of(Object.class);
-
 	private static final Map<Class<?>,Class<?>> pmap1 = new HashMap<>();
 	private static final Map<Class<?>,Class<?>> pmap2 = new HashMap<>();
 
@@ -239,7 +236,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		assertArg(inner != null || innerType != null, "At least one of inner or innerType must be specified.");
 		this.innerType = innerType;
 		this.inner = inner;
-		this.isParameterizedType = innerType != null && (innerType instanceof ParameterizedType);
+		this.isParameterizedType = innerType instanceof ParameterizedType;
 		this.dimensions = memoize(this::findDimensions);
 		this.componentType = memoize(this::findComponentType);
 		this.packageInfo = memoize(() -> opt(inner).map(Class::getPackage).filter(p -> p != null).map(PackageInfo::of).orElse(null));  // PackageInfo may be null for primitive types and arrays.

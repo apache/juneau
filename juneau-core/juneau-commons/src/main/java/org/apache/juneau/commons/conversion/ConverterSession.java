@@ -32,14 +32,14 @@ import java.util.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jc>// A conversion that uses the session's TimeZone.</jc>
- * 	BeanContext <jv>bc</jv> = BeanContext
- * 		.<jsm>create</jsm>()
- * 		.addConverter(String.<jk>class</jk>, Calendar.<jk>class</jk>, (<jv>in</jv>, <jv>memberOf</jv>, <jv>session</jv>, <jv>args</jv>) -&gt; {
- * 			var <jv>tz</jv> = <jv>session</jv>.get(TimeZone.<jk>class</jk>).orElse(TimeZone.<jsm>getDefault</jsm>());
- * 			<jc>// ... parse string using tz ...</jc>
- * 		})
- * 		.build();
+ * 	<jc>// A Conversion lambda that reads TimeZone from the session.</jc>
+ * 	Conversion&lt;String, Calendar&gt; <jv>conv</jv> = (<jv>in</jv>, <jv>memberOf</jv>, <jv>session</jv>, <jv>args</jv>) -&gt; {
+ * 		var <jv>tz</jv> = <jv>session</jv> != <jk>null</jk>
+ * 			? <jv>session</jv>.get(TimeZone.<jk>class</jk>).orElse(TimeZone.<jsm>getDefault</jsm>())
+ * 			: TimeZone.<jsm>getDefault</jsm>();
+ * 		<jc>// ... parse in using tz ...</jc>
+ * 		<jk>return null</jk>;
+ * 	};
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

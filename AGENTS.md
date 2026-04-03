@@ -41,7 +41,7 @@ This document outlines the rules, guidelines, and best practices that AI assista
 - **"start jetty"** - Runs `scripts/start-examples-rest-jetty.py`
 - **"start springboot"** - Runs `scripts/start-examples-springboot.py`
 - **"push"** or **"push changes"** - When the user asks to push changes, use `./scripts/push.py "Commit message"` to push changes. **Always prompt the user for the commit message** and provide 2-3 suggested commit message options based on the changes made. Example: `./scripts/push.py "Replace Stream.collect(Collectors.toList()) with Stream.toList()"`
-- **"test"** - Runs `scripts/build-and-test.py`
+- **"test"** - Runs `scripts/test.py`
 
 ### Documentation Commands
 - **"save a rule"** or **"save this rule"** - Add the rule/information to `AGENTS.md` (permanent/general)
@@ -362,32 +362,32 @@ If you can't find Java on the file system using standard commands, look for it i
 ### 5. Helper Scripts
 
 **Build and Test Script:**
-A reusable Python script is available at `scripts/build-and-test.py` for common Maven operations.
+A reusable Python script is available at `scripts/test.py` for common Maven operations.
 
 **Usage:**
 ```bash
 # Default: Clean build + run tests
-./scripts/build-and-test.py
+./scripts/test.py
 
 # Build only (skip tests)
-./scripts/build-and-test.py --build-only
-./scripts/build-and-test.py -b
+./scripts/test.py --build-only
+./scripts/test.py -b
 
 # Test only (no build)
-./scripts/build-and-test.py --test-only
-./scripts/build-and-test.py -t
+./scripts/test.py --test-only
+./scripts/test.py -t
 
 # Full build and test (explicit)
-./scripts/build-and-test.py --full
-./scripts/build-and-test.py -f
+./scripts/test.py --full
+./scripts/test.py -f
 
 # Verbose output (show full Maven output)
-./scripts/build-and-test.py --verbose
-./scripts/build-and-test.py -v
+./scripts/test.py --verbose
+./scripts/test.py -v
 
 # Help
-./scripts/build-and-test.py --help
-./scripts/build-and-test.py -h
+./scripts/test.py --help
+./scripts/test.py -h
 ```
 
 **What it does:**

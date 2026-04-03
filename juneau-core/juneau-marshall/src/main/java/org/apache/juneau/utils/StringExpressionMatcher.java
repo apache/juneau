@@ -103,6 +103,10 @@ public class StringExpressionMatcher {
 	}
 
 	abstract static class Exp {
+		@SuppressWarnings({
+			"unused",    // set unused in base no-op; subclasses that override do use it
+			"java:S1172" // Same as above
+		})
 		void appendTokens(Set<String> set) {}
 
 		abstract boolean matches(String input);

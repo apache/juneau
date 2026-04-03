@@ -42,14 +42,16 @@ public interface Converter {
 	 * Converts the specified object to the specified type.
 	 *
 	 * <p>
-	 * Returns <jk>null</jk> only when the input object is <jk>null</jk>.
+	 * When the input is <jk>null</jk>, returns the JVM default for primitive types (e.g. {@code 0} for
+	 * {@code int.class}, {@code false} for {@code boolean.class}), or <jk>null</jk> for all other types.
 	 * Throws {@link InvalidConversionException} when no conversion path exists.
 	 * Use {@link #canConvert(Class, Class)} to pre-check if uncertain.
 	 *
 	 * @param o The object to convert.
 	 * @param type The type to convert to.
 	 * @param <T> The type to convert to.
-	 * @return The converted object, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @return The converted object, the primitive zero-value if input is <jk>null</jk> and type is primitive,
+	 * 	or <jk>null</jk> if the input is <jk>null</jk> and type is non-primitive.
 	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.
 	 */
 	<T> T to(Object o, Class<T> type);

@@ -68,7 +68,7 @@ public class ConfigurableConverter extends BasicConverter {
 	 */
 	public boolean hasCustomConversion(Class<?> inType, Class<?> outType) {
 		for (var finder : finders)
-			if (finder.find(inType, outType) != null)
+			if (finder.findConversion(inType, outType) != null)
 				return true;
 		return false;
 	}
@@ -79,7 +79,7 @@ public class ConfigurableConverter extends BasicConverter {
 	})
 	protected <I, O> Conversion<I, O> findConversion(Class<I> inType, Class<O> outType) {
 		for (var finder : finders) {
-			var fn = (Conversion<I, O>) finder.find(inType, outType);
+			var fn = (Conversion<I, O>) finder.findConversion(inType, outType);
 			if (fn != null)
 				return fn;
 		}

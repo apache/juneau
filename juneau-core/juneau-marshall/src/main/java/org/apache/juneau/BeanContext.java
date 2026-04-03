@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.reflect.Visibility.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -32,6 +33,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.function.*;
@@ -42,6 +44,7 @@ import org.apache.juneau.json5.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Bean context.
@@ -3817,38 +3820,56 @@ public class BeanContext extends Context implements ConversionFinder {
 	public final ConfigurableConverter getConverter() { return converter; }
 
 	/**
-	 * Implements {@link ConversionFinder} by searching the registered {@link ObjectSwap} list for a swap
-	 * that can convert between the given type pair.
+	 * Implements {@link ConversionFinder} to provide all BeanContext-specific type conversions that cannot
+	 * be expressed in {@link BasicConverter} (which has no dependency on {@code juneau-marshall}).
 	 *
 	 * <p>
-	 * For each registered swap:
-	 * <ul>
-	 * 	<li>If the swap class is assignable from {@code inType} and the normal class is assignable from {@code outType},
-	 * 		returns a {@link Conversion} that calls {@link ObjectSwap#unswap} using the session.
-	 * 	<li>If the normal class is assignable from {@code inType} and the swap class is assignable from {@code outType},
-	 * 		returns a {@link Conversion} that calls {@link ObjectSwap#swap} using the session.
-	 * </ul>
+	 * Conversions are resolved in this priority order:
+	 * <ol>
+	 * 	<li>ObjectSwap-based conversions (highest priority)
+	 * 	<li>Iso8601 date/time formatting and parsing
+	 * 	<li>Epoch-millis to date/time
+	 * 	<li>Map/Bean/Collection/Array to String via serializer
+	 * 	<li>String/CharSequence to Array, Map, Collection via JSON parsing
+	 * 	<li>Map to Bean and String to Bean via BeanMap
+	 * 	<li>Calendar/Date specialized copies
+	 * 	<li>InputStream and Reader construction
+	 * </ol>
 	 *
 	 * @param inType The input type class.
 	 * @param outType The output type class.
-	 * @return A {@link Conversion} backed by a matching swap, or {@code null} if no swap applies.
+	 * @return A matching {@link Conversion}, or {@code null} if none applies.
 	 */
 	@Override
 	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked casts for ObjectSwap generic types
+		"java:S3776"  // Cognitive complexity acceptable for comprehensive conversion dispatch
 	})
-	public Conversion<?,?> find(Class<?> inType, Class<?> outType) {
+	public Conversion<?,?> findConversion(Class<?> inType, Class<?> outType) {
+		var toMeta = getClassMeta(outType);
+		var fromMeta = getClassMeta(inType);
+
+		// --- ObjectSwap conversions (must come first) ---
 		for (var swap : objectSwaps) {
 			var nc = swap.getNormalClass().inner();
 			var fc = swap.getSwapClass().inner();
-			// Unswap: input is swap class, output is normal class
-			if (nc.isAssignableFrom(outType) && fc.isAssignableFrom(inType)) {
-				var to = getClassMeta(outType);
+			// Unswap: input is swap class (or convertible to it), output is normal class
+			if (nc.isAssignableFrom(outType) && (fc.isAssignableFrom(inType) || Map.class.isAssignableFrom(inType) || Number.class.isAssignableFrom(inType))) {
 				return (in, memberOf, session, args) -> {
 					try {
-						var bs = session instanceof BeanSession bs2 ? bs2 : null;
-						var resolvedSwap = bs != null ? to.getSwap(bs) : null;
-						return ((ObjectSwap<Object,Object>) (resolvedSwap != null ? resolvedSwap : swap)).unswap(bs, in, to);
+						var bs = beanSession(session);
+						var resolvedSwap = bs != null ? toMeta.getSwap(bs) : null;
+						var activeSwap = (ObjectSwap<Object,Object>) (resolvedSwap != null ? resolvedSwap : swap);
+						var swapClass = activeSwap.getSwapClass().inner();
+						// Direct match
+						if (swapClass.isInstance(in))
+							return activeSwap.unswap(bs, in, toMeta);
+						// Intermediate Map conversion
+						if (Map.class.isAssignableFrom(swapClass) && in instanceof Map)
+							return activeSwap.unswap(bs, converter.to(in, memberOf, bs, swapClass), toMeta);
+						// Intermediate Number conversion
+						if (Number.class.isAssignableFrom(swapClass) && in instanceof Number)
+							return activeSwap.unswap(bs, converter.to(in, memberOf, bs, swapClass), toMeta);
+						return null;
 					} catch (Exception e) {
 						throw rex(e);
 					}
@@ -3858,7 +3879,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			if (nc.isAssignableFrom(inType) && fc.isAssignableFrom(outType)) {
 				return (in, memberOf, session, args) -> {
 					try {
-						var bs = session instanceof BeanSession bs2 ? bs2 : null;
+						var bs = beanSession(session);
 						return ((ObjectSwap<Object,Object>) swap).swap(bs, in);
 					} catch (Exception e) {
 						throw rex(e);
@@ -3866,7 +3887,388 @@ public class BeanContext extends Context implements ConversionFinder {
 				};
 			}
 		}
+
+		// --- Inline/auto-detected swaps from ClassMeta (e.g. AutoNumberSwap, AutoObjectSwap) ---
+		// These are swaps found on the class itself (via swap() methods, toXxx() patterns, etc.)
+		// and not registered in the objectSwaps list.
+		var toSwap = toMeta.getSwap(null);
+		if (toSwap != null) {
+			// Use boxed version of swap class to handle primitive swap types (e.g. toInt() → int.class → Integer.class)
+			var fcBoxed = info(toSwap.getSwapClass().inner()).getWrapperIfPrimitive().inner();
+			if (fcBoxed.isAssignableFrom(inType) || Map.class.isAssignableFrom(inType) || Number.class.isAssignableFrom(inType)) {
+				return (in, memberOf, session, args) -> {
+					try {
+					var bs = beanSession(session);
+					var activeSwap = (ObjectSwap<Object,Object>) toMeta.getSwap(bs);
+						if (activeSwap == null) return null;
+						// Use boxed swap class to handle primitive return types (e.g. int.class → Integer.class)
+						var swapClass = info(activeSwap.getSwapClass().inner()).getWrapperIfPrimitive().inner();
+						if (swapClass.isInstance(in))
+							return activeSwap.unswap(bs, in, toMeta);
+						if (Map.class.isAssignableFrom(swapClass) && in instanceof Map)
+							return activeSwap.unswap(bs, converter.to(in, memberOf, bs, swapClass), toMeta);
+						if (Number.class.isAssignableFrom(swapClass) && in instanceof Number)
+							return activeSwap.unswap(bs, converter.to(in, memberOf, bs, swapClass), toMeta);
+						return null;
+					} catch (Exception e) {
+						throw rex(e);
+					}
+				};
+			}
+		}
+		var fromSwap = fromMeta.getSwap(null);
+		if (fromSwap != null) {
+			var fcBoxed = info(fromSwap.getSwapClass().inner()).getWrapperIfPrimitive().inner();
+			if (fcBoxed.isAssignableFrom(outType) || outType == Object.class) {
+				return (in, memberOf, session, args) -> {
+					try {
+					var bs = beanSession(session);
+					var activeSwap = (ObjectSwap<Object,Object>) fromMeta.getSwap(bs);
+						if (activeSwap == null) return null;
+						return activeSwap.swap(bs, in);
+					} catch (Exception e) {
+						throw rex(e);
+					}
+				};
+			}
+		}
+
+		// --- Date/time → CharSequence via Iso8601Utils (Gap 5) ---
+		if (CharSequence.class.isAssignableFrom(outType) && (fromMeta.isDateOrCalendarOrTemporal() || fromMeta.isDuration()))
+			return (in, memberOf, session, args) -> Iso8601Utils.format(in, fromMeta, sessionTimeZone(session));
+
+		// --- CharSequence → date/time via Iso8601Utils (Gap 6) ---
+		if (CharSequence.class.isAssignableFrom(inType) && (toMeta.isDateOrCalendarOrTemporal() || toMeta.isDuration()))
+			return (in, memberOf, session, args) -> Iso8601Utils.parse(in.toString(), toMeta, sessionTimeZone(session));
+
+		// --- Number → date/time via epoch millis (Gap 7) ---
+		if (Number.class.isAssignableFrom(inType) && toMeta.isDateOrCalendarOrTemporal())
+			return (in, memberOf, session, args) -> Iso8601Utils.fromEpochMillis(((Number)in).longValue(), toMeta, sessionTimeZone(session));
+
+		// --- Map/Bean/Collection/Array/Optional → String via serializer (Gap 14) ---
+		if (outType == String.class) {
+			// byte[] → String must come before isCollectionOrArrayOrOptional since byte[] is an array type
+			if (byte[].class == inType)
+				return (in, memberOf, session, args) -> new String((byte[]) in, java.nio.charset.StandardCharsets.UTF_8);
+			if (fromMeta.isMapOrBean() || fromMeta.isCollectionOrArrayOrOptional()) {
+				return (in, memberOf, session, args) -> {
+					try {
+						var ws = getBeanToStringSerializer();
+						return ws != null ? ws.serialize(in) : in.toString();
+					} catch (Exception e) {
+						throw rex(e);
+					}
+				};
+			}
+			if (Class.class == inType)
+				return (in, memberOf, session, args) -> ((Class<?>) in).getName();
+		}
+
+		// --- CharSequence → Array via JSON parsing (Gap 10) ---
+		// Excludes byte[] since that is handled by BasicConverter.findSpecialConversion (getBytes(UTF_8)).
+		if (CharSequence.class.isAssignableFrom(inType) && outType.isArray() && outType != byte[].class) {
+			return (in, memberOf, session, args) -> {
+				try {
+					var bs = beanSessionOrDefault(session);
+					var str = in.toString();
+					JsonList list;
+					if (startsWith(str, '['))
+						list = JsonList.ofJson(str).setBeanSession(bs);
+					else
+						list = new JsonList((Object[]) splita(str)).setBeanSession(bs);
+					return bs.convertToType(list, outType);
+				} catch (Exception e) {
+					throw rex(e);
+				}
+			};
+		}
+
+		// --- CharSequence → Map via JSON parsing (Gap 11) ---
+		if (CharSequence.class.isAssignableFrom(inType) && Map.class.isAssignableFrom(outType) && !toMeta.canCreateNewInstanceFromString(null)) {
+			return (in, memberOf, session, args) -> {
+				try {
+					var bs = beanSessionOrDefault(session);
+					var m = JsonMap.ofJson(in.toString());
+					m.setBeanSession(bs);
+					return bs.convertToType(m, outType);
+				} catch (Exception e) {
+					throw rex(e);
+				}
+			};
+		}
+
+		// --- Collection/Array → Collection with session-aware element conversion ---
+		// When the target is an abstract collection type (List, Collection), uses JsonList instead of ArrayList
+		// to preserve the session-aware default behavior from the original convertToCollectionType.
+		if ((Collection.class.isAssignableFrom(inType) || inType.isArray()) && Collection.class.isAssignableFrom(outType)) {
+			return (in, memberOf, session, args) -> {
+				// Treat Object.class as "no element type" (untyped/raw, needs no element conversion).
+				var elemType = args.length > 0 && args[0] != Object.class ? (Class<?>) args[0] : null;
+				if (elemType == null && !inType.isArray() && outType.isAssignableFrom(in.getClass()))
+					return in;
+				var bs = beanSessionOrDefault(session);
+				Collection<Object> result;
+				if (outType.isAssignableFrom(JsonList.class)) {
+					result = new JsonList(bs);  // Use JsonList for abstract types (List, Collection, Iterable)
+				} else {
+					result = newCollection(outType);
+				}
+				if (in instanceof Collection<?> col2) {
+					for (var elem : col2)
+						result.add(elemType != null ? converter.to(elem, memberOf, session, elemType) : elem);
+				} else {
+					var len = Array.getLength(in);
+					for (var i = 0; i < len; i++) {
+						var elem = Array.get(in, i);
+						result.add(elemType != null ? converter.to(elem, memberOf, session, elemType) : elem);
+					}
+				}
+				return result;
+			};
+		}
+
+		// --- Map → Collection (wraps map as single element, preserving old convertToCollectionType behavior) ---
+		if (Map.class.isAssignableFrom(inType) && Collection.class.isAssignableFrom(outType)) {
+			return (in, memberOf, session, args) -> {
+				var bs = beanSessionOrDefault(session);
+				Collection<Object> result;
+				if (outType.isAssignableFrom(JsonList.class)) {
+					result = new JsonList(bs);
+				} else {
+					result = newCollection(outType);
+				}
+				var elemType = args.length > 0 && args[0] != Object.class ? (Class<?>) args[0] : null;
+				result.add(elemType != null ? converter.to(in, memberOf, session, elemType) : in);
+				return result;
+			};
+		}
+
+		// --- CharSequence → Collection via JSON parsing (Gap 12) ---
+		if (CharSequence.class.isAssignableFrom(inType) && Collection.class.isAssignableFrom(outType)) {
+			return (in, memberOf, session, args) -> {
+				try {
+					var bs = beanSessionOrDefault(session);
+					var str = in.toString();
+					if (!isProbablyJsonArray(str, false))
+						throw rex("Cannot convert string to {0}: {1}", outType.getName(), str);
+					var elemType = args.length > 0 ? args[0] : null;
+					var l2 = JsonList.ofJson(str).setBeanSession(bs);
+					var result = (Collection<Object>) newCollection(outType);
+					l2.forEach(x -> result.add(elemType != null && x != null ? converter.to(x, elemType) : x));
+					return result;
+				} catch (Exception e) {
+					throw rex(e);
+				}
+			};
+		}
+
+		// --- Map → Bean via BeanMap/BuilderSwap/BeanRegistry (Gap 17) ---
+		if (Map.class.isAssignableFrom(inType) && toMeta.isBean()) {
+			return (in, memberOf, session, args) -> {
+				try {
+					var bs = beanSessionOrDefault(session);
+					var m2 = (Map<?,?>) in;
+					var builder = (BuilderSwap<Object,Object>) toMeta.getBuilderSwap(bs);
+					if (m2 instanceof JsonMap jm && builder == null) {
+						var typeName = jm.getString(bs.getBeanTypePropertyName(toMeta));
+						if (nn(typeName)) {
+							var cm = toMeta.getBeanRegistry().getClassMeta(typeName);
+							if (nn(cm) && toMeta.isAssignableFrom(cm.inner()))
+								return jm.cast(cm);
+						}
+					}
+					if (nn(builder)) {
+						var created = builder.create(bs, toMeta);
+						if (created != null) {
+							var bm = bs.toBeanMap(created);
+							bm.load(m2);
+							return builder.build(bs, bm.getBean(), toMeta);
+						}
+					}
+					return bs.newBeanMap(toMeta.inner()).load(m2).getBean();
+				} catch (Exception e) {
+					throw rex(e);
+				}
+			};
+		}
+
+		// --- CharSequence → URL (URL(String) is deprecated in Java 20+, use URI.create().toURL() instead) ---
+		if (CharSequence.class.isAssignableFrom(inType) && outType == java.net.URL.class)
+			return (in, memberOf, session, args) -> {
+				try {
+					return new java.net.URI(in.toString()).toURL();
+				} catch (Exception e) {
+					throw rex(e);
+				}
+			};
+
+		// --- CharSequence → Bean via BeanMap (Gap 21) ---
+		if (CharSequence.class.isAssignableFrom(inType) && toMeta.isBean()) {
+			return (in, memberOf, session, args) -> {
+				try {
+					var bs = beanSessionOrDefault(session);
+					return bs.newBeanMap(toMeta.inner()).load(in.toString()).getBean();
+				} catch (Exception e) {
+					throw rex(e);
+				}
+			};
+		}
+
+		// --- Calendar/Date specialized conversions (Gap 19) ---
+		if (toMeta.isCalendar()) {
+			if (Calendar.class.isAssignableFrom(inType))
+				return (in, memberOf, session, args) -> {
+					var c = (Calendar) in;
+					var c2 = new GregorianCalendar(c.getTimeZone());
+					c2.setTime(c.getTime());
+					return c2;
+				};
+			if (Date.class.isAssignableFrom(inType))
+				return (in, memberOf, session, args) -> {
+					var c2 = new GregorianCalendar(TimeZone.getDefault());
+					c2.setTime((Date) in);
+					return c2;
+				};
+			if (java.time.temporal.Temporal.class.isAssignableFrom(inType))
+				return (in, memberOf, session, args) -> {
+					var temporal = (java.time.temporal.Temporal) in;
+					java.time.Instant instant;
+					try {
+						instant = java.time.Instant.from(temporal);
+					} catch (java.time.DateTimeException e) {
+						// LocalDateTime lacks offset info - interpret using session/system timezone
+						var tz = sessionTimeZone(session);
+						var zoneId = tz != null ? tz.toZoneId() : java.time.ZoneId.systemDefault();
+						instant = java.time.LocalDateTime.from(temporal).atZone(zoneId).toInstant();
+					}
+					return Iso8601Utils.fromEpochMillis(instant.toEpochMilli(), toMeta, sessionTimeZone(session));
+				};
+		}
+		if (toMeta.isDate() && outType == java.util.Date.class) {
+			if (Calendar.class.isAssignableFrom(inType))
+				return (in, memberOf, session, args) -> ((Calendar) in).getTime();
+			if (java.time.temporal.Temporal.class.isAssignableFrom(inType))
+				return (in, memberOf, session, args) -> {
+					var temporal = (java.time.temporal.Temporal) in;
+					java.time.Instant instant;
+					try {
+						instant = java.time.Instant.from(temporal);
+					} catch (java.time.DateTimeException e) {
+						// LocalDateTime lacks offset info - interpret using session/system timezone
+						var tz = sessionTimeZone(session);
+						var zoneId = tz != null ? tz.toZoneId() : java.time.ZoneId.systemDefault();
+						instant = java.time.LocalDateTime.from(temporal).atZone(zoneId).toInstant();
+					}
+					return java.util.Date.from(instant);
+				};
+		}
+
+		// --- byte[]/CharSequence → InputStream (Gap 18) ---
+		if (InputStream.class.isAssignableFrom(outType)) {
+			if (byte[].class == inType)
+				return (in, memberOf, session, args) -> { var b = (byte[]) in; return new ByteArrayInputStream(b, 0, b.length); };
+			if (CharSequence.class.isAssignableFrom(inType))
+				return (in, memberOf, session, args) -> { var b = in.toString().getBytes(); return new ByteArrayInputStream(b, 0, b.length); };
+		}
+
+		// --- byte[]/CharSequence → Reader (Gap 18) ---
+		if (Reader.class.isAssignableFrom(outType)) {
+			if (byte[].class == inType)
+				return (in, memberOf, session, args) -> new StringReader(new String((byte[]) in));
+			if (CharSequence.class.isAssignableFrom(inType))
+				return (in, memberOf, session, args) -> new StringReader(in.toString());
+		}
+
+		// --- CharSequence → Enum using ClassMeta (respects ignoreUnknownEnumValues) (Gap 13) ---
+		if (CharSequence.class.isAssignableFrom(inType) && outType.isEnum()) {
+			return (in, memberOf, session, args) -> {
+				try {
+					return toMeta.newInstanceFromString(memberOf, in.toString());
+				} catch (Exception e) {
+					throw rex(e);
+				}
+			};
+		}
+
+		// --- CharSequence → CharSequence subtype via ClassMeta (Gap 15) ---
+		if (CharSequence.class.isAssignableFrom(inType) && toMeta.isCharSequence() && outType != String.class && toMeta.canCreateNewInstanceFromString(null)) {
+			return (in, memberOf, session, args) -> {
+				try {
+					return toMeta.newInstanceFromString(memberOf, in.toString());
+				} catch (Exception e) {
+					throw rex(e);
+				}
+			};
+		}
+
+		// --- Array → CharSequence subtype via serializer (Gap 15) ---
+		if (inType.isArray() && toMeta.isCharSequence() && outType != String.class && toMeta.canCreateNewInstanceFromString(null)) {
+			return (in, memberOf, session, args) -> {
+				try {
+					var ws = getBeanToStringSerializer();
+					var str = ws != null ? ws.serialize(in) : in.toString();
+					return toMeta.newInstanceFromString(memberOf, str);
+				} catch (Exception e) {
+					throw rex(e);
+				}
+			};
+		}
+
+		// --- Enum → T via toString() (allows Enum→Boolean, Enum→Number, etc.) ---
+		// Excludes Enum→Enum (handled by BasicConverter) and Enum→String (handled by BasicConverter/CharSequence path).
+		if (inType.isEnum() && !outType.isEnum() && !CharSequence.class.isAssignableFrom(outType)) {
+			return (in, memberOf, session, args) -> converter.to(in.toString(), memberOf, session, outType, args);
+		}
+
+		// --- Object → Boolean via toString() (lenient: any non-"true" string is false) ---
+		// Excludes CharSequence types (handled by BasicConverter), primitives (handled by CachingConverter nullDefault),
+		// and types that BasicConverter already handles (e.g. via toBoolean() instance method).
+		if ((outType == Boolean.class || outType == boolean.class) && !CharSequence.class.isAssignableFrom(inType) && !Number.class.isAssignableFrom(inType) && inType != boolean.class && inType != Boolean.class && !BasicConverter.INSTANCE.canConvert(inType, Boolean.class)) {
+			return (in, memberOf, session, args) -> converter.to(in.toString(), memberOf, session, Boolean.class);
+		}
+
+		// --- Object → Bean via toString() + BeanMap.load() (fallback for bean-compatible types) ---
+		// Matches old convertToMemberType fallback: if (to.isBean()) return newBeanMap(to.inner()).load(value.toString()).getBean()
+		// Excludes cases where input is already assignable to output (handled by BeanSession isInstance shortcut).
+		if (toMeta.isBean() && !Map.class.isAssignableFrom(inType) && !CharSequence.class.isAssignableFrom(inType)
+				&& !outType.isAssignableFrom(inType)) {
+			return (in, memberOf, session, args) -> {
+				try {
+					var bs = beanSessionOrDefault(session);
+					return bs.newBeanMap(toMeta.inner()).load(in.toString()).getBean();
+				} catch (Exception e) {
+					throw rex(e);
+				}
+			};
+		}
+
 		return null;
+	}
+
+	private static TimeZone sessionTimeZone(ConverterSession session) {
+		return session == null ? null : session.get(TimeZone.class).orElse(null);
+	}
+
+	private BeanSession beanSession(ConverterSession session) {
+		return session instanceof BeanSession bs ? bs : null;
+	}
+
+	private BeanSession beanSessionOrDefault(ConverterSession session) {
+		return session instanceof BeanSession bs ? bs : defaultSession;
+	}
+
+	private static Collection<Object> newCollection(Class<?> outType) {
+		if (outType == List.class || outType == Collection.class || outType == Iterable.class || outType == AbstractList.class)
+			return new ArrayList<>();
+		if (outType == Set.class || outType == LinkedHashSet.class || outType == AbstractSet.class)
+			return new LinkedHashSet<>();
+		if (outType == SortedSet.class || outType == NavigableSet.class || outType == TreeSet.class)
+			return new TreeSet<>();
+		try {
+			return (Collection<Object>) outType.getDeclaredConstructor().newInstance();
+		} catch (Exception e) {
+			return new ArrayList<>();
+		}
 	}
 
 	/**

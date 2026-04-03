@@ -277,7 +277,7 @@ public abstract class ObjectSwap<T,S> {
 		if (forMediaTypes == null)
 			return 1;
 		int i = 0;
-		var mt = session.getMediaType();
+		var mt = session != null ? session.getMediaType() : null;
 		if (mt == null)
 			return 0;
 		if (nn(forMediaTypes))
