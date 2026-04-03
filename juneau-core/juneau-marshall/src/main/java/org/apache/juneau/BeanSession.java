@@ -18,18 +18,15 @@ package org.apache.juneau;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.text.*;
 import java.time.*;
 import java.util.*;
-import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
@@ -256,16 +253,6 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * Currently this always returns <js>"_name"</js>.
 	 */
 	public static final String NAME_PROPERTY_NAME = "_name";
-
-	private static int getMultiplier(String s) {
-		if (s.endsWith("G"))
-			return 1024 * 1024 * 1024;
-		if (s.endsWith("M"))
-			return 1024 * 1024;
-		if (s.endsWith("K"))
-			return 1024;
-		return 1;
-	}
 
 	private boolean hasMutater(ClassMeta<?> from, ClassMeta<?> to) {
 		if (to.hasMutaterFrom(from) || from.hasMutaterTo(to))

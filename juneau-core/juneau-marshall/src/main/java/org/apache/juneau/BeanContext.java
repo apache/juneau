@@ -168,7 +168,7 @@ import org.apache.juneau.swap.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - ClassMeta<?> for parameter resolution and type variables
 })
-public class BeanContext extends Context {
+public class BeanContext extends Context implements ConversionFinder {
 
 	// Property name constants
 	private static final String PROP_beanClassVisibility = "beanClassVisibility";
@@ -258,8 +258,6 @@ public class BeanContext extends Context {
 		private Set<ClassInfo> notBeanClasses;
 		private Set<String> notBeanPackages;
 		
-		private final ConfigurableConverter converter = new ConfigurableConverter();
-
 		/**
 		 * Constructor.
 		 *
@@ -3688,7 +3686,6 @@ public class BeanContext extends Context {
 		beansRequireSerializable = builder.beansRequireSerializable;
 		beansRequireSettersForGetters = builder.beansRequireSettersForGetters;
 		beansRequireSomeProperties = ! builder.disableBeansRequireSomeProperties;
-		converter = builder.converter;
 		findFluentSetters = builder.findFluentSetters;
 		hashKey = builder.hashKey();
 		ignoreInvocationExceptionsOnGetters = builder.ignoreInvocationExceptionsOnGetters;
@@ -3735,6 +3732,7 @@ public class BeanContext extends Context {
 			}
 		});
 		objectSwaps = u(objectSwapsList);
+		converter = new ConfigurableConverter(this);
 
 		cmCache = Cache.<Class,ClassMeta>create().supplier(type -> new ClassMeta<>(type, this)).build();
 		cmString = cmCache.get(String.class);
@@ -3817,6 +3815,59 @@ public class BeanContext extends Context {
 	 * @return The converter.
 	 */
 	public final ConfigurableConverter getConverter() { return converter; }
+
+	/**
+	 * Implements {@link ConversionFinder} by searching the registered {@link ObjectSwap} list for a swap
+	 * that can convert between the given type pair.
+	 *
+	 * <p>
+	 * For each registered swap:
+	 * <ul>
+	 * 	<li>If the swap class is assignable from {@code inType} and the normal class is assignable from {@code outType},
+	 * 		returns a {@link Conversion} that calls {@link ObjectSwap#unswap} using the session.
+	 * 	<li>If the normal class is assignable from {@code inType} and the swap class is assignable from {@code outType},
+	 * 		returns a {@link Conversion} that calls {@link ObjectSwap#swap} using the session.
+	 * </ul>
+	 *
+	 * @param inType The input type class.
+	 * @param outType The output type class.
+	 * @return A {@link Conversion} backed by a matching swap, or {@code null} if no swap applies.
+	 */
+	@Override
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts for ObjectSwap generic types
+	})
+	public Conversion<?,?> find(Class<?> inType, Class<?> outType) {
+		for (var swap : objectSwaps) {
+			var nc = swap.getNormalClass().inner();
+			var fc = swap.getSwapClass().inner();
+			// Unswap: input is swap class, output is normal class
+			if (nc.isAssignableFrom(outType) && fc.isAssignableFrom(inType)) {
+				var to = getClassMeta(outType);
+				return (in, memberOf, session, args) -> {
+					try {
+						var bs = session instanceof BeanSession bs2 ? bs2 : null;
+						var resolvedSwap = bs != null ? to.getSwap(bs) : null;
+						return ((ObjectSwap<Object,Object>) (resolvedSwap != null ? resolvedSwap : swap)).unswap(bs, in, to);
+					} catch (Exception e) {
+						throw rex(e);
+					}
+				};
+			}
+			// Swap: input is normal class, output is swap class
+			if (nc.isAssignableFrom(inType) && fc.isAssignableFrom(outType)) {
+				return (in, memberOf, session, args) -> {
+					try {
+						var bs = session instanceof BeanSession bs2 ? bs2 : null;
+						return ((ObjectSwap<Object,Object>) swap).swap(bs, in);
+					} catch (Exception e) {
+						throw rex(e);
+					}
+				};
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Returns the {@link BeanMeta} class for the specified class.
