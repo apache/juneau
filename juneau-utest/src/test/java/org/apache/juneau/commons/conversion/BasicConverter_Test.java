@@ -127,11 +127,11 @@ class BasicConverter_Test extends TestBase {
 
 	@Test void c01_stringToChar() {
 		assertEquals('A', C.to("A", Character.class));
-		assertNull(C.to("AB", Character.class));
+		assertThrows(IllegalArgumentException.class, () -> C.to("AB", Character.class));
 	}
 
 	@Test void c02_numberToChar() {
-		assertEquals('A', C.to(65, Character.class));
+		assertEquals('6', C.to(65, Character.class));
 	}
 
 	@Test void c03_primitiveChar() {

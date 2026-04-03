@@ -94,7 +94,7 @@ public abstract class CachingConverter implements Converter {
 	 * @return The JVM zero/false default, or <jk>null</jk> if {@code type} is not a primitive.
 	 */
 	@SuppressWarnings("unchecked")
-	private static <T> T primitiveDefault(Class<T> type) {
+	static <T> T primitiveDefault(Class<T> type) {
 		if (type == Integer.TYPE)   return (T) Integer.valueOf(0);
 		if (type == Long.TYPE)      return (T) Long.valueOf(0L);
 		if (type == Double.TYPE)    return (T) Double.valueOf(0.0d);
@@ -272,6 +272,9 @@ public abstract class CachingConverter implements Converter {
 		var fn = (Conversion<Object, T>) lookupConversion(inType, rawType);
 		if (fn == null)
 			throw new InvalidConversionException(inType, rawType);
-		return fn.to(o, memberOf, session, argClasses);
+		var result = fn.to(o, memberOf, session, argClasses);
+		if (result == null && rawType.isPrimitive())
+			return primitiveDefault(rawType);
+		return result;
 	}
 }

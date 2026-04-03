@@ -18,6 +18,7 @@ package org.apache.juneau.commons.conversion;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -271,10 +272,15 @@ public class BasicConverter extends CachingConverter {
 		if (CharSequence.class.isAssignableFrom(inType))
 			return (in, memberOf, session, args) -> {
 				var s = in.toString();
-				return s.length() == 1 ? (O) Character.valueOf(s.charAt(0)) : null;
+				if (s.length() != 1)
+					throw illegalArg("Cannot convert string of length {0} to char: ''{1}''", s.length(), s);
+				return (O) Character.valueOf(s.charAt(0));
 			};
 		if (Number.class.isAssignableFrom(inType))
-			return (in, memberOf, session, args) -> (O) Character.valueOf((char) ((Number) in).intValue());
+			return (in, memberOf, session, args) -> {
+				var s = in.toString();
+				return s.isEmpty() ? null : (O) Character.valueOf(s.charAt(0));
+			};
 		return null;
 	}
 
