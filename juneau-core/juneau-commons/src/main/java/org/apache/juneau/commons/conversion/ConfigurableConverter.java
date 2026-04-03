@@ -17,95 +17,69 @@
 package org.apache.juneau.commons.conversion;
 
 import java.util.*;
-import java.util.concurrent.*;
 
 /**
- * A {@link BasicConverter} subclass that supports runtime registration of custom type conversions.
+ * A {@link BasicConverter} subclass that supports pluggable type conversion discovery via {@link ConversionFinder}.
  *
  * <p>
- * Use {@link #add(Class, Class, Conversion)} to register a custom {@link Conversion} function for a specific
- * input/output type pair before the first conversion for that pair is requested.
- * Registered conversions take priority over the built-in {@link BasicConverter} reflection logic.
- *
- * <p>
- * This class is intended to be instantiated and held as a field (e.g., on a {@code BeanContext}) so that
- * custom conversions can be injected at configuration time.
+ * Pass one or more {@link ConversionFinder} instances to the constructor. Finders are consulted in order before
+ * falling back to the built-in {@link BasicConverter} reflection logic.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	ConfigurableConverter <jv>converter</jv> = <jk>new</jk> ConfigurableConverter()
- * 		.add(String.<jk>class</jk>, MyBean.<jk>class</jk>, (<jv>in</jv>, <jv>memberOf</jv>, <jv>args</jv>) -> MyBean.fromString(<jv>in</jv>));
+ * 	ConfigurableConverter <jv>converter</jv> = <jk>new</jk> ConfigurableConverter(
+ * 		(<jv>in</jv>, <jv>out</jv>) -> <jv>in</jv> == String.<jk>class</jk> &amp;&amp; <jv>out</jv> == MyBean.<jk>class</jk>
+ * 			? (<jv>s</jv>, <jv>memberOf</jv>, <jv>session</jv>, <jv>args</jv>) -> MyBean.fromString((<jk>String</jk>) <jv>s</jv>)
+ * 			: <jk>null</jk>
+ * 	);
  *
  * 	MyBean <jv>bean</jv> = <jv>converter</jv>.to(<js>"value"</js>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
- * <p>
- * This class is thread-safe provided that all {@link #add} calls complete before the converter is shared across
- * threads. Registering conversions concurrently with active {@link #to} calls is also safe due to the underlying
- * {@link ConcurrentHashMap}, but registered conversions may not be visible immediately if the cache has already
- * been populated for that type pair.
- * </p>
- *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link BasicConverter}
+ * 	<li class='jc'>{@link ConversionFinder}
  * 	<li class='jc'>{@link Conversion}
  * </ul>
  */
-@SuppressWarnings({
-	"unchecked" // Type erasure requires unchecked casts in registry lookup
-})
 public class ConfigurableConverter extends BasicConverter {
 
-	private final Map<Class<?>, Map<Class<?>, Conversion<?,?>>> registered = new ConcurrentHashMap<>();
+	private final List<ConversionFinder> finders;
 
 	/**
 	 * Constructor.
-	 */
-	public ConfigurableConverter() {}
-
-	/**
-	 * Registers a custom conversion function for the specified input/output type pair.
 	 *
-	 * <p>
-	 * The registered conversion takes priority over the built-in {@link BasicConverter} reflection logic.
-	 * Registrations should be made before the converter is shared across threads or before the first conversion
-	 * for the given type pair is requested.
-	 *
-	 * @param <I> The input type.
-	 * @param <O> The output type.
-	 * @param inType The input type class.
-	 * @param outType The output type class.
-	 * @param conversion The conversion function to register.
-	 * @return This object.
+	 * @param finders Optional {@link ConversionFinder} instances consulted in order before registered
+	 *   type-pair conversions and the built-in {@link BasicConverter} reflection logic.
 	 */
-	public <I, O> ConfigurableConverter add(Class<I> inType, Class<O> outType, Conversion<I, O> conversion) {
-		registered
-			.computeIfAbsent(inType, k -> new ConcurrentHashMap<>())
-			.put(outType, conversion);
-		return this;
+	public ConfigurableConverter(ConversionFinder... finders) {
+		this.finders = List.of(finders);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if a custom conversion has been explicitly registered for the specified type pair.
+	 * Returns <jk>true</jk> if any registered {@link ConversionFinder} can convert the specified type pair.
 	 *
 	 * <p>
-	 * This only checks the user-registered conversions, not the built-in {@link BasicConverter} reflection logic.
+	 * This only checks the registered finders, not the built-in {@link BasicConverter} reflection logic.
 	 *
 	 * @param inType The input type class.
 	 * @param outType The output type class.
-	 * @return <jk>true</jk> if a custom conversion exists for the specified type pair.
+	 * @return <jk>true</jk> if a finder-provided conversion exists for the specified type pair.
 	 */
 	public boolean hasCustomConversion(Class<?> inType, Class<?> outType) {
-		var inner = registered.get(inType);
-		return inner != null && inner.containsKey(outType);
+		for (var finder : finders)
+			if (finder.find(inType, outType) != null)
+				return true;
+		return false;
 	}
 
 	@Override
+	@SuppressWarnings({
+		"unchecked" // Type safety guaranteed by ConversionFinder contract
+	})
 	protected <I, O> Conversion<I, O> findConversion(Class<I> inType, Class<O> outType) {
-		var inner = registered.get(inType);
-		if (inner != null) {
-			var fn = (Conversion<I, O>) inner.get(outType);
+		for (var finder : finders) {
+			var fn = (Conversion<I, O>) finder.find(inType, outType);
 			if (fn != null)
 				return fn;
 		}

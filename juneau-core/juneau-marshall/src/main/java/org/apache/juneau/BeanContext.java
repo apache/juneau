@@ -401,35 +401,6 @@ public class BeanContext extends Context {
 		}
 
 		/**
-		 * Registers a custom type conversion on this context.
-		 *
-		 * <p>
-		 * User-registered conversions take priority over built-in type dispatch in
-		 * {@link BeanSession#convertToMemberType(Object, Object, ClassMeta)}, but are checked after
-		 * {@link ObjectSwap} processing.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Register a custom String-to-MyBean conversion.</jc>
-		 * 	BeanContext <jv>bc</jv> = BeanContext
-		 * 		.<jsm>create</jsm>()
-		 * 		.addConverter(String.<jk>class</jk>, MyBean.<jk>class</jk>, (<jv>in</jv>, <jv>memberOf</jv>, <jv>session</jv>, <jv>args</jv>) -&gt; MyBean.fromString(<jv>in</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param <I> The input type.
-		 * @param <O> The output type.
-		 * @param inType The input type class.
-		 * @param outType The output type class.
-		 * @param conversion The conversion function.
-		 * @return This object.
-		 */
-		public <I, O> Builder addConverter(Class<I> inType, Class<O> outType, Conversion<I, O> conversion) {
-			converter.add(inType, outType, conversion);
-			return this;
-		}
-
-		/**
 		 * Minimum bean class visibility.
 		 *
 		 * <p>
@@ -3841,10 +3812,9 @@ public class BeanContext extends Context {
 	public final Visibility getBeanFieldVisibility() { return beanFieldVisibility; }
 
 	/**
-	 * Returns the custom converter registered on this context, or <jk>null</jk> if none.
+	 * Returns the converter for this context.
 	 *
-	 * @see BeanContext.Builder#addConverter(Class, Class, Conversion)
-	 * @return The custom converter, or <jk>null</jk> if no custom conversions have been registered.
+	 * @return The converter.
 	 */
 	public final ConfigurableConverter getConverter() { return converter; }
 
