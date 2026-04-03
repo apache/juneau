@@ -1254,24 +1254,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 				if (from.isNumber()) {
 					return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
 				} else if (from.isBoolean()) {
-					var b = (Boolean)value;
-					boolean b2 = isTrue(b);
-					if (tc == Integer.class)
-						return (T)Integer.valueOf(b2 ? 1 : 0);
-					if (tc == Short.class)
-						return (T)Short.valueOf(b2 ? (short)1 : 0);
-					if (tc == Long.class)
-						return (T)Long.valueOf(b2 ? 1 : 0);
-					if (tc == Float.class)
-						return (T)Float.valueOf(b2 ? 1 : 0);
-					if (tc == Double.class)
-						return (T)Double.valueOf(b2 ? 1 : 0);
-					if (tc == Byte.class)
-						return (T)Byte.valueOf(b2 ? (byte)1 : 0);
-					if (tc == AtomicInteger.class)
-						return (T)new AtomicInteger(b2 ? 1 : 0);
-					if (tc == AtomicLong.class)
-						return (T)new AtomicLong(b2 ? 1 : 0);
+					return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
 				} else if (isNullOrEmpty(value)) {
 					return null;
 				} else if (! hasMutater(from, to)) {
@@ -1288,24 +1271,25 @@ public class BeanSession extends ContextSession implements ConverterSession {
 						if (tc == Long.TYPE)
 							return (T)Long.valueOf(l);
 					} else {
-						if (tc == Integer.class)
-							return (T)Integer.valueOf(s);
-						if (tc == Short.class)
-							return (T)Short.valueOf(s);
-						if (tc == Long.class)
-							return (T)Long.valueOf(s);
-						if (tc == Float.class)
-							return (T)Float.valueOf(s);
-						if (tc == Double.class)
-							return (T)Double.valueOf(s);
-						if (tc == Byte.class)
-							return (T)Byte.valueOf(s);
-						if (tc == AtomicInteger.class)
-							return (T)new AtomicInteger(Integer.valueOf(s));
-						if (tc == AtomicLong.class)
-							return (T)new AtomicLong(Long.valueOf(s));
-						if (tc == Number.class)
-							return (T)StringUtils.parseNumber(s, Number.class);
+						return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
+//						if (tc == Integer.class)
+//							return (T)Integer.valueOf(s);
+//						if (tc == Short.class)
+//							return (T)Short.valueOf(s);
+//						if (tc == Long.class)
+//							return (T)Long.valueOf(s);
+//						if (tc == Float.class)
+//							return (T)Float.valueOf(s);
+//						if (tc == Double.class)
+//							return (T)Double.valueOf(s);
+//						if (tc == Byte.class)
+//							return (T)Byte.valueOf(s);
+//						if (tc == AtomicInteger.class)
+//							return (T)new AtomicInteger(Integer.valueOf(s));
+//						if (tc == AtomicLong.class)
+//							return (T)new AtomicLong(Long.valueOf(s));
+//						if (tc == Number.class)
+//							return (T)StringUtils.parseNumber(s, Number.class);
 					}
 				}
 			}
