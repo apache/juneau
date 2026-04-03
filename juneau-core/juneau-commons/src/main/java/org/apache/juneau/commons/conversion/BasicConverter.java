@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
+import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
@@ -235,6 +236,13 @@ public class BasicConverter extends CachingConverter {
 		if (outType == Byte.class) return (in, memberOf, session, args) -> (O) Byte.valueOf(((Number) in).byteValue());
 		if (outType == AtomicInteger.class) return (in, memberOf, session, args) -> (O) new AtomicInteger(((Number) in).intValue());
 		if (outType == AtomicLong.class) return (in, memberOf, session, args) -> (O) new AtomicLong(((Number) in).longValue());
+		if (outType == BigDecimal.class) return (in, memberOf, session, args) -> (O) new BigDecimal(((Number) in).toString());
+		if (outType == BigInteger.class) return (in, memberOf, session, args) -> {
+			var n = (Number) in;
+			if (n instanceof BigDecimal bd) return (O) bd.toBigInteger();
+			if (n instanceof BigInteger bi) return (O) bi;
+			return (O) BigInteger.valueOf(n.longValue());
+		};
 		return null;
 	}
 
@@ -247,6 +255,8 @@ public class BasicConverter extends CachingConverter {
 		if (outType == Byte.class) return (in, memberOf, session, args) -> (O) Byte.valueOf(in.booleanValue() ? (byte) 1 : (byte) 0);
 		if (outType == AtomicInteger.class) return (in, memberOf, session, args) -> (O) new AtomicInteger(in.booleanValue() ? 1 : 0);
 		if (outType == AtomicLong.class) return (in, memberOf, session, args) -> (O) new AtomicLong(in.booleanValue() ? 1L : 0L);
+		if (outType == BigDecimal.class) return (in, memberOf, session, args) -> (O) BigDecimal.valueOf(in.booleanValue() ? 1L : 0L);
+		if (outType == BigInteger.class) return (in, memberOf, session, args) -> (O) BigInteger.valueOf(in.booleanValue() ? 1L : 0L);
 		return null;
 	}
 

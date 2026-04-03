@@ -1252,23 +1252,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 
 			if (to.isNumber()) {
 				if (from.isNumber()) {
-					var n = (Number)value;
-					if (tc == Integer.class)
-						return (T)Integer.valueOf(n.intValue());
-					if (tc == Short.class)
-						return (T)Short.valueOf(n.shortValue());
-					if (tc == Long.class)
-						return (T)Long.valueOf(n.longValue());
-					if (tc == Float.class)
-						return (T)Float.valueOf(n.floatValue());
-					if (tc == Double.class)
-						return (T)Double.valueOf(n.doubleValue());
-					if (tc == Byte.class)
-						return (T)Byte.valueOf(n.byteValue());
-					if (tc == AtomicInteger.class)
-						return (T)new AtomicInteger(n.intValue());
-					if (tc == AtomicLong.class)
-						return (T)new AtomicLong(n.intValue());
+					return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
 				} else if (from.isBoolean()) {
 					var b = (Boolean)value;
 					boolean b2 = isTrue(b);

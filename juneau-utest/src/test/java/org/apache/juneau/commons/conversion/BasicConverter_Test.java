@@ -86,11 +86,12 @@ class BasicConverter_Test extends TestBase {
 		assertEquals((byte) 42, C.to("42", byte.class));
 	}
 
-	@Test void a05_numberAndBooleanToUnsupportedNumericType() {
-		// Number → BigDecimal: hits findNumberFromNumber line 234 false branch (not AtomicLong), returns null
-		assertThrows(InvalidConversionException.class, () -> C.to(42, java.math.BigDecimal.class));
-		// Boolean → BigDecimal: hits findNumberFromBoolean line 246 false branch (not AtomicLong), returns null
-		assertThrows(InvalidConversionException.class, () -> C.to(true, java.math.BigDecimal.class));
+	@Test void a05_numberToBigDecimalAndBigInteger() {
+		assertEquals(new java.math.BigDecimal("42"), C.to(42, java.math.BigDecimal.class));
+		assertEquals(new java.math.BigDecimal("9.0"), C.to(9.0, java.math.BigDecimal.class));
+		assertEquals(java.math.BigInteger.valueOf(42), C.to(42, java.math.BigInteger.class));
+		assertEquals(java.math.BigInteger.valueOf(1), C.to(true, java.math.BigDecimal.class).toBigInteger());
+		assertEquals(java.math.BigInteger.valueOf(0), C.to(false, java.math.BigDecimal.class).toBigInteger());
 	}
 
 	//====================================================================================================
