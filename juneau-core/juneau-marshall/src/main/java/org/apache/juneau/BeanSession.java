@@ -1267,19 +1267,13 @@ public class BeanSession extends ContextSession implements ConverterSession {
 			}
 
 			if (to.isByteArray()) {
-				if (from.isInputStream())
-					return (T)readBytes((InputStream)value);
-				if (from.isReader())
-					return (T)read((Reader)value).getBytes();
+				if (from.isInputStream() || from.isReader())
+					return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
 				if (to.hasMutaterFrom(from))
 					return to.mutateFrom(value);
 				if (from.hasMutaterTo(to))
 					return from.mutateTo(value, to);
-				if (from.isCollection())
-					return (T)toArray(to, (Collection)value);
-				if (from.isArray())
-					return (T)toArray(to, l((Object[])value));
-				return (T)value.toString().getBytes(StandardCharsets.UTF_8);
+				return ctxConverter.to(value, outer, this, to.innerType(), to.getParameters());
 			}
 
 			// Handle setting of array properties

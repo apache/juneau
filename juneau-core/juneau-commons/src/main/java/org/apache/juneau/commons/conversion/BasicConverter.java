@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 import java.math.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
@@ -466,6 +467,8 @@ public class BasicConverter extends CachingConverter {
 					return null;
 				return (O) Boolean.valueOf(s);
 			};
+		if (CharSequence.class.isAssignableFrom(inType) && outType == byte[].class)
+			return (in, memberOf, session, args) -> (O) in.toString().getBytes(StandardCharsets.UTF_8);
 		return null;
 	}
 
