@@ -58,8 +58,6 @@ public class YamlSerializerSession extends WriterSerializerSession {
 	 */
 	public static class Builder extends WriterSerializerSession.Builder {
 
-		private YamlSerializer ctx;
-
 		/**
 		 * Constructor
 		 *
@@ -68,7 +66,6 @@ public class YamlSerializerSession extends WriterSerializerSession {
 		 */
 		protected Builder(YamlSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
-			this.ctx = ctx;
 		}
 
 		@Override /* Overridden from Builder */
@@ -196,8 +193,6 @@ public class YamlSerializerSession extends WriterSerializerSession {
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
-	private final YamlSerializer ctx;
-
 	/**
 	 * Constructor.
 	 *
@@ -205,7 +200,6 @@ public class YamlSerializerSession extends WriterSerializerSession {
 	 */
 	protected YamlSerializerSession(Builder builder) {
 		super(builder);
-		this.ctx = builder.ctx;
 	}
 
 	@Override /* Overridden from SerializerSession */
@@ -441,13 +435,4 @@ public class YamlSerializerSession extends WriterSerializerSession {
 		return out;
 	}
 
-	/**
-	 * Add <js>"_type"</js> properties when needed.
-	 *
-	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
-	 */
-	@Override
-	protected final boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
 }

@@ -488,8 +488,4 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		RDFDataMgr.write(out.getOutputStream(), model, lang);
 	}
 
-	@Override
-	protected boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
-	}
 }

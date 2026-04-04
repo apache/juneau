@@ -56,6 +56,14 @@ import org.apache.juneau.utils.*;
 })
 public class CsvSerializerSession extends WriterSerializerSession {
 
+	// Property name constants
+	private static final String PROP_byteArrayFormat = "byteArrayFormat";
+	private static final String PROP_allowNestedStructures = "allowNestedStructures";
+	private static final String PROP_nullValue = "nullValue";
+	private static final String PROP_CsvSerializerSession_byteArrayFormat = "CsvSerializerSession.byteArrayFormat";
+	private static final String PROP_CsvSerializerSession_allowNestedStructures = "CsvSerializerSession.allowNestedStructures";
+	private static final String PROP_CsvSerializerSession_nullValue = "CsvSerializerSession.nullValue";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
@@ -88,6 +96,17 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			nullValue = ctx.getNullValue();
 		}
 
+		/**
+		 * Allow nested structures.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowNestedStructures(boolean value) {
+			allowNestedStructures = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
@@ -97,6 +116,18 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		@Override
 		public CsvSerializerSession build() {
 			return new CsvSerializerSession(this);
+		}
+
+		/**
+		 * Byte array format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder byteArrayFormat(ByteArrayFormat value) {
+			if (nn(value))
+				byteArrayFormat = value;
+			return this;
 		}
 
 		@Override /* Overridden from Builder */
@@ -135,6 +166,17 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			return this;
 		}
 
+		/**
+		 * Null value string.
+		 *
+		 * @param value The new value for this property. Can be <jk>null</jk> (resets to default).
+		 * @return This object.
+		 */
+		public Builder nullValue(String value) {
+			nullValue = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder properties(Map<String,Object> value) {
 			super.properties(value);
@@ -143,8 +185,21 @@ public class CsvSerializerSession extends WriterSerializerSession {
 
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) {
+				super.property(key, value);
+				return this;
+			}
+			switch (key) {
+				case PROP_byteArrayFormat, PROP_CsvSerializerSession_byteArrayFormat:
+					return byteArrayFormat(cvt(value, ByteArrayFormat.class));
+				case PROP_allowNestedStructures, PROP_CsvSerializerSession_allowNestedStructures:
+					return allowNestedStructures(cvt(value, Boolean.class));
+				case PROP_nullValue, PROP_CsvSerializerSession_nullValue:
+					return nullValue(cvt(value, String.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		@Override /* Overridden from Builder */

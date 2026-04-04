@@ -75,10 +75,26 @@ public class SerializerSession extends BeanTraverseSession {
 	private static final String PROP_schema = "schema";
 	private static final String PROP_uriContext = "uriContext";
 	private static final String PROP_uriResolver = "uriResolver";
+	private static final String PROP_keepNullProperties = "keepNullProperties";
+	private static final String PROP_trimStrings = "trimStrings";
+	private static final String PROP_addBeanTypes = "addBeanTypes";
+	private static final String PROP_addRootType = "addRootType";
+	private static final String PROP_sortCollections = "sortCollections";
+	private static final String PROP_sortMaps = "sortMaps";
+	private static final String PROP_trimEmptyCollections = "trimEmptyCollections";
+	private static final String PROP_trimEmptyMaps = "trimEmptyMaps";
 	private static final String PROP_SerializerSession_javaMethod = "SerializerSession.javaMethod";
 	private static final String PROP_SerializerSession_resolver = "SerializerSession.resolver";
 	private static final String PROP_SerializerSession_schema = "SerializerSession.schema";
 	private static final String PROP_SerializerSession_uriContext = "SerializerSession.uriContext";
+	private static final String PROP_SerializerSession_keepNullProperties = "SerializerSession.keepNullProperties";
+	private static final String PROP_SerializerSession_trimStrings = "SerializerSession.trimStrings";
+	private static final String PROP_SerializerSession_addBeanTypes = "SerializerSession.addBeanTypes";
+	private static final String PROP_SerializerSession_addRootType = "SerializerSession.addRootType";
+	private static final String PROP_SerializerSession_sortCollections = "SerializerSession.sortCollections";
+	private static final String PROP_SerializerSession_sortMaps = "SerializerSession.sortMaps";
+	private static final String PROP_SerializerSession_trimEmptyCollections = "SerializerSession.trimEmptyCollections";
+	private static final String PROP_SerializerSession_trimEmptyMaps = "SerializerSession.trimEmptyMaps";
 
 	/**
 	 * Builder class.
@@ -92,6 +108,14 @@ public class SerializerSession extends BeanTraverseSession {
 		private Serializer ctx;
 		private UriContext uriContext;
 		private VarResolverSession resolver;
+		private boolean keepNullProperties;
+		private boolean trimStrings;
+		private boolean addBeanTypes;
+		private boolean addRootType;
+		private boolean sortCollections;
+		private boolean sortMaps;
+		private boolean trimEmptyCollections;
+		private boolean trimEmptyMaps;
 
 		/**
 		 * Constructor
@@ -104,6 +128,14 @@ public class SerializerSession extends BeanTraverseSession {
 			this.ctx = ctx;
 			mediaTypeDefault(ctx.getResponseContentType());
 			uriContext = ctx.getUriContext();
+			keepNullProperties = ctx.isKeepNullProperties();
+			trimStrings = ctx.isTrimStrings();
+			addBeanTypes = ctx.isAddBeanTypes();
+			addRootType = ctx.isAddRootType();
+			sortCollections = ctx.isSortCollections();
+			sortMaps = ctx.isSortMaps();
+			trimEmptyCollections = ctx.isTrimEmptyCollections();
+			trimEmptyMaps = ctx.isTrimEmptyMaps();
 		}
 
 		@Override /* Overridden from Builder */
@@ -176,6 +208,22 @@ public class SerializerSession extends BeanTraverseSession {
 					return schema(cvt(value, HttpPartSchema.class));
 				case PROP_uriContext, PROP_SerializerSession_uriContext:
 					return uriContext(cvt(value, UriContext.class));
+				case PROP_keepNullProperties, PROP_SerializerSession_keepNullProperties:
+					return keepNullProperties(cvt(value, Boolean.class));
+				case PROP_trimStrings, PROP_SerializerSession_trimStrings:
+					return trimStrings(cvt(value, Boolean.class));
+				case PROP_addBeanTypes, PROP_SerializerSession_addBeanTypes:
+					return addBeanTypes(cvt(value, Boolean.class));
+				case PROP_addRootType, PROP_SerializerSession_addRootType:
+					return addRootType(cvt(value, Boolean.class));
+				case PROP_sortCollections, PROP_SerializerSession_sortCollections:
+					return sortCollections(cvt(value, Boolean.class));
+				case PROP_sortMaps, PROP_SerializerSession_sortMaps:
+					return sortMaps(cvt(value, Boolean.class));
+				case PROP_trimEmptyCollections, PROP_SerializerSession_trimEmptyCollections:
+					return trimEmptyCollections(cvt(value, Boolean.class));
+				case PROP_trimEmptyMaps, PROP_SerializerSession_trimEmptyMaps:
+					return trimEmptyMaps(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
 					return this;
@@ -267,6 +315,94 @@ public class SerializerSession extends BeanTraverseSession {
 				uriContext = value;
 			return this;
 		}
+
+		/**
+		 * Keep null bean property values.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder keepNullProperties(boolean value) {
+			keepNullProperties = value;
+			return this;
+		}
+
+		/**
+		 * Trim strings.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder trimStrings(boolean value) {
+			trimStrings = value;
+			return this;
+		}
+
+		/**
+		 * Add bean types.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder addBeanTypes(boolean value) {
+			addBeanTypes = value;
+			return this;
+		}
+
+		/**
+		 * Add root type.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder addRootType(boolean value) {
+			addRootType = value;
+			return this;
+		}
+
+		/**
+		 * Sort collections.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder sortCollections(boolean value) {
+			sortCollections = value;
+			return this;
+		}
+
+		/**
+		 * Sort maps.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder sortMaps(boolean value) {
+			sortMaps = value;
+			return this;
+		}
+
+		/**
+		 * Trim empty collections.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder trimEmptyCollections(boolean value) {
+			trimEmptyCollections = value;
+			return this;
+		}
+
+		/**
+		 * Trim empty maps.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder trimEmptyMaps(boolean value) {
+			trimEmptyMaps = value;
+			return this;
+		}
 	}
 
 	/**
@@ -344,6 +480,14 @@ public class SerializerSession extends BeanTraverseSession {
 	private final SerializerListener listener;
 	private final UriResolver uriResolver;
 	private VarResolverSession vrs;
+	private final boolean keepNullProperties;
+	private final boolean trimStrings;
+	private final boolean addBeanTypes;
+	private final boolean addRootType;
+	private final boolean sortCollections;
+	private final boolean sortMaps;
+	private final boolean trimEmptyCollections;
+	private final boolean trimEmptyMaps;
 
 	/**
 	 * Constructor.
@@ -359,6 +503,14 @@ public class SerializerSession extends BeanTraverseSession {
 		uriResolver = UriResolver.of(ctx.getUriResolution(), ctx.getUriRelativity(), uriContext);
 		vrs = builder.resolver;
 		listener = BeanCreator.of(SerializerListener.class).type(ctx.getListener()).orElse(null);
+		keepNullProperties = builder.keepNullProperties;
+		trimStrings = builder.trimStrings;
+		addBeanTypes = builder.addBeanTypes;
+		addRootType = builder.addRootType;
+		sortCollections = builder.sortCollections;
+		sortMaps = builder.sortMaps;
+		trimEmptyCollections = builder.trimEmptyCollections;
+		trimEmptyMaps = builder.trimEmptyMaps;
 	}
 
 	/**
@@ -973,7 +1125,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * 	<jk>true</jk> if <js>"_type"</js> properties added to beans if their type cannot be inferred
 	 * 	through reflection.
 	 */
-	protected boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
+	protected boolean isAddBeanTypes() { return addBeanTypes; }
 
 	/**
 	 * Add type attribute to root nodes.
@@ -982,7 +1134,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if type property should be added to root node.
 	 */
-	protected final boolean isAddRootType() { return ctx.isAddRootType(); }
+	protected final boolean isAddRootType() { return addRootType; }
 
 	/**
 	 * Don't trim null bean property values.
@@ -991,7 +1143,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if null bean values are serialized to the output.
 	 */
-	protected final boolean isKeepNullProperties() { return ctx.isKeepNullProperties(); }
+	protected final boolean isKeepNullProperties() { return keepNullProperties; }
 
 	/**
 	 * Sort arrays and collections alphabetically.
@@ -1000,7 +1152,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if arrays and collections are copied and sorted before serialization.
 	 */
-	protected final boolean isSortCollections() { return ctx.isSortCollections(); }
+	protected final boolean isSortCollections() { return sortCollections; }
 
 	/**
 	 * Sort maps alphabetically.
@@ -1009,7 +1161,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if maps are copied and sorted before serialization.
 	 */
-	protected final boolean isSortMaps() { return ctx.isSortMaps(); }
+	protected final boolean isSortMaps() { return sortMaps; }
 
 	/**
 	 * Trim empty lists and arrays.
@@ -1018,7 +1170,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
 	 */
-	protected final boolean isTrimEmptyCollections() { return ctx.isTrimEmptyCollections(); }
+	protected final boolean isTrimEmptyCollections() { return trimEmptyCollections; }
 
 	/**
 	 * Trim empty maps.
@@ -1027,7 +1179,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if empty map values are not serialized to the output.
 	 */
-	protected final boolean isTrimEmptyMaps() { return ctx.isTrimEmptyMaps(); }
+	protected final boolean isTrimEmptyMaps() { return trimEmptyMaps; }
 
 	/**
 	 * Trim strings.
@@ -1036,7 +1188,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */
-	protected boolean isTrimStrings() { return ctx.isTrimStrings(); }
+	protected boolean isTrimStrings() { return trimStrings; }
 
 	/**
 	 * Specialized warning when an exception is thrown while executing a bean getter.

@@ -58,11 +58,19 @@ import org.apache.juneau.utils.Iso8601Utils;
 })
 public class XmlParserSession extends ReaderParserSession {
 
+	// Property name constants
+	private static final String PROP_preserveRootElement = "preserveRootElement";
+	private static final String PROP_validating = "validating";
+	private static final String PROP_XmlParserSession_preserveRootElement = "XmlParserSession.preserveRootElement";
+	private static final String PROP_XmlParserSession_validating = "XmlParserSession.validating";
+
 	/**
 	 * Builder class.
 	 */
 	public static class Builder extends ReaderParserSession.Builder {
 
+		private boolean preserveRootElement;
+		private boolean validating;
 		private XmlParser ctx;
 
 		/**
@@ -73,6 +81,8 @@ public class XmlParserSession extends ReaderParserSession {
 		protected Builder(XmlParser ctx) {
 			super(ctx);
 			this.ctx = ctx;
+			preserveRootElement = ctx.isPreserveRootElement();
+			validating = ctx.isValidating();
 		}
 
 		@Override /* Overridden from Builder */
@@ -134,10 +144,40 @@ public class XmlParserSession extends ReaderParserSession {
 			return this;
 		}
 
+		/**
+		 * Preserve root element during XML parsing.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder preserveRootElement(boolean value) {
+			preserveRootElement = value;
+			return this;
+		}
+
+		/**
+		 * Validate XML during parsing.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder validating(boolean value) {
+			validating = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) { super.property(key, value); return this; }
+			switch (key) {
+				case PROP_preserveRootElement, PROP_XmlParserSession_preserveRootElement:
+					return preserveRootElement(cvt(value, Boolean.class));
+				case PROP_validating, PROP_XmlParserSession_validating:
+					return validating(cvt(value, Boolean.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		@Override /* Overridden from Builder */
@@ -217,6 +257,8 @@ public class XmlParserSession extends ReaderParserSession {
 	}
 
 	private final XmlParser ctx;
+	private final boolean preserveRootElement;
+	private final boolean validating;
 
 	private final StringBuilder rsb = new StringBuilder();  // Reusable string builder used in this class.
 
@@ -228,6 +270,8 @@ public class XmlParserSession extends ReaderParserSession {
 	protected XmlParserSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
+		preserveRootElement = builder.preserveRootElement;
+		validating = builder.validating;
 	}
 
 	/*
@@ -744,7 +788,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * 	<jk>true</jk> if when parsing into a generic {@link JsonMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
 	 */
-	protected final boolean isPreserveRootElement() { return ctx.isPreserveRootElement(); }
+	protected final boolean isPreserveRootElement() { return preserveRootElement; }
 
 	/**
 	 * Enable validation.
@@ -753,7 +797,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @return
 	 * 	<jk>true</jk> if XML document will be validated.
 	 */
-	protected final boolean isValidating() { return ctx.isValidating(); }
+	protected final boolean isValidating() { return validating; }
 
 	/**
 	 * Returns <jk>true</jk> if the current element is a whitespace element.

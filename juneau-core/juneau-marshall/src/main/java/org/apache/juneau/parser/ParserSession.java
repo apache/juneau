@@ -62,9 +62,11 @@ public class ParserSession extends BeanSession {
 	private static final String PROP_listener = "listener";
 	private static final String PROP_outer = "outer";
 	private static final String PROP_schema = "schema";
+	private static final String PROP_trimStrings = "trimStrings";
 	private static final String PROP_ParserSession_javaMethod = "ParserSession.javaMethod";
 	private static final String PROP_ParserSession_outer = "ParserSession.outer";
 	private static final String PROP_ParserSession_schema = "ParserSession.schema";
+	private static final String PROP_ParserSession_trimStrings = "ParserSession.trimStrings";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -77,6 +79,7 @@ public class ParserSession extends BeanSession {
 		private HttpPartSchema schema;
 		private Method javaMethod;
 		private Object outer;
+		private boolean trimStrings;
 		private Parser ctx;
 
 		/**
@@ -89,6 +92,7 @@ public class ParserSession extends BeanSession {
 			super(assertArgNotNull(ARG_ctx, ctx).getBeanContext());
 			this.ctx = ctx;
 			mediaTypeDefault(ctx.getPrimaryMediaType());
+			trimStrings = ctx.isTrimStrings();
 		}
 
 		@Override /* Overridden from Builder */
@@ -172,10 +176,23 @@ public class ParserSession extends BeanSession {
 					return outer(value);
 				case PROP_schema, PROP_ParserSession_schema:
 					return schema(cvt(value, HttpPartSchema.class));
+				case PROP_trimStrings, PROP_ParserSession_trimStrings:
+					return trimStrings(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
 					return this;
 			}
+		}
+
+		/**
+		 * Trim parsed strings.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder trimStrings(boolean value) {
+			trimStrings = value;
+			return this;
 		}
 
 		/**
@@ -283,6 +300,7 @@ public class ParserSession extends BeanSession {
 	private final HttpPartSchema schema;
 	private final Method javaMethod;
 	private final Object outer;
+	private final boolean trimStrings;
 	private final Parser ctx;
 	private final ParserListener listener;
 	private final Deque<StringBuilder> sbStack;
@@ -302,6 +320,7 @@ public class ParserSession extends BeanSession {
 		javaMethod = builder.javaMethod;
 		outer = builder.outer;
 		schema = builder.schema;
+		trimStrings = builder.trimStrings;
 		listener = BeanCreator.of(ParserListener.class).type(ctx.getListener()).orElse(null);
 		sbStack = new ArrayDeque<>();
 	}
@@ -1065,7 +1084,7 @@ public class ParserSession extends BeanSession {
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * 	the POJO.
 	 */
-	protected final boolean isTrimStrings() { return ctx.isTrimStrings(); }
+	protected final boolean isTrimStrings() { return trimStrings; }
 
 	/**
 	 * Unbuffered.
@@ -1126,7 +1145,8 @@ public class ParserSession extends BeanSession {
 		return super.properties()
 			.a(PROP_javaMethod, javaMethod)
 			.a(PROP_listener, listener)
-			.a(PROP_outer, outer);
+			.a(PROP_outer, outer)
+			.a(PROP_trimStrings, trimStrings);
 	}
 
 	/**

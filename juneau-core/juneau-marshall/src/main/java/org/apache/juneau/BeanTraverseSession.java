@@ -56,6 +56,8 @@ public class BeanTraverseSession extends BeanSession {
 	// Property name constants
 	private static final String PROP_indent = "indent";
 	private static final String PROP_depth = "depth";
+	private static final String PROP_initialDepth = "initialDepth";
+	private static final String PROP_BeanTraverseSession_initialDepth = "BeanTraverseSession.initialDepth";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -117,10 +119,30 @@ public class BeanTraverseSession extends BeanSession {
 			return this;
 		}
 
+		/**
+		 * Initial depth.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder initialDepth(int value) {
+			initialDepth = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) {
+				super.property(key, value);
+				return this;
+			}
+			switch (key) {
+				case PROP_initialDepth, PROP_BeanTraverseSession_initialDepth:
+					return initialDepth(cvt(value, Integer.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		@Override /* Overridden from Builder */

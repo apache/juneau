@@ -51,6 +51,10 @@ import org.apache.juneau.utils.*;
 })
 public class JsonSerializerSession extends WriterSerializerSession {
 
+	// Property name constants
+	private static final String PROP_escapeSolidus = "escapeSolidus";
+	private static final String PROP_JsonSerializerSession_escapeSolidus = "JsonSerializerSession.escapeSolidus";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
@@ -59,6 +63,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 */
 	public static class Builder extends WriterSerializerSession.Builder {
 
+		private boolean escapeSolidus;
 		private JsonSerializer ctx;
 
 		/**
@@ -70,6 +75,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		protected Builder(JsonSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
+			escapeSolidus = ctx.isEscapeSolidus();
 		}
 
 		@Override /* Overridden from Builder */
@@ -125,10 +131,27 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			return this;
 		}
 
+		/**
+		 * Prefix solidus characters with escapes.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder escapeSolidus(boolean value) {
+			escapeSolidus = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) { super.property(key, value); return this; }
+			switch (key) {
+				case PROP_escapeSolidus, PROP_JsonSerializerSession_escapeSolidus:
+					return escapeSolidus(cvt(value, Boolean.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		@Override /* Overridden from Builder */
@@ -198,6 +221,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	}
 
 	private final JsonSerializer ctx;
+	private final boolean escapeSolidus;
 
 	/**
 	 * Constructor.
@@ -207,6 +231,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	protected JsonSerializerSession(Builder builder) {
 		super(builder);
 		this.ctx = builder.ctx;
+		escapeSolidus = builder.escapeSolidus;
 	}
 
 	protected SerializerWriter serializeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
@@ -335,16 +360,8 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		return w;
 	}
 
-	/**
-	 * Add <js>"_type"</js> properties when needed.
-	 *
-	 * @see JsonSerializer.Builder#addBeanTypesJson()
-	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
-	 */
 	@Override
-	protected final boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
+	public final boolean isAddBeanTypes() { return super.isAddBeanTypes(); }
 
 	/**
 	 * Prefix solidus <js>'/'</js> characters with escapes.
@@ -353,7 +370,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
 	 */
-	protected final boolean isEscapeSolidus() { return ctx.isEscapeSolidus(); }
+	protected final boolean isEscapeSolidus() { return escapeSolidus; }
 
 	/**
 	 * Workhorse method.

@@ -310,8 +310,4 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 		bsonOut.writeDocumentTo(out.getOutputStream());
 	}
 
-	@Override
-	protected boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
-	}
 }

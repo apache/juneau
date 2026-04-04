@@ -58,11 +58,16 @@ import org.apache.juneau.utils.Iso8601Utils;
 })
 public class JsonParserSession extends ReaderParserSession {
 
+	// Property name constants
+	private static final String PROP_validateEnd = "validateEnd";
+	private static final String PROP_JsonParserSession_validateEnd = "JsonParserSession.validateEnd";
+
 	/**
 	 * Builder class.
 	 */
 	public static class Builder extends ReaderParserSession.Builder {
 
+		private boolean validateEnd;
 		private JsonParser ctx;
 
 		/**
@@ -73,6 +78,7 @@ public class JsonParserSession extends ReaderParserSession {
 		protected Builder(JsonParser ctx) {
 			super(ctx);
 			this.ctx = ctx;
+			validateEnd = ctx.isValidateEnd();
 		}
 
 		@Override /* Overridden from Builder */
@@ -134,10 +140,27 @@ public class JsonParserSession extends ReaderParserSession {
 			return this;
 		}
 
+		/**
+		 * Validate end.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder validateEnd(boolean value) {
+			validateEnd = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) { super.property(key, value); return this; }
+			switch (key) {
+				case PROP_validateEnd, PROP_JsonParserSession_validateEnd:
+					return validateEnd(cvt(value, Boolean.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		@Override /* Overridden from Builder */
@@ -190,6 +213,7 @@ public class JsonParserSession extends ReaderParserSession {
 	}
 
 	private final JsonParser ctx;
+	private final boolean validateEnd;
 
 	/**
 	 * Constructor.
@@ -199,6 +223,7 @@ public class JsonParserSession extends ReaderParserSession {
 	protected JsonParserSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
+		validateEnd = builder.validateEnd;
 	}
 
 	@SuppressWarnings({
@@ -905,7 +930,7 @@ public class JsonParserSession extends ReaderParserSession {
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.
 	 */
-	protected boolean isValidateEnd() { return ctx.isValidateEnd(); }
+	protected boolean isValidateEnd() { return validateEnd; }
 
 	/**
 	 * Returns <jk>true</jk> if the specified character is whitespace.

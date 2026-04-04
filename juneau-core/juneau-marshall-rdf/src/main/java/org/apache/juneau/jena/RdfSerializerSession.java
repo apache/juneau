@@ -682,17 +682,6 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Add <js>"_type"</js> properties when needed.
-	 *
-	 * @see RdfSerializer.Builder#addBeanTypes()
-	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
-	 */
-	@Override
-	protected final boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
-
-	/**
 	 * Add XSI data types to non-<c>String</c> literals.
 	 *
 	 * @see RdfSerializer.Builder#addLiteralTypes()

@@ -57,6 +57,18 @@ import org.apache.juneau.xml.annotation.*;
 })
 public class XmlSerializerSession extends WriterSerializerSession {
 
+	// Property name constants
+	private static final String PROP_addNamespaceUrisToRoot = "addNamespaceUrisToRoot";
+	private static final String PROP_autoDetectNamespaces = "autoDetectNamespaces";
+	private static final String PROP_defaultNamespace = "defaultNamespace";
+	private static final String PROP_enableNamespaces = "enableNamespaces";
+	private static final String PROP_textNodeDelimiter = "textNodeDelimiter";
+	private static final String PROP_XmlSerializerSession_addNamespaceUrisToRoot = "XmlSerializerSession.addNamespaceUrisToRoot";
+	private static final String PROP_XmlSerializerSession_autoDetectNamespaces = "XmlSerializerSession.autoDetectNamespaces";
+	private static final String PROP_XmlSerializerSession_defaultNamespace = "XmlSerializerSession.defaultNamespace";
+	private static final String PROP_XmlSerializerSession_enableNamespaces = "XmlSerializerSession.enableNamespaces";
+	private static final String PROP_XmlSerializerSession_textNodeDelimiter = "XmlSerializerSession.textNodeDelimiter";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
@@ -65,6 +77,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 */
 	public static class Builder extends WriterSerializerSession.Builder {
 
+		private boolean addNamespaceUrisToRoot;
+		private boolean autoDetectNamespaces;
+		private String defaultNamespace;
+		private boolean enableNamespaces;
+		private String textNodeDelimiter;
 		private XmlSerializer ctx;
 
 		/**
@@ -76,6 +93,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		protected Builder(XmlSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
+			addNamespaceUrisToRoot = ctx.isAddNamespaceUrlsToRoot();
+			autoDetectNamespaces = ctx.isAutoDetectNamespaces();
+			defaultNamespace = ctx.getDefaultNamespace() == null ? null : ctx.getDefaultNamespace().toString();
+			enableNamespaces = ctx.isEnableNamespaces();
+			textNodeDelimiter = ctx.getTextNodeDelimiter();
 		}
 
 		@Override /* Overridden from Builder */
@@ -131,10 +153,79 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			return this;
 		}
 
+		/**
+		 * Add namespace URLs to the root element.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder addNamespaceUrisToRoot(boolean value) {
+			addNamespaceUrisToRoot = value;
+			return this;
+		}
+
+		/**
+		 * Auto-detect namespace usage.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder autoDetectNamespaces(boolean value) {
+			autoDetectNamespaces = value;
+			return this;
+		}
+
+		/**
+		 * Default namespace.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder defaultNamespace(String value) {
+			defaultNamespace = value;
+			return this;
+		}
+
+		/**
+		 * Enable support for XML namespaces.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder enableNamespaces(boolean value) {
+			enableNamespaces = value;
+			return this;
+		}
+
+		/**
+		 * Text node delimiter.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder textNodeDelimiter(String value) {
+			textNodeDelimiter = value == null ? "" : value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) { super.property(key, value); return this; }
+			switch (key) {
+				case PROP_addNamespaceUrisToRoot, PROP_XmlSerializerSession_addNamespaceUrisToRoot:
+					return addNamespaceUrisToRoot(cvt(value, Boolean.class));
+				case PROP_autoDetectNamespaces, PROP_XmlSerializerSession_autoDetectNamespaces:
+					return autoDetectNamespaces(cvt(value, Boolean.class));
+				case PROP_defaultNamespace, PROP_XmlSerializerSession_defaultNamespace:
+					return defaultNamespace(cvt(value, String.class));
+				case PROP_enableNamespaces, PROP_XmlSerializerSession_enableNamespaces:
+					return enableNamespaces(cvt(value, Boolean.class));
+				case PROP_textNodeDelimiter, PROP_XmlSerializerSession_textNodeDelimiter:
+					return textNodeDelimiter(cvt(value, String.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		@Override /* Overridden from Builder */
@@ -245,6 +336,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	private final String textNodeDelimiter;
+	private final boolean addNamespaceUrisToRoot;
+	private final boolean autoDetectNamespaces;
+	private final boolean enableNamespaces;
 	private final XmlSerializer ctx;
 	private Namespace defaultNamespace;
 	private List<Namespace> namespaces = new ArrayList<>();
@@ -257,10 +351,15 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	protected XmlSerializerSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
-		defaultNamespace = findDefaultNamespace(ctx.getDefaultNamespace());
+		addNamespaceUrisToRoot = builder.addNamespaceUrisToRoot;
+		autoDetectNamespaces = builder.autoDetectNamespaces;
+		enableNamespaces = builder.enableNamespaces;
+		textNodeDelimiter = builder.textNodeDelimiter;
+		defaultNamespace = findDefaultNamespace(
+			builder.defaultNamespace != null ? Namespace.create(builder.defaultNamespace) : ctx.getDefaultNamespace()
+		);
 		var ctxNamespaces = ctx.getNamespaces();
 		namespaces = ctxNamespaces == null ? new ArrayList<>() : new ArrayList<>(ctxNamespaces);
-		textNodeDelimiter = ctx.getTextNodeDelimiter();
 	}
 
 	/**
@@ -726,16 +825,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 */
 	protected final List<Namespace> getNamespaces() { return namespaces == null ? l() : namespaces; }
 
-	/**
-	 * Add <js>"_type"</js> properties when needed.
-	 *
-	 * @see XmlSerializer.Builder#addBeanTypesXml()
-	 * @return
-	 * 	<jk>true</jk> if<js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
-	 */
 	@Override
-	protected boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
+	public boolean isAddBeanTypes() { return super.isAddBeanTypes(); }
 
 	/**
 	 * Add JSON type tags.
@@ -753,7 +844,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.
 	 */
-	protected final boolean isAddNamespaceUrisToRoot() { return ctx.isAddNamespaceUrlsToRoot(); }
+	protected final boolean isAddNamespaceUrisToRoot() { return addNamespaceUrisToRoot; }
 
 	/**
 	 * Auto-detect namespace usage.
@@ -762,7 +853,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if namespace usage is detected before serialization.
 	 */
-	protected final boolean isAutoDetectNamespaces() { return ctx.isAutoDetectNamespaces(); }
+	protected final boolean isAutoDetectNamespaces() { return autoDetectNamespaces; }
 
 	/**
 	 * Enable support for XML namespaces.
@@ -771,7 +862,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	<jk>false</jk> if XML output will not contain any namespaces regardless of any other settings.
 	 */
-	protected final boolean isEnableNamespaces() { return ctx.isEnableNamespaces(); }
+	protected final boolean isEnableNamespaces() { return enableNamespaces; }
 
 	/**
 	 * Returns <jk>true</jk> if we're serializing HTML.

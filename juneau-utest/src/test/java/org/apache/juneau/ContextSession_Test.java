@@ -22,9 +22,15 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.csv.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
 class ContextSession_Test extends TestBase {
@@ -139,6 +145,21 @@ class ContextSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Nested class E_propertyDispatch extends TestBase {
+
+		public static class BeanWithNullField {
+			public String a = null;
+			public int b = 1;
+		}
+
+		public static class BeanWithEmptyCollection {
+			public String[] a = new String[0];
+			public int b = 1;
+		}
+
+		public static class BeanWithEmptyMap {
+			public Map<String,Object> a = new LinkedHashMap<>();
+			public int b = 1;
+		}
 
 		// -- ContextSession: debug --
 
@@ -295,6 +316,297 @@ class ContextSession_Test extends TestBase {
 				.property("locale", "ja-JP")
 				.build();
 			assertEquals(Locale.forLanguageTag("ja-JP"), session.getLocale());
+		}
+
+		// -- BeanTraverseSession: initialDepth --
+
+		@Test void e20_beanTraverse_initialDepth_shortForm() {
+			var session = (BeanTraverseSession) JsonSerializer.DEFAULT.createSession()
+				.property("initialDepth", 3)
+				.build();
+			assertEquals(3, session.indent);
+		}
+
+		@Test void e21_beanTraverse_initialDepth_qualifiedForm() {
+			var session = (BeanTraverseSession) JsonSerializer.DEFAULT.createSession()
+				.property("BeanTraverseSession.initialDepth", "5")
+				.build();
+			assertEquals(5, session.indent);
+		}
+
+		// -- SerializerSession: trimStrings --
+
+		@Test void e22_serializer_trimStrings_shortForm() throws Exception {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("trimStrings", true)
+				.build();
+			assertEquals("\"hello\"", session.serialize("  hello  "));
+		}
+
+		@Test void e23_serializer_trimStrings_qualifiedForm() throws Exception {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("SerializerSession.trimStrings", "true")
+				.build();
+			assertEquals("\"hello\"", session.serialize("  hello  "));
+		}
+
+		// -- SerializerSession: keepNullProperties --
+
+		@Test void e24_serializer_keepNullProperties_true() throws Exception {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("keepNullProperties", true)
+				.build();
+			var result = session.serialize(new BeanWithNullField());
+			assertTrue(result.contains("\"a\""));
+		}
+
+		@Test void e25_serializer_keepNullProperties_false() throws Exception {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("SerializerSession.keepNullProperties", "false")
+				.build();
+			var result = session.serialize(new BeanWithNullField());
+			assertFalse(result.contains("\"a\""));
+		}
+
+		// -- SerializerSession: sortCollections --
+
+		@Test void e26_serializer_sortCollections() throws Exception {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("sortCollections", true)
+				.build();
+			var result = session.serialize(new String[]{"c", "a", "b"});
+			assertEquals("[\"a\",\"b\",\"c\"]", result);
+		}
+
+		// -- SerializerSession: sortMaps --
+
+		@Test void e27_serializer_sortMaps() throws Exception {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("SerializerSession.sortMaps", "true")
+				.build();
+			var m = new LinkedHashMap<String,Integer>();
+			m.put("c", 3);
+			m.put("a", 1);
+			m.put("b", 2);
+			var result = session.serialize(m);
+			assertEquals("{\"a\":1,\"b\":2,\"c\":3}", result);
+		}
+
+		// -- SerializerSession: trimEmptyCollections --
+
+		@Test void e28_serializer_trimEmptyCollections() throws Exception {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("trimEmptyCollections", true)
+				.build();
+			var result = session.serialize(new BeanWithEmptyCollection());
+			assertFalse(result.contains("\"a\""));
+			assertTrue(result.contains("\"b\""));
+		}
+
+		// -- SerializerSession: trimEmptyMaps --
+
+		@Test void e29_serializer_trimEmptyMaps() throws Exception {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("trimEmptyMaps", true)
+				.build();
+			var result = session.serialize(new BeanWithEmptyMap());
+			assertFalse(result.contains("\"a\""));
+			assertTrue(result.contains("\"b\""));
+		}
+
+		// -- WriterSerializerSession: maxIndent --
+
+		@Test void e30_writerSerializer_maxIndent_shortForm() throws Exception {
+			var ctx = JsonSerializer.create().useWhitespace().build();
+			var noLimitSession = (WriterSerializerSession) ctx.createSession().build();
+			var limitedSession = (WriterSerializerSession) ctx.createSession()
+				.property("maxIndent", 0)
+				.build();
+			// With maxIndent=0, output should have no leading spaces on values
+			var unlimited = noLimitSession.serialize(JsonMap.of("a", 1));
+			var limited = limitedSession.serialize(JsonMap.of("a", 1));
+			assertTrue(unlimited.contains("\t"));
+			assertFalse(limited.contains("\t"));
+		}
+
+		@Test void e31_writerSerializer_maxIndent_qualifiedForm() throws Exception {
+			var ctx = JsonSerializer.create().useWhitespace().build();
+			var session = (WriterSerializerSession) ctx.createSession()
+				.property("WriterSerializerSession.maxIndent", "0")
+				.build();
+			var result = session.serialize(JsonMap.of("a", 1));
+			assertFalse(result.contains("\t"));
+		}
+
+		// -- WriterSerializerSession: quoteChar --
+
+		@Test void e32_writerSerializer_quoteChar_shortForm() throws Exception {
+			var session = (WriterSerializerSession) Json5Serializer.DEFAULT.createSession()
+				.property("quoteChar", '"')
+				.build();
+			var result = session.serialize("hello");
+			assertEquals("\"hello\"", result);
+		}
+
+		@Test void e33_writerSerializer_quoteChar_qualifiedForm() throws Exception {
+			var session = (WriterSerializerSession) Json5Serializer.DEFAULT.createSession()
+				.property("WriterSerializerSession.quoteChar", "\"")
+				.build();
+			var result = session.serialize("hello");
+			assertEquals("\"hello\"", result);
+		}
+
+		// -- CsvSerializerSession: nullValue --
+
+		@Test void e34_csv_nullValue_shortForm() throws Exception {
+			var session = CsvSerializer.DEFAULT.createSession()
+				.property("nullValue", "N/A")
+				.build();
+			var result = session.serialize(JsonMap.of("a", null));
+			assertTrue(result.contains("N/A"));
+		}
+
+		@Test void e35_csv_nullValue_qualifiedForm() throws Exception {
+			var session = CsvSerializer.DEFAULT.createSession()
+				.property("CsvSerializerSession.nullValue", "EMPTY")
+				.build();
+			var result = session.serialize(JsonMap.of("a", null));
+			assertTrue(result.contains("EMPTY"));
+		}
+
+		// -- CsvSerializerSession: byteArrayFormat --
+
+		@Test void e36_csv_byteArrayFormat_shortForm() throws Exception {
+			var session = CsvSerializer.DEFAULT.createSession()
+				.property("byteArrayFormat", ByteArrayFormat.SEMICOLON_DELIMITED)
+				.build();
+			var result = session.serialize(new byte[]{1, 2, 3});
+			assertTrue(result.contains("1;2;3"));
+		}
+
+		// -- ParserSession: trimStrings --
+
+		@Test void e37_parser_trimStrings_shortForm() throws Exception {
+			var session = JsonParser.DEFAULT.createSession()
+				.property("trimStrings", true)
+				.build();
+			var result = session.parse("\" hello \"", String.class);
+			assertEquals("hello", result);
+		}
+
+		@Test void e38_parser_trimStrings_qualifiedForm() throws Exception {
+			var session = JsonParser.DEFAULT.createSession()
+				.property("ParserSession.trimStrings", "true")
+				.build();
+			var result = session.parse("\" hello \"", String.class);
+			assertEquals("hello", result);
+		}
+
+		// -- JsonSerializerSession: escapeSolidus --
+
+		@Test void e39_json_escapeSolidus_shortForm() throws Exception {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("escapeSolidus", true)
+				.build();
+			var result = session.serialize("http://example.com");
+			assertTrue(result.contains("\\/"));
+		}
+
+		@Test void e40_json_escapeSolidus_qualifiedForm() throws Exception {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("JsonSerializerSession.escapeSolidus", "true")
+				.build();
+			var result = session.serialize("http://example.com");
+			assertTrue(result.contains("\\/"));
+		}
+
+		// -- JsonParserSession: validateEnd --
+
+		@Test void e41_json_validateEnd_shortForm() throws Exception {
+			var session = JsonParser.DEFAULT.createSession()
+				.property("validateEnd", true)
+				.build();
+			// With validateEnd=true, trailing content should throw an error
+			assertThrows(Exception.class, () -> session.parse("{\"a\":1}extra", JsonMap.class));
+		}
+
+		// -- UonParserSession: validateEnd --
+
+		@Test void e42_uon_validateEnd_shortForm() throws Exception {
+			var session = UonParser.DEFAULT.createSession()
+				.property("validateEnd", true)
+				.build();
+			assertThrows(Exception.class, () -> session.parse("(a=1)extra", JsonMap.class));
+		}
+
+		// -- UonSerializerSession: encoding --
+
+		@Test void e43_uon_encoding_shortForm() throws Exception {
+			var session = (WriterSerializerSession) UonSerializer.DEFAULT.createSession()
+				.property("encoding", true)
+				.build();
+			var result = session.serialize("hello world");
+			assertTrue(result.contains("%20") || result.contains("+"));
+		}
+
+		// -- UonSerializerSession: paramFormat --
+
+		@Test void e44_uon_paramFormat_shortForm() throws Exception {
+			var session = (WriterSerializerSession) UonSerializer.DEFAULT.createSession()
+				.property("paramFormat", ParamFormat.PLAINTEXT)
+				.build();
+			var result = session.serialize("hello");
+			assertEquals("hello", result);
+		}
+
+		// -- UrlEncodingSerializerSession: expandedParams --
+
+		@Test void e45_urlEncoding_expandedParams_shortForm() throws Exception {
+			var session = (WriterSerializerSession) UrlEncodingSerializer.DEFAULT.createSession()
+				.property("expandedParams", true)
+				.build();
+			var result = session.serialize(JsonMap.of("a", new int[]{1, 2, 3}));
+			assertTrue(result.contains("a=1") && result.contains("a=2") && result.contains("a=3"));
+		}
+
+		// -- XmlSerializerSession: enableNamespaces --
+
+		@Test void e46_xml_enableNamespaces_shortForm() throws Exception {
+			var session = (WriterSerializerSession) XmlSerializer.DEFAULT.createSession()
+				.property("enableNamespaces", false)
+				.build();
+			var result = session.serialize(JsonMap.of("a", 1));
+			assertFalse(result.contains("xmlns"));
+		}
+
+		// -- XmlParserSession: preserveRootElement --
+
+		@Test void e47_xml_preserveRootElement_shortForm() throws Exception {
+			var session = XmlParser.DEFAULT.createSession()
+				.property("preserveRootElement", true)
+				.build();
+			var result = session.parse("<root><a>1</a></root>", JsonMap.class);
+			assertTrue(result.containsKey("root"));
+		}
+
+		// -- HtmlSerializerSession: detectLinksInStrings --
+
+		@Test void e48_html_detectLinksInStrings_shortForm() throws Exception {
+			var session = (WriterSerializerSession) HtmlSerializer.DEFAULT.createSession()
+				.property("detectLinksInStrings", false)
+				.build();
+			var result = session.serialize("http://example.com");
+			assertFalse(result.contains("<a "));
+		}
+
+		// -- HtmlSerializerSession: labelParameter --
+
+		@Test void e49_html_labelParameter_shortForm() throws Exception {
+			var session = (WriterSerializerSession) HtmlSerializer.DEFAULT.createSession()
+				.property("labelParameter", "customlabel")
+				.build();
+			var result = session.serialize("http://example.com?customlabel=MyLink");
+			assertTrue(result.contains("MyLink"));
 		}
 	}
 }

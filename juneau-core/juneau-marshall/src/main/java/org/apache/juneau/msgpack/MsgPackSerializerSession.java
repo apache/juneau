@@ -59,8 +59,6 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	 */
 	public static class Builder extends OutputStreamSerializerSession.Builder {
 
-		private MsgPackSerializer ctx;
-
 		/**
 		 * Constructor
 		 *
@@ -69,7 +67,6 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		 */
 		protected Builder(MsgPackSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
-			this.ctx = ctx;
 		}
 
 		@Override /* Overridden from Builder */
@@ -201,8 +198,6 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		return os;
 	}
 
-	private final MsgPackSerializer ctx;
-
 	/**
 	 * Constructor.
 	 *
@@ -210,7 +205,6 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	 */
 	protected MsgPackSerializerSession(Builder builder) {
 		super(builder);
-		ctx = builder.ctx;
 	}
 
 	/*
@@ -391,5 +385,5 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	}
 
 	@Override
-	protected boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
+	public boolean isAddBeanTypes() { return super.isAddBeanTypes(); }
 }

@@ -110,6 +110,42 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
     * New classes: CsvCellParser, CsvCellSerializer, ByteArrayFormat.
     * New builder options: byteArrayFormat(), allowNestedStructures(), nullValue().
 
+** New Features - Per-Session Property Overrides
+
+    * Session.Builder.property(String, Object) and properties(Map) now dispatch to typed
+      session-level setter methods, enabling per-request override of serializer/parser configuration.
+    * Both short names (e.g., "locale") and fully-qualified names (e.g., "BeanSession.locale") are
+      accepted as property keys.
+    * New properties exposed as session-level overrides:
+        - ParserSession: trimStrings
+        - BeanTraverseSession: initialDepth
+        - SerializerSession: keepNullProperties, trimStrings, addBeanTypes, addRootType,
+          sortCollections, sortMaps, trimEmptyCollections, trimEmptyMaps
+        - WriterSerializerSession: maxIndent, quoteChar
+        - CsvSerializerSession: byteArrayFormat, allowNestedStructures, nullValue
+        - JsonSerializerSession: escapeSolidus
+        - JsonParserSession: validateEnd
+        - UonSerializerSession: encoding, paramFormat (also fixes quoteChar bypass)
+        - UonParserSession: validateEnd
+        - UrlEncodingSerializerSession: expandedParams
+        - UrlEncodingParserSession: expandedParams
+        - XmlSerializerSession: addNamespaceUrisToRoot, autoDetectNamespaces, defaultNamespace,
+          enableNamespaces, textNodeDelimiter
+        - XmlParserSession: preserveRootElement, validating
+        - HtmlSerializerSession: addKeyValueTableHeaders, detectLabelParameters,
+          detectLinksInStrings, labelParameter, uriAnchorText
+    * Bug fixes - several serializer sessions were bypassing the session-level addBeanTypes field by
+      overriding isAddBeanTypes() to return ctx.isAddBeanTypes() directly. These overrides now
+      correctly delegate to the session field via super.isAddBeanTypes(). Affected classes:
+      JsonSerializerSession, UonSerializerSession, XmlSerializerSession, HtmlSerializerSession,
+      MsgPackSerializerSession, YamlSerializerSession, CborSerializerSession, BsonSerializerSession,
+      RdfSerializerSession, RdfStreamSerializerSession. Similarly, ParserSession.isTrimStrings()
+      now returns the session-level field instead of delegating to the context.
+    * Example: serializer.createSession().property("locale", "fr-FR").build()
+      is equivalent to serializer.createSession().locale(Locale.forLanguageTag("fr-FR")).build()
+    * BasicConverter handles type coercion so string values (e.g., "true", "fr-FR") are
+      automatically converted to the expected target types.
+
 ** Changes
 
     * Bump junit.version from a mix of 5.13.4 and 6.0.1 to 6.0.3.

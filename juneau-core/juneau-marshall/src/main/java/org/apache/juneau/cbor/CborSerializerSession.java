@@ -58,8 +58,6 @@ public class CborSerializerSession extends OutputStreamSerializerSession {
 	 */
 	public static class Builder extends OutputStreamSerializerSession.Builder {
 
-		private CborSerializer ctx;
-
 		/**
 		 * Constructor
 		 *
@@ -68,7 +66,6 @@ public class CborSerializerSession extends OutputStreamSerializerSession {
 		 */
 		protected Builder(CborSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
-			this.ctx = ctx;
 		}
 
 		@Override /* Overridden from Builder */
@@ -200,8 +197,6 @@ public class CborSerializerSession extends OutputStreamSerializerSession {
 		return os;
 	}
 
-	private final CborSerializer ctx;
-
 	/**
 	 * Constructor.
 	 *
@@ -209,7 +204,6 @@ public class CborSerializerSession extends OutputStreamSerializerSession {
 	 */
 	protected CborSerializerSession(Builder builder) {
 		super(builder);
-		ctx = builder.ctx;
 	}
 
 	/*
@@ -380,8 +374,4 @@ public class CborSerializerSession extends OutputStreamSerializerSession {
 		serializeAnything(getCborOutputStream(out), o, getExpectedRootType(o), "root", null);
 	}
 
-	@Override
-	protected boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
-	}
 }

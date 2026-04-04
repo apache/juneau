@@ -62,6 +62,18 @@ import org.apache.juneau.xml.annotation.*;
 })
 public class HtmlSerializerSession extends XmlSerializerSession {
 
+	// Property name constants
+	private static final String PROP_addKeyValueTableHeaders = "addKeyValueTableHeaders";
+	private static final String PROP_detectLabelParameters = "detectLabelParameters";
+	private static final String PROP_detectLinksInStrings = "detectLinksInStrings";
+	private static final String PROP_labelParameter = "labelParameter";
+	private static final String PROP_uriAnchorText = "uriAnchorText";
+	private static final String PROP_HtmlSerializerSession_addKeyValueTableHeaders = "HtmlSerializerSession.addKeyValueTableHeaders";
+	private static final String PROP_HtmlSerializerSession_detectLabelParameters = "HtmlSerializerSession.detectLabelParameters";
+	private static final String PROP_HtmlSerializerSession_detectLinksInStrings = "HtmlSerializerSession.detectLinksInStrings";
+	private static final String PROP_HtmlSerializerSession_labelParameter = "HtmlSerializerSession.labelParameter";
+	private static final String PROP_HtmlSerializerSession_uriAnchorText = "HtmlSerializerSession.uriAnchorText";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
@@ -76,6 +88,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	public static class Builder extends XmlSerializerSession.Builder {
 
+		private boolean addKeyValueTableHeaders;
+		private boolean detectLabelParameters;
+		private boolean detectLinksInStrings;
+		private String labelParameter;
+		private AnchorText uriAnchorText;
 		private HtmlSerializer ctx;
 
 		/**
@@ -87,6 +104,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		protected Builder(HtmlSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
+			addKeyValueTableHeaders = ctx.isAddKeyValueTableHeaders();
+			detectLabelParameters = ctx.isDetectLabelParameters();
+			detectLinksInStrings = ctx.isDetectLinksInStrings();
+			labelParameter = ctx.getLabelParameter();
+			uriAnchorText = ctx.getUriAnchorText();
 		}
 
 		@Override /* Overridden from Builder */
@@ -142,10 +164,79 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			return this;
 		}
 
+		/**
+		 * Add key/value headers on bean/map tables.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder addKeyValueTableHeaders(boolean value) {
+			addKeyValueTableHeaders = value;
+			return this;
+		}
+
+		/**
+		 * Look for link labels in URIs.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder detectLabelParameters(boolean value) {
+			detectLabelParameters = value;
+			return this;
+		}
+
+		/**
+		 * Look for URLs in Strings.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder detectLinksInStrings(boolean value) {
+			detectLinksInStrings = value;
+			return this;
+		}
+
+		/**
+		 * The label parameter name.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder labelParameter(String value) {
+			labelParameter = value;
+			return this;
+		}
+
+		/**
+		 * The anchor text to use for URL objects.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder uriAnchorText(AnchorText value) {
+			uriAnchorText = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) { super.property(key, value); return this; }
+			switch (key) {
+				case PROP_addKeyValueTableHeaders, PROP_HtmlSerializerSession_addKeyValueTableHeaders:
+					return addKeyValueTableHeaders(cvt(value, Boolean.class));
+				case PROP_detectLabelParameters, PROP_HtmlSerializerSession_detectLabelParameters:
+					return detectLabelParameters(cvt(value, Boolean.class));
+				case PROP_detectLinksInStrings, PROP_HtmlSerializerSession_detectLinksInStrings:
+					return detectLinksInStrings(cvt(value, Boolean.class));
+				case PROP_labelParameter, PROP_HtmlSerializerSession_labelParameter:
+					return labelParameter(cvt(value, String.class));
+				case PROP_uriAnchorText, PROP_HtmlSerializerSession_uriAnchorText:
+					return uriAnchorText(cvt(value, AnchorText.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		@Override /* Overridden from Builder */
@@ -215,6 +306,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	private final HtmlSerializer ctx;
+	private final boolean addKeyValueTableHeaders;
+	private final boolean detectLabelParameters;
+	private final boolean detectLinksInStrings;
+	private final String labelParameter;
+	private final AnchorText uriAnchorText;
 	private final Pattern urlPattern = Pattern.compile("https?\\:\\/\\/.*");
 	private final Pattern labelPattern;
 
@@ -226,7 +322,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	protected HtmlSerializerSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
-		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(ctx.getLabelParameter()) + "=([^\\&]*)");
+		addKeyValueTableHeaders = builder.addKeyValueTableHeaders;
+		detectLabelParameters = builder.detectLabelParameters;
+		detectLinksInStrings = builder.detectLinksInStrings;
+		labelParameter = builder.labelParameter;
+		uriAnchorText = builder.uriAnchorText;
+		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(labelParameter) + "=([^\\&]*)");
 	}
 
 	/**
@@ -772,7 +873,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return
 	 * 	The parameter name to look for when resolving link labels.
 	 */
-	protected final String getLabelParameter() { return ctx.getLabelParameter(); }
+	protected final String getLabelParameter() { return labelParameter; }
 
 	/**
 	 * Anchor text source.
@@ -782,18 +883,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 	When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * 	<xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
 	 */
-	protected final AnchorText getUriAnchorText() { return ctx.getUriAnchorText(); }
+	protected final AnchorText getUriAnchorText() { return uriAnchorText; }
 
-	/**
-	 * Add <js>"_type"</js> properties when needed.
-	 *
-	 * @see HtmlSerializer.Builder#addBeanTypesHtml()
-	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
-	 */
 	@Override
-	protected final boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
+	public final boolean isAddBeanTypes() { return super.isAddBeanTypes(); }
 
 	/**
 	 * Add key/value headers on bean/map tables.
@@ -802,7 +895,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 	 */
-	protected final boolean isAddKeyValueTableHeaders() { return ctx.isAddKeyValueTableHeaders(); }
+	protected final boolean isAddKeyValueTableHeaders() { return addKeyValueTableHeaders; }
 
 	/**
 	 * Look for link labels in URIs.
@@ -811,7 +904,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if we should ook for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
-	protected final boolean isDetectLabelParameters() { return ctx.isDetectLabelParameters(); }
+	protected final boolean isDetectLabelParameters() { return detectLabelParameters; }
 
 	/**
 	 * Look for URLs in {@link String Strings}.
@@ -820,7 +913,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
 	 */
-	protected final boolean isDetectLinksInStrings() { return ctx.isDetectLinksInStrings(); }
+	protected final boolean isDetectLinksInStrings() { return detectLinksInStrings; }
 
 	/**
 	 * Serialize the specified object to the specified writer.

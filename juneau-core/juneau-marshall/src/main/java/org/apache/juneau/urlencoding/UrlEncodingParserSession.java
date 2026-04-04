@@ -56,11 +56,16 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 	private static final String CONST_value = "_value";
 
+	// Property name constants
+	private static final String PROP_expandedParams = "expandedParams";
+	private static final String PROP_UrlEncodingParserSession_expandedParams = "UrlEncodingParserSession.expandedParams";
+
 	/**
 	 * Builder class.
 	 */
 	public static class Builder extends UonParserSession.Builder {
 
+		private boolean expandedParams;
 		private UrlEncodingParser ctx;
 
 		/**
@@ -71,6 +76,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		protected Builder(UrlEncodingParser ctx) {
 			super(ctx);
 			this.ctx = ctx;
+			expandedParams = ctx.isExpandedParams();
 		}
 
 		@Override /* Overridden from Builder */
@@ -138,10 +144,27 @@ public class UrlEncodingParserSession extends UonParserSession {
 			return this;
 		}
 
+		/**
+		 * Serialize bean property collections/arrays as separate key/value pairs.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder expandedParams(boolean value) {
+			expandedParams = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) { super.property(key, value); return this; }
+			switch (key) {
+				case PROP_expandedParams, PROP_UrlEncodingParserSession_expandedParams:
+					return expandedParams(cvt(value, Boolean.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		@Override /* Overridden from Builder */
@@ -192,6 +215,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	}
 
 	private final UrlEncodingParser ctx;
+	private final boolean expandedParams;
 
 	/**
 	 * Constructor.
@@ -201,6 +225,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	public UrlEncodingParserSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
+		expandedParams = builder.expandedParams;
 	}
 
 	/**
@@ -572,5 +597,5 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 * <jk>false</jk> if serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
 	 * <br><jk>true</jk> if serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 */
-	protected final boolean isExpandedParams() { return ctx.isExpandedParams(); }
+	protected final boolean isExpandedParams() { return expandedParams; }
 }

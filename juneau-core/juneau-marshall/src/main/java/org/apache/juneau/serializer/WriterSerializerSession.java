@@ -59,9 +59,13 @@ public class WriterSerializerSession extends SerializerSession {
 	private static final String PROP_fileCharset = "fileCharset";
 	private static final String PROP_streamCharset = "streamCharset";
 	private static final String PROP_useWhitespace = "useWhitespace";
+	private static final String PROP_maxIndent = "maxIndent";
+	private static final String PROP_quoteChar = "quoteChar";
 	private static final String PROP_WriterSerializerSession_fileCharset = "WriterSerializerSession.fileCharset";
 	private static final String PROP_WriterSerializerSession_streamCharset = "WriterSerializerSession.streamCharset";
 	private static final String PROP_WriterSerializerSession_useWhitespace = "WriterSerializerSession.useWhitespace";
+	private static final String PROP_WriterSerializerSession_maxIndent = "WriterSerializerSession.maxIndent";
+	private static final String PROP_WriterSerializerSession_quoteChar = "WriterSerializerSession.quoteChar";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -74,7 +78,8 @@ public class WriterSerializerSession extends SerializerSession {
 		private boolean useWhitespace;
 		private Charset fileCharset;
 		private Charset streamCharset;
-		private WriterSerializer ctx;
+		private int maxIndent;
+		private char quoteChar;
 
 		/**
 		 * Constructor
@@ -84,10 +89,11 @@ public class WriterSerializerSession extends SerializerSession {
 		 */
 		protected Builder(WriterSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
-			this.ctx = ctx;
 			fileCharset = ctx.getFileCharset();
 			streamCharset = ctx.getStreamCharset();
 			useWhitespace = ctx.useWhitespace;
+			maxIndent = ctx.getMaxIndent();
+			quoteChar = ctx.getQuoteChar();
 		}
 
 		@Override /* Overridden from Builder */
@@ -160,6 +166,17 @@ public class WriterSerializerSession extends SerializerSession {
 			return this;
 		}
 
+		/**
+		 * Maximum indentation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder maxIndent(int value) {
+			maxIndent = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
 			if (key == null) {
@@ -173,10 +190,25 @@ public class WriterSerializerSession extends SerializerSession {
 					return streamCharset(cvt(value, Charset.class));
 				case PROP_useWhitespace, PROP_WriterSerializerSession_useWhitespace:
 					return useWhitespace(cvt(value, Boolean.class));
+				case PROP_maxIndent, PROP_WriterSerializerSession_maxIndent:
+					return maxIndent(cvt(value, Integer.class));
+				case PROP_quoteChar, PROP_WriterSerializerSession_quoteChar:
+					return quoteChar(cvt(value, Character.class));
 				default:
 					super.property(key, value);
 					return this;
 			}
+		}
+
+		/**
+		 * Quote character.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder quoteChar(char value) {
+			quoteChar = value;
+			return this;
 		}
 
 		@Override /* Overridden from Builder */
@@ -273,10 +305,11 @@ public class WriterSerializerSession extends SerializerSession {
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
-	private final WriterSerializer ctx;
 	private final boolean useWhitespace;
 	private final Charset fileCharset;
 	private final Charset streamCharset;
+	private final int maxIndent;
+	private final char quoteChar;
 
 	/**
 	 * Constructor.
@@ -285,10 +318,11 @@ public class WriterSerializerSession extends SerializerSession {
 	 */
 	protected WriterSerializerSession(Builder builder) {
 		super(builder);
-		ctx = builder.ctx;
 		fileCharset = builder.fileCharset;
 		streamCharset = builder.streamCharset;
 		useWhitespace = builder.useWhitespace;
+		maxIndent = builder.maxIndent;
+		quoteChar = builder.quoteChar;
 	}
 
 	/**
@@ -343,7 +377,7 @@ public class WriterSerializerSession extends SerializerSession {
 	 * @return
 	 * 	The maximum indentation level in the serialized document.
 	 */
-	protected final int getMaxIndent() { return ctx.getMaxIndent(); }
+	protected final int getMaxIndent() { return maxIndent; }
 
 	/**
 	 * Quote character.
@@ -352,7 +386,7 @@ public class WriterSerializerSession extends SerializerSession {
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
-	protected char getQuoteChar() { return ctx.getQuoteChar(); }
+	protected char getQuoteChar() { return quoteChar; }
 
 	/**
 	 * Use whitespace.
@@ -368,6 +402,8 @@ public class WriterSerializerSession extends SerializerSession {
 		return super.properties()
 			.a(PROP_fileCharset, fileCharset)
 			.a(PROP_streamCharset, streamCharset)
-			.a(PROP_useWhitespace, useWhitespace);
+			.a(PROP_useWhitespace, useWhitespace)
+			.a(PROP_maxIndent, maxIndent)
+			.a(PROP_quoteChar, quoteChar);
 	}
 }

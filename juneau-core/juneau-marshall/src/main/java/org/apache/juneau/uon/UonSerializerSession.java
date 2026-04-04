@@ -54,6 +54,12 @@ import org.apache.juneau.utils.*;
 })
 public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession {
 
+	// Property name constants
+	private static final String PROP_encoding = "encoding";
+	private static final String PROP_paramFormat = "paramFormat";
+	private static final String PROP_UonSerializerSession_encoding = "UonSerializerSession.encoding";
+	private static final String PROP_UonSerializerSession_paramFormat = "UonSerializerSession.paramFormat";
+
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
@@ -62,7 +68,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 */
 	public static class Builder extends WriterSerializerSession.Builder {
 
-		private UonSerializer ctx;
+		private boolean encoding;
+		private ParamFormat paramFormat;
 
 		/**
 		 * Constructor
@@ -72,7 +79,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		 */
 		protected Builder(UonSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
-			this.ctx = ctx;
+			encoding = ctx.isEncoding();
+			paramFormat = ctx.getParamFormat();
 		}
 
 		@Override /* Overridden from Builder */
@@ -128,10 +136,40 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			return this;
 		}
 
+		/**
+		 * Encode non-valid URI characters.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder encoding(boolean value) {
+			encoding = value;
+			return this;
+		}
+
+		/**
+		 * Format to use for query/form-data/header values.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder paramFormat(ParamFormat value) {
+			paramFormat = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) { super.property(key, value); return this; }
+			switch (key) {
+				case PROP_encoding, PROP_UonSerializerSession_encoding:
+					return encoding(cvt(value, Boolean.class));
+				case PROP_paramFormat, PROP_UonSerializerSession_paramFormat:
+					return paramFormat(cvt(value, ParamFormat.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		@Override /* Overridden from Builder */
@@ -200,7 +238,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
-	private final UonSerializer ctx;
+	private final boolean encoding;
+	private final ParamFormat paramFormat;
 	private final boolean plainTextParams;
 
 	/**
@@ -210,8 +249,9 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 */
 	public UonSerializerSession(Builder builder) {
 		super(builder);
-		ctx = builder.ctx;
-		plainTextParams = ctx.getParamFormat() == ParamFormat.PLAINTEXT;
+		encoding = builder.encoding;
+		paramFormat = builder.paramFormat;
+		plainTextParams = paramFormat == ParamFormat.PLAINTEXT;
 	}
 
 	@Override /* Overridden from HttpPartSerializer */
@@ -365,17 +405,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @return
 	 * 	Specifies the format to use for URL GET parameter keys and values.
 	 */
-	protected final ParamFormat getParamFormat() { return ctx.getParamFormat(); }
-
-	/**
-	 * Quote character.
-	 *
-	 * @see UonSerializer.Builder#quoteCharUon(char)
-	 * @return
-	 * 	The character used for quoting attributes and values.
-	 */
-	@Override
-	protected final char getQuoteChar() { return ctx.getQuoteChar(); }
+	protected final ParamFormat getParamFormat() { return paramFormat; }
 
 	/**
 	 * Converts the specified output target object to an {@link UonWriter}.
@@ -393,16 +423,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return w;
 	}
 
-	/**
-	 * Add <js>"_type"</js> properties when needed.
-	 *
-	 * @see UonSerializer.Builder#addBeanTypesUon()
-	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
-	 */
 	@Override
-	protected final boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
+	public final boolean isAddBeanTypes() { return super.isAddBeanTypes(); }
 
 	/**
 	 * Encode non-valid URI characters.
@@ -411,7 +433,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @return
 	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
 	 */
-	protected final boolean isEncoding() { return ctx.isEncoding(); }
+	protected final boolean isEncoding() { return encoding; }
 
 	/**
 	 * Workhorse method.

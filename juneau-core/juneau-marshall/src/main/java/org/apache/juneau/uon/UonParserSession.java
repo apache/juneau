@@ -61,6 +61,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	// Property name constants
 	private static final String PROP_decoding = "decoding";
+	private static final String PROP_validateEnd = "validateEnd";
+	private static final String PROP_UonParserSession_validateEnd = "UonParserSession.validateEnd";
 
 	/**
 	 * Builder class.
@@ -68,7 +70,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	public static class Builder extends ReaderParserSession.Builder {
 
 		private boolean decoding;
-		private UonParser ctx;
+		private boolean validateEnd;
 
 		/**
 		 * Constructor
@@ -77,8 +79,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		 */
 		protected Builder(UonParser ctx) {
 			super(ctx);
-			this.ctx = ctx;
 			decoding = ctx.decoding;
+			validateEnd = ctx.isValidateEnd();
 		}
 
 		@Override /* Overridden from Builder */
@@ -153,7 +155,26 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
+			if (key == null) { super.property(key, value); return this; }
+			switch (key) {
+				case PROP_decoding:
+					return decoding(cvt(value, Boolean.class));
+				case PROP_validateEnd, PROP_UonParserSession_validateEnd:
+					return validateEnd(cvt(value, Boolean.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
+		}
+
+		/**
+		 * Validate end.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder validateEnd(boolean value) {
+			validateEnd = value;
 			return this;
 		}
 
@@ -236,9 +257,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		}
 	}
 
-	private final UonParser ctx;
-
 	private final boolean decoding;
+	private final boolean validateEnd;
 
 	/**
 	 * Constructor.
@@ -247,8 +267,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 */
 	protected UonParserSession(Builder builder) {
 		super(builder);
-		ctx = builder.ctx;
 		decoding = builder.decoding;
+		validateEnd = builder.validateEnd;
 	}
 
 	/**
@@ -870,7 +890,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.
 	 */
-	protected final boolean isValidateEnd() { return ctx.isValidateEnd(); }
+	protected final boolean isValidateEnd() { return validateEnd; }
 
 	/**
 	 * Convenience method for parsing an attribute from the specified parser.
@@ -992,6 +1012,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	@Override /* Overridden from ReaderParserSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_decoding, decoding);
+			.a(PROP_decoding, decoding)
+			.a(PROP_validateEnd, validateEnd);
 	}
 }
