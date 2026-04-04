@@ -11,6 +11,24 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 9.2.1
+
+** Changes
+
+    * Direct serialization support for Iterator, Iterable, Stream, and Enumeration types across all serializers.
+    * Text-based serializers (JSON, XML, UON, URL Encoding, OpenAPI) serialize these types lazily without intermediate List materialization.
+    * Binary/layout-dependent serializers (MsgPack, HTML, CSV) materialize to List when the format requires it.
+    * New ClassMeta methods: isIterator(), isIterable(), isStream(), isStreamable().
+    * New ClassMeta.Category enum values: ITERATOR, ITERABLE, STREAM.
+    * New SerializerSession methods: forEachStreamableEntry(), toListFromStreamable().
+    * Removed IteratorSwap and EnumerationSwap classes (native support replaces them).
+    * Removed IteratorSwap and EnumerationSwap from DefaultSwaps registration.
+    * @BeanIgnore: new ignoreAccessors attribute (default false). When true on a field, BeanMeta also suppresses the matching JavaBean accessor pair from bean property discovery (default introspection and useJavaBeanIntrospector).
+    * RestResponse.setSerializer(Serializer): force response body serializer; null clears override (skips Accept negotiation for serializer choice).
+    * BasicHtmlDocTemplate / @HtmlDocConfig(navlinks): bare lines like request:?Accept=... or request:/?Accept=... (and servlet: or context: with /, ?, or # after the colon) are rejoined to full marshall URIs before resolveUri, fixing wrong browser-relative href values (e.g. .../request:?Accept=... under the current path).
+    * @Beanp("*") on a non-Map field: property name is the field name (dyna "*" reserved for Map fields); @BeanIgnore(ignoreAccessors) suppression uses the same resolved name.
+    * RestResponse.downloadAs(filename): sets Content-Disposition attachment with quoted filename for browser downloads; ContentDisposition.attachment / HttpHeaders.contentDispositionAttachment in juneau-rest-common build the header value with escaping.
+
 Release Notes - Juneau - Version 9.2.0
 
 ** Changes

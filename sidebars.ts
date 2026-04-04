@@ -126,16 +126,21 @@ const sidebars: SidebarsConfig = {
 									id: 'topics/02.04.01.BeanContextBasics',
 									label: '2.4.1. Bean Context Basics',
 								},
-								{
-									type: 'doc',
-									id: 'topics/02.04.02.JavaBeansSupport',
-									label: '2.4.2. Java Beans Support',
-								},
-								{
-									type: 'doc',
-									id: 'topics/02.04.03.BeanAnnotation',
-									label: '2.4.3. @Bean Annotation',
-								},
+							{
+								type: 'doc',
+								id: 'topics/02.04.02.JavaBeansSupport',
+								label: '2.4.2. Java Beans Support',
+							},
+							{
+								type: 'doc',
+								id: 'topics/02.04.02a.JavaRecordsSupport',
+								label: '2.4.2a. Java Records Support',
+							},
+							{
+								type: 'doc',
+								id: 'topics/02.04.03.BeanAnnotation',
+								label: '2.4.3. @Bean Annotation',
+							},
 								{
 									type: 'doc',
 									id: 'topics/02.04.04.BeanpAnnotation',
@@ -604,16 +609,134 @@ const sidebars: SidebarsConfig = {
 							],
 						},
 						{
+							type: 'category',
+							label: '2.33. TOML Support',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/02.33.01.TomlBasics',
+									label: '2.33.1. TOML Basics',
+								},
+							],
+						},
+						{
+							type: 'category',
+							label: '2.33.5. Protobuf Text Format',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/02.33.05.ProtobufBasics',
+									label: '2.33.5.1. Protobuf Text Format Basics',
+								},
+							],
+						},
+						{
+							type: 'category',
+							label: '2.37. JSONL Support',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/02.37.01.JsonlBasics',
+									label: '2.37.1. JSONL Basics',
+								},
+							],
+						},
+						{
+							type: 'category',
+							label: '2.38. Hjson Support',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/02.38.01.HjsonBasics',
+									label: '2.38.1. Hjson Basics',
+								},
+							],
+						},
+						{
+							type: 'category',
+							label: '2.39. JCS Support',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/02.39.01.JcsBasics',
+									label: '2.39.1. JCS Basics',
+								},
+							],
+						},
+						{
+							type: 'category',
+							label: '2.40. BSON Support',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/02.40.01.BsonBasics',
+									label: '2.40.1. BSON Basics',
+								},
+							],
+						},
+						{
+							type: 'category',
+							label: '2.41. CBOR Support',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/02.41.01.CborBasics',
+									label: '2.41.1. CBOR Basics',
+								},
+							],
+						},
+						{
+							type: 'category',
+							label: '2.42. HOCON Support',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/02.42.01.HoconBasics',
+									label: '2.42.1. HOCON Basics',
+								},
+							],
+						},
+						{
 							type: 'doc',
-							id: 'topics/02.33.BestPractices',
-							label: '2.33. Best Practices',
+							id: 'topics/02.34.BestPractices',
+							label: '2.34. Best Practices',
 						},
 					],
 				},
 				{
-					type: 'doc',
-					id: 'topics/03.Module-juneau-marshall-rdf',
+					type: 'category',
 					label: '3. juneau-marshall-rdf',
+					collapsed: true,
+					items: [
+						{
+							type: 'doc',
+							id: 'topics/03.Module-juneau-marshall-rdf',
+							label: '3.1. Module Overview',
+						},
+						{
+							type: 'doc',
+							id: 'topics/03.01.RdfBasics',
+							label: '3.2. RDF Basics',
+						},
+						{
+							type: 'doc',
+							id: 'topics/03.02.RdfSerializers',
+							label: '3.3. RDF Serializers',
+						},
+						{
+							type: 'doc',
+							id: 'topics/03.03.RdfParsers',
+							label: '3.4. RDF Parsers',
+						},
+					],
 				},
 				{
 					type: 'category',
@@ -2034,6 +2157,11 @@ const sidebars: SidebarsConfig = {
 					type: 'category',
 					label: 'Version 9.x',
 					items: [
+						{
+							type: 'doc',
+							id: 'release-notes/9.2.1',
+							label: '9.2.1',
+						},
 						{
 							type: 'doc',
 							id: 'release-notes/9.2.0',
