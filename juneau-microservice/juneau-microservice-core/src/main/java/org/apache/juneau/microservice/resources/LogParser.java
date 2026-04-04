@@ -33,6 +33,9 @@ import java.util.regex.*;
  * Provides the capability of returning splices of log files based on dates and filtering based on thread and logger
  * names.
  */
+@SuppressWarnings({
+	"resource" // br is closed via this class's close() method
+})
 public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 
 	/**

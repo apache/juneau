@@ -39,7 +39,8 @@ import jakarta.servlet.http.*;
 */
 @SuppressWarnings({
 	"java:S4144", // Identical methods intentional for different test scenarios
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)
+	"resource" // Streams returned to servlet container; lifecycle managed by the container
 })
 public class MockServletResponse implements HttpServletResponse {
 

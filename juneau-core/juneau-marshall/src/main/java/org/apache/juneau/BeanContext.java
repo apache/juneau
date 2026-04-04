@@ -4916,17 +4916,9 @@ public class BeanContext extends Context implements ConversionFinder {
 		if (! (o instanceof ParameterizedType)) {
 			while (nn(c)) {
 				o = c.getGenericSuperclass();
+				if (!(o instanceof ParameterizedType))
+					o = Arrays.stream(c.getGenericInterfaces()).filter(t -> t instanceof ParameterizedType).findFirst().orElse(null);
 				if (o instanceof ParameterizedType)
-					break;
-				boolean found = false;
-				for (var t : c.getGenericInterfaces()) {
-					o = t;
-					if (o instanceof ParameterizedType) {
-						found = true;
-						break;
-					}
-				}
-				if (found)
 					break;
 				c = c.getSuperclass();
 			}

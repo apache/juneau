@@ -27,6 +27,9 @@ import jakarta.servlet.*;
  * ServletInputStream wrapper around a normal input stream with support for limiting input.
  *
  */
+@SuppressWarnings({
+	"resource" // is and sis are servlet-container-managed streams passed in by the caller; closed by the container
+})
 public class BoundedServletInputStream extends ServletInputStream {
 
 	private final InputStream is;

@@ -27,6 +27,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Utility class for starting up the examples microservice.
  */
+@SuppressWarnings("resource")
 public class SamplesMicroservice {
 	static volatile JettyMicroservice microservice;
 	static URI microserviceURI;

@@ -27,6 +27,9 @@ import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
+@SuppressWarnings({
+	"resource" // RestClient lifecycle managed by SamplesMicroservice; fluent API chains consume and close responses internally
+})
 @FixMethodOrder(NAME_ASCENDING)
 public class RootResourcesTest extends RestTestcase {
 

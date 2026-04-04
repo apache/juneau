@@ -18,6 +18,13 @@ package org.apache.juneau;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.nio.charset.*;
+import java.util.*;
+
+import org.apache.juneau.collections.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
 class ContextSession_Test extends TestBase {
@@ -125,6 +132,170 @@ class ContextSession_Test extends TestBase {
 		var context = BeanContext.DEFAULT;
 		var session = context.createSession().build();
 		assertSame(context, session.getContext());
+	}
+
+	//====================================================================================================
+	// ContextSession.Builder.property() dispatch - typed property keys
+	//====================================================================================================
+
+	@Nested class E_propertyDispatch extends TestBase {
+
+		// -- ContextSession: debug --
+
+		@Test void e01_debug_shortForm() {
+			var session = BeanContext.DEFAULT.createSession()
+				.property("debug", true)
+				.build();
+			assertTrue(session.isDebug());
+		}
+
+		@Test void e02_debug_qualifiedForm() {
+			var session = BeanContext.DEFAULT.createSession()
+				.property("ContextSession.debug", "true")
+				.build();
+			assertTrue(session.isDebug());
+		}
+
+		@Test void e03_debug_nullResetsToDefault() {
+			var session = BeanContext.DEFAULT.createSession()
+				.property("debug", null)
+				.build();
+			assertEquals(BeanContext.DEFAULT.isDebug(), session.isDebug());
+		}
+
+		// -- BeanSession: locale --
+
+		@Test void e04_locale_shortForm_string() {
+			var session = BeanContext.DEFAULT.createSession()
+				.property("locale", "fr-FR")
+				.build();
+			assertEquals(Locale.forLanguageTag("fr-FR"), session.getLocale());
+		}
+
+		@Test void e05_locale_qualifiedForm() {
+			var session = BeanContext.DEFAULT.createSession()
+				.property("BeanSession.locale", Locale.GERMAN)
+				.build();
+			assertEquals(Locale.GERMAN, session.getLocale());
+		}
+
+		// -- BeanSession: timeZone --
+
+		@Test void e06_timeZone_shortForm_string() {
+			var session = BeanContext.DEFAULT.createSession()
+				.property("timeZone", "America/New_York")
+				.build();
+			assertEquals(TimeZone.getTimeZone("America/New_York"), session.getTimeZone());
+		}
+
+		@Test void e07_timeZone_qualifiedForm() {
+			var tz = TimeZone.getTimeZone("UTC");
+			var session = BeanContext.DEFAULT.createSession()
+				.property("BeanSession.timeZone", tz)
+				.build();
+			assertEquals(tz, session.getTimeZone());
+		}
+
+		// -- BeanSession: mediaType --
+
+		@Test void e08_mediaType_shortForm_string() {
+			var session = BeanContext.DEFAULT.createSession()
+				.property("mediaType", "application/json")
+				.build();
+			assertEquals("application/json", session.getMediaType().toString());
+		}
+
+		@Test void e09_mediaType_qualifiedForm() {
+			var session = BeanContext.DEFAULT.createSession()
+				.property("BeanSession.mediaType", "text/xml")
+				.build();
+			assertEquals("text/xml", session.getMediaType().toString());
+		}
+
+		// -- WriterSerializerSession: fileCharset, streamCharset, useWhitespace --
+
+		@Test void e10_writerSerializer_fileCharset_shortForm() {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("fileCharset", "UTF-16")
+				.build();
+			assertEquals(Charset.forName("UTF-16"), session.getFileCharset());
+		}
+
+		@Test void e11_writerSerializer_fileCharset_qualifiedForm() {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("WriterSerializerSession.fileCharset", Charset.forName("ISO-8859-1"))
+				.build();
+			assertEquals(Charset.forName("ISO-8859-1"), session.getFileCharset());
+		}
+
+		@Test void e12_writerSerializer_streamCharset_shortForm() {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("streamCharset", "UTF-16")
+				.build();
+			assertEquals(Charset.forName("UTF-16"), session.getStreamCharset());
+		}
+
+		@Test void e13_writerSerializer_streamCharset_qualifiedForm() {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("WriterSerializerSession.streamCharset", "ISO-8859-1")
+				.build();
+			assertEquals(Charset.forName("ISO-8859-1"), session.getStreamCharset());
+		}
+
+		// -- ReaderParserSession: fileCharset, streamCharset --
+
+		@Test void e14_readerParser_fileCharset_shortForm() {
+			var session = (ReaderParserSession) JsonParser.DEFAULT.createSession()
+				.property("fileCharset", "UTF-16")
+				.build();
+			assertEquals(Charset.forName("UTF-16"), session.getFileCharset());
+		}
+
+		@Test void e15_readerParser_streamCharset_qualifiedForm() {
+			var session = (ReaderParserSession) JsonParser.DEFAULT.createSession()
+				.property("ReaderParserSession.streamCharset", "ISO-8859-1")
+				.build();
+			assertEquals(Charset.forName("ISO-8859-1"), session.getStreamCharset());
+		}
+
+		// -- properties(Map) delegates to property() --
+
+		@Test void e16_properties_map_dispatchesKnownKeys() {
+			var session = BeanContext.DEFAULT.createSession()
+				.properties(JsonMap.of("locale", "de-DE", "timeZone", "Europe/Berlin", "unknownKey", "someValue"))
+				.build();
+			assertEquals(Locale.forLanguageTag("de-DE"), session.getLocale());
+			assertEquals(TimeZone.getTimeZone("Europe/Berlin"), session.getTimeZone());
+			assertEquals("someValue", session.getSessionProperties().get("unknownKey"));
+		}
+
+		@Test void e17_properties_map_resetsPreviousRawProperties() {
+			var session = BeanContext.DEFAULT.createSession()
+				.property("rawKey1", "value1")
+				.properties(JsonMap.of("rawKey2", "value2"))
+				.build();
+			// After properties(Map), the raw map was reset so rawKey1 should be gone
+			assertFalse(session.getSessionProperties().containsKey("rawKey1"));
+			assertEquals("value2", session.getSessionProperties().get("rawKey2"));
+		}
+
+		// -- Unknown keys fall through to the raw properties map --
+
+		@Test void e18_unknownKey_goesToRawMap() {
+			var session = BeanContext.DEFAULT.createSession()
+				.property("myCustomKey", "myCustomValue")
+				.build();
+			assertEquals("myCustomValue", session.getSessionProperties().get("myCustomKey"));
+		}
+
+		// -- Locale inheritance through serializer session chain --
+
+		@Test void e19_locale_dispatchedThroughSerializerChain() {
+			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
+				.property("locale", "ja-JP")
+				.build();
+			assertEquals(Locale.forLanguageTag("ja-JP"), session.getLocale());
+		}
 	}
 }
 

@@ -42,7 +42,8 @@ import org.junit.*;
 @FixMethodOrder(NAME_ASCENDING)
 @Ignore("Base class for parameterized tests - not meant to be run directly")
 @SuppressWarnings({
-	"java:S3577" // Class name ends with "TestBase" to indicate it's a base class, not a test class itself
+	"java:S3577", // Class name ends with "TestBase" to indicate it's a base class, not a test class itself
+	"resource" // RestClient lifecycle managed via the clients map and tearDown(); fluent API chains consume responses internally
 })
 public class ContentComboTestBase extends RestTestcase {
 
@@ -64,7 +65,8 @@ public class ContentComboTestBase extends RestTestcase {
 		};
 	}
 
-	protected RestClient getClient(String label, Serializer serializer, Parser parser, Consumer<RestClient.Builder>...postApply) {
+	@SafeVarargs
+	protected final RestClient getClient(String label, Serializer serializer, Parser parser, Consumer<RestClient.Builder>...postApply) {
 		if (! clients.containsKey(label)) {
 			var b = SamplesMicroservice.client(serializer, parser);
 			for (var c : postApply)

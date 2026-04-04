@@ -48,6 +48,9 @@ import org.apache.juneau.rest.servlet.*;
 	allowedMethodParams="*"
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
+@SuppressWarnings({
+	"resource" // Streams and parsers returned to servlet container or caller; lifecycle managed externally
+})
 public class LogsResource extends BasicRestServlet {
 
 	/** File action link. */

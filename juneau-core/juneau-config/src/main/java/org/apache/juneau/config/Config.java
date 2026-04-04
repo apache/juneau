@@ -56,7 +56,8 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"resource" // ConfigStore and other Closeable fields are owned by the caller; lifecycle managed externally
 })
 public class Config extends Context implements ConfigEventListener {
 

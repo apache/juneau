@@ -26,6 +26,9 @@ import org.apache.juneau.rest.client.assertion.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // response is owned by the RestCall that created this status line; lifecycle managed externally
+})
 public class ResponseStatusLine implements StatusLine {
 
 	private final RestResponse response;

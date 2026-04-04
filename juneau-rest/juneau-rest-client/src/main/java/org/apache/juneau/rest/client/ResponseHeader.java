@@ -47,6 +47,9 @@ import org.apache.juneau.rest.client.assertion.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // request and response are owned by the RestCall that created this header; lifecycle managed externally
+})
 public class ResponseHeader extends BasicHeader {
 
 	private static final long serialVersionUID = 1L;

@@ -111,6 +111,9 @@ public class RoleMatcher {
 
 	abstract static class Exp {
 
+		@SuppressWarnings({
+			"unused" // set parameter unused in this default no-op implementation; subclasses use it
+		})
 		void appendTokens(Set<String> set) {}
 
 		abstract boolean matches(Set<String> roles);

@@ -47,6 +47,8 @@ public class ReaderParserSession extends ParserSession {
 	// Property name constants
 	private static final String PROP_fileCharset = "fileCharset";
 	private static final String PROP_streamCharset = "streamCharset";
+	private static final String PROP_ReaderParserSession_fileCharset = "ReaderParserSession.fileCharset";
+	private static final String PROP_ReaderParserSession_streamCharset = "ReaderParserSession.streamCharset";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -150,8 +152,19 @@ public class ReaderParserSession extends ParserSession {
 
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) {
+				super.property(key, value);
+				return this;
+			}
+			switch (key) {
+				case PROP_fileCharset, PROP_ReaderParserSession_fileCharset:
+					return fileCharset(cvt(value, Charset.class));
+				case PROP_streamCharset, PROP_ReaderParserSession_streamCharset:
+					return streamCharset(cvt(value, Charset.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		@Override /* Overridden from Builder */

@@ -37,6 +37,7 @@ import org.eclipse.jgit.transport.*;
  */
 @SuppressWarnings({
 	"unused", // Example/demo class - some fields used only for JGit configuration
+	"resource" // localRepo and git are JGit resources opened in the constructor; lifecycle managed by this class's operations
 })
 public class GitControl {
 

@@ -38,6 +38,7 @@ import org.junit.jupiter.api.*;
 	"java:S1186", // Empty method body intentional for callback testing
 	"java:S116", // Field names use underscores for test data clarity
 	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"java:S3008", // Static field names use underscores for test data clarity
 })
 class ParameterInfo_Test extends TestBase {
 

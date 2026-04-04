@@ -25,6 +25,9 @@ import jakarta.servlet.http.*;
  * Wraps an {@link HttpServletResponse} and caches the output stream in a separate buffer for debugging purposes.
  *
  */
+@SuppressWarnings({
+	"resource" // os is a servlet-container-managed stream obtained from the wrapped response; closed by the container
+})
 public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 
 	/**

@@ -173,6 +173,7 @@ import jakarta.servlet.http.*;
 	"unchecked", // Type erasure requires unchecked casts in REST client operations
 	"unused", // Unused parameters in HttpServletRequest overrides and helper methods
 	"java:S6539", // Collection.toArray() usage intentional
+	"resource" // Streams returned to servlet container; lifecycle managed by the container
 })
 public class RestRequest extends HttpServletRequestWrapper {
 

@@ -61,6 +61,10 @@ public class ParserSession extends BeanSession {
 	private static final String PROP_javaMethod = "javaMethod";
 	private static final String PROP_listener = "listener";
 	private static final String PROP_outer = "outer";
+	private static final String PROP_schema = "schema";
+	private static final String PROP_ParserSession_javaMethod = "ParserSession.javaMethod";
+	private static final String PROP_ParserSession_outer = "ParserSession.outer";
+	private static final String PROP_ParserSession_schema = "ParserSession.schema";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -157,8 +161,21 @@ public class ParserSession extends BeanSession {
 
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) {
+				super.property(key, value);
+				return this;
+			}
+			switch (key) {
+				case PROP_javaMethod, PROP_ParserSession_javaMethod:
+					return javaMethod(cvt(value, Method.class));
+				case PROP_outer, PROP_ParserSession_outer:
+					return outer(value);
+				case PROP_schema, PROP_ParserSession_schema:
+					return schema(cvt(value, HttpPartSchema.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		/**

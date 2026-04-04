@@ -79,7 +79,8 @@ import org.apache.juneau.rest.servlet.*;
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., DIRECTORY_RESOURCE_rootDir)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., DIRECTORY_RESOURCE_rootDir)
+	"resource" // Streams returned to servlet container; lifecycle managed by the container
 })
 public class DirectoryResource extends BasicRestServlet {
 

@@ -58,6 +58,9 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	private static final String PROP_locale = "locale";
 	private static final String PROP_mediaType = "mediaType";
 	private static final String PROP_timeZone = "timeZone";
+	private static final String PROP_BeanSession_locale = "BeanSession.locale";
+	private static final String PROP_BeanSession_mediaType = "BeanSession.mediaType";
+	private static final String PROP_BeanSession_timeZone = "BeanSession.timeZone";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -180,8 +183,21 @@ public class BeanSession extends ContextSession implements ConverterSession {
 
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) {
+				super.property(key, value);  // delegates null-key validation to base class
+				return this;
+			}
+			switch (key) {
+				case PROP_locale, PROP_BeanSession_locale:
+					return locale(cvt(value, Locale.class));
+				case PROP_mediaType, PROP_BeanSession_mediaType:
+					return mediaType(cvt(value, MediaType.class));
+				case PROP_timeZone, PROP_BeanSession_timeZone:
+					return timeZone(cvt(value, TimeZone.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		/**

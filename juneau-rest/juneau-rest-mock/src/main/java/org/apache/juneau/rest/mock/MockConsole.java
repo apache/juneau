@@ -82,6 +82,9 @@ import org.apache.juneau.assertions.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Stream returned to caller; lifecycle managed by the caller
+})
 public class MockConsole extends PrintStream {
 
 	private static final ByteArrayOutputStream baos = new ByteArrayOutputStream();

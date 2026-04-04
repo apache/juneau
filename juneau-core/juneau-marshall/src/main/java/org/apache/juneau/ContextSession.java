@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 
@@ -46,6 +47,7 @@ public abstract class ContextSession {
 
 	// Property name constants
 	private static final String PROP_debug = "debug";
+	private static final String PROP_ContextSession_debug = "ContextSession.debug";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -65,6 +67,18 @@ public abstract class ContextSession {
 		private boolean unmodifiable;
 		private Context ctx;
 		private Memoizer<LinkedHashMap<String,Object>> properties;
+
+		/**
+		 * Convenience method for converting values using {@link BasicConverter}.
+		 *
+		 * @param <T> The target type.
+		 * @param value The value to convert.
+		 * @param type The target class.
+		 * @return The converted value.
+		 */
+		protected static <T> T cvt(Object value, Class<T> type) {
+			return BasicConverter.INSTANCE.to(value, null, null, type);
+		}
 
 		/**
 		 * Constructor.
@@ -141,28 +155,38 @@ public abstract class ContextSession {
 		public Builder properties(Map<String,Object> value) {
 			assertArgNotNull(ARG_value, value);
 			properties.reset();
-			properties.get().putAll(value);
+			value.forEach(this::property);
 			return this;
 		}
 
 		/**
 		 * Adds a property to this session.
 		 *
+		 * <p>
+		 * If the key matches a known session property (e.g. <js>"debug"</js> or <js>"ContextSession.debug"</js>),
+		 * the value is converted via {@link BasicConverter} and routed to the corresponding typed setter.
+		 * Unknown keys are stored in the raw session properties map.
+		 *
 		 * @param key The property key.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @param value The property value.
-		 * 	<br>Can be <jk>null</jk> (removes the property).
+		 * 	<br>Can be <jk>null</jk> (resets typed properties to their default; removes raw properties).
 		 * @return This object.
 		 */
 		public Builder property(String key, Object value) {
 			assertArgNotNull(ARG_key, key);
-			var map = properties.get();
-			if (value == null) {
-				map.remove(key);
-			} else {
-				map.put(key, value);
+			switch (key) {
+				case PROP_debug, PROP_ContextSession_debug:
+					return debug(cvt(value, Boolean.class));
+				default:
+					var map = properties.get();
+					if (value == null) {
+						map.remove(key);
+					} else {
+						map.put(key, value);
+					}
+					return this;
 			}
-			return this;
 		}
 
 		/**

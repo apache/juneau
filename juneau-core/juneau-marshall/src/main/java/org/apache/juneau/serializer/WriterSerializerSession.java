@@ -59,6 +59,9 @@ public class WriterSerializerSession extends SerializerSession {
 	private static final String PROP_fileCharset = "fileCharset";
 	private static final String PROP_streamCharset = "streamCharset";
 	private static final String PROP_useWhitespace = "useWhitespace";
+	private static final String PROP_WriterSerializerSession_fileCharset = "WriterSerializerSession.fileCharset";
+	private static final String PROP_WriterSerializerSession_streamCharset = "WriterSerializerSession.streamCharset";
+	private static final String PROP_WriterSerializerSession_useWhitespace = "WriterSerializerSession.useWhitespace";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -159,8 +162,21 @@ public class WriterSerializerSession extends SerializerSession {
 
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) {
+				super.property(key, value);
+				return this;
+			}
+			switch (key) {
+				case PROP_fileCharset, PROP_WriterSerializerSession_fileCharset:
+					return fileCharset(cvt(value, Charset.class));
+				case PROP_streamCharset, PROP_WriterSerializerSession_streamCharset:
+					return streamCharset(cvt(value, Charset.class));
+				case PROP_useWhitespace, PROP_WriterSerializerSession_useWhitespace:
+					return useWhitespace(cvt(value, Boolean.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		@Override /* Overridden from Builder */

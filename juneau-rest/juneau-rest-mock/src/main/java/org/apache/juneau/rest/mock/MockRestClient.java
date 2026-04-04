@@ -246,6 +246,9 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Builders and requests returned to callers; lifecycle managed by the enclosing MockRestClient or test
+})
 public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	/**

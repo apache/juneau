@@ -650,6 +650,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return An empty optional, or <jk>null</jk> if this isn't an optional.
 	 */
+	@SuppressWarnings({
+		"java:S2789" // null intentionally signals "not an Optional type"; callers check for null
+	})
 	public Optional<?> getOptionalDefault() {
 		if (isOptional())
 			return opt(getElementType().getOptionalDefault());
@@ -869,7 +872,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		// array conversions from element types, which can produce false positives here.
 		if (inner().isArray() && c.isArray())
 			return false;
-		// Exclude Collections and Maps: BeanSession handles collection/map conversion directly;
+		// Exclude Collections and Maps — BeanSession handles collection/map conversion directly.
 		// BasicConverter's generic conversions produce false positives that Mutaters never did.
 		if (Collection.class.isAssignableFrom(inner()) || Map.class.isAssignableFrom(inner()))
 			return false;
@@ -907,7 +910,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		// array conversions from element types, which can produce false positives here.
 		if (inner().isArray() && c.isArray())
 			return false;
-		// Exclude Collection/Map targets: BeanSession handles collection/map conversion directly;
+		// Exclude Collection/Map targets — BeanSession handles collection/map conversion directly.
 		// BasicConverter's generic conversions produce false positives that Mutaters never did.
 		if (Collection.class.isAssignableFrom(c) || Map.class.isAssignableFrom(c))
 			return false;

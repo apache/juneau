@@ -127,6 +127,7 @@ import jakarta.servlet.http.*;
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_allowContentParam); class has 22 dependencies, acceptable for this core REST context class
 	"java:S1200", // Class has many dependencies; acceptable for this core context class
+	"resource" // Streams and session objects returned to callers; lifecycle managed by the servlet container or RestCall
 })
 public class RestContext extends Context {
 

@@ -6375,7 +6375,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws RestCallException REST call failed.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for callback parsing state machine
+		"java:S3776", // Cognitive complexity acceptable for callback parsing state machine
+		"java:S1854"  // state = S5 is a necessary state machine transition; SonarLint false positive
 	})
 	public RestRequest callback(String callString) throws RestCallException {
 		callString = emptyIfNull(callString);
@@ -8145,7 +8146,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for remote execution logic
-		"java:S112"   // throws Exception intentional - callback/lifecycle method
+		"java:S112",  // throws Exception intentional - callback/lifecycle method
+		"unused"      // interfaceClass unused in this implementation but part of the remote execution contract
 	})
 	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Exception {
 		RemoteOperationReturn ror = rom.getReturns();

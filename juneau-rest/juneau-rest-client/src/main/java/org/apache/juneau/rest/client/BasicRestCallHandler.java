@@ -31,6 +31,9 @@ import org.apache.http.protocol.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // client is passed in by the caller and owned by the RestClient; lifecycle managed externally
+})
 public class BasicRestCallHandler implements RestCallHandler {
 
 	private final RestClient client;

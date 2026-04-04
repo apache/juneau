@@ -95,11 +95,17 @@ import org.apache.juneau.utils.*;
 
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // consoleReader and consoleWriter are backed by system streams or caller-provided streams; lifecycle managed by stop()
+})
 public class Microservice implements ConfigEventListener {
 
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"resource" // configStore, consoleReader, consoleWriter are passed in by the caller or assigned to system streams; lifecycle managed externally
+	})
 	public static class Builder {
 
 		Args args;

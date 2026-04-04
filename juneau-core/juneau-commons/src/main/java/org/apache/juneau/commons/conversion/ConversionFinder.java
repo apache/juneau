@@ -54,5 +54,8 @@ public interface ConversionFinder {
 	 * @param outType The output type class.
 	 * @return A {@link Conversion} function, or <jk>null</jk> if no conversion is available.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Wildcards unavoidable; concrete I/O types are only known at runtime
+	})
 	Conversion<?,?> findConversion(Class<?> inType, Class<?> outType);
 }

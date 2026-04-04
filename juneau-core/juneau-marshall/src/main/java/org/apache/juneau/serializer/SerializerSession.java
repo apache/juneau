@@ -70,15 +70,22 @@ import org.apache.juneau.utils.Iso8601Utils;
 public class SerializerSession extends BeanTraverseSession {
 
 	// Property name constants
+	private static final String PROP_javaMethod = "javaMethod";
+	private static final String PROP_resolver = "resolver";
+	private static final String PROP_schema = "schema";
+	private static final String PROP_uriContext = "uriContext";
 	private static final String PROP_uriResolver = "uriResolver";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_ctx = "ctx";
+	private static final String PROP_SerializerSession_javaMethod = "SerializerSession.javaMethod";
+	private static final String PROP_SerializerSession_resolver = "SerializerSession.resolver";
+	private static final String PROP_SerializerSession_schema = "SerializerSession.schema";
+	private static final String PROP_SerializerSession_uriContext = "SerializerSession.uriContext";
 
 	/**
 	 * Builder class.
 	 */
 	public static class Builder extends BeanTraverseSession.Builder {
+
+		private static final String ARG_ctx = "ctx";
 
 		private HttpPartSchema schema;
 		private Method javaMethod;
@@ -156,8 +163,23 @@ public class SerializerSession extends BeanTraverseSession {
 
 		@Override /* Overridden from Builder */
 		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
+			if (key == null) {
+				super.property(key, value);
+				return this;
+			}
+			switch (key) {
+				case PROP_javaMethod, PROP_SerializerSession_javaMethod:
+					return javaMethod(cvt(value, Method.class));
+				case PROP_resolver, PROP_SerializerSession_resolver:
+					return resolver(cvt(value, VarResolverSession.class));
+				case PROP_schema, PROP_SerializerSession_schema:
+					return schema(cvt(value, HttpPartSchema.class));
+				case PROP_uriContext, PROP_SerializerSession_uriContext:
+					return uriContext(cvt(value, UriContext.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
 		}
 
 		/**
@@ -255,7 +277,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return A new builder.
 	 */
 	public static Builder create(Serializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+		return new Builder(assertArgNotNull("ctx", ctx));
 	}
 
 	/**
@@ -478,8 +500,8 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return A new list containing all elements.
 	 * @since 9.2.1
 	 */
-	public final List<?> toListFromStreamable(Object o, ClassMeta<?> type) {
-		var list = new ArrayList<>();
+	public final List<Object> toListFromStreamable(Object o, ClassMeta<?> type) {
+		var list = new ArrayList<Object>();
 		forEachStreamableEntry(o, type, list::add);
 		return list;
 	}

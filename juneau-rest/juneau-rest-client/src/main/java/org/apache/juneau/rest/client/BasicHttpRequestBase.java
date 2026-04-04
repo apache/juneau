@@ -25,6 +25,9 @@ import org.apache.http.client.methods.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // restRequest is owned by the RestClient call chain; lifecycle managed by the enclosing RestCall
+})
 class BasicHttpRequestBase extends HttpRequestBase implements RestRequestCreated {
 
 	final String method;

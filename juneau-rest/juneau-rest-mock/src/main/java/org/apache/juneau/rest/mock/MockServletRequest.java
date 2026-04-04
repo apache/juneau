@@ -42,6 +42,9 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Streams returned to servlet container; lifecycle managed by the container
+})
 public class MockServletRequest implements HttpServletRequest {
 
 	/**

@@ -28,6 +28,9 @@ import jakarta.servlet.*;
  * A wrapped {@link ServletOutputStream} with an added <c>finish()</c> method.
  *
  */
+@SuppressWarnings({
+	"resource" // os and sos are servlet-container-managed streams passed in by the caller; closed by the container
+})
 public class FinishableServletOutputStream extends ServletOutputStream implements Finishable {
 
 	final OutputStream os;

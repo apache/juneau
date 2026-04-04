@@ -60,7 +60,8 @@ import org.apache.juneau.cp.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., MSG_parameterCannotBeNull); System.err/out usage is intentional for assertion error output
-	"java:S106" // System.out/err usage acceptable for assertion output
+	"java:S106", // System.out/err usage acceptable for assertion output
+	"resource" // out field assigned to System.err which is a JVM-managed singleton not owned by this class
 })
 public class Assertion {
 

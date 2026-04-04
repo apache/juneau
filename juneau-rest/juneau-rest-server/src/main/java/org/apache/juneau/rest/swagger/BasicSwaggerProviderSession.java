@@ -746,7 +746,8 @@ public class BasicSwaggerProviderSession {
 	}
 
 	@SuppressWarnings({
-		"java:S1172" // Parameter kept to match interface contract
+		"java:S1172", // Parameter kept to match interface contract
+		"unused" // Eclipse: type parameter unused but kept for API consistency
 	})
 	private static void addParamExample(RestOpContext sm, JsonMap piri, RestPartType in, Type type) {
 
