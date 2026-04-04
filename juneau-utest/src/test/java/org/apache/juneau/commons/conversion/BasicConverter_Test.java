@@ -27,7 +27,8 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"unused" // Test helper classes have fields read only via assertions
+	"unused",    // Test helper classes have fields read only via assertions
+	"java:S5778" // assertThrows lambdas intentionally contain multiple statements to fully exercise the conversion path
 })
 
 class BasicConverter_Test extends TestBase {
@@ -789,8 +790,8 @@ class BasicConverter_Test extends TestBase {
 	}
 
 	@Test void p01_innerClassConstructorWithMemberOf() {
-		// to(o, memberOf, session, Class) routes through the inner-class path in findConstructorConversion;
-		// memberOf (this) is passed as the synthetic outer-instance parameter.
+		// Verifies the inner-class path in findConstructorConversion where the outer instance
+		// is passed as the synthetic first constructor parameter.
 		var x = C.to("hello", this, (ConverterSession)null, P01_Inner.class);
 		assertEquals("hello", x.value);
 	}

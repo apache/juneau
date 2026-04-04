@@ -3842,7 +3842,8 @@ public class BeanContext extends Context implements ConversionFinder {
 	 */
 	@Override
 	@SuppressWarnings({
-		"java:S3776"  // Cognitive complexity acceptable for comprehensive conversion dispatch
+		"java:S3776", // Cognitive complexity acceptable for comprehensive conversion dispatch
+		"java:S6541"  // Brain Method: conversion dispatch inherently requires handling many type pairs in one place
 	})
 	public Conversion<?,?> findConversion(Class<?> inType, Class<?> outType) {
 		var toMeta = getClassMeta(outType);
@@ -4053,7 +4054,7 @@ public class BeanContext extends Context implements ConversionFinder {
 						throw rex("Cannot convert string to {0}: {1}", outType.getName(), str);
 					var elemType = args.length > 0 ? args[0] : null;
 					var l2 = JsonList.ofJson(str).setBeanSession(bs);
-					var result = (Collection<Object>) newCollection(outType);
+					var result = newCollection(outType);
 					l2.forEach(x -> result.add(elemType != null && x != null ? converter.to(x, elemType) : x));
 					return result;
 				} catch (Exception e) {
@@ -4134,14 +4135,14 @@ public class BeanContext extends Context implements ConversionFinder {
 					var temporal = (java.time.temporal.Temporal) in;
 					java.time.Instant instant;
 					try {
-						instant = java.time.Instant.from(temporal);
-					} catch (java.time.DateTimeException e) {
-						// LocalDateTime lacks offset info - interpret using session/system timezone
-						var tz = sessionTimeZone(session);
-						var zoneId = tz != null ? tz.toZoneId() : java.time.ZoneId.systemDefault();
-						instant = java.time.LocalDateTime.from(temporal).atZone(zoneId).toInstant();
-					}
-					return Iso8601Utils.fromEpochMillis(instant.toEpochMilli(), toMeta, sessionTimeZone(session));
+					instant = java.time.Instant.from(temporal);
+					} catch (@SuppressWarnings("unused") java.time.DateTimeException e) {
+					// LocalDateTime lacks offset info - interpret using session/system timezone
+					var tz = sessionTimeZone(session);
+					var zoneId = tz != null ? tz.toZoneId() : java.time.ZoneId.systemDefault();
+					instant = java.time.LocalDateTime.from(temporal).atZone(zoneId).toInstant();
+				}
+				return Iso8601Utils.fromEpochMillis(instant.toEpochMilli(), toMeta, sessionTimeZone(session));
 				};
 		}
 		if (toMeta.isDate() && outType == java.util.Date.class) {
@@ -4152,14 +4153,14 @@ public class BeanContext extends Context implements ConversionFinder {
 					var temporal = (java.time.temporal.Temporal) in;
 					java.time.Instant instant;
 					try {
-						instant = java.time.Instant.from(temporal);
-					} catch (java.time.DateTimeException e) {
-						// LocalDateTime lacks offset info - interpret using session/system timezone
-						var tz = sessionTimeZone(session);
-						var zoneId = tz != null ? tz.toZoneId() : java.time.ZoneId.systemDefault();
-						instant = java.time.LocalDateTime.from(temporal).atZone(zoneId).toInstant();
-					}
-					return java.util.Date.from(instant);
+					instant = java.time.Instant.from(temporal);
+					} catch (@SuppressWarnings("unused") java.time.DateTimeException e) {
+					// LocalDateTime lacks offset info - interpret using session/system timezone
+					var tz = sessionTimeZone(session);
+					var zoneId = tz != null ? tz.toZoneId() : java.time.ZoneId.systemDefault();
+					instant = java.time.LocalDateTime.from(temporal).atZone(zoneId).toInstant();
+				}
+				return java.util.Date.from(instant);
 				};
 		}
 
@@ -4227,9 +4228,9 @@ public class BeanContext extends Context implements ConversionFinder {
 			return (in, memberOf, session, args) -> converter.to(in.toString(), memberOf, session, Boolean.class);
 		}
 
-		// --- Object → Bean via toString() + BeanMap.load() (fallback for bean-compatible types) ---
-		// Matches old convertToMemberType fallback: if (to.isBean()) return newBeanMap(to.inner()).load(value.toString()).getBean()
-		// Excludes cases where input is already assignable to output (handled by BeanSession isInstance shortcut).
+	// --- Object → Bean via toString() + BeanMap.load() (fallback for bean-compatible types) ---
+	// Replicates the old convertToMemberType fallback for beans (newBeanMap + load + getBean).
+	// Excludes cases where input is already assignable to output (handled by BeanSession isInstance shortcut).
 		if (toMeta.isBean() && !Map.class.isAssignableFrom(inType) && !CharSequence.class.isAssignableFrom(inType)
 				&& !outType.isAssignableFrom(inType)) {
 			return (in, memberOf, session, args) -> {
@@ -4249,7 +4250,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		return session == null ? null : session.get(TimeZone.class).orElse(null);
 	}
 
-	private BeanSession beanSession(ConverterSession session) {
+	private static BeanSession beanSession(ConverterSession session) {
 		return session instanceof BeanSession bs ? bs : null;
 	}
 
@@ -4266,7 +4267,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			return new TreeSet<>();
 		try {
 			return (Collection<Object>) outType.getDeclaredConstructor().newInstance();
-		} catch (Exception e) {
+		} catch (@SuppressWarnings("unused") Exception e) {
 			return new ArrayList<>();
 		}
 	}
@@ -4913,17 +4914,22 @@ public class BeanContext extends Context implements ConversionFinder {
 
 		// Loop until we find a ParameterizedType
 		if (! (o instanceof ParameterizedType)) {
-			loop: do {
+			while (nn(c)) {
 				o = c.getGenericSuperclass();
 				if (o instanceof ParameterizedType)
-					break loop;
+					break;
+				boolean found = false;
 				for (var t : c.getGenericInterfaces()) {
 					o = t;
-					if (o instanceof ParameterizedType)
-						break loop;
+					if (o instanceof ParameterizedType) {
+						found = true;
+						break;
+					}
 				}
+				if (found)
+					break;
 				c = c.getSuperclass();
-			} while (nn(c));
+			}
 		}
 
 		if (o instanceof ParameterizedType o2 && ! o2.getRawType().equals(Enum.class)) {

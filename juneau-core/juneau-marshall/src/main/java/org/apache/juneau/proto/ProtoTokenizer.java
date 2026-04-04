@@ -103,8 +103,8 @@ class ProtoTokenizer {
 			}
 			if (c == '#') {
 				readChar();
-				while ((c = readChar()) >= 0 && c != '\n' && c != '\r')
-					;
+			while ((c = readChar()) >= 0 && c != '\n' && c != '\r')
+				{ /* consume comment characters until end of line */ }
 				if (c == '\r' && peekChar() == '\n')
 					readChar();
 				continue;

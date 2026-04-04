@@ -215,6 +215,10 @@ public class IniSerializerSession extends WriterSerializerSession {
 		});
 	}
 
+	@SuppressWarnings({
+		"unused",    // type reserved for future type-aware section serialization
+		"java:S1172" // Same as above
+	})
 	private void serializeMapSection(IniWriter w, Map<?,?> map, ClassMeta<?> type) throws SerializeException {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		forEachEntry(map, e -> {
@@ -298,6 +302,10 @@ public class IniSerializerSession extends WriterSerializerSession {
 		return b.build();
 	}
 
+	@SuppressWarnings({
+		"unused",    // value accepted for future value-aware inline detection
+		"java:S1172" // Same as above
+	})
 	private static boolean isSimpleOrJson5Inline(ClassMeta<?> aType, Object value) {
 		if (aType.isBean() || aType.isMap())
 			return false;

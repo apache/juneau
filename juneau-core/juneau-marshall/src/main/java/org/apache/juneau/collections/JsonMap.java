@@ -751,8 +751,8 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			|| (x instanceof Boolean x2 && x2.equals(false))
 			|| (x instanceof Number x3 && x3.intValue() == -1)
 		|| (isArray(x) && Array.getLength(x) == 0)
-		|| (x instanceof Map x2 && x2.isEmpty())
-		|| (x instanceof Collection x3 && x3.isEmpty())
+		|| (x instanceof Map<?,?> x2 && x2.isEmpty())
+		|| (x instanceof Collection<?> x3 && x3.isEmpty())
 		));
 		// @formatter:on
 	}

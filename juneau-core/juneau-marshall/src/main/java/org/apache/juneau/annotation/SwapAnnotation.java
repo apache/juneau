@@ -221,6 +221,9 @@ public class SwapAnnotation {
 
 	}
 
+	@SuppressWarnings({
+		"java:S2160" // equals not needed; annotation object identity is sufficient for usage in Sets/Maps
+	})
 	private static class Object extends AppliedOnClassAnnotationObject implements Swap {
 
 		private final String[] description;

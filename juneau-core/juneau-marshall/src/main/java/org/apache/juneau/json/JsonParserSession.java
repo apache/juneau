@@ -626,7 +626,9 @@ public class JsonParserSession extends ReaderParserSession {
 	}
 
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for number parsing logic
+		"unused",    // r accepted for API consistency; subclasses may use it for position tracking
+		"java:S1172", // Same as above
+		"java:S3776"  // Cognitive complexity acceptable for number parsing logic
 	})
 	protected Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
 

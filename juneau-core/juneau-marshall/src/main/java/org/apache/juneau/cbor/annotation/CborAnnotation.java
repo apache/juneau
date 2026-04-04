@@ -175,6 +175,9 @@ public class CborAnnotation {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S2160" // equals not needed; annotation object identity is sufficient for usage in Sets/Maps
+	})
 	private static class Object extends AppliedOnClassAnnotationObject implements Cbor {
 
 		private final String[] description;

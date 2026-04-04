@@ -1230,6 +1230,7 @@ class Swagger_Test extends TestBase {
 	@Rest
 	@Deprecated
 	public static class J2 {
+		@Deprecated
 		@RestGet(path="/path2/{foo}")
 		public X a() {
 			return null;

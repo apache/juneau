@@ -86,6 +86,9 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone (used when the value lacks zone info).
 	 * @return The ISO 8601 string representation.
 	 */
+	@SuppressWarnings({
+		"java:S1172" // type kept for API compatibility; callers pass ClassMeta context for potential future use
+	})
 	public static String format(Object value, ClassMeta<?> type, TimeZone timeZone) {
 		if (value instanceof Duration d)
 			return d.toString();
@@ -148,6 +151,9 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone.
 	 * @return The ISO date string.
 	 */
+	@SuppressWarnings({
+		"java:S1172" // type kept for API compatibility; callers pass ClassMeta context for potential future use
+	})
 	public static String formatAsDate(Object value, ClassMeta<?> type, TimeZone timeZone) {
 		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
 		if (value instanceof Calendar c) {
@@ -169,6 +175,9 @@ public final class Iso8601Utils {
 	 * @param timeZone The session time zone.
 	 * @return The ISO date-time string.
 	 */
+	@SuppressWarnings({
+		"java:S1172" // type kept for API compatibility; callers pass ClassMeta context for potential future use
+	})
 	public static String formatAsDateTime(Object value, ClassMeta<?> type, TimeZone timeZone) {
 		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
 		if (value instanceof Calendar c) {

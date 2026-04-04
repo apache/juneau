@@ -183,8 +183,9 @@ public class CborParserSession extends InputStreamParserSession {
 	 * Workhorse method.
 	 */
 	@SuppressWarnings({
+		"resource",   // is is caller-owned; this method does not close it
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded session contexts do not require synchronization
+		"java:S6541"  // Single-threaded session contexts do not require synchronization
 	})
 	private <T> T parseAnything(ClassMeta<?> eType, CborInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 

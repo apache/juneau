@@ -68,7 +68,8 @@ import org.apache.juneau.swap.*;
 @Bean(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 @SuppressWarnings({
 	"java:S1200",  // Class has 23 dependencies, acceptable for this core reflection metadata class
-	"java:S1452"   // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, etc. for element/component types
+	"java:S1452",  // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, etc. for element/component types
+	"java:S6539"   // Monster Class: ClassMeta is a focused reflection-metadata cache; splitting would increase coupling
 })
 public class ClassMeta<T> extends ClassInfoTyped<T> {
 
@@ -868,8 +869,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		// array conversions from element types, which can produce false positives here.
 		if (inner().isArray() && c.isArray())
 			return false;
-		// Exclude Collections and Maps: BeanSession handles those via convertToCollectionType/convertToMapType;
-		// BasicConverter's generic collection/map conversions produce false positives (Mutaters never did these).
+		// Exclude Collections and Maps: BeanSession handles collection/map conversion directly;
+		// BasicConverter's generic conversions produce false positives that Mutaters never did.
 		if (Collection.class.isAssignableFrom(inner()) || Map.class.isAssignableFrom(inner()))
 			return false;
 		return BasicConverter.INSTANCE.canConvert(c, inner());
@@ -906,8 +907,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		// array conversions from element types, which can produce false positives here.
 		if (inner().isArray() && c.isArray())
 			return false;
-		// Exclude Collection/Map targets: BeanSession handles those via convertToCollectionType/convertToMapType;
-		// BasicConverter's generic collection/map conversions produce false positives (Mutaters never did these).
+		// Exclude Collection/Map targets: BeanSession handles collection/map conversion directly;
+		// BasicConverter's generic conversions produce false positives that Mutaters never did.
 		if (Collection.class.isAssignableFrom(c) || Map.class.isAssignableFrom(c))
 			return false;
 		return BasicConverter.INSTANCE.canConvert(inner(), c);
@@ -1452,9 +1453,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private KeyValueTypes findKeyValueTypes() {
 		if (cat.is(MAP) && ! cat.is(BEANMAP)) {
 			// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
-			var parameters = beanContext.findParameters(inner(), inner());
-			if (nn(parameters) && parameters.length == 2) {
-				return new KeyValueTypes(parameters[0], parameters[1]);
+			var typeParams = beanContext.findParameters(inner(), inner());
+			if (nn(typeParams) && typeParams.length == 2) {
+				return new KeyValueTypes(typeParams[0], typeParams[1]);
 			}
 			return new KeyValueTypes(beanContext.getClassMeta(Object.class), beanContext.getClassMeta(Object.class));
 		}
@@ -1467,9 +1468,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (cat.is(ARRAY)) {
 			return beanContext.getClassMeta(inner().getComponentType());
 		} else if (cat.is(COLLECTION) || cat.is(ITERABLE) || cat.is(ITERATOR) || cat.is(STREAM) || is(Optional.class)) {
-			var parameters = beanContext.findParameters(inner(), inner());
-			if (nn(parameters) && parameters.length == 1) {
-				return parameters[0];
+			var typeParams = beanContext.findParameters(inner(), inner());
+			if (nn(typeParams) && typeParams.length == 1) {
+				return typeParams[0];
 			}
 			return beanContext.getClassMeta(Object.class);
 		}

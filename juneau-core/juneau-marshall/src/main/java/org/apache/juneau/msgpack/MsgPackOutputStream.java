@@ -88,10 +88,9 @@ public class MsgPackOutputStream extends OutputStream {
 
 	
 	@SuppressWarnings({
-		"java:S1172", // Parameter out unused; loop counter advances for surrogate pairs
-		"java:S127", // For-loop counter modification acceptable in this algorithm
+		"java:S127" // For-loop counter modification acceptable in this algorithm
 	})
-	private int writeUtf8To(CharSequence in, OutputStream out) {
+	private int writeUtf8To(CharSequence in) {
 		var count = 0;
 		for (int i = 0, len = in.length(); i < len; i++) {
 			var c = (in.charAt(i) & 0xFFFF);
@@ -385,7 +384,7 @@ public class MsgPackOutputStream extends OutputStream {
 		else
 			append1(STR32).append4(length);
 
-		int length2 = writeUtf8To(cs, os);
+		int length2 = writeUtf8To(cs);
 
 		if (length != length2)
 			throw new SerializeException("Unexpected length.  Expected={0}, Actual={1}", length, length2);

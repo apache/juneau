@@ -159,6 +159,9 @@ public class HoconTokenizer {
 	 *
 	 * @param reader The reader to tokenize.
 	 */
+	@SuppressWarnings({
+		"resource" // BufferedReader is owned by PushbackReader; PushbackReader constructor never throws
+	})
 	public HoconTokenizer(Reader reader) {
 		var in = reader instanceof BufferedReader br ? br : new BufferedReader(reader);
 		this.reader = new PushbackReader(in, 8);

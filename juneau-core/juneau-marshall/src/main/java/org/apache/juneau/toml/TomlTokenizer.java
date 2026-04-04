@@ -111,8 +111,8 @@ class TomlTokenizer {
 
 	void skipComment() throws IOException {
 		if (peek() == '#') {
-			while (read() >= 0 && peek() != '\n' && peek() != '\r')
-				;
+		while (read() >= 0 && peek() != '\n' && peek() != '\r')
+			{ /* consume comment characters until end of line */ }
 		}
 	}
 
@@ -129,7 +129,7 @@ class TomlTokenizer {
 	void skipToNextLine() throws IOException {
 		int c;
 		while ((c = read()) >= 0 && c != '\n' && c != '\r')
-			;
+			{ /* consume characters until end of line */ }
 		if (c == '\r' && peek() == '\n')
 			read();
 	}

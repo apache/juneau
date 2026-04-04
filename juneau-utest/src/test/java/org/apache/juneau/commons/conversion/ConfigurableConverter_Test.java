@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link ConfigurableConverter}.
  */
-public class ConfigurableConverter_Test {
+class ConfigurableConverter_Test {
 
 	// =================================================================================================================
 	// a - ConversionFinder integration

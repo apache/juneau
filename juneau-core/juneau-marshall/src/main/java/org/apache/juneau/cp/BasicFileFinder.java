@@ -178,12 +178,14 @@ public class BasicFileFinder implements FileFinder {
 
 		if (lf == null) {
 			List<String> candidateFileNames = getCandidateFileNames(name, locale);
-			paths: for (LocalDir root : roots) {
+			for (LocalDir root : roots) {
 				for (var cfn : candidateFileNames) {
 					lf = root.resolve(cfn);
 					if (nn(lf))
-						break paths;
+						break;
 				}
+				if (nn(lf))
+					break;
 			}
 
 			if (nn(lf) && isIgnoredFile(lf.getName()))

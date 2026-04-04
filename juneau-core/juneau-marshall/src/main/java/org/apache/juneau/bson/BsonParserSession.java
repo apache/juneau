@@ -118,6 +118,9 @@ public class BsonParserSession extends InputStreamParserSession {
 		return o;
 	}
 
+	@SuppressWarnings({
+		"resource" // is is caller-owned; this method does not close it
+	})
 	private <T> T parseDocument(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 		is.readDocumentSize();
 		if (eType == null)
@@ -233,6 +236,10 @@ public class BsonParserSession extends InputStreamParserSession {
 		return beanMap;
 	}
 
+	@SuppressWarnings({
+		"unused",    // pMeta kept for API consistency with other parseXxx methods
+		"java:S1172" // Same as above
+	})
 	private Object parseArray(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 		is.readDocumentSize();
 		if (eType == null)
