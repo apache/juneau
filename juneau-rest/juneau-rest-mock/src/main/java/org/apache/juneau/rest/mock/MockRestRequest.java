@@ -807,6 +807,54 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	}
 
 	@Override /* Overridden from RestRequest */
+	public MockRestRequest serializerSessionOptionsHeader(String json5) {
+		super.serializerSessionOptionsHeader(json5);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest serializerSessionOptionsHeader(Map<String,?> properties) {
+		super.serializerSessionOptionsHeader(properties);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest serializerSessionOptionsQuery(String uon) {
+		super.serializerSessionOptionsQuery(uon);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest serializerSessionOptionsQuery(Map<String,?> properties) {
+		super.serializerSessionOptionsQuery(properties);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest parserSessionOptionsHeader(String json5) {
+		super.parserSessionOptionsHeader(json5);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest parserSessionOptionsHeader(Map<String,?> properties) {
+		super.parserSessionOptionsHeader(properties);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest parserSessionOptionsQuery(String uon) {
+		super.parserSessionOptionsQuery(uon);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
+	public MockRestRequest parserSessionOptionsQuery(Map<String,?> properties) {
+		super.parserSessionOptionsQuery(properties);
+		return this;
+	}
+
+	@Override /* Overridden from RestRequest */
 	public MockRestRequest protocolVersion(ProtocolVersion version) {
 		super.protocolVersion(version);
 		return this;

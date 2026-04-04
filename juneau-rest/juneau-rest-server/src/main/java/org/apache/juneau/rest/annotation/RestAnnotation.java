@@ -108,6 +108,9 @@ public class RestAnnotation {
 		private String uriContext = "";
 		private String uriRelativity = "";
 		private String uriResolution = "";
+		private String[] allowedParserOptions = {};
+		private String[] allowedSerializerOptions = {};
+		private String[] noInherit = {};
 		private String[] consumes = {};
 		private String[] defaultRequestAttributes = {};
 		private String[] defaultRequestHeaders = {};
@@ -242,6 +245,39 @@ public class RestAnnotation {
 		 */
 		public Builder consumes(String...value) {
 			consumes = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#allowedSerializerOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedSerializerOptions(String...value) {
+			allowedSerializerOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#allowedParserOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedParserOptions(String...value) {
+			allowedParserOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#noInherit()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder noInherit(String...value) {
+			noInherit = value;
 			return this;
 		}
 
@@ -802,6 +838,9 @@ public class RestAnnotation {
 		private final String uriContext;
 		private final String uriRelativity;
 		private final String uriResolution;
+		private final String[] allowedParserOptions;
+		private final String[] allowedSerializerOptions;
+		private final String[] noInherit;
 		private final String[] consumes;
 		private final String[] produces;
 		private final String[] defaultRequestAttributes;
@@ -825,6 +864,9 @@ public class RestAnnotation {
 			children = copyOf(b.children);
 			clientVersionHeader = b.clientVersionHeader;
 			config = b.config;
+			allowedParserOptions = copyOf(b.allowedParserOptions);
+			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
+			noInherit = copyOf(b.noInherit);
 			consumes = copyOf(b.consumes);
 			converters = copyOf(b.converters);
 			debug = b.debug;
@@ -905,6 +947,21 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String config() {
 			return config;
+		}
+
+		@Override /* Overridden from Rest */
+		public String[] allowedParserOptions() {
+			return allowedParserOptions;
+		}
+
+		@Override /* Overridden from Rest */
+		public String[] allowedSerializerOptions() {
+			return allowedSerializerOptions;
+		}
+
+		@Override /* Overridden from Rest */
+		public String[] noInherit() {
+			return noInherit;
 		}
 
 		@Override /* Overridden from Rest */

@@ -196,6 +196,47 @@ import org.apache.juneau.xml.*;
 		ParquetParser.class,
 		ProtoParser.class,
 		MarkdownParser.class
+	},
+
+	// Serializer session properties that clients are allowed to override via HTTP headers/query parameters.
+	allowedSerializerOptions={
+		"useWhitespace",          // WriterSerializer - enable/disable whitespace
+		"maxIndent",              // WriterSerializer - max indentation level
+		"quoteChar",              // WriterSerializer - quote character
+		"keepNullProperties",     // SerializerSession - include null properties
+		"trimStrings",            // SerializerSession - trim string values
+		"addBeanTypes",           // SerializerSession - add bean type annotations
+		"addRootType",            // SerializerSession - add root type annotation
+		"sortCollections",        // SerializerSession - sort collections
+		"sortMaps",               // SerializerSession - sort maps
+		"trimEmptyCollections",   // SerializerSession - trim empty collections
+		"trimEmptyMaps",          // SerializerSession - trim empty maps
+		"binaryFormat",           // OutputStreamSerializer - binary encoding format
+		"escapeSolidus",          // JsonSerializerSession - escape forward slashes
+		"encoding",               // UonSerializerSession - URL-encode characters
+		"paramFormat",            // UonSerializerSession - parameter format style
+		"addNamespaceUrisToRoot", // XmlSerializerSession - add namespace URIs to root
+		"autoDetectNamespaces",   // XmlSerializerSession - auto-detect namespaces
+		"enableNamespaces",       // XmlSerializerSession - enable namespace support
+		"textNodeDelimiter",      // XmlSerializerSession - text node delimiter
+		"addKeyValueTableHeaders",// HtmlSerializerSession - add key/value table headers
+		"detectLabelParameters",  // HtmlSerializerSession - detect label parameters
+		"detectLinksInStrings",   // HtmlSerializerSession - detect links in strings
+		"labelParameter",         // HtmlSerializerSession - label parameter name
+		"uriAnchorText",          // HtmlSerializerSession - URI anchor text strategy
+		"byteArrayFormat",        // CsvSerializerSession - byte array encoding format
+		"allowNestedStructures"   // CsvSerializerSession - allow nested structures
+	},
+
+	// Parser session properties that clients are allowed to override via HTTP headers/query parameters.
+	allowedParserOptions={
+		"trimStrings",            // ParserSession - trim string values
+		"binaryFormat",           // InputStreamParser - binary decoding format
+		"validateEnd",            // JsonParserSession/UonParserSession - validate end of input
+		"decoding",               // UonParserSession - URL-decode characters
+		"expandedParams",         // UrlEncodingParserSession - expanded parameters
+		"preserveRootElement",    // XmlParserSession - preserve root element
+		"validating"              // XmlParserSession - validate XML
 	}
 )
 public interface BasicUniversalConfig extends DefaultConfig, DefaultHtmlConfig {}

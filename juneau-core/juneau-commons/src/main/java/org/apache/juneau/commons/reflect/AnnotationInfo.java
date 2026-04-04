@@ -128,6 +128,27 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
+	 * Returns the annotatable object (class, method, field, etc.) where this annotation was found.
+	 *
+	 * @return The annotatable object where this annotation was found.
+	 */
+	public Annotatable getAnnotatable() {
+		return annotatable;
+	}
+
+	/**
+	 * Returns the annotatable object cast to the specified type.
+	 *
+	 * @param <A> The annotatable type.
+	 * @param type The class to cast to.
+	 * @return The annotatable element cast to the specified type.
+	 * @throws ClassCastException If the annotatable element is not of the specified type.
+	 */
+	public <A extends Annotatable> A getAnnotatable(Class<A> type) {
+		return type.cast(annotatable);
+	}
+
+	/**
 	 * Returns the annotation type of this annotation.
 	 *
 	 * <p>

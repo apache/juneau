@@ -727,6 +727,56 @@ public @interface RestOp {
 	String[] produces() default {};
 
 	/**
+	 * Allowed serializer session option keys for this operation (ordered merge, prefix {@code -key} removes a key).
+	 *
+	 * <p>
+	 * Comma-delimited list of session property keys that clients may send via the <js>"X-Juneau-Serializer-Options"</js>
+	 * header or <js>"juneauSerializerOptions"</js> query parameter.
+	 * Merged on top of resource-level {@link Rest#allowedSerializerOptions()} values.
+	 * Use {@link #noInherit()} to replace rather than extend the resource-level list.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options - Safe Properties</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] allowedSerializerOptions() default {};
+
+	/**
+	 * Allowed parser session option keys for this operation (ordered merge, prefix {@code -key} removes a key).
+	 *
+	 * <p>
+	 * Comma-delimited list of session property keys that clients may send via the <js>"X-Juneau-Parser-Options"</js>
+	 * header or <js>"juneauParserOptions"</js> query parameter.
+	 * Merged on top of resource-level {@link Rest#allowedParserOptions()} values.
+	 * Use {@link #noInherit()} to replace rather than extend the resource-level list.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options - Safe Properties</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] allowedParserOptions() default {};
+
+	/**
+	 * Property names for which less-derived contributions are NOT inherited.
+	 *
+	 * <p>
+	 * Accepted values: {@code "allowedSerializerOptions"}, {@code "allowedParserOptions"}.
+	 * Prevents the named property from inheriting values from the enclosing {@code @Rest} annotation.
+	 * The {@code noInherit} attribute itself is never inherited.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions">Session Options</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] noInherit() default {};
+
+	/**
 	 * Role guard.
 	 *
 	 * <p>

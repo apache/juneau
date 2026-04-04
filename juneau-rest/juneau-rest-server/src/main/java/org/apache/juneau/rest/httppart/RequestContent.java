@@ -551,7 +551,7 @@ public class RequestContent {
 			// @formatter:off
 			var session = p
 				.createSession()
-				.properties(req.getAttributes().asMap())
+				.properties(req.getParserSessionPropertyMap())
 				.javaMethod(req.getOpContext().getJavaMethod())
 				.locale(locale)
 				.timeZone(timeZone.orElse(null))

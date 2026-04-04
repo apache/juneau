@@ -29,6 +29,7 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.rest.RestSharedConstants.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
 
 import java.io.*;
@@ -2553,6 +2554,72 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
+		 * Sets a default request header with serializer session options (JSON5 map) for all requests.
+		 *
+		 * <p>
+		 * This is a shortcut for <c>headersDefault(basicHeader({@link org.apache.juneau.rest.RestSharedConstants#HEADER_JuneauSerializerOptions}, <jv>json5</jv>))</c>.
+		 *
+		 * @param json5
+		 * 	Serializer session options in JSON5 form.
+		 * 	<br>Can be <jk>null</jk> (default is not set by this method).
+		 * @return This object.
+		 */
+		public Builder serializerSessionOptionsHeader(String json5) {
+			if (json5 != null)
+				headersDefault(basicHeader(HEADER_JuneauSerializerOptions, json5));
+			return this;
+		}
+
+		/**
+		 * Sets a default request header with parser session options (JSON5 map) for all requests.
+		 *
+		 * <p>
+		 * This is a shortcut for <c>headersDefault(basicHeader({@link org.apache.juneau.rest.RestSharedConstants#HEADER_JuneauParserOptions}, <jv>json5</jv>))</c>.
+		 *
+		 * @param json5
+		 * 	Parser session options in JSON5 form.
+		 * 	<br>Can be <jk>null</jk> (default is not set by this method).
+		 * @return This object.
+		 */
+		public Builder parserSessionOptionsHeader(String json5) {
+			if (json5 != null)
+				headersDefault(basicHeader(HEADER_JuneauParserOptions, json5));
+			return this;
+		}
+
+		/**
+		 * Convenience for {@link #serializerSessionOptionsHeader(String)} using a map serialized with JSON5.
+		 *
+		 * @param properties
+		 * 	Property names and values for serializer session options.
+		 * 	<br>Can be <jk>null</jk> (treated as an empty map).
+		 * @return This object.
+		 */
+		public Builder serializerSessionOptionsHeader(Map<String,?> properties) {
+			try {
+				return serializerSessionOptionsHeader(isEmpty(properties) ? null : Json5.of(properties));
+			} catch (SerializeException e) {
+				throw rex(e, "Could not serialize serializer session options header");
+			}
+		}
+
+		/**
+		 * Convenience for {@link #parserSessionOptionsHeader(String)} using a map serialized with JSON5.
+		 *
+		 * @param properties
+		 * 	Property names and values for parser session options.
+		 * 	<br>Can be <jk>null</jk> (treated as an empty map).
+		 * @return This object.
+		 */
+		public Builder parserSessionOptionsHeader(Map<String,?> properties) {
+			try {
+				return parserSessionOptionsHeader(isEmpty(properties) ? null : Json5.of(properties));
+			} catch (SerializeException e) {
+				throw rex(e, "Could not serialize parser session options header");
+			}
+		}
+
+		/**
 		 * Convenience method for specifying HTML as the marshalling transmission media type.
 		 *
 		 * <p>
@@ -4637,6 +4704,72 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		public Builder queryDataDefault(NameValuePair...parts) {
 			queryData().setDefault(parts);
 			return this;
+		}
+
+		/**
+		 * Sets a default query parameter with serializer session options (UON map) for all requests.
+		 *
+		 * <p>
+		 * This is a shortcut for <c>queryDataDefault(stringPart({@link org.apache.juneau.rest.RestSharedConstants#QUERY_juneauSerializerOptions}, <jv>uon</jv>))</c>.
+		 *
+		 * @param uon
+		 * 	Serializer session options in UON form.
+		 * 	<br>Can be <jk>null</jk> (default is not set by this method).
+		 * @return This object.
+		 */
+		public Builder serializerSessionOptionsQueryDefault(String uon) {
+			if (uon != null)
+				queryDataDefault(stringPart(QUERY_juneauSerializerOptions, uon));
+			return this;
+		}
+
+		/**
+		 * Sets a default query parameter with parser session options (UON map) for all requests.
+		 *
+		 * <p>
+		 * This is a shortcut for <c>queryDataDefault(stringPart({@link org.apache.juneau.rest.RestSharedConstants#QUERY_juneauParserOptions}, <jv>uon</jv>))</c>.
+		 *
+		 * @param uon
+		 * 	Parser session options in UON form.
+		 * 	<br>Can be <jk>null</jk> (default is not set by this method).
+		 * @return This object.
+		 */
+		public Builder parserSessionOptionsQueryDefault(String uon) {
+			if (uon != null)
+				queryDataDefault(stringPart(QUERY_juneauParserOptions, uon));
+			return this;
+		}
+
+		/**
+		 * Convenience for {@link #serializerSessionOptionsQueryDefault(String)} using {@link org.apache.juneau.marshaller.Uon#of(Object)}.
+		 *
+		 * @param properties
+		 * 	Property names and values for serializer session options.
+		 * 	<br>Can be <jk>null</jk> (treated as an empty map).
+		 * @return This object.
+		 */
+		public Builder serializerSessionOptionsQueryDefault(Map<String,?> properties) {
+			try {
+				return serializerSessionOptionsQueryDefault(isEmpty(properties) ? null : Uon.of(properties));
+			} catch (SerializeException e) {
+				throw rex(e, "Could not serialize serializer session options query default");
+			}
+		}
+
+		/**
+		 * Convenience for {@link #parserSessionOptionsQueryDefault(String)} using {@link org.apache.juneau.marshaller.Uon#of(Object)}.
+		 *
+		 * @param properties
+		 * 	Property names and values for parser session options.
+		 * 	<br>Can be <jk>null</jk> (treated as an empty map).
+		 * @return This object.
+		 */
+		public Builder parserSessionOptionsQueryDefault(Map<String,?> properties) {
+			try {
+				return parserSessionOptionsQueryDefault(isEmpty(properties) ? null : Uon.of(properties));
+			} catch (SerializeException e) {
+				throw rex(e, "Could not serialize parser session options query default");
+			}
 		}
 
 		/**

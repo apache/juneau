@@ -288,6 +288,62 @@ public @interface Rest {
 	String[] consumes() default {};
 
 	/**
+	 * Allowed serializer session option keys for this resource (ordered merge, prefix {@code -key} removes a key).
+	 *
+	 * <p>
+	 * Comma-delimited list of session property keys (e.g. <js>"escapeSolidus,maxIndent"</js>) that clients may
+	 * send via the <js>"X-Juneau-Serializer-Options"</js> header or <js>"juneauSerializerOptions"</js> query parameter.
+	 * Keys not in the effective allowlist cause a {@code 400 Bad Request} response.
+	 *
+	 * <p>
+	 * Entries are merged in application order. A leading hyphen removes a previously added key: <js>"-escapeSolidus"</js>.
+	 * Method-level {@link org.apache.juneau.rest.annotation.RestGet#allowedSerializerOptions()} values are always merged on top.
+	 * Use {@link #noInherit()} to prevent inheriting less-derived contributions.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options - Safe Properties</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] allowedSerializerOptions() default {};
+
+	/**
+	 * Allowed parser session option keys for this resource (ordered merge, prefix {@code -key} removes a key).
+	 *
+	 * <p>
+	 * Comma-delimited list of session property keys that clients may send via the <js>"X-Juneau-Parser-Options"</js>
+	 * header or <js>"juneauParserOptions"</js> query parameter. Parser options are ignored for operations without
+	 * a request-body parser. Keys not in the effective allowlist cause a {@code 400 Bad Request} response.
+	 *
+	 * <p>
+	 * Use {@link #noInherit()} to prevent inheriting less-derived contributions.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Session Options - Safe Properties</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] allowedParserOptions() default {};
+
+	/**
+	 * Property names for which less-derived contributions are NOT inherited.
+	 *
+	 * <p>
+	 * Accepted values: {@code "allowedSerializerOptions"}, {@code "allowedParserOptions"}.
+	 * Each entry is SVL-resolved then comma-split. Prevents the named property from inheriting values from
+	 * parent {@code @Rest} annotations (router hierarchy). The {@code noInherit} attribute itself is never inherited.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions">Session Options</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] noInherit() default {};
+
+	/**
 	 * Class-level response converters.
 	 *
 	 * <p>

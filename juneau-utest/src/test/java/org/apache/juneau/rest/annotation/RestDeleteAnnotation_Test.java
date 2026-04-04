@@ -38,6 +38,9 @@ class RestDeleteAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestDelete a1 = RestDeleteAnnotation.create()
+		.allowedParserOptions("p1")
+		.allowedSerializerOptions("p2")
+		.noInherit("p3")
 		.clientVersion("a")
 		.debug("b")
 		.defaultAccept("c")
@@ -60,6 +63,9 @@ class RestDeleteAnnotation_Test extends TestBase {
 		.build();
 
 	RestDelete a2 = RestDeleteAnnotation.create()
+		.allowedParserOptions("p1")
+		.allowedSerializerOptions("p2")
+		.noInherit("p3")
 		.clientVersion("a")
 		.debug("b")
 		.defaultAccept("c")
@@ -83,8 +89,8 @@ class RestDeleteAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"clientVersion,debug,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,on,path,roleGuard,rolesDeclared,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
-			"a,b,c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[j],[k],l,m,n,{[],,[],{[],},,[],[],[],[],[],[],[]},o");
+			"allowedParserOptions,allowedSerializerOptions,clientVersion,debug,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,noInherit,on,path,roleGuard,rolesDeclared,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"[p1],[p2],a,b,c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[p3],[j],[k],l,m,n,{[],,[],{[],},,[],[],[],[],[],[],[]},o");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -129,6 +135,9 @@ class RestDeleteAnnotation_Test extends TestBase {
 	public interface D1 {
 
 		@RestDelete(
+			allowedParserOptions="p1",
+			allowedSerializerOptions="p2",
+			noInherit="p3",
 			clientVersion="a",
 			debug="b",
 			defaultAccept="c",
@@ -152,6 +161,9 @@ class RestDeleteAnnotation_Test extends TestBase {
 		void m1();
 
 		@RestDelete(
+			allowedParserOptions="p1",
+			allowedSerializerOptions="p2",
+			noInherit="p3",
 			clientVersion="a",
 			debug="b",
 			defaultAccept="c",

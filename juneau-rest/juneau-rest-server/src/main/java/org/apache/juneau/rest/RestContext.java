@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.PredicateUtils.*;
+import static org.apache.juneau.rest.RestServerConstants.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -49,6 +50,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
+import org.apache.juneau.commons.function.Memoizer;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.reflect.*;
@@ -5182,6 +5184,159 @@ public class RestContext extends Context {
 	@Override /* Overridden from Context */
 	public RestSession.Builder createSession() {
 		return RestSession.create(this);
+	}
+
+	//---------------------------------------------------------------------------------------------
+	// Memoized allowlist fields
+	//---------------------------------------------------------------------------------------------
+
+	/**
+	 * Memoized value of the {@code noInherit} annotation attribute from the nearest {@code @Rest} annotation.
+	 *
+	 * <p>
+	 * {@code noInherit} itself is never inherited; it only applies to the {@code @Rest} that declares it.
+	 */
+	private final Memoizer<SortedSet<String>> noInherit = memoizer(() ->
+		getRestAnnotation()
+			.map(x -> x.getStringArray("noInherit").orElse(StringUtils.EMPTY_STRING_ARRAY))
+			.map(x -> treeSet(String.CASE_INSENSITIVE_ORDER, resolveCdl(x).toList()))
+			.orElseGet(Collections::emptySortedSet)
+	);
+
+	/**
+	 * Memoized list of every {@link Rest} annotation on the resource class and its supertypes, in child-to-parent order.
+	 */
+	private final Memoizer<List<AnnotationInfo<Rest>>> restAnnotations = memoizer(() ->
+		getAnnotationProvider().find(Rest.class, ClassInfo.of(getResourceClass()))
+	);
+
+	/**
+	 * Memoized parser session-option keys from {@code @Rest(allowedParserOptions)}, after SVL resolution and comma expansion.
+	 *
+	 * <p>
+	 * When inheritance is not blocked, keys from {@link #parentContext} are included first, then this resource's own tokens.
+	 * Leading-hyphen tokens (e.g. {@code -foo}) remove earlier positive tokens.
+	 */
+	private final Memoizer<SortedSet<String>> allowedParserOptions = memoizer(this::findAllowedParserOptions);
+
+	private SortedSet<String> findAllowedParserOptions() {
+		var l = new ArrayList<String>();
+		var p = PROPERTY_allowedParserOptions;
+		if (isInherited(p) && parentContext != null)
+			l.addAll(parentContext.getAllowedParserOptions());
+		getRestAnnotationsForProperty(p).forEach(x -> resolveCdl(x.getStringArray(p)).forEach(l::add));
+		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
+	}
+
+	/**
+	 * Memoized serializer session-option keys from {@code @Rest(allowedSerializerOptions)}, after SVL resolution and comma expansion.
+	 *
+	 * <p>
+	 * When inheritance is not blocked, keys from {@link #parentContext} are included first, then this resource's own tokens.
+	 * Leading-hyphen tokens remove earlier positive tokens.
+	 */
+	private final Memoizer<SortedSet<String>> allowedSerializerOptions = memoizer(this::findAllowedSerializerOptions);
+
+	private SortedSet<String> findAllowedSerializerOptions() {
+		var l = new ArrayList<String>();
+		var p = PROPERTY_allowedSerializerOptions;
+		if (isInherited(p) && parentContext != null)
+			l.addAll(parentContext.getAllowedSerializerOptions());
+		getRestAnnotationsForProperty(p).forEach(x -> resolveCdl(x.getStringArray(p)).forEach(l::add));
+		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
+	}
+
+	private Stream<AnnotationInfo<Rest>> getRestAnnotationsForProperty(String name) {
+		var annotations = getRestAnnotations();
+		var cutoff = annotations.size();
+		for (var i = 0; i < annotations.size(); i++) {
+			if (resolveCdl(annotations.get(i).getStringArray(PROPERTY_noInherit)).anyMatch(name::equalsIgnoreCase)) {
+				cutoff = i + 1;
+				break;
+			}
+		}
+		return rstream(annotations.subList(0, cutoff));
+	}
+
+	/**
+	 * Returns all {@link Rest} annotations on the resource class hierarchy, in child-to-parent order.
+	 *
+	 * @return An unmodifiable list of {@link AnnotationInfo} for {@link Rest}, never {@code null}.
+	 */
+	protected List<AnnotationInfo<Rest>> getRestAnnotations() {
+		return restAnnotations.get();
+	}
+
+	/**
+	 * Returns the nearest {@link Rest} annotation on this resource.
+	 *
+	 * @return An {@link Optional} containing the first (most-derived) {@link Rest} {@link AnnotationInfo}.
+	 */
+	protected Optional<AnnotationInfo<Rest>> getRestAnnotation() {
+		return getRestAnnotations().stream().findFirst();
+	}
+
+	/**
+	 * Returns {@code true} if values for the given annotation attribute may be inherited from {@link #parentContext}.
+	 *
+	 * <p>
+	 * Inheritance is blocked when the nearest {@code @Rest(noInherit)} lists the property name (case-insensitive).
+	 *
+	 * @param property The annotation attribute name (e.g. {@code "allowedSerializerOptions"}).
+	 * @return {@code true} if parent values should be included.
+	 */
+	protected boolean isInherited(String property) {
+		return RestContext.this.parentContext != null && !noInherit.get().contains(property);
+	}
+
+	/**
+	 * Resolves comma-delimited annotation values with SVL variable substitution.
+	 *
+	 * @param values Raw annotation attribute values.
+	 * @return A stream of trimmed, non-blank tokens.
+	 */
+	private Stream<String> resolveCdl(String...values) {
+		if (values == null || values.length == 0)
+			return Stream.empty();
+		return Arrays.stream(values)
+			.filter(Objects::nonNull)
+			.map(this::resolve)
+			.map(StringUtils::split)
+			.flatMap(Collection::stream)
+			.map(String::trim)
+			.filter(StringUtils::isNotBlank);
+	}
+
+	private Stream<String> resolveCdl(Optional<String[]> values) {
+		return values.isEmpty() ? Stream.empty() : resolveCdl(values.get());
+	}
+
+	/**
+	 * Resolves SVL variables in the given string.
+	 *
+	 * @param s The raw string. Can be {@code null}.
+	 * @return The resolved string.
+	 */
+	protected String resolve(String s) {
+		return getVarResolver().resolve(s);
+	}
+
+	/**
+	 * Returns the parser session-option keys allowed for this resource.
+	 *
+	 * @return An unmodifiable case-insensitive sorted set, never {@code null}.
+	 */
+	public SortedSet<String> getAllowedParserOptions() {
+		return allowedParserOptions.get();
+	}
+
+	/**
+	 * Returns the serializer session-option keys allowed for this resource.
+	 *
+	 * @return An unmodifiable case-insensitive sorted set, never {@code null}.
+	 */
+	public SortedSet<String> getAllowedSerializerOptions() {
+		return allowedSerializerOptions.get();
 	}
 
 	/**

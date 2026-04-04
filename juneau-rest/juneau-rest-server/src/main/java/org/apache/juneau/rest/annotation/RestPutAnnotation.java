@@ -86,6 +86,9 @@ public class RestPutAnnotation {
 		private String[] defaultRequestAttributes = {};
 		private String[] defaultRequestHeaders = {};
 		private String[] defaultResponseHeaders = {};
+		private String[] allowedParserOptions = {};
+		private String[] allowedSerializerOptions = {};
+		private String[] noInherit = {};
 		private String[] path = {};
 		private String[] produces = {};
 
@@ -330,6 +333,39 @@ public class RestPutAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestPut#allowedSerializerOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedSerializerOptions(String...value) {
+			allowedSerializerOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestPut#allowedParserOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedParserOptions(String...value) {
+			allowedParserOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestPut#noInherit()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder noInherit(String...value) {
+			noInherit = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestPut#roleGuard()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -489,6 +525,9 @@ public class RestPutAnnotation {
 		private final String[] defaultRequestAttributes;
 		private final String[] defaultRequestHeaders;
 		private final String[] defaultResponseHeaders;
+		private final String[] allowedParserOptions;
+		private final String[] allowedSerializerOptions;
+		private final String[] noInherit;
 		private final String[] path;
 		private final String[] produces;
 
@@ -512,6 +551,9 @@ public class RestPutAnnotation {
 			matchers = copyOf(b.matchers);
 			maxInput = b.maxInput;
 			parsers = copyOf(b.parsers);
+			allowedParserOptions = copyOf(b.allowedParserOptions);
+			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
+			noInherit = copyOf(b.noInherit);
 			path = copyOf(b.path);
 			produces = copyOf(b.produces);
 			roleGuard = b.roleGuard;
@@ -605,6 +647,21 @@ public class RestPutAnnotation {
 		@Override /* Overridden from RestPut */
 		public Class<?>[] parsers() {
 			return parsers;
+		}
+
+		@Override /* Overridden from RestPut */
+		public String[] allowedParserOptions() {
+			return allowedParserOptions;
+		}
+
+		@Override /* Overridden from RestPut */
+		public String[] allowedSerializerOptions() {
+			return allowedSerializerOptions;
+		}
+
+		@Override /* Overridden from RestPut */
+		public String[] noInherit() {
+			return noInherit;
 		}
 
 		@Override /* Overridden from RestPut */

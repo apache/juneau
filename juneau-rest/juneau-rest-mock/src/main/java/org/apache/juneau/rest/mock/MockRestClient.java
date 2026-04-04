@@ -321,6 +321,54 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder serializerSessionOptionsHeader(String json5) {
+			super.serializerSessionOptionsHeader(json5);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder serializerSessionOptionsHeader(java.util.Map<String,?> properties) {
+			super.serializerSessionOptionsHeader(properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder parserSessionOptionsHeader(String json5) {
+			super.parserSessionOptionsHeader(json5);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder parserSessionOptionsHeader(java.util.Map<String,?> properties) {
+			super.parserSessionOptionsHeader(properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder serializerSessionOptionsQueryDefault(String uon) {
+			super.serializerSessionOptionsQueryDefault(uon);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder serializerSessionOptionsQueryDefault(java.util.Map<String,?> properties) {
+			super.serializerSessionOptionsQueryDefault(properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder parserSessionOptionsQueryDefault(String uon) {
+			super.parserSessionOptionsQueryDefault(uon);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder parserSessionOptionsQueryDefault(java.util.Map<String,?> properties) {
+			super.parserSessionOptionsQueryDefault(properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
 			return this;

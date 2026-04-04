@@ -41,6 +41,9 @@ class RestPostAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestPost a1 = RestPostAnnotation.create()
+		.allowedParserOptions("u1")
+		.allowedSerializerOptions("u2")
+		.noInherit("u3")
 		.clientVersion("a")
 		.consumes("b")
 		.converters(RestConverter.class)
@@ -71,6 +74,9 @@ class RestPostAnnotation_Test extends TestBase {
 		.build();
 
 	RestPost a2 = RestPostAnnotation.create()
+		.allowedParserOptions("u1")
+		.allowedSerializerOptions("u2")
+		.noInherit("u3")
 		.clientVersion("a")
 		.consumes("b")
 		.converters(RestConverter.class)
@@ -102,8 +108,8 @@ class RestPostAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"clientVersion,consumes,converters,debug,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestFormData,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,maxInput,on,parsers,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
-			"a,[b],[RestConverter],c,d,e,f,[i],[g],[j],[h],[k],[l],[Encoder],[RestGuard],[RestMatcher],m,[n],[Parser],[o],[p],q,r,[Serializer],s,{[],,[],{[],},,[],[],[],[],[],[],[]},t");
+			"allowedParserOptions,allowedSerializerOptions,clientVersion,consumes,converters,debug,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestFormData,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,maxInput,noInherit,on,parsers,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"[u1],[u2],a,[b],[RestConverter],c,d,e,f,[i],[g],[j],[h],[k],[l],[Encoder],[RestGuard],[RestMatcher],m,[u3],[n],[Parser],[o],[p],q,r,[Serializer],s,{[],,[],{[],},,[],[],[],[],[],[],[]},t");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -148,6 +154,9 @@ class RestPostAnnotation_Test extends TestBase {
 	public interface D1 {
 
 		@RestPost(
+			allowedParserOptions="u1",
+			allowedSerializerOptions="u2",
+			noInherit="u3",
 			clientVersion="a",
 			consumes="b",
 			converters=RestConverter.class,
@@ -179,6 +188,9 @@ class RestPostAnnotation_Test extends TestBase {
 		void m1();
 
 		@RestPost(
+			allowedParserOptions="u1",
+			allowedSerializerOptions="u2",
+			noInherit="u3",
 			clientVersion="a",
 			consumes="b",
 			converters=RestConverter.class,

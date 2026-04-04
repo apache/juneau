@@ -22,8 +22,10 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.rest.RestSharedConstants.*;
 
 import java.time.*;
+import java.util.Map;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
@@ -69,7 +71,7 @@ public class RestClient_Headers_Test extends TestBase {
 
 	@Rest(callLogger=CaptureLogger.class)
 	public static class A extends BasicRestObject {
-		@RestGet
+		@RestGet(allowedSerializerOptions="simple", allowedParserOptions="addBeanTypes")
 		public String[] headers(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
 		}
@@ -81,6 +83,12 @@ public class RestClient_Headers_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void a00_sessionOptionHeaders() throws Exception {
+		checkFooClient().serializerSessionOptionsHeader("{simple:true}").build().get("/headers").header("Check", HEADER_JuneauSerializerOptions).run().assertContent("[\"{simple:true}\"]");
+		checkFooClient().parserSessionOptionsHeader("{addBeanTypes:false}").build().get("/headers").header("Check", HEADER_JuneauParserOptions).run().assertContent("[\"{addBeanTypes:false}\"]");
+		checkFooClient().build().get("/headers").serializerSessionOptionsHeader(Map.of("simple", true)).header("Check", HEADER_JuneauSerializerOptions).run().assertContent().asString().isContains("simple");
+	}
 
 	@Test void a01_header_String_Object() throws Exception {
 		checkFooClient().header("Foo","bar").build().get("/headers").run().assertContent("[\"bar\"]");

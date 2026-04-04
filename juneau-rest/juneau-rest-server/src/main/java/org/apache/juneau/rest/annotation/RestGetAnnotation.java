@@ -81,6 +81,9 @@ public class RestGetAnnotation {
 		private String[] defaultRequestAttributes = {};
 		private String[] defaultRequestHeaders = {};
 		private String[] defaultResponseHeaders = {};
+		private String[] allowedParserOptions = {};
+		private String[] allowedSerializerOptions = {};
+		private String[] noInherit = {};
 		private String[] path = {};
 		private String[] produces = {};
 
@@ -270,6 +273,39 @@ public class RestGetAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestGet#allowedSerializerOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedSerializerOptions(String...value) {
+			allowedSerializerOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestGet#allowedParserOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedParserOptions(String...value) {
+			allowedParserOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestGet#noInherit()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder noInherit(String...value) {
+			noInherit = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestGet#roleGuard()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -419,6 +455,9 @@ public class RestGetAnnotation {
 		private final String[] defaultRequestAttributes;
 		private final String[] defaultRequestHeaders;
 		private final String[] defaultResponseHeaders;
+		private final String[] allowedParserOptions;
+		private final String[] allowedSerializerOptions;
+		private final String[] noInherit;
 		private final String[] path;
 		private final String[] produces;
 
@@ -437,6 +476,9 @@ public class RestGetAnnotation {
 			encoders = copyOf(b.encoders);
 			guards = copyOf(b.guards);
 			matchers = copyOf(b.matchers);
+			allowedParserOptions = copyOf(b.allowedParserOptions);
+			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
+			noInherit = copyOf(b.noInherit);
 			path = copyOf(b.path);
 			produces = copyOf(b.produces);
 			roleGuard = b.roleGuard;
@@ -505,6 +547,21 @@ public class RestGetAnnotation {
 		@Override /* Overridden from RestGet */
 		public Class<? extends RestMatcher>[] matchers() {
 			return matchers;
+		}
+
+		@Override /* Overridden from RestGet */
+		public String[] allowedParserOptions() {
+			return allowedParserOptions;
+		}
+
+		@Override /* Overridden from RestGet */
+		public String[] allowedSerializerOptions() {
+			return allowedSerializerOptions;
+		}
+
+		@Override /* Overridden from RestGet */
+		public String[] noInherit() {
+			return noInherit;
 		}
 
 		@Override /* Overridden from RestGet */

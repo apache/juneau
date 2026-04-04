@@ -92,6 +92,9 @@ public class RestOpAnnotation {
 		private String[] defaultResponseHeaders = {};
 		private String[] path = {};
 		private String[] produces = {};
+		private String[] allowedSerializerOptions = {};
+		private String[] allowedParserOptions = {};
+		private String[] noInherit = {};
 
 		/**
 		 * Constructor.
@@ -345,6 +348,39 @@ public class RestOpAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestOp#allowedSerializerOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedSerializerOptions(String...value) {
+			allowedSerializerOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#allowedParserOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedParserOptions(String...value) {
+			allowedParserOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#noInherit()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder noInherit(String...value) {
+			noInherit = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestOp#roleGuard()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -517,6 +553,9 @@ public class RestOpAnnotation {
 		private final String[] defaultResponseHeaders;
 		private final String[] path;
 		private final String[] produces;
+		private final String[] allowedSerializerOptions;
+		private final String[] allowedParserOptions;
+		private final String[] noInherit;
 
 		Object(RestOpAnnotation.Builder b) {
 			super(b);
@@ -541,6 +580,9 @@ public class RestOpAnnotation {
 			parsers = copyOf(b.parsers);
 			path = copyOf(b.path);
 			produces = copyOf(b.produces);
+			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
+			allowedParserOptions = copyOf(b.allowedParserOptions);
+			noInherit = copyOf(b.noInherit);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
 			serializers = copyOf(b.serializers);
@@ -647,6 +689,21 @@ public class RestOpAnnotation {
 		@Override /* Overridden from RestOp */
 		public String[] produces() {
 			return produces;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] allowedSerializerOptions() {
+			return allowedSerializerOptions;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] allowedParserOptions() {
+			return allowedParserOptions;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] noInherit() {
+			return noInherit;
 		}
 
 		@Override /* Overridden from RestOp */

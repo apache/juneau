@@ -77,6 +77,9 @@ public class StringUtils {
 	/** Zero-length string constant. */
 	public static final String EMPTY = "";
 
+	/** Zero-length string array constant. */
+	public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
 	/** Characters allowed at the beginning of a numeric literal. */
 	public static final AsciiSet FIRST_NUMBER_CHARS = AsciiSet.of("+-.#0123456789");
 

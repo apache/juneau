@@ -77,6 +77,9 @@ public class RestDeleteAnnotation {
 		private String[] defaultRequestAttributes = {};
 		private String[] defaultRequestHeaders = {};
 		private String[] defaultResponseHeaders = {};
+		private String[] allowedParserOptions = {};
+		private String[] allowedSerializerOptions = {};
+		private String[] noInherit = {};
 		private String[] path = {};
 
 		/**
@@ -242,6 +245,39 @@ public class RestDeleteAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestDelete#allowedSerializerOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedSerializerOptions(String...value) {
+			allowedSerializerOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestDelete#allowedParserOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedParserOptions(String...value) {
+			allowedParserOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestDelete#noInherit()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder noInherit(String...value) {
+			noInherit = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestDelete#roleGuard()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -374,6 +410,9 @@ public class RestDeleteAnnotation {
 		private final String[] defaultRequestAttributes;
 		private final String[] defaultRequestHeaders;
 		private final String[] defaultResponseHeaders;
+		private final String[] allowedParserOptions;
+		private final String[] allowedSerializerOptions;
+		private final String[] noInherit;
 		private final String[] path;
 
 		Object(RestDeleteAnnotation.Builder b) {
@@ -390,6 +429,9 @@ public class RestDeleteAnnotation {
 			encoders = copyOf(b.encoders);
 			guards = copyOf(b.guards);
 			matchers = copyOf(b.matchers);
+			allowedParserOptions = copyOf(b.allowedParserOptions);
+			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
+			noInherit = copyOf(b.noInherit);
 			path = copyOf(b.path);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
@@ -451,6 +493,21 @@ public class RestDeleteAnnotation {
 		@Override /* Overridden from RestDelete */
 		public Class<? extends RestMatcher>[] matchers() {
 			return matchers;
+		}
+
+		@Override /* Overridden from RestDelete */
+		public String[] allowedParserOptions() {
+			return allowedParserOptions;
+		}
+
+		@Override /* Overridden from RestDelete */
+		public String[] allowedSerializerOptions() {
+			return allowedSerializerOptions;
+		}
+
+		@Override /* Overridden from RestDelete */
+		public String[] noInherit() {
+			return noInherit;
 		}
 
 		@Override /* Overridden from RestDelete */

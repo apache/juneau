@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.rest.RestServerConstants.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -32,12 +33,14 @@ import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.*;
 import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
+import org.apache.juneau.commons.function.Memoizer;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
@@ -2178,6 +2181,107 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	protected final SerializerSet serializers;
 	protected final String httpMethod;
 	protected final UrlPathMatcher[] pathMatchers;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Memoized allowlist fields
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/** Memoized all {@link RestOp}-group annotations on this method, child-to-parent order. */
+	private final Memoizer<List<AnnotationInfo<?>>> restOpAnnotations = memoizer(this::findRestOpAnnotations);
+
+	private List<AnnotationInfo<?>> findRestOpAnnotations() {
+		return context.getAnnotationProvider().find(mi, SELF, MATCHING_METHODS).stream()
+			.filter(ai -> ai.isInGroup(RestOp.class))
+			.toList();
+	}
+
+	/** Memoized aggregated {@code noInherit} keys from all RestOp-group annotations on this operation. */
+	private final Memoizer<SortedSet<String>> noInheritOp = memoizer(this::findNoInheritOp);
+
+	private SortedSet<String> findNoInheritOp() {
+		var l = getRestOpAnnotations().stream()
+			.map(ai -> ai.getStringArray("noInherit").orElse(StringUtils.EMPTY_STRING_ARRAY))
+			.flatMap(arr -> resolveCdl(arr))
+			.toList();
+		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, l));
+	}
+
+	/** Memoized effective allowed parser option keys for this operation. */
+	private final Memoizer<SortedSet<String>> allowedParserOptions = memoizer(this::findAllowedParserOptions);
+
+	private SortedSet<String> findAllowedParserOptions() {
+		var l = new ArrayList<String>();
+		var p = PROPERTY_allowedParserOptions;
+		if (isInherited(p))
+			l.addAll(context.getAllowedParserOptions());
+		getRestOpAnnotations().stream()
+			.flatMap(ai -> resolveCdl(ai.getStringArray(p).orElse(new String[0])))
+			.forEach(l::add);
+		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
+	}
+
+	/** Memoized effective allowed serializer option keys for this operation. */
+	private final Memoizer<SortedSet<String>> allowedSerializerOptions = memoizer(this::findAllowedSerializerOptions);
+
+	private SortedSet<String> findAllowedSerializerOptions() {
+		var l = new ArrayList<String>();
+		var p = PROPERTY_allowedSerializerOptions;
+		if (isInherited(p))
+			l.addAll(context.getAllowedSerializerOptions());
+		getRestOpAnnotations().stream()
+			.flatMap(ai -> resolveCdl(ai.getStringArray(p).orElse(new String[0])))
+			.forEach(l::add);
+		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
+	}
+
+	private Stream<String> resolveCdl(String...values) {
+		if (values == null || values.length == 0)
+			return Stream.empty();
+		return Arrays.stream(values)
+			.filter(Objects::nonNull)
+			.map(s -> RestOpContext.this.context.getVarResolver().resolve(s))
+			.map(StringUtils::split)
+			.flatMap(Collection::stream)
+			.map(String::trim)
+			.filter(StringUtils::isNotBlank);
+	}
+
+	/**
+	 * Returns all {@link RestOp}-group annotations on this operation method, in child-to-parent order.
+	 *
+	 * @return An unmodifiable list, never {@code null}.
+	 */
+	public List<AnnotationInfo<?>> getRestOpAnnotations() {
+		return restOpAnnotations.get();
+	}
+
+	/**
+	 * Returns {@code true} if context-level values for the given property should be merged.
+	 *
+	 * @param property The annotation attribute name.
+	 * @return {@code true} if {@code noInherit} does not contain this property.
+	 */
+	protected boolean isInherited(String property) {
+		return !noInheritOp.get().contains(property);
+	}
+
+	/**
+	 * Returns the parser session-option keys allowed for this operation.
+	 *
+	 * @return An unmodifiable case-insensitive sorted set, never {@code null}.
+	 */
+	public SortedSet<String> getAllowedParserOptions() {
+		return allowedParserOptions.get();
+	}
+
+	/**
+	 * Returns the serializer session-option keys allowed for this operation.
+	 *
+	 * @return An unmodifiable case-insensitive sorted set, never {@code null}.
+	 */
+	public SortedSet<String> getAllowedSerializerOptions() {
+		return allowedSerializerOptions.get();
+	}
 
 	/**
 	 * Context constructor.

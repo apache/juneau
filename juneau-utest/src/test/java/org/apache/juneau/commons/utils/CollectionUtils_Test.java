@@ -1659,4 +1659,26 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(1, intSet.first());
 		assertEquals(3, intSet.last());
 	}
+
+	//====================================================================================================
+	// isEmpty(Collection<?>)
+	//====================================================================================================
+	@Test
+	void a096_isEmpty_collection() {
+		assertTrue(isEmpty((java.util.Collection<?>)null));
+		assertTrue(isEmpty(list()));
+		assertFalse(isEmpty(list("a")));
+		assertFalse(isEmpty(list("a", "b")));
+	}
+
+	//====================================================================================================
+	// isEmpty(Map<?,?>)
+	//====================================================================================================
+	@Test
+	void a097_isEmpty_map() {
+		assertTrue(isEmpty((java.util.Map<?,?>)null));
+		assertTrue(isEmpty(map()));
+		assertFalse(isEmpty(map("k", "v")));
+		assertFalse(isEmpty(map("k1", "v1", "k2", "v2")));
+	}
 }

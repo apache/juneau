@@ -129,6 +129,8 @@ import org.apache.juneau.commons.collections.*;
 public class CollectionUtils {
 
 	// Argument name constants for assertArgNotNull
+	private static final String ARG_comparator = "comparator";
+	private static final String ARG_input = "input";
 	private static final String ARG_value = "value";
 	private static final String ARG_array = "array";
 	private static final String ARG_arrays = "arrays";
@@ -867,6 +869,26 @@ public class CollectionUtils {
 	 */
 	public static int[] ints(int...value) {
 		return value;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified collection is null or empty.
+	 *
+	 * @param c The collection to check.
+	 * @return <jk>true</jk> if the specified collection is null or empty.
+	 */
+	public static boolean isEmpty(Collection<?> c) {
+		return c == null || c.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified map is null or empty.
+	 *
+	 * @param m The map to check.
+	 * @return <jk>true</jk> if the specified map is null or empty.
+	 */
+	public static boolean isEmpty(Map<?,?> m) {
+		return m == null || m.isEmpty();
 	}
 
 	/**
@@ -2013,6 +2035,64 @@ public class CollectionUtils {
 		if (value == null || value.isEmpty())
 			return Stream.empty();
 		return IntStream.range(0, value.size()).mapToObj(i -> value.get(value.size() - 1 - i));
+	}
+
+	/**
+	 * Removes negation tokens from a list.
+	 *
+	 * <p>
+	 * A negation token is a string starting with <js>'-'</js> followed by at least one character.
+	 * When encountered, it removes the first prior occurrence of the corresponding positive token.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>result</jv> = <jsm>removeNegations</jsm>(list(<js>"a"</js>, <js>"b"</js>, <js>"-a"</js>, <js>"c"</js>));
+	 * 	<jc>// Produces: ["b", "c"]</jc>
+	 * </p>
+	 *
+	 * @param input The input list. Cannot be <jk>null</jk>.
+	 * @return The list with negation tokens applied, or the original list if no negation tokens were present.
+	 */
+	public static List<String> removeNegations(List<String> input) {
+		assertArgNotNull(ARG_input, input);
+		var hasNegation = false;
+		for (var token : input) {
+			if (token != null && token.length() > 1 && token.charAt(0) == '-') {
+				hasNegation = true;
+				break;
+			}
+		}
+		if (!hasNegation)
+			return input;
+		var out = new ArrayList<String>(input.size());
+		for (var token : input) {
+			if (token != null && token.length() > 1 && token.charAt(0) == '-')
+				out.remove(token.substring(1));
+			else
+				out.add(token);
+		}
+		return out;
+	}
+
+	/**
+	 * Creates a {@link TreeSet} with a custom comparator from a collection of elements.
+	 *
+	 * <p>
+	 * Null elements in the collection are silently skipped.
+	 *
+	 * @param <E> The element type.
+	 * @param comparator The comparator to use for ordering. Cannot be <jk>null</jk>.
+	 * @param elements The initial elements. Can be <jk>null</jk> (treated as empty).
+	 * @return A new {@link TreeSet} containing all non-null elements from the collection.
+	 */
+	public static <E> SortedSet<E> treeSet(Comparator<? super E> comparator, Collection<? extends E> elements) {
+		assertArgNotNull(ARG_comparator, comparator);
+		var s = new TreeSet<E>(comparator);
+		if (elements != null)
+			for (var e : elements)
+				if (e != null)
+					s.add(e);
+		return s;
 	}
 
 	/**

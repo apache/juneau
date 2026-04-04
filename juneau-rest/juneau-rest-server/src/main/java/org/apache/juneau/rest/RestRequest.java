@@ -18,6 +18,7 @@ package org.apache.juneau.rest;
 
 import static java.util.Optional.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.rest.RestSharedConstants.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -31,6 +32,8 @@ import java.net.*;
 import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
@@ -57,6 +60,9 @@ import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.marshaller.*;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.uon.*;
 
 import jakarta.servlet.*;
@@ -212,6 +218,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	private Swagger swagger;
 
 	private Charset charset;
+	private Map<String,Object> serializerSessionProperties;
+	private Map<String,Object> parserSessionProperties;
 
 	/**
 	 * Constructor.
@@ -1425,6 +1433,200 @@ public class RestRequest extends HttpServletRequestWrapper {
 	@Override
 	public void setAttribute(String name, Object value) {
 		attrs.set(name, value);
+	}
+
+	/**
+	 * Sets a serializer session property programmatically.
+	 *
+	 * <p>
+	 * Session properties override context-level properties and can be used to customize serializer behavior for this request only.
+	 *
+	 * @param name The property name (e.g. {@code "escapeSolidus"}).
+	 * @param value The property value.
+	 * @return This object.
+	 */
+	public RestRequest setSerializerSessionProperty(String name, Object value) {
+		if (serializerSessionProperties == null)
+			serializerSessionProperties = new LinkedHashMap<>();
+		serializerSessionProperties.put(name, value);
+		return this;
+	}
+
+	/**
+	 * Sets a parser session property programmatically.
+	 *
+	 * <p>
+	 * Session properties override context-level properties and can be used to customize parser behavior for this request only.
+	 *
+	 * @param name The property name (e.g. {@code "trimStrings"}).
+	 * @param value The property value.
+	 * @return This object.
+	 */
+	public RestRequest setParserSessionProperty(String name, Object value) {
+		if (parserSessionProperties == null)
+			parserSessionProperties = new LinkedHashMap<>();
+		parserSessionProperties.put(name, value);
+		return this;
+	}
+
+	/**
+	 * Sets multiple serializer session properties programmatically.
+	 *
+	 * @param values The properties to set. Can be {@code null}.
+	 * @return This object.
+	 */
+	public RestRequest setSerializerSessionProperties(Map<String,Object> values) {
+		if (values != null && !values.isEmpty()) {
+			if (serializerSessionProperties == null)
+				serializerSessionProperties = new LinkedHashMap<>();
+			serializerSessionProperties.putAll(values);
+		}
+		return this;
+	}
+
+	/**
+	 * Sets multiple parser session properties programmatically.
+	 *
+	 * @param values The properties to set. Can be {@code null}.
+	 * @return This object.
+	 */
+	public RestRequest setParserSessionProperties(Map<String,Object> values) {
+		if (values != null && !values.isEmpty()) {
+			if (parserSessionProperties == null)
+				parserSessionProperties = new LinkedHashMap<>();
+			parserSessionProperties.putAll(values);
+		}
+		return this;
+	}
+
+	/**
+	 * Returns the merged serializer session property map for this request.
+	 *
+	 * <p>
+	 * Merges (in order of increasing priority):
+	 * <ol>
+	 * 	<li>Request attributes (from {@link #getAttributes()}, e.g. {@code defaultRequestAttributes})
+	 * 	<li>UON-encoded {@code juneauSerializerOptions} query parameter
+	 * 	<li>JSON5-encoded {@code X-Juneau-Serializer-Options} header
+	 * 	<li>Programmatically-set properties via {@link #setSerializerSessionProperty}
+	 * </ol>
+	 *
+	 * <p>
+	 * Client-supplied keys are validated against the allowlist from {@link RestOpContext#getAllowedSerializerOptions()}.
+	 * Keys not in the allowlist cause a {@code 400 Bad Request} response.
+	 *
+	 * @return An unmodifiable map of session properties; may be empty but never {@code null}.
+	 */
+	@SuppressWarnings({
+		"java:S3776" // cognitive complexity acceptable; sequential null-checks for 4 sources
+	})
+	public Map<String,Object> getSerializerSessionPropertyMap() {
+		var allowlist = opContext.getAllowedSerializerOptions();
+		Map<String,Object> m1 = null, m2 = null;
+
+		var q = getQueryParams().get(QUERY_juneauSerializerOptions).asString().orElse(null);
+		if (q != null && !q.isBlank()) {
+			m1 = parseUonMap(q, e -> badRequest(e, "Could not parse UON session options from query parameter ''{0}''.", QUERY_juneauSerializerOptions));
+			var invalid = m1.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
+			if (!invalid.isEmpty())
+				badRequest("Invalid session options in query parameter ''{0}'': ''{1}''", QUERY_juneauSerializerOptions, invalid);
+		}
+
+		var h = getHeaderParam(HEADER_JuneauSerializerOptions).asString().orElse(null);
+		if (h != null && !h.isBlank()) {
+			m2 = parseJsonMap(h, e -> badRequest(e, "Could not parse JSON5 session options from header ''{0}''.", HEADER_JuneauSerializerOptions));
+			var invalid = m2.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
+			if (!invalid.isEmpty())
+				badRequest("Invalid session options in header ''{0}'': ''{1}''", HEADER_JuneauSerializerOptions, invalid);
+		}
+
+		return mergeSessionMaps(getAttributes().asMap(), m1, m2, serializerSessionProperties);
+	}
+
+	/**
+	 * Returns the merged parser session property map for this request.
+	 *
+	 * <p>
+	 * Merges (in order of increasing priority):
+	 * <ol>
+	 * 	<li>Request attributes (from {@link #getAttributes()}, e.g. {@code defaultRequestAttributes})
+	 * 	<li>UON-encoded {@code juneauParserOptions} query parameter
+	 * 	<li>JSON5-encoded {@code X-Juneau-Parser-Options} header
+	 * 	<li>Programmatically-set properties via {@link #setParserSessionProperty}
+	 * </ol>
+	 *
+	 * <p>
+	 * Client-supplied keys are validated against the allowlist from {@link RestOpContext#getAllowedParserOptions()}.
+	 * Keys not in the allowlist cause a {@code 400 Bad Request} response.
+	 *
+	 * @return An unmodifiable map of session properties; may be empty but never {@code null}.
+	 */
+	@SuppressWarnings({
+		"java:S3776" // cognitive complexity acceptable; sequential null-checks for 4 sources
+	})
+	public Map<String,Object> getParserSessionPropertyMap() {
+		var allowlist = opContext.getAllowedParserOptions();
+		Map<String,Object> m1 = null, m2 = null;
+
+		var q = getQueryParams().get(QUERY_juneauParserOptions).asString().orElse(null);
+		if (q != null && !q.isBlank()) {
+			m1 = parseUonMap(q, e -> badRequest(e, "Could not parse UON session options from query parameter ''{0}''.", QUERY_juneauParserOptions));
+			var invalid = m1.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
+			if (!invalid.isEmpty())
+				badRequest("Invalid session options in query parameter ''{0}'': ''{1}''", QUERY_juneauParserOptions, invalid);
+		}
+
+		var h = getHeaderParam(HEADER_JuneauParserOptions).asString().orElse(null);
+		if (h != null && !h.isBlank()) {
+			m2 = parseJsonMap(h, e -> badRequest(e, "Could not parse JSON5 session options from header ''{0}''.", HEADER_JuneauParserOptions));
+			var invalid = m2.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
+			if (!invalid.isEmpty())
+				badRequest("Invalid session options in header ''{0}'': ''{1}''", HEADER_JuneauParserOptions, invalid);
+		}
+
+		return mergeSessionMaps(getAttributes().asMap(), m1, m2, parserSessionProperties);
+	}
+
+	@SafeVarargs
+	private static Map<String,Object> mergeSessionMaps(Map<String,Object>...maps) {
+		Map<String,Object> result = null;
+		for (var map : maps) {
+			if (map != null && !map.isEmpty()) {
+				if (result == null)
+					result = new LinkedHashMap<>(map);
+				else
+					result.putAll(map);
+			}
+		}
+		return result != null ? Collections.unmodifiableMap(result) : Collections.emptyMap();
+	}
+
+	private static void badRequest(String msg, Object...args) {
+		throw new BadRequest(msg, args);
+	}
+
+	private static void badRequest(Exception causedBy, String msg, Object...args) {
+		throw new BadRequest(causedBy, msg, args);
+	}
+
+	private static Map<String,Object> parseUonMap(String input, Consumer<ParseException> onError) {
+		try {
+			var m = Uon.DEFAULT.read(input, JsonMap.class);
+			return m != null ? m : Collections.emptyMap();
+		} catch (ParseException e) {
+			onError.accept(e);
+			return Collections.emptyMap();
+		}
+	}
+
+	private static Map<String,Object> parseJsonMap(String input, Consumer<ParseException> onError) {
+		try {
+			var m = Json5.DEFAULT.read(input, JsonMap.class);
+			return m != null ? m : Collections.emptyMap();
+		} catch (ParseException e) {
+			onError.accept(e);
+			return Collections.emptyMap();
+		}
 	}
 
 	/**

@@ -72,7 +72,7 @@ public class SerializedPojoProcessor implements ResponseProcessor {
 				// @formatter:off
 				SerializerSession session = s
 					.createSession()
-					.properties(req.getAttributes().asMap())
+					.properties(req.getSerializerSessionPropertyMap())
 					.javaMethod(req.getOpContext().getJavaMethod())
 					.locale(req.getLocale())
 					.timeZone(req.getTimeZone().orElse(null))

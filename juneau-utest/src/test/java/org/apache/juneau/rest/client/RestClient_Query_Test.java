@@ -20,6 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.rest.RestSharedConstants.*;
 
 import java.io.*;
 
@@ -49,6 +50,15 @@ class RestClient_Query_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	// Method tests
 	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void a00_sessionOptionQuery() throws Exception {
+		client().serializerSessionOptionsQueryDefault("(simple=true)").build().get("/query").run().assertContent().asString().asUrlDecode()
+			.isContains(QUERY_juneauSerializerOptions + "=(simple=true)");
+		client().parserSessionOptionsQueryDefault("(strict=true)").build().get("/query").run().assertContent().asString().asUrlDecode()
+			.isContains(QUERY_juneauParserOptions + "=(strict=true)");
+		client().build().get("/query").serializerSessionOptionsQuery("(a=1)").run().assertContent().asString().asUrlDecode()
+			.isContains(QUERY_juneauSerializerOptions + "=(a=1)");
+	}
 
 	@Test void a01_query_String_Object() throws Exception {
 		client().queryData("foo","bar").queryData(part("foo",new StringBuilder("baz"),null)).build().get("/query").run().assertContent("foo=bar&foo=baz");

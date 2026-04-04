@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import org.apache.juneau.rest.RestSharedConstants;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -1690,6 +1691,128 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest plainText() {
 		return serializer(PlainTextSerializer.class).parser(PlainTextParser.class);
+	}
+
+	/**
+	 * Sets the {@code X-Juneau-Serializer-Options} header for this request.
+	 *
+	 * <p>
+	 * The value is a JSON5 object whose keys are serializer session property names and values are the overrides.
+	 * Example: <js>"{escapeSolidus:true,maxIndent:4}"</js>.
+	 *
+	 * @param json5
+	 * 	Serializer session options as JSON5. Can be <jk>null</jk> (header is not set).
+	 * @return This object.
+	 */
+	public RestRequest serializerSessionOptionsHeader(String json5) {
+		return header(RestSharedConstants.HEADER_JuneauSerializerOptions, json5);
+	}
+
+	/**
+	 * Sets the {@code X-Juneau-Parser-Options} header for this request.
+	 *
+	 * <p>
+	 * The value is a JSON5 object whose keys are parser session property names and values are the overrides.
+	 *
+	 * @param json5
+	 * 	Parser session options as JSON5. Can be <jk>null</jk> (header is not set).
+	 * @return This object.
+	 */
+	public RestRequest parserSessionOptionsHeader(String json5) {
+		return header(RestSharedConstants.HEADER_JuneauParserOptions, json5);
+	}
+
+	/**
+	 * Convenience for {@link #serializerSessionOptionsHeader(String)} using a map serialized with {@link org.apache.juneau.marshaller.Json5#of(Object)}.
+	 *
+	 * @param properties
+	 * 	Property map for serializer session options. Can be <jk>null</jk> (treated as empty).
+	 * @return This object.
+	 */
+	public RestRequest serializerSessionOptionsHeader(Map<String,?> properties) {
+		if (isEmpty(properties))
+			return this;
+		try {
+			return header(RestSharedConstants.HEADER_JuneauSerializerOptions, org.apache.juneau.marshaller.Json5.of(properties));
+		} catch (org.apache.juneau.serializer.SerializeException e) {
+			throw new RuntimeException("Could not serialize serializer session options header", e);
+		}
+	}
+
+	/**
+	 * Convenience for {@link #parserSessionOptionsHeader(String)} using a map serialized with {@link org.apache.juneau.marshaller.Json5#of(Object)}.
+	 *
+	 * @param properties
+	 * 	Property map for parser session options. Can be <jk>null</jk> (treated as empty).
+	 * @return This object.
+	 */
+	public RestRequest parserSessionOptionsHeader(Map<String,?> properties) {
+		if (isEmpty(properties))
+			return this;
+		try {
+			return header(RestSharedConstants.HEADER_JuneauParserOptions, org.apache.juneau.marshaller.Json5.of(properties));
+		} catch (org.apache.juneau.serializer.SerializeException e) {
+			throw new RuntimeException("Could not serialize parser session options header", e);
+		}
+	}
+
+	/**
+	 * Sets the {@code juneauSerializerOptions} query parameter for this request (UON-encoded map).
+	 *
+	 * <p>
+	 * Example: <js>"(escapeSolidus=true,maxIndent=4)"</js>.
+	 *
+	 * @param uon
+	 * 	Serializer session options in UON form. Can be <jk>null</jk> (parameter is not set).
+	 * @return This object.
+	 */
+	public RestRequest serializerSessionOptionsQuery(String uon) {
+		return queryData(RestSharedConstants.QUERY_juneauSerializerOptions, uon);
+	}
+
+	/**
+	 * Sets the {@code juneauParserOptions} query parameter for this request (UON-encoded map).
+	 *
+	 * @param uon
+	 * 	Parser session options in UON form. Can be <jk>null</jk> (parameter is not set).
+	 * @return This object.
+	 */
+	public RestRequest parserSessionOptionsQuery(String uon) {
+		return queryData(RestSharedConstants.QUERY_juneauParserOptions, uon);
+	}
+
+	/**
+	 * Convenience for {@link #serializerSessionOptionsQuery(String)} using {@link org.apache.juneau.marshaller.Uon#of(Object)}.
+	 *
+	 * @param properties
+	 * 	Property map for serializer session options. Can be <jk>null</jk> (treated as empty).
+	 * @return This object.
+	 */
+	public RestRequest serializerSessionOptionsQuery(Map<String,?> properties) {
+		if (isEmpty(properties))
+			return this;
+		try {
+			return serializerSessionOptionsQuery(org.apache.juneau.marshaller.Uon.of(properties));
+		} catch (org.apache.juneau.serializer.SerializeException e) {
+			throw new RuntimeException("Could not serialize serializer session options query", e);
+		}
+	}
+
+	/**
+	 * Convenience for {@link #parserSessionOptionsQuery(String)} using {@link org.apache.juneau.marshaller.Uon#of(Object)}.
+	 *
+	 * @param properties
+	 * 	Property map for parser session options. Can be <jk>null</jk> (treated as empty).
+	 * @return This object.
+	 */
+	public RestRequest parserSessionOptionsQuery(Map<String,?> properties) {
+		if (isEmpty(properties))
+			return this;
+		try {
+			return parserSessionOptionsQuery(org.apache.juneau.marshaller.Uon.of(properties));
+		} catch (org.apache.juneau.serializer.SerializeException e) {
+			throw new RuntimeException("Could not serialize parser session options query", e);
+		}
 	}
 
 	/**
