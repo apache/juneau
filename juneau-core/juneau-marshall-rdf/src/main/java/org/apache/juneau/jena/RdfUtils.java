@@ -34,6 +34,8 @@ import org.apache.juneau.xml.*;
  */
 public class RdfUtils {
 
+	private RdfUtils() {}
+
 	/**
 	 * Find the namespace given a list of <ja>@Rdf</ja> and <ja>@RdfSchema</ja> annotations.
 	 *
@@ -61,6 +63,9 @@ public class RdfUtils {
 		return null;
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for exhaustive RDF namespace resolution across annotation hierarchies
+	})
 	private static Namespace findNamespace(String prefix, String ns, List<Rdf> rdfs, List<RdfSchema> schemas) {
 
 		// If both prefix and namespace specified, use that Namespace mapping.

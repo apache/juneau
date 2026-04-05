@@ -34,7 +34,8 @@ import org.apache.juneau.commons.reflect.*;
  */
 @SuppressWarnings({
 	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
-	"java:S3011"  // Reflection access needed for class introspection utilities
+	"java:S3011", // Reflection access needed for class introspection utilities
+	"java:S3740"  // Raw Class/Constructor types used intentionally for generic class-loading and reflection utilities
 })
 public class ClassUtils {
 

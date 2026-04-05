@@ -101,12 +101,12 @@ class MarkdownWriter_Test {
 		assertEquals("---\n", out);
 	}
 
-	@Test void c12_escapePipe() throws Exception {
+	@Test void c12_escapePipe() {
 		var out = MarkdownWriter.escapeCell("hello | world");
 		assertEquals("hello \\| world", out);
 	}
 
-	@Test void c13_escapeBackslash() throws Exception {
+	@Test void c13_escapeBackslash() {
 		var out = MarkdownWriter.escapeCell("path\\to\\file");
 		assertEquals("path\\\\to\\\\file", out);
 	}

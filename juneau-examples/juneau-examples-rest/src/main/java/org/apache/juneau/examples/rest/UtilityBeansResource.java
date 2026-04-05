@@ -59,6 +59,9 @@ public class UtilityBeansResource extends BasicRestObject {
 	/**
 	 * Sample address bean used for demonstrating utility bean functionality.
 	 */
+	@SuppressWarnings({
+		"java:S1104" // All public fields intentional for direct bean serialization in REST example demonstrations
+	})
 	@Bean(p = "street,city,state,zip,isCurrent")
 	public static class Address {
 

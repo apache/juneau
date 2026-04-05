@@ -952,9 +952,9 @@ public class Parser extends BeanContextable {
 		trimStrings = builder.trimStrings;
 		unbuffered = builder.unbuffered;
 
-	String[] consumesArray = splita(nn(consumes) ? consumes : "");
+	String[] consumesParts = splita(nn(consumes) ? consumes : "");
 	List<MediaType> consumesList = new ArrayList<>();
-	for (var consume : consumesArray) {
+	for (var consume : consumesParts) {
 		consumesList.add(MediaType.of(consume));
 	}
 	this.consumesArray = u(consumesList);

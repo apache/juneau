@@ -44,9 +44,10 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
+	"resource",  // Resource management handled externally
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115" // Constants use UPPER_snakeCase naming convention
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S3776" // Cognitive complexity acceptable for YAML serializer session methods
 })
 public class YamlSerializerSession extends WriterSerializerSession {
 

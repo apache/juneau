@@ -50,7 +50,8 @@ import org.apache.juneau.http.header.*;
  */
 @BeanIgnore
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_value)
+	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_value)
+	"java:S3740"  // Raw Supplier/Object types used where HTTP part value type cannot be parameterized at this abstraction level
 })
 public class BasicPart implements NameValuePair, Headerable {
 

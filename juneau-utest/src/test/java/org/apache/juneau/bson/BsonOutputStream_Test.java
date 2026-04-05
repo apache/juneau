@@ -34,7 +34,7 @@ import org.junit.jupiter.api.*;
 class BsonOutputStream_Test extends TestBase {
 
 	@Test
-	void a01_emptyDocument() throws Exception {
+	void a01_emptyDocument() {
 		var out = new ByteArrayOutputStream();
 		var bson = new BsonOutputStream(out);
 		bson.startDocument();
@@ -45,7 +45,7 @@ class BsonOutputStream_Test extends TestBase {
 	}
 
 	@Test
-	void a02_simpleKeyValueDocument() throws Exception {
+	void a02_simpleKeyValueDocument() {
 		var out = new ByteArrayOutputStream();
 		var bson = new BsonOutputStream(out);
 		bson.startDocument();
@@ -57,7 +57,7 @@ class BsonOutputStream_Test extends TestBase {
 	}
 
 	@Test
-	void a03_writePrimitives() throws Exception {
+	void a03_writePrimitives() {
 		var out = new ByteArrayOutputStream();
 		var bson = new BsonOutputStream(out);
 		bson.startDocument();
@@ -75,7 +75,7 @@ class BsonOutputStream_Test extends TestBase {
 	}
 
 	@Test
-	void a04_writeDecimal128() throws Exception {
+	void a04_writeDecimal128() {
 		var out = new ByteArrayOutputStream();
 		var bson = new BsonOutputStream(out);
 		bson.startDocument();

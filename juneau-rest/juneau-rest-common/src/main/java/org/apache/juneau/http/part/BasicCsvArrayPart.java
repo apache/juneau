@@ -33,6 +33,9 @@ import org.apache.juneau.assertions.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicPart compares name+value; typed field is accessed via getValue()
+})
 public class BasicCsvArrayPart extends BasicPart {
 	private static final String[] EMPTY = {};
 

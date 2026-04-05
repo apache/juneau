@@ -32,6 +32,9 @@ import java.math.MathContext;
  * 	<li class='link'><a class="doclink" href="https://bsonspec.org/spec.html">BSON Specification</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S115" // NaN_MASK uses industry-standard NaN casing (Not-a-Number) rather than all-caps NANMASK
+})
 public final class BsonDecimal128 {
 
 	private static final MathContext DECIMAL128 = new MathContext(34);
@@ -42,7 +45,7 @@ public final class BsonDecimal128 {
 	private static final int MAX_EXPONENT = 6111;
 	private static final int EXPONENT_OFFSET = 6176;
 	private static final int MAX_BIT_LENGTH = 113;
-	private static final BigInteger TEN = new BigInteger("10");
+	private static final BigInteger TEN = BigInteger.TEN;
 	private static final BigInteger ZERO = BigInteger.ZERO;
 	private static final BigInteger ONE = BigInteger.ONE;
 
@@ -99,7 +102,7 @@ public final class BsonDecimal128 {
 			if (significand.testBit(i))
 				localHigh |= 1L << (i - 64);
 
-		long biasedExponent = exponent + EXPONENT_OFFSET;
+		long biasedExponent = (long)exponent + EXPONENT_OFFSET;
 		localHigh |= biasedExponent << 49;
 
 		if (value.signum() == -1 || isNegative)
@@ -110,7 +113,7 @@ public final class BsonDecimal128 {
 	}
 
 	private static BigDecimal clampAndRound(BigDecimal initialValue) {
-		var value = initialValue;
+		BigDecimal value;
 		if (-initialValue.scale() > MAX_EXPONENT) {
 			int diff = -initialValue.scale() - MAX_EXPONENT;
 			if (initialValue.unscaledValue().equals(ZERO))

@@ -90,7 +90,7 @@ class ProtoEdgeCases_Test {
 	}
 
 	@Test
-	void g08_cyclicReferences() throws Exception {
+	void g08_cyclicReferences() {
 		var a = new JsonMap();
 		a.put("name", "self");
 		a.put("ref", a);

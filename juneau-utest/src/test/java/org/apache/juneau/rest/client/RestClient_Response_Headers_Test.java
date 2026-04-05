@@ -63,6 +63,9 @@ class RestClient_Response_Headers_Test extends TestBase {
 		assertTrue(checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").isPresent());
 	}
 
+	@SuppressWarnings({
+		"java:S1144" // Private constructor is intentional; A2 is a test fixture verifying that types with no accessible constructor are handled gracefully
+	})
 	public static class A2 extends BasicHeader {
 		private static final long serialVersionUID = 1L;
 

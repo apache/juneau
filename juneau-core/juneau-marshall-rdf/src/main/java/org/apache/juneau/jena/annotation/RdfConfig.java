@@ -41,6 +41,9 @@ import org.apache.juneau.xml.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 @ContextApply({ RdfConfigAnnotation.SerializerApply.class, RdfConfigAnnotation.ParserApply.class })
+@SuppressWarnings({
+	"java:S100" // Method names use underscore-separated namespacing convention (e.g. rdfxml_xmlbase, n3_minGap) to group related settings
+})
 public @interface RdfConfig {
 
 	/**

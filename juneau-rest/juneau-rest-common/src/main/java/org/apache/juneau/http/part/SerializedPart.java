@@ -44,6 +44,10 @@ import org.apache.juneau.urlencoding.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S3740", // Raw HttpPartSerializer/Supplier types used where serialized HTTP part value type cannot be statically parameterized
+	"java:S2160"  // equals() inherited from BasicPart compares name+value; serializer field affects rendering not identity
+})
 public class SerializedPart extends BasicPart {
 
 	/**

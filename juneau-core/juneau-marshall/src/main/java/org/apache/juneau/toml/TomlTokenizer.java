@@ -33,6 +33,7 @@ import org.apache.juneau.parser.ParseException;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S115",  // Constants use naming conventions that embed type info or config keys (e.g. PROP_strictMode)
 	"java:S3776", // Cognitive complexity acceptable for TOML grammar
 	"java:S6541"  // Brain method acceptable for tokenizer
 })

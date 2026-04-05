@@ -44,6 +44,9 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header
 @Schema(type = "integer", format = "int32")
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; typed Integer field is accessed via getValue()
+})
 public class BasicIntegerHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 

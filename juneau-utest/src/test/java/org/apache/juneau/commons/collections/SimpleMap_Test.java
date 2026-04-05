@@ -387,7 +387,7 @@ class SimpleMap_Test extends TestBase {
 		Object[] values = { "value1" };
 		SimpleMap<String,Object> map = new SimpleMap<>(keys, values);
 
-		assertFalse(map.equals("not-a-map"));
+		assertFalse(map.equals((Object)"not-a-map"));
 		assertFalse(map.equals(null));
 	}
 
@@ -398,7 +398,7 @@ class SimpleMap_Test extends TestBase {
 		SimpleMap<String,Object> map = new SimpleMap<>(keys, values);
 
 		var entry = map.entrySet().iterator().next();
-		assertFalse(entry.equals("not-an-entry"));
+		assertFalse(entry.equals((Object)"not-an-entry"));
 		assertFalse(entry.equals(null));
 	}
 

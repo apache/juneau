@@ -67,7 +67,8 @@ import org.apache.juneau.svl.vars.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource" // VarResolver manages Closeable resources
+	"resource",  // VarResolver manages Closeable resources
+	"java:S3740" // Raw Var/Class types used intentionally for dynamic variable resolver registration where type parameters are not available
 })
 public class VarResolver {
 

@@ -80,6 +80,9 @@ import java.util.*;
  * @param <K> The key type.
  * @param <V> The value type.
  */
+@SuppressWarnings({
+	"java:S3740" // Raw Map/Iterator types used intentionally for bidirectional map operations where erased types are required for structural compatibility
+})
 public class BidiMap<K,V> implements Map<K,V> {
 
 	/**

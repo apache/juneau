@@ -79,8 +79,7 @@ def run_command(cmd, description, cwd=None):
         return False
 
 
-# NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
-def play_sound(success=True):
+def play_sound(success=True):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
     """
     Play a system sound to indicate success or failure.
     
@@ -146,8 +145,7 @@ def play_sound(success=True):
         pass
 
 
-# NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
-def play_sound(success=True):
+def play_sound(success=True):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
     """
     Play a system sound to indicate success or failure.
     
@@ -296,8 +294,7 @@ def check_upstream_changes(repo_dir):
         return (False, f"Error checking upstream changes: {e}")
 
 
-# NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
-def play_sound(success=True):
+def play_sound(success=True):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
     """
     Play a system sound to indicate success or failure.
     
@@ -363,8 +360,7 @@ def play_sound(success=True):
         pass
 
 
-# NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
-def main():
+def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
     parser = argparse.ArgumentParser(
         description="Build, test, and push Juneau project to Git repository",
         formatter_class=argparse.RawDescriptionHelpFormatter,

@@ -69,7 +69,8 @@ import org.apache.juneau.commons.collections.*;
  * @param <T> The annotation type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"java:S3740"  // Raw Annotation type used intentionally for unparameterized annotation introspection
 })
 public class AnnotationInfo<T extends Annotation> {
 

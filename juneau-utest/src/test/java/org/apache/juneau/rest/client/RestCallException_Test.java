@@ -53,7 +53,10 @@ class RestCallException_Test extends TestBase {
 		}
 	}
 
-	@Test void a01_basic() throws Exception {
+	@SuppressWarnings({
+		"java:S5783" // Lambdas intentionally exercise multiple checked-exception-throwing calls to validate exception propagation
+	})
+	@Test void a01_basic() {
 		RestCallException ex1 = assertThrows(RestCallException.class, () -> client().build().get().run());
 		assertEquals(404, ex1.getResponseCode());
 		assertNull(ex1.getCause());

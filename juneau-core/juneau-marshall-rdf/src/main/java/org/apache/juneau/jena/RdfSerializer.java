@@ -58,7 +58,9 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S100", // Builder methods use underscore-separated namespacing convention (e.g. n3_disableAbbrevBaseUri, rdfxml_xmlbase) to group related settings by Jena component
+	"java:S110", // Inheritance depth exceeds 5; necessary to participate in the serializer hierarchy
+	"java:S115"  // Constants use UPPER_snakeCase convention
 })
 public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
@@ -80,6 +82,10 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	private static final String ARG_copyFrom = "copyFrom";
 	private static final String ARG_values = "values";
 
+	// Media type and language constants
+	private static final String LANG_RDF_XML_ABBREV = "RDF/XML-ABBREV";
+	private static final String MT_TEXT_XML_RDF = "text/xml+rdf";
+
 	/**
 	 * Builder class.
 	 */
@@ -87,15 +93,18 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
 		private static final Cache<HashKey,RdfSerializer> CACHE = Cache.of(HashKey.class, RdfSerializer.class).build();
 
-		// @formatter:off
-		private static final Namespace
-			DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/"),
-			DEFAULT_JUNEAUBP_NS = Namespace.of("jp", "http://www.apache.org/juneaubp/");
-		// @formatter:on
+		private static final Namespace DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/");
+		private static final Namespace DEFAULT_JUNEAUBP_NS = Namespace.of("jp", "http://www.apache.org/juneaubp/");
 
-		boolean addBeanTypesRdf, addLiteralTypes, addRootProperty, disableAutoDetectNamespaces, disableUseXmlNamespaces, looseCollections;
+		boolean addBeanTypesRdf;
+		boolean addLiteralTypes;
+		boolean addRootProperty;
+		boolean disableAutoDetectNamespaces;
+		boolean disableUseXmlNamespaces;
+		boolean looseCollections;
 		String language;
-		Namespace juneauNs, juneauBpNs;
+		Namespace juneauNs;
+		Namespace juneauBpNs;
 		RdfCollectionFormat collectionFormat;
 		List<Namespace> namespaces;
 		Map<String,Object> jenaSettings;
@@ -111,7 +120,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			disableAutoDetectNamespaces = env("Rdf.disableAutoDetectNamespaces", false);
 			disableUseXmlNamespaces = env("Rdf.disableUseXmlNamespaces", false);
 			looseCollections = env("Rdf.looseCollections", false);
-			language = env("Rdf.language", "RDF/XML-ABBREV");
+			language = env("Rdf.language", LANG_RDF_XML_ABBREV);
 			collectionFormat = env("Rdf.collectionFormat", RdfCollectionFormat.DEFAULT);
 			juneauNs = DEFAULT_JUNEAU_NS;
 			juneauBpNs = DEFAULT_JUNEAUBP_NS;
@@ -1870,7 +1879,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return builder.getAccept();
 		return switch (builder.language) {
 			case "RDF/XML" -> "text/xml+rdf+abbrev";
-			case "RDF/XML-ABBREV" -> "text/xml+rdf+abbrev,text/xml+rdf;q=0.9";
+			case LANG_RDF_XML_ABBREV -> "text/xml+rdf+abbrev,text/xml+rdf;q=0.9";
 			case "N-TRIPLE" -> "text/n-triple";
 			case "N3" -> "text/n3";
 			case "N3-PP" -> "text/n3-pp";
@@ -1882,7 +1891,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			case "TRIG" -> "application/trig";
 			case "TRIX" -> "application/trix+xml";
 			case "RDF/JSON" -> "application/rdf+json";
-			default -> "text/xml+rdf";
+			default -> MT_TEXT_XML_RDF;
 		};
 	}
 
@@ -1891,7 +1900,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return builder.getProduces();
 		return switch (builder.language) {
 			case "RDF/XML" -> "text/xml+rdf+abbrev";
-			case "RDF/XML-ABBREV" -> "text/xml+rdf";
+			case LANG_RDF_XML_ABBREV -> MT_TEXT_XML_RDF;
 			case "N-TRIPLE" -> "text/n-triple";
 			case "N3" -> "text/n3";
 			case "N3-PP" -> "text/n3-pp";
@@ -1903,7 +1912,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			case "TRIG" -> "application/trig";
 			case "TRIX" -> "application/trix+xml";
 			case "RDF/JSON" -> "application/rdf+json";
-			default -> "text/xml+rdf";
+			default -> MT_TEXT_XML_RDF;
 		};
 	}
 
@@ -1920,7 +1929,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
 	final Map<String,Object> jenaSettings;
 	final Namespace[] namespaces;
-	private final boolean addBeanTypes;
+	private final boolean addBeanTypesEffective;
 	private final Map<ClassMeta<?>,RdfClassMeta> rdfClassMetas = new ConcurrentHashMap<>();
 
 	private final Map<BeanMeta<?>,RdfBeanMeta> rdfBeanMetas = new ConcurrentHashMap<>();
@@ -1952,7 +1961,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		addBeanTypesRdf = builder.addBeanTypesRdf;
 		jenaSettings = new TreeMap<>(builder.jenaSettings);
 
-		addBeanTypes = addBeanTypesRdf || super.isAddBeanTypes();
+		addBeanTypesEffective = addBeanTypesRdf || super.isAddBeanTypes();
 	}
 
 	@Override /* Overridden from Context */
@@ -1976,32 +1985,17 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
 	@Override /* Overridden from RdfMetaProvider */
 	public RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
-		RdfBeanMeta m = rdfBeanMetas.get(bm);
-		if (m == null) {
-			m = new RdfBeanMeta(bm, this);
-			rdfBeanMetas.put(bm, m);
-		}
-		return m;
+		return rdfBeanMetas.computeIfAbsent(bm, k -> new RdfBeanMeta(k, this));
 	}
 
 	@Override /* Overridden from RdfMetaProvider */
 	public RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
-		RdfBeanPropertyMeta m = rdfBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new RdfBeanPropertyMeta(bpm.getDelegateFor(), this);
-			rdfBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return rdfBeanPropertyMetas.computeIfAbsent(bpm, k -> new RdfBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from RdfMetaProvider */
 	public RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
-		RdfClassMeta m = rdfClassMetas.get(cm);
-		if (m == null) {
-			m = new RdfClassMeta(cm, this);
-			rdfClassMetas.put(cm, m);
-		}
-		return m;
+		return rdfClassMetas.computeIfAbsent(cm, k -> new RdfClassMeta(k, this));
 	}
 
 	@Override /* Overridden from Context */
@@ -2009,32 +2003,17 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
-		XmlBeanMeta m = xmlBeanMetas.get(bm);
-		if (m == null) {
-			m = new XmlBeanMeta(bm, this);
-			xmlBeanMetas.put(bm, m);
-		}
-		return m;
+		return xmlBeanMetas.computeIfAbsent(bm, k -> new XmlBeanMeta(k, this));
 	}
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
-		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new XmlBeanPropertyMeta(bpm.getDelegateFor(), this);
-			xmlBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
+		return xmlBeanPropertyMetas.computeIfAbsent(bpm, k -> new XmlBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
-		XmlClassMeta m = xmlClassMetas.get(cm);
-		if (m == null) {
-			m = new XmlClassMeta(cm, this);
-			xmlClassMetas.put(cm, m);
-		}
-		return m;
+		return xmlClassMetas.computeIfAbsent(cm, k -> new XmlClassMeta(k, this));
 	}
 
 	/**
@@ -2090,7 +2069,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	 * 	through reflection.
 	 */
 	@Override
-	protected final boolean isAddBeanTypes() { return addBeanTypes; }
+	protected final boolean isAddBeanTypes() { return addBeanTypesEffective; }
 
 	/**
 	 * Add XSI data types to non-<c>String</c> literals.

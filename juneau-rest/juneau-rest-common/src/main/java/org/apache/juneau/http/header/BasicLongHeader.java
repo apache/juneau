@@ -44,6 +44,9 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header
 @Schema(type = "integer", format = "int64")
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; typed Long field is accessed via getValue()
+})
 public class BasicLongHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 

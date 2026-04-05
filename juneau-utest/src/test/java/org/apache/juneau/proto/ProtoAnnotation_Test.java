@@ -39,7 +39,7 @@ class ProtoAnnotation_Test {
 	}
 
 	@Test
-	void f02_annotationEquivalency() throws Exception {
+	void f02_annotationEquivalency() {
 		var a1 = ProtoAnnotation.create().comment("x").build();
 		var a2 = ProtoAnnotation.create().comment("x").build();
 		assertEquals(a1.comment(), a2.comment());

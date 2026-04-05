@@ -37,7 +37,8 @@ import org.apache.juneau.rest.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource" // ResponseBeanProcessor manages Closeable resources
+	"resource",  // ResponseBeanProcessor manages Closeable resources
+	"java:S3740" // Raw Class/BeanMeta types used for reflective response bean processing where generic type parameters are erased
 })
 public class ResponseBeanProcessor implements ResponseProcessor {
 

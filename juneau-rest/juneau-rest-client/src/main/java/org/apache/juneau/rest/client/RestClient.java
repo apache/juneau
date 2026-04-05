@@ -6509,7 +6509,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for callback parsing state machine
-		"java:S1854"  // state = S5 is a necessary state machine transition; SonarLint false positive
+		"java:S1854", // state = S5 is a necessary state machine transition; SonarLint false positive
+		"java:S4165"  // state already holds S5 in some paths, but the assignment is a deliberate state machine transition
 	})
 	public RestRequest callback(String callString) throws RestCallException {
 		callString = emptyIfNull(callString);

@@ -31,7 +31,8 @@ import org.apache.juneau.parser.*;
  * Session for parsing HOCON format into POJOs.
  */
 @SuppressWarnings({
-	"java:S110", "java:S115", "java:S3776", "java:S6541", "unchecked"
+	"java:S110", "java:S115", "java:S135", "java:S3776", "java:S6541", "unchecked"
+	// java:S135: parseValueOrConcat uses two distinct breaks — one for standard HOCON terminators, one for unquoted keys after arrays/objects; merging them would obscure intent
 })
 public class HoconParserSession extends ReaderParserSession {
 

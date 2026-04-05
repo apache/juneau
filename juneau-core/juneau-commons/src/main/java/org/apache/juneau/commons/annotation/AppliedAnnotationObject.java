@@ -120,7 +120,8 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_value, ARG_values)
+	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., ARG_value, ARG_values)
+	"java:S2160"  // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields accessed via those methods
 })
 public class AppliedAnnotationObject extends AnnotationObject {
 

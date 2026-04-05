@@ -32,8 +32,12 @@ import org.apache.juneau.utils.Iso8601Utils;
  * Session for serializing objects to TOML format.
  */
 @SuppressWarnings({
-	"resource", "rawtypes",
-	"java:S110", "java:S3776", "java:S6541"
+	"resource",   // TomlWriter lifecycle managed by SerializerPipe
+	"rawtypes",   // Raw types necessary for generic type handling
+	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
+	"java:S115",  // Constants use naming conventions that embed type info or config keys (e.g. PROP_trimWhitespace)
+	"java:S3776", // Cognitive complexity acceptable for serialization logic
+	"java:S6541"  // Acceptable for session implementation
 })
 public class TomlSerializerSession extends WriterSerializerSession {
 
@@ -133,17 +137,13 @@ public class TomlSerializerSession extends WriterSerializerSession {
 			Object v = e.getValue();
 			if (!checkNull.test(v))
 				return;
-			try {
-				ClassMeta<?> aType = getClassMetaForObject(v, type);
-				if (aType.isMap() && v instanceof Map<?,?> nested) {
-					w.blankLine();
-					w.tableHeader(k);
-					serializeMapAsTable(w, k, nested, aType);
-				} else {
-					writeKeyValue(w, k, v, null);
-				}
-			} catch (SerializeException ex) {
-				throw new RuntimeException(ex);
+			ClassMeta<?> aType = getClassMetaForObject(v, type);
+			if (aType.isMap() && v instanceof Map<?,?> nested) {
+				w.blankLine();
+				w.tableHeader(k);
+				serializeMapAsTable(w, k, nested, aType);
+			} else {
+				writeKeyValue(w, k, v, null);
 			}
 		});
 	}
@@ -218,7 +218,13 @@ public class TomlSerializerSession extends WriterSerializerSession {
 	}
 
 	private void writeKeyValue(TomlWriter w, String key, Object value, BeanPropertyMeta pMeta) throws SerializeException {
-		ClassMeta<?> cMeta = pMeta != null ? pMeta.getClassMeta() : (value != null ? getClassMetaForObject(value) : object());
+		ClassMeta<?> cMeta;
+		if (pMeta != null)
+			cMeta = pMeta.getClassMeta();
+		else if (value != null)
+			cMeta = getClassMetaForObject(value);
+		else
+			cMeta = object();
 		ClassMeta<?> aType = value == null ? cMeta : getClassMetaForObject(value, cMeta);
 
 		// Apply swap
@@ -286,11 +292,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 					first[0] = false;
 					writeKey(w, k);
 					w.w(" = ");
-					try {
-						writeValue(w, v, pm.getClassMeta(), pm);
-					} catch (SerializeException e) {
-						throw new RuntimeException(e);
-					}
+				writeValue(w, v, pm.getClassMeta(), pm);
 				});
 				w.inlineTableEnd();
 			} else {
@@ -335,11 +337,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 			Object v = e.getValue();
 			if (!checkNull.test(v))
 				return;
-			try {
-				writeKeyValue(w, k, v, null);
-			} catch (SerializeException ex) {
-				throw new RuntimeException(ex);
-			}
+			writeKeyValue(w, k, v, null);
 		});
 	}
 

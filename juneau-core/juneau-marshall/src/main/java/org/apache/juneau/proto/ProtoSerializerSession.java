@@ -133,9 +133,13 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 
 		var aType = push2(fieldName, o, eType);
 		var isRecursion = aType == null;
-		if (debugTrace && fieldName == null)
-			traceLog.add("[Proto] serializeAnything(root): push2 aType=" + (aType == null ? "null" : aType.inner().getName())
-				+ ", isBean=" + (aType != null ? aType.isBean() : "n/a") + ", isMap=" + (aType != null ? aType.isMap() : "n/a") + ", isRecursion=" + isRecursion);
+		if (debugTrace && fieldName == null) {
+			var aTypeName = aType == null ? "null" : aType.inner().getName();
+			var isBean = aType != null ? aType.isBean() : "n/a";
+			var isMap = aType != null ? aType.isMap() : "n/a";
+			traceLog.add("[Proto] serializeAnything(root): push2 aType=" + aTypeName
+				+ ", isBean=" + isBean + ", isMap=" + isMap + ", isRecursion=" + isRecursion);
+		}
 		if (aType == null) {
 			pop();
 			return;
@@ -162,7 +166,15 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 		var typeName = getBeanTypeName(this, eType, aType, pMeta);
 
 		if (debugTrace && fieldName == null) {
-			var path = sType.isBean() ? "bean" : sType.isMap() ? "map" : (sType.isCollection() || sType.isArray()) ? "collection" : "scalar";
+			String path;
+			if (sType.isBean())
+				path = "bean";
+			else if (sType.isMap())
+				path = "map";
+			else if (sType.isCollection() || sType.isArray())
+				path = "collection";
+			else
+				path = "scalar";
 			traceLog.add("[Proto] serializeAnything(root): sType=" + sType.inner().getName() + ", isBean=" + sType.isBean() + ", isMap=" + sType.isMap()
 				+ ", path=" + path);
 		}

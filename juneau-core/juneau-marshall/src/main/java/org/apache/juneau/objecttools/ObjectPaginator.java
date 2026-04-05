@@ -51,6 +51,9 @@ import org.apache.juneau.*;
 
  * </ul>
  */
+@SuppressWarnings({
+	"java:S3740" // Raw Collection/List types used intentionally for object pagination where the element type is not known until runtime
+})
 public class ObjectPaginator implements ObjectTool<PageArgs> {
 
 	/**

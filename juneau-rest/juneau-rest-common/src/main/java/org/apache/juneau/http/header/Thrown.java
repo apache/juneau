@@ -59,6 +59,9 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("Thrown")
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; no additional equality-relevant fields
+})
 public class Thrown extends BasicCsvHeader {
 
 	/**

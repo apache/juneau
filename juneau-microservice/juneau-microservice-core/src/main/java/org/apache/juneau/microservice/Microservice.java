@@ -96,7 +96,8 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource" // consoleReader and consoleWriter are backed by system streams or caller-provided streams; lifecycle managed by stop()
+	"resource",  // consoleReader and consoleWriter are backed by system streams or caller-provided streams; lifecycle managed by stop()
+	"java:S3740" // Raw Class/Builder types used intentionally for reflective microservice wiring where type parameters are not available
 })
 public class Microservice implements ConfigEventListener {
 

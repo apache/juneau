@@ -289,8 +289,9 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 		var simpleProps = new java.util.LinkedHashMap<String, Object>();
 		var complexProps = new java.util.LinkedHashMap<String, Object>();
 
-		for (var key : bm.keySet()) {
-			var val = bm.get(key);
+		for (var e : bm.entrySet()) {
+			var key = e.getKey();
+			var val = e.getValue();
 			if (val == null) {
 				simpleProps.put(key, null);
 			} else {

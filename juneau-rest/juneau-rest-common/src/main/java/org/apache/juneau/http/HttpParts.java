@@ -39,6 +39,9 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S3740" // Raw Supplier/NameValuePair types used in factory methods where HTTP part value type cannot be statically parameterized
+})
 public class HttpParts {
 
 	/**

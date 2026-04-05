@@ -39,6 +39,9 @@ import org.apache.juneau.*;
  *
  * @serial exclude
  */
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; typed field is accessed via getValue()
+})
 public class BasicStringRangesHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 

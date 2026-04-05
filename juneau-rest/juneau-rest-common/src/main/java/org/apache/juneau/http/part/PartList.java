@@ -49,8 +49,9 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115"  // Constants use UPPER_snakeCase naming convention
+	"java:S110",  // Inheritance depth acceptable for this class hierarchy
+	"java:S115",  // Constants use UPPER_snakeCase naming convention
+	"java:S2160"  // equals() inherited from AbstractList; list equality is element-based, which is correct for part lists
 })
 public class PartList extends ControlledArrayList<NameValuePair> {
 

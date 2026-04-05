@@ -54,7 +54,8 @@ import org.apache.juneau.commons.conversion.*;
  */
 @SuppressWarnings({
 	"java:S6541", // Stateless converter, singleton for convenience
-	"java:S6542"  // Singleton required for stateless Converter; thread-safe shared instance
+	"java:S6542", // Singleton required for stateless Converter; thread-safe shared instance
+	"java:S6548"  // Singleton pattern is intentional; INSTANCE is a stateless, thread-safe shared converter
 })
 public class BeanContextConverter implements Converter {
 

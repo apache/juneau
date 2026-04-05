@@ -39,7 +39,8 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource" // OutputStream resource managed by calling code
+	"resource",  // OutputStream resource managed by calling code
+	"java:S4349" // write(byte[],int,int) is intentionally omitted; MsgPack writes single structured bytes via write(int); bulk array writes are not part of this protocol API
 })
 public class MsgPackOutputStream extends OutputStream {
 

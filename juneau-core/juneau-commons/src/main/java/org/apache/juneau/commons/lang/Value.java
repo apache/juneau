@@ -106,7 +106,8 @@ import org.apache.juneau.commons.reflect.ClassInfo;
  * @param <T> The value type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"java:S3740"  // Raw Consumer/Supplier types used in value holder utility where callback type parameter cannot be further bounded
 })
 public class Value<T> {
 
@@ -270,8 +271,7 @@ public class Value<T> {
 		if (t == null)
 			return Value.empty();
 		var result = mapper.apply(t);
-		var cast = (Value<T2>)result;
-		return cast;
+		return (Value<T2>)result;
 	}
 
 	/**

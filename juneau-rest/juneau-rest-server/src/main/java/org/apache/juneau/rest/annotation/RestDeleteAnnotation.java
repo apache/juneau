@@ -391,6 +391,9 @@ public class RestDeleteAnnotation {
 
 	}
 
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+	})
 	private static class Object extends AppliedAnnotationObject implements RestDelete {
 
 		private final String[] description;

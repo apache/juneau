@@ -41,6 +41,9 @@ import org.apache.juneau.oapi.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S3740" // Raw Supplier/Header types used in factory methods where HTTP header value type cannot be statically parameterized
+})
 public class HttpHeaders {
 
 	/**
@@ -554,15 +557,18 @@ public class HttpHeaders {
 	 * 	The object to cast or convert to a {@link Header}.
 	 * @return Either the same object cast as a {@link Header} or converted to a {@link Header}.
 	*/
+	@SuppressWarnings({
+		"java:S2681" // Each if-branch has a single return; indentation mismatch is cosmetic, not a logic error
+	})
 	public static Header cast(Object o) {
 		if (o instanceof Header o2)
 			return o2;
-	if (o instanceof Headerable o3)
-		return o3.asHeader();
-	if (o instanceof NameValuePair o4)
-		return BasicHeader.of(o4);
-	if (o instanceof NameValuePairable o5)
-		return BasicHeader.of(o5.asNameValuePair());
+		if (o instanceof Headerable o3)
+			return o3.asHeader();
+		if (o instanceof NameValuePair o4)
+			return BasicHeader.of(o4);
+		if (o instanceof NameValuePairable o5)
+			return BasicHeader.of(o5.asNameValuePair());
 		if (o instanceof Map.Entry e) {
 			return BasicHeader.of(s(e.getKey()), s(e.getValue()));
 		}

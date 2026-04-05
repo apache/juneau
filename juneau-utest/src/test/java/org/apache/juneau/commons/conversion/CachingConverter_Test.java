@@ -24,6 +24,10 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"java:S116",  // Test fixture field names use underscore-prefixed test-method identifiers (e.g. d03_listField) for traceability to specific test cases
+	"java:S5778"  // assertThrows lambdas intentionally call multiple methods to reach the one expected to throw the runtime exception
+})
 class CachingConverter_Test extends TestBase {
 
 	private static final BasicConverter C = BasicConverter.INSTANCE;

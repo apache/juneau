@@ -77,7 +77,8 @@ import org.apache.juneau.commons.collections.Cache;
  */
 @SuppressWarnings({
 	"java:S100",  // Method names match java.util.logging.Logger for API compatibility
-	"java:S1192"  // String literals intentionally duplicated for clarity
+	"java:S1192", // String literals intentionally duplicated for clarity
+	"java:S2176"  // Class name intentionally matches java.util.logging.Logger; extends it to provide Juneau-specific logging enhancements
 })
 public class Logger extends java.util.logging.Logger {
 

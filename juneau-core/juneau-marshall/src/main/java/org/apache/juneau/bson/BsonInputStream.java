@@ -42,6 +42,7 @@ import org.apache.juneau.parser.*;
 public class BsonInputStream extends ParserInputStream {
 
 	private static final Charset UTF8 = StandardCharsets.UTF_8;
+	private static final String UNEXPECTED_END_OF_BSON_STREAM = "Unexpected end of BSON stream";
 
 	private int pushback = -1;
 
@@ -84,7 +85,7 @@ public class BsonInputStream extends ParserInputStream {
 		var b3 = read();
 		var b4 = read();
 		if (b4 < 0)
-			throw ioex("Unexpected end of BSON stream");
+			throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
 		return (b1 & 0xFF) | ((b2 & 0xFF) << 8) | ((b3 & 0xFF) << 16) | ((b4 & 0xFF) << 24);
 	}
 
@@ -119,7 +120,7 @@ public class BsonInputStream extends ParserInputStream {
 	public int readElementType() throws IOException {
 		var b = read();
 		if (b < 0)
-			throw ioex("Unexpected end of BSON stream");
+			throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
 		return b & 0xFF;
 	}
 
@@ -145,7 +146,7 @@ public class BsonInputStream extends ParserInputStream {
 		while ((b = read()) >= 0 && b != 0)
 			baos.write(b);
 		if (b < 0)
-			throw ioex("Unexpected end of BSON stream");
+			throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
 		return new String(baos.toByteArray(), UTF8);
 	}
 
@@ -212,7 +213,7 @@ public class BsonInputStream extends ParserInputStream {
 	public boolean readBoolean() throws IOException {
 		var b = read();
 		if (b < 0)
-			throw ioex("Unexpected end of BSON stream");
+			throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
 		return b != 0;
 	}
 
@@ -230,7 +231,7 @@ public class BsonInputStream extends ParserInputStream {
 		for (var i = 0; i < bytes.length; i++) {
 			var b = read();
 			if (b < 0)
-				throw ioex("Unexpected end of BSON stream");
+				throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
 			bytes[i] = (byte)b;
 		}
 		var term = read();
@@ -249,12 +250,12 @@ public class BsonInputStream extends ParserInputStream {
 		var len = readLE4();
 		var subtype = read();
 		if (subtype < 0)
-			throw ioex("Unexpected end of BSON stream");
+			throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
 		var bytes = new byte[len];
 		for (var i = 0; i < len; i++) {
 			var b = read();
 			if (b < 0)
-				throw ioex("Unexpected end of BSON stream");
+				throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
 			bytes[i] = (byte)b;
 		}
 		return bytes;
@@ -281,7 +282,7 @@ public class BsonInputStream extends ParserInputStream {
 		for (var i = 0; i < 12; i++) {
 			var b = read();
 			if (b < 0)
-				throw ioex("Unexpected end of BSON stream");
+				throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
 			bytes[i] = (byte)b;
 		}
 		var sb = new StringBuilder(24);
@@ -301,7 +302,7 @@ public class BsonInputStream extends ParserInputStream {
 		for (var i = 0; i < 16; i++) {
 			var b = read();
 			if (b < 0)
-				throw ioex("Unexpected end of BSON stream");
+				throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
 			bytes[i] = (byte)b;
 		}
 		return decodeDecimal128(bytes);
@@ -329,11 +330,11 @@ public class BsonInputStream extends ParserInputStream {
 				read();
 				skip(len);
 			}
-			case 0x06 -> { }
+			case 0x06 -> { /* BSON Undefined (deprecated) - zero bytes, intentionally ignored */ }
 			case 0x07 -> skip(12);
 			case 0x08 -> read();
 			case 0x09 -> readLE8();
-			case 0x0A -> { }
+			case 0x0A -> { /* BSON Null - zero bytes, no payload to consume */ }
 			case 0x0B -> {
 				readCString();
 				readCString();
@@ -352,7 +353,7 @@ public class BsonInputStream extends ParserInputStream {
 			case 0x11 -> readLE8();
 			case 0x12 -> readLE8();
 			case 0x13 -> skip(16);
-			case 0x7F, 0xFF -> { }
+			case 0x7F, 0xFF -> { /* BSON MinKey/MaxKey - zero bytes, marker types with no payload to consume */ }
 			default -> throw ioex("Unknown BSON type: {0}", type);
 		}
 	}
@@ -360,7 +361,7 @@ public class BsonInputStream extends ParserInputStream {
 	private void skip(int n) throws IOException {
 		for (var i = 0; i < n; i++)
 			if (read() < 0)
-				throw ioex("Unexpected end of BSON stream");
+				throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
 	}
 
 	/**

@@ -101,7 +101,8 @@ import java.util.stream.Collectors;
  * @param <E> The element type of this set.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"java:S3740"  // Raw Set/Iterator types used in multi-set structural operations where element type is erased
 })
 public class MultiSet<E> extends AbstractSet<E> {
 

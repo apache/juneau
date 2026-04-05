@@ -126,6 +126,9 @@ public class RestPostInitAnnotation {
 
 	}
 
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+	})
 	private static class Object extends AppliedAnnotationObject implements RestPostInit {
 
 		private final String[] description;

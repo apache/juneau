@@ -690,7 +690,7 @@ class BidiMap_Test extends TestBase {
 		var map = BidiMap.<String,Integer>create()
 			.add("one", 1)
 			.build();
-		assertFalse(map.equals("notAMap"));
+		assertFalse(map.equals((Object)"notAMap"));
 	}
 
 	@Test

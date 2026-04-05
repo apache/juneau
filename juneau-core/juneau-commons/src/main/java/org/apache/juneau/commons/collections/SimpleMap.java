@@ -119,7 +119,8 @@ import org.apache.juneau.commons.utils.Utils;
  * @param <V> The value type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., ARG_keys, ARG_values)
+	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., ARG_keys, ARG_values)
+	"java:S3740"  // Raw Map/Iterator types used in simple map structural operations where key/value types are erased
 })
 public class SimpleMap<K,V> extends AbstractMap<K,V> {
 

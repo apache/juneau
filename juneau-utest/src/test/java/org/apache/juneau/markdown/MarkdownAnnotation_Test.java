@@ -39,7 +39,7 @@ class MarkdownAnnotation_Test {
 		public String name;
 	}
 
-	@Test void e01_formatTable() throws Exception {
+	@Test void e01_formatTable() {
 		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E01_Bean.class));
 		assertEquals(MarkdownFormat.TABLE, cm.getFormat());
 	}
@@ -53,7 +53,7 @@ class MarkdownAnnotation_Test {
 		public String name;
 	}
 
-	@Test void e02_formatList() throws Exception {
+	@Test void e02_formatList() {
 		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E02_Bean.class));
 		assertEquals(MarkdownFormat.LIST, cm.getFormat());
 	}
@@ -67,7 +67,7 @@ class MarkdownAnnotation_Test {
 		public String name;
 	}
 
-	@Test void e03_formatCode() throws Exception {
+	@Test void e03_formatCode() {
 		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E03_Bean.class));
 		assertEquals(MarkdownFormat.CODE, cm.getFormat());
 	}
@@ -81,7 +81,7 @@ class MarkdownAnnotation_Test {
 		public String name;
 	}
 
-	@Test void e04_formatPlainText() throws Exception {
+	@Test void e04_formatPlainText() {
 		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E04_Bean.class));
 		assertEquals(MarkdownFormat.PLAIN_TEXT, cm.getFormat());
 	}
@@ -95,7 +95,7 @@ class MarkdownAnnotation_Test {
 		public String name;
 	}
 
-	@Test void e05_formatJson5() throws Exception {
+	@Test void e05_formatJson5() {
 		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E05_Bean.class));
 		assertEquals(MarkdownFormat.JSON5, cm.getFormat());
 	}
@@ -109,7 +109,7 @@ class MarkdownAnnotation_Test {
 		public String name;
 	}
 
-	@Test void e06_noTables() throws Exception {
+	@Test void e06_noTables() {
 		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E06_Bean.class));
 		assertTrue(cm.isNoTables());
 	}
@@ -123,7 +123,7 @@ class MarkdownAnnotation_Test {
 		public String name;
 	}
 
-	@Test void e07_noHeaders() throws Exception {
+	@Test void e07_noHeaders() {
 		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E07_Bean.class));
 		assertTrue(cm.isNoHeaders());
 	}
@@ -137,7 +137,7 @@ class MarkdownAnnotation_Test {
 		public String name;
 	}
 
-	@Test void e08_customHeading() throws Exception {
+	@Test void e08_customHeading() {
 		var bm = serializer().getBeanContext().getBeanMeta(E08_Bean.class);
 		var pm = bm.getPropertyMeta("name");
 		var mpm = serializer().getMarkdownBeanPropertyMeta(pm);
@@ -153,7 +153,7 @@ class MarkdownAnnotation_Test {
 		public String value;
 	}
 
-	@Test void e09_code() throws Exception {
+	@Test void e09_code() {
 		var bm = serializer().getBeanContext().getBeanMeta(E09_Bean.class);
 		var pm = bm.getPropertyMeta("value");
 		var mpm = serializer().getMarkdownBeanPropertyMeta(pm);
@@ -169,7 +169,7 @@ class MarkdownAnnotation_Test {
 		public String url;
 	}
 
-	@Test void e10_link() throws Exception {
+	@Test void e10_link() {
 		var bm = serializer().getBeanContext().getBeanMeta(E10_Bean.class);
 		var pm = bm.getPropertyMeta("url");
 		var mpm = serializer().getMarkdownBeanPropertyMeta(pm);

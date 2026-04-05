@@ -379,6 +379,9 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	}
 
 	@Override
+	@SuppressWarnings({
+		"java:S2225" // Returning null from toString() is intentional; null value signals absent/unset array in assertion context
+	})
 	public String toString() {
 		if (valueIsNull())
 			return null;

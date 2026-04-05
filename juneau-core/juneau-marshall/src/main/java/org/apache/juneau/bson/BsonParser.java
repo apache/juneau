@@ -78,6 +78,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
+	private static final String DEFAULT_NULL_KEY = "<NULL>";
 
 	/** Default parser, string input encoded as BASE64. */
 	public static class Base64 extends BsonParser {
@@ -99,14 +100,14 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider {
 
 		private static final Cache<HashKey,BsonParser> CACHE = Cache.of(HashKey.class, BsonParser.class).build();
 
-		private String nullKeyString = "<NULL>";
+		private String nullKeyString = DEFAULT_NULL_KEY;
 
 		/**
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
 			consumes("application/bson");
-			nullKeyString = env("BsonParser.nullKeyString", "<NULL>");
+			nullKeyString = env("BsonParser.nullKeyString", DEFAULT_NULL_KEY);
 		}
 
 		/**
@@ -146,7 +147,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider {
 		 * @return This object.
 		 */
 		public Builder nullKeyString(String value) {
-			nullKeyString = value == null ? "<NULL>" : value;
+			nullKeyString = value == null ? DEFAULT_NULL_KEY : value;
 			return this;
 		}
 

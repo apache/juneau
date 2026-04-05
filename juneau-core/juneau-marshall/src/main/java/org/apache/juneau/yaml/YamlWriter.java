@@ -122,6 +122,9 @@ public class YamlWriter extends SerializerWriter {
 	 * @param s The string value.
 	 * @return This object.
 	 */
+	@SuppressWarnings({
+		"java:S4144" // Identical to keyName by design; distinct semantic role (value vs key quoting)
+	})
 	public YamlWriter textValue(String s) {
 		if (trimStrings)
 			s = trim(s);

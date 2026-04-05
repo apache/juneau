@@ -67,8 +67,7 @@ def extract_topic_info(docs_dir):
     
     return topics
 
-# NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
-def find_topic_links(source_dir):
+def find_topic_links(source_dir):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
     """Find all topic links in the source tree."""
     links = []
     

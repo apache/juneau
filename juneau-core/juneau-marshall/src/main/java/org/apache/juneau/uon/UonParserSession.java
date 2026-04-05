@@ -477,6 +477,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return (T)o;
 	}
 
+	@SuppressWarnings({
+		"java:S2447" // null is a valid UON value distinct from true/false; Boolean (boxed) is deliberately used for this tristate
+	})
 	private Boolean parseBoolean(UonReader r) throws IOException, ParseException {
 		var s = parseString(r, false);
 		if (s == null || s.equals("null"))
@@ -490,6 +493,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@SuppressWarnings({
 		"java:S1168",    // TODO: null for empty/EOF or parseAttrName('%00'). Parser state machine.
+		"java:S2589",    // Final if (state==S4) is always true given prior checks; exhaustive state error-reporting pattern
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
@@ -612,7 +616,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@SuppressWarnings({
 		"java:S1168",    // TODO: null for EOF/AMP. Parser state machine.
+		"java:S1854",    // argIndex=0 is the valid starting arg index; Sonar FP on early-return paths that never read it
 		"java:S2583",    // State variables persist across loop iterations
+		"java:S2589",    // Final if (state==S3) is always true given prior check; exhaustive state error-reporting pattern
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
 	private <E> Collection<E> parseIntoCollection(UonReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta)
@@ -704,6 +710,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@SuppressWarnings({
 		"java:S1168",    // TODO: null for EOF/AMP. Parser state machine.
+		"java:S2589",    // Final if (state==S4) is always true given prior checks; exhaustive state error-reporting pattern
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
 	private <K,V> Map<K,V> parseIntoMap(UonReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {

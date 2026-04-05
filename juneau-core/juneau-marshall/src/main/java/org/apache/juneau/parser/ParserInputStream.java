@@ -32,6 +32,9 @@ import java.io.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S4929" // read(byte[],int,int) is intentionally omitted; ParserInputStream reads one byte at a time to maintain accurate position tracking for parse error reporting
+})
 public class ParserInputStream extends InputStream implements Positionable {
 
 	private final InputStream is;

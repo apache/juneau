@@ -36,6 +36,9 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S3740" // Raw Comparable type used intentionally for namespace ordering where the generic bound cannot be expressed
+})
 @Bean(sort = true)
 public class Namespace {
 

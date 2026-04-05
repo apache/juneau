@@ -324,9 +324,10 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 	@SuppressWarnings({
 		"java:S1168",    // TODO: null when currAttr is '%00'. Parser state machine.
-		"java:S1213",    // Method name matches private method in parent class by design
+		"java:S2177",    // Intentional: UrlEncodingParserSession provides its own private parseIntoBeanMap() with expanded-params logic
 		"java:S125",     // State-machine comments (S1: ..., S2: ...)
 		"java:S2583",    // State variables persist across loop iterations
+		"java:S2589",    // Final if (state==S4) is always true given prior checks; exhaustive state error-reporting pattern
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})

@@ -1220,6 +1220,9 @@ public class HtmlBuilder {
 	 *
 	 * @return The new element.
 	 */
+	@SuppressWarnings({
+		"java:S3051" // Named 'main' to match the HTML element name, not a program entry point
+	})
 	public static final Main main() {
 		return new Main();
 	}
@@ -1230,6 +1233,9 @@ public class HtmlBuilder {
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
+	@SuppressWarnings({
+		"java:S3051" // Named 'main' to match the HTML element name, not a program entry point
+	})
 	public static final Main main(Object...children) {
 		return new Main(children);
 	}

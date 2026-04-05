@@ -17,6 +17,7 @@
 package org.apache.juneau.ini;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
@@ -35,6 +36,7 @@ import org.apache.juneau.utils.Iso8601Utils;
 @SuppressWarnings({
 	"resource", // IniWriter lifecycle managed by SerializerPipe
 	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
+	"java:S115", // Constants use naming conventions that embed type info or config keys (e.g. PROP_trimWhitespace)
 	"java:S3776", // Cognitive complexity acceptable for serialization logic
 	"java:S6541"  // Acceptable for session implementation
 })
@@ -210,7 +212,7 @@ public class IniSerializerSession extends WriterSerializerSession {
 					writeKeyValue(w, k, v, null);
 				}
 			} catch (SerializeException | IOException ex) {
-				throw new RuntimeException(ex);
+				throw rex(ex);
 			}
 		});
 	}
@@ -226,16 +228,18 @@ public class IniSerializerSession extends WriterSerializerSession {
 			var v = e.getValue();
 			if (!checkNull.test(v))
 				return;
-			try {
-				writeKeyValue(w, k, v, null);
-			} catch (SerializeException ex) {
-				throw new RuntimeException(ex);
-			}
+			writeKeyValue(w, k, v, null);
 		});
 	}
 
 	private void writeKeyValue(IniWriter w, String key, Object value, BeanPropertyMeta pMeta) throws SerializeException {
-		var cMeta = pMeta != null ? pMeta.getClassMeta() : (value != null ? getClassMetaForObject(value) : object());
+		ClassMeta<?> cMeta;
+		if (pMeta != null)
+			cMeta = pMeta.getClassMeta();
+		else if (value != null)
+			cMeta = getClassMetaForObject(value);
+		else
+			cMeta = object();
 		var aType = value == null ? cMeta : getClassMetaForObject(value, cMeta);
 
 		var swap = aType.getSwap(this);
@@ -283,14 +287,11 @@ public class IniSerializerSession extends WriterSerializerSession {
 		if (s.contains("=") || s.contains("[") || s.contains("]") || s.contains("#") || s.contains("\n"))
 			return true;
 		var trimmed = s.trim();
-		if (!trimmed.equals(s))
-			return true;
-		return false;
+		return !trimmed.equals(s);
 	}
 
 	private String encodeComplexValue(Object value) throws SerializeException {
-		var json5 = getJson5Serializer().serialize(value);
-		return json5;
+		return getJson5Serializer().serialize(value);
 	}
 
 	private JsonSerializer getJson5Serializer() {
@@ -311,9 +312,7 @@ public class IniSerializerSession extends WriterSerializerSession {
 			return false;
 		if (aType.isCollection() || aType.isArray())
 			return false;
-		if (aType.isStreamable())
-			return false;
-		return true;
+		return !aType.isStreamable();
 	}
 
 	private boolean isSimpleMap(Map<?,?> map, ClassMeta<?> mapType) {

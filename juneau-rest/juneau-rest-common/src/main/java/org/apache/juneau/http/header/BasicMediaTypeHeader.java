@@ -42,6 +42,9 @@ import org.apache.juneau.json5.Json5Serializer;
  *
  * @serial exclude
  */
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; typed MediaType field is accessed via getValue()
+})
 public class BasicMediaTypeHeader extends BasicStringHeader {
 	private static final long serialVersionUID = 1L;
 
@@ -317,7 +320,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	}
 
 	@SuppressWarnings({
-		"java:S1213" // Method name matches private method in parent class by design
+		"java:S2177" // Intentional: subclass provides its own private value() with a different return type (MediaType vs String)
 	})
 	private MediaType value() {
 		if (nn(supplier))

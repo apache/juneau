@@ -43,6 +43,9 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header
 @Schema(type = "boolean")
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; typed boolean field is accessed via getValue()
+})
 public class BasicBooleanHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 

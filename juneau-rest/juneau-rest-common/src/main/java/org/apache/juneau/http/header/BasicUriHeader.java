@@ -38,6 +38,9 @@ import java.util.function.*;
  *
  * @serial exclude
  */
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; typed URI field is accessed via getValue()
+})
 public class BasicUriHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 

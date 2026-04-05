@@ -77,6 +77,9 @@ public abstract class HoconValue {
 		 *
 		 * @return The members map.
 		 */
+		@SuppressWarnings({
+			"java:S1319" // LinkedHashMap return type intentional; HOCON preserves insertion order of object members
+		})
 		public LinkedHashMap<String, HoconValue> getMembers() {
 			return members;
 		}

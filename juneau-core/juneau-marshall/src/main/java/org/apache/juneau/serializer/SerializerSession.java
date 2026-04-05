@@ -653,7 +653,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @since 9.2.1
 	 */
 	public final List<Object> toListFromStreamable(Object o, ClassMeta<?> type) {
-		var list = new ArrayList<Object>();
+		var list = new ArrayList<>();
 		forEachStreamableEntry(o, type, list::add);
 		return list;
 	}

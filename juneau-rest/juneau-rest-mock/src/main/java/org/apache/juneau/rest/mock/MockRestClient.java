@@ -247,7 +247,8 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource" // Builders and requests returned to callers; lifecycle managed by the enclosing MockRestClient or test
+	"resource",  // Builders and requests returned to callers; lifecycle managed by the enclosing MockRestClient or test
+	"java:S3740" // Raw Class/Builder types used intentionally for fluent mock client construction where response type is unknown at build time
 })
 public class MockRestClient extends RestClient implements HttpClientConnection {
 

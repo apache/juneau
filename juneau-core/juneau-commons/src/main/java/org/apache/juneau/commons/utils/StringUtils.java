@@ -50,9 +50,10 @@ import org.apache.juneau.commons.reflect.*;
  * Reusable string utility methods.
  */
 @SuppressWarnings({
-	"java:S115", // Constant names use UPPER_snakeCase convention
+	"java:S115",  // Constant names use UPPER_snakeCase convention
 	"java:S1192", // Duplicated string literals (HTML entities) are intentional
-	"java:S5843" // FP_REGEX copied from JDK source for parsing consistency
+	"java:S5843", // FP_REGEX copied from JDK source for parsing consistency
+	"java:S3516"  // Methods flagged as always returning the same value are valid utility implementations (e.g. null-safe wrappers)
 })
 public class StringUtils {
 
@@ -363,9 +364,9 @@ public class StringUtils {
 			var i1 = bIn[iIn++];
 			var i2 = iIn < inLength ? bIn[iIn++] : 'A';
 			var i3 = iIn < inLength ? bIn[iIn++] : 'A';
-			var b0 = BASE64M2[i0];
-			var b1 = BASE64M2[i1];
-			var b2 = BASE64M2[i2];
+			var b0 = BASE64M2[i0 & 0xff];
+			var b1 = BASE64M2[i1 & 0xff];
+			var b2 = BASE64M2[i2 & 0xff];
 			var b3 = BASE64M2[i3 & 0xff];
 			var o0 = (b0 << 2) | (b1 >>> 4);
 			var o1 = ((b1 & 0xf) << 4) | (b2 >>> 2);
@@ -3612,11 +3613,7 @@ public class StringUtils {
 	}
 
 	private static boolean isLowerCaseLetter(char c) {
-		if (c < 'a')
-			return false;
-		if (c > 'z')
-			return false;
-		return true;
+		return c >= 'a' && c <= 'z';
 	}
 
 	/**
@@ -4386,7 +4383,8 @@ public class StringUtils {
 	 */
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for metaphone algorithm
-		"java:S6541" // Thread-safe singleton pattern acceptable
+		"java:S6541", // Thread-safe singleton pattern acceptable
+		"java:S1871" // Multiple cases in phonetic algorithm intentionally map to the same code (e.g. 'Q' -> 'K')
 	})
 	public static String metaphone(String str) {
 		if (isEmpty(str))

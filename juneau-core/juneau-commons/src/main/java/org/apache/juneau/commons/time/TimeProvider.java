@@ -43,7 +43,8 @@ import java.time.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S6541" // Intentional singleton for extensibility
+	"java:S6541", // Intentional singleton for extensibility
+	"java:S6548"  // Singleton pattern is intentional; INSTANCE provides a replaceable system-clock abstraction
 })
 public class TimeProvider {
 

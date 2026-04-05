@@ -64,7 +64,8 @@ import org.apache.juneau.json.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable
+	"java:S110", // Inheritance depth acceptable
+	"java:S115"  // Constants use naming conventions that embed type info or config keys (e.g. PROP_escapeSolidus)
 })
 public class Json5Serializer extends JsonSerializer {
 

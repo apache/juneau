@@ -692,6 +692,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
+	@SuppressWarnings({
+		"java:S1119" // Labeled 'continue outer' is the clearest way to skip to the next parameter after a match
+	})
 	public final int parameterMatchesLenientCount(Class<?>...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
@@ -720,6 +723,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
+	@SuppressWarnings({
+		"java:S1119" // Labeled 'continue outer' is the clearest way to skip to the next parameter after a match
+	})
 	public final int parameterMatchesLenientCount(ClassInfo...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
@@ -748,6 +754,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
+	@SuppressWarnings({
+		"java:S1119" // Labeled 'continue outer' is the clearest way to skip to the next parameter after a match
+	})
 	public final int parameterMatchesLenientCount(Object...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {

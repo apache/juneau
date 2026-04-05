@@ -106,6 +106,9 @@ public class JsonWriter extends SerializerWriter {
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 * @return A new JsonWriter instance.
 	 */
+	@SuppressWarnings({
+		"java:S107" // Factory method mirrors the constructor; all 8 parameters are distinct JSON writer configuration settings
+	})
 	public static JsonWriter create(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
 		return new JsonWriter(out, useWhitespace, maxIndent, escapeSolidus, quoteChar, simpleAttrs, trimStrings, uriResolver);
 	}

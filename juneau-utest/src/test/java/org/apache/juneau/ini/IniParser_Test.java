@@ -119,7 +119,7 @@ class IniParser_Test extends TestBase {
 	}
 
 	@Test
-	void a13_topLevelCollectionThrows() throws Exception {
+	void a13_topLevelCollectionThrows() {
 		var ex = assertThrows(Exception.class, () ->
 			IniParser.DEFAULT.parse("[]", List.class, String.class));
 		assertTrue(ex.getMessage().contains("not supported") || ex.getMessage().contains("bean")

@@ -212,9 +212,9 @@ public class PathArg implements RestOpArg {
 
 			// Check for {#} variables.
 			var idxs = String.valueOf(idx);
-			for (var var : vars)
-				if (isNumeric(var) && var.equals(idxs))
-					return var;
+			for (var v : vars)
+				if (isNumeric(v) && v.equals(idxs))
+					return v;
 
 			return pathMatcher.getVars()[idx];
 		}

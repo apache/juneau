@@ -98,6 +98,7 @@ public class BsonSerializer extends OutputStreamSerializer implements BsonMetaPr
 	private static final String PROP_addBeanTypesBson = "addBeanTypesBson";
 	private static final String PROP_nullKeyString = "nullKeyString";
 	private static final String PROP_writeDatesAsDatetime = "writeDatesAsDatetime";
+	private static final String DEFAULT_NULL_KEY = "<NULL>";
 
 	/** Default serializer, BASE64 string output. */
 	public static class Base64 extends BsonSerializer {
@@ -120,7 +121,7 @@ public class BsonSerializer extends OutputStreamSerializer implements BsonMetaPr
 		private static final Cache<HashKey,BsonSerializer> CACHE = Cache.of(HashKey.class, BsonSerializer.class).build();
 
 		private boolean addBeanTypesBson;
-		private String nullKeyString = "<NULL>";
+		private String nullKeyString = DEFAULT_NULL_KEY;
 		private boolean writeDatesAsDatetime = true;
 
 		/**
@@ -130,7 +131,7 @@ public class BsonSerializer extends OutputStreamSerializer implements BsonMetaPr
 			produces("application/bson");
 			accept("application/bson");
 			addBeanTypesBson = env("BsonSerializer.addBeanTypesBson", false);
-			nullKeyString = env("BsonSerializer.nullKeyString", "<NULL>");
+			nullKeyString = env("BsonSerializer.nullKeyString", DEFAULT_NULL_KEY);
 			writeDatesAsDatetime = env("BsonSerializer.writeDatesAsDatetime", true);
 		}
 
@@ -181,7 +182,7 @@ public class BsonSerializer extends OutputStreamSerializer implements BsonMetaPr
 		 * @return This object.
 		 */
 		public Builder nullKeyString(String value) {
-			nullKeyString = value == null ? "<NULL>" : value;
+			nullKeyString = value == null ? DEFAULT_NULL_KEY : value;
 			return this;
 		}
 

@@ -61,7 +61,8 @@ import org.apache.juneau.json.JsonParser;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for Json5Parser hierarchy
+	"java:S110", // Inheritance depth acceptable for Json5Parser hierarchy
+	"java:S115"  // Constants use naming conventions that embed type info or config keys (e.g. PROP_escapeSolidus)
 })
 public class Json5Parser extends JsonParser {
 

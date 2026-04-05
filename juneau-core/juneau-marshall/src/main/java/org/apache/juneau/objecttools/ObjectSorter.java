@@ -59,7 +59,8 @@ import org.apache.juneau.*;
 	"unchecked", // Type erasure requires unchecked casts
 	"rawtypes", // Raw types necessary for generic type handling
 	"java:S6541", // Stateless utility, singleton for convenience
-	"java:S6542"  // Singleton required for ObjectTool pattern; stateless builder-style API
+	"java:S6542", // Singleton required for ObjectTool pattern; stateless builder-style API
+	"java:S6548"  // Singleton pattern is intentional; DEFAULT is a stateless, thread-safe shared tool
 })
 public class ObjectSorter implements ObjectTool<SortArgs> {
 	private static class SortEntry implements Comparable {

@@ -114,7 +114,7 @@ class CborInputStream_Test extends TestBase {
 	}
 
 	@Test
-	void b12_dataTypeDetection() throws Exception {
+	void b12_dataTypeDetection() {
 		assertEquals(0, CborInputStream.getMajorType(0x00));
 		assertEquals(1, CborInputStream.getMajorType(0x20));
 		assertEquals(3, CborInputStream.getMajorType(0x61));

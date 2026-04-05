@@ -24,7 +24,12 @@ package org.apache.juneau.jena;
 
  * </ul>
  */
+@SuppressWarnings({
+	"java:S115" // RDF language name constants mirror the official Jena API string identifiers (e.g. LANG_RDF_XML, LANG_N3) which use mixed conventions
+})
 public class Constants {
+
+	private Constants() {}
 
 	/** Jena language support: <js>"RDF/XML"</js>.*/
 	public static final String LANG_RDF_XML = "RDF/XML";

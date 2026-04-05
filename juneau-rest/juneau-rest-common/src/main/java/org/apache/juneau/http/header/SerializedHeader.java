@@ -34,6 +34,9 @@ import org.apache.juneau.serializer.*;
  *
  * @serial exclude
  */
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; serializer field affects rendering not identity
+})
 public class SerializedHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 
@@ -196,6 +199,7 @@ public class SerializedHeader extends BasicHeader {
 	 *
 	 * @return A new copy of this object.
 	 */
+	@Override /* Overridden from BasicHeader */
 	public SerializedHeader copy() {
 		return new SerializedHeader(this);
 	}

@@ -115,6 +115,9 @@ public class RestInitAnnotation {
 
 	}
 
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+	})
 	private static class Object extends AppliedAnnotationObject implements RestInit {
 
 		private final String[] description;

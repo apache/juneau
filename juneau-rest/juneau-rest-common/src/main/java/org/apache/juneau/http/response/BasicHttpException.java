@@ -66,15 +66,18 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings({
-		"java:S1104" // Fields reassigned after construction, cannot be final
+		"java:S1104", // Fields reassigned after construction, cannot be final
+		"java:S1165"  // Cannot be final; setHeaders() replaces the list entirely via headers = value.copy()
 	})
 	HeaderList headers = HeaderList.create();
 	@SuppressWarnings({
-		"java:S1104" // Field reassigned after construction, cannot be final
+		"java:S1104", // Field reassigned after construction, cannot be final
+		"java:S1165"  // Cannot be final; setStatusLine() replaces it entirely via statusLine = value.copy()
 	})
 	transient BasicStatusLine statusLine = new BasicStatusLine();
 	@SuppressWarnings({
-		"java:S1104" // Field reassigned after construction, cannot be final
+		"java:S1104", // Field reassigned after construction, cannot be final
+		"java:S1165"  // Cannot be final; setContent() replaces it via content = value
 	})
 	transient HttpEntity content;
 
@@ -297,7 +300,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return this == o || (o instanceof BasicHttpException other && eq(this, other, (x, y) -> {
-			Throwable t1 = x, t2 = y;
+			Throwable t1 = x;
+			Throwable t2 = y;
 			while (nn(t1) && nn(t2)) {
 				if (!Arrays.equals(t1.getStackTrace(), t2.getStackTrace()))
 					return false;

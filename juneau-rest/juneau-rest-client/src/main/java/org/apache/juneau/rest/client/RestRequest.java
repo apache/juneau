@@ -103,8 +103,9 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"resource", // Resource management handled externally
+	"java:S115",  // Constants use UPPER_snakeCase naming convention
+	"resource",   // Resource management handled externally
+	"java:S3740"  // Raw Class/Supplier types used for fluent REST request building where response type is unknown at construction time
 })
 public class RestRequest extends BeanSession implements HttpUriRequest, Configurable, AutoCloseable {
 

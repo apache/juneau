@@ -46,6 +46,9 @@ import java.util.*;
  * 	<li>{@link #of(Type)}
  * </ul>
  */
+@SuppressWarnings({
+	"java:S3740" // Raw Class/TypeVariable types used intentionally for type variable resolution where generic parameters cannot be determined at compile time
+})
 public class TypeVariables {
 
 	private final Map<Class<?>,List<Class<?>>> map;

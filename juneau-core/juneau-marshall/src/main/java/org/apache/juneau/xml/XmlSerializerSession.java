@@ -53,7 +53,8 @@ import org.apache.juneau.xml.annotation.*;
 @SuppressWarnings({
 	"rawtypes",  // Raw Map/Collection necessary for serializer dispatch over heterogeneous types
 	"unchecked", // Type erasure requires unchecked casts in serializer dispatch
-	"resource"  // Writer/Closeable resources managed by try-with-resources; analyzer FP in lambdas
+	"resource",  // Writer/Closeable resources managed by try-with-resources; analyzer FP in lambdas
+	"java:S115"  // Constants use naming conventions that embed type info or config keys (e.g. PROP_addNamespaceUrisToRoot)
 })
 public class XmlSerializerSession extends WriterSerializerSession {
 
@@ -310,6 +311,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			return value;
 		}
 
+		@SuppressWarnings({
+			"java:S1871" // return true is the only correct action here; coincidental match with isXmlText is not a logic error
+		})
 		boolean isOneOf(JsonType...types) {
 			for (var type : types)
 				if (type == this)

@@ -71,6 +71,9 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("Retry-After")
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; no additional equality-relevant fields
+})
 public class RetryAfter extends BasicDateHeader {
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Retry-After";

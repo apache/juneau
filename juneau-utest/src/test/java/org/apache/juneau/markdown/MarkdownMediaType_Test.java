@@ -25,19 +25,19 @@ import org.junit.jupiter.api.*;
  */
 class MarkdownMediaType_Test {
 
-	@Test void g01_producesCorrectMediaType() throws Exception {
+	@Test void g01_producesCorrectMediaType() {
 		var ct = MarkdownSerializer.DEFAULT.getResponseContentType();
 		assertEquals("text", ct.getType());
 		assertEquals("markdown", ct.getSubType());
 	}
 
-	@Test void g02_acceptsMediaTypes() throws Exception {
+	@Test void g02_acceptsMediaTypes() {
 		var types = new java.util.ArrayList<String>();
 		MarkdownSerializer.DEFAULT.forEachAcceptMediaType(mt -> types.add(mt.getType() + "/" + mt.getSubType()));
 		assertTrue(types.stream().anyMatch(t -> t.contains("markdown")), "Expected text/markdown or text/x-markdown: " + types);
 	}
 
-	@Test void g03_parserAcceptsMediaTypes() throws Exception {
+	@Test void g03_parserAcceptsMediaTypes() {
 		var types = MarkdownParser.DEFAULT.getMediaTypes().stream()
 			.map(mt -> mt.getType() + "/" + mt.getSubType())
 			.toList();

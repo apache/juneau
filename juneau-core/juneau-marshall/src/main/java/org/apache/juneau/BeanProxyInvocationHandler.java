@@ -72,6 +72,9 @@ import org.apache.juneau.json5.*;
  * @see BeanMeta#getBeanProxyInvocationHandler()
  * @see Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)
  */
+@SuppressWarnings({
+	"java:S3740" // Raw Class/Map types used intentionally for reflective proxy dispatch where generic parameters are erased at runtime
+})
 public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 
 	private final BeanMeta<T> meta;						// The BeanMeta for this instance

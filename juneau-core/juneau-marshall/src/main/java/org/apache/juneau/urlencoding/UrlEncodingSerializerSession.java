@@ -312,8 +312,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 	
 	@SuppressWarnings({
-		"java:S3776", // Method name matches private method in parent class by design
-		"java:S1213", // Field order differs from constructor for logical grouping
+		"java:S3776", // Cognitive complexity acceptable for expanded-params bean map serialization
+		"java:S2177", // Intentional: UrlEncodingSerializerSession provides its own private serializeBeanMap() with expanded-params logic
 	})
 	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		var addAmp = Flag.create();
@@ -388,7 +388,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	}
 
 	@SuppressWarnings({
-		"java:S1213" // Method name matches private method in parent class by design for override behavior
+		"java:S2177" // Intentional: UrlEncodingSerializerSession provides its own private serializeMap() with expanded-params logic
 	})
 	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 

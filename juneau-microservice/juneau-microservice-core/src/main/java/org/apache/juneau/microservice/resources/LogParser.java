@@ -34,7 +34,8 @@ import java.util.regex.*;
  * names.
  */
 @SuppressWarnings({
-	"resource" // br is closed via this class's close() method
+	"resource",  // br is closed via this class's close() method
+	"java:S3776" // Cognitive complexity acceptable for log line parsing state machine
 })
 public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 

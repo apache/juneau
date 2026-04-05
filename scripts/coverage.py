@@ -128,7 +128,7 @@ def pct(covered, total):
     return f"{covered / total * 100:.0f}%"
 
 
-def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_only: bool):
+def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_only: bool):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for XML report parsing and output formatting
     """Parse jacoco.xml and print coverage for the matching package/file."""
     if not xml_path.exists():
         die(f"JaCoCo report not found at {xml_path}. Run with --run to generate it.")
@@ -145,7 +145,7 @@ def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_on
 
     if not matched_packages:
         die(f"No JaCoCo data found for package '{pkg_filter}'.\n"
-            f"Make sure the module is built and the exec file is up to date.")
+            "Make sure the module is built and the exec file is up to date.")
 
     # Collect per-file data
     files_data = []  # list of (pkg_name, fname, lines_with_issues)
@@ -180,17 +180,14 @@ def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_on
                 ln = int(line.get("nr", 0))
                 lmb = int(line.get("mb", 0))
                 lmi = int(line.get("mi", 0))
-                if branches_only and lmb > 0:
-                    lcb = int(line.get("cb", 0))
-                    uncovered.append((ln, lmb, lmb + lcb, lmi))
-                elif not branches_only and (lmb > 0 or lmi > 0):
+                if lmb > 0 or (not branches_only and lmi > 0):
                     lcb = int(line.get("cb", 0))
                     uncovered.append((ln, lmb, lmb + lcb, lmi))
 
             files_data.append((pkg_name, fname, mb, cb, mi, ci, uncovered))
 
     if not files_data:
-        print(f"No data found for the specified path.")
+        print("No data found for the specified path.")
         return
 
     # Print per-file results
@@ -205,7 +202,7 @@ def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_on
         print(f"  Branches:     {bar(cb, branch_total)}  {branch_pct:>4}  ({cb}/{branch_total} covered, {mb} missed)")
         print(f"  Instructions: {bar(ci, instr_total)}  {instr_pct:>4}  ({ci}/{instr_total} covered, {mi} missed)")
         if uncovered:
-            print(f"\n  Uncovered lines:")
+            print("\n  Uncovered lines:")
             for ln, lmb, ltotal, lmi in sorted(uncovered):
                 parts = []
                 if lmb > 0:
@@ -214,21 +211,21 @@ def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_on
                     parts.append(f"{lmi} instructions missed")
                 print(f"    line {ln:4d}:  {', '.join(parts)}")
         else:
-            print(f"\n  All lines covered!")
+            print("\n  All lines covered!")
 
     # Print summary if multiple files
     if len(files_data) > 1:
         branch_total = total_mb + total_cb
         instr_total = total_mi + total_ci
         print(f"\n{'='*70}")
-        print(f"  TOTAL SUMMARY")
+        print("  TOTAL SUMMARY")
         print(f"{'='*70}")
         print(f"  Branches:     {bar(total_cb, branch_total)}  {pct(total_cb, branch_total):>4}  ({total_cb}/{branch_total} covered, {total_mb} missed)")
         print(f"  Instructions: {bar(total_ci, instr_total)}  {pct(total_ci, instr_total):>4}  ({total_ci}/{instr_total} covered, {total_mi} missed)")
         print()
 
 
-def main():
+def main():  # NOSONAR: always returns 0 by design — standard POSIX exit code for success
     args = sys.argv[1:]
     if not args or "--help" in args or "-h" in args:
         print(__doc__)

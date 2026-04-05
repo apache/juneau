@@ -74,6 +74,9 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("If-Range")
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; no additional equality-relevant fields
+})
 public class IfRange extends BasicDateHeader {
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "If-Range";

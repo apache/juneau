@@ -55,10 +55,12 @@ import org.apache.jena.riot.*;
  * </ul>
  */
 @SuppressWarnings({
-	"rawtypes", // Raw types necessary for generic type handling
+	"rawtypes",  // Raw types necessary for generic type handling
 	"unchecked", // Type erasure requires unchecked casts
 	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S2176" // Inheritance depth exceeds 5; necessary to participate in the serializer session hierarchy
+	"java:S2176", // Inheritance depth exceeds 5; necessary to participate in the serializer session hierarchy
+	"java:S3776", // Cognitive complexity acceptable for RDF serializer session methods
+	"java:S6541"  // Brain Method complexity acceptable for core RDF serializer dispatch logic
 })
 public class RdfSerializerSession extends WriterSerializerSession {
 
@@ -231,7 +233,8 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	private final Model model;
-	private final Property pRoot, pValue;
+	private final Property pRoot;
+	private final Property pValue;
 	private final Lang lang;
 	private final RdfSerializer ctx;
 	private final Namespace[] namespaces;

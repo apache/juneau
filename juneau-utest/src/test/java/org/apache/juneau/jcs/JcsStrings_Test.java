@@ -88,6 +88,9 @@ class JcsStrings_Test extends TestBase {
 		assertEquals(emoji, parsed.getString("x"));
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // assertThrows lambda calls JsonMap.of() and serialize() together; both are needed to reproduce the lone-surrogate error path
+	})
 	@Test
 	void b09_loneSurrogateError() {
 		var s = "\uDEAD";

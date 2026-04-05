@@ -202,9 +202,9 @@ public class VarResolverSession {
 		// Special case where value consists of a single variable with no embedded variables (e.g. "$X{...}").
 		// This is a common case, so we want an optimized solution that doesn't involve string builders.
 		if (isSimpleVar(s)) {
-			String var = s.substring(1, s.indexOf('{'));
-			String val = s.substring(s.indexOf('{') + 1, s.length() - 1);
-			Var v = getVar(var);
+		String varName = s.substring(1, s.indexOf('{'));
+		String val = s.substring(s.indexOf('{') + 1, s.length() - 1);
+		Var v = getVar(varName);
 			if (nn(v)) {
 				try {
 					if (v.streamed) {
@@ -219,7 +219,7 @@ public class VarResolverSession {
 				} catch (VarResolverException e) {
 					throw e;
 				} catch (Exception e) {
-					throw new VarResolverException(e, "Problem occurred resolving variable ''{0}'' in string ''{1}''", var, s);
+					throw new VarResolverException(e, "Problem occurred resolving variable ''{0}'' in string ''{1}''", varName, s);
 				}
 			}
 			return s;

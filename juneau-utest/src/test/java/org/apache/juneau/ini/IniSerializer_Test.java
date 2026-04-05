@@ -154,7 +154,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a10_topLevelCollectionThrows() throws Exception {
+	void a10_topLevelCollectionThrows() {
 		var list = List.of("a", "b", "c");
 		var ex = assertThrows(Exception.class, () -> IniSerializer.DEFAULT.serialize(list));
 		assertTrue(ex.getMessage().contains("Collection") || ex.getMessage().contains("not supported")
@@ -162,7 +162,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a11_topLevelScalarThrows() throws Exception {
+	void a11_topLevelScalarThrows() {
 		var ex = assertThrows(Exception.class, () -> IniSerializer.DEFAULT.serialize("hello"));
 		assertTrue(ex.getMessage().contains("not supported") || ex.getMessage().contains("bean")
 			|| ex.getClass().getSimpleName().contains("Serialize"));

@@ -352,8 +352,6 @@ class RdfSerializer_Test extends TestBase {
 	}
 
 	@Test void d01_constants_class() {
-		// Covers the default constructor of Constants (utility class with static fields)
-		assertNotNull(new Constants());
 		// Verify constants are accessible at runtime (not all are compile-time inlined)
 		assertNotNull(Constants.RDF_NIL);
 		assertNotNull(Constants.RDF_SEQ);

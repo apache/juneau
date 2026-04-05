@@ -53,8 +53,11 @@ import org.apache.jena.util.iterator.*;
  * </ul>
  */
 @SuppressWarnings({
-	"unchecked", // Type erasure requires unchecked casts
-	"rawtypes", // Raw types necessary for generic type handling
+	"unchecked",   // Type erasure requires unchecked casts
+	"rawtypes",    // Raw types necessary for generic type handling
+	"java:S115",   // Constants use naming conventions that embed type info or config keys (e.g. PROP_collectionFormat)
+	"java:S3776",  // Cognitive complexity acceptable for RDF stream parser state machine methods
+	"java:S6541"   // Brain Method complexity acceptable for core RDF stream parser dispatch logic
 })
 public class RdfStreamParserSession extends InputStreamParserSession {
 
@@ -181,7 +184,10 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 	}
 
 	private final Model model;
-	private final org.apache.jena.rdf.model.Property pRoot, pValue, pType, pRdfType;
+	private final org.apache.jena.rdf.model.Property pRoot;
+	private final org.apache.jena.rdf.model.Property pValue;
+	private final org.apache.jena.rdf.model.Property pType;
+	private final org.apache.jena.rdf.model.Property pRdfType;
 	private final Lang lang;
 	private final RdfStreamParser ctx;
 	private final Set<Resource> urisVisited = new HashSet<>();
@@ -323,7 +329,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 			eType = object();
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		var sType = (ClassMeta<?>)null;
+		ClassMeta<?> sType;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
 		else if (nn(swap))
@@ -336,19 +342,17 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 
 		setCurrentClass(sType);
 
-		if (! sType.canCreateNewInstance(outer)) {
-			if (n.isResource()) {
-				var st = n.asResource().getProperty(pType);
-				if (nn(st)) {
-					var c = st.getLiteral().getString();
-					var tcm = getClassMeta(c, pMeta, eType);
-					if (nn(tcm))
-						sType = eType = tcm;
-				}
+		if (! sType.canCreateNewInstance(outer) && n.isResource()) {
+			var st = n.asResource().getProperty(pType);
+			if (nn(st)) {
+				var c = st.getLiteral().getString();
+				var tcm = getClassMeta(c, pMeta, eType);
+				if (nn(tcm))
+					sType = eType = tcm;
 			}
 		}
 
-		var o = (Object)null;
+		Object o = null;
 		if (n.isResource() && nn(n.asResource().getURI()) && n.asResource().getURI().equals(RDF_NIL)) {
 			// Do nothing.  Leave o == null.
 		} else if (sType.isObject()) {
@@ -559,7 +563,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 
 		// Special case where we're parsing a loose collection of resources.
 		if (isLooseCollections() && type.isCollectionOrArray()) {
-			var c = (Collection)null;
+			Collection c;
 			if (type.isArray() || type.isArgs())
 				c = list();
 			else

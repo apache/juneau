@@ -89,9 +89,6 @@ public class GitControl {
 	 *
 	 * @throws GitAPIException If clone fails.
 	 */
-	@SuppressWarnings({
-		"resource" // Git resources managed by JGit library
-	})
 	public void cloneRepo() throws GitAPIException {
 		Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call();
 	}

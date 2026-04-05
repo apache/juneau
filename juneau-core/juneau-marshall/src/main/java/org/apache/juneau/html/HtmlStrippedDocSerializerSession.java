@@ -40,6 +40,9 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S3740" // Raw ObjectMap/ClassMeta types propagated from parent serializer session hierarchy where type parameters are erased
+})
 public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 
 	/**

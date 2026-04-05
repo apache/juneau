@@ -691,7 +691,7 @@ class SortedArrayList_Test extends TestBase {
 	void n10_equals_notAList() {
 		var list = new SortedArrayList<String>();
 		list.add("a");
-		assertFalse(list.equals("not-a-list"));
+		assertFalse(list.equals((Object)"not-a-list"));
 		assertFalse(list.equals(null));
 	}
 

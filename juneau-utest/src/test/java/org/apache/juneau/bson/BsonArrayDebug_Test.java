@@ -17,6 +17,7 @@
 package org.apache.juneau.bson;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ class BsonArrayDebug_Test {
 		}
 		System.out.println("First 80 bytes (hex):");
 		System.out.println(sb);
+		assertTrue(bytes.length > 0);
 	}
 
 	@Test
@@ -51,5 +53,6 @@ class BsonArrayDebug_Test {
 		}
 		System.out.println("JsonList BSON (hex):");
 		System.out.println(sb);
+		assertTrue(bytes.length > 0);
 	}
 }

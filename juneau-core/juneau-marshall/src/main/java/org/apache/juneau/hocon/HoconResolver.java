@@ -113,7 +113,9 @@ public class HoconResolver {
 				throw rex("Substitution ''${0}'' not found", path);
 			}
 			var resolved = resolveValue(found);
-			return resolved == null ? (optional ? null : found) : resolved;
+			if (resolved != null)
+				return resolved;
+			return optional ? null : found;
 		} finally {
 			inProgress.remove(path);
 		}
@@ -209,7 +211,9 @@ public class HoconResolver {
 				throw rex("Substitution ''${0}'' not found", path);
 			}
 			var resolved = resolveValueWithLookup(found, lookup);
-			return resolved == null ? (optional ? null : found) : resolved;
+			if (resolved != null)
+				return resolved;
+			return optional ? null : found;
 		} finally {
 			inProgress.remove(path);
 		}

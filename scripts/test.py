@@ -86,8 +86,7 @@ def parse_test_results(output):
         return total, failures, errors
     return None, None, None
 
-# NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
-def main():
+def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
     args = sys.argv[1:]
     
     # Parse arguments

@@ -117,7 +117,8 @@ import java.util.function.*;
  * @param <E> The element type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"java:S3740"  // Raw Set/Iterable types used in utility methods where element type is not statically known
 })
 public class Sets<E> {
 

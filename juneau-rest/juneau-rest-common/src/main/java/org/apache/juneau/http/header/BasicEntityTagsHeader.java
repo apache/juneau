@@ -39,6 +39,9 @@ import java.util.function.*;
  *
  * @serial exclude
  */
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; typed field is accessed via getValue()
+})
 public class BasicEntityTagsHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 

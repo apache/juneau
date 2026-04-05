@@ -18,15 +18,29 @@ package org.apache.juneau.yaml;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.stream.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 class YamlParser_Test extends TestBase {
 
-	@Test void a01_parseString() throws Exception {
-		var p = YamlParser.DEFAULT;
-		assertEquals("hello", p.parse("hello", String.class));
+	@ParameterizedTest @MethodSource
+	void a01_parseString(String input, String expected) throws Exception {
+		assertEquals(expected, YamlParser.DEFAULT.parse(input, String.class));
+	}
+
+	static Stream<Arguments> a01_parseString() {
+		return Stream.of(
+			Arguments.of("hello", "hello"),
+			Arguments.of("null", null),
+			Arguments.of("hello # this is a comment", "hello"),
+			Arguments.of("", null),
+			Arguments.of("~", null)
+		);
 	}
 
 	@Test void a02_parseQuotedString() throws Exception {
@@ -45,11 +59,6 @@ class YamlParser_Test extends TestBase {
 		var p = YamlParser.DEFAULT;
 		assertEquals(true, p.parse("true", boolean.class));
 		assertEquals(false, p.parse("false", boolean.class));
-	}
-
-	@Test void a05_parseNull() throws Exception {
-		var p = YamlParser.DEFAULT;
-		assertNull(p.parse("null", String.class));
 	}
 
 	@Test void a06_parseFlowMapping() throws Exception {
@@ -83,21 +92,6 @@ class YamlParser_Test extends TestBase {
 		var p = YamlParser.DEFAULT;
 		JsonMap m = p.parse("outer:\n  inner: value", JsonMap.class);
 		assertNotNull(m.get("outer"));
-	}
-
-	@Test void a11_parseComment() throws Exception {
-		var p = YamlParser.DEFAULT;
-		assertEquals("hello", p.parse("hello # this is a comment", String.class));
-	}
-
-	@Test void a12_parseEmptyInput() throws Exception {
-		var p = YamlParser.DEFAULT;
-		assertNull(p.parse("", String.class));
-	}
-
-	@Test void a13_parseTildeNull() throws Exception {
-		var p = YamlParser.DEFAULT;
-		assertNull(p.parse("~", String.class));
 	}
 
 	public static class DurationBean {

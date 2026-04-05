@@ -115,6 +115,9 @@ public class RestStartCallAnnotation {
 
 	}
 
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+	})
 	private static class Object extends AppliedAnnotationObject implements RestStartCall {
 
 		private final String[] description;

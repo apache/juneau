@@ -48,6 +48,9 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("Client-Version")
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; no additional equality-relevant fields
+})
 public class ClientVersion extends BasicStringHeader {
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Client-Version";

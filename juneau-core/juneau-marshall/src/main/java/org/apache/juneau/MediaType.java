@@ -42,7 +42,8 @@ import org.apache.juneau.json5.Json5Serializer;
  */
 @BeanIgnore
 @SuppressWarnings({
-	"java:S1845" // Field name intentionally matches method name
+	"java:S1700", // Field 'mediaType' intentionally shares the class name; it holds the canonical string form of this MediaType instance
+	"java:S1845"  // Field name intentionally matches method name
 })
 public class MediaType implements Comparable<MediaType> {
 

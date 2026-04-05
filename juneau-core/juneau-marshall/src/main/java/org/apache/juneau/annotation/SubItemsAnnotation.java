@@ -523,7 +523,8 @@ public class SubItemsAnnotation {
 	}
 
 	@SuppressWarnings({
-		"java:S116" // Field names match JSON Schema property names for API consistency
+		"java:S116",  // Field names match JSON Schema property names for API consistency
+		"java:S2160"  // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
 	private static class Object extends AnnotationObject implements SubItems {
 

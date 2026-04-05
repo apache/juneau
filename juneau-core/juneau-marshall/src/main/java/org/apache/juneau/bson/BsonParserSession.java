@@ -43,12 +43,14 @@ import org.apache.juneau.swap.*;
 	"rawtypes",
 	"unchecked",
 	"java:S115",
+	"java:S125",  // Explanatory comments contain BSON/JSON syntax (e.g. {"value":x}) that Sonar misreads as commented-out code
 	"java:S3776",
 	"java:S6541"
 })
 public class BsonParserSession extends InputStreamParserSession {
 
 	private static final String ARG_ctx = "ctx";
+	private static final String BSON_VALUE_KEY = "value";
 
 	/**
 	 * Builder class.
@@ -128,7 +130,13 @@ public class BsonParserSession extends InputStreamParserSession {
 
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
-		ClassMeta<?> sType = nn(builder) ? builder.getBuilderClassMeta(this) : (nn(swap) ? swap.getSwapClassMeta(this) : eType);
+		ClassMeta<?> sType;
+		if (nn(builder))
+			sType = builder.getBuilderClassMeta(this);
+		else if (nn(swap))
+			sType = swap.getSwapClassMeta(this);
+		else
+			sType = eType;
 
 		// Do not recurse for Optional here - BSON wraps non-bean/map roots as {"value":x}.
 		// We must parse the document first, then unwrap via the map.size()==1 / "value" path below.
@@ -151,7 +159,7 @@ public class BsonParserSession extends InputStreamParserSession {
 				map.put(key, value);
 			}
 			is.readDocumentTerminator();
-			var raw = map instanceof JsonMap ? cast((JsonMap)map, pMeta, eType) : map;
+			var raw = map instanceof JsonMap jsonmap ? cast(jsonmap, pMeta, eType) : map;
 			// Convert JsonMap to target map type (TreeMap, LinkedHashMap, etc.) when needed
 			if (eType.isMap() && raw instanceof Map mr && !eType.inner().isInstance(raw))
 				result = convertToMemberType(null, mr, eType);
@@ -192,12 +200,12 @@ public class BsonParserSession extends InputStreamParserSession {
 				var et = is.readElementType();
 				var name = is.readElementName();
 				var key = name.equals(nullKeyString) ? null : trimKey(name);
-				map.put(key, readTypedValue(is, et, "value".equals(name) ? eType : object(), map, null));
-			}
-			is.readDocumentTerminator();
-			// Unwrap {"value":x} when target is Optional or when scalar-like (BSON root wrap convention)
-			if (map.size() == 1 && map.containsKey("value")) {
-				var wrapped = map.get("value");
+			map.put(key, readTypedValue(is, et, BSON_VALUE_KEY.equals(name) ? eType : object(), map, null));
+		}
+		is.readDocumentTerminator();
+		// Unwrap {"value":x} when target is Optional or when scalar-like (BSON root wrap convention)
+		if (map.size() == 1 && map.containsKey(BSON_VALUE_KEY)) {
+			var wrapped = map.get(BSON_VALUE_KEY);
 				if (eType.isOptional() || (!sType.isMap() && !sType.isBean() && !sType.isObject())
 					|| (wrapped == null && sType.isObject())) {
 					result = convertToMemberType(null, wrapped, eType);
@@ -215,8 +223,8 @@ public class BsonParserSession extends InputStreamParserSession {
 			}
 		}
 		// Final fallback: when target is Optional and we have map with "value", unwrap
-		if (eType.isOptional() && result instanceof Map m && m.size() == 1 && m.containsKey("value")) {
-			result = convertToMemberType(null, m.get("value"), eType);
+		if (eType.isOptional() && result instanceof Map m && m.size() == 1 && m.containsKey(BSON_VALUE_KEY)) {
+			result = convertToMemberType(null, m.get(BSON_VALUE_KEY), eType);
 			wrapInOptional = false; // convertToMemberType already wrapped
 		}
 		// Convert JsonMap to target Map type (TreeMap, LinkedHashMap, etc.) when needed

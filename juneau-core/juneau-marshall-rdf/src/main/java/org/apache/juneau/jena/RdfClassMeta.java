@@ -33,6 +33,9 @@ import org.apache.juneau.xml.*;
 
  * </ul>
  */
+@SuppressWarnings({
+	"java:S1612" // Lambdas used instead of method references; annotation attribute access requires explicit lambda form
+})
 public class RdfClassMeta extends ExtendedClassMeta {
 
 	private final RdfCollectionFormat collectionFormat;

@@ -121,7 +121,8 @@ import java.util.function.*;
  * @param <V> The value type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"java:S3740"  // Raw Map/Entry types used in utility methods where key/value types are not statically known
 })
 public class Maps<K,V> {
 

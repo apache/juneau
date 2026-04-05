@@ -102,7 +102,8 @@ import java.util.stream.Collectors;
  * @param <V> The value type of this map.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"java:S3740"  // Raw Map/Iterator types used in multi-map structural operations where value collection type is erased
 })
 public class MultiMap<K,V> extends AbstractMap<K,V> {
 

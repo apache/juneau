@@ -42,6 +42,9 @@ import org.apache.juneau.assertions.*;
  *
  * @serial exclude
  */
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; typed ZonedDateTime field is accessed via getValue()
+})
 public class BasicDateHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 

@@ -56,7 +56,8 @@ import org.apache.juneau.internal.*;
 	"unchecked", // Type erasure requires unchecked casts
 	"rawtypes", // Raw types necessary for generic type handling
 	"java:S6541", // Stateless utility, singleton for convenience
-	"java:S6542"  // Singleton required for ObjectTool pattern; stateless DEFAULT instance
+	"java:S6542", // Singleton required for ObjectTool pattern; stateless DEFAULT instance
+	"java:S6548"  // Singleton pattern is intentional; DEFAULT is a stateless, thread-safe shared tool
 })
 public class ObjectViewer implements ObjectTool<ViewArgs> {
 

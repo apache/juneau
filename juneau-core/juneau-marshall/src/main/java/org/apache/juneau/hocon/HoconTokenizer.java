@@ -351,10 +351,8 @@ public class HoconTokenizer {
 		if (c == ':') {
 			return Token.of(TokenType.COLON);
 		}
-		if (c == '=') {
-			if (peekChar() != '+')
-				return Token.of(TokenType.EQUALS);
-		}
+		if (c == '=' && peekChar() != '+')
+			return Token.of(TokenType.EQUALS);
 		if (c == '+' && peekChar() == '=') {
 			readChar();
 			return Token.of(TokenType.PLUS_EQUALS);

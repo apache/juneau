@@ -117,6 +117,9 @@ public class CborInputStream extends ParserInputStream {
 	/**
 	 * Reads 1 unsigned byte.
 	 */
+	@SuppressWarnings({
+		"java:S4144" // Identical to readInitialByte by design; each method has distinct semantic purpose
+	})
 	int readUInt1() throws IOException {
 		int b = read();
 		if (b == -1)
@@ -198,7 +201,12 @@ public class CborInputStream extends ParserInputStream {
 
 		lastDataType = dt;
 		if (dt == FLOAT)
-			length = additionalInfo == 25 ? 2 : additionalInfo == 26 ? 4 : 8;
+			if (additionalInfo == 25)
+				length = 2;
+			else if (additionalInfo == 26)
+				length = 4;
+			else
+				length = 8;
 		else if (dt != BOOLEAN && dt != NULL && dt != UNDEFINED && dt != BREAK)
 			length = readArgument(additionalInfo);
 		else

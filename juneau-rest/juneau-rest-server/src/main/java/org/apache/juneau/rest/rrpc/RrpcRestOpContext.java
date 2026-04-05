@@ -33,6 +33,9 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  * </ul>
  */
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from parent context; RrpcRestOpContext adds only runtime-state fields not relevant to identity
+})
 public class RrpcRestOpContext extends RestOpContext {
 
 	private final RrpcInterfaceMeta meta;

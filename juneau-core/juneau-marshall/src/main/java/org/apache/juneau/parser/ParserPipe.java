@@ -256,8 +256,7 @@ public class ParserPipe implements Closeable {
 	public ParserReader getParserReader() throws IOException {
 		if (input == null)
 			return null;
-		ParserReader parserReader = input instanceof ParserReader input2 ? input2 : new ParserReader(this);
-		return parserReader;
+		return input instanceof ParserReader input2 ? input2 : new ParserReader(this);
 	}
 
 	/**

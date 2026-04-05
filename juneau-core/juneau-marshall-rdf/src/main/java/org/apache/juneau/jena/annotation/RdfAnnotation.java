@@ -38,6 +38,8 @@ import org.apache.juneau.svl.*;
  */
 public class RdfAnnotation {
 
+	private RdfAnnotation() {}
+
 	/**
 	 * A collection of {@link Rdf @Rdf annotations}.
 	 */
@@ -64,7 +66,8 @@ public class RdfAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
-		private String namespace = "", prefix = "";
+		private String namespace = "";
+		private String prefix = "";
 		private boolean beanUri;
 		private RdfCollectionFormat collectionFormat = RdfCollectionFormat.DEFAULT;
 
@@ -230,11 +233,15 @@ public class RdfAnnotation {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+	})
 	private static class Object extends AppliedOnClassAnnotationObject implements Rdf {
 
 		private final boolean beanUri;
 		private final RdfCollectionFormat collectionFormat;
-		private final String namespace, prefix;
+		private final String namespace;
+		private final String prefix;
 
 		Object(RdfAnnotation.Builder b) {
 			super(b);

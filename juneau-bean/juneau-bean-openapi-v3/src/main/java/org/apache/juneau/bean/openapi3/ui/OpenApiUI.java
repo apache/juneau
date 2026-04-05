@@ -42,7 +42,8 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S1192" // String literals repeated for clarity in UI generation
+	"java:S1192",      // String literals repeated for clarity in UI generation
+	"javabugs:S2259"   // Null accesses are guarded by nn() checks; Sonar's flow analysis does not track nn() as a null guard
 })
 public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 

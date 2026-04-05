@@ -54,6 +54,9 @@ public final class CsvCellSerializer {
 		return serializeValue(value, session);
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for exhaustive CSV value type dispatch
+	})
 	private String serializeValue(Object value, CsvSerializerSession session) {
 		if (value == null)
 			return nullMarker;
@@ -76,7 +79,7 @@ public final class CsvCellSerializer {
 		var prepared = session.prepareForInlineValue(value);
 		if (prepared instanceof Map) return serializeMap((Map<?, ?>) prepared, session);
 		if (prepared instanceof Collection) return serializeCollection((Collection<?>) prepared, session);
-		if (prepared instanceof Object[]) return serializeObjectArray((Object[]) prepared, session);
+		if (prepared instanceof Object[] objectArray) return serializeObjectArray(objectArray, session);
 		return escapeIfNeeded(prepared.toString());
 	}
 

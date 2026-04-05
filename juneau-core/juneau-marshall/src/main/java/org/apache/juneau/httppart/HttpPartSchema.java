@@ -4403,7 +4403,7 @@ public class HttpPartSchema {
 							s2.validateOutput(v, bc);
 					});
 				} else if (cm.isBean()) {
-
+					// Bean validation is handled above via isMapOrBean() which converts the bean to a BeanMap
 				}
 				break;
 			}
@@ -4716,7 +4716,8 @@ public class HttpPartSchema {
 
 	private static boolean isValidRelativeJsonPointer(String x) {
 		// Relative JSON Pointer validation (programmatic to avoid regex stack overflow on large inputs)
-		int i = 0, len = x.length();
+		int i = 0;
+		int len = x.length();
 		if (i >= len)
 			return false;
 		if (x.charAt(i) == '0') {

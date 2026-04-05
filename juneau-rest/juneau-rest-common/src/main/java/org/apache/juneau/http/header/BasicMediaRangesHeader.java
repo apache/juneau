@@ -39,6 +39,9 @@ import org.apache.juneau.*;
  *
  * @serial exclude
  */
+@SuppressWarnings({
+	"java:S2160" // equals() inherited from BasicHeader compares name+value; typed field is accessed via getValue()
+})
 public class BasicMediaRangesHeader extends BasicStringHeader {
 	private static final long serialVersionUID = 1L;
 
@@ -217,7 +220,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	}
 
 	@SuppressWarnings({
-		"java:S1213" // Method name matches private method in parent class by design
+		"java:S2177" // Intentional: subclass provides its own private value() with a different return type (MediaRanges vs String)
 	})
 	private MediaRanges value() {
 		if (nn(supplier))

@@ -33,6 +33,9 @@ import org.apache.juneau.commons.utils.*;
  * </p>
  *
  */
+@SuppressWarnings({
+	"java:S1700" // Field 'hashCode' intentionally shares the class name; it accumulates the computed hash value for this HashCode instance
+})
 public class HashCode {
 
 	/**

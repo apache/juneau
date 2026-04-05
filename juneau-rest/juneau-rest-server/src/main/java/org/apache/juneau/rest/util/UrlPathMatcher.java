@@ -37,6 +37,9 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 	/**
 	 * A file name pattern such as "favicon.ico" or "*.jsp".
 	 */
+	@SuppressWarnings({
+		"java:S2160" // equals() is inherited from UrlPathMatcher which compares by pattern string; added fields are derived from the pattern
+	})
 	private static class FileNameMatcher extends UrlPathMatcher {
 
 		private final String basePattern;
@@ -71,6 +74,9 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 	/**
 	 * A dir name pattern such as "/foo" or "/*".
 	 */
+	@SuppressWarnings({
+		"java:S2160" // equals() is inherited from UrlPathMatcher which compares by pattern string; added fields are derived from the pattern
+	})
 	private static class PathMatcher extends UrlPathMatcher {
 		private static final Pattern VAR_PATTERN = Pattern.compile("\\{([^\\}]+)\\}");
 

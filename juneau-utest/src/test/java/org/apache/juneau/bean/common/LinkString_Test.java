@@ -72,7 +72,7 @@ class LinkString_Test extends TestBase {
 		assertTrue(a.equals(b));
 		assertFalse(a.equals(c));
 		assertFalse(a.equals(null));
-		assertFalse(a.equals("notALinkString"));
+		assertFalse(a.equals((Object)"notALinkString"));
 		assertTrue(a.equals(a));
 	}
 

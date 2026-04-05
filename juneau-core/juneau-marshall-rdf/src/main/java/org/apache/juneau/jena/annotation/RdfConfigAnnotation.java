@@ -29,7 +29,12 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
+@SuppressWarnings({
+	"java:S1612" // Lambdas used instead of method references throughout; conditional checks before delegation prevent direct method ref conversion
+})
 public class RdfConfigAnnotation {
+
+	private RdfConfigAnnotation() {}
 
 	/**
 	 * Applies {@link RdfConfig} annotations to a {@link org.apache.juneau.jena.RdfParser.Builder}.

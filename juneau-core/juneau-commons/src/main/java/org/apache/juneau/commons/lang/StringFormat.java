@@ -524,6 +524,7 @@ public final class StringFormat {
 		"java:S125", // S125: state-machine/docs comments
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded context; synchronization unnecessary
+		"java:S1871" // else-branch intentionally duplicates known-conversion branch; semantics differ (valid vs unknown format char)
 	})
 	private static List<Token> parseTokens(String pattern) {
 		var tokens = new ArrayList<Token>();
@@ -641,6 +642,9 @@ public final class StringFormat {
 	}
 
 
+	@SuppressWarnings({
+		"java:S3398" // sf() is a generic String.format wrapper; keeping it at outer-class scope alongside other utility methods is intentional
+	})
 	private static String sf(Locale l, String s, Object o) {
 		return String.format(l, s, a(o));
 	}
