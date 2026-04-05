@@ -110,6 +110,13 @@ class StringListAssertion_Test extends TestBase {
 		test(nil).asSize().isNull();
 	}
 
+	@Test void bb03_asTrimmed() {
+		var x = l("  a  ","  b  ");
+		var nil = listn(String.class);
+		test(x).asTrimmed().isHas("a","b");
+		test(nil).asTrimmed().isNull();
+	}
+
 	@Test void bc01_apply2() {
 		var x1 = l("1");
 		var x2 = l("2");

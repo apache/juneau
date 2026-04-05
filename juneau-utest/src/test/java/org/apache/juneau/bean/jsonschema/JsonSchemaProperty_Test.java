@@ -356,4 +356,27 @@ class JsonSchemaProperty_Test extends TestBase {
 		JsonSchema unevaluated = p.getUnevaluatedItems();
 		assertNotNull(unevaluated);
 	}
+
+	@Test void a20_addRequired_overloads() {
+		var p = new JsonSchemaProperty("parent");
+
+		// addRequired(JsonSchemaProperty...)
+		var child = new JsonSchemaProperty("childField");
+		JsonSchemaProperty r1 = p.addRequired(child);
+		assertSame(p, r1);
+		assertInstanceOf(JsonSchemaProperty.class, r1);
+
+		// addRequired(List<String>)
+		JsonSchemaProperty r2 = p.addRequired(l("field1", "field2"));
+		assertSame(p, r2);
+		assertInstanceOf(JsonSchemaProperty.class, r2);
+	}
+
+	@Test void a21_setSchemaMap() {
+		var p = new JsonSchemaProperty("prop");
+		var map = new JsonSchemaMap() {};
+		JsonSchemaProperty r = p.setSchemaMap(map);
+		assertSame(p, r);
+		assertInstanceOf(JsonSchemaProperty.class, r);
+	}
 }

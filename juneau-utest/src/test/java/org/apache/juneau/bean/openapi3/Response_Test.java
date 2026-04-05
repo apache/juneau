@@ -205,6 +205,20 @@ class Response_Test extends TestBase {
 			// Test null name parameter
 			assertThrows(IllegalArgumentException.class, () -> x.getLink(null));
 		}
+
+		@Test void a17_nullSafeMethods() {
+			// setContent, setHeaders, setLinks with null cover the false branches of nn(value)
+			var x = bean()
+				.setContent(m("application/json", mediaType()))
+				.setHeaders(m("a1", headerInfo().setDescription("a2")))
+				.setLinks(m("b1", link().setOperationId("b2")));
+			x.setContent(null);
+			assertNull(x.getContent());
+			x.setHeaders(null);
+			assertNull(x.getHeaders());
+			x.setLinks(null);
+			assertNull(x.getLinks());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

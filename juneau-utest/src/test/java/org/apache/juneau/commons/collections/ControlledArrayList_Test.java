@@ -675,5 +675,41 @@ class ControlledArrayList_Test extends TestBase {
 			x1.setUnmodifiable();
 			assertFalse(x1.isModifiable());
 		}
+
+		@Test
+		void g05_equals() {
+			var a = new ControlledArrayList<String>(false);
+			a.overrideAdd("x");
+			var b = new ControlledArrayList<String>(false);
+			b.overrideAdd("x");
+			var c = new ControlledArrayList<String>(true);
+			c.overrideAdd("x");
+
+			// same instance
+			assertEquals(a, a);
+			// equal contents, same unmodifiable flag
+			assertEquals(a, b);
+			// equal contents, different unmodifiable flag
+			assertNotEquals(a, c);
+			// different type
+			assertNotEquals(a, new Object());
+			// different contents
+			var d = new ControlledArrayList<String>(false);
+			d.overrideAdd("y");
+			assertNotEquals(a, d);
+		}
+
+		@Test
+		void g06_hashCode() {
+			var a = new ControlledArrayList<String>(false);
+			a.overrideAdd("x");
+			var b = new ControlledArrayList<String>(false);
+			b.overrideAdd("x");
+			var c = new ControlledArrayList<String>(true);
+			c.overrideAdd("x");
+
+			assertEquals(a.hashCode(), b.hashCode());
+			assertNotEquals(a.hashCode(), c.hashCode());
+		}
 	}
 }

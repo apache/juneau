@@ -98,4 +98,55 @@ class HtmlElementContainer_Test extends TestBase {
 		x.setChildren(children);
 		assertString("[child1,child2]", x.getChildren());
 	}
+
+	@Test void a04_container_getChild_typed() {
+		// Use Table (extends HtmlElementContainer directly) to test HtmlElementContainer.getChild(Class, int)
+		var x = new Table();
+		assertNull(x.getChild(String.class, 0));   // children == null branch
+
+		var t = table("row1", "row2");
+		assertNull(t.getChild(String.class, 5));   // children.size() <= index branch
+		assertNull(t.getChild(String.class, -1));  // index < 0 branch
+		assertString("row1", t.getChild(String.class, 0));  // valid branch
+	}
+
+	@Test void a05_container_getChild_int() {
+		// Use Table to test HtmlElementContainer.getChild(int)
+		var x = new Table();
+		assertNull(x.getChild(0));                 // children == null → true branch
+
+		var t = table("row1", "row2");
+		assertNull(t.getChild(5));                 // children.size() <= index → true branch
+		assertNull(t.getChild(-1));                // index < 0 → true branch (need non-null children to reach this)
+		assertString("row1", t.getChild(0));       // valid path
+	}
+
+	@Test void a06_container_children_emptyArgs() {
+		// Use Table to test HtmlElementContainer.children() with empty array (false branch of value.length > 0)
+		var x = new Table();
+		x.children();
+		assertNull(x.getChildren());
+	}
+
+	@Test void a07_container_getChild_varargs() {
+		// Use Table to test HtmlElementContainer.getChild(int...) vararg paths
+		var t = table("row1");
+
+		assertNull(t.getChild(ints()));            // index.length == 0 branch
+		assertString("row1", t.getChild(ints(0))); // index.length == 1 branch
+
+		// Navigate through nested HtmlElementContainer elements: Table[0]=Tr, Tr[0]="cell1"
+		var x = new Table();
+		x.children(tr("cell1"));
+		assertString("cell1", x.getChild(0, 0));
+
+		// Navigate: Table[0]=Tr (HtmlElementContainer), Tr[0]=Td (HtmlElementMixed), Td[0]="data"
+		// This exercises the HtmlElementContainer else-if branch (Tr is a HtmlElementContainer)
+		var y = table(tr(td("data")));
+		assertString("data", y.getChild(0, 0, 0));
+
+		// Try to navigate into a non-container leaf (returns null - else branch)
+		var z = table("text");
+		assertNull(z.getChild(0, 0));
+	}
 }

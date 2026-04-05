@@ -950,5 +950,15 @@ class Cache2_Test extends TestBase {
 		// Cache should still have values (cleanup only affects thread-local caches)
 		assertSize(2, x);
 	}
+
+	@Test void q03_cleanup_threadLocal_notYetPopulated() {
+		var x = Cache2.of(String.class, Integer.class, String.class)
+			.supplier((k1, k2) -> k1 + ":" + k2)
+			.threadLocal()
+			.build();
+
+		// Cleanup before any access - threadLocalMap is null; should not throw
+		x.cleanup();
+	}
 }
 

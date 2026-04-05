@@ -149,8 +149,7 @@ public class HeaderInfo extends SwaggerElement {
 		this.collectionFormat = copyFrom.collectionFormat;
 		this.default_ = copyFrom.default_;
 		this.description = copyFrom.description;
-		if (nn(copyFrom.enum_))
-			this.enum_.addAll(copyOf(copyFrom.enum_));
+		this.enum_.addAll(copyOf(copyFrom.enum_));
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;

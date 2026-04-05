@@ -116,6 +116,13 @@ class Encoding_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
+
+		@Test void a13_nullSafeMethods() {
+			// setHeaders(null) covers the false branch of nn(value) in setHeaders
+			var x = bean().setHeaders(m("a1", headerInfo().setDescription("a2")));
+			x.setHeaders(null);
+			assertNull(x.getHeaders());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

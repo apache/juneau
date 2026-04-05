@@ -22,6 +22,8 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.MediaType;
 import org.apache.juneau.collections.*;
@@ -300,6 +302,33 @@ class Swagger_Test extends TestBase {
 			var x = swagger().setHost("a");
 			var json = x.asJson();
 			assertTrue(json.contains("a"));
+		}
+
+		@Test void a22_nullSafeMethods() {
+			var x = bean();
+			assertDoesNotThrow(() -> x.addConsumes((Collection<MediaType>)null));
+			assertDoesNotThrow(() -> x.addConsumes((MediaType[])null));
+			assertDoesNotThrow(() -> x.addConsumes(new MediaType[]{null}));
+			assertDoesNotThrow(() -> x.setConsumes((Collection<MediaType>)null));
+			assertDoesNotThrow(() -> x.addProduces((Collection<MediaType>)null));
+			assertDoesNotThrow(() -> x.addProduces((MediaType[])null));
+			assertDoesNotThrow(() -> x.addProduces(new MediaType[]{null}));
+			assertDoesNotThrow(() -> x.setProduces((Collection<MediaType>)null));
+			assertDoesNotThrow(() -> x.addSchemes((Collection<String>)null));
+			assertDoesNotThrow(() -> x.addSchemes((String[])null));
+			assertDoesNotThrow(() -> x.addSchemes(new String[]{null}));
+			assertDoesNotThrow(() -> x.setSchemes((Collection<String>)null));
+			assertDoesNotThrow(() -> x.addTags((Collection<Tag>)null));
+			assertDoesNotThrow(() -> x.addTags((Tag[])null));
+			assertDoesNotThrow(() -> x.addTags(new Tag[]{null}));
+			assertDoesNotThrow(() -> x.setTags((Collection<Tag>)null));
+			assertDoesNotThrow(() -> x.addSecurity((Collection<Map<String,List<String>>>)null));
+			assertDoesNotThrow(() -> x.setSecurity((Collection<Map<String,List<String>>>)null));
+			assertDoesNotThrow(() -> x.setDefinitions((Map<String,JsonMap>)null));
+			assertDoesNotThrow(() -> x.setParameters((Map<String,ParameterInfo>)null));
+			assertDoesNotThrow(() -> x.setPaths((Map<String,OperationMap>)null));
+			assertDoesNotThrow(() -> x.setResponses((Map<String,ResponseInfo>)null));
+			assertDoesNotThrow(() -> x.setSecurityDefinitions((Map<String,SecurityScheme>)null));
 		}
 	}
 

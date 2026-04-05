@@ -60,6 +60,19 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 		assertThrown(()->PrimitiveArrayAssertion.create(new Integer[0])).asMessage().asOneLine().is("Object was not an array.  Actual='[Ljava.lang.Integer;'.");
 	}
 
+	@Test void a04_toString_allPrimitiveTypes() {
+		// Covers static initializer lambdas for all primitive types and toString() null branch
+		assertNull(assertIntArray((int[])null).toString());
+		assertEquals("[true, false]", assertBooleanArray(new boolean[]{true,false}).toString());
+		assertEquals("[1, 2]", assertByteArray(new byte[]{1,2}).toString());
+		assertEquals("[a, b]", assertCharArray(new char[]{'a','b'}).toString());
+		assertEquals("[1.0, 2.0]", assertDoubleArray(new double[]{1.0,2.0}).toString());
+		assertEquals("[1.0, 2.0]", assertFloatArray(new float[]{1.0f,2.0f}).toString());
+		assertEquals("[1, 2]", assertIntArray(new int[]{1,2}).toString());
+		assertEquals("[1, 2]", assertLongArray(new long[]{1L,2L}).toString());
+		assertEquals("[1, 2]", assertShortArray(new short[]{1,2}).toString());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform tests
 	//-----------------------------------------------------------------------------------------------------------------

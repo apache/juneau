@@ -18,6 +18,7 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.http.response.InsufficientStorage.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
@@ -52,6 +53,11 @@ class InsufficentStorage_Test extends TestBase {
 		public void f6() throws InsufficientStorage {
 			throw new InsufficientStorage("foo");
 		}
+	}
+
+	@Test void a02_nullCause() {
+		var x = new InsufficientStorage((Throwable)null);
+		assertEquals(InsufficientStorage.REASON_PHRASE, x.getMessage());
 	}
 
 	@Test void a01_basic() throws Exception {

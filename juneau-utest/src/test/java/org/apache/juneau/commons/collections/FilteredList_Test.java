@@ -1191,5 +1191,17 @@ class FilteredList_Test extends TestBase {
 		var array = list.toArray(new String[0]);
 		assertEquals(0, array.length);
 	}
+
+	@Test
+	void z05_addAny_nullArray() {
+		var list = FilteredList
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+		list.add("existing");
+
+		list.addAny((Object[])null);
+		assertSize(1, list);
+	}
 }
 

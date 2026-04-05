@@ -531,5 +531,17 @@ class FluentList_Test extends TestBase {
 
 		assertEquals(underlyingList.hashCode(), list.hashCode());
 	}
+
+	@Test
+	void z01_listIterator_withIndex() {
+		var list = new FluentList<>(new ArrayList<String>());
+		list.add("a");
+		list.add("b");
+		list.add("c");
+
+		var it = list.listIterator(1);
+		assertTrue(it.hasNext());
+		assertEquals("b", it.next());
+	}
 }
 

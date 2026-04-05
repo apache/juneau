@@ -945,5 +945,30 @@ class FilteredSet_Test extends TestBase {
 
 		assertSize(2, set);
 	}
+
+	@Test
+	void z01_addAny_nullArray() {
+		var set = FilteredSet
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+		set.add("existing");
+
+		set.addAny((Object[])null);
+		assertSize(1, set);
+	}
+
+	@Test
+	void z02_toArrayTyped() {
+		var set = FilteredSet
+			.create(String.class)
+			.filter(v -> v != null)
+			.build();
+		set.add("a");
+		set.add("b");
+
+		var array = set.toArray(new String[2]);
+		assertEquals(2, array.length);
+	}
 }
 

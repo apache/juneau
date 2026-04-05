@@ -133,6 +133,23 @@ class BasicBeanConverter_Test extends TestBase {
 
 			assertEquals("<null>", converter.stringify(null));
 		}
+
+		@Test
+		@DisplayName("a09_addSizer() registers custom sizer")
+		void a09_addSizer_registersCustomSizer() {
+			// Test lines 374-375 (addSizer), 520-523 (SizerEntry constructor), 1006-1008 (findSizer), 871-872 (custom sizer used in size())
+			class FixedSizeContainer {
+				final int capacity;
+				FixedSizeContainer(int n) { capacity = n; }
+			}
+
+			var converter = builder().defaultSettings()
+				.addSizer(FixedSizeContainer.class, (obj, c) -> obj.capacity)
+				.build();
+
+			assertEquals(7, converter.size(new FixedSizeContainer(7)));
+			assertEquals(0, converter.size(new FixedSizeContainer(0)));
+		}
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -386,6 +403,18 @@ class BasicBeanConverter_Test extends TestBase {
 	// Test Helper Classes
 	//------------------------------------------------------------------------------------------------------------------
 
+	public static class HasIsEmptyOnly {
+		private final boolean empty;
+		public HasIsEmptyOnly(boolean empty) { this.empty = empty; }
+		public boolean isEmpty() { return empty; }
+	}
+
+	public static class NoSizeAtAll {
+		public NoSizeAtAll() {}
+		public String name() { return "test"; }
+		public String name(String prefix) { return prefix + "test"; }
+	}
+
 	public static class TestBean {
 		private String name;
 		private int age;
@@ -620,6 +649,62 @@ class BasicBeanConverter_Test extends TestBase {
 			// MultiInterfaceWrapper won't directly match, FirstInterface won't match,
 			// but SecondInterface will match during interface iteration
 			assertEquals("SWAPPED:second", converter.stringify(new MultiInterfaceWrapper()));
+		}
+
+		@Test
+		void h11_size_withNullAfterSwap() {
+			// Test line 856-857: size() returns 0 when swap() returns null for the object
+			var converter = builder().defaultSettings()
+				.addSwapper(String.class, (c, obj) -> null)
+				.build();
+
+			assertEquals(0, converter.size("hello"));
+		}
+
+		@Test
+		void h12_size_withIsEmptyFallback() {
+			// Test line 901: size() uses isEmpty() when no size/length/listify method exists
+			var converter = builder().defaultSettings().build();
+			assertEquals(0, converter.size(new HasIsEmptyOnly(true)));
+			assertEquals(1, converter.size(new HasIsEmptyOnly(false)));
+		}
+
+		@Test
+		void h12b_size_withNoDeterminableSize() {
+			// Test line 903: size() throws when no size mechanism exists at all
+			var converter = builder().defaultSettings().build();
+			var ex = assertThrows(IllegalArgumentException.class, () -> converter.size(new NoSizeAtAll()));
+			assertContains("does not have a determinable size", ex.getMessage());
+		}
+
+		@Test
+		void h13_getNested_hashSymbol_nonListifiable() {
+			// Test line 777: eq("#", token.getValue()) is true but canListify(o) is false - missed branch
+			var converter = builder().defaultSettings().build();
+			var nonListifiable = new TestPerson("Alice", 30);
+			var token = tokenize("#{name}").get(0);
+
+			// TestPerson is not listifiable, so the hash-iteration branch is NOT taken
+			// Falls through to property access for "#" which is not a valid TestPerson property
+			assertThrows(RuntimeException.class, () -> converter.getNested(nonListifiable, token));
+		}
+
+		@Test
+		void h14_getProperty_mapEntry_nonKeyValue() {
+			// Test line 246: false branch of "value".equals(name) on Map.Entry (name is not "key" or "value")
+			var converter = builder().defaultSettings().build();
+			var entry = Map.entry("k", "v");
+
+			// Requesting a property that's not "key" or "value" covers the false branch at line 246
+			assertThrows(RuntimeException.class, () -> converter.getProperty(entry, "something"));
+		}
+
+		@Test
+		void h15_getProperty_byExactMethodName() {
+			// Test line 268-271: property extracted via method named exactly the property name (0 params)
+			// NoSizeAtAll has name() method: no isName(), no getName(), no field "name", but has name()
+			var converter = builder().defaultSettings().build();
+			assertEquals("test", converter.getProperty(new NoSizeAtAll(), "name"));
 		}
 	}
 }

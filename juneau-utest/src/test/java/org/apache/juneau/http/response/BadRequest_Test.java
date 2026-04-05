@@ -124,4 +124,9 @@ class BadRequest_Test extends TestBase {
 		HttpEntity entity = x2.getEntity();
 		assertSame(x2, x2.setContent(entity));
 	}
+
+	@Test void a03_nullCause() {
+		var x = new BadRequest((Throwable)null);
+		assertEquals(BadRequest.REASON_PHRASE, x.getMessage());
+	}
 }

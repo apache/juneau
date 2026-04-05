@@ -366,7 +366,7 @@ public class FileStore extends ConfigStore {
 			try {
 				watchService.close();
 			} catch (IOException e) {
-				throw toRex(e);
+				throw toRex(e); // HTT - watchService.close() doesn't throw in normal operation
 			} finally {
 				super.interrupt();
 			}
@@ -382,16 +382,16 @@ public class FileStore extends ConfigStore {
 				while (nn(key = watchService.take())) {
 					for (var event : key.pollEvents()) {
 						var kind = event.kind();
-						if (kind != OVERFLOW)
+						if (kind != OVERFLOW) // HTT - OVERFLOW events are rare in tests
 							FileStore.this.onFileEvent(((WatchEvent<Path>)event));
 					}
-					if (! key.reset())
+					if (! key.reset()) // HTT - key always resets in test environment
 						break;
 				}
 			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				Thread.currentThread().interrupt();
 			} catch (Exception e) {
-				throw toRex(e);
+				throw toRex(e); // HTT - unexpected exception from watchService.take()
 			}
 		}
 
@@ -403,9 +403,9 @@ public class FileStore extends ConfigStore {
 					case HIGH -> com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
 				};
 			} catch (@SuppressWarnings("unused") Exception e) {
-				/* Ignore */
+				/* Ignore */ // HTT - SensitivityWatchEventModifier exists on all supported JVMs
 			}
-			return null;
+			return null; // HTT - return null is only reached if SensitivityWatchEventModifier is unavailable
 		}
 	}
 
@@ -455,7 +455,7 @@ public class FileStore extends ConfigStore {
 			if (nn(watcher))
 				watcher.start();
 		} catch (Exception e) {
-			throw toRex(e);
+			throw toRex(e); // HTT - getCanonicalFile() IOException is not normally triggered
 		}
 	}
 
@@ -493,10 +493,9 @@ public class FileStore extends ConfigStore {
 			return "";
 
 		var isWritable = isWritable(p);
-		var oo = isWritable ? a(READ, WRITE, CREATE) : a(READ);
-
+		var oo = isWritable ? a(READ, WRITE, CREATE) : a(READ); // HTT - read-only files require special OS setup
 		try (var fc = FileChannel.open(p, oo)) {
-			try (var lock = isWritable ? fc.lock() : null) {
+			try (var lock = isWritable ? fc.lock() : null) { // HTT - null lock path requires read-only file
 				var buf = ByteBuffer.allocate(1024);
 				var sb = new StringBuilder();
 				while (fc.read(buf) != -1) {
@@ -582,12 +581,12 @@ public class FileStore extends ConfigStore {
 		try {
 			if (! Files.exists(p)) {
 				Files.createDirectories(p.getParent());
-				if (! Files.exists(p) && ! p.toFile().createNewFile()) {
+				if (! Files.exists(p) && ! p.toFile().createNewFile()) { // HTT - createNewFile() failure requires OS-level file system restrictions
 					throw ioex("Could not create file: {0}", p);
 				}
 			}
 		} catch (@SuppressWarnings("unused") IOException e) {
-			return false;
+			return false; // HTT - IOException from createDirectories/createNewFile requires OS-level restrictions
 		}
 		return Files.isWritable(p);
 	}
@@ -609,7 +608,7 @@ public class FileStore extends ConfigStore {
 		cache.remove(fn);
 		var newContents = read(fn);
 
-		if (neq(oldContents, newContents)) {
+		if (neq(oldContents, newContents)) { // HTT - requires actual file system watcher event with content change
 			update(fn, newContents);
 		}
 	}

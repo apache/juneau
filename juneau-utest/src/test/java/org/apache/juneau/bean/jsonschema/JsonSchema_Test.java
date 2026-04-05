@@ -292,4 +292,280 @@ public class JsonSchema_Test extends TestBase {
 			.setAdditionalItems(Boolean.TRUE)
 			.setAdditionalProperties(Boolean.TRUE);
 	}
+
+	// Tests for addXxx() false branches (call each method twice to hit the non-null path)
+
+	@Test void b01_addAdditionalItems_calledTwice() {
+		var x = new JsonSchema();
+		x.addAdditionalItems(new JsonSchemaProperty("a", JsonType.STRING));
+		x.addAdditionalItems(new JsonSchemaProperty("b", JsonType.NUMBER)); // non-null path
+		assertEquals(2, x.getAdditionalItemsAsSchemaArray().size());
+	}
+
+	@Test void b02_addAnyOf_calledTwice() {
+		var x = new JsonSchema();
+		x.addAnyOf(new JsonSchemaRef("http://a"));
+		x.addAnyOf(new JsonSchemaRef("http://b")); // non-null path
+		assertEquals(2, x.getAnyOf().size());
+	}
+
+	@Test void b03_addDef_calledTwice() {
+		var x = new JsonSchema();
+		x.addDef("k1", new JsonSchema());
+		x.addDef("k2", new JsonSchema()); // non-null path
+		assertEquals(2, x.getDefs().size());
+	}
+
+	@Test void b04_addDefinition_calledTwice() {
+		var x = new JsonSchema();
+		x.addDefinition("d1", new JsonSchema());
+		x.addDefinition("d2", new JsonSchema()); // non-null path
+		assertEquals(2, x.getDefinitions().size());
+	}
+
+	@Test void b05_addDependency_calledTwice() {
+		var x = new JsonSchema();
+		x.addDependency("d1", new JsonSchema());
+		x.addDependency("d2", new JsonSchema()); // non-null path
+		assertEquals(2, x.getDependencies().size());
+	}
+
+	@Test void b06_addDependentRequired_calledTwice() {
+		var x = new JsonSchema();
+		x.addDependentRequired("k1", java.util.Arrays.asList("f1"));
+		x.addDependentRequired("k2", java.util.Arrays.asList("f2")); // non-null path
+		assertEquals(2, x.getDependentRequired().size());
+	}
+
+	@Test void b07_addDependentSchema_calledTwice() {
+		var x = new JsonSchema();
+		x.addDependentSchema("k1", new JsonSchema());
+		x.addDependentSchema("k2", new JsonSchema()); // non-null path
+		assertEquals(2, x.getDependentSchemas().size());
+	}
+
+	@Test void b08_addEnum_calledTwice() {
+		var x = new JsonSchema();
+		x.addEnum("a");
+		x.addEnum("b"); // non-null path
+		assertEquals(2, x.getEnum().size());
+	}
+
+	@Test void b09_addExamples_calledTwice() {
+		var x = new JsonSchema();
+		x.addExamples("ex1");
+		x.addExamples("ex2"); // non-null path
+		assertEquals(2, x.getExamples().size());
+	}
+
+	@Test void b10_addItems_calledTwice() {
+		var x = new JsonSchema();
+		x.addItems(new JsonSchema().setType(JsonType.STRING));
+		x.addItems(new JsonSchema().setType(JsonType.NUMBER)); // non-null path
+		assertEquals(2, x.getItemsAsSchemaArray().size());
+	}
+
+	@Test void b11_addOneOf_calledTwice() {
+		var x = new JsonSchema();
+		x.addOneOf(new JsonSchemaRef("http://a"));
+		x.addOneOf(new JsonSchemaRef("http://b")); // non-null path
+		assertEquals(2, x.getOneOf().size());
+	}
+
+	@Test void b12_addPatternProperties_calledTwice() {
+		var x = new JsonSchema();
+		x.addPatternProperties(new JsonSchemaProperty("/pat1/", JsonType.STRING));
+		x.addPatternProperties(new JsonSchemaProperty("/pat2/", JsonType.NUMBER)); // non-null path
+		assertEquals(2, x.getPatternProperties().size());
+	}
+
+	@Test void b13_addPatternProperties_nullNameThrows() {
+		var x = new JsonSchema();
+		var p = new JsonSchemaProperty(); // no name set
+		assertThrows(RuntimeException.class, () -> x.addPatternProperties(p));
+	}
+
+	@Test void b14_addPrefixItems_calledTwice() {
+		var x = new JsonSchema();
+		x.addPrefixItems(new JsonSchema().setType(JsonType.STRING));
+		x.addPrefixItems(new JsonSchema().setType(JsonType.NUMBER)); // non-null path
+		assertEquals(2, x.getPrefixItems().size());
+	}
+
+	@Test void b15_addProperties_calledTwice() {
+		var x = new JsonSchema();
+		x.addProperties(new JsonSchemaProperty("f1", JsonType.STRING));
+		x.addProperties(new JsonSchemaProperty("f2", JsonType.NUMBER)); // non-null path
+		assertEquals(2, x.getProperties().size());
+	}
+
+	@Test void b16_addProperties_nullNameThrows() {
+		var x = new JsonSchema();
+		var p = new JsonSchemaProperty(); // no name set
+		assertThrows(RuntimeException.class, () -> x.addProperties(p));
+	}
+
+	@Test void b17_addRequired_propertyOverload_calledTwice() {
+		var x = new JsonSchema();
+		x.addRequired(new JsonSchemaProperty("f1"));
+		x.addRequired(new JsonSchemaProperty("f2")); // non-null path
+		assertEquals(2, x.getRequired().size());
+	}
+
+	@Test void b18_addRequired_listOverload_calledTwice() {
+		var x = new JsonSchema();
+		x.addRequired(java.util.Arrays.asList("f1"));
+		x.addRequired(java.util.Arrays.asList("f2")); // non-null path
+		assertEquals(2, x.getRequired().size());
+	}
+
+	@Test void b19_jsonTypeArray_constructor() {
+		var arr = new JsonTypeArray(JsonType.STRING, JsonType.NUMBER);
+		assertEquals(2, arr.size());
+		assertTrue(arr.contains(JsonType.STRING));
+		assertTrue(arr.contains(JsonType.NUMBER));
+	}
+
+	@Test void b20_addRequired_stringOverload_calledTwice() {
+		var x = new JsonSchema();
+		x.addRequired("f1");
+		x.addRequired("f2"); // non-null path
+		assertEquals(2, x.getRequired().size());
+	}
+
+	@Test void b21_addTypes_calledTwice() {
+		var x = new JsonSchema();
+		x.addTypes(JsonType.STRING);
+		x.addTypes(JsonType.NUMBER); // non-null path
+		assertEquals(2, x.getTypeAsJsonTypeArray().size());
+	}
+
+	@Test void b22_beanIgnoreGetters() {
+		var x = new JsonSchema()
+			.setAdditionalItems(Boolean.TRUE)
+			.setAdditionalProperties(Boolean.TRUE)
+			.setItems(new JsonSchema().setType(JsonType.STRING));
+
+		assertNotNull(x.getAdditionalItemsAsBoolean());
+		assertNotNull(x.getAdditionalPropertiesAsBoolean());
+		assertNotNull(x.getItemsAsSchema());
+	}
+
+	@Test void b23_getAdditionalPropertiesAsSchema() {
+		var x = new JsonSchema().setAdditionalProperties(new JsonSchemaRef("http://extra"));
+		assertNotNull(x.getAdditionalPropertiesAsSchema());
+	}
+
+	@Test void b23b_getTypeAsJsonType() {
+		var x = new JsonSchema().setType(JsonType.STRING);
+		assertNotNull(x.getTypeAsJsonType());
+	}
+
+	@Test void b23c_setDefs_nonNull_setsMaster() {
+		var child = new JsonSchema().setType(JsonType.NUMBER);
+		var x = new JsonSchema().setDefs(java.util.Map.of("key", child));
+		assertNotNull(x.getDefs());
+	}
+
+	@Test void b23d_setAdditionalItems_invalidType_throws() {
+		var x = new JsonSchema();
+		assertThrows(RuntimeException.class, () -> x.setAdditionalItems("invalid"));
+	}
+
+	@Test void b23e_setAdditionalProperties_invalidType_throws() {
+		var x = new JsonSchema();
+		assertThrows(RuntimeException.class, () -> x.setAdditionalProperties("invalid"));
+	}
+
+	@Test void b23f_setItems_jsonSchemaArray_path() {
+		var x = new JsonSchema().setItems(new JsonSchemaArray(new JsonSchemaRef("http://a")));
+		assertNotNull(x.getItemsAsSchemaArray());
+	}
+
+	@Test void b23g_setItems_invalidType_throws() {
+		var x = new JsonSchema();
+		assertThrows(RuntimeException.class, () -> x.setItems("invalid"));
+	}
+
+	@Test void b23h_setType_invalidType_throws() {
+		var x = new JsonSchema();
+		assertThrows(RuntimeException.class, () -> x.setType("invalid-string"));
+	}
+
+	@Test void b23h2_resolve_refSetButNoSchemaMap() {
+		// ref is not null, but master.schemaMap is null → returns this
+		var ref = new JsonSchemaRef("http://example.org/schema");
+		// No schemaMap set → master.schemaMap == null → returns this
+		var resolved = ref.resolve();
+		assertSame(ref, resolved);
+	}
+
+	@Test void b23i_resolve_withSchemaMap() {
+		var targetUri = URI.create("http://target.org/schema");
+		var targetSchema = new JsonSchema().setType(JsonType.OBJECT);
+
+		var map = new JsonSchemaMap() {
+			@Override
+			public JsonSchema load(URI uri) {
+				if (uri.equals(targetUri))
+					return targetSchema;
+				return null;
+			}
+		};
+
+		var ref = new JsonSchemaRef(targetUri);
+		ref.setSchemaMap(map);
+		var resolved = ref.resolve();
+		assertSame(targetSchema, resolved);
+	}
+
+	@Test void b23j_setMaster_withAllFields() {
+		// Create a richly-populated schema so that setMaster() traverses all branches
+		var child = new JsonSchema()
+			.setType(JsonType.OBJECT)
+			.addDefinition("d1", new JsonSchema())
+			.addDef("k1", new JsonSchema())
+			.addProperties(new JsonSchemaProperty("p1", JsonType.STRING))
+			.addPatternProperties(new JsonSchemaProperty("/pat/", JsonType.NUMBER))
+			.addDependency("dep1", new JsonSchema())
+			.addDependentSchema("dep2", new JsonSchema())
+			.setItems(new JsonSchema().setType(JsonType.ANY))
+			.addItems(new JsonSchema().setType(JsonType.STRING))
+			.addPrefixItems(new JsonSchema())
+			.addAdditionalItems(new JsonSchemaProperty("ai", JsonType.BOOLEAN))
+			.setUnevaluatedItems(new JsonSchema())
+			.setAdditionalProperties(new JsonSchemaRef("http://extra"))
+			.setUnevaluatedProperties(new JsonSchema())
+			.addAllOf(new JsonSchemaRef("http://allOf"))
+			.addAnyOf(new JsonSchemaRef("http://anyOf"))
+			.addOneOf(new JsonSchemaRef("http://oneOf"))
+			.setNot(new JsonSchemaRef("http://not"))
+			.setIf(new JsonSchema())
+			.setThen(new JsonSchema())
+			.setElse(new JsonSchema());
+
+		// Adding 'child' to a parent triggers setMaster() with all fields
+		var parent = new JsonSchema().addDefinition("child", child);
+		assertNotNull(parent);
+	}
+
+	@Test void b24_getProperty() {
+		var x = new JsonSchema();
+		// properties is null → getProperty(name) returns null
+		assertNull(x.getProperty("missing"));
+		assertNull(x.getProperty("missing", false));
+		assertNull(x.getProperty("missing", true));
+
+		// Add a property
+		x.addProperties(new JsonSchemaProperty("foo", JsonType.STRING));
+
+		// Property exists → found
+		assertNotNull(x.getProperty("foo"));
+
+		// Missing property in non-null map → returns null
+		assertNull(x.getProperty("bar"));
+
+		// resolve = true path (no schemaMap, so resolve() returns self)
+		assertNotNull(x.getProperty("foo", true));
+	}
 }

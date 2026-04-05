@@ -452,5 +452,12 @@ class HashKey_Test extends TestBase {
 		HashKey key = HashKey.of(list, set);
 		assertNotNull(key);
 	}
+
+	@Test
+	void h05_equals_nonHashKeyObject() {
+		HashKey key = HashKey.of("a", "b");
+		assertFalse(key.equals("not-a-hashkey"));
+		assertFalse(key.equals(null));
+	}
 }
 

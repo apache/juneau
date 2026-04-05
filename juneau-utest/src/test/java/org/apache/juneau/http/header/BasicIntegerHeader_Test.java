@@ -74,6 +74,22 @@ class BasicIntegerHeader_Test extends TestBase {
 		assertEquals(1, integerHeader(HEADER,1).asInteger().get());
 	}
 
+	@Test void a03_factoryNullReturns() {
+		assertNull(BasicIntegerHeader.of("Foo", (Integer)null));
+		assertNull(BasicIntegerHeader.of("Foo", (String)null));
+		assertNull(BasicIntegerHeader.of("Foo", (Supplier<Integer>)null));
+	}
+
+	@Test void a04_methods() {
+		var h = new BasicIntegerHeader("Foo", 42);
+		assertEquals(Integer.valueOf(42), h.orElse(0));
+		assertEquals(Integer.valueOf(42), h.toInteger());
+
+		var h2 = new BasicIntegerHeader("Foo", (Integer)null);
+		assertNull(h2.toInteger());
+		assertEquals(Integer.valueOf(99), h2.orElse(99));
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------

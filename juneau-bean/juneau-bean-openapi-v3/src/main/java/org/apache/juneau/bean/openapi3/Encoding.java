@@ -114,8 +114,7 @@ public class Encoding extends OpenApiElement {
 		this.style = copyFrom.style;
 		this.explode = copyFrom.explode;
 		this.allowReserved = copyFrom.allowReserved;
-		if (nn(copyFrom.headers))
-			headers.putAll(copyOf(copyFrom.headers, HeaderInfo::copy));
+		headers.putAll(copyOf(copyFrom.headers, HeaderInfo::copy));
 	}
 
 	/**

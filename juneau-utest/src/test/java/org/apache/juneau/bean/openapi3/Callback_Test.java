@@ -115,6 +115,17 @@ class Callback_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
+
+		@Test void a13_addCallbackTwice() {
+			// Calling addCallback twice covers the false branch of 'if (callbacks == null)'.
+			var x = bean()
+				.addCallback("a1", pathItem().setGet(operation().setSummary("a2")))
+				.addCallback("b1", pathItem().setPost(operation().setSummary("b2")));
+			assertBean(x,
+				"callbacks{a1{get{summary}},b1{post{summary}}}",
+				"{{{a2}},{{b2}}}"
+			);
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

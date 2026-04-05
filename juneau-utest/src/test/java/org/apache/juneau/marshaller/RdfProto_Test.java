@@ -55,6 +55,34 @@ class RdfProto_Test extends TestBase {
 		assertJson("{foo:'bar'}", RdfProto.to(fromHex(toHex(bytes)), Map.class, String.class, String.class));
 	}
 
+	@Test void a03_complexRoundtrip() throws Exception {
+		var in1 = JsonMap.of("name", "Alice", "age", 30);
+		var bytes = RdfProto.of(in1);
+		assertNotNull(bytes);
+		assertTrue(bytes.length > 0);
+		// Verify we can get the bytes via OutputStream variant too
+		var baosOut = bytes(RdfProto.of(in1, baos()));
+		assertNotNull(baosOut);
+		assertTrue(baosOut.length > 0);
+	}
+
+	@Test void a04_defaultInstance() {
+		assertNotNull(RdfProto.DEFAULT);
+		assertNotNull(new RdfProto());
+	}
+
+	@Test void a05_to_inputStream() throws Exception {
+		var bytes = RdfProto.of("foo");
+		var result = RdfProto.to(new ByteArrayInputStream(bytes), String.class);
+		assertEquals("foo", result);
+	}
+
+	@Test void a06_to_inputStream_type() throws Exception {
+		var bytes = RdfProto.of("foo");
+		var result = RdfProto.to(new ByteArrayInputStream(bytes), String.class, new java.lang.reflect.Type[0]);
+		assertEquals("foo", result);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------

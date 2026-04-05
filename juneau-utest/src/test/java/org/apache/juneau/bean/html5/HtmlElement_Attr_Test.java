@@ -110,4 +110,153 @@ class HtmlElement_Attr_Test extends TestBase {
 		assertTrue(result.contains("data-url='http://test.com'"));
 		assertTrue(result.contains("class='test'"));
 	}
+
+	// attrUri() on all element classes not covered by a01-a11
+	@Test void b01_attrUri_allRemainingElements() {
+		var u = "http://example.org/";
+		assertNotNull(abbr().attrUri("data-u", u));
+		assertNotNull(address().attrUri("data-u", u));
+		assertNotNull(article().attrUri("data-u", u));
+		assertNotNull(aside().attrUri("data-u", u));
+		assertNotNull(b().attrUri("data-u", u));
+		assertNotNull(bdi().attrUri("data-u", u));
+		assertNotNull(bdo().attrUri("data-u", u));
+		assertNotNull(blockquote().attrUri("data-u", u));
+		assertNotNull(body().attrUri("data-u", u));
+		assertNotNull(br().attrUri("data-u", u));
+		assertNotNull(canvas().attrUri("data-u", u));
+		assertNotNull(caption().attrUri("data-u", u));
+		assertNotNull(cite().attrUri("data-u", u));
+		assertNotNull(code().attrUri("data-u", u));
+		assertNotNull(col().attrUri("data-u", u));
+		assertNotNull(colgroup().attrUri("data-u", u));
+		assertNotNull(data().attrUri("data-u", u));
+		assertNotNull(datalist().attrUri("data-u", u));
+		assertNotNull(dd().attrUri("data-u", u));
+		assertNotNull(del().attrUri("data-u", u));
+		assertNotNull(dfn().attrUri("data-u", u));
+		assertNotNull(dl().attrUri("data-u", u));
+		assertNotNull(dt().attrUri("data-u", u));
+		assertNotNull(em().attrUri("data-u", u));
+		assertNotNull(fieldset().attrUri("data-u", u));
+		assertNotNull(figcaption().attrUri("data-u", u));
+		assertNotNull(figure().attrUri("data-u", u));
+		assertNotNull(footer().attrUri("data-u", u));
+		assertNotNull(h1().attrUri("data-u", u));
+		assertNotNull(h2().attrUri("data-u", u));
+		assertNotNull(h3().attrUri("data-u", u));
+		assertNotNull(h4().attrUri("data-u", u));
+		assertNotNull(h5().attrUri("data-u", u));
+		assertNotNull(h6().attrUri("data-u", u));
+		assertNotNull(head().attrUri("data-u", u));
+		assertNotNull(header().attrUri("data-u", u));
+		assertNotNull(hr().attrUri("data-u", u));
+		assertNotNull(html().attrUri("data-u", u));
+		assertNotNull(i().attrUri("data-u", u));
+		assertNotNull(input().attrUri("data-u", u));
+		assertNotNull(ins().attrUri("data-u", u));
+		assertNotNull(kbd().attrUri("data-u", u));
+		assertNotNull(keygen().attrUri("data-u", u));
+		assertNotNull(label().attrUri("data-u", u));
+		assertNotNull(legend().attrUri("data-u", u));
+		assertNotNull(li().attrUri("data-u", u));
+		assertNotNull(link().attrUri("data-u", u));
+		assertNotNull(main().attrUri("data-u", u));
+		assertNotNull(map().attrUri("data-u", u));
+		assertNotNull(mark().attrUri("data-u", u));
+		assertNotNull(meta().attrUri("data-u", u));
+		assertNotNull(meter().attrUri("data-u", u));
+		assertNotNull(nav().attrUri("data-u", u));
+		assertNotNull(noscript().attrUri("data-u", u));
+		assertNotNull(object().attrUri("data-u", u));
+		assertNotNull(ol().attrUri("data-u", u));
+		assertNotNull(optgroup().attrUri("data-u", u));
+		assertNotNull(option().attrUri("data-u", u));
+		assertNotNull(output().attrUri("data-u", u));
+		assertNotNull(p().attrUri("data-u", u));
+		assertNotNull(param().attrUri("data-u", u));
+		assertNotNull(pre().attrUri("data-u", u));
+		assertNotNull(progress().attrUri("data-u", u));
+		assertNotNull(q().attrUri("data-u", u));
+		assertNotNull(rb().attrUri("data-u", u));
+		assertNotNull(rp().attrUri("data-u", u));
+		assertNotNull(rt().attrUri("data-u", u));
+		assertNotNull(rtc().attrUri("data-u", u));
+		assertNotNull(ruby().attrUri("data-u", u));
+		assertNotNull(s().attrUri("data-u", u));
+		assertNotNull(samp().attrUri("data-u", u));
+		assertNotNull(section().attrUri("data-u", u));
+		assertNotNull(select().attrUri("data-u", u));
+		assertNotNull(small().attrUri("data-u", u));
+		assertNotNull(span().attrUri("data-u", u));
+		assertNotNull(strong().attrUri("data-u", u));
+		assertNotNull(sub().attrUri("data-u", u));
+		assertNotNull(sup().attrUri("data-u", u));
+		assertNotNull(table().attrUri("data-u", u));
+		assertNotNull(tbody().attrUri("data-u", u));
+		assertNotNull(td().attrUri("data-u", u));
+		assertNotNull(template().attrUri("data-u", u));
+		assertNotNull(textarea().attrUri("data-u", u));
+		assertNotNull(tfoot().attrUri("data-u", u));
+		assertNotNull(th().attrUri("data-u", u));
+		assertNotNull(thead().attrUri("data-u", u));
+		assertNotNull(time().attrUri("data-u", u));
+		assertNotNull(title().attrUri("data-u", u));
+		assertNotNull(tr().attrUri("data-u", u));
+		assertNotNull(u().attrUri("data-u", u));
+		assertNotNull(ul().attrUri("data-u", u));
+		assertNotNull(var().attrUri("data-u", u));
+		assertNotNull(wbr().attrUri("data-u", u));
+	}
+
+	// HtmlElement.attr() missing branches (line 97): url/href/action keys
+	@Test void b02_htmlElement_attr_urlAndActionKeys() {
+		var x = div()
+			.attr("url", "http://example.org/")
+			.attr("href", "http://example.org/page")
+			.attr("formaction", "http://example.org/submit");
+		assertTrue(x.toString().contains("url='http://example.org/'"));
+		assertTrue(x.toString().contains("href='http://example.org/page'"));
+		assertTrue(x.toString().contains("formaction='http://example.org/submit'"));
+	}
+
+	// HtmlElement.getAttr() line 186: attrs == null branch
+	@Test void b03_htmlElement_getAttr_nullAttrs() {
+		var x = new Div();
+		assertNull(x.getAttr(String.class, "data-test"));
+	}
+
+	// HtmlElement.setAttrs() line 1054: url/href/action keys → converted to URI
+	@Test void b04_htmlElement_setAttrs_withUriKeys() {
+		var attrs = new java.util.LinkedHashMap<String, Object>();
+		attrs.put("url", "http://example.org/");
+		attrs.put("href", "http://example.org/page");
+		attrs.put("formaction", "http://example.org/submit");
+		attrs.put("class", "test");
+		var x = div().setAttrs(attrs);
+		var str = x.toString();
+		assertTrue(str.contains("url='http://example.org/'"));
+		assertTrue(str.contains("href='http://example.org/page'"));
+		assertTrue(str.contains("formaction='http://example.org/submit'"));
+	}
+
+	// HtmlElementMixed.getChild() through HtmlElementContainer (lines 153-154)
+	@Test void b05_htmlElementMixed_getChild_throughContainer() {
+		var x = p(
+			table(
+				tr(
+					td("cell")
+				)
+			)
+		);
+		// Navigates: p[0] = table (HtmlElementContainer) → hits else-if branch on line 153
+		assertNotNull(x.getChild(0, 0));
+	}
+
+	// HtmlBuilder missing factory methods with children args
+	@Test void b06_htmlBuilder_missingFactoryMethods() {
+		assertNotNull(object("child1"));
+		assertNotNull(progress("child1"));
+		assertNotNull(rt("child1"));
+	}
 }

@@ -168,11 +168,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * @return This object for method chaining.
 		 */
 		public Builder<K,V> filter(BiPredicate<K,V> value) {
-			BiPredicate<K,V> newFilter = assertArgNotNull(ARG_value, value);
-			if (filter == null)
-				filter = newFilter;
-			else
-				filter = filter.and(newFilter);
+			filter = filter.and(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 

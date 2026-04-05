@@ -93,6 +93,36 @@ class BasicCsvHeader_Test extends TestBase {
 		new BasicCsvHeader("Foo", (String)null).assertList().isNull();
 	}
 
+	@Test void a04_factoryNullReturns() {
+		assertNull(BasicCsvHeader.of("Foo", (String)null));
+		assertNull(BasicCsvHeader.of("Foo", (String[])null));
+		assertNull(BasicCsvHeader.of("Foo", (Supplier<String[]>)null));
+	}
+
+	@Test void a05_additionalMethods() {
+		var h = new BasicCsvHeader("Foo", "bar", "baz");
+		assertTrue(h.asArray().isPresent());
+		assertEquals(2, h.asArray().get().length);
+		assertTrue(h.asList().isPresent());
+		assertEquals(2, h.asList().get().size());
+		assertEquals(2, h.orElse((String[])null).length);
+		assertEquals(2, h.toArray().length);
+		assertEquals(2, h.toList().size());
+
+		var h2 = csvHeader("Foo", ()->null);
+		assertFalse(h2.asArray().isPresent());
+		assertFalse(h2.asList().isPresent());
+		assertEquals(1, h2.orElse(new String[]{"other"}).length);
+		assertNull(h2.toArray());
+		assertNull(h2.toList());
+
+		var h3 = csvHeader("Foo", ()->new String[]{"foo", "bar"});
+		assertTrue(h3.contains("foo"));
+		assertTrue(h3.containsIgnoreCase("FOO"));
+		assertFalse(h3.contains("baz"));
+		assertFalse(h3.containsIgnoreCase("BAZ"));
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------

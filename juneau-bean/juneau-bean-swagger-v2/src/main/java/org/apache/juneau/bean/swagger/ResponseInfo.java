@@ -118,10 +118,8 @@ public class ResponseInfo extends SwaggerElement {
 
 		this.description = copyFrom.description;
 		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
-		if (nn(copyFrom.examples))
-			examples.putAll(copyOf(copyFrom.examples));
-		if (nn(copyFrom.headers))
-			headers.putAll(copyOf(copyFrom.headers, HeaderInfo::copy));
+		examples.putAll(copyOf(copyFrom.examples));
+		headers.putAll(copyOf(copyFrom.headers, HeaderInfo::copy));
 	}
 
 	/**
@@ -178,10 +176,8 @@ public class ResponseInfo extends SwaggerElement {
 				description = r.description;
 			if (nn(r.schema))
 				schema = r.schema;
-			if (nn(r.headers))
-				headers = r.headers;
-			if (nn(r.examples))
-				examples = r.examples;
+			headers = r.headers;
+			examples = r.examples;
 		}
 		return this;
 	}

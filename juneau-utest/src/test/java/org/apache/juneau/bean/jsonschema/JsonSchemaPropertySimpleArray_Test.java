@@ -288,4 +288,61 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 		assertSame(p, result);
 		assertInstanceOf(JsonSchemaPropertySimpleArray.class, result);
 	}
+
+	@Test void a18_missingOverrides_addMethods() {
+		var p = new JsonSchemaPropertySimpleArray("x", JsonType.ANY);
+
+		assertSame(p, p.addDef("k", new JsonSchema()));
+		assertSame(p, p.addPatternProperties(new JsonSchemaProperty("/p/")));
+		assertSame(p, p.addRequired(new JsonSchemaProperty("f")));
+		assertSame(p, p.addRequired(l("g", "h")));
+	}
+
+	@Test void a19_missingOverrides_setSchemaComposition() {
+		var p = new JsonSchemaPropertySimpleArray("x", JsonType.ANY);
+
+		assertSame(p, p.setAllOf(l(new JsonSchema())));
+		assertSame(p, p.setAnyOf(l(new JsonSchema())));
+		assertSame(p, p.setOneOf(l(new JsonSchema())));
+	}
+
+	@Test void a20_missingOverrides_setContent() {
+		var p = new JsonSchemaPropertySimpleArray("x", JsonType.ANY);
+
+		assertSame(p, p.setContentEncoding("base64"));
+		assertSame(p, p.setContentMediaType("application/json"));
+	}
+
+	@Test void a21_missingOverrides_setMaps() {
+		var p = new JsonSchemaPropertySimpleArray("x", JsonType.ANY);
+
+		assertSame(p, p.setDependencies(new HashMap<>()));
+		assertSame(p, p.setDependentRequired(new HashMap<>()));
+		assertSame(p, p.setDependentSchemas(new HashMap<>()));
+		assertSame(p, p.setPatternProperties(new HashMap<>()));
+	}
+
+	@Test void a22_missingOverrides_setListProps() {
+		var p = new JsonSchemaPropertySimpleArray("x", JsonType.ANY);
+
+		assertSame(p, p.setEnum(l("a", "b")));
+		assertSame(p, p.setExamples(l("ex1", "ex2")));
+		assertSame(p, p.setRequired(l("f1")));
+	}
+
+	@Test void a23_missingOverrides_setNumericProps() {
+		var p = new JsonSchemaPropertySimpleArray("x", JsonType.ANY);
+
+		assertSame(p, p.setExclusiveMaximum(100));
+		assertSame(p, p.setExclusiveMinimum(0));
+		assertSame(p, p.setMaxProperties(10));
+		assertSame(p, p.setMinProperties(1));
+	}
+
+	@Test void a24_missingOverrides_setSchemaMap() {
+		var p = new JsonSchemaPropertySimpleArray("x", JsonType.ANY);
+		var map = new JsonSchemaMap() {};
+
+		assertSame(p, p.setSchemaMap(map));
+	}
 }

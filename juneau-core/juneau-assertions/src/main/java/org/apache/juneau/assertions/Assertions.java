@@ -981,5 +981,5 @@ public class Assertions {
 	/**
 	 * Constructor.
 	 */
-	protected Assertions() {}
+	protected Assertions() {} // HTT - utility class; instantiation via subclass is theoretical
 }

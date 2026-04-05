@@ -112,7 +112,8 @@ class KeywordSet_Test extends TestBase {
 	void w08_equals_notAKeywordSet() {
 		var ks = new KeywordSet("apple", "banana");
 
-		assertNotNull(ks);
+		assertFalse(ks.equals("not-a-keyword-set"));
+		assertFalse(ks.equals(null));
 	}
 
 	@Test

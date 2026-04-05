@@ -112,8 +112,7 @@ public class OAuthFlow extends OpenApiElement {
 		this.authorizationUrl = copyFrom.authorizationUrl;
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.refreshUrl = copyFrom.refreshUrl;
-		if (nn(copyFrom.scopes))
-			scopes.putAll(copyFrom.scopes);
+		scopes.putAll(copyFrom.scopes);
 	}
 
 	/**

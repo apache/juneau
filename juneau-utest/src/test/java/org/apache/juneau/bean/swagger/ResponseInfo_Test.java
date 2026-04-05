@@ -165,6 +165,12 @@ class ResponseInfo_Test extends TestBase {
 			// Test null name parameter
 			assertThrows(IllegalArgumentException.class, () -> y.getHeader(null));
 		}
+
+		@Test void a16_nullSafeMethods() {
+			var x = bean();
+			assertDoesNotThrow(() -> x.setExamples(null));
+			assertDoesNotThrow(() -> x.setHeaders(null));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

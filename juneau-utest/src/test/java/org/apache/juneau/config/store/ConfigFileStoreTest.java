@@ -207,6 +207,91 @@ class ConfigFileStoreTest extends TestBase {
 		assertFalse(cs.exists("Foox"));
 	}
 
+	@Test void b01_builder_copyFromBuilder() {
+		var b = FileStore.create().directory(DIR);
+		var b2 = b.copy();
+		assertNotNull(b2.build());
+	}
+
+	@Test void b02_builder_copyFromInstance() {
+		var fs = FileStore.create().directory(DIR).build();
+		var b = fs.copy();
+		assertNotNull(b.build());
+	}
+
+	@Test void b03_builder_annotations() {
+		assertNotNull(FileStore.create().directory(DIR).annotations().build());
+	}
+
+	@Test void b04_builder_apply() {
+		assertNotNull(FileStore.create().directory(DIR).apply(AnnotationWorkList.create()).build());
+	}
+
+	@Test void b05_builder_applyAnnotationsClass() {
+		assertNotNull(FileStore.create().directory(DIR).applyAnnotations(String.class).build());
+	}
+
+	@Test void b06_builder_applyAnnotationsObject() {
+		assertNotNull(FileStore.create().directory(DIR).applyAnnotations("foo").build());
+	}
+
+	@Test void b07_builder_cache() {
+		assertNotNull(FileStore.create().directory(DIR).cache(null).build());
+	}
+
+	@Test void b08_builder_debug() {
+		assertNotNull(FileStore.create().directory(DIR).debug().build());
+	}
+
+	@Test void b09_builder_debugBoolean() {
+		assertNotNull(FileStore.create().directory(DIR).debug(true).build());
+	}
+
+	@Test void b10_builder_impl() {
+		var impl = FileStore.DEFAULT;
+		assertNotNull(FileStore.create().directory(DIR).impl(impl).build());
+	}
+
+	@Test void b11_builder_updateOnWrite() throws Exception {
+		var fs = FileStore.create().directory(DIR).updateOnWrite().build();
+		assertNull(fs.write("Y.cfg", null, "hello"));
+		assertEquals("hello", fs.read("Y.cfg"));
+	}
+
+	@Test void b12_write_sameContents_noOp() throws Exception {
+		var fs = FileStore.create().directory(DIR).build();
+		assertNull(fs.write("Z.cfg", "same", "same"));
+	}
+
+	@Test void b13_close_noWatcher() {
+		var fs = FileStore.create().directory(DIR).build();
+		assertDoesNotThrow(fs::close);
+	}
+
+	@Test void b14_properties_toString() {
+		var fs = FileStore.create().directory(DIR).build();
+		var s = fs.toString();
+		assertNotNull(s);
+	}
+
+	@Test void b15_close_withWatcher() throws Exception {
+		var fs = FileStore.create().directory(DIR).enableWatcher().build();
+		assertDoesNotThrow(fs::close);
+	}
+
+	@Test void b16_resolveName_noExtensions() throws Exception {
+		var fs = FileStore.create().directory(DIR).extensions("").build();
+		assertNull(fs.write("NE", null, "data"));
+		assertEquals("data", fs.read("NE"));
+	}
+
+	@Test void b17_write_expectedMismatch() throws Exception {
+		var fs = FileStore.create().directory(DIR).build();
+		assertNull(fs.write("M.cfg", null, "initial"));
+		assertNotNull(fs.write("M.cfg", "wrong", "new"));
+		assertEquals("initial", fs.read("M.cfg"));
+	}
+
 	private static void assertFileExists(String name) {
 		assertTrue(new File(DIR, name).exists());
 	}

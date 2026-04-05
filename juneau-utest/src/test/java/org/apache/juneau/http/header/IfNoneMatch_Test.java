@@ -17,6 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
@@ -70,5 +71,9 @@ class IfNoneMatch_Test extends TestBase {
 
 	private static RestClient.Builder client() {
 		return MockRestClient.create(A.class);
+	}
+
+	@Test void a02_factoryNullReturn() {
+		assertNull(IfNoneMatch.of((org.apache.juneau.http.header.EntityTags)null));
 	}
 }

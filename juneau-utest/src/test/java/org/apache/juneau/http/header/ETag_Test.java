@@ -81,4 +81,8 @@ class ETag_Test extends TestBase {
 	private static RestClient.Builder client() {
 		return MockRestClient.create(A.class);
 	}
+
+	@Test void a02_factoryNullReturn() {
+		assertNull(ETag.of((org.apache.juneau.http.header.EntityTag)null));
+	}
 }

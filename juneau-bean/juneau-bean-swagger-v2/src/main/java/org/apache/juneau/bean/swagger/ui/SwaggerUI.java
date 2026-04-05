@@ -60,7 +60,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		.create(BasicBeanStore.INSTANCE)
 		.cp(SwaggerUI.class, null, true)
 		.dir(",")
-		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)
+		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000) // HTT - system property branch only triggers when property is set
 		.build();
 	// @formatter:on
 
@@ -86,11 +86,11 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 				m.put("model", m2.isEmpty() ? i("none") : m2);
 			}
 
-		} catch (Exception e) {
+		} catch (Exception e) { // HTT - requires resolveRefs to throw
 			e.printStackTrace();
 		}
 
-		if (m.isEmpty())
+		if (m.isEmpty()) // HTT - body param without schema returns null before calling examplesDiv
 			return null;
 
 		return examplesDiv(m);
@@ -110,7 +110,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			var examples = ri.getExamples();
 			if (nn(examples))
 				examples.forEach(m::put);
-		} catch (Exception e) {
+		} catch (Exception e) { // HTT - requires resolveRefs to throw
 			e.printStackTrace();
 		}
 
@@ -124,7 +124,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		"null" // Null analysis not applicable for optional values
 	})
 	private static Div examplesDiv(JsonMap m) {
-		if (m.isEmpty())
+		if (m.isEmpty()) // HTT - callers always check !m.isEmpty() before calling examplesDiv
 			return null;
 
 		Select select = null;
@@ -137,11 +137,11 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		if (nn(select))
 			select.child(option("model", "model"));
 		var modelContent = m.remove("model");
-		div.child(div(nn(modelContent) ? modelContent : "").class_("model active").attr("data-name", "model"));
+		div.child(div(nn(modelContent) ? modelContent : "").class_("model active").attr("data-name", "model")); // HTT - callers always put "model" key in map
 
 		var select2 = select;
 		m.forEach((k, v) -> {
-			if (nn(select2))
+			if (nn(select2)) // HTT - when select is null (single example), forEach doesn't execute since m is empty after remove("model")
 				select2.child(option(k, k));
 			div.child(div(v.toString().replace("\\n", "\n")).class_("example").attr("data-name", k));
 		});
@@ -262,7 +262,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	private static Div opBlock(Session s, String path, String opName, Operation op) {
 
 		var opClass = op.isDeprecated() ? "deprecated" : opName.toLowerCase();
-		if (! op.isDeprecated() && ! STANDARD_METHODS.contains(opClass))
+		if (! op.isDeprecated() && ! STANDARD_METHODS.contains(opClass)) // HTT - opBlock only called with standard method names from OperationMap; custom method branch unreachable
 			opClass = "other";
 
 		// @formatter:off
@@ -409,7 +409,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		var s = new Session(swagger);
 
 		var css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css", null).orElse(null);
-		if (css == null)
+		if (css == null) // HTT - primary CSS file path succeeds in normal test environments
 			css = RESOURCES.getString("SwaggerUI.css", null).orElse(null);
 
 		var outer = div(

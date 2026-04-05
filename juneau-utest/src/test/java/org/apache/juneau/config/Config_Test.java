@@ -28,6 +28,8 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
@@ -1518,5 +1520,599 @@ class Config_Test extends TestBase {
 		c.setSystemProperties();
 		assertEquals("1", System.getProperty("a"));
 		assertEquals("2", System.getProperty("S/b"));
+	}
+
+	//====================================================================================================
+	// Section.asBean(Class, boolean) - section not present
+	//====================================================================================================
+
+	@Test void a19_sectionAsBean_sectionNotPresent() throws Exception {
+		var c = init("foo=bar");
+		assertFalse(c.getSection("NONEXISTENT").asBean(ABean.class, true).isPresent());
+		assertFalse(c.getSection("NONEXISTENT").asBean(ABean.class, false).isPresent());
+	}
+
+	//====================================================================================================
+	// Section.writeToBean - section not present throws
+	//====================================================================================================
+
+	@Test void a20_sectionWriteToBean_sectionNotPresent() {
+		var c = init("foo=bar");
+		assertThrowsWithMessage(IllegalArgumentException.class, "Section 'NONEXISTENT' not found in configuration.", ()->c.getSection("NONEXISTENT").writeToBean(new ABean(), true));
+	}
+
+	//====================================================================================================
+	// Section.asInterface - unsupported method
+	//====================================================================================================
+
+	@Test void a21_sectionAsInterface_unsupportedMethod() {
+		var c = init("[S]", "x=1");
+		var iface = c.getSection("S").asInterface(A21_Interface.class).get();
+		assertThrowsWithMessage(UnsupportedOperationException.class, "Unsupported interface method.", iface::doSomething);
+	}
+
+	public interface A21_Interface {
+		String doSomething();
+	}
+
+	//====================================================================================================
+	// Entry.asBytes with HEX and SPACED_HEX formats
+	//====================================================================================================
+
+	@Test void a22_entryAsBytes_hex() throws Exception {
+		MemoryStore.DEFAULT.update("Test.cfg", "a=48656C6C6F");
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.BinaryFormat.HEX).build().rollback();
+		var bytes = c.get("a").asBytes().get();
+		assertEquals("Hello", new String(bytes));
+	}
+
+	@Test void a23_entryAsBytes_spacedHex() throws Exception {
+		MemoryStore.DEFAULT.update("Test.cfg", "a=48 65 6C 6C 6F");
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.BinaryFormat.SPACED_HEX).build().rollback();
+		var bytes = c.get("a").asBytes().get();
+		assertEquals("Hello", new String(bytes));
+	}
+
+	@Test void a24_entryAsBytes_base64() throws Exception {
+		MemoryStore.DEFAULT.update("Test.cfg", "a=SGVsbG8=");
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.BinaryFormat.BASE64).build().rollback();
+		var bytes = c.get("a").asBytes().get();
+		assertEquals("Hello", new String(bytes));
+	}
+
+	@Test void a25_entryAsBytes_withNewlines() throws Exception {
+		MemoryStore.DEFAULT.update("Test.cfg", "a=SGVs\n\tbG8=");
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.BinaryFormat.BASE64).build().rollback();
+		var bytes = c.get("a").asBytes().get();
+		assertEquals("Hello", new String(bytes));
+	}
+
+	//====================================================================================================
+	// Entry as(Parser, Type, args...) with simple types via parser
+	//====================================================================================================
+
+	@Test void a26_entryAs_simpleTypeViaParser() throws Exception {
+		var c = init("myEnum=ONE");
+		var result = c.get("myEnum").as(org.apache.juneau.uon.UonParser.DEFAULT, A26_MyEnum.class);
+		assertEquals(A26_MyEnum.ONE, result.get());
+	}
+
+	public enum A26_MyEnum { ONE, TWO, THREE }
+
+	//====================================================================================================
+	// Entry as(Type, args) uses default parser
+	//====================================================================================================
+
+	@Test void a27_entryAs_typeWithArgs() throws Exception {
+		var c = init("[S]", "list=['a','b','c']");
+		var result = c.get("S/list").as(java.util.List.class, String.class);
+		assertTrue(result.isPresent());
+	}
+
+	//====================================================================================================
+	// Entry.asDouble() - non-empty branch
+	//====================================================================================================
+
+	@Test void a28_entryAsDouble() {
+		var c = init("a=3.14", "b=");
+		assertEquals(3.14, c.get("a").asDouble().get(), 0.001);
+		assertFalse(c.get("b").asDouble().isPresent());
+		assertFalse(c.get("x").asDouble().isPresent());
+	}
+
+	//====================================================================================================
+	// Entry.asFloat() - non-empty branch
+	//====================================================================================================
+
+	@Test void a29_entryAsFloat() {
+		var c = init("a=1.5", "b=");
+		assertEquals(1.5f, c.get("a").asFloat().get(), 0.001f);
+		assertFalse(c.get("b").asFloat().isPresent());
+		assertFalse(c.get("x").asFloat().isPresent());
+	}
+
+	//====================================================================================================
+	// Entry.asMap() - no-arg form delegates to asMap(parser); JSON parser wraps value without braces
+	//====================================================================================================
+
+	@Test void a30_entryAsMap_noBraces() throws Exception {
+		var c = init("a=\"key\":\"value\"");
+		var m = c.get("a").asMap().get();
+		assertEquals("value", m.get("key"));
+		assertFalse(c.get("x").asMap().isPresent());
+	}
+
+	//====================================================================================================
+	// Entry.asList() - no-arg form delegates to asList(parser); JSON parser wraps value without brackets
+	//====================================================================================================
+
+	@Test void a31_entryAsList_noBrackets() throws Exception {
+		var c = init("a=\"x\",\"y\"");
+		var list = c.get("a").asList().get();
+		assertEquals(2, list.size());
+		assertEquals("x", list.get(0));
+		assertEquals("y", list.get(1));
+		assertFalse(c.get("x").asList().isPresent());
+	}
+
+	//====================================================================================================
+	// Entry.asStringArray() - JSON path: when value starts with '[', parses as JSON array
+	//====================================================================================================
+
+	@Test void a32_entryAsStringArray_jsonPath() {
+		var c = init("a=[\"x\",\"y\",\"z\"]");
+		var arr = c.get("a").asStringArray().get();
+		assertEquals(3, arr.length);
+		assertEquals("x", arr[0]);
+		assertEquals("y", arr[1]);
+		assertEquals("z", arr[2]);
+	}
+
+	//====================================================================================================
+	// Entry.get() - throws NullPointerException when entry is absent
+	//====================================================================================================
+
+	@Test void a33_entryGet_nullThrow() {
+		var c = init("a=1");
+		assertThrows(NullPointerException.class, () -> c.get("missing").get());
+	}
+
+	//====================================================================================================
+	// Entry.getComment(), getKey(), getModifiers(), getPreLines(), getValue()
+	//====================================================================================================
+
+	@Test void a34_entryMetadataGetters() throws Exception {
+		var c = init();
+		c.set("a", "hello", null, "*", "my comment", l("#preline"));
+		var entry = c.get("a");
+		assertEquals("a", entry.getKey());
+		assertEquals("my comment", entry.getComment());
+		assertEquals("*", entry.getModifiers());
+		assertEquals(1, entry.getPreLines().size());
+		assertEquals("#preline", entry.getPreLines().get(0));
+		assertNotNull(entry.getValue());
+	}
+
+	//====================================================================================================
+	// Entry.isNotEmpty()
+	//====================================================================================================
+
+	@Test void a35_entryIsNotEmpty() {
+		var c = init("a=hello", "b=");
+		assertTrue(c.get("a").isNotEmpty());
+		assertFalse(c.get("b").isNotEmpty());
+		assertFalse(c.get("x").isNotEmpty());
+	}
+
+	//====================================================================================================
+	// Entry.orElseGet(Supplier<String>)
+	//====================================================================================================
+
+	@Test void a36_entryOrElseGet() {
+		var c = init("a=hello");
+		assertEquals("hello", c.get("a").orElseGet(() -> "default"));
+		assertEquals("default", c.get("missing").orElseGet(() -> "default"));
+	}
+
+	//====================================================================================================
+	// Entry.toString() - returns null when entry is absent
+	//====================================================================================================
+
+	@Test void a37_entryToString_nullPath() {
+		var c = init("a=1");
+		assertNull(c.get("missing").toString());
+	}
+
+	//====================================================================================================
+	// Entry.as(Parser, Type...) - dispatch for Long, JsonMap, and JsonList types
+	//====================================================================================================
+
+	@Test void a38_entryAs_typeDispatch() throws Exception {
+		var c = init("a=123", "b={\"k\":\"v\"}", "d=[\"x\"]");
+		assertEquals(123L, c.get("a").as(JsonParser.DEFAULT, Long.class).get());
+		var m = c.get("b").as(JsonParser.DEFAULT, JsonMap.class).get();
+		assertEquals("v", m.get("k"));
+		var list = c.get("d").as(JsonParser.DEFAULT, JsonList.class).get();
+		assertEquals("x", list.get(0));
+	}
+
+	//====================================================================================================
+	// Entry.as(Json5Parser, URL.class) - triggers JSON string wrapping for non-array/non-object type
+	//====================================================================================================
+
+	@Test void a39_entryAs_jsonWrapping() throws Exception {
+		var c = init("a=http://example.com");
+		var u = c.get("a").as(Json5Parser.DEFAULT, URL.class).get();
+		assertEquals("http://example.com", u.toString());
+	}
+
+	//====================================================================================================
+	// Config.Builder.annotations(Annotation...)
+	//====================================================================================================
+
+	@Test void a40_builderAnnotationsVarargs() {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").annotations().build().rollback();
+		assertNotNull(c);
+	}
+
+	//====================================================================================================
+	// Config.Builder.annotations(List<Annotation>)
+	//====================================================================================================
+
+	@Test void a41_builderAnnotationsList() {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").annotations(List.of()).build().rollback();
+		assertNotNull(c);
+	}
+
+	//====================================================================================================
+	// Config.Builder.apply(AnnotationWorkList)
+	//====================================================================================================
+
+	@Test void a42_builderApply() {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").apply(AnnotationWorkList.create()).build().rollback();
+		assertNotNull(c);
+	}
+
+	//====================================================================================================
+	// Config.Builder.binaryLineLength(int)
+	//====================================================================================================
+
+	@Test void a43_builderBinaryLineLength() {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryLineLength(80).build().rollback();
+		assertNotNull(c);
+	}
+
+	//====================================================================================================
+	// Config.Builder.cache(Cache...)
+	//====================================================================================================
+
+	@Test void a44_builderCache() {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").cache(null).build().rollback();
+		assertNotNull(c);
+	}
+
+	//====================================================================================================
+	// Config.Builder.debug() and debug(boolean)
+	//====================================================================================================
+
+	@Test void a45_builderDebug() {
+		var c1 = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").debug().build().rollback();
+		assertNotNull(c1);
+		var c2 = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").debug(false).build().rollback();
+		assertNotNull(c2);
+	}
+
+	//====================================================================================================
+	// Config.Builder.memStore()
+	//====================================================================================================
+
+	@Test void a46_builderMemStore() {
+		var c = Config.create().memStore().name("Test.cfg").build().rollback();
+		assertNotNull(c);
+	}
+
+	//====================================================================================================
+	// Config.Builder.multiLineValuesOnSeparateLines()
+	//====================================================================================================
+
+	@Test void a47_builderMultiLineValues() {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").multiLineValuesOnSeparateLines().build().rollback();
+		assertNotNull(c);
+	}
+
+	//====================================================================================================
+	// Config.Builder.parser(ReaderParser)
+	//====================================================================================================
+
+	@Test void a48_builderParser() {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").parser(JsonParser.DEFAULT).build().rollback();
+		assertNotNull(c);
+	}
+
+	//====================================================================================================
+	// Config.getName()
+	//====================================================================================================
+
+	@Test void a49_getName() {
+		var c = init("a=1");
+		assertEquals("Test.cfg", c.getName());
+	}
+
+	//====================================================================================================
+	// Config.getString(String key)
+	//====================================================================================================
+
+	@Test void a50_getString() {
+		var c = init("a=1", "[S]", "b=2");
+		assertEquals("1", c.getString("a"));
+		assertEquals("2", c.getString("S/b"));
+		assertNull(c.getString("missing"));
+	}
+
+	//====================================================================================================
+	// Config.load(Map<String,Map<String,Object>>)
+	//====================================================================================================
+
+	@Test void a51_load_map() throws Exception {
+		var c = init();
+		var data = new LinkedHashMap<String, Map<String, Object>>();
+		data.put("S", JsonMap.of("k", "v"));
+		c.load(data);
+		assertEquals("v", c.get("S/k").get());
+	}
+
+	//====================================================================================================
+	// Config.setSystemDefault(Config) / Config.getSystemDefault()
+	//====================================================================================================
+
+	@Test void a52_systemDefault() {
+		var c = init("a=1");
+		Config.setSystemDefault(c);
+		assertSame(c, Config.getSystemDefault());
+		Config.setSystemDefault(null);
+	}
+
+	//====================================================================================================
+	// Config.setImport(String, String, List) - throws UnsupportedOperationException (not supported)
+	//====================================================================================================
+
+	@Test void a53_setImport() {
+		var c = init();
+		assertThrows(UnsupportedOperationException.class, () -> c.setImport("", "other.cfg", null));
+	}
+
+	//====================================================================================================
+	// Binary serialization with binaryLineLength - splits encoded value with newlines
+	//====================================================================================================
+
+	@Test void a54_binaryLineLength_splitting() throws Exception {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryLineLength(4).build().rollback();
+		c.set("a", new byte[]{1, 2, 3, 4, 5, 6, 7, 8});
+		assertTrue(c.get("a").orElse("").contains("\n"));
+	}
+
+	//====================================================================================================
+	// multiLineValuesOnSeparateLines - serializes multi-line string values starting on new line
+	//====================================================================================================
+
+	@Test void a55_multiLineOnSeparateLines() throws Exception {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").multiLineValuesOnSeparateLines().build().rollback();
+		c.set("a", "line1\nline2");
+		assertTrue(c.get("a").orElse("").contains("line1"));
+	}
+
+	//====================================================================================================
+	// Config.Builder.readOnly() - throws UnsupportedOperationException on write operations
+	//====================================================================================================
+
+	@Test void a56_readOnly() {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").readOnly().build();
+		assertThrows(UnsupportedOperationException.class, () -> c.set("a", "1"));
+	}
+
+	@Test void a57_builderCopyMethod() {
+		var b = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg");
+		var b2 = b.copy();
+		var c = b2.build().rollback();
+		assertNotNull(c);
+	}
+
+	@Test void a58_builderApplyAnnotationsClass() {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").applyAnnotations(String.class).build().rollback();
+		assertNotNull(c);
+	}
+
+	@Test void a59_builderApplyAnnotationsObject() {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").applyAnnotations("foo").build().rollback();
+		assertNotNull(c);
+	}
+
+	@Test void a60_builderImpl() {
+		var existing = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").build().rollback();
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").impl(existing).build();
+		assertNotNull(c);
+	}
+
+	@Test void a61_removeImport() throws Exception {
+		var c = init();
+		assertThrows(UnsupportedOperationException.class, () -> c.removeImport("", "nonexistent.cfg"));
+	}
+
+	@Test void a62_set_nullValueNonExistentKey() throws Exception {
+		var c = init();
+		c.set("nonExistent", (String)null);
+		assertNull(c.get("nonExistent").orElse(null));
+	}
+
+	@Test void a63_properties_toStringCoversProperties() throws Exception {
+		var c = Config.create()
+			.store(MemoryStore.DEFAULT)
+			.name("Test.cfg")
+			.binaryFormat(BinaryFormat.HEX)
+			.binaryLineLength(80)
+			.multiLineValuesOnSeparateLines()
+			.readOnly()
+			.build();
+		assertNotNull(c.toString());
+	}
+
+	@Test void a64_serialize_null() throws Exception {
+		var c = init("a=1");
+		c.set("a", (Object)null);
+		assertEquals("", c.get("a").orElse(null));
+	}
+
+	@Test void a65_multiLineValues_withObject() throws Exception {
+		var c = Config.create()
+			.store(MemoryStore.DEFAULT)
+			.name("Test.cfg")
+			.multiLineValuesOnSeparateLines()
+			.build()
+			.rollback();
+		c.set("a", List.of("x", "y", "z"));
+		assertNotNull(c.get("a").orElse(null));
+	}
+
+	@Test void a66_applyMods_nullBranches() {
+		var c = init();
+		assertEquals("x", c.applyMods(null, "x"));
+		assertEquals(null, c.applyMods("x", null));
+	}
+
+	@Test void a67_removeMods_nullBranches() {
+		var c = init();
+		assertEquals("x", c.removeMods(null, "x"));
+		assertEquals(null, c.removeMods("x", null));
+	}
+
+	@Test void a68_setSystemProperties() throws Exception {
+		var c = init("sysProp=testValue", "[S]", "k=v");
+		c.setSystemProperties();
+		assertEquals("testValue", System.getProperty("sysProp"));
+		System.clearProperty("sysProp");
+	}
+
+	@Test void a69_setSection_stringList() throws Exception {
+		var c = init();
+		c.setSection("NewSection", List.of("# A comment"));
+		assertTrue(c.getSectionNames().contains("NewSection"));
+	}
+
+	@Test void a70_binaryLineLength_noSplit_shortValue() throws Exception {
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryLineLength(100).build().rollback();
+		c.set("a", new byte[]{1, 2, 3});
+		assertFalse(c.get("a").orElse("").contains("\n"));
+	}
+
+	@Test void a71_load_nullMap() throws Exception {
+		var c = init("a=1");
+		c.load(null);
+		assertEquals("1", c.get("a").get());
+	}
+
+	@Test void a72_load_synchronous() throws Exception {
+		var c = init("");
+		c.load("[S1]\na=1", true);
+		assertEquals("1", c.get("S1/a").get());
+	}
+
+	@Test void a73_load_withImport() throws Exception {
+		var c = init("");
+		c.load("<ImportCfg>\n[S1]\na=1", false);
+		assertNotNull(c.toMap());
+		assertNotNull(c.getSectionNames());
+		assertNotNull(c.getKeys("S1"));
+		assertTrue(c.getSection("S1") != null);
+		assertNotNull(c.getSectionNames());
+	}
+
+	@Test void a74_removeSection_nonExistent() throws Exception {
+		var c = init("[S1]\na=1");
+		assertDoesNotThrow(() -> c.removeSection("NonExistentSection"));
+		assertEquals("1", c.get("S1/a").get());
+	}
+
+	@Test void a75_configMap_load_null() throws Exception {
+		var c = init("[S1]\na=1");
+		MemoryStore.DEFAULT.update("Test.cfg", (String)null);
+		assertNull(c.get("S1/a").orElse(null));
+	}
+
+	@Test void a76_configMap_invalidImportStartDigit() throws Exception {
+		var c = init("");
+		assertThrows(Exception.class, () -> c.load("<1invalid>", false));
+	}
+
+	@Test void a77_configMap_invalidImportWithSpace() throws Exception {
+		var c = init("");
+		assertThrows(Exception.class, () -> c.load("<a b>", false));
+	}
+
+	@Test void a78_configMap_emptyImportName() throws Exception {
+		var c = init("");
+		assertThrows(Exception.class, () -> c.load("<>", false));
+	}
+
+	@Test void a79_configMap_importWithExtraContent() throws Exception {
+		var c = init("");
+		assertThrows(Exception.class, () -> c.load("<validname> extraStuff", false));
+	}
+
+	@Test void a80_configMap_invalidSectionName() throws Exception {
+		var c = init("");
+		assertThrows(Exception.class, () -> c.load("[invalid-section!", false));
+	}
+
+	@Test void a81_configMap_findDiffs_importsAddedAndRemoved() throws Exception {
+		var c = init("[S1]\na=1");
+		c.load("<ImportCfg>\n[S1]\na=1", false);
+		c.load("[S1]\na=1", false);
+		assertEquals("1", c.get("S1/a").get());
+	}
+
+	@Test void a82_configMap_importListedTwice() throws Exception {
+		var c = init("");
+		c.load("<ImportCfg>\n<ImportCfg>\n[S1]\na=1", false);
+		assertNotNull(c.getSectionNames());
+	}
+
+	@Test void a83_configMap_importLineNoClosingBracket() throws Exception {
+		var c = init("");
+		c.load("<noClosingBracket\n[S1]\na=1", false);
+		assertEquals("1", c.get("S1/a").get());
+	}
+
+	@Test void a84_configMap_tabIndentedComment() throws Exception {
+		var c = init("");
+		c.load("[S1]\na=value1\n\t#this is a comment\nb=value2", false);
+		assertEquals("value1", c.get("S1/a").get());
+		assertEquals("value2", c.get("S1/b").get());
+	}
+
+	@Test void a85_configMap_importWithHashComment() throws Exception {
+		var c = init("");
+		c.load("<ImportCfg>#comment\n[S1]\na=1", false);
+		assertEquals("1", c.get("S1/a").get());
+	}
+
+	@Test void a86_configMapEntry_keyWithModifierNoClose() throws Exception {
+		var c = init("[S1]\nkey<notclosed=value");
+		assertEquals("value", c.get("S1/key").get());
+	}
+
+	@Test void a87_configMapEntry_valueWithBackslash() throws Exception {
+		var c = init("[S1]\nkey=normal");
+		c.set("S1/key", "value\\with\\backslash");
+		c.commit();
+		var s = c.toString();
+		assertTrue(s.contains("key"));
+	}
+
+	@Test void a88_configMapEntry_valueWithIsoControlChar() throws Exception {
+		var c = init("[S1]\nkey=normal");
+		c.set("S1/key", "value\u0001control");
+		c.commit();
+		var s = c.toString();
+		assertTrue(s.contains("key"));
 	}
 }

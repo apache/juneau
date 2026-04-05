@@ -282,6 +282,45 @@ class BctConfig_Test extends TestBase {
 	}
 
 	// ====================================================================================================
+	// Global settings tests
+	// ====================================================================================================
+
+	@Nested
+	class J_globalSettings extends TestBase {
+
+		@AfterEach
+		void cleanup() {
+			BctConfiguration.clearGlobal();
+		}
+
+		@Test
+		void j01_setGlobal_visibleOnCurrentThread() {
+			BctConfiguration.setGlobal(BCT_SORT_MAPS, true);
+			assertTrue(BctConfiguration.get(BCT_SORT_MAPS, false));
+		}
+
+		@Test
+		void j02_get_withStringSetting() {
+			BctConfiguration.setGlobal(BCT_SORT_MAPS, true);
+			var setting = BctConfiguration.get(BCT_SORT_MAPS);
+			assertNotNull(setting);
+		}
+
+		@Test
+		void j03_get_withTypedDefault() {
+			var result = BctConfiguration.get("nonexistent.property", "defaultValue");
+			assertEquals("defaultValue", result);
+		}
+
+		@Test
+		void j04_clearGlobal_removesGlobalSettings() {
+			BctConfiguration.setGlobal(BCT_SORT_MAPS, true);
+			BctConfiguration.clearGlobal();
+			assertFalse(BctConfiguration.get(BCT_SORT_MAPS, false));
+		}
+	}
+
+	// ====================================================================================================
 	// Test helper classes
 	// ====================================================================================================
 

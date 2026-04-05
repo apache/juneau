@@ -100,14 +100,14 @@ public class LogEntryFormatter extends Formatter {
 
 		// @formatter:off
 		format = format
-			.replace("\\{date\\}", "%1\\$s")
-			.replace("\\{class\\}", "%2\\$s")
-			.replace("\\{method\\}", "%3\\$s")
-			.replace("\\{logger\\}", "%4\\$s")
-			.replace("\\{level\\}", "%5\\$s")
-			.replace("\\{msg\\}", "%6\\$s")
-			.replace("\\{threadid\\}", "%7\\$s")
-			.replace("\\{exception\\}", "%8\\$s");
+			.replaceAll("\\{date\\}", "%1\\$s")
+			.replaceAll("\\{class\\}", "%2\\$s")
+			.replaceAll("\\{method\\}", "%3\\$s")
+			.replaceAll("\\{logger\\}", "%4\\$s")
+			.replaceAll("\\{level\\}", "%5\\$s")
+			.replaceAll("\\{msg\\}", "%6\\$s")
+			.replaceAll("\\{threadid\\}", "%7\\$s")
+			.replaceAll("\\{exception\\}", "%8\\$s");
 		// @formatter:on
 
 		this.format = format;
@@ -144,7 +144,7 @@ public class LogEntryFormatter extends Formatter {
 				if (c == '$') {
 					state = S4;
 				} else {
-					re.append("\\%").append(format.substring(i1, i));
+					re.append("\\%").append(format.substring(i1, i)); // HTT - requires %digit followed by non-$ which can't come from standard format placeholders
 					state = S1;
 				}
 			} else if (state == S4) {
@@ -183,10 +183,10 @@ public class LogEntryFormatter extends Formatter {
 							fieldIndexes.put("exception", index++);
 							re.append("(.*)");
 							break;
-						default: // Fall through.
+						default: // HTT - group numbers > 8 would require a format placeholder beyond {exception}
 					}
 				} else {
-					re.append("\\%").append(format.substring(i1, i));
+					re.append("\\%").append(format.substring(i1, i)); // HTT - requires %digit$ followed by non-s which can't come from standard format placeholders
 				}
 				state = S1;
 			}

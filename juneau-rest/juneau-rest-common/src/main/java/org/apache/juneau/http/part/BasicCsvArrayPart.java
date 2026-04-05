@@ -178,7 +178,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	public String getValue() {
 		if (nn(supplier))
 			return join(supplier.get(), ',');
-		if (nn(stringValue))
+		if (!nn(stringValue))
 			stringValue = join(value, ',');
 		return stringValue;
 	}

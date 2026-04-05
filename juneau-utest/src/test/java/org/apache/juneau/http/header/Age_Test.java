@@ -29,6 +29,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 
 class Age_Test extends TestBase {
@@ -70,5 +71,9 @@ class Age_Test extends TestBase {
 
 	private static RestClient.Builder client() {
 		return MockRestClient.create(A.class);
+	}
+
+	@Test void a02_factoryNullReturn() {
+		assertNull(Age.of((Integer)null));
 	}
 }

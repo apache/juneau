@@ -213,32 +213,25 @@ public class Operation extends SwaggerElement {
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
 
-		if (nn(copyFrom.consumes))
-			this.consumes.addAll(copyOf(copyFrom.consumes));
+		this.consumes.addAll(copyOf(copyFrom.consumes));
 		this.deprecated = copyFrom.deprecated;
 		this.description = copyFrom.description;
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 		this.operationId = copyFrom.operationId;
-		if (nn(copyFrom.produces))
-			this.produces.addAll(copyOf(copyFrom.produces));
-		if (nn(copyFrom.schemes))
-			this.schemes.addAll(copyOf(copyFrom.schemes));
+		this.produces.addAll(copyOf(copyFrom.produces));
+		this.schemes.addAll(copyOf(copyFrom.schemes));
 		this.summary = copyFrom.summary;
-		if (nn(copyFrom.tags))
-			this.tags.addAll(copyOf(copyFrom.tags));
+		this.tags.addAll(copyOf(copyFrom.tags));
 
-		if (nn(copyFrom.parameters))
-			parameters.addAll(copyOf(copyFrom.parameters, ParameterInfo::copy));
+		parameters.addAll(copyOf(copyFrom.parameters, ParameterInfo::copy));
 
-		if (nn(copyFrom.responses))
-			copyFrom.responses.forEach((k, v) -> responses.put(k, v.copy()));
+		copyFrom.responses.forEach((k, v) -> responses.put(k, v.copy()));
 
-		if (nn(copyFrom.security))
-			copyFrom.security.forEach(x -> {
-				Map<String,List<String>> m2 = map();
-				x.forEach((k, v) -> m2.put(k, copyOf(v)));
-				security.add(m2);
-			});
+		copyFrom.security.forEach(x -> {
+			Map<String,List<String>> m2 = map();
+			x.forEach((k, v) -> m2.put(k, copyOf(v)));
+			security.add(m2);
+		});
 	}
 
 	/**

@@ -387,7 +387,19 @@ class SimpleMap_Test extends TestBase {
 		Object[] values = { "value1" };
 		SimpleMap<String,Object> map = new SimpleMap<>(keys, values);
 
-		assertNotNull(map);
+		assertFalse(map.equals("not-a-map"));
+		assertFalse(map.equals(null));
+	}
+
+	@Test
+	void e08_entry_equals_nonEntry() {
+		String[] keys = { "key1" };
+		Object[] values = { "value1" };
+		SimpleMap<String,Object> map = new SimpleMap<>(keys, values);
+
+		var entry = map.entrySet().iterator().next();
+		assertFalse(entry.equals("not-an-entry"));
+		assertFalse(entry.equals(null));
 	}
 
 	@Test

@@ -307,6 +307,30 @@ class Operation_Test extends TestBase {
 			var b = bean().addResponse("200", responseInfo()).addResponse("201", responseInfo());
 			assertSize(2, b.getResponses());
 		}
+
+		@Test void a21_nullSafeMethods() {
+			var x = bean();
+			assertDoesNotThrow(() -> x.addConsumes((Collection<MediaType>)null));
+			assertDoesNotThrow(() -> x.addConsumes((MediaType[])null));
+			assertDoesNotThrow(() -> x.addConsumes(new MediaType[]{null}));
+			assertDoesNotThrow(() -> x.setConsumes((Collection<MediaType>)null));
+			assertDoesNotThrow(() -> x.addProduces((Collection<MediaType>)null));
+			assertDoesNotThrow(() -> x.addProduces((MediaType[])null));
+			assertDoesNotThrow(() -> x.addProduces(new MediaType[]{null}));
+			assertDoesNotThrow(() -> x.setProduces((Collection<MediaType>)null));
+			assertDoesNotThrow(() -> x.addSchemes((Collection<String>)null));
+			assertDoesNotThrow(() -> x.addSchemes((String[])null));
+			assertDoesNotThrow(() -> x.addSchemes(new String[]{null}));
+			assertDoesNotThrow(() -> x.setSchemes((Collection<String>)null));
+			assertDoesNotThrow(() -> x.addTags((Collection<String>)null));
+			assertDoesNotThrow(() -> x.addTags((String[])null));
+			assertDoesNotThrow(() -> x.addTags(new String[]{null}));
+			assertDoesNotThrow(() -> x.setTags((Collection<String>)null));
+			assertDoesNotThrow(() -> x.addParameters((Collection<ParameterInfo>)null));
+			assertDoesNotThrow(() -> x.addParameters((ParameterInfo[])null));
+			assertDoesNotThrow(() -> x.addParameters(new ParameterInfo[]{null}));
+			assertDoesNotThrow(() -> x.setResponses((Map<String,ResponseInfo>)null));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

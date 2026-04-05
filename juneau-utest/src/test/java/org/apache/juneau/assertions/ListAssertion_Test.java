@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json5.*;
@@ -137,6 +138,73 @@ class ListAssertion_Test extends TestBase {
 		var nil = listn(Integer.class);
 		test(x).asSorted(null).isString("[1,2,3]");
 		test(nil).asSorted(null).isNull();
+	}
+
+	@Test void bc04_asCdl() {
+		var x = l("a","b");
+		var nil = listn(String.class);
+		test(x).asCdl().is("a,b");
+		test(nil).asCdl().isNull();
+	}
+
+	@Test void bc05_asCdl_wFunction() {
+		var x = l("a","b");
+		var nil = listn(String.class);
+		test(x).asCdl(String::toUpperCase).is("A,B");
+		test(nil).asCdl(String::toUpperCase).isNull();
+	}
+
+	@Test void bc06_asFirst() {
+		var x = l("a","b");
+		var nil = listn(String.class);
+		test(x).asFirst().is("a");
+		test(nil).asFirst().isNull();
+	}
+
+	@Test void bc07_asFirst_wCount() {
+		var x = l("a","b","c");
+		var nil = listn(String.class);
+		test(x).asFirst(2).isString("[a,b]");
+		test(nil).asFirst(2).isNull();
+	}
+
+	@Test void bc08_asLast() {
+		var x = l("a","b");
+		var nil = listn(String.class);
+		test(x).asLast().is("b");
+		var assertion1 = test(nil);
+		assertThrows(BasicAssertionError.class, assertion1::asLast);
+	}
+
+	@Test void bc09_asLast_wCount() {
+		var x = l("a","b","c");
+		var nil = listn(String.class);
+		test(x).asLast(2).isString("[b,c]");
+		test(nil).asLast(2).isNull();
+	}
+
+	@Test void bc10_asStrings_wFunction() {
+		var x = l("a","b");
+		var nil = listn(String.class);
+		test(x).asStrings(String::toUpperCase).isHas("A","B");
+		test(nil).asStrings(String::toUpperCase).isNull();
+	}
+
+	@Test void bc11_asSublist() {
+		var x = l("a","b","c");
+		var nil = listn(String.class);
+		test(x).asSublist(1,3).isString("[b,c]");
+		test(nil).asSublist(1,3).isNull();
+	}
+
+	@Test void bd01_create_wStream() {
+		ListAssertion.create(Stream.of("a","b")).setSilent().isHas("a","b");
+		ListAssertion.create((Stream<String>)null).setSilent().isNull();
+	}
+
+	@Test void bd02_assertList_wStream() {
+		assertList(Stream.of("a","b")).isHas("a","b");
+		assertList((Stream<String>)null).isNull();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -394,5 +462,10 @@ class ListAssertion_Test extends TestBase {
 		assertThrown(()->test(x1).isEach(x->x==null,x->x==null)).asMessage().asOneLine().is("List did not contain expected value at index 0.  Unexpected value: 'a'.");
 		var assertion16 = test(nil);
 		assertThrows(BasicAssertionError.class, ()->assertion16.isEach(x->x==null), "Value was null.");
+	}
+
+	@Test void cc03_each_wNullPredicate() {
+		var x1 = l("a","b");
+		test(x1).isEach(null, null);
 	}
 }

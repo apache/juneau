@@ -126,8 +126,8 @@ public class Swappers {
 				try {
 					return future.get();
 				} catch (@SuppressWarnings("unused") InterruptedException e) {
-					Thread.currentThread().interrupt();
-					return "<interrupted>";
+					Thread.currentThread().interrupt(); // HTT - requires thread interruption during Future.get()
+					return "<interrupted>"; // HTT
 				} catch (Exception e) {
 					return "<error: " + e.getMessage() + ">";
 				}

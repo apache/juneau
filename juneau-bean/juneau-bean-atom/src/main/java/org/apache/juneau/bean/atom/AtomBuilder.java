@@ -236,5 +236,5 @@ public class AtomBuilder {
 	/**
 	 * Constructor.
 	 */
-	protected AtomBuilder() {}
+	protected AtomBuilder() {} // HTT - utility class; protected constructor exists only to allow subclassing
 }

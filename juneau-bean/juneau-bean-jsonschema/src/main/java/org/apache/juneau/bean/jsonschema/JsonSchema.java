@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.jsonschema;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -2044,9 +2045,9 @@ public class JsonSchema {
 	}
 
 	private void setMasterOn(JsonSchema[] ss) {
-		if (nn(ss))
-			for (var s : ss)
-				setMasterOn(s);
+		assertArgNotNull("ss", ss);
+		for (var s : ss)
+			setMasterOn(s);
 	}
 
 	private void setMasterOn(JsonSchemaArray ss) {

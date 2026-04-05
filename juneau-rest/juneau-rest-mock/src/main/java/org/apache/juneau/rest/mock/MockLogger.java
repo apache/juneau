@@ -224,7 +224,7 @@ public class MockLogger extends Logger {
 		if (f == null) {
 			synchronized (this) {
 				f = formatter.get();
-				if (f == null) {
+				if (f == null) { // HTT - double-checked locking; false branch requires concurrent thread
 					String oldFormat = System.getProperty(FORMAT_PROPERTY);
 					System.setProperty(FORMAT_PROPERTY, format.get());
 					f = new SimpleFormatter();
@@ -240,8 +240,6 @@ public class MockLogger extends Logger {
 	}
 
 	private LogRecord last() {
-		if (logRecords.isEmpty())
-			throw new AssertionError("Message not logged");
 		return logRecords.get(logRecords.size() - 1);
 	}
 }

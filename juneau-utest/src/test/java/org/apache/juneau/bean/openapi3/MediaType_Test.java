@@ -116,6 +116,17 @@ class MediaType_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
+
+		@Test void a13_nullSafeMethods() {
+			// setEncoding(null) and setExamples(null) cover the false branches of nn(value)
+			var x = bean()
+				.setEncoding(m("a1", encoding()))
+				.setExamples(m("b1", example().setValue("b2")));
+			x.setEncoding(null);
+			assertNull(x.getEncoding());
+			x.setExamples(null);
+			assertNull(x.getExamples());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

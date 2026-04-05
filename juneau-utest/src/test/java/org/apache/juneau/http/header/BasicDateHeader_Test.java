@@ -22,6 +22,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.time.*;
@@ -79,6 +80,23 @@ class BasicDateHeader_Test extends TestBase {
 
 	@Test void a04_assertZonedDateTime() {
 		dateHeader(HEADER,VALUE).assertZonedDateTime().asString().is("1994-10-29T19:43:31Z");
+	}
+
+	@Test void a05_factoryNullReturns() {
+		assertNull(BasicDateHeader.of("Foo", (String)null));
+		assertNull(BasicDateHeader.of("Foo", (Supplier<ZonedDateTime>)null));
+		assertNull(BasicDateHeader.of("Foo", (ZonedDateTime)null));
+	}
+
+	@Test void a06_orElseAndToZonedDateTime() {
+		var h = dateHeader(HEADER, VALUE);
+		assertNotNull(h.orElse((ZonedDateTime)null));
+		assertNotNull(h.toZonedDateTime());
+
+		// null supplier returns other
+		var h2 = new BasicDateHeader(HEADER, (Supplier<ZonedDateTime>) () -> null);
+		assertNull(h2.orElse((ZonedDateTime)null));
+		assertNull(h2.toZonedDateTime());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

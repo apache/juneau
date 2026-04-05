@@ -19,6 +19,7 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -67,6 +68,30 @@ class BasicBooleanHeader_Test extends TestBase {
 		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->booleanHeader(null, PARSED));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->booleanHeader("", ()->PARSED));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->booleanHeader(null, ()->PARSED));
+	}
+
+	@Test void a02_factoryNullReturns() {
+		assertNull(BasicBooleanHeader.of("Foo", (Boolean)null));
+		assertNull(BasicBooleanHeader.of("Foo", (String)null));
+		assertNull(BasicBooleanHeader.of("Foo", (Supplier<Boolean>)null));
+	}
+
+	@Test void a03_methods() {
+		var h = new BasicBooleanHeader("Foo", true);
+		h.assertBoolean().isTrue();
+		assertTrue(h.isTrue());
+		assertEquals(Boolean.TRUE, h.orElse(false));
+		assertEquals(Boolean.TRUE, h.toBoolean());
+
+		var h2 = new BasicBooleanHeader("Foo", false);
+		assertFalse(h2.isTrue());
+		assertEquals(Boolean.FALSE, h2.orElse(true));
+		assertEquals(Boolean.FALSE, h2.toBoolean());
+
+		var h3 = new BasicBooleanHeader("Foo", (Boolean)null);
+		assertNull(h3.toBoolean());
+		assertEquals(Boolean.TRUE, h3.orElse(true));
+		assertNull(h3.orElse((Boolean)null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

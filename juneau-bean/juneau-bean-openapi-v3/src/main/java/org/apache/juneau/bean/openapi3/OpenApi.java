@@ -128,14 +128,11 @@ public class OpenApi extends OpenApiElement {
 		super(copyFrom);
 		this.openapi = copyFrom.openapi;
 		this.info = copyFrom.info;
-		if (nn(copyFrom.servers))
-			this.servers.addAll(copyOf(copyFrom.servers, Server::copy));
+		this.servers.addAll(copyOf(copyFrom.servers, Server::copy));
 		this.paths = copyOf(copyFrom.paths);
 		this.components = copyFrom.components;
-		if (nn(copyFrom.security))
-			this.security.addAll(copyOf(copyFrom.security, SecurityRequirement::copy));
-		if (nn(copyFrom.tags))
-			this.tags.addAll(copyOf(copyFrom.tags, Tag::copy));
+		this.security.addAll(copyOf(copyFrom.security, SecurityRequirement::copy));
+		this.tags.addAll(copyOf(copyFrom.tags, Tag::copy));
 		this.externalDocs = copyFrom.externalDocs;
 	}
 

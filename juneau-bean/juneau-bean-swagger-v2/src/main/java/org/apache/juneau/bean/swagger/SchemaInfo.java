@@ -186,13 +186,11 @@ public class SchemaInfo extends SwaggerElement {
 		super(copyFrom);
 
 		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
-		if (nn(copyFrom.allOf))
-			this.allOf.addAll(copyOf(copyFrom.allOf, SchemaInfo::copy));
+		this.allOf.addAll(copyOf(copyFrom.allOf, SchemaInfo::copy));
 		this.default_ = copyFrom.default_;
 		this.description = copyFrom.description;
 		this.discriminator = copyFrom.discriminator;
-		if (nn(copyFrom.enum_))
-			this.enum_.addAll(copyOf(copyFrom.enum_));
+		this.enum_.addAll(copyOf(copyFrom.enum_));
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -212,14 +210,12 @@ public class SchemaInfo extends SwaggerElement {
 		this.readOnly = copyFrom.readOnly;
 		this.ref = copyFrom.ref;
 		this.required = copyFrom.required;
-		if (nn(copyFrom.requiredProperties))
-			this.requiredProperties.addAll(copyOf(copyFrom.requiredProperties));
+		this.requiredProperties.addAll(copyOf(copyFrom.requiredProperties));
 		this.title = copyFrom.title;
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
-		if (nn(copyFrom.properties))
-			properties.putAll(copyOf(copyFrom.properties, SchemaInfo::copy));
+		properties.putAll(copyOf(copyFrom.properties, SchemaInfo::copy));
 	}
 
 	/**

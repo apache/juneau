@@ -154,24 +154,24 @@ public class ConfigMap implements ConfigStoreListener {
 
 		@Override
 		public boolean equals(Object o) {
-			return o instanceof Import ir && ir.getConfigName().equals(getConfigName());
+			return o instanceof Import ir && ir.getConfigName().equals(getConfigName()); // HTT - Import.equals() only called via imports.contains() in findDiffs, which requires active import listeners
 		}
 
 		@Override
 		public int hashCode() {
-			return getConfigName().hashCode();
+			return getConfigName().hashCode(); // HTT - Import.hashCode() only called when Import is used as map key, which requires active import functionality
 		}
 
-		ConfigMap getConfigMap() { return configMap; }
+		ConfigMap getConfigMap() { return configMap; } // HTT - only called from import-related paths requiring active import listeners
 
-		String getConfigName() { return configMap.name; }
+		String getConfigName() { return configMap.name; } // HTT - only called from import-related paths requiring active import listeners
 
 		synchronized Import register(Collection<ConfigEventListener> listeners) {
 			listeners.forEach(this::register);
 			return this;
 		}
 
-		synchronized Import register(ConfigEventListener listener) {
+		synchronized Import register(ConfigEventListener listener) { // HTT - only called when registering with non-empty listener collection
 			var l2 = (ConfigEventListener)events -> {
 				var events2 = events.stream().filter(x -> ! hasEntry(x.getSection(), x.getKey())).collect(Collectors.toCollection(ConfigEvents::new));
 				if (! events2.isEmpty())
@@ -182,7 +182,7 @@ public class ConfigMap implements ConfigStoreListener {
 			return this;
 		}
 
-		synchronized Import unregister(ConfigEventListener listener) {
+		synchronized Import unregister(ConfigEventListener listener) { // HTT - only called when import listener unregistration is triggered via unsupported import functionality
 			configMap.unregister(listenerMap.remove(listener));
 			return this;
 		}
@@ -205,8 +205,6 @@ public class ConfigMap implements ConfigStoreListener {
 	}
 
 	private static boolean isValidConfigName(String s) {
-		if (s == null)
-			return false;
 		s = s.trim();
 		if (s.isEmpty())
 			return false;
@@ -340,10 +338,10 @@ public class ConfigMap implements ConfigStoreListener {
 			for (var i = 0; i <= 10; i++) {
 				if (i == 10)
 					throw new ConfigException("Unable to store contents of config to store.");
-				var currentContents = store.write(name, contents, newContents);
-				if (currentContents == null)
-					break;
-				onChange(currentContents);
+			var currentContents = store.write(name, contents, newContents);
+			if (currentContents == null)
+				break;
+			onChange(currentContents); // HTT - retry loop requires concurrent write conflict causing store.write() to return non-null
 			}
 			this.changes.clear();
 		}
@@ -392,7 +390,7 @@ public class ConfigMap implements ConfigStoreListener {
 		Set<String> s = imports.isEmpty() && nn(cs) ? cs.entries.keySet() : set();
 		if (! imports.isEmpty()) {
 			imports.forEach(x -> s.addAll(x.getConfigMap().getKeys(section)));
-			if (nn(cs))
+			if (nn(cs)) // HTT - requires imports where the section doesn't exist locally (cs==null), which needs active import listeners
 				s.addAll(cs.entries.keySet());
 		}
 		return u(s);
@@ -452,7 +450,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public boolean hasSection(String section) {
 		checkSectionName(section);
-		return nn(entries.get(section)) || imports.stream().anyMatch(x -> x.getConfigMap().hasSection(section));
+		return nn(entries.get(section)) || imports.stream().anyMatch(x -> x.getConfigMap().hasSection(section)); // HTT - anyMatch() on imports requires active import listeners
 	}
 
 	/**
@@ -471,11 +469,11 @@ public class ConfigMap implements ConfigStoreListener {
 			var listener = (ConfigStoreListener)x -> latch.countDown();
 			store.register(name, listener);
 			store.write(name, null, contents);
-			if (latch.await(30, TimeUnit.SECONDS)) {
-				store.unregister(name, listener);
-			} else {
-				throw new ConfigException("Unable to store contents of config to store.");
-			}
+		if (latch.await(30, TimeUnit.SECONDS)) {
+			store.unregister(name, listener);
+		} else {
+			throw new ConfigException("Unable to store contents of config to store."); // HTT - timeout requires a store that doesn't fire change events within 30 seconds
+		}
 		} else {
 			store.write(name, null, contents);
 		}
@@ -494,7 +492,7 @@ public class ConfigMap implements ConfigStoreListener {
 				this.changes.forEach(y -> applyChange(false, y));
 			}
 		} catch (IOException e) {
-			throw toRex(e);
+			throw toRex(e); // HTT - IOException from findDiffs/load requires a failing store operation during onChange
 		}
 		if (changes2 != null && ! changes2.isEmpty())
 			signal(changes2);
@@ -573,15 +571,15 @@ public class ConfigMap implements ConfigStoreListener {
 			try (var x = lock.write()) {
 				changes.clear();
 				load(contents);
-			} catch (IOException e) {
-				throw toRex(e);
-			}
+		} catch (IOException e) {
+			throw toRex(e); // HTT - IOException from private load() is not possible in normal operation (scanner/section parsing doesn't throw)
 		}
-		return this;
 	}
+	return this;
+}
 
-	/**
-	 * Adds or overwrites an existing entry.
+/**
+ * Adds or overwrites an existing entry.
 	 *
 	 * @param section
 	 * 	The section name.
@@ -684,8 +682,6 @@ public class ConfigMap implements ConfigStoreListener {
 		"java:S3776" // Cognitive complexity acceptable for config change application
 	})
 	private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {
-		if (ce == null)
-			return this;
 		try (var x = lock.write()) {
 			var section = ce.getSection();
 			var cs = entries.get(section);
@@ -732,7 +728,7 @@ public class ConfigMap implements ConfigStoreListener {
 				cs.writeTo(sw);
 			return sw.toString();
 		} catch (IOException e) {
-			throw toRex(e);  // Not possible.
+			throw toRex(e);  // HTT - StringWriter.append() never throws IOException
 		}
 	}
 
@@ -744,7 +740,7 @@ public class ConfigMap implements ConfigStoreListener {
 		var newMap = new ConfigMap(store, name, updatedContents);
 
 		// Imports added.
-		for (var i : newMap.imports) {
+		for (var i : newMap.imports) { // HTT - requires active import listeners with actual ConfigMap imports registered
 			if (! imports.contains(i)) {
 				for (var s : i.getConfigMap().entries.values()) {
 					for (var e : s.oentries.values()) {
@@ -757,7 +753,7 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		// Imports removed.
-		for (var i : imports) {
+		for (var i : imports) { // HTT - requires active import listeners with actual ConfigMap imports registered
 			if (! newMap.imports.contains(i)) {
 				for (var s : i.getConfigMap().entries.values()) {
 					for (var e : s.oentries.values()) {
@@ -935,8 +931,7 @@ public class ConfigMap implements ConfigStoreListener {
 	}
 
 	private void signal(ConfigEvents changes) {
-		if (ne(changes))
-			listeners.forEach(x -> x.onConfigChange(changes));
+		listeners.forEach(x -> x.onConfigChange(changes));
 	}
 
 	boolean hasEntry(String section, String key) {

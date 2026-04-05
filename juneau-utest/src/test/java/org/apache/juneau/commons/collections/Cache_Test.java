@@ -1271,5 +1271,14 @@ class Cache_Test extends TestBase {
 		cache.cleanup();
 		assertEmpty(cache);
 	}
+
+	@Test void a67_cleanup_threadLocal_notYetPopulated() {
+		var cache = Cache.of(String.class, String.class)
+			.threadLocal()
+			.build();
+
+		// Cleanup before any access - threadLocalMap and threadLocalWrapperCache are null; should not throw
+		cache.cleanup();
+	}
 }
 

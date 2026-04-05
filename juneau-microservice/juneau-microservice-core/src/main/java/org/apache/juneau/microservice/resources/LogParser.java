@@ -195,17 +195,13 @@ public class LogParser implements Iterable<LogParser.Entry>, Closeable {
 		while (nn(line = br.readLine())) {
 			var e = new Entry(line);
 			if (e.isRecord) {
-				if (e.matches()) {
-					if (nn(prev))
-						allEntries.add(prev);
-					prev = e;
-				} else {
-					prev = null;
-				}
-		} else {
-			if (prev != null)
-				prev.addText(e.line);
-		}
+				if (nn(prev))
+					allEntries.add(prev);
+				prev = e.matches() ? e : null;
+			} else {
+				if (prev != null)
+					prev.addText(e.line);
+			}
 		}
 		if (nn(prev))
 			allEntries.add(prev);

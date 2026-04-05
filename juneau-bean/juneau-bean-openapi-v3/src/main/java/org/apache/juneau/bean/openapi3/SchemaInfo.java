@@ -221,16 +221,11 @@ public class SchemaInfo extends OpenApiElement {
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
-		if (nn(copyFrom.enum_))
-			enum_.addAll(copyFrom.enum_);
-		if (nn(copyFrom.allOf))
-			allOf.addAll(copyFrom.allOf);
-		if (nn(copyFrom.required))
-			required.addAll(copyFrom.required);
-		if (nn(copyFrom.anyOf))
-			anyOf.addAll(copyFrom.anyOf);
-		if (nn(copyFrom.oneOf))
-			oneOf.addAll(copyFrom.oneOf);
+		enum_.addAll(copyFrom.enum_);
+		allOf.addAll(copyFrom.allOf);
+		required.addAll(copyFrom.required);
+		anyOf.addAll(copyFrom.anyOf);
+		oneOf.addAll(copyFrom.oneOf);
 		this.properties = copyOf(copyFrom.properties, SchemaInfo::copy);
 		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
 		this.not = copyFrom.not == null ? null : copyFrom.not.copy();

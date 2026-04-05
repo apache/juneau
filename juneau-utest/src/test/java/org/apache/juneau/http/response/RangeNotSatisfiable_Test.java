@@ -22,6 +22,7 @@ import static org.apache.juneau.http.response.RangeNotSatisfiable.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 
 class RangeNotSatisfiable_Test extends TestBase {
@@ -76,5 +77,10 @@ class RangeNotSatisfiable_Test extends TestBase {
 		c.get("/f6").run()
 			.assertStatus().asCode().is(STATUS_CODE)
 			.assertContent("foo");
+	}
+
+	@Test void a02_nullCause() {
+		var x = new RangeNotSatisfiable((Throwable)null);
+		assertEquals(RangeNotSatisfiable.REASON_PHRASE, x.getMessage());
 	}
 }

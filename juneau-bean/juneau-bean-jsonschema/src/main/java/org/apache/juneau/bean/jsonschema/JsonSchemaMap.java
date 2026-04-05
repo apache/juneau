@@ -136,7 +136,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 			if (r == null)
 				return null;
 			return Json5Parser.DEFAULT.parse(r, JsonSchema.class);
-		} catch (Exception e) {
+		} catch (Exception e) { // HTT - compiler-generated branch from try-with-resources null check
 			throw toRex(e);
 		}
 	}

@@ -151,6 +151,14 @@ class HeaderInfo_Test extends TestBase {
 			assertDoesNotThrow(() -> x.setType("array"));
 			assertDoesNotThrow(() -> y.setType("invalid"));
 		}
+
+		@Test void a13_nullSafeMethods() {
+			var x = bean();
+			assertDoesNotThrow(() -> x.addEnum((Collection<Object>)null));
+			assertDoesNotThrow(() -> x.addEnum((Object[])null));
+			assertDoesNotThrow(() -> x.addEnum(new Object[]{null}));
+			assertDoesNotThrow(() -> x.setEnum((Collection<Object>)null));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

@@ -494,7 +494,7 @@ public class Config extends Context implements ConfigEventListener {
 		}
 
 		var cmd = System.getProperty("sun.java.command", "not_found").split("\\s+")[0];
-		if (cmd.endsWith(".jar") && ! co(cmd, "surefirebooter")) {
+		if (cmd.endsWith(".jar") && ! co(cmd, "surefirebooter")) { // HTT - not a .jar during tests
 			cmd = cmd.replaceAll(".*?([^\\\\\\/]+)\\.jar$", "$1");
 			l.add(cmd + ".cfg");
 			cmd = cmd.replaceAll("[\\.\\_].*$", "");  // Try also without version in jar name.
@@ -502,7 +502,7 @@ public class Config extends Context implements ConfigEventListener {
 		}
 
 		var fileArray = new File(".").listFiles();
-		if (fileArray != null) {
+		if (fileArray != null) { // HTT - listFiles() always returns non-null in test environment
 			for (var f : fileArray)
 				if (f.getName().endsWith(".cfg"))
 					l.add(f.getName());
@@ -535,11 +535,9 @@ public class Config extends Context implements ConfigEventListener {
 	}
 
 	private static synchronized Config find(String name) {
-		if (name == null)
-			return null;
-		if (FileStore.DEFAULT.exists(name))
+		if (FileStore.DEFAULT.exists(name)) // HTT - no .cfg files on disk in test environment
 			return Config.create(name).store(FileStore.DEFAULT).build();
-		if (ClasspathStore.DEFAULT.exists(name))
+		if (ClasspathStore.DEFAULT.exists(name)) // HTT - test config files are not on classpath by default
 			return Config.create(name).store(ClasspathStore.DEFAULT).build();
 		return null;
 	}
@@ -548,10 +546,10 @@ public class Config extends Context implements ConfigEventListener {
 
 		for (var n : getCandidateSystemDefaultConfigNames()) {
 			var config = find(n);
-			if (nn(config)) {
-				if (! isTrue(DISABLE_AUTO_SYSTEM_PROPS.get()))
+			if (nn(config)) { // HTT - find() always returns null in test environment
+				if (! isTrue(DISABLE_AUTO_SYSTEM_PROPS.get())) // HTT - unreachable block
 					config.setSystemProperties();
-				return config;
+				return config; // HTT
 			}
 		}
 
@@ -1084,7 +1082,7 @@ public class Config extends Context implements ConfigEventListener {
 		try {
 			return setSection(section(name), preLines, null);
 		} catch (SerializeException e) {
-			throw toRex(e);  // Impossible.
+			throw toRex(e);  // HTT - setSection with null contents cannot throw SerializeException
 		}
 	}
 
@@ -1142,6 +1140,7 @@ public class Config extends Context implements ConfigEventListener {
 
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
+		// HTT - Config.toString() is overridden to return configMap.toString(), so this method is never called in practice
 		return super.properties()
 			.a(PROP_binaryFormat, binaryFormat)
 			.a(PROP_binaryLineLength, binaryLineLength)
@@ -1189,9 +1188,6 @@ public class Config extends Context implements ConfigEventListener {
 		var skey = skey(key);
 
 		var ce = configMap.getEntry(sname, skey);
-
-		if (ce == null)
-			return null;
 
 		return removeMods(ce.getModifiers(), ce.getValue());
 	}

@@ -134,6 +134,13 @@ class HeaderInfo_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
+
+		@Test void a13_nullSafeMethods() {
+			// setExamples(null) covers the false branch of nn(value) in setExamples
+			var x = bean().setExamples(m("a1", example().setValue("a2")));
+			x.setExamples(null);
+			assertNull(x.getExamples());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

@@ -356,4 +356,26 @@ class JsonSchemaRef_Test extends TestBase {
 		assertTrue(json.contains("\"title\":\"User Schema\""));
 		assertTrue(json.contains("\"description\":\"Schema for user objects\""));
 	}
+
+	@Test void a20_addRequired_overloads() {
+		var r = new JsonSchemaRef("http://example.com/schema");
+
+		// addRequired(JsonSchemaProperty...)
+		JsonSchemaRef r1 = r.addRequired(new JsonSchemaProperty("field"));
+		assertSame(r, r1);
+		assertInstanceOf(JsonSchemaRef.class, r1);
+
+		// addRequired(List<String>)
+		JsonSchemaRef r2 = r.addRequired(l("f1", "f2"));
+		assertSame(r, r2);
+		assertInstanceOf(JsonSchemaRef.class, r2);
+	}
+
+	@Test void a21_setSchemaMap() {
+		var r = new JsonSchemaRef("http://example.com/schema");
+		var map = new JsonSchemaMap() {};
+		JsonSchemaRef result = r.setSchemaMap(map);
+		assertSame(r, result);
+		assertInstanceOf(JsonSchemaRef.class, result);
+	}
 }

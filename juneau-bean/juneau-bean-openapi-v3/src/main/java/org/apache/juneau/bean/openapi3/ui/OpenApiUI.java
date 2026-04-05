@@ -61,7 +61,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		.create(BasicBeanStore.INSTANCE)
 		.cp(OpenApiUI.class, null, true)
 		.dir(",")
-		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)
+		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000) // HTT - system property branch only triggers when property is set
 		.build();
 	// @formatter:on
 
@@ -71,7 +71,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		"null" // Null analysis not applicable for optional values
 	})
 	private static void addOperationIfTagMatches(Div tagBlockContents, Session s, String path, String method, Operation op, Tag t) {
-		if ((t == null && (op.getTags() == null || op.getTags().isEmpty())) || (nn(t) && nn(op.getTags()) && op.getTags().contains(t.getName()))) {
+		if ((t == null && (op.getTags() == null || op.getTags().isEmpty())) || (nn(t) && nn(op.getTags()) && op.getTags().contains(t.getName()))) { // HTT - op.getTags() is always non-null (initialized to list()); the null branch is unreachable
 			tagBlockContents.child(opBlock(s, path, method, op));
 		}
 	}
@@ -83,8 +83,8 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 			var si = pi.getSchema();
 			if (nn(si))
 				m.put("model", si.copy().resolveRefs(s.openApi, new ArrayDeque<>(), s.resolveRefsMaxDepth));
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e) { // HTT - requires resolveRefs to throw during schema resolution
+			e.printStackTrace(); // HTT
 		}
 
 		if (m.isEmpty())
@@ -101,18 +101,18 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 				// For OpenAPI 3.0, content is a map of media types to MediaType objects
 				content.forEach((mediaType, mediaTypeObj) -> {
 					if (nn(mediaTypeObj.getSchema())) {
-						try {
-							var schema = mediaTypeObj.getSchema().copy().resolveRefs(s.openApi, new ArrayDeque<>(), s.resolveRefsMaxDepth);
-							m.put(mediaType, schema);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+					try {
+						var schema = mediaTypeObj.getSchema().copy().resolveRefs(s.openApi, new ArrayDeque<>(), s.resolveRefsMaxDepth);
+						m.put(mediaType, schema);
+					} catch (Exception e) { // HTT - requires resolveRefs to throw
+						e.printStackTrace(); // HTT
 					}
-				});
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+				}
+			});
 		}
+	} catch (Exception e) { // HTT - requires content.forEach to throw
+		e.printStackTrace(); // HTT
+	}
 
 		if (m.isEmpty())
 			return null;
@@ -124,7 +124,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		"null" // Null analysis not applicable for optional values
 	})
 	private static Div examplesDiv(JsonMap m) {
-		if (m.isEmpty())
+		if (m.isEmpty()) // HTT - callers always check !m.isEmpty() before calling examplesDiv
 			return null;
 
 		Select select = null;
@@ -230,7 +230,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	// Creates the contents under the "Model" header.
 	private static Div modelsBlockContents(Session s) {
 		var modelBlockContents = div().class_("tag-block-contents");
-		if (nn(s.openApi.getComponents()) && nn(s.openApi.getComponents().getSchemas())) {
+		if (nn(s.openApi.getComponents()) && nn(s.openApi.getComponents().getSchemas())) { // HTT - always true when called from swap() which guards with same condition; both false-branches are unreachable
 			s.openApi.getComponents().getSchemas().forEach((k, v) -> modelBlockContents.child(modelBlock(k, v)));
 		}
 		return modelBlockContents;
@@ -245,7 +245,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 		boolean deprecated = isTrue(op.getDeprecated());
 		var opClass = deprecated ? "deprecated" : opName.toLowerCase();
-		if (! deprecated && ! STANDARD_METHODS.contains(opClass))
+		if (! deprecated && ! STANDARD_METHODS.contains(opClass)) // HTT - opBlock only called with standard method names; custom method branch unreachable
 			opClass = "other";
 
 		return div().class_("op-block op-block-closed " + opClass).children(opBlockSummary(path, opName, op), div(tableContainer(s, op)).class_("op-block-contents"));
@@ -269,7 +269,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 			op.getParameters().forEach(x -> {
 				var piName = x.getName();
-				var required = nn(x.getRequired()) && x.getRequired();
+				var required = nn(x.getRequired()) && x.getRequired(); // HTT - JaCoCo counts Boolean unboxing NPE check as a branch; unreachable since nn() already guarantees non-null
 
 				var parameterKey = td(div(piName).class_("name" + (required ? " required" : "")), required ? div("required").class_("requiredlabel") : null,
 					nn(x.getSchema()) ? div(x.getSchema().getType()).class_("type") : null, div('(' + x.getIn() + ')').class_("in")).class_("parameter-key");
@@ -380,7 +380,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		var s = new Session(openApi);
 
 		var css = RESOURCES.getString("files/htdocs/styles/OpenApiUI.css", null).orElse(null);
-		if (css == null)
+		if (css == null) // HTT - primary CSS file path succeeds in normal test environments
 			css = RESOURCES.getString("OpenApiUI.css", null).orElse(null);
 
 		var outer = div(style(css), script("text/javascript", RESOURCES.getString("OpenApiUI.js", null).orElse(null)), header(s)).class_("openapi-ui");

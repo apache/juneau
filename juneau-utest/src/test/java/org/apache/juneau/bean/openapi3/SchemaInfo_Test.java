@@ -111,7 +111,7 @@ class SchemaInfo_Test extends TestBase {
 			var x = bean();
 			x.set("$ref", "#/components/schemas/MySchema");
 			assertEquals("#/components/schemas/MySchema", x.get("$ref", String.class));
-			assertEquals("#/components/schemas/MySchema", x.getRef());
+			assertBean(x, "ref", "#/components/schemas/MySchema");
 		}
 
 		@Test void a09_addMethods() {
@@ -163,6 +163,39 @@ class SchemaInfo_Test extends TestBase {
 				"enum,required",
 				"[a1,a2],[b1,b2]"
 			);
+		}
+
+		@Test void a14_nullSafeMethods() {
+			var x = bean();
+			// addXxx null varargs and null element
+			x.addAllOf((Object[])null);
+			x.addAllOf(new Object[]{null});
+			x.addAnyOf((Object[])null);
+			x.addAnyOf(new Object[]{null});
+			x.addEnum((Object[])null);
+			x.addEnum(new Object[]{null});
+			x.addOneOf((Object[])null);
+			x.addOneOf(new Object[]{null});
+			x.addRequired((String[])null);
+			x.addRequired(new String[]{null});
+			// setXxx(null) covers the false branches of nn(value) checks
+			Collection<Object> nullObjList = null;
+			Collection<String> nullStrList = null;
+			x.addAllOf("a");
+			x.setAllOf(nullObjList);
+			assertNull(x.getAllOf());
+			x.addAnyOf("b");
+			x.setAnyOf(nullObjList);
+			assertNull(x.getAnyOf());
+			x.addEnum("c");
+			x.setEnum(nullObjList);
+			assertNull(x.getEnum());
+			x.addOneOf("d");
+			x.setOneOf(nullObjList);
+			assertNull(x.getOneOf());
+			x.addRequired("e");
+			x.setRequired(nullStrList);
+			assertNull(x.getRequired());
 		}
 	}
 
@@ -375,8 +408,7 @@ class SchemaInfo_Test extends TestBase {
 
 			// Should return the same object unchanged
 			assertSame(schema, result);
-			assertEquals("string", result.getType());
-			assertEquals("Test schema", result.getDescription());
+			assertBean(result, "type,description", "string,Test schema");
 		}
 
 		@Test void d06_resolveRefs_maxDepthDirect() {
@@ -394,7 +426,7 @@ class SchemaInfo_Test extends TestBase {
 
 			// Should return the original object without resolving
 			assertSame(schema, result);
-			assertEquals("#/components/schemas/MySchema", result.getRef());
+			assertBean(result, "ref", "#/components/schemas/MySchema");
 		}
 
 		@Test void d07_resolveRefs_additionalProperties() {
@@ -411,9 +443,7 @@ class SchemaInfo_Test extends TestBase {
 
 			// additionalProperties should have its ref resolved
 			assertSame(schema, result);
-			assertNotNull(result.getAdditionalProperties());
-			assertEquals("string", result.getAdditionalProperties().getType());
-			assertNull(result.getAdditionalProperties().getRef());
+			assertBean(result.getAdditionalProperties(), "type,ref", "string,<null>");
 		}
 	}
 

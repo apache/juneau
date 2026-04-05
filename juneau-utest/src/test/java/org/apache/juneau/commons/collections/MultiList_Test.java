@@ -804,5 +804,57 @@ class MultiList_Test extends TestBase {
 
 		assertEquals(expectedHashCode, ml.hashCode());
 	}
+
+	@Test
+	void h15_equals_nonList() {
+		var ml = new MultiList<>(l("a", "b"), l("c"));
+		assertFalse(ml.equals("not-a-list"));
+		assertFalse(ml.equals(null));
+	}
+
+	@Test
+	void h16_listIterator_emptyMultiList_hasNext() {
+		var ml = new MultiList<String>();
+		var it = ml.listIterator();
+		assertFalse(it.hasNext());
+		assertFalse(it.hasPrevious());
+	}
+
+	@Test
+	void h17_listIterator_emptyMultiList_next_throws() {
+		var ml = new MultiList<String>();
+		var it = ml.listIterator();
+		assertThrows(java.util.NoSuchElementException.class, it::next);
+	}
+
+	@Test
+	void h18_listIterator_emptyMultiList_previous_throws() {
+		var ml = new MultiList<String>();
+		var it = ml.listIterator();
+		assertThrows(java.util.NoSuchElementException.class, it::previous);
+	}
+
+	@Test
+	void h19_listIterator_emptyMultiList_remove_throws() {
+		var ml = new MultiList<String>();
+		var it = ml.listIterator();
+		assertThrows(IllegalStateException.class, it::remove);
+	}
+
+	@Test
+	void h20_listIterator_emptyMultiList_set_throws() {
+		var ml = new MultiList<String>();
+		var it = ml.listIterator();
+		assertThrows(IllegalStateException.class, () -> it.set("x"));
+	}
+
+	@Test
+	void h21_listIterator_indexPastAllSubLists() {
+		var ml = new MultiList<>(l("a", "b"), l("c", "d"));
+		// Index at end (size=4) - should create iterator at end of last sublist
+		var it = ml.listIterator(4);
+		assertFalse(it.hasNext());
+		assertTrue(it.hasPrevious());
+	}
 }
 

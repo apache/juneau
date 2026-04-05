@@ -157,6 +157,28 @@ class StringAssertion_Test extends TestBase {
 		test(nil).asOneLine().isNull();
 	}
 
+	@Test void bb08_asLength() {
+		var x = "foo";
+		var nil = no(String.class);
+		test(x).asLength().is(3);
+		test(nil).asLength().isNull();
+	}
+
+	@Test void bb09_asTrimmed() {
+		var x = "  foo  ";
+		var nil = no(String.class);
+		test(x).asTrimmed().is("foo");
+		test(nil).asTrimmed().isNull();
+	}
+
+	@Test void bb10_isString_wObject() {
+		var x = "foo";
+		var nil = no(String.class);
+		test(x).isString((Object)"anything");
+		test(nil).isString((Object)null);
+		assertThrown(()->test(x).isString((Object)null)).isNotNull();
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test tests
 	//-----------------------------------------------------------------------------------------------------------------

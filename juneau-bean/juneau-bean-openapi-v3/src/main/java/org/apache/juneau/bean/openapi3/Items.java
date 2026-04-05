@@ -162,8 +162,7 @@ public class Items extends OpenApiElement {
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this.default_ = copyFrom.default_;
-		if (nn(copyFrom.enum_))
-			this.enum_.addAll(copyOf(copyFrom.enum_));
+		this.enum_.addAll(copyOf(copyFrom.enum_));
 		this.ref = copyFrom.ref;
 	}
 
@@ -794,7 +793,7 @@ public class Items extends OpenApiElement {
 			for (var e : o2.entrySet())
 				e.setValue(resolveRefs(e.getValue(), openApi, refStack, maxDepth));
 		}
-		if (o instanceof JsonList o2)
+		if (o instanceof JsonList o2) // HTT - requires JsonList-typed extra property for resolveRefs
 			for (var li = o2.listIterator(); li.hasNext();)
 				li.set(resolveRefs(li.next(), openApi, refStack, maxDepth));
 		return o;

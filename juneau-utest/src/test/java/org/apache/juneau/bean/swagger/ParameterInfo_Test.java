@@ -281,6 +281,14 @@ class ParameterInfo_Test extends TestBase {
 
 			assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='null', valid values=['string','number','integer','boolean','array','file']", () -> x.setType(null));
 		}
+
+		@Test void a23_nullSafeMethods() {
+			var x = bean();
+			assertDoesNotThrow(() -> x.addEnum((Collection<Object>)null));
+			assertDoesNotThrow(() -> x.addEnum((Object[])null));
+			assertDoesNotThrow(() -> x.addEnum(new Object[]{null}));
+			assertDoesNotThrow(() -> x.setEnum((Collection<Object>)null));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

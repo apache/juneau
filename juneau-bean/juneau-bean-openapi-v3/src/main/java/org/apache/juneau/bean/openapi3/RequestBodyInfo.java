@@ -99,8 +99,7 @@ public class RequestBodyInfo extends OpenApiElement {
 
 		this.description = copyFrom.description;
 		this.required = copyFrom.required;
-		if (nn(copyFrom.content))
-			content.putAll(copyOf(copyFrom.content, MediaType::copy));
+		content.putAll(copyOf(copyFrom.content, MediaType::copy));
 	}
 
 	/**

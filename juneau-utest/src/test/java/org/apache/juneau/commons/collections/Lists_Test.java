@@ -786,5 +786,60 @@ class Lists_Test extends TestBase {
 
 		assertList(list, "abc", "abcd");
 	}
+
+	@Test
+	void r04_filtered_withNonEmptyArray() {
+		var list = Lists.create(Object.class)
+			.filtered()
+			.add("a", new String[]{"x", "y"}, "b")
+			.build();
+
+		// Non-empty array passes the filter
+		assertEquals(3, list.size());
+	}
+
+	@Test
+	void r05_filtered_withNonEmptyMap() {
+		var list = Lists.create(Object.class)
+			.filtered()
+			.add("a", m("k", "v"), "b")
+			.build();
+
+		// Non-empty map passes the filter
+		assertEquals(3, list.size());
+	}
+
+	@Test
+	void r06_filtered_withNonEmptyCollection() {
+		var list = Lists.create(Object.class)
+			.filtered()
+			.add("a", l("x"), "b")
+			.build();
+
+		// Non-empty collection passes the filter
+		assertEquals(3, list.size());
+	}
+
+	@Test
+	void r07_concurrent_booleanArg() {
+		var list = Lists.create(String.class)
+			.add("a", "b")
+			.concurrent(true)
+			.build();
+
+		assertNotNull(list);
+		assertSize(2, list);
+	}
+
+	@Test
+	void r08_convertElement_viaElementFunction() {
+		var list = Lists.create(Integer.class)
+			.elementFunction(o -> Integer.parseInt(o.toString()))
+			.addAny("42", "100")
+			.build();
+
+		// addAny converts string to integer via elementFunction
+		assertList(list, 42, 100);
+	}
 }
 

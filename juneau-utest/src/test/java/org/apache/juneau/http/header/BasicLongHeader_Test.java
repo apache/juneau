@@ -19,6 +19,7 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -71,6 +72,22 @@ class BasicLongHeader_Test extends TestBase {
 
 	@Test void a02_assertLong() {
 		longHeader(HEADER,1L).assertLong().is(1L);
+	}
+
+	@Test void a03_factoryNullReturns() {
+		assertNull(BasicLongHeader.of("Foo", (Long)null));
+		assertNull(BasicLongHeader.of("Foo", (String)null));
+		assertNull(BasicLongHeader.of("Foo", (Supplier<Long>)null));
+	}
+
+	@Test void a04_methods() {
+		var h = new BasicLongHeader("Foo", 42L);
+		assertEquals(Long.valueOf(42L), h.orElse(0L));
+		assertEquals(Long.valueOf(42L), h.toLong());
+
+		var h2 = new BasicLongHeader("Foo", (Long)null);
+		assertNull(h2.toLong());
+		assertEquals(Long.valueOf(99L), h2.orElse(99L));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -137,4 +137,11 @@ class Input_Test extends TestBase {
 		assertString("<input type='a'/>", x1);
 
 	}
+
+	@Test void a04_readonly_false() {
+		var x = input().readonly(true);
+		assertString("<input value='value'/>", x);
+		var y = input().readonly(false);
+		assertString("<input/>", y);
+	}
 }

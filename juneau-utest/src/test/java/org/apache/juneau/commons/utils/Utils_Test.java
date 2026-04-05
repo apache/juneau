@@ -1488,9 +1488,95 @@ class Utils_Test extends TestBase {
 		assertEquals(3.14, abs(3.14));
 		assertEquals(10L, abs(-10L));
 		assertEquals(10L, abs(10L));
+		assertEquals(5.0f, abs(-5.0f));
 		assertEquals((short)5, abs((short)-5));
 		assertEquals((byte)5, abs((byte)-5));
+		// Custom Number type falls through to double calculation
+		assertEquals(42.0, abs(new Number() {
+			@Override public int intValue() { return -42; }
+			@Override public long longValue() { return -42L; }
+			@Override public float floatValue() { return -42.0f; }
+			@Override public double doubleValue() { return -42.0; }
+		}));
 		assertNull(abs(null));
+	}
+
+	//====================================================================================================
+	// lt(null, null) - null-null comparison
+	//====================================================================================================
+	@Test
+	void a085_lt_null_null() {
+		assertFalse(lt(null, null));
+		assertTrue(lt(null, "x"));
+	}
+
+	//====================================================================================================
+	// n(Object...) - all-null check
+	//====================================================================================================
+	@Test
+	void a086_n() {
+		assertTrue(n((Object[])null));
+		assertTrue(n());
+		assertTrue(n((Object)null, (Object)null));
+		assertFalse(n("x"));
+		assertFalse(n((Object)null, "x"));
+	}
+
+	//====================================================================================================
+	// and((boolean[])null)
+	//====================================================================================================
+	@Test
+	void a087_and_null() {
+		assertTrue(and((boolean[])null));
+	}
+
+	//====================================================================================================
+	// or((boolean[])null)
+	//====================================================================================================
+	@Test
+	void a088_or_null() {
+		assertFalse(or((boolean[])null));
+	}
+
+	//====================================================================================================
+	// opt(List, int)
+	//====================================================================================================
+	@Test
+	void a089_opt_list_index() {
+		var list = l("a", "b", "c");
+		assertEquals("b", opt(list, 1).orElse(null));
+		assertNull(opt(list, 99).orElse(null));
+	}
+
+	//====================================================================================================
+	// quiet() - exception thrown
+	//====================================================================================================
+	@Test
+	void a090_quiet_throws() {
+		assertDoesNotThrow(() -> quiet(() -> { throw new RuntimeException("ignored"); }));
+	}
+
+	//====================================================================================================
+	// safeCatch()
+	//====================================================================================================
+	@Test
+	void a091_safeCatch() {
+		var result1 = safeCatch(() -> "ok", e -> "caught");
+		assertEquals("ok", result1);
+
+		var result2 = safeCatch(() -> { throw new Exception("oops"); }, e -> "caught");
+		assertEquals("caught", result2);
+	}
+
+	//====================================================================================================
+	// memoize (thread-safe) - compareAndSet race covered by cache hit path
+	//====================================================================================================
+	@Test
+	void a092_memoize_threadSafe_cachesResult() {
+		// Second call should return cached result (compareAndSet already done)
+		var supplier = memoize(() -> "computed");
+		assertEquals("computed", supplier.get());
+		assertEquals("computed", supplier.get());
 	}
 }
 

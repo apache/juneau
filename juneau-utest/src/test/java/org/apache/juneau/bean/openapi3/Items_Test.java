@@ -164,6 +164,18 @@ class Items_Test extends TestBase {
 			assertDoesNotThrow(() -> x.setCollectionFormat("multi"));
 			assertDoesNotThrow(() -> y.setCollectionFormat("invalid"));
 		}
+
+		@Test void a14_nullSafeMethods() {
+			var x = bean();
+			// addEnum null varargs and null element
+			x.addEnum((Object[])null);
+			x.addEnum(new Object[]{null});
+			// setEnum(null) covers the false branch of nn(value) in setEnum
+			Collection<Object> nullEnumList = null;
+			x.addEnum("a");
+			x.setEnum(nullEnumList);
+			assertNull(x.getEnum());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

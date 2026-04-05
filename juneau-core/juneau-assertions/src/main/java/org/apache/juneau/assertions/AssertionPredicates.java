@@ -393,5 +393,5 @@ public class AssertionPredicates {
 	/**
 	 * Constructor.
 	 */
-	protected AssertionPredicates() {}
+	protected AssertionPredicates() {} // HTT - utility class; instantiation via subclass is theoretical
 }

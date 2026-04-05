@@ -352,4 +352,12 @@ class ThrowableAssertion_Test extends TestBase {
 		assertThrown(()->test(x).isJson(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual=''java.lang.RuntimeException: 1''.");
 		assertThrown(()->test(nil).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
+
+	@Test void ca16_equals_specialCases() {
+		var x = throwable("1");
+		// equals() override falls through to super.equals() when o2 is null (null instanceof Throwable is false)
+		assertThrown(()->test(x).is((Throwable)null)).isNotNull();
+		// equals() lambda: class mismatch causes false branch on getClass() comparison
+		assertThrown(()->assertThrowable(x).setSilent().is(new IllegalArgumentException("1"))).isNotNull();
+	}
 }

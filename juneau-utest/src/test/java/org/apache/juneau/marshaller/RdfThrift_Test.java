@@ -55,6 +55,34 @@ class RdfThrift_Test extends TestBase {
 		assertJson("{foo:'bar'}", RdfThrift.to(fromHex(toHex(bytes)), Map.class, String.class, String.class));
 	}
 
+	@Test void a03_complexRoundtrip() throws Exception {
+		var in1 = JsonMap.of("name", "Alice", "age", 30);
+		var bytes = RdfThrift.of(in1);
+		assertNotNull(bytes);
+		assertTrue(bytes.length > 0);
+		// Verify we can get the bytes via OutputStream variant too
+		var baosOut = bytes(RdfThrift.of(in1, baos()));
+		assertNotNull(baosOut);
+		assertTrue(baosOut.length > 0);
+	}
+
+	@Test void a04_defaultInstance() {
+		assertNotNull(RdfThrift.DEFAULT);
+		assertNotNull(new RdfThrift());
+	}
+
+	@Test void a05_to_inputStream() throws Exception {
+		var bytes = RdfThrift.of("foo");
+		var result = RdfThrift.to(new ByteArrayInputStream(bytes), String.class);
+		assertEquals("foo", result);
+	}
+
+	@Test void a06_to_inputStream_type() throws Exception {
+		var bytes = RdfThrift.of("foo");
+		var result = RdfThrift.to(new ByteArrayInputStream(bytes), String.class, new java.lang.reflect.Type[0]);
+		assertEquals("foo", result);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------

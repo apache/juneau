@@ -106,10 +106,8 @@ public class MediaType extends OpenApiElement {
 
 		this.schema = copyFrom.schema;
 		this.example = copyFrom.example;
-		if (nn(copyFrom.examples))
-			examples.putAll(copyOf(copyFrom.examples, Example::copy));
-		if (nn(copyFrom.encoding))
-			encoding.putAll(copyOf(copyFrom.encoding, Encoding::copy));
+		examples.putAll(copyOf(copyFrom.examples, Example::copy));
+		encoding.putAll(copyOf(copyFrom.encoding, Encoding::copy));
 	}
 
 	/**

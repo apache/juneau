@@ -111,4 +111,9 @@ class Link_Test extends TestBase {
 		assertString("<link href='a'/>", x1);
 
 	}
+
+	@Test void a04_as_() {
+		var x = link().as_("style");
+		assertString("<link as='style'/>", x);
+	}
 }

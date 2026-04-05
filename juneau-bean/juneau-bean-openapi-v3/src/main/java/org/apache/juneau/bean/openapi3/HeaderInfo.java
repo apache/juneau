@@ -130,8 +130,7 @@ public class HeaderInfo extends OpenApiElement {
 		this.ref = copyFrom.ref;
 		this.explode = copyFrom.explode;
 		this.deprecated = copyFrom.deprecated;
-		if (nn(copyFrom.examples))
-			examples.putAll(copyOf(copyFrom.examples, Example::copy));
+		examples.putAll(copyOf(copyFrom.examples, Example::copy));
 	}
 
 	/**

@@ -162,44 +162,34 @@ public class Swagger extends SwaggerElement {
 		super(copyFrom);
 
 		this.basePath = copyFrom.basePath;
-		if (nn(copyFrom.consumes))
-			this.consumes.addAll(copyOf(copyFrom.consumes));
+		this.consumes.addAll(copyOf(copyFrom.consumes));
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 		this.host = copyFrom.host;
 		this.info = copyFrom.info == null ? null : copyFrom.info.copy();
-		if (nn(copyFrom.produces))
-			this.produces.addAll(copyOf(copyFrom.produces));
-		if (nn(copyFrom.schemes))
-			this.schemes.addAll(copyOf(copyFrom.schemes));
+		this.produces.addAll(copyOf(copyFrom.produces));
+		this.schemes.addAll(copyOf(copyFrom.schemes));
 		this.swagger = copyFrom.swagger;
 
 		// TODO - Definitions are not deep copied, so they should not contain references.
-		if (nn(copyFrom.definitions))
-			definitions.putAll(copyOf(copyFrom.definitions, JsonMap::new));
+		definitions.putAll(copyOf(copyFrom.definitions, JsonMap::new));
 
-		if (nn(copyFrom.paths))
-			copyFrom.paths.forEach((k, v) -> {
-				var m = new OperationMap();
-				v.forEach((k2, v2) -> m.put(k2, v2.copy()));
-				paths.put(k, m);
-			});
+		copyFrom.paths.forEach((k, v) -> {
+			var m = new OperationMap();
+			v.forEach((k2, v2) -> m.put(k2, v2.copy()));
+			paths.put(k, m);
+		});
 
-		if (nn(copyFrom.parameters))
-			parameters.putAll(copyOf(copyFrom.parameters, ParameterInfo::copy));
-		if (nn(copyFrom.responses))
-			responses.putAll(copyOf(copyFrom.responses, ResponseInfo::copy));
-		if (nn(copyFrom.securityDefinitions))
-			securityDefinitions.putAll(copyOf(copyFrom.securityDefinitions, SecurityScheme::copy));
+		parameters.putAll(copyOf(copyFrom.parameters, ParameterInfo::copy));
+		responses.putAll(copyOf(copyFrom.responses, ResponseInfo::copy));
+		securityDefinitions.putAll(copyOf(copyFrom.securityDefinitions, SecurityScheme::copy));
 
-		if (nn(copyFrom.security))
-			copyFrom.security.forEach(x -> {
-				Map<String,List<String>> m2 = map();
-				x.forEach((k, v) -> m2.put(k, copyOf(v)));
-				security.add(m2);
-			});
+		copyFrom.security.forEach(x -> {
+			Map<String,List<String>> m2 = map();
+			x.forEach((k, v) -> m2.put(k, copyOf(v)));
+			security.add(m2);
+		});
 
-		if (nn(copyFrom.tags))
-			this.tags.addAll(copyOf(copyFrom.tags, Tag::copy));
+		this.tags.addAll(copyOf(copyFrom.tags, Tag::copy));
 	}
 
 	/**

@@ -1203,5 +1203,17 @@ class FilteredMap_Test extends TestBase {
 		assertEquals(5, map.get("123"));
 		assertEquals(10, map.get("456"));
 	}
+
+	@Test
+	void z01_addAny_nullArray() {
+		var map = FilteredMap
+			.create(String.class, Integer.class)
+			.filter((k, v) -> v != null && v > 0)
+			.build();
+		map.put("existing", 1);
+
+		map.addAny((Object[])null);
+		assertSize(1, map);
+	}
 }
 

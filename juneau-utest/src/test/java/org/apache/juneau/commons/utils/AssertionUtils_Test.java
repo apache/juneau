@@ -419,5 +419,24 @@ class AssertionUtils_Test extends TestBase {
 			assertArgNoNulls("arg", multipleNullArray);
 		});
 	}
+
+	//====================================================================================================
+	// assertState(boolean, String, Object...)
+	//====================================================================================================
+	@Test
+	void a014_assertState() {
+		assertDoesNotThrow(() -> assertState(true, "ok"));
+		assertThrowsWithMessage(IllegalStateException.class, "state failed", () -> assertState(false, "state failed"));
+	}
+
+	//====================================================================================================
+	// assertNotNull(T, String, Object...)
+	//====================================================================================================
+	@Test
+	void a015_assertNotNull_withMessage() {
+		var result = AssertionUtils.assertNotNull("value", "must not be null");
+		assertEquals("value", result);
+		assertThrowsWithMessage(IllegalStateException.class, "must not be null", () -> AssertionUtils.assertNotNull(null, "must not be null"));
+	}
 }
 

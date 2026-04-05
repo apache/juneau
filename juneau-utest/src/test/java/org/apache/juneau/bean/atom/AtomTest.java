@@ -18,9 +18,11 @@ package org.apache.juneau.bean.atom;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.bean.atom.AtomBuilder.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.xml.*;
@@ -194,5 +196,170 @@ class AtomTest extends TestBase {
 		var r = f.toString();
 		var f2 = p.parse(r, Feed.class);
 		assertEquals(json(f2), json(f));
+	}
+
+	// AtomBuilder factory methods not covered by a01-a04
+	@Test void b01_atomBuilderMissingFactoryMethods() {
+		assertBean(category("tech"), "term", "tech");
+		assertBean(content(), "type", "<null>");
+		assertBean(id("tag:example.org"), "text", "tag:example.org");
+		assertBean(logo("http://example.org/logo.png"), "uri", "http://example.org/logo.png");
+		assertBean(source(), "generator", "<null>");
+		assertBean(text(), "text", "<null>");
+	}
+
+	@Test void b02_atomBuilderObjectConstructors() {
+		var idObj = id("tag:example.org");
+		var titleObj = text("text").setText("Title");
+		var cal = GregorianCalendar.from(java.time.ZonedDateTime.parse("2024-01-01T00:00:00Z"));
+
+		var a = entry(idObj, titleObj, cal);
+		assertBean(a, "id{text}", "{tag:example.org}");
+
+		var b = feed(idObj, titleObj, cal);
+		assertBean(b, "id{text}", "{tag:example.org}");
+	}
+
+	// Category class - completely uncovered
+	@Test void b03_category() {
+		var a = category("tech")
+			.setLabel("Technology")
+			.setScheme("http://example.org/schemes/")
+			.setBase("http://example.org/")
+			.setLang("en");
+		assertBean(a, "term,label,scheme", "tech,Technology,http://example.org/schemes/");
+		assertBean(new Category(), "term", "<null>");
+	}
+
+	// Logo class - completely uncovered
+	@Test void b04_logo() {
+		var a = logo("http://example.org/logo.png")
+			.setBase("http://example.org/")
+			.setLang("en");
+		assertBean(a, "uri", "http://example.org/logo.png");
+		assertBean(new Logo(), "uri", "<null>");
+		a.setUri(null);
+		assertBean(a, "uri", "<null>");
+	}
+
+	// Source class - completely uncovered
+	@Test void b05_source() {
+		var gen = generator("Test Gen");
+		var ico = icon("http://example.org/icon.png");
+		var lgo = logo("http://example.org/logo.png");
+		var a = source()
+			.setGenerator(gen)
+			.setIcon(ico)
+			.setLogo(lgo)
+			.setId("tag:example.org")
+			.setId(id("tag:example.org"))
+			.setTitle("My Source")
+			.setTitle(text("text").setText("My Source"))
+			.setSubtitle("Sub")
+			.setSubtitle(text("text").setText("Sub"))
+			.setRights("Copyright 2024")
+			.setRights(text("text").setText("Copyright 2024"))
+			.setUpdated("2024-01-01T00:00:00Z")
+			.setUpdated((Calendar) null)
+			.setAuthors(person("Author"))
+			.setCategories(category("tech"))
+			.setContributors(person("Contributor"))
+			.setLinks(link("alternate", "text/html", "http://example.org/"))
+			.setBase("http://example.org/")
+			.setLang("en");
+		assertBean(a, "generator{text},icon{uri},logo{uri}", "{Test Gen},{http://example.org/icon.png},{http://example.org/logo.png}");
+		assertBean(a, "id{text},title{text},subtitle{text},rights{text},updated", "{tag:example.org},{My Source},{Sub},{Copyright 2024},<null>");
+		assertBean(a, "authors{#{name}},categories{#{term}},contributors{#{name}},links{#{href}}", "{[{Author}]},{[{tech}]},{[{Contributor}]},{[{http://example.org/}]}");
+	}
+
+	// CommonEntry missing setters
+	@Test void b06_commonEntryMissingSetters() {
+		var cal = GregorianCalendar.from(java.time.ZonedDateTime.parse("2024-01-01T00:00:00Z"));
+		var a = feed("id", "Title", "2024-01-01T00:00:00Z")
+			.setBase("http://example.org/")
+			.setCategories(category("tech"))
+			.setContributors(person("Contrib"))
+			.setId("new-id")
+			.setLang("fr")
+			.setLinks(link("alternate", "text/html", "http://example.org/"))
+			.setRights("Copyright 2024")
+			.setRights(text("text").setText("Copyright 2024"))
+			.setUpdated(cal)
+			.setUpdated("");
+		assertBean(a, "id{text},rights{text},updated", "{new-id},{Copyright 2024},<null>");
+		assertBean(a, "categories{#{term}},contributors{#{name}},links{#{href}}", "{[{tech}]},{[{Contrib}]},{[{http://example.org/}]}");
+	}
+
+	// Entry missing constructors and setters
+	@Test void b07_entryMissingConstructorsAndSetters() {
+		var idObj = id("eid");
+		var titleObj = text("text").setText("Entry Title");
+		var cal = GregorianCalendar.from(java.time.ZonedDateTime.parse("2024-01-01T00:00:00Z"));
+		var a = new Entry(idObj, titleObj, cal);
+		assertBean(a, "id{text}", "{eid}");
+
+		var src = source().setTitle("Source Feed").setUpdated("2024-01-01T00:00:00Z");
+		a.setBase("http://example.org/")
+			.setCategories(category("cat"))
+			.setSource(src);
+		assertBean(a.getSource(), "title{text}", "{Source Feed}");
+	}
+
+	// Link missing setters
+	@Test void b08_linkMissingSetters() {
+		var a = link("alternate", "text/html", "http://example.org/")
+			.setBase("http://example.org/")
+			.setLang("en")
+			.setTitle("My Link");
+		assertBean(a, "title", "My Link");
+	}
+
+	// Person missing setters
+	@Test void b09_personMissingSetters() {
+		var a = person("Jane Doe")
+			.setBase("http://example.org/")
+			.setLang("en");
+		assertBean(a, "name", "Jane Doe");
+	}
+
+	// Entry additional missing setters
+	@Test void b10_entryAdditionalSetters() {
+		var a = entry("eid", "title", "2024-01-01T00:00:00Z")
+			.setLang("de")
+			.setRights("Copyright")
+			.setRights(text("text").setText("Copyright text"))
+			.setSummary("Brief summary")
+			.setSummary(text("text").setText("Full summary text"))
+			.setPublished("");
+		assertBean(a, "rights{text},summary{text},published", "{Copyright text},{Full summary text},<null>");
+	}
+
+	// Feed additional missing setters
+	@Test void b11_feedAdditionalSetters() {
+		var a = feed("fid", "Feed Title", "2024-01-01T00:00:00Z")
+			.setAuthors(person("Author"))
+			.setIcon(icon("http://example.org/icon.png"))
+			.setLogo(logo("http://example.org/logo.png"))
+			.setSubtitle("Plain subtitle");
+		assertBean(a, "icon{uri},logo{uri},subtitle{type}", "{http://example.org/icon.png},{http://example.org/logo.png},{Plain subtitle}");
+		assertBean(a, "authors{#{name}}", "{[{Author}]}");
+	}
+
+	// Generator, Icon, Id - missing setBase and setLang overrides
+	@Test void b12_miscBeanSetters() {
+		var gen = generator("Test Generator")
+			.setBase("http://example.org/")
+			.setLang("en");
+		assertBean(gen, "text", "Test Generator");
+
+		var ico = new Icon()
+			.setBase("http://example.org/")
+			.setLang("en");
+		assertBean(ico, "uri", "<null>");
+
+		var idBean = id("tag:example.org")
+			.setBase("http://example.org/")
+			.setLang("en");
+		assertBean(idBean, "text", "tag:example.org");
 	}
 }

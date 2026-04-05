@@ -146,8 +146,7 @@ public class Items extends SwaggerElement {
 
 		this.collectionFormat = copyFrom.collectionFormat;
 		this.default_ = copyFrom.default_;
-		if (nn(copyFrom.enum_))
-			this.enum_.addAll(copyOf(copyFrom.enum_));
+		this.enum_.addAll(copyOf(copyFrom.enum_));
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
 		this.format = copyFrom.format;

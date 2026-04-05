@@ -130,8 +130,7 @@ public class SecurityScheme extends SwaggerElement {
 		this.flow = copyFrom.flow;
 		this.in = copyFrom.in;
 		this.name = copyFrom.name;
-		if (nn(copyFrom.scopes))
-			scopes.putAll(copyFrom.scopes);
+		scopes.putAll(copyFrom.scopes);
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.type = copyFrom.type;
 	}

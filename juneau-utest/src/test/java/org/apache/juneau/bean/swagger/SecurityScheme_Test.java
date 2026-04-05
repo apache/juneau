@@ -128,6 +128,11 @@ class SecurityScheme_Test extends TestBase {
 			assertDoesNotThrow(() -> x.setType("oauth2"));
 			assertDoesNotThrow(() -> y.setType("invalid"));
 		}
+
+		@Test void a13_nullSafeMethods() {
+			var x = bean();
+			assertDoesNotThrow(() -> x.setScopes(null));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

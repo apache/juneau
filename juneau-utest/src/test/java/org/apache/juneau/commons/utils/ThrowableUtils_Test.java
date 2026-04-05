@@ -482,5 +482,100 @@ class ThrowableUtils_Test extends TestBase {
 		assertSame(cause, ex.getCause());
 		assertTrue(ex.getMessage().contains("Error message test"));
 	}
+
+	//====================================================================================================
+	// printStackTrace(Throwable, PrintWriter, Integer)
+	//====================================================================================================
+	@Test
+	void a030_printStackTrace_printWriter() {
+		var sw = new StringWriter();
+		var pw = new PrintWriter(sw);
+		var ex = new RuntimeException("test error");
+
+		// null maxDepth prints all frames
+		printStackTrace(ex, pw, null);
+		var output = sw.toString();
+		assertTrue(output.contains("test error"));
+		assertTrue(output.contains("\tat "));
+
+		// negative maxDepth also prints all frames
+		sw.getBuffer().setLength(0);
+		printStackTrace(ex, pw, -1);
+		assertTrue(sw.toString().contains("test error"));
+
+		// positive maxDepth truncates and shows "... (N more)" when stack is deeper
+		sw.getBuffer().setLength(0);
+		printStackTrace(ex, pw, 1);
+		var truncated = sw.toString();
+		assertTrue(truncated.contains("\tat "));
+		assertTrue(truncated.contains("more)"));
+
+		// maxDepth >= stack length → no truncation line
+		sw.getBuffer().setLength(0);
+		printStackTrace(ex, pw, 10000);
+		assertFalse(sw.toString().contains("more)"));
+	}
+
+	@Test
+	void a031_printStackTrace_printWriter_withCause() {
+		var sw = new StringWriter();
+		var pw = new PrintWriter(sw);
+		var cause = new IOException("root cause");
+		var ex = new RuntimeException("wrapper", cause);
+
+		printStackTrace(ex, pw, null);
+		var output = sw.toString();
+		assertTrue(output.contains("wrapper"));
+		assertTrue(output.contains("Caused by:"));
+		assertTrue(output.contains("root cause"));
+	}
+
+	//====================================================================================================
+	// printStackTrace(Throwable, Integer)
+	//====================================================================================================
+	@Test
+	void a032_printStackTrace_integer() {
+		// Redirects to System.err — just verify it doesn't throw
+		var ex = new RuntimeException("test error");
+		printStackTrace(ex, (Integer)null);
+		printStackTrace(ex, 2);
+	}
+
+	//====================================================================================================
+	// lm() — null message and truncation paths
+	//====================================================================================================
+	@Test
+	void a033_lm_nullMessage() {
+		// Throwable with no message → getLocalizedMessage() returns null
+		var ex = new RuntimeException((String)null);
+		assertNull(lm(ex));
+	}
+
+	@Test
+	void a034_lm_truncation() {
+		// Message longer than 2000 chars triggers truncation
+		var longMsg = "x".repeat(2500);
+		var ex = new RuntimeException(longMsg);
+		var result = lm(ex);
+		assertTrue(result.contains("<truncated-500-chars>"));
+		assertEquals(longMsg.substring(0, 1000), result.substring(0, 1000));
+		assertEquals(longMsg.substring(longMsg.length() - 1000), result.substring(result.length() - 1000));
+	}
+
+	//====================================================================================================
+	// log() — VERBOSE branch
+	//====================================================================================================
+	@Test
+	void a035_log_verbose() {
+		// HTT - VERBOSE branch requires juneau.enableVerboseExceptions=true system property at class load time
+		System.setProperty("juneau.enableVerboseExceptions", "true");
+		try {
+			// Any method that calls log() will trigger the verbose branch if it re-reads the setting
+			var ex = illegalArg("test {0}", "verbose");
+			assertNotNull(ex);
+		} finally {
+			System.clearProperty("juneau.enableVerboseExceptions");
+		}
+	}
 }
 

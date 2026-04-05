@@ -190,6 +190,24 @@ class SchemaInfo_Test extends TestBase {
 				"{[{a1},{a2}]},[b1,b2],[c1,c2]"
 			);
 		}
+
+		@Test void a15_nullSafeMethods() {
+			var x = bean();
+			assertDoesNotThrow(() -> x.addAllOf((Collection<SchemaInfo>)null));
+			assertDoesNotThrow(() -> x.addAllOf((SchemaInfo[])null));
+			assertDoesNotThrow(() -> x.addAllOf(new SchemaInfo[]{null}));
+			assertDoesNotThrow(() -> x.addAllOf(l((SchemaInfo)null)));
+			assertDoesNotThrow(() -> x.setAllOf((Collection<SchemaInfo>)null));
+			assertDoesNotThrow(() -> x.addEnum((Collection<Object>)null));
+			assertDoesNotThrow(() -> x.addEnum((Object[])null));
+			assertDoesNotThrow(() -> x.addEnum(new Object[]{null}));
+			assertDoesNotThrow(() -> x.setEnum((Collection<Object>)null));
+			assertDoesNotThrow(() -> x.addRequiredProperties((Collection<String>)null));
+			assertDoesNotThrow(() -> x.addRequiredProperties((String[])null));
+			assertDoesNotThrow(() -> x.addRequiredProperties(new String[]{null}));
+			assertDoesNotThrow(() -> x.setRequiredProperties((Collection<String>)null));
+			assertDoesNotThrow(() -> x.setProperties((Map<String,SchemaInfo>)null));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

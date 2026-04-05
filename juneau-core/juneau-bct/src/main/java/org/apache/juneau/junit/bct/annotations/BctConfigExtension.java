@@ -39,9 +39,6 @@ public class BctConfigExtension implements BeforeEachCallback, AfterEachCallback
 	public void beforeEach(ExtensionContext context) throws Exception {
 		var al = getAnnotations(context);
 
-		if (al.isEmpty())
-			return;
-
 		clear();
 
 		al.stream().map(x -> x.sortMaps()).filter(x -> neq(x, UNSET)).findFirst().ifPresent(x -> set(BCT_SORT_MAPS, x == TRUE));
@@ -57,16 +54,11 @@ public class BctConfigExtension implements BeforeEachCallback, AfterEachCallback
 			var c = x.getDeclaredConstructor();
 			c.setAccessible(true);
 			set(c.newInstance());
-		}, e -> rex(e, "Failed to instantiate BeanConverter: {0}. It must have a no-arg constructor.", x.getName()));
+		}, e -> rex(e, "Failed to instantiate BeanConverter: {0}. It must have a no-arg constructor.", x.getName())); // HTT - requires invalid converter without no-arg constructor
 	}
 
 	@Override
 	public void afterEach(ExtensionContext context) throws Exception {
-		var al = getAnnotations(context);
-
-		if (al.isEmpty())
-			return;
-
 		clear();
 	}
 

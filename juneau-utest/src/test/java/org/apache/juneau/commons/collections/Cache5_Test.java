@@ -648,5 +648,15 @@ class Cache5_Test extends TestBase {
 		// Cache should still have values (cleanup only affects thread-local caches)
 		assertSize(2, x);
 	}
+
+	@Test void q03_cleanup_threadLocal_notYetPopulated() {
+		var x = Cache5.of(String.class, String.class, String.class, String.class, Integer.class, String.class)
+			.supplier((k1, k2, k3, k4, k5) -> k1 + ":" + k2 + ":" + k3 + ":" + k4 + ":" + k5)
+			.threadLocal()
+			.build();
+
+		// Cleanup before any access - threadLocalMap is null; should not throw
+		x.cleanup();
+	}
 }
 

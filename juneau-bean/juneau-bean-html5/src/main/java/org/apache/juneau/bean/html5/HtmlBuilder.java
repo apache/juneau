@@ -2209,5 +2209,5 @@ public class HtmlBuilder {
 	/**
 	 * Constructor.
 	 */
-	protected HtmlBuilder() {}
+	protected HtmlBuilder() {} // HTT - utility class; protected constructor exists only to allow subclassing
 }

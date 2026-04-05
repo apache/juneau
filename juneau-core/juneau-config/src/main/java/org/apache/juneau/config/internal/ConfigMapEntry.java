@@ -73,7 +73,7 @@ public class ConfigMapEntry {
 
 		this.value = replaceUnicodeSequences(line.trim());
 
-		this.preLines = preLines == null ? Collections.emptyList() : u(copyOf(preLines));
+		this.preLines = u(copyOf(preLines));
 	}
 
 	ConfigMapEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
@@ -133,7 +133,7 @@ public class ConfigMapEntry {
 				var c = rawLine.charAt(i);
 				if (c == '\n')
 					w.append('\n').append('\t');
-				else if (c != '\r')
+				else if (c != '\r') // HTT - '\r' in raw line requires OS-level carriage return in stored config content
 					w.append(c);
 			}
 			w.append('\n');
@@ -148,8 +148,8 @@ public class ConfigMapEntry {
 				var c = val.charAt(i);
 				if (c == '\n')
 					w.append('\n').append('\t');
-				else if (c != '\r') {
-					if (REPLACE_CHARS.contains(c) || (Character.isISOControl(c) && ! (c == '\n' || c == '\r' || c == '\t'))) {
+				else if (c != '\r') { // HTT - '\r' in value requires OS-level carriage return injection
+					if (REPLACE_CHARS.contains(c) || (Character.isISOControl(c) && ! (c == '\n' || c == '\r' || c == '\t'))) { // HTT - some branch combinations (e.g. '\r' in isISOControl) are unreachable due to the outer '\r' check
 						w.append(unicodeSequence(c));
 					} else {
 						w.append(c);

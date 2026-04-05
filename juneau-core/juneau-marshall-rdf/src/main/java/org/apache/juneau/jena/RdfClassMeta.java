@@ -49,7 +49,7 @@ public class RdfClassMeta extends ExtendedClassMeta {
 		List<Rdf> rdfs = list();
 		List<RdfSchema> schemas = list();
 		cm.forEachAnnotation(Rdf.class, x -> true, x -> rdfs.add(x));
-		cm.forEachAnnotation(RdfSchema.class, x -> true, x -> schemas.add(x));
+		cm.forEachAnnotation(RdfSchema.class, x -> true, x -> schemas.add(x)); // HTT - @RdfSchema targets PACKAGE only; cannot annotate classes with it in tests
 
 		this.collectionFormat = rdfs.stream().map(x -> x.collectionFormat()).filter(x -> x != RdfCollectionFormat.DEFAULT).findFirst().orElse(RdfCollectionFormat.DEFAULT);
 		this.namespace = RdfUtils.findNamespace(rdfs, schemas);

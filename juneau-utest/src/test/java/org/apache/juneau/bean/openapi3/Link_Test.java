@@ -119,6 +119,13 @@ class Link_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
+
+		@Test void a13_nullSafeMethods() {
+			// setParameters(null) covers the false branch of nn(value) in setParameters
+			var x = bean().setParameters(m("a1", "a2"));
+			x.setParameters(null);
+			assertNull(x.getParameters());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

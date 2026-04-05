@@ -22,6 +22,8 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -113,6 +115,18 @@ class ServerVariable_Test extends TestBase {
 			assertFalse(bean().isStrict());
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
+		}
+
+		@Test void a13_nullSafeMethods() {
+			var x = bean();
+			// addEnum null varargs and null element
+			x.addEnum((Object[])null);
+			x.addEnum(new Object[]{null});
+			// setEnum(null) covers the false branch of nn(value) in setEnum
+			Collection<Object> nullEnumList = null;
+			x.addEnum("a");
+			x.setEnum(nullEnumList);
+			assertNull(x.getEnum());
 		}
 	}
 

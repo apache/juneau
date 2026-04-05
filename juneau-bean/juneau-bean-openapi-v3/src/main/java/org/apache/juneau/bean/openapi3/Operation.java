@@ -142,24 +142,18 @@ public class Operation extends OpenApiElement {
 	 */
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
-		if (nn(copyFrom.tags))
-			tags.addAll(copyFrom.tags);
+		tags.addAll(copyFrom.tags);
 		this.summary = copyFrom.summary;
 		this.description = copyFrom.description;
 		this.operationId = copyFrom.operationId;
 		this.externalDocs = copyFrom.externalDocs;
-		if (nn(copyFrom.parameters))
-			parameters.addAll(copyOf(copyFrom.parameters, Parameter::copy));
+		parameters.addAll(copyOf(copyFrom.parameters, Parameter::copy));
 		this.requestBody = copyFrom.requestBody;
-		if (nn(copyFrom.responses))
-			responses.putAll(copyFrom.responses);
-		if (nn(copyFrom.callbacks))
-			callbacks.putAll(copyFrom.callbacks);
+		responses.putAll(copyFrom.responses);
+		callbacks.putAll(copyFrom.callbacks);
 		this.deprecated = copyFrom.deprecated;
-		if (nn(copyFrom.security))
-			security.addAll(copyOf(copyFrom.security, SecurityRequirement::copy));
-		if (nn(copyFrom.servers))
-			servers.addAll(copyOf(copyFrom.servers, Server::copy));
+		security.addAll(copyOf(copyFrom.security, SecurityRequirement::copy));
+		servers.addAll(copyOf(copyFrom.servers, Server::copy));
 	}
 
 	/**

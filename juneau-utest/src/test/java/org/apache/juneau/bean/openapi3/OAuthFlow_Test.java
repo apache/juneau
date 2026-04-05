@@ -115,6 +115,13 @@ class OAuthFlow_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
+
+		@Test void a13_nullSafeMethods() {
+			// setScopes(null) covers the false branch of nn(value) in setScopes
+			var x = bean().setScopes(m("a1", "a2"));
+			x.setScopes(null);
+			assertNull(x.getScopes());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

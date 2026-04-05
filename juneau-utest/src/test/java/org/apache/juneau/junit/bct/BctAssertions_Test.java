@@ -791,5 +791,13 @@ class BctAssertions_Test extends TestBase {
 			// Test with Stream (gets converted to list)
 			assertSize(4, Stream.of("w", "x", "y", "z"));
 		}
+
+		@Test
+		void h07_assertList_nonStringObjectMismatch() {
+			// Test line 791-792: else branch where expected is non-String, non-Predicate and doesn't match actual
+			var list = l(1, 2, 3);
+			var e = assertThrows(AssertionFailedError.class, () -> assertList(list, 1, 99, 3));
+			assertContains("Element at index 1 did not match", e.getMessage());
+		}
 	}
 }

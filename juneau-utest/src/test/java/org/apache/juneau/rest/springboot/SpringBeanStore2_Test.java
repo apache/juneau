@@ -437,6 +437,13 @@ class SpringBeanStore2_Test extends TestBase {
 		assertFalse(beanStore.hasBean(TestService.class));
 	}
 
+	@Test
+	void g06_hasBean_nullAppContext() {
+		var store = new SpringBeanStore2(null, null);
+
+		assertFalse(store.hasBean(TestService.class));
+	}
+
 	//====================================================================================================
 	// Tests - hasBean(Class, String)
 	//====================================================================================================
@@ -496,6 +503,13 @@ class SpringBeanStore2_Test extends TestBase {
 		when(mockAppContext.isTypeMatch("myBean", TestService.class)).thenThrow(new RuntimeException("Error"));
 
 		assertFalse(beanStore.hasBean(TestService.class, "myBean"));
+	}
+
+	@Test
+	void h08_hasBeanNamed_nullAppContext() {
+		var store = new SpringBeanStore2(null, null);
+
+		assertFalse(store.hasBean(TestService.class, "myBean"));
 	}
 
 	//====================================================================================================
@@ -560,6 +574,15 @@ class SpringBeanStore2_Test extends TestBase {
 		when(mockAppContext.getBeanProvider(TestService.class)).thenThrow(new RuntimeException("Error"));
 
 		var supplier = beanStore.getBeanSupplier(TestService.class);
+
+		assertFalse(supplier.isPresent());
+	}
+
+	@Test
+	void i06_getBeanSupplier_nullAppContext() {
+		var store = new SpringBeanStore2(null, null);
+
+		var supplier = store.getBeanSupplier(TestService.class);
 
 		assertFalse(supplier.isPresent());
 	}
@@ -632,6 +655,34 @@ class SpringBeanStore2_Test extends TestBase {
 	void j06_getBeanSupplierNamed_springThrowsException() {
 		when(mockAppContext.containsBean("myBean")).thenReturn(true);
 		when(mockAppContext.isTypeMatch("myBean", TestService.class)).thenThrow(new RuntimeException("Error"));
+
+		var supplier = beanStore.getBeanSupplier(TestService.class, "myBean");
+
+		assertFalse(supplier.isPresent());
+	}
+
+	@Test
+	void j07_getBeanSupplierNamed_nullAppContext() {
+		var store = new SpringBeanStore2(null, null);
+
+		var supplier = store.getBeanSupplier(TestService.class, "myBean");
+
+		assertFalse(supplier.isPresent());
+	}
+
+	@Test
+	void j08_getBeanSupplierNamed_nullName() {
+		var store = new SpringBeanStore2(mockAppContext, null);
+
+		var supplier = store.getBeanSupplier(TestService.class, null);
+
+		assertFalse(supplier.isPresent());
+	}
+
+	@Test
+	void j09_getBeanSupplierNamed_wrongType() {
+		when(mockAppContext.containsBean("myBean")).thenReturn(true);
+		when(mockAppContext.isTypeMatch("myBean", TestService.class)).thenReturn(false);
 
 		var supplier = beanStore.getBeanSupplier(TestService.class, "myBean");
 

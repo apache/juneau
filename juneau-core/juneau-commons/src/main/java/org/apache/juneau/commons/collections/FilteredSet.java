@@ -162,11 +162,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 		 * @return This object for method chaining.
 		 */
 		public Builder<E> filter(Predicate<E> value) {
-			Predicate<E> newFilter = assertArgNotNull(ARG_value, value);
-			if (filter == null)
-				filter = newFilter;
-			else
-				filter = filter.and(newFilter);
+			filter = filter.and(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 

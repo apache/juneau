@@ -146,4 +146,83 @@ class HttpException_Test extends TestBase {
 		HttpEntity entity = x2.getEntity();
 		assertSame(x2, x2.setContent(entity));
 	}
+
+	@Test void a05_equalsAndHashCode() {
+		var x1 = new BasicHttpException(400, "foo");
+		var x2 = new BasicHttpException(400, "foo");
+
+		// Same instance
+		assertEquals(x1, x1);
+
+		// Different instance same content - stack traces differ so not equal
+		assertNotEquals(x1, x2);
+
+		// Non-BasicHttpException
+		assertNotEquals(x1, "foo");
+		assertNotEquals(x1, null);
+
+		// hashCode is consistent
+		assertNotEquals(0, x1.hashCode());
+		assertEquals(x1.hashCode(), x1.hashCode());
+	}
+
+	@Test void a06_getEntity_whenContentAlreadySet() {
+		var x = httpException().setStatusCode2(500).setContent("existing content");
+		// Calling getEntity() when content is already set should return existing entity
+		var entity = x.getEntity();
+		assertNotNull(entity);
+		// Calling again should return the same entity
+		assertSame(entity, x.getEntity());
+	}
+
+	@Test void a07_getMessage_withCause() {
+		// getMessage() when no message set but has cause
+		var cause = new RuntimeException("cause message");
+		var x = new BasicHttpException(500, cause, null);
+		assertEquals("cause message", x.getMessage());
+	}
+
+	@Test void a08_getMessage_fromStatusLine() {
+		// getMessage() when no message and no cause - falls back to reason phrase
+		var x = new BasicHttpException(200);
+		// Should return status code reason phrase "OK"
+		assertNotNull(x.getMessage());
+	}
+
+	@Test void a09_fluentStatusLine_setters() {
+		var x = httpException().setStatusCode2(500);
+		var pv = new org.apache.http.ProtocolVersion("HTTP", 2, 0);
+		assertSame(x, x.setProtocolVersion(pv));
+		assertSame(x, x.setLocale2(java.util.Locale.FRENCH));
+		assertSame(x, x.setMessage("new message"));
+		assertSame(x, x.setHeaders2(BasicHeader.of("X-A", "1"), BasicHeader.of("X-B", "2")));
+		assertEquals("1", x.getFirstHeader("X-A").getValue());
+		assertEquals("2", x.getFirstHeader("X-B").getValue());
+	}
+
+	@Test void a10_getLastHeader_and_getHeaders_by_name() {
+		var x = httpException().setStatusCode2(500)
+			.setHeaders(l(
+				BasicHeader.of("X-Multi", "first"),
+				BasicHeader.of("X-Multi", "second")
+			));
+		assertEquals("second", x.getLastHeader("X-Multi").getValue());
+		assertEquals(2, x.getHeaders("X-Multi").length);
+		assertTrue(x.containsHeader("X-Multi"));
+		assertFalse(x.containsHeader("X-NonExistent"));
+	}
+
+	@Test void a11_copyConstructorViaCast() {
+		var original = new BasicHttpException(400, new RuntimeException("err"), "original message");
+		// Verify the exception has the expected message
+		assertEquals("original message", original.getMessage());
+	}
+
+	@Test void a12_addHeader() {
+		var x = httpException().setStatusCode2(500);
+		x.addHeader("X-Added", "addedValue");
+		assertEquals("addedValue", x.getFirstHeader("X-Added").getValue());
+		x.addHeader(BasicHeader.of("X-Added2", "value2"));
+		assertEquals("value2", x.getFirstHeader("X-Added2").getValue());
+	}
 }

@@ -886,4 +886,72 @@ class Sets_Test extends TestBase {
 
 		assertList(set, "abc", "abcd");
 	}
+
+	@Test
+	void u04_filtered_withNonEmptyArray() {
+		var set = Sets.create(Object.class)
+			.filtered()
+			.add("a", new String[]{"x", "y"}, "b")
+			.build();
+		assertEquals(3, set.size());
+	}
+
+	@Test
+	void u05_filtered_withNonEmptyMap() {
+		var set = Sets.create(Object.class)
+			.filtered()
+			.add("a", m("k", "v"), "b")
+			.build();
+		assertEquals(3, set.size());
+	}
+
+	@Test
+	void u06_filtered_withNonEmptyCollection() {
+		var set = Sets.create(Object.class)
+			.filtered()
+			.add("a", l("x"), "b")
+			.build();
+		assertEquals(3, set.size());
+	}
+
+	@Test
+	void u07_add_withComparator() {
+		var set = Sets.create(String.class)
+			.sorted(Comparator.reverseOrder())
+			.add("banana", "apple", "cherry")
+			.build();
+		assertNotNull(set);
+		assertTrue(set instanceof java.util.TreeSet);
+	}
+
+	@Test
+	void u08_addAll_withOrdered() {
+		var set = Sets.create(String.class)
+			.ordered()
+			.addAll(l("a", "b", "c"))
+			.build();
+		assertNotNull(set);
+		assertEquals(3, set.size());
+	}
+
+	@Test
+	void u09_addAll_withComparator() {
+		var set = Sets.create(String.class)
+			.sorted(Comparator.reverseOrder())
+			.addAll(l("banana", "apple", "cherry"))
+			.build();
+		assertNotNull(set);
+		assertTrue(set instanceof java.util.TreeSet);
+	}
+
+	@Test
+	void u10_ordered_false() {
+		var set = Sets.create(String.class)
+			.ordered(true)
+			.ordered(false)
+			.add("a", "b")
+			.build();
+		assertNotNull(set);
+		assertSize(2, set);
+	}
 }

@@ -599,12 +599,7 @@ public class Lists<E> {
 	 * @param o The object to convert.
 	 * @return The converted element, or <jk>null</jk> if conversion is not possible.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to E for element conversion
-	})
 	private E convertElement(Object o) {
-		if (elementType.isInstance(o))
-			return (E)o;
 		if (nn(elementFunction))
 			return elementFunction.apply(o);
 		return null;

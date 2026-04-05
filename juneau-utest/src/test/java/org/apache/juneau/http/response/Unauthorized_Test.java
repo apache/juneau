@@ -22,6 +22,7 @@ import static org.apache.juneau.http.response.Unauthorized.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 
 class Unauthorized_Test extends TestBase {
@@ -76,5 +77,10 @@ class Unauthorized_Test extends TestBase {
 		c.get("/f6").run()
 			.assertStatus().asCode().is(STATUS_CODE)
 			.assertContent("foo");
+	}
+
+	@Test void a02_nullCause() {
+		var x = new Unauthorized((Throwable)null);
+		assertEquals(Unauthorized.REASON_PHRASE, x.getMessage());
 	}
 }

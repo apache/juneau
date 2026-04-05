@@ -676,4 +676,64 @@ class BidiMap_Test extends TestBase {
 
 		assertEquals(map.hashCode(), regularMap.hashCode());
 	}
+
+	@Test
+	void w08_equals_sameInstance() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.build();
+		assertEquals(map, map);
+	}
+
+	@Test
+	void w09_equals_nonMapObject() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.build();
+		assertFalse(map.equals("notAMap"));
+	}
+
+	@Test
+	void x01_builder_nullKeyFiltered() {
+		var map = BidiMap.<String,Integer>create()
+			.add(null, 1)
+			.add("two", 2)
+			.build();
+		assertFalse(map.containsValue(1));
+		assertEquals(1, map.size());
+	}
+
+	@Test
+	void x02_builder_nullValueFiltered() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", null)
+			.add("two", 2)
+			.build();
+		assertFalse(map.containsKey("one"));
+		assertEquals(1, map.size());
+	}
+
+	@Test
+	void x03_put_sameValueToSameKey() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.build();
+		// Putting same key-value pair again is not a conflict
+		map.put("one", 1);
+		assertEquals(1, map.size());
+		assertEquals(1, map.get("one"));
+	}
+
+	@Test
+	void x04_putAll_sameValueToSameKey() {
+		var map = BidiMap.<String,Integer>create()
+			.add("one", 1)
+			.build();
+		// putAll with same key-value pairs is not a conflict
+		var sameEntries = new LinkedHashMap<String, Integer>();
+		sameEntries.put("one", 1);
+		map.putAll(sameEntries);
+		assertEquals(1, map.size());
+		assertEquals(1, map.get("one"));
+	}
 }

@@ -149,6 +149,14 @@ class Items_Test extends TestBase {
 			assertDoesNotThrow(() -> x.setType("array"));
 			assertDoesNotThrow(() -> y.setType("invalid"));
 		}
+
+		@Test void a13_nullSafeMethods() {
+			var x = bean();
+			assertDoesNotThrow(() -> x.addEnum((Collection<Object>)null));
+			assertDoesNotThrow(() -> x.addEnum((Object[])null));
+			assertDoesNotThrow(() -> x.addEnum(new Object[]{null}));
+			assertDoesNotThrow(() -> x.setEnum((Collection<Object>)null));
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {
@@ -311,8 +319,19 @@ class Items_Test extends TestBase {
 			);
 		}
 
-		@Test void d04_resolveRefs_noRefNoItems() {
-			// Test resolveRefs when both ref and items are null (covers the missing branch)
+		@Test void d04_resolveRefs_circularRef() {
+			var swagger = swagger()
+				.addDefinition("MyItem", JsonMap.of("type", "string", "$ref", "#/definitions/MyItem"));
+
+			var refStack = new ArrayDeque<String>();
+			refStack.addLast("#/definitions/MyItem");
+
+			var result = items().setRef("#/definitions/MyItem").resolveRefs(swagger, refStack, 10);
+
+			assertBean(result, "ref", "#/definitions/MyItem");
+		}
+
+		@Test void d05_resolveRefs_noRefNoItems() {
 			var swagger = swagger();
 			var items = items()
 				.setType("string")
@@ -320,7 +339,6 @@ class Items_Test extends TestBase {
 
 			var result = items.resolveRefs(swagger, new ArrayDeque<>(), 10);
 
-			// Should return the same object unchanged
 			assertSame(items, result);
 			assertEquals("string", result.getType());
 			assertEquals("text", result.getFormat());

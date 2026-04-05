@@ -105,8 +105,7 @@ public class Link extends OpenApiElement {
 		this.operationId = copyFrom.operationId;
 		this.requestBody = copyFrom.requestBody;
 		this.server = copyFrom.server == null ? null : copyFrom.server.copy();
-		if (nn(copyFrom.parameters))
-			parameters.putAll(copyFrom.parameters);
+		parameters.putAll(copyFrom.parameters);
 	}
 
 	/**

@@ -19,6 +19,7 @@ package org.apache.juneau.http.header;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
@@ -73,5 +74,9 @@ class LastModified_Test extends TestBase {
 
 	private static RestClient.Builder client() {
 		return MockRestClient.create(A.class);
+	}
+
+	@Test void a02_factoryNullReturn() {
+		assertNull(LastModified.of((java.time.ZonedDateTime)null));
 	}
 }

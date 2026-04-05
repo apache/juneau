@@ -78,4 +78,67 @@ class ConfigMemoryStore_Test extends TestBase {
 		assertFalse(MemoryStore.DEFAULT.exists("foo"));
 		assertFalse(MemoryStore.DEFAULT.exists("foo2"));
 	}
+
+	//====================================================================================================
+	// Builder fluent override methods
+	//====================================================================================================
+
+	@Test void b01_builder_debug() {
+		var fs = MemoryStore.create().debug().build();
+		assertNotNull(fs);
+	}
+
+	@Test void b02_builder_debugBoolean() {
+		var fs = MemoryStore.create().debug(true).build();
+		assertNotNull(fs);
+	}
+
+	@Test void b03_builder_copy() {
+		var b = MemoryStore.create().debug(true);
+		var b2 = b.copy();
+		assertNotNull(b2.build());
+	}
+
+	@Test void b04_builder_type() {
+		var fs = MemoryStore.create().type(MemoryStore.class).build();
+		assertNotNull(fs);
+	}
+
+	@Test void b05_builder_applyAnnotationsFromClass() {
+		var fs = MemoryStore.create().applyAnnotations(String.class).build();
+		assertNotNull(fs);
+	}
+
+	@Test void b06_builder_applyAnnotationsFromObject() {
+		var fs = MemoryStore.create().applyAnnotations("foo").build();
+		assertNotNull(fs);
+	}
+
+	@Test void b07_context_copy() {
+		var fs = MemoryStore.create().build();
+		var copy = fs.copy().build();
+		assertNotNull(copy);
+	}
+
+	@Test void b08_builder_copyFromInstance() {
+		var fs = MemoryStore.DEFAULT;
+		var b = fs.copy();
+		assertNotNull(b.build());
+	}
+
+	@Test void b09_builder_annotations() {
+		var fs = MemoryStore.create().annotations().build();
+		assertNotNull(fs);
+	}
+
+	@Test void b10_builder_cache() {
+		var fs = MemoryStore.create().cache(null).build();
+		assertNotNull(fs);
+	}
+
+	@Test void b11_builder_impl() {
+		var impl = MemoryStore.DEFAULT;
+		var fs = MemoryStore.create().impl(impl).build();
+		assertNotNull(fs);
+	}
 }

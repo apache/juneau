@@ -23,6 +23,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -173,6 +174,28 @@ class OpenApi_Test extends TestBase {
 			var pathItem = pathItem();
 			assertThrows(IllegalArgumentException.class, () -> x.addPath(null, pathItem));
 			assertThrows(IllegalArgumentException.class, () -> x.addPath("/test", null));
+		}
+
+		@Test void a15_nullSafeMethods() {
+			var x = bean();
+			// addServers null collection, null varargs, null element
+			List<Server> nullServerList = null;
+			x.addServers(nullServerList);
+			x.addServers((Server[])null);
+			x.addServers(new Server[]{null});
+			// addTags null collection, null varargs, null element
+			List<Tag> nullTagList = null;
+			x.addTags(nullTagList);
+			x.addTags((Tag[])null);
+			x.addTags(new Tag[]{null});
+			// setXxx(null) covers the false branches of nn(value) checks
+			List<SecurityRequirement> nullSecList = null;
+			x.setSecurity(nullSecList);
+			x.setServers(nullServerList);
+			x.setTags(nullTagList);
+			// findRef exception path - reference that can't be converted to given type
+			var y = bean().setInfo(info().setTitle("test").setVersion("1.0"));
+			assertThrows(RuntimeException.class, () -> y.findRef("#/info", Integer.class));
 		}
 	}
 

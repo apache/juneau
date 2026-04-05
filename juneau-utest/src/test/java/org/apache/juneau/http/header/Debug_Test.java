@@ -1,0 +1,75 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                               *
+// ***************************************************************************************************************************
+package org.apache.juneau.http.header;
+
+import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.http.HttpHeaders.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.*;
+import java.util.function.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.mock.*;
+import org.junit.jupiter.api.*;
+
+class Debug_Test extends TestBase {
+
+	private static final String HEADER = "Debug";
+	private static final String VALUE = "true";
+	private static final Boolean PARSED = Boolean.TRUE;
+
+	@Rest
+	public static class A {
+		@RestOp
+		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
+			return reader(h == null ? "null" : join(h, ','));
+		}
+	}
+
+	@Test void a01_basic() throws Exception {
+		var c = client().build();
+
+		c.get().header(debug(VALUE)).run().assertContent(VALUE);
+		c.get().header(debug(PARSED)).run().assertContent(VALUE);
+		c.get().header(debug(()->PARSED)).run().assertContent(VALUE);
+
+		c.get().header(debug((String)null)).run().assertContent().isEmpty();
+		c.get().header(debug((Supplier<Boolean>)null)).run().assertContent().isEmpty();
+		c.get().header(debug(()->null)).run().assertContent().isEmpty();
+	}
+
+	@Test void a02_factoryNullReturns() {
+		assertNull(Debug.of((Boolean)null));
+		assertNull(Debug.of((String)null));
+		assertNull(Debug.of((Supplier<Boolean>)null));
+	}
+
+	@Test void a03_constants() {
+		assertNotNull(Debug.TRUE);
+		assertNotNull(Debug.FALSE);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Helper methods.
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static RestClient.Builder client() {
+		return MockRestClient.create(A.class);
+	}
+}

@@ -227,18 +227,9 @@ public class RdfParserSession extends ReaderParserSession {
 		var lang = RDFLanguages.nameToLang(langName);
 		if (lang != null)
 			return lang;
-		return switch (langName) {
-			case "N-TRIPLE" -> Lang.NTRIPLES;
-			case "RDF/XML-ABBREV" -> Lang.RDFXML;
-			case "JSON-LD" -> Lang.JSONLD;
-			case "N-QUADS" -> Lang.NQUADS;
-			case "TRIG" -> Lang.TRIG;
-			case "TRIX" -> Lang.TRIX;
-			case "RDF/JSON" -> Lang.RDFJSON;
-			case "RDF/THRIFT" -> Lang.RDFTHRIFT;
-			case "RDF/PROTO" -> Lang.RDFPROTO;
-			default -> null;
-		};
+		if ("RDF/PROTO".equals(langName)) // HTT - not registered in Jena's RDFLanguages
+			return Lang.RDFPROTO;
+		return null;
 	}
 
 	private final void addModelPrefix(Namespace ns) {

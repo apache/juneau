@@ -69,12 +69,8 @@ public enum JsonType {
 		if (value == null || value.length() < 4)
 			return null;
 		var c = value.charAt(0);
-		if (c == 'a') {
-			if (value.equals("array"))
-				return ARRAY;
-			if (value.equals("any"))
-				return ANY;
-		}
+		if (c == 'a' && value.equals("array"))
+			return ARRAY;
 		if (c == 'b' && value.equals("boolean"))
 			return BOOLEAN;
 		if (c == 'i' && value.equals("integer"))

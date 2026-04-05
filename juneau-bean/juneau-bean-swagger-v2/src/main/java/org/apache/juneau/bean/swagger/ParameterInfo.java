@@ -203,8 +203,7 @@ public class ParameterInfo extends SwaggerElement {
 		this.collectionFormat = copyFrom.collectionFormat;
 		this.default_ = copyFrom.default_;
 		this.description = copyFrom.description;
-		if (nn(copyFrom.enum_))
-			this.enum_.addAll(copyOf(copyFrom.enum_));
+		this.enum_.addAll(copyOf(copyFrom.enum_));
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -310,8 +309,7 @@ public class ParameterInfo extends SwaggerElement {
 				items = p.items;
 			if (nn(p.default_))
 				default_ = p.default_;
-			if (nn(p.enum_))
-				enum_ = p.enum_;
+			enum_ = p.enum_;
 			if (nn(p.example))
 				example = p.example;
 			if (nn(p.examples))

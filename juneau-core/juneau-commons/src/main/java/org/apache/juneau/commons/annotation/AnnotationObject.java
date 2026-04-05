@@ -220,7 +220,7 @@ public class AnnotationObject implements Annotation {
 		stream(annotationType().getDeclaredMethods())
 			// Note: isAnnotation() check is defensive code. For properly-formed AnnotationObject instances,
 			// annotationType() always returns an annotation interface, so this condition is always true.
-			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
+			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation()) // HTT - false branches unreachable for well-formed annotation types
 			.sorted(Comparator.comparing(Method::getName))
 			.forEach(x -> m.put(x.getName(), safeSupplier(()->x.invoke(this))));
 		return m;

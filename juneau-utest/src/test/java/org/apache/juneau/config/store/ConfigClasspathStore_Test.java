@@ -94,4 +94,82 @@ class ConfigClasspathStore_Test extends TestBase {
 		assertFalse(ClasspathStore.DEFAULT.exists("foo.cfg"));
 		assertFalse(ClasspathStore.DEFAULT.exists("foo2.cfg"));
 	}
+
+	//====================================================================================================
+	// Builder fluent override methods
+	//====================================================================================================
+
+	@Test void b01_builder_debug() {
+		var fs = ClasspathStore.create().debug().build();
+		assertNotNull(fs);
+	}
+
+	@Test void b02_builder_debugBoolean() {
+		var fs = ClasspathStore.create().debug(true).build();
+		assertNotNull(fs);
+	}
+
+	@Test void b03_builder_copy() {
+		var b = ClasspathStore.create().debug(true);
+		var b2 = b.copy();
+		assertNotNull(b2.build());
+	}
+
+	@Test void b04_builder_type() {
+		var fs = ClasspathStore.create().type(ClasspathStore.class).build();
+		assertNotNull(fs);
+	}
+
+	@Test void b05_builder_applyAnnotationsFromClass() {
+		var fs = ClasspathStore.create().applyAnnotations(String.class).build();
+		assertNotNull(fs);
+	}
+
+	@Test void b06_builder_applyAnnotationsFromObject() {
+		var fs = ClasspathStore.create().applyAnnotations("foo").build();
+		assertNotNull(fs);
+	}
+
+	@Test void b07_context_copy() {
+		var fs = ClasspathStore.create().build();
+		var copy = fs.copy().build();
+		assertNotNull(copy);
+	}
+
+	@Test void b08_builder_copyFromInstance() {
+		var fs = ClasspathStore.DEFAULT;
+		var b = fs.copy();
+		assertNotNull(b.build());
+	}
+
+	@Test void b09_builder_annotations() throws Exception {
+		var fs = ClasspathStore.create().annotations().build();
+		assertNotNull(fs);
+	}
+
+	@Test void b10_builder_cache() throws Exception {
+		var fs = ClasspathStore.create().cache(null).build();
+		assertNotNull(fs);
+	}
+
+	@Test void b11_builder_impl() throws Exception {
+		var impl = ClasspathStore.DEFAULT;
+		var fs = ClasspathStore.create().impl(impl).build();
+		assertNotNull(fs);
+	}
+
+	@Test void b12_close() throws Exception {
+		var fs = ClasspathStore.create().build();
+		assertDoesNotThrow(fs::close);
+	}
+
+	@Test void b13_write_sameContents_noOp() throws Exception {
+		var fs = ClasspathStore.create().build();
+		assertNull(fs.write("same.cfg", "same", "same"));
+	}
+
+	@Test void b14_unregister_noListener() throws Exception {
+		var fs = ClasspathStore.create().build();
+		assertDoesNotThrow(() -> fs.unregister("nonexistent.cfg", s -> {}));
+	}
 }

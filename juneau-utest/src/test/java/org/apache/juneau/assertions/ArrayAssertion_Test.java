@@ -421,4 +421,32 @@ public class ArrayAssertion_Test extends TestBase {
 		assertThrown(()->test(x).isHas(nil)).asMessage().asOneLine().is("Argument 'entries' cannot be null.");
 		assertThrown(()->test(nil).isHas("foo")).asMessage().asOneLine().is("Value was null.");
 	}
+
+	@Test void bb05_asCdl() {
+		var x = a("a","b");
+		var nil = na(String.class);
+		test(x).asCdl().is("a,b");
+		test(nil).asCdl().isNull();
+	}
+
+	@Test void bb06_asCdl_wFunction() {
+		var x = a("a","b");
+		var nil = na(String.class);
+		test(x).asCdl(String::toUpperCase).is("A,B");
+		test(nil).asCdl(String::toUpperCase).isNull();
+	}
+
+	@Test void bb07_asStrings_wFunction() {
+		var x = a("a","b");
+		var nil = na(String.class);
+		test(x).asStrings(String::toUpperCase).isHas("A","B");
+		test(nil).asStrings(String::toUpperCase).isNull();
+	}
+
+	@Test void bb08_toString() {
+		var x = a(1,2);
+		var nil = na(Integer.class);
+		assertEquals("[1, 2]", test(x).toString());
+		assertNull(test(nil).toString());
+	}
 }

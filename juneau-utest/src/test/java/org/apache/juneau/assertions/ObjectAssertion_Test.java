@@ -117,6 +117,13 @@ class ObjectAssertion_Test extends TestBase {
 		test(nil).asAny().isNull();
 	}
 
+	@Test void ba06_asTransformedTo() {
+		var x = 42;
+		var nil = no(Integer.class);
+		test(x).asTransformedTo(i -> "value=" + i).is("value=42");
+		test(nil).asTransformedTo(i -> i == null ? "null-input" : "non-null").is("null-input");
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test tests
 	//-----------------------------------------------------------------------------------------------------------------

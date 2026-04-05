@@ -113,6 +113,13 @@ class Discriminator_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
+
+		@Test void a13_nullSafeMethods() {
+			// setMapping(null) covers the false branch of nn(value) in setMapping
+			var x = bean().setMapping(m("a1", "a2"));
+			x.setMapping(null);
+			assertNull(x.getMapping());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

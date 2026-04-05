@@ -116,6 +116,13 @@ class Server_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
+
+		@Test void a13_nullSafeMethods() {
+			// setVariables(null) covers the false branch of nn(value) in setVariables
+			var x = bean().setVariables(m("a1", serverVariable().setDefault("a2")));
+			x.setVariables(null);
+			assertNull(x.getVariables());
+		}
 	}
 
 	@Nested class B_emptyTests extends TestBase {

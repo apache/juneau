@@ -491,5 +491,22 @@ class FluentMap_Test extends TestBase {
 
 		assertEquals(underlyingMap.hashCode(), map.hashCode());
 	}
+
+	//====================================================================================================
+	// ai(Predicate<V>, K, V) method
+	//====================================================================================================
+	@Test
+	void x01_ai_predicateTrue() {
+		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		map.ai(s -> !s.isEmpty(), "key1", "value1");
+		assertEquals("value1", map.get("key1"));
+	}
+
+	@Test
+	void x02_ai_predicateFalse() {
+		var map = new FluentMap<>(new LinkedHashMap<String, String>());
+		map.ai(s -> !s.isEmpty(), "key1", "");
+		assertFalse(map.containsKey("key1"));
+	}
 }
 

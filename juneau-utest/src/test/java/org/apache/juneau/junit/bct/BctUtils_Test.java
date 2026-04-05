@@ -100,5 +100,26 @@ class BctUtils_Test extends TestBase {
 		assertEquals("age", tokens.get(2).getValue());
 		assertEmpty(tokens.get(2).getNested());
 	}
+
+	@Test
+	@DisplayName("tokenize() - Trailing comma produces empty final token")
+	void d03_tokenize_trailingComma() {
+		// Test NestedTokenizer line 240: lastWasComma branch (finalValue is empty but lastWasComma=true)
+		var tokens = tokenize("a,");
+		assertSize(2, tokens);
+		assertEquals("a", tokens.get(0).getValue());
+		assertEquals("", tokens.get(1).getValue());
+	}
+
+	@Test
+	@DisplayName("tokenize() - Unclosed brace produces empty token (tokens.isEmpty branch)")
+	void d04_tokenize_unclosedBrace() {
+		// Test NestedTokenizer line 240: tokens.isEmpty() branch
+		// Unclosed "{" leaves the parser in PARSING_NESTED state with no tokens added,
+		// so at end: finalValue="", lastWasComma=false, tokens=[] → tokens.isEmpty()=true
+		var tokens = tokenize("{");
+		assertSize(1, tokens);
+		assertEquals("", tokens.get(0).getValue());
+	}
 }
 
