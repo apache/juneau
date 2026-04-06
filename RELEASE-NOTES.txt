@@ -261,6 +261,57 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
         - Implements Converter and delegates to the default BeanContext session for type conversion.
         - Provides access to the full Juneau framework conversion logic including bean mapping.
 
+** New Features - Large-Dataset Streaming APIs (BeanSupplier / BeanConsumer / BeanChannel)
+
+    * New streaming interfaces for serializing and parsing large datasets without loading all elements
+      into memory, enabling direct database integration (JDBC inserts/cursors, batch commits, rollbacks).
+
+    * BeanSupplier<T> (juneau-commons) - serializer-side lifecycle interface:
+        - Extends Iterable<T>; serializer calls begin(), iterates, calls onError(Exception) on error,
+          and always calls complete() in a finally block for resource cleanup (cursors, connections).
+        - Default onError() rethrows; override to add rollback or logging logic.
+
+    * BeanConsumer<T> (juneau-commons) - parser-side lifecycle interface:
+        - Extends ThrowingConsumer<T>; parser calls begin(), acceptThrows(T) per element,
+          onError(Exception) on element failure, and always calls complete() for resource cleanup.
+        - Default onError() rethrows (stop-on-error); override to absorb the exception and continue
+          parsing remaining elements (skip-and-continue / fault-tolerant ingestion).
+
+    * BeanChannel<T> (juneau-commons) - round-trip interface that extends both BeanSupplier and
+      BeanConsumer, allowing the same property to be used for both serialization and parsing.
+
+    * ListBeanChannel<T> (juneau-commons) - built-in in-memory implementation of BeanChannel backed
+      by an ArrayList; useful for testing and simple scenarios without a DI framework.
+
+    * ParserSession.parseToBeanConsumer(Object, BeanConsumer<T>, Class<T>) - new top-level API for
+      streaming parsing; drives the full consumer lifecycle. The default implementation parses to a
+      List first; format-specific parsers may override doParseToBeanConsumer() for true streaming.
+
+    * Supplier<T> unwrapping in SerializerSession - serializers now recursively unwrap nested
+      Supplier chains (up to depth 10) to their underlying value before serialization. BeanSupplier
+      instances are NOT unwrapped (they are treated as Iterable sequences).
+
+    * Direction validation - serializers throw SerializeException if a BeanConsumer (not BeanChannel)
+      is passed as a source; parsers throw ParseException if a BeanSupplier (not BeanChannel) is the
+      parse target. Error messages guide users toward the correct interface.
+
+    * @Bean(factory=X.class) - new annotation attribute specifying a BeanFactory class for
+      class-level factory-based instantiation; integrates with BeanStore (e.g. SpringBeanStore) for
+      DI framework support.
+
+    * @Beanp(factory=X.class) - new annotation attribute specifying a BeanFactory for a specific
+      bean property's value; enables property-level DI-managed streaming implementations.
+
+    * @Beanp(elementType=Y.class) - new annotation attribute declaring the element type for generic
+      streaming properties (Stream<Y>, BeanSupplier<Y>, BeanConsumer<Y>, BeanChannel<Y>); overcomes
+      Java type erasure. Also supports narrowing to concrete implementation types.
+
+    * BeanFactory<T> (juneau-commons) - universal @FunctionalInterface for creating instances of any
+      type T; BeanFactory.Void is a sentinel class for annotation defaults.
+
+    * BeanContext.Builder.beanStore(BeanStore) - new builder method for injecting a BeanStore (e.g.
+      SpringBeanStore) for factory resolution during bean creation.
+
 Release Notes - Juneau - Version 9.2.0 - 2025-12-30
 
 ** Changes

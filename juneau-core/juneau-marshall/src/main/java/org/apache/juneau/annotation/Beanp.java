@@ -78,6 +78,82 @@ public @interface Beanp {
 	Class<?>[] dictionary() default {};
 
 	/**
+	 * Element type for streaming/consuming bean properties.
+	 *
+	 * <p>
+	 * Specifies the element type for properties of type {@link java.util.stream.Stream},
+	 * {@link org.apache.juneau.commons.function.BeanSupplier},
+	 * {@link org.apache.juneau.commons.function.BeanConsumer}, or
+	 * {@link org.apache.juneau.commons.function.BeanChannel} when type erasure prevents
+	 * the framework from inferring the generic type argument at runtime.
+	 *
+	 * <p>
+	 * This attribute also supports:
+	 * <ul>
+	 * 	<li><b>Narrowing</b> - Specify a more specific subtype than the declared type
+	 * 	<li><b>Concrete implementation</b> - Specify a concrete class for an abstract/interface element type
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>public class</jk> OrderCollection {
+	 * 		<jc>// Stream property - element type cannot be inferred at runtime due to erasure</jc>
+	 * 		<ja>@Beanp</ja>(elementType=Order.<jk>class</jk>)
+	 * 		<jk>public</jk> Stream&lt;Order&gt; getOrders() { ... }
+	 *
+	 * 		<jc>// BeanChannel with concrete impl specified instead of abstract element type</jc>
+	 * 		<ja>@Beanp</ja>(elementType=ConcreteItem.<jk>class</jk>)
+	 * 		<jk>public</jk> BeanChannel&lt;AbstractItem&gt; getItems() { ... }
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanSupplier}
+	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanConsumer}
+	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanChannel}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	Class<?> elementType() default void.class;
+
+	/**
+	 * Bean factory class for this property's value.
+	 *
+	 * <p>
+	 * Specifies a {@link org.apache.juneau.commons.function.BeanFactory} class to use when instantiating
+	 * the value of this specific bean property, overriding the class-level {@link Bean#factory()} if present.
+	 *
+	 * <p>
+	 * When a factory class is specified, the framework resolves it in the following order:
+	 * <ol>
+	 * 	<li>Look up the factory class in the configured {@link org.apache.juneau.commons.inject.BeanStore}
+	 * 	<li>Attempt direct instantiation via no-arg constructor or {@code getInstance()} static method
+	 * 	<li>Throw {@link IllegalArgumentException} if both fail
+	 * </ol>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<ja>@Beanp</ja>(factory=ItemChannelFactory.<jk>class</jk>, elementType=Item.<jk>class</jk>)
+	 * 		<jk>public</jk> BeanChannel&lt;Item&gt; getItems() { ... }
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanFactory}
+	 * 	<li class='ja'>{@link Bean#factory()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanStore(org.apache.juneau.commons.inject.BeanStore)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	@SuppressWarnings({
+		"rawtypes" // Raw BeanFactory type required for annotation attribute declaration
+	})
+	Class<? extends org.apache.juneau.commons.function.BeanFactory> factory() default org.apache.juneau.commons.function.BeanFactory.Void.class;
+
+	/**
 	 * Specifies a String format for converting the bean property value to a formatted string.
 	 *
 	 * <p>

@@ -24,6 +24,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
@@ -95,6 +96,8 @@ public class BeanAnnotation {
 		private Class<?> stopClass = void.class;
 		private Class<? extends BeanInterceptor<?>> interceptor = BeanInterceptor.Void.class;
 		private Class<? extends PropertyNamer> propertyNamer = BasicPropertyNamer.class;
+		@SuppressWarnings("rawtypes")
+		private Class<? extends BeanFactory> factory = BeanFactory.Void.class;
 		private String example = "";
 		private String excludeProperties = "";
 		private String p = "";
@@ -144,6 +147,18 @@ public class BeanAnnotation {
 		 */
 		public Builder dictionary(Class<?>...value) {
 			dictionary = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Bean#factory()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		@SuppressWarnings("rawtypes")
+		public Builder factory(Class<? extends BeanFactory> value) {
+			factory = value;
 			return this;
 		}
 
@@ -391,6 +406,8 @@ public class BeanAnnotation {
 		private final Class<?> interfaceClass;
 		private final Class<?> stopClass;
 		private final Class<?>[] dictionary;
+		@SuppressWarnings("rawtypes")
+		private final Class<? extends BeanFactory> factory;
 		private final String example;
 		private final String excludeProperties;
 		private final String p;
@@ -409,6 +426,7 @@ public class BeanAnnotation {
 			dictionary = copyOf(b.dictionary);
 			example = b.example;
 			excludeProperties = b.excludeProperties;
+			factory = b.factory;
 			findFluentSetters = b.findFluentSetters;
 			implClass = b.implClass;
 			interceptor = b.interceptor;
@@ -430,6 +448,12 @@ public class BeanAnnotation {
 		@Override /* Overridden from Bean */
 		public Class<?>[] dictionary() {
 			return dictionary;
+		}
+
+		@Override /* Overridden from Bean */
+		@SuppressWarnings("rawtypes")
+		public Class<? extends BeanFactory> factory() {
+			return factory;
 		}
 
 		@Override /* Overridden from Bean */

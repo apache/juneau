@@ -37,6 +37,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.cp.*;
@@ -261,6 +262,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		private List<Object> swaps;
 		private Set<ClassInfo> notBeanClasses;
 		private Set<String> notBeanPackages;
+		private BeanStore beanStore;
 		
 		/**
 		 * Constructor.
@@ -298,6 +300,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			typePropertyName = env("BeanContext.typePropertyName", "_type");
 			useEnumNames = env("BeanContext.useEnumNames", false);
 			useJavaBeanIntrospector = env("BeanContext.useJavaBeanIntrospector", false);
+			beanStore = null;
 		}
 
 		/**
@@ -337,6 +340,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			typePropertyName = copyFrom.typePropertyName;
 			useEnumNames = copyFrom.useEnumNames;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
+			beanStore = copyFrom.beanStore;
 		}
 
 		/**
@@ -376,6 +380,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			typePropertyName = copyFrom.typePropertyName;
 			useEnumNames = copyFrom.useEnumNames;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
+			beanStore = copyFrom.beanStore;
 		}
 
 		@Override /* Overridden from Builder */
@@ -1718,6 +1723,39 @@ public class BeanContext extends Context implements ConversionFinder {
 			return this;
 		}
 
+		/**
+		 * Sets the bean store used for factory-based instantiation.
+		 *
+		 * <p>
+		 * The bean store is used to resolve {@link BeanFactory} instances registered via
+		 * <ja>@Bean</ja><c>(factory=X.class)</c> and <ja>@Beanp</ja><c>(factory=X.class)</c> annotations.
+		 * When a factory class is encountered, the framework first looks it up in the bean store
+		 * before attempting direct instantiation.
+		 *
+		 * <p>
+		 * Typically set to a {@code SpringBeanStore} wrapping the application's
+		 * {@code ApplicationContext} so that Spring-managed factories are resolved automatically.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jk>public class</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
+		 * 		<ja>@Autowired</ja> ApplicationContext <jv>ctx</jv>;
+		 *
+		 * 		<ja>@Override</ja>
+		 * 		<jk>protected</jk> BeanContext createBeanContext(BeanContext.Builder <jv>builder</jv>) {
+		 * 			<jk>return</jk> <jv>builder</jv>.beanStore(<jk>new</jk> SpringBeanStore(<jv>ctx</jv>)).build();
+		 * 		}
+		 * 	}
+		 * </p>
+		 *
+		 * @param value The bean store, or <jk>null</jk> to use direct instantiation only.
+		 * @return This object.
+		 */
+		public Builder beanStore(BeanStore value) {
+			beanStore = value;
+			return this;
+		}
+
 		@Override /* Overridden from Context.Builder */
 		public BeanContext build() {
 			return cache(CACHE).build(BeanContext.class);
@@ -2256,7 +2294,8 @@ public class BeanContext extends Context implements ConversionFinder {
 				mediaType,
 				timeZone,
 				locale,
-				propertyNamer
+				propertyNamer,
+				System.identityHashCode(beanStore)
 			);
 			// @formatter:on
 		}
@@ -3671,6 +3710,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	private final Visibility beanConstructorVisibility;
 	private final Visibility beanFieldVisibility;
 	private final Visibility beanMethodVisibility;
+	private final BeanStore beanStore;
 
 	/**
 	 * Constructor.
@@ -3710,6 +3750,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		useEnumNames = builder.useEnumNames;
 		useInterfaceProxies = ! builder.disableInterfaceProxies;
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
+		beanStore = builder.beanStore;
 
 		var builderNotBeanClasses = new ArrayList<>(builder.notBeanClasses);
 		notBeanClasses = builderNotBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.concat(builderNotBeanClasses.stream(), DEFAULT_NOTBEAN_CLASSES.stream()).distinct().toList();
@@ -3791,6 +3832,14 @@ public class BeanContext extends Context implements ConversionFinder {
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
 	public final Visibility getBeanConstructorVisibility() { return beanConstructorVisibility; }
+
+	/**
+	 * The bean store used for factory-based instantiation.
+	 *
+	 * @see BeanContext.Builder#beanStore(BeanStore)
+	 * @return The bean store, or <jk>null</jk> if none configured.
+	 */
+	public final BeanStore getBeanStore() { return beanStore; }
 
 	/**
 	 * Bean dictionary.
@@ -4875,6 +4924,13 @@ public class BeanContext extends Context implements ConversionFinder {
 				if (elementType.isObject())
 					return cm2;
 				return new ClassMeta<>(cm2, null, null, elementType);
+			}
+
+			// Handle @Beanp(elementType=) for BeanSupplier, BeanConsumer, BeanChannel, and Stream properties.
+			if (isNotVoid(beanp.elementType()) && (cm2.isIterable() || cm2.isStream())) {
+				var elementType = resolveClassMeta(beanp.elementType(), typeVarImpls);
+				if (! elementType.isObject())
+					return new ClassMeta<>(cm2, null, null, elementType);
 			}
 
 			return cm2;

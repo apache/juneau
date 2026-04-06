@@ -33,6 +33,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.httppart.*;
@@ -782,6 +783,8 @@ public class ParserSession extends BeanSession {
 	private <T> T parseInner(ParserPipe pipe, ClassMeta<T> type) throws ParseException, IOException {
 		if (type.isVoid())
 			return null;
+		if (BeanSupplier.class.isAssignableFrom(type.inner()) && !BeanChannel.class.isAssignableFrom(type.inner()))
+			throw new ParseException(this, "BeanSupplier cannot be used as a parser target. Use BeanConsumer or BeanChannel for round-trip support.");
 		try {
 			return doParse(pipe, type);
 		} catch (ParseException | IOException e) {
@@ -792,6 +795,85 @@ public class ParserSession extends BeanSession {
 			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), lm(e));
 		} finally {
 			checkForWarnings();
+		}
+	}
+
+	/**
+	 * Parses the input and streams each parsed element into the given {@link BeanConsumer}.
+	 *
+	 * <p>
+	 * This is the primary API for large-dataset parsing where parsed beans should be consumed lazily
+	 * (e.g. inserted directly into a database) rather than collected into an in-memory collection.
+	 *
+	 * <p>
+	 * The parser drives the full consumer lifecycle:
+	 * <ol>
+	 * 	<li>Calls {@link BeanConsumer#begin()} before parsing starts
+	 * 	<li>Calls {@link BeanConsumer#acceptThrows(Object)} for each parsed element
+	 * 	<li>If {@link BeanConsumer#acceptThrows(Object)} throws, calls {@link BeanConsumer#onError(Exception)};
+	 * 	    if {@code onError()} absorbs the exception, parsing continues to the next element
+	 * 	<li>Always calls {@link BeanConsumer#complete()} at the end (like {@code finally})
+	 * </ol>
+	 *
+	 * <p>
+	 * The default implementation parses the input into a {@link List} first and then feeds each element
+	 * to the consumer. Format-specific subclasses may override {@link #doParseToBeanConsumer} for true
+	 * streaming behavior without loading all elements into memory.
+	 *
+	 * @param <T> The element type.
+	 * @param input The input to parse.
+	 * @param consumer The consumer to receive parsed elements.
+	 * @param elementType The type of each element.
+	 * @throws ParseException If a parse error occurs that causes {@code onError()} to rethrow.
+	 * @throws IOException If an I/O error occurs reading the input.
+	 */
+	public final <T> void parseToBeanConsumer(Object input, BeanConsumer<T> consumer, Class<T> elementType) throws ParseException, IOException {
+		try (var p = createPipe(input)) {
+			doParseToBeanConsumer(p, consumer, elementType);
+		}
+	}
+
+	/**
+	 * Format-specific implementation for {@link #parseToBeanConsumer}.
+	 *
+	 * <p>
+	 * The default implementation parses the input as a {@link List} and feeds each element to the consumer.
+	 * Override this method in format-specific parsers to support true streaming without collecting all
+	 * elements into memory.
+	 *
+	 * @param <T> The element type.
+	 * @param pipe The parser input pipe.
+	 * @param consumer The consumer to receive parsed elements.
+	 * @param elementType The type of each element.
+	 * @throws ParseException If a parse error occurs.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	@SuppressWarnings({
+		"unchecked" // Unchecked cast from Object to T for consumer elements
+	})
+	protected <T> void doParseToBeanConsumer(ParserPipe pipe, BeanConsumer<T> consumer, Class<T> elementType) throws ParseException, IOException {
+		List<T> list = (List<T>) doParse(pipe, getClassMeta(List.class, elementType));
+		if (list == null)
+			return;
+		try {
+			consumer.begin();
+			for (var element : list) {
+				try {
+					consumer.acceptThrows(element);
+				} catch (Exception e) {
+					consumer.onError(e);
+				}
+			}
+		} catch (ParseException | IOException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), lm(e));
+		} finally {
+			try {
+				consumer.complete();
+			} catch (Exception e) {
+				throw new ParseException(this, e, "Exception occurred in BeanConsumer.complete().  exception={0}, message={1}.", cns(e), lm(e));
+			}
 		}
 	}
 

@@ -60,6 +60,41 @@ public @interface Bean {
 	String[] description() default {};
 
 	/**
+	 * Bean factory class.
+	 *
+	 * <p>
+	 * Specifies a {@link org.apache.juneau.commons.function.BeanFactory} class to use for instantiating
+	 * this class instead of relying on a no-arg constructor or static {@code getInstance()} method.
+	 *
+	 * <p>
+	 * When a factory class is specified, the framework resolves it in the following order:
+	 * <ol>
+	 * 	<li>Look up the factory class in the configured {@link org.apache.juneau.commons.inject.BeanStore}
+	 * 	    (e.g. a Spring {@code ApplicationContext} wrapped in a {@code SpringBeanStore})
+	 * 	<li>Attempt direct instantiation via no-arg constructor or {@code getInstance()} static method
+	 * 	<li>Throw {@link IllegalArgumentException} if both fail
+	 * </ol>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Bean</ja>(factory=ItemChannelFactory.<jk>class</jk>)
+	 * 	<jk>public class</jk> ItemChannel <jk>implements</jk> BeanChannel&lt;Item&gt; { ... }
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanFactory}
+	 * 	<li class='ja'>{@link Beanp#factory()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanStore(org.apache.juneau.commons.inject.BeanStore)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	@SuppressWarnings({
+		"rawtypes" // Raw BeanFactory type required for annotation attribute declaration
+	})
+	Class<? extends org.apache.juneau.commons.function.BeanFactory> factory() default org.apache.juneau.commons.function.BeanFactory.Void.class;
+
+	/**
 	 * Bean dictionary.
 	 *
 	 * <p>

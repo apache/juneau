@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 import org.apache.juneau.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
@@ -629,14 +630,33 @@ public class SerializerSession extends BeanTraverseSession {
 		if (type.isCollection()) {
 			forEachEntry((Collection)o, consumer);
 		} else if (type.isIterable()) {
-			((Iterable)o).forEach(consumer);
+			if (o instanceof BeanSupplier bs) {
+				try {
+					bs.begin();
+					try {
+						bs.iterator().forEachRemaining(consumer);
+					} catch (Exception e) {
+						bs.onError(e);
+					} finally {
+						bs.complete();
+					}
+				} catch (RuntimeException e) {
+					throw e;
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			} else {
+				((Iterable)o).forEach(consumer);
+			}
 		} else if (type.isIterator()) {
 			if (o instanceof Enumeration e)
 				e.asIterator().forEachRemaining(consumer);
 			else
 				((Iterator)o).forEachRemaining(consumer);
 		} else if (type.isStream()) {
-			((Stream)o).forEach(consumer);
+			try (var stream = (Stream)o) {
+				stream.forEach(consumer);
+			}
 		}
 	}
 
@@ -789,7 +809,11 @@ public class SerializerSession extends BeanTraverseSession {
 	 */
 	public final void serialize(Object o, Object out) throws SerializeException, IOException {
 		try (SerializerPipe pipe = createPipe(out)) {
-			doSerialize(pipe, o);
+			var unwrapped = unwrapSupplier(o, 0);
+			if (unwrapped instanceof BeanConsumer && !(unwrapped instanceof BeanChannel))
+				throw new SerializeException(this,
+					"BeanConsumer cannot be used as a serializer source. Use BeanSupplier or BeanChannel for round-trip support.");
+			doSerialize(pipe, unwrapped);
 		} catch (SerializeException | IOException e) {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
@@ -800,6 +824,27 @@ public class SerializerSession extends BeanTraverseSession {
 		} finally {
 			checkForWarnings();
 		}
+	}
+
+	/**
+	 * Recursively unwraps nested {@link Supplier} chains to their underlying value.
+	 *
+	 * <p>
+	 * Supports chains of the form {@code Supplier<Supplier<T>>} → {@code T} with a maximum depth of 10
+	 * to prevent infinite loops. Note that {@link BeanSupplier} instances are NOT unwrapped here —
+	 * they are treated as {@link Iterable} sequences by the serializer.
+	 *
+	 * @param o The object to unwrap.
+	 * @param depth The current recursion depth (must be 0 on initial call).
+	 * @return The unwrapped value, or the original object if it is not a {@code Supplier}.
+	 * @throws SerializeException If the {@link Supplier} chain exceeds 10 levels.
+	 */
+	protected final Object unwrapSupplier(Object o, int depth) throws SerializeException {
+		if (! (o instanceof Supplier<?>) || o instanceof BeanSupplier)
+			return o;
+		if (depth > 10)
+			throw new SerializeException(this, "Supplier chain exceeds maximum unwrap depth of 10.");
+		return unwrapSupplier(((Supplier<?>)o).get(), depth + 1);
 	}
 
 	/**

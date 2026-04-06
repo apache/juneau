@@ -12,3 +12,4 @@
 - Possibility of adding convenience classes for okhttp3.mockwebserver.Dispatcher?
 
 - Duration.ofDays(7) serialized in hours?
+- Synonym for @Bean to avoid confusion when using Spring?

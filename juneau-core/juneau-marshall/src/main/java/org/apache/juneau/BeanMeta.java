@@ -32,11 +32,12 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.NullableSupplier;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.cp.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
@@ -356,6 +357,8 @@ public class BeanMeta<T> {
 	private final ClassMeta<T> classMeta;                                      // The target class type that this meta object describes.
 	private final Supplier<String> dictionaryName;                             // The @Bean(typeName) annotation defined on this bean class.
 	private final BeanPropertyMeta dynaProperty;                               // "extras" property.
+	@SuppressWarnings("rawtypes")
+	private final Class<? extends org.apache.juneau.commons.function.BeanFactory> factoryClass;  // @Bean(factory=X.class) — null means no factory.
 	private final boolean fluentSetters;                                       // Whether fluent setters are enabled.
 	private final Map<Method,String> getterProps;                              // The getter properties on the target class.
 	private final Map<String,BeanPropertyMeta> hiddenProperties;               // The hidden properties on the target class.
@@ -598,6 +601,8 @@ public class BeanMeta<T> {
 		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(beanContext.string()).beanRegistry(beanRegistry.get()).build();
 		dictionaryName = memoize(this::findDictionaryName);
 		beanProxyInvocationHandler = memoize(()->beanContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
+		var factoryClassTemp = ba.stream().map(x -> x.inner().factory()).filter(x -> x != org.apache.juneau.commons.function.BeanFactory.Void.class).findFirst().orElse(null);
+		factoryClass = factoryClassTemp;
 	}
 
 	@SuppressWarnings({
@@ -925,9 +930,20 @@ public class BeanMeta<T> {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings({
-		"unchecked" // Type erasure requires unchecked cast
+		"unchecked", // Type erasure requires unchecked cast
+		"rawtypes" // Raw BeanFactory type used at runtime for factory resolution
 	})
 	protected T newBean(Object outer) throws ExecutableException {
+		if (factoryClass != null) {
+			try {
+				BeanFactory factory = resolveFactory(factoryClass);
+				return (T) factory.create();
+			} catch (ExecutableException e) {
+				throw e;
+			} catch (Exception e) {
+				throw new ExecutableException(e);
+			}
+		}
 		if (classMeta.isMemberClass() && classMeta.isNotStatic()) {
 			if (hasConstructor())
 				return getConstructor().<T>newInstance(outer);
@@ -941,6 +957,20 @@ public class BeanMeta<T> {
 			}
 		}
 		return null;
+	}
+
+	@SuppressWarnings({
+		"rawtypes", // Raw BeanFactory type at runtime
+		"unchecked" // Unchecked casts required for factory class and BeanStore result
+	})
+	private org.apache.juneau.commons.function.BeanFactory resolveFactory(Class<? extends org.apache.juneau.commons.function.BeanFactory> fc) {
+		var bs = beanContext.getBeanStore();
+		if (bs != null) {
+			var opt = bs.getBean(fc);
+			if (opt.isPresent())
+				return opt.get();
+		}
+		return (BeanFactory) BeanCreator.of((Class)fc).run();
 	}
 
 	/*

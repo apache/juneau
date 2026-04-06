@@ -25,6 +25,7 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -90,8 +91,11 @@ public class BeanpAnnotation {
 
 		private String[] description = {};
 		private Class<?> type = void.class;
+		private Class<?> elementType = void.class;
 		private Class<?>[] dictionary = new Class[0];
 		private Class<?>[] params = new Class[0];
+		@SuppressWarnings("rawtypes")
+		private Class<? extends BeanFactory> factory = BeanFactory.Void.class;
 		private String format = "";
 		private String name = "";
 		private String properties = "";
@@ -134,6 +138,29 @@ public class BeanpAnnotation {
 		 */
 		public Builder dictionary(Class<?>...value) {
 			dictionary = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Beanp#elementType()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder elementType(Class<?> value) {
+			elementType = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Beanp#factory()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		@SuppressWarnings("rawtypes")
+		public Builder factory(Class<? extends BeanFactory> value) {
+			factory = value;
 			return this;
 		}
 
@@ -264,8 +291,11 @@ public class BeanpAnnotation {
 
 		private final String[] description;
 		private final Class<?> type;
+		private final Class<?> elementType;
 		private final Class<?>[] params;
 		private final Class<?>[] dictionary;
+		@SuppressWarnings("rawtypes")
+		private final Class<? extends BeanFactory> factory;
 		private final String name;
 		private final String value;
 		private final String properties;
@@ -277,6 +307,8 @@ public class BeanpAnnotation {
 			super(b);
 			description = copyOf(b.description);
 			dictionary = copyOf(b.dictionary);
+			elementType = b.elementType;
+			factory = b.factory;
 			format = b.format;
 			name = b.name;
 			params = copyOf(b.params);
@@ -290,6 +322,17 @@ public class BeanpAnnotation {
 		@Override /* Overridden from Beanp */
 		public Class<?>[] dictionary() {
 			return dictionary;
+		}
+
+		@Override /* Overridden from Beanp */
+		public Class<?> elementType() {
+			return elementType;
+		}
+
+		@Override /* Overridden from Beanp */
+		@SuppressWarnings("rawtypes")
+		public Class<? extends BeanFactory> factory() {
+			return factory;
 		}
 
 		@Override /* Overridden from Beanp */
