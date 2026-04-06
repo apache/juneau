@@ -299,6 +299,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/02.17a.LargeDatasetStreaming',
+							label: '2.17a. Large-Dataset Streaming',
+						},
+						{
+							type: 'doc',
 							id: 'topics/02.18.MarshallingUris',
 							label: '2.18. Marshalling URIs',
 						},
