@@ -482,6 +482,12 @@ timeout 120s sh -c 'mvn clean install 2>&1 | tail -20'
 - Focus on methods with 0% coverage first
 - Add comprehensive tests for all code paths
 - **Hard-to-Test Code Marking**: When a line of code is found to not be fully testable (e.g., requires complex setup, compiler-generated code, or unreachable branches), add a comment `// HTT` (Hard To Test) on that line to document why it's difficult to test
+- **When writing unit tests for new code, always run `coverage.py` afterward to identify coverage gaps before moving on.** Use `--run` to refresh the `.exec` data after adding new tests:
+  ```bash
+  ./scripts/coverage.py path/to/NewFile.java --run
+  ./scripts/coverage.py path/to/new/package/ --run
+  ./scripts/coverage.py path/to/new/package/ --branches  # show only missed branches
+  ```
 
 ### 8. File Organization and Naming
 - Follow established file naming conventions
@@ -1323,7 +1329,12 @@ In all cases, `assertBean` should be used to validate results.
 - **Builder Classes**: Include comprehensive tests for all builder methods
 
 ### Coverage Analysis
-- Use JaCoCo reports to identify missing coverage
+- Use `coverage.py` to identify missing coverage — always run it after writing unit tests for new code:
+  ```bash
+  ./scripts/coverage.py path/to/NewFile.java --run
+  ./scripts/coverage.py path/to/new/package/ --run
+  ./scripts/coverage.py path/to/new/package/ --branches
+  ```
 - Focus on methods with 0% coverage first
 - Add tests for uncovered code paths
 - Verify coverage improvements after adding tests

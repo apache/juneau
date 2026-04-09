@@ -1144,7 +1144,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
@@ -1177,7 +1177,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
@@ -1210,7 +1210,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
@@ -1286,7 +1286,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * 	{@link JsonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
@@ -1320,7 +1320,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * 	{@link Json5Parser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
@@ -1434,7 +1434,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * 	{@link MsgPackParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
@@ -1484,7 +1484,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * 	{@link OpenApiParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 		<li>Typically the {@link ResponseContent#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
 	 * 	</ul>
@@ -1510,7 +1510,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Overrides the parsers specified on the {@link RestClient}.
 	 *
 	 * <p>
-	 * 	The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 	The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 	bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 *
 	 * <p>
@@ -1532,7 +1532,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Overrides the parsers specified on the {@link RestClient}.
 	 *
 	 * <p>
-	 * 	The parser is not modified by any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 	The parser is not modified by any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 	bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 *
 	 * <p>
@@ -1676,7 +1676,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * 	{@link PlainTextParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
@@ -2392,7 +2392,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * 	{@link UonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
@@ -2545,7 +2545,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * 	{@link UrlEncodingParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
@@ -2575,7 +2575,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p>
 	 * 	{@link XmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 	 * 	<ul>
-	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
+	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#ignoreUnknownBeanProperties()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>

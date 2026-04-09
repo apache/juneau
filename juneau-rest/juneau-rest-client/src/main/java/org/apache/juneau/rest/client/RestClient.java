@@ -2634,7 +2634,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
@@ -2679,7 +2679,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
@@ -2724,7 +2724,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	{@link HtmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
@@ -3162,7 +3162,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	{@link JsonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
@@ -3208,7 +3208,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	{@link Json5Parser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
@@ -3458,7 +3458,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
-		 * 	parser property setters (e.g. {@link #strict()}), or bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class have no effect.
+		 * 	parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}), or bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class have no effect.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -3489,7 +3489,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
-		 * 	parser property setters (e.g. {@link #strict()}), or bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class have no effect.
+		 * 	parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}), or bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class have no effect.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -3682,7 +3682,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	{@link MsgPackParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
@@ -3882,7 +3882,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	{@link OpenApiParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 		<li>Typically the {@link ResponseContent#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
 		 * 	</ul>
@@ -4011,7 +4011,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The parser is used to parse the HTTP response body into a POJO.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 	<li class='note'>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * </ul>
 		 *
@@ -4046,7 +4046,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The parser is used to parse the HTTP response body into a POJO.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #strict()}) or
+		 * 	<li class='note'>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 		 * 	on this builder class have no effect.
 		 * </ul>
@@ -4095,7 +4095,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 	<li class='note'>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * </ul>
 		 *
@@ -4136,7 +4136,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #strict()}) or
+		 * 	<li class='note'>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 		 * 	on this builder class have no effect.
 		 * </ul>
@@ -4456,7 +4456,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	{@link PlainTextParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
@@ -5692,7 +5692,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	All basic Juneau parsers will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parsers can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parsers can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
@@ -5780,7 +5780,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	{@link UonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
@@ -5949,7 +5949,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	{@link UrlEncodingParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
@@ -6115,7 +6115,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * 	{@link XmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>

@@ -25,6 +25,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.swap.*;
 
 /**

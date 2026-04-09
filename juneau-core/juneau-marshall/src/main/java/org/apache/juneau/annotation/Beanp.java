@@ -23,6 +23,7 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.reflect.Visibility;
 
 /**
  * Used tailor how bean properties get interpreted by the framework.
