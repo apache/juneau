@@ -37,6 +37,7 @@
 		<module>juneau-rest-server-springboot</module>
 		<module>juneau-rest-client</module>
 		<module>juneau-rest-mock</module>
+		<module>juneau-ng-rest-client-apache-httpclient-45</module>
 	</modules>
 
 	<build>

@@ -87,6 +87,18 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-ng-rest-client-apache-httpclient-45</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Force commons-codec >= 1.13 to satisfy Jena's MurmurHash3 requirement;
+		     httpclient:4.5.14 pulls in 1.11 which pre-dates MurmurHash3. -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.19.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
