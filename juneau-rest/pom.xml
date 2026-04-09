@@ -40,6 +40,8 @@
 		<module>juneau-ng-rest-client-apache-httpclient-45</module>
 		<module>juneau-ng-rest-client-apache-httpclient-50</module>
 		<module>juneau-ng-rest-client-java-httpclient</module>
+		<module>juneau-ng-rest-client-okhttp</module>
+		<module>juneau-ng-rest-client-jetty</module>
 	</modules>
 
 	<build>
