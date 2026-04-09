@@ -107,7 +107,7 @@ New code is added as new packages inside **existing** modules where possible. On
 - **New package**: `org.apache.juneau.ng.http` — no `httpcore` or `httpclient` dependency in this package
 - **Contains**: JDK-native replacements for all ~186 types in `juneau-rest-common` that currently implement Apache HttpCore interfaces
 
-See [ng.http Package Design](#nghttp-package-design-in-juneau-rest-common) below.
+See ng.http Package Design below.
 
 ### 1. `juneau-rest-client` (Existing — new package added)
 

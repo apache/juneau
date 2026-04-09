@@ -38,6 +38,8 @@
 		<module>juneau-rest-client</module>
 		<module>juneau-rest-mock</module>
 		<module>juneau-ng-rest-client-apache-httpclient-45</module>
+		<module>juneau-ng-rest-client-apache-httpclient-50</module>
+		<module>juneau-ng-rest-client-java-httpclient</module>
 	</modules>
 
 	<build>
