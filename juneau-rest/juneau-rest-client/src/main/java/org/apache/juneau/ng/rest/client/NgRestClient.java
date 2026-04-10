@@ -23,7 +23,9 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.ng.http.*;
+import org.apache.juneau.ng.http.entity.*;
 import org.apache.juneau.ng.http.part.*;
+import org.apache.juneau.ng.rest.client.remote.*;
 
 /**
  * Next-generation transport-agnostic REST client.
@@ -60,10 +62,27 @@ import org.apache.juneau.ng.http.part.*;
 })
 public final class NgRestClient implements Closeable {
 
+	/**
+	 * Default body converters applied in order when {@link NgRestRequest#body(Object)} is called.
+	 *
+	 * <p>
+	 * Custom converters registered via {@link Builder#bodyConverter(BodyConverter[])} are prepended to this list.
+	 * Call {@link Builder#bodyConverters(BodyConverter[])} to replace all defaults.
+	 */
+	public static final List<BodyConverter<?>> DEFAULT_BODY_CONVERTERS = List.of(
+		BodyConverter.of(HttpBody.class, body -> TransportBody.of(body)),
+		BodyConverter.of(InputStream.class, is -> TransportBody.of(StreamBody.of(is))),
+		BodyConverter.of(byte[].class, bytes -> TransportBody.of(ByteArrayBody.of(bytes))),
+		BodyConverter.of(java.io.File.class, file -> TransportBody.of(FileBody.of(file)))
+	);
+
 	final HttpTransport transport;
 	final List<HttpHeader> defaultHeaders;
 	final List<HttpPart> defaultQueryData;
 	final String rootUrl;
+	final List<RestCallInterceptor> interceptors;
+	final RestLogger logger;
+	final List<BodyConverter<?>> bodyConverters;
 
 	private NgRestClient(Builder builder) {
 		this.transport = assertArgNotNull("transport",
@@ -71,6 +90,9 @@ public final class NgRestClient implements Closeable {
 		this.defaultHeaders = List.copyOf(builder.defaultHeaders);
 		this.defaultQueryData = List.copyOf(builder.defaultQueryData);
 		this.rootUrl = builder.rootUrl;
+		this.interceptors = List.copyOf(builder.interceptors);
+		this.logger = builder.logger;
+		this.bodyConverters = List.copyOf(builder.bodyConverters);
 	}
 
 	private static HttpTransport discoverTransport() {
@@ -78,7 +100,7 @@ public final class NgRestClient implements Closeable {
 		for (var p : ServiceLoader.load(HttpTransportProvider.class))
 			if (p.isAvailable())
 				providers.add(p);
-		if (providers.isEmpty())
+		if (providers.isEmpty()) // HTT: requires test classpath with no transport modules present
 			return null;
 		providers.sort(Comparator.comparingInt(HttpTransportProvider::getPriority));
 		return providers.get(0).create();
@@ -179,6 +201,26 @@ public final class NgRestClient implements Closeable {
 		return transport;
 	}
 
+	/**
+	 * Creates a Java proxy for the given {@link org.apache.juneau.ng.http.remote.Remote}-annotated interface.
+	 *
+	 * <p>
+	 * Each method call on the returned proxy will be translated into an HTTP request using this client.
+	 *
+	 * <p class='bjava'>
+	 * 	UserService <jv>svc</jv> = client.remote(UserService.<jk>class</jk>);
+	 * 	String <jv>user</jv> = <jv>svc</jv>.getUser(<js>"42"</js>);
+	 * </p>
+	 *
+	 * @param <T> The interface type.
+	 * @param iface The interface class. Must be annotated with {@link org.apache.juneau.ng.http.remote.Remote}. Must not be <jk>null</jk>.
+	 * @return A proxy instance backed by this client. Never <jk>null</jk>.
+	 * @throws IllegalArgumentException If {@code iface} is not an interface or not annotated with {@code @Remote}.
+	 */
+	public <T> T remote(Class<T> iface) {
+		return new NgRemoteClient(this).create(iface);
+	}
+
 	@Override /* Closeable */
 	public void close() throws IOException {
 		transport.close();
@@ -202,6 +244,9 @@ public final class NgRestClient implements Closeable {
 		final List<HttpHeader> defaultHeaders = new ArrayList<>();
 		final List<HttpPart> defaultQueryData = new ArrayList<>();
 		String rootUrl;
+		final List<RestCallInterceptor> interceptors = new ArrayList<>();
+		RestLogger logger;
+		List<BodyConverter<?>> bodyConverters = new ArrayList<>(DEFAULT_BODY_CONVERTERS);
 
 		private Builder() {}
 
@@ -285,6 +330,58 @@ public final class NgRestClient implements Closeable {
 		 */
 		public Builder queryData(String name, String value) {
 			defaultQueryData.add(HttpPartBean.of(name, value));
+			return this;
+		}
+
+		/**
+		 * Adds one or more lifecycle interceptors called before/after each request.
+		 *
+		 * @param value The interceptors to add. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder interceptors(RestCallInterceptor... value) {
+			interceptors.addAll(Arrays.asList(value));
+			return this;
+		}
+
+		/**
+		 * Sets the logger called at the end of every request (success or failure).
+		 *
+		 * @param value The logger. May be <jk>null</jk> to disable logging.
+		 * @return This object.
+		 */
+		public Builder logger(RestLogger value) {
+			logger = value;
+			return this;
+		}
+
+		/**
+		 * Prepends custom body converters to the default converter list.
+		 *
+		 * <p>
+		 * Custom converters are checked before the defaults when {@link NgRestRequest#body(Object)} is called.
+		 *
+		 * @param value The converters to prepend. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder bodyConverter(BodyConverter<?>... value) {
+			var prepended = new ArrayList<BodyConverter<?>>(Arrays.asList(value));
+			prepended.addAll(bodyConverters);
+			bodyConverters = prepended;
+			return this;
+		}
+
+		/**
+		 * Replaces the entire body converter list (including defaults).
+		 *
+		 * <p>
+		 * Use this when you want full control over body conversion, including disabling the built-in defaults.
+		 *
+		 * @param value The complete replacement converter list. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder bodyConverters(BodyConverter<?>... value) {
+			bodyConverters = new ArrayList<>(Arrays.asList(value));
 			return this;
 		}
 

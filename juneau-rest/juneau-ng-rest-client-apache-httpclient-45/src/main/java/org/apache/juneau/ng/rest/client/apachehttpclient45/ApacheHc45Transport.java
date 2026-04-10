@@ -18,7 +18,6 @@ package org.apache.juneau.ng.rest.client.apachehttpclient45;
 
 import java.io.*;
 
-import org.apache.http.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;

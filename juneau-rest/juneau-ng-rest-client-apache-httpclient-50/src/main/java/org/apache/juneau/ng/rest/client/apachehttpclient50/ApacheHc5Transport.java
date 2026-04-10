@@ -85,9 +85,9 @@ public final class ApacheHc5Transport implements HttpTransport {
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
 		var hcRequest = buildHcRequest(request);
-		CloseableHttpResponse hcResponse;
+		ClassicHttpResponse hcResponse;
 		try {
-			hcResponse = httpClient.execute(hcRequest);
+			hcResponse = httpClient.executeOpen(null, hcRequest, null);
 		} catch (IOException e) {
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}
@@ -123,11 +123,12 @@ public final class ApacheHc5Transport implements HttpTransport {
 		return new EntityTemplate(body.getContentLength(), contentType, null, body::writeTo);
 	}
 
-	private static TransportResponse buildTransportResponse(CloseableHttpResponse hcResponse) throws TransportException {
+	private static TransportResponse buildTransportResponse(ClassicHttpResponse hcResponse) throws TransportException {
 		var builder = TransportResponse.builder()
 			.statusCode(hcResponse.getCode())
-			.reasonPhrase(hcResponse.getReasonPhrase())
-			.closeCallback(hcResponse);
+			.reasonPhrase(hcResponse.getReasonPhrase());
+		if (hcResponse instanceof Closeable)
+			builder.closeCallback((Closeable) hcResponse);
 		for (var h : hcResponse.getHeaders())
 			builder.header(h.getName(), h.getValue());
 		var entity = hcResponse.getEntity();

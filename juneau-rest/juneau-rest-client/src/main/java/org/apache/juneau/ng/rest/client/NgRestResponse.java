@@ -20,6 +20,8 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
+import org.apache.juneau.ng.rest.client.assertion.*;
+
 /**
  * An HTTP response returned by {@link NgRestRequest#run()}.
  *
@@ -136,6 +138,42 @@ public final class NgRestResponse implements Closeable {
 		if (actual != expected)
 			throw new NgRestCallException(actual, "Expected status " + expected + " but got " + actual);
 		return this;
+	}
+
+	/**
+	 * Returns a fluent body accessor for this response.
+	 *
+	 * @return A new body accessor. Never <jk>null</jk>.
+	 */
+	public ResponseBody body() {
+		return new ResponseBody(this);
+	}
+
+	/**
+	 * Returns a fluent assertion object for this response.
+	 *
+	 * <p>
+	 * Use this for test-style validation of the response in production or test code:
+	 * <p class='bjava'>
+	 * 	<jv>resp</jv>.assertThat()
+	 * 		.statusCode(200)
+	 * 		.body().contains(<js>"alice"</js>);
+	 * </p>
+	 *
+	 * @return A new assertion object. Never <jk>null</jk>.
+	 */
+	public ResponseAssertion assertThat() {
+		return new ResponseAssertion(this);
+	}
+
+	/**
+	 * Returns a fluent header accessor for the named response header.
+	 *
+	 * @param name The header name (case-insensitive). Must not be <jk>null</jk>.
+	 * @return A new header accessor. Never <jk>null</jk>.
+	 */
+	public ResponseHeader header(String name) {
+		return new ResponseHeader(name, this);
 	}
 
 	@Override /* Closeable */
