@@ -161,6 +161,7 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
     * Bump org.eclipse.jgit:org.eclipse.jgit from 7.5.0.202512021534-r to 7.6.0.202603022253-r #329.
     * Bump org.apache.felix:maven-bundle-plugin from 6.0.0 to 6.0.2 #322.
     * Bump org.apache.httpcomponents.client5:httpclient5 from 5.5.2 to 5.6 #332.
+    * Bump com.squareup.okhttp3:okhttp-jvm from 5.2.0 to 5.3.2 #331.
     * JsonSerializer and JsonParser now strictly enforce RFC 8259 JSON (double quotes only).
       Single-quoted JSON is rejected by JsonParser. Use Json5Serializer and Json5Parser for
       JSON5 syntax (single quotes, trailing commas, comments, etc.).
