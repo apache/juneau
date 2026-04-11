@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.ng.rest.client;
 
+import static org.apache.juneau.commons.utils.Utils.opt;
+
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * A fluent accessor for a named HTTP response header.
@@ -44,6 +45,10 @@ import java.util.stream.*;
 public final class ResponseHeader {
 
 	private final String name;
+
+	@SuppressWarnings({
+		"resource" // Eclipse resource analysis: response is borrowed; caller closes it
+	})
 	private final NgRestResponse response;
 
 	ResponseHeader(String name, NgRestResponse response) {
@@ -96,7 +101,7 @@ public final class ResponseHeader {
 	 * @return An optional containing the first header value, or empty if absent.
 	 */
 	public Optional<String> asOptional() {
-		return Optional.ofNullable(getValue());
+		return opt(getValue());
 	}
 
 	/**
@@ -143,7 +148,7 @@ public final class ResponseHeader {
 		return response.getHeaders().stream()
 			.filter(h -> name.equalsIgnoreCase(h.name()))
 			.map(TransportHeader::value)
-			.collect(Collectors.toUnmodifiableList());
+			.toList();
 	}
 
 	/**
@@ -161,7 +166,7 @@ public final class ResponseHeader {
 		return Arrays.stream(value.split(","))
 			.map(String::trim)
 			.filter(s -> !s.isEmpty())
-			.collect(Collectors.toUnmodifiableList());
+			.toList();
 	}
 
 	@Override /* Object */

@@ -34,7 +34,7 @@ public class ParquetConfigAnnotation {
 	private ParquetConfigAnnotation() {}
 
 	/**
-	 * Applies {@link ParquetConfig} annotations to a {@link ParquetSerializer.Builder}.
+	 * Applies {@link ParquetConfig} annotations to a {@link org.apache.juneau.parquet.ParquetSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<ParquetConfig,ParquetSerializer.Builder> {
 
@@ -65,7 +65,7 @@ public class ParquetConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link ParquetConfig} annotations to a {@link ParquetParser.Builder}.
+	 * Applies {@link ParquetConfig} annotations to a {@link org.apache.juneau.parquet.ParquetParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<ParquetConfig,ParquetParser.Builder> {
 

@@ -63,7 +63,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link JsonSerializer.Builder#addBeanTypesJson()}
+	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#addBeanTypesJson()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -90,7 +90,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link JsonSerializer.Builder#escapeSolidus()}
+	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#escapeSolidus()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -125,7 +125,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link JsonParser.Builder#validateEnd()}
+	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonParser.Builder#validateEnd()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

@@ -36,7 +36,7 @@ public class BsonConfigAnnotation {
 	private BsonConfigAnnotation() {}
 
 	/**
-	 * Applies {@link BsonConfig} annotations to a {@link BsonParser.Builder}.
+	 * Applies {@link BsonConfig} annotations to a {@link org.apache.juneau.bson.BsonParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<BsonConfig,BsonParser.Builder> {
 
@@ -56,7 +56,7 @@ public class BsonConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link BsonConfig} annotations to a {@link BsonSerializer.Builder}.
+	 * Applies {@link BsonConfig} annotations to a {@link org.apache.juneau.bson.BsonSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<BsonConfig,BsonSerializer.Builder> {
 

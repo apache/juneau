@@ -26,6 +26,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 
 import org.apache.juneau.commons.collections.Cache;
+import org.apache.juneau.commons.utils.Utils;
 
 /**
  * Extended logger that provides convenience methods for logging formatted messages.

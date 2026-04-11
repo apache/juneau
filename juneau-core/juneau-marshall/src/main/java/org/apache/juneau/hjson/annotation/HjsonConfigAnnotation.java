@@ -29,7 +29,7 @@ public class HjsonConfigAnnotation {
 	private HjsonConfigAnnotation() {}
 
 	/**
-	 * Applies {@link HjsonConfig} annotations to an {@link HjsonParser.Builder}.
+	 * Applies {@link HjsonConfig} annotations to an {@link org.apache.juneau.hjson.HjsonParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<HjsonConfig, HjsonParser.Builder> {
 
@@ -49,7 +49,7 @@ public class HjsonConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link HjsonConfig} annotations to an {@link HjsonSerializer.Builder}.
+	 * Applies {@link HjsonConfig} annotations to an {@link org.apache.juneau.hjson.HjsonSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<HjsonConfig, HjsonSerializer.Builder> {
 

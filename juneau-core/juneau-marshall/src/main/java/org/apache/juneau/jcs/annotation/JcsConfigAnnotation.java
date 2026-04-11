@@ -33,7 +33,7 @@ public class JcsConfigAnnotation {
 	private JcsConfigAnnotation() {}
 
 	/**
-	 * Applies {@link JcsConfig} annotations to a {@link JcsSerializer.Builder}.
+	 * Applies {@link JcsConfig} annotations to a {@link org.apache.juneau.jcs.JcsSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<JcsConfig,JcsSerializer.Builder> {
 

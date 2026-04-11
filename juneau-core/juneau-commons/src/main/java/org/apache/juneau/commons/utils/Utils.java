@@ -28,6 +28,7 @@ import java.util.function.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.logging.Logger;
+import org.apache.juneau.commons.reflect.ExecutableException;
 import org.apache.juneau.commons.settings.*;
 
 /**
@@ -1163,7 +1164,7 @@ public class Utils {
 	 * @param o The string to check.
 	 * @return <jk>true</jk> if string is not <jk>null</jk> and not empty.
 	 * @see #e(CharSequence)
-	 * @see StringUtils#isNotBlank(String)
+	 * @see StringUtils#isNotBlank(CharSequence)
 	 */
 	public static boolean ne(CharSequence o) {
 		return ! e(o);

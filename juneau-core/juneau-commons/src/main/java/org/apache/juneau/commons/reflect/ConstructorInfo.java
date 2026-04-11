@@ -282,7 +282,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * </ul>
 	 *
 	 * <p>
-	 * If a parameter has a {@link org.apache.juneau.annotation.Named @Named} or {@code @Qualifier} annotation,
+	 * If a parameter has a <ja>@Named</ja> or {@code @Qualifier} annotation,
 	 * the method checks for a bean with that specific name in the bean store.  Otherwise, it checks for an unnamed bean
 	 * of the parameter type in the bean store, and if not found, checks the <c>otherBeans</c> parameter.
 	 *
@@ -329,7 +329,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * </ul>
 	 *
 	 * <p>
-	 * If a parameter has a {@link org.apache.juneau.annotation.Named @Named} or {@code @Qualifier} annotation,
+	 * If a parameter has a <ja>@Named</ja> or {@code @Qualifier} annotation,
 	 * the method checks for a bean with that specific name in the bean store.  Otherwise, it checks for an unnamed bean
 	 * of the parameter type in the bean store, and if not found, checks the <c>otherBeans</c> parameter.
 	 *

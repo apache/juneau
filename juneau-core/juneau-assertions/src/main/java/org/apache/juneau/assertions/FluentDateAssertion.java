@@ -96,7 +96,7 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function) asString(Function)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asJson() asJson()}
  * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted() asJsonSorted()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(Function) asApplied(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(UnaryOperator) asTransformed(UnaryOperator)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asAny() asAny()}
  *	</ul>
  * </ul>

@@ -24,12 +24,12 @@ import java.util.function.Supplier;
  *
  * <p>
  * This interface provides a minimal contract for bean lookup operations, similar to Spring's
- * {@link org.springframework.beans.factory.BeanFactory BeanFactory} interface.
+ * <a class="doclink" href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/BeanFactory.html">BeanFactory</a> interface.
  *
  * <p>
  * Implementations of this interface can be backed by various sources:
  * <ul>
- * 	<li>Spring's {@link org.springframework.context.ApplicationContext ApplicationContext}
+ * 	<li>Spring's <a class="doclink" href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/ApplicationContext.html">ApplicationContext</a>
  * 	<li>Custom in-memory stores
  * 	<li>Other dependency injection frameworks
  * </ul>

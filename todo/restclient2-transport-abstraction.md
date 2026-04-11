@@ -260,6 +260,62 @@ Default concrete status line: `org.apache.juneau.ng.http.response.HttpStatusLine
 
 The `Headerable` bridge interface is updated to return `HttpHeader` (not `org.apache.http.Header`). All features from `juneau-rest-common` are preserved: `Supplier<T>`-valued headers/parts, fluent builders, fluent assertions, caching.
 
+### Typed header hierarchy (planned enhancement)
+
+**Gap:** The first-generation stack (`org.apache.juneau.http.header`) groups headers under **format-specific abstract bases** (e.g. `Accept` → `BasicMediaRangesHeader`, `AcceptCharset` → `BasicStringRangesHeader`). Those bases expose **parsed values** and **convenience APIs** (`MediaRanges`, `StringRanges`, `Calendar`/`ZonedDateTime`, CSV tokens, etc.) on top of the wire string. The initial `org.apache.juneau.ng.http.header` delivery uses a **flat** model: every named header extends **`HttpHeaderBean`** only, so callers only see raw `String` / `Supplier<String>` unless they parse manually.
+
+**Goal:** Reintroduce the **same conceptual hierarchy** under `org.apache.juneau.ng.http.header`, with naming aligned to the ng convention (**drop the `Basic` prefix**; prefer `Http…Header` intermediates). RFC-named types (`Accept`, `ContentType`, …) should **extend the appropriate format base**, not `HttpHeaderBean` directly, and should offer the **same category of convenience methods** as today’s `Basic*Header` hierarchy (adapted to JDK types and existing `juneau-marshall` / commons parsers where those types already live).
+
+**Proposed intermediate types** (each `implements HttpHeader` via the inheritance chain; extend or sit alongside `HttpHeaderBean` depending on refactor — e.g. shared logic in `HttpHeaderBean` or an `AbstractHttpHeaderBean` if constructor/`of` factories need unification):
+
+| Proposed ng base | Replaces (old) | Purpose / wire shape |
+|------------------|----------------|----------------------|
+| `HttpStringHeader` | `BasicStringHeader` | Opaque string value; shared `of(name, String)` / `of(name, Supplier<String>)` patterns for “plain text” headers |
+| `HttpMediaTypeHeader` | `BasicMediaTypeHeader` | Single `MediaType` (e.g. `Content-Type`) |
+| `HttpMediaRangesHeader` | `BasicMediaRangesHeader` | `MediaRanges` / Accept-style media ranges with parameters and q |
+| `HttpStringRangesHeader` | `BasicStringRangesHeader` | `StringRanges` / comma-separated tokens with q-values (`Accept-Encoding`, `Accept-Language`, `Accept-Charset`, …) |
+| `HttpCsvHeader` | `BasicCsvHeader` | Simple comma-separated list without q-semantics (`Allow`, `Content-Language`, `Via`, `Upgrade`, …) |
+| `HttpDateHeader` | `BasicDateHeader` | IMF-fixdate / HTTP-date parsing (`Date`, `Expires`, `Last-Modified`, `If-*-Since`, …) |
+| `HttpUriHeader` | `BasicUriHeader` | URI string validation/normalization (`Location`, `Content-Location`, `Referer`) |
+| `HttpIntegerHeader` | `BasicIntegerHeader` | Integer header value (`Age`, `Max-Forwards`, …) |
+| `HttpLongHeader` | `BasicLongHeader` | Long / numeric string (`Content-Length`, …) |
+| `HttpBooleanHeader` | `BasicBooleanHeader` | Boolean token (`Debug`, `NoTrace`) |
+| `HttpEntityTagHeader` | `BasicEntityTagHeader` | Single entity-tag (`ETag`) |
+| `HttpEntityTagsHeader` | `BasicEntityTagsHeader` | Multiple entity-tags (`If-Match`, `If-None-Match`) |
+
+**RFC-named header → base** (mirror `org.apache.juneau.http.header`; adjust only if a header’s parsing model changes):
+
+| Named header | Extends (proposed) |
+|--------------|-------------------|
+| `Accept` | `HttpMediaRangesHeader` |
+| `ContentType` | `HttpMediaTypeHeader` |
+| `AcceptCharset`, `AcceptEncoding`, `AcceptLanguage`, `ContentDisposition`, `TE` | `HttpStringRangesHeader` |
+| `Allow`, `ContentLanguage`, `Thrown`, `Upgrade`, `Via` | `HttpCsvHeader` |
+| `Date`, `Expires`, `IfModifiedSince`, `IfUnmodifiedSince`, `LastModified`, `RetryAfter`*, `IfRange` | `HttpDateHeader` |
+| `Location`, `ContentLocation`, `Referer` | `HttpUriHeader` |
+| `Age`, `MaxForwards` | `HttpIntegerHeader` |
+| `ContentLength` | `HttpLongHeader` |
+| `Debug`, `NoTrace` | `HttpBooleanHeader` |
+| `ETag` | `HttpEntityTagHeader` |
+| `IfMatch`, `IfNoneMatch` | `HttpEntityTagsHeader` |
+| Most remaining standard headers (e.g. `Authorization`, `CacheControl`, `Connection`, `Host`, `UserAgent`, …) | `HttpStringHeader` |
+
+\*`RetryAfter` in the legacy stack extends `BasicDateHeader`; if ng chooses to model delay-seconds as a first-class variant, document whether it stays on `HttpDateHeader` or gets a small `HttpRetryAfterHeader` — either way, preserve the old **convenience surface** (parsed seconds vs. HTTP-date).
+
+**Convenience API expectations:** Each intermediate type should expose **typed accessors** analogous to the old classes, for example:
+
+- `HttpMediaRangesHeader` → `MediaRanges getValue()` / parse from `getValueString()`, plus static `Accept.of(MediaRanges)` / `Accept.of(String)` overloads mirroring legacy ergonomics.
+- `HttpStringRangesHeader` → `StringRanges getValue()`; same pattern for `AcceptCharset.of(StringRanges)` etc.
+- `HttpDateHeader` → parsed temporal type consistent with ng/JDK usage (e.g. `ZonedDateTime` or `Instant`, aligned with `juneau-marshall` HTTP-date utilities if present).
+- `HttpCsvHeader` → `List<String>` or `String[]` tokens, trimming rules matching legacy `BasicCsvHeader`.
+- `HttpUriHeader` → `URI` accessor where valid.
+
+**Wire contract:** Subclasses remain **`HttpHeader`**: `getName()` / `getValue()` (and lazy `Supplier`) behavior stays compatible with `TransportHeader` conversion. Typed getters are **additional**; serialization for the wire should still use the canonical string form (or delegate to the same serializer the old `Basic*Header` used).
+
+**Static helpers:** `HttpHeaders.*` factory methods should return the **most specific public type** (e.g. `Accept` not `HttpHeaderBean`) so callers get convenience methods without casting.
+
+**Tests:** Extend `NgHttp_Test` (and any focused header tests) to cover **parsing edge cases** and parity with `juneau-utest` coverage for `org.apache.juneau.http.header.*` where formats overlap.
+
 ### Package Structure
 
 ```
@@ -273,11 +329,13 @@ org.apache.juneau.ng.http
 ├── HttpBodies.java              static factory helpers
 ├── HttpResponses.java           static factory helpers
 ├── header/
-│   ├── HttpHeaderBean.java      base for all typed headers (~73 total)
+│   ├── HttpHeaderBean.java      root bean implementing HttpHeader (generic name + string/supplier value)
+│   ├── HttpStringHeader.java    (planned) intermediate — plain string headers
+│   ├── HttpMediaTypeHeader.java, HttpMediaRangesHeader.java, HttpStringRangesHeader.java, … — (planned) format bases; see [Typed header hierarchy](#typed-header-hierarchy-planned-enhancement)
 │   ├── HeaderList.java
 │   ├── SerializedHeader.java
 │   ├── Headerable.java          interface → HttpHeader
-│   ├── Accept.java
+│   ├── Accept.java              extends format base (e.g. HttpMediaRangesHeader), not HttpHeaderBean directly once hierarchy lands
 │   ├── ContentType.java
 │   └── ... (~70 more RFC-named headers)
 ├── part/
@@ -1256,7 +1314,7 @@ The existing `juneau-rest-client` and `juneau-rest-common` modules remain **unch
 - `src/main/java/org/apache/juneau/ng/http/`
   - `HttpHeader.java`, `HttpPart.java`, `HttpBody.java`, `HttpStatusLine.java` — core interfaces (request/cross-cutting / status line)
   - `HttpHeaders.java`, `HttpParts.java`, `HttpBodies.java`, `HttpResponses.java` — static helpers
-  - `header/` — `HttpHeaderBean`, `HeaderList`, `SerializedHeader`, `Headerable`, ~73 named headers
+  - `header/` — `HttpHeaderBean`, format-specific intermediate bases (`HttpStringHeader`, `HttpMediaRangesHeader`, … — see [Typed header hierarchy](#typed-header-hierarchy-planned-enhancement)), `HeaderList`, `SerializedHeader`, `Headerable`, ~73 named headers
   - `part/` — `HttpPartBean`, `PartList`, `SerializedPart`, ~14 typed parts (e.g. `HttpStringPart`, `HttpDatePart`)
   - `entity/` — `HttpBodyBean`, `StringBody`, `ByteArrayBody`, `StreamBody`, `SerializedBody`, `MultipartBody`
   - `resource/` — `HttpResource`

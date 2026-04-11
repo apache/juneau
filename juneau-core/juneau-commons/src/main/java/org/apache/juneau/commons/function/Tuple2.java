@@ -169,7 +169,7 @@ public class Tuple2<A,B> {
 	 * @return The first value wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<A> optA() {
-		return Optional.ofNullable(a);
+		return opt(a);
 	}
 
 	/**
@@ -187,7 +187,7 @@ public class Tuple2<A,B> {
 	 * @return The second value wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<B> optB() {
-		return Optional.ofNullable(b);
+		return opt(b);
 	}
 
 	@Override /* Overridden from Object */

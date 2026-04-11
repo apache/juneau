@@ -32,7 +32,6 @@ import com.sun.net.httpserver.*;
 /**
  * Integration tests for {@link ApacheHc45Transport} against a real embedded HTTP server.
  */
-@SuppressWarnings("restriction")
 public class ApacheHc45Transport_Test {
 
 	private static HttpServer server;
@@ -254,19 +253,19 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void f01_provider_isAvailable() {
-		var provider = new org.apache.juneau.ng.rest.client.apachehttpclient45.ApacheHc45TransportProvider();
+		var provider = new ApacheHc45TransportProvider();
 		assertTrue(provider.isAvailable());
 	}
 
 	@Test
 	void f02_provider_priority() {
-		var provider = new org.apache.juneau.ng.rest.client.apachehttpclient45.ApacheHc45TransportProvider();
+		var provider = new ApacheHc45TransportProvider();
 		assertEquals(50, provider.getPriority());
 	}
 
 	@Test
 	void f03_provider_create() throws Exception {
-		var provider = new org.apache.juneau.ng.rest.client.apachehttpclient45.ApacheHc45TransportProvider();
+		var provider = new ApacheHc45TransportProvider();
 		try (var transport = provider.create()) {
 			assertNotNull(transport);
 		}

@@ -24,7 +24,7 @@ package org.apache.juneau.commons.conversion;
  * the built-in {@link BasicConverter} reflection logic.
  *
  * <p>
- * Return <jk>null</jk> from {@link #find} to indicate that this finder has no conversion for the
+ * Return <jk>null</jk> from {@link #findConversion(Class, Class)} to indicate that this finder has no conversion for the
  * given type pair; the next registered finder (or the built-in logic) will be tried instead.
  *
  * <h5 class='section'>Example:</h5>

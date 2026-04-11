@@ -38,13 +38,13 @@ import org.apache.juneau.parser.*;
  *
  * <h5 class='section'>JSON Parity Features (opt-in):</h5>
  * <ul>
- *   <li><b>Type discriminator</b> — Parse {@code _type} column when present; use {@link #beanDictionary(Class[])
+ *   <li><b>Type discriminator</b> — Parse {@code _type} column when present; use {@link CsvParser.Builder#beanDictionary(Class[])
  *       beanDictionary()} for polymorphic types.
- *   <li><b>Byte arrays</b> — {@link #byteArrayFormat(ByteArrayFormat) byteArrayFormat(BASE64)} or
+ *   <li><b>Byte arrays</b> — {@link CsvParser.Builder#byteArrayFormat(ByteArrayFormat) byteArrayFormat(BASE64)} or
  *       {@code SEMICOLON_DELIMITED}; primitive arrays from {@code [1;2;3]}.
- *   <li><b>Nested structures</b> — {@link #allowNestedStructures(boolean) allowNestedStructures(true)}
+ *   <li><b>Nested structures</b> — {@link CsvParser.Builder#allowNestedStructures(boolean) allowNestedStructures(true)}
  *       parses inline {@code {key:val}} and {@code [val;val]} in cells.
- *   <li><b>Null marker</b> — {@link #nullValue(String) nullValue("&lt;NULL&gt;")} (default); cells
+ *   <li><b>Null marker</b> — {@link CsvParser.Builder#nullValue(String) nullValue("&lt;NULL&gt;")} (default); cells
  *       matching this are parsed as null.
  * </ul>
  *

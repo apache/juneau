@@ -31,6 +31,7 @@
  * 	<li>{@link org.apache.juneau.ng.http.entity.StreamBody} — wraps a one-shot {@link java.io.InputStream}
  * 	<li>{@link org.apache.juneau.ng.http.entity.FileBody} — streams a {@link java.io.File}
  * 	<li>{@link org.apache.juneau.ng.http.entity.MultipartBody} — {@code multipart/form-data} with file uploads
+ * 	<li>{@link org.apache.juneau.ng.http.entity.HttpBodyBean} — wraps an existing body with an overridden content type
  * </ul>
  */
 package org.apache.juneau.ng.http.entity;

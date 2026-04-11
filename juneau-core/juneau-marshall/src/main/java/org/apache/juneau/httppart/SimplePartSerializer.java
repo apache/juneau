@@ -20,12 +20,13 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.conversion.BasicConverter;
 
 /**
  * An implementation of {@link HttpPartSerializer} that simply serializes everything using {@link Object#toString()}.
  *
  * <p>
- * More precisely, uses {@link org.apache.juneau.commons.conversion.Converter#INSTANCE} to stringify objects.
+ * More precisely, uses {@link BasicConverter#INSTANCE} to stringify objects.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.

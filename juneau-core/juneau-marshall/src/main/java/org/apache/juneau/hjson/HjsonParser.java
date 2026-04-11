@@ -19,6 +19,8 @@ package org.apache.juneau.hjson;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.JsonList;
+import org.apache.juneau.collections.JsonMap;
 import org.apache.juneau.parser.*;
 
 /**

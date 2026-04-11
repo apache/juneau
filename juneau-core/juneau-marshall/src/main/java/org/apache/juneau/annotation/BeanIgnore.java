@@ -21,7 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.Visibility;
 
 /**
@@ -73,7 +72,7 @@ public @interface BeanIgnore {
 	 *
 	 * <p>
 	 * Default is <jk>false</jk>: {@code @BeanIgnore} on a field only excludes the field from field-based discovery;
-	 * accessors can still expose the property (for example when {@link BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility} is {@link Visibility#NONE NONE}). Set to <jk>true</jk> to
+	 * accessors can still expose the property (for example when {@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility} is {@link Visibility#NONE NONE}). Set to <jk>true</jk> to
 	 * omit the property from serialization and parsing while keeping accessors for other frameworks.
 	 *
 	 * @return The annotation value.
@@ -84,7 +83,7 @@ public @interface BeanIgnore {
 	 * Dynamically apply this annotation to the specified classes/methods/fields/constructors.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field/constructor.
+	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field/constructor.
 	 * It is ignored when the annotation is applied directly to classes/methods/fields/constructors.
 	 *
 	 * <h5 class='section'>Valid patterns:</h5>

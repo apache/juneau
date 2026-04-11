@@ -24,7 +24,9 @@ import java.util.function.*;
 
 import org.apache.juneau.ng.http.*;
 import org.apache.juneau.ng.http.entity.*;
+import org.apache.juneau.ng.http.header.HttpHeaderBean;
 import org.apache.juneau.ng.http.part.*;
+import org.apache.juneau.http.remote.Remote;
 import org.apache.juneau.ng.rest.client.remote.*;
 
 /**
@@ -202,7 +204,7 @@ public final class NgRestClient implements Closeable {
 	}
 
 	/**
-	 * Creates a Java proxy for the given {@link org.apache.juneau.ng.http.remote.Remote}-annotated interface.
+	 * Creates a Java proxy for the given {@link Remote}-annotated interface.
 	 *
 	 * <p>
 	 * Each method call on the returned proxy will be translated into an HTTP request using this client.
@@ -213,7 +215,7 @@ public final class NgRestClient implements Closeable {
 	 * </p>
 	 *
 	 * @param <T> The interface type.
-	 * @param iface The interface class. Must be annotated with {@link org.apache.juneau.ng.http.remote.Remote}. Must not be <jk>null</jk>.
+	 * @param iface The interface class. Must be annotated with {@link Remote}. Must not be <jk>null</jk>.
 	 * @return A proxy instance backed by this client. Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If {@code iface} is not an interface or not annotated with {@code @Remote}.
 	 */
@@ -294,7 +296,7 @@ public final class NgRestClient implements Closeable {
 		 * @return This object.
 		 */
 		public Builder header(String name, String value) {
-			defaultHeaders.add(org.apache.juneau.ng.http.header.HttpHeaderBean.of(name, value));
+			defaultHeaders.add(HttpHeaderBean.of(name, value));
 			return this;
 		}
 
@@ -306,7 +308,7 @@ public final class NgRestClient implements Closeable {
 		 * @return This object.
 		 */
 		public Builder header(String name, Supplier<String> value) {
-			defaultHeaders.add(org.apache.juneau.ng.http.header.HttpHeaderBean.of(name, value));
+			defaultHeaders.add(HttpHeaderBean.of(name, value));
 			return this;
 		}
 

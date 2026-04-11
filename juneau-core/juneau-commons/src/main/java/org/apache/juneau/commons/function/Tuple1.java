@@ -148,7 +148,7 @@ public class Tuple1<A> {
 	 * @return The value wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<A> optA() {
-		return Optional.ofNullable(a);
+		return opt(a);
 	}
 
 	@Override /* Overridden from Object */

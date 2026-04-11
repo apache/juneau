@@ -2371,6 +2371,12 @@ class StringUtils_Test extends TestBase {
 		assertFalse(StringUtils.isEmpty("a"));
 		assertFalse(StringUtils.isEmpty("hello"));
 		assertFalse(StringUtils.isEmpty("   "));
+		assertFalse(StringUtils.isNotEmpty(null));
+		assertFalse(StringUtils.isNotEmpty(""));
+		assertTrue(StringUtils.isNotEmpty(" "));
+		assertTrue(StringUtils.isNotEmpty("a"));
+		assertTrue(StringUtils.isNotEmpty("hello"));
+		assertTrue(StringUtils.isNotEmpty("   "));
 	}
 
 	//====================================================================================================

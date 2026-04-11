@@ -71,6 +71,8 @@ public class RemoteMeta {
 		for (var r : remotes) {
 			if (ne(r.path()))
 				path = trimSlashes(resolve(r.path()));
+			else if (ne(r.value()))
+				path = trimSlashes(resolve(r.value()));
 			for (var h : r.headers())
 				headers2.append(stringHeader(resolve(h)));
 			if (ne(r.version()))

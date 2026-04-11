@@ -68,7 +68,8 @@ import org.apache.juneau.cp.*;
  * @param <T> The class type that this metadata applies to.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_class)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_class)
+	"java:S1200" // Central bean-introspection type; high coupling to annotations/reflect/utils is inherent to its role
 })
 public class BeanMeta<T> {
 

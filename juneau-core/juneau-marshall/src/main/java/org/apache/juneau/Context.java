@@ -27,6 +27,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.bson.annotation.BsonConfig;
+import org.apache.juneau.cbor.annotation.CborConfig;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;

@@ -17,7 +17,6 @@
 package org.apache.juneau.jsonl;
 
 import org.apache.juneau.json.JsonSerializer;
-import org.apache.juneau.serializer.WriterSerializer;
 import org.apache.juneau.swap.ObjectSwap;
 
 /**
@@ -77,7 +76,7 @@ import org.apache.juneau.swap.ObjectSwap;
  * <h5 class='section'>Limitations compared to JSON</h5>
  * <p>
  * <ul class='spaced-list'>
- * 	<li><b>No pretty-printing</b>: {@link WriterSerializer.Builder#useWhitespace() useWhitespace()}
+ * 	<li><b>No pretty-printing</b>: {@link org.apache.juneau.serializer.WriterSerializer.Builder#useWhitespace() useWhitespace()}
  * 		is always suppressed.  JSONL requires each JSON value to fit on a single line;
  * 		applying intra-line pretty-printing would embed newlines and produce invalid JSONL.
  * 		The setting is silently ignored regardless of its configured value.

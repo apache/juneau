@@ -39,13 +39,13 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>JSON Parity Features (opt-in):</h5>
  * <ul>
- *   <li><b>Type discriminator</b> — {@link #addBeanTypes() addBeanTypes()}.{@link #addRootType() addRootType()}
+ *   <li><b>Type discriminator</b> — {@link CsvSerializer.Builder#addBeanTypes() addBeanTypes()}.{@link CsvSerializer.Builder#addRootType() addRootType()}
  *       adds a {@code _type} column for polymorphic parsing.
- *   <li><b>Byte arrays</b> — {@link #byteArrayFormat(ByteArrayFormat) byteArrayFormat(BASE64)} (default) or
+ *   <li><b>Byte arrays</b> — {@link CsvSerializer.Builder#byteArrayFormat(ByteArrayFormat) byteArrayFormat(BASE64)} (default) or
  *       {@code SEMICOLON_DELIMITED} for {@code byte[]}; primitive arrays as {@code [1;2;3]}.
- *   <li><b>Nested structures</b> — {@link #allowNestedStructures(boolean) allowNestedStructures(true)}
+ *   <li><b>Nested structures</b> — {@link CsvSerializer.Builder#allowNestedStructures(boolean) allowNestedStructures(true)}
  *       enables inline {@code {key:val}} and {@code [val;val]} in cells.
- *   <li><b>Null marker</b> — {@link #nullValue(String) nullValue("&lt;NULL&gt;")} (default) for unambiguous null.
+ *   <li><b>Null marker</b> — {@link CsvSerializer.Builder#nullValue(String) nullValue("&lt;NULL&gt;")} (default) for unambiguous null.
  * </ul>
  *
  * <h5 class='section'>Data Structures Not Supported:</h5>

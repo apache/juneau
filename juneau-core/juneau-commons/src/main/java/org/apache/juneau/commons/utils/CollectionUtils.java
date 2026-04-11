@@ -2424,7 +2424,7 @@ public class CollectionUtils {
 	 * @param o The object to convert to a List. Must not be null and must be a supported collection-like type.
 	 * @return A {@link List} containing the elements from the input object.
 	 * @throws IllegalArgumentException if the input object cannot be converted to a List.
-	 * @see arrayToList
+	 * @see #arrayToList(Object)
 	 */
 	@SuppressWarnings({
 		"java:S1452"  // Wildcard required - List<?> for heterogeneous collections from various sources

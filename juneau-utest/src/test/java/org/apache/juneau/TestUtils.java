@@ -55,20 +55,23 @@ import org.junit.jupiter.api.*;
  * </ul>
  *
  * <h5 class='section'>Primary BCT Assertion Methods:</h5>
+ * These static methods are defined on {@link BctAssertions} and typically used via
+ * {@code import static org.apache.juneau.junit.bct.BctAssertions.*;} (also re-exported through {@link TestBase}).
+ * </p>
  * <dl>
- * 	<dt><b>{@link #assertBean(Object, String, String)}</b></dt>
+ * 	<dt><b>{@link BctAssertions#assertBean(Object, String, String)}</b></dt>
  * 	<dd>Tests object properties with nested syntax support and collection iteration</dd>
  *
- * 	<dt><b>{@link #assertMap(Map, String, String)}</b></dt>
+ * 	<dt><b>{@link BctAssertions#assertMap(java.util.Map, Object...)}</b></dt>
  * 	<dd>Tests map entries with the same nested property syntax as assertBean</dd>
  *
- * 	<dt><b>{@link #assertMapped(Object, java.util.function.BiFunction, String, String)}</b></dt>
+ * 	<dt><b>{@link BctAssertions#assertMapped(Object, java.util.function.BiFunction, String, String)}</b></dt>
  * 	<dd>Tests custom property access using BiFunction for non-standard objects</dd>
  *
- * 	<dt><b>{@link #assertList(List, Object...)}</b></dt>
+ * 	<dt><b>{@link BctAssertions#assertList(Object, Object...)}</b></dt>
  * 	<dd>Tests list/collection elements with varargs for expected values</dd>
  *
- * 	<dt><b>{@link #assertBeans(Collection, String, String...)}</b></dt>
+ * 	<dt><b>{@link BctAssertions#assertBeans(Object, String, String...)}</b></dt>
  * 	<dd>Tests collections of objects by extracting and comparing specific fields</dd>
  * </dl>
  *
@@ -374,7 +377,7 @@ public class TestUtils extends Utils {
 	 * Temporarily sets the default system locale to the specified locale.
 	 * Use {@link #unsetLocale()} to unset it.
 	 *
-	 * @param name
+	 * @param v The locale to use as the default until {@link #unsetLocale()} is called.
 	 */
 	public static final void setLocale(Locale v) {
 		SYSTEM_LOCALE.set(Locale.getDefault());
@@ -385,7 +388,7 @@ public class TestUtils extends Utils {
 	 * Temporarily sets the default system timezone to the specified timezone ID.
 	 * Use {@link #unsetTimeZone()} to unset it.
 	 *
-	 * @param name
+	 * @param v The timezone ID passed to {@link TimeZone#getTimeZone(String)}.
 	 */
 	public static final synchronized void setTimeZone(String v) {
 		SYSTEM_TIME_ZONE.set(TimeZone.getDefault());

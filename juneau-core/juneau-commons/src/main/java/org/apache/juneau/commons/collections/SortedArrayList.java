@@ -79,7 +79,7 @@ import java.util.*;
  * 	<li>All elements must be mutually comparable (or comparable via the comparator)
  * 	<li>Null elements are allowed only if the comparator supports them
  * 	<li>The list maintains sorted order at all times - you cannot insert at a specific index
- * 	<li>Calling {@link #set(int, E)} may cause the element to move to maintain sorted order
+ * 	<li>Calling {@link #set(int, Object)} may cause the element to move to maintain sorted order
  * 	<li>This implementation is not thread-safe
  * </ul>
  *

@@ -513,7 +513,7 @@ public class SchemaAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Schema#deprecatedProperty} property on this annotation.
+		 * Sets the {@link Schema#deprecated_()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.

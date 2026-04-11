@@ -4979,7 +4979,6 @@ public class RestContext extends Context {
 	 * 	<br>If <jk>null</jk>, then some features (such as access to servlet init params) will not be available.
 	 *
 	 * @return A new builder object.
-	 * @throws ServletException Something bad happened.
 	 */
 	public static Builder create(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) {
 		return new Builder(resourceClass, parentContext, servletConfig);

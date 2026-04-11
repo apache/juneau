@@ -87,7 +87,7 @@ import org.apache.juneau.serializer.*;
  * 	<li>
  * 		{@link Json5Serializer} - Default serializer, single quotes, simple mode.
  * 	<li>
- * 		{@link Json5Serializer.Readable} - Default serializer, single quotes, simple mode, with whitespace.
+ * 		{@link org.apache.juneau.json5.Json5Serializer.Readable} - Default serializer, single quotes, simple mode, with whitespace.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>

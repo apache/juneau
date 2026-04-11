@@ -19,7 +19,6 @@ package org.apache.juneau.jsonl.annotation;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.jsonl.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -30,7 +29,7 @@ public class JsonlConfigAnnotation {
 	private JsonlConfigAnnotation() {}
 
 	/**
-	 * Applies {@link JsonlConfig} annotations to a {@link JsonlParser.Builder}.
+	 * Applies {@link JsonlConfig} annotations to a {@link org.apache.juneau.json.JsonParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<JsonlConfig, JsonParser.Builder> {
 
@@ -50,7 +49,7 @@ public class JsonlConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link JsonlConfig} annotations to a {@link JsonlSerializer.Builder}.
+	 * Applies {@link JsonlConfig} annotations to a {@link org.apache.juneau.json.JsonSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<JsonlConfig, JsonSerializer.Builder> {
 

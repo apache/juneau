@@ -127,7 +127,7 @@ public class Tuple4<A,B,C,D> {
 	 * @return The first object wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<A> optA() {
-		return Optional.ofNullable(a);
+		return opt(a);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class Tuple4<A,B,C,D> {
 	 * @return The second object wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<B> optB() {
-		return Optional.ofNullable(b);
+		return opt(b);
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class Tuple4<A,B,C,D> {
 	 * @return The third object wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<C> optC() {
-		return Optional.ofNullable(c);
+		return opt(c);
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class Tuple4<A,B,C,D> {
 	 * @return The fourth object wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<D> optD() {
-		return Optional.ofNullable(d);
+		return opt(d);
 	}
 
 	@Override /* Overridden from Object */

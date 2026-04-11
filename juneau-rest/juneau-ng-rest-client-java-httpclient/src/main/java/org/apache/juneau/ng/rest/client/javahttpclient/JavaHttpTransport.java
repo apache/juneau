@@ -109,24 +109,39 @@ public final class JavaHttpTransport implements HttpTransport {
 		return builder.build();
 	}
 
+	@SuppressWarnings({
+		"java:S2095" // PipedInputStream closed by HttpClient when body publishing finishes; PipedOutputStream closed in writer thread try-with-resources
+	})
 	private static BodyPublisher buildBodyPublisher(TransportBody body) throws IOException {
 		if (body == null)
 			return BodyPublishers.noBody();
 		// Use a pipe so body.writeTo() streams directly to the JDK client without full in-memory buffering.
 		// The writer runs on a daemon thread; the JDK client reads from the PipedInputStream on its own threads.
-		var in = new PipedInputStream();
-		var out = new PipedOutputStream(in);
-		var writer = new Thread(() -> {
-			try (out) {
-				body.writeTo(out);
+		// The supplier runs when the client publishes the request body (not when the HttpRequest is built).
+		return BodyPublishers.ofInputStream(() -> {
+			var in = new PipedInputStream();
+			try {
+				var out = new PipedOutputStream(in);
+				var writer = new Thread(() -> {
+					try (out) {
+						body.writeTo(out);
+					} catch (IOException e) {
+						// Closing the pipe on error causes the reader to see an IOException,
+						// which propagates to the JDK client as a send failure.
+					}
+				}, "juneau-ng-body-writer");
+				writer.setDaemon(true);
+				writer.start();
+				return in;
 			} catch (IOException e) {
-				// Closing the pipe on error causes the reader to see an IOException,
-				// which propagates to the JDK client as a send failure.
+				try {
+					in.close();
+				} catch (IOException e2) {
+					e.addSuppressed(e2);
+				}
+				throw new UncheckedIOException(e);
 			}
-		}, "juneau-ng-body-writer");
-		writer.setDaemon(true);
-		writer.start();
-		return BodyPublishers.ofInputStream(() -> in);
+		});
 	}
 
 	private static TransportResponse buildTransportResponse(HttpResponse<InputStream> jdkResponse) {

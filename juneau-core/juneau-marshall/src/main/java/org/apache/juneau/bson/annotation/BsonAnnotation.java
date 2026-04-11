@@ -42,7 +42,7 @@ public class BsonAnnotation {
 	private BsonAnnotation() {}
 
 	/**
-	 * Applies targeted {@link Bson} annotations to a {@link Context.Builder}.
+	 * Applies targeted {@link Bson} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<Bson,Context.Builder> {
 

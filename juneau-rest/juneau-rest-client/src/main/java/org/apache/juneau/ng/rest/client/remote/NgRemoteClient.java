@@ -16,10 +16,19 @@
  */
 package org.apache.juneau.ng.rest.client.remote;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.assertArgNotNull;
+
 import java.io.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.ng.http.remote.*;
+import org.apache.juneau.http.remote.Remote;
+import org.apache.juneau.http.remote.RemoteReturn;
+import org.apache.juneau.ng.http.HttpBody;
+import org.apache.juneau.ng.http.remote.Body;
+import org.apache.juneau.ng.http.remote.Header;
+import org.apache.juneau.ng.http.remote.Path;
+import org.apache.juneau.ng.http.remote.Query;
+import org.apache.juneau.ng.http.remote.RrpcInterfaceMeta;
 import org.apache.juneau.ng.rest.client.*;
 
 /**
@@ -56,6 +65,9 @@ import org.apache.juneau.ng.rest.client.*;
  */
 public final class NgRemoteClient {
 
+	@SuppressWarnings({
+		"resource" // Eclipse resource analysis: client is caller-owned, not closed by this holder
+	})
 	private final NgRestClient client;
 
 	/**
@@ -63,10 +75,11 @@ public final class NgRemoteClient {
 	 *
 	 * @param client The underlying REST client. Must not be <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"resource" // NgRestClient is owned by caller; this holder must not close it
+	})
 	public NgRemoteClient(NgRestClient client) {
-		if (client == null)
-			throw new IllegalArgumentException("client must not be null");
-		this.client = client;
+		this.client = assertArgNotNull("client", client);
 	}
 
 	/**
@@ -79,8 +92,7 @@ public final class NgRemoteClient {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T create(Class<T> iface) {
-		if (iface == null)
-			throw new IllegalArgumentException("iface must not be null");
+		assertArgNotNull("iface", iface);
 		var meta = RrpcInterfaceMeta.of(iface);
 		return (T) Proxy.newProxyInstance(
 			iface.getClassLoader(),
@@ -148,7 +160,7 @@ public final class NgRemoteClient {
 						continue;
 
 					// Check for @Path annotation on parameter
-					var pathAnnotation = param.getAnnotation(org.apache.juneau.ng.http.remote.Path.class);
+					var pathAnnotation = param.getAnnotation(Path.class);
 					if (pathAnnotation != null) {
 						var name = pathAnnotation.value().isEmpty() ? param.getName() : pathAnnotation.value();
 						req = req.pathData(name, String.valueOf(arg));
@@ -156,7 +168,7 @@ public final class NgRemoteClient {
 					}
 
 					// Check for @Query annotation on parameter
-					var queryAnnotation = param.getAnnotation(org.apache.juneau.ng.http.remote.Query.class);
+					var queryAnnotation = param.getAnnotation(Query.class);
 					if (queryAnnotation != null) {
 						var name = queryAnnotation.value().isEmpty() ? param.getName() : queryAnnotation.value();
 						req = req.queryData(name, String.valueOf(arg));
@@ -164,7 +176,7 @@ public final class NgRemoteClient {
 					}
 
 					// Check for @Header annotation on parameter
-					var headerAnnotation = param.getAnnotation(org.apache.juneau.ng.http.remote.Header.class);
+					var headerAnnotation = param.getAnnotation(Header.class);
 					if (headerAnnotation != null) {
 						var name = headerAnnotation.value().isEmpty() ? param.getName() : headerAnnotation.value();
 						req = req.header(name, String.valueOf(arg));
@@ -172,9 +184,9 @@ public final class NgRemoteClient {
 					}
 
 					// Check for @Body annotation on parameter
-					var bodyAnnotation = param.getAnnotation(org.apache.juneau.ng.http.remote.Body.class);
+					var bodyAnnotation = param.getAnnotation(Body.class);
 					if (bodyAnnotation != null) {
-						if (arg instanceof org.apache.juneau.ng.http.HttpBody b)
+						if (arg instanceof HttpBody b)
 							req = req.body(b);
 						else
 							req = req.bodyString(String.valueOf(arg));
@@ -183,7 +195,7 @@ public final class NgRemoteClient {
 
 					// Single unannotated parameter — treat as body if it's the only one
 					if (params.length == 1) {
-						if (arg instanceof org.apache.juneau.ng.http.HttpBody b)
+						if (arg instanceof HttpBody b)
 							req = req.body(b);
 						else
 							req = req.bodyString(String.valueOf(arg));
@@ -219,7 +231,9 @@ public final class NgRemoteClient {
 					yield sc;
 				}
 			}
-				case RESPONSE -> req.run(); // caller must close
+			case RESPONSE -> req.run(); // caller must close
+			case BEAN, NONE -> throw new UnsupportedOperationException(
+				"NgRestClient remote proxies support RemoteReturn.BODY, STATUS, and RESPONSE only; got " + returnMode);
 			};
 		}
 

@@ -22,9 +22,12 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.markdown.MarkdownParser;
+import org.apache.juneau.markdown.MarkdownSerializer;
 
 /**
- * Annotation for specifying config properties defined in {@link MarkdownSerializer} and {@link MarkdownParser}.
+ * Annotation for specifying config properties defined in {@link MarkdownSerializer MarkdownSerializer}
+ * and {@link MarkdownParser MarkdownParser}.
  *
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.

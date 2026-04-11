@@ -270,7 +270,13 @@ public class MockServletResponse implements HttpServletResponse {
 		}
 	}
 
-	byte[] getContent() throws IOException {
+	/**
+	 * Returns the raw bytes written to the response body.
+	 *
+	 * @return The response body bytes. Never <jk>null</jk>.
+	 * @throws IOException If the stream cannot be flushed.
+	 */
+	public byte[] getContent() throws IOException {
 		baos.flush();
 		return baos.toByteArray();
 	}

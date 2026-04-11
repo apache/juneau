@@ -18,16 +18,15 @@ package org.apache.juneau.marshaller;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
+import java.nio.charset.Charset;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json5.*;
-import org.apache.juneau.parser.ReaderParser;
 import org.apache.juneau.serializer.*;
 
 /**
- * A pairing of a {@link Json5Serializer} and {@link JsonParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link Json5Serializer} and {@link Json5Parser} into a single class with convenience read/write methods.
  *
  * <p>
  * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
@@ -131,11 +130,11 @@ public class Json5 extends CharMarshaller {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#fileCharset(Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * @param type The object type to create.
 	 * @return The parsed object.
@@ -161,11 +160,11 @@ public class Json5 extends CharMarshaller {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#fileCharset(Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * @param type
 	 * 	The object type to create.

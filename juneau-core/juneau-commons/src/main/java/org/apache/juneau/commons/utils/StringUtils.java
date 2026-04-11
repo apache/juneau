@@ -3303,6 +3303,23 @@ public class StringUtils {
 	}
 
 	/**
+	 * Checks if a string is non-null and not empty.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isNotEmpty(<jk>null</jk>);    <jc>// false</jc>
+	 * 	isNotEmpty(<js>""</js>);      <jc>// false</jc>
+	 * 	isNotEmpty(<js>"abc"</js>);   <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is non-null and not empty.
+	 */
+	public static boolean isNotEmpty(String str) {
+		return !isEmpty(str);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified character is a valid first character for a number.
 	 *
 	 * @param c The character to test.
@@ -6310,7 +6327,7 @@ public class StringUtils {
 	}
 
 	/**
-	 * Same as {@link splita} but consumes the tokens instead of creating an array.
+	 * Same as {@link #splita(String, char)} but consumes the tokens instead of creating an array.
 	 *
 	 * @param s The string to split.
 	 * @param c The character to split on.
@@ -6347,7 +6364,7 @@ public class StringUtils {
 	}
 
 	/**
-	 * Same as {@link splita} but limits the number of tokens returned.
+	 * Same as {@link #splita(String, char, int)} but returns a {@link List}.
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
@@ -6391,7 +6408,7 @@ public class StringUtils {
 	}
 
 	/**
-	 * Same as {@link splita} but consumes the tokens instead of creating an array.
+	 * Same as {@link #splita(String)} but consumes the tokens instead of creating an array.
 	 *
 	 * @param s The string to split.
 	 * @param consumer The consumer of the tokens.

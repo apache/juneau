@@ -43,6 +43,9 @@ import java.nio.charset.*;
  */
 public final class ResponseBody {
 
+	@SuppressWarnings({
+		"resource" // Eclipse resource analysis: response is borrowed; caller closes it after reading body
+	})
 	private final NgRestResponse response;
 
 	ResponseBody(NgRestResponse response) {
@@ -100,6 +103,9 @@ public final class ResponseBody {
 	 *
 	 * @return The body stream, or <jk>null</jk> if the response has no body.
 	 */
+	@SuppressWarnings({
+		"resource" // Stream owned by transport; close parent NgRestResponse instead (see Javadoc)
+	})
 	public InputStream asStream() {
 		return response.getBodyStream();
 	}

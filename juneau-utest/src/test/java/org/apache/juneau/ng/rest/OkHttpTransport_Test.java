@@ -34,7 +34,6 @@ import com.sun.net.httpserver.*;
 /**
  * Integration tests for {@link OkHttpTransport} against a real embedded HTTP server.
  */
-@SuppressWarnings("restriction")
 public class OkHttpTransport_Test {
 
 	private static HttpServer server;

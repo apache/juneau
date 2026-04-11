@@ -25,7 +25,6 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
-import java.util.Optional;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -243,7 +242,7 @@ public class CsvParserSession extends ReaderParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T) Optional.ofNullable(parseAnything(eType.getElementType(), r, outer, pMeta));
+			return (T) opt(parseAnything(eType.getElementType(), r, outer, pMeta));
 
 		// Read header row
 		var headers = r.readRow();

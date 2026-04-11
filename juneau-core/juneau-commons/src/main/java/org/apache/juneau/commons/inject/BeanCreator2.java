@@ -174,7 +174,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li class='note'>All constructors and methods except {@link Optional} and {@link List} parameters
  * 		must have beans available in the store.
  * 	<li class='note'>If multiple constructors/methods are found, the one with the most matching parameters is used.
- * 	<li class='note'>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods/constructors are ignored.
+ * 	<li class='note'>Deprecated and <a class="doclink" href="https://juneau.apache.org/site/apidocs/org/apache/juneau/annotation/BeanIgnore.html">@BeanIgnore</a>-annotated methods/constructors are ignored.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -876,7 +876,7 @@ public class BeanCreator2<T> {
 	 * Returns the name of the bean being created.
 	 *
 	 * <p>
-	 * Returns the name that was set via {@link #name(String)}, or <jk>null</jk> if no name was specified.
+	 * Returns the name that was passed to {@link #of(Class, BeanStore, String, Object)}, or <jk>null</jk> if no name was specified.
 	 *
 	 * @return The bean name, or <jk>null</jk> if not set.
 	 */

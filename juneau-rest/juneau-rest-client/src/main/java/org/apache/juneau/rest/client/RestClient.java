@@ -8307,6 +8307,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				rc.ignoreErrors();
 				res = rc.run();
 				ret = res.as(ror.getResponseBeanMeta());
+			} else if (ror.getReturnValue() == RemoteReturn.RESPONSE) {
+				res = rc.run();
+				ret = res;
 			} else {
 				var rt = method.getReturnType();
 				if (Throwable.class.isAssignableFrom(rt))

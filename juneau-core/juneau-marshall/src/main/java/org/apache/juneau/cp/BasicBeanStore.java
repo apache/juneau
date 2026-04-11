@@ -60,7 +60,6 @@ import org.apache.juneau.commons.reflect.*;
  * <ul class='javatreec'>
  * 	<li class='jm'>{@link #getBean(Class) getBean(Class)}
  * 	<li class='jm'>{@link #getBean(Class,String) getBean(Class,String)}
- * 	<li class='jm'>{@link #stream(Class) stream(Class)}
  * </ul>
  *
  * <p>

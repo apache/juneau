@@ -33,7 +33,6 @@ import com.sun.net.httpserver.*;
 /**
  * Integration tests for {@link JavaHttpTransport} against a real embedded HTTP server.
  */
-@SuppressWarnings("restriction")
 public class JavaHttpTransport_Test {
 
 	private static HttpServer server;

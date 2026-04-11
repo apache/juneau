@@ -21,6 +21,8 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.Json5Parser;
+import org.apache.juneau.json5.Json5Serializer;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.plaintext.*;

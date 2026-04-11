@@ -20,6 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.junit.bct.BctAssertions;
 import org.apache.juneau.marshaller.*;
 
 /**
@@ -28,7 +29,7 @@ import org.apache.juneau.marshaller.*;
  * <p>
  * This class provides a fluent API for setting up and executing common bean tests including:
  * <ul>
- *    <li>Getter/setter validation using {@link TestUtils#assertBean(Object, String, String)}
+ *    <li>Getter/setter validation using {@link BctAssertions#assertBean(Object, String, String)}
  *    <li>Copy constructor/method testing
  *    <li>JSON serialization/deserialization testing
  *    <li>Round-trip serialization testing
@@ -107,7 +108,7 @@ public class BeanTester<T> {
 	 * Sets the comma-delimited list of property names for bean validation.
 	 *
 	 * <p>
-	 * This string is used by {@link TestUtils#assertBean(Object, String, String)} to
+	 * This string is used by {@link BctAssertions#assertBean(Object, String, String)} to
 	 * validate that the bean has the expected properties with the expected values.
 	 * Property names should be listed in the same order as their corresponding values
 	 * in the {@link #vals(String)} parameter.
@@ -130,7 +131,7 @@ public class BeanTester<T> {
 	 * Sets the comma-delimited list of expected property values for bean validation.
 	 *
 	 * <p>
-	 * This string is used by {@link TestUtils#assertBean(Object, String, String)} to
+	 * This string is used by {@link BctAssertions#assertBean(Object, String, String)} to
 	 * validate that the bean properties have the expected values. Values should be
 	 * listed in the same order as their corresponding property names in the
 	 * {@link #props(String)} parameter. String values should be quoted (e.g., "'value'").
@@ -172,7 +173,7 @@ public class BeanTester<T> {
 	 * Validates that the bean's getters and setters work correctly.
 	 *
 	 * <p>
-	 * This method uses {@link TestUtils#assertBean(Object, String, String)} to verify
+	 * This method uses {@link BctAssertions#assertBean(Object, String, String)} to verify
 	 * that the bean's properties match the expected values specified by {@link #props(String)}
 	 * and {@link #vals(String)}.
 	 *

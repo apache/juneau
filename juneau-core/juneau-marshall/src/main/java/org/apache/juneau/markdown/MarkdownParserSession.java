@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.markdown;
 
+import static org.apache.juneau.commons.utils.Utils.opt;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -229,7 +231,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T) Optional.ofNullable(parseAnything(lines, eType.getElementType(), outer, pMeta));
+			return (T) opt(parseAnything(lines, eType.getElementType(), outer, pMeta));
 
 		// Skip blank lines and handle empty input
 		var nonBlank = lines.stream().filter(l -> !l.isBlank()).toList();

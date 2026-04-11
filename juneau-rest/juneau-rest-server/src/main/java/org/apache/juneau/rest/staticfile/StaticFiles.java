@@ -60,7 +60,7 @@ public interface StaticFiles extends FileFinder {
 		/**
 		 * Prepend the MIME type values to the MIME types registry.
 		 *
-		 * @param mimeTypes A .mime.types formatted string of entries.  See {@link MimeTypeDetector.Builder#addTypes(String...)}.
+		 * @param mimeTypes A .mime.types formatted string of entries.  See {@link org.apache.juneau.commons.io.MimeTypeDetector.Builder#addTypes(String...)}.
 		 * @return This object.
 		 */
 		public Builder addMimeTypes(String mimeTypes) {

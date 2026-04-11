@@ -40,7 +40,7 @@ public class BeanIgnoreAnnotation {
 	private BeanIgnoreAnnotation() {}
 
 	/**
-	 * Applies targeted {@link BeanIgnore} annotations to a {@link BeanContext.Builder}.
+	 * Applies targeted {@link BeanIgnore} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<BeanIgnore,BeanContext.Builder> {
 
@@ -83,7 +83,7 @@ public class BeanIgnoreAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link BeanContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	@SuppressWarnings({

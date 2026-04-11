@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.TestUtils.assertThrowsWithMessage;
+import static org.apache.juneau.commons.utils.AssertionUtils.assertArgNotNull;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -601,8 +602,7 @@ class FilteredList_Test extends TestBase {
 			.create(Integer.class)
 			.filter(v -> v != null)
 			.elementFunction(o -> {
-				if (o == null)
-					throw new IllegalArgumentException("Element cannot be null");
+				assertArgNotNull("element", o);
 				return Integer.parseInt(o.toString());
 			})
 			.build();

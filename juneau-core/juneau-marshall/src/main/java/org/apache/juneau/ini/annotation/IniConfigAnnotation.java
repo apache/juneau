@@ -29,7 +29,7 @@ public class IniConfigAnnotation {
 	private IniConfigAnnotation() {}
 
 	/**
-	 * Applies {@link IniConfig} annotations to an {@link IniParser.Builder}.
+	 * Applies {@link IniConfig} annotations to an {@link org.apache.juneau.ini.IniParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<IniConfig, IniParser.Builder> {
 
@@ -49,7 +49,7 @@ public class IniConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link IniConfig} annotations to an {@link IniSerializer.Builder}.
+	 * Applies {@link IniConfig} annotations to an {@link org.apache.juneau.ini.IniSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<IniConfig, IniSerializer.Builder> {
 

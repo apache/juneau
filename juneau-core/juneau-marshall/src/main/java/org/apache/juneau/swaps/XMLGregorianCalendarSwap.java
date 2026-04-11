@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.Swap;
 import org.apache.juneau.swap.*;
 
 /**
@@ -36,7 +37,7 @@ import org.apache.juneau.swap.*;
  * <p>
  * Date/time types are now serialized as ISO 8601 strings by default without needing a swap.
  * These swap classes can be used to override the default format (e.g., using RFC 1123 instead of ISO 8601).
- * They can be registered globally via {@link BeanContext#swaps()} or per-field via the {@link Swap @Swap} annotation.
+ * They can be registered globally via {@link org.apache.juneau.BeanContext.Builder#swaps(Class[]) BeanContext.Builder.swaps(Class...)} or per-field via the {@link Swap} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>

@@ -2201,7 +2201,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private SortedSet<String> findNoInheritOp() {
 		var l = getRestOpAnnotations().stream()
 			.map(ai -> ai.getStringArray("noInherit").orElse(StringUtils.EMPTY_STRING_ARRAY))
-			.flatMap(arr -> resolveCdl(arr))
+			.flatMap(this::resolveCdl)
 			.toList();
 		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, l));
 	}

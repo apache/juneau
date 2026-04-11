@@ -87,6 +87,18 @@ public @interface Remote {
 	String path() default "";
 
 	/**
+	 * Alias for {@link #path()}.
+	 *
+	 * <p>
+	 * Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
+	 * (e.g. <js>"$P{mySystemProperty}"</js>).
+	 * </p>
+	 *
+	 * @return The annotation value.
+	 */
+	String value() default "";
+
+	/**
 	 * Specifies the client version of this interface.
 	 *
 	 * <p>

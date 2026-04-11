@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
 public class HoconAnnotation {
 
 	/**
-	 * Applies {@link Hocon} annotations to a {@link Context.Builder}.
+	 * Applies {@link Hocon} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<Hocon, Context.Builder> {
 
