@@ -1746,10 +1746,10 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 		@FormData("f1") String f1
 	) {
 
-		assertEquals("dummy-1", p1);
-		assertEquals("dummy-2", h1);
-		assertEquals("dummy-3", q1);
-		assertEquals("dummy-4", f1);
+		assertEquals("'1'", p1);
+		assertEquals("'2'", h1);
+		assertEquals("'3'", q1);
+		assertEquals("'4'", f1);
 
 		return "OK";
 	}

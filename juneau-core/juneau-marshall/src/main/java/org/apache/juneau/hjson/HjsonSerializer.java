@@ -97,7 +97,7 @@ import org.apache.juneau.serializer.*;
  * 		Use {@link Builder#omitRootBraces(boolean)} to suppress them.
  * 	<li class='note'>In compact mode, strings containing newlines are serialized as double-quoted strings
  * 		with JSON escape sequences rather than multiline <c>'''</c> blocks.
- * 	<li class='note'>Format-specific field-level annotations ({@link Hjson @Hjson}) are supported
+ * 	<li class='note'>Format-specific field-level annotations ({@link org.apache.juneau.hjson.annotation.Hjson @Hjson}) are supported
  * 		but intentionally minimal in the initial implementation.
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

@@ -37,7 +37,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -85,7 +84,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 		@RemoteOp(path="a/{x}") String getX14(@Path @Schema(f="uon") Map<String,Bean> b);
 		@RemoteOp(path="a/{x}") String getX15(@Path("*") PartList b);
 		@RemoteOp(path="a/{x}") String getX16(@Path PartList b);
-		@RemoteOp(path="a/{x}") String getX17(@Path(name="x",serializer=UonSerializer.class) Map<String,Bean> b);
+		@RemoteOp(path="a/{x}") String getX17(@Path(name="x") @Schema(f="uon") Map<String,Bean> b);
 		@RemoteOp(path="a/{x}") String getX18(@Path("*") NameValuePair b);
 		@RemoteOp(path="a/{x}") String getX19(@Path NameValuePair b);
 		@RemoteOp(path="a/{x}") String getX20(@Path NameValuePair[] b);
@@ -111,7 +110,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 		assertEquals("x=1",x.getX14(map("x",Bean.create())));
 		assertEquals("bar",x.getX15(parts("x","bar")));
 		assertEquals("bar",x.getX16(parts("x","bar")));
-		assertEquals("(x=(x=1))",x.getX17(map("x",Bean.create())));
+		assertEquals("x=x\\=1",x.getX17(map("x",Bean.create())));
 		assertEquals("bar",x.getX18(part("x","bar")));
 		assertEquals("bar",x.getX19(part("x","bar")));
 		assertEquals("bar",x.getX20(a(part("x","bar"))));
@@ -570,12 +569,12 @@ class Remote_PathAnnotation_Test extends TestBase {
 
 	@Remote
 	public interface H1 {
-		@RemoteOp(path="/{x}") String getX1(@Path(name="x",serializer=FakeWriterSerializer.X.class) String b);
+		@RemoteOp(path="/{x}") String getX1(@Path(name="x") String b);
 	}
 
 	@Test void h01_path_serializer() {
 		var x = remote(H.class,H1.class);
-		assertEquals("{x:'xXx'}",x.getX1("X"));
+		assertEquals("{x:'X'}",x.getX1("X"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -597,7 +596,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K1 {
 		@RemoteOp(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX1(@Request K1a rb);
-		@RemoteOp(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K1a rb);
+		@RemoteOp(path="/{a}/{b}/{c}/{e}/{g}/{h}") String getX2(@Request K1a rb);
 	}
 
 	public static class K1a {
@@ -614,7 +613,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
 		assertEquals("a1/b1/c1//true/123",x1.getX1(new K1a()));
 		assertEquals("a1/b1/c1//'true'/'123'",x2.getX1(new K1a()));
-		assertEquals("xa1x/xb1x/xc1x/xx/xtruex/x123x",x2.getX2(new K1a()));
+		assertEquals("a1/b1/c1//'true'/'123'",x2.getX2(new K1a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -624,7 +623,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K2 {
 		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX1(@Request K2a rb);
-		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K2a rb);
+		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}") String getX2(@Request K2a rb);
 	}
 
 	public static class K2a {
@@ -640,7 +639,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
 		assertEquals("v1/123/null//true/123/null/v1/123/null/",x1.getX1(new K2a()));
 		assertEquals("v1/123/null//'true'/'123'/'null'/v1/123/null/",x2.getX1(new K2a()));
-		assertEquals("xv1x/x123x/null/xx/xtruex/x123x/xnullx/xv1x/x123x/null/xx",x2.getX2(new K2a()));
+		assertEquals("v1/123/null//'true'/'123'/'null'/v1/123/null/",x2.getX2(new K2a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -650,7 +649,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K3 {
 		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}") String getX1(@Request K3a rb);
-		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K3a rb);
+		@RemoteOp(path="/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}/{e1}/{e2}/{e3}/{e4}") String getX2(@Request K3a rb);
 	}
 
 	public static class K3a {
@@ -677,16 +676,16 @@ class Remote_PathAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K4 {
 		@RemoteOp(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX1(@Request K4a rb);
-		@RemoteOp(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K4a rb);
+		@RemoteOp(path="/{a}/{b}/{c}/{d}/{f}/{g}/{h}") String getX2(@Request K4a rb);
 	}
 
 	public static class K4a {
 		@Path public List<Object> getA() { return l("foo","","true","123","null",true,123,null); }
 		@Path("b") public List<Object> getX1() { return l("foo","","true","123","null",true,123,null); }
-		@Path(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return l("foo","","true","123","null",true,123,null); }
+		@Path(name="c") public List<Object> getX2() { return l("foo","","true","123","null",true,123,null); }
 		@Path("d") @Schema(aev=true) public List<Object> getX3() { return l(); }
 		@Path("f") public Object[] getX5() { return a("foo","","true","123","null",true,123,null); }
-		@Path(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return a("foo","","true","123","null",true,123,null); }
+		@Path(name="g") public Object[] getX6() { return a("foo","","true","123","null",true,123,null); }
 		@Path("h") @Schema(aev=true)
 		public Object[] getX7() { return a(); }
 	}
@@ -694,9 +693,9 @@ class Remote_PathAnnotation_Test extends TestBase {
 	@Test void k04_requestBean_collections() {
 		var x1 = remote(K.class,K4.class);
 		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
-		assertEquals("foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx//foo,,true,123,null,true,123,null/xfoo||true|123|null|true|123|nullx/", x1.getX1(new K4a()));
-		assertEquals("@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/xfoo||true|123|null|true|123|nullx/@()/@(foo,'','true','123','null',true,123,null)/xfoo||true|123|null|true|123|nullx/@()", x2.getX1(new K4a()));
-		assertEquals("xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xx/xfoo||true|123|null|true|123|nullx/xfoo||true|123|null|true|123|nullx/xx", x2.getX2(new K4a()));
+		assertEquals("foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null//foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/", x1.getX1(new K4a()));
+		assertEquals("@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/@()/@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/@()", x2.getX1(new K4a()));
+		assertEquals("@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/@()/@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/@()", x2.getX2(new K4a()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

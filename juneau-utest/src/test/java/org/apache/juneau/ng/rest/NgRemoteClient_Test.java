@@ -21,6 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.http.annotation.Content;
+import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.http.remote.Remote;
 import org.apache.juneau.http.remote.RemoteDelete;
 import org.apache.juneau.http.remote.RemoteGet;
@@ -30,10 +34,6 @@ import org.apache.juneau.http.remote.RemotePut;
 import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.ng.http.HttpBody;
 import org.apache.juneau.ng.http.entity.*;
-import org.apache.juneau.ng.http.remote.Body;
-import org.apache.juneau.ng.http.remote.Header;
-import org.apache.juneau.ng.http.remote.Path;
-import org.apache.juneau.ng.http.remote.Query;
 import org.apache.juneau.ng.http.remote.RrpcInterfaceMeta;
 import org.apache.juneau.ng.rest.client.*;
 import org.apache.juneau.ng.rest.client.remote.*;
@@ -56,13 +56,13 @@ public class NgRemoteClient_Test {
 		String getUser(@Path("id") String id);
 
 		@RemotePost
-		String createUser(@Body String json);
+		String createUser(@Content String json);
 
 		@RemotePut("/{id}")
-		String updateUser(@Path("id") String id, @Body String json);
+		String updateUser(@Path("id") String id, @Content String json);
 
 		@RemotePatch("/{id}")
-		String patchUser(@Path("id") String id, @Body String json);
+		String patchUser(@Path("id") String id, @Content String json);
 
 		@RemoteDelete("/{id}")
 		void deleteUser(@Path("id") String id);
@@ -137,7 +137,7 @@ public class NgRemoteClient_Test {
 		String listItems(@Query("page") String page);
 
 		@RemotePost
-		String createItem(@Body String body);
+		String createItem(@Content String body);
 
 		@RemoteGet(returns = RemoteReturn.STATUS)
 		int getStatus();
@@ -294,13 +294,13 @@ public class NgRemoteClient_Test {
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------
-	// G — @Body with HttpBody
+	// G — @Content with HttpBody
 	// ------------------------------------------------------------------------------------------------------------------
 
 	@Remote(path = "/upload")
 	interface G01_UploadService {
 		@RemotePost
-		String upload(@Body HttpBody body);
+		String upload(@Content HttpBody body);
 	}
 
 	@Test void g01_body_httpBody() throws Exception {
@@ -450,7 +450,7 @@ public class NgRemoteClient_Test {
 	@Remote(path = "/m")
 	interface M01_VerbService {
 		@RemotePut("/{id}")
-		String put(@Path("id") String id, @Body String body);
+		String put(@Path("id") String id, @Content String body);
 
 		@RemotePatch("/{id}")
 		String patch(@Path("id") String id);
@@ -661,13 +661,13 @@ public class NgRemoteClient_Test {
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------
-	// S — @Body param with HttpBody type (explicit @Body annotation, non-String arg)
+	// S — @Content param with HttpBody type (explicit @Content annotation, non-String arg)
 	// ------------------------------------------------------------------------------------------------------------------
 
 	@Remote(path = "/s")
 	interface S01_BodyAnnotatedHttpBodyService {
 		@RemotePost
-		String upload(@Body HttpBody body);
+		String upload(@Content HttpBody body);
 	}
 
 	@Test void s01_body_annotated_httpbody() throws Exception {

@@ -22,17 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S1186" // Empty test method intentional for framework testing
 })
 class ResponseAnnotation_Test extends TestBase {
-
-	private static final String CNAME = ResponseAnnotation_Test.class.getName();
-
-	public static class X1 {}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -41,30 +36,22 @@ class ResponseAnnotation_Test extends TestBase {
 	Response a1 = ResponseAnnotation.create()
 		.description("a")
 		.examples("b")
-		.headers(HeaderAnnotation.DEFAULT)
-		.on("c")
-		.onClass(X1.class)
-		.parser(OpenApiParser.class)
+		.headers()
 		.schema(SchemaAnnotation.DEFAULT)
-		.serializer(OpenApiSerializer.class)
 		.build();
 
 	Response a2 = ResponseAnnotation.create()
 		.description("a")
 		.examples("b")
-		.headers(HeaderAnnotation.DEFAULT)
-		.on("c")
-		.onClass(X1.class)
-		.parser(OpenApiParser.class)
+		.headers()
 		.schema(SchemaAnnotation.DEFAULT)
-		.serializer(OpenApiSerializer.class)
 		.build();
 
 	@Test void a01_basic() {
 		assertBean(
 			a1,
-			"description,examples,on,onClass{#{simpleName}},parser{simpleName},serializer{simpleName}",
-			"[a],[b],[c],{[{X1}]},{OpenApiParser},{OpenApiSerializer}"
+			"description,examples",
+			"[a],[b]"
 		);
 	}
 
@@ -85,41 +72,13 @@ class ResponseAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c1 = ResponseAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = ResponseAnnotation.create("a").on("b").build();
-		var c4 = ResponseAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Response(
 		description={ "a" },
 		examples="b",
-		headers=@Header,
-		on="c",
-		onClass=X1.class,
-		parser=OpenApiParser.class,
-		schema=@Schema,
-		serializer=OpenApiSerializer.class
+		schema=@Schema
 	)
 	public static class D1 {}
 	Response d1 = D1.class.getAnnotationsByType(Response.class)[0];
@@ -127,12 +86,7 @@ class ResponseAnnotation_Test extends TestBase {
 	@Response(
 		description={ "a" },
 		examples="b",
-		headers=@Header,
-		on="c",
-		onClass=X1.class,
-		parser=OpenApiParser.class,
-		schema=@Schema,
-		serializer=OpenApiSerializer.class
+		schema=@Schema
 	)
 	public static class D2 {}
 	Response d2 = D2.class.getAnnotationsByType(Response.class)[0];

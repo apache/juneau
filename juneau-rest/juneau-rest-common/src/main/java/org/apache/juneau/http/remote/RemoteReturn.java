@@ -39,8 +39,10 @@ public enum RemoteReturn {
 	 * Full response object (caller must close when applicable).
 	 *
 	 * <p>
-	 * For {@link org.apache.juneau.rest.client.RestClient} proxies, the return type is typically {@link org.apache.juneau.rest.client.RestResponse}.
-	 * For {@link org.apache.juneau.ng.rest.client.NgRestClient} proxies, the return type is typically {@link org.apache.juneau.ng.rest.client.NgRestResponse}.
+	 * For <c>org.apache.juneau.rest.client.RestClient</c> proxies, the return type is typically
+	 * <c>org.apache.juneau.rest.client.RestResponse</c>.
+	 * For <c>org.apache.juneau.ng.rest.client.NgRestClient</c> proxies, the return type is typically
+	 * <c>org.apache.juneau.ng.rest.client.NgRestResponse</c>.
 	 * </p>
 	 */
 	RESPONSE,

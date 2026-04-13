@@ -20,18 +20,19 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.*;
 
 /**
- * Utility classes and methods for the {@link Contact @Contact} annotation.
+ * Utility classes and methods for the {@link Tag @XXX} annotation.
  *
  */
-public class ContactAnnotation {
+public class TagAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private ContactAnnotation() {}
+	private TagAnnotation() {}
 
 	/**
 	 * Builder class.
@@ -43,24 +44,23 @@ public class ContactAnnotation {
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
-		private String email = "";
+		private ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		private String name = "";
-		private String url = "";
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(Contact.class);
+			super(Tag.class);
 		}
 
 		/**
-		 * Instantiates a new {@link Contact @Contact} object initialized with this builder.
+		 * Instantiates a new {@link Tag @Tag} object initialized with this builder.
 		 *
-		 * @return A new {@link Contact @Contact} object.
+		 * @return A new {@link Tag @Tag} object.
 		 */
-		public Contact build() {
-			return new Object(this);
+		public Tag build() {
+			return new Instance(this);
 		}
 
 		/**
@@ -75,18 +75,18 @@ public class ContactAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Contact#email} property on this annotation.
+		 * Sets the {@link Tag#externalDocs} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder email(String value) {
-			email = value;
+		public Builder externalDocs(ExternalDocs value) {
+			externalDocs = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link Contact#name} property on this annotation.
+		 * Sets the {@link Tag#name} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -96,49 +96,34 @@ public class ContactAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the {@link Contact#url} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder url(String value) {
-			url = value;
-			return this;
-		}
 	}
 
 	@SuppressWarnings({
-		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"ClassExplicitlyAnnotation", // IntelliJ / SonarLint: Instance implements @Tag (AnnotationObject runtime proxy pattern)
+		"all" // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)
 	})
-	private static class Object extends AnnotationObject implements Contact {
+	private static class Instance extends AnnotationObject implements Tag {
 
 		private final String[] description;
-		private final String email;
+		private final ExternalDocs externalDocs;
 		private final String name;
-		private final String url;
 
-		Object(ContactAnnotation.Builder b) {
+		Instance(TagAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
-			email = b.email;
+			externalDocs = b.externalDocs;
 			name = b.name;
-			url = b.url;
 		}
 
-		@Override /* Overridden from Contact */
-		public String email() {
-			return email;
+		@Override /* Overridden from Tag */
+		public ExternalDocs externalDocs() {
+			return externalDocs;
 		}
 
-		@Override /* Overridden from Contact */
+		@Override /* Overridden from Tag */
 		public String name() {
 			return name;
-		}
-
-		@Override /* Overridden from Contact */
-		public String url() {
-			return url;
 		}
 
 		@Override /* Overridden from annotation */
@@ -148,7 +133,7 @@ public class ContactAnnotation {
 	}
 
 	/** Default value */
-	public static final Contact DEFAULT = create().build();
+	public static final Tag DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -157,15 +142,5 @@ public class ContactAnnotation {
 	 */
 	public static Builder create() {
 		return new Builder();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(Contact a) {
-		return a == null || DEFAULT.equals(a);
 	}
 }

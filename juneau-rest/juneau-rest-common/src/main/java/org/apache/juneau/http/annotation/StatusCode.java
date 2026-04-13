@@ -21,7 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.lang.*;
 
 /**
@@ -104,8 +103,6 @@ import org.apache.juneau.commons.lang.*;
 @Target({ PARAMETER, METHOD, TYPE })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(StatusCodeAnnotation.Array.class)
-@ContextApply(StatusCodeAnnotation.Applier.class)
 public @interface StatusCode {
 
 	/**
@@ -115,31 +112,6 @@ public @interface StatusCode {
 	 * @since 9.2.0
 	 */
 	String[] description() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <p>
-	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
 
 	/**
 	 * The HTTP response codes.

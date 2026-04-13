@@ -25,8 +25,6 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -49,26 +47,15 @@ class AnnotationUtils_Test extends TestBase {
 		Items items() default @Items;
 	}
 
-	@Content
 	@Response
-	@Header
 	@X1
 	public static class A1 {
-		@Query @Header @FormData @Path @Schema
+		@Schema
 		public int f1;
 	}
 
 	public static class A2 {
 		public int f1;
-	}
-
-	@Test void a01_Body() {
-		assertBean(body().build().annotationType(), "simpleName", "Content");
-
-		assertTrue(ContentAnnotation.empty(A1.class.getAnnotation(Content.class)));
-		assertTrue(ContentAnnotation.empty(A2.class.getAnnotation(Content.class)));
-		assertTrue(ContentAnnotation.empty(body().build()));
-		assertTrue(ContentAnnotation.empty((Content)null));
 	}
 
 	@Test void a02_Contact() {
@@ -85,71 +72,6 @@ class AnnotationUtils_Test extends TestBase {
 		assertFalse(ContactAnnotation.empty(contact().url("foo").build()));
 	}
 
-	@Test void a03_FormData() throws Exception {
-		var f1 = A1.class.getField("f1");
-		var f2 = A2.class.getField("f1");
-
-		assertBean(formData().build().annotationType(), "simpleName", "FormData");
-
-		assertTrue(FormDataAnnotation.empty(f1.getAnnotation(FormData.class)));
-		assertTrue(FormDataAnnotation.empty(f2.getAnnotation(FormData.class)));
-		assertTrue(FormDataAnnotation.empty((FormData)null));
-		assertTrue(FormDataAnnotation.empty(formData().build()));
-
-		assertFalse(FormDataAnnotation.empty(formData().name("foo").build()));
-		assertFalse(FormDataAnnotation.empty(formData().parser(OpenApiParser.class).build()));
-		assertFalse(FormDataAnnotation.empty(formData().serializer(OpenApiSerializer.class).build()));
-		assertFalse(FormDataAnnotation.empty(formData().value("foo").build()));
-	}
-
-	@Test void a04_HasFormData() {
-		assertBean(hasFormData().build().annotationType(), "simpleName", "HasFormData");
-
-		assertEquals("foo", hasFormData().name("foo").build().name());
-		assertEquals("foo", hasFormData().value("foo").build().value());
-	}
-
-	@Test void a05_Query() throws Exception {
-		var f1 = A1.class.getField("f1");
-		var f2 = A2.class.getField("f1");
-
-		assertBean(query().build().annotationType(), "simpleName", "Query");
-
-		assertTrue(QueryAnnotation.empty(f1.getAnnotation(Query.class)));
-		assertTrue(QueryAnnotation.empty(f2.getAnnotation(Query.class)));
-		assertTrue(QueryAnnotation.empty((Query)null));
-		assertTrue(QueryAnnotation.empty(query().build()));
-
-		assertFalse(QueryAnnotation.empty(query().name("foo").build()));
-		assertFalse(QueryAnnotation.empty(query().parser(OpenApiParser.class).build()));
-		assertFalse(QueryAnnotation.empty(query().serializer(OpenApiSerializer.class).build()));
-		assertFalse(QueryAnnotation.empty(query().value("foo").build()));
-	}
-
-	@Test void a06_HasQuery() {
-		assertBean(hasQuery().build().annotationType(), "simpleName", "HasQuery");
-
-		assertEquals("foo", hasQuery().name("foo").build().name());
-		assertEquals("foo", hasQuery().value("foo").build().value());
-	}
-
-	@Test void a07_Header() throws Exception {
-		var f1 = A1.class.getField("f1");
-		var f2 = A2.class.getField("f1");
-
-		assertBean(header().build().annotationType(), "simpleName", "Header");
-
-		assertTrue(HeaderAnnotation.empty(f1.getAnnotation(Header.class)));
-		assertTrue(HeaderAnnotation.empty(f2.getAnnotation(Header.class)));
-		assertTrue(HeaderAnnotation.empty((Header)null));
-		assertTrue(HeaderAnnotation.empty(header().build()));
-
-		assertFalse(HeaderAnnotation.empty(header().name("foo").build()));
-		assertFalse(HeaderAnnotation.empty(header().parser(OpenApiParser.class).build()));
-		assertFalse(HeaderAnnotation.empty(header().serializer(OpenApiSerializer.class).build()));
-		assertFalse(HeaderAnnotation.empty(header().value("foo").build()));
-	}
-
 	@Test void a08_License() {
 		var x = A1.class.getAnnotation(X1.class);
 
@@ -163,30 +85,6 @@ class AnnotationUtils_Test extends TestBase {
 		assertFalse(LicenseAnnotation.empty(license().url("foo").build()));
 	}
 
-	@Test void a09_Path() throws Exception {
-		var f1 = A1.class.getField("f1");
-		var f2 = A2.class.getField("f1");
-
-		assertBean(path().build().annotationType(), "simpleName", "Path");
-
-		assertTrue(PathAnnotation.empty(f1.getAnnotation(Path.class)));
-		assertTrue(PathAnnotation.empty(f2.getAnnotation(Path.class)));
-		assertTrue(PathAnnotation.empty((Path)null));
-		assertTrue(PathAnnotation.empty(path().build()));
-
-		assertFalse(PathAnnotation.empty(path().name("foo").build()));
-		assertFalse(PathAnnotation.empty(path().parser(OpenApiParser.class).build()));
-		assertFalse(PathAnnotation.empty(path().serializer(OpenApiSerializer.class).build()));
-		assertFalse(PathAnnotation.empty(path().value("foo").build()));
-	}
-
-	@Test void a10_Request() {
-		assertBean(request().build().annotationType(), "simpleName", "Request");
-
-		assertString("org.apache.juneau.oapi.OpenApiParser", request().parser(OpenApiParser.class).build().parser().getName());
-		assertString("org.apache.juneau.oapi.OpenApiSerializer", request().serializer(OpenApiSerializer.class).build().serializer().getName());
-	}
-
 	@Test void a11_Response() {
 		assertBean(response().build().annotationType(), "simpleName", "Response");
 
@@ -196,14 +94,7 @@ class AnnotationUtils_Test extends TestBase {
 		assertTrue(ResponseAnnotation.empty((Response)null));
 
 		assertFalse(ResponseAnnotation.empty(response().examples(a("foo")).build()));
-		assertFalse(ResponseAnnotation.empty(response().headers(CollectionUtils.a(header().name("foo").build())).build()));
-		assertFalse(ResponseAnnotation.empty(response().parser(OpenApiParser.class).build()));
 		assertFalse(ResponseAnnotation.empty(response().schema(schema().$ref("foo").build()).build()));
-		assertFalse(ResponseAnnotation.empty(response().serializer(OpenApiSerializer.class).build()));
-	}
-
-	@Test void a14_ResponseStatus() {
-		assertBean(responseCode().build().annotationType(), "simpleName", "StatusCode");
 	}
 
 	@Test void a15_Tag() {
@@ -378,52 +269,16 @@ class AnnotationUtils_Test extends TestBase {
 	// Helper methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static ContentAnnotation.Builder body() {
-		return ContentAnnotation.create();
-	}
-
 	private static ContactAnnotation.Builder contact() {
 		return ContactAnnotation.create();
-	}
-
-	private static FormDataAnnotation.Builder formData() {
-		return FormDataAnnotation.create();
-	}
-
-	private static HasFormDataAnnotation.Builder hasFormData() {
-		return HasFormDataAnnotation.create();
-	}
-
-	private static QueryAnnotation.Builder query() {
-		return QueryAnnotation.create();
-	}
-
-	private static HasQueryAnnotation.Builder hasQuery() {
-		return HasQueryAnnotation.create();
-	}
-
-	private static HeaderAnnotation.Builder header() {
-		return HeaderAnnotation.create();
 	}
 
 	private static LicenseAnnotation.Builder license() {
 		return LicenseAnnotation.create();
 	}
 
-	private static PathAnnotation.Builder path() {
-		return PathAnnotation.create();
-	}
-
-	private static RequestAnnotation.Builder request() {
-		return RequestAnnotation.create();
-	}
-
 	private static ResponseAnnotation.Builder response() {
 		return ResponseAnnotation.create();
-	}
-
-	private static StatusCodeAnnotation.Builder responseCode() {
-		return StatusCodeAnnotation.create();
 	}
 
 	private static TagAnnotation.Builder tag() {

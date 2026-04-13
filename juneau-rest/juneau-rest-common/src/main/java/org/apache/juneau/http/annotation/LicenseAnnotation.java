@@ -23,15 +23,15 @@ import java.lang.annotation.*;
 import org.apache.juneau.commons.annotation.*;
 
 /**
- * Utility classes and methods for the {@link HasQuery @HasQuery} annotation.
+ * Utility classes and methods for the {@link License @License} annotation.
  *
  */
-public class HasQueryAnnotation {
+public class LicenseAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private HasQueryAnnotation() {}
+	private LicenseAnnotation() {}
 
 	/**
 	 * Builder class.
@@ -44,22 +44,22 @@ public class HasQueryAnnotation {
 
 		private String[] description = {};
 		private String name = "";
-		private String value = "";
+		private String url = "";
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(HasQuery.class);
+			super(License.class);
 		}
 
 		/**
-		 * Instantiates a new {@link HasQuery @HasQuery} object initialized with this builder.
+		 * Instantiates a new {@link License @License} object initialized with this builder.
 		 *
-		 * @return A new {@link HasQuery @HasQuery} object.
+		 * @return A new {@link License @License} object.
 		 */
-		public HasQuery build() {
-			return new Object(this);
+		public License build() {
+			return new Instance(this);
 		}
 
 		/**
@@ -74,7 +74,7 @@ public class HasQueryAnnotation {
 		}
 
 		/**
-		 * Sets the {@link HasQuery#name} property on this annotation.
+		 * Sets the {@link License#name} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -85,42 +85,44 @@ public class HasQueryAnnotation {
 		}
 
 		/**
-		 * Sets the {@link HasQuery#value} property on this annotation.
+		 * Sets the {@link License#url} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder value(String value) {
-			this.value = value;
+		public Builder url(String value) {
+			url = value;
 			return this;
 		}
 
 	}
 
 	@SuppressWarnings({
-		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"ClassExplicitlyAnnotation", // IntelliJ / SonarLint: Instance implements @License (AnnotationObject runtime proxy pattern)
+		"all" // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)
 	})
-	private static class Object extends AnnotationObject implements HasQuery {
+	private static class Instance extends AnnotationObject implements License {
 
 		private final String[] description;
 		private final String name;
-		private final String value;
+		private final String url;
 
-		Object(HasQueryAnnotation.Builder b) {
+		Instance(LicenseAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
 			name = b.name;
-			value = b.value;
+			url = b.url;
 		}
 
-		@Override
+		@Override /* Overridden from License */
 		public String name() {
 			return name;
 		}
 
-		@Override
-		public String value() {
-			return value;
+		@Override /* Overridden from License */
+		public String url() {
+			return url;
 		}
 
 		@Override /* Overridden from annotation */
@@ -130,7 +132,7 @@ public class HasQueryAnnotation {
 	}
 
 	/** Default value */
-	public static final HasQuery DEFAULT = create().build();
+	public static final License DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -139,5 +141,15 @@ public class HasQueryAnnotation {
 	 */
 	public static Builder create() {
 		return new Builder();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(License a) {
+		return a == null || DEFAULT.equals(a);
 	}
 }

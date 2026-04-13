@@ -23,15 +23,15 @@ import java.lang.annotation.*;
 import org.apache.juneau.commons.annotation.*;
 
 /**
- * Utility classes and methods for the {@link HasFormData @HasFormData} annotation.
+ * Utility classes and methods for the {@link Contact @Contact} annotation.
  *
  */
-public class HasFormDataAnnotation {
+public class ContactAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private HasFormDataAnnotation() {}
+	private ContactAnnotation() {}
 
 	/**
 	 * Builder class.
@@ -43,23 +43,24 @@ public class HasFormDataAnnotation {
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
+		private String email = "";
 		private String name = "";
-		private String value = "";
+		private String url = "";
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(HasFormData.class);
+			super(Contact.class);
 		}
 
 		/**
-		 * Instantiates a new {@link HasFormData @HasFormData} object initialized with this builder.
+		 * Instantiates a new {@link Contact @Contact} object initialized with this builder.
 		 *
-		 * @return A new {@link HasFormData @HasFormData} object.
+		 * @return A new {@link Contact @Contact} object.
 		 */
-		public HasFormData build() {
-			return new Object(this);
+		public Contact build() {
+			return new Instance(this);
 		}
 
 		/**
@@ -74,7 +75,18 @@ public class HasFormDataAnnotation {
 		}
 
 		/**
-		 * Sets the {@link HasFormData#name} property on this annotation.
+		 * Sets the {@link Contact#email} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder email(String value) {
+			email = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Contact#name} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -85,42 +97,50 @@ public class HasFormDataAnnotation {
 		}
 
 		/**
-		 * Sets the {@link HasFormData#value} property on this annotation.
+		 * Sets the {@link Contact#url} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder value(String value) {
-			this.value = value;
+		public Builder url(String value) {
+			url = value;
 			return this;
 		}
-
 	}
 
 	@SuppressWarnings({
-		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"ClassExplicitlyAnnotation", // IntelliJ / SonarLint: Instance implements @Contact (AnnotationObject runtime proxy pattern)
+		"all" // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)
 	})
-	private static class Object extends AnnotationObject implements HasFormData {
+	private static class Instance extends AnnotationObject implements Contact {
 
 		private final String[] description;
+		private final String email;
 		private final String name;
-		private final String value;
+		private final String url;
 
-		Object(HasFormDataAnnotation.Builder b) {
+		Instance(ContactAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
+			email = b.email;
 			name = b.name;
-			value = b.value;
+			url = b.url;
 		}
 
-		@Override
+		@Override /* Overridden from Contact */
+		public String email() {
+			return email;
+		}
+
+		@Override /* Overridden from Contact */
 		public String name() {
 			return name;
 		}
 
-		@Override
-		public String value() {
-			return value;
+		@Override /* Overridden from Contact */
+		public String url() {
+			return url;
 		}
 
 		@Override /* Overridden from annotation */
@@ -130,7 +150,7 @@ public class HasFormDataAnnotation {
 	}
 
 	/** Default value */
-	public static final HasFormData DEFAULT = create().build();
+	public static final Contact DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -139,5 +159,15 @@ public class HasFormDataAnnotation {
 	 */
 	public static Builder create() {
 		return new Builder();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(Contact a) {
+		return a == null || DEFAULT.equals(a);
 	}
 }

@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.http.annotation.HeaderAnnotation.*;
 
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
@@ -62,6 +63,17 @@ public class ResponseHeaderArg implements RestOpArg {
 		if (paramInfo.getParameterType().is(Value.class) && AP.has(Header.class, paramInfo))
 			return new ResponseHeaderArg(paramInfo, annotations);
 		return null;
+	}
+
+	private static Optional<String> findName(ParameterInfo pi) {
+		// @formatter:off
+		return AP.find(Header.class, pi)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> isAnyNotBlank(x.value(), x.name()))
+			.findFirst()
+			.map(x -> firstNonBlank(x.name(), x.value()));
+		// @formatter:on
 	}
 
 	final ResponsePartMeta meta;

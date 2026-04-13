@@ -42,7 +42,6 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -449,33 +448,19 @@ public class HttpPartSchema {
 		 * @return This object.
 		*/
 		public Builder apply(Annotation a) {
-			if (a instanceof Content a2)
-				apply(a2);
-			else if (a instanceof Header a2)
-				apply(a2);
-			else if (a instanceof FormData a2)
-				apply(a2);
-			else if (a instanceof Query a2)
-				apply(a2);
-			else if (a instanceof Path a2)
-				apply(a2);
-			else if (a instanceof PathRemainder a2)
-				apply(a2);
-			else if (a instanceof Response a2)
-				apply(a2);
-			else if (a instanceof StatusCode a2)
-				apply(a2);
-			else if (a instanceof HasQuery a2)
-				apply(a2);
-			else if (a instanceof HasFormData a2)
-				apply(a2);
-			else if (a instanceof Schema a2)
-				apply(a2);
-			else if (cn(a.annotationType()).startsWith("jakarta.validation.constraints."))
+			if (a instanceof Schema a2)
+				return apply(a2);
+			if (a instanceof Items a2)
+				return apply(a2);
+			if (a instanceof SubItems a2)
+				return apply(a2);
+			if (a instanceof HttpPartMarshalling a2)
+				return apply(a2);
+			if (cn(a.annotationType()).startsWith("jakarta.validation.constraints.")) {
 				applyJakartaValidation(a);
-			else
-				throw rex("Builder.apply(@{0}) not defined", cn(a));
-			return this;
+				return this;
+			}
+			return applyHttpAnnotation(a);
 		}
 
 		/**
@@ -2659,41 +2644,80 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		Builder apply(Content a) {
-			if (! SchemaAnnotation.empty(a.schema()))
-				apply(a.schema());
-			default_(a.def());
-			return this;
-		}
-
-		Builder apply(FormData a) {
-			if (! SchemaAnnotation.empty(a.schema()))
-				apply(a.schema());
-			name(firstNonEmpty(a.name(), a.value()));
-			default_(a.def());
+		Builder apply(HttpPartMarshalling a) {
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
 		}
 
-		Builder apply(HasFormData a) {
-			name(firstNonEmpty(a.name(), a.value()));
+		private Builder applyHttpAnnotation(Annotation a) {
+			var annotationName = a.annotationType().getSimpleName();
+
+			var schema = getAnnotationValue(a, "schema", Schema.class);
+			if (schema != null && ("Response".equals(annotationName) || !SchemaAnnotation.empty(schema)))
+				apply(schema);
+
+			var aName = getAnnotationString(a, "name");
+			var aValue = getAnnotationString(a, ANN_value);
+
+			switch (annotationName) {
+				case "PathRemainder" -> {
+					name("/*");
+					default_(getAnnotationString(a, "def"));
+					allowEmptyValue();
+					required(false);
+				}
+				case "Path" -> {
+					name(firstNonEmpty(aName, aValue));
+					var def = getAnnotationString(a, "def");
+					if (def != null && neq(NONE, def))
+						default_ = def;
+					if (startsWith(name, '/')) {
+						allowEmptyValue();
+						required(false);
+					} else if (required == null) {
+						required(def == null || eq(NONE, def));
+					}
+				}
+				case "Response" -> {
+					allowEmptyValue(true);
+					required(false);
+				}
+				case "StatusCode" -> codes(getAnnotationIntArray(a, ANN_value));
+				default -> {
+					name(firstNonEmpty(aName, aValue));
+					default_(getAnnotationString(a, "def"));
+				}
+			}
 			return this;
 		}
 
-		Builder apply(HasQuery a) {
-			name(firstNonEmpty(a.name(), a.value()));
-			return this;
+		private static String getAnnotationString(Annotation a, String methodName) {
+			try {
+				var m = a.annotationType().getMethod(methodName);
+				if (m.getReturnType() == String.class)
+					return (String) m.invoke(a);
+			} catch (@SuppressWarnings("unused") NoSuchMethodException e) {
+				// Attribute doesn't exist on this annotation -- ignore
+			} catch (Exception e) {
+				throw rex(e);
+			}
+			return null;
 		}
 
-		Builder apply(Header a) {
-			if (! SchemaAnnotation.empty(a.schema()))
-				apply(a.schema());
-			name(firstNonEmpty(a.name(), a.value()));
-			default_(a.def());
-			parser(a.parser());
-			serializer(a.serializer());
-			return this;
+		private static int[] getAnnotationIntArray(Annotation a, String methodName) {
+			try {
+				var m = a.annotationType().getMethod(methodName);
+				if (m.getReturnType() == int[].class) {
+					var arr = (int[]) m.invoke(a);
+					return arr == null ? new int[0] : arr;
+				}
+			} catch (@SuppressWarnings("unused") NoSuchMethodException e) {
+				// Attribute doesn't exist on this annotation -- ignore
+			} catch (Exception e) {
+				throw rex(e);
+			}
+			return new int[0];
 		}
 
 		Builder apply(Items a) {
@@ -2753,63 +2777,6 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		Builder apply(Path a) {
-			if (! SchemaAnnotation.empty(a.schema()))
-				apply(a.schema());
-			name(firstNonEmpty(a.name(), a.value()));
-			String def = a.def();
-			if (neq(NONE, def))
-				default_ = def;  // Set directly to allow empty strings as valid defaults
-			parser(a.parser());
-			serializer(a.serializer());
-
-			// Path remainder always allows empty value.
-			if (startsWith(name, '/')) {
-				allowEmptyValue();
-				required(false);
-			} else if (required == null) {
-				// Path parameters with default values are not required
-				required(eq(NONE, def));
-			}
-
-			return this;
-		}
-
-		Builder apply(PathRemainder a) {
-			if (! SchemaAnnotation.empty(a.schema()))
-				apply(a.schema());
-			// PathRemainder is always "/*"
-			name("/*");
-			default_(a.def());
-			parser(a.parser());
-			serializer(a.serializer());
-
-			// Path remainder always allows empty value.
-			allowEmptyValue();
-			required(false);
-
-			return this;
-		}
-
-		Builder apply(Query a) {
-			if (! SchemaAnnotation.empty(a.schema()))
-				apply(a.schema());
-			name(firstNonEmpty(a.name(), a.value()));
-			default_(a.def());
-			parser(a.parser());
-			serializer(a.serializer());
-			return this;
-		}
-
-		Builder apply(Response a) {
-			allowEmptyValue(true);
-			apply(a.schema());
-			parser(a.parser());
-			required(false);
-			serializer(a.serializer());
-			return this;
-		}
-
 		// -----------------------------------------------------------------------------------------------------------------
 		// Other
 		// -----------------------------------------------------------------------------------------------------------------
@@ -2866,11 +2833,6 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		Builder apply(StatusCode a) {
-			codes(a.value());
-			return this;
-		}
-
 		Builder apply(SubItems a) {
 			default_(joinnlOrNull(a.default_(), a.df()));
 			enum_(toSet(a.enum_(), a.e()));
@@ -2892,15 +2854,15 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		Builder applyAll(Class<? extends Annotation> c, java.lang.reflect.Type t) {
+		public Builder applyAll(Class<? extends Annotation> c, java.lang.reflect.Type t) {
 			return apply(Schema.class, t).apply(c, t);
 		}
 
-		Builder applyAll(Class<? extends Annotation> c, Method m) {
+		public Builder applyAll(Class<? extends Annotation> c, Method m) {
 			return apply(Schema.class, m).apply(c, m);
 		}
 
-		Builder applyAll(Class<? extends Annotation> c, ParameterInfo mpi) {
+		public Builder applyAll(Class<? extends Annotation> c, ParameterInfo mpi) {
 			return apply(Schema.class, mpi).apply(c, mpi);
 		}
 
@@ -2935,7 +2897,8 @@ public class HttpPartSchema {
 		 * @since 9.2.0
 		 */
 		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for Jakarta validation application
+			"java:S3776", // Cognitive complexity acceptable for Jakarta validation application
+			"java:S6541" // Brain method: consolidated Jakarta validation constraint dispatch
 		})
 		Builder applyJakartaValidation(Annotation a) {
 			String simpleName = cns(a.annotationType());
@@ -3177,14 +3140,14 @@ public class HttpPartSchema {
 	 * 	The annotation to look for.
 	 * 	<br>Valid values:
 	 * 	<ul>
-	 * 		<li>{@link Content}
-	 * 		<li>{@link Header}
-	 * 		<li>{@link Query}
-	 * 		<li>{@link FormData}
-	 * 		<li>{@link Path}
-	 * 		<li>{@link Response}
-	 * 		<li>{@link HasQuery}
-	 * 		<li>{@link HasFormData}
+	 * 		<li><ja>@Content</ja>
+	 * 		<li><ja>@Header</ja>
+	 * 		<li><ja>@Query</ja>
+	 * 		<li><ja>@FormData</ja>
+	 * 		<li><ja>@Path</ja>
+	 * 		<li><ja>@Response</ja>
+	 * 		<li><ja>@HasQuery</ja>
+	 * 		<li><ja>@HasFormData</ja>
 	 * 	</ul>
 	 * @param t
 	 * 	The class containing the parameter.
@@ -3209,14 +3172,14 @@ public class HttpPartSchema {
 	 * 	The annotation to look for.
 	 * 	<br>Valid values:
 	 * 	<ul>
-	 * 		<li>{@link Content}
-	 * 		<li>{@link Header}
-	 * 		<li>{@link Query}
-	 * 		<li>{@link FormData}
-	 * 		<li>{@link Path}
-	 * 		<li>{@link Response}
-	 * 		<li>{@link HasQuery}
-	 * 		<li>{@link HasFormData}
+	 * 		<li><ja>@Content</ja>
+	 * 		<li><ja>@Header</ja>
+	 * 		<li><ja>@Query</ja>
+	 * 		<li><ja>@FormData</ja>
+	 * 		<li><ja>@Path</ja>
+	 * 		<li><ja>@Response</ja>
+	 * 		<li><ja>@HasQuery</ja>
+	 * 		<li><ja>@HasFormData</ja>
 	 * 	</ul>
 	 * @param m
 	 * 	The Java method with the return type being checked.
@@ -3241,14 +3204,14 @@ public class HttpPartSchema {
 	 * 	The annotation to look for.
 	 * 	<br>Valid values:
 	 * 	<ul>
-	 * 		<li>{@link Content}
-	 * 		<li>{@link Header}
-	 * 		<li>{@link Query}
-	 * 		<li>{@link FormData}
-	 * 		<li>{@link Path}
-	 * 		<li>{@link Response}
-	 * 		<li>{@link HasQuery}
-	 * 		<li>{@link HasFormData}
+	 * 		<li><ja>@Content</ja>
+	 * 		<li><ja>@Header</ja>
+	 * 		<li><ja>@Query</ja>
+	 * 		<li><ja>@FormData</ja>
+	 * 		<li><ja>@Path</ja>
+	 * 		<li><ja>@Response</ja>
+	 * 		<li><ja>@HasQuery</ja>
+	 * 		<li><ja>@HasFormData</ja>
 	 * 	</ul>
 	 * @param mpi The Java method parameter.
 	 * @return The schema information about the parameter.
@@ -4328,7 +4291,8 @@ public class HttpPartSchema {
 	 * @throws SchemaValidationException if the specified parsed output does not validate against this schema.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for output validation
+		"java:S3776", // Cognitive complexity acceptable for output validation
+		"java:S6541" // Brain method: schema output validation branches by OpenAPI part type
 	})
 	public <T> T validateOutput(T o, BeanContext bc) throws SchemaValidationException {
 		if (o == null) {

@@ -19,7 +19,6 @@ package org.apache.juneau.rest.arg;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.http.annotation.HeaderAnnotation.*;
 
 import java.util.*;
 
@@ -114,93 +113,48 @@ public class HeaderArg implements RestOpArg {
 		return null;
 	}
 
-	/**
-	 * Gets the merged @Header annotation combining class-level and parameter-level values.
-	 *
-	 * @param pi The parameter info.
-	 * @param paramName The header name.
-	 * @return Merged annotation, or null if no class-level defaults exist.
-	 */
-	private static Header getMergedHeader(ParameterInfo pi, String paramName) {
-		// Get the declaring class
-		var declaringClass = pi.getMethod().getDeclaringClass();
-		if (declaringClass == null)
-			return null;
-
-		// Find @Rest annotation on the class
-		var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
-		if (restAnnotation == null)
-			return null;
-
-		// Find matching @Header from class-level headerParams array
-		Header classLevelHeader = null;
-		for (var h : restAnnotation.headerParams()) {
-			var hName = firstNonEmpty(h.name(), h.value());
-			if (paramName.equals(hName)) {
-				classLevelHeader = h;
-				break;
-			}
-		}
-
-		if (classLevelHeader == null)
-			return null;
-
-		// Get parameter-level @Header
-		var paramHeader = AP.find(Header.class, pi).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
-
-		if (paramHeader == null) {
-			// No parameter-level @Header, use class-level as-is
-			return classLevelHeader;
-		}
-
-		// Merge the two annotations: parameter-level takes precedence
-		return mergeAnnotations(classLevelHeader, paramHeader);
-	}
-
-	/**
-	 * Merges two @Header annotations, with param-level taking precedence over class-level.
-	 *
-	 * @param classLevel The class-level default.
-	 * @param paramLevel The parameter-level override.
-	 * @return Merged annotation.
-	 */
-	private static Header mergeAnnotations(Header classLevel, Header paramLevel) {
+	private static Optional<String> findName(ParameterInfo pi) {
 		// @formatter:off
-		return HeaderAnnotation.create()
-			.name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
-			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name()))
-			.def(firstNonEmpty(paramLevel.def(), classLevel.def()))
-			.description(paramLevel.description().length > 0 ? paramLevel.description() : classLevel.description())
-			.parser(paramLevel.parser() != HttpPartParser.Void.class ? paramLevel.parser() : classLevel.parser())
-			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer())
-			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
-			.build();
+		return AP.find(Header.class, pi)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> isAnyNotBlank(x.value(), x.name()))
+			.findFirst()
+			.map(x -> firstNonBlank(x.name(), x.value()));
 		// @formatter:on
 	}
 
-	/**
-	 * Merges two @Schema annotations, with param-level taking precedence.
-	 *
-	 * @param classLevel The class-level default.
-	 * @param paramLevel The parameter-level override.
-	 * @return Merged annotation.
-	 */
-	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
-		// If parameter has a non-default schema, use it; otherwise use class-level
-		if (! SchemaAnnotation.empty(paramLevel))
-			return paramLevel;
-		return classLevel;
+	private static Optional<String> findDef(ParameterInfo pi) {
+		// @formatter:off
+		return AP.find(Header.class, pi)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> ne(x.def()))
+			.findFirst()
+			.map(Header::def);
+		// @formatter:on
+	}
+
+	private static Header getClassLevelHeader(ParameterInfo pi, String paramName) {
+		var declaringClass = pi.getMethod().getDeclaringClass();
+		if (declaringClass == null)
+			return null;
+		var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		if (restAnnotation == null)
+			return null;
+		for (var h : restAnnotation.headerParams()) {
+			var hName = firstNonEmpty(h.name(), h.value());
+			if (paramName.equals(hName))
+				return h;
+		}
+		return null;
 	}
 
 	private final HttpPartParser partParser;
-
 	private final HttpPartSchema schema;
-
 	private final boolean multi;
-
 	private final String name;
 	private final String def;
-
 	private final ClassInfo type;
 
 	/**
@@ -210,16 +164,18 @@ public class HeaderArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected HeaderArg(ParameterInfo pi, AnnotationWorkList annotations) {
-		// Get the header name from the parameter
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
 
-		// Check for class-level defaults and merge if found
-		var mergedHeader = getMergedHeader(pi, name);
+		var classLevelHeader = getClassLevelHeader(pi, name);
 
-		// Use merged header annotation for all lookups
-		this.def = nn(mergedHeader) && ! mergedHeader.def().isEmpty() ? mergedHeader.def() : findDef(pi).orElse(null);
+		var schemaBuilder = HttpPartSchema.create();
+		if (classLevelHeader != null)
+			schemaBuilder.apply(classLevelHeader);
+		schemaBuilder.applyAll(Header.class, pi);
+		this.schema = schemaBuilder.build();
+
+		this.def = findDef(pi).or(() -> Optional.ofNullable(classLevelHeader).filter(h -> ne(h.def())).map(Header::def)).orElse(null);
 		this.type = pi.getParameterType();
-		this.schema = nn(mergedHeader) ? HttpPartSchema.create(mergedHeader) : HttpPartSchema.create(Header.class, pi);
 		var pp = schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;

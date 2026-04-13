@@ -19,7 +19,6 @@ package org.apache.juneau.rest.arg;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.http.annotation.QueryAnnotation.*;
 
 import java.util.*;
 
@@ -73,82 +72,41 @@ public class QueryArg implements RestOpArg {
 		return null;
 	}
 
-	/**
-	 * Gets the merged @Query annotation combining class-level and parameter-level values.
-	 *
-	 * @param pi The parameter info.
-	 * @param paramName The query parameter name.
-	 * @return Merged annotation, or null if no class-level defaults exist.
-	 */
-	private static Query getMergedQuery(ParameterInfo pi, String paramName) {
-		// Get the declaring class
-		var declaringClass = pi.getMethod().getDeclaringClass();
-		if (declaringClass == null)
-			return null;
-
-		// Find @Rest annotation on the class
-		var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
-		if (restAnnotation == null)
-			return null;
-
-		// Find matching @Query from class-level queryParams array
-		Query classLevelQuery = null;
-		for (var q : restAnnotation.queryParams()) {
-			var qName = firstNonEmpty(q.name(), q.value());
-			if (paramName.equals(qName)) {
-				classLevelQuery = q;
-				break;
-			}
-		}
-
-		if (classLevelQuery == null)
-			return null;
-
-		// Get parameter-level @Query
-		var paramQuery = AP.find(Query.class, pi).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
-
-		if (paramQuery == null) {
-			// No parameter-level @Query, use class-level as-is
-			return classLevelQuery;
-		}
-
-		// Merge the two annotations: parameter-level takes precedence
-		return mergeAnnotations(classLevelQuery, paramQuery);
-	}
-
-	/**
-	 * Merges two @Query annotations, with param-level taking precedence over class-level.
-	 *
-	 * @param classLevel The class-level default.
-	 * @param paramLevel The parameter-level override.
-	 * @return Merged annotation.
-	 */
-	private static Query mergeAnnotations(Query classLevel, Query paramLevel) {
+	private static Optional<String> findName(ParameterInfo pi) {
 		// @formatter:off
-		return QueryAnnotation.create()
-			.name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
-			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name()))
-			.def(firstNonEmpty(paramLevel.def(), classLevel.def()))
-			.description(paramLevel.description().length > 0 ? paramLevel.description() : classLevel.description())
-			.parser(paramLevel.parser() != HttpPartParser.Void.class ? paramLevel.parser() : classLevel.parser())
-			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer())
-			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
-			.build();
+		return AP.find(Query.class, pi)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> isAnyNotBlank(x.value(), x.name()))
+			.findFirst()
+			.map(x -> firstNonBlank(x.name(), x.value()));
 		// @formatter:on
 	}
 
-	/**
-	 * Merges two @Schema annotations, with param-level taking precedence.
-	 *
-	 * @param classLevel The class-level default.
-	 * @param paramLevel The parameter-level override.
-	 * @return Merged annotation.
-	 */
-	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
-		// If parameter has a non-default schema, use it; otherwise use class-level
-		if (! SchemaAnnotation.empty(paramLevel))
-			return paramLevel;
-		return classLevel;
+	private static Optional<String> findDef(ParameterInfo pi) {
+		// @formatter:off
+		return AP.find(Query.class, pi)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> ne(x.def()))
+			.findFirst()
+			.map(Query::def);
+		// @formatter:on
+	}
+
+	private static Query getClassLevelQuery(ParameterInfo pi, String paramName) {
+		var declaringClass = pi.getMethod().getDeclaringClass();
+		if (declaringClass == null)
+			return null;
+		var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		if (restAnnotation == null)
+			return null;
+		for (var q : restAnnotation.queryParams()) {
+			var qName = firstNonEmpty(q.name(), q.value());
+			if (paramName.equals(qName))
+				return q;
+		}
+		return null;
 	}
 
 	private final boolean multi;
@@ -165,16 +123,18 @@ public class QueryArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected QueryArg(ParameterInfo pi, AnnotationWorkList annotations) {
-		// Get the query name from the parameter
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
 
-		// Check for class-level defaults and merge if found
-		var mergedQuery = getMergedQuery(pi, name);
+		var classLevelQuery = getClassLevelQuery(pi, name);
 
-		// Use merged query annotation for all lookups
-		this.def = nn(mergedQuery) && ! mergedQuery.def().isEmpty() ? mergedQuery.def() : findDef(pi).orElse(null);
+		var schemaBuilder = HttpPartSchema.create();
+		if (classLevelQuery != null)
+			schemaBuilder.apply(classLevelQuery);
+		schemaBuilder.applyAll(Query.class, pi);
+		this.schema = schemaBuilder.build();
+
+		this.def = findDef(pi).or(() -> Optional.ofNullable(classLevelQuery).filter(q -> ne(q.def())).map(Query::def)).orElse(null);
 		this.type = pi.getParameterType();
-		this.schema = nn(mergedQuery) ? HttpPartSchema.create(mergedQuery) : HttpPartSchema.create(Query.class, pi);
 		var pp = schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;

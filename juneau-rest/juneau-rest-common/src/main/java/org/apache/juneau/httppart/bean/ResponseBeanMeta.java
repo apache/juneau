@@ -63,10 +63,7 @@ public class ResponseBeanMeta {
 
 		Builder apply(Response a) {
 			if (nn(a)) {
-				if (isNotVoid(a.serializer()))
-					partSerializer = a.serializer();
-				if (isNotVoid(a.parser()))
-					partParser = a.parser();
+				// Serializer/parser now specified via @HttpPartMarshalling annotation instead of @Response attributes
 				schema.apply(a.schema());
 			}
 			return this;

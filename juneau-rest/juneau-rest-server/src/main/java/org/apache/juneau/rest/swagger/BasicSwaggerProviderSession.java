@@ -476,7 +476,7 @@ public class BasicSwaggerProviderSession {
 					addBodyExamples(sm, param, false, type, locale);
 
 				} else if (ap.has(Query.class, mpi)) {
-					var name = QueryAnnotation.findName(mpi).orElse(null);
+					var name = findAnnotationName(ap, Query.class, mpi).orElse(null);
 					var param = paramMap.getMap(QUERY + "." + name, true).append(SWAGGER_name, name).append(SWAGGER_in, QUERY);
 					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
 					rstream(ap.find(Query.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
@@ -484,7 +484,7 @@ public class BasicSwaggerProviderSession {
 					addParamExample(sm, param, QUERY, type);
 
 				} else if (ap.has(FormData.class, mpi)) {
-					var name = FormDataAnnotation.findName(mpi).orElse(null);
+					var name = findAnnotationName(ap, FormData.class, mpi).orElse(null);
 					var param = paramMap.getMap(FORM_DATA + "." + name, true).append(SWAGGER_name, name).append(SWAGGER_in, FORM_DATA);
 					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
 					rstream(ap.find(FormData.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
@@ -492,7 +492,7 @@ public class BasicSwaggerProviderSession {
 					addParamExample(sm, param, FORM_DATA, type);
 
 				} else if (ap.has(Header.class, mpi)) {
-					var name = HeaderAnnotation.findName(mpi).orElse(null);
+					var name = findAnnotationName(ap, Header.class, mpi).orElse(null);
 					var param = paramMap.getMap(HEADER + "." + name, true).append(SWAGGER_name, name).append(SWAGGER_in, HEADER);
 					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
 					rstream(ap.find(Header.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
@@ -500,7 +500,7 @@ public class BasicSwaggerProviderSession {
 					addParamExample(sm, param, HEADER, type);
 
 				} else if (ap.has(Path.class, mpi)) {
-					var name = PathAnnotation.findName(mpi).orElse(null);
+					var name = findAnnotationName(ap, Path.class, mpi).orElse(null);
 					var param = paramMap.getMap(PATH + "." + name, true).append(SWAGGER_name, name).append(SWAGGER_in, PATH);
 					rstream(ap.find(Schema.class, mpi)).forEach(x -> merge(param, x.inner()));
 					rstream(ap.find(Path.class, mpi)).forEach(x -> merge(param, x.inner().schema()));
@@ -602,7 +602,7 @@ public class BasicSwaggerProviderSession {
 					var la = rstream(ap.find(Header.class, mpi)).map(AnnotationInfo::inner).toList();
 					var la2 = rstream(ap.find(StatusCode.class, mpi)).map(AnnotationInfo::inner).toList();
 					var codes = getCodes(la2, 200);
-					var name = HeaderAnnotation.findName(mpi).orElse(null);
+					var name = findAnnotationName(ap, Header.class, mpi).orElse(null);
 					var type = Value.unwrap(mpi.getParameterType().innerType());
 					for (var a : la) {
 						if (! isMulti(a)) {
@@ -1256,6 +1256,31 @@ public class BasicSwaggerProviderSession {
 			.appendIf(nem, SWAGGER_externalDocs, merge(om.getMap(SWAGGER_externalDocs), toMap(a.externalDocs())));
 		// @formatter:on
 		return nullIfEmpty(om);
+	}
+
+	private static Optional<String> findAnnotationName(AnnotationProvider ap, Class<? extends java.lang.annotation.Annotation> type, ParameterInfo pi) {
+		// @formatter:off
+		return ap.find(type, pi)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> {
+				var nv = getNameValue(x);
+				return isAnyNotBlank(nv[0], nv[1]);
+			})
+			.findFirst()
+			.map(x -> {
+				var nv = getNameValue(x);
+				return firstNonBlank(nv[0], nv[1]);
+			});
+		// @formatter:on
+	}
+
+	private static String[] getNameValue(java.lang.annotation.Annotation a) {
+		if (a instanceof Query a2) return new String[]{a2.name(), a2.value()};
+		if (a instanceof Header a2) return new String[]{a2.name(), a2.value()};
+		if (a instanceof FormData a2) return new String[]{a2.name(), a2.value()};
+		if (a instanceof Path a2) return new String[]{a2.name(), a2.value()};
+		return new String[]{"", ""};
 	}
 
 	private static Set<String> toSet(String[] ss) {

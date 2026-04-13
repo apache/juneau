@@ -68,23 +68,6 @@ class Remote_MethodDefaultsAnnotation_Test {
 		assertEquals("Foo=defaultFoo,Bar=null", x.x1(null, null));
 	}
 
-	@Remote
-	public interface A2 {
-		@RemoteGet("/x1")
-		@Header(name="Foo", def="defaultFoo")
-		@Header(name="Bar", def="defaultBar")
-		String x1(@Header("Foo") String foo, @Header("Bar") String bar);
-	}
-
-	@Test
-	void a04_headerDefaults_multipleDefaults() {
-		var x = MockRestClient.buildJson5(A.class).getRemote(A2.class);
-		assertEquals("Foo=defaultFoo,Bar=defaultBar", x.x1(null, null));
-		assertEquals("Foo=customFoo,Bar=defaultBar", x.x1("customFoo", null));
-		assertEquals("Foo=defaultFoo,Bar=customBar", x.x1(null, "customBar"));
-		assertEquals("Foo=customFoo,Bar=customBar", x.x1("customFoo", "customBar"));
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Query defaults on methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -113,22 +96,6 @@ class Remote_MethodDefaultsAnnotation_Test {
 	@Test
 	void b02_queryDefaults_nullValue() {
 		var x = MockRestClient.buildJson5(B.class).getRemote(B1.class);
-		assertEquals("foo=defaultFoo,bar=customBar", x.x1(null, "customBar"));
-	}
-
-	@Remote
-	public interface B2 {
-		@RemoteGet("/x1")
-		@Query(name="foo", def="defaultFoo")
-		@Query(name="bar", def="defaultBar")
-		String x1(@Query("foo") String foo, @Query("bar") String bar);
-	}
-
-	@Test
-	void b03_queryDefaults_multipleDefaults() {
-		var x = MockRestClient.buildJson5(B.class).getRemote(B2.class);
-		assertEquals("foo=defaultFoo,bar=defaultBar", x.x1(null, null));
-		assertEquals("foo=customFoo,bar=defaultBar", x.x1("customFoo", null));
 		assertEquals("foo=defaultFoo,bar=customBar", x.x1(null, "customBar"));
 	}
 
@@ -161,21 +128,6 @@ class Remote_MethodDefaultsAnnotation_Test {
 	void c02_formDataDefaults_nullValue() {
 		var x = MockRestClient.buildJson5(C.class).getRemote(C1.class);
 		assertEquals("foo=defaultFoo,bar=customBar", x.x1(null, "customBar"));
-	}
-
-	@Remote
-	public interface C2 {
-		@RemotePost("/x1")
-		@FormData(name="foo", def="defaultFoo")
-		@FormData(name="bar", def="defaultBar")
-		String x1(@FormData("foo") String foo, @FormData("bar") String bar);
-	}
-
-	@Test
-	void c03_formDataDefaults_multipleDefaults() {
-		var x = MockRestClient.buildJson5(C.class).getRemote(C2.class);
-		assertEquals("foo=defaultFoo,bar=defaultBar", x.x1(null, null));
-		assertEquals("foo=customFoo,bar=defaultBar", x.x1("customFoo", null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -20,18 +20,19 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.*;
 
 /**
- * Utility classes and methods for the {@link License @License} annotation.
+ * Utility classes and methods for the {@link Response @Response} annotation.
  *
  */
-public class LicenseAnnotation {
+public class ResponseAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private LicenseAnnotation() {}
+	private ResponseAnnotation() {}
 
 	/**
 	 * Builder class.
@@ -43,23 +44,24 @@ public class LicenseAnnotation {
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
-		private String name = "";
-		private String url = "";
+		private Header[] headers = {};
+		private Schema schema = SchemaAnnotation.DEFAULT;
+		private String[] examples = {};
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(License.class);
+			super(Response.class);
 		}
 
 		/**
-		 * Instantiates a new {@link License @License} object initialized with this builder.
+		 * Instantiates a new {@link Response @Response} object initialized with this builder.
 		 *
-		 * @return A new {@link License @License} object.
+		 * @return A new {@link Response @Response} object.
 		 */
-		public License build() {
-			return new Object(this);
+		public Response build() {
+			return new Instance(this);
 		}
 
 		/**
@@ -74,53 +76,73 @@ public class LicenseAnnotation {
 		}
 
 		/**
-		 * Sets the {@link License#name} property on this annotation.
+		 * Sets the {@link Response#examples} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder name(String value) {
-			name = value;
+		public Builder examples(String...value) {
+			examples = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link License#url} property on this annotation.
+		 * Sets the {@link Response#headers} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder url(String value) {
-			url = value;
+		public Builder headers(Header...value) {
+			headers = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Response#schema} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder schema(Schema value) {
+			schema = value;
 			return this;
 		}
 
 	}
 
 	@SuppressWarnings({
-		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"ClassExplicitlyAnnotation", // IntelliJ / SonarLint: Instance implements @Response (AnnotationObject runtime proxy pattern)
+		"all" // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)
 	})
-	private static class Object extends AnnotationObject implements License {
+	private static class Instance extends AnnotationObject implements Response {
 
 		private final String[] description;
-		private final String name;
-		private final String url;
+		private final Header[] headers;
+		private final Schema schema;
+		private final String[] examples;
 
-		Object(LicenseAnnotation.Builder b) {
+		Instance(ResponseAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
-			name = b.name;
-			url = b.url;
+			examples = copyOf(b.examples);
+			headers = copyOf(b.headers);
+			schema = b.schema;
 		}
 
-		@Override /* Overridden from License */
-		public String name() {
-			return name;
+		@Override /* Overridden from Response */
+		public String[] examples() {
+			return examples;
 		}
 
-		@Override /* Overridden from License */
-		public String url() {
-			return url;
+		@Override /* Overridden from Response */
+		public Header[] headers() {
+			return headers;
+		}
+
+		@Override /* Overridden from Response */
+		public Schema schema() {
+			return schema;
 		}
 
 		@Override /* Overridden from annotation */
@@ -130,7 +152,7 @@ public class LicenseAnnotation {
 	}
 
 	/** Default value */
-	public static final License DEFAULT = create().build();
+	public static final Response DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -147,7 +169,7 @@ public class LicenseAnnotation {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(License a) {
+	public static boolean empty(Response a) {
 		return a == null || DEFAULT.equals(a);
 	}
 }

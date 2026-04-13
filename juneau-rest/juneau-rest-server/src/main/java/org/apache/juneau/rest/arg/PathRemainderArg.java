@@ -17,9 +17,9 @@
 package org.apache.juneau.rest.arg;
 
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.http.annotation.PathRemainderAnnotation.*;
 
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
@@ -77,6 +77,17 @@ public class PathRemainderArg implements RestOpArg {
 		if (AP.has(PathRemainder.class, paramInfo))
 			return new PathRemainderArg(paramInfo, annotations);
 		return null;
+	}
+
+	private static Optional<String> findDef(ParameterInfo pi) {
+		// @formatter:off
+		return AP.find(PathRemainder.class, pi)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> ne(x.def()))
+			.findFirst()
+			.map(PathRemainder::def);
+		// @formatter:on
 	}
 
 	private final HttpPartParser partParser;

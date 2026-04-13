@@ -26,7 +26,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 class Remote_RequestAnnotation_Test extends TestBase {
@@ -253,7 +252,7 @@ class Remote_RequestAnnotation_Test extends TestBase {
 		}
 	}
 
-	@Request(serializer=FakeWriterSerializer.X.class)
+	@Request
 	public static class E1 {
 		@Content
 		public String getBody() {
@@ -280,7 +279,7 @@ class Remote_RequestAnnotation_Test extends TestBase {
 
 	@Test void e01_partSerializer() {
 		var x = remote(E.class,E2.class);
-		assertEquals("{body:'foo',header:'xxx',query:'xxx',path:'xxx'}",x.post(new E1()));
+		assertEquals("{body:'foo',header:'x',query:'x',path:'x'}",x.post(new E1()));
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}",x.post(null));
 	}
 

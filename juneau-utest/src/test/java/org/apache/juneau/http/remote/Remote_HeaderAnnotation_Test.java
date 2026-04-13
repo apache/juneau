@@ -35,7 +35,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -657,12 +656,12 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 
 	@Remote
 	public interface J1 {
-		@RemoteOp(path="/") String getX1(@Header(name="x",serializer=FakeWriterSerializer.X.class) String b);
+		@RemoteOp(path="/") String getX1(@Header(name="x") String b);
 	}
 
 	@Test void j01_serializer() {
 		var x = remote(J.class,J1.class);
-		assertEquals("{x:'xXx'}",x.getX1("X"));
+		assertEquals("{x:'X'}",x.getX1("X"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -684,7 +683,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K1 {
 		@RemoteOp(path="/") String getX1(@Request K1a rb);
-		@RemoteOp(path="/") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K1a rb);
+		@RemoteOp(path="/") String getX2(@Request K1a rb);
 	}
 
 	public static class K1a {
@@ -705,7 +704,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
 		assertEquals("{a=a1,b=b1,c=c1,e=,g=true,h=123,i1=foo}",x1.getX1(new K1a()));
 		assertEquals("{a=a1,b=b1,c=c1,e=,g='true',h='123',i1=foo}",x2.getX1(new K1a()));
-		assertEquals("{a=xa1x,b=xb1x,c=xc1x,e=xx,g=xtruex,h=x123x,i1=xfoox}",x2.getX2(new K1a()));
+		assertEquals("{a=a1,b=b1,c=c1,e=,g='true',h='123',i1=foo}",x2.getX2(new K1a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -715,7 +714,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K2 {
 		@RemoteOp(path="/") String getX1(@Request K2a rb);
-		@RemoteOp(path="/") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K2a rb);
+		@RemoteOp(path="/") String getX2(@Request K2a rb);
 	}
 
 	public static class K2a {
@@ -730,7 +729,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
 		assertEquals("{a=a1=v1,a2=123,a3=null,a4=,b1=true,b2=123,b3=null,c1=v1,c2=123,c4=}",x1.getX1(new K2a()));
 		assertEquals("{a=(a1=v1,a2=123,a3=null,a4=''),b1='true',b2='123',b3='null',c1=v1,c2=123,c4=}",x2.getX1(new K2a()));
-		assertEquals("{a=x{a1=v1, a2=123, a3=null, a4=}x,b1=xtruex,b2=x123x,b3=xnullx,c1=xv1x,c2=x123x,c4=xx}",x2.getX2(new K2a()));
+		assertEquals("{a=(a1=v1,a2=123,a3=null,a4=''),b1='true',b2='123',b3='null',c1=v1,c2=123,c4=}",x2.getX2(new K2a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -740,7 +739,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K3 {
 		@RemoteOp(path="/") String getX1(@Request K3a rb);
-		@RemoteOp(path="/") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K3a rb);
+		@RemoteOp(path="/") String getX2(@Request K3a rb);
 	}
 
 	public static class K3a {
@@ -767,17 +766,17 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K4 {
 		@RemoteOp(path="/") String getX1(@Request K4a rb);
-		@RemoteOp(path="/") String getX2(@Request(serializer=FakeWriterSerializer.X.class) K4a rb);
+		@RemoteOp(path="/") String getX2(@Request K4a rb);
 	}
 
 	public static class K4a {
 		@Header public List<Object> getA() { return l("foo","","true","123","null",true,123,null); }
 		@Header("b") public List<Object> getX1() { return l("foo","","true","123","null",true,123,null); }
-		@Header(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return l("foo","","true","123","null",true,123,null); }
+		@Header(name="c") public List<Object> getX2() { return l("foo","","true","123","null",true,123,null); }
 		@Header(name="d") @Schema(aev=true) public List<Object> getX3() { return l(); }
 		@Header("e") public List<Object> getX4() { return null; }
 		@Header("f") public Object[] getX5() { return a("foo","","true","123","null",true,123,null); }
-		@Header(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return a("foo","","true","123","null",true,123,null); }
+		@Header(name="g") public Object[] getX6() { return a("foo","","true","123","null",true,123,null); }
 		@Header(name="h") @Schema(aev=true) public Object[] getX7() { return a(); }
 		@Header("i") public Object[] getX8() { return null; }
 	}
@@ -785,9 +784,9 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Test void k04_requestBean_collections() {
 		var x1 = remote(K.class,K4.class);
 		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K4.class);
-		assertEquals("{a=foo,,true,123,null,true,123,null,b=foo,,true,123,null,true,123,null,c=xfoo||true|123|null|true|123|nullx,d=,f=foo,,true,123,null,true,123,null,g=xfoo||true|123|null|true|123|nullx,h=}", x1.getX1(new K4a()));
-		assertEquals("{a=@(foo,'','true','123','null',true,123,null),b=@(foo,'','true','123','null',true,123,null),c=xfoo||true|123|null|true|123|nullx,d=@(),f=@(foo,'','true','123','null',true,123,null),g=xfoo||true|123|null|true|123|nullx,h=@()}", x2.getX1(new K4a()));
-		assertEquals("{a=xfoo||true|123|null|true|123|nullx,b=xfoo||true|123|null|true|123|nullx,c=xfoo||true|123|null|true|123|nullx,d=xx,f=xfoo||true|123|null|true|123|nullx,g=xfoo||true|123|null|true|123|nullx,h=xx}", x2.getX2(new K4a()));
+		assertEquals("{a=foo,,true,123,null,true,123,null,b=foo,,true,123,null,true,123,null,c=foo,,true,123,null,true,123,null,d=,f=foo,,true,123,null,true,123,null,g=foo,,true,123,null,true,123,null,h=}", x1.getX1(new K4a()));
+		assertEquals("{a=@(foo,'','true','123','null',true,123,null),b=@(foo,'','true','123','null',true,123,null),c=@(foo,'','true','123','null',true,123,null),d=@(),f=@(foo,'','true','123','null',true,123,null),g=@(foo,'','true','123','null',true,123,null),h=@()}", x2.getX1(new K4a()));
+		assertEquals("{a=@(foo,'','true','123','null',true,123,null),b=@(foo,'','true','123','null',true,123,null),c=@(foo,'','true','123','null',true,123,null),d=@(),f=@(foo,'','true','123','null',true,123,null),g=@(foo,'','true','123','null',true,123,null),h=@()}", x2.getX2(new K4a()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

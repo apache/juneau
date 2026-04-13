@@ -18,18 +18,17 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.Constants.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.oapi.*;
+import org.apache.juneau.annotation.Schema;
 
 /**
- * REST request header annotation.
+ * REST request path annotation.
  *
  * <p>
- * Identifies a POJO to be used as the header of an HTTP request.
+ * Identifies a POJO to be used as a path entry on an HTTP request.
  *
  * <p>
  * Can be used in the following locations:
@@ -41,24 +40,22 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
  * <p>
- * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a HTTP
- * request header.
+ * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a variable
+ * in a URL path pattern.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@RestGet</ja>
- * 	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID <jv>etag</jv>) {...}
+ * 	<ja>@RestGet</ja>(<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+ * 	<jk>public void</jk> doGet(
+ * 			<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>,
+ * 			<ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> <jv>bar</jv>,
+ * 			<ja>@Path</ja>(<js>"baz"</js>) UUID <jv>baz</jv>,
+ * 			<ja>@Path</ja>(<js>"/*"</js>) String <jv>remainder</jv>,
+ * 		) {...}
  * </p>
  *
  * <p>
- * This is functionally equivalent to the following code...
- * <p class='bjava'>
- * 	<ja>@RestGet</ja>
- * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
- * 		UUID <jv>etag</jv> = <jv>req</jv>.getHeader(<js>"ETag"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
- * 		...
- * 	}
- * </p>
+ * The special name <js>"/*"</js> is used to retrieve the path remainder after the path match (i.e. the part that matches <js>"/*"</js>).
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
@@ -67,11 +64,10 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  * <p>
- * Annotation applied to Java method arguments of interface proxies to denote that they are serialized as an HTTP
- * header value.
+ * Annotation applied to Java method arguments of interface proxies to denote that they are path variables on the request.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Header">@Header</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Path">@Path</a>
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
@@ -79,22 +75,20 @@ import org.apache.juneau.oapi.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
  * </ul>
- * <p>
+ *
  */
 @Documented
 @Target({ PARAMETER, METHOD, TYPE, FIELD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(HeaderAnnotation.Array.class)
-@ContextApply(HeaderAnnotation.Applier.class)
-public @interface Header {
+public @interface Path {
 
 	/**
 	 * Default value for this parameter.
 	 *
 	 * @return The annotation value.
 	 */
-	String def() default "";
+	String def() default NONE;
 
 	/**
 	 * Optional description for the exposed API.
@@ -105,43 +99,45 @@ public @interface Header {
 	String[] description() default {};
 
 	/**
-	 * HTTP header name.
-	 * <p>
-	 * A blank value (the default) indicates to reuse the bean property name when used on a request bean property.
+	 * URL path variable name.
 	 *
 	 * <p>
-	 * The value should be either a valid HTTP header name, or <js>"*"</js> to represent multiple name/value pairs
+	 * The path remainder after the path match can be referenced using the name <js>"/*"</js>.
+	 * <br>The non-URL-decoded path remainder after the path match can be referenced using the name <js>"/**"</js>.
+	 *
+	 * <p>
+	 * The value should be either a valid path parameter name, or <js>"*"</js> to represent multiple name/value pairs
 	 *
 	 * <p>
 	 * A blank value (the default) has the following behavior:
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		If the data type is <c>NameValuePairs</c>, <c>Map</c>, or a bean,
-	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
+	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be treated as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a REST method</jc>
-	 * 	<ja>@RestPost</ja>(<js>"/addPet"</js>)
-	 * 	<jk>public void</jk> addPet(<ja>@Header</ja> JsonMap <jv>allHeaderParameters</jv>) {...}
+	 * 	<ja>@RestPost</ja>
+	 * 	<jk>public void</jk> addPet(<ja>@Path</ja> JsonMap <jv>allPathParameters</jv>) {...}
 	 * 		</p>
 	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
 	 *
-	 * 		<jc>// Equivalent to @Header("*")</jc>
-	 * 		<ja>@RemoteGet</ja>(<js>"/mymethod"</js>)
-	 * 		String myProxyMethod1(<ja>@Header</ja> Map&lt;String,Object&gt; <jv>allHeaderParameters</jv>);
+	 * 		<jc>// Equivalent to @Path("*")</jc>
+	 * 		<ja>@RemoteGet</ja>(<js>"/mymethod/{foo}/{bar}"</js>)
+	 * 		String myProxyMethod1(<ja>@Path</ja> Map&lt;String,Object&gt; <jv>allPathParameters</jv>);
 	 * 	}
 	 * 		</p>
 	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a request bean method</jc>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
-	 * 		<jc>// Equivalent to @Header("*")</jc>
-	 * 		<ja>@Header</ja>
-	 * 		Map&lt;String,Object&gt; getFoo();
+	 * 		<jc>// Equivalent to @Path("*")</jc>
+	 * 		<ja>@Path</ja>
+	 * 		Map&lt;String,Object&gt; getPathVars();
 	 * 	}
 	 * 		</p>
 	 * 	</li>
@@ -152,53 +148,24 @@ public @interface Header {
 	 * 		<p class='bjava'>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
-	 * 		<jc>// Equivalent to @Header("Foo")</jc>
-	 * 		<ja>@Header</ja>
-	 * 		<ja>@Beanp</ja>(<js>"Foo"</js>)
+	 * 		<jc>// Equivalent to @Path("foo")</jc>
+	 * 		<ja>@Path</ja>
 	 * 		String getFoo();
 	 * 	}
-	 * 		</p>
-	 * 	</li>
+	 * </ul>
+	 *
+	 * <p>
+	 * The name field MUST correspond to the associated <a class="doclink" href="https://swagger.io/specification/v2#pathsPath">path</a> segment from the path field in the <a class="doclink" href="https://swagger.io/specification/v2#pathsObject">Paths Object</a>.
+	 * See <a class="doclink" href="https://swagger.io/specification/v2#pathTemplating">Path Templating</a> for further information.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The format is plain-text.
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
 	String name() default "";
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <p>
-	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
-
-	/**
-	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
-	 *
-	 * <p>
-	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
 	/**
 	 * <mk>schema</mk> field of the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>.
@@ -226,28 +193,20 @@ public @interface Header {
 	Schema schema() default @Schema;
 
 	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
-	 *
-	 * <p>
-	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiSerializer}.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Void.class;
-
-	/**
 	 * A synonym for {@link #name()}.
 	 *
 	 * <p>
 	 * Allows you to use shortened notation if you're only specifying the name.
 	 *
 	 * <p>
-	 * The following are completely equivalent ways of defining a header entry:
+	 * The following are completely equivalent ways of defining a path entry:
 	 * <p class='bjava'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@Header</ja>(name=<js>"api_key"</js>) String <jv>apiKey</jv>) {...}
+	 * 	<ja>@RestGet</ja>(<js>"/pet/{petId}"</js>)
+	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(name=<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) { ... }
 	 * </p>
 	 * <p class='bjava'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@Header</ja>(<js>"api_key"</js>) String <jv>apiKey</jv>) {...}
+	 * 	<ja>@RestGet</ja>(<js>"/pet/{petId}"</js>)
+	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) { ... }
 	 * </p>
 	 *
 	 * @return The annotation value.

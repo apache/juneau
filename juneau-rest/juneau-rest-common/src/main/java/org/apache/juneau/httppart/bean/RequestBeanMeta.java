@@ -17,9 +17,7 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.httppart.bean.MethodInfoUtils.*;
 
@@ -88,13 +86,8 @@ public class RequestBeanMeta {
 			return apply(mpi.getParameterType().inner()).apply(AP.find(Request.class, mpi).stream().findFirst().map(AnnotationInfo::inner).orElse(null));
 		}
 
-		Builder apply(Request a) {
-			if (nn(a)) {
-				if (isNotVoid(a.serializer()))
-					serializer.type(a.serializer());
-				if (isNotVoid(a.parser()))
-					parser.type(a.parser());
-			}
+		Builder apply(@SuppressWarnings("unused") Request a) {
+			// Serializer/parser now specified via @HttpPartMarshalling annotation instead of @Request attributes
 			return this;
 		}
 

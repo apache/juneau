@@ -39,7 +39,6 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -694,12 +693,12 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 
 	@Remote
 	public interface J1 {
-		@RemoteOp(path="/") String postX1(@FormData(name="x",serializer=FakeWriterSerializer.X.class) String b);
+		@RemoteOp(path="/") String postX1(@FormData(name="x") String b);
 	}
 
 	@Test void j01_serializer() {
 		var x = remote(J.class,J1.class);
-		assertEquals("{x:'xXx'}",x.postX1("X"));
+		assertEquals("{x:'X'}",x.postX1("X"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -721,7 +720,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K1 {
 		@RemoteOp(path="/") String postX1(@Request K1a rb);
-		@RemoteOp(path="/") String postX2(@Request(serializer=FakeWriterSerializer.X.class) K1a rb);
+		@RemoteOp(path="/") String postX2(@Request K1a rb);
 	}
 
 	public static class K1a {
@@ -742,7 +741,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K1.class);
 		assertEquals("{a=a1,b=b1,c=c1,e=,g=true,h=123,i1=foo}",x1.postX1(new K1a()));
 		assertEquals("{a=a1,b=b1,c=c1,e=,g='true',h='123',i1=foo}",x2.postX1(new K1a()));
-		assertEquals("{a=xa1x,b=xb1x,c=xc1x,e=xx,g=xtruex,h=x123x,i1=xfoox}",x2.postX2(new K1a()));
+		assertEquals("{a=a1,b=b1,c=c1,e=,g='true',h='123',i1=foo}",x2.postX2(new K1a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -752,7 +751,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K2 {
 		@RemoteOp(path="/") String postX1(@Request K2a rb);
-		@RemoteOp(path="/") String postX2(@Request(serializer=FakeWriterSerializer.X.class) K2a rb);
+		@RemoteOp(path="/") String postX2(@Request K2a rb);
 	}
 
 	public static class K2a {
@@ -767,7 +766,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K2.class);
 		assertEquals("{a=a1=v1,a2=123,a3=null,a4=,b1=true,b2=123,b3=null,c1=v1,c2=123,c4=}",x1.postX1(new K2a()));
 		assertEquals("{a=(a1=v1,a2=123,a3=null,a4=''),b1='true',b2='123',b3='null',c1=v1,c2=123,c4=}",x2.postX1(new K2a()));
-		assertEquals("{a=x{a1=v1, a2=123, a3=null, a4=}x,b1=xtruex,b2=x123x,b3=xnullx,c1=xv1x,c2=x123x,c4=xx}",x2.postX2(new K2a()));
+		assertEquals("{a=(a1=v1,a2=123,a3=null,a4=''),b1='true',b2='123',b3='null',c1=v1,c2=123,c4=}",x2.postX2(new K2a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -777,7 +776,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K3 {
 		@RemoteOp(path="/") String postX1(@Request K3a rb);
-		@RemoteOp(path="/") String postX2(@Request(serializer=FakeWriterSerializer.X.class) K3a rb);
+		@RemoteOp(path="/") String postX2(@Request K3a rb);
 	}
 
 	public static class K3a {
@@ -839,17 +838,17 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Remote(path="/")
 	public interface K6 {
 		@RemoteOp(path="/") String postX1(@Request K6a rb);
-		@RemoteOp(path="/") String postX2(@Request(serializer=FakeWriterSerializer.X.class) K6a rb);
+		@RemoteOp(path="/") String postX2(@Request K6a rb);
 	}
 
 	public static class K6a {
 		@FormData public List<Object> getA() { return l("foo","","true","123","null",true,123,null); }
 		@FormData("b") public List<Object> getX1() { return l("foo","","true","123","null",true,123,null); }
-		@FormData(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return l("foo","","true","123","null",true,123,null); }
+		@FormData(name="c") public List<Object> getX2() { return l("foo","","true","123","null",true,123,null); }
 		@FormData("d") @Schema(aev=true) public List<Object> getX3() { return l(); }
 		@FormData("e") public List<Object> getX4() { return null; }
 		@FormData("f") public Object[] getX5() { return a("foo","","true","123","null",true,123,null); }
-		@FormData(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return a("foo","","true","123","null",true,123,null); }
+		@FormData(name="g") public Object[] getX6() { return a("foo","","true","123","null",true,123,null); }
 		@FormData("h") @Schema(aev=true) public Object[] getX7() { return a(); }
 		@FormData("i") public Object[] getX8() { return null; }
 	}
@@ -857,9 +856,9 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Test void k06_requestBean_collections() {
 		var x1 = remote(K.class,K6.class);
 		var x2 = client(K.class).partSerializer(UonSerializer.class).build().getRemote(K6.class);
-		assertEquals("{a=foo,,true,123,null,true,123,null,b=foo,,true,123,null,true,123,null,c=xfoo||true|123|null|true|123|nullx,d=,f=foo,,true,123,null,true,123,null,g=xfoo||true|123|null|true|123|nullx,h=}", x1.postX1(new K6a()));
-		assertEquals("{a=@(foo,'','true','123','null',true,123,null),b=@(foo,'','true','123','null',true,123,null),c=xfoo||true|123|null|true|123|nullx,d=@(),f=@(foo,'','true','123','null',true,123,null),g=xfoo||true|123|null|true|123|nullx,h=@()}", x2.postX1(new K6a()));
-		assertEquals("{a=xfoo||true|123|null|true|123|nullx,b=xfoo||true|123|null|true|123|nullx,c=xfoo||true|123|null|true|123|nullx,d=xx,f=xfoo||true|123|null|true|123|nullx,g=xfoo||true|123|null|true|123|nullx,h=xx}", x2.postX2(new K6a()));
+		assertEquals("{a=foo,,true,123,null,true,123,null,b=foo,,true,123,null,true,123,null,c=foo,,true,123,null,true,123,null,d=,f=foo,,true,123,null,true,123,null,g=foo,,true,123,null,true,123,null,h=}", x1.postX1(new K6a()));
+		assertEquals("{a=@(foo,'','true','123','null',true,123,null),b=@(foo,'','true','123','null',true,123,null),c=@(foo,'','true','123','null',true,123,null),d=@(),f=@(foo,'','true','123','null',true,123,null),g=@(foo,'','true','123','null',true,123,null),h=@()}", x2.postX1(new K6a()));
+		assertEquals("{a=@(foo,'','true','123','null',true,123,null),b=@(foo,'','true','123','null',true,123,null),c=@(foo,'','true','123','null',true,123,null),d=@(),f=@(foo,'','true','123','null',true,123,null),g=@(foo,'','true','123','null',true,123,null),h=@()}", x2.postX2(new K6a()));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

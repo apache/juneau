@@ -21,9 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.oapi.*;
+import org.apache.juneau.annotation.Schema;
 
 /**
  * REST response annotation.
@@ -52,8 +50,6 @@ import org.apache.juneau.oapi.*;
 @Target({ PARAMETER, TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(ResponseAnnotation.Array.class)
-@ContextApply(ResponseAnnotation.Applier.class)
 public @interface Response {
 
 	/**
@@ -118,41 +114,6 @@ public @interface Response {
 	Header[] headers() default {};
 
 	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <p>
-	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
-
-	/**
-	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
-	 *
-	 * <p>
-	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
-
-	/**
 	 * <mk>schema</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#responseObject">Swagger Response Object</a>.
 	 *
 	 * <h5 class='section'>Used for:</h5>
@@ -167,13 +128,4 @@ public @interface Response {
 	 */
 	Schema schema() default @Schema;
 
-	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
-	 *
-	 * <p>
-	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiSerializer}.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Void.class;
 }

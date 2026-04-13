@@ -21,8 +21,9 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.annotation.Schema;
+
+import org.apache.juneau.json.JsonSchemaSerializer;
 
 /**
  * REST request body annotation.
@@ -103,8 +104,6 @@ import org.apache.juneau.json.*;
 @Target({ PARAMETER, METHOD, TYPE })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(ContentAnnotation.Array.class)
-@ContextApply(ContentAnnotation.Applier.class)
 public @interface Content {
 
 	/**
@@ -127,31 +126,6 @@ public @interface Content {
 	 * @since 9.2.0
 	 */
 	String[] description() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <p>
-	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
 
 	/**
 	 * <mk>schema</mk> field of the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>.

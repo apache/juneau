@@ -17,17 +17,15 @@
 package org.apache.juneau.ng.rest.client.remote;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.assertArgNotNull;
+import static org.apache.juneau.commons.utils.StringUtils.firstNonEmpty;
 
 import java.io.*;
 import java.lang.reflect.*;
 
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.remote.Remote;
 import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.ng.http.HttpBody;
-import org.apache.juneau.ng.http.remote.Body;
-import org.apache.juneau.ng.http.remote.Header;
-import org.apache.juneau.ng.http.remote.Path;
-import org.apache.juneau.ng.http.remote.Query;
 import org.apache.juneau.ng.http.remote.RrpcInterfaceMeta;
 import org.apache.juneau.ng.rest.client.*;
 
@@ -44,7 +42,7 @@ import org.apache.juneau.ng.rest.client.*;
  * 	<ja>@Remote</ja>(path=<js>"/api/users"</js>)
  * 	<jk>public interface</jk> UserService {{
  * 		<ja>@RemoteGet</ja>(<js>"/{id}"</js>)
- * 		String getUser(<ja>@Path</ja>(<js>"id"</js>) String id);
+ * 		String getUser(<ja>@Path</ja>(<js>"id"</js>) String <jv>id</jv>);
  * 	}}
  *
  * 	UserService <jv>svc</jv> = client.remote(UserService.<jk>class</jk>);
@@ -150,7 +148,6 @@ public final class NgRemoteClient {
 				default -> throw new IllegalArgumentException("Unsupported HTTP method: " + httpMethod); // HTT
 			};
 
-			// Process method parameters
 			if (args != null) {
 				var params = method.getParameters();
 				for (int i = 0; i < params.length; i++) {
@@ -159,33 +156,29 @@ public final class NgRemoteClient {
 					if (arg == null)
 						continue;
 
-					// Check for @Path annotation on parameter
-					var pathAnnotation = param.getAnnotation(Path.class);
+					var pathAnnotation = param.getAnnotation(org.apache.juneau.http.annotation.Path.class);
 					if (pathAnnotation != null) {
-						var name = pathAnnotation.value().isEmpty() ? param.getName() : pathAnnotation.value();
+						var name = firstNonEmpty(pathAnnotation.value(), pathAnnotation.name(), param.getName());
 						req = req.pathData(name, String.valueOf(arg));
 						continue;
 					}
 
-					// Check for @Query annotation on parameter
-					var queryAnnotation = param.getAnnotation(Query.class);
+					var queryAnnotation = param.getAnnotation(org.apache.juneau.http.annotation.Query.class);
 					if (queryAnnotation != null) {
-						var name = queryAnnotation.value().isEmpty() ? param.getName() : queryAnnotation.value();
+						var name = firstNonEmpty(queryAnnotation.value(), queryAnnotation.name(), param.getName());
 						req = req.queryData(name, String.valueOf(arg));
 						continue;
 					}
 
-					// Check for @Header annotation on parameter
-					var headerAnnotation = param.getAnnotation(Header.class);
+					var headerAnnotation = param.getAnnotation(org.apache.juneau.http.annotation.Header.class);
 					if (headerAnnotation != null) {
-						var name = headerAnnotation.value().isEmpty() ? param.getName() : headerAnnotation.value();
+						var name = firstNonEmpty(headerAnnotation.value(), headerAnnotation.name(), param.getName());
 						req = req.header(name, String.valueOf(arg));
 						continue;
 					}
 
-					// Check for @Body annotation on parameter
-					var bodyAnnotation = param.getAnnotation(Body.class);
-					if (bodyAnnotation != null) {
+					var contentAnnotation = param.getAnnotation(Content.class);
+					if (contentAnnotation != null) {
 						if (arg instanceof HttpBody b)
 							req = req.body(b);
 						else
@@ -193,7 +186,6 @@ public final class NgRemoteClient {
 						continue;
 					}
 
-					// Single unannotated parameter — treat as body if it's the only one
 					if (params.length == 1) {
 						if (arg instanceof HttpBody b)
 							req = req.body(b);

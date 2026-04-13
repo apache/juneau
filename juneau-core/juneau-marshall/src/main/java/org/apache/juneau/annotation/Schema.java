@@ -23,7 +23,6 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 
@@ -472,7 +471,7 @@ public @interface Schema {
 	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
 	 *
 	 * <p>
-	 * Static strings are defined in {@link CollectionFormatType}.
+	 * Static strings are defined in <c>CollectionFormatType</c>.
 	 *
 	 * <p>
 	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
@@ -952,7 +951,7 @@ public @interface Schema {
 	 * The extending format for the previously mentioned <a class="doclink" href="https://swagger.io/specification/v2#parameterType">parameter type</a>.
 	 *
 	 * <p>
-	 * Static strings are defined in {@link FormatType}.
+	 * Static strings are defined in <c>FormatType</c>.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
@@ -1699,7 +1698,7 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Static strings are defined in {@link ParameterType}.
+	 * 	<li class='note'>Static strings are defined in <c>ParameterType</c>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

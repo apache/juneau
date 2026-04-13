@@ -18,7 +18,6 @@ package org.apache.juneau.httppart;
 
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.annotation.*;
 
 /**
  * Interface used to convert POJOs to simple strings in HTTP headers, query parameters, form-data parameters, and URI
@@ -35,12 +34,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * This class is used in the following locations:
  * <ul class='javatree'>
- * 	<li class='ja'>{@link FormData#serializer()}
- * 	<li class='ja'>{@link Query#serializer()}
- * 	<li class='ja'>{@link Header#serializer()}
- * 	<li class='ja'>{@link Path#serializer()}
- * 	<li class='ja'>{@link Request#serializer()}
- * 	<li class='ja'>{@link Response#serializer()}
+ * 	<li class='ja'>{@link HttpPartMarshalling#serializer()}
  * 	<li class='jc'><c>RestClient.Builder.partSerializer(Class)</c>
  * </ul>
  *

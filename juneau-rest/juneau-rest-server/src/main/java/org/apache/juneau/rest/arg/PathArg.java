@@ -19,12 +19,11 @@ package org.apache.juneau.rest.arg;
 import static org.apache.juneau.Constants.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.http.annotation.PathAnnotation.*;
 
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.annotation.*;
@@ -72,82 +71,41 @@ public class PathArg implements RestOpArg {
 		return null;
 	}
 
-	/**
-	 * Gets the merged @Path annotation combining class-level and parameter-level values.
-	 *
-	 * @param pi The parameter info.
-	 * @param paramName The path parameter name.
-	 * @return Merged annotation, or null if no class-level defaults exist.
-	 */
-	private static Path getMergedPath(ParameterInfo pi, String paramName) {
-		// Get the declaring class
-		var declaringClass = pi.getMethod().getDeclaringClass();
-		if (declaringClass == null)
-			return null;
-
-		// Find @Rest annotation on the class
-		var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
-		if (restAnnotation == null)
-			return null;
-
-		// Find matching @Path from class-level pathParams array
-		Path classLevelPath = null;
-		for (var p : restAnnotation.pathParams()) {
-			var pName = firstNonEmpty(p.name(), p.value());
-			if (paramName.equals(pName)) {
-				classLevelPath = p;
-				break;
-			}
-		}
-
-		if (classLevelPath == null)
-			return null;
-
-		// Get parameter-level @Path
-		var paramPath = AP.find(Path.class, pi).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
-
-		if (paramPath == null) {
-			// No parameter-level @Path, use class-level as-is
-			return classLevelPath;
-		}
-
-		// Merge the two annotations: parameter-level takes precedence
-		return mergeAnnotations(classLevelPath, paramPath);
-	}
-
-	/**
-	 * Merges two @Path annotations, with param-level taking precedence over class-level.
-	 *
-	 * @param classLevel The class-level default.
-	 * @param paramLevel The parameter-level override.
-	 * @return Merged annotation.
-	 */
-	private static Path mergeAnnotations(Path classLevel, Path paramLevel) {
+	private static Optional<String> findName(ParameterInfo pi) {
 		// @formatter:off
-		return PathAnnotation.create()
-			.name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
-			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name()))
-			.def(firstNonEmpty(paramLevel.def(), classLevel.def()))
-			.description(paramLevel.description().length > 0 ? paramLevel.description() : classLevel.description())
-			.parser(paramLevel.parser() != HttpPartParser.Void.class ? paramLevel.parser() : classLevel.parser())
-			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer())
-			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
-			.build();
+		return AP.find(Path.class, pi)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> isAnyNotBlank(x.value(), x.name()))
+			.findFirst()
+			.map(x -> firstNonBlank(x.name(), x.value()));
 		// @formatter:on
 	}
 
-	/**
-	 * Merges two @Schema annotations, with param-level taking precedence.
-	 *
-	 * @param classLevel The class-level default.
-	 * @param paramLevel The parameter-level override.
-	 * @return Merged annotation.
-	 */
-	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
-		// If parameter has a non-default schema, use it; otherwise use class-level
-		if (! SchemaAnnotation.empty(paramLevel))
-			return paramLevel;
-		return classLevel;
+	private static Optional<String> findDef(ParameterInfo pi) {
+		// @formatter:off
+		return AP.find(Path.class, pi)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> ne(x.def()) && neq(NONE, x.def()))
+			.findFirst()
+			.map(Path::def);
+		// @formatter:on
+	}
+
+	private static Path getClassLevelPath(ParameterInfo pi, String paramName) {
+		var declaringClass = pi.getMethod().getDeclaringClass();
+		if (declaringClass == null)
+			return null;
+		var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		if (restAnnotation == null)
+			return null;
+		for (var p : restAnnotation.pathParams()) {
+			var pName = firstNonEmpty(p.name(), p.value());
+			if (paramName.equals(pName))
+				return p;
+		}
+		return null;
 	}
 
 	private final HttpPartParser partParser;
@@ -164,17 +122,18 @@ public class PathArg implements RestOpArg {
 	 * @param pathMatcher Path matcher for the specified method.
 	 */
 	protected PathArg(ParameterInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
-		// Get the path parameter name
 		this.name = getName(paramInfo, pathMatcher);
 
-		// Check for class-level defaults and merge if found
-		var mergedPath = getMergedPath(paramInfo, name);
+		var classLevelPath = getClassLevelPath(paramInfo, name);
 
-		// Use merged path annotation for all lookups
-		var pathDef = nn(mergedPath) ? mergedPath.def() : null;
-		this.def = nn(pathDef) && neq(NONE, pathDef) ? pathDef : findDef(paramInfo).orElse(null);
+		var schemaBuilder = HttpPartSchema.create();
+		if (classLevelPath != null)
+			schemaBuilder.apply(classLevelPath);
+		schemaBuilder.applyAll(Path.class, paramInfo);
+		this.schema = schemaBuilder.build();
+
+		this.def = findDef(paramInfo).or(() -> Optional.ofNullable(classLevelPath).filter(p -> ne(p.def()) && neq(NONE, p.def())).map(Path::def)).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
-		this.schema = nn(mergedPath) ? HttpPartSchema.create(mergedPath) : HttpPartSchema.create(Path.class, paramInfo);
 		var pp = schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 	}
@@ -210,7 +169,6 @@ public class PathArg implements RestOpArg {
 			if (vars.length <= idx)
 				throw new ArgException(pi, "Number of attribute parameters exceeds the number of URL pattern variables.  vars.length={0}, idx={1}", vars.length, idx);
 
-			// Check for {#} variables.
 			var idxs = String.valueOf(idx);
 			for (var v : vars)
 				if (isNumeric(v) && v.equals(idxs))

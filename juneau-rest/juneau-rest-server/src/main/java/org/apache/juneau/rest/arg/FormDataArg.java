@@ -19,7 +19,6 @@ package org.apache.juneau.rest.arg;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.http.annotation.FormDataAnnotation.*;
 
 import java.util.*;
 
@@ -73,88 +72,48 @@ public class FormDataArg implements RestOpArg {
 		return null;
 	}
 
-	/**
-	 * Gets the merged @FormData annotation combining class-level and parameter-level values.
-	 *
-	 * @param pi The parameter info.
-	 * @param paramName The form data parameter name.
-	 * @return Merged annotation, or null if no class-level defaults exist.
-	 */
-	private static FormData getMergedFormData(ParameterInfo pi, String paramName) {
-		// Get the declaring class
+	private static Optional<String> findName(ParameterInfo pi) {
+		// @formatter:off
+		return AP.find(FormData.class, pi)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> isAnyNotBlank(x.value(), x.name()))
+			.findFirst()
+			.map(x -> firstNonBlank(x.name(), x.value()));
+		// @formatter:on
+	}
+
+	private static Optional<String> findDef(ParameterInfo pi) {
+		// @formatter:off
+		return AP.find(FormData.class, pi)
+			.stream()
+			.map(AnnotationInfo::inner)
+			.filter(x -> ne(x.def()))
+			.findFirst()
+			.map(FormData::def);
+		// @formatter:on
+	}
+
+	private static FormData getClassLevelFormData(ParameterInfo pi, String paramName) {
 		var declaringClass = pi.getMethod().getDeclaringClass();
 		if (declaringClass == null)
 			return null;
-
-		// Find @Rest annotation on the class
 		var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (restAnnotation == null)
 			return null;
-
-		// Find matching @FormData from class-level formDataParams array
-		FormData classLevelFormData = null;
 		for (var f : restAnnotation.formDataParams()) {
 			var fName = firstNonEmpty(f.name(), f.value());
-			if (eq(paramName, fName)) {
-				classLevelFormData = f;
-				break;
-			}
+			if (eq(paramName, fName))
+				return f;
 		}
-
-		if (classLevelFormData == null)
-			return null;
-
-		// Get parameter-level @FormData
-		var paramFormData = AP.find(FormData.class, pi).stream().findFirst().map(AnnotationInfo::inner).orElse(null);
-
-		if (paramFormData == null) {
-			// No parameter-level @FormData, use class-level as-is
-			return classLevelFormData;
-		}
-
-		// Merge the two annotations: parameter-level takes precedence
-		return mergeAnnotations(classLevelFormData, paramFormData);
-	}
-
-	/**
-	 * Merges two @FormData annotations, with param-level taking precedence over class-level.
-	 *
-	 * @param classLevel The class-level default.
-	 * @param paramLevel The parameter-level override.
-	 * @return Merged annotation.
-	 */
-	private static FormData mergeAnnotations(FormData classLevel, FormData paramLevel) {
-		return FormDataAnnotation.create().name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
-			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name())).def(firstNonEmpty(paramLevel.def(), classLevel.def()))
-			.description(paramLevel.description().length > 0 ? paramLevel.description() : classLevel.description())
-			.parser(paramLevel.parser() != HttpPartParser.Void.class ? paramLevel.parser() : classLevel.parser())
-			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer()).schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
-			.build();
-	}
-
-	/**
-	 * Merges two @Schema annotations, with param-level taking precedence.
-	 *
-	 * @param classLevel The class-level default.
-	 * @param paramLevel The parameter-level override.
-	 * @return Merged annotation.
-	 */
-	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
-		// If parameter has a non-default schema, use it; otherwise use class-level
-		if (! SchemaAnnotation.empty(paramLevel))
-			return paramLevel;
-		return classLevel;
+		return null;
 	}
 
 	private final boolean multi;
-
 	private final HttpPartParser partParser;
-
 	private final HttpPartSchema schema;
-
 	private final String name;
 	private final String def;
-
 	private final ClassInfo type;
 
 	/**
@@ -164,17 +123,19 @@ public class FormDataArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected FormDataArg(ParameterInfo pi, AnnotationWorkList annotations) {
-		// Get the form data parameter name
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@FormData used without name or value"));
 
-		// Check for class-level defaults and merge if found
-		FormData mergedFormData = getMergedFormData(pi, name);
+		var classLevelFormData = getClassLevelFormData(pi, name);
 
-		// Use merged form data annotation for all lookups
-		this.def = nn(mergedFormData) && ! mergedFormData.def().isEmpty() ? mergedFormData.def() : findDef(pi).orElse(null);
+		var schemaBuilder = HttpPartSchema.create();
+		if (classLevelFormData != null)
+			schemaBuilder.apply(classLevelFormData);
+		schemaBuilder.applyAll(FormData.class, pi);
+		this.schema = schemaBuilder.build();
+
+		this.def = findDef(pi).or(() -> Optional.ofNullable(classLevelFormData).filter(f -> ne(f.def())).map(FormData::def)).orElse(null);
 		this.type = pi.getParameterType();
-		this.schema = nn(mergedFormData) ? HttpPartSchema.create(mergedFormData) : HttpPartSchema.create(FormData.class, pi);
-		Class<? extends HttpPartParser> pp = schema.getParser();
+		var pp = schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
@@ -188,10 +149,10 @@ public class FormDataArg implements RestOpArg {
 	})
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		RestRequest req = opSession.getRequest();
-		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
-		RequestFormParams rh = req.getFormParams();
-		BeanSession bs = req.getBeanSession();
+		var req = opSession.getRequest();
+		var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
+		var rh = req.getFormParams();
+		var bs = req.getBeanSession();
 		var cm = bs.getClassMeta(type.innerType());
 
 		if (multi) {

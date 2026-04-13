@@ -2117,10 +2117,10 @@ class ThirdPartyProxy_Test extends TestBase {
 
 		@RemoteOp(method="POST", path="/partFormatters/{p1}")
 		String partFormatters(
-			@Path(value="p1", serializer=DummyPartSerializer.class) String p1,
-			@Header(value="h1", serializer=DummyPartSerializer.class) String h1,
-			@Query(value="q1", serializer=DummyPartSerializer.class) String q1,
-			@FormData(value="f1", serializer=DummyPartSerializer.class) String f1
+			@Path(value="p1") String p1,
+			@Header(value="h1") String h1,
+			@Query(value="q1") String q1,
+			@FormData(value="f1") String f1
 		);
 
 		//-------------------------------------------------------------------------------------------------------------
