@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.urlencoding;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;

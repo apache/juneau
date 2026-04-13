@@ -16,6 +16,9 @@
  */
 package org.apache.juneau.http;
 
+import org.apache.juneau.commons.http.MediaRanges;
+import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.http.StringRanges;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -25,7 +28,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.header.*;

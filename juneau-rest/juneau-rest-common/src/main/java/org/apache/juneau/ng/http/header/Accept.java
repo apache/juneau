@@ -17,9 +17,9 @@
 package org.apache.juneau.ng.http.header;
 
 
+import org.apache.juneau.commons.http.MediaRanges;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 
 /**
  * Represents an HTTP <c>Accept</c> header.

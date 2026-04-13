@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.ClassMeta.Category.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;

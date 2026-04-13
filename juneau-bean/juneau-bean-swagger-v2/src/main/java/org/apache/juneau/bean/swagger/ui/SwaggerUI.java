@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.swagger.ui;
 
+import org.apache.juneau.commons.http.MediaType;
 import static java.util.Collections.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.a;

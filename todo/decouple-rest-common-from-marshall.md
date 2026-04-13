@@ -9,38 +9,24 @@ juneau-commons -> juneau-rest-common -> juneau-marshall -> juneau-rest-client
                                                         -> juneau-rest-server
 ```
 
-Currently juneau-rest-common depends on juneau-marshall for:
-- `@Schema`, `InvalidAnnotationException` (83 files)
-- `MediaType`, `MediaRanges`, `StringRanges` (26 files)
-- `HttpPartSerializer`, `HttpPartSchema`, `HttpPartType` (12 files)
-- `Serializer`, `SerializerSession` (4 files)
-- `OpenApiSerializer` (3 files)
-- `BeanCreator` (3 files)
-- `VarResolverSession` (2 files)
-- `JsonSchemaSerializer`, `Json5Serializer` (2 files)
-- `UrlEncodingSerializer` (1 file)
+**Status:** Phase 1 is done for the HTTP media/range types (see below). `juneau-rest-common` still depends on `juneau-marshall` for `@Schema`, serializers, `HttpPartSchema`, etc.
 
 ---
 
-## Phase 1 — Move `MediaType`, `MediaRanges`, `StringRanges` to `juneau-commons`
+## Phase 1 — Move `MediaType`, `MediaRanges`, `StringRanges` to `juneau-commons` (done)
 
-**Difficulty**: Medium  
-**Impact**: 26 files in rest-common
+**Completed:** The following now live in `org.apache.juneau.commons.http` in **juneau-commons**:
 
-These are fundamental HTTP types that don't need serializer/parser infrastructure. Move from `org.apache.juneau` (marshall root package) to `org.apache.juneau.commons.http` or similar in juneau-commons.
+- `MediaType`, `MediaRange`, `MediaRanges`, `StringRange`, `StringRanges`
 
-### Classes to move
-- `MediaType`
-- `MediaRange`
-- `MediaRanges`
-- `StringRange`
-- `StringRanges`
-- `Constants` (if only used for media type constants)
+**Also in commons (parser support):** `NameValuePair`, `BasicNameValuePair`, `HeaderElement`, `HeaderValueParser` (replacing HttpCore usage for these types).
 
-### Considerations
-- These types are used pervasively across marshall, rest-server, and rest-client
-- Must assess whether `MediaType` depends on anything else in marshall
-- Package rename may be needed to avoid split-package issues
+**Follow-ups:**
+
+- `juneau-rest-common` declares a **direct** dependency on `juneau-commons` (in addition to `juneau-marshall`) so HTTP types are explicit on the classpath.
+- `@org.apache.juneau.commons.annotation.BeanIgnore` marks these types as non-beans; `BeanMeta` treats it like `org.apache.juneau.annotation.BeanIgnore` at class level so JSON remains the canonical string form.
+- `Constants` was **not** moved; it is unrelated to this HTTP surface.
+- Third-party name clashes (e.g. OkHttp `MediaType` vs Juneau) are resolved with fully qualified names or by omitting the Juneau import where only OkHttp's type is used.
 
 ---
 
@@ -123,19 +109,19 @@ Move `SerializedHeader`, `SerializedPart`, `SerializedEntity` and their factory 
 
 ---
 
-## Dependency Surface Summary
+## Dependency surface summary
 
-| Priority | Package | Files | Target Module |
-|----------|---------|-------|---------------|
-| 1 | `MediaType`, `MediaRanges`, etc. | 26 | juneau-commons |
-| 2 | `@Schema`, `@Items`, `@SubItems` | 83 | juneau-commons |
-| 3 | `HttpPartSchema`, `HttpPartType` | 12 | juneau-commons |
-| 4 | `Serialized*` bridge classes | 6 | juneau-marshall or bridge |
-| 5 | `VarResolverSession`, `BeanCreator` | 5 | juneau-commons or optional |
+| Priority | Package | Files | Target module | Status |
+|----------|---------|-------|----------------|--------|
+| 1 | `MediaType`, `MediaRanges`, `StringRanges`, etc. | many | juneau-commons (`org.apache.juneau.commons.http`) | Done |
+| 2 | `@Schema`, `@Items`, `@SubItems` | 83 | juneau-commons | Pending |
+| 3 | `HttpPartSchema`, `HttpPartType` | 12 | juneau-commons | Pending |
+| 4 | `Serialized*` bridge classes | 6 | juneau-marshall or bridge | Pending |
+| 5 | `VarResolverSession`, `BeanCreator` | 5 | juneau-commons or optional | Pending |
 
-## Risk Notes
+## Risk notes
 
-- **Split-package**: Moving `MediaType` from `org.apache.juneau` requires a new package name in commons
+- **Split-package**: HTTP media types moved out of `org.apache.juneau` into `org.apache.juneau.commons.http`
 - **Binary compatibility**: All moves require recompilation of downstream modules
 - **Schema complexity**: `@Schema` has ~50 attributes and deep integration with serializers
 - **Incremental approach**: Each phase should be self-contained and buildable independently

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.parser;
 
+import org.apache.juneau.commons.http.MediaType;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;

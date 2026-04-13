@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.header;
 
+import org.apache.juneau.commons.http.StringRanges;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -74,6 +75,6 @@ class TE_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(TE.of((org.apache.juneau.StringRanges)null));
+		assertNull(TE.of((org.apache.juneau.commons.http.StringRanges)null));
 	}
 }

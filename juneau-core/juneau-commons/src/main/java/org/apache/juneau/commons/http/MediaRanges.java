@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons.http;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -23,8 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.annotation.BeanIgnore;
 import org.apache.juneau.commons.collections.*;
 
 /**
@@ -236,7 +235,7 @@ public class MediaRanges {
 
 	@Override
 	public int hashCode() {
-		return string != null ? string.hashCode() : 0;
+		return Objects.hashCode(string);
 	}
 
 	@Override /* Overridden from Object */

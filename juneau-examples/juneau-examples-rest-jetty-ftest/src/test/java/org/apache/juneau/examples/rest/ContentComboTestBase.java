@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.examples.rest;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.examples.rest.TestUtils.*;
@@ -25,7 +26,6 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;

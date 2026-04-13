@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest;
 
+import org.apache.juneau.commons.http.StringRanges;
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;

@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.rest.annotation;
 
+import org.apache.juneau.commons.http.MediaType;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.commons.annotation.*;

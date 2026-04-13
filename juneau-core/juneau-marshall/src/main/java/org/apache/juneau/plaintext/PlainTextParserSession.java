@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.plaintext;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 
 import java.io.*;

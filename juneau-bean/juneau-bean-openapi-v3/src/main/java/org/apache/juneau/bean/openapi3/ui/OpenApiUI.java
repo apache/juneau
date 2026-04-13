@@ -17,7 +17,8 @@
 package org.apache.juneau.bean.openapi3.ui;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.MediaType.*;
+
+import static org.apache.juneau.commons.http.MediaType.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.a;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -33,6 +34,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.commons.http.MediaType;
 
 /**
  * Generates an OpenAPI-UI interface from an OpenAPI document.
@@ -371,7 +373,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	 * This UI applies to HTML requests only.
 	 */
 	@Override
-	public org.apache.juneau.MediaType[] forMediaTypes() {
+	public MediaType[] forMediaTypes() {
 		return CollectionUtils.a(HTML);
 	}
 

@@ -17,12 +17,12 @@
 package org.apache.juneau.ng.http.header;
 
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.http.NameValuePair;
 
 /**

@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.http.header;
 
+import org.apache.juneau.commons.http.StringRanges;
 import static org.apache.juneau.commons.utils.StringUtils.isBlank;
 import static org.apache.juneau.commons.utils.ThrowableUtils.illegalArg;
 
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.http.annotation.*;
 

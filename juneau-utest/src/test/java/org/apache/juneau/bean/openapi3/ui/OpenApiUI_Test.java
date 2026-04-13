@@ -177,7 +177,7 @@ class OpenApiUI_Test extends TestBase {
 		var mediaTypes = UI.forMediaTypes();
 		assertNotNull(mediaTypes);
 		assertEquals(1, mediaTypes.length);
-		assertEquals(org.apache.juneau.MediaType.HTML, mediaTypes[0]);
+		assertEquals(org.apache.juneau.commons.http.MediaType.HTML, mediaTypes[0]);
 	}
 
 	// Tests swap() with externalDocs having URL but no description (tagBlockSummary branch)

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.examples.bean;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.bean.atom.AtomBuilder.*;
 import static org.apache.juneau.bean.atom.AtomBuilder.link;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
@@ -23,7 +24,6 @@ import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 
 import java.net.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;

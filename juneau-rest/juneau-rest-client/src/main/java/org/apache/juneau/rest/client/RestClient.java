@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import org.apache.juneau.commons.http.MediaType;
 import static java.lang.Character.isWhitespace;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.commons.lang.StateEnum.*;

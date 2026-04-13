@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.transforms;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.TestUtils.*;
 
 import java.util.function.*;

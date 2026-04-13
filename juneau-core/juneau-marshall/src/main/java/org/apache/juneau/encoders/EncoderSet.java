@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.encoders;
 
+import org.apache.juneau.commons.http.StringRanges;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.markdown;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 

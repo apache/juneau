@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.http.header;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.http.NameValuePair;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.Json5Serializer;

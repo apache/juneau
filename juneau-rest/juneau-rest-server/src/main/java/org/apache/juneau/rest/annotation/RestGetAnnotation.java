@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.annotation;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;

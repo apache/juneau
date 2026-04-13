@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons.http;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -23,12 +23,9 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.annotation.BeanIgnore;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.Json5Serializer;
 
 /**
  * Describes a single media type used in content negotiation between an HTTP client and server, as described in
@@ -381,8 +378,8 @@ public class MediaType implements Comparable<MediaType> {
 	 * 		The reverse is not true, e.g. the comparison media type must contain all subtype tokens found in the
 	 * 		comparing media type.
 	 * 		<ul>
-	 * 			<li>We want the {@link JsonSerializer} (<js>"text/json"</js>) class to be able to handle requests for <js>"text/json+foo"</js>.
-	 * 			<li>We want to make sure {@link Json5Serializer} (<js>"text/json5"</js>) does not handle
+	 * 			<li>We want the <c>JsonSerializer</c> (<js>"text/json"</js>) class to be able to handle requests for <js>"text/json+foo"</js>.
+	 * 			<li>We want to make sure <c>Json5Serializer</c> (<js>"text/json5"</js>) does not handle
 	 * 				requests for <js>"text/json"</js>.
 	 * 		</ul>
 	 * 		More token matches should result in a higher match number.

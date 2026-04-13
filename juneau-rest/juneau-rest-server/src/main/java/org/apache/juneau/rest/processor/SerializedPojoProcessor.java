@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.processor;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;

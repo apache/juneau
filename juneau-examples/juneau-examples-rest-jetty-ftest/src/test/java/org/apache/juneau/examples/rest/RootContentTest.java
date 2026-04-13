@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.examples.rest;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 

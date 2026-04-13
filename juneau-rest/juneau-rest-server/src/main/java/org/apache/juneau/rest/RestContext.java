@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest;
 
+import org.apache.juneau.commons.http.MediaType;
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;

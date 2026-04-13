@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.csv;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.lang.annotation.*;

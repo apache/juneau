@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.serializer;
 
-import org.apache.juneau.*;
+import org.apache.juneau.commons.http.MediaType;
 
 /**
  * Represents a serializer and media type that matches an HTTP <c>Accept</c> header value.

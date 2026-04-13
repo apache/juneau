@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.parser;
 
-import org.apache.juneau.*;
+import org.apache.juneau.commons.http.MediaType;
 
 /**
  * Represents a parser and media type that matches an HTTP <c>Content-Type</c> header value.

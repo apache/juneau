@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.json;
 
+import org.apache.juneau.commons.http.MediaType;
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;

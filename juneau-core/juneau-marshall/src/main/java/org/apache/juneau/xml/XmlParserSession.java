@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.xml;
 
+import org.apache.juneau.commons.http.MediaType;
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;

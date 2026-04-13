@@ -26,7 +26,7 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.MediaType;
+import org.apache.juneau.commons.http.MediaType;
 import org.junit.jupiter.api.*;
 
 /**

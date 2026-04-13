@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.header;
 
+import org.apache.juneau.commons.http.StringRanges;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;

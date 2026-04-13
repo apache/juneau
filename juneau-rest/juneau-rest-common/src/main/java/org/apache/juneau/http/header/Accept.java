@@ -16,9 +16,10 @@
  */
 package org.apache.juneau.http.header;
 
+import org.apache.juneau.commons.http.MediaRanges;
+import org.apache.juneau.commons.http.MediaType;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.http.annotation.*;
 

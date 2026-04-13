@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.serializer;
 
+import org.apache.juneau.commons.http.MediaRanges;
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;

@@ -409,7 +409,7 @@ class RdfSerializer_Test extends TestBase {
 			assertNotNull(RdfSerializer.create().keepNullProperties(false).build());
 			assertNotNull(RdfSerializer.create().listener(F01_TestSerializerListener.class).build());
 			assertNotNull(RdfSerializer.create().locale(Locale.ENGLISH).build());
-			assertNotNull(RdfSerializer.create().mediaType(org.apache.juneau.MediaType.of("text/xml+rdf")).build());
+			assertNotNull(RdfSerializer.create().mediaType(org.apache.juneau.commons.http.MediaType.of("text/xml+rdf")).build());
 		}
 
 		@Test void f07_n3Settings() {
@@ -608,7 +608,7 @@ class RdfSerializer_Test extends TestBase {
 			assertNotNull(s.createSession().javaMethod(null).build());
 			assertNotNull(s.createSession().locale(Locale.US).build());
 			assertNotNull(s.createSession().fileCharset(java.nio.charset.Charset.defaultCharset()).build());
-			assertNotNull(s.createSession().mediaType(org.apache.juneau.MediaType.JSON).build());
+			assertNotNull(s.createSession().mediaType(org.apache.juneau.commons.http.MediaType.JSON).build());
 		}
 	}
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.mock;
 
+import org.apache.juneau.commons.http.MediaType;
 import static java.util.Collections.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;

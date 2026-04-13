@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.httppart;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;

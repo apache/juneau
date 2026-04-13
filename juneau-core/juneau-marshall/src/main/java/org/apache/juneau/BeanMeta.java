@@ -224,7 +224,7 @@ public class BeanMeta<T> {
 			if (bc.isBeansRequireSerializable() && ! cm.isAssignableTo(Serializable.class) && ! ap.has(Bean.class, cm))
 				return notABean("Class is not serializable");
 
-			if (ap.has(BeanIgnore.class, cm))
+			if (ap.has(BeanIgnore.class, cm) || ap.has(org.apache.juneau.commons.annotation.BeanIgnore.class, cm))
 				return notABean("Class is annotated with @BeanIgnore");
 
 			if ((! bc.getBeanClassVisibility().isVisible(cm.getModifiers()) || cm.isAnonymousClass()) && ! ap.has(Bean.class, cm))

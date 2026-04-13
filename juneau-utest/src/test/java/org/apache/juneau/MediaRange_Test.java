@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import org.apache.juneau.commons.http.MediaRange;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 

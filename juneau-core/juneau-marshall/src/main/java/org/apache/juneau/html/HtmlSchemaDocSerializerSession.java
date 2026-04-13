@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.html;
 
+import org.apache.juneau.commons.http.MediaType;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;

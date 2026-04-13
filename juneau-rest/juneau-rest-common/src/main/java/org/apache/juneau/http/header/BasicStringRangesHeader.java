@@ -16,12 +16,14 @@
  */
 package org.apache.juneau.http.header;
 
+import org.apache.juneau.commons.http.MediaRange;
+import org.apache.juneau.commons.http.StringRange;
+import org.apache.juneau.commons.http.StringRanges;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 
 /**
  * Category of headers that consist of simple comma-delimited lists of strings with q-values.

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.parser;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
@@ -24,7 +25,6 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.httppart.*;
 

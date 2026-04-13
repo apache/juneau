@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.uon;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 

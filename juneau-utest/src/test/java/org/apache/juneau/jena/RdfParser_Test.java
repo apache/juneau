@@ -354,7 +354,7 @@ class RdfParser_Test extends TestBase {
 		@Test void d10_listenerLocaleMediaType() {
 			assertNotNull(RdfParser.create().listener(D10_TestParserListener.class).build());
 			assertNotNull(RdfParser.create().locale(Locale.ENGLISH).build());
-			assertNotNull(RdfParser.create().mediaType(org.apache.juneau.MediaType.of("text/xml+rdf")).build());
+			assertNotNull(RdfParser.create().mediaType(org.apache.juneau.commons.http.MediaType.of("text/xml+rdf")).build());
 		}
 
 		@Test void d11_notBeanAndPropertyNamer() {
@@ -430,7 +430,7 @@ class RdfParser_Test extends TestBase {
 			assertNotNull(p.createSession().javaMethod(null).build());
 			assertNotNull(p.createSession().locale(Locale.US).build());
 			assertNotNull(p.createSession().fileCharset(java.nio.charset.Charset.defaultCharset()).build());
-			assertNotNull(p.createSession().mediaType(org.apache.juneau.MediaType.JSON).build());
+			assertNotNull(p.createSession().mediaType(org.apache.juneau.commons.http.MediaType.JSON).build());
 		}
 
 		@Test void d17_xmlMetaProviderMethods() {

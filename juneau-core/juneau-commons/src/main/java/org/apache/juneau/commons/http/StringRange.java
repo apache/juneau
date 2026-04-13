@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons.http;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -23,8 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.annotation.BeanIgnore;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for
@@ -77,7 +76,7 @@ public class StringRange {
 		}
 
 		this.qValue = qValue2;
-		this.extensions = extensions2.toArray(new NameValuePair[extensions2.size()]);
+		this.extensions = extensions2.toArray(NameValuePair.EMPTY_ARRAY);
 		this.name = e.getName();
 
 		var sb = new StringBuilder();

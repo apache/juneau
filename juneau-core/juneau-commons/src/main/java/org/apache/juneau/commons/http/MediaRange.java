@@ -14,15 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons.http;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
-
-import org.apache.juneau.commons.http.*;
 
 /**
  * Describes a single type used in content negotiation between an HTTP client and server, as described in
@@ -63,7 +61,7 @@ public class MediaRange extends MediaType {
 		}
 
 		this.qValue = qValue2;
-		this.extensions = extensions2.toArray(new NameValuePair[extensions2.size()]);
+		this.extensions = extensions2.toArray(NameValuePair.EMPTY_ARRAY);
 
 		var sb = new StringBuilder().append(super.toString());
 
@@ -137,6 +135,6 @@ public class MediaRange extends MediaType {
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return string != null ? string.hashCode() : 0;
+		return Objects.hashCode(string);
 	}
 }
