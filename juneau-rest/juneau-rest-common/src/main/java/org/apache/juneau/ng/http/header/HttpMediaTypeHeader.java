@@ -22,8 +22,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.commons.http.NameValuePair;
 
 /**
  * Base type for headers whose value is a single {@link MediaType} (e.g. {@code Content-Type}).

@@ -22,8 +22,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
-import org.apache.http.message.*;
+import org.apache.juneau.commons.http.*;
 
 /**
  * Describes a single type used in content negotiation between an HTTP client and server, as described in

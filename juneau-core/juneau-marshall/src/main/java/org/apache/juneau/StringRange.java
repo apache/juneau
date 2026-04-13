@@ -23,9 +23,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
-import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.http.*;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for
@@ -48,8 +47,8 @@ import org.apache.juneau.annotation.*;
 public class StringRange {
 
 	private static HeaderElement parse(String value) {
-		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
-		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("*", ""));
+		HeaderElement[] elements = HeaderValueParser.parseElements(emptyIfNull(trim(value)));
+		return (elements.length > 0 ? elements[0] : new HeaderElement("*", NameValuePair.EMPTY_ARRAY));
 	}
 
 	private final NameValuePair[] extensions;

@@ -19,7 +19,7 @@ package org.apache.juneau.httppart;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import org.apache.http.*;
+import org.apache.juneau.commons.http.*;
 
 /**
  * Represents an instance of an HTTP part.

@@ -23,9 +23,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
-import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.collections.*;
 
 /**
@@ -97,7 +96,7 @@ public class MediaRanges {
 	}
 
 	private static HeaderElement[] parse(String value) {
-		return BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
+		return HeaderValueParser.parseElements(emptyIfNull(trim(value)));
 	}
 
 	private final MediaRange[] ranges;

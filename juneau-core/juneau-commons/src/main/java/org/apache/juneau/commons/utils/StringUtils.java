@@ -370,12 +370,12 @@ public class StringUtils {
 			var b3 = BASE64M2[i3 & 0xff];
 			var o0 = (b0 << 2) | (b1 >>> 4);
 			var o1 = ((b1 & 0xf) << 4) | (b2 >>> 2);
-			var o2 = ((b2 & 3) << 6) | b3;
-			out[iOut++] = (byte)o0;
+			var o2 = ((b2 & 3) << 6) | (b3 & 0xff);
+			out[iOut++] = (byte)(o0 & 0xff);
 			if (iOut < outLength)
-				out[iOut++] = (byte)o1;
+				out[iOut++] = (byte)(o1 & 0xff);
 			if (iOut < outLength)
-				out[iOut++] = (byte)o2;
+				out[iOut++] = (byte)(o2 & 0xff);
 		}
 		return out;
 	}
@@ -6323,6 +6323,8 @@ public class StringUtils {
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
 	public static List<String> split(String s, char c) {
+		if (s == null)
+			return null;
 		return split(s, c, Integer.MAX_VALUE);
 	}
 
@@ -6369,14 +6371,14 @@ public class StringUtils {
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
 	 * @param limit The maximum number of tokens to return.
-	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 * @return The tokens, or an empty list if the string was <jk>null</jk>.
 	 */
 	public static List<String> split(String s, char c, int limit) {
 
 		var escapeChars = getEscapeSet(c);
 
 		if (s == null)
-			return null;
+			return Collections.emptyList();
 		if (isEmpty(s))
 			return Collections.emptyList();
 		if (s.indexOf(c) == -1)
@@ -6466,8 +6468,10 @@ public class StringUtils {
 		"java:S1168"     // TODO: splita used widely; null propagates from split(). Consider empty array. See BasicCsvHeader, etc.
 	})
 	public static String[] splita(String s, char c, int limit) {
+		if (s == null)
+			return null;
 		var l = StringUtils.split(s, c, limit);
-		return l == null ? null : l.toArray(new String[l.size()]);
+		return l.toArray(new String[l.size()]);
 	}
 
 	/**

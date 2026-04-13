@@ -23,9 +23,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
-import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.collections.*;
 
 /**
@@ -109,7 +108,7 @@ public class StringRanges {
 	}
 
 	private static HeaderElement[] parse(String value) {
-		return value == null ? null : BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
+		return value == null ? null : HeaderValueParser.parseElements(emptyIfNull(trim(value)));
 	}
 
 	private final StringRange[] value;

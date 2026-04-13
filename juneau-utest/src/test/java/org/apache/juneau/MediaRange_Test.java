@@ -21,8 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.http.*;
-import org.apache.http.message.*;
+import org.apache.juneau.commons.http.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -31,8 +30,7 @@ import org.junit.jupiter.api.*;
 class MediaRange_Test extends TestBase {
 
 	@Test void a01_basic() {
-		// Test basic MediaRange creation
-		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("text/html;charset=UTF-8;q=0.9", null);
+		var element = HeaderValueParser.parseElements("text/html;charset=UTF-8;q=0.9")[0];
 
 		var x = new MediaRange(element);
 
@@ -42,8 +40,7 @@ class MediaRange_Test extends TestBase {
 	}
 
 	@Test void a02_forEachParameter_fluentChaining() {
-		// Test that forEachParameter returns MediaRange for fluent chaining
-		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("text/html;charset=UTF-8;level=1", null);
+		var element = HeaderValueParser.parseElements("text/html;charset=UTF-8;level=1")[0];
 
 		var x = new MediaRange(element);
 
@@ -61,8 +58,7 @@ class MediaRange_Test extends TestBase {
 	}
 
 	@Test void a03_forEachParameter_withConsumer() {
-		// Test that forEachParameter properly iterates parameters
-		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("application/json;charset=UTF-8;version=2", null);
+		var element = HeaderValueParser.parseElements("application/json;charset=UTF-8;version=2")[0];
 
 		var x = new MediaRange(element);
 
@@ -75,8 +71,7 @@ class MediaRange_Test extends TestBase {
 	}
 
 	@Test void a04_forEachParameter_emptyParameters() {
-		// Test with no parameters
-		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("text/plain", null);
+		var element = HeaderValueParser.parseElements("text/plain")[0];
 
 		var x = new MediaRange(element);
 
@@ -89,8 +84,7 @@ class MediaRange_Test extends TestBase {
 	}
 
 	@Test void a05_fluentChaining_combined() {
-		// Test chaining forEachParameter multiple times
-		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("text/html;charset=UTF-8;level=1", null);
+		var element = HeaderValueParser.parseElements("text/html;charset=UTF-8;level=1")[0];
 
 		var x = new MediaRange(element);
 
@@ -108,8 +102,7 @@ class MediaRange_Test extends TestBase {
 	}
 
 	@Test void a06_forEachParameter_withExtensions() {
-		// Test that both forEachParameter and forEachExtension APIs work
-		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("text/html;q=0.9", null);
+		var element = HeaderValueParser.parseElements("text/html;q=0.9")[0];
 
 		var x = new MediaRange(element);
 
