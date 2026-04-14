@@ -30,10 +30,6 @@ import org.junit.jupiter.api.*;
 })
 class SchemaAnnotation_Test extends TestBase {
 
-	private static final String CNAME = SchemaAnnotation_Test.class.getName();
-
-	private static class X1 {}
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
@@ -78,8 +74,6 @@ class SchemaAnnotation_Test extends TestBase {
 		.minProperties(12)
 		.mo("s")
 		.multipleOf("t")
-		.on("u")
-		.onClass(X1.class)
 		.p("v")
 		.pattern("w")
 		.properties("x")
@@ -135,8 +129,6 @@ class SchemaAnnotation_Test extends TestBase {
 		.minProperties(12)
 		.mo("s")
 		.multipleOf("t")
-		.on("u")
-		.onClass(X1.class)
 		.p("v")
 		.pattern("w")
 		.properties("x")
@@ -154,8 +146,8 @@ class SchemaAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"$ref,default_,enum_,additionalProperties,aev,allOf,allowEmptyValue,cf,collectionFormat,d,description,df,discriminator,e,emax,emin,exclusiveMaximum,exclusiveMinimum,externalDocs{description,url},f,format,ignore,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxProperties,maxi,maximum,maxl,maxp,min,minItems,minLength,minProperties,mini,minimum,minl,minp,mo,multipleOf,on,onClass,p,pattern,properties,r,readOnly,required,ro,sie,skipIfEmpty,t,title,type,ui,uniqueItems,xml",
-			"c,[a],[b],[d],false,[e],false,f,g,[h],[i],[j],k,[l],true,true,true,true,{[],},m,n,true,{,[],[],,,[],[],[],false,false,false,false,,,{,[],[],,,[],[],[],false,false,false,false,,,[],,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},o,2,4,6,1,p,3,5,q,8,10,12,7,r,9,11,s,t,[u],[X1],v,w,[x],true,true,true,true,false,false,z,aa,bb,true,true,[cc]");
+			"$ref,default_,enum_,additionalProperties,aev,allOf,allowEmptyValue,cf,collectionFormat,d,description,df,discriminator,e,emax,emin,exclusiveMaximum,exclusiveMinimum,externalDocs{description,url},f,format,ignore,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxProperties,maxi,maximum,maxl,maxp,min,minItems,minLength,minProperties,mini,minimum,minl,minp,mo,multipleOf,p,pattern,properties,r,readOnly,required,ro,sie,skipIfEmpty,t,title,type,ui,uniqueItems,xml",
+			"c,[a],[b],[d],false,[e],false,f,g,[h],[i],[j],k,[l],true,true,true,true,{[],},m,n,true,{,[],[],,,[],[],[],false,false,false,false,,,{,[],[],,,[],[],[],false,false,false,false,,,[],,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},o,2,4,6,1,p,3,5,q,8,10,12,7,r,9,11,s,t,v,w,[x],true,true,true,true,false,false,z,aa,bb,true,true,[cc]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -177,27 +169,6 @@ class SchemaAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	// Other methods.
 	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c1 = SchemaAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = SchemaAnnotation.create("a").on("b").build();
-		var c3 = SchemaAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		var c4 = SchemaAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
-		assertBean(c3, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
-	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
@@ -243,8 +214,6 @@ class SchemaAnnotation_Test extends TestBase {
 		minProperties=12,
 		mo="s",
 		multipleOf="t",
-		on="u",
-		onClass=X1.class,
 		p="v",
 		pattern="w",
 		properties="x",
@@ -302,8 +271,6 @@ class SchemaAnnotation_Test extends TestBase {
 		minProperties=12,
 		mo="s",
 		multipleOf="t",
-		on="u",
-		onClass=X1.class,
 		p="v",
 		pattern="w",
 		properties="x",

@@ -22,17 +22,13 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link Schema @Schema} annotation.
@@ -98,29 +94,6 @@ public class SchemaAnnotation {
 	private SchemaAnnotation() {}
 
 	/**
-	 * Applies targeted {@link Schema} annotations to a {@link org.apache.juneau.Context.Builder}.
-	 */
-	public static class Apply extends AnnotationApplier<Schema,Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(Schema.class, Context.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Schema> ai, Context.Builder b) {
-			Schema a = ai.inner();
-			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
-				return;
-			b.annotations(a);
-		}
-	}
-
-	/**
 	 * A collection of {@link Schema @Schema annotations}.
 	 */
 	@Documented
@@ -147,7 +120,7 @@ public class SchemaAnnotation {
 	@SuppressWarnings({
 		"java:S116" // Field names intentionally match JSON property names
 	})
-	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
+	public static class Builder extends AnnotationObject.Builder {
 
 		private boolean aev;
 		private boolean allowEmptyValue;
@@ -1088,67 +1061,13 @@ public class SchemaAnnotation {
 			return this;
 		}
 
-		@Override /* Overridden from AppliedAnnotationObject.Builder */
-		public Builder on(String...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder on(Class<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedOnClassAnnotationObject.Builder */
-		public Builder onClass(Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
-		public Builder on(Method...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderMF */
-		public Builder on(Field...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder on(ClassInfo...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder onClass(ClassInfo...value) {
-			super.onClass(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderTMF */
-		public Builder on(FieldInfo...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderTMF */
-		public Builder on(MethodInfo...value) {
-			super.on(value);
-			return this;
-		}
-
 	}
 
 	@SuppressWarnings({
 		"java:S116",  // Field names intentionally match JSON property names
 		"java:S2160"  // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedOnClassAnnotationObject implements Schema {
+	private static class Object extends AnnotationObject implements Schema {
 
 		private final String[] description;
 		private final boolean aev;
@@ -1785,26 +1704,6 @@ public class SchemaAnnotation {
 	 */
 	public static Builder create() {
 		return new Builder();
-	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
 	}
 
 	/**

@@ -33,21 +33,26 @@ juneau-commons -> juneau-rest-common -> juneau-marshall -> juneau-rest-client
 ## Phase 2 — Move `@Schema` and related annotations to `juneau-commons`
 
 **Difficulty**: Hard  
-**Impact**: 83 files (7 HTTP annotations + Swagger model classes)
+**Impact**: Large (HTTP annotations, Swagger models)
+
+**Prerequisite**: The global `XApply` annotation split must be completed first. See [`xapply-annotation-split.md`](xapply-annotation-split.md) for the full plan covering the removal of `on`/`onClass` from all 30 context-appliable annotations into companion `@XApply` annotations.
 
 `@Schema` is the #1 blocker. Every HTTP annotation references it via `Schema schema() default @Schema`. `InvalidAnnotationException` is also used.
 
-### Classes to move
-- `org.apache.juneau.annotation.Schema` → `org.apache.juneau.commons.annotation.Schema`
-- `org.apache.juneau.annotation.Items` → `org.apache.juneau.commons.annotation.Items`
-- `org.apache.juneau.annotation.SubItems` → `org.apache.juneau.commons.annotation.SubItems`
-- `org.apache.juneau.annotation.ExternalDocs` → `org.apache.juneau.commons.annotation.ExternalDocs`
-- `InvalidAnnotationException`
+### Classes to move (commons)
+
+- `org.apache.juneau.annotation.Schema` -> `org.apache.juneau.commons.annotation.Schema` (no `on`/`onClass`/`@ContextApply` after XApply split)
+- `SchemaAnnotation` -> commons **minus** apply-only / marshall-only inner types
+- `org.apache.juneau.annotation.Items` -> `org.apache.juneau.commons.annotation.Items`
+- `org.apache.juneau.annotation.SubItems` -> `org.apache.juneau.commons.annotation.SubItems`
+- `org.apache.juneau.annotation.ExternalDocs` -> `org.apache.juneau.commons.annotation.ExternalDocs`
+- `InvalidAnnotationException` (and any other schema-adjacent types that must compile without marshall)
 
 ### Considerations
-- `SchemaAnnotation` (empty(), DEFAULT, builder utilities) must also move or be split
-- `@Schema` references `JsonSchemaSerializer` in javadoc — javadoc link would break
-- `HttpPartSchema` reads `@Schema` attributes — must check if `HttpPartSchema` can also move or if reflective access suffices
+
+- **`@Schema` Javadoc** references marshall-only types (e.g. `JsonSchemaSerializer`) -- replace with neutral text or doclinks that do not create a compile dependency from commons to marshall.
+- **`HttpPartSchema`** reads `@Schema` -- after the move, references **`org.apache.juneau.commons.annotation.Schema`** (Phase 3 may move `HttpPartSchema` itself to commons).
+- **Repeatability**: `@Schema` keeps its own `@Repeatable(Schema.Array.class)` for inline use; `@SchemaApply` has its own `@Repeatable` container.
 
 ---
 
@@ -70,7 +75,7 @@ juneau-commons -> juneau-rest-common -> juneau-marshall -> juneau-rest-client
 - `HttpPartMarshalling` (references serializer/parser types)
 
 ### Considerations
-- `HttpPartSchema.Builder` currently has `apply(HttpPartMarshalling)` which reads `serializer()`/`parser()` — this creates a dependency on marshall. Could be split: schema model in commons, marshalling-aware builder extension in marshall.
+- `HttpPartSchema.Builder` currently has `apply(HttpPartMarshalling)` which reads `serializer()`/`parser()` -- this creates a dependency on marshall. Could be split: schema model in commons, marshalling-aware builder extension in marshall.
 
 ---
 
@@ -79,7 +84,7 @@ juneau-commons -> juneau-rest-common -> juneau-marshall -> juneau-rest-client
 **Difficulty**: Medium  
 **Impact**: 3 files (SerializedHeader, SerializedPart, SerializedEntity) + 3 factory helpers
 
-These classes have the heaviest marshall dependencies — they use `httppart`, `oapi`, `serializer`, and `urlencoding` packages. They bridge the gap between REST-common HTTP types and marshall serialization.
+These classes have the heaviest marshall dependencies -- they use `httppart`, `oapi`, `serializer`, and `urlencoding` packages. They bridge the gap between REST-common HTTP types and marshall serialization.
 
 ### Options
 1. **Move to marshall**: These classes logically belong in the serialization layer
@@ -114,7 +119,7 @@ Move `SerializedHeader`, `SerializedPart`, `SerializedEntity` and their factory 
 | Priority | Package | Files | Target module | Status |
 |----------|---------|-------|----------------|--------|
 | 1 | `MediaType`, `MediaRanges`, `StringRanges`, etc. | many | juneau-commons (`org.apache.juneau.commons.http`) | Done |
-| 2 | `@Schema`, `@Items`, `@SubItems` | 83 | juneau-commons | Pending |
+| 2 | `@Schema`, `@Items`, etc. + `@XApply` in marshall | 83+ | commons + marshall (`@SchemaApply`, etc.) | Pending |
 | 3 | `HttpPartSchema`, `HttpPartType` | 12 | juneau-commons | Pending |
 | 4 | `Serialized*` bridge classes | 6 | juneau-marshall or bridge | Pending |
 | 5 | `VarResolverSession`, `BeanCreator` | 5 | juneau-commons or optional | Pending |
@@ -124,4 +129,5 @@ Move `SerializedHeader`, `SerializedPart`, `SerializedEntity` and their factory 
 - **Split-package**: HTTP media types moved out of `org.apache.juneau` into `org.apache.juneau.commons.http`
 - **Binary compatibility**: All moves require recompilation of downstream modules
 - **Schema complexity**: `@Schema` has ~50 attributes and deep integration with serializers
+- **Breaking `XApply` migration**: Replacing `on`/`onClass` on context-appliable annotations touches many call sites; plan for a single major release boundary and migration notes
 - **Incremental approach**: Each phase should be self-contained and buildable independently

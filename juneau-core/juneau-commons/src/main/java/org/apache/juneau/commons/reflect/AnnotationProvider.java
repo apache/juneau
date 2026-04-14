@@ -345,18 +345,22 @@ public class AnnotationProvider {
 				try {
 					var ci = ClassInfo.of(a.getClass());
 
+					// XApply pattern: if annotation has a value() returning a single Annotation,
+					// unwrap and store the inner annotation instead of the wrapper.
+					var annotationToStore = unwrapXApply(ci, a);
+
 					ci.getPublicMethod(x -> x.hasName("onClass")).ifPresent(mi -> {
 						if (! mi.getReturnType().is(Class[].class))
 							throw bex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an onClass() method that returns a Class array.", cns(a));
 						for (var c : (Class<?>[])mi.accessible().invoke(a))
-							runtimeAnnotations.append(c.getName(), a);
+							runtimeAnnotations.append(c.getName(), annotationToStore);
 					});
 
 					ci.getPublicMethod(x -> x.hasName("on")).ifPresent(mi -> {
 						if (! mi.getReturnType().is(String[].class))
 							throw bex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an on() method that returns a String array.", cns(a));
 						for (var s : (String[])mi.accessible().invoke(a))
-							runtimeAnnotations.append(s, a);
+							runtimeAnnotations.append(s, annotationToStore);
 					});
 
 				} catch (BeanRuntimeException e) {
@@ -366,6 +370,18 @@ public class AnnotationProvider {
 				}
 			}
 			return this;
+		}
+
+		private static Annotation unwrapXApply(ClassInfo ci, Annotation a) {
+			var valueMethod = ci.getPublicMethod(x -> x.hasName("value"));
+			if (valueMethod.isEmpty())
+				return a;
+			var mi = valueMethod.get();
+			var rt = mi.getReturnType().inner();
+			if (! Annotation.class.isAssignableFrom(rt) || rt.isArray())
+				return a;
+			var inner = (Annotation) mi.accessible().invoke(a);
+			return inner != null ? inner : a;
 		}
 
 		/**

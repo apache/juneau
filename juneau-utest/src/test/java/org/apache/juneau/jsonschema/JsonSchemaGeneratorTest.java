@@ -1168,9 +1168,9 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{description:'baz',format:'bar',type:'foo',properties:{f1:{type:'integer',format:'int32'}}}", s.getSchema(A1a.class));
 	}
 
-	@Schema(on="Dummy1",type="foo",format="bar",description="baz")
-	@Schema(on="A1a",type="foo",format="bar",description="baz")
-	@Schema(on="Dummy2",type="foo",format="bar",description="baz")
+	@SchemaApply(on="Dummy1",value=@Schema(type="foo",format="bar",description="baz"))
+	@SchemaApply(on="A1a",value=@Schema(type="foo",format="bar",description="baz"))
+	@SchemaApply(on="Dummy2",value=@Schema(type="foo",format="bar",description="baz"))
 	private static class A1aConfig {}
 
 	public static class A1a {
@@ -1192,7 +1192,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo'}}}", s.getSchema(A2a.class));
 	}
 
-	@Schema(on="A2a.f1",type="foo",format="bar",description="baz")
+	@SchemaApply(on="A2a.f1",value=@Schema(type="foo",format="bar",description="baz"))
 	private static class A2aConfig {}
 
 	public static class A2a {
@@ -1214,7 +1214,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo'}}}", s.getSchema(A3a.class));
 	}
 
-	@Schema(on="A3a.getF1",type="foo",format="bar",description="baz")
+	@SchemaApply(on="A3a.getF1",value=@Schema(type="foo",format="bar",description="baz"))
 	private static class A3aConfig {}
 
 	public static class A3a {
@@ -1238,7 +1238,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo'}}}", s.getSchema(A4a.class));
 	}
 
-	@Schema(on="A4a.setF1",type="foo",format="bar",description="baz")
+	@SchemaApply(on="A4a.setF1",value=@Schema(type="foo",format="bar",description="baz"))
 	private static class A4aConfig {}
 
 	public static class A4a {
@@ -1272,7 +1272,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{description:'baz',format:'bar',type:'foo'}}}", s.getSchema(SimpleBean[][].class));
 	}
 
-	@Schema(on="SwapWithAnnotation2", type="foo",format="bar",description="baz")
+	@SchemaApply(on="SwapWithAnnotation2", value=@Schema(type="foo",format="bar",description="baz"))
 	private static class SwapWithAnnotation2Config {}
 
 	public static class SwapWithAnnotation2 extends ObjectSwap<SimpleBean,Integer> {}
@@ -1281,7 +1281,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 	// @JsonSchema on ObjectSwap
 	//====================================================================================================
 
-	@Schema(onClass=B.class,$ref="ref")
+	@SchemaApply(onClass=B.class, value=@Schema($ref="ref"))
 	static class BConfig {}
 
 	static class B {}
