@@ -18,35 +18,13 @@ package org.apache.juneau.markdown.annotation;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.annotation.*;
 
 /**
  * Utility classes and methods for the {@link Markdown @Markdown} annotation.
  *
  */
 public class MarkdownAnnotation {
-
-	/**
-	 * Applies {@link Markdown} annotations to a {@link org.apache.juneau.Context.Builder}.
-	 */
-	public static class Apply extends AnnotationApplier<Markdown,Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(Markdown.class, Context.Builder.class, vr);
-		}
-
-		@Override /* AnnotationApplier */
-		public void apply(AnnotationInfo<Markdown> ai, Context.Builder b) {
-			// No-op: @Markdown settings are read at serialization/parse time via MarkdownMetaProvider.
-		}
-	}
 
 	/**
 	 * A collection of {@link Markdown} annotations.
@@ -64,4 +42,37 @@ public class MarkdownAnnotation {
 		 */
 		Markdown[] value();
 	}
+
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+	})
+	private static class Object extends AnnotationObject implements Markdown {
+		Object() {
+			super(new AnnotationObject.Builder(Markdown.class));
+		}
+
+		@Override
+		public String[] description() { return new String[0]; }
+
+		@Override
+		public MarkdownFormat format() { return MarkdownFormat.DEFAULT; }
+
+		@Override
+		public String heading() { return ""; }
+
+		@Override
+		public boolean noTables() { return false; }
+
+		@Override
+		public boolean noHeaders() { return false; }
+
+		@Override
+		public boolean code() { return false; }
+
+		@Override
+		public String link() { return ""; }
+	}
+
+	/** Default value */
+	public static final Markdown DEFAULT = new Object();
 }

@@ -493,9 +493,9 @@ class BeanMap_Test extends TestBase {
 		assertBean(t, "ab2{class{simpleName}},ab2{0{class{simpleName},s}}", "{{D2c[]}},{{{D2c},foobar}}");
 	}
 
-	@Bean(on="Dummy1", typeName="dummy")
-	@Bean(on="D2c", typeName="D2")
-	@Bean(on="Dummy2", typeName="dummy")
+	@BeanApply(on="Dummy1",value=@Bean(typeName="dummy"))
+	@BeanApply(on="D2c",value=@Bean(typeName="D2"))
+	@BeanApply(on="Dummy2",value=@Bean(typeName="dummy"))
 	private static class D1cConfig {}
 
 	public static class D1c {
@@ -944,9 +944,9 @@ class BeanMap_Test extends TestBase {
 		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "4,5,6");
 	}
 
-	@Bean(on="Dummy1", propertyNamer=PropertyNamerDLC.class)
-	@Bean(on="P1c", propertyNamer=PropertyNamerDLC.class)
-	@Bean(on="Dummy2", propertyNamer=PropertyNamerDLC.class)
+	@BeanApply(on="Dummy1",value=@Bean(propertyNamer=PropertyNamerDLC.class))
+	@BeanApply(on="P1c",value=@Bean(propertyNamer=PropertyNamerDLC.class))
+	@BeanApply(on="Dummy2",value=@Bean(propertyNamer=PropertyNamerDLC.class))
 	private static class P1cConfig {}
 
 	public static class P1c {
@@ -1625,9 +1625,9 @@ class BeanMap_Test extends TestBase {
 		assertEquals("b(setter)", t.b);
 	}
 
-	@BeanIgnore(on="Dummy1")
-	@BeanIgnore(on="Uc.getB,Uc.c,Uc.getD,Uc.setD")
-	@BeanIgnore(on="Dummy2")
+	@BeanIgnoreApply(on="Dummy1",value=@BeanIgnore())
+	@BeanIgnoreApply(on="Uc.getB,Uc.c,Uc.getD,Uc.setD",value=@BeanIgnore())
+	@BeanIgnoreApply(on="Dummy2",value=@BeanIgnore())
 	private static class UcConfig {}
 
 	public static class Uc {
@@ -1672,9 +1672,9 @@ class BeanMap_Test extends TestBase {
 		assertEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", ws.toString(new V3c()));
 	}
 
-	@Bean(on="Dummy1", stopClass=Vc.class)
-	@Bean(on="V3c", stopClass=Vc.class)
-	@Bean(on="Dummy2", stopClass=Vc.class)
+	@BeanApply(on="Dummy1",value=@Bean(stopClass=Vc.class))
+	@BeanApply(on="V3c",value=@Bean(stopClass=Vc.class))
+	@BeanApply(on="Dummy2",value=@Bean(stopClass=Vc.class))
 	private static class VcConfig {}
 
 	public static class Vc {

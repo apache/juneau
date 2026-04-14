@@ -564,7 +564,7 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore class
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(on="D01c")
+	@BeanIgnoreApply(on="D01c",value=@BeanIgnore())
 	private static class D01Config {}
 
 	@BeanIgnore
@@ -612,7 +612,7 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore swap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(on="E01c.toInteger")
+	@BeanIgnoreApply(on="E01c.toInteger",value=@BeanIgnore())
 	private static class E01Config {}
 
 	public static class E01 {
@@ -676,7 +676,7 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore unswap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(on="F01c.create(java.lang.Integer)")
+	@BeanIgnoreApply(on="F01c.create(java.lang.Integer)",value=@BeanIgnore())
 	private static class F01Config {}
 
 	public static class F01 {
@@ -777,7 +777,7 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore constructor
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(on="G01c(java.lang.Integer)")
+	@BeanIgnoreApply(on="G01c(java.lang.Integer)",value=@BeanIgnore())
 	private static class G01Config {}
 
 	public static class G01 {

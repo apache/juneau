@@ -21,7 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.proto.*;
 
 /**
@@ -31,7 +30,6 @@ import org.apache.juneau.proto.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Marshalled classes/methods/fields.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -43,7 +41,6 @@ import org.apache.juneau.proto.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ProtoAnnotation.Array.class)
-@ContextApply(ProtoAnnotation.Apply.class)
 public @interface Proto {
 
 	/**
@@ -63,33 +60,4 @@ public @interface Proto {
 	 * @since 9.2.0
 	 */
 	String[] description() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes/methods/fields.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field.
-	 * It is ignored when the annotation is applied directly to classes/methods/fields.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <p>
-	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
 }

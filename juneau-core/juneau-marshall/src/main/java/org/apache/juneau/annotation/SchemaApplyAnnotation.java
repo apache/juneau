@@ -175,16 +175,6 @@ public class SchemaApplyAnnotation {
 		public Schema value() {
 			return value;
 		}
-
-		@Override /* Overridden from SchemaApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from SchemaApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
-		}
 	}
 
 	/** Default value */

@@ -18,34 +18,12 @@ package org.apache.juneau.ini.annotation;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.annotation.*;
 
 /**
  * Utility classes and methods for the {@link Ini @Ini} annotation.
  */
 public class IniAnnotation {
-
-	/**
-	 * Applies {@link Ini} annotations to a {@link org.apache.juneau.Context.Builder}.
-	 */
-	public static class Apply extends AnnotationApplier<Ini, Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(Ini.class, Context.Builder.class, vr);
-		}
-
-		@Override /* AnnotationApplier */
-		public void apply(AnnotationInfo<Ini> ai, Context.Builder b) {
-			// No-op: @Ini settings are read at serialization/parse time via IniMetaProvider.
-		}
-	}
 
 	/**
 	 * A collection of {@link Ini} annotations.
@@ -63,4 +41,25 @@ public class IniAnnotation {
 		 */
 		Ini[] value();
 	}
+
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+	})
+	private static class Object extends AnnotationObject implements Ini {
+		Object() {
+			super(new AnnotationObject.Builder(Ini.class));
+		}
+
+		@Override
+		public String section() { return ""; }
+
+		@Override
+		public String comment() { return ""; }
+
+		@Override
+		public boolean json5Encoding() { return false; }
+	}
+
+	/** Default value */
+	public static final Ini DEFAULT = new Object();
 }

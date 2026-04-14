@@ -28,8 +28,6 @@ import org.junit.jupiter.api.*;
 })
 class HtmlLinkAnnotation_Test extends TestBase {
 
-	private static final String CNAME = HtmlLinkAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
@@ -37,19 +35,17 @@ class HtmlLinkAnnotation_Test extends TestBase {
 	HtmlLink a1 = HtmlLinkAnnotation.create()
 		.description("a")
 		.nameProperty("b")
-		.on("c")
 		.uriProperty("d")
 		.build();
 
 	HtmlLink a2 = HtmlLinkAnnotation.create()
 		.description("a")
 		.nameProperty("b")
-		.on("c")
 		.uriProperty("d")
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,nameProperty,on,onClass,uriProperty", "[a],b,[c],[],d");
+		assertBean(a1, "description,nameProperty,uriProperty", "[a],b,d");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -69,34 +65,12 @@ class HtmlLinkAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() {
-		var c1 = HtmlLinkAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = HtmlLinkAnnotation.create("a").on("b").build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@HtmlLink(
 		description={ "a" },
 		nameProperty="b",
-		on="c",
 		uriProperty="d"
 	)
 	public static class D1 {}
@@ -105,7 +79,6 @@ class HtmlLinkAnnotation_Test extends TestBase {
 	@HtmlLink(
 		description={ "a" },
 		nameProperty="b",
-		on="c",
 		uriProperty="d"
 	)
 	public static class D2 {}

@@ -5470,7 +5470,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(List.of("1", "2"), split("1,2"));
 
 		// split(String,char) - with escaping
-		assertNull(split(null, ','));
+		assertEquals(Collections.emptyList(), split(null, ','));
 		assertTrue(split("", ',').isEmpty());
 		assertEquals(List.of("1"), split("1", ','));
 		assertEquals(List.of("1", "2"), split("1,2", ','));

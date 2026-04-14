@@ -32,17 +32,15 @@ class BsonAnnotation_Test extends org.apache.juneau.TestBase {
 
 	Bson a1 = BsonAnnotation.create()
 		.description("a")
-		.on("b")
 		.build();
 
 	Bson a2 = BsonAnnotation.create()
 		.description("a")
-		.on("b")
 		.build();
 
 	@Test
 	void a01_basic() {
-		assertBean(a1, "description,on,onClass", "[a],[b],[]");
+		assertBean(a1, "description", "[a]");
 	}
 
 	@Test
@@ -59,10 +57,10 @@ class BsonAnnotation_Test extends org.apache.juneau.TestBase {
 		assertSame(bc1, bc2);
 	}
 
-	@org.apache.juneau.bson.annotation.Bson(description = "a", on = "b")
+	@org.apache.juneau.bson.annotation.Bson(description = "a")
 	public static class D1 {}
 
-	@org.apache.juneau.bson.annotation.Bson(description = "a", on = "b")
+	@org.apache.juneau.bson.annotation.Bson(description = "a")
 	public static class D2 {}
 
 	@Test

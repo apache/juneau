@@ -21,8 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
-
 /**
  * Annotation for customizing Markdown serialization and parsing behavior on classes, methods, and fields.
  *
@@ -30,7 +28,6 @@ import org.apache.juneau.annotation.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Marshalled classes/methods/fields.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
  */
@@ -39,7 +36,6 @@ import org.apache.juneau.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(MarkdownAnnotation.Array.class)
-@ContextApply(MarkdownAnnotation.Apply.class)
 public @interface Markdown {
 
 	/**
@@ -99,26 +95,4 @@ public @interface Markdown {
 	 * @return The annotation value.
 	 */
 	String link() default "";
-
-	/**
-	 * Dynamically apply this annotation to the specified classes/methods/fields.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
 }

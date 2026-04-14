@@ -48,8 +48,8 @@ class BeanIgnore_Test extends TestBase {
 		assertJson("{a:'a',c:'c'}", new A());
 	}
 
-	@BeanIgnore(on="Ac.getB")
-	@BeanIgnore(on="Ac.d")
+	@BeanIgnoreApply(on="Ac.getB",value=@BeanIgnore())
+	@BeanIgnoreApply(on="Ac.d",value=@BeanIgnore())
 	private static class AcConfig {}
 
 	public static class Ac {
@@ -97,7 +97,7 @@ class BeanIgnore_Test extends TestBase {
 		assertJson("{f2:2,f3:'xxx',f4:'xxx'}", new B());
 	}
 
-	@BeanIgnore(on="B1c")
+	@BeanIgnoreApply(on="B1c",value=@BeanIgnore())
 	private static class B1cConfig {}
 
 	public static class B1c {

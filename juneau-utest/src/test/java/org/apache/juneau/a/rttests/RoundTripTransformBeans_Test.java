@@ -407,9 +407,9 @@ class RoundTripTransformBeans_Test extends TestBase {
 		assertBean(x, "f1", "bar");
 	}
 
-	@Swap(on="Dummy1",value=BcSwap.class)
-	@Swap(on="Bc",value=BcSwap.class)
-	@Swap(on="Dummy2",value=BcSwap.class)
+	@SwapApply(on="Dummy1",value=@Swap(BcSwap.class))
+	@SwapApply(on="Bc",value=@Swap(BcSwap.class))
+	@SwapApply(on="Dummy2",value=@Swap(BcSwap.class))
 	private static class BcConfig {}
 
 	public static class Bc {
@@ -606,9 +606,9 @@ class RoundTripTransformBeans_Test extends TestBase {
 		t.roundTrip(x, E1c.class);
 	}
 
-	@Swap(on="Dummy1",value=E2c.class)
-	@Swap(on="E1c",value=E2c.class)
-	@Swap(on="Dummy2",value=E2c.class)
+	@SwapApply(on="Dummy1",value=@Swap(E2c.class))
+	@SwapApply(on="E1c",value=@Swap(E2c.class))
+	@SwapApply(on="Dummy2",value=@Swap(E2c.class))
 	private static class E1cConfig {}
 
 	public static class E1c {
@@ -669,9 +669,9 @@ class RoundTripTransformBeans_Test extends TestBase {
 		t.roundTrip(x, F1.class);
 	}
 
-	@Swap(on="Dummy1.c", value=TemporalCalendarSwap.IsoInstant.class)
-	@Swap(on="F1c.c", value=TemporalCalendarSwap.IsoInstant.class)
-	@Swap(on="Dummy2.c", value=TemporalCalendarSwap.IsoInstant.class)
+	@SwapApply(on="Dummy1.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
+	@SwapApply(on="F1c.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
+	@SwapApply(on="Dummy2.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
 	private static class F1cConfig {}
 
 	public static class F1c {
@@ -738,9 +738,9 @@ class RoundTripTransformBeans_Test extends TestBase {
 		t.roundTrip(x, F2.class);
 	}
 
-	@Swap(on="Dummy1.c", value=TemporalCalendarSwap.IsoInstant.class)
-	@Swap(on="F2ac.c", value=TemporalCalendarSwap.IsoInstant.class)
-	@Swap(on="Dummy2.c", value=TemporalCalendarSwap.IsoInstant.class)
+	@SwapApply(on="Dummy1.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
+	@SwapApply(on="F2ac.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
+	@SwapApply(on="Dummy2.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
 	private static class F2acConfig {}
 
 	public static class F2ac {

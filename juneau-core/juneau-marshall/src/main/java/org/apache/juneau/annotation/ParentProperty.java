@@ -41,7 +41,7 @@ import java.lang.annotation.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Bean setter methods or fields
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link ParentPropertyApply @ParentPropertyApply}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
@@ -88,7 +88,6 @@ import java.lang.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ParentPropertyAnnotation.Array.class)
-@ContextApply(ParentPropertyAnnotation.Applier.class)
 public @interface ParentProperty {
 
 	/**
@@ -99,69 +98,4 @@ public @interface ParentProperty {
 	 */
 	String[] description() default {};
 
-	/**
-	 * Dynamically apply this annotation to the specified methods/fields.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing method/field.
-	 * It is ignored when the annotation is applied directly to methods/fields.
-	 *
-	 * <h5 class='section'>Valid patterns:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>Fully qualified with args:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass.myMethod(String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass.myMethod()"</js>
-	 * 				</ul>
-	 * 			<li>Fully qualified:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass.myMethod"</js>
-	 * 				</ul>
-	 * 			<li>Simple with args:
-	 * 				<ul>
-	 * 					<li><js>"MyClass.myMethod(String,int)"</js>
-	 * 					<li><js>"MyClass.myMethod(java.lang.String,int)"</js>
-	 * 					<li><js>"MyClass.myMethod()"</js>
-	 * 				</ul>
-	 * 			<li>Simple:
-	 * 				<ul>
-	 * 					<li><js>"MyClass.myMethod"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner class:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2.myMethod"</js>
-	 * 					<li><js>"Inner1$Inner2.myMethod"</js>
-	 * 					<li><js>"Inner2.myMethod"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>Fields:
-	 * 		<ul>
-	 * 			<li>Fully qualified:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass.myField"</js>
-	 * 				</ul>
-	 * 			<li>Simple:
-	 * 				<ul>
-	 * 					<li><js>"MyClass.myField"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner class:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2.myField"</js>
-	 * 					<li><js>"Inner1$Inner2.myField"</js>
-	 * 					<li><js>"Inner2.myField"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>A comma-delimited list of anything on this list.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
 }

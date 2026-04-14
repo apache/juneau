@@ -68,9 +68,9 @@ import jakarta.servlet.http.*;
 	maxDepth="5",
 	detectRecursions="true"
 )
-@Bean(on="HttpServletRequest",interfaceClass=HttpServletRequest.class)
-@Bean(on="HttpSession",interfaceClass=HttpSession.class)
-@Bean(on="ServletContext",interfaceClass=ServletContext.class)
+@BeanApply(on="HttpServletRequest",value=@Bean(interfaceClass=HttpServletRequest.class))
+@BeanApply(on="HttpSession",value=@Bean(interfaceClass=HttpSession.class))
+@BeanApply(on="ServletContext",value=@Bean(interfaceClass=ServletContext.class))
 public class RequestEchoResource extends BasicRestObject {
 
 	/**

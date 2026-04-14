@@ -216,9 +216,9 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 		assertBean(x, "f1", "1");
 	}
 
-	@Bean(on="Dummy1", findFluentSetters=true)
-	@Bean(on="Builder", findFluentSetters=true)
-	@Bean(on="Dummy2", findFluentSetters=true)
+	@BeanApply(on="Dummy1",value=@Bean(findFluentSetters=true))
+	@BeanApply(on="Builder",value=@Bean(findFluentSetters=true))
+	@BeanApply(on="Dummy2",value=@Bean(findFluentSetters=true))
 	private static class AcConfig {}
 
 	public static class Ac {

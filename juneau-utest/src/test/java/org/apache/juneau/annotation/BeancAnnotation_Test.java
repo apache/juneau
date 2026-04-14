@@ -25,26 +25,22 @@ import org.junit.jupiter.api.*;
 
 class BeancAnnotation_Test extends TestBase {
 
-	private static final String CNAME = BeancAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
 	Beanc a1 = BeancAnnotation.create()
 		.description("a")
-		.on("b")
 		.properties("c")
 		.build();
 
 	Beanc a2 = BeancAnnotation.create()
 		.description("a")
-		.on("b")
 		.properties("c")
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,on,properties", "[a],[b],c");
+		assertBean(a1, "description,properties", "[a],c");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -64,27 +60,11 @@ class BeancAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {}
-	public static class C2 {}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c1 = BeancAnnotation.create("a").on("b").build();
-		var c2 = BeancAnnotation.create().on(C1.class.getConstructor()).on(C2.class.getConstructor()).build();
-
-		assertBean(c1, "on", "[a,b]");
-		assertBean(c2, "on", "["+CNAME+"$C1(),"+CNAME+"$C2()]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Beanc(
 		description={ "a" },
-		on="b",
 		properties="c"
 	)
 	public static class D1 {}
@@ -92,7 +72,6 @@ class BeancAnnotation_Test extends TestBase {
 
 	@Beanc(
 		description={ "a" },
-		on="b",
 		properties="c"
 	)
 	public static class D2 {}

@@ -28,24 +28,20 @@ import org.junit.jupiter.api.*;
 })
 class UonAnnotation_Test extends TestBase {
 
-	private static final String CNAME = UonAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
 	Uon a1 = UonAnnotation.create()
 		.description("a")
-		.on("b")
 		.build();
 
 	Uon a2 = UonAnnotation.create()
 		.description("a")
-		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,on,onClass", "[a],[b],[]");
+		assertBean(a1, "description", "[a]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -65,44 +61,17 @@ class UonAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c1 = UonAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = UonAnnotation.create("a").on("b").build();
-		var c3 = UonAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		var c4 = UonAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
-		assertBean(c3, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Uon(
-		description={ "a" },
-		on="b"
+		description={ "a" }
 	)
 	public static class D1 {}
 	Uon d1 = D1.class.getAnnotationsByType(Uon.class)[0];
 
 	@Uon(
-		description={ "a" },
-		on="b"
+		description={ "a" }
 	)
 	public static class D2 {}
 	Uon d2 = D2.class.getAnnotationsByType(Uon.class)[0];

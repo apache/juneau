@@ -147,8 +147,8 @@ public class XBeans {
 		public static final XC INSTANCE = get();
 	}
 
-	@Bean(on="XD,XE,XF",sort=true)
-	@UrlEncoding(on="C",expandedParams=true)
+	@BeanApply(on="XD,XE,XF",value=@Bean(sort=true))
+	@UrlEncodingApply(on="C",value=@UrlEncoding(expandedParams=true))
 	public static class Annotations {}
 
 	public static class XD {

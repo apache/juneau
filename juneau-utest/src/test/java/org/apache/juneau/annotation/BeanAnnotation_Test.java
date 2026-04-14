@@ -26,8 +26,6 @@ import org.junit.jupiter.api.*;
 
 class BeanAnnotation_Test extends TestBase {
 
-	private static final String CNAME = BeanAnnotation_Test.class.getName();
-
 	private static class X1 {}
 	private  static class X2 extends BeanInterceptor<BeanAnnotation_Test> {}
 
@@ -44,8 +42,6 @@ class BeanAnnotation_Test extends TestBase {
 		.implClass(X1.class)
 		.interceptor(X2.class)
 		.interfaceClass(X1.class)
-		.on("d")
-		.onClass(X1.class)
 		.p("e")
 		.properties("f")
 		.propertyNamer(BasicPropertyNamer.class)
@@ -69,8 +65,6 @@ class BeanAnnotation_Test extends TestBase {
 		.implClass(X1.class)
 		.interceptor(X2.class)
 		.interfaceClass(X1.class)
-		.on("d")
-		.onClass(X1.class)
 		.p("e")
 		.properties("f")
 		.propertyNamer(BasicPropertyNamer.class)
@@ -87,8 +81,8 @@ class BeanAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"description,dictionary,example,excludeProperties,findFluentSetters,implClass,interceptor,interfaceClass,on,onClass,p,properties,propertyNamer,readOnlyProperties,ro,sort,stopClass,typeName,typePropertyName,wo,writeOnlyProperties,xp",
-			"[a],[X1],b,c,true,X1,X2,X1,[d],[X1],e,f,BasicPropertyNamer,g,h,true,X1,i,j,k,l,m");
+			"description,dictionary,example,excludeProperties,findFluentSetters,implClass,interceptor,interfaceClass,p,properties,propertyNamer,readOnlyProperties,ro,sort,stopClass,typeName,typePropertyName,wo,writeOnlyProperties,xp",
+			"[a],[X1],b,c,true,X1,X2,X1,e,f,BasicPropertyNamer,g,h,true,X1,i,j,k,l,m");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -109,21 +103,6 @@ class BeanAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {}
-	public static class C2 {}
-
-	@Test void c01_otherMethods() {
-		var c1 = BeanAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = BeanAnnotation.create("a").on("b").build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -136,8 +115,6 @@ class BeanAnnotation_Test extends TestBase {
 		implClass=X1.class,
 		interceptor=X2.class,
 		interfaceClass=X1.class,
-		on="d",
-		onClass=X1.class,
 		p="e",
 		properties="f",
 		propertyNamer=BasicPropertyNamer.class,
@@ -163,8 +140,6 @@ class BeanAnnotation_Test extends TestBase {
 		implClass=X1.class,
 		interceptor=X2.class,
 		interfaceClass=X1.class,
-		on="d",
-		onClass=X1.class,
 		p="e",
 		properties="f",
 		propertyNamer=BasicPropertyNamer.class,

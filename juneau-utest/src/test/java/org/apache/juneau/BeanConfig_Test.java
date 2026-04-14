@@ -367,12 +367,12 @@ class BeanConfig_Test extends TestBase {
 		}
 	}
 
-	@Bean(on="Dummy1",p="dummy")
-	@Bean(on="ReadOnlyPerson2",p="name,age")
-	@Bean(on="Dummy2",p="dummy")
-	@Beanc(on="Dummy1",properties="dummy")
-	@Beanc(on="ReadOnlyPerson2(String,int)",properties="name,age")
-	@Beanc(on="Dummy2",properties="dummy")
+	@BeanApply(on="Dummy1",value=@Bean(p="dummy"))
+	@BeanApply(on="ReadOnlyPerson2",value=@Bean(p="name,age"))
+	@BeanApply(on="Dummy2",value=@Bean(p="dummy"))
+	@BeancApply(on="Dummy1",value=@Beanc(properties="dummy"))
+	@BeancApply(on="ReadOnlyPerson2(String,int)",value=@Beanc(properties="name,age"))
+	@BeancApply(on="Dummy2",value=@Beanc(properties="dummy"))
 	private static class ReadOnlyPerson2Config {}
 
 	//====================================================================================================

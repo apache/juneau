@@ -28,8 +28,6 @@ import org.junit.jupiter.api.*;
 })
 class SwapAnnotation_Test extends TestBase {
 
-	private static final String CNAME = SwapAnnotation_Test.class.getName();
-
 	private static class X1 {}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -40,8 +38,6 @@ class SwapAnnotation_Test extends TestBase {
 		.description("a")
 		.impl(X1.class)
 		.mediaTypes("c")
-		.on("d")
-		.onClass(X1.class)
 		.template("e")
 		.value(X1.class)
 		.build();
@@ -50,14 +46,12 @@ class SwapAnnotation_Test extends TestBase {
 		.description("a")
 		.impl(X1.class)
 		.mediaTypes("c")
-		.on("d")
-		.onClass(X1.class)
 		.template("e")
 		.value(X1.class)
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,impl,mediaTypes,on,onClass,template,value", "[a],X1,[c],[d],[X1],e,X1");
+		assertBean(a1, "description,impl,mediaTypes,template,value", "[a],X1,[c],e,X1");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -76,31 +70,6 @@ class SwapAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c1 = SwapAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = SwapAnnotation.create("a").on("b").build();
-		var c3 = SwapAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		var c4 = SwapAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
-		assertBean(c3, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -108,8 +77,6 @@ class SwapAnnotation_Test extends TestBase {
 		description={ "a" },
 		impl=X1.class,
 		mediaTypes="c",
-		on="d",
-		onClass=X1.class,
 		template="e",
 		value=X1.class
 	)
@@ -120,8 +87,6 @@ class SwapAnnotation_Test extends TestBase {
 		description={ "a" },
 		impl=X1.class,
 		mediaTypes="c",
-		on="d",
-		onClass=X1.class,
 		template="e",
 		value=X1.class
 	)

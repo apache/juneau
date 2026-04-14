@@ -57,9 +57,9 @@ class Bean_Test extends TestBase {
 		assertEquals("{f1:1}", json);
 	}
 
-	@Bean(on="Dummy1")
-	@Bean(on="A2")
-	@Bean(on="Dummy2")
+	@BeanApply(on="Dummy1",value=@Bean())
+	@BeanApply(on="A2",value=@Bean())
+	@BeanApply(on="Dummy2",value=@Bean())
 	private static class A2Config {}
 
 	private static class A2 {
@@ -125,10 +125,10 @@ class Bean_Test extends TestBase {
 		assertEquals("{f1:1,f2:2}", json);
 	}
 
-	@Beanc(on="B2()")
-	@Beanp(on="B2.f1")
-	@Beanp(on="B2.setF2")
-	@Beanp(on="B2.getF2")
+	@BeancApply(on="B2()",value=@Beanc())
+	@BeanpApply(on="B2.f1",value=@Beanp())
+	@BeanpApply(on="B2.setF2",value=@Beanp())
+	@BeanpApply(on="B2.getF2",value=@Beanp())
 	private static class B2Config {}
 
 	public static class B2 {
@@ -200,9 +200,9 @@ class Bean_Test extends TestBase {
 		}
 	}
 
-	@Bean(on="Dummy", p="b,c,d", xp="c")
-	@Bean(on="D1", properties="b,c,d", excludeProperties="c")
-	@Bean(on="D2", p="b,c,d", xp="c")
+	@BeanApply(on="Dummy",value=@Bean(p="b,c,d",xp="c"))
+	@BeanApply(on="D1",value=@Bean(properties="b,c,d",excludeProperties="c"))
+	@BeanApply(on="D2",value=@Bean(p="b,c,d",xp="c"))
 	static class DConfig {}
 
 	private static ClassInfo dConfig = ClassInfo.of(DConfig.class);
@@ -248,7 +248,7 @@ class Bean_Test extends TestBase {
 	}
 
 	@Test void d05_beanPropertiesExcludePropertiesCombined_beanContextBuilderOverride() throws Exception {
-		var ba = BeanAnnotation.create("D1").properties("b,c,d").excludeProperties("c").build();
+		var ba = BeanApplyAnnotation.create("D1").value(BeanAnnotation.create().properties("b,c,d").excludeProperties("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
@@ -260,7 +260,7 @@ class Bean_Test extends TestBase {
 	}
 
 	@Test void d06_beanPXpCombined_beanContextBuilderOverride() throws Exception {
-		var ba = BeanAnnotation.create("D2").p("b,c,d").xp("c").build();
+		var ba = BeanApplyAnnotation.create("D2").value(BeanAnnotation.create().p("b,c,d").xp("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
@@ -311,9 +311,9 @@ class Bean_Test extends TestBase {
 		}
 	}
 
-	@Bean(on="Dummy", p="b,c,d", xp="c")
-	@Bean(on="E1", properties="b,c,d", excludeProperties="c")
-	@Bean(on="E2", p="b,c,d", xp="c")
+	@BeanApply(on="Dummy",value=@Bean(p="b,c,d",xp="c"))
+	@BeanApply(on="E1",value=@Bean(properties="b,c,d",excludeProperties="c"))
+	@BeanApply(on="E2",value=@Bean(p="b,c,d",xp="c"))
 	static class EConfig {}
 
 	private static ClassInfo eConfig = ClassInfo.of(EConfig.class);
@@ -359,7 +359,7 @@ class Bean_Test extends TestBase {
 	}
 
 	@Test void e05_beanPropertiersExcludePropertiesCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
-		var ba = BeanAnnotation.create("E1").properties("b,c,d").excludeProperties("c").build();
+		var ba = BeanApplyAnnotation.create("E1").value(BeanAnnotation.create().properties("b,c,d").excludeProperties("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
@@ -371,7 +371,7 @@ class Bean_Test extends TestBase {
 	}
 
 	@Test void e06_beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
-		var ba = BeanAnnotation.create("E2").p("b,c,d").xp("c").build();
+		var ba = BeanApplyAnnotation.create("E2").value(BeanAnnotation.create().p("b,c,d").xp("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 

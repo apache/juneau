@@ -40,7 +40,7 @@ import java.lang.annotation.*;
  * </ul>
  */
 @Documented
-@Target(TYPE)
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Repeatable(SchemaApply.Array.class)
 @ContextApply(SchemaApplyAnnotation.Applier.class)
@@ -85,7 +85,7 @@ public @interface SchemaApply {
 	 * A collection of {@link SchemaApply @SchemaApply annotations}.
 	 */
 	@Documented
-	@Target(TYPE)
+	@Target({ TYPE, METHOD })
 	@Retention(RUNTIME)
 	public @interface Array {
 

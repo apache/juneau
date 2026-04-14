@@ -21,8 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
-
 /**
  * Annotation for customizing INI serialization and parsing behavior on classes, methods, and fields.
  *
@@ -30,7 +28,6 @@ import org.apache.juneau.annotation.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Marshalled classes/methods/fields.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  */
 @Documented
@@ -38,7 +35,6 @@ import org.apache.juneau.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(IniAnnotation.Array.class)
-@ContextApply(IniAnnotation.Apply.class)
 public @interface Ini {
 
 	/**
@@ -64,18 +60,4 @@ public @interface Ini {
 	 * @return The annotation value.
 	 */
 	boolean json5Encoding() default false;
-
-	/**
-	 * Dynamically apply this annotation to the specified classes/methods/fields.
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
 }

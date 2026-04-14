@@ -686,8 +686,8 @@ class Content_Test extends TestBase {
 	}
 
 	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class, defaultAccept="application/json")
-	@Bean(on="A,B,C",sort=true)
-	@UrlEncoding(on="C",expandedParams=true)
+	@BeanApply(on="A,B,C",value=@Bean(sort=true))
+	@UrlEncodingApply(on="C",value=@UrlEncoding(expandedParams=true))
 	public static class E2 {
 		@RestPut(path="/B")
 		public XBeans.XE a(@Content XBeans.XE b) {
@@ -844,8 +844,8 @@ class Content_Test extends TestBase {
 	}
 
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
-	@Bean(on="A,B,C",sort=true)
-	@UrlEncoding(on="C",expandedParams=true)
+	@BeanApply(on="A,B,C",value=@Bean(sort=true))
+	@UrlEncodingApply(on="C",value=@UrlEncoding(expandedParams=true))
 	public static class H2 {
 		@RestPost(path="/")
 		@UrlEncodingConfig(expandedParams="true")
@@ -893,8 +893,8 @@ class Content_Test extends TestBase {
 			return content;
 		}
 		@RestPost
-		@Bean(on="A,B,C",sort=true)
-		@UrlEncoding(on="C",expandedParams=true)
+		@BeanApply(on="A,B,C",value=@Bean(sort=true))
+		@UrlEncodingApply(on="C",value=@UrlEncoding(expandedParams=true))
 		public XBeans.XE b(@Content @Schema(r=true) XBeans.XE content) {
 			return content;
 		}

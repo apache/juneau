@@ -26,9 +26,9 @@ import org.apache.juneau.xml.annotation.*;
 @Bean(sort=true)
 public class TestURIc {
 
-	@Uri(on="Dummy1")
-	@Uri(on="TestURIc.f0,TestURIc.f2a,TestURIc.f2b,TestURIc.f2c,TestURIc.f2d,TestURIc.f2e,TestURIc.f2f,TestURIc.f2g,TestURIc.f2h,TestURIc.f2i,TestURIc.f2j,TestURIc.f2k,TestURIc.f2l,TestURIc.f2m,TestURIc.f2n,TestURIc.f2o,TestURIc.f3a,,TestURIc.f3b,TestURIc.f3c,TestURIc.getF5,TestURIbc")
-	@Uri(on="Dummy2")
+	@UriApply(on="Dummy1", value=@Uri)
+	@UriApply(on="TestURIc.f0,TestURIc.f2a,TestURIc.f2b,TestURIc.f2c,TestURIc.f2d,TestURIc.f2e,TestURIc.f2f,TestURIc.f2g,TestURIc.f2h,TestURIc.f2i,TestURIc.f2j,TestURIc.f2k,TestURIc.f2l,TestURIc.f2m,TestURIc.f2n,TestURIc.f2o,TestURIc.f3a,,TestURIc.f3b,TestURIc.f3c,TestURIc.getF5,TestURIbc", value=@Uri)
+	@UriApply(on="Dummy2", value=@Uri)
 	public static class Config {}
 
 	// String annotated as a URI

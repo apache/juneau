@@ -30,7 +30,7 @@ import org.apache.juneau.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Bean constructors.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link BeancApply @BeancApply}.
  * </ul>
 
  * <p>
@@ -69,7 +69,6 @@ import org.apache.juneau.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BeancAnnotation.Array.class)
-@ContextApply(BeancAnnotation.Applier.class)
 public @interface Beanc {
 
 	/**
@@ -79,84 +78,6 @@ public @interface Beanc {
 	 * @since 9.2.0
 	 */
 	String[] description() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified constructors.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing constructor.
-	 * It is ignored when the annotation is applied directly to constructors.
-	 *
-	 * <p>
-	 * The following example shows this annotation in use:
-	 * <p class='bjava'>
-	 *		<jc>// Our read-only bean.</jc>
-	 *		<jk>public class</jk> Person {
-	 *			<jk>private final</jk> String <jf>name</jf>;
-	 *			<jk>private final int</jk> <jf>age</jf>;
-	 *
-	 *			<jk>public</jk> Person(String <jv>name</jv>, <jk>int</jk> <jv>age</jv>) {
-	 *				<jk>this</jk>.<jf>name</jf> = <jv>name</jv>;
-	 *				<jk>this</jk>.<jf>age</jf> = <jv>age</jv>;
-	 *			}
-	 *
-	 *			<jc>// Read only properties.</jc>
-	 *			<jc>// Getters, but no setters.</jc>
-	 *
-	 *			<jk>public</jk> String getName() {
-	 *				<jk>return</jk> <jf>name</jf>;
-	 *			}
-	 *
-	 *			<jk>public int</jk> getAge() {
-	 *				<jk>return</jk> <jf>age</jf>;
-	 *			}
-	 *		}
-	 *
-	 *		<ja>@BeanConfig</ja>
-	 *		<ja>@Beanc</ja>(on=<js>"Person(String,int)"</js>, properties=<js>"name,age"</js>))
-	 *		<jk>public static class</jk> MyConfig {}
-	 * </p>
-	 * <p class='bjava'>
-	 *		<jc>// Parsing into a read-only bean.</jc>
-	 *		String <jv>json</jv> = <js>"{name:'John Smith',age:45}"</js>;
-	 *		Person <jv>person</jv> = JsonParser.<jsf>DEFAULT</jsf>.copy().applyAnnotations(MyConfig.<jk>class</jk>).build().parse(<jv>json</jv>);
-	 *		String <jv>name</jv> = <jv>person</jv>.getName();  <jc>// "John Smith"</jc>
-	 *		<jk>int</jk> <jv>age</jv> = <jv>person</jv>.getAge();   <jc>// 45</jc>
-	 * </p>
-	 *
-	 * <h5 class='section'>Valid patterns:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Constructors:
-	 * 		<ul>
-	 * 			<li>Fully qualified with args:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass(String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass(java.lang.String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass()"</js>
-	 * 				</ul>
-	 * 			<li>Simple with args:
-	 * 				<ul>
-	 * 					<li><js>"MyClass(String,int)"</js>
-	 * 					<li><js>"MyClass(java.lang.String,int)"</js>
-	 * 					<li><js>"MyClass()"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner class:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2()"</js>
-	 * 					<li><js>"Inner1$Inner2()"</js>
-	 * 					<li><js>"Inner2()"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>A comma-delimited list of anything on this list.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
 
 	/**
 	 * The names of the properties of the constructor arguments.

@@ -18,34 +18,12 @@ package org.apache.juneau.hjson.annotation;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.annotation.*;
 
 /**
  * Utility classes and methods for the {@link Hjson @Hjson} annotation.
  */
 public class HjsonAnnotation {
-
-	/**
-	 * Applies {@link Hjson} annotations to a {@link org.apache.juneau.Context.Builder}.
-	 */
-	public static class Apply extends AnnotationApplier<Hjson, Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(Hjson.class, Context.Builder.class, vr);
-		}
-
-		@Override /* AnnotationApplier */
-		public void apply(AnnotationInfo<Hjson> ai, Context.Builder b) {
-			// No-op: @Hjson settings are read at serialization/parse time via HjsonMetaProvider.
-		}
-	}
 
 	/**
 	 * A collection of {@link Hjson} annotations.
@@ -63,4 +41,13 @@ public class HjsonAnnotation {
 		 */
 		Hjson[] value();
 	}
+
+	private static class Object extends AnnotationObject implements Hjson {
+		Object() {
+			super(new AnnotationObject.Builder(Hjson.class));
+		}
+	}
+
+	/** Default value */
+	public static final Hjson DEFAULT = new Object();
 }

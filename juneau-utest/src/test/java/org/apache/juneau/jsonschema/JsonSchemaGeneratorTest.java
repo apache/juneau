@@ -318,9 +318,9 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}", s.getSchema(B1c[][].class));
 	}
 
-	@Example(on="Dummy1.example")
-	@Example(on="B1c.example")
-	@Example(on="Dummy2.example")
+	@ExampleApply(on="Dummy1.example", value=@Example)
+	@ExampleApply(on="B1c.example", value=@Example)
+	@ExampleApply(on="Dummy2.example", value=@Example)
 	private static class B1cConfig {}
 
 	public static class B1c extends SimpleBean {
@@ -366,9 +366,9 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}", s.getSchema(B2c[][].class));
 	}
 
-	@Example(on="Dummy1.example2")
-	@Example(on="B2c.example2")
-	@Example(on="Dummy2.example2")
+	@ExampleApply(on="Dummy1.example2", value=@Example)
+	@ExampleApply(on="B2c.example2", value=@Example)
+	@ExampleApply(on="Dummy2.example2", value=@Example)
 	private static class B2cConfig {}
 
 	public static class B2c extends B1c {
@@ -412,7 +412,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}", s.getSchema(B3c[][].class));
 	}
 
-	@Example(on="B3c.EXAMPLE")
+	@ExampleApply(on="B3c.EXAMPLE", value=@Example)
 	private static class B3cConfig {}
 
 	public static class B3c extends SimpleBean {
@@ -449,7 +449,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}", s.getSchema(B4c[][].class));
 	}
 
-	@Example(on="B4c", value="{f1:'foobar'}")
+	@ExampleApply(on="B4c", value=@Example("{f1:'foobar'}"))
 	private static class B4cConfig {}
 
 	public static class B4c extends SimpleBean {}
@@ -511,7 +511,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'456':{f1:'foobar'}}}", s.getSchema(C1c.class));
 	}
 
-	@Example(on="C1c.example")
+	@ExampleApply(on="C1c.example", value=@Example)
 	private static class C1cConfig {}
 
 	public static class C1c extends BeanMap {
@@ -555,7 +555,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'foobar'}}}}}", s.getSchema(C2c[][].class));
 	}
 
-	@Example(on="C2c.EXAMPLE")
+	@ExampleApply(on="C2c.EXAMPLE", value=@Example)
 	private static class C2cConfig {}
 
 	public static class C2c extends BeanMap {
@@ -592,7 +592,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'baz'}}}}}", s.getSchema(C3c[][].class));
 	}
 
-	@Example(on="C3c", value="{'123':{f1:'baz'}}")
+	@ExampleApply(on="C3c", value=@Example("{'123':{f1:'baz'}}"))
 	private static class C3cConfig {}
 
 	public static class C3c extends BeanMap {}
@@ -654,7 +654,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'baz'}]}", s.getSchema(D1c.class));
 	}
 
-	@Example(on="D1c.example")
+	@ExampleApply(on="D1c.example", value=@Example)
 	private static class D1cConfig {}
 
 	public static class D1c extends BeanList {
@@ -698,7 +698,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},example:[[[{f1:'foobar'}]]]}", s.getSchema(D2c[][].class));
 	}
 
-	@Example(on="D2c.EXAMPLE")
+	@ExampleApply(on="D2c.EXAMPLE", value=@Example)
 	private static class D2cConfig {}
 
 	public static class D2c extends BeanList {
@@ -735,7 +735,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},example:[[[{f1:'baz'}]]]}", s.getSchema(D3c[][].class));
 	}
 
-	@Example(on="D3c", value="[{f1:'baz'}]")
+	@ExampleApply(on="D3c", value=@Example("[{f1:'baz'}]"))
 	private static class D3cConfig {}
 
 	public static class D3c extends BeanList {}

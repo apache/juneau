@@ -21,12 +21,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link Beanc @Beanc} annotation.
@@ -38,29 +34,6 @@ public class BeancAnnotation {
 	 * Prevents instantiation.
 	 */
 	private BeancAnnotation() {}
-
-	/**
-	 * Applies targeted {@link Beanc} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
-	 */
-	public static class Applier extends AnnotationApplier<Beanc,BeanContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Applier(VarResolverSession vr) {
-			super(Beanc.class, BeanContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Beanc> ai, BeanContext.Builder b) {
-			Beanc a = ai.inner();
-			if (isEmptyArray(a.on()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
-	}
 
 	/**
 	 * A collection of {@link Beanc @Beanc annotations}.
@@ -86,7 +59,7 @@ public class BeancAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderC {
+	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 		private String properties = "";
@@ -129,30 +102,12 @@ public class BeancAnnotation {
 			return this;
 		}
 
-		@Override /* Overridden from AppliedAnnotationObject.Builder */
-		public Builder on(String...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderC */
-		public Builder on(Constructor<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderC */
-		public Builder on(ConstructorInfo...value) {
-			super.on(value);
-			return this;
-		}
-
 	}
 
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedAnnotationObject implements Beanc {
+	private static class Object extends AnnotationObject implements Beanc {
 
 		private final String[] description;
 		private final String properties;
@@ -178,38 +133,11 @@ public class BeancAnnotation {
 	public static final Beanc DEFAULT = create().build();
 
 	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static Beanc copy(Beanc a, VarResolverSession r) {
-		// @formatter:off
-		return
-			create()
-			.on(r.resolve(a.on()))
-			.properties(r.resolve(a.properties()))
-			.build();
-		// @formatter:on
-	}
-
-	/**
 	 * Instantiates a new builder for this class.
 	 *
 	 * @return A new builder object.
 	 */
 	public static Builder create() {
 		return new Builder();
-	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
 	}
 }

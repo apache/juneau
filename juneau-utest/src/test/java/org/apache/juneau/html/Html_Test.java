@@ -254,8 +254,8 @@ class Html_Test extends TestBase {
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><f1></td></tr></table>", r);
 	}
 
-	@Html(on="B3", format=PLAIN_TEXT)
-	@Html(on="B4.f1", format=PLAIN_TEXT)
+	@HtmlApply(on="B3", value=@Html(format=PLAIN_TEXT))
+	@HtmlApply(on="B4.f1", value=@Html(format=PLAIN_TEXT))
 	private static class B3Config {}
 
 	public static class B3 {
@@ -307,7 +307,7 @@ class Html_Test extends TestBase {
 		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td>&lt;f1&gt;</td></tr></table>", r);
 	}
 
-	@Html(on="C3,C4.f1",format=XML)
+	@HtmlApply(on="C3,C4.f1",value=@Html(format=XML))
 	private static class C3Config {}
 
 	public static class C3 {
@@ -344,7 +344,7 @@ class Html_Test extends TestBase {
 		assertEquals("<ul><li><table><tr><td>foo</td><td>bar</td></tr></table></li></ul>", r);
 	}
 
-	@Html(on="org.apache.juneau.html.Html_Test$MyMap2", noTables=true, noTableHeaders=true)
+	@HtmlApply(on="org.apache.juneau.html.Html_Test$MyMap2", value=@Html(noTables=true, noTableHeaders=true))
 	private static class MyMap2Config {}
 
 	public static class MyMap2 extends LinkedHashMap<String,String> {}
@@ -375,7 +375,7 @@ class Html_Test extends TestBase {
 		assertEquals("<table _type='array'><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>", r);
 	}
 
-	@Html(on="MyBean2", noTableHeaders=true)
+	@HtmlApply(on="MyBean2", value=@Html(noTableHeaders=true))
 	private static class MyBean2Config {}
 
 	public static class MyBean2 {
@@ -383,7 +383,7 @@ class Html_Test extends TestBase {
 	}
 
 	@Test void d05_testNoTableHeadersOnBeans_usingConcreteAnnotation() throws Exception {
-		var s = HtmlSerializer.DEFAULT_SQ.copy().annotations(HtmlAnnotation.create("MyBean2").noTables(true).build()).build();
+		var s = HtmlSerializer.DEFAULT_SQ.copy().annotations(HtmlApplyAnnotation.create("MyBean2").value(HtmlAnnotation.create().noTables(true).build()).build()).build();
 
 		var b = new MyBean();
 		var o = JsonList.of(b,b);

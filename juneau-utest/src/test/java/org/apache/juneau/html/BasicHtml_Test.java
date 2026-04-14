@@ -2873,9 +2873,9 @@ class BasicHtml_Test extends TestBase {
 		}
 	}
 
-	@HtmlLink(on="Dummy1", nameProperty="a", uriProperty="b")
-	@HtmlLink(on="LinkBeanC", nameProperty="a", uriProperty="b")
-	@HtmlLink(on="Dummy2", nameProperty="a", uriProperty="b")
+	@HtmlLinkApply(on="Dummy1", value=@HtmlLink(nameProperty="a", uriProperty="b"))
+	@HtmlLinkApply(on="LinkBeanC", value=@HtmlLink(nameProperty="a", uriProperty="b"))
+	@HtmlLinkApply(on="Dummy2", value=@HtmlLink(nameProperty="a", uriProperty="b"))
 	private static class LinkBeanCConfig {}
 
 	public static class LinkBeanC {
@@ -3052,12 +3052,12 @@ class BasicHtml_Test extends TestBase {
 		}
 	}
 
-	@Html(on="Dummy1",format=XML)
-	@Html(on="BeanWithWhitespaceTextFields2",format=XML)
-	@Html(on="Dummy2",format=XML)
-	@Xml(on="Dummy1.a",format=XmlFormat.TEXT)
-	@Xml(on="BeanWithWhitespaceTextFields2.a",format=XmlFormat.TEXT)
-	@Xml(on="Dumuy2.a",format=XmlFormat.TEXT)
+	@HtmlApply(on="Dummy1",value=@Html(format=XML))
+	@HtmlApply(on="BeanWithWhitespaceTextFields2",value=@Html(format=XML))
+	@HtmlApply(on="Dummy2",value=@Html(format=XML))
+	@XmlApply(on="Dummy1.a",value=@Xml(format=XmlFormat.TEXT))
+	@XmlApply(on="BeanWithWhitespaceTextFields2.a",value=@Xml(format=XmlFormat.TEXT))
+	@XmlApply(on="Dumuy2.a",value=@Xml(format=XmlFormat.TEXT))
 	private static class BeanWithWhitespaceTextFields2Config {}
 
 	public static class BeanWithWhitespaceTextFields2 {
@@ -3069,8 +3069,8 @@ class BasicHtml_Test extends TestBase {
 		}
 	}
 
-	@Html(on="BeanWithWhitespaceTextPwsFields2",format=XML)
-	@Xml(on="BeanWithWhitespaceTextPwsFields2.a",format=XmlFormat.TEXT_PWS)
+	@HtmlApply(on="BeanWithWhitespaceTextPwsFields2",value=@Html(format=XML))
+	@XmlApply(on="BeanWithWhitespaceTextPwsFields2.a",value=@Xml(format=XmlFormat.TEXT_PWS))
 	private static class BeanWithWhitespaceTextPwsFields2Config {}
 
 	public static class BeanWithWhitespaceTextPwsFields2 {
@@ -3082,8 +3082,8 @@ class BasicHtml_Test extends TestBase {
 		}
 	}
 
-	@Html(on="BeanWithWhitespaceMixedFields2",format=XML)
-	@Xml(on="BeanWithWhitespaceMixedFields2.a",format=XmlFormat.MIXED)
+	@HtmlApply(on="BeanWithWhitespaceMixedFields2",value=@Html(format=XML))
+	@XmlApply(on="BeanWithWhitespaceMixedFields2.a",value=@Xml(format=XmlFormat.MIXED))
 	public static class BeanWithWhitespaceMixedFields2Config {}
 
 	public static class BeanWithWhitespaceMixedFields2 {
@@ -3095,8 +3095,8 @@ class BasicHtml_Test extends TestBase {
 		}
 	}
 
-	@Html(on="BeanWithWhitespaceMixedPwsFields2",format=XML)
-	@Xml(on="BeanWithWhitespaceMixedPwsFields2.a",format=XmlFormat.MIXED_PWS)
+	@HtmlApply(on="BeanWithWhitespaceMixedPwsFields2",value=@Html(format=XML))
+	@XmlApply(on="BeanWithWhitespaceMixedPwsFields2.a",value=@Xml(format=XmlFormat.MIXED_PWS))
 	public static class BeanWithWhitespaceMixedPwsFields2Config {}
 
 	@Html(format=XML)

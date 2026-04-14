@@ -21,8 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
-
 /**
  * Annotation for customizing Hjson serialization and parsing behavior on classes, methods, and fields.
  *
@@ -30,7 +28,6 @@ import org.apache.juneau.annotation.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Marshalled classes/methods/fields.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -42,20 +39,5 @@ import org.apache.juneau.annotation.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(HjsonAnnotation.Array.class)
-@ContextApply(HjsonAnnotation.Apply.class)
 public @interface Hjson {
-
-	/**
-	 * Dynamically apply this annotation to the specified classes/methods/fields.
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
 }

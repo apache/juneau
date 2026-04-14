@@ -236,9 +236,9 @@ class Json_Test extends TestBase{
 		assertEquals(1, m.get("bar").f1);
 	}
 
-	@Json(on="Dummy1",wrapperAttr="foo")
-	@Json(on="A2",wrapperAttr="foo")
-	@Json(on="Dummy2",wrapperAttr="foo")
+	@JsonApply(on="Dummy1",value=@Json(wrapperAttr="foo"))
+	@JsonApply(on="A2",value=@Json(wrapperAttr="foo"))
+	@JsonApply(on="Dummy2",value=@Json(wrapperAttr="foo"))
 	private static class A2Config {}
 
 	public static class A2 {
@@ -314,7 +314,7 @@ class Json_Test extends TestBase{
 		assertEquals(1, m.get("bar").f1);
 	}
 
-	@Json(on="B2",wrapperAttr="foo")
+	@JsonApply(on="B2",value=@Json(wrapperAttr="foo"))
 	private static class B2Config {}
 
 	public static class B2 {

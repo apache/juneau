@@ -194,7 +194,7 @@ class AutoListSwapTest extends TestBase {
 		assertNull(find(D02.D02A.class));
 	}
 
-	@BeanIgnore(on="D01c")
+	@BeanIgnoreApply(on="D01c",value=@BeanIgnore())
 	private static class D01cConfig {}
 
 	public static class D01c {
@@ -222,7 +222,7 @@ class AutoListSwapTest extends TestBase {
 	// Ignore swap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(on="E01c.toList")
+	@BeanIgnoreApply(on="E01c.toList",value=@BeanIgnore())
 	private static class E01Config {}
 
 	public static class E01 {
@@ -286,7 +286,7 @@ class AutoListSwapTest extends TestBase {
 	// Ignore unswap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(on="F01c.create")
+	@BeanIgnoreApply(on="F01c.create",value=@BeanIgnore())
 	private static class F01Config {}
 
 	public static class F01 {
@@ -387,7 +387,7 @@ class AutoListSwapTest extends TestBase {
 	// Ignore constructor
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(on="G01c(List)")
+	@BeanIgnoreApply(on="G01c(List)",value=@BeanIgnore())
 	private static class G01Config {}
 
 	public static class G01 {

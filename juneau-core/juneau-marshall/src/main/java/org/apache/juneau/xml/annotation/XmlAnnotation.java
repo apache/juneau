@@ -21,12 +21,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link Xml @Xml} annotation.
@@ -41,29 +37,6 @@ public class XmlAnnotation {
 	 * Prevents instantiation.
 	 */
 	private XmlAnnotation() {}
-
-	/**
-	 * Applies targeted {@link Xml} annotations to a {@link org.apache.juneau.Context.Builder}.
-	 */
-	public static class Apply extends AnnotationApplier<Xml,Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(Xml.class, Context.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Xml> ai, Context.Builder b) {
-			Xml a = ai.inner();
-			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
-	}
 
 	/**
 	 * A collection of {@link Xml @Xml annotations}.
@@ -89,7 +62,7 @@ public class XmlAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
+	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 		private String childName = "";
@@ -168,66 +141,12 @@ public class XmlAnnotation {
 			return this;
 		}
 
-		@Override /* Overridden from AppliedAnnotationObject.Builder */
-		public Builder on(String...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder on(Class<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedOnClassAnnotationObject.Builder */
-		public Builder onClass(Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
-		public Builder on(Method...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderMF */
-		public Builder on(Field...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder on(ClassInfo...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder onClass(ClassInfo...value) {
-			super.onClass(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderTMF */
-		public Builder on(FieldInfo...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderTMF */
-		public Builder on(MethodInfo...value) {
-			super.on(value);
-			return this;
-		}
-
 	}
 
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedOnClassAnnotationObject implements Xml {
+	private static class Object extends AnnotationObject implements Xml {
 
 		private final String[] description;
 		private final String childName;
@@ -274,52 +193,11 @@ public class XmlAnnotation {
 	public static final Xml DEFAULT = create().build();
 
 	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.s
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static Xml copy(Xml a, VarResolverSession r) {
-		// @formatter:off
-		return
-			create()
-			.childName(r.resolve(a.childName()))
-			.format(a.format())
-			.namespace(r.resolve(a.namespace()))
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.prefix(r.resolve(a.prefix()))
-			.build();
-		// @formatter:on
-	}
-
-	/**
 	 * Instantiates a new builder for this class.
 	 *
 	 * @return A new builder object.
 	 */
 	public static Builder create() {
 		return new Builder();
-	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
 	}
 }

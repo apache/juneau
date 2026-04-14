@@ -18,13 +18,10 @@ package org.apache.juneau.parquet.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.annotation.*;
 
 /**
  * Utility classes for the {@link Parquet @Parquet} annotation.
@@ -32,29 +29,6 @@ import org.apache.juneau.svl.*;
 public class ParquetAnnotation {
 
 	private ParquetAnnotation() {}
-
-	/**
-	 * Applies targeted {@link Parquet} annotations to a {@link org.apache.juneau.Context.Builder}.
-	 */
-	public static class Apply extends AnnotationApplier<Parquet,Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(Parquet.class, Context.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Parquet> ai, Context.Builder b) {
-			Parquet a = ai.inner();
-			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
-	}
 
 	/**
 	 * A collection of {@link Parquet @Parquet} annotations.
@@ -69,44 +43,21 @@ public class ParquetAnnotation {
 		Parquet[] value();
 	}
 
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver.
-	 * @return A copy of the annotation.
-	 */
-	public static Parquet copy(Parquet a, VarResolverSession r) {
-		return new Object(a.parquetType(), a.logicalType(), r.resolve(a.on()), a.onClass());
-	}
-
-	private static class Object implements Parquet {
-
-		private final String parquetType;
-		private final String logicalType;
-		private final String[] on;
-		private final Class<?>[] onClass;
-
-		Object(String parquetType, String logicalType, String[] on, Class<?>[] onClass) {
-			this.parquetType = parquetType == null ? "" : parquetType;
-			this.logicalType = logicalType == null ? "" : logicalType;
-			this.on = on == null ? new String[0] : on;
-			this.onClass = onClass == null ? new Class[0] : onClass;
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+	})
+	private static class Object extends AnnotationObject implements Parquet {
+		Object() {
+			super(new AnnotationObject.Builder(Parquet.class));
 		}
 
 		@Override
-		public String parquetType() { return parquetType; }
+		public String parquetType() { return ""; }
 
 		@Override
-		public String logicalType() { return logicalType; }
-
-		@Override
-		public String[] on() { return on; }
-
-		@Override
-		public Class<?>[] onClass() { return onClass; }
-
-		@Override
-		public Class<? extends Annotation> annotationType() { return Parquet.class; }
+		public String logicalType() { return ""; }
 	}
+
+	/** Default value */
+	public static final Parquet DEFAULT = new Object();
 }

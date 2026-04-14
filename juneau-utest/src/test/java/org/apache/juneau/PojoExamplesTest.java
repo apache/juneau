@@ -75,9 +75,9 @@ class PojoExamplesTest extends TestBase {
 		assertJson("{f1:'f1b'}", bs.getClassMeta(B1c.class).getExample(bs,session));
 	}
 
-	@Example(on="Dummy1.EXAMPLE")
-	@Example(on="B1c.EXAMPLE")
-	@Example(on="Dummy2.EXAMPLE")
+	@ExampleApply(on="Dummy1.EXAMPLE", value=@Example)
+	@ExampleApply(on="B1c.EXAMPLE", value=@Example)
+	@ExampleApply(on="Dummy2.EXAMPLE", value=@Example)
 	private static class B1cConfig {}
 
 	public static class B1c {
@@ -116,9 +116,9 @@ class PojoExamplesTest extends TestBase {
 		assertJson("{f1:'f1b'}", bs.getClassMeta(B2c.class).getExample(bs,session));
 	}
 
-	@Example(on="Dummy1.EXAMPLE")
-	@Example(on="B2c.EXAMPLE")
-	@Example(on="Dummy2.EXAMPLE")
+	@ExampleApply(on="Dummy1.EXAMPLE", value=@Example)
+	@ExampleApply(on="B2c.EXAMPLE", value=@Example)
+	@ExampleApply(on="Dummy2.EXAMPLE", value=@Example)
 	private static class B2cConfig {}
 
 	public static class B2c {
@@ -159,9 +159,9 @@ class PojoExamplesTest extends TestBase {
 		assertJson("{f1:'f1c'}", bs.getClassMeta(C1c.class).getExample(bs,session));
 	}
 
-	@Example(on="Dummy1.x")
-	@Example(on="C1c.x")
-	@Example(on="Dummy2.x")
+	@ExampleApply(on="Dummy1.x", value=@Example)
+	@ExampleApply(on="C1c.x", value=@Example)
+	@ExampleApply(on="Dummy2.x", value=@Example)
 	private static class C1cConfig {}
 
 	public static class C1c {
@@ -204,9 +204,9 @@ class PojoExamplesTest extends TestBase {
 		assertJson("{f1:'f1c'}", bs.getClassMeta(C2c.class).getExample(bs,session));
 	}
 
-	@Example(on="Dummy1.x")
-	@Example(on="C2c.x")
-	@Example(on="Dummy2.x")
+	@ExampleApply(on="Dummy1.x", value=@Example)
+	@ExampleApply(on="C2c.x", value=@Example)
+	@ExampleApply(on="Dummy2.x", value=@Example)
 	private static class C2cConfig {}
 
 	public static class C2c {
@@ -249,9 +249,9 @@ class PojoExamplesTest extends TestBase {
 		assertJson("{f1:'f1d'}", bs.getClassMeta(D1c.class).getExample(bs,session));
 	}
 
-	@Example(on="Dummy1.x(BeanSession)")
-	@Example(on="D1c.x(BeanSession)")
-	@Example(on="Dummy2.x(BeanSession)")
+	@ExampleApply(on="Dummy1.x(BeanSession)", value=@Example)
+	@ExampleApply(on="D1c.x(BeanSession)", value=@Example)
+	@ExampleApply(on="Dummy2.x(BeanSession)", value=@Example)
 	private static class D1cConfig {}
 
 	public static class D1c {

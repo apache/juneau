@@ -120,7 +120,7 @@ class Annotations_Test extends TestBase {
 		public void setName(String v) { name = v; }
 	}
 
-	@Bean(on="Person4",properties="age,name")
+	@BeanApply(on="Person4",value=@Bean(properties="age,name"))
 	public static class PersonConfig {}
 
 	//====================================================================================================

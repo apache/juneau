@@ -25,8 +25,6 @@ import java.lang.annotation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -39,29 +37,6 @@ public class BeanAnnotation {
 	 * Prevents instantiation.
 	 */
 	private BeanAnnotation() {}
-
-	/**
-	 * Applies targeted {@link Bean} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
-	 */
-	public static class Applier extends AnnotationApplier<Bean,BeanContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Applier(VarResolverSession vr) {
-			super(Bean.class, BeanContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Bean> ai, BeanContext.Builder b) {
-			Bean a = ai.inner();
-			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
-	}
 
 	/**
 	 * A collection of {@link Bean @Bean annotations}.
@@ -87,7 +62,7 @@ public class BeanAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderT {
+	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 		private Class<?>[] dictionary = new Class[0];
@@ -360,42 +335,12 @@ public class BeanAnnotation {
 			return this;
 		}
 
-		@Override /* Overridden from AppliedAnnotationObject.Builder */
-		public Builder on(String...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder on(Class<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedOnClassAnnotationObject.Builder */
-		public Builder onClass(Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder on(ClassInfo...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder onClass(ClassInfo...value) {
-			super.onClass(value);
-			return this;
-		}
-
 	}
 
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedOnClassAnnotationObject implements Bean {
+	private static class Object extends AnnotationObject implements Bean {
 
 		private final String[] description;
 		private final boolean findFluentSetters;
@@ -556,67 +501,11 @@ public class BeanAnnotation {
 	public static final Bean DEFAULT = create().build();
 
 	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static Bean copy(Bean a, VarResolverSession r) {
-		// @formatter:off
-		return
-			create()
-			.dictionary(a.dictionary())
-			.example(r.resolve(a.example()))
-			.excludeProperties(r.resolve(a.excludeProperties()))
-			.findFluentSetters(a.findFluentSetters())
-			.implClass(a.implClass())
-			.interceptor(a.interceptor())
-			.interfaceClass(a.interfaceClass())
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.p(r.resolve(a.p()))
-			.properties(r.resolve(a.properties()))
-			.propertyNamer(a.propertyNamer())
-			.readOnlyProperties(r.resolve(a.readOnlyProperties()))
-			.ro(r.resolve(a.ro()))
-			.sort(a.sort())
-			.stopClass(a.stopClass())
-			.typeName(r.resolve(a.typeName()))
-			.typePropertyName(r.resolve(a.typePropertyName()))
-			.wo(r.resolve(a.wo()))
-			.writeOnlyProperties(r.resolve(a.writeOnlyProperties()))
-			.xp(r.resolve(a.xp()))
-			.build();
-		// @formatter:on
-	}
-
-	/**
 	 * Instantiates a new builder for this class.
 	 *
 	 * @return A new builder object.
 	 */
 	public static Builder create() {
 		return new Builder();
-	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
 	}
 }

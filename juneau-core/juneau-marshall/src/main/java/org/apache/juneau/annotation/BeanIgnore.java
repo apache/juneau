@@ -35,7 +35,7 @@ import org.apache.juneau.commons.reflect.Visibility;
  * 	<li>
  * 		Fields — Use {@link #ignoreAccessors()} to also exclude matching JavaBean accessors from bean metadata (see
  * 		{@link #ignoreAccessors()}).
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link BeanIgnoreApply @BeanIgnoreApply}.
  * </ul>
  *
  * <h5 class='section'>Java Records:</h5>
@@ -55,7 +55,6 @@ import org.apache.juneau.commons.reflect.Visibility;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BeanIgnoreAnnotation.Array.class)
-@ContextApply(BeanIgnoreAnnotation.Applier.class)
 public @interface BeanIgnore {
 
 	/**
@@ -79,125 +78,4 @@ public @interface BeanIgnore {
 	 */
 	boolean ignoreAccessors() default false;
 
-	/**
-	 * Dynamically apply this annotation to the specified classes/methods/fields/constructors.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class/method/field/constructor.
-	 * It is ignored when the annotation is applied directly to classes/methods/fields/constructors.
-	 *
-	 * <h5 class='section'>Valid patterns:</h5>
-	 * <ul class='spaced-list'>
-	 *  <li>Classes:
-	 * 		<ul>
-	 * 			<li>Fully qualified:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass"</js>
-	 * 				</ul>
-	 * 			<li>Fully qualified inner class:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
-	 * 				</ul>
-	 * 			<li>Simple:
-	 * 				<ul>
-	 * 					<li><js>"MyClass"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2"</js>
-	 * 					<li><js>"Inner1$Inner2"</js>
-	 * 					<li><js>"Inner2"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>Methods:
-	 * 		<ul>
-	 * 			<li>Fully qualified with args:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass.myMethod(String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass.myMethod(java.lang.String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass.myMethod()"</js>
-	 * 				</ul>
-	 * 			<li>Fully qualified:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass.myMethod"</js>
-	 * 				</ul>
-	 * 			<li>Simple with args:
-	 * 				<ul>
-	 * 					<li><js>"MyClass.myMethod(String,int)"</js>
-	 * 					<li><js>"MyClass.myMethod(java.lang.String,int)"</js>
-	 * 					<li><js>"MyClass.myMethod()"</js>
-	 * 				</ul>
-	 * 			<li>Simple:
-	 * 				<ul>
-	 * 					<li><js>"MyClass.myMethod"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner class:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2.myMethod"</js>
-	 * 					<li><js>"Inner1$Inner2.myMethod"</js>
-	 * 					<li><js>"Inner2.myMethod"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>Fields:
-	 * 		<ul>
-	 * 			<li>Fully qualified:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass.myField"</js>
-	 * 				</ul>
-	 * 			<li>Simple:
-	 * 				<ul>
-	 * 					<li><js>"MyClass.myField"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner class:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2.myField"</js>
-	 * 					<li><js>"Inner1$Inner2.myField"</js>
-	 * 					<li><js>"Inner2.myField"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>Constructors:
-	 * 		<ul>
-	 * 			<li>Fully qualified with args:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass(String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass(java.lang.String,int)"</js>
-	 * 					<li><js>"com.foo.MyClass()"</js>
-	 * 				</ul>
-	 * 			<li>Simple with args:
-	 * 				<ul>
-	 * 					<li><js>"MyClass(String,int)"</js>
-	 * 					<li><js>"MyClass(java.lang.String,int)"</js>
-	 * 					<li><js>"MyClass()"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner class:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2()"</js>
-	 * 					<li><js>"Inner1$Inner2()"</js>
-	 * 					<li><js>"Inner2()"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>A comma-delimited list of anything on this list.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <p>
-	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
 }

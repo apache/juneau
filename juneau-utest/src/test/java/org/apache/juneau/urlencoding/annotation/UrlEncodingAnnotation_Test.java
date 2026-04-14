@@ -28,8 +28,6 @@ import org.junit.jupiter.api.*;
 })
 class UrlEncodingAnnotation_Test extends TestBase {
 
-	private static final String CNAME = UrlEncodingAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
@@ -37,17 +35,15 @@ class UrlEncodingAnnotation_Test extends TestBase {
 	UrlEncoding a1 = UrlEncodingAnnotation.create()
 		.description("a")
 		.expandedParams(true)
-		.on("b")
 		.build();
 
 	UrlEncoding a2 = UrlEncodingAnnotation.create()
 		.description("a")
 		.expandedParams(true)
-		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,expandedParams,on,onClass", "[a],true,[b],[]");
+		assertBean(a1, "description,expandedParams", "[a],true");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -67,46 +63,19 @@ class UrlEncodingAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c1 = UrlEncodingAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = UrlEncodingAnnotation.create("a").on("b").build();
-		var c3 = UrlEncodingAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		var c4 = UrlEncodingAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
-		assertBean(c3, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@UrlEncoding(
 		description="a",
-		expandedParams=true,
-		on="b"
+		expandedParams=true
 	)
 	public static class D1 {}
 	UrlEncoding d1 = D1.class.getAnnotationsByType(UrlEncoding.class)[0];
 
 	@UrlEncoding(
 		description="a",
-		expandedParams=true,
-		on="b"
+		expandedParams=true
 	)
 	public static class D2 {}
 	UrlEncoding d2 = D2.class.getAnnotationsByType(UrlEncoding.class)[0];

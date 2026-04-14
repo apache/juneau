@@ -97,7 +97,7 @@ class RestClient_Config_Context_Test extends TestBase {
 		}
 	}
 
-	@org.apache.juneau.annotation.Bean(sort=true,on="A6a")
+	@BeanApply(on="A6a",value=@Bean(sort=true))
 	public static class A6b {}
 
 	@BeanConfig(sortProperties="true")
@@ -120,7 +120,7 @@ class RestClient_Config_Context_Test extends TestBase {
 	}
 
 	@Test void a09_annotations() throws Exception {
-		client().annotations(BeanAnnotation.create(A6a.class).sort(true).build()).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
+		client().annotations(BeanApplyAnnotation.create(A6a.class).value(BeanAnnotation.create().sort(true).build()).build()).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

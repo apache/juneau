@@ -65,10 +65,10 @@ class BeanMapErrors_Test extends TestBase {
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
-	@Bean(on="Dummy",p="dummy")
-	@Bean(on="B1", p="f1")
-	@Beanp(on="Dummy", value="dummy")
-	@Beanp(on="B1.f2", value="f2")
+	@BeanApply(on="Dummy",value=@Bean(p="dummy"))
+	@BeanApply(on="B1",value=@Bean(p="f1"))
+	@BeanpApply(on="Dummy",value=@Beanp("dummy"))
+	@BeanpApply(on="B1.f2",value=@Beanp("f2"))
 	private static class B1Config {}
 
 	public static class B1 {
@@ -115,10 +115,10 @@ class BeanMapErrors_Test extends TestBase {
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
-	@Bean(on="Dummy",p="dummy")
-	@Bean(on="B2", p="f1")
-	@Beanp(on="Dummy", value="dummy")
-	@Beanp(on="B2.f2", value="f2")
+	@BeanApply(on="Dummy",value=@Bean(p="dummy"))
+	@BeanApply(on="B2",value=@Bean(p="f1"))
+	@BeanpApply(on="Dummy",value=@Beanp("dummy"))
+	@BeanpApply(on="B2.f2",value=@Beanp("f2"))
 	private static class B2Config {}
 
 	public static class B2 {

@@ -526,8 +526,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 		if (t.isValidationOnly())
 			return;
 
-		var s = t.getSerializer().copy().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
-		var p = t.getParser().copy().annotations(BeanAnnotation.create(CA.class).dictionary(CAFilterDictionaryMap.class).build()).build();
+		var s = t.getSerializer().copy().annotations(BeanApplyAnnotation.create(CA.class).value(BeanAnnotation.create().dictionary(CAFilterDictionaryMap.class).build()).build()).build();
+		var p = t.getParser().copy().annotations(BeanApplyAnnotation.create(CA.class).value(BeanAnnotation.create().dictionary(CAFilterDictionaryMap.class).build()).build()).build();
 
 		var c1 = CA1.create();
 		var r = s.serialize(c1);
@@ -1029,7 +1029,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		assertDoesNotThrow(()->t.roundTrip(x2, LinkedHashMap.class, String.class, L2.class));
 	}
 
-	@Json(on="L2",wrapperAttr="foo")
+	@JsonApply(on="L2",value=@Json(wrapperAttr="foo"))
 	private static class L2Config {}
 
 	public static class L2 {
@@ -1092,7 +1092,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		assertDoesNotThrow(()->t.roundTrip(x2, LinkedHashMap.class, String.class, M2.class));
 	}
 
-	@Json(on="M2",wrapperAttr="foo")
+	@JsonApply(on="M2",value=@Json(wrapperAttr="foo"))
 	private static class M2Config {}
 
 	public static class M2 {

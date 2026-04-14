@@ -174,7 +174,7 @@ class AutoObjectSwapTest extends TestBase {
 	// Ignore class
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(on="D01c")
+	@BeanIgnoreApply(on="D01c",value=@BeanIgnore())
 	private static class D01Config {}
 
 	@BeanIgnore
@@ -212,7 +212,7 @@ class AutoObjectSwapTest extends TestBase {
 	// Ignore swap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(on="E01c.swap")
+	@BeanIgnoreApply(on="E01c.swap",value=@BeanIgnore())
 	private static class E01Config {}
 
 	public static class E01 {
@@ -267,7 +267,7 @@ class AutoObjectSwapTest extends TestBase {
 	// Ignore unswap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(on="F01c.create(java.util.Map)")
+	@BeanIgnoreApply(on="F01c.create(java.util.Map)",value=@BeanIgnore())
 	private static class F01Config {}
 
 	public static class F01 {
@@ -368,7 +368,7 @@ class AutoObjectSwapTest extends TestBase {
 	// Ignore constructor
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(on="G01c(Map)")
+	@BeanIgnoreApply(on="G01c(Map)",value=@BeanIgnore())
 	private static class G01Config {}
 
 	public static class G01 {

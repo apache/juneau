@@ -42,12 +42,12 @@ class ContextPropertiesTest extends TestBase {
 		assertEquals(s2.hashKey(), s3.hashKey());
 	}
 
-	@Html(on="B1", format=HtmlFormat.XML)
+	@HtmlApply(on="B1", value=@Html(format=HtmlFormat.XML))
 	private static class B1Config {}
 
 	public static class B1 {}
 
-	@Html(on="B2", format=HtmlFormat.HTML)
+	@HtmlApply(on="B2", value=@Html(format=HtmlFormat.HTML))
 	private static class B2Config {}
 
 	public static class B2 {}

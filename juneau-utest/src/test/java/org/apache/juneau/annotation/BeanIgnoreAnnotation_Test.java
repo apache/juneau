@@ -28,28 +28,20 @@ import org.junit.jupiter.api.*;
 })
 class BeanIgnoreAnnotation_Test extends TestBase {
 
-	private static final String CNAME = BeanIgnoreAnnotation_Test.class.getName();
-
-	private static class X1 {}
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
 	BeanIgnore a1 = BeanIgnoreAnnotation.create()
 		.description("a")
-		.on("b")
-		.onClass(X1.class)
 		.build();
 
 	BeanIgnore a2 = BeanIgnoreAnnotation.create()
 		.description("a")
-		.on("b")
-		.onClass(X1.class)
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,ignoreAccessors,on,onClass", "[a],false,[b],[X1]");
+		assertBean(a1, "description,ignoreAccessors", "[a],false");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -70,48 +62,17 @@ class BeanIgnoreAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c1 = BeanIgnoreAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = BeanIgnoreAnnotation.create("a").on("b").build();
-		var c3 = BeanIgnoreAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		var c4 = BeanIgnoreAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-		var c5 = BeanIgnoreAnnotation.create().on(C1.class.getConstructor()).on(C2.class.getConstructor()).build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
-		assertBean(c3, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
-		assertBean(c5, "on", "["+CNAME+"$C1(),"+CNAME+"$C2()]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@BeanIgnore(
-		description={ "a" },
-		on="b",
-		onClass=X1.class
+		description={ "a" }
 	)
 	public static class D1 {}
 	BeanIgnore d1 = D1.class.getAnnotationsByType(BeanIgnore.class)[0];
 
 	@BeanIgnore(
-		description={ "a" },
-		on="b",
-		onClass=X1.class
+		description={ "a" }
 	)
 	public static class D2 {}
 	BeanIgnore d2 = D2.class.getAnnotationsByType(BeanIgnore.class)[0];

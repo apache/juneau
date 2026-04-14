@@ -33,7 +33,7 @@ import org.apache.juneau.swap.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Bean classes and parent interfaces.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link BeanApply @BeanApply}.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -45,7 +45,6 @@ import org.apache.juneau.swap.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BeanAnnotation.Array.class)
-@ContextApply(BeanAnnotation.Applier.class)
 @SuppressWarnings({
 	"java:S1452"  // Wildcard required - Class<? extends BeanInterceptor<?>> for interceptor definition
 })
@@ -279,61 +278,6 @@ public @interface Bean {
 	 * @return The annotation value.
 	 */
 	Class<?> interfaceClass() default void.class;
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class.
-	 * It is ignored when the annotation is applied directly to classes.
-	 *
-	 * <h5 class='section'>Valid patterns:</h5>
-	 * <ul class='spaced-list'>
-	 *  <li>Classes:
-	 * 		<ul>
-	 * 			<li>Fully qualified:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass"</js>
-	 * 				</ul>
-	 * 			<li>Fully qualified inner class:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
-	 * 				</ul>
-	 * 			<li>Simple:
-	 * 				<ul>
-	 * 					<li><js>"MyClass"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2"</js>
-	 * 					<li><js>"Inner1$Inner2"</js>
-	 * 					<li><js>"Inner2"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>A comma-delimited list of anything on this list.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <p>
-	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
 
 	/**
 	 * Synonym for {@link #properties()}.

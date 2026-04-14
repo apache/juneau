@@ -22,10 +22,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link Bson @Bson} annotation.
@@ -40,29 +37,6 @@ public class BsonAnnotation {
 	 * Prevents instantiation.
 	 */
 	private BsonAnnotation() {}
-
-	/**
-	 * Applies targeted {@link Bson} annotations to a {@link org.apache.juneau.Context.Builder}.
-	 */
-	public static class Apply extends AnnotationApplier<Bson,Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(Bson.class, Context.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Bson> ai, Context.Builder b) {
-			Bson a = ai.inner();
-			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
-	}
 
 	/**
 	 * A collection of {@link Bson @Bson} annotations.
@@ -82,34 +56,9 @@ public class BsonAnnotation {
 	}
 
 	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static Bson copy(Bson a, VarResolverSession r) {
-		var b = BsonAnnotation.create().on(r.resolve(a.on()));
-		if (a.onClass().length > 0)
-			b = b.onClass(a.onClass());
-		if (a.description().length > 0)
-			b = b.description(a.description());
-		return b.build();
-	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static BsonAnnotation.Builder create() {
-		return new BsonAnnotation.Builder();
-	}
-
-	/**
 	 * Builder class.
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
+	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 
@@ -139,24 +88,12 @@ public class BsonAnnotation {
 			description = value;
 			return this;
 		}
-
-		@Override /* AppliedAnnotationObject.Builder */
-		public Builder on(String...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* AppliedAnnotationObject.BuilderT */
-		public Builder onClass(Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
 	}
 
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedOnClassAnnotationObject implements Bson {
+	private static class Object extends AnnotationObject implements Bson {
 
 		private final String[] description;
 
@@ -169,5 +106,17 @@ public class BsonAnnotation {
 		public String[] description() {
 			return description;
 		}
+	}
+
+	/** Default value */
+	public static final Bson DEFAULT = create().build();
+
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static BsonAnnotation.Builder create() {
+		return new BsonAnnotation.Builder();
 	}
 }

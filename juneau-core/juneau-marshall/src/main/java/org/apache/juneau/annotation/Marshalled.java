@@ -30,7 +30,7 @@ import org.apache.juneau.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Marshalled classes.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link MarshalledApply @MarshalledApply}.
  * </ul>
  *
  * <p>
@@ -43,7 +43,6 @@ import org.apache.juneau.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(MarshalledAnnotation.Array.class)
-@ContextApply(MarshalledAnnotation.Applier.class)
 public @interface Marshalled {
 
 	/**
@@ -112,74 +111,4 @@ public @interface Marshalled {
 	 */
 	Class<?> implClass() default void.class;
 
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...)} to dynamically apply an annotation to an existing class.
-	 * It is ignored when the annotation is applied directly to classes.
-	 *
-	 * <p>
-	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation to REST methods:
-	 * <p class='bjava'>
-	 * 	<jc>// Class with explicit annotation.</jc>
-	 * 	<ja>@Marshalled</ja>(example=<js>"{foo:'bar'}"</js>)
-	 * 	<jk>public class</jk> A {...}
-	 *
-	 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
-	 * 	<jk>public class</jk> B {...}
-	 *
-	 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
-	 * 	<ja>@RestOp</ja>(...)
-	 * 	<ja>@Marshalled</ja>(on=<js>"B"</js>, example=<js>"{foo:'bar'}"</js>)
-	 * 	<jk>public void</jk> doFoo() {...}
-	 * </p>
-	 *
-	 * <h5 class='section'>Valid patterns:</h5>
-	 * <ul class='spaced-list'>
-	 *  <li>Classes:
-	 * 		<ul>
-	 * 			<li>Fully qualified:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass"</js>
-	 * 				</ul>
-	 * 			<li>Fully qualified inner class:
-	 * 				<ul>
-	 * 					<li><js>"com.foo.MyClass$Inner1$Inner2"</js>
-	 * 				</ul>
-	 * 			<li>Simple:
-	 * 				<ul>
-	 * 					<li><js>"MyClass"</js>
-	 * 				</ul>
-	 * 			<li>Simple inner:
-	 * 				<ul>
-	 * 					<li><js>"MyClass$Inner1$Inner2"</js>
-	 * 					<li><js>"Inner1$Inner2"</js>
-	 * 					<li><js>"Inner2"</js>
-	 * 				</ul>
-	 * 		</ul>
-	 * 	<li>A comma-delimited list of anything on this list.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * <p>
-	 * Identical to {@link #on()} except allows you to specify class objects instead of a strings.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
 }

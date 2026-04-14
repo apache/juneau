@@ -21,7 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parquet.*;
 
 /**
@@ -35,7 +34,6 @@ import org.apache.juneau.parquet.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ParquetAnnotation.Array.class)
-@ContextApply(ParquetAnnotation.Apply.class)
 public @interface Parquet {
 
 	/** Override Parquet physical type. */
@@ -43,10 +41,4 @@ public @interface Parquet {
 
 	/** Override logical type. */
 	String logicalType() default "";
-
-	/** Apply to specified targets. */
-	String[] on() default {};
-
-	/** Apply to specified classes. */
-	Class<?>[] onClass() default {};
 }

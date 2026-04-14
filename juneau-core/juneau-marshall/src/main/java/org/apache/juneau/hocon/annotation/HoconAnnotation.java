@@ -18,34 +18,12 @@ package org.apache.juneau.hocon.annotation;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.annotation.*;
 
 /**
  * Utility classes and methods for the {@link Hocon @Hocon} annotation.
  */
 public class HoconAnnotation {
-
-	/**
-	 * Applies {@link Hocon} annotations to a {@link org.apache.juneau.Context.Builder}.
-	 */
-	public static class Apply extends AnnotationApplier<Hocon, Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(Hocon.class, Context.Builder.class, vr);
-		}
-
-		@Override /* AnnotationApplier */
-		public void apply(AnnotationInfo<Hocon> ai, Context.Builder b) {
-			// No-op: @Hocon settings are read at serialization/parse time via HoconMetaProvider.
-		}
-	}
 
 	/**
 	 * A collection of {@link Hocon} annotations.
@@ -63,4 +41,13 @@ public class HoconAnnotation {
 		 */
 		Hocon[] value();
 	}
+
+	private static class Object extends AnnotationObject implements Hocon {
+		Object() {
+			super(new AnnotationObject.Builder(Hocon.class));
+		}
+	}
+
+	/** Default value */
+	public static final Hocon DEFAULT = new Object();
 }

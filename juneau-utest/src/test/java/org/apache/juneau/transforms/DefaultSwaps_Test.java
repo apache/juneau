@@ -114,9 +114,9 @@ class DefaultSwaps_Test extends TestBase {
 		}
 	}
 
-	@Swap(on="Dummy1.f2", value=AcSwap.class)
-	@Swap(on="AcBean.f2", value=AcSwap.class)
-	@Swap(on="Dummy2.f2", value=AcSwap.class)
+	@SwapApply(on="Dummy1.f2", value=@Swap(AcSwap.class))
+	@SwapApply(on="AcBean.f2", value=@Swap(AcSwap.class))
+	@SwapApply(on="Dummy2.f2", value=@Swap(AcSwap.class))
 	private static class AcBeanConfig {}
 
 	public static class AcBean {
@@ -176,9 +176,9 @@ class DefaultSwaps_Test extends TestBase {
 		}
 	}
 
-	@Swap(on="Dummy1.f2", value=BcSwap.class)
-	@Swap(on="BcBean.f2", value=BcSwap.class)
-	@Swap(on="Dummy2.f2", value=BcSwap.class)
+	@SwapApply(on="Dummy1.f2", value=@Swap(BcSwap.class))
+	@SwapApply(on="BcBean.f2", value=@Swap(BcSwap.class))
+	@SwapApply(on="Dummy2.f2", value=@Swap(BcSwap.class))
 	private static class BcBeanConfig {}
 
 	public static class BcBean {

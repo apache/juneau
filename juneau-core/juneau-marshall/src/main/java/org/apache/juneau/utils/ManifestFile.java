@@ -60,9 +60,9 @@ public class ManifestFile extends JsonMap {
 		}
 		var manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
 		try {
-			var mf = new Manifest(new URL(manifestPath).openStream());
+			var mf = new Manifest(URI.create(manifestPath).toURL().openStream());
 			load(mf);
-		} catch (MalformedURLException e) {
+		} catch (IllegalArgumentException | MalformedURLException e) {
 			throw castException(IOException.class, e);
 		} catch (IOException e) {
 			e.printStackTrace();

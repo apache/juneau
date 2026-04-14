@@ -88,7 +88,7 @@ public class BeanConfigAnnotation {
 			classes(a.notBeanClasses()).ifPresent(b::notBeanClasses);
 			classes(a.notBeanClasses_replace()).ifPresent(x -> { b.notBeanClasses().clear(); b.notBeanClasses(x);});
 			type(a.propertyNamer()).ifPresent(b::propertyNamer);
-			l(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(b::annotations);
+			l(a.interfaces()).stream().map(x -> BeanApplyAnnotation.create(x).value(BeanAnnotation.create().interfaceClass(x).build()).build()).forEach(b::annotations);
 			strings(a.notBeanPackages()).ifPresent(b::notBeanPackages);
 			strings(a.notBeanPackages_replace()).ifPresent(x -> {b.notBeanPackages().clear(); b.notBeanPackages(x);});
 			// @formatter:on

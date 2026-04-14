@@ -112,12 +112,12 @@ class BeanFilter_Test extends TestBase {
 		);
 	}
 
-	@Bean(on="E", dictionary={E1.class, E2.class})
-	@Bean(on="E1", typeName="E1")
-	@Bean(on="E2", typeName="E2")
-	@Bean(on="F", dictionary={F1.class,F2.class})
-	@Bean(on="F1", typeName="F1")
-	@Bean(on="F2", typeName="F2")
+	@BeanApply(on="E",value=@Bean(dictionary={E1.class, E2.class}))
+	@BeanApply(on="E1",value=@Bean(typeName="E1"))
+	@BeanApply(on="E2",value=@Bean(typeName="E2"))
+	@BeanApply(on="F",value=@Bean(dictionary={F1.class,F2.class}))
+	@BeanApply(on="F1",value=@Bean(typeName="F1"))
+	@BeanApply(on="F2",value=@Bean(typeName="F2"))
 	private static class EConfig {}
 
 	private static class EConfig2 extends EConfig {}

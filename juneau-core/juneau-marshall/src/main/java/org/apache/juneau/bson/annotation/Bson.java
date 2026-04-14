@@ -21,7 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.bson.*;
 
 /**
@@ -31,7 +30,6 @@ import org.apache.juneau.bson.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Marshalled classes/methods/fields.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when an {@link #on()} value is specified.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -43,7 +41,6 @@ import org.apache.juneau.bson.*;
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BsonAnnotation.Array.class)
-@ContextApply(BsonAnnotation.Apply.class)
 public @interface Bson {
 
 	/**
@@ -53,18 +50,4 @@ public @interface Bson {
 	 * @since 9.2.0
 	 */
 	String[] description() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes/methods/fields.
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified classes.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] onClass() default {};
 }

@@ -60,7 +60,7 @@ import org.apache.juneau.rest.widget.*;
 		"</div>"
 	}
 )
-@Marshalled(on="Schema",example="$F{JsonSchemaResource_example.json}")
+@MarshalledApply(on="Schema",value=@Marshalled(example="$F{JsonSchemaResource_example.json}"))
 public class JsonSchemaResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 

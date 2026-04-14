@@ -83,11 +83,11 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 		assertEquals(2, x.f2);
 	}
 
-	@Bean(on="Dummy1", readOnlyProperties="f1", writeOnlyProperties="f2")
-	@Bean(on="Bc", readOnlyProperties="f1", writeOnlyProperties="f2")
-	@Bean(on="Dummy2", readOnlyProperties="f1", writeOnlyProperties="f2")
-	@Beanp(on="Bc.f1", ro="true")
-	@Beanp(on="Bc.f2", wo="true")
+	@BeanApply(on="Dummy1",value=@Bean(readOnlyProperties="f1",writeOnlyProperties="f2"))
+	@BeanApply(on="Bc",value=@Bean(readOnlyProperties="f1",writeOnlyProperties="f2"))
+	@BeanApply(on="Dummy2",value=@Bean(readOnlyProperties="f1",writeOnlyProperties="f2"))
+	@BeanpApply(on="Bc.f1",value=@Beanp(ro="true"))
+	@BeanpApply(on="Bc.f2",value=@Beanp(wo="true"))
 	private static class BcConfig {}
 
 	public static class Bc {
@@ -229,7 +229,7 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 		assertEquals(0, x.f2);
 	}
 
-	@Bean(on="Dc",readOnlyProperties="*")
+	@BeanApply(on="Dc",value=@Bean(readOnlyProperties="*"))
 	private static class DcConfig {}
 
 	public static class Dc {
@@ -281,7 +281,7 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 		assertEquals(2, x.f2);
 	}
 
-	@Bean(on="Ec", writeOnlyProperties="*")
+	@BeanApply(on="Ec",value=@Bean(writeOnlyProperties="*"))
 	private static class EcConfig {}
 
 	public static class Ec {

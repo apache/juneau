@@ -28,8 +28,6 @@ import org.junit.jupiter.api.*;
 })
 class MarshalledAnnotation_Test extends TestBase {
 
-	private static final String CNAME = MarshalledAnnotation_Test.class.getName();
-
 	private static class X1 {}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -40,20 +38,16 @@ class MarshalledAnnotation_Test extends TestBase {
 		.description("a")
 		.example("b")
 		.implClass(X1.class)
-		.on("c")
-		.onClass(X1.class)
 		.build();
 
 	Marshalled a2 = MarshalledAnnotation.create()
 		.description("a")
 		.example("b")
 		.implClass(X1.class)
-		.on("c")
-		.onClass(X1.class)
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,example,implClass,on,onClass", "[a],b,X1,[c],[X1]");
+		assertBean(a1, "description,example,implClass", "[a],b,X1");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -73,36 +67,13 @@ class MarshalledAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() {
-		var c1 = MarshalledAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = MarshalledAnnotation.create("a").on("b").build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Marshalled(
 		description={ "a" },
 		example="b",
-		implClass=X1.class,
-		on="c",
-		onClass=X1.class
+		implClass=X1.class
 	)
 	public static class D1 {}
 	Marshalled d1 = D1.class.getAnnotationsByType(Marshalled.class)[0];
@@ -110,9 +81,7 @@ class MarshalledAnnotation_Test extends TestBase {
 	@Marshalled(
 		description={ "a" },
 		example="b",
-		implClass=X1.class,
-		on="c",
-		onClass=X1.class
+		implClass=X1.class
 	)
 	public static class D2 {}
 	Marshalled d2 = D2.class.getAnnotationsByType(Marshalled.class)[0];

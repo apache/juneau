@@ -28,8 +28,6 @@ import org.junit.jupiter.api.*;
 })
 class XmlAnnotation_Test extends TestBase {
 
-	private static final String CNAME = XmlAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
@@ -39,7 +37,6 @@ class XmlAnnotation_Test extends TestBase {
 		.description("b")
 		.format(XmlFormat.ATTR)
 		.namespace("c")
-		.on("d")
 		.prefix("e")
 		.build();
 
@@ -48,12 +45,11 @@ class XmlAnnotation_Test extends TestBase {
 		.description("b")
 		.format(XmlFormat.ATTR)
 		.namespace("c")
-		.on("d")
 		.prefix("e")
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "childName,description,format,namespace,on,onClass,prefix", "a,[b],ATTR,c,[d],[],e");
+		assertBean(a1, "childName,description,format,namespace,prefix", "a,[b],ATTR,c,e");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -73,31 +69,6 @@ class XmlAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c1 = XmlAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = XmlAnnotation.create("a").on("b").build();
-		var c3 = XmlAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		var c4 = XmlAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
-		assertBean(c3, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -106,7 +77,6 @@ class XmlAnnotation_Test extends TestBase {
 		description={ "b" },
 		format=XmlFormat.ATTR,
 		namespace="c",
-		on="d",
 		prefix="e"
 	)
 	public static class D1 {}
@@ -117,7 +87,6 @@ class XmlAnnotation_Test extends TestBase {
 		description={ "b" },
 		format=XmlFormat.ATTR,
 		namespace="c",
-		on="d",
 		prefix="e"
 	)
 	public static class D2 {}

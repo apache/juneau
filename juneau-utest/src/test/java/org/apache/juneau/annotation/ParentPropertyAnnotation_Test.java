@@ -29,24 +29,20 @@ import org.junit.jupiter.api.*;
 })
 class ParentPropertyAnnotation_Test extends TestBase {
 
-	private static final String CNAME = ParentPropertyAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
 	ParentProperty a1 = ParentPropertyAnnotation.create()
 		.description("a")
-		.on("b")
 		.build();
 
 	ParentProperty a2 = ParentPropertyAnnotation.create()
 		.description("a")
-		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,on", "[a],[b]");
+		assertBean(a1, "description", "[a]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -66,42 +62,17 @@ class ParentPropertyAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c1 = ParentPropertyAnnotation.create("a").on("b").build();
-		var c2 = ParentPropertyAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		var c3 = ParentPropertyAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c1, "on", "[a,b]");
-		assertBean(c2, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
-		assertBean(c3, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@ParentProperty(
-		description={ "a" },
-		on="b"
+		description={ "a" }
 	)
 	public static class D1 {}
 	ParentProperty d1 = D1.class.getAnnotationsByType(ParentProperty.class)[0];
 
 	@ParentProperty(
-		description={ "a" },
-		on="b"
+		description={ "a" }
 	)
 	public static class D2 {}
 	ParentProperty d2 = D2.class.getAnnotationsByType(ParentProperty.class)[0];

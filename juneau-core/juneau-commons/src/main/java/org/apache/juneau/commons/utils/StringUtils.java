@@ -6313,18 +6313,16 @@ public class StringUtils {
 	 * split("a,,c",',') -&gt; {"a","","c"}
 	 * split(",,",',') -&gt; {"","",""}
 	 * split("",',') -&gt; {}
-	 * split(null,',') -&gt; null
+	 * split(null,',') -&gt; {}
 	 * split("a,b\,c,d", ',', false) -&gt; {"a","b\,c","d"}
 	 * split("a,b\\,c,d", ',', false) -&gt; {"a","b\","c","d"}
 	 * split("a,b\,c,d", ',', true) -&gt; {"a","b,c","d"}
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.
-	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 * @return The tokens, or an empty list if the string was <jk>null</jk>.
 	 */
 	public static List<String> split(String s, char c) {
-		if (s == null)
-			return null;
 		return split(s, c, Integer.MAX_VALUE);
 	}
 

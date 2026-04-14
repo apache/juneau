@@ -754,7 +754,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanAnnotation.create(on).interceptor(value).build());
+			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().interceptor(value).build()).build());
 		}
 
 		/**
@@ -908,7 +908,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanProperties(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanAnnotation.create(beanClass).p(properties).build());
+			return annotations(BeanApplyAnnotation.create(beanClass).value(BeanAnnotation.create().p(properties).build()).build());
 		}
 
 		/**
@@ -971,7 +971,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanProperties(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).p(s(v)).build()));
+			values.forEach((k, v) -> annotations(BeanApplyAnnotation.create(k).value(BeanAnnotation.create().p(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1036,7 +1036,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanProperties(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanAnnotation.create(beanClassName).p(properties).build());
+			return annotations(BeanApplyAnnotation.create(beanClassName).value(BeanAnnotation.create().p(properties).build()).build());
 		}
 
 		/**
@@ -1091,7 +1091,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanAnnotation.create(beanClass).xp(properties).build());
+			return annotations(BeanApplyAnnotation.create(beanClass).value(BeanAnnotation.create().xp(properties).build()).build());
 		}
 
 		/**
@@ -1146,7 +1146,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).xp(s(v)).build()));
+			values.forEach((k, v) -> annotations(BeanApplyAnnotation.create(k).value(BeanAnnotation.create().xp(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1204,7 +1204,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanAnnotation.create(beanClassName).xp(properties).build());
+			return annotations(BeanApplyAnnotation.create(beanClassName).value(BeanAnnotation.create().xp(properties).build()).build());
 		}
 
 		/**
@@ -1262,7 +1262,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanAnnotation.create(beanClass).ro(properties).build());
+			return annotations(BeanApplyAnnotation.create(beanClass).value(BeanAnnotation.create().ro(properties).build()).build());
 		}
 
 		/**
@@ -1320,7 +1320,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).ro(s(v)).build()));
+			values.forEach((k, v) -> annotations(BeanApplyAnnotation.create(k).value(BeanAnnotation.create().ro(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1379,7 +1379,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanAnnotation.create(beanClassName).ro(properties).build());
+			return annotations(BeanApplyAnnotation.create(beanClassName).value(BeanAnnotation.create().ro(properties).build()).build());
 		}
 
 		/**
@@ -1436,7 +1436,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanAnnotation.create(beanClass).wo(properties).build());
+			return annotations(BeanApplyAnnotation.create(beanClass).value(BeanAnnotation.create().wo(properties).build()).build());
 		}
 
 		/**
@@ -1493,7 +1493,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(BeanAnnotation.create(k).wo(s(v)).build()));
+			values.forEach((k, v) -> annotations(BeanApplyAnnotation.create(k).value(BeanAnnotation.create().wo(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1551,7 +1551,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanAnnotation.create(beanClassName).wo(properties).build());
+			return annotations(BeanApplyAnnotation.create(beanClassName).value(BeanAnnotation.create().wo(properties).build()).build());
 		}
 
 		/**
@@ -1831,7 +1831,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNoNulls(ARG_values, values);
-			return annotations(BeanAnnotation.create(on).dictionary(values).build());
+			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().dictionary(values).build()).build());
 		}
 
 		/**
@@ -2106,7 +2106,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * @return This object.
 		 */
 		public <T> Builder example(Class<T> pojoClass, String json) {
-			return annotations(MarshalledAnnotation.create(assertArgNotNull(ARG_pojoClass, pojoClass)).example(json).build());
+			return annotations(MarshalledApplyAnnotation.create(assertArgNotNull(ARG_pojoClass, pojoClass)).value(MarshalledAnnotation.create().example(json).build()).build());
 		}
 
 		/**
@@ -2156,7 +2156,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * @return This object.
 		 */
 		public <T> Builder example(Class<T> pojoClass, T o) {
-			return annotations(MarshalledAnnotation.create(assertArgNotNull(ARG_pojoClass, pojoClass)).example(Json5.of(o)).build());
+			return annotations(MarshalledApplyAnnotation.create(assertArgNotNull(ARG_pojoClass, pojoClass)).value(MarshalledAnnotation.create().example(Json5.of(o)).build()).build());
 		}
 
 		/**
@@ -2256,7 +2256,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 */
 		public Builder findFluentSetters(Class<?> on) {
 			assertArgNotNull(ARG_on, on);
-			return annotations(BeanAnnotation.create(on).findFluentSetters(true).build());
+			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().findFluentSetters(true).build()).build());
 		}
 
 		@Override /* Overridden from Context.Builder */
@@ -2512,7 +2512,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
 			assertArgNotNull(ARG_interfaceClass, interfaceClass);
 			assertArgNotNull(ARG_implClass, implClass);
-			return annotations(MarshalledAnnotation.create(interfaceClass).implClass(implClass).build());
+			return annotations(MarshalledApplyAnnotation.create(interfaceClass).value(MarshalledAnnotation.create().implClass(implClass).build()).build());
 		}
 
 		/**
@@ -2552,7 +2552,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(MarshalledAnnotation.create(k).implClass(v).build()));
+			values.forEach((k, v) -> annotations(MarshalledApplyAnnotation.create(k).value(MarshalledAnnotation.create().implClass(v).build()).build()));
 			return this;
 		}
 
@@ -2602,7 +2602,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanAnnotation.create(on).interfaceClass(value).build());
+			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().interfaceClass(value).build()).build());
 		}
 
 		/**
@@ -2649,7 +2649,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder interfaces(Class<?>...value) {
 			assertArgNoNulls(ARG_value, value);
 			for (var v : value)
-				annotations(BeanAnnotation.create(v).interfaceClass(v).build());
+				annotations(BeanApplyAnnotation.create(v).value(BeanAnnotation.create().interfaceClass(v).build()).build());
 			return this;
 		}
 
@@ -2946,7 +2946,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanAnnotation.create(on).propertyNamer(value).build());
+			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().propertyNamer(value).build()).build());
 		}
 
 		/**
@@ -3083,7 +3083,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder sortProperties(Class<?>...on) {
 			assertArgNoNulls(ARG_on, on);
 			for (var c : on)
-				annotations(BeanAnnotation.create(c).sort(true).build());
+				annotations(BeanApplyAnnotation.create(c).value(BeanAnnotation.create().sort(true).build()).build());
 			return this;
 		}
 
@@ -3132,7 +3132,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanAnnotation.create(on).stopClass(value).build());
+			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().stopClass(value).build()).build());
 		}
 
 		/**
@@ -3409,7 +3409,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder typeName(Class<?> on, String value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanAnnotation.create(on).typeName(value).build());
+			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().typeName(value).build()).build());
 		}
 
 		/**
@@ -3457,7 +3457,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder typePropertyName(Class<?> on, String value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanAnnotation.create(on).typePropertyName(value).build());
+			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().typePropertyName(value).build()).build());
 		}
 
 		/**
