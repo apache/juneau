@@ -20,7 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.mock.*;

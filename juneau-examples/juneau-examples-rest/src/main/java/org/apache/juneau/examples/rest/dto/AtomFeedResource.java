@@ -20,7 +20,7 @@ import static org.apache.juneau.bean.atom.AtomBuilder.*;
 
 import java.net.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.bean.atom.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.annotation.*;

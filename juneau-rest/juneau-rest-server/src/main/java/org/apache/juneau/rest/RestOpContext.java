@@ -38,7 +38,7 @@ import java.util.stream.*;
 import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.Memoizer;

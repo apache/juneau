@@ -20,7 +20,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.ExternalDocs;
 
 /**
  * Extended annotation for {@link RestOp#swagger() RestOp.swagger()}.

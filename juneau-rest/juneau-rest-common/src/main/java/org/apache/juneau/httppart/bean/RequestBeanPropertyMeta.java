@@ -23,7 +23,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;

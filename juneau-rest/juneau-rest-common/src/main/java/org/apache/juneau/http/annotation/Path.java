@@ -22,7 +22,7 @@ import static org.apache.juneau.Constants.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.Schema;
+import org.apache.juneau.commons.annotation.Schema;
 
 /**
  * REST request path annotation.

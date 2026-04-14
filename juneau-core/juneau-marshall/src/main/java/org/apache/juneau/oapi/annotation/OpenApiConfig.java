@@ -22,6 +22,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.msgpack.*;
 
@@ -45,7 +46,7 @@ public @interface OpenApiConfig {
 	 * Default collection format for HTTP parts.
 	 *
 	 * <p>
-	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#collectionFormat()}.
+	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link Schema#collectionFormat()}.
 	 *
 	 * <ul class='values javatree'>
 	 * 	<li class='jc'>{@link HttpPartCollectionFormat}
@@ -72,7 +73,7 @@ public @interface OpenApiConfig {
 	 * Default format for HTTP parts.
 	 *
 	 * <p>
-	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#format()}.
+	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link Schema#format()}.
 	 *
 	 * <ul class='values javatree'>
 	 * 	<li class='jc'>{@link HttpPartFormat}

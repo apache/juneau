@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.*;
 import org.apache.http.*;
 import org.apache.http.client.config.*;
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.part.*;

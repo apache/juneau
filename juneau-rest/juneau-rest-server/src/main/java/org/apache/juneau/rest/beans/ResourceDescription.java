@@ -19,6 +19,7 @@ package org.apache.juneau.rest.beans;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 

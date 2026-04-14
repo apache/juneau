@@ -22,6 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.ExternalDocs;
+import org.apache.juneau.commons.annotation.Items;
+import org.apache.juneau.commons.annotation.Schema;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

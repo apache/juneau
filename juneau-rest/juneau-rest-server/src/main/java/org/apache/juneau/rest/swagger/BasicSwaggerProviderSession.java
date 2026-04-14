@@ -30,6 +30,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.collections.*;

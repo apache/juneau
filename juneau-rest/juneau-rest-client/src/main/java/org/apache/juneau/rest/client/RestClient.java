@@ -70,6 +70,7 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
@@ -3749,7 +3750,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default collection format for HTTP parts.
 		 *
 		 * <p>
-		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#collectionFormat()} for the
+		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link Schema#collectionFormat()} for the
 		 * OpenAPI serializer and parser on this client.
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -3811,7 +3812,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default OpenAPI format for HTTP parts.
 		 *
 		 * <p>
-		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#format()} for
+		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link Schema#format()} for
 		 * the OpenAPI serializer and parser on this client.
 		 *
 		 * <h5 class='section'>Example:</h5>

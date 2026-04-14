@@ -25,6 +25,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

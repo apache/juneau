@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
@@ -92,23 +90,6 @@ public class SchemaAnnotation {
 	 * Prevents instantiation.
 	 */
 	private SchemaAnnotation() {}
-
-	/**
-	 * A collection of {@link Schema @Schema annotations}.
-	 */
-	@Documented
-	@Target({ METHOD, TYPE })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Schema[] value();
-	}
 
 	/**
 	 * Builder class.

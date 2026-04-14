@@ -23,7 +23,9 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.Items;
+import org.apache.juneau.commons.annotation.SubItems;
+import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;

@@ -24,8 +24,8 @@ import java.lang.annotation.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.parser.*;

@@ -21,7 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.Schema;
+import org.apache.juneau.commons.annotation.Schema;
 
 /**
  * REST request header annotation.

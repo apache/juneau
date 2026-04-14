@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

@@ -17,6 +17,7 @@
 package org.apache.juneau.examples.rest.dto;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.ExternalDocs;
 import org.apache.juneau.bean.jsonschema.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;

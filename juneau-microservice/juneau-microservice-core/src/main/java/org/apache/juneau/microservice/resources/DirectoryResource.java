@@ -26,6 +26,7 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.bean.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.html.annotation.*;

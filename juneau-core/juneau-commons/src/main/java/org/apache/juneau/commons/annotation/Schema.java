@@ -14,17 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.commons.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 import java.util.*;
-
-import org.apache.juneau.collections.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.oapi.*;
 
 /**
  * Swagger/OpenAPI/JSON Schema annotation.
@@ -44,7 +40,7 @@ import org.apache.juneau.oapi.*;
  *
  * <p>
  * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
- * <br>Also used to define OpenAPI schema information for POJOs serialized through {@link OpenApiSerializer} and parsed through {@link OpenApiParser}.
+ * <br>Also used to define OpenAPI schema information for POJOs serialized through <c>OpenApiSerializer</c> and parsed through <c>OpenApiParser</c>.
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bjava'>
@@ -95,11 +91,27 @@ import org.apache.juneau.oapi.*;
 @Documented
 @Target({ PARAMETER, METHOD, TYPE, FIELD })
 @Retention(RUNTIME)
-@Repeatable(SchemaAnnotation.Array.class)
+@Repeatable(Schema.Array.class)
 @SuppressWarnings({
 	"java:S100" // Annotation methods use underscore suffix or $ prefix to match JSON Schema keywords (e.g., default_, enum_, $ref)
 })
 public @interface Schema {
+
+	/**
+	 * A collection of {@link Schema @Schema annotations}.
+	 */
+	@Documented
+	@Target({ PARAMETER, METHOD, TYPE, FIELD })
+	@Retention(RUNTIME)
+	public @interface Array {
+
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		Schema[] value();
+	}
 
 	/**
 	 * <mk>const</mk> field of the JSON Schema.
@@ -219,7 +231,7 @@ public @interface Schema {
 	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -774,7 +786,7 @@ public @interface Schema {
 	 * Defines whether the maximum is matched exclusively.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -852,7 +864,7 @@ public @interface Schema {
 	 * Defines whether the minimum is matched exclusively.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -1073,7 +1085,7 @@ public @interface Schema {
 	 * <br>The value must be a valid JSON number.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -1101,7 +1113,7 @@ public @interface Schema {
 	 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -1138,7 +1150,7 @@ public @interface Schema {
 	 * <br>The value <c>-1</c> is always ignored.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -1201,7 +1213,7 @@ public @interface Schema {
 	 * <br>The value must be a valid JSON number.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -1229,7 +1241,7 @@ public @interface Schema {
 	 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -1266,7 +1278,7 @@ public @interface Schema {
 	 * <br>The value <c>-1</c> is always ignored.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -1322,7 +1334,7 @@ public @interface Schema {
 	 * <br>The value must be a valid JSON number.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -1357,7 +1369,7 @@ public @interface Schema {
 	 * A string input is valid if it matches the specified regular expression pattern.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -1448,7 +1460,7 @@ public @interface Schema {
 	 * Determines whether the parameter is mandatory.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
@@ -1584,11 +1596,11 @@ public @interface Schema {
 	 * 		<js>"array"</js>
 	 * 		<br>Parameter must be an array or collection.
 	 * 		<br>Elements must be strings or POJOs convertible from strings.
-	 * 		<br>If parameter is <c>Object</c>, creates an {@link JsonList}.
+	 * 		<br>If parameter is <c>Object</c>, creates an <c>JsonList</c>.
 	 * 	<li>
 	 * 		<js>"object"</js>
 	 * 		<br>Parameter must be a map or bean.
-	 * 		<br>If parameter is <c>Object</c>, creates an {@link JsonMap}.
+	 * 		<br>If parameter is <c>Object</c>, creates an <c>JsonMap</c>.
 	 * 		<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
 	 * 	<li>
 	 * 		<js>"file"</js>
@@ -1669,7 +1681,7 @@ public @interface Schema {
 	 * If <jk>true</jk> the input validates successfully if all of its elements are unique.
 	 *
 	 * <p>
-	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a <c>SchemaValidationException</c>.
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *

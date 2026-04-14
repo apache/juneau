@@ -14,13 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.commons.annotation;
 
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-
-import org.apache.juneau.oapi.*;
 
 /**
  * Swagger items annotation.
@@ -30,7 +28,7 @@ import org.apache.juneau.oapi.*;
  *
  * <p>
  * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
- * <br>Also used to define OpenAPI schema information for POJOs serialized through {@link OpenApiSerializer} and parsed through {@link OpenApiParser}.
+ * <br>Also used to define OpenAPI schema information for POJOs serialized through <c>OpenApiSerializer</c> and parsed through <c>OpenApiParser</c>.
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bjava'>

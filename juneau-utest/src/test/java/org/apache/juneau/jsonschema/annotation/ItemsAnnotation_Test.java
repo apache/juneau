@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.Items;
 import org.junit.jupiter.api.*;
 
 class ItemsAnnotation_Test extends TestBase {

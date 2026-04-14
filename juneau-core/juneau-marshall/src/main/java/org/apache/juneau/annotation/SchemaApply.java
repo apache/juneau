@@ -21,6 +21,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.commons.annotation.*;
+
 /**
  * Dynamically applies a {@link Schema @Schema} annotation to specified classes, methods, or fields.
  *

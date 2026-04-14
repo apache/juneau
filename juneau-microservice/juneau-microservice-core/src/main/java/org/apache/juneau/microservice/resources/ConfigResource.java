@@ -21,7 +21,7 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import java.io.*;
 import java.util.Map;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
