@@ -64,7 +64,7 @@ public class RestOpAnnotation {
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast for Builder inheritance
 	})
-	public static class Builder extends AppliedAnnotationObject.BuilderM {
+	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 		private Class<? extends RestConverter>[] converters = new Class[0];
@@ -448,24 +448,6 @@ public class RestOpAnnotation {
 			return this;
 		}
 
-		@Override /* Overridden from AppliedAnnotationObject.Builder */
-		public Builder on(String...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
-		public Builder on(java.lang.reflect.Method...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
-		public Builder on(MethodInfo...value) {
-			super.on(value);
-			return this;
-		}
-
 	}
 
 	/**
@@ -528,7 +510,7 @@ public class RestOpAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedAnnotationObject implements RestOp {
+	private static class Object extends AnnotationObject implements RestOp {
 
 		private final String[] description;
 		private final Class<? extends RestConverter>[] converters;

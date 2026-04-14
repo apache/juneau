@@ -525,17 +525,6 @@ public @interface RestPut {
 	String maxInput() default "";
 
 	/**
-	 * Dynamically apply this annotation to the specified methods.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
-
-	/**
 	 * Specifies the parsers for converting HTTP request bodies into POJOs for this method.
 	 *
 	 * <p>

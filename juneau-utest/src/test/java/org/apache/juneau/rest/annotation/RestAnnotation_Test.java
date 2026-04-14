@@ -42,8 +42,6 @@ import org.junit.jupiter.api.*;
 })
 class RestAnnotation_Test extends TestBase {
 
-	private static final String CNAME = RestAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
@@ -77,8 +75,6 @@ class RestAnnotation_Test extends TestBase {
 		.guards(RestGuard.class)
 		.maxInput("q")
 		.messages("r")
-		.on("s")
-		.onClass(RestAnnotation_Test.class)
 		.parsers(Parser.class)
 		.partParser(HttpPartParser.class)
 		.partSerializer(HttpPartSerializer.class)
@@ -131,8 +127,6 @@ class RestAnnotation_Test extends TestBase {
 		.guards(RestGuard.class)
 		.maxInput("q")
 		.messages("r")
-		.on("s")
-		.onClass(RestAnnotation_Test.class)
 		.parsers(Parser.class)
 		.partParser(HttpPartParser.class)
 		.partSerializer(HttpPartSerializer.class)
@@ -158,8 +152,8 @@ class RestAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"allowedHeaderParams,allowedMethodHeaders,allowedMethodParams,allowedParserOptions,allowedSerializerOptions,beanStore,callLogger,children,clientVersionHeader,config,consumes,converters,debug,debugEnablement,debugOn,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestHeaders,defaultResponseHeaders,description,disableContentParam,encoders,guards,maxInput,messages,noInherit,on,onClass,parsers,partParser,partSerializer,path,produces,renderResponseStackTraces,responseProcessors,restChildrenClass,restOpArgs,roleGuard,rolesDeclared,serializers,siteName,staticFiles,swagger{contact{description,email,name,url},description,externalDocs{description,url},license{description,name,url},tags,termsOfService,title,value,version},swaggerProvider,title,uriAuthority,uriContext,uriRelativity,uriResolution",
-			"b,c,d,[e1],[e2],BasicBeanStore,CallLogger,[RestAnnotation_Test],e,f,[g],[RestConverter],h,DebugEnablement,i,j,k,l,[m],[n],[o],[p],a,[Encoder],[RestGuard],q,r,[e3],[s],[RestAnnotation_Test],[Parser],HttpPartParser,HttpPartSerializer,t,[u],v,[ResponseProcessor],RestChildren,[RestOpArg],w,x,[Serializer],y,StaticFiles,{{[],,,},[],{[],},{[],,},[],[],[],[],},BasicSwaggerProvider,[z],aa,bb,cc,dd");
+			"allowedHeaderParams,allowedMethodHeaders,allowedMethodParams,allowedParserOptions,allowedSerializerOptions,beanStore,callLogger,children,clientVersionHeader,config,consumes,converters,debug,debugEnablement,debugOn,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestHeaders,defaultResponseHeaders,description,disableContentParam,encoders,guards,maxInput,messages,noInherit,parsers,partParser,partSerializer,path,produces,renderResponseStackTraces,responseProcessors,restChildrenClass,restOpArgs,roleGuard,rolesDeclared,serializers,siteName,staticFiles,swagger{contact{description,email,name,url},description,externalDocs{description,url},license{description,name,url},tags,termsOfService,title,value,version},swaggerProvider,title,uriAuthority,uriContext,uriRelativity,uriResolution",
+			"b,c,d,[e1],[e2],BasicBeanStore,CallLogger,[RestAnnotation_Test],e,f,[g],[RestConverter],h,DebugEnablement,i,j,k,l,[m],[n],[o],[p],a,[Encoder],[RestGuard],q,r,[e3],[Parser],HttpPartParser,HttpPartSerializer,t,[u],v,[ResponseProcessor],RestChildren,[RestOpArg],w,x,[Serializer],y,StaticFiles,{{[],,,},[],{[],},{[],,},[],[],[],[],},BasicSwaggerProvider,[z],aa,bb,cc,dd");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -176,27 +170,6 @@ class RestAnnotation_Test extends TestBase {
 		var bc1 = BeanContext.create().annotations(a1).build();
 		var bc2 = BeanContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() {
-		var c1 = RestAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = RestAnnotation.create("a").on("b").build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -232,8 +205,6 @@ class RestAnnotation_Test extends TestBase {
 		guards=RestGuard.class,
 		maxInput="q",
 		messages="r",
-		on="s",
-		onClass=RestAnnotation_Test.class,
 		parsers=Parser.class,
 		partParser=HttpPartParser.class,
 		partSerializer=HttpPartSerializer.class,
@@ -288,8 +259,6 @@ class RestAnnotation_Test extends TestBase {
 		guards=RestGuard.class,
 		maxInput="q",
 		messages="r",
-		on="s",
-		onClass=RestAnnotation_Test.class,
 		parsers=Parser.class,
 		partParser=HttpPartParser.class,
 		partSerializer=HttpPartSerializer.class,

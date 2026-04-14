@@ -92,15 +92,4 @@ public @interface RestInit {
 	 * @since 9.2.0
 	 */
 	String[] description() default {};
-
-	/**
-	 * Dynamically apply this annotation to the specified methods.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] on() default {};
 }

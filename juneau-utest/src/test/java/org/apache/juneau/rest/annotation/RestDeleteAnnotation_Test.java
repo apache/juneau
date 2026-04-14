@@ -31,8 +31,6 @@ import org.junit.jupiter.api.*;
 })
 class RestDeleteAnnotation_Test extends TestBase {
 
-	private static final String CNAME = RestDeleteAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
@@ -53,7 +51,6 @@ class RestDeleteAnnotation_Test extends TestBase {
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
-		.on("j")
 		.path("k")
 		.roleGuard("l")
 		.rolesDeclared("m")
@@ -78,7 +75,6 @@ class RestDeleteAnnotation_Test extends TestBase {
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
-		.on("j")
 		.path("k")
 		.roleGuard("l")
 		.rolesDeclared("m")
@@ -89,8 +85,8 @@ class RestDeleteAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"allowedParserOptions,allowedSerializerOptions,clientVersion,debug,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,noInherit,on,path,roleGuard,rolesDeclared,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
-			"[p1],[p2],a,b,c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[p3],[j],[k],l,m,n,{[],,[],{[],},,[],[],[],[],[],[],[]},o");
+			"allowedParserOptions,allowedSerializerOptions,clientVersion,debug,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,noInherit,path,roleGuard,rolesDeclared,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"[p1],[p2],a,b,c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[p3],[k],l,m,n,{[],,[],{[],},,[],[],[],[],[],[],[]},o");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -107,25 +103,6 @@ class RestDeleteAnnotation_Test extends TestBase {
 		var bc1 = BeanContext.create().annotations(a1).build();
 		var bc2 = BeanContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c4 = RestDeleteAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -150,7 +127,6 @@ class RestDeleteAnnotation_Test extends TestBase {
 			encoders=Encoder.class,
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
-			on="j",
 			path="k",
 			roleGuard="l",
 			rolesDeclared="m",
@@ -176,7 +152,6 @@ class RestDeleteAnnotation_Test extends TestBase {
 			encoders=Encoder.class,
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
-			on="j",
 			path="k",
 			roleGuard="l",
 			rolesDeclared="m",

@@ -28,24 +28,20 @@ import org.junit.jupiter.api.*;
 })
 class RestDestroyAnnotation_Test extends TestBase {
 
-	private static final String CNAME = RestDestroyAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestDestroy a1 = RestDestroyAnnotation.create()
 		.description("a")
-		.on("b")
 		.build();
 
 	RestDestroy a2 = RestDestroyAnnotation.create()
 		.description("a")
-		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,on", "[a],[b]");
+		assertBean(a1, "description", "[a]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -65,38 +61,17 @@ class RestDestroyAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c4 = RestDestroyAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestDestroy(
-		description={ "a" },
-		on="b"
+		description={ "a" }
 	)
 	public static class D1 {}
 	RestDestroy d1 = D1.class.getAnnotationsByType(RestDestroy.class)[0];
 
 	@RestDestroy(
-		description={ "a" },
-		on="b"
+		description={ "a" }
 	)
 	public static class D2 {}
 	RestDestroy d2 = D2.class.getAnnotationsByType(RestDestroy.class)[0];

@@ -67,7 +67,7 @@ public class RestAnnotation {
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast for Builder inheritance
 	})
-	public static class Builder extends AppliedAnnotationObject.BuilderT {
+	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 		private Class<? extends Encoder>[] encoders = new Class[0];
@@ -684,35 +684,6 @@ public class RestAnnotation {
 			return this;
 		}
 
-		@Override /* Overridden from AppliedAnnotationObject.Builder */
-		public Builder on(String...value) {
-			super.on(value);
-			return this;
-		}
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder on(Class<?>...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedOnClassAnnotationObject.Builder */
-		public Builder onClass(Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder on(ClassInfo...value) {
-			super.on(value);
-			return this;
-		}
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
-		public Builder onClass(ClassInfo...value) {
-			super.onClass(value);
-			return this;
-		}
-
 	}
 
 	/**
@@ -800,7 +771,7 @@ public class RestAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedOnClassAnnotationObject implements Rest {
+	private static class Object extends AnnotationObject implements Rest {
 
 		private final String[] description;
 		private final Class<? extends Encoder>[] encoders;
@@ -1191,23 +1162,4 @@ public class RestAnnotation {
 		return new Builder();
 	}
 
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
-	}
 }

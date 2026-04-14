@@ -34,8 +34,6 @@ import org.junit.jupiter.api.*;
 })
 class RestPutAnnotation_Test extends TestBase {
 
-	private static final String CNAME = RestPutAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
@@ -61,7 +59,6 @@ class RestPutAnnotation_Test extends TestBase {
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
 		.maxInput("m")
-		.on("n")
 		.parsers(Parser.class)
 		.path("o")
 		.produces("p")
@@ -94,7 +91,6 @@ class RestPutAnnotation_Test extends TestBase {
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
 		.maxInput("m")
-		.on("n")
 		.parsers(Parser.class)
 		.path("o")
 		.produces("p")
@@ -108,8 +104,8 @@ class RestPutAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"allowedParserOptions,allowedSerializerOptions,clientVersion,consumes,converters,debug,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestFormData,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,maxInput,noInherit,on,parsers,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
-			"[u1],[u2],a,[b],[RestConverter],c,d,e,f,[i],[g],[j],[h],[k],[l],[Encoder],[RestGuard],[RestMatcher],m,[u3],[n],[Parser],[o],[p],q,r,[Serializer],s,{[],,[],{[],},,[],[],[],[],[],[],[]},t");
+			"allowedParserOptions,allowedSerializerOptions,clientVersion,consumes,converters,debug,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestFormData,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,maxInput,noInherit,parsers,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"[u1],[u2],a,[b],[RestConverter],c,d,e,f,[i],[g],[j],[h],[k],[l],[Encoder],[RestGuard],[RestMatcher],m,[u3],[Parser],[o],[p],q,r,[Serializer],s,{[],,[],{[],},,[],[],[],[],[],[],[]},t");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -126,25 +122,6 @@ class RestPutAnnotation_Test extends TestBase {
 		var bc1 = BeanContext.create().annotations(a1).build();
 		var bc2 = BeanContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c4 = RestPutAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -174,7 +151,6 @@ class RestPutAnnotation_Test extends TestBase {
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
 			maxInput="m",
-			on="n",
 			parsers=Parser.class,
 			path="o",
 			produces="p",
@@ -208,7 +184,6 @@ class RestPutAnnotation_Test extends TestBase {
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
 			maxInput="m",
-			on="n",
 			parsers=Parser.class,
 			path="o",
 			produces="p",

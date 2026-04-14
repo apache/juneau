@@ -10,6 +10,22 @@ Today the NG client has its own simplified copies (`ng.http.remote.Body`, `Heade
 Consolidating on the originals eliminates duplication and lets users annotate proxy interfaces once for
 both clients.
 
+## Prerequisites (completed)
+
+### XApply annotation split (done)
+
+All marshall annotations (`@Schema`, `@Bean`, `@Json`, `@Xml`, etc.) have been split so that:
+- The core `@X` annotation is a **pure data annotation** with no `on()`/`onClass()`/`@ContextApply`
+- A separate `@XApply` annotation (in marshall) carries targeting and `@ContextApply`
+- `AnnotationProvider.Builder.addRuntimeAnnotations()` handles unwrapping `@XApply` generically
+
+This means annotations like `@Schema` can now move to `juneau-commons` without pulling in marshall.
+
+### REST annotation targeting removal (done)
+
+All REST annotations (`@Rest`, `@RestOp`, `@RestGet`, etc.) had their unused `on()`/`onClass()` removed.
+The `@ContextApply` appliers remain (they apply real REST config), but there is no dynamic targeting.
+
 ## Current Location
 
 `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/http/annotation/`
@@ -58,6 +74,9 @@ The 14 builder classes import from:
 
 These cannot move to `juneau-rest-common` without also moving their dependencies.
 
+**Note:** Now that `@Schema` is a pure data annotation (no `@ContextApply`), it could potentially
+move to `juneau-commons` first, which would reduce the coupling of these builder classes.
+
 ### 3. Wide usage across modules
 
 ~279 files import from this package across all modules.  Most use wildcard imports, so
@@ -65,11 +84,11 @@ a package-name change is a single-line edit per file — but the volume is high.
 
 ## Plan
 
-### Phase 1 — Decouple annotations from juneau-marshall internals
+### Phase 1 — Audit annotation dependencies
 
 The `*Annotation` builder classes and the `httppart/bean` classes are the main coupling points.
-The builder classes exist primarily to support Juneau's dynamic annotation infrastructure
-(`AnnotationWorkList`, `@ContextApply`, etc.).  The NG client does not use any of that machinery.
+The builder classes exist primarily to support Juneau's dynamic annotation infrastructure.
+The NG client does not use any of that machinery.
 
 **Tasks:**
 
@@ -79,6 +98,8 @@ The builder classes exist primarily to support Juneau's dynamic annotation infra
 - [ ] Determine whether `HttpPartSchema`, `RequestBeanMeta`, and `ResponseBeanMeta` should move
       to `juneau-rest-common` alongside the annotations, or whether those should stay in
       `juneau-marshall` and reference the annotations via a shared dependency.
+- [ ] Assess whether the http.annotation `*Annotation` builder classes still need `on()`/`onClass()`
+      or whether they also need the XApply split (check if any of these annotations have targeting).
 
 ### Phase 2 — Move the bare annotations
 
@@ -90,11 +111,10 @@ Move the 14 `@interface` files + 3 constant classes + `package-info.java` into
 - [ ] Move annotation source files to `juneau-rest-common`
 - [ ] Leave `*Annotation` builder classes in `juneau-marshall` (they depend on marshall internals
       and are only consumed by the classic annotation-processing pipeline)
-- [ ] Verify `juneau-marshall` can still compile — it already depends on nothing in `juneau-rest`,
-      so the annotations must be available via a dependency.  Options:
-      - Add `juneau-rest-common` as a dependency of `juneau-marshall` (**creates a cycle — not viable**)
+- [ ] Verify `juneau-marshall` can still compile.  Options:
       - Move `HttpPartSchema` + `RequestBeanMeta` + `ResponseBeanMeta` to `juneau-rest-common` too
       - Keep the annotations in `juneau-marshall` as thin re-exports / keep a copy
+      - Add `juneau-rest-common` as a dependency of `juneau-marshall` (**creates a cycle — not viable**)
 - [ ] Update all import statements across the codebase (mostly mechanical — wildcard imports)
 
 ### Phase 3 — Move `httppart` types if needed

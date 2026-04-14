@@ -31,24 +31,20 @@ import org.junit.jupiter.api.*;
 })
 class RestInitAnnotation_Test extends TestBase {
 
-	private static final String CNAME = RestInitAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestInit a1 = RestInitAnnotation.create()
 		.description("a")
-		.on("b")
 		.build();
 
 	RestInit a2 = RestInitAnnotation.create()
 		.description("a")
-		.on("b")
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,on", "[a],[b]");
+		assertBean(a1, "description", "[a]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -68,38 +64,17 @@ class RestInitAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c4 = RestInitAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestInit(
-		description={ "a" },
-		on="b"
+		description={ "a" }
 	)
 	public static class D1 {}
 	RestInit d1 = D1.class.getAnnotationsByType(RestInit.class)[0];
 
 	@RestInit(
-		description={ "a" },
-		on="b"
+		description={ "a" }
 	)
 	public static class D2 {}
 	RestInit d2 = D2.class.getAnnotationsByType(RestInit.class)[0];

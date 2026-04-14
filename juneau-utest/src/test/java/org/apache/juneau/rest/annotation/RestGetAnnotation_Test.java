@@ -33,8 +33,6 @@ import org.junit.jupiter.api.*;
 })
 class RestGetAnnotation_Test extends TestBase {
 
-	private static final String CNAME = RestGetAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
@@ -56,7 +54,6 @@ class RestGetAnnotation_Test extends TestBase {
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
-		.on("j")
 		.path("k")
 		.produces("l")
 		.roleGuard("m")
@@ -84,7 +81,6 @@ class RestGetAnnotation_Test extends TestBase {
 		.encoders(Encoder.class)
 		.guards(RestGuard.class)
 		.matchers(RestMatcher.class)
-		.on("j")
 		.path("k")
 		.produces("l")
 		.roleGuard("m")
@@ -97,8 +93,8 @@ class RestGetAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"allowedParserOptions,allowedSerializerOptions,clientVersion,converters,debug,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,noInherit,on,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
-			"[q1],[q2],a,[RestConverter],b,c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[q3],[j],[k],[l],m,n,[Serializer],o,{[],,[],{[],},,[],[],[],[],[],[],[]},p");
+			"allowedParserOptions,allowedSerializerOptions,clientVersion,converters,debug,defaultAccept,defaultCharset,defaultRequestAttributes,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,noInherit,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"[q1],[q2],a,[RestConverter],b,c,d,[f],[g],[e],[h],[i],[Encoder],[RestGuard],[RestMatcher],[q3],[k],[l],m,n,[Serializer],o,{[],,[],{[],},,[],[],[],[],[],[],[]},p");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -115,25 +111,6 @@ class RestGetAnnotation_Test extends TestBase {
 		var bc1 = BeanContext.create().annotations(a1).build();
 		var bc2 = BeanContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c4 = RestGetAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -159,7 +136,6 @@ class RestGetAnnotation_Test extends TestBase {
 			encoders=Encoder.class,
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
-			on="j",
 			path="k",
 			produces="l",
 			roleGuard="m",
@@ -188,7 +164,6 @@ class RestGetAnnotation_Test extends TestBase {
 			encoders=Encoder.class,
 			guards=RestGuard.class,
 			matchers=RestMatcher.class,
-			on="j",
 			path="k",
 			produces="l",
 			roleGuard="m",

@@ -28,26 +28,22 @@ import org.junit.jupiter.api.*;
 })
 class RestPostInitAnnotation_Test extends TestBase {
 
-	private static final String CNAME = RestPostInitAnnotation_Test.class.getName();
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
 	RestPostInit a1 = RestPostInitAnnotation.create()
 		.description("a")
-		.on("b")
 		.childFirst()
 		.build();
 
 	RestPostInit a2 = RestPostInitAnnotation.create()
 		.description("a")
-		.on("b")
 		.childFirst()
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "childFirst,description,on", "true,[a],[b]");
+		assertBean(a1, "childFirst,description", "true,[a]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -67,40 +63,19 @@ class RestPostInitAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Other methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_otherMethods() throws Exception {
-		var c4 = RestPostInitAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@RestPostInit(
 		childFirst=true,
-		description={ "a" },
-		on="b"
+		description={ "a" }
 	)
 	public static class D1 {}
 	RestPostInit d1 = D1.class.getAnnotationsByType(RestPostInit.class)[0];
 
 	@RestPostInit(
 		childFirst=true,
-		description={ "a" },
-		on="b"
+		description={ "a" }
 	)
 	public static class D2 {}
 	RestPostInit d2 = D2.class.getAnnotationsByType(RestPostInit.class)[0];

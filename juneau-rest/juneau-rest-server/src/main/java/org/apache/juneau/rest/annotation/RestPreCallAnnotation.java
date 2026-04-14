@@ -64,7 +64,7 @@ public class RestPreCallAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderM {
+	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
 
@@ -95,30 +95,12 @@ public class RestPreCallAnnotation {
 			return this;
 		}
 
-		@Override /* Overridden from AppliedAnnotationObject.Builder */
-		public Builder on(String...value) {
-			super.on(value);
-			return this;
-		}
-		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
-		public Builder on(java.lang.reflect.Method...value) {
-			super.on(value);
-			return this;
-		}
-
-
-		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
-		public Builder on(org.apache.juneau.commons.reflect.MethodInfo...value) {
-			super.on(value);
-			return this;
-		}
-
 	}
 
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedAnnotationObject implements RestPreCall {
+	private static class Object extends AnnotationObject implements RestPreCall {
 
 		private final String[] description;
 
