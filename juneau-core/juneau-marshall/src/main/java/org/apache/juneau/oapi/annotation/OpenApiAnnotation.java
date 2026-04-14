@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.oapi.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -37,24 +35,6 @@ public class OpenApiAnnotation {
 	 * Prevents instantiation.
 	 */
 	private OpenApiAnnotation() {}
-
-	/**
-	 * A collection of {@link OpenApi @OpenApi annotations}.
-	 */
-	@Documented
-	@Target({ METHOD, TYPE })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		OpenApi[] value();
-	}
-
 	/**
 	 * Builder class.
 	 *

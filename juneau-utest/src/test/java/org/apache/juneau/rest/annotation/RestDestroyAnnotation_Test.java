@@ -64,17 +64,29 @@ class RestDestroyAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestDestroy(
-		description={ "a" }
-	)
-	public static class D1 {}
-	RestDestroy d1 = D1.class.getAnnotationsByType(RestDestroy.class)[0];
+	public static class D1 {
+		@RestDestroy(
+			description={ "a" }
+		)
+		public void m1() {}
+	}
 
-	@RestDestroy(
-		description={ "a" }
-	)
-	public static class D2 {}
-	RestDestroy d2 = D2.class.getAnnotationsByType(RestDestroy.class)[0];
+	public static class D2 {
+		@RestDestroy(
+			description={ "a" }
+		)
+		public void m1() {}
+	}
+
+	RestDestroy d1, d2;
+	{
+		try {
+			d1 = D1.class.getMethod("m1").getAnnotationsByType(RestDestroy.class)[0];
+			d2 = D2.class.getMethod("m1").getAnnotationsByType(RestDestroy.class)[0];
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);

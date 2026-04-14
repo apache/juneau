@@ -16,11 +16,7 @@
  */
 package org.apache.juneau.bson.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-
-import java.lang.annotation.*;
 
 import org.apache.juneau.commons.annotation.*;
 
@@ -37,24 +33,6 @@ public class BsonAnnotation {
 	 * Prevents instantiation.
 	 */
 	private BsonAnnotation() {}
-
-	/**
-	 * A collection of {@link Bson @Bson} annotations.
-	 */
-	@Documented
-	@Target({ METHOD, TYPE })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Bson[] value();
-	}
-
 	/**
 	 * Builder class.
 	 */

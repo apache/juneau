@@ -40,7 +40,6 @@ import org.apache.juneau.bson.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(BsonAnnotation.Array.class)
 public @interface Bson {
 
 	/**

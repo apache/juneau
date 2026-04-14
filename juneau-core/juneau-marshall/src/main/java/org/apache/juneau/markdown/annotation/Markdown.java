@@ -35,7 +35,6 @@ import java.lang.annotation.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(MarkdownAnnotation.Array.class)
 public @interface Markdown {
 
 	/**

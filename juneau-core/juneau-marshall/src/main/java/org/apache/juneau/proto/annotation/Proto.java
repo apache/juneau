@@ -40,7 +40,6 @@ import org.apache.juneau.proto.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(ProtoAnnotation.Array.class)
 public @interface Proto {
 
 	/**

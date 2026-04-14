@@ -42,7 +42,6 @@ import org.apache.juneau.html.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(HtmlAnnotation.Array.class)
 public @interface Html {
 
 	/**

@@ -41,7 +41,6 @@ import org.apache.juneau.oapi.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(OpenApiAnnotation.Array.class)
 public @interface OpenApi {
 
 	/**

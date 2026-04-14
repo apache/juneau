@@ -16,31 +16,12 @@
  */
 package org.apache.juneau.ini.annotation;
 
-import java.lang.annotation.*;
-
 import org.apache.juneau.commons.annotation.*;
 
 /**
  * Utility classes and methods for the {@link Ini @Ini} annotation.
  */
 public class IniAnnotation {
-
-	/**
-	 * A collection of {@link Ini} annotations.
-	 */
-	@Documented
-	@Target({ java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD })
-	@Retention(RetentionPolicy.RUNTIME)
-	@Inherited
-	public @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Ini[] value();
-	}
 
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods

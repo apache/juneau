@@ -39,10 +39,9 @@ import org.apache.juneau.*;
  *
  */
 @Documented
-@Target({ METHOD, TYPE })
+@Target({ TYPE })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(MarshalledAnnotation.Array.class)
 public @interface Marshalled {
 
 	/**

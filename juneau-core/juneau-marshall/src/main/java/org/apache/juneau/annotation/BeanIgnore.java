@@ -54,7 +54,6 @@ import org.apache.juneau.commons.reflect.Visibility;
 @Target({ FIELD, METHOD, TYPE, CONSTRUCTOR })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(BeanIgnoreAnnotation.Array.class)
 public @interface BeanIgnore {
 
 	/**

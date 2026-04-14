@@ -64,17 +64,29 @@ class RestEndCallAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestEndCall(
-		description={ "a" }
-	)
-	public static class D1 {}
-	RestEndCall d1 = D1.class.getAnnotationsByType(RestEndCall.class)[0];
+	public static class D1 {
+		@RestEndCall(
+			description={ "a" }
+		)
+		public void m1() {}
+	}
 
-	@RestEndCall(
-		description={ "a" }
-	)
-	public static class D2 {}
-	RestEndCall d2 = D2.class.getAnnotationsByType(RestEndCall.class)[0];
+	public static class D2 {
+		@RestEndCall(
+			description={ "a" }
+		)
+		public void m1() {}
+	}
+
+	RestEndCall d1, d2;
+	{
+		try {
+			d1 = D1.class.getMethod("m1").getAnnotationsByType(RestEndCall.class)[0];
+			d2 = D2.class.getMethod("m1").getAnnotationsByType(RestEndCall.class)[0];
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);

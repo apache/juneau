@@ -43,10 +43,9 @@ import org.apache.juneau.commons.reflect.Visibility;
  * </ul>
  */
 @Documented
-@Target({ FIELD, METHOD, PARAMETER, TYPE })
+@Target({ FIELD, METHOD, PARAMETER })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(BeanpAnnotation.Array.class)
 public @interface Beanp {
 
 	/**

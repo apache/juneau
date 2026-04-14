@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.plaintext.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -34,24 +32,6 @@ public class PlainTextAnnotation {
 	 * Prevents instantiation.
 	 */
 	private PlainTextAnnotation() {}
-
-	/**
-	 * A collection of {@link PlainText @PlainText annotations}.
-	 */
-	@Documented
-	@Target({ METHOD, TYPE })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		PlainText[] value();
-	}
-
 	/**
 	 * Builder class.
 	 *

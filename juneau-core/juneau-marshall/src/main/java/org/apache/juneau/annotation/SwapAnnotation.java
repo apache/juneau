@@ -39,7 +39,7 @@ public class SwapAnnotation {
 	 * A collection of {@link Swap @Swap annotations}.
 	 */
 	@Documented
-	@Target({ METHOD, TYPE })
+	@Target({ TYPE, ANNOTATION_TYPE, FIELD, METHOD })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {

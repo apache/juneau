@@ -66,19 +66,31 @@ class RestPostInitAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestPostInit(
-		childFirst=true,
-		description={ "a" }
-	)
-	public static class D1 {}
-	RestPostInit d1 = D1.class.getAnnotationsByType(RestPostInit.class)[0];
+	public static class D1 {
+		@RestPostInit(
+			childFirst=true,
+			description={ "a" }
+		)
+		public void m1() {}
+	}
 
-	@RestPostInit(
-		childFirst=true,
-		description={ "a" }
-	)
-	public static class D2 {}
-	RestPostInit d2 = D2.class.getAnnotationsByType(RestPostInit.class)[0];
+	public static class D2 {
+		@RestPostInit(
+			childFirst=true,
+			description={ "a" }
+		)
+		public void m1() {}
+	}
+
+	RestPostInit d1, d2;
+	{
+		try {
+			d1 = D1.class.getMethod("m1").getAnnotationsByType(RestPostInit.class)[0];
+			d2 = D2.class.getMethod("m1").getAnnotationsByType(RestPostInit.class)[0];
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);

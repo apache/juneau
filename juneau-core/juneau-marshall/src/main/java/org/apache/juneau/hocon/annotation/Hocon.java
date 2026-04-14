@@ -38,6 +38,5 @@ import java.lang.annotation.*;
 @Target({ TYPE, METHOD, FIELD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(HoconAnnotation.Array.class)
 public @interface Hocon {
 }

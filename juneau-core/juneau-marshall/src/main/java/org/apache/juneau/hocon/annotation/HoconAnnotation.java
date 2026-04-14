@@ -16,31 +16,12 @@
  */
 package org.apache.juneau.hocon.annotation;
 
-import java.lang.annotation.*;
-
 import org.apache.juneau.commons.annotation.*;
 
 /**
  * Utility classes and methods for the {@link Hocon @Hocon} annotation.
  */
 public class HoconAnnotation {
-
-	/**
-	 * A collection of {@link Hocon} annotations.
-	 */
-	@Documented
-	@Target({ java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD })
-	@Retention(RetentionPolicy.RUNTIME)
-	@Inherited
-	public @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Hocon[] value();
-	}
 
 	private static class Object extends AnnotationObject implements Hocon {
 		Object() {

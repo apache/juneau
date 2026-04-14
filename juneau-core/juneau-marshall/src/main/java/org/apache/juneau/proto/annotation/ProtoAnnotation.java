@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.proto.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -37,24 +35,6 @@ public class ProtoAnnotation {
 	 * Prevents instantiation.
 	 */
 	private ProtoAnnotation() {}
-
-	/**
-	 * A collection of {@link Proto @Proto annotations}.
-	 */
-	@Documented
-	@Target({ TYPE, METHOD, FIELD })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Proto[] value();
-	}
-
 	/**
 	 * Builder class.
 	 *

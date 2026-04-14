@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -38,23 +36,6 @@ public class RestStartCallAnnotation {
 	 */
 	private RestStartCallAnnotation() {
 		// Utility class - prevent instantiation
-	}
-
-	/**
-	 * A collection of {@link RestStartCall @RestStartCall annotations}.
-	 */
-	@Documented
-	@Target({ METHOD, TYPE })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		RestStartCall[] value();
 	}
 
 	/**

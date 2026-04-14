@@ -38,7 +38,6 @@ import org.apache.juneau.csv.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(CsvAnnotation.Array.class)
 public @interface Csv {
 
 	/**

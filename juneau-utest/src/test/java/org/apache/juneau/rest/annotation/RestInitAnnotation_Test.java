@@ -67,17 +67,29 @@ class RestInitAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestInit(
-		description={ "a" }
-	)
-	public static class D1 {}
-	RestInit d1 = D1.class.getAnnotationsByType(RestInit.class)[0];
+	public static class D1 {
+		@RestInit(
+			description={ "a" }
+		)
+		public void m1() {}
+	}
 
-	@RestInit(
-		description={ "a" }
-	)
-	public static class D2 {}
-	RestInit d2 = D2.class.getAnnotationsByType(RestInit.class)[0];
+	public static class D2 {
+		@RestInit(
+			description={ "a" }
+		)
+		public void m1() {}
+	}
+
+	RestInit d1, d2;
+	{
+		try {
+			d1 = D1.class.getMethod("m1").getAnnotationsByType(RestInit.class)[0];
+			d2 = D2.class.getMethod("m1").getAnnotationsByType(RestInit.class)[0];
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);

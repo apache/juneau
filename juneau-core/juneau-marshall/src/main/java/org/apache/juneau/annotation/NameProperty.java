@@ -85,10 +85,9 @@ import java.lang.annotation.*;
 
  * </ul>
  */
-@Target({ METHOD, FIELD, TYPE })
+@Target({ METHOD, FIELD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(NamePropertyAnnotation.Array.class)
 public @interface NameProperty {
 
 	/**

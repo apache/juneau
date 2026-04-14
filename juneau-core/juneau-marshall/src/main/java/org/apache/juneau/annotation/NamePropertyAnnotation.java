@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -34,23 +32,6 @@ public class NamePropertyAnnotation {
 	 * Prevents instantiation.
 	 */
 	private NamePropertyAnnotation() {}
-
-	/**
-	 * A collection of {@link NameProperty @NameProperty annotations}.
-	 */
-	@Documented
-	@Target({ METHOD, TYPE })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		NameProperty[] value();
-	}
 
 	/**
 	 * Builder class.

@@ -55,10 +55,9 @@ import jakarta.servlet.*;
  * 		overridden by the child class.
  * </ul>
  */
-@Target({ METHOD, TYPE })
+@Target({ METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(RestPostInitAnnotation.Array.class)
 public @interface RestPostInit {
 
 	/**

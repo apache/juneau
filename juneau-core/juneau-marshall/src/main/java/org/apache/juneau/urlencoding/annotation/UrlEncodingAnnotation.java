@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.urlencoding.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -37,24 +35,6 @@ public class UrlEncodingAnnotation {
 	 * Prevents instantiation.
 	 */
 	private UrlEncodingAnnotation() {}
-
-	/**
-	 * A collection of {@link UrlEncoding @UrlEncoding annotations}.
-	 */
-	@Documented
-	@Target({ METHOD, TYPE })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		UrlEncoding[] value();
-	}
-
 	/**
 	 * Builder class.
 	 *

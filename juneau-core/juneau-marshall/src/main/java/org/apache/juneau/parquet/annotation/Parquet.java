@@ -33,7 +33,6 @@ import org.apache.juneau.parquet.*;
 @Target({ TYPE, METHOD, FIELD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(ParquetAnnotation.Array.class)
 public @interface Parquet {
 
 	/** Override Parquet physical type. */

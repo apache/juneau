@@ -64,17 +64,29 @@ class RestPreCallAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestPreCall(
-		description={ "a" }
-	)
-	public static class D1 {}
-	RestPreCall d1 = D1.class.getAnnotationsByType(RestPreCall.class)[0];
+	public static class D1 {
+		@RestPreCall(
+			description={ "a" }
+		)
+		public void m1() {}
+	}
 
-	@RestPreCall(
-		description={ "a" }
-	)
-	public static class D2 {}
-	RestPreCall d2 = D2.class.getAnnotationsByType(RestPreCall.class)[0];
+	public static class D2 {
+		@RestPreCall(
+			description={ "a" }
+		)
+		public void m1() {}
+	}
+
+	RestPreCall d1, d2;
+	{
+		try {
+			d1 = D1.class.getMethod("m1").getAnnotationsByType(RestPreCall.class)[0];
+			d2 = D2.class.getMethod("m1").getAnnotationsByType(RestPreCall.class)[0];
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);

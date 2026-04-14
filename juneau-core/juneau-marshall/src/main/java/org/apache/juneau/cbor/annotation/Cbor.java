@@ -40,7 +40,6 @@ import org.apache.juneau.cbor.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(CborAnnotation.Array.class)
 public @interface Cbor {
 
 	/**

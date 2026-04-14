@@ -47,7 +47,6 @@ import java.lang.annotation.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(XmlAnnotation.Array.class)
 public @interface Xml {
 
 	/**

@@ -87,10 +87,9 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LifecycleHooks">Lifecycle Hooks</a>
  * </ul>
  */
-@Target({ METHOD, TYPE })
+@Target({ METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(RestEndCallAnnotation.Array.class)
 public @interface RestEndCall {
 
 	/**

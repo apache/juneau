@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -34,23 +32,6 @@ public class UriAnnotation {
 	 * Prevents instantiation.
 	 */
 	private UriAnnotation() {}
-
-	/**
-	 * A collection of {@link Uri @Uri annotations}.
-	 */
-	@Documented
-	@Target({ METHOD, TYPE })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Uri[] value();
-	}
 
 	/**
 	 * Builder class.

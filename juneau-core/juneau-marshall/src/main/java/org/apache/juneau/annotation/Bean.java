@@ -41,10 +41,9 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @Documented
-@Target({ METHOD, TYPE })
+@Target({ TYPE })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(BeanAnnotation.Array.class)
 @SuppressWarnings({
 	"java:S1452"  // Wildcard required - Class<? extends BeanInterceptor<?>> for interceptor definition
 })

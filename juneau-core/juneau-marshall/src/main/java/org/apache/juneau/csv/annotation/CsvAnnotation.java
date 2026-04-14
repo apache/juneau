@@ -16,11 +16,7 @@
  */
 package org.apache.juneau.csv.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-
-import java.lang.annotation.*;
 
 import org.apache.juneau.commons.annotation.*;
 
@@ -31,14 +27,6 @@ import org.apache.juneau.commons.annotation.*;
 public class CsvAnnotation {
 
 	private CsvAnnotation() {}
-
-	@Documented
-	@Target({ METHOD, TYPE })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-		Csv[] value();
-	}
 
 	public static class Builder extends AnnotationObject.Builder {
 

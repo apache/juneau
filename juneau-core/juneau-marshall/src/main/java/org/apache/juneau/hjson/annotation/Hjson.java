@@ -38,6 +38,5 @@ import java.lang.annotation.*;
 @Target({ TYPE, METHOD, FIELD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(HjsonAnnotation.Array.class)
 public @interface Hjson {
 }

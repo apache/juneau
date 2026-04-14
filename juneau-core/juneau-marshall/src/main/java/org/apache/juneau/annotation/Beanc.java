@@ -65,10 +65,9 @@ import org.apache.juneau.*;
  * </ul>
  */
 @Documented
-@Target({ METHOD, TYPE, CONSTRUCTOR })
+@Target({ CONSTRUCTOR })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(BeancAnnotation.Array.class)
 public @interface Beanc {
 
 	/**

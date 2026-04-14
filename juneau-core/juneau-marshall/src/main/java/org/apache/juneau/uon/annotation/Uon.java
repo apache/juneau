@@ -41,7 +41,6 @@ import org.apache.juneau.uon.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(UonAnnotation.Array.class)
 public @interface Uon {
 
 	/**

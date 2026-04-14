@@ -16,31 +16,12 @@
  */
 package org.apache.juneau.hjson.annotation;
 
-import java.lang.annotation.*;
-
 import org.apache.juneau.commons.annotation.*;
 
 /**
  * Utility classes and methods for the {@link Hjson @Hjson} annotation.
  */
 public class HjsonAnnotation {
-
-	/**
-	 * A collection of {@link Hjson} annotations.
-	 */
-	@Documented
-	@Target({ java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD })
-	@Retention(RetentionPolicy.RUNTIME)
-	@Inherited
-	public @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Hjson[] value();
-	}
 
 	private static class Object extends AnnotationObject implements Hjson {
 		Object() {

@@ -43,7 +43,6 @@ import org.apache.juneau.urlencoding.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(UrlEncodingAnnotation.Array.class)
 public @interface UrlEncoding {
 
 	/**

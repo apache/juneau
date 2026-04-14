@@ -47,7 +47,6 @@ import java.lang.annotation.*;
 @Target({ TYPE, METHOD, FIELD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(JsonAnnotation.Array.class)
 public @interface Json {
 
 	/**

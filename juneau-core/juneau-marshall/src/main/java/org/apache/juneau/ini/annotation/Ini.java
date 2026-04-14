@@ -34,7 +34,6 @@ import java.lang.annotation.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(IniAnnotation.Array.class)
 public @interface Ini {
 
 	/**

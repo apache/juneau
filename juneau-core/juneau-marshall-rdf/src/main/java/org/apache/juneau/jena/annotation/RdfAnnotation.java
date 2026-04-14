@@ -16,9 +16,6 @@
  */
 package org.apache.juneau.jena.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
-
 import java.lang.annotation.*;
 
 import org.apache.juneau.commons.annotation.*;
@@ -34,23 +31,6 @@ import org.apache.juneau.jena.*;
 public class RdfAnnotation {
 
 	private RdfAnnotation() {}
-
-	/**
-	 * A collection of {@link Rdf @Rdf annotations}.
-	 */
-	@Documented
-	@Target({ METHOD, TYPE })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Rdf[] value();
-	}
 
 	/**
 	 * Builder class.

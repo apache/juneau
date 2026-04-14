@@ -16,11 +16,6 @@
  */
 package org.apache.juneau.parquet.annotation;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
-
-import java.lang.annotation.*;
-
 import org.apache.juneau.commons.annotation.*;
 
 /**
@@ -29,20 +24,6 @@ import org.apache.juneau.commons.annotation.*;
 public class ParquetAnnotation {
 
 	private ParquetAnnotation() {}
-
-	/**
-	 * A collection of {@link Parquet @Parquet} annotations.
-	 */
-	@Documented
-	@Target({ METHOD, TYPE })
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/** The child annotations. */
-		Parquet[] value();
-	}
-
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})

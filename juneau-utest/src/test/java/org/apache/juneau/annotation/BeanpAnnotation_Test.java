@@ -84,35 +84,47 @@ class BeanpAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Beanp(
-		description={ "a" },
-		dictionary=X1.class,
-		format="b",
-		name="c",
-		params=X1.class,
-		properties="e",
-		ro="f",
-		type=X1.class,
-		value="g",
-		wo="h"
-	)
-	public static class D1 {}
-	Beanp d1 = D1.class.getAnnotationsByType(Beanp.class)[0];
+	public static class D1 {
+		@Beanp(
+			description={ "a" },
+			dictionary=X1.class,
+			format="b",
+			name="c",
+			params=X1.class,
+			properties="e",
+			ro="f",
+			type=X1.class,
+			value="g",
+			wo="h"
+		)
+		public int f;
+	}
 
-	@Beanp(
-		description={ "a" },
-		dictionary=X1.class,
-		format="b",
-		name="c",
-		params=X1.class,
-		properties="e",
-		ro="f",
-		type=X1.class,
-		value="g",
-		wo="h"
-	)
-	public static class D2 {}
-	Beanp d2 = D2.class.getAnnotationsByType(Beanp.class)[0];
+	public static class D2 {
+		@Beanp(
+			description={ "a" },
+			dictionary=X1.class,
+			format="b",
+			name="c",
+			params=X1.class,
+			properties="e",
+			ro="f",
+			type=X1.class,
+			value="g",
+			wo="h"
+		)
+		public int f;
+	}
+
+	Beanp d1, d2;
+	{
+		try {
+			d1 = D1.class.getField("f").getAnnotationsByType(Beanp.class)[0];
+			d2 = D2.class.getField("f").getAnnotationsByType(Beanp.class)[0];
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);

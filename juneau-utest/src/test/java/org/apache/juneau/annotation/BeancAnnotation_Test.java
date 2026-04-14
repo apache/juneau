@@ -63,19 +63,31 @@ class BeancAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Beanc(
-		description={ "a" },
-		properties="c"
-	)
-	public static class D1 {}
-	Beanc d1 = D1.class.getAnnotationsByType(Beanc.class)[0];
+	public static class D1 {
+		@Beanc(
+			description={ "a" },
+			properties="c"
+		)
+		public D1() {}
+	}
 
-	@Beanc(
-		description={ "a" },
-		properties="c"
-	)
-	public static class D2 {}
-	Beanc d2 = D2.class.getAnnotationsByType(Beanc.class)[0];
+	public static class D2 {
+		@Beanc(
+			description={ "a" },
+			properties="c"
+		)
+		public D2() {}
+	}
+
+	Beanc d1, d2;
+	{
+		try {
+			d1 = D1.class.getConstructor().getAnnotationsByType(Beanc.class)[0];
+			d2 = D2.class.getConstructor().getAnnotationsByType(Beanc.class)[0];
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);

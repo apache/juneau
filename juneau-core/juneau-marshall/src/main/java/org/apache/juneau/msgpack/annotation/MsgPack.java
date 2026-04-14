@@ -41,7 +41,6 @@ import org.apache.juneau.msgpack.*;
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(MsgPackAnnotation.Array.class)
 public @interface MsgPack {
 
 	/**

@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.markdown.annotation;
 
-import java.lang.annotation.*;
-
 import org.apache.juneau.commons.annotation.*;
 
 /**
@@ -25,23 +23,6 @@ import org.apache.juneau.commons.annotation.*;
  *
  */
 public class MarkdownAnnotation {
-
-	/**
-	 * A collection of {@link Markdown} annotations.
-	 */
-	@Documented
-	@Target({ java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD })
-	@Retention(RetentionPolicy.RUNTIME)
-	@Inherited
-	public @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Markdown[] value();
-	}
 
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods

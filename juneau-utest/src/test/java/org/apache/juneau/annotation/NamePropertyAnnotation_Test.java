@@ -65,17 +65,29 @@ class NamePropertyAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@NameProperty(
-		description={ "a" }
-	)
-	public static class D1 {}
-	NameProperty d1 = D1.class.getAnnotationsByType(NameProperty.class)[0];
+	public static class D1 {
+		@NameProperty(
+			description={ "a" }
+		)
+		public int f;
+	}
 
-	@NameProperty(
-		description={ "a" }
-	)
-	public static class D2 {}
-	NameProperty d2 = D2.class.getAnnotationsByType(NameProperty.class)[0];
+	public static class D2 {
+		@NameProperty(
+			description={ "a" }
+		)
+		public int f;
+	}
+
+	NameProperty d1, d2;
+	{
+		try {
+			d1 = D1.class.getField("f").getAnnotationsByType(NameProperty.class)[0];
+			d2 = D2.class.getField("f").getAnnotationsByType(NameProperty.class)[0];
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);
