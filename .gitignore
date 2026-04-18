@@ -10,6 +10,10 @@ derby.log
 # Temporary cursor assistant scripts
 cursor-*
 
+# Local Cursor / AI assistant config (not part of Apache source tree)
+AGENTS.md
+.cursor/
+
 # Maven Shade Plugin generated files
 **/dependency-reduced-pom.xml
 
