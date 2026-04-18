@@ -18,7 +18,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
 import java.time.*;

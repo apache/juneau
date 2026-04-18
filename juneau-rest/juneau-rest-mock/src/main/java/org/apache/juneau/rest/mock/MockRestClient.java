@@ -58,6 +58,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;

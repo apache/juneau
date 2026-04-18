@@ -18,14 +18,14 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
+import static org.apache.juneau.commons.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.uon.ParamFormat.*;
 
 import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;

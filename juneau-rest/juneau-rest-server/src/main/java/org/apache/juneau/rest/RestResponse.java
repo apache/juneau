@@ -21,7 +21,7 @@ import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -34,6 +34,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.oapi.*;

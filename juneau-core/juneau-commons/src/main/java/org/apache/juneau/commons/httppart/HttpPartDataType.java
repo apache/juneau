@@ -14,51 +14,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.httppart;
+package org.apache.juneau.commons.httppart;
 
 /**
- * Valid values for the <c>collectionFormat</c> field.
+ * Valid values for the <c>type</c> field.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
  * </ul>
  */
-public enum HttpPartCollectionFormat {
+public enum HttpPartDataType {
 
 	/**
-	 * Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * String.
 	 */
-	CSV,
+	STRING,
 
 	/**
-	 * Space-separated values (e.g. <js>"foo bar"</js>).
+	 * Floating point number.
 	 */
-	SSV,
+	NUMBER,
 
 	/**
-	 * Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * Decimal number.
 	 */
-	TSV,
+	INTEGER,
 
 	/**
-	 * Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * Boolean.
 	 */
-	PIPES,
+	BOOLEAN,
 
 	/**
-	 * Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+	 * Array or collection.
 	 */
-	MULTI,
+	ARRAY,
 
 	/**
-	 * UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+	 * Map or bean.
 	 */
-	UONC,
+	OBJECT,
+
+	/**
+	 * File.
+	 */
+	FILE,
 
 	/**
 	 * Not specified.
 	 */
-	NO_COLLECTION_FORMAT;
+	NO_TYPE;
 
 	/**
 	 * Create from lowercase string.
@@ -66,11 +71,7 @@ public enum HttpPartCollectionFormat {
 	 * @param value The enum name.
 	 * @return The enum.
 	 */
-	public static HttpPartCollectionFormat fromString(String value) {
-		if (value == null)
-			return null;
-		if (value.equalsIgnoreCase("UON"))
-			return UONC;
+	public static HttpPartDataType fromString(String value) {
 		return valueOf(value.toUpperCase());
 	}
 

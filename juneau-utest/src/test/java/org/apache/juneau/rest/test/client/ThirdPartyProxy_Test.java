@@ -34,6 +34,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;

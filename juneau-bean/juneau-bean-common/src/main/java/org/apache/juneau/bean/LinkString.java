@@ -24,7 +24,7 @@ import java.text.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.serializer.*;

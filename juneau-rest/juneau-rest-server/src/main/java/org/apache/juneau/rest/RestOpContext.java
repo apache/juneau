@@ -26,7 +26,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.RestServerConstants.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.lang.annotation.*;
@@ -2624,7 +2624,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var a = ClassInfo.of(c).getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 			if (nn(a)) {
 				var schema = HttpPartSchema.create(a);
-				var serializer = createPartSerializer(schema.getSerializer(), partSerializer);
+				@SuppressWarnings("unchecked")
+				var serializer = createPartSerializer((Class<? extends HttpPartSerializer>)schema.getSerializer(), partSerializer);
 				pm = new ResponsePartMeta(HEADER, schema, serializer);
 			}
 			if (pm == null)

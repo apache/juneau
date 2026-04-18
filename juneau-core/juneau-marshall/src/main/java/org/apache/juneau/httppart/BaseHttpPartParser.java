@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.parser.*;
 
 /**

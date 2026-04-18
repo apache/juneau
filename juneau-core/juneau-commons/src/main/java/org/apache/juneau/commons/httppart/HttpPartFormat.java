@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.httppart;
+package org.apache.juneau.commons.httppart;
 
 /**
  * Valid values for the <c>format</c> field.

@@ -25,6 +25,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 
 /**
  * Represents the metadata gathered from a getter method of a class annotated with {@link Response}.

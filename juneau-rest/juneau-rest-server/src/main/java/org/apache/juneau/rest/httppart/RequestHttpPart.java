@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.httppart;
 
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
 import java.time.*;
@@ -32,6 +32,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.rest.*;

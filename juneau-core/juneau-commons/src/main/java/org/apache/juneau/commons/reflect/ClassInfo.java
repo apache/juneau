@@ -2154,11 +2154,32 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this class is <jk>boolean</jk> or {@link Boolean}.
+	 *
+	 * @return <jk>true</jk> if this class is <jk>boolean</jk> or {@link Boolean}.
+	 */
+	public boolean isBoolean() { return isAny(boolean.class, Boolean.class); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is assignable to {@link CharSequence}.
+	 *
+	 * @return <jk>true</jk> if this class is assignable to {@link CharSequence}.
+	 */
+	public boolean isCharSequence() { return isAssignableTo(CharSequence.class); }
+
+	/**
 	 * Returns <jk>true</jk> if this class is not an interface.
 	 *
 	 * @return <jk>true</jk> if this class is not an interface.
 	 */
 	public boolean isClass() { return nn(inner) && ! inner.isInterface(); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is assignable to {@link Collection}.
+	 *
+	 * @return <jk>true</jk> if this class is assignable to {@link Collection}.
+	 */
+	public boolean isCollection() { return isAssignableTo(Collection.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Collection} or an array.
@@ -2168,6 +2189,20 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	public boolean isCollectionOrArray() { return nn(inner) && (Collection.class.isAssignableFrom(inner) || inner.isArray()); }
 
 	/**
+	 * Returns <jk>true</jk> if this class is assignable to {@link java.util.Date} or {@link java.util.Calendar}.
+	 *
+	 * @return <jk>true</jk> if this class is assignable to {@link java.util.Date} or {@link java.util.Calendar}.
+	 */
+	public boolean isDateOrCalendar() { return isAssignableToAny(java.util.Date.class, java.util.Calendar.class); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is a decimal number type ({@link Float}, {@link Double}, <jk>float</jk>, or <jk>double</jk>).
+	 *
+	 * @return <jk>true</jk> if this class is a decimal number type.
+	 */
+	public boolean isDecimal() { return isAssignableToAny(Float.class, Double.class) || isAny(float.class, double.class); }
+
+	/**
 	 * Returns <jk>true</jk> if this class has the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this class has the {@link Deprecated @Deprecated} annotation on it.
@@ -2175,11 +2210,46 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	public boolean isDeprecated() { return nn(inner) && inner.isAnnotationPresent(Deprecated.class); }
 
 	/**
+	 * Returns <jk>true</jk> if this class is {@link Double} or <jk>double</jk>.
+	 *
+	 * @return <jk>true</jk> if this class is {@link Double} or <jk>double</jk>.
+	 */
+	public boolean isDouble() { return isAny(Double.class, double.class); }
+
+	/**
 	 * Returns <jk>true</jk> if this class is an enum.
 	 *
 	 * @return <jk>true</jk> if this class is an enum.
 	 */
 	public boolean isEnum() { return nn(inner) && inner.isEnum(); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is {@link Long} or <jk>long</jk>.
+	 *
+	 * @return <jk>true</jk> if this class is {@link Long} or <jk>long</jk>.
+	 */
+	public boolean isLong() { return isAny(Long.class, long.class); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is assignable to {@link Map}.
+	 *
+	 * @return <jk>true</jk> if this class is assignable to {@link Map}.
+	 */
+	public boolean isMap() { return isAssignableTo(Map.class); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is a numeric type (assignable to {@link Number} or a numeric primitive).
+	 *
+	 * @return <jk>true</jk> if this class is a numeric type.
+	 */
+	public boolean isNumber() { return isAssignableTo(Number.class) || isAny(byte.class, short.class, int.class, long.class, float.class, double.class); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is assignable to {@link java.time.temporal.Temporal}.
+	 *
+	 * @return <jk>true</jk> if this class is assignable to {@link java.time.temporal.Temporal}.
+	 */
+	public boolean isTemporal() { return isAssignableTo(java.time.temporal.Temporal.class); }
 
 	/**
 	 * Returns <jk>true</jk> if the specified value is an instance of this class.

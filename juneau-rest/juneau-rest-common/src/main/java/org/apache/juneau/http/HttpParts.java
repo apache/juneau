@@ -28,7 +28,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 

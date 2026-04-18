@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.httppart;
 
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.serializer.*;
 
 /**

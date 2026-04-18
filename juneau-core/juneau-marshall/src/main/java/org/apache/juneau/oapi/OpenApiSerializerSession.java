@@ -19,9 +19,9 @@ package org.apache.juneau.oapi;
 import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
-import static org.apache.juneau.httppart.HttpPartDataType.*;
-import static org.apache.juneau.httppart.HttpPartFormat.*;
+import static org.apache.juneau.commons.httppart.HttpPartCollectionFormat.*;
+import static org.apache.juneau.commons.httppart.HttpPartDataType.*;
+import static org.apache.juneau.commons.httppart.HttpPartFormat.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -34,6 +34,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
@@ -319,11 +320,12 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 		String out = null;
 
-		schema.validateOutput(value, ctx.getBeanContext());
+		schema.validateOutput(value);
 
-		if (type.hasMutaterTo(schema.getParsedType()) || schema.getParsedType().hasMutaterFrom(type)) {
-			value = toType(value, schema.getParsedType());
-			type = schema.getParsedType();
+		var spt = getClassMeta(schema.getParsedType());
+		if (type.hasMutaterTo(spt) || spt.hasMutaterFrom(type)) {
+			value = toType(value, spt);
+			type = spt;
 		}
 
 		if (type.isUri()) {

@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.httppart.*;
 
 /**
  * Represents an instance of an HTTP part.

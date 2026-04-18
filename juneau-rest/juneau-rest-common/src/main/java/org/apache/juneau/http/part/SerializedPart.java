@@ -24,6 +24,7 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;

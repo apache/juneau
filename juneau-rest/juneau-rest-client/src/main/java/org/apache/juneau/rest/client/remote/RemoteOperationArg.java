@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import java.util.*;
 
@@ -24,6 +24,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 
 /**
  * Represents the metadata about an annotated argument of a method on a REST proxy class.

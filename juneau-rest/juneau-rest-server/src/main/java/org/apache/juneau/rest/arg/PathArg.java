@@ -134,7 +134,8 @@ public class PathArg implements RestOpArg {
 
 		this.def = findDef(paramInfo).or(() -> Optional.ofNullable(classLevelPath).filter(p -> ne(p.def()) && neq(NONE, p.def())).map(Path::def)).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
-		var pp = schema.getParser();
+		@SuppressWarnings("unchecked")
+		var pp = (Class<? extends HttpPartParser>)schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 	}
 

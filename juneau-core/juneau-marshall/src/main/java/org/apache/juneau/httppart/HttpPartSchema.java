@@ -24,8 +24,8 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.Constants.*;
-import static org.apache.juneau.httppart.HttpPartDataType.*;
-import static org.apache.juneau.httppart.HttpPartFormat.*;
+import static org.apache.juneau.commons.httppart.HttpPartDataType.*;
+import static org.apache.juneau.commons.httppart.HttpPartFormat.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -40,6 +40,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
@@ -87,7 +88,7 @@ import org.apache.juneau.parser.*;
 	"java:S116", // Field names use trailing underscores (default_, enum_, const_) to avoid Java keyword conflicts
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties)
 	"java:S5843", // Complex regex patterns needed for RFC compliance (IPv6, ISO 8601 duration, date-time formats)
-	"java:S1452"  // Wildcard required - ClassMeta<?> for parsed type metadata
+	"java:S1452"  // Wildcard required for parsed type metadata
 })
 public class HttpPartSchema {
 
@@ -178,8 +179,8 @@ public class HttpPartSchema {
 		Object items;
 		Object additionalProperties;
 		boolean noValidate;
-		Class<? extends HttpPartParser> parser;
-		Class<? extends HttpPartSerializer> serializer;
+		Class<?> parser;
+		Class<?> serializer;
 		// JSON Schema Draft 2020-12 properties
 		String const_;
 		String[] examples;
@@ -696,7 +697,7 @@ public class HttpPartSchema {
 				if (ne(value))
 					this.collectionFormat = HttpPartCollectionFormat.fromString(value);
 			} catch (Exception e) {
-				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
+				throw new BasicRuntimeException(e, "Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
 			}
 			return this;
 		}
@@ -1244,7 +1245,7 @@ public class HttpPartSchema {
 				if (ne(value))
 					format = HttpPartFormat.fromString(value);
 			} catch (Exception e) {
-				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
+				throw new BasicRuntimeException(e, "Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
 			}
 			return this;
 		}
@@ -1895,7 +1896,7 @@ public class HttpPartSchema {
 		/**
 		 * Disables Swagger schema usage validation checking.
 		 *
-		 * @param value Specify <jk>true</jk> to prevent {@link ContextRuntimeException} from being thrown if invalid Swagger usage was detected.
+		 * @param value Specify <jk>true</jk> to prevent {@link BasicRuntimeException} from being thrown if invalid Swagger usage was detected.
 		 * @return This object.
 		 */
 		public Builder noValidate(Boolean value) {
@@ -1960,10 +1961,10 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartParser.Void}.
+		 * 	<br>Ignored if value is <jk>null</jk> or has the simple name "Void".
 		 * @return This object.
 		 */
-		public Builder parser(Class<? extends HttpPartParser> value) {
+		public Builder parser(Class<?> value) {
 			if (isNotVoid(value))
 				parser = value;
 			return this;
@@ -1997,7 +1998,7 @@ public class HttpPartSchema {
 				if (ne(value))
 					this.pattern = Pattern.compile(value);
 			} catch (Exception e) {
-				throw new ContextRuntimeException(e, "Invalid value {0} passed in as pattern value.  Must be a valid regular expression.", value);
+				throw new BasicRuntimeException(e, "Invalid value {0} passed in as pattern value.  Must be a valid regular expression.", value);
 			}
 			return this;
 		}
@@ -2142,10 +2143,10 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartSerializer.Void}.
+		 * 	<br>Ignored if value is <jk>null</jk> or has the simple name "Void".
 		 * @return This object.
 		 */
-		public Builder serializer(Class<? extends HttpPartSerializer> value) {
+		public Builder serializer(Class<?> value) {
 			if (isNotVoid(value))
 				serializer = value;
 			return this;
@@ -2371,7 +2372,7 @@ public class HttpPartSchema {
 		 * 		<li class='jf'>
 		 * 			{@link HttpPartDataType#OBJECT OBJECT}
 		 * 			<br>Parameter must be a map or bean.
-		 * 			<br>If parameter is <c>Object</c>, creates an {@link JsonMap}.
+		 * 			<br>If parameter is <c>Object</c>, creates a map.
 		 * 			<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
 		 * 		<li class='jf'>
 		 * 			{@link HttpPartDataType#FILE FILE}
@@ -2433,7 +2434,7 @@ public class HttpPartSchema {
 		 * 	<li>
 		 * 		<js>"object"</js>
 		 * 		<br>Parameter must be a map or bean.
-		 * 		<br>If parameter is <c>Object</c>, creates an {@link JsonMap}.
+		 * 		<br>If parameter is <c>Object</c>, creates a map.
 		 * 		<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
 		 * 	<li>
 		 * 		<js>"file"</js>
@@ -2454,7 +2455,7 @@ public class HttpPartSchema {
 				if (ne(value))
 					type = HttpPartDataType.fromString(value);
 			} catch (Exception e) {
-				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
+				throw new BasicRuntimeException(e, "Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
 			}
 			return this;
 		}
@@ -2550,12 +2551,6 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		private Builder additionalProperties(JsonMap value) {
-			if (nn(value) && ! value.isEmpty())
-				additionalProperties = HttpPartSchema.create().apply(value);
-			return this;
-		}
-
 		private static Long firstNmo(Long...l) {
 			for (var ll : l)
 				if (nn(ll) && ll != -1)
@@ -2590,12 +2585,6 @@ public class HttpPartSchema {
 				if (ss.length > 0)
 					return StringUtils.joinnl(ss);
 			return null;
-		}
-
-		private Builder properties(JsonMap value) {
-			if (nn(value))
-				value.forEach((k, v) -> property(k, HttpPartSchema.create().apply((JsonMap)v)));
-			return this;
 		}
 
 		private static Boolean resolve(Boolean newValue, Boolean oldValue) {
@@ -2746,38 +2735,6 @@ public class HttpPartSchema {
 		// JSON Schema Draft 2020-12 property setters
 		// -----------------------------------------------------------------------------------------------------------------
 
-		Builder apply(JsonMap m) {
-			if (nn(m) && ! m.isEmpty()) {
-				default_(m.getString(PROP_default));
-				enum_(HttpPartSchema.toSet(m.getString(PROP_enum)));
-				allowEmptyValue(m.getBoolean(PROP_allowEmptyValue));
-				exclusiveMaximum(m.getBoolean(PROP_exclusiveMaximum));
-				exclusiveMinimum(m.getBoolean(PROP_exclusiveMinimum));
-				required(m.getBoolean(PROP_required));
-				uniqueItems(m.getBoolean(PROP_uniqueItems));
-				collectionFormat(m.getString(PROP_collectionFormat));
-				type(m.getString(PROP_type));
-				format(m.getString(PROP_format));
-				pattern(m.getString(PROP_pattern));
-				maximum(m.get(PROP_maximum, Number.class));
-				minimum(m.get(PROP_minimum, Number.class));
-				multipleOf(m.get(PROP_multipleOf, Number.class));
-				maxItems(m.get(PROP_maxItems, Long.class));
-				maxLength(m.get(PROP_maxLength, Long.class));
-				maxProperties(m.get(PROP_maxProperties, Long.class));
-				minItems(m.get(PROP_minItems, Long.class));
-				minLength(m.get(PROP_minLength, Long.class));
-				minProperties(m.get(PROP_minProperties, Long.class));
-
-				items(m.getMap(PROP_items));
-				properties(m.getMap(PROP_properties));
-				additionalProperties(m.getMap(PROP_additionalProperties));
-
-				apply(m.getMap("schema", null));
-			}
-			return this;
-		}
-
 		// -----------------------------------------------------------------------------------------------------------------
 		// Other
 		// -----------------------------------------------------------------------------------------------------------------
@@ -2788,7 +2745,6 @@ public class HttpPartSchema {
 		Builder apply(Schema a) {
 			default_(joinnlOrNull(a.default_(), a.df()));
 			enum_(toSet(a.enum_(), a.e()));
-			additionalProperties(HttpPartSchema.toJsonMap(a.additionalProperties()));
 			allowEmptyValue(a.allowEmptyValue() || a.aev());
 			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
 
@@ -2820,7 +2776,6 @@ public class HttpPartSchema {
 			minProperties(firstNmo(a.minProperties(), a.minp()));
 			multipleOf(toNumber(a.multipleOf(), a.mo()));
 			pattern(firstNonEmpty(a.pattern(), a.p()));
-			properties(HttpPartSchema.toJsonMap(a.properties()));
 			required(a.required() || a.r());
 			skipIfEmpty(a.skipIfEmpty() || a.sie());
 			type(firstNonEmpty(a.type(), a.t()));
@@ -2841,7 +2796,6 @@ public class HttpPartSchema {
 			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
 			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
 			format(firstNonEmpty(a.format(), a.f()));
-			items(HttpPartSchema.toJsonMap(a.items()));
 			maximum(toNumber(a.maximum(), a.max()));
 			maxItems(firstNmo(a.maxItems(), a.maxi()));
 			maxLength(firstNmo(a.maxLength(), a.maxl()));
@@ -2992,12 +2946,6 @@ public class HttpPartSchema {
 
 		Builder items(Items value) {
 			if (! ItemsAnnotation.empty(value))
-				items = HttpPartSchema.create().apply(value);
-			return this;
-		}
-
-		Builder items(JsonMap value) {
-			if (nn(value) && ! value.isEmpty())
 				items = HttpPartSchema.create().apply(value);
 			return this;
 		}
@@ -3599,22 +3547,6 @@ public class HttpPartSchema {
 		return in == null ? emptySet() : u(copyOf(in));
 	}
 
-	@SuppressWarnings({
-		"java:S1168"     // TODO: null for empty input. Consider empty JsonMap.
-	})
-	static final JsonMap toJsonMap(String[] ss) {
-		String s = StringUtils.joinnl(ss);
-		if (s.isEmpty())
-			return null;
-		if (! isProbablyJsonObject(s, true))
-			s = "{" + s + "}";
-		try {
-			return JsonMap.ofJson(s);
-		} catch (ParseException e) {
-			throw toRex(e);
-		}
-	}
-
 	static final Number toNumber(String...s) {
 		try {
 			for (var ss : s)
@@ -3633,11 +3565,7 @@ public class HttpPartSchema {
 		if (isEmpty(s))
 			return null;
 		Set<String> set = set();
-		try {
-			JsonList.ofJsonOrCdl(s).forEach(x -> set.add(x.toString()));
-		} catch (ParseException e) {
-			throw toRex(e);
-		}
+		StringUtils.split(s, set::add);
 		return set;
 	}
 
@@ -3684,11 +3612,11 @@ public class HttpPartSchema {
 	final Long maxProperties;
 	final Long minProperties;
 
-	final Class<? extends HttpPartParser> parser;
+	final Class<?> parser;
 
-	final Class<? extends HttpPartSerializer> serializer;
+	final Class<?> serializer;
 
-	final ClassMeta<?> parsedType;
+	final Class<?> parsedType;
 
 	// JSON Schema Draft 2020-12 fields
 	final String const_;
@@ -3741,8 +3669,8 @@ public class HttpPartSchema {
 		// Calculate parse type
 		Class<?> parsedType2 = Object.class;
 		if (type == ARRAY) {
-			if (nn(items))
-				parsedType2 = Array.newInstance(items.parsedType.inner(), 0).getClass();
+			if (nn(items) && nn(items.parsedType))
+				parsedType2 = Array.newInstance(items.parsedType, 0).getClass();
 		} else if (type == BOOLEAN) {
 			parsedType2 = Boolean.class;
 		} else if (type == INTEGER) {
@@ -3763,7 +3691,7 @@ public class HttpPartSchema {
 			else
 				parsedType2 = String.class;
 		}
-		this.parsedType = BeanContext.DEFAULT.getClassMeta(parsedType2);
+		this.parsedType = parsedType2;
 
 		if (b.noValidate)
 			return;
@@ -3922,7 +3850,7 @@ public class HttpPartSchema {
 			errors.add("Cannot define an array of objects unless array format is 'uon'.");
 
 		if (! errors.isEmpty())
-			throw new ContextRuntimeException("Schema specification errors: \n\t" + StringUtils.join(errors, "\n\t"));
+			throw new BasicRuntimeException("Schema specification errors: \n\t" + StringUtils.join(errors, "\n\t"));
 	}
 
 	/**
@@ -3961,12 +3889,12 @@ public class HttpPartSchema {
 	 * Returns the <c>format</c> field of this schema.
 	 *
 	 * @param cm
-	 * 	The class meta of the object.
+	 * 	The class info of the object.
 	 * 	<br>Used to auto-detect the format if the format was not specified.
 	 * @return The <c>format</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#format(String)
 	 */
-	public HttpPartFormat getFormat(ClassMeta<?> cm) {
+	public HttpPartFormat getFormat(ClassInfo cm) {
 		if (format != HttpPartFormat.NO_FORMAT)
 			return format;
 		if (cm.isNumber()) {
@@ -4075,7 +4003,7 @@ public class HttpPartSchema {
 	 *
 	 * @return The default parsed type for this schema.  Never <jk>null</jk>.
 	 */
-	public ClassMeta<?> getParsedType() { return parsedType; }
+	public Class<?> getParsedType() { return parsedType; }
 
 	/**
 	 * Returns the <c>parser</c> field of this schema.
@@ -4083,7 +4011,7 @@ public class HttpPartSchema {
 	 * @return The <c>parser</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#parser(Class)
 	 */
-	public Class<? extends HttpPartParser> getParser() { return parser; }
+	public Class<?> getParser() { return parser; }
 
 	/**
 	 * Returns the <c>xxx</c> field of this schema.
@@ -4114,7 +4042,7 @@ public class HttpPartSchema {
 	 * @return The <c>serializer</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#serializer(Class)
 	 */
-	public Class<? extends HttpPartSerializer> getSerializer() { return serializer; }
+	public Class<?> getSerializer() { return serializer; }
 
 	/**
 	 * Returns the <c>type</c> field of this schema.
@@ -4128,12 +4056,12 @@ public class HttpPartSchema {
 	 * Returns the <c>type</c> field of this schema.
 	 *
 	 * @param cm
-	 * 	The class meta of the object.
+	 * 	The class info of the object.
 	 * 	<br>Used to auto-detect the type if the type was not specified.
 	 * @return The format field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#format(String)
 	 */
-	public HttpPartDataType getType(ClassMeta<?> cm) {
+	public HttpPartDataType getType(ClassInfo cm) {
 		if (type != HttpPartDataType.NO_TYPE)
 			return type;
 		if (cm.isTemporal() || cm.isDateOrCalendar())
@@ -4145,11 +4073,17 @@ public class HttpPartSchema {
 		}
 		if (cm.isBoolean())
 			return HttpPartDataType.BOOLEAN;
-		if (cm.isMapOrBean())
+		if (cm.isMap() || isObjectType(cm))
 			return HttpPartDataType.OBJECT;
 		if (cm.isCollectionOrArray())
 			return HttpPartDataType.ARRAY;
 		return HttpPartDataType.STRING;
+	}
+
+	private static boolean isObjectType(ClassInfo cm) {
+		if (cm instanceof ClassMeta<?> cm2)
+			return cm2.isBean();
+		return false;
 	}
 
 	/**
@@ -4283,11 +4217,10 @@ public class HttpPartSchema {
 	}
 
 	/**
-	 * Throws a {@link ParseException} if the specified parsed output does not validate against this schema.
+	 * Validates the specified parsed output against this schema.
 	 *
 	 * @param <T> The return type.
 	 * @param o The parsed output.
-	 * @param bc The bean context used to detect POJO types.
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified parsed output does not validate against this schema.
 	 */
@@ -4295,16 +4228,16 @@ public class HttpPartSchema {
 		"java:S3776", // Cognitive complexity acceptable for output validation
 		"java:S6541" // Brain method: schema output validation branches by OpenAPI part type
 	})
-	public <T> T validateOutput(T o, BeanContext bc) throws SchemaValidationException {
+	public <T> T validateOutput(T o) throws SchemaValidationException {
 		if (o == null) {
 			if (! isValidRequired(o))
 				throw new SchemaValidationException("Required value not provided.");
 			return o;
 		}
-		var cm = bc.getClassMetaForObject(o);
-		switch (getType(cm)) {
+		var ci = ClassInfo.of(o);
+		switch (getType(ci)) {
 			case ARRAY: {
-				if (cm.isArray()) {
+				if (ci.isArray()) {
 					if (! isValidMinItems(o))
 						throw new SchemaValidationException("Minimum number of items not met.");
 					if (! isValidMaxItems(o))
@@ -4314,8 +4247,8 @@ public class HttpPartSchema {
 					HttpPartSchema items2 = getItems();
 					if (nn(items2))
 						for (var i = 0; i < Array.getLength(o); i++)
-							items2.validateOutput(Array.get(o, i), bc);
-				} else if (cm.isCollection()) {
+							items2.validateOutput(Array.get(o, i));
+				} else if (ci.isCollection()) {
 					Collection<?> c = (Collection<?>)o;
 					if (! isValidMinItems(c))
 						throw new SchemaValidationException("Minimum number of items not met.");
@@ -4325,12 +4258,12 @@ public class HttpPartSchema {
 						throw new SchemaValidationException("Duplicate items not allowed.");
 					HttpPartSchema items2 = getItems();
 					if (nn(items2))
-						c.forEach(x -> items2.validateOutput(x, bc));
+						c.forEach(x -> items2.validateOutput(x));
 				}
 				break;
 			}
 			case INTEGER: {
-				if (cm.isNumber()) {
+				if (ci.isNumber()) {
 					Number n = (Number)o;
 					if (! isValidMinimum(n))
 						throw new SchemaValidationException("Minimum value not met.");
@@ -4342,7 +4275,7 @@ public class HttpPartSchema {
 				break;
 			}
 			case NUMBER: {
-				if (cm.isNumber()) {
+				if (ci.isNumber()) {
 					Number n = (Number)o;
 					if (! isValidMinimum(n))
 						throw new SchemaValidationException("Minimum value not met.");
@@ -4351,12 +4284,11 @@ public class HttpPartSchema {
 					if (! isValidMultipleOf(n))
 						throw new SchemaValidationException("Multiple-of not met.");
 				}
-				// If not a number, skip validation (validation only applies to number types)
 				break;
 			}
 			case OBJECT: {
-				if (cm.isMapOrBean()) {
-					Map<?,?> m = cm.isMap() ? (Map<?,?>)o : bc.toBeanMap(o);
+				if (ci.isMap()) {
+					Map<?,?> m = (Map<?,?>)o;
 					if (! isValidMinProperties(m))
 						throw new SchemaValidationException("Minimum number of properties not met.");
 					if (! isValidMaxProperties(m))
@@ -4365,15 +4297,13 @@ public class HttpPartSchema {
 						var key = k.toString();
 						HttpPartSchema s2 = getProperty(key);
 						if (nn(s2))
-							s2.validateOutput(v, bc);
+							s2.validateOutput(v);
 					});
-				} else if (cm.isBean()) {
-					// Bean validation is handled above via isMapOrBean() which converts the bean to a BeanMap
 				}
 				break;
 			}
 			case STRING: {
-				if (cm.isCharSequence()) {
+				if (ci.isCharSequence()) {
 					var s = o.toString();
 					if (! isValidMinLength(s))
 						throw new SchemaValidationException("Minimum length of value not met.");

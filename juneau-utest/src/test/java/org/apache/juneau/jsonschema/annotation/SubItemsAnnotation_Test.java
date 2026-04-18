@@ -106,7 +106,7 @@ class SubItemsAnnotation_Test extends TestBase {
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems", "a,[b],[c],d,e,[f],[g],[h],true,true,true,true,i,j,[],k,2,4,1,l,3,m,6,8,5,n,7,o,p,q,r,s,t,true,true");
+		assertBean(a1, "$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems", "a,[b],[c],d,e,[f],[g],[h],true,true,true,true,i,j,k,2,4,1,l,3,m,6,8,5,n,7,o,p,q,r,s,t,true,true");
 	}
 
 	@Test void a02_testEquivalency() {

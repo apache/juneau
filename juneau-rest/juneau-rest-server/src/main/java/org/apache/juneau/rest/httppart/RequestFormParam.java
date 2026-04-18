@@ -19,7 +19,7 @@ package org.apache.juneau.rest.httppart;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import java.io.*;
 import java.lang.reflect.*;

@@ -14,21 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons;
+
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 
 /**
  * Subclass of runtime exceptions that take in a message and zero or more arguments.
  *
- * <p>
- * This class extends {@link org.apache.juneau.commons.BasicRuntimeException} in juneau-commons
- * for backward compatibility.
  *
  * @serial exclude
  */
-public class BasicRuntimeException extends org.apache.juneau.commons.BasicRuntimeException {
+public class BasicRuntimeException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
+	@SuppressWarnings({
+		"java:S1104", // Field may be set via setUnmodifiable() method
+		"java:S1165"  // Cannot be final; reassigned by setUnmodifiable() on mutable exception instances
+	})
+	boolean unmodifiable;
+	@SuppressWarnings({
+		"java:S1104", // Field reassigned via setMessage() method, cannot be final
+		"java:S1165"  // Cannot be final; reassigned by setMessage() on mutable exception instances
+	})
+	String message;
 
 	/**
 	 * Constructor.
@@ -37,7 +46,7 @@ public class BasicRuntimeException extends org.apache.juneau.commons.BasicRuntim
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicRuntimeException(String message, Object...args) {
-		super(message, args);
+		super(f(message, args));
 	}
 
 	/**
@@ -57,12 +66,23 @@ public class BasicRuntimeException extends org.apache.juneau.commons.BasicRuntim
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicRuntimeException(Throwable cause, String message, Object...args) {
-		super(cause, message, args);
+		super(f(message, args), cause);
 	}
 
-	@Override /* Overridden from BasicRuntimeException */
+	@Override /* Overridden from Throwable */
+	public String getMessage() {
+		return nn(message) ? message : super.getMessage();
+	}
+
+	/**
+	 * Sets the detail message on this exception.
+	 *
+	 * @param message The message.
+	 * @param args The message args.
+	 * @return This object.
+	 */
 	public BasicRuntimeException setMessage(String message, Object...args) {
-		super.setMessage(message, args);
+		this.message = f(message, args);
 		return this;
 	}
 }

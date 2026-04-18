@@ -20,9 +20,9 @@ import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
-import static org.apache.juneau.httppart.HttpPartDataType.*;
-import static org.apache.juneau.httppart.HttpPartFormat.*;
+import static org.apache.juneau.commons.httppart.HttpPartCollectionFormat.*;
+import static org.apache.juneau.commons.httppart.HttpPartDataType.*;
+import static org.apache.juneau.commons.httppart.HttpPartFormat.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -36,6 +36,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.time.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.uon.*;
@@ -239,7 +240,7 @@ public class OpenApiParserSession extends UonParserSession {
 		T t = parseInner(partType, schema, in, type);
 		if (t == null && type.isPrimitive())
 			t = type.getPrimitiveDefault();
-		schema.validateOutput(t, ctx.getBeanContext());
+		schema.validateOutput(t);
 
 		if (isOptional)
 			t = (T)opt(t);
@@ -353,9 +354,10 @@ public class OpenApiParserSession extends UonParserSession {
 				if (type.isObject())
 					type = (ClassMeta<T>)CM_JsonList;
 
+				var spt = getClassMeta(schema.getParsedType());
 				var eType = type.isObject() ? string() : type.getElementType();
 				if (eType == null)
-					eType = schema.getParsedType().getElementType();
+					eType = spt.getElementType();
 				if (eType == null)
 					eType = string();
 
@@ -385,8 +387,8 @@ public class OpenApiParserSession extends UonParserSession {
 				var o = Array.newInstance(eType.inner(), ss.length);
 				for (var i = 0; i < ss.length; i++)
 					Array.set(o, i, parse(partType, items, ss[i], eType));
-				if (type.hasMutaterFrom(schema.getParsedType()) || schema.getParsedType().hasMutaterTo(type))
-					return toType(toType(o, schema.getParsedType()), type);
+				if (type.hasMutaterFrom(spt) || spt.hasMutaterTo(type))
+					return toType(toType(o, spt), type);
 				return toType(o, type);
 
 			} else if (t == OBJECT) {
@@ -442,7 +444,7 @@ public class OpenApiParserSession extends UonParserSession {
 
 				var eType = type.isObject() ? string() : type.getValueType();
 				if (eType == null)
-					eType = schema.getParsedType().getValueType();
+					eType = getClassMeta(schema.getParsedType()).getValueType();
 				if (eType == null)
 					eType = string();
 

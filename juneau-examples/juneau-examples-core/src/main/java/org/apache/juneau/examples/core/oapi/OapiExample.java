@@ -18,7 +18,7 @@ package org.apache.juneau.examples.core.oapi;
 
 import org.apache.juneau.commons.logging.Logger;
 
-import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import org.apache.juneau.examples.core.pojo.*;
 import org.apache.juneau.httppart.*;

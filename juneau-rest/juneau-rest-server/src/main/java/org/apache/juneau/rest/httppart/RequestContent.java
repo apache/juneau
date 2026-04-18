@@ -34,6 +34,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
@@ -566,7 +567,7 @@ public class RequestContent {
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
 				var o = session.parse(in, cm);
 				if (nn(schema))
-					schema.validateOutput(o, cm.getBeanContext());
+					schema.validateOutput(o);
 				return o;
 			}
 		}

@@ -23,7 +23,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.msgpack.*;
 
 /**

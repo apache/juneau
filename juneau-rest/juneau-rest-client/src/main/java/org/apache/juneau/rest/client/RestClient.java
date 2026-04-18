@@ -29,7 +29,7 @@ import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.http.HttpParts.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.RestSharedConstants.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
 
@@ -83,6 +83,7 @@ import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.jcs.*;
@@ -3831,20 +3832,20 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <ul class='values javatree'>
-		 * 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartFormat}
+		 * 	<li class='jc'>{@link HttpPartFormat}
 		 * 	<ul>
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#UON UON} - UON notation (e.g. <js>"'foo bar'"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT32 INT32} - Signed 32 bits.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT64 INT64} - Signed 64 bits.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE DATE} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE_TIME DATE_TIME} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#NO_FORMAT NO_FORMAT} - (default) Not specified.
+		 * 		<li class='jf'>{@link HttpPartFormat#UON UON} - UON notation (e.g. <js>"'foo bar'"</js>).
+		 * 		<li class='jf'>{@link HttpPartFormat#INT32 INT32} - Signed 32 bits.
+		 * 		<li class='jf'>{@link HttpPartFormat#INT64 INT64} - Signed 64 bits.
+		 * 		<li class='jf'>{@link HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.
+		 * 		<li class='jf'>{@link HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.
+		 * 		<li class='jf'>{@link HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.
+		 * 		<li class='jf'>{@link HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+		 * 		<li class='jf'>{@link HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
+		 * 		<li class='jf'>{@link HttpPartFormat#DATE DATE} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+		 * 		<li class='jf'>{@link HttpPartFormat#DATE_TIME DATE_TIME} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+		 * 		<li class='jf'>{@link HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.
+		 * 		<li class='jf'>{@link HttpPartFormat#NO_FORMAT NO_FORMAT} - (default) Not specified.
 		 * 	</ul>
 		 * </ul>
 		 *

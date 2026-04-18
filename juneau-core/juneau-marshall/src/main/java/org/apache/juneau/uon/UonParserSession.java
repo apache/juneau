@@ -35,6 +35,7 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.Iso8601Utils;

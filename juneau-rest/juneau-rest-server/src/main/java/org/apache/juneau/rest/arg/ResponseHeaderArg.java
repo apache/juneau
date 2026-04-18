@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.rest.*;
@@ -92,7 +93,8 @@ public class ResponseHeaderArg implements RestOpArg {
 		this.type = pi.getParameterType().innerType();
 		var schema = HttpPartSchema.create(Header.class, pi);
 
-		var ps = schema.getSerializer();
+		@SuppressWarnings("unchecked")
+		var ps = (Class<? extends HttpPartSerializer>)schema.getSerializer();
 		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, nn(ps) ? HttpPartSerializer.creator().type(ps).apply(annotations).create() : null);
 
 		Class<?> c;

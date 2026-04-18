@@ -25,7 +25,7 @@ import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -52,6 +52,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.assertions.*;

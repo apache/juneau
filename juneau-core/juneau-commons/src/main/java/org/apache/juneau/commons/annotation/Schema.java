@@ -408,19 +408,6 @@ public @interface Schema {
 	String $ref() default "";
 
 	/**
-	 * <mk>additionalProperties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] additionalProperties() default {};
-
-	/**
 	 * Synonym for {@link #allowEmptyValue()}.
 	 *
 	 * @return The annotation value.
@@ -1419,19 +1406,6 @@ public @interface Schema {
 	 * @return The annotation value.
 	 */
 	String[] prefixItems() default {};
-
-	/**
-	 * <mk>properties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] properties() default {};
 
 	/**
 	 * Synonym for {@link #required()}.

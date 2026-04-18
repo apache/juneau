@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.httppart;
+package org.apache.juneau.commons.httppart;
 
 /**
- * Represents possible enum values that can be passed to the {@link HttpPartSerializerSession#serialize(HttpPartType, HttpPartSchema, Object)}.
+ * Represents possible enum values for HTTP part types.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>

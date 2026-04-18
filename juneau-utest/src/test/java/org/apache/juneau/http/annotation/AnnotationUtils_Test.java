@@ -128,7 +128,6 @@ class AnnotationUtils_Test extends TestBase {
 		assertFalse(SchemaAnnotation.empty(schema().default_(a("foo")).build()));
 		assertFalse(SchemaAnnotation.empty(schema().enum_(a("foo")).build()));
 		assertFalse(SchemaAnnotation.empty(schema().$ref("foo").build()));
-		assertFalse(SchemaAnnotation.empty(schema().additionalProperties(a("foo")).build()));
 		assertFalse(SchemaAnnotation.empty(schema().allOf(a("foo")).build()));
 		assertFalse(SchemaAnnotation.empty(schema().cf("foo").build()));
 		assertFalse(SchemaAnnotation.empty(schema().collectionFormat("foo").build()));
@@ -166,7 +165,6 @@ class AnnotationUtils_Test extends TestBase {
 		assertFalse(SchemaAnnotation.empty(schema().multipleOf("foo").build()));
 		assertFalse(SchemaAnnotation.empty(schema().p("foo").build()));
 		assertFalse(SchemaAnnotation.empty(schema().pattern("foo").build()));
-		assertFalse(SchemaAnnotation.empty(schema().properties(a("foo")).build()));
 		assertFalse(SchemaAnnotation.empty(schema().r(true).build()));
 		assertFalse(SchemaAnnotation.empty(schema().readOnly(true).build()));
 		assertFalse(SchemaAnnotation.empty(schema().required(true).build()));
@@ -200,7 +198,6 @@ class AnnotationUtils_Test extends TestBase {
 		assertFalse(SubItemsAnnotation.empty(subItems().exclusiveMinimum(true).build()));
 		assertFalse(SubItemsAnnotation.empty(subItems().f("foo").build()));
 		assertFalse(SubItemsAnnotation.empty(subItems().format("foo").build()));
-		assertFalse(SubItemsAnnotation.empty(subItems().items(a("foo")).build()));
 		assertFalse(SubItemsAnnotation.empty(subItems().max("foo").build()));
 		assertFalse(SubItemsAnnotation.empty(subItems().maxi(0).build()));
 		assertFalse(SubItemsAnnotation.empty(subItems().maximum("foo").build()));

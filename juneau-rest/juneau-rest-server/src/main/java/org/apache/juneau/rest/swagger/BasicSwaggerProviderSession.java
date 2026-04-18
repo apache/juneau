@@ -74,7 +74,6 @@ public class BasicSwaggerProviderSession {
 	private static final Logger LOG = Logger.getLogger(BasicSwaggerProviderSession.class);
 
 	// Swagger JSON property name constants
-	private static final String SWAGGER_additionalProperties = "additionalProperties";
 	private static final String SWAGGER_allOf = "allOf";
 	private static final String SWAGGER_body = "body";
 	private static final String SWAGGER_collectionFormat = "collectionFormat";
@@ -115,7 +114,6 @@ public class BasicSwaggerProviderSession {
 	private static final String SWAGGER_paths = "paths";
 	private static final String SWAGGER_pattern = "pattern";
 	private static final String SWAGGER_produces = "produces";
-	private static final String SWAGGER_properties = "properties";
 	private static final String SWAGGER_readOnly = "readOnly";
 	private static final String SWAGGER_required = "required";
 	private static final String SWAGGER_responses = "responses";
@@ -949,7 +947,6 @@ public class BasicSwaggerProviderSession {
 			Predicate<Long> nm1 = Utils::nm1;
 			// @formatter:off
 			return om
-				.appendIf(nem, SWAGGER_additionalProperties, toJsonMap(a.additionalProperties()))
 				.appendIf(ne, SWAGGER_allOf, joinnl(a.allOf()))
 				.appendFirst(ne, SWAGGER_collectionFormat, a.collectionFormat(), a.cf())
 				.appendIf(ne, SWAGGER_default, joinnl(a.default_(), a.df()))
@@ -972,7 +969,6 @@ public class BasicSwaggerProviderSession {
 				.appendFirst(nm1, SWAGGER_minProperties, a.minProperties(), a.minp())
 				.appendFirst(ne, SWAGGER_multipleOf, a.multipleOf(), a.mo())
 				.appendFirst(ne, SWAGGER_pattern, a.pattern(), a.p())
-				.appendIf(nem, SWAGGER_properties, toJsonMap(a.properties()))
 				.appendIf(nf, SWAGGER_readOnly, a.readOnly() || a.ro())
 				.appendIf(nf, SWAGGER_required, a.required() || a.r())
 				.appendIf(ne, SWAGGER_title, a.title())
@@ -993,7 +989,6 @@ public class BasicSwaggerProviderSession {
 		om = newMap(om);
 		Predicate<String> ne = Utils::ne;
 		Predicate<Collection<?>> nec = Utils::ne;
-		Predicate<Map<?,?>> nem = Utils::ne;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::nm1;
 		// @formatter:off
@@ -1004,7 +999,6 @@ public class BasicSwaggerProviderSession {
 			.appendIf(nf, SWAGGER_exclusiveMaximum, a.exclusiveMaximum() || a.emax())
 			.appendIf(nf, SWAGGER_exclusiveMinimum, a.exclusiveMinimum() || a.emin())
 			.appendFirst(ne, SWAGGER_format, a.format(), a.f())
-			.appendIf(nem, SWAGGER_items, toJsonMap(a.items()))
 			.appendFirst(ne, SWAGGER_maximum, a.maximum(), a.max())
 			.appendFirst(nm1, SWAGGER_maxItems, a.maxItems(), a.maxi())
 			.appendFirst(nm1, SWAGGER_maxLength, a.maxLength(), a.maxl())
@@ -1187,18 +1181,6 @@ public class BasicSwaggerProviderSession {
 				return js.getBeanDefs().get(ref.substring(14));
 		}
 		return m;
-	}
-
-	private JsonMap toJsonMap(String[] ss) throws ParseException {
-		if (ss.length == 0)
-			return null;
-		var s = joinnl(ss);
-		if (s.isEmpty())
-			return null;
-		if (! isProbablyJsonObject(s, true))
-			s = "{" + s + "}";
-		s = resolve(s);
-		return JsonMap.ofJson(s);
 	}
 
 	private JsonList toList(Tag[] aa) {

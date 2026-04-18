@@ -33,12 +33,11 @@ import org.apache.juneau.parser.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_additionalProperties)
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_allOf)
 })
 public class SchemaAnnotation {
 
 	// Property name constants
-	private static final String PROP_additionalProperties = "additionalProperties";
 	private static final String PROP_allOf = "allOf";
 	private static final String PROP_collectionFormat = "collectionFormat";
 	private static final String PROP_const = "const";
@@ -72,7 +71,6 @@ public class SchemaAnnotation {
 	private static final String PROP_multipleOf = "multipleOf";
 	private static final String PROP_pattern = "pattern";
 	private static final String PROP_prefixItems = "prefixItems";
-	private static final String PROP_properties = "properties";
 	private static final String PROP_readOnly = "readOnly";
 	private static final String PROP_ref = "$ref";
 	private static final String PROP_required = "required";
@@ -151,13 +149,11 @@ public class SchemaAnnotation {
 		private String type = "";
 		private String[] default_ = {};
 		private String[] enum_ = {};
-		private String[] additionalProperties = {};
 		private String[] allOf = {};
 		private String[] d = {};
 		private String[] description = {};
 		private String[] df = {};
 		private String[] e = {};
-		private String[] properties = {};
 		private String[] xml = {};
 		private boolean deprecatedProperty;
 		private String $id = "";
@@ -322,17 +318,6 @@ public class SchemaAnnotation {
 		})
 		public Builder $ref(String value) {
 			this.$ref = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#additionalProperties} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder additionalProperties(String...value) {
-			additionalProperties = value;
 			return this;
 		}
 
@@ -878,17 +863,6 @@ public class SchemaAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Schema#properties} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder properties(String...value) {
-			properties = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Schema#r} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -1103,8 +1077,6 @@ public class SchemaAnnotation {
 		private final String[] enum_;
 		private final String[] e;
 		private final String[] allOf;
-		private final String[] properties;
-		private final String[] additionalProperties;
 		private final String[] xml;
 		// JSON Schema Draft 2020-12 fields
 		private final boolean deprecatedProperty;
@@ -1132,7 +1104,6 @@ public class SchemaAnnotation {
 			$ref = b.$ref;
 			default_ = copyOf(b.default_);
 			enum_ = copyOf(b.enum_);
-			additionalProperties = copyOf(b.additionalProperties);
 			allOf = copyOf(b.allOf);
 			aev = b.aev;
 			allowEmptyValue = b.allowEmptyValue;
@@ -1171,7 +1142,6 @@ public class SchemaAnnotation {
 			multipleOf = b.multipleOf;
 			p = b.p;
 			pattern = b.pattern;
-			properties = copyOf(b.properties);
 			r = b.r;
 			readOnly = b.readOnly;
 			required = b.required;
@@ -1252,11 +1222,6 @@ public class SchemaAnnotation {
 		@Override /* Overridden from Schema */
 		public String $ref() {
 			return $ref;
-		}
-
-		@Override /* Overridden from Schema */
-		public String[] additionalProperties() {
-			return additionalProperties;
 		}
 
 		@Override /* Overridden from Schema */
@@ -1499,11 +1464,6 @@ public class SchemaAnnotation {
 		}
 
 		@Override /* Overridden from Schema */
-		public String[] properties() {
-			return properties;
-		}
-
-		@Override /* Overridden from Schema */
 		public boolean r() {
 			return r;
 		}
@@ -1626,7 +1586,6 @@ public class SchemaAnnotation {
 
 		// @formatter:off
 		return m
-			.appendIf(nem, PROP_additionalProperties, parseMap(a.additionalProperties()))
 			.appendIf(ne, PROP_allOf, joinnl(a.allOf()))
 			.appendFirst(ne, PROP_collectionFormat, a.collectionFormat(), a.cf())
 			.appendIf(ne, PROP_default, joinnl(a.default_(), a.df()))
@@ -1649,7 +1608,6 @@ public class SchemaAnnotation {
 			.appendFirst(nm1, PROP_minProperties, a.minProperties(), a.minp())
 			.appendFirst(ne, PROP_multipleOf, a.multipleOf(), a.mo())
 			.appendFirst(ne, PROP_pattern, a.pattern(), a.p())
-			.appendIf(nem, PROP_properties, parseMap(a.properties()))
 			.appendIf(nf, PROP_readOnly, a.readOnly() || a.ro())
 			.appendIf(nf, PROP_required, a.required() || a.r())
 			.appendIf(ne, PROP_title, a.title())

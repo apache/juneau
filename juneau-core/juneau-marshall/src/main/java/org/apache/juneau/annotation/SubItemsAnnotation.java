@@ -44,7 +44,6 @@ public class SubItemsAnnotation {
 	private static final String PROP_exclusiveMaximum = "exclusiveMaximum";
 	private static final String PROP_exclusiveMinimum = "exclusiveMinimum";
 	private static final String PROP_format = "format";
-	private static final String PROP_items = "items";
 	private static final String PROP_maximum = "maximum";
 	private static final String PROP_maxItems = "maxItems";
 	private static final String PROP_maxLength = "maxLength";
@@ -108,7 +107,6 @@ public class SubItemsAnnotation {
 		private String[] enum_ = {};
 		private String[] df = {};
 		private String[] e = {};
-		private String[] items = {};
 
 		/**
 		 * Constructor.
@@ -286,17 +284,6 @@ public class SubItemsAnnotation {
 		 */
 		public Builder format(String value) {
 			format = value;
-			return this;
-		}
-
-		/**
-		 * Sets the <c>items</c> property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder items(String...value) {
-			items = value;
 			return this;
 		}
 
@@ -562,7 +549,6 @@ public class SubItemsAnnotation {
 		private final String[] enum_;
 		private final String[] df;
 		private final String[] e;
-		private final String[] items;
 
 		Object(SubItemsAnnotation.Builder b) {
 			super(b);
@@ -580,7 +566,6 @@ public class SubItemsAnnotation {
 			exclusiveMinimum = b.exclusiveMinimum;
 			f = b.f;
 			format = b.format;
-			items = copyOf(b.items);
 			max = b.max;
 			maxi = b.maxi;
 			maximum = b.maximum;
@@ -666,11 +651,6 @@ public class SubItemsAnnotation {
 		@Override /* Overridden from SubItems */
 		public String format() {
 			return format;
-		}
-
-		@Override /* Overridden from SubItems */
-		public String[] items() {
-			return items;
 		}
 
 		@Override /* Overridden from SubItems */
@@ -814,7 +794,6 @@ public class SubItemsAnnotation {
 			return om;
 		Predicate<String> ne = Utils::ne;
 		Predicate<Collection<?>> nec = Utils::ne;
-		Predicate<Map<?,?>> nem = Utils::ne;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::nm1;
 		// @formatter:off
@@ -825,7 +804,6 @@ public class SubItemsAnnotation {
 			.appendIf(nf, PROP_exclusiveMaximum, a.exclusiveMaximum() || a.emax())
 			.appendIf(nf, PROP_exclusiveMinimum, a.exclusiveMinimum() || a.emin())
 			.appendFirst(ne, PROP_format, a.format(), a.f())
-			.appendIf(nem, PROP_items, parseMap(a.items()))
 			.appendFirst(ne, PROP_maximum, a.maximum(), a.max())
 			.appendFirst(nm1, PROP_maxItems, a.maxItems(), a.maxi())
 			.appendFirst(nm1, PROP_maxLength, a.maxLength(), a.maxl())

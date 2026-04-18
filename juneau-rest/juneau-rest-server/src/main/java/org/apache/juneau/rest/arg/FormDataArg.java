@@ -28,6 +28,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
@@ -135,7 +136,8 @@ public class FormDataArg implements RestOpArg {
 
 		this.def = findDef(pi).or(() -> Optional.ofNullable(classLevelFormData).filter(f -> ne(f.def())).map(FormData::def)).orElse(null);
 		this.type = pi.getParameterType();
-		var pp = schema.getParser();
+		@SuppressWarnings("unchecked")
+		var pp = (Class<? extends HttpPartParser>)schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 

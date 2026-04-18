@@ -18,7 +18,7 @@ package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.httppart.bean.MethodInfoUtils.*;
 
 import java.util.*;

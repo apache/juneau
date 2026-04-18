@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.Items;
 import org.apache.juneau.commons.annotation.SubItems;
 import org.apache.juneau.commons.annotation.Schema;
+import org.apache.juneau.commons.httppart.SchemaValidationException;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
@@ -153,25 +154,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 				emin=true,
 				ui=true,
 				df={"c5","c6"},
-				e="e5,e6",
-				items={
-					"type:'array',",
-					"format:'double',",
-					"collectionFormat:'pipes',",
-					"maximum:'13',",
-					"minimum:'14',",
-					"multipleOf:'15',",
-					"pattern:'16',",
-					"maxLength:13,",
-					"minLength:14,",
-					"maxItems:15,",
-					"minItems:16,",
-					"exclusiveMaximum:false,",
-					"exclusiveMinimum:false,",
-					"uniqueItems:false,",
-					"default:'c7\\nc8',",
-					"enum:['e7','e8']",
-				}
+				e="e5,e6"
 			)
 		)
 	)
@@ -191,20 +174,6 @@ class HttpPartSchema_Body_Test extends TestBase {
 			items,
 			"type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
 			"INTEGER,INT64,SSV,5,6,7,8,5,6,7,8,false,false,false,[e3,e4],c3\nc4"
-		);
-
-		items = items.getItems();
-		assertBean(
-			items,
-			"type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
-			"STRING,FLOAT,TSV,9,10,11,12,9,10,11,12,true,true,true,[e5,e6],c5\nc6"
-		);
-
-		items = items.getItems();
-		assertBean(
-			items,
-			"type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
-			"ARRAY,DOUBLE,PIPES,13,14,15,16,13,14,15,16,false,false,false,[e7,e8],c7\nc8"
 		);
 	}
 
@@ -242,11 +211,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		items=@Items(
 			p="w.*",
 			items=@SubItems(
-				p="x.*",
-				items={
-					"pattern:'y.*',",
-					"items:{pattern:'z.*'}"
-				}
+				p="x.*"
 			)
 		)
 	)
@@ -272,11 +237,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		items=@Items(
 			minl=2, maxl=3,
 			items=@SubItems(
-				minl=3, maxl=4,
-				items={
-					"minLength:4,maxLength:5,",
-					"items:{minLength:5,maxLength:6}"
-				}
+				minl=3, maxl=4
 			)
 		)
 	)
@@ -287,28 +248,18 @@ class HttpPartSchema_Body_Test extends TestBase {
 
 		s.getItems().validateInput("12");
 		s.getItems().getItems().validateInput("123");
-		s.getItems().getItems().getItems().validateInput("1234");
-		s.getItems().getItems().getItems().getItems().validateInput("12345");
 
 		s.getItems().validateInput("123");
 		s.getItems().getItems().validateInput("1234");
-		s.getItems().getItems().getItems().validateInput("12345");
-		s.getItems().getItems().getItems().getItems().validateInput("123456");
 
 		s.getItems().validateInput(null);
 		s.getItems().getItems().validateInput(null);
-		s.getItems().getItems().getItems().validateInput(null);
-		s.getItems().getItems().getItems().getItems().validateInput(null);
 
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum length of value not met.", ()->s.getItems().validateInput("1"));
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum length of value not met.", ()->s.getItems().getItems().validateInput("12"));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum length of value not met.", ()->s.getItems().getItems().getItems().validateInput("123"));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum length of value not met.", ()->s.getItems().getItems().getItems().getItems().validateInput("1234"));
 
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum length of value exceeded.", ()->s.getItems().validateInput("1234"));
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum length of value exceeded.", ()->s.getItems().getItems().validateInput("12345"));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum length of value exceeded.", ()->s.getItems().getItems().getItems().validateInput("123456"));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum length of value exceeded.", ()->s.getItems().getItems().getItems().getItems().validateInput("1234567"));
 	}
 
 	@Content
@@ -358,11 +309,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		items=@Items(
 			e="W",
 			items=@SubItems(
-				e="X",
-				items={
-					"enum:['Y'],",
-					"items:{enum:['Z']}"
-				}
+				e="X"
 			)
 		)
 	)
@@ -373,13 +320,9 @@ class HttpPartSchema_Body_Test extends TestBase {
 
 		s.getItems().validateInput("W");
 		s.getItems().getItems().validateInput("X");
-		s.getItems().getItems().getItems().validateInput("Y");
-		s.getItems().getItems().getItems().getItems().validateInput("Z");
 
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match one of the expected values.  Must be one of the following:  W", ()->s.getItems().validateInput("V"));
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match one of the expected values.  Must be one of the following:  X", ()->s.getItems().getItems().validateInput("V"));
-		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match one of the expected values.  Must be one of the following:  Y", ()->s.getItems().getItems().getItems().validateInput("V"));
-		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match one of the expected values.  Must be one of the following:  Z", ()->s.getItems().getItems().getItems().getItems().validateInput("V"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -394,11 +337,11 @@ class HttpPartSchema_Body_Test extends TestBase {
 
 	@Test void c01a_minmax_ints() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C01a.class).build();
-		s.validateOutput(10, BeanContext.DEFAULT);
-		s.validateOutput(100, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(9, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101, BeanContext.DEFAULT));
+		s.validateOutput(10);
+		s.validateOutput(100);
+		s.validateOutput(null);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(9));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101));
 	}
 
 	@Content
@@ -406,11 +349,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		items=@Items(
 			min="10", max="100",
 			items=@SubItems(
-				min="100", max="1000",
-				items={
-					"minimum:1000,maximum:10000,",
-					"items:{minimum:10000,maximum:100000}"
-				}
+				min="100", max="1000"
 			)
 		)
 	)
@@ -419,25 +358,17 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Test void c01b_minmax_ints_items() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C01b.class).build();
 
-		s.getItems().validateOutput(10, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
+		s.getItems().validateOutput(10);
+		s.getItems().getItems().validateOutput(100);
 
-		s.getItems().validateOutput(100, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT);
+		s.getItems().validateOutput(100);
+		s.getItems().getItems().validateOutput(1000);
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().validateOutput(9, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().validateOutput(99, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().getItems().validateOutput(999, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().getItems().getItems().validateOutput(9999, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().validateOutput(9));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().validateOutput(99));
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().validateOutput(101, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().validateOutput(1001, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().getItems().getItems().validateOutput(100001, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().validateOutput(101));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().validateOutput(1001));
 	}
 
 	@Content
@@ -448,11 +379,11 @@ class HttpPartSchema_Body_Test extends TestBase {
 
 	@Test void c02a_minmax_exclusive() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C02a.class).build();
-		s.validateOutput(11, BeanContext.DEFAULT);
-		s.validateOutput(99, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(10, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100, BeanContext.DEFAULT));
+		s.validateOutput(11);
+		s.validateOutput(99);
+		s.validateOutput(null);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(10));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100));
 	}
 
 	@Content
@@ -460,11 +391,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		items=@Items(
 			min="10", max="100", emin=true, emax=true,
 			items=@SubItems(
-				min="100", max="1000", emin=true, emax=true,
-				items={
-					"minimum:1000,maximum:10000,exclusiveMinimum:true,exclusiveMaximum:true,",
-					"items:{minimum:10000,maximum:100000,exclusiveMinimum:true,exclusiveMaximum:true}"
-				}
+				min="100", max="1000", emin=true, emax=true
 			)
 		)
 	)
@@ -473,25 +400,17 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Test void c02b_minmax_exclusive_items() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C02b.class).build();
 
-		s.getItems().validateOutput(11, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(1001, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT);
+		s.getItems().validateOutput(11);
+		s.getItems().getItems().validateOutput(101);
 
-		s.getItems().validateOutput(99, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(999, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(9999, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(99999, BeanContext.DEFAULT);
+		s.getItems().validateOutput(99);
+		s.getItems().getItems().validateOutput(999);
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().validateOutput(10, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().getItems().validateOutput(1000, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().validateOutput(10));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().validateOutput(100));
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().validateOutput(100, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().validateOutput(1000, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().validateOutput(100));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().validateOutput(1000));
 	}
 
 	@Content
@@ -502,11 +421,11 @@ class HttpPartSchema_Body_Test extends TestBase {
 
 	@Test void c03_minmax_floats() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C03a.class).build();
-		s.validateOutput(10.1f, BeanContext.DEFAULT);
-		s.validateOutput(100.1f, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(10f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100.2f, BeanContext.DEFAULT));
+		s.validateOutput(10.1f);
+		s.validateOutput(100.1f);
+		s.validateOutput(null);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(10f));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100.2f));
 	}
 
 	@Content
@@ -514,11 +433,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		items=@Items(
 			min="10.1", max="100.1",
 			items=@SubItems(
-				min="100.1", max="1000.1",
-				items={
-					"minimum:1000.1,maximum:10000.1,",
-					"items:{minimum:10000.1,maximum:100000.1}"
-				}
+				min="100.1", max="1000.1"
 			)
 		)
 	)
@@ -527,25 +442,17 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Test void c03b_minmax_floats_items() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C03b.class).build();
 
-		s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
+		s.getItems().validateOutput(10.1f);
+		s.getItems().getItems().validateOutput(100.1f);
 
-		s.getItems().validateOutput(100.1f, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT);
+		s.getItems().validateOutput(100.1f);
+		s.getItems().getItems().validateOutput(1000.1f);
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().validateOutput(10f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().validateOutput(100f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().getItems().validateOutput(1000f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().validateOutput(10f));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().validateOutput(100f));
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().validateOutput(100.2f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().getItems().getItems().validateOutput(100000.2f, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().validateOutput(100.2f));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().validateOutput(1000.2f));
 	}
 
 	@Content
@@ -556,11 +463,11 @@ class HttpPartSchema_Body_Test extends TestBase {
 
 	@Test void c04a_minmax_floats_exclusive() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C04a.class).build();
-		s.validateOutput(10.2f, BeanContext.DEFAULT);
-		s.validateOutput(100f, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(10.1f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100.1f, BeanContext.DEFAULT));
+		s.validateOutput(10.2f);
+		s.validateOutput(100f);
+		s.validateOutput(null);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(10.1f));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100.1f));
 	}
 
 	@Content
@@ -568,11 +475,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		items=@Items(
 			min="10.1", max="100.1", emin=true, emax=true,
 			items=@SubItems(
-				min="100.1", max="1000.1", emin=true, emax=true,
-				items={
-					"minimum:1000.1,maximum:10000.1,exclusiveMinimum:true,exclusiveMaximum:true,",
-					"items:{minimum:10000.1,maximum:100000.1,exclusiveMinimum:true,exclusiveMaximum:true}"
-				}
+				min="100.1", max="1000.1", emin=true, emax=true
 			)
 		)
 	)
@@ -581,25 +484,17 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Test void c04b_minmax_floats_exclusive_items() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C04b.class).build();
 
-		s.getItems().validateOutput(10.2f, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT);
+		s.getItems().validateOutput(10.2f);
+		s.getItems().getItems().validateOutput(100.2f);
 
-		s.getItems().validateOutput(100f, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(1000f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(100000f, BeanContext.DEFAULT);
+		s.getItems().validateOutput(100f);
+		s.getItems().getItems().validateOutput(1000f);
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().validateOutput(10.1f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().validateOutput(10.1f));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.getItems().getItems().validateOutput(100.1f));
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().validateOutput(100.1f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().validateOutput(100.1f));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.getItems().getItems().validateOutput(1000.1f));
 	}
 
 	@Content
@@ -610,13 +505,13 @@ class HttpPartSchema_Body_Test extends TestBase {
 
 	@Test void c05a_multipleOf() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C05a.class).build();
-		s.validateOutput(0, BeanContext.DEFAULT);
-		s.validateOutput(10, BeanContext.DEFAULT);
-		s.validateOutput(20, BeanContext.DEFAULT);
-		s.validateOutput(10f, BeanContext.DEFAULT);
-		s.validateOutput(20f, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.validateOutput(11, BeanContext.DEFAULT));
+		s.validateOutput(0);
+		s.validateOutput(10);
+		s.validateOutput(20);
+		s.validateOutput(10f);
+		s.validateOutput(20f);
+		s.validateOutput(null);
+		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.validateOutput(11));
 	}
 
 	@Content
@@ -624,11 +519,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		items=@Items(
 			mo="10",
 			items=@SubItems(
-				mo="100",
-				items={
-					"multipleOf:1000,",
-					"items:{multipleOf:10000}"
-				}
+				mo="100"
 			)
 		)
 	)
@@ -637,35 +528,23 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Test void c05b_multipleOf_items() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C05b.class).build();
 
-		s.getItems().validateOutput(0, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
+		s.getItems().validateOutput(0);
+		s.getItems().getItems().validateOutput(0);
 
-		s.getItems().validateOutput(10, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(1000, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
+		s.getItems().validateOutput(10);
+		s.getItems().getItems().validateOutput(100);
 
-		s.getItems().validateOutput(20, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(200, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(2000, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(20000, BeanContext.DEFAULT);
+		s.getItems().validateOutput(20);
+		s.getItems().getItems().validateOutput(200);
 
-		s.getItems().validateOutput(10f, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(100f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(1000f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT);
+		s.getItems().validateOutput(10f);
+		s.getItems().getItems().validateOutput(100f);
 
-		s.getItems().validateOutput(20f, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(200f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(2000f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(20000f, BeanContext.DEFAULT);
+		s.getItems().validateOutput(20f);
+		s.getItems().getItems().validateOutput(200f);
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().validateOutput(11, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().getItems().getItems().validateOutput(1001, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().validateOutput(11));
+		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().getItems().validateOutput(101));
 	}
 
 	@Content
@@ -676,11 +555,11 @@ class HttpPartSchema_Body_Test extends TestBase {
 
 	@Test void c06a_multipleOf_floats() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C06a.class).build();
-		s.validateOutput(0, BeanContext.DEFAULT);
-		s.validateOutput(10.1f, BeanContext.DEFAULT);
-		s.validateOutput(20.2f, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.validateOutput(10.2f, BeanContext.DEFAULT));
+		s.validateOutput(0);
+		s.validateOutput(10.1f);
+		s.validateOutput(20.2f);
+		s.validateOutput(null);
+		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.validateOutput(10.2f));
 	}
 
 	@Content
@@ -688,11 +567,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		items=@Items(
 			mo="10.1",
 			items=@SubItems(
-				mo="100.1",
-				items={
-					"multipleOf:1000.1,",
-					"items:{multipleOf:10000.1}"
-				}
+				mo="100.1"
 			)
 		)
 	)
@@ -701,25 +576,17 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Test void c06b_multipleOf_floats_items() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, C06b.class).build();
 
-		s.getItems().validateOutput(0, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(0, BeanContext.DEFAULT);
+		s.getItems().validateOutput(0);
+		s.getItems().getItems().validateOutput(0);
 
-		s.getItems().validateOutput(10.1f, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
+		s.getItems().validateOutput(10.1f);
+		s.getItems().getItems().validateOutput(100.1f);
 
-		s.getItems().validateOutput(20.2f, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(200.2f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(2000.2f, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(20000.2f, BeanContext.DEFAULT);
+		s.getItems().validateOutput(20.2f);
+		s.getItems().getItems().validateOutput(200.2f);
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().validateOutput(10.2f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().validateOutput(10.2f));
+		assertThrowsWithMessage(SchemaValidationException.class, "Multiple-of not met.", ()->s.getItems().getItems().validateOutput(100.2f));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -731,11 +598,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		items=@Items(
 			ui=true,
 			items=@SubItems(
-				ui=true,
-				items={
-					"uniqueItems:true,",
-					"items:{uniqueItems:true}"
-				}
+				ui=true
 			)
 		)
 	)
@@ -747,16 +610,12 @@ class HttpPartSchema_Body_Test extends TestBase {
 		var good = split("a,b");
 		var bad = split("a,a");
 
-		s.getItems().validateOutput(good, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
-		s.getItems().validateOutput(null, BeanContext.DEFAULT);
+		s.getItems().validateOutput(good);
+		s.getItems().getItems().validateOutput(good);
+		s.getItems().validateOutput(null);
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().validateOutput(bad, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().validateOutput(bad));
+		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().getItems().validateOutput(bad));
 	}
 
 	@Test void d01b_uniqueItems_collections() throws Exception {
@@ -765,16 +624,12 @@ class HttpPartSchema_Body_Test extends TestBase {
 		var good = l("a","b");
 		var bad = l("a","a");
 
-		s.getItems().validateOutput(good, BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
-		s.getItems().validateOutput(null, BeanContext.DEFAULT);
+		s.getItems().validateOutput(good);
+		s.getItems().getItems().validateOutput(good);
+		s.getItems().validateOutput(null);
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().validateOutput(bad, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().validateOutput(bad));
+		assertThrowsWithMessage(SchemaValidationException.class, "Duplicate items not allowed.", ()->s.getItems().getItems().validateOutput(bad));
 	}
 
 	@Content
@@ -782,11 +637,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 		items=@Items(
 			mini=1, maxi=2,
 			items=@SubItems(
-				mini=2, maxi=3,
-				items={
-					"minItems:3,maxItems:4,",
-					"items:{minItems:4,maxItems:5}"
-				}
+				mini=2, maxi=3
 			)
 		)
 	)
@@ -795,25 +646,17 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Test void d02a_minMaxItems_arrays() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, D02.class).build();
 
-		s.getItems().validateOutput(split("1"), BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);
+		s.getItems().validateOutput(split("1"));
+		s.getItems().getItems().validateOutput(split("1,2"));
 
-		s.getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT);
+		s.getItems().validateOutput(split("1,2"));
+		s.getItems().getItems().validateOutput(split("1,2,3"));
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().validateOutput(new String[0], BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().getItems().validateOutput(split("1"), BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().validateOutput(new String[0]));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().getItems().validateOutput(split("1")));
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5,6"), BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().validateOutput(split("1,2,3")));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().validateOutput(split("1,2,3,4")));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -851,14 +694,14 @@ class HttpPartSchema_Body_Test extends TestBase {
 
 	@Test void d02a_exclusiveNumericBounds() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, D02a.class).build();
-		s.validateOutput(1, BeanContext.DEFAULT);
-		s.validateOutput(50, BeanContext.DEFAULT);
-		s.validateOutput(99, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(-1, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101, BeanContext.DEFAULT));
+		s.validateOutput(1);
+		s.validateOutput(50);
+		s.validateOutput(99);
+		s.validateOutput(null);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(-1));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101));
 	}
 
 	@Content
@@ -867,14 +710,14 @@ class HttpPartSchema_Body_Test extends TestBase {
 
 	@Test void d02b_exclusiveNumericBounds_doubles() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, D02b.class).build();
-		s.validateOutput(0.6, BeanContext.DEFAULT);
-		s.validateOutput(5.0, BeanContext.DEFAULT);
-		s.validateOutput(10.4, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0.5, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(10.5, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0.4, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(10.6, BeanContext.DEFAULT));
+		s.validateOutput(0.6);
+		s.validateOutput(5.0);
+		s.validateOutput(10.4);
+		s.validateOutput(null);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0.5));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(10.5));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0.4));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(10.6));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -887,15 +730,15 @@ class HttpPartSchema_Body_Test extends TestBase {
 
 	@Test void d03a_exclusiveBooleanBounds() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, D03a.class).build();
-		s.validateOutput(1, BeanContext.DEFAULT);
-		s.validateOutput(50, BeanContext.DEFAULT);
-		s.validateOutput(99, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
+		s.validateOutput(1);
+		s.validateOutput(50);
+		s.validateOutput(99);
+		s.validateOutput(null);
 		// With boolean flags, 0 and 100 are excluded
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(-1, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(-1));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101));
 	}
 
 	@Content
@@ -905,14 +748,14 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Test void d03b_inclusiveBounds() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, D03b.class).build();
 		// With boolean flags set to false, 0 and 100 are included
-		s.validateOutput(0, BeanContext.DEFAULT);
-		s.validateOutput(1, BeanContext.DEFAULT);
-		s.validateOutput(50, BeanContext.DEFAULT);
-		s.validateOutput(99, BeanContext.DEFAULT);
-		s.validateOutput(100, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(-1, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101, BeanContext.DEFAULT));
+		s.validateOutput(0);
+		s.validateOutput(1);
+		s.validateOutput(50);
+		s.validateOutput(99);
+		s.validateOutput(100);
+		s.validateOutput(null);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(-1));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101));
 	}
 
 	@Content
@@ -922,12 +765,12 @@ class HttpPartSchema_Body_Test extends TestBase {
 	@Test void d03c_newStyleTakesPrecedence() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Content.class, D03c.class).build();
 		// New numeric style should take precedence over old boolean flags
-		s.validateOutput(1, BeanContext.DEFAULT);
-		s.validateOutput(50, BeanContext.DEFAULT);
-		s.validateOutput(99, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0, BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100, BeanContext.DEFAULT));
+		s.validateOutput(1);
+		s.validateOutput(50);
+		s.validateOutput(99);
+		s.validateOutput(null);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

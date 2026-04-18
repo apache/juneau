@@ -14,14 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons;
 
 /**
  * Global constants used across the Juneau framework.
- *
- * <p>
- * This class re-exports constants from {@link org.apache.juneau.commons.Constants} in juneau-commons
- * for backward compatibility.
  */
 public class Constants {
 
@@ -33,8 +29,9 @@ public class Constants {
 	/**
 	 * Sentinel value to indicate that a default value is not specified.
 	 *
-	 * @see org.apache.juneau.commons.Constants#NONE
-	 * TODO - Replace this
+	 * <p>
+	 * Used in annotation default values where empty string cannot distinguish between
+	 * "no value specified" and "explicitly set to empty string".
 	 */
-	public static final String NONE = org.apache.juneau.commons.Constants.NONE;
+	public static final String NONE = "_NONE_";
 }

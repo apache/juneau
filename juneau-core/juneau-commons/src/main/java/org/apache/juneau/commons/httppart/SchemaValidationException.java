@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.httppart;
+package org.apache.juneau.commons.httppart;
 
 import java.text.*;
 
-import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.commons.BasicRuntimeException;
 
 /**
- * Exception thrown when an HTTP part fails schema validation during parsing.
+ * Exception thrown when an HTTP part fails schema validation.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
@@ -29,10 +29,7 @@ import org.apache.juneau.parser.ParseException;
  *
  * @serial exclude
  */
-@SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for SchemaValidationException hierarchy
-})
-public class SchemaValidationException extends ParseException {
+public class SchemaValidationException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -45,16 +42,20 @@ public class SchemaValidationException extends ParseException {
 		super(message, args);
 	}
 
-	@Override /* Overridden from ParseException */
+	/**
+	 * Returns the root cause of this exception.
+	 *
+	 * @return The root cause of this exception.
+	 */
 	public SchemaValidationException getRootCause() {
-		ParseException t = this;
+		var t = this;
 		while (t.getCause() instanceof SchemaValidationException t2) {
 			t = t2;
 		}
-		return (SchemaValidationException)t;
+		return t;
 	}
 
-	@Override /* Overridden from ParseException */
+	@Override /* Overridden from BasicRuntimeException */
 	public SchemaValidationException setMessage(String message, Object...args) {
 		super.setMessage(message, args);
 		return this;
