@@ -23,9 +23,7 @@ AGENTS.md
 /coverage/
 /coverage.csv
 /coverage.exec
-/AI_SESSION.md
 
 # Release script generated history files
 scripts/release-history-*.json
 /SONARQUBE_ISSUES.txt
-/AISESSION.md
