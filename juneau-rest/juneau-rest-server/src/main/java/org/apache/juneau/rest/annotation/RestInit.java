@@ -29,16 +29,35 @@ import jakarta.servlet.*;
  * Identifies a method that gets called during servlet initialization.
  *
  * <p>
- * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link org.apache.juneau.rest.RestContext.Builder}
- * object has been created and initialized with the annotations defined on the class, but before the
- * {@link RestContext} object has been created.
+ * This method is called from within the {@link Servlet#init(ServletConfig)} method after the
+ * resource's annotation-driven configuration has been applied to the in-flight {@link RestContext}, but before
+ * any HTTP request is dispatched. It's the supported hook for one-time setup work such as loading data files
+ * or precomputing caches.
  *
  * <p>
- * The only valid parameter type for this method is {@link org.apache.juneau.rest.RestContext.Builder} which can be used to configure the servlet.
+ * Method parameters are resolved from the
+ * {@link org.apache.juneau.rest.beanstore.BasicBeanStore bean store} the same way as any other Juneau-injected
+ * method. {@link jakarta.servlet.ServletConfig}, {@link jakarta.servlet.ServletContext}, the resource instance
+ * itself, and any bean registered via {@link org.apache.juneau.rest.annotation.RestInject @RestInject} or the
+ * {@link Rest#beans()} attribute are all resolvable. Zero-argument variants are also supported.
  *
  * <p>
- * An example of this is the <c>PetStoreResource</c> class that uses an init method to perform initialization
- * of an internal data structure.
+ * <b>Note (9.5):</b> two related Builder-injection protocols have been removed in this release. They had zero
+ * real-world callers across the codebase before deletion (TODO-16 Phase C-3):
+ * <ul>
+ * 	<li><b>Per-operation:</b> {@code @RestInit public void init(RestOpContext.Builder b)} (invoked once per
+ * 		<code>@RestOp</code>-annotated method) — replaced by declarative <code>@RestOp(...)</code> attributes,
+ * 		<code>@RestInject(name=, methodScope=)</code>-named beans, or class-level <code>@RestInit</code> hooks.
+ * 	<li><b>Class-level Builder injection:</b> {@code @RestInit public void init(RestContext.Builder b)} (which
+ * 		injected the in-flight resource-level builder so the hook could imperatively mutate it) — replaced by the
+ * 		same declarative surfaces. Migrate by moving each <code>builder.xxx(...)</code> call to the equivalent
+ * 		<code>@Rest(xxx=...)</code> annotation attribute or {@code @RestInject}-named bean.
+ * </ul>
+ *
+ * <p>
+ * The remaining supported {@code @RestInit} hook shape is one whose parameters are bean-store-resolvable
+ * (no {@code RestContext.Builder} or {@code RestOpContext.Builder}). The example below uses the resource
+ * instance itself, but {@code @RestInject}-supplied beans, {@code ServletConfig}, etc. work the same way.
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
@@ -49,7 +68,7 @@ import jakarta.servlet.*;
  * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
  *
  * 		<ja>@RestInit</ja>
- * 		<jk>public void</jk> onInit(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+ * 		<jk>public void</jk> onInit() <jk>throws</jk> Exception {
  * 			<jc>// Load our database from a local JSON file.</jc>
  * 			<jf>petDB</jf> = JsonParser.<jsf>DEFAULT</jsf>.parse(getClass().getResourceAsStream(<js>"PetStore.json"</js>), LinkedHashMap.<jk>class</jk>, Integer.<jk>class</jk>, Pet.<jk>class</jk>);
  * 		}

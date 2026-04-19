@@ -18,7 +18,6 @@ package org.apache.juneau.rest.annotation;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
@@ -28,6 +27,12 @@ class RestInit_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @RestInit
+	//
+	// Pre-9.5 this test also covered `@RestInit public void initX(RestContext.Builder b)` — the framework
+	// injected the in-flight RestContext.Builder so user code could imperatively configure the context.
+	// That protocol was deleted in TODO-16 Phase C-3 (Builder is no longer a user-visible bean), so the
+	// `init1c(RestContext.Builder)` cases were dropped along with it. The remaining cases still cover
+	// no-arg invocation, ServletConfig injection, and inheritance / override ordering.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(children={A_Super.class,A_Sub.class})
@@ -37,8 +42,8 @@ class RestInit_Test extends TestBase {
 	public static class A_Super {
 		protected JsonList events = new JsonList();
 		@RestInit
-		public void init1c(RestContext.Builder builder) {
-			events.add("super-1c");
+		public void init1d(MarkerBean marker) {
+			events.add("super-1d");
 		}
 		@RestInit
 		public void init1a(ServletConfig config) {
@@ -56,14 +61,22 @@ class RestInit_Test extends TestBase {
 		public JsonList getEvents() {
 			return events;
 		}
+
+		// Bean injected via @RestInject so we can also exercise non-built-in @RestInit parameter resolution.
+		@RestInject
+		public MarkerBean marker() {
+			return new MarkerBean();
+		}
+
+		public static class MarkerBean {}
 	}
 
 	@Rest(path="/sub", children={A_Child.class})
 	public static class A_Sub extends A_Super {
 		@Override
 		@RestInit
-		public void init1c(RestContext.Builder builder) {
-			events.add("sub-1c");
+		public void init1d(MarkerBean marker) {
+			events.add("sub-1d");
 		}
 		@Override
 		@RestInit
@@ -85,8 +98,8 @@ class RestInit_Test extends TestBase {
 	public static class A_Child extends A_Super {
 		@Override
 		@RestInit
-		public void init1c(RestContext.Builder builder) {
-			events.add("child-1c");
+		public void init1d(MarkerBean marker) {
+			events.add("child-1d");
 		}
 		@RestInit
 		public void init2b() {
@@ -96,8 +109,8 @@ class RestInit_Test extends TestBase {
 
 	@Test void a01_init() throws Exception {
 		var a = MockRestClient.build(A.class);
-		a.get("/super/events").run().assertContent("['super-1a','super-1b','super-1c','super-2a']");
-		a.get("/sub/events").run().assertContent("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		a.get("/sub/child/events").run().assertContent("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		a.get("/super/events").run().assertContent("['super-1a','super-1b','super-1d','super-2a']");
+		a.get("/sub/events").run().assertContent("['sub-1a','sub-1b','sub-1d','super-2a','sub-2b']");
+		a.get("/sub/child/events").run().assertContent("['super-1a','super-1b','child-1d','super-2a','child-2b']");
 	}
 }

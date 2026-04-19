@@ -100,9 +100,9 @@ class Rest_Messages_Test extends TestBase {
 	}
 
 	public static class B3 extends B1 {
-		@RestInit
-		public void init(RestContext.Builder builder) {
-			builder.messages().location(null, "B2x").location(B1.class, "B1x");
+		@RestInject
+		public static Messages messages(Messages.Builder b) {
+			return b.location(null, "B2x").location(B1.class, "B1x").build();
 		}
 	}
 

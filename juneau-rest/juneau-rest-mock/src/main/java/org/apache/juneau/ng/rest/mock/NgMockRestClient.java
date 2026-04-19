@@ -23,6 +23,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.ng.rest.client.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.logger.*;
@@ -217,16 +218,10 @@ public final class NgMockRestClient implements Closeable {
 				if (!restContextCache.containsKey(c)) {
 					var isClass = impl instanceof Class<?>;
 					var o = isClass ? ((Class<?>)impl).getDeclaredConstructor().newInstance() : impl;
-					// @formatter:off
-					RestContext rc = RestContext
-						.create(o.getClass(), null, null)
-						.defaultClasses(BasicTestCallLogger.class)
-						.debugDefault(CONDITIONAL)
-						.init(()->o)
-						.build()
-						.postInit()
-						.postInitChildFirst();
-					// @formatter:on
+					RestContext rc = new RestContext(new RestContextInit(o.getClass(), () -> o, bs -> {
+						bs.addBean(Enablement.class, CONDITIONAL);
+						bs.addBeanType(CallLogger.class, BasicTestCallLogger.class);
+					})).postInit().postInitChildFirst();
 					restContextCache.put(c, rc);
 				}
 

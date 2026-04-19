@@ -16,7 +16,13 @@
  */
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.commons.utils.IoUtils.UTF8;
+import static org.apache.juneau.commons.utils.StringUtils.parseLongWithSuffix;
+import static org.apache.juneau.commons.utils.Utils.env;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.juneau.TestBase;
 import org.apache.juneau.rest.annotation.*;
@@ -37,7 +43,7 @@ class NoInherit_Test extends TestBase {
 			parentContext = restContext(parentClass);
 		}
 		
-		return RestContext.create(c, parentContext, null).init(() -> o).build().postInit().postInitChildFirst();
+		return new RestContext(new RestContextInit(c, parentContext, null, () -> o, "", java.util.List.of())).postInit().postInitChildFirst();
 	}
 
 	@Rest(allowedSerializerOptions = "parentSer")
@@ -164,5 +170,79 @@ class NoInherit_Test extends TestBase {
 		
 		// Should NOT include class-level key because of noInherit
 		assertFalse(keys.contains("classLevel"));
+	}
+
+	/**
+	 * Plain {@code @Rest} POJO (not {@link BasicRestObject}) so {@code BasicUniversalConfig} does not pre-populate
+	 * charset / maxInput on the op builder — needed to exercise {@code @Rest}-hierarchy fallbacks and {@code noInherit}.
+	 */
+	@Rest(defaultCharset = "ISO-8859-1")
+	public static class CharsetInheritPlain {
+		@RestGet
+		public void get() {
+			// Intentionally empty - method only used for annotation metadata testing
+		}
+	}
+
+	@Rest(defaultCharset = "ISO-8859-1")
+	public static class CharsetNoInheritPlain {
+		@RestGet(noInherit = "defaultCharset")
+		public void get() {
+			// Intentionally empty - method only used for annotation metadata testing
+		}
+	}
+
+	@Test
+	void a06_restOp_noInherit_defaultCharset_skipsContextCharset() throws Exception {
+		var o = new CharsetNoInheritPlain();
+		var ctx = new RestContext(new RestContextInit(CharsetNoInheritPlain.class, () -> o)).postInit().postInitChildFirst();
+		var op = ctx.getRestOperations().getOpContexts().get(0);
+		assertFalse(op.getRestOpAnnotations().isEmpty(), "Expected @RestGet on method for noInherit aggregation");
+		assertFalse(op.isInherited("defaultCharset"), "noInherit=defaultCharset should block @Rest charset fallback");
+		var expected = env("RestContext.defaultCharset").map(Charset::forName).orElse(UTF8);
+		assertEquals(expected, op.getDefaultCharset());
+		assertNotEquals(StandardCharsets.ISO_8859_1, op.getDefaultCharset());
+	}
+
+	@Test
+	void a07_restOp_withoutNoInherit_defaultCharset_inheritsContext() throws Exception {
+		var o = new CharsetInheritPlain();
+		var ctx = new RestContext(new RestContextInit(CharsetInheritPlain.class, () -> o)).postInit().postInitChildFirst();
+		var op = ctx.getRestOperations().getOpContexts().get(0);
+		assertEquals(StandardCharsets.ISO_8859_1, op.getDefaultCharset());
+	}
+
+	@Rest(maxInput = "7M")
+	public static class MaxNoInheritPlain {
+		@RestGet(noInherit = "maxInput")
+		public void get() {
+			// Intentionally empty - method only used for annotation metadata testing
+		}
+	}
+
+	@Rest(maxInput = "7M")
+	public static class MaxInheritPlain {
+		@RestGet
+		public void get() {
+			// Intentionally empty - method only used for annotation metadata testing
+		}
+	}
+
+	@Test
+	void a08_restOp_noInherit_maxInput_skipsContextMaxInput() throws Exception {
+		var o = new MaxNoInheritPlain();
+		var ctx = new RestContext(new RestContextInit(MaxNoInheritPlain.class, () -> o)).postInit().postInitChildFirst();
+		var op = ctx.getRestOperations().getOpContexts().get(0);
+		var expected = env("RestContext.maxInput").map(x -> parseLongWithSuffix(x)).orElse(100_000_000L);
+		assertEquals(expected, op.getMaxInput());
+		assertNotEquals(parseLongWithSuffix("7M"), op.getMaxInput());
+	}
+
+	@Test
+	void a09_restOp_withoutNoInherit_maxInput_inheritsContext() throws Exception {
+		var o = new MaxInheritPlain();
+		var ctx = new RestContext(new RestContextInit(MaxInheritPlain.class, () -> o)).postInit().postInitChildFirst();
+		var op = ctx.getRestOperations().getOpContexts().get(0);
+		assertEquals(parseLongWithSuffix("7M"), op.getMaxInput());
 	}
 }

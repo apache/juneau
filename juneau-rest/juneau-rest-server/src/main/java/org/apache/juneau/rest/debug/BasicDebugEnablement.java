@@ -28,7 +28,6 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -63,14 +62,16 @@ public class BasicDebugEnablement extends DebugEnablement {
 	protected Builder init(BasicBeanStore beanStore) {
 		var b = super.init(beanStore);
 
-		var defaultSettings = beanStore.getBean(DefaultSettingsMap.class).orElseThrow(() -> new IllegalStateException("DefaultSettingsMap not found"));
-		var builder = beanStore.getBean(RestContext.Builder.class).orElseThrow(() -> new IllegalStateException("RestContext.Builder not found"));
 		var resource = beanStore.getBean(ResourceSupplier.class).orElseThrow(() -> new IllegalStateException("ResourceSupplier not found"));
 		var varResolver = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalStateException("VarResolver not found"));
 		var ap = AP;
 
-		// Default debug enablement if not overridden at class/method level.
-		var debugDefault = defaultSettings.get(Enablement.class, "RestContext.debugDefault").orElse(builder.isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
+		// Default debug enablement when no resource-class or operation-method debug setting is in effect.
+		// RestContext.findDebugEnablement() unconditionally pre-publishes an Enablement bean derived from
+		// @Rest(debugDefault=...) → pre-registered Enablement bean → @Rest(debug) boolean flag. Subclasses
+		// only need to read it back here. (Pre-9.5 this method also resolved RestContext.Builder out of the
+		// bean store to read isDebug(); that protocol was deleted in TODO-16 Phase C-3.)
+		var debugDefault = beanStore.getBean(Enablement.class).orElse(Enablement.NEVER);
 		b.defaultEnable(debugDefault);
 
 		var ci = ClassInfo.ofProxy(resource.get());

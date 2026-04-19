@@ -330,8 +330,8 @@ public class TestUtils extends Utils {
 	public static Swagger getSwagger(Class<?> c) {
 		try {
 			var r = c.getDeclaredConstructor().newInstance();
-			var rc = RestContext.create(r.getClass(),null,null).init(()->r).build();
-			var ctx = RestOpContext.create(TestUtils.class.getMethod("getSwagger", Class.class), rc).build();
+			var rc = new RestContext(new RestContextInit(r.getClass(), () -> r));
+			var ctx = new RestOpContext(TestUtils.class.getMethod("getSwagger", Class.class), rc);
 			var session = RestSession.create(rc).resource(r).req(new MockServletRequest()).res(new MockServletResponse()).build();
 			var req = ctx.createRequest(session);
 			var ip = rc.getSwaggerProvider();

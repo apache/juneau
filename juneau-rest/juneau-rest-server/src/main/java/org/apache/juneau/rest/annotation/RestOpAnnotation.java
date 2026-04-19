@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -471,8 +470,6 @@ public class RestOpAnnotation {
 			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
 			classes(a.parsers()).ifPresent(x -> b.parsers().set(x));
 			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
-		stream(a.produces()).map(MediaType::of).forEach(b::produces);
-		stream(a.consumes()).map(MediaType::of).forEach(b::consumes);
 			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders().setDefault(x));
 			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders().setDefault(x));
 			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes().add(x));
@@ -484,24 +481,15 @@ public class RestOpAnnotation {
 			b.guards().append(a.guards());
 			b.matchers().append(a.matchers());
 			string(a.clientVersion()).ifPresent(b::clientVersion);
-			string(a.defaultCharset()).map(Charset::forName).ifPresent(b::defaultCharset);
-			string(a.maxInput()).ifPresent(b::maxInput);
 			stream(a.path()).forEach(b::path);
 			cdl(a.rolesDeclared()).forEach(b::rolesDeclared);
 			string(a.roleGuard()).ifPresent(b::roleGuard);
 
-			string(a.method()).ifPresent(b::httpMethod);
-			string(a.debug()).map(Enablement::fromString).ifPresent(b::debug);
-
 			var v = trim(string(a.value()).orElse(null));
 			if (nn(v)) {
 				var i = v.indexOf(' ');
-				if (i == -1) {
-					b.httpMethod(v);
-				} else {
-					b.httpMethod(v.substring(0, i).trim());
+				if (i != -1)
 					b.path(v.substring(i).trim());
-				}
 			}
 		}
 

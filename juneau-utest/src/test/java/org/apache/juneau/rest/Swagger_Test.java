@@ -52,8 +52,9 @@ class Swagger_Test extends TestBase {
 	public void testMethod() { /* no-op */ }
 
 	private static org.apache.juneau.bean.swagger.Swagger getSwaggerWithFile(Object resource) throws Exception {
-		var rc = RestContext.create(resource.getClass(),null,null).init(()->resource).defaultClasses(TestClasspathFileFinder.class).build();
-		var roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
+		var rc = new RestContext(new RestContextInit(resource.getClass(), () -> resource,
+			bs -> bs.addBeanType(StaticFiles.class, TestClasspathFileFinder.class)));
+		var roc = new RestOpContext(Swagger_Test.class.getMethod("testMethod"), rc);
 		var call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
 		var req = roc.createRequest(call);
 		var ip = rc.getSwaggerProvider();
@@ -61,8 +62,8 @@ class Swagger_Test extends TestBase {
 	}
 
 	private static org.apache.juneau.bean.swagger.Swagger getSwagger(Object resource) throws Exception {
-		var rc = RestContext.create(resource.getClass(),null,null).init(()->resource).build();
-		var roc = RestOpContext.create(Swagger_Test.class.getMethod("testMethod"), rc).build();
+		var rc = new RestContext(new RestContextInit(resource.getClass(), () -> resource));
+		var roc = new RestOpContext(Swagger_Test.class.getMethod("testMethod"), rc);
 		var call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
 		var req = roc.createRequest(call);
 		var ip = rc.getSwaggerProvider();

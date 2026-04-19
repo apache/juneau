@@ -143,9 +143,9 @@ import org.apache.juneau.svl.*;
  * 	<tr><th>Bean class</td><th>Bean qualifying names</th><th>Scope</th></tr>
  * 	<tr><td>{@link BeanContext}<br>{@link org.apache.juneau.BeanContext.Builder}</td><td></td><td>class<br>method</td></tr>
  * 	<tr><td>{@link BasicBeanStore}<br>{@link org.apache.juneau.cp.BasicBeanStore.Builder}</td><td></td><td>class</td></tr>
- * 	<tr><td>{@link CallLogger}<br>{@link org.apache.juneau.rest.logger.CallLogger.Builder}</td><td></td><td>class</td></tr>
+ * 	<tr><td>{@link CallLogger}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link Config}</td><td></td><td>class</td></tr>
- * 	<tr><td>{@link DebugEnablement}<br>{@link org.apache.juneau.rest.debug.DebugEnablement.Builder}</td><td></td><td>class</td></tr>
+ * 	<tr><td>{@link DebugEnablement}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link EncoderSet}<br>{@link org.apache.juneau.encoders.EncoderSet.Builder}</td><td></td><td>class<br>method</td></tr>
  * 	<tr><td>{@link FileFinder}<br>{@link org.apache.juneau.cp.FileFinder.Builder}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link HeaderList}<br>{@link org.apache.juneau.http.header.HeaderList}</td><td><js>"defaultRequestHeaders"</js><br><js>"defaultResponseHeaders"</js></td><td>class<br>method</td></tr>
@@ -167,8 +167,8 @@ import org.apache.juneau.svl.*;
  * 	<tr><td>{@link RestOpArgList}<br>{@link org.apache.juneau.rest.arg.RestOpArgList.Builder}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link RestOperations}<br>{@link org.apache.juneau.rest.RestOperations.Builder}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link SerializerSet}<br>{@link org.apache.juneau.serializer.SerializerSet.Builder}</td><td></td><td>class<br>method</td></tr>
- * 	<tr><td>{@link StaticFiles}<br>{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder}</td><td></td><td>class</td></tr>
- * 	<tr><td>{@link SwaggerProvider}<br>{@link org.apache.juneau.rest.swagger.SwaggerProvider.Builder}</td><td></td><td>class</td></tr>
+ * 	<tr><td>{@link StaticFiles}</td><td></td><td>class</td></tr>
+ * 	<tr><td>{@link SwaggerProvider}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link ThrownStore}<br>{@link org.apache.juneau.rest.stats.ThrownStore.Builder}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link UrlPathMatcherList}</td><td></td><td>method</td></tr>
  * 	<tr><td>{@link VarList}</td><td></td><td>class</td></tr>

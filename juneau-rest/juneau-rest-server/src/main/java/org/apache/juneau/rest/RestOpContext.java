@@ -20,6 +20,7 @@ import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.UTF8;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -70,6 +71,7 @@ import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
@@ -102,6 +104,18 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
+	private static Charset envDefaultRestCharset() {
+		return env("RestContext.defaultCharset").map(Charset::forName).orElse(UTF8);
+	}
+
+	private static long envDefaultRestMaxInput() {
+		return env("RestContext.maxInput").map(RestOpContext::parseMaxInputEnv).orElse(100_000_000L);
+	}
+
+	private static long parseMaxInputEnv(String value) {
+		return parseLongWithSuffix(value);
+	}
+
 	/**
 	 * Builder class.
 	 */
@@ -109,19 +123,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		private BeanContext.Builder beanContext;
 		private BasicBeanStore beanStore;
-		private boolean dotAll;
-		private Charset defaultCharset;
 		private EncoderSet.Builder encoders;
-		private Enablement debug;
 		private HeaderList defaultRequestHeaders;
 		private HeaderList defaultResponseHeaders;
 		private HttpPartParser.Creator partParser;
 		private HttpPartSerializer.Creator partSerializer;
 		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
-		private List<MediaType> consumes;
-		private List<MediaType> produces;
 		private List<String> path;
-		private Long maxInput;
 		private Method restMethod;
 		private NamedAttributeMap defaultRequestAttributes;
 		private ParserSet.Builder parsers;
@@ -136,9 +144,20 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		private Set<String> roleGuard;
 		private Set<String> rolesDeclared;
 		private String clientVersion;
-		private String httpMethod;
 
-		Builder(java.lang.reflect.Method method, RestContext context) {
+		/**
+		 * Constructor.
+		 *
+		 * <p>
+		 * Was previously package-private and reached via the static {@code RestOpContext.create(method, context)} factory.
+		 * Promoted to <jk>public</jk> in 9.5 (TODO-16 Phase C-3 Route B) so that internal subclasses living outside this
+		 * package (e.g. {@link org.apache.juneau.rest.rrpc.RrpcRestOpContext}) can construct a builder directly without
+		 * the now-deleted factory method.
+		 *
+		 * @param method The Java method this builder is being created for.
+		 * @param context The owning REST context.
+		 */
+		public Builder(java.lang.reflect.Method method, RestContext context) {
 
 			this.restContext = context;
 			this.parent = context.builder;
@@ -376,37 +395,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		/**
-		 * Supported content media types.
-		 *
-		 * <p>
-		 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
-		 * <br>An example where this might be useful if you have parsers registered that handle media types that you
-		 * don't want exposed in the Swagger documentation.
-		 *
-		 * <p>
-		 * This affects the returned values from the following:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestContext#getConsumes() RestContext.getConsumes()}
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#consumes}
-		 * 	<li class='ja'>{@link RestOp#consumes}
-		 * 	<li class='ja'>{@link RestPut#consumes}
-		 * 	<li class='ja'>{@link RestPost#consumes}
-		 * </ul>
-		 *
-		 * @param values The values to add to this setting.
-		 * 	<br>Cannot contain <jk>null</jk> values.
-		 * @return This object.
-		 */
-		public Builder consumes(MediaType...values) {
-			assertArgNoNulls(ARG_values, values);
-			consumes = addAll(consumes, values);
-			return this;
-		}
-
-		/**
 		 * Returns the response converter list sub-builder.
 		 *
 		 * @return The response converter list sub-builder.
@@ -471,79 +459,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		public Builder debug(boolean value) {
 			super.debug(value);
 			return this;
-		}
-
-		/**
-		 * Debug mode.
-		 *
-		 * <p>
-		 * Enables the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>
-		 * 		HTTP request/response bodies are cached in memory for logging purposes.
-		 * </ul>
-		 *
-		 * <p>
-		 * If not sppecified, the debug enablement is inherited from the class context.
-		 *
-		 * @param value The new value for this setting.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder debug(Enablement value) {
-			debug = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
-		/**
-		 * Default character encoding.
-		 *
-		 * <p>
-		 * The default character encoding for the request and response if not specified on the request.
-		 *
-		 * <p>
-		 * This overrides the value defined on the {@link RestContext}.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link RestContext.Builder#defaultCharset(Charset)}
-		 * 	<li class='ja'>{@link Rest#defaultCharset}
-		 * 	<li class='ja'>{@link RestOp#defaultCharset}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.defaultCharset"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_defaultCharset"
-		 * 		<li><js>"utf-8"</js>
-		 * 	</ul>
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder defaultCharset(Charset value) {
-			defaultCharset = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
-		/**
-		 * Returns the default classes list.
-		 *
-		 * <p>
-		 * This defines the implementation classes for a variety of bean types.
-		 *
-		 * <p>
-		 * Default classes are inherited from the parent REST object.
-		 * Typically used on the top-level {@link RestContext.Builder} to affect class types for that REST object and all children.
-		 *
-		 * <p>
-		 * Modifying the default class list on this builder does not affect the default class list on the parent builder, but changes made
-		 * here are inherited by child builders.
-		 *
-		 * @return The default classes list for this builder.
-		 */
-		public DefaultClassList defaultClasses() {
-			return restContext.builder.defaultClasses();
 		}
 
 		/**
@@ -697,16 +612,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		/**
-		 * When enabled, append <js>"/*"</js> to path patterns if not already present.
-		 *
-		 * @return This object.
-		 */
-		public Builder dotAll() {
-			dotAll = true;
-			return this;
-		}
-
-		/**
 		 * Returns the encoder group sub-builder.
 		 *
 		 * @return The encoder group sub-builder.
@@ -803,67 +708,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		public Builder guards(RestGuard...value) {
 			assertArgNoNulls(ARG_value, value);
 			guards().append(value);
-			return this;
-		}
-
-		/**
-		 * HTTP method name.
-		 *
-		 * <p>
-		 * Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
-		 *
-		 * <p>
-		 * Method names are case-insensitive (always folded to upper-case).
-		 *
-		 * <p>
-		 * Note that you can use {@link org.apache.juneau.http.HttpMethod} for constant values.
-		 *
-		 * <p>
-		 * Besides the standard HTTP method names, the following can also be specified:
-		 * <ul class='spaced-list'>
-		 * 	<li>
-		 * 		<js>"*"</js>
-		 * 		- Denotes any method.
-		 * 		<br>Use this if you want to capture any HTTP methods in a single Java method.
-		 * 		<br>The {@link org.apache.juneau.rest.annotation.Method @Method} annotation and/or {@link RestRequest#getMethod()} method can be used to
-		 * 		distinguish the actual HTTP method name.
-		 * 	<li>
-		 * 		<js>""</js>
-		 * 		- Auto-detect.
-		 * 		<br>The method name is determined based on the Java method name.
-		 * 		<br>For example, if the method is <c>doPost(...)</c>, then the method name is automatically detected
-		 * 		as <js>"POST"</js>.
-		 * 		<br>Otherwise, defaults to <js>"GET"</js>.
-		 * 	<li>
-		 * 		<js>"RRPC"</js>
-		 * 		- Remote-proxy interface.
-		 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the
-		 * 		{@link Remote @Remote} annotation) to be used as a remote proxy using
-		 * 		<c>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</c>.
-		 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
-		 * 		<br>Conceptually, this is simply a fancy <c>POST</c> against the url <js>"/{path}/{javaMethodName}"</js>
-		 * 		where the arguments are marshalled from the client to the server as an HTTP content containing an array of
-		 * 		objects, passed to the method as arguments, and then the resulting object is marshalled back to the client.
-		 * 	<li>
-		 * 		Anything else
-		 * 		- Overloaded non-HTTP-standard names that are passed in through a <c>&amp;method=methodName</c> URL
-		 * 		parameter.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link RestOp#method()}
-		 * 	<li class='ja'>{@link RestGet}
-		 * 	<li class='ja'>{@link RestPut}
-		 * 	<li class='ja'>{@link RestPost}
-		 * 	<li class='ja'>{@link RestDelete}
-		 * </ul>
-		 *
-		 * @param value The new value for this setting.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder httpMethod(String value) {
-			httpMethod = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -967,71 +811,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		public Builder matchers(RestMatcher...value) {
 			assertArgNoNulls(ARG_value, value);
 			matchers().append(value);
-			return this;
-		}
-
-		/**
-		 * The maximum allowed input size (in bytes) on HTTP requests.
-		 *
-		 * <p>
-		 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
-		 * in out-of-memory errors which could affect system stability.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Override at the method level.</jc>
-		 * 		<ja>@RestPost</ja>(maxInput=<js>"10M"</js>)
-		 * 		<jk>public</jk> Object myMethod() {...}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		String value that gets resolved to a <jk>long</jk>.
-		 * 	<li class='note'>
-		 * 		Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:
-		 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-		 * 	<li class='note'>
-		 * 		A value of <js>"-1"</js> can be used to represent no limit.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#maxInput}
-		 * 	<li class='ja'>{@link RestOp#maxInput}
-		 * 	<li class='jm'>{@link RestOpContext.Builder#maxInput(String)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.maxInput"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_MAXINPUT"
-		 * 		<li><js>"100M"</js>
-		 * 	</ul>
-		 * 	<br>The default is <js>"100M"</js>.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder maxInput(String value) {
-			maxInput = parseLongWithSuffix(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -1201,39 +980,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		public Builder path(String...values) {
 			assertArgNoNulls(ARG_values, values);
 			path = prependAll(path, values);
-			return this;
-		}
-
-		/**
-		 * Supported accept media types.
-		 *
-		 * <p>
-		 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
-		 * <br>An example where this might be useful if you have serializers registered that handle media types that you
-		 * don't want exposed in the Swagger documentation.
-		 *
-		 * <p>
-		 * This affects the returned values from the following:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestContext#getProduces() RestContext.getProduces()}
-		 * 	<li class='jm'>{@link SwaggerProvider#getSwagger(RestContext,Locale)} - Affects produces field.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#produces}
-		 * 	<li class='ja'>{@link RestOp#produces}
-		 * 	<li class='ja'>{@link RestGet#produces}
-		 * 	<li class='ja'>{@link RestPut#produces}
-		 * 	<li class='ja'>{@link RestPost#produces}
-		 * </ul>
-		 *
-		 * @param values The values to add to this setting.
-		 * 	<br>Cannot contain <jk>null</jk> values.
-		 * @return This object.
-		 */
-		public Builder produces(MediaType...values) {
-			assertArgNoNulls(ARG_values, values);
-			produces = addAll(produces, values);
 			return this;
 		}
 
@@ -1428,10 +1174,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		/**
 		 * Specifies a {@link BasicBeanStore} to use when resolving constructor arguments.
 		 *
+		 * <p>
+		 * Promoted from {@code protected} to <jk>public</jk> in 9.5 (TODO-16 Phase C-3 Route B) so that subclasses
+		 * living outside this package (e.g. {@link org.apache.juneau.rest.rrpc.RrpcRestOpContext}) can override the
+		 * builder-time bean store without going through the now-deleted {@code RestOpContext.create(...)} factory.
+		 *
 		 * @param beanStore The bean store to use for resolving constructor arguments.
 		 * @return This object.
 		 */
-		protected Builder beanStore(BasicBeanStore beanStore) {
+		public Builder beanStore(BasicBeanStore beanStore) {
 			this.beanStore = beanStore;
 			return this;
 		}
@@ -1491,26 +1242,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		}
 		 * 	}
 		 *
-		 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
+		 * 	<jc>// Registered via annotation.</jc>
 		 * 	<ja>@Rest</ja>(converters={MyConverter.<jk>class</jk>})
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.converters(MyConverter.<jk>class</jk>);
-		 *
-		 * 			<jc>// Pass in an instance instead.</jc>
-		 * 			<jv>builder</jv>.converters(<jk>new</jk> MyConverter());
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.converters(MyConverter.<jk>class</jk>);
-		 * 		}
-		 * 	}
+		 * 	<jk>public class</jk> MyResource { ... }
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -1546,7 +1280,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			Value<RestConverterList.Builder> v = Value.of(RestConverterList.create(beanStore));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses().get(RestConverterList.class).ifPresent(x -> v.get().type(x));
+			beanStore.getBeanType(RestConverterList.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
 			beanStore.getBean(RestConverterList.class).ifPresent(x -> v.get().impl(x));
@@ -1750,7 +1484,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			Value<RestGuardList.Builder> v = Value.of(RestGuardList.create(beanStore));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses().get(RestGuardList.class).ifPresent(x -> v.get().type(x));
+			beanStore.getBeanType(RestGuardList.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
 			beanStore.getBean(RestGuardList.class).ifPresent(x -> v.get().impl(x));
@@ -1855,7 +1589,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			Value<RestMatcherList.Builder> v = Value.of(RestMatcherList.create(beanStore));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses().get(RestMatcherList.class).ifPresent(x -> v.get().type(x));
+			beanStore.getBeanType(RestMatcherList.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
 			beanStore.getBean(RestMatcherList.class).ifPresent(x -> v.get().impl(x));
@@ -1999,11 +1733,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var v = Value.of(UrlPathMatcherList.create());
 
 			if (nn(path)) {
-				for (var p : path) {
-					if (dotAll && ! p.endsWith("/*"))
-						p += "/*";
+				for (var p : path)
 					v.get().add(UrlPathMatcher.of(p));
-				}
 			}
 
 			if (v.get().isEmpty()) {
@@ -2031,7 +1762,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 				p = HttpUtils.detectHttpPath(restMethod, httpMethod2);
 
-				if (dotAll && ! p.endsWith("/*"))
+				// RRPC operations match anything below the method's URL when no explicit
+				// path is supplied. The legacy `Builder.dotAll()` flag was removed per
+				// TODO-16 Decision #17 — RRPC's "match anything below" convention is
+				// now baked into auto-detection.
+				if ("RRPC".equalsIgnoreCase(httpMethod2) && ! p.endsWith("/*"))
 					p += "/*";
 
 				v.get().add(UrlPathMatcher.of(p));
@@ -2132,56 +1867,36 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	}
 
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param method The Java method this context belongs to.
-	 * @param context The Java class context.
-	 * @return A new builder.
-	 */
-	public static Builder create(java.lang.reflect.Method method, RestContext context) {
-		return new Builder(method, context);
-	}
+	// `public static Builder create(Method, RestContext)` removed in 9.5 (TODO-16 Phase C-3 Route B).
+	// Direct callers were Site 1 / Site 2 in `RestContext.Builder.createRestOperations`, both migrated to the
+	// new 2-arg ctors `new RestOpContext(method, context)` / `new RrpcRestOpContext(method, context)`. Internal
+	// subclasses still needing builder-shaped construction (e.g. `RrpcRestOpContext`'s 2-arg ctor delegating to
+	// the protected `RestOpContext(Builder)` ctor) instantiate the now-public `Builder(Method, RestContext)`
+	// directly.
 
 	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, HttpPartSerializer defaultSerializer) {
 		return BeanCreator.of(HttpPartSerializer.class).type(c).orElse(defaultSerializer);
 	}
 
-	protected final boolean dotAll;
+	protected final Builder builder;
 	protected final int hierarchyDepth;
-	protected final long maxInput;
-	protected final BeanContext beanContext;
-	protected final CallLogger callLogger;
-	protected final Charset defaultCharset;
-	protected final DebugEnablement debug;
-	protected final EncoderSet encoders;
-	protected final HeaderList defaultRequestHeaders;
-	protected final HeaderList defaultResponseHeaders;
-	protected final HttpPartParser partParser;
-	protected final HttpPartSerializer partSerializer;
-	protected final JsonSchemaGenerator jsonSchemaGenerator;
-	protected final List<MediaType> supportedAcceptTypes;
-	protected final List<MediaType> supportedContentTypes;
 	protected final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 	protected final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
 	protected final Method method;
 	protected final MethodInfo mi;
-	protected final NamedAttributeMap defaultRequestAttributes;
-	protected final PartList defaultRequestFormData;
-	protected final PartList defaultRequestQueryData;
-	protected final ParserSet parsers;
 	protected final RestContext context;
-	protected final RestConverter[] converters;
-	protected final RestGuard[] guards;
-	protected final RestMatcher[] optionalMatchers;
-	protected final RestMatcher[] requiredMatchers;
 	protected final RestOpInvoker methodInvoker;
 	protected final RestOpInvoker[] postCallMethods;
 	protected final RestOpInvoker[] preCallMethods;
 	protected final ResponseBeanMeta responseMeta;
-	protected final SerializerSet serializers;
-	protected final String httpMethod;
-	protected final UrlPathMatcher[] pathMatchers;
+
+	/** Resolved once at construction from {@link Builder} annotation apply and context fallbacks (TODO-16). */
+	private final Charset resolvedDefaultCharset;
+	private final long resolvedMaxInput;
+	private final DebugEnablement resolvedDebugEnablement;
+	private final List<MediaType> resolvedSupportedAcceptTypes;
+	private final List<MediaType> resolvedSupportedContentTypes;
+	private final String resolvedHttpMethod;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Memoized allowlist fields
@@ -2191,7 +1906,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final Memoizer<List<AnnotationInfo<?>>> restOpAnnotations = memoizer(this::findRestOpAnnotations);
 
 	private List<AnnotationInfo<?>> findRestOpAnnotations() {
-		return context.getAnnotationProvider().find(mi, SELF, MATCHING_METHODS).stream()
+		// Use the same MethodInfo as {@link Builder}'s annotation traversal (resource class + method), not
+		// {@link MethodInfo#of(Method)} alone, so method-level {@code @RestGet}/@RestOp metadata (e.g. noInherit)
+		// resolves consistently when the implementation class differs from the method's declaring class.
+		var methodInfo = MethodInfo.of(context.getResourceClass(), method).accessible();
+		return context.getAnnotationProvider().find(methodInfo, SELF, MATCHING_METHODS).stream()
 			.filter(ai -> ai.isInGroup(RestOp.class))
 			.toList();
 	}
@@ -2235,6 +1954,120 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
 	}
 
+	private final Memoizer<BeanContext> beanContextMemo = memoizer(this::findBeanContext);
+
+	private BeanContext findBeanContext() {
+		return builder.getBeanContext().orElse(context.getBeanContext());
+	}
+
+	private final Memoizer<CallLogger> callLoggerMemo = memoizer(this::findCallLogger);
+
+	private CallLogger findCallLogger() {
+		return context.getCallLogger();
+	}
+
+	private final Memoizer<EncoderSet> encodersMemo = memoizer(this::findEncoders);
+
+	private EncoderSet findEncoders() {
+		return builder.getEncoders().orElse(context.getEncoders());
+	}
+
+	private final Memoizer<JsonSchemaGenerator> jsonSchemaGeneratorMemo = memoizer(this::findJsonSchemaGenerator);
+
+	private JsonSchemaGenerator findJsonSchemaGenerator() {
+		return builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator());
+	}
+
+	private final Memoizer<ParserSet> parsersMemo = memoizer(this::findParsers);
+
+	private ParserSet findParsers() {
+		return builder.getParsers().orElse(context.getParsers());
+	}
+
+	private final Memoizer<HttpPartParser> partParserMemo = memoizer(this::findPartParser);
+
+	private HttpPartParser findPartParser() {
+		return builder.getPartParser().orElse(context.getPartParser());
+	}
+
+	private final Memoizer<HttpPartSerializer> partSerializerMemo = memoizer(this::findPartSerializer);
+
+	private HttpPartSerializer findPartSerializer() {
+		return builder.getPartSerializer().orElse(context.getPartSerializer());
+	}
+
+	private final Memoizer<SerializerSet> serializersMemo = memoizer(this::findSerializers);
+
+	private SerializerSet findSerializers() {
+		return builder.getSerializers().orElse(context.getSerializers());
+	}
+
+	private final Memoizer<NamedAttributeMap> defaultRequestAttributesMemo = memoizer(this::findDefaultRequestAttributes);
+
+	private NamedAttributeMap findDefaultRequestAttributes() {
+		return builder.defaultRequestAttributes();
+	}
+
+	private final Memoizer<PartList> defaultRequestFormDataMemo = memoizer(this::findDefaultRequestFormData);
+
+	private PartList findDefaultRequestFormData() {
+		return builder.defaultRequestFormData();
+	}
+
+	private final Memoizer<HeaderList> defaultRequestHeadersMemo = memoizer(this::findDefaultRequestHeaders);
+
+	private HeaderList findDefaultRequestHeaders() {
+		return builder.defaultRequestHeaders();
+	}
+
+	private final Memoizer<PartList> defaultRequestQueryDataMemo = memoizer(this::findDefaultRequestQueryData);
+
+	private PartList findDefaultRequestQueryData() {
+		return builder.defaultRequestQueryData();
+	}
+
+	private final Memoizer<HeaderList> defaultResponseHeadersMemo = memoizer(this::findDefaultResponseHeaders);
+
+	private HeaderList findDefaultResponseHeaders() {
+		return builder.defaultResponseHeaders();
+	}
+
+	private final Memoizer<RestConverter[]> convertersMemo = memoizer(this::findConverters);
+
+	private RestConverter[] findConverters() {
+		return builder.converters().build().asArray();
+	}
+
+	private final Memoizer<RestGuard[]> guardsMemo = memoizer(this::findGuards);
+
+	private RestGuard[] findGuards() {
+		return builder.getGuards().asArray();
+	}
+
+	private final Memoizer<RestMatcherList> matchersListMemo = memoizer(this::findMatchersList);
+
+	private RestMatcherList findMatchersList() {
+		return builder.getMatchers(context);
+	}
+
+	private final Memoizer<RestMatcher[]> optionalMatchersMemo = memoizer(this::findOptionalMatchers);
+
+	private RestMatcher[] findOptionalMatchers() {
+		return matchersListMemo.get().getOptionalEntries();
+	}
+
+	private final Memoizer<RestMatcher[]> requiredMatchersMemo = memoizer(this::findRequiredMatchers);
+
+	private RestMatcher[] findRequiredMatchers() {
+		return matchersListMemo.get().getRequiredEntries();
+	}
+
+	private final Memoizer<UrlPathMatcher[]> pathMatchersMemo = memoizer(this::findPathMatchers);
+
+	private UrlPathMatcher[] findPathMatchers() {
+		return builder.getPathMatchers().asArray();
+	}
+
 	private Stream<String> resolveCdl(String...values) {
 		if (values == null || values.length == 0)
 			return Stream.empty();
@@ -2259,7 +2092,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/**
 	 * Returns {@code true} if context-level values for the given property should be merged.
 	 *
-	 * @param property The annotation attribute name.
+	 * @param property The annotation attribute name (e.g. {@link RestServerConstants#PROPERTY_allowedParserOptions},
+	 * 	{@link RestServerConstants#PROPERTY_defaultCharset}, {@link RestServerConstants#PROPERTY_maxInput},
+	 * 	{@link RestServerConstants#PROPERTY_debug}).
 	 * @return {@code true} if {@code noInherit} does not contain this property.
 	 */
 	protected boolean isInherited(String property) {
@@ -2285,6 +2120,201 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
+	 * Returns the first non-blank, SVL-resolved value of the given attribute across all
+	 * {@code @RestOp}-group annotations on this method (child-to-parent order).
+	 *
+	 * @param attr The annotation attribute name (e.g. {@code "defaultCharset"}).
+	 * @return The resolved string, or empty if no annotation defines it.
+	 */
+	private Optional<String> findOpString(String attr) {
+		var vr = context.getVarResolver();
+		for (var ai : getRestOpAnnotations()) {
+			var s = ai.getString(attr).orElse("");
+			if (!s.isEmpty()) {
+				var resolved = vr.resolve(s);
+				if (!resolved.isEmpty())
+					return Optional.of(resolved);
+			}
+		}
+		return Optional.empty();
+	}
+
+	private Charset findDefaultCharset() {
+		var v = findOpString(PROPERTY_defaultCharset);
+		if (v.isPresent())
+			return Charset.forName(v.get());
+		if (isInherited(PROPERTY_defaultCharset)) {
+			var rv = context.mergeReplacedStringAttribute(PROPERTY_defaultCharset, null);
+			if (rv != null && !rv.isEmpty())
+				return Charset.forName(rv);
+		}
+		return envDefaultRestCharset();
+	}
+
+	private long findMaxInput() {
+		var v = findOpString(PROPERTY_maxInput);
+		if (v.isPresent())
+			return parseLongWithSuffix(v.get());
+		if (isInherited(PROPERTY_maxInput)) {
+			var rv = context.mergeReplacedStringAttribute(PROPERTY_maxInput, null);
+			if (rv != null && !rv.isEmpty())
+				return parseLongWithSuffix(rv);
+		}
+		return envDefaultRestMaxInput();
+	}
+
+	private DebugEnablement findDebugEnablement() {
+		var v = findOpString(PROPERTY_debug);
+		if (v.isPresent())
+			return DebugEnablement.create(context.getBeanStore()).enable(Enablement.fromString(v.get()), "*").build();
+		if (isInherited(PROPERTY_debug))
+			return context.getDebugEnablement();
+		return DebugEnablement.create(context.getBeanStore()).build();
+	}
+
+	/**
+	 * Resolves the supported request content types for this operation.
+	 *
+	 * <p>
+	 * Walks the op-level {@code @RestOp}-group annotations for {@code consumes} attributes and (when
+	 * {@code noInherit} does not block it) the class-level {@code @Rest(consumes)} hierarchy. Each
+	 * value is SVL-resolved. If no explicit values are declared, falls back to the supported content
+	 * types of the operation's {@link ParserSet}.
+	 *
+	 * @return An unmodifiable list of media types, never {@code null}.
+	 */
+	private List<MediaType> findSupportedContentTypes() {
+		var result = collectAnnotationMediaTypes(PROPERTY_consumes);
+		if (result.isEmpty())
+			return u(getParsers().getSupportedMediaTypes());
+		return u(result);
+	}
+
+	/**
+	 * Resolves the supported response accept types for this operation.
+	 *
+	 * <p>
+	 * Walks the op-level {@code @RestOp}-group annotations for {@code produces} attributes and (when
+	 * {@code noInherit} does not block it) the class-level {@code @Rest(produces)} hierarchy. Each
+	 * value is SVL-resolved. If no explicit values are declared, falls back to the supported media
+	 * types of the operation's {@link SerializerSet}.
+	 *
+	 * @return An unmodifiable list of media types, never {@code null}.
+	 */
+	private List<MediaType> findSupportedAcceptTypes() {
+		var result = collectAnnotationMediaTypes(PROPERTY_produces);
+		if (result.isEmpty())
+			return u(getSerializers().getSupportedMediaTypes());
+		return u(result);
+	}
+
+	private List<MediaType> collectAnnotationMediaTypes(String attr) {
+		var result = new ArrayList<MediaType>();
+		var vr = context.getVarResolver();
+		// Class-level @Rest(consumes|produces) first (when inheritance is allowed), then op-level overrides append.
+		if (isInherited(attr)) {
+			for (var ai : context.getRestAnnotations())
+				appendResolvedMediaTypes(ai, attr, vr, result);
+		}
+		for (var ai : getRestOpAnnotations())
+			appendResolvedMediaTypes(ai, attr, vr, result);
+		return result;
+	}
+
+	private static void appendResolvedMediaTypes(AnnotationInfo<?> ai, String attr, VarResolver vr, List<MediaType> result) {
+		var arr = ai.getStringArray(attr).orElse(null);
+		if (arr == null)
+			return;
+		for (var s : arr) {
+			if (s == null || s.isEmpty())
+				continue;
+			var resolved = vr.resolve(s);
+			if (resolved.isEmpty())
+				continue;
+			result.add(MediaType.of(resolved));
+		}
+	}
+
+	/**
+	 * Resolves the HTTP method for this operation from {@code @RestOp}-group annotations.
+	 *
+	 * <p>
+	 * Walks the op-level annotations in child-to-parent order:
+	 * <ul>
+	 *   <li>{@code @RestGet}/{@code @RestPut}/{@code @RestPost}/{@code @RestDelete}/{@code @RestPatch}/{@code @RestOptions}
+	 *       imply their fixed verb.
+	 *   <li>{@code @RestOp(method)} is SVL-resolved; if blank, {@code @RestOp(value)} is parsed for a leading verb token.
+	 * </ul>
+	 * <p>
+	 * If no annotation supplies a value, the verb is inferred from the Java method name via
+	 * {@link HttpUtils#detectHttpMethod(Method, boolean, String)}. The literal {@code "METHOD"} is
+	 * normalized to the wildcard {@code "*"}, and the result is upper-cased.
+	 *
+	 * @return The resolved HTTP method, never {@code null}.
+	 */
+	private String findHttpMethod() {
+		var vr = context.getVarResolver();
+		for (var ai : getRestOpAnnotations()) {
+			var v = httpMethodFromAnnotation(ai.inner(), vr);
+			if (v != null && !v.isEmpty())
+				return normalizeHttpMethod(v);
+		}
+		return normalizeHttpMethod(HttpUtils.detectHttpMethod(method, true, "GET"));
+	}
+
+	private static String httpMethodFromAnnotation(Annotation a, VarResolver vr) {
+		if (a instanceof RestGet)
+			return "get";
+		if (a instanceof RestPut)
+			return "put";
+		if (a instanceof RestPost)
+			return "post";
+		if (a instanceof RestDelete)
+			return "delete";
+		if (a instanceof RestPatch)
+			return "patch";
+		if (a instanceof RestOptions)
+			return "options";
+		if (a instanceof RestOp r) {
+			var m = vr.resolve(r.method());
+			if (m != null && !m.isEmpty())
+				return m;
+			var s = vr.resolve(r.value());
+			if (s != null) {
+				s = s.trim();
+				if (!s.isEmpty()) {
+					var i = s.indexOf(' ');
+					return i == -1 ? s : s.substring(0, i).trim();
+				}
+			}
+		}
+		return null;
+	}
+
+	private static String normalizeHttpMethod(String v) {
+		if ("METHOD".equalsIgnoreCase(v))
+			return "*";
+		return v.toUpperCase(Locale.ENGLISH);
+	}
+
+	/**
+	 * 2-arg positional context constructor.
+	 *
+	 * <p>
+	 * Equivalent to the legacy {@code RestOpContext.create(method, context).build()} entry point but without exposing
+	 * the {@link Builder} to the caller. All operation-level configuration is resolved from {@link RestOp}-group
+	 * annotations on the method and inherited from the parent {@link RestContext}.
+	 *
+	 * @param method The Java method this context represents. Must not be <jk>null</jk>.
+	 * @param context The owning {@link RestContext}. Must not be <jk>null</jk>.
+	 * @throws ServletException If context could not be created.
+	 * @since 9.2.1
+	 */
+	public RestOpContext(java.lang.reflect.Method method, RestContext context) throws ServletException {
+		this(new Builder(method, context));
+	}
+
+	/**
 	 * Context constructor.
 	 *
 	 * @param builder The builder for this object.
@@ -2294,13 +2324,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		super(builder);
 
 		try {
+			this.builder = builder;
 			context = builder.restContext;
 			method = builder.restMethod;
-
-			if (builder.debug == null)
-				debug = context.getDebugEnablement();
-			else
-				debug = DebugEnablement.create(context.getBeanStore()).enable(builder.debug, "*").build();
 
 			mi = MethodInfo.of(method).accessible();
 
@@ -2312,31 +2338,26 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// @formatter:on
 			bs.addBean(BasicBeanStore.class, bs);
 
-			beanContext = bs.add(BeanContext.class, builder.getBeanContext().orElse(context.getBeanContext()));
-			converters = bs.add(RestConverter[].class, builder.converters().build().asArray());
-			encoders = bs.add(EncoderSet.class, builder.getEncoders().orElse(context.getEncoders()));
-			guards = bs.add(RestGuard[].class, builder.getGuards().asArray());
-			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator()));
-			parsers = bs.add(ParserSet.class, builder.getParsers().orElse(context.getParsers()));
-			partParser = bs.add(HttpPartParser.class, builder.getPartParser().orElse(context.getPartParser()));
-			partSerializer = bs.add(HttpPartSerializer.class, builder.getPartSerializer().orElse(context.getPartSerializer()));
-			serializers = bs.add(SerializerSet.class, builder.getSerializers().orElse(context.getSerializers()));
+			bs.add(BeanContext.class, getBeanContext());
+			bs.add(RestConverter[].class, getConverters());
+			bs.add(EncoderSet.class, getEncoders());
+			bs.add(RestGuard[].class, getGuards());
+			bs.add(JsonSchemaGenerator.class, getJsonSchemaGenerator());
+			bs.add(ParserSet.class, getParsers());
+			bs.add(HttpPartParser.class, getPartParser());
+			bs.add(HttpPartSerializer.class, getPartSerializer());
+			bs.add(SerializerSet.class, getSerializers());
 
-			var matchers = builder.getMatchers(context);
-			optionalMatchers = matchers.getOptionalEntries();
-			requiredMatchers = matchers.getRequiredEntries();
+			resolvedDefaultCharset = findDefaultCharset();
+			resolvedMaxInput = findMaxInput();
+			resolvedDebugEnablement = findDebugEnablement();
+			resolvedSupportedAcceptTypes = findSupportedAcceptTypes();
+			resolvedSupportedContentTypes = findSupportedContentTypes();
+			resolvedHttpMethod = findHttpMethod();
 
-			pathMatchers = bs.add(UrlPathMatcher[].class, builder.getPathMatchers().asArray());
-			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
-
-			supportedAcceptTypes = u(nn(builder.produces) ? builder.produces : serializers.getSupportedMediaTypes());
-			supportedContentTypes = u(nn(builder.consumes) ? builder.consumes : parsers.getSupportedMediaTypes());
-
-			defaultRequestAttributes = builder.defaultRequestAttributes();
-			defaultRequestFormData = builder.defaultRequestFormData();
-			defaultRequestHeaders = builder.defaultRequestHeaders();
-			defaultRequestQueryData = builder.defaultRequestQueryData();
-			defaultResponseHeaders = builder.defaultResponseHeaders();
+			var pm = getPathMatchers();
+			bs.add(UrlPathMatcher[].class, pm);
+			bs.addBean(UrlPathMatcher.class, pm.length > 0 ? pm[0] : null);
 
 		int hierarchyDepthTemp = 0;
 		var sc = method.getDeclaringClass().getSuperclass();
@@ -2346,24 +2367,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 		hierarchyDepth = hierarchyDepthTemp;
 
-		var httpMethodValue = builder.httpMethod;
-		if (httpMethodValue == null)
-			httpMethodValue = HttpUtils.detectHttpMethod(method, true, "GET");
-		if ("METHOD".equals(httpMethodValue))
-			httpMethodValue = "*";
-		httpMethod = httpMethodValue.toUpperCase(Locale.ENGLISH);
-
-			defaultCharset = nn(builder.defaultCharset) ? builder.defaultCharset : context.defaultCharset;
-			dotAll = builder.dotAll;
-			maxInput = nn(builder.maxInput) ? builder.maxInput : context.maxInput;
-
 			responseMeta = ResponseBeanMeta.create(mi, builder.getApplied());
 
 			preCallMethods = context.getPreCallMethods().stream().map(x -> new RestOpInvoker(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(RestOpInvoker[]::new);
 			postCallMethods = context.getPostCallMethods().stream().map(x -> new RestOpInvoker(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(RestOpInvoker[]::new);
 			methodInvoker = new RestOpInvoker(method, context.findRestOperationArgs(method, bs), context.getMethodExecStats(method));
-
-			this.callLogger = context.getCallLogger();
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}
@@ -2377,8 +2385,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	public int compareTo(RestOpContext o) {
 		int c;
 
-		for (int i = 0; i < Math.min(pathMatchers.length, o.pathMatchers.length); i++) {
-			c = pathMatchers[i].compareTo(o.pathMatchers[i]);
+		var pm = getPathMatchers();
+		var opm = o.getPathMatchers();
+		for (int i = 0; i < Math.min(pm.length, opm.length); i++) {
+			c = pm[i].compareTo(opm[i]);
 			if (c != 0)
 				return c;
 		}
@@ -2387,15 +2397,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (c != 0)
 			return c;
 
-		c = cmp(o.requiredMatchers.length, requiredMatchers.length);
+		c = cmp(o.getRequiredMatchers().length, getRequiredMatchers().length);
 		if (c != 0)
 			return c;
 
-		c = cmp(o.optionalMatchers.length, optionalMatchers.length);
+		c = cmp(o.getOptionalMatchers().length, getOptionalMatchers().length);
 		if (c != 0)
 			return c;
 
-		c = cmp(o.guards.length, guards.length);
+		c = cmp(o.getGuards().length, getGuards().length);
 
 		if (c != 0)
 			return c;
@@ -2467,7 +2477,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
 	public RestOpSession.Builder createSession(RestSession session) throws Exception {
-		return RestOpSession.create(this, session).logger(callLogger).debug(debug.isDebug(this, session.getRequest()));
+		return RestOpSession.create(this, session).logger(getCallLogger()).debug(resolvedDebugEnablement.isDebug(this, session.getRequest()));
 	}
 
 	@Override /* Overridden from Object */
@@ -2480,63 +2490,63 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The bean context associated with this context.
 	 */
-	public BeanContext getBeanContext() { return beanContext; }
+	public BeanContext getBeanContext() { return beanContextMemo.get(); }
 
 	/**
 	 * Returns the default charset.
 	 *
 	 * @return The default charset.  Never <jk>null</jk>.
 	 */
-	public Charset getDefaultCharset() { return defaultCharset; }
+	public Charset getDefaultCharset() { return resolvedDefaultCharset; }
 
 	/**
 	 * Returns the default request attributes.
 	 *
 	 * @return The default request attributes.  Never <jk>null</jk>.
 	 */
-	public NamedAttributeMap getDefaultRequestAttributes() { return defaultRequestAttributes; }
+	public NamedAttributeMap getDefaultRequestAttributes() { return defaultRequestAttributesMemo.get(); }
 
 	/**
 	 * Returns the default form data parameters.
 	 *
 	 * @return The default form data parameters.  Never <jk>null</jk>.
 	 */
-	public PartList getDefaultRequestFormData() { return defaultRequestFormData; }
+	public PartList getDefaultRequestFormData() { return defaultRequestFormDataMemo.get(); }
 
 	/**
 	 * Returns the default request headers.
 	 *
 	 * @return The default request headers.  Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultRequestHeaders() { return defaultRequestHeaders; }
+	public HeaderList getDefaultRequestHeaders() { return defaultRequestHeadersMemo.get(); }
 
 	/**
 	 * Returns the default request query parameters.
 	 *
 	 * @return The default request query parameters.  Never <jk>null</jk>.
 	 */
-	public PartList getDefaultRequestQueryData() { return defaultRequestQueryData; }
+	public PartList getDefaultRequestQueryData() { return defaultRequestQueryDataMemo.get(); }
 
 	/**
 	 * Returns the default response headers.
 	 *
 	 * @return The default response headers.  Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultResponseHeaders() { return defaultResponseHeaders; }
+	public HeaderList getDefaultResponseHeaders() { return defaultResponseHeadersMemo.get(); }
 
 	/**
 	 * Returns the compression encoders to use for this method.
 	 *
 	 * @return The compression encoders to use for this method.
 	 */
-	public EncoderSet getEncoders() { return encoders; }
+	public EncoderSet getEncoders() { return encodersMemo.get(); }
 
 	/**
 	 * Returns the HTTP method name (e.g. <js>"GET"</js>).
 	 *
 	 * @return The HTTP method name.
 	 */
-	public String getHttpMethod() { return httpMethod; }
+	public String getHttpMethod() { return resolvedHttpMethod; }
 
 	/**
 	 * Returns the underlying Java method that this context belongs to.
@@ -2550,42 +2560,74 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The JSON-Schema generator applicable to this Java method.
 	 */
-	public JsonSchemaGenerator getJsonSchemaGenerator() { return jsonSchemaGenerator; }
+	public JsonSchemaGenerator getJsonSchemaGenerator() { return jsonSchemaGeneratorMemo.get(); }
 
 	/**
 	 * Returns the max number of bytes to process in the input content.
 	 *
 	 * @return The max number of bytes to process in the input content.
 	 */
-	public long getMaxInput() { return maxInput; }
+	public long getMaxInput() { return resolvedMaxInput; }
 
 	/**
 	 * Returns the parsers to use for this method.
 	 *
 	 * @return The parsers to use for this method.
 	 */
-	public ParserSet getParsers() { return parsers; }
+	public ParserSet getParsers() { return parsersMemo.get(); }
 
 	/**
 	 * Bean property getter:  <property>partParser</property>.
 	 *
 	 * @return The value of the <property>partParser</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public HttpPartParser getPartParser() { return partParser; }
+	public HttpPartParser getPartParser() { return partParserMemo.get(); }
 
 	/**
 	 * Bean property getter:  <property>partSerializer</property>.
 	 *
 	 * @return The value of the <property>partSerializer</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public HttpPartSerializer getPartSerializer() { return partSerializer; }
+	public HttpPartSerializer getPartSerializer() { return partSerializerMemo.get(); }
 
 	/**
 	 * Returns the path pattern for this method.
 	 *
 	 * @return The path pattern.
 	 */
-	public String getPathPattern() { return pathMatchers[0].toString(); }
+	public String getPathPattern() { return getPathMatchers()[0].toString(); }
+
+	/**
+	 * Returns the URL path matchers for this operation.
+	 *
+	 * @return The URL path matchers for this operation.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public UrlPathMatcher[] getPathMatchers() { return pathMatchersMemo.get(); }
+
+	/**
+	 * Returns the optional matchers for this operation.
+	 *
+	 * @return The optional matchers for this operation.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public RestMatcher[] getOptionalMatchers() { return optionalMatchersMemo.get(); }
+
+	/**
+	 * Returns the required matchers for this operation.
+	 *
+	 * @return The required matchers for this operation.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public RestMatcher[] getRequiredMatchers() { return requiredMatchersMemo.get(); }
+
+	/**
+	 * Returns the call logger for this operation.
+	 *
+	 * @return The call logger for this operation.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public CallLogger getCallLogger() { return callLoggerMemo.get(); }
 
 	/**
 	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.
@@ -2625,7 +2667,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (nn(a)) {
 				var schema = HttpPartSchema.create(a);
 				@SuppressWarnings("unchecked")
-				var serializer = createPartSerializer((Class<? extends HttpPartSerializer>)schema.getSerializer(), partSerializer);
+				var serializer = createPartSerializer((Class<? extends HttpPartSerializer>)schema.getSerializer(), getPartSerializer());
 				pm = new ResponsePartMeta(HEADER, schema, serializer);
 			}
 			if (pm == null)
@@ -2649,21 +2691,21 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The serializers to use for this method.
 	 */
-	public SerializerSet getSerializers() { return serializers; }
+	public SerializerSet getSerializers() { return serializersMemo.get(); }
 
 	/**
 	 * Returns a list of supported accept types.
 	 *
 	 * @return An unmodifiable list.
 	 */
-	public List<MediaType> getSupportedAcceptTypes() { return supportedAcceptTypes; }
+	public List<MediaType> getSupportedAcceptTypes() { return resolvedSupportedAcceptTypes; }
 
 	/**
 	 * Returns the list of supported content types.
 	 *
 	 * @return An unmodifiable list.
 	 */
-	public List<MediaType> getSupportedContentTypes() { return supportedContentTypes; }
+	public List<MediaType> getSupportedContentTypes() { return resolvedSupportedContentTypes; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
@@ -2672,7 +2714,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	private UrlPathMatch matchPattern(RestSession call) {
 		UrlPathMatch pm = null;
-		for (var pp : pathMatchers)
+		for (var pp : getPathMatchers())
 			if (pm == null)
 				pm = pp.match(call.getUrlPath());
 		return pm;
@@ -2704,7 +2746,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (pm == null)
 			return 0;
 
-		if (requiredMatchers.length == 0 && optionalMatchers.length == 0) {
+		var rm = getRequiredMatchers();
+		var om = getOptionalMatchers();
+		if (rm.length == 0 && om.length == 0) {
 			session.urlPathMatch(pm);  // Cache so we don't have to recalculate.
 			return 2;
 		}
@@ -2713,16 +2757,16 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var req = session.getRequest();
 
 			// If the method implements matchers, test them.
-			for (var m : requiredMatchers)
+			for (var m : rm)
 				if (! m.matches(req))
 					return 1;
-			if (optionalMatchers.length > 0) {
+			if (om.length > 0) {
 				var matches = false;
-				for (var m : optionalMatchers)
+				for (var m : om)
 					matches |= m.matches(req);
 				if (! matches)
 					return 1;
-			}
+		}
 
 			session.urlPathMatch(pm);  // Cache so we don't have to recalculate.
 			return 2;
@@ -2734,15 +2778,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_defaultRequestFormData, defaultRequestFormData)
-			.a(PROP_defaultRequestHeaders, defaultRequestHeaders)
-			.a(PROP_defaultRequestQueryData, defaultRequestQueryData)
-			.a(PROP_httpMethod, httpMethod);
+			.a(PROP_defaultRequestFormData, getDefaultRequestFormData())
+			.a(PROP_defaultRequestHeaders, getDefaultRequestHeaders())
+			.a(PROP_defaultRequestQueryData, getDefaultRequestQueryData())
+			.a(PROP_httpMethod, getHttpMethod());
 	}
 
-	RestConverter[] getConverters() { return converters; }
+	RestConverter[] getConverters() { return convertersMemo.get(); }
 
-	RestGuard[] getGuards() { return guards; }
+	RestGuard[] getGuards() { return guardsMemo.get(); }
 
 	RestOpInvoker getMethodInvoker() { return methodInvoker; }
 

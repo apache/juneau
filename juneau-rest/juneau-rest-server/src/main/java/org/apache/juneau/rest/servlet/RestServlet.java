@@ -149,7 +149,7 @@ public abstract class RestServlet extends HttpServlet {
 			if (nn(context.get()))
 				return;
 			super.init(servletConfig);
-			context.set(RestContext.create(this.getClass(), null, servletConfig).init(() -> this).build());
+			context.set(new RestContext(new RestContextInit(this.getClass(), null, servletConfig, () -> this, "", java.util.List.of())));
 			context.get().postInit();
 			context.get().postInitChildFirst();
 		} catch (ServletException e) {

@@ -81,7 +81,6 @@ public class RestAnnotation {
 		private Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Void.class;
 		private Class<? extends RestOpArg>[] restOpArgs = new Class[0];
 		private Class<? extends BasicBeanStore> beanStore = BasicBeanStore.Void.class;
-		private Class<? extends RestChildren> restChildrenClass = RestChildren.Void.class;
 		private Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
 		private Class<? extends Serializer>[] serializers = new Class[0];
 		private Class<?>[] children = {};
@@ -94,6 +93,7 @@ public class RestAnnotation {
 		private String clientVersionHeader = "";
 		private String config = "";
 		private String debug = "";
+		private String debugDefault = "";
 		private String debugOn = "";
 		private String defaultAccept = "";
 		private String defaultCharset = "";
@@ -317,6 +317,17 @@ public class RestAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Rest#debugDefault()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder debugDefault(String value) {
+			debugDefault = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Rest#debugOn()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -529,17 +540,6 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#restChildrenClass()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder restChildrenClass(Class<? extends RestChildren> value) {
-			restChildrenClass = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Rest#restOpArgs()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -719,23 +719,7 @@ public class RestAnnotation {
 			b.children((java.lang.Object[])a.children());
 			b.restOpArgs(a.restOpArgs());
 			classes(a.encoders()).ifPresent(x -> b.encoders().add(x));
-			string(a.uriContext()).ifPresent(b::uriContext);
-			string(a.uriAuthority()).ifPresent(b::uriAuthority);
-			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(b::uriRelativity);
-			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(b::uriResolution);
-			b.messages().location(string(a.messages()).orElse(null));
-			type(a.staticFiles()).ifPresent(x -> b.staticFiles().type(x));
 			string(a.path()).ifPresent(b::path);
-			string(a.clientVersionHeader()).ifPresent(b::clientVersionHeader);
-			type(a.callLogger()).ifPresent(x -> b.callLogger().type(x));
-			type(a.swaggerProvider()).ifPresent(b::swaggerProvider);
-			type(a.restChildrenClass()).ifPresent(b::restChildrenClass);
-			type(a.debugEnablement()).ifPresent(x -> b.debugEnablement().type(x));
-			string(a.disableContentParam()).map(Boolean::parseBoolean).ifPresent(b::disableContentParam);
-			string(a.allowedHeaderParams()).ifPresent(b::allowedHeaderParams);
-			string(a.allowedMethodHeaders()).ifPresent(b::allowedMethodHeaders);
-			string(a.allowedMethodParams()).ifPresent(b::allowedMethodParams);
-			bool(a.renderResponseStackTraces()).ifPresent(b::renderResponseStackTraces);
 		}
 	}
 
@@ -757,12 +741,8 @@ public class RestAnnotation {
 		public void apply(AnnotationInfo<Rest> ai, RestOpContext.Builder b) {
 			Rest a = ai.inner();
 
-			stream(a.produces()).map(MediaType::of).forEach(b::produces);
-			stream(a.consumes()).map(MediaType::of).forEach(b::consumes);
 			b.converters().append(a.converters());
 			b.guards().append(a.guards());
-			string(a.defaultCharset()).map(Charset::forName).ifPresent(b::defaultCharset);
-			string(a.maxInput()).ifPresent(b::maxInput);
 			cdl(a.rolesDeclared()).forEach(b::rolesDeclared);
 			string(a.roleGuard()).ifPresent(b::roleGuard);
 		}
@@ -785,7 +765,6 @@ public class RestAnnotation {
 		private final Class<? extends SwaggerProvider> swaggerProvider;
 		private final Class<? extends RestOpArg>[] restOpArgs;
 		private final Class<? extends BasicBeanStore> beanStore;
-		private final Class<? extends RestChildren> restChildrenClass;
 		private final Class<? extends DebugEnablement> debugEnablement;
 		private final Class<? extends Serializer>[] serializers;
 		private final Class<?>[] children;
@@ -798,6 +777,7 @@ public class RestAnnotation {
 		private final String clientVersionHeader;
 		private final String config;
 		private final String debug;
+		private final String debugDefault;
 		private final String debugOn;
 		private final String defaultAccept;
 		private final String defaultCharset;
@@ -845,6 +825,7 @@ public class RestAnnotation {
 			consumes = copyOf(b.consumes);
 			converters = copyOf(b.converters);
 			debug = b.debug;
+			debugDefault = b.debugDefault;
 			debugEnablement = b.debugEnablement;
 			debugOn = b.debugOn;
 			defaultAccept = b.defaultAccept;
@@ -864,7 +845,6 @@ public class RestAnnotation {
 			produces = copyOf(b.produces);
 			renderResponseStackTraces = b.renderResponseStackTraces;
 			responseProcessors = copyOf(b.responseProcessors);
-			restChildrenClass = b.restChildrenClass;
 			restOpArgs = copyOf(b.restOpArgs);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
@@ -957,6 +937,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public Class<? extends DebugEnablement> debugEnablement() {
 			return debugEnablement;
+		}
+
+		@Override /* Overridden from Rest */
+		public String debugDefault() {
+			return debugDefault;
 		}
 
 		@Override /* Overridden from Rest */
@@ -1072,11 +1057,6 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public Class<? extends ResponseProcessor>[] responseProcessors() {
 			return responseProcessors;
-		}
-
-		@Override /* Overridden from Rest */
-		public Class<? extends RestChildren> restChildrenClass() {
-			return restChildrenClass;
 		}
 
 		@Override /* Overridden from Rest */

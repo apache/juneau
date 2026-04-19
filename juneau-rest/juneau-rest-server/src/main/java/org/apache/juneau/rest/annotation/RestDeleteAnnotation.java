@@ -352,8 +352,6 @@ public class RestDeleteAnnotation {
 		public void apply(AnnotationInfo<RestDelete> ai, RestOpContext.Builder b) {
 			RestDelete a = ai.inner();
 
-			b.httpMethod("delete");
-
 			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
 			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders().setDefault(x));
 			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders().setDefault(x));
@@ -363,12 +361,10 @@ public class RestDeleteAnnotation {
 			b.guards().append(a.guards());
 			b.matchers().append(a.matchers());
 			string(a.clientVersion()).ifPresent(b::clientVersion);
-			string(a.defaultCharset()).map(Charset::forName).ifPresent(b::defaultCharset);
 			stream(a.path()).forEach(b::path);
 			string(a.value()).ifPresent(b::path);
 			cdl(a.rolesDeclared()).forEach(b::rolesDeclared);
 			string(a.roleGuard()).ifPresent(b::roleGuard);
-			string(a.debug()).map(Enablement::fromString).ifPresent(b::debug);
 		}
 
 	}

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.rrpc;
 
+import java.lang.reflect.*;
+
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
@@ -39,6 +41,31 @@ import jakarta.servlet.*;
 public class RrpcRestOpContext extends RestOpContext {
 
 	private final RrpcInterfaceMeta meta;
+
+	/**
+	 * 2-arg positional context constructor.
+	 *
+	 * <p>
+	 * Constructs an {@code RrpcRestOpContext} directly from a Java method and its owning {@link RestContext}, mirroring
+	 * {@link RestOpContext#RestOpContext(Method, RestContext) RestOpContext}'s 2-arg ctor and replacing the legacy
+	 * {@code RestOpContext.create(method, context).beanStore(context.getRootBeanStore()).type(RrpcRestOpContext.class).build()}
+	 * fluent chain that {@link org.apache.juneau.rest.RestContext.Builder#createRestOperations(org.apache.juneau.rest.beanstore.BasicBeanStore, java.util.function.Supplier, RestContext) createRestOperations}
+	 * used to call. Per TODO-16 Phase C-3 Route B, the public {@code RestOpContext.create(...)} factory was deleted; this
+	 * ctor is the only supported entry point for instantiating an {@code RrpcRestOpContext}.
+	 *
+	 * <p>
+	 * Internally builds a {@link RestOpContext.Builder} backed by {@link RestContext#getRootBeanStore()} (rather than the
+	 * resource-scoped {@link RestContext#getBeanStore()} used by {@code RestOpContext}'s 2-arg ctor). The root bean store
+	 * is preserved verbatim from the legacy fluent chain to avoid behavioral drift in RRPC builder-time bean creation.
+	 *
+	 * @param method The Java method this context represents. Must not be <jk>null</jk>.
+	 * @param context The owning {@link RestContext}. Must not be <jk>null</jk>.
+	 * @throws ServletException If context could not be created.
+	 * @since 9.5.0
+	 */
+	public RrpcRestOpContext(Method method, RestContext context) throws ServletException {
+		this(new RestOpContext.Builder(method, context).beanStore(context.getRootBeanStore()));
+	}
 
 	/**
 	 * Constructor.

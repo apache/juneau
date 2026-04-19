@@ -17,24 +17,29 @@
 package org.apache.juneau.rest;
 
 import org.apache.juneau.cp.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
  * Represents a simple child REST resource / path mapping.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jc>// Parent resource.</jc>
- * 	<jk>public class</jk> MyResource {
- * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+ * 	<jc>// Parent resource declares its children declaratively via the @Rest annotation.</jc>
+ * 	<ja>@Rest</ja>(children = { MyChildResource.<jk>class</jk>, OtherChildResource.<jk>class</jk> })
+ * 	<jk>public class</jk> MyResource { ... }
  *
- * 			<jc>// Register a child resource.</jc>
- * 			<jv>builder</jv>.children(<jk>new</jk> RestChild(<js>"/child"</js>, <jk>new</jk> MyChildResource());
- *
- * 			<jc>// The above is equivalent to...</jc>
- * 			<jv>builder</jv>.child(<js>"/child"</js>, <jk>new</jk> MyChildResource());
- * 		}
- * 	}
+ * 	<jc>// Or programmatically via RestContextInit when constructing the context directly:</jc>
+ * 	<jk>new</jk> RestContext(<jk>new</jk> RestContextInit(
+ * 		MyResource.<jk>class</jk>, <jk>null</jk>, <jk>null</jk>, () -&gt; <jk>new</jk> MyResource(),
+ * 		<js>""</js>, List.<jsm>of</jsm>(<jk>new</jk> RestChild(<js>"/child"</js>, <jk>new</jk> MyChildResource()))));
  * </p>
+ *
+ * <h5 class='section'>Note (9.5):</h5>
+ * <p>
+ * The legacy {@code public MyResource(RestContext.Builder builder)} constructor pattern (where the resource class
+ * imperatively registered children inside its own ctor) is removed in 9.5 along with {@code RestContext.Builder}.
+ * Resource classes now declare children either via the {@link Rest#children() @Rest(children=...)} annotation or
+ * by passing them through {@link RestContextInit#children() RestContextInit.children}.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>

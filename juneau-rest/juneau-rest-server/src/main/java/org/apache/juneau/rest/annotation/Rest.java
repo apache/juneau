@@ -332,7 +332,10 @@ public @interface Rest {
 	 * Property names for which less-derived contributions are NOT inherited.
 	 *
 	 * <p>
-	 * Accepted values: {@code "allowedSerializerOptions"}, {@code "allowedParserOptions"}.
+	 * Accepted values include {@code "allowedParserOptions"}, {@code "allowedSerializerOptions"},
+	 * {@code "allowedHeaderParams"}, {@code "allowedMethodHeaders"}, {@code "allowedMethodParams"},
+	 * {@code "disableContentParam"}, {@code "renderResponseStackTraces"}, {@code "clientVersionHeader"},
+	 * {@code "uriAuthority"}, {@code "uriContext"}, {@code "uriRelativity"}, and {@code "uriResolution"}.
 	 * Each entry is SVL-resolved then comma-split. Prevents the named property from inheriting values from
 	 * parent {@code @Rest} annotations (router hierarchy). The {@code noInherit} attribute itself is never inherited.
 	 *
@@ -393,7 +396,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getDebugEnablement()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -408,12 +411,33 @@ public @interface Rest {
 	 * This allows for more sophisticated control over when debug features are enabled beyond simple boolean flags.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getDebugEnablement()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
 	Class<? extends DebugEnablement> debugEnablement() default DebugEnablement.Void.class;
+
+	/**
+	 * Default debug enablement value.
+	 *
+	 * <p>
+	 * Specifies the default {@link org.apache.juneau.Enablement} value used by {@link DebugEnablement} when no
+	 * resource-class or operation-method debug setting is in effect. Accepts the standard enablement names —
+	 * {@code "ALWAYS"}, {@code "NEVER"}, {@code "CONDITIONAL"} (case-insensitive). An empty string (the default)
+	 * means "no override" — {@link DebugEnablement} falls back to {@link org.apache.juneau.Enablement#ALWAYS} when
+	 * {@link Rest#debug()} is set, otherwise {@link org.apache.juneau.Enablement#NEVER}.
+	 *
+	 * <p>
+	 * Replaces the deleted {@code RestContext.Builder.debugDefault(Enablement)} method.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getDebugEnablement()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String debugDefault() default "";
 
 	/**
 	 * Enable debug mode on specified classes/methods.
@@ -562,8 +586,6 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultCharset(Charset)}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultCharset(Charset)}
 	 * 	<li class='ja'>{@link RestOp#defaultCharset}
 	 * 	<li class='ja'>{@link RestGet#defaultCharset}
 	 * 	<li class='ja'>{@link RestPut#defaultCharset}
@@ -756,11 +778,8 @@ public @interface Rest {
 	 * The encoders can also be tailored at the method level using {@link RestOp#encoders()} (and related annotations).
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is:
-	 * <p class='bjava'>
-	 * 	RestContext.Builder <jv>builder</jv> = RestContext.<jsm>create</jsm>(<jv>resource</jv>);
-	 * 	<jv>builder</jv>.getEncoders().add(<jv>classes</jv>);
-	 * </p>
+	 * For programmatic equivalents, contribute an {@link org.apache.juneau.encoders.EncoderSet} bean via
+	 * {@link RestInject @RestInject(name="encoders")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>
@@ -853,8 +872,6 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#maxInput(String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#maxInput(String)}
 	 * 	<li class='ja'>{@link RestOp#maxInput}
 	 * 	<li class='ja'>{@link RestPost#maxInput}
 	 * 	<li class='ja'>{@link RestPut#maxInput}
@@ -934,11 +951,8 @@ public @interface Rest {
 	 * The parsers can also be tailored at the method level using {@link RestOp#parsers()} (and related annotations).
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is:
-	 * <p class='bjava'>
-	 * 	RestContext.Builder <jv>builder</jv> = RestContext.<jsm>create</jsm>(<jv>resource</jv>);
-	 * 	<jv>builder</jv>.getParsers().add(<jv>classes</jv>);
-	 * </p>
+	 * For programmatic equivalents, contribute a {@link org.apache.juneau.parser.ParserSet} bean via
+	 * {@link RestInject @RestInject(name="parsers")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>
@@ -1191,20 +1205,6 @@ public @interface Rest {
 	Class<? extends ResponseProcessor>[] responseProcessors() default {};
 
 	/**
-	 * REST children class.
-	 *
-	 * <p>
-	 * Allows you to extend the {@link RestChildren} class to modify how any of the methods are implemented.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restChildrenClass(Class)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends RestChildren> restChildrenClass() default RestChildren.Void.class;
-
-	/**
 	 * Java REST operation method parameter resolvers.
 	 *
 	 * <p>
@@ -1340,11 +1340,8 @@ public @interface Rest {
 	 * The serializers can also be tailored at the method level using {@link RestOp#serializers()} (and related annotations).
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is:
-	 * <p class='bjava'>
-	 * 	RestContext.Builder <jv>builder</jv> = RestContext.<jsm>create</jsm>(<jv>resource</jv>);
-	 * 	<jv>builder</jv>.getSerializers().add(<jv>classes</jv>);
-	 * </p>
+	 * For programmatic equivalents, contribute a {@link org.apache.juneau.serializer.SerializerSet} bean via
+	 * {@link RestInject @RestInject(name="serializers")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>

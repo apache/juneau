@@ -63,6 +63,13 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  *
  * <p>
+ * Type bindings (a class type mapped to an implementation class for deferred construction) are managed through:
+ * <ul class='javatreec'>
+ * 	<li class='jm'>{@link #addBeanType(Class,Class) addBeanType(Class,Class)}
+ * 	<li class='jm'>{@link #getBeanType(Class) getBeanType(Class)}
+ * </ul>
+ *
+ * <p>
  * Beans are created through the following methods:
  * <ul class='javatreec'>
  * 	<li class='jm'>{@link BeanCreator#of(Class,BasicBeanStore) BeanCreator.of(Class,BasicBeanStore)}
@@ -244,6 +251,7 @@ public class BasicBeanStore {
 
 	private final Deque<Entry<?>> entries;
 	private final Map<Class<?>,Entry<?>> unnamedEntries;
+	private final Map<Class<?>,Class<?>> beanTypes;
 
 	final Optional<BasicBeanStore> parent;
 	final boolean readOnly;
@@ -262,6 +270,7 @@ public class BasicBeanStore {
 		lock = threadSafe ? new SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
 		entries = threadSafe ? new ConcurrentLinkedDeque<>() : new LinkedList<>();
 		unnamedEntries = threadSafe ? new ConcurrentHashMap<>() : map();
+		beanTypes = threadSafe ? new ConcurrentHashMap<>() : map();
 		var e = createEntry(BasicBeanStore.class, ()->this, null);
 		entries.addFirst(e);
 		unnamedEntries.put(BasicBeanStore.class, e);
@@ -368,8 +377,57 @@ public class BasicBeanStore {
 		try (var x = lock.write()) {
 			unnamedEntries.clear();
 			entries.clear();
+			beanTypes.clear();
 		}
 		return this;
+	}
+
+	/**
+	 * Adds a type binding to this bean store.
+	 *
+	 * <p>
+	 * Type bindings allow a class type to be mapped to an implementation class for deferred construction.
+	 * Unlike {@link #addBean(Class,Object)} which stores an instance, this method stores only the implementation
+	 * class to be instantiated later by the caller.
+	 *
+	 * <p>
+	 * Type bindings are inherited through the parent chain via {@link #getBeanType(Class)}.
+	 *
+	 * @param <T> The class type to associate with the implementation.
+	 * @param beanType The class type to associate with the implementation.
+	 * @param implType The implementation class.  Must be a subtype of <c>beanType</c>.
+	 * @return This object.
+	 */
+	public <T> BasicBeanStore addBeanType(Class<T> beanType, Class<? extends T> implType) {
+		assertCanWrite();
+		try (var x = lock.write()) {
+			beanTypes.put(beanType, implType);
+		}
+		return this;
+	}
+
+	/**
+	 * Returns the implementation class registered for the specified bean type.
+	 *
+	 * <p>
+	 * If no binding is found in this store, the parent chain is consulted recursively.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type to look up.
+	 * @return The registered implementation class, or {@link Optional#empty()} if no binding exists.
+	 */
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked cast; addBeanType enforces the bound at insertion time.
+	})
+	public <T> Optional<Class<? extends T>> getBeanType(Class<T> beanType) {
+		try (var x = lock.read()) {
+			var c = beanTypes.get(beanType);
+			if (nn(c))
+				return opt((Class<? extends T>) c);
+			if (parent.isPresent())
+				return parent.get().getBeanType(beanType);
+			return opte();
+		}
 	}
 
 	/**

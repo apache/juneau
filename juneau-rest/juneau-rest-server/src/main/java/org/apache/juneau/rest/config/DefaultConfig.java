@@ -126,10 +126,7 @@ import org.apache.juneau.serializer.annotation.*;
 	callLogger=CallLogger.Void.class,  // Defaults to BasicCallLogger.
 	debugEnablement=DebugEnablement.Void.class,  // Defaults to BasicDefaultEnablement.
 	staticFiles=StaticFiles.Void.class,  // Defaults to BasicStaticFiles.
-	swaggerProvider=SwaggerProvider.Void.class,  // Defaults to BasicSwaggerProvider.
-
-	// Overridable context classes.
-	restChildrenClass=RestChildren.class
+	swaggerProvider=SwaggerProvider.Void.class  // Defaults to BasicSwaggerProvider.
 )
 @BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.

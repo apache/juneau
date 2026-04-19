@@ -1,166 +1,71 @@
 # Decouple `juneau-rest-common` from `juneau-marshall`
 
-## Goal
-
-Break juneau-rest-common's compile-time dependency on juneau-marshall so the module chain becomes:
+Target module chain:
 
 ```
 juneau-commons -> juneau-rest-common -> juneau-marshall -> juneau-rest-client
                                                         -> juneau-rest-server
 ```
 
-**Status (current):**
+Phases **1a** (HTTP types in commons), **1b** (annotation types in commons), and **2** (enums/exceptions/`HttpPartSchema` refactor, annotation cleanup) are **done** — details removed from this plan to avoid noise.
 
-- **Done:** HTTP media/range types in commons (Phase 1a below).
-- **Done:** `@Schema`, `@Items`, `@SubItems`, `@ExternalDocs` live in `org.apache.juneau.commons.annotation`; `@Repeatable` uses `Schema.Array` on `Schema`; marshall-side `SchemaAnnotation` / apply types import them from commons. `juneau-utest` declares a **direct** `juneau-commons` dependency so IDE classpaths resolve types such as `ExternalDocs` referenced indirectly from `Swagger`.
-- **Done:** Phase 2 preparatory refactoring -- enums, exceptions, constants moved to commons; `HttpPartSchema` refactored to remove most marshall dependencies (see Phase 2 below).
-- **Still on marshall:** `SchemaAnnotation` (large), `InvalidAnnotationException`, serializers, `HttpPartSchema` (refactored but not yet moved), bean/httppart meta, etc. **`juneau-rest-common` still depends on `juneau-marshall`** until later phases shrink that surface.
+**Current gap:** `juneau-rest-common` **still** compile-depends on `juneau-marshall` (`SchemaAnnotation`, `InvalidAnnotationException`, serializers, refactored-but-not-moved `HttpPartSchema`, bean/httppart meta, etc.).
 
 ---
 
-## Phase 1a -- Move `MediaType`, `MediaRanges`, `StringRanges` to `juneau-commons` (done)
+## Phase 2 follow-through — move `HttpPartSchema` to commons (deferred)
 
-**Completed:** The following now live in `org.apache.juneau.commons.http` in **juneau-commons**:
+`HttpPartSchema` remains in marshall until these are addressed:
 
-- `MediaType`, `MediaRange`, `MediaRanges`, `StringRange`, `StringRanges`
-
-**Also in commons (parser support):** `NameValuePair`, `BasicNameValuePair`, `HeaderElement`, `HeaderValueParser` (replacing HttpCore usage for these types).
-
-**Follow-ups:**
-
-- `juneau-rest-common` declares a **direct** dependency on `juneau-commons` (in addition to `juneau-marshall`) so HTTP types are explicit on the classpath.
-- `@org.apache.juneau.commons.annotation.BeanIgnore` marks these types as non-beans; `BeanMeta` treats it like `org.apache.juneau.annotation.BeanIgnore` at class level so JSON remains the canonical string form.
-- `Constants` was **not** moved; it is unrelated to this HTTP surface.
-- Third-party name clashes (e.g. OkHttp `MediaType` vs Juneau) are resolved with fully qualified names or by omitting the Juneau import where only OkHttp's type is used.
-
----
-
-## Phase 1b -- Move `@Schema` and related annotations to `juneau-commons` (done for annotation types)
-
-**Difficulty**: Hard  
-**Impact**: Large (HTTP annotations, Swagger models)
-
-**Completed (annotation surface):**
-
-- `org.apache.juneau.commons.annotation.Schema` (including inner `Schema.Array` for `@Repeatable`)
-- `org.apache.juneau.commons.annotation.Items`, `SubItems`, `ExternalDocs`
-- Javadoc on commons `Schema` / `Items` avoids `{@link}` to marshall-only types (neutral text / external doclinks).
-- Call sites updated across marshall, REST, beans, examples, tests.
-
-**Not done in this phase (still marshall or follow-up):**
-
-- **`SchemaAnnotation`** remains in `juneau-marshall` (apply machinery, generator hooks); it imports the commons annotation types.
-- **`InvalidAnnotationException`** remains in `org.apache.juneau.annotation` (marshall); moving it to commons is optional for a later "rest-common compiles without marshall" milestone.
-- **Global `@XApply` split** (removing `on` / `onClass` from context-appliable annotations into companion `@XApply` types) is still a **separate**, release-shaping effort if pursued; it was listed as a prerequisite in an older draft but the annotation **types** were moved without blocking on that split.
-
-**Tooling / classpath:**
-
-- Any test or sample module that compiles against REST types which reference commons annotations should depend on **`juneau-commons` explicitly** when the IDE does not expand transitive deps cleanly (e.g. `juneau-utest`).
-
-**Still true for next phases:**
-
-- **`HttpPartSchema`** reads `@Schema` from commons today; Phase 2 (below) may move `HttpPartSchema` itself to commons.
-
----
-
-## Phase 2 -- Refactor `HttpPartSchema` and move supporting types to `juneau-commons`
-
-**Difficulty**: Hard  
-**Impact**: 12 files in rest-common  
-**Status**: Partially complete
-
-`HttpPartSchema` is the schema model built from `@Schema` annotations. `@Schema` is already in commons; this phase moves supporting types to commons and refactors `HttpPartSchema` to reduce marshall dependencies in preparation for eventually moving the class itself.
-
-### Completed
-
-**Types moved to `juneau-commons`:**
-- `HttpPartType` -> `org.apache.juneau.commons.httppart.HttpPartType`
-- `HttpPartDataType` -> `org.apache.juneau.commons.httppart.HttpPartDataType`
-- `HttpPartCollectionFormat` -> `org.apache.juneau.commons.httppart.HttpPartCollectionFormat`
-- `HttpPartFormat` -> `org.apache.juneau.commons.httppart.HttpPartFormat`
-- `BasicRuntimeException` -> `org.apache.juneau.commons.BasicRuntimeException` (marshall version subclasses commons)
-- `SchemaValidationException` -> `org.apache.juneau.commons.httppart.SchemaValidationException`
-- `Constants` -> `org.apache.juneau.commons.Constants` (marshall version re-exports constants)
-
-**`ClassInfo` enhancements (juneau-commons):**
-- Added ~10 type-classification convenience methods: `isBoolean()`, `isNumber()`, `isInteger()`, `isDecimal()`, `isCharSequence()`, `isMapOrBean()`, `isCollectionOrArray()`, `isTemporal()`, `isDate()`, `isCalendar()`
-
-**`@Schema` / `@SubItems` annotation cleanup:**
-- Removed JSON `String[]` attributes: `properties()` and `additionalProperties()` from `@Schema`; `items()` from `@SubItems`
-- Eliminated `JsonMap`/`JsonList` dependencies from `HttpPartSchema` by removing JSON-parsing methods (`apply(JsonMap)`, `properties(JsonMap)`, `additionalProperties(JsonMap)`, `items(JsonMap)`, `toJsonMap()`)
-- Replaced `JsonList.ofJsonOrCdl()` with `StringUtils.split()` in `toSet()`
-
-**`HttpPartSchema` refactoring:**
-- Replaced `ClassMeta<?> parsedType` with `Class<?> parsedType` to remove dependency on `ClassMeta`
-- Changed `Class<? extends HttpPartSerializer>` and `Class<? extends HttpPartParser>` to raw `Class<?>` fields and methods (callers use unchecked casts)
-- Refactored `getFormat(ClassInfo)` and `getType(ClassInfo)` to accept `ClassInfo` instead of `ClassMeta`
-- Removed `BeanContext` parameter from `validateOutput(T)` -- bean property validation now limited to `Map` objects
-- Replaced `ContextRuntimeException` with `BasicRuntimeException`
-
-### Deferred (remaining marshall dependencies)
-
-**`HttpPartSchema` not yet moved to commons** -- remaining blockers:
-- `apply(HttpPartMarshalling)` in builder references marshall's `HttpPartMarshalling` type
-- References to `*Annotation.empty()` methods (e.g., `ItemsAnnotation.DEFAULT`, `SubItemsAnnotation.DEFAULT`)
+- `apply(HttpPartMarshalling)` on the builder ties to marshall’s `HttpPartMarshalling`
+- References to `*Annotation.empty()` (e.g. `ItemsAnnotation.DEFAULT`, `SubItemsAnnotation.DEFAULT`)
 - `ParseException` import from marshall
 
-**Creator inner classes not stripped** from `HttpPartSerializer`/`HttpPartParser` -- lower priority, these stay in marshall regardless.
+**Lower priority:** strip Creator inner classes from `HttpPartSerializer` / `HttpPartParser` (can stay in marshall regardless).
 
-### Classes kept in marshall
-- `HttpPartSerializer` and `HttpPartParser` (interface + implementations depend on serializer infrastructure)
-- `HttpPartMarshalling` (references serializer/parser types)
+**Keep in marshall by design:** `HttpPartSerializer`, `HttpPartParser`, `HttpPartMarshalling` (serializer/parser surface).
 
 ---
 
-## Phase 3 -- Extract `Serialized*` bridge classes
+## Phase 3 — Extract `Serialized*` bridge classes
 
-**Difficulty**: Medium  
-**Impact**: 3 files (SerializedHeader, SerializedPart, SerializedEntity) + 3 factory helpers
+**Difficulty:** Medium  
+**Impact:** `SerializedHeader`, `SerializedPart`, `SerializedEntity` + factory helpers
 
-These classes have the heaviest marshall dependencies -- they use `httppart`, `oapi`, `serializer`, and `urlencoding` packages. They bridge the gap between REST-common HTTP types and marshall serialization.
+Heaviest marshall usage (`httppart`, `oapi`, `serializer`, `urlencoding`). Options:
 
-### Options
-1. **Move to marshall**: These classes logically belong in the serialization layer
-2. **Create bridge module**: `juneau-rest-bridge` between commons and marshall
-3. **Keep in rest-common with optional dependency**: Use reflection to optionally load serializers
+1. Move bridge types into **marshall**
+2. New **`juneau-rest-bridge`** module between commons and marshall
+3. Keep in rest-common with optional/reflection loading
 
-### Recommendation
-Move `SerializedHeader`, `SerializedPart`, `SerializedEntity` and their factory methods from `HttpHeaders`/`HttpParts`/`HttpEntities` to juneau-marshall or a new bridge module. The base `Basic*` classes in rest-common would remain serializer-free.
+**Recommendation:** Move `SerializedHeader` / `SerializedPart` / `SerializedEntity` (and factories on `HttpHeaders` / `HttpParts` / `HttpEntities`) to marshall or a bridge module; keep `Basic*` types serializer-free in rest-common.
 
 ---
 
-## Phase 4 -- Remove remaining marshall dependencies
+## Phase 4 — Remove remaining marshall dependencies
 
-**Difficulty**: Low-Medium  
+**Difficulty:** Low–medium
 
-### VarResolverSession (2 files)
-- `HeaderList` and `PartList` use SVL variable resolution
-- Option: Make SVL resolution optional via interface/callback
-
-### BeanCreator (3 files in httppart.bean)
-- Used by `RequestBeanMeta`/`ResponseBeanMeta` for bean construction
-- Option: Use `ClassInfo.newInstance()` from commons instead, or move `BeanCreator` to commons
-
-### Assertion types (19 files)
-- `juneau-assertions` is already a separate module
-- Rest-common should depend on `juneau-assertions` directly, not transitively through marshall
+- **VarResolverSession** — `HeaderList` / `PartList` SVL resolution; optional interface/callback to make SVL optional
+- **BeanCreator** (`httppart.bean`) — `RequestBeanMeta` / `ResponseBeanMeta`; consider `ClassInfo.newInstance()` or moving `BeanCreator` to commons
+- **Assertions** — rest-common should depend on **`juneau-assertions`** directly, not only transitively through marshall
 
 ---
 
-## Dependency surface summary
+## Dependency surface (pending rows)
 
-| Priority | Package | Files | Target module | Status |
-|----------|---------|-------|----------------|--------|
-| 1 | `MediaType`, `MediaRanges`, `StringRanges`, etc. | many | juneau-commons (`org.apache.juneau.commons.http`) | Done |
-| 2 | `@Schema`, `@Items`, `@SubItems`, `@ExternalDocs` (+ marshall `SchemaAnnotation` / apply) | many | commons annotations + marshall | Annotation types **done**; `SchemaAnnotation` / `InvalidAnnotationException` still marshall |
-| 3 | `HttpPartSchema`, `HttpPartType`, etc. | 12 | juneau-commons | Enums/exceptions **done**; `HttpPartSchema` refactored but not yet moved |
-| 4 | `Serialized*` bridge classes | 6 | juneau-marshall or bridge | Pending |
-| 5 | `VarResolverSession`, `BeanCreator` | 5 | juneau-commons or optional | Pending |
+| Priority | Area | Target |
+|----------|------|--------|
+| 3 | `HttpPartSchema` + remaining httppart surface | commons (blocked as above) |
+| 4 | `Serialized*` bridge | marshall or bridge module |
+| 5 | `VarResolverSession`, `BeanCreator`, assertions wiring | commons / optional / direct deps |
 
-## Risk notes
+---
 
-- **Split-package**: HTTP media types moved out of `org.apache.juneau` into `org.apache.juneau.commons.http`
-- **Binary compatibility**: All moves require recompilation of downstream modules
-- **Schema complexity**: `@Schema` has ~50 attributes and deep integration with serializers
-- **Breaking `XApply` migration**: Replacing `on`/`onClass` on context-appliable annotations touches many call sites; plan for a single major release boundary and migration notes
-- **Incremental approach**: Each phase should be self-contained and buildable independently
+## Risk notes (still relevant)
+
+- Split-package / HTTP types in `org.apache.juneau.commons.http`
+- Binary compatibility on moves
+- `@Schema` / serializer integration complexity
+- **`@XApply` split** (`on` / `onClass`) is a separate, release-sized effort if pursued
+- Keep phases independently buildable

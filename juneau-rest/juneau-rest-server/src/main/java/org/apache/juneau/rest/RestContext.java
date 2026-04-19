@@ -37,11 +37,11 @@ import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
-import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 import java.util.logging.*;
 import java.util.stream.*;
@@ -97,26 +97,31 @@ import jakarta.servlet.http.*;
  * An extension of the {@link ServletConfig} object used during servlet initialization.
  *
  * <p>
- * Methods are provided for overriding or augmenting the information provided by the <ja>@Rest</ja> annotation.
- * In general, most information provided in the <ja>@Rest</ja> annotation can be specified programmatically
- * through calls on this object.
+ * Configuration is supplied declaratively through the {@link Rest @Rest} annotation on the resource class
+ * (and inherited from any parent classes), and programmatically through {@link RestInject @RestInject}-annotated
+ * methods/fields that contribute named beans (e.g. <c>encoders</c>, <c>parsers</c>, <c>callLogger</c>) to the REST
+ * resource's bean store. Where direct construction is needed (test rigs, mock clients, embedded usage),
+ * the public constructor takes a {@link RestContextInit} record carrying the bootstrap state.
  *
- * <p>
- * To interact with this object, simply pass it in as a constructor argument or in an INIT hook.
+ * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jc>// Option #1 - Pass in through constructor.</jc>
- * 	<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) {
- * 			<jv>builder</jv>
- * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>);
- * 	}
+ * 	<ja>@Rest</ja>(path=<js>"/myresource"</js>, serializers=JsonSerializer.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
+ * 	<jk>public class</jk> MyResource {
  *
- * 	<jc>// Option #2 - Use an init hook.</jc>
- * 	<ja>@RestInit</ja>
- * 	<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
- * 			<jv>builder</jv>
- * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>);
+ * 		<jc>// Programmatically contribute a bean to the resource's bean store.</jc>
+ * 		<ja>@RestInject</ja>
+ * 		<jk>public</jk> CallLogger callLogger() {
+ * 			<jk>return new</jk> MyCustomCallLogger();
+ * 		}
  * 	}
  * </p>
+ *
+ * <p>
+ * The historical <c>public MyResource(RestContext.Builder builder)</c> constructor-injection pattern and the
+ * <c>{@link RestInit @RestInit} public void init(RestContext.Builder builder)</c> method-injection pattern were both
+ * removed in 9.5. {@code RestContext.Builder} itself is on the deletion path; new code should not depend on it.
+ * See <a class="doclink" href="https://juneau.apache.org/docs/topics/V9.5MigrationGuide">v9.5 Migration Guide</a>
+ * for replacement recipes.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
@@ -124,7 +129,6 @@ import jakarta.servlet.http.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestContext">RestContext</a>
-
  * </ul>
  */
 @SuppressWarnings({
@@ -139,11 +143,7 @@ public class RestContext extends Context {
 
 	// Property name constants
 	private static final String PROP_allowContentParam = "allowContentParam";
-	private static final String PROP_allowedHeaderParams = "allowedHeaderParams";
-	private static final String PROP_allowedMethodHeader = "allowedMethodHeader";
-	private static final String PROP_allowedMethodParams = "allowedMethodParams";
 	private static final String PROP_beanStore = "beanStore";
-	private static final String PROP_clientVersionHeader = "clientVersionHeader";
 	private static final String PROP_consumes = "consumes";
 	private static final String PROP_defaultRequestAttributes = "defaultRequestAttributes";
 	private static final String PROP_defaultRequestHeaders = "defaultRequestHeaders";
@@ -151,15 +151,11 @@ public class RestContext extends Context {
 	private static final String PROP_partParser = "partParser";
 	private static final String PROP_partSerializer = "partSerializer";
 	private static final String PROP_produces = "produces";
-	private static final String PROP_renderResponseStackTraces = "renderResponseStackTraces";
 	private static final String PROP_responseProcessors = "responseProcessors";
 	private static final String PROP_restOpArgs = "restOpArgs";
+	private static final String PROP_simpleVarResolver = "simpleVarResolver";
 	private static final String PROP_staticFiles = "staticFiles";
 	private static final String PROP_swaggerProvider = "swaggerProvider";
-	private static final String PROP_uriAuthority = "uriAuthority";
-	private static final String PROP_uriContext = "uriContext";
-	private static final String PROP_uriRelativity = "uriRelativity";
-	private static final String PROP_uriResolution = "uriResolution";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
@@ -182,10 +178,8 @@ public class RestContext extends Context {
 			BeanContext.Builder.class,
 			BasicBeanStore.Builder.class,
 			BasicBeanStore.class,
-			CallLogger.Builder.class,
 			CallLogger.class,
 			Config.class,
-			DebugEnablement.Builder.class,
 			DebugEnablement.class,
 			EncoderSet.Builder.class,
 			EncoderSet.class,
@@ -198,9 +192,7 @@ public class RestContext extends Context {
 			JsonSchemaGenerator.Builder.class,
 			JsonSchemaGenerator.class,
 			Logger.class,
-			Messages.Builder.class,
 			Messages.class,
-			MethodExecStore.Builder.class,
 			MethodExecStore.class,
 			ParserSet.Builder.class,
 			ParserSet.class,
@@ -214,14 +206,10 @@ public class RestContext extends Context {
 			RestOperations.class,
 			SerializerSet.Builder.class,
 			SerializerSet.class,
-			StaticFiles.Builder.class,
 			StaticFiles.class,
-			SwaggerProvider.Builder.class,
 			SwaggerProvider.class,
-			ThrownStore.Builder.class,
 			ThrownStore.class,
 			VarList.class,
-			VarResolver.Builder.class,
 			VarResolver.class
 		);
 
@@ -229,6 +217,7 @@ public class RestContext extends Context {
 			PROP_defaultRequestAttributes,
 			PROP_defaultRequestHeaders,
 			PROP_defaultResponseHeaders,
+			PROP_simpleVarResolver,
 			"destroyMethods",
 			"endCallMethods",
 			"postCallMethods",
@@ -263,22 +252,11 @@ public class RestContext extends Context {
 	}
 
 		private BeanContext.Builder beanContext;
-		private BeanCreator<CallLogger> callLogger;
-		private BeanCreator<DebugEnablement> debugEnablement;
-		private BeanCreator<StaticFiles> staticFiles;
-		private BeanCreator<SwaggerProvider> swaggerProvider;
 		private BasicBeanStore beanStore;
 		private BasicBeanStore rootBeanStore;
-		private boolean disableContentParam = env("RestContext.disableContentParam", false);
 		private boolean initialized;
-		private boolean renderResponseStackTraces = env("RestContext.renderResponseStackTraces", false);
-		private Charset defaultCharset = env("RestContext.defaultCharset").map(Charset::forName).orElse(UTF8);
-		private Class<? extends RestChildren> childrenClass = RestChildren.class;
-		private Class<? extends RestOpContext> opContextClass = RestOpContext.class;
 		private final Class<?> resourceClass;
 		private Config config;
-		private DefaultClassList defaultClasses;
-		private DefaultSettingsMap defaultSettings;
 		private EncoderSet.Builder encoders;
 		private HeaderList defaultRequestHeaders;
 		private HeaderList defaultResponseHeaders;
@@ -288,17 +266,6 @@ public class RestContext extends Context {
 		private List<MediaType> consumes;
 		private List<MediaType> produces;
 		private List<Object> children = list();
-		private Logger logger;
-		private long maxInput = env("RestContext.maxInput").map(StringUtils::parseLongWithSuffix).orElse(100_000_000l);
-		private MethodExecStore.Builder methodExecStore;
-		private MethodList destroyMethods;
-		private MethodList endCallMethods;
-		private MethodList postCallMethods;
-		private MethodList postInitChildFirstMethods;
-		private MethodList postInitMethods;
-		private MethodList preCallMethods;
-		private MethodList startCallMethods;
-		private Messages.Builder messages;
 		private NamedAttributeMap defaultRequestAttributes;
 		private ParserSet.Builder parsers;
 		private final RestContext parentContext;
@@ -309,17 +276,8 @@ public class RestContext extends Context {
 		private ResourceSupplier resource;
 		private SerializerSet.Builder serializers;
 		private final ServletConfig inner;
-		private String allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type");
-		private String allowedMethodHeaders = env("RestContext.allowedMethodHeaders", "");
-		private String allowedMethodParams = env("RestContext.allowedMethodParams", "HEAD,OPTIONS");
-		private String clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version");
 		private String path = null;
-		private String uriAuthority = env("RestContext.uriAuthority").orElse(null);
-		private String uriContext = env("RestContext.uriContext").orElse(null);
-		private ThrownStore.Builder thrownStore;
-		private UriRelativity uriRelativity = env("RestContext.uriRelativity", UriRelativity.RESOURCE);
-		private UriResolution uriResolution = env("RestContext.uriResolution", UriResolution.ROOT_RELATIVE);
-		private VarResolver.Builder varResolver;
+		private VarResolver simpleVarResolver;
 
 		/**
 		 * Constructor.
@@ -335,196 +293,12 @@ public class RestContext extends Context {
 			this.inner = servletConfig;
 			this.parentContext = parentContext;
 
-			// Pass-through default values.
-			if (nn(parentContext)) {
-				defaultClasses = parentContext.defaultClasses.copy();
-				defaultSettings = parentContext.defaultSettings.copy();
+			if (nn(parentContext))
 				rootBeanStore = parentContext.rootBeanStore;
-			} else {
-				defaultClasses = DefaultClassList.create();
-				defaultSettings = DefaultSettingsMap.create();
-			}
 		}
 
-		/**
-		 * Allowed header URL parameters.
-		 *
-		 * <p>
-		 * When specified, allows headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
-		 * parameters.
-		 * <br>
-		 * For example:
-		 * <p class='burlenc'>
-		 *  ?Accept=text/json&amp;Content-Type=text/json
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		Useful for debugging REST interface using only a browser so that you can quickly simulate header values
-		 * 		in the URL bar.
-		 * 	<li class='note'>
-		 * 		Header names are case-insensitive.
-		 * 	<li class='note'>
-		 * 		Use <js>"*"</js> to allow any headers to be specified as URL parameters.
-		 * 	<li class='note'>
-		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#allowedHeaderParams}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.allowedHeaderParams"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDHEADERPARAMS"
-		 * 		<li><js>"Accept,Content-Type"</js>
-		 * 	</ul>
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder allowedHeaderParams(String value) {
-			allowedHeaderParams = assertArgNotNull(ARG_value, value);
-			return this;
-		}
 
-		/**
-		 * Allowed method headers.
-		 *
-		 * <p>
-		 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <c>X-Method</c> HTTP header
-		 * to override the real HTTP method name.
-		 *
-		 * <p>
-		 * Allows you to override the actual HTTP method with a simulated method.
-		 * <br>For example, if an HTTP Client API doesn't support <c>PATCH</c> but does support <c>POST</c> (because
-		 * <c>PATCH</c> is not part of the original HTTP spec), you can add a <c>X-Method: PATCH</c> header on a normal
-		 * <c>HTTP POST /foo</c> request call which will make the HTTP call look like a <c>PATCH</c> request in any of the REST APIs.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(allowedMethodHeaders=<js>"PATCH"</js>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.allowedMethodHeaders(<js>"PATCH"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.allowedMethodHeaders(<js>"PATCH"</js>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		Method names are case-insensitive.
-		 * 	<li class='note'>
-		 * 		Use <js>"*"</js> to represent all methods.
-		 * 	<li class='note'>
-		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#allowedMethodHeaders}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.allowedMethodHeaders"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDMETHODHEADERS"
-		 * 		<li><js>""</js>
-		 * 	</ul>
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder allowedMethodHeaders(String value) {
-			allowedMethodHeaders = assertArgNotNull(ARG_value, value);
-			return this;
-		}
 
-		/**
-		 * Allowed method parameters.
-		 *
-		 * <p>
-		 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
-		 * GET request.
-		 * <br>
-		 * For example:
-		 * <p class='burlenc'>
-		 *  ?method=OPTIONS
-		 * </p>
-		 *
-		 * <p>
-		 * 	Useful in cases where you want to simulate a non-GET request in a browser by simply adding a parameter.
-		 * 	<br>Also useful if you want to construct hyperlinks to non-GET REST endpoints such as links to <c>OPTIONS</c>
-		 * pages.
-		 *
-		 * <p>
-		 * Note that per the <a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
-		 * be taken when allowing non-safe (<c>POST</c>, <c>PUT</c>, <c>DELETE</c>) methods to be invoked through GET requests.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation.</jc>
-		 * 	<ja>@Rest</ja>(allowedMethodParams=<js>"HEAD,OPTIONS,PUT"</js>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.allowedMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder builder) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.allowedMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
-		 * 	<li class='note'>
-		 * 		<js>'method'</js> parameter name is case-insensitive.
-		 * 	<li class='note'>
-		 * 		Use <js>"*"</js> to represent all methods.
-		 * 	<li class='note'>
-		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#allowedMethodParams}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.allowedMethodParams"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_ALLOWEDMETHODPARAMS"
-		 * 		<li><js>"HEAD,OPTIONS"</js>
-		 * 	</ul>
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder allowedMethodParams(String value) {
-			allowedMethodParams = assertArgNotNull(ARG_value, value);
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
@@ -664,125 +438,6 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Returns the call logger bean creator.
-		 *
-		 * <p>
-		 * Specifies the logger to use for logging of HTTP requests and responses.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Our customized logger.</jc>
-		 * 	<jk>public class</jk> MyLogger <jk>extends</jk> BasicCallLogger {
-		 *
-		 * 		<jk>public</jk> MyLogger(BasicBeanStore <jv>beanStore</jv>) {
-		 *			<jk>super</jk>(<jv>beanStore</jv>);
-		 *		}
-		 *
-		 * 		<ja>@Override</ja>
-		 * 			<jk>protected void</jk> log(Level <jv>level</jv>, String <jv>msg</jv>, Throwable <jv>e</jv>) {
-		 * 			<jc>// Handle logging ourselves.</jc>
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Option #1 - Registered via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(callLogger=MyLogger.<jk>class</jk>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Registered via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <p>
-		 * The default call logger can overridden via any of the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>Injected via bean store.
-		 * 	<li>Class annotation:  {@link Rest#callLogger() @Rest(callLogger)}
-		 * 	<li>{@link RestInject @RestInject}-annotated method:
-		 * 		<p class='bjava'>
-		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] CallLogger myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 		</p>
-		 * 		Args can be any injected bean.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		The default call logger if not specified is {@link BasicCallLogger}.
-		 * 	<li class='note'>
-		 * 		The resource class itself will be used if it implements the {@link CallLogger} interface and not
-		 * 		explicitly overridden via this annotation.
-		 * 	<li class='note'>
-		 * 		When defined as a class, the implementation must have one of the following constructor:
-		 * 		<ul>
-		 * 			<li><code><jk>public</jk> T(BasicBeanStore)</code>
-		 * 		</ul>
-		 * 	<li class='note'>
-		 * 		Inner classes of the REST resource class are allowed.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
-		 * </ul>
-		 *
-		 * @return The call logger sub-builder.
-		 * @throws RuntimeException If {@link #init(Supplier)} has not been called.
-		 */
-		public BeanCreator<CallLogger> callLogger() {
-			if (callLogger == null)
-				callLogger = createCallLogger(beanStore, resource);
-			return callLogger;
-		}
-
-		/**
-		 * Specifies the call logger for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.callLogger().impl(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
-		 * 	<li class='jm'>{@link #callLogger()}
-		 * </ul>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder callLogger(CallLogger value) {
-			callLogger().impl(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Specifies the call logger for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.callLogger().type(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
-		 * 	<li class='jm'>{@link #callLogger()}
-		 * </ul>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder callLogger(Class<? extends CallLogger> value) {
-			callLogger().type(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
 		 * Add a child REST resource.
 		 *
 		 * <p>
@@ -852,37 +507,20 @@ public class RestContext extends Context {
 		 * 	<ja>@Rest</ja>(path=<js>"/child"</js>)
 		 * 	<jk>public class</jk> MyChildResource {...}
 		 *
-		 * 	<jc>// Option #1 - Registered via annotation.</jc>
+		 * 	<jc>// Registered via annotation.</jc>
 		 * 	<ja>@Rest</ja>(children={MyChildResource.<jk>class</jk>})
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.children(MyChildResource.<jk>class</jk>);
-		 *
-		 * 			<jc>// Use a pre-instantiated object instead.</jc>
-		 * 			<jv>builder</jv>.child(<js>"/child"</js>, <jk>new</jk> MyChildResource());
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.children(MyChildResource.<jk>class</jk>);
-		 * 		}
-		 * 	}
+		 * 	<jk>public class</jk> MyResource { ... }
 		 * </p>
+		 *
+		 * <p>
+		 * For programmatic registration of pre-instantiated child resources, supply them via
+		 * {@link RestContextInit#children(java.util.List)} when constructing the context directly.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
-		 * 		When defined as classes, instances are resolved using the registered bean store which
-		 * 		by default is {@link BasicBeanStore} which requires the class have one of the following
-		 * 		constructors:
-		 * 		<ul>
-		 * 			<li><code><jk>public</jk> T(RestContext.Builder)</code>
-		 * 			<li><code><jk>public</jk> T()</code>
-		 * 		</ul>
+		 * 		When defined as classes, instances are resolved using the registered bean store
+		 * 		({@link BasicBeanStore} by default), which instantiates them via their public no-arg
+		 * 		constructor or via bean-store-resolved arguments.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -905,77 +543,6 @@ public class RestContext extends Context {
 			return this;
 		}
 
-		/**
-		 * Client version header.
-		 *
-		 * <p>
-		 * Specifies the name of the header used to denote the client version on HTTP requests.
-		 *
-		 * <p>
-		 * The client version is used to support backwards compatibility for breaking REST interface changes.
-		 * <br>Used in conjunction with {@link RestOp#clientVersion() @RestOp(clientVersion)} annotation.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(clientVersionHeader=<js>"$C{REST/clientVersionHeader,Client-Version}"</js>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.clientVersionHeader(<js>"Client-Version"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.clientVersionHeader(<js>"Client-Version"</js>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <p class='bjava'>
-		 * 	<jc>// Call this method if Client-Version is at least 2.0.
-		 * 	// Note that this also matches 2.0.1.</jc>
-		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
-		 * 	<jk>public</jk> Object method1() {
-		 * 		...
-		 * 	}
-		 *
-		 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
-		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
-		 * 	<jk>public</jk> Object method2() {
-		 * 		...
-		 * 	}
-		 *
-		 * 	<jc>// Call this method if Client-Version is less than 1.1.</jc>
-		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
-		 * 	<jk>public</jk> Object method3() {
-		 * 		...
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#clientVersionHeader}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.clientVersionHeader"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_CLIENTVERSIONHEADER"
-		 * 		<li><js>"Client-Version"</js>
-		 * 	</ul>
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder clientVersionHeader(String value) {
-			clientVersionHeader = assertArgNotNull(ARG_value, value);
-			return this;
-		}
 
 		/**
 		 * Returns the external configuration file for this resource.
@@ -1054,23 +621,9 @@ public class RestContext extends Context {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+		 * 	<jc>// Defined via annotation (config-file substitution supported).</jc>
 		 * 	<ja>@Rest</ja>(consumes={<js>"$C{REST/supportedConsumes,application/json}"</js>})
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.consumes(<jk>false</jk>, <js>"application/json"</js>)
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.consumes(<jk>false</jk>, <js>"application/json"</js>);
-		 * 		}
-		 * 	}
+		 * 	<jk>public class</jk> MyResource { ... }
 		 * </p>
 		 *
 		 * <p>
@@ -1114,186 +667,6 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Sets the debug default value.
-		 *
-		 * <p>
-		 * The default debug value is the enablement value if not otherwise overridden at the class or method level.
-		 *
-		 * @param value The debug default value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder debugDefault(Enablement value) {
-			defaultSettings().set("RestContext.debugDefault", assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Returns the debug enablement bean creator.
-		 *
-		 * <p>
-		 * Enables the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>
-		 * 		HTTP request/response bodies are cached in memory for logging purposes.
-		 * 	<li>
-		 * 		Request/response messages are automatically logged always or per request.
-		 * </ul>
-		 *
-		 * @return The debug enablement sub-builder.
-		 */
-		public BeanCreator<DebugEnablement> debugEnablement() {
-			if (debugEnablement == null)
-				debugEnablement = createDebugEnablement(beanStore, resource);
-			return debugEnablement;
-		}
-
-		/**
-		 * Specifies the debug enablement class to use for this REST context.
-		 *
-		 * @param value The new value for this setting.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder debugEnablement(Class<? extends DebugEnablement> value) {
-			debugEnablement().type(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Specifies the debug enablement class to use for this REST context.
-		 *
-		 * @param value The new value for this setting.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder debugEnablement(DebugEnablement value) {
-			debugEnablement().impl(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Specifies a default <c>Accept</c> header value if not specified on a request.
-		 *
-		 * @param value
-		 * 	The default value of the <c>Accept</c> header.
-		 * 	<br>Ignored if <jk>null</jk> or empty.
-		 * @return This object.
-		 */
-		public Builder defaultAccept(String value) {
-			if (ne(value))
-				defaultRequestHeaders(accept(value));
-			return this;
-		}
-
-		/**
-		 * Default character encoding.
-		 *
-		 * <p>
-		 * The default character encoding for the request and response if not specified on the request.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(defaultCharset=<js>"$C{REST/defaultCharset,US-ASCII}"</js>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.defaultCharset(<js>"US-ASCII"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.defaultCharset(<js>"US-ASCII"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Override at the method level.</jc>
-		 * 		<ja>@RestGet</ja>(defaultCharset=<js>"UTF-16"</js>)
-		 * 		<jk>public</jk> Object myMethod() {...}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#defaultCharset}
-		 * 	<li class='ja'>{@link RestOp#defaultCharset}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.defaultCharset"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_defaultCharset"
-		 * 		<li><js>"utf-8"</js>
-		 * 	</ul>
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder defaultCharset(Charset value) {
-			defaultCharset = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
-		/**
-		 * Returns the default implementation class list.
-		 *
-		 * <p>
-		 * This defines the implementation classes for a variety of bean types.
-		 *
-		 * <p>
-		 * Default classes are inherited from the parent REST object.
-		 * Typically used on the top-level {@link RestContext.Builder} to affect class types for that REST object and all children.
-		 *
-		 * <p>
-		 * Modifying the default class list on this builder does not affect the default class list on the parent builder, but changes made
-		 * here are inherited by child builders.
-		 *
-		 * @return The default implementation class list.
-		 */
-		public DefaultClassList defaultClasses() {
-			return defaultClasses;
-		}
-
-		/**
-		 * Adds to the default implementation class list.
-		 *
-		 * <p>
-		 * A shortcut for the following code:
-		 *
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.defaultClasses().add(<jv>values</jv>);
-		 * </p>
-		 *
-		 * @param values The values to add to the list of default classes.
-		 * 	<br>Cannot contain <jk>null</jk> values.
-		 * @return This object.
-		 * @see #defaultClasses()
-		 */
-		public Builder defaultClasses(Class<?>...values) {
-			assertArgNoNulls(ARG_values, values);
-			defaultClasses().add(values);
-			return this;
-		}
-
-		/**
-		 * Specifies a default <c>Content-Type</c> header value if not specified on a request.
-		 *
-		 * @param value
-		 * 	The default value of the <c>Content-Type</c> header.
-		 * 	<br>Ignored if <jk>null</jk> or empty.
-		 * @return This object.
-		 */
-		public Builder defaultContentType(String value) {
-			if (ne(value))
-				defaultRequestHeaders(contentType(value));
-			return this;
-		}
-
-		/**
 		 * Returns the default request attributes sub-builder.
 		 *
 		 * @return The default request attributes sub-builder.
@@ -1318,26 +691,9 @@ public class RestContext extends Context {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+		 * 	<jc>// Defined via annotation (config-file substitution supported).</jc>
 		 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
 		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>
-		 * 				.defaultRequestAttributes(
-		 * 					BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>),
-		 * 					BasicNamedAttribute.<jsm>of</jsm>(<js>"Baz"</js>, <jk>true</jk>)
-		 * 				);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.defaultRequestAttribute(<js>"Foo"</js>, <js>"bar"</js>);
-		 * 		}
 		 *
 		 * 		<jc>// Override at the method level.</jc>
 		 * 		<ja>@RestGet</ja>(defaultRequestAttributes={<js>"Foo: bar"</js>})
@@ -1386,26 +742,9 @@ public class RestContext extends Context {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+		 * 	<jc>// Defined via annotation (config-file substitution supported).</jc>
 		 * 	<ja>@Rest</ja>(defaultRequestHeaders={<js>"Accept: application/json"</js>, <js>"My-Header=$C{REST/myHeaderValue}"</js>})
 		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>
-		 * 				.defaultRequestHeaders(
-		 * 					Accept.<jsm>of</jsm>(<js>"application/json"</js>),
-		 * 					BasicHeader.<jsm>of</jsm>(<js>"My-Header"</js>, <js>"foo"</js>)
-		 * 				);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.defaultRequestHeaders(Accept.<jsm>of</jsm>(<js>"application/json"</js>));
-		 * 		}
 		 *
 		 * 		<jc>// Override at the method level.</jc>
 		 * 		<ja>@RestGet</ja>(defaultRequestHeaders={<js>"Accept: text/xml"</js>})
@@ -1459,27 +798,9 @@ public class RestContext extends Context {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+		 * 	<jc>// Defined via annotation (config-file substitution supported).</jc>
 		 * 	<ja>@Rest</ja>(defaultResponseHeaders={<js>"Content-Type: $C{REST/defaultContentType,text/plain}"</js>,<js>"My-Header: $C{REST/myHeaderValue}"</js>})
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>
-		 * 				.defaultResponseHeaders(
-		 * 					ContentType.<jsm>of</jsm>(<js>"text/plain"</js>),
-		 * 					BasicHeader.<jsm>ofPair</jsm>(<js>"My-Header: foo"</js>)
-		 * 				);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.defaultResponseHeaders(ContentType.<jsm>of</jsm>(<js>"text/plain"</js>));
-		 * 		}
-		 * 	}
+		 * 	<jk>public class</jk> MyResource { ... }
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1502,113 +823,15 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Sets a value in the default settings map.
-		 *
-		 * <p>
-		 * A shortcut for the following code:
-		 *
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.defaultSettings().add(<jv>key</jv>, <jv>value</jv>);
-		 *
-		 * </p>
-		 * @param key The setting key.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @param value The setting value.
-		 * @return This object.
-		 * @see #defaultSettings()
-		 */
-		public Builder defaultSetting(String key, Object value) {
-			defaultSettings().set(assertArgNotNull(ARG_key, key), value);
-			return this;
-		}
-
-		/**
-		 * Returns the default settings map.
-		 *
-		 * <p>
-		 * Default settings are inherited from the parent REST object.
-		 * Typically used on the top-level {@link RestContext.Builder} to affect settings for that REST object and all children.
-		 *
-		 * <p>
-		 * Modifying the default settings map on this builder does not affect the default settings on the parent builder, but changes made
-		 * here are inherited by child builders.
-		 *
-		 * @return The default settings map.
-		 */
-		public DefaultSettingsMap defaultSettings() {
-			return defaultSettings;
-		}
-
-		/**
 		 * Returns the destroy method list.
 		 *
 		 * @return The destroy method list.
 		 */
 		public MethodList destroyMethods() {
-			if (destroyMethods == null)
-				destroyMethods = createDestroyMethods(beanStore(), resource());
-			return destroyMethods;
+			return createDestroyMethods(beanStore(), resource());
 		}
 
-		/**
-		 * Disable content URL parameter.
-		 *
-		 * <p>
-		 * When enabled, the HTTP content content on PUT and POST requests can be passed in as text using the <js>"content"</js>
-		 * URL parameter.
-		 * <br>
-		 * For example:
-		 * <p class='burlenc'>
-		 *  ?content=(name='John%20Smith',age=45)
-		 * </p>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(disableContentParam=<js>"$C{REST/disableContentParam,true}"</js>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.disableContentParam();
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.disableContentParam();
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		<js>'content'</js> parameter name is case-insensitive.
-		 * 	<li class='note'>
-		 * 		Useful for debugging PUT and POST methods using only a browser.
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder disableContentParam() {
-			return disableContentParam(true);
-		}
 
-		/**
-		 * Disable content URL parameter.
-		 *
-		 * <p>
-		 * Same as {@link #disableContentParam()} but allows you to set it as a boolean value.
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder disableContentParam(boolean value) {
-			disableContentParam = value;
-			return this;
-		}
 
 		/**
 		 * Returns the encoder group sub-builder.
@@ -1697,9 +920,7 @@ public class RestContext extends Context {
 		 * @return The end call method list.
 		 */
 		public MethodList endCallMethods() {
-			if (endCallMethods == null)
-				endCallMethods = createEndCallMethods(beanStore(), resource());
-			return endCallMethods;
+			return createEndCallMethods(beanStore(), resource());
 		}
 
 		/**
@@ -1816,9 +1037,13 @@ public class RestContext extends Context {
 			var rc = resourceClass;
 
 			// @formatter:off
+			// Note: pre-9.5 this also called .addBean(Builder.class, this) so user code could request the
+			// in-flight RestContext.Builder via @RestInit method parameters or @RestInject method-finder
+			// resolution. That injection protocol was deleted in TODO-16 Phase C-3 (zero non-test callers
+			// across the entire codebase) — the Builder is now a private staging detail of RestContext
+			// construction, not a user-visible bean.
 			beanStore = createBeanStore(resource)
 				.build()
-				.addBean(Builder.class, this)
 				.addBean(ResourceSupplier.class, this.resource)
 				.addBean(ServletConfig.class, nn(inner) ? inner : this)
 				.addBean(ServletContext.class, (nn(inner) ? inner : this).getServletContext());
@@ -1831,10 +1056,8 @@ public class RestContext extends Context {
 			var bs = beanStore;
 
 			beanStore.add(BasicBeanStore.class, bs);
-			varResolver = createVarResolver(bs, r, rc);
-			beanStore.add(VarResolver.class, varResolver.build());
+			beanStore.add(VarResolver.class, simpleVarResolver());
 			config = beanStore.add(Config.class, createConfig(bs, r, rc));
-			beanStore.add(VarResolver.class, varResolver.bean(Config.class, config).build());
 
 			var rci = ClassInfo.of(resourceClass);
 
@@ -1863,7 +1086,7 @@ public class RestContext extends Context {
 				}
 			});
 
-			var vrs = varResolver().build().createSession();
+			var vrs = simpleVarResolver().createSession();
 			var work = AnnotationWorkList.of(vrs, rstream(AP.find(rci)).filter(CONTEXT_APPLY_FILTER));
 
 			apply(work);
@@ -1963,346 +1186,6 @@ public class RestContext extends Context {
 		 */
 		public Builder jsonSchemaGenerator(JsonSchemaGenerator value) {
 			jsonSchemaGenerator().impl(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Returns the logger for this resource.
-		 *
-		 * <p>
-		 * The logger is used in the following locations:
-		 * <ul>
-		 * 	<li>{@link RestServlet#log(Level, Throwable, String, Object...)} and related methods.
-		 * 	<li>{@link RestObject#log(Level, Throwable, String, Object...)} and related methods.
-		 * 	<li>In the {@link #callLogger()} of this resource.
-		 * </ul>
-		 * It can also be accessed directly via {@link RestContext#getLogger()} or passed in as a parameter
-		 * on a {@link RestOp}-annotated method.
-		 *
-		 * <p>
-		 * The default config can be overridden via any of the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestInject @RestInject}-annotated method:
-		 * 		<p class='bjava'>
-		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] Logger myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 		</p>
-		 * 		Args can be any injected bean.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
-		 * </ul>
-		 *
-		 * @return The logger for this resource.
-		 */
-		public Logger logger() {
-			if (logger == null)
-				logger = createLogger(beanStore(), resource, resourceClass);
-			return logger;
-		}
-
-		/**
-		 * Sets the logger for this resource.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
-		 * 	<li class='jm'>{@link #logger()}
-		 * </ul>
-		 *
-		 * @param value The logger to use for the REST resource.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder logger(Logger value) {
-			logger = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
-		/**
-		 * The maximum allowed input size (in bytes) on HTTP requests.
-		 *
-		 * <p>
-		 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
-		 * in out-of-memory errors which could affect system stability.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Override at the method level.</jc>
-		 * 		<ja>@RestPost</ja>(maxInput=<js>"10M"</js>)
-		 * 		<jk>public</jk> Object myMethod() {...}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		String value that gets resolved to a <jk>long</jk>.
-		 * 	<li class='note'>
-		 * 		Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:
-		 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-		 * 	<li class='note'>
-		 * 		A value of <js>"-1"</js> can be used to represent no limit.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#maxInput}
-		 * 	<li class='ja'>{@link RestOp#maxInput}
-		 * 	<li class='jm'>{@link RestOpContext.Builder#maxInput(String)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.maxInput"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_MAXINPUT"
-		 * 		<li><js>"100M"</js>
-		 * 	</ul>
-		 * 	<br>The default is <js>"100M"</js>.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder maxInput(String value) {
-			maxInput = StringUtils.parseLongWithSuffix(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Returns the messages sub-builder.
-		 *
-		 * <p>
-		 * Messages beans are wrappers around resource bundles containing localized messages.
-		 *
-		 * <p>
-		 * By default, the resource bundle name is assumed to match the class name.  For example, given the class
-		 * <c>MyClass.java</c>, the resource bundle is assumed to be <c>MyClass.properties</c>.  This property
-		 * allows you to override this setting to specify a different location such as <c>MyMessages.properties</c> by
-		 * specifying a value of <js>"MyMessages"</js>.
-		 *
-		 * <p>
-		 * 	Resource bundles are searched using the following base name patterns:
-		 * 	<ul>
-		 * 		<li><js>"{package}.{name}"</js>
-		 * 		<li><js>"{package}.i18n.{name}"</js>
-		 * 		<li><js>"{package}.nls.{name}"</js>
-		 * 		<li><js>"{package}.messages.{name}"</js>
-		 * 	</ul>
-		 *
-		 * <p>
-		 * This annotation is used to provide request-localized (based on <c>Accept-Language</c>) messages for the following methods:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestRequest#getMessage(String, Object...)}
-		 * 	<li class='jm'>{@link RestContext#getMessages() RestContext.getMessages()}
-		 * </ul>
-		 *
-		 * <p>
-		 * Request-localized messages are also available by passing either of the following parameter types into your Java method:
-		 * <ul class='javatree'>
-		 * 	<li class='jc'>{@link ResourceBundle} - Basic Java resource bundle.
-		 * 	<li class='jc'>{@link Messages} - Extended resource bundle with several convenience methods.
-		 * </ul>
-		 *
-		 * The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
-		 * <js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
-		 * absolute path like <js>"com.foo.sample.nls.Messages"</js>
-		 *
-		 * <h5 class='section'>Examples:</h5>
-		 * <p class='bini'>
-		 * 	<cc># Contents of org/apache/foo/nls/MyMessages.properties</cc>
-		 *
-		 * 	<ck>HelloMessage</ck> = <cv>Hello {0}!</cv>
-		 * </p>
-		 * <p class='bjava'>
-		 * 	<jc>// Contents of org/apache/foo/MyResource.java</jc>
-		 *
-		 * 	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
-		 * 	<jk>public class</jk> MyResource {...}
-		 *
-		 * 		<ja>@RestGet</ja>(<js>"/hello/{you}"</js>)
-		 * 		<jk>public</jk> Object helloYou(RestRequest <jv>req</jv>, Messages <jv>messages</jv>, <ja>@Path</ja>(<js>"name"</js>) String <jv>you</jv>) {
-		 * 			String <jv>string</jv>;
-		 *
-		 * 			<jc>// Get it from the RestRequest object.</jc>
-		 * 			<jv>string</jv> = <jv>req</jv>.getMessage(<js>"HelloMessage"</js>, <jv>you</jv>);
-		 *
-		 * 			<jc>// Or get it from the method parameter.</jc>
-		 * 			<jv>string</jv> = <jv>messages</jv>.getString(<js>"HelloMessage"</js>, <jv>you</jv>);
-		 *
-		 * 			<jc>// Or get the message in a locale different from the request.</jc>
-		 * 			<jv>string</jv> = <jv>messages</jv>.forLocale(Locale.<jsf>UK</jsf>).getString(<js>"HelloMessage"</js>, <jv>you</jv>);
-		 *
-		 * 			<jk>return</jk> <jv>string</jv>;
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <p>
-		 * The default messages can overridden via any of the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>Injected via bean store.
-		 * 	<li>Class annotation:  {@link Rest#messages() @Rest(messages)}
-		 * 	<li>{@link RestInject @RestInject}-annotated method:
-		 * 		<p class='bjava'>
-		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] Messages myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 		</p>
-		 * 		Args can be any injected bean including Messages.Builder, the default builder.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>Mappings are cumulative from super classes.
-		 * 		<br>Therefore, you can find and retrieve messages up the class-hierarchy chain.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jc'>{@link Messages}
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LocalizedMessages">Localized Messages</a>
-		 * </ul>
-		 *
-		 * @return The messages sub-builder.
-		 */
-		public Messages.Builder messages() {
-			if (messages == null)
-				messages = createMessages(beanStore(), resource());
-			return messages;
-		}
-
-		/**
-		 * Specifies the messages bundle for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.messages().type(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LocalizedMessages">Localized Messages</a>
-		 * 	<li class='jm'>{@link #messages()}
-		 * </ul>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder messages(Class<? extends Messages> value) {
-			messages().type(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Specifies the messages bundle for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.messages().impl(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LocalizedMessages">Localized Messages</a>
-		 * 	<li class='jm'>{@link #messages()}
-		 * </ul>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder messages(Messages value) {
-			messages().impl(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Returns the method execution statistics store sub-builder.
-		 *
-		 * <p>
-		 * Used for tracking basic call statistics on Java methods in this class.
-		 * It can be accessed directly via {@link RestContext#getMethodExecStore()} or passed in as a parameter
-		 * on a {@link RestOp}-annotated method.
-		 *
-		 * <p>
-		 * The default method exec store can overridden via any of the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestInject @RestInject}-annotated method:
-		 * 		<p class='bjava'>
-		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] MethodExecStore myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 		</p>
-		 * 		Args can be any injected bean including MethodExecStore.Builder, the default builder.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
-		 * </ul>
-		 *
-		 * @return The method execution statistics store sub-builder.
-		 */
-		public MethodExecStore.Builder methodExecStore() {
-			if (methodExecStore == null)
-				methodExecStore = createMethodExecStore(beanStore(), resource());
-			return methodExecStore;
-		}
-
-		/**
-		 * Specifies the method execution store for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.methodExecStore().type(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
-		 * 	<li class='jm'>{@link #methodExecStore()}
-		 * </ul>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder methodExecStore(Class<? extends MethodExecStore> value) {
-			methodExecStore().type(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Specifies the method execution store for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.methodExecStore().impl(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
-		 * 	<li class='jm'>{@link #methodExecStore()}
-		 * </ul>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder methodExecStore(MethodExecStore value) {
-			methodExecStore().impl(assertArgNotNull(ARG_value, value));
 			return this;
 		}
 
@@ -2569,24 +1452,14 @@ public class RestContext extends Context {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation.</jc>
+		 * 	<jc>// Defined via annotation.</jc>
 		 * 	<ja>@Rest</ja>(path=<js>"/myResource"</js>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.path(<js>"/myResource"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.path(<js>"/myResource"</js>);
-		 * 		}
-		 * 	}
+		 * 	<jk>public class</jk> MyResource { ... }
 		 * </p>
+		 *
+		 * <p>
+		 * For programmatic construction, supply the path via {@link RestContextInit} when building a {@link RestContext}
+		 * directly.
 		 *
 		 * <p>
 		 * <h5 class='section'>Notes:</h5><ul>
@@ -2631,9 +1504,7 @@ public class RestContext extends Context {
 		 * @return The list of methods that gets called immediately after the <ja>@RestOp</ja> annotated method gets called..
 		 */
 		public MethodList postCallMethods() {
-			if (postCallMethods == null)
-				postCallMethods = createPostCallMethods(beanStore(), resource());
-			return postCallMethods;
+			return createPostCallMethods(beanStore(), resource());
 		}
 
 		/**
@@ -2642,9 +1513,7 @@ public class RestContext extends Context {
 		 * @return The post-init-child-first method list.
 		 */
 		public MethodList postInitChildFirstMethods() {
-			if (postInitChildFirstMethods == null)
-				postInitChildFirstMethods = createPostInitChildFirstMethods(beanStore(), resource());
-			return postInitChildFirstMethods;
+			return createPostInitChildFirstMethods(beanStore(), resource());
 		}
 
 		/**
@@ -2653,9 +1522,7 @@ public class RestContext extends Context {
 		 * @return The post-init method list.
 		 */
 		public MethodList postInitMethods() {
-			if (postInitMethods == null)
-				postInitMethods = createPostInitMethods(beanStore(), resource());
-			return postInitMethods;
+			return createPostInitMethods(beanStore(), resource());
 		}
 
 		/**
@@ -2667,9 +1534,7 @@ public class RestContext extends Context {
 		 * @return The pre-call method list.
 		 */
 		public MethodList preCallMethods() {
-			if (preCallMethods == null)
-				preCallMethods = createPreCallMethods(beanStore(), resource());
-			return preCallMethods;
+			return createPreCallMethods(beanStore(), resource());
 		}
 
 		/**
@@ -2691,23 +1556,9 @@ public class RestContext extends Context {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+		 * 	<jc>// Defined via annotation (config-file substitution supported).</jc>
 		 * 	<ja>@Rest</ja>(produces={<js>"$C{REST/supportedProduces,application/json}"</js>})
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.produces(<jk>false</jk>, <js>"application/json"</js>)
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.produces(<jk>false</jk>, <js>"application/json"</js>);
-		 * 		}
-		 * 	}
+		 * 	<jk>public class</jk> MyResource { ... }
 		 * </p>
 		 *
 		 * <p>
@@ -2735,34 +1586,7 @@ public class RestContext extends Context {
 			return this;
 		}
 
-		/**
-		 * <i><l>RestContext</l> configuration property:&emsp;</i>  Render response stack traces in responses.
-		 *
-		 * <p>
-		 * Shortcut for calling <code>renderResponseStackTraces(<jk>true</jk>)</code>.
-		 *
-		 * @return This object.
-		 */
-		public Builder renderResponseStackTraces() {
-			renderResponseStackTraces = true;
-			return this;
-		}
 
-		/**
-		 * <i><l>RestContext</l> configuration property:&emsp;</i>  Render response stack traces in responses.
-		 *
-		 * <p>
-		 * Render stack traces in HTTP response bodies when errors occur.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is <jk>false</jk>.
-		 * @return This object.
-		 */
-		public Builder renderResponseStackTraces(boolean value) {
-			renderResponseStackTraces = value;
-			return this;
-		}
 
 		/**
 		 * Returns the REST servlet/bean instance that this context is defined against.
@@ -2833,15 +1657,9 @@ public class RestContext extends Context {
 		 * 		}
 		 * 	}
 		 *
-		 * 	<jc>// Option #1 - Defined via annotation.</jc>
+		 * 	<jc>// Defined via annotation.</jc>
 		 * 	<ja>@Rest</ja>(responseProcessors=MyResponseProcessor.<jk>class</jk>)
 		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessors.<jk>class</jk>);
-		 * 		}
 		 *
 		 * 		<ja>@RestGet</ja>(...)
 		 * 		<jk>public</jk> Object myMethod() {
@@ -2954,63 +1772,6 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * REST children class.
-		 *
-		 * <p>
-		 * Allows you to extend the {@link RestChildren} class to modify how any of the methods are implemented.
-		 *
-		 * <p>
-		 * The subclass must have a public constructor that takes in any of the following arguments:
-		 * <ul>
-		 * 	<li>{@link RestChildren.Builder} - The builder for the object.
-		 * 	<li>Any beans found in the specified bean store.
-		 * 	<li>Any {@link Optional} beans that may or may not be found in the specified bean store.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Our extended context class</jc>
-		 * 	<jk>public</jk> MyRestChildren <jk>extends</jk> RestChildren {
-		 * 		<jk>public</jk> MyRestChildren(RestChildren.Builder <jv>builder</jv>, ARequiredSpringBean <jv>bean1</jv>, Optional&lt;AnOptionalSpringBean&gt; <jv>bean2</jv>) {
-		 * 			<jk>super</jk>(<jv>builder</jv>);
-		 * 		}
-		 *
-		 * 		<jc>// Override any methods.</jc>
-		 *
-		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> Optional&lt;RestChildMatch&gt; findMatch(RestCall <jv>call</jv>) {
-		 * 			String <jv>path</jv> = <jv>call</jv>.getPathInfo();
-		 * 			<jk>if</jk> (<jv>path</jv>.endsWith(<js>"/foo"</js>)) {
-		 * 				<jc>// Do our own special handling.</jc>
-		 * 			}
-		 * 			<jk>return super</jk>.findMatch(<jv>call</jv>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation.</jc>
-		 * 	<ja>@Rest</ja>(restChildrenClass=MyRestChildren.<jk>class</jk>)
-		 * 	<jk>public class</jk> MyResource {
-		 * 		...
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.restChildrenClass(MyRestChildren.<jk>class</jk>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * @param value The new value for this setting.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder restChildrenClass(Class<? extends RestChildren> value) {
-			childrenClass = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
-		/**
 		 * Returns the REST operation args sub-builder.
 		 *
 		 * @return The REST operation args sub-builder.
@@ -3038,71 +1799,6 @@ public class RestContext extends Context {
 		public final Builder restOpArgs(Class<? extends RestOpArg>...value) {
 			assertArgNoNulls(ARG_value, value);
 			restOpArgs().add(value);
-			return this;
-		}
-
-		/**
-		 * REST operation context class.
-		 *
-		 * <p>
-		 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
-		 *
-		 * <p>
-		 * The subclass must have a public constructor that takes in any of the following arguments:
-		 * <ul>
-		 * 	<li>{@link RestOpContext.Builder} - The builder for the object.
-		 * 	<li>Any beans found in the specified bean store.
-		 * 	<li>Any {@link Optional} beans that may or may not be found in the specified bean store.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Our extended context class that adds a request attribute to all requests.</jc>
-		 * 	<jc>// The attribute value is provided by an injected spring bean.</jc>
-		 * 	<jk>public</jk> MyRestOperationContext <jk>extends</jk> RestOpContext {
-		 *
-		 * 		<jk>private final</jk> Optional&lt;? <jk>extends</jk> Supplier&lt;Object&gt;&gt; <jf>fooSupplier</jf>;
-		 *
-		 * 		<jc>// Constructor that takes in builder and optional injected attribute provider.</jc>
-		 * 		<jk>public</jk> MyRestOperationContext(RestOpContext.Builder <jv>builder</jv>, Optional&lt;AnInjectedFooSupplier&gt; <jv>fooSupplier</jv>) {
-		 * 			<jk>super</jk>(<jv>builder</jv>);
-		 * 			<jk>this</jk>.<jf>fooSupplier</jf> = <jv>fooSupplier</jv>.orElseGet(()-&gt;<jk>null</jk>);
-		 * 		}
-		 *
-		 * 		<jc>// Override the method used to create default request attributes.</jc>
-		 * 		<ja>@Override</ja>
-		 * 		<jk>protected</jk> NamedAttributeMap createDefaultRequestAttributes(Object <jv>resource</jv>, BasicBeanStore <jv>beanStore</jv>, Method <jv>method</jv>, RestContext <jv>context</jv>) <jk>throws</jk> Exception {
-		 * 			<jk>return super</jk>
-		 * 				.createDefaultRequestAttributes(<jv>resource</jv>, <jv>beanStore</jv>, <jv>method</jv>, <jv>context</jv>)
-		 * 				.append(NamedAttribute.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jf>fooSupplier</jf>.get());
-		 * 		}
-		 * 	}
-		 * </p>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation.</jc>
-		 * 	<ja>@Rest</ja>(restOpContextClass=MyRestOperationContext.<jk>class</jk>)
-		 * 	<jk>public class</jk> MyResource {
-		 * 		...
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.methodContextClass(MyRestOperationContext.<jk>class</jk>);
-		 * 		}
-		 *
-		 * 		<ja>@RestGet</ja>
-		 * 		<jk>public</jk> Object foo(RequestAttributes <jv>attributes</jv>) {
-		 * 			<jk>return</jk> <jv>attributes</jv>.get(<js>"foo"</js>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * @param value The new value for this setting.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder restOpContextClass(Class<? extends RestOpContext> value) {
-			opContextClass = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -3239,243 +1935,7 @@ public class RestContext extends Context {
 		 * @return The start call method list.
 		 */
 		public MethodList startCallMethods() {
-			if (startCallMethods == null)
-				startCallMethods = createStartCallMethods(beanStore(), resource());
-			return startCallMethods;
-		}
-
-		/**
-		 * Returns the static files bean creator.
-		 *
-		 * <p>
-		 * Used to retrieve localized files to be served up as static files through the REST API via the following
-		 * predefined methods:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link BasicRestObject#getHtdoc(String, Locale)}.
-		 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
-		 * </ul>
-		 *
-		 * <p>
-		 * The static file finder can be accessed through the following methods:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestContext#getStaticFiles()}
-		 * 	<li class='jm'>{@link RestRequest#getStaticFiles()}
-		 * </ul>
-		 *
-		 * <p>
-		 * The default static files finder implementation class is {@link BasicStaticFiles}.  This can be overridden via the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>
-		 * 		The {@link Rest#staticFiles() @Rest(staticFiles)} annotation.
-		 * 	<li>
-		 * 		Overridden {@link StaticFiles} implementation class name specified in {@link #defaultClasses()}.
-		 * 	<li>
-		 * 		Type specified via <c>{@link RestContext.Builder}.{@link #staticFiles() staticFiles()}.{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder#type(Class) type(Class)}</c>.
-		 * 	<li>
-		 * 		Bean specified via <c>{@link RestContext.Builder}.{@link #staticFiles() staticFiles()}.{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder#impl(Object) impl(Object)}</c>.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a static file finder that looks for files in the /files working subdirectory, but
-		 * 	// overrides the find() and resolve methods for special handling of special cases and adds a
-		 *	// Foo header to all requests.</jc>
-		 * 	<jk>public class</jk> MyStaticFiles <jk>extends</jk> BasicStaticFiles {
-		 *
-		 * 		<jk>public</jk> MyStaticFiles() {
-		 * 			<jk>super</jk>(
-		 * 				StaticFiles
-		 * 					.<jsm>create</jsm>()
-		 * 					.dir(<js>"/files"</js>)
-		 * 					.headers(BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>))
-		 * 			);
-		 * 		}
-		 * 	}
-		 * </p>
-		 * <p class='bjava'>
-		 * 	<ja>@Rest</ja>(staticFiles=MyStaticFiles.<jk>class</jk>)
-		 * 	<jk>public class</jk> MyResource {...}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
-		 * </ul>
-		 *
-		 * @return The static files bean creator.
-		 */
-		public BeanCreator<StaticFiles> staticFiles() {
-			if (staticFiles == null)
-				staticFiles = createStaticFiles(beanStore, resource);
-			return staticFiles;
-		}
-
-		/**
-		 * Specifies the static files resource finder for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.staticFiles().type(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
-		 * </ul>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder staticFiles(Class<? extends StaticFiles> value) {
-			staticFiles().type(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Specifies the static files resource finder for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.staticFiles().impl(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
-		 * </ul>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder staticFiles(StaticFiles value) {
-			staticFiles().impl(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Returns the swagger provider sub-builder.
-		 *
-		 * @return The swagger provider sub-builder.
-		 */
-		public BeanCreator<SwaggerProvider> swaggerProvider() {
-			if (swaggerProvider == null)
-				swaggerProvider = createSwaggerProvider(beanStore, resource);
-			return swaggerProvider;
-		}
-
-		/**
-		 * Specifies the swagger provider for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.swaggerProvider().type(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder swaggerProvider(Class<? extends SwaggerProvider> value) {
-			swaggerProvider().type(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Specifies the swagger provider for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.swaggerProvider().impl(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder swaggerProvider(SwaggerProvider value) {
-			swaggerProvider().impl(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Returns the thrown-store sub-builder.
-		 *
-		 * <p>
-		 * The thrown store is an in-memory cache of thrown exceptions.
-		 * It is used to store thrown exceptions when {@link MethodExecStats#error(Throwable)} is called from the {@link MethodExecStore}
-		 * bean of this resource.  It can also be accessed directly via {@link RestContext#getThrownStore()} or passed in as a parameter
-		 * on a {@link RestOp}-annotated method.
-		 *
-		 * <p>
-		 * The default thrown store is inherited from the parent context and can be overridden via any of the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestInject @RestInject}-annotated method:
-		 * 		<p class='bjava'>
-		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] ThrownStore myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 		</p>
-		 * 		Args can be any injected bean including ThrownStore.Builder, the default builder.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
-		 * </ul>
-		 *
-		 * @return The builder for the {@link ThrownStore} object in the REST context.
-		 */
-		public ThrownStore.Builder thrownStore() {
-			if (thrownStore == null)
-				thrownStore = createThrownStore(beanStore(), resource(), parentContext);
-			return thrownStore;
-		}
-
-		/**
-		 * Specifies the thrown store for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.thrownStore().type(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
-		 * 	<li class='jm'>{@link #thrownStore()}
-		 * </ul>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder thrownStore(Class<? extends ThrownStore> value) {
-			thrownStore().type(assertArgNotNull(ARG_value, value));
-			return this;
-		}
-
-		/**
-		 * Specifies the thrown store for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.thrownStore().impl(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
-		 * 	<li class='jm'>{@link #thrownStore()}
-		 * </ul>
-		 *
-		 * @param value The new value.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder thrownStore(ThrownStore value) {
-			thrownStore().impl(assertArgNotNull(ARG_value, value));
-			return this;
+			return createStartCallMethods(beanStore(), resource());
 		}
 
 		@Override /* Overridden from Builder */
@@ -3484,370 +1944,37 @@ public class RestContext extends Context {
 			return this;
 		}
 
-		/**
-		 * Resource authority path.
-		 *
-		 * <p>
-		 * Overrides the authority path value for this resource and any child resources.
-		 *
-		 * <p>
-		 * This setting is useful if you want to resolve relative URIs to absolute paths and want to explicitly specify the hostname/port.
-		 *
-		 * <p>
-		 * Affects the following methods:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestRequest#getAuthorityPath()}
-		 * </ul>
-		 *
-		 * <p>
-		 * If you do not specify the authority, it is automatically calculated via the following:
-		 *
-		 * <p class='bjava'>
-		 * 	String <jv>scheme</jv> = <jv>request</jv>.getScheme();
-		 * 	<jk>int</jk> <jv>port</jv> = <jv>request</jv>.getServerPort();
-		 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder(<jv>request</jv>.getScheme()).append(<js>"://"</js>).append(<jv>request</jv>.getServerName());
-		 * 	<jk>if</jk> (! (<jv>port</jv> == 80 &amp;&amp; <js>"http"</js>.equals(<jv>scheme</jv>) || port == 443 &amp;&amp; <js>"https"</js>.equals(<jv>scheme</jv>)))
-		 * 		<jv>sb</jv>.append(<js>':'</js>).append(<jv>port</jv>);
-		 * 	<jv>authorityPath</jv> = <jv>sb</jv>.toString();
-		 * </p>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(
-		 * 		path=<js>"/servlet"</js>,
-		 * 		uriAuthority=<js>"$C{REST/authorityPathOverride,http://localhost:10000}"</js>
-		 * 	)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.uriAuthority(<js>"http://localhost:10000"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.uriAuthority(<js>"http://localhost:10000"</js>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#uriAuthority}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.uriAuthority"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_URIAUTHORITY"
-		 * 		<li><jk>null</jk>
-		 * 	</ul>
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder uriAuthority(String value) {
-			uriAuthority = assertArgNotNull(ARG_value, value);
-			return this;
-		}
+
+
+
 
 		/**
-		 * Resource context path.
+		 * Returns the simple (bootstrap-time) variable resolver for this REST context.
 		 *
 		 * <p>
-		 * Overrides the context path value for this resource and any child resources.
+		 * The simple resolver is used during context construction to resolve SVL variables in annotation attribute values
+		 * (e.g. <c>@Rest(messages=...)</c>, <c>@Rest(config=...)</c>) before the runtime {@link VarResolver} — which has
+		 * {@link Messages} and {@link Config} beans wired in — is available. It exposes the same {@link Var} catalog as
+		 * the runtime resolver, but {@link LocalizationVar} and {@link ConfigVar} resolve to empty strings because their
+		 * backing beans haven't been built yet.
 		 *
 		 * <p>
-		 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
-		 * the context path is not actually specified on the servlet container.
-		 *
-		 * <p>
-		 * Affects the following methods:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestRequest#getContextPath()} - Returns the overridden context path for the resource.
-		 * 	<li class='jm'>{@link RestRequest#getServletPath()} - Includes the overridden context path for the resource.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * To override the simple resolver, declare a named {@link RestInject @RestInject} static method on the resource
+		 * class:
 		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(
-		 * 		path=<js>"/servlet"</js>,
-		 * 		uriContext=<js>"$C{REST/contextPathOverride,/foo}"</js>
-		 * 	)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.uriContext(<js>"/foo"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.uriContext(<js>"/foo"</js>);
-		 * 		}
-		 * 	}
+		 * 	<ja>@RestInject</ja>(name=<js>"simpleVarResolver"</js>) <jk>public static</jk> VarResolver mySimpleResolver(<i>&lt;args&gt;</i>) {...}
 		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#uriContext}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.uriContext"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_URICONTEXT"
-		 * 		<li><jk>null</jk>
-		 * 	</ul>
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder uriContext(String value) {
-			uriContext = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
-		/**
-		 * URI resolution relativity.
-		 *
-		 * <p>
-		 * Specifies how relative URIs should be interpreted by serializers.
-		 *
-		 * <p>
-		 * See {@link UriResolution} for possible values.
-		 *
-		 * <p>
-		 * Affects the following methods:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestRequest#getUriResolver()}
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(
-		 * 		path=<js>"/servlet"</js>,
-		 * 		uriRelativity=<js>"$C{REST/uriRelativity,PATH_INFO}"</js>
-		 * 	)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.uriRelativity(<jsf>PATH_INFO</jsf>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.uriRelativity(<jsf>PATH_INFO</jsf>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#uriRelativity}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.uriRelativity"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_URIRELATIVITY"
-		 * 		<li>{@link UriRelativity#RESOURCE}
-		 * 	</ul>
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder uriRelativity(UriRelativity value) {
-			uriRelativity = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
-		/**
-		 * URI resolution.
-		 *
-		 * <p>
-		 * Specifies how relative URIs should be interpreted by serializers.
-		 *
-		 * <p>
-		 * See {@link UriResolution} for possible values.
-		 *
-		 * <p>
-		 * Affects the following methods:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestRequest#getUriResolver()}
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(
-		 * 		path=<js>"/servlet"</js>,
-		 * 		uriResolution=<js>"$C{REST/uriResolution,ABSOLUTE}"</js>
-		 * 	)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.uriResolution(<jsf>ABSOLUTE</jsf>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.uriResolution(<jsf>ABSOLUTE</jsf>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#uriResolution}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.uriResolution"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_URIRESOLUTION"
-		 * 		<li>{@link UriResolution#ROOT_RELATIVE}
-		 * 	</ul>
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder uriResolution(UriResolution value) {
-			uriResolution = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
-		/**
-		 * Returns the variable resolver sub-builder.
-		 *
-		 * <p>
-		 * 	The variable resolver is used to resolve string variables of the form <js>"$X{...}"</js> in various places such as annotations on the REST class and methods.
-		 *
-		 * <p>
-		 * 	Can be used to add more variables or context objects to the variable resolver.
-		 * 	These variables affect the variable resolver returned by {@link RestRequest#getVarResolverSession()}.
-		 *
-		 * <p>
-		 * The var resolver is created by the constructor using the {@link #createVarResolver(BasicBeanStore,Supplier,Class)} method and is initialized with the following variables:
-		 * <ul class='javatreec'>
-		 * 	<li class='jc'>{@link ArgsVar}
-		 * 	<li class='jc'>{@link CoalesceVar}
-		 * 	<li class='jc'>{@link ConfigVar}
-		 * 	<li class='jc'>{@link EnvVariablesVar}
-		 * 	<li class='jc'>{@link FileVar}
-		 * 	<li class='jc'>{@link HtmlWidgetVar}
-		 * 	<li class='jc'>{@link IfVar}
-		 * 	<li class='jc'>{@link LenVar}
-		 * 	<li class='jc'>{@link LocalizationVar}
-		 * 	<li class='jc'>{@link LowerCaseVar}
-		 * 	<li class='jc'>{@link ManifestFileVar}
-		 * 	<li class='jc'>{@link NotEmptyVar}
-		 * 	<li class='jc'>{@link PatternExtractVar}
-		 * 	<li class='jc'>{@link PatternMatchVar}
-		 * 	<li class='jc'>{@link PatternReplaceVar}
-		 * 	<li class='jc'>{@link RequestAttributeVar}
-		 * 	<li class='jc'>{@link RequestFormDataVar}
-		 * 	<li class='jc'>{@link RequestHeaderVar}
-		 * 	<li class='jc'>{@link RequestPathVar}
-		 * 	<li class='jc'>{@link RequestQueryVar}
-		 * 	<li class='jc'>{@link RequestSwaggerVar}
-		 * 	<li class='jc'>{@link RequestVar}
-		 * 	<li class='jc'>{@link SerializedRequestAttrVar}
-		 * 	<li class='jc'>{@link ServletInitParamVar}
-		 * 	<li class='jc'>{@link SubstringVar}
-		 * 	<li class='jc'>{@link SwaggerVar}
-		 * 	<li class='jc'>{@link SwitchVar}
-		 * 	<li class='jc'>{@link SystemPropertiesVar}
-		 * 	<li class='jc'>{@link UpperCaseVar}
-		 * 	<li class='jc'>{@link UrlEncodeVar}
-		 * 	<li class='jc'>{@link UrlVar}
-		 * </ul>
-		 *
-		 * <p>
-		 * The default var resolver can be overridden via any of the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestInject @RestInject}-annotated methods:
-		 * 		<p class='bjava'>
-		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] VarResolver myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 		</p>
-		 * 		Args can be any injected bean including {@link org.apache.juneau.svl.VarResolver.Builder}, the default builder.
-		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 		 * </ul>
 		 *
-		 * @return The variable resolver sub-builder.
+		 * @return The simple (bootstrap-time) variable resolver. Cached on first call.
 		 */
-		public VarResolver.Builder varResolver() {
-			return varResolver;
-		}
-
-		/**
-		 * Adds one or more variables to the var resolver of this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.vars().add(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
-		 * 	<li class='jm'>{@link #varResolver()}
-		 * </ul>
-		 *
-		 * @param value The values to add.
-		 * 	<br>Cannot contain <jk>null</jk> values.
-		 * @return This object.
-		 */
-		@SafeVarargs
-		public final Builder vars(Class<? extends Var>...value) {
-			assertArgNoNulls(ARG_value, value);
-			varResolver.vars(value);
-			return this;
-		}
-
-		/**
-		 * Adds one or more variables to the var resolver of this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.vars().add(<jv>value</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
-		 * 	<li class='jm'>{@link #varResolver()}
-		 * </ul>
-		 *
-		 * @param value The values to add.
-		 * 	<br>Cannot contain <jk>null</jk> values.
-		 * @return This object.
-		 */
-		public Builder vars(Var...value) {
-			assertArgNoNulls(ARG_value, value);
-			varResolver.vars(value);
-			return this;
+		public VarResolver simpleVarResolver() {
+			if (simpleVarResolver == null)
+				simpleVarResolver = createSimpleVarResolver(beanStore, resource, resourceClass);
+			return simpleVarResolver;
 		}
 
 		private static void runInitHooks(BasicBeanStore beanStore, Supplier<?> resource) throws ServletException {
@@ -3856,8 +1983,15 @@ public class RestContext extends Context {
 
 			var map = CollectionUtils.<String,MethodInfo>map();
 			// @formatter:off
+			// Note: pre-9.5 this filter also excluded `y.hasParameter(RestOpContext.Builder.class)` because the
+			// per-op `@RestInit(RestOpContext.Builder)` flow handled those separately. That flow was deleted in
+			// TODO-16 Phase C-3 Route B (zero real-world callers), so the exclusion is gone too. Likewise, the
+			// class-level `@RestInit(RestContext.Builder)` injection protocol was deleted in TODO-16 Phase C-3
+			// (zero non-test callers anywhere) — `RestContext.Builder` is no longer added to the bean store, so
+			// any straggling `@RestInit` method that still declares either Builder type as a parameter will now
+			// surface a "missing prerequisites" error here, which is the desired loud-failure signal.
 			ClassInfo.ofProxy(r).getAllMethodsTopDown().stream()
-				.filter(y -> y.hasAnnotation(RestInit.class) && ! y.hasParameter(RestOpContext.Builder.class))
+				.filter(y -> y.hasAnnotation(RestInit.class))
 				.forEach(y -> {
 					var sig = y.getSignature();
 					if (! map.containsKey(sig))
@@ -3938,34 +2072,6 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Instantiates the call logger sub-builder.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
-		 * </ul>
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new call logger sub-builder.
-		 */
-		protected BeanCreator<CallLogger> createCallLogger(BasicBeanStore beanStore, Supplier<?> resource) {
-
-			var creator = BeanCreator.of(CallLogger.class, beanStore).type(BasicCallLogger.class);
-
-			// Specify the bean type if its set as a default.
-			defaultClasses().get(CallLogger.class).ifPresent(creator::type);
-
-			beanStore.getBean(CallLogger.class).ifPresent(creator::impl);
-
-			// Replace with bean from:  @RestInject public [static] CallLogger xxx(<args>)
-			new BeanCreateMethodFinder<>(CallLogger.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
-
-			return creator;
-		}
-
-		/**
 		 * Creates the config for this builder.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -4010,30 +2116,6 @@ public class RestContext extends Context {
 			new BeanCreateMethodFinder<>(Config.class, resource.get(), beanStore).addBean(Config.class, v.get()).find(Builder::isRestInjectMethod).run(v::set);
 
 			return v.get();
-		}
-
-		/**
-		 * Instantiates the debug enablement bean creator.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new debug enablement bean creator.
-		 */
-		protected BeanCreator<DebugEnablement> createDebugEnablement(BasicBeanStore beanStore, Supplier<?> resource) {
-
-			var creator = BeanCreator.of(DebugEnablement.class, beanStore).type(BasicDebugEnablement.class);
-
-			// Specify the bean type if its set as a default.
-			defaultClasses().get(DebugEnablement.class).ifPresent(creator::type);
-
-			beanStore.getBean(DebugEnablement.class).ifPresent(creator::impl);
-
-			// Replace with bean from:  @RestInject public [static] DebugEnablement xxx(<args>)
-			new BeanCreateMethodFinder<>(DebugEnablement.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
-
-			return creator;
 		}
 
 		/**
@@ -4145,7 +2227,7 @@ public class RestContext extends Context {
 			Value<EncoderSet.Builder> v = Value.of(EncoderSet.create(beanStore).add(IdentityEncoder.INSTANCE));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses().get(EncoderSet.class).ifPresent(x -> v.get().type(x));
+			beanStore.getBeanType(EncoderSet.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
 			beanStore.getBean(EncoderSet.class).ifPresent(x -> v.get().impl(x));
@@ -4206,92 +2288,6 @@ public class RestContext extends Context {
 			return v.get();
 		}
 
-		/**
-		 * Instantiates the logger for this resource.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
-		 * 	<li class='jm'>{@link #logger()}
-		 * </ul>
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @param resourceClass
-		 * 	The REST servlet/bean class that this context is defined against.
-		 * @return A new logger.
-		 */
-		protected Logger createLogger(BasicBeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
-
-			// Default value.
-			Value<Logger> v = Value.of(Logger.getLogger(cn(resourceClass)));
-
-			// Replace with bean from bean store.
-			beanStore.getBean(Logger.class).ifPresent(v::set);
-
-			// Replace with bean from:  @RestInject public [static] Logger xxx(<args>)
-			new BeanCreateMethodFinder<>(Logger.class, resource.get(), beanStore).addBean(Logger.class, v.get()).find(Builder::isRestInjectMethod).run(v::set);
-
-			return v.get();
-		}
-
-		/**
-		 * Instantiates the messages sub-builder.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LocalizedMessages">Localized Messages</a>
-		 * </ul>
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new messages sub-builder.
-		 */
-		protected Messages.Builder createMessages(BasicBeanStore beanStore, Supplier<?> resource) {
-
-			// Default value.
-			Value<Messages.Builder> v = Value.of(Messages.create(resourceClass));
-
-			// Replace with bean from bean store.
-			beanStore.getBean(Messages.class).ifPresent(x -> v.get().impl(x));
-
-			// Replace with bean from:  @RestInject public [static] Messages xxx(<args>)
-			new BeanCreateMethodFinder<>(Messages.class, resource.get(), beanStore).addBean(Messages.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
-
-			return v.get();
-		}
-
-		/**
-		 * Instantiates the method execution statistics store sub-builder.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
-		 * </ul>
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new method execution statistics store sub-builder.
-		 */
-		protected MethodExecStore.Builder createMethodExecStore(BasicBeanStore beanStore, Supplier<?> resource) {
-
-			// Default value.
-			Value<MethodExecStore.Builder> v = Value.of(MethodExecStore.create(beanStore));
-
-			// Specify the implementation class if its set as a default.
-			defaultClasses().get(MethodExecStore.class).ifPresent(x -> v.get().type(x));
-
-			// Replace with bean from bean store.
-			beanStore.getBean(MethodExecStore.class).ifPresent(x -> v.get().impl(x));
-
-			// Replace with bean from:  @RestInject public [static] MethodExecStore xxx(<args>)
-			new BeanCreateMethodFinder<>(MethodExecStore.class, resource.get(), beanStore).addBean(MethodExecStore.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
-
-			return v.get();
-		}
 
 		/**
 		 * Instantiates the parser group sub-builder.
@@ -4314,7 +2310,7 @@ public class RestContext extends Context {
 			Value<ParserSet.Builder> v = Value.of(ParserSet.create(beanStore));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses().get(ParserSet.class).ifPresent(x -> v.get().type(x));
+			beanStore.getBeanType(ParserSet.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
 			beanStore.getBean(ParserSet.class).ifPresent(x -> v.get().impl(x));
@@ -4354,7 +2350,7 @@ public class RestContext extends Context {
 			resourceAs(HttpPartParser.class).ifPresent(x -> v.get().impl(x));
 
 			// Specify the bean type if its set as a default.
-			defaultClasses().get(HttpPartParser.class).ifPresent(x -> v.get().type(x));
+			beanStore.getBeanType(HttpPartParser.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from:  @RestInject public [static] HttpPartParser xxx(<args>)
 			new BeanCreateMethodFinder<>(HttpPartParser.class, resource.get(), beanStore).addBean(HttpPartParser.Creator.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
@@ -4390,7 +2386,7 @@ public class RestContext extends Context {
 			resourceAs(HttpPartSerializer.class).ifPresent(x -> v.get().impl(x));
 
 			// Specify the bean type if its set as a default.
-			defaultClasses().get(HttpPartSerializer.class).ifPresent(x -> v.get().type(x));
+			beanStore.getBeanType(HttpPartSerializer.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from:  @RestInject public [static] HttpPartSerializer xxx(<args>)
 			new BeanCreateMethodFinder<>(HttpPartSerializer.class, resource.get(), beanStore).addBean(HttpPartSerializer.Creator.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
@@ -4555,41 +2551,40 @@ public class RestContext extends Context {
 		protected RestChildren.Builder createRestChildren(BasicBeanStore beanStore, Supplier<?> resource, RestContext restContext) throws Exception {
 
 			// Default value.
-			Value<RestChildren.Builder> v = Value.of(RestChildren.create(beanStore).type(childrenClass));
+			Value<RestChildren.Builder> v = Value.of(RestChildren.create(beanStore).type(RestChildren.class));
 
 			// Initialize our child resources.
 			for (var o : children) {
 				String path2 = null;
 				Supplier<?> so;
-				RestContext.Builder cb = null;
+				Class<?> rc2;
 
 				if (o instanceof RestChild o2) {
 					path2 = o2.path;
 					var o3 = o2.resource;
 					so = () -> o3;
-					cb = RestContext.create(o3.getClass(), restContext, inner);
-				} else {
-					if (o instanceof Class<?> oc) {
-						// Don't allow specifying yourself as a child.  Causes an infinite loop.
-						if (oc == resourceClass)
-							continue;
-						cb = RestContext.create(oc, restContext, inner);
-						if (beanStore.getBean(oc).isPresent()) {
-							so = () -> beanStore.getBean(oc).get();  // If we resolved via injection, always get it this way.
-						} else {
-							Object o2 = BeanCreator.of(oc, beanStore).builder(RestContext.Builder.class, cb).run();
-							so = () -> o2;
-						}
+					rc2 = o3.getClass();
+				} else if (o instanceof Class<?> oc) {
+					// Don't allow specifying yourself as a child.  Causes an infinite loop.
+					if (oc == resourceClass)
+						continue;
+					rc2 = oc;
+					if (beanStore.getBean(oc).isPresent()) {
+						so = () -> beanStore.getBean(oc).get();  // If we resolved via injection, always get it this way.
 					} else {
-						cb = RestContext.create(o.getClass(), restContext, inner);
-						so = () -> o;
+						// Decision #23 Phase C-2 (2026-04-19): the legacy ctor-takes-RestContext.Builder injection
+						// protocol is dropped in 9.5.  Child resources now self-configure via @Rest annotations +
+						// @RestInject members instead of imperative builder calls in their constructors.
+						Object o2 = BeanCreator.of(oc, beanStore).run();
+						so = () -> o2;
 					}
+				} else {
+					rc2 = o.getClass();
+					so = () -> o;
 				}
 
-				if (nn(path2))
-					cb.path(path2);
-
-				var cc = cb.init(so).build();
+				var cc = new RestContext(new RestContextInit(rc2, restContext, inner, so,
+					path2 == null ? "" : path2, java.util.List.of()));
 
 				var mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
 				if (nn(mi))
@@ -4668,16 +2663,12 @@ public class RestContext extends Context {
 
 			var rci = ClassInfo.of(resource.get());
 
-			var initMap = CollectionUtils.<String,MethodInfo>map();
-			// @formatter:off
-			ClassInfo.ofProxy(resource.get()).getAllMethodsTopDown().stream()
-				.filter(y -> y.hasAnnotation(RestInit.class) && y.hasParameter(RestOpContext.Builder.class))
-				.forEach(y -> {
-					var sig = y.getSignature();
-					if (! initMap.containsKey(sig))
-						initMap.put(sig, y.accessible());
-				});
-			// @formatter:on
+			// TODO-16 Phase C-3 (Route B, 2026-04-19): The per-op `@RestInit(RestOpContext.Builder)` protocol
+			// was deleted. Audit confirmed zero real-world callers (only stale javadoc/docs examples). Users who
+			// previously injected `RestOpContext.Builder` per op now configure operations declaratively via
+			// `@RestOp(...)` attributes, `@RestInject`-named beans, or the class-level `@RestInit(RestContext.Builder)`
+			// hook (still supported until the parent Builder is deleted). The corresponding `initMap` scan
+			// (filtering for `y.hasParameter(RestOpContext.Builder.class)`) and the per-op invocation loop are gone.
 
 			for (var mi : rci.getPublicMethods()) {
 				var al = rstream(ap.find(mi)).filter(REST_OP_GROUP).collect(Collectors.toList());
@@ -4694,18 +2685,12 @@ public class RestContext extends Context {
 						if (mi.isNotPublic())
 							throw servletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getNameSimple());
 
-						RestOpContext.Builder rocb = RestOpContext.create(mi.inner(), restContext).beanStore(beanStore).type(opContextClass);
-
-						beanStore = BasicBeanStore.of(beanStore).addBean(RestOpContext.Builder.class, rocb);
-						for (var m : initMap.values()) {
-							if (! beanStore.hasAllParams(m, resource.get())) {
-								throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", cns(m.getDeclaringClass()), m.getSignature(),
-									beanStore.getMissingParams(m, resource.get()));
-							}
-							restContext.invokeRestInitMethod(m, resource, beanStore);
-						}
-
-						var roc = rocb.build();
+						// `RestOpContext.create(method, context).beanStore(beanStore).type(RestOpContext.class).build()` →
+						// `new RestOpContext(method, context)`. The `.beanStore(beanStore)` override is equivalent to
+						// the ctor default `BasicBeanStore.of(context.getBeanStore())` since `beanStore` here IS the
+						// resource-context's bean store; `.type(RestOpContext.class)` was the default. See TODO-16
+						// Phase C-3 Route B for the full migration record.
+						var roc = new RestOpContext(mi.inner(), restContext);
 
 						String httpMethod = roc.getHttpMethod();
 
@@ -4714,17 +2699,15 @@ public class RestContext extends Context {
 						// We override the CallMethod.invoke() method to insert our logic.
 						if ("RRPC".equals(httpMethod)) {
 
-							// @formatter:off
-							RestOpContext roc2 = RestOpContext
-								.create(mi.inner(), restContext)
-								.dotAll()
-								.beanStore(restContext.getRootBeanStore())
-								.type(RrpcRestOpContext.class)
-								.build();
+							// `RestOpContext.create(method, context).beanStore(restContext.getRootBeanStore()).type(RrpcRestOpContext.class).build()` →
+							// `new RrpcRestOpContext(method, context)`. The bean-store override (root, not the
+							// resource-layered store) is preserved verbatim inside the new 2-arg ctor on
+							// `RrpcRestOpContext`. The `.dotAll()` flag was removed per TODO-16 Decision #17 —
+							// RRPC operations auto-append `/*` inside `Builder.getPathMatchers()`.
+							RestOpContext roc2 = new RrpcRestOpContext(mi.inner(), restContext);
 							v.get()
 								.add("GET", roc2)
 								.add("POST", roc2);
-							// @formatter:on
 
 						} else {
 							v.get().add(roc);
@@ -4762,7 +2745,7 @@ public class RestContext extends Context {
 			Value<SerializerSet.Builder> v = Value.of(SerializerSet.create(beanStore));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses().get(SerializerSet.class).ifPresent(x -> v.get().type(x));
+			beanStore.getBeanType(SerializerSet.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
 			beanStore.getBean(SerializerSet.class).ifPresent(x -> v.get().impl(x));
@@ -4795,118 +2778,13 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Instantiates the static files bean creator.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
-		 * </ul>
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new static files sub-builder.
-		 */
-		protected BeanCreator<StaticFiles> createStaticFiles(BasicBeanStore beanStore, Supplier<?> resource) {
-
-			var creator = BeanCreator.of(StaticFiles.class, beanStore).type(BasicStaticFiles.class);
-
-			// Specify the bean type if its set as a default.
-			defaultClasses().get(StaticFiles.class).ifPresent(creator::type);
-
-			beanStore.getBean(StaticFiles.class).ifPresent(creator::impl);
-
-			// Replace with bean from:  @RestInject public [static] StaticFiles xxx(<args>)
-			new BeanCreateMethodFinder<>(StaticFiles.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
-
-			return creator;
-		}
-
-		/**
-		 * Instantiates the swagger provider sub-builder.
+		 * Creates the simple (bootstrap-time) variable resolver.
 		 *
 		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ul>
-		 * 	<li>Returns the resource class itself is an instance of {@link SwaggerProvider}.
-		 * 	<li>Looks for swagger provider set via any of the following:
-		 * 		<ul>
-		 * 			<li>{@link RestContext.Builder#swaggerProvider(Class)}/{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
-		 * 			<li>{@link Rest#swaggerProvider()}.
-		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createSwaggerProvider()</c> method that returns {@link SwaggerProvider} on the
-		 * 		resource class with any of the following arguments:
-		 * 		<ul>
-		 * 			<li>{@link RestContext}
-		 * 			<li>{@link BasicBeanStore}
-		 * 			<li>Any <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>.
-		 * 		</ul>
-		 * 	<li>Resolves it via the bean store registered in this context.
-		 * 	<li>Instantiates a default {@link BasicSwaggerProvider}.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
-		 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
-		 * </ul>
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new swagger provider sub-builder.
-		 */
-		protected BeanCreator<SwaggerProvider> createSwaggerProvider(BasicBeanStore beanStore, Supplier<?> resource) {
-
-			var creator = BeanCreator.of(SwaggerProvider.class, beanStore).type(BasicSwaggerProvider.class);
-
-			// Specify the bean type if its set as a default.
-			defaultClasses().get(SwaggerProvider.class).ifPresent(creator::type);
-
-			beanStore.getBean(SwaggerProvider.class).ifPresent(creator::impl);
-
-			// Replace with bean from:  @RestInject public [static] SwaggerProvider xxx(<args>)
-			new BeanCreateMethodFinder<>(SwaggerProvider.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
-
-			return creator;
-		}
-
-		/**
-		 * Instantiates the thrown-store sub-builder.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
-		 * </ul>
-		 *
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @param parent
-		 * 	The parent context if the REST bean was registered via {@link Rest#children()}.
-		 * 	<br>Will be <jk>null</jk> if the bean is a top-level resource.
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
-		 * @return A new thrown-store sub-builder.
-		 */
-		protected ThrownStore.Builder createThrownStore(BasicBeanStore beanStore, Supplier<?> resource, RestContext parent) {
-
-			// Default value.
-			Value<ThrownStore.Builder> v = Value.of(ThrownStore.create(beanStore).impl(parent == null ? null : parent.getThrownStore()));
-
-			// Specify the implementation class if its set as a default.
-			defaultClasses().get(ThrownStore.class).ifPresent(x -> v.get().type(x));
-
-			// Replace with bean from bean store.
-			beanStore.getBean(ThrownStore.class).ifPresent(x -> v.get().impl(x));
-
-			// Replace with bean from:  @RestInject public [static] ThrownStore xxx(<args>)
-			new BeanCreateMethodFinder<>(ThrownStore.class, resource.get(), beanStore).addBean(ThrownStore.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
-
-			return v.get();
-		}
-
-		/**
-		 * Creates the variable resolver sub-builder.
+		 * Builds the same {@link Var} catalog as the runtime resolver but without {@link Messages} or {@link Config}
+		 * beans wired in — those depend on settings that are themselves resolved against this resolver, so they're
+		 * added later by {@link RestContext#findVarResolver()}. Override via
+		 * {@link RestInject @RestInject(name="simpleVarResolver")} on a static method.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
@@ -4918,13 +2796,13 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @param resourceClass
 		 * 	The REST servlet/bean type that this context is defined against.
-		 * @return A new variable resolver sub-builder.
+		 * @return The built simple variable resolver.
 		 */
-		protected VarResolver.Builder createVarResolver(BasicBeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
+		protected VarResolver createSimpleVarResolver(BasicBeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			// Default value.
 			// @formatter:off
-			Value<VarResolver.Builder> v = Value.of(
+			Value<VarResolver> v = Value.of(
 				VarResolver
 					.create()
 					.defaultVars()
@@ -4950,40 +2828,21 @@ public class RestContext extends Context {
 						.addDefault()
 					)
 					.bean(FileFinder.class, FileFinder.create(beanStore).cp(resourceClass,null,true).build())
+					.build()
 			);
 			// @formatter:on
 
-			// Replace with bean from bean store.
-			beanStore.getBean(VarResolver.class).ifPresent(x -> v.get().impl(x));
+			// Replace with named bean from bean store (PROP_simpleVarResolver).
+			beanStore.getBean(VarResolver.class, PROP_simpleVarResolver).ifPresent(v::set);
 
-			// Replace with bean from:  @RestInject public [static] VarResolver xxx(<args>)
-			new BeanCreateMethodFinder<>(VarResolver.class, resource.get(), beanStore).addBean(VarResolver.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
+			// Replace with bean from:  @RestInject(name="simpleVarResolver") public [static] VarResolver xxx(<args>)
+			new BeanCreateMethodFinder<>(VarResolver.class, resource.get(), beanStore).find(x -> isRestInjectMethod(x, PROP_simpleVarResolver)).run(v::set);
 
 			return v.get();
 		}
 	}
 
 	private static final Map<Class<?>,RestContext> REGISTRY = new ConcurrentHashMap<>();
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param resourceClass
-	 * 	The class annotated with <ja>@Rest</ja>.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param parentContext
-	 * 	The parent context if the REST bean was registered via {@link Rest#children()}.
-	 * 	<br>Can be <jk>null</jk> if the bean is a top-level resource.
-	 * @param servletConfig
-	 * 	The servlet config passed into the servlet by the servlet container.
-	 * 	<br>Can be <jk>null</jk> if not available.
-	 * 	<br>If <jk>null</jk>, then some features (such as access to servlet init params) will not be available.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) {
-		return new Builder(resourceClass, parentContext, servletConfig);
-	}
 
 	/**
 	 * Returns a registry of all created {@link RestContext} objects.
@@ -5000,67 +2859,309 @@ public class RestContext extends Context {
 		return new ServletException(f(msg, args), t);
 	}
 
-	protected final boolean allowContentParam;
-	protected final boolean renderResponseStackTraces;
-	protected final long maxInput;
 	protected final AtomicBoolean initialized = new AtomicBoolean(false);
 	protected final BasicHttpException initException;
-	protected final BeanContext beanContext;
 	protected final BasicBeanStore beanStore;
 	protected final BasicBeanStore rootBeanStore;
 	protected final Builder builder;
-	protected final CallLogger callLogger;
-	protected final Charset defaultCharset;
 	protected final Class<?> resourceClass;
-	protected final Class<? extends RestOpArg>[] restOpArgs;
 	protected final ConcurrentHashMap<Locale,Swagger> swaggerCache = new ConcurrentHashMap<>();
-	protected final Config config;
-	protected final DebugEnablement debugEnablement;
-	protected final DefaultClassList defaultClasses;
-	protected final DefaultSettingsMap defaultSettings;
-	protected final EncoderSet encoders;
-	protected final HeaderList defaultRequestHeaders;
-	protected final HeaderList defaultResponseHeaders;
-	protected final HttpPartParser partParser;
-	protected final HttpPartSerializer partSerializer;
 	protected final Instant startTime;
-	protected final JsonSchemaGenerator jsonSchemaGenerator;
 	protected final List<MediaType> consumes;
 	protected final List<MediaType> produces;
-	protected final Logger logger;
-	protected final Messages messages;
-	protected final MethodExecStore methodExecStore;
-	protected final NamedAttributeMap defaultRequestAttributes;
-	protected final ParserSet parsers;
 	protected final RestChildren restChildren;
 	protected final RestContext parentContext;
 	protected final RestOperations restOperations;
-	protected final ResponseProcessor[] responseProcessors;
-	protected final SerializerSet serializers;
-	protected final Set<String> allowedHeaderParams;
-	protected final Set<String> allowedMethodHeaders;
-	protected final Set<String> allowedMethodParams;
-	protected final StaticFiles staticFiles;
-	protected final String clientVersionHeader;
 	protected final String fullPath;
 	protected final String path;
-	protected final String uriAuthority;
-	protected final String uriContext;
-	protected final SwaggerProvider swaggerProvider;
-	protected final ThrownStore thrownStore;
 	protected final ThreadLocal<RestSession> localSession = new ThreadLocal<>();
-	protected final UriRelativity uriRelativity;
-	protected final UriResolution uriResolution;
 	protected final UrlPathMatcher pathMatcher;
-	protected final VarResolver varResolver;
-	private final MethodInvoker[] destroyMethods;
-	private final MethodInvoker[] endCallMethods;
-	private final MethodInvoker[] postInitChildFirstMethods;
-	private final MethodInvoker[] postInitMethods;
-	private final MethodInvoker[] startCallMethods;
-	private final MethodList postCallMethods;
-	private final MethodList preCallMethods;
+
+	private static final class LifecycleInvokerPair {
+		final MethodList methods;
+		final MethodInvoker[] invokers;
+
+		LifecycleInvokerPair(MethodList methods, MethodInvoker[] invokers) {
+			this.methods = methods;
+			this.invokers = invokers;
+		}
+	}
+
+	private final Memoizer<LifecycleInvokerPair> destroyInvokerPair = memoizer(this::findDestroyLifecycle);
+	private final Memoizer<LifecycleInvokerPair> endCallInvokerPair = memoizer(this::findEndCallLifecycle);
+	private final Memoizer<LifecycleInvokerPair> postInitInvokerPair = memoizer(this::findPostInitLifecycle);
+	private final Memoizer<LifecycleInvokerPair> postInitChildFirstInvokerPair = memoizer(this::findPostInitChildFirstLifecycle);
+	private final Memoizer<LifecycleInvokerPair> startCallInvokerPair = memoizer(this::findStartCallLifecycle);
+	private final Memoizer<MethodList> preCallMethodsMemo = memoizer(this::findPreCallMethodsList);
+	private final Memoizer<MethodList> postCallMethodsMemo = memoizer(this::findPostCallMethodsList);
+
+	private final Memoizer<Logger> loggerMemo = memoizer(this::findLogger);
+
+	private Logger findLogger() {
+		var v = Value.of(Logger.getLogger(cn(resourceClass)));
+		beanStore.getBean(Logger.class).ifPresent(v::set);
+		new BeanCreateMethodFinder<>(Logger.class, resource.get(), beanStore).addBean(Logger.class, v.get()).find(Builder::isRestInjectMethod).run(v::set);
+		return v.get();
+	}
+
+	// Bootstrap-time resolver — no Messages, no Config bean. Cached on the builder so that init()
+	// and findMessages()/findConfig() see the same instance during construction.
+	private final Memoizer<VarResolver> simpleVarResolverMemo = memoizer(this::findSimpleVarResolver);
+
+	private VarResolver findSimpleVarResolver() {
+		return builder.simpleVarResolver();
+	}
+
+	private final Memoizer<Messages> messagesMemo = memoizer(this::findMessages);
+
+	private Messages findMessages() {
+		var b = Messages.create(resourceClass);
+		// Walk @Rest annotations parent-to-child; child wins because location() prepends.
+		var anns = new ArrayList<>(getRestAnnotations());
+		Collections.reverse(anns);
+		// Resolve location strings against the simple resolver — full resolver isn't available yet
+		// (it depends on getMessages()).
+		var vrs = getSimpleVarResolver().createSession();
+		anns.forEach(ai -> ai.getString(PROPERTY_messages).filter(StringUtils::isNotBlank).ifPresent(s -> b.location(vrs.resolve(s))));
+		beanStore.getBean(Messages.class).ifPresent(b::impl);
+		new BeanCreateMethodFinder<>(Messages.class, resource.get(), beanStore).addBean(Messages.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
+		return b.build();
+	}
+
+	private final Memoizer<ThrownStore> thrownStoreMemo = memoizer(this::findThrownStore);
+
+	private ThrownStore findThrownStore() {
+		var b = ThrownStore.create(beanStore).impl(parentContext == null ? null : parentContext.getThrownStore());
+		beanStore.getBeanType(ThrownStore.class).ifPresent(b::type);
+		beanStore.getBean(ThrownStore.class).ifPresent(b::impl);
+		new BeanCreateMethodFinder<>(ThrownStore.class, resource.get(), beanStore).addBean(ThrownStore.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
+		return b.build();
+	}
+
+	// Depends on getThrownStore() for thrownStoreOnce wiring.
+	private final Memoizer<MethodExecStore> methodExecStoreMemo = memoizer(this::findMethodExecStore);
+
+	private MethodExecStore findMethodExecStore() {
+		var b = MethodExecStore.create(beanStore).thrownStoreOnce(getThrownStore());
+		beanStore.getBeanType(MethodExecStore.class).ifPresent(b::type);
+		beanStore.getBean(MethodExecStore.class).ifPresent(b::impl);
+		new BeanCreateMethodFinder<>(MethodExecStore.class, resource.get(), beanStore).addBean(MethodExecStore.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
+		return b.build();
+	}
+
+	// Runtime resolver — wraps the simple resolver and adds Messages + Config beans.
+	// Depends on getSimpleVarResolver() and getMessages(); pulls the bootstrap Config from the builder
+	// to avoid an infinite recursion with the runtime Config (which wraps the bootstrap Config in a
+	// session backed by *this* resolver).
+	private final Memoizer<VarResolver> varResolverMemo = memoizer(this::findVarResolver);
+
+	private VarResolver findVarResolver() {
+		var b = getSimpleVarResolver().copy()
+			.bean(Messages.class, getMessages())
+			.bean(Config.class, builder.config());
+		beanStore.getBean(VarResolver.class).ifPresent(b::impl);
+		new BeanCreateMethodFinder<>(VarResolver.class, resource.get(), beanStore).addBean(VarResolver.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
+		return b.build();
+	}
+
+	private final Memoizer<Config> configMemo = memoizer(this::findConfig);
+
+	private Config findConfig() {
+		// builder.config() returns the unresolved config (already populated in Builder.init() via createConfig());
+		// wrapping with .resolving(varResolver.createSession()) yields the resolving variant exposed by getConfig().
+		return builder.config().resolving(getVarResolver().createSession());
+	}
+
+	private final Memoizer<CallLogger> callLoggerMemo = memoizer(this::findCallLogger);
+
+	private CallLogger findCallLogger() {
+		var creator = BeanCreator.of(CallLogger.class, beanStore).type(BasicCallLogger.class);
+		// Order matters — annotations override defaults so they need to be applied last.
+		beanStore.getBeanType(CallLogger.class).ifPresent(creator::type);
+		// @Rest(callLogger=X) — most-derived non-Void wins.
+		// getRestAnnotationsForProperty(...) yields parent-to-child order (rstream reversal); reduce-last
+		// keeps the most-derived value, mirroring the prior "apply each annotation, child overrides parent" semantics.
+		getRestAnnotationsForProperty(PROPERTY_callLogger)
+			.map(ai -> ai.inner().callLogger())
+			.filter(c -> c != CallLogger.Void.class)
+			.reduce((first, second) -> second)
+			.ifPresent(creator::type);
+		beanStore.getBean(CallLogger.class).ifPresent(creator::impl);
+		new BeanCreateMethodFinder<>(CallLogger.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
+		return creator.orElse(null);
+	}
+
+	private final Memoizer<DebugEnablement> debugEnablementMemo = memoizer(this::findDebugEnablement);
+
+	private DebugEnablement findDebugEnablement() {
+		// @Rest(debugDefault="ALWAYS|NEVER|CONDITIONAL") — most-derived non-blank value wins, with parent inheritance
+		// gated by @Rest(noInherit={"debugDefault"}). Resolved value is published as an Enablement bean so that
+		// BasicDebugEnablement.init() (and any subclass) can pick it up via beanStore.getBean(Enablement.class).
+		// Annotation value overrides any pre-registered Enablement bean (e.g. mock-client default).
+		// If neither a debugDefault annotation value NOR a pre-registered Enablement bean is present, fall back
+		// to the @Rest(debug=true|false) boolean flag — ALWAYS when set, NEVER otherwise. This used to be done
+		// inside BasicDebugEnablement.init() by reading RestContext.Builder.isDebug() out of the bean store, but
+		// that protocol is gone (TODO-16 Phase C-3, 2026-04-19): no Enablement.class lookup escapes this method
+		// without a value, so subclasses no longer need access to the in-flight Builder.
+		String debugDefaultStr = mergeReplacedStringAttribute(PROPERTY_debugDefault, env("RestContext.debugDefault").orElse(null));
+		Enablement resolvedDebugDefault = null;
+		if (nn(debugDefaultStr) && !debugDefaultStr.isBlank())
+			resolvedDebugDefault = Enablement.fromString(debugDefaultStr);
+		if (nn(resolvedDebugDefault))
+			beanStore.addBean(Enablement.class, resolvedDebugDefault);
+		else if (beanStore.getBean(Enablement.class).isEmpty())
+			beanStore.addBean(Enablement.class, builder.isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
+		var creator = BeanCreator.of(DebugEnablement.class, beanStore).type(BasicDebugEnablement.class);
+		// Order matters — annotations override defaults so they need to be applied last.
+		beanStore.getBeanType(DebugEnablement.class).ifPresent(creator::type);
+		// @Rest(debugEnablement=X) — most-derived non-Void wins. See findCallLogger() for the reduce-last rationale.
+		getRestAnnotationsForProperty(PROPERTY_debugEnablement)
+			.map(ai -> ai.inner().debugEnablement())
+			.filter(c -> c != DebugEnablement.Void.class)
+			.reduce((first, second) -> second)
+			.ifPresent(creator::type);
+		beanStore.getBean(DebugEnablement.class).ifPresent(creator::impl);
+		new BeanCreateMethodFinder<>(DebugEnablement.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
+		return creator.orElse(null);
+	}
+
+	private final Memoizer<StaticFiles> staticFilesMemo = memoizer(this::findStaticFiles);
+
+	private StaticFiles findStaticFiles() {
+		var creator = BeanCreator.of(StaticFiles.class, beanStore).type(BasicStaticFiles.class);
+		// Order matters — annotations override defaults so they need to be applied last.
+		beanStore.getBeanType(StaticFiles.class).ifPresent(creator::type);
+		// @Rest(staticFiles=X) — most-derived non-Void wins. See findCallLogger() for the reduce-last rationale.
+		getRestAnnotationsForProperty(PROPERTY_staticFiles)
+			.map(ai -> ai.inner().staticFiles())
+			.filter(c -> c != StaticFiles.Void.class)
+			.reduce((first, second) -> second)
+			.ifPresent(creator::type);
+		beanStore.getBean(StaticFiles.class).ifPresent(creator::impl);
+		new BeanCreateMethodFinder<>(StaticFiles.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
+		return creator.orElse(null);
+	}
+
+	private final Memoizer<BeanContext> beanContextMemo = memoizer(this::findBeanContext);
+
+	private BeanContext findBeanContext() {
+		// Builder.beanContext() lazy-creates from BeanContext.create() seeded with bean-store overrides
+		// (BeanContext.Builder / BeanContext) and is mutated by init()'s apply(work) call before the ctor
+		// triggers this memoizer — so by the time we build() the builder it's in its final configured state.
+		return builder.beanContext().build();
+	}
+
+	private final Memoizer<ResponseProcessor[]> responseProcessorsMemo = memoizer(this::findResponseProcessors);
+
+	private ResponseProcessor[] findResponseProcessors() {
+		return builder.responseProcessors().build().toArray();
+	}
+
+	private final Memoizer<Class<? extends RestOpArg>[]> restOpArgsMemo = memoizer(this::findRestOpArgs);
+
+	private Class<? extends RestOpArg>[] findRestOpArgs() {
+		return builder.restOpArgs().build().asArray();
+	}
+
+	private final Memoizer<SerializerSet> serializersMemo = memoizer(this::findSerializers);
+
+	private SerializerSet findSerializers() {
+		return builder.serializers().build();
+	}
+
+	private final Memoizer<ParserSet> parsersMemo = memoizer(this::findParsers);
+
+	private ParserSet findParsers() {
+		return builder.parsers().build();
+	}
+
+	private final Memoizer<HttpPartSerializer> partSerializerMemo = memoizer(this::findPartSerializer);
+
+	private HttpPartSerializer findPartSerializer() {
+		return builder.partSerializer().create();
+	}
+
+	private final Memoizer<HttpPartParser> partParserMemo = memoizer(this::findPartParser);
+
+	private HttpPartParser findPartParser() {
+		return builder.partParser().create();
+	}
+
+	private final Memoizer<JsonSchemaGenerator> jsonSchemaGeneratorMemo = memoizer(this::findJsonSchemaGenerator);
+
+	private JsonSchemaGenerator findJsonSchemaGenerator() {
+		return builder.jsonSchemaGenerator().build();
+	}
+
+	private final Memoizer<EncoderSet> encodersMemo = memoizer(this::findEncoders);
+
+	private EncoderSet findEncoders() {
+		return builder.encoders().build();
+	}
+
+	private final Memoizer<HeaderList> defaultRequestHeadersMemo = memoizer(this::findDefaultRequestHeaders);
+
+	private HeaderList findDefaultRequestHeaders() {
+		return builder.defaultRequestHeaders();
+	}
+
+	private final Memoizer<HeaderList> defaultResponseHeadersMemo = memoizer(this::findDefaultResponseHeaders);
+
+	private HeaderList findDefaultResponseHeaders() {
+		return builder.defaultResponseHeaders();
+	}
+
+	private final Memoizer<NamedAttributeMap> defaultRequestAttributesMemo = memoizer(this::findDefaultRequestAttributes);
+
+	private NamedAttributeMap findDefaultRequestAttributes() {
+		return builder.defaultRequestAttributes();
+	}
+
+	private final Memoizer<SwaggerProvider> swaggerProviderMemo = memoizer(this::findSwaggerProvider);
+
+	private SwaggerProvider findSwaggerProvider() {
+		var creator = BeanCreator.of(SwaggerProvider.class, beanStore).type(BasicSwaggerProvider.class);
+		// Order matters — annotations override defaults so they need to be applied last.
+		beanStore.getBeanType(SwaggerProvider.class).ifPresent(creator::type);
+		// @Rest(swaggerProvider=X) — most-derived non-Void wins. See findCallLogger() for the reduce-last rationale.
+		getRestAnnotationsForProperty(PROPERTY_swaggerProvider)
+			.map(ai -> ai.inner().swaggerProvider())
+			.filter(c -> c != SwaggerProvider.Void.class)
+			.reduce((first, second) -> second)
+			.ifPresent(creator::type);
+		beanStore.getBean(SwaggerProvider.class).ifPresent(creator::impl);
+		new BeanCreateMethodFinder<>(SwaggerProvider.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
+		return creator.orElse(null);
+	}
+
 	private final Supplier<?> resource;
+
+	/**
+	 * Constructor — record-based entry point.
+	 *
+	 * <p>
+	 * Wires {@link RestContextInit#resourceClass()}, {@link RestContextInit#parentContext()},
+	 * {@link RestContextInit#servletConfig()}, {@link RestContextInit#resource()}, {@link RestContextInit#path()},
+	 * {@link RestContextInit#children()}, and {@link RestContextInit#beanStoreConfigurer()} into the resolved
+	 * {@code RestContext}. Replaces the deleted {@code RestContext.create(...)} fluent factory.
+	 *
+	 * @param init The bootstrap arguments. Must not be <jk>null</jk>.
+	 * @throws Exception If any initialization problems were encountered.
+	 * @since 9.2.1
+	 */
+	public RestContext(RestContextInit init) throws Exception {
+		this(toBuilder(init));
+	}
+
+	private static Builder toBuilder(RestContextInit init) throws ServletException {
+		var b = new Builder(init.resourceClass(), init.parentContext(), init.servletConfig()).init(init.resource());
+		if (! init.path().isEmpty())
+			b.path(init.path());
+		if (! init.children().isEmpty())
+			b.children(init.children().toArray());
+		init.beanStoreConfigurer().accept(b.beanStore());
+		return b;
+	}
 
 	/**
 	 * Constructor.
@@ -5080,8 +3181,6 @@ public class RestContext extends Context {
 		try {
 			this.builder = builder;
 
-			defaultClasses = builder.defaultClasses();
-			defaultSettings = builder.defaultSettings();
 			parentContext = builder.parentContext;
 			resource = builder.resource;
 			resourceClass = builder.resourceClass;
@@ -5093,7 +3192,6 @@ public class RestContext extends Context {
 				.addBean(BasicBeanStore.class, beanStore)
 				.addBean(RestContext.class, this)
 				.addBean(Object.class, resource.get())
-				.addBean(DefaultSettingsMap.class, defaultSettings)
 				.addBean(Builder.class, builder)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
 			// @formatter:on
@@ -5105,52 +3203,34 @@ public class RestContext extends Context {
 				p += "/*";
 			pathMatcher = UrlPathMatcher.of(p);
 
-			allowContentParam = ! builder.disableContentParam;
-			allowedHeaderParams = newCaseInsensitiveSet(opt(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodHeaders = newCaseInsensitiveSet(opt(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodParams = newCaseInsensitiveSet(opt(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			clientVersionHeader = builder.clientVersionHeader;
-			defaultCharset = builder.defaultCharset;
-			maxInput = builder.maxInput;
-			renderResponseStackTraces = builder.renderResponseStackTraces;
-			uriAuthority = builder.uriAuthority;
-			uriContext = builder.uriContext;
-			uriRelativity = builder.uriRelativity;
-			uriResolution = builder.uriResolution;
-
-			beanContext = bs.add(BeanContext.class, builder.beanContext().build());
-			encoders = bs.add(EncoderSet.class, builder.encoders().build());
-			serializers = bs.add(SerializerSet.class, builder.serializers().build());
-			parsers = bs.add(ParserSet.class, builder.parsers().build());
-			logger = bs.add(Logger.class, builder.logger());
-			bs.addBean(java.util.logging.Logger.class, logger); // Also register under java.util.logging.Logger for CallLogger compatibility
-			thrownStore = bs.add(ThrownStore.class, builder.thrownStore().build());
-			methodExecStore = bs.add(MethodExecStore.class, builder.methodExecStore().thrownStoreOnce(thrownStore).build());
-			messages = bs.add(Messages.class, builder.messages().build());
-			varResolver = bs.add(VarResolver.class, builder.varResolver().bean(Messages.class, messages).build());
-			config = bs.add(Config.class, builder.config().resolving(varResolver.createSession()));
-			responseProcessors = bs.add(ResponseProcessor[].class, builder.responseProcessors().build().toArray());
-			callLogger = bs.add(CallLogger.class, builder.callLogger().orElse(null));
-			partSerializer = bs.add(HttpPartSerializer.class, builder.partSerializer().create());
-			partParser = bs.add(HttpPartParser.class, builder.partParser().create());
-			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.jsonSchemaGenerator().build());
-			staticFiles = bs.add(StaticFiles.class, builder.staticFiles().orElse(null));
-			bs.add(FileFinder.class, staticFiles);
-			defaultRequestHeaders = bs.add(HeaderList.class, builder.defaultRequestHeaders(), PROP_defaultRequestHeaders);
-			defaultResponseHeaders = bs.add(HeaderList.class, builder.defaultResponseHeaders(), PROP_defaultResponseHeaders);
-			defaultRequestAttributes = bs.add(NamedAttributeMap.class, builder.defaultRequestAttributes(), PROP_defaultRequestAttributes);
-			restOpArgs = builder.restOpArgs().build().asArray();
-			debugEnablement = bs.add(DebugEnablement.class, builder.debugEnablement().orElse(null));
-			startCallMethods = builder.startCallMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			endCallMethods = builder.endCallMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			postInitMethods = builder.postInitMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			postInitChildFirstMethods = builder.postInitChildFirstMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			destroyMethods = builder.destroyMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
-			preCallMethods = builder.preCallMethods();
-			postCallMethods = builder.postCallMethods();
+			bs.addBean(BeanContext.class, getBeanContext());
+			bs.add(EncoderSet.class, getEncoders());
+			bs.add(SerializerSet.class, getSerializers());
+			bs.add(ParserSet.class, getParsers());
+			var lg = getLogger();
+			bs.addBean(Logger.class, lg);
+			bs.addBean(java.util.logging.Logger.class, lg); // Also register under java.util.logging.Logger for CallLogger compatibility
+			bs.addBean(ThrownStore.class, getThrownStore());
+			bs.addBean(MethodExecStore.class, getMethodExecStore());
+			var msgs = getMessages();
+			bs.addBean(Messages.class, msgs);
+			bs.add(VarResolver.class, getVarResolver());
+			bs.add(Config.class, getConfig());
+			bs.add(ResponseProcessor[].class, getResponseProcessors());
+			bs.addBean(CallLogger.class, getCallLogger());
+			bs.add(HttpPartSerializer.class, getPartSerializer());
+			bs.add(HttpPartParser.class, getPartParser());
+			bs.add(JsonSchemaGenerator.class, getJsonSchemaGenerator());
+			var sf = getStaticFiles();
+			bs.addBean(StaticFiles.class, sf);
+			bs.addBean(FileFinder.class, sf);
+			bs.add(HeaderList.class, getDefaultRequestHeaders(), PROP_defaultRequestHeaders);
+			bs.add(HeaderList.class, getDefaultResponseHeaders(), PROP_defaultResponseHeaders);
+			bs.add(NamedAttributeMap.class, getDefaultRequestAttributes(), PROP_defaultRequestAttributes);
+			bs.addBean(DebugEnablement.class, getDebugEnablement());
 			restOperations = builder.restOperations(this).build();
 			restChildren = builder.restChildren(this).build();
-			swaggerProvider = bs.add(SwaggerProvider.class, builder.swaggerProvider().orElse(null));
+			bs.addBean(SwaggerProvider.class, getSwaggerProvider());
 
 			var opContexts = restOperations.getOpContexts();
 
@@ -5245,6 +3325,125 @@ public class RestContext extends Context {
 			l.addAll(parentContext.getAllowedSerializerOptions());
 		getRestAnnotationsForProperty(p).forEach(x -> resolveCdl(x.getStringArray(p)).forEach(l::add));
 		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
+	}
+
+	private Stream<AnnotationInfo<Rest>> restAnnotationsForPropertySortedByRank(String propertyName) {
+		return getRestAnnotationsForProperty(propertyName).sorted(Comparator.comparingInt(AnnotationInfo::getRank));
+	}
+
+	private static String leadingEnumToken(String s) {
+		s = trim(s);
+		if (isEmpty(s))
+			return s;
+		int i = 0;
+		while (i < s.length() && (Character.isLetter(s.charAt(i)) || s.charAt(i) == '_'))
+			i++;
+		return s.substring(0, i);
+	}
+
+	private <E extends Enum<E>> Optional<E> parseEnumConstant(Class<E> enumClass, String resolved) {
+		var t = leadingEnumToken(trim(emptyIfNull(resolved)));
+		if (isEmpty(t))
+			return Optional.empty();
+		try {
+			return Optional.of(Enum.valueOf(enumClass, t));
+		} catch (IllegalArgumentException ignored) {
+			return Optional.empty();
+		}
+	}
+
+	String mergeReplacedStringAttribute(String propertyName, String initialFromEnvOrNull) {
+		var v = new AtomicReference<>(initialFromEnvOrNull == null ? null : resolve(initialFromEnvOrNull));
+		restAnnotationsForPropertySortedByRank(propertyName).forEach(ai ->
+			ai.getString(propertyName).filter(StringUtils::isNotBlank).ifPresent(s -> v.set(resolve(s))));
+		return v.get();
+	}
+
+	private boolean mergeReplacedBooleanAttribute(String propertyName, boolean envDefault) {
+		var v = new AtomicReference<>(envDefault);
+		restAnnotationsForPropertySortedByRank(propertyName).forEach(ai ->
+			ai.getString(propertyName).filter(StringUtils::isNotBlank).ifPresent(s -> v.set(Boolean.parseBoolean(resolve(s)))));
+		return v.get();
+	}
+
+	private final Memoizer<Set<String>> allowedHeaderParams = memoizer(this::findAllowedHeaderParams);
+
+	private Set<String> findAllowedHeaderParams() {
+		return Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedHeaderParams, env("RestContext.allowedHeaderParams", "Accept,Content-Type"))));
+	}
+
+	private final Memoizer<Set<String>> allowedMethodHeaders = memoizer(this::findAllowedMethodHeaders);
+
+	private Set<String> findAllowedMethodHeaders() {
+		return Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodHeaders, env("RestContext.allowedMethodHeaders").orElse(""))));
+	}
+
+	private final Memoizer<Set<String>> allowedMethodParams = memoizer(this::findAllowedMethodParams);
+
+	private Set<String> findAllowedMethodParams() {
+		return Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodParams, env("RestContext.allowedMethodParams", "HEAD,OPTIONS"))));
+	}
+
+	private final Memoizer<Boolean> allowContentParam = memoizer(this::findAllowContentParam);
+
+	private boolean findAllowContentParam() {
+		return ! mergeReplacedBooleanAttribute(PROPERTY_disableContentParam, env("RestContext.disableContentParam", false));
+	}
+
+	private final Memoizer<Boolean> renderResponseStackTraces = memoizer(this::findRenderResponseStackTraces);
+
+	private boolean findRenderResponseStackTraces() {
+		return mergeReplacedBooleanAttribute(PROPERTY_renderResponseStackTraces, env("RestContext.renderResponseStackTraces", false));
+	}
+
+	private final Memoizer<String> clientVersionHeader = memoizer(this::findClientVersionHeader);
+
+	private String findClientVersionHeader() {
+		return mergeReplacedStringAttribute(PROPERTY_clientVersionHeader, env("RestContext.clientVersionHeader", "Client-Version"));
+	}
+
+	private final Memoizer<UriRelativity> uriRelativity = memoizer(this::findUriRelativity);
+
+	private UriRelativity findUriRelativity() {
+		var v = new AtomicReference<>(
+			parseEnumConstant(UriRelativity.class, resolve(emptyIfNull(env("RestContext.uriRelativity").get())))
+				.orElse(UriRelativity.RESOURCE)
+		);
+		restAnnotationsForPropertySortedByRank(PROPERTY_uriRelativity).forEach(ai -> ai.getString(PROPERTY_uriRelativity).filter(StringUtils::isNotBlank).ifPresent(s ->
+			parseEnumConstant(UriRelativity.class, resolve(s)).ifPresent(v::set)
+		));
+		return v.get();
+	}
+
+	private final Memoizer<UriResolution> uriResolution = memoizer(this::findUriResolution);
+
+	private UriResolution findUriResolution() {
+		var v = new AtomicReference<>(
+			parseEnumConstant(UriResolution.class, resolve(emptyIfNull(env("RestContext.uriResolution").get())))
+				.orElse(UriResolution.ROOT_RELATIVE)
+		);
+		restAnnotationsForPropertySortedByRank(PROPERTY_uriResolution).forEach(ai -> ai.getString(PROPERTY_uriResolution).filter(StringUtils::isNotBlank).ifPresent(s ->
+			parseEnumConstant(UriResolution.class, resolve(s)).ifPresent(v::set)
+		));
+		return v.get();
+	}
+
+	private final Memoizer<String> uriAuthority = memoizer(this::findUriAuthority);
+
+	private String findUriAuthority() {
+		String local = mergeReplacedStringAttribute(PROPERTY_uriAuthority, env("RestContext.uriAuthority").orElse(null));
+		if (nn(local))
+			return local;
+		return isInherited(PROPERTY_uriAuthority) ? parentContext.getUriAuthority() : null;
+	}
+
+	private final Memoizer<String> uriContext = memoizer(this::findUriContext);
+
+	private String findUriContext() {
+		String local = mergeReplacedStringAttribute(PROPERTY_uriContext, env("RestContext.uriContext").orElse(null));
+		if (nn(local))
+			return local;
+		return isInherited(PROPERTY_uriContext) ? parentContext.getUriContext() : null;
 	}
 
 	private Stream<AnnotationInfo<Rest>> getRestAnnotationsForProperty(String name) {
@@ -5344,7 +3543,7 @@ public class RestContext extends Context {
 	 * Called during servlet destruction to invoke all {@link RestDestroy} methods.
 	 */
 	public void destroy() {
-		for (var x : destroyMethods) {
+		for (var x : destroyInvokerPair.get().invokers) {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
@@ -5477,7 +3676,7 @@ public class RestContext extends Context {
 	 * 	The header names allowed to be passed as URL parameters.
 	 * 	<br>The set is case-insensitive ordered and unmodifiable.
 	 */
-	public Set<String> getAllowedHeaderParams() { return allowedHeaderParams; }
+	public Set<String> getAllowedHeaderParams() { return allowedHeaderParams.get(); }
 
 	/**
 	 * Allowed method headers.
@@ -5491,7 +3690,7 @@ public class RestContext extends Context {
 	 * 	The method names allowed to be passed as <c>X-Method</c> headers.
 	 * 	<br>The set is case-insensitive ordered and unmodifiable.
 	 */
-	public Set<String> getAllowedMethodHeaders() { return allowedMethodHeaders; }
+	public Set<String> getAllowedMethodHeaders() { return allowedMethodHeaders.get(); }
 
 	/**
 	 * Allowed method URL parameters.
@@ -5505,7 +3704,7 @@ public class RestContext extends Context {
 	 * 	The method names allowed to be passed as <c>method</c> URL parameters.
 	 * 	<br>The set is case-insensitive ordered and unmodifiable.
 	 */
-	public Set<String> getAllowedMethodParams() { return allowedMethodParams; }
+	public Set<String> getAllowedMethodParams() { return allowedMethodParams.get(); }
 
 	/**
 	 * Returns the annotations applied to this context.
@@ -5519,7 +3718,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The bean store associated with this context.
 	 */
-	public BeanContext getBeanContext() { return beanContext; }
+	public BeanContext getBeanContext() { return beanContextMemo.get(); }
 
 	/**
 	 * Returns the bean store associated with this context.
@@ -5541,15 +3740,24 @@ public class RestContext extends Context {
 	/**
 	 * Returns the call logger to use for this resource.
 	 *
+	 * <p>
+	 * The default call logger is {@link BasicCallLogger}. Override via {@link Rest#callLogger() @Rest(callLogger)}
+	 * on the resource class, by registering a {@link CallLogger} bean in the bean store, or by declaring a
+	 * {@link RestInject @RestInject}-annotated static method on the resource class:
+	 * <p class='bjava'>
+	 * 	<ja>@RestInject</ja> <jk>public static</jk> CallLogger myCallLogger(<i>&lt;args&gt;</i>) {...}
+	 * </p>
+	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link RestContext.Builder#callLogger()}
+	 * 	<li class='ja'>{@link Rest#callLogger}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
 	 * </ul>
 	 *
 	 * @return
 	 * 	The call logger to use for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public CallLogger getCallLogger() { return callLogger; }
+	public CallLogger getCallLogger() { return callLoggerMemo.get(); }
 
 	/**
 	 * Returns the name of the client version header name used by this resource.
@@ -5563,7 +3771,7 @@ public class RestContext extends Context {
 	 * 	The name of the client version header used by this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public String getClientVersionHeader() { return clientVersionHeader; }
+	public String getClientVersionHeader() { return clientVersionHeader.get(); }
 
 	/**
 	 * Returns the config file associated with this servlet.
@@ -5579,7 +3787,7 @@ public class RestContext extends Context {
 	 * 	The resolving config file associated with this servlet.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Config getConfig() { return config; }
+	public Config getConfig() { return configMemo.get(); }
 
 	/**
 	 * Returns the explicit list of supported content types for this resource.
@@ -5601,7 +3809,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The debug enablement bean for this context.
 	 */
-	public DebugEnablement getDebugEnablement() { return debugEnablement; }
+	public DebugEnablement getDebugEnablement() { return debugEnablementMemo.get(); }
 
 	/**
 	 * Returns the default request attributes for this resource.
@@ -5614,7 +3822,7 @@ public class RestContext extends Context {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public NamedAttributeMap getDefaultRequestAttributes() { return defaultRequestAttributes; }
+	public NamedAttributeMap getDefaultRequestAttributes() { return defaultRequestAttributesMemo.get(); }
 
 	/**
 	 * Returns the default request headers for this resource.
@@ -5627,7 +3835,7 @@ public class RestContext extends Context {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultRequestHeaders() { return defaultRequestHeaders; }
+	public HeaderList getDefaultRequestHeaders() { return defaultRequestHeadersMemo.get(); }
 
 	/**
 	 * Returns the default response headers for this resource.
@@ -5640,14 +3848,14 @@ public class RestContext extends Context {
 	 * 	The default response headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultResponseHeaders() { return defaultResponseHeaders; }
+	public HeaderList getDefaultResponseHeaders() { return defaultResponseHeadersMemo.get(); }
 
 	/**
 	 * Returns the encoders associated with this context.
 	 *
 	 * @return The encoders associated with this context.
 	 */
-	public EncoderSet getEncoders() { return encoders; }
+	public EncoderSet getEncoders() { return encodersMemo.get(); }
 
 	/**
 	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
@@ -5671,7 +3879,7 @@ public class RestContext extends Context {
 	 * 	The HTTP-part serializer associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public JsonSchemaGenerator getJsonSchemaGenerator() { return jsonSchemaGenerator; }
+	public JsonSchemaGenerator getJsonSchemaGenerator() { return jsonSchemaGeneratorMemo.get(); }
 
 	/**
 	 * Returns the HTTP call for the current request.
@@ -5693,7 +3901,7 @@ public class RestContext extends Context {
 	 * 	The logger for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Logger getLogger() { return logger; }
+	public Logger getLogger() { return loggerMemo.get(); }
 
 	/**
 	 * Returns the resource bundle used by this resource.
@@ -5702,21 +3910,21 @@ public class RestContext extends Context {
 	 * 	The resource bundle for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Messages getMessages() { return messages; }
+	public Messages getMessages() { return messagesMemo.get(); }
 
 	/**
 	 * Returns the timing statistics on all method executions on this class.
 	 *
 	 * @return The timing statistics on all method executions on this class.
 	 */
-	public MethodExecStore getMethodExecStore() { return methodExecStore; }
+	public MethodExecStore getMethodExecStore() { return methodExecStoreMemo.get(); }
 
 	/**
 	 * Returns the parsers associated with this context.
 	 *
 	 * @return The parsers associated with this context.
 	 */
-	public ParserSet getParsers() { return parsers; }
+	public ParserSet getParsers() { return parsersMemo.get(); }
 
 	/**
 	 * Returns the HTTP-part parser associated with this resource.
@@ -5725,7 +3933,7 @@ public class RestContext extends Context {
 	 * 	The HTTP-part parser associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpPartParser getPartParser() { return partParser; }
+	public HttpPartParser getPartParser() { return partParserMemo.get(); }
 
 	/**
 	 * Returns the HTTP-part serializer associated with this resource.
@@ -5734,7 +3942,7 @@ public class RestContext extends Context {
 	 * 	The HTTP-part serializer associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpPartSerializer getPartSerializer() { return partSerializer; }
+	public HttpPartSerializer getPartSerializer() { return partSerializerMemo.get(); }
 
 	/**
 	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
@@ -5794,6 +4002,42 @@ public class RestContext extends Context {
 	public Class<?> getResourceClass() { return resourceClass; }
 
 	/**
+	 * Returns the response processors registered on this resource.
+	 *
+	 * <p>
+	 * Returned in the order they're invoked by {@link #processResponse(RestOpSession)}.
+	 * The returned array is the live backing array — callers must not mutate it.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#responseProcessors}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
+	 * </ul>
+	 *
+	 * @return
+	 * 	The response processors for this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public ResponseProcessor[] getResponseProcessors() { return responseProcessorsMemo.get(); }
+
+	/**
+	 * Returns the {@link RestOpArg} classes registered on this resource.
+	 *
+	 * <p>
+	 * Per-op {@link RestOpArg} instances are resolved separately at per-op setup via the bean store
+	 * (see {@link #findRestOperationArgs(Method, BasicBeanStore)}); this getter returns the class list
+	 * that drives that resolution.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#restOpArgs}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The REST-op-arg classes for this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public Class<? extends RestOpArg>[] getRestOpArgs() { return restOpArgsMemo.get(); }
+
+	/**
 	 * Returns the child resources associated with this servlet.
 	 *
 	 * @return
@@ -5825,7 +4069,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The serializers associated with this context.
 	 */
-	public SerializerSet getSerializers() { return serializers; }
+	public SerializerSet getSerializers() { return serializersMemo.get(); }
 
 	/**
 	 * Returns the servlet init parameter returned by {@link ServletConfig#getInitParameter(String)}.
@@ -5844,7 +4088,7 @@ public class RestContext extends Context {
 	 * 	The static files for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public StaticFiles getStaticFiles() { return staticFiles; }
+	public StaticFiles getStaticFiles() { return staticFilesMemo.get(); }
 
 	/**
 	 * Gives access to the internal statistics on this context.
@@ -5863,7 +4107,7 @@ public class RestContext extends Context {
 		Swagger s = swaggerCache.get(locale);
 		if (s == null) {
 			try {
-				s = swaggerProvider.getSwagger(this, locale);
+				s = getSwaggerProvider().getSwagger(this, locale);
 				if (nn(s))
 					swaggerCache.put(locale, s);
 			} catch (Exception e) {
@@ -5877,15 +4121,14 @@ public class RestContext extends Context {
 	 * Returns the Swagger provider used by this resource.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
-	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
+	 * 	<li class='ja'>{@link Rest#swaggerProvider()}
 	 * </ul>
 	 *
 	 * @return
 	 * 	The information provider for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public SwaggerProvider getSwaggerProvider() { return swaggerProvider; }
+	public SwaggerProvider getSwaggerProvider() { return swaggerProviderMemo.get(); }
 
 	/**
 	 * Returns the stack trace database associated with this context.
@@ -5894,7 +4137,7 @@ public class RestContext extends Context {
 	 * 	The stack trace database for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public ThrownStore getThrownStore() { return thrownStore; }
+	public ThrownStore getThrownStore() { return thrownStoreMemo.get(); }
 
 	/**
 	 * Returns the authority path of the resource.
@@ -5908,11 +4151,7 @@ public class RestContext extends Context {
 	 * 	<br>If not specified, returns the context path of the ascendant resource.
 	 */
 	public String getUriAuthority() {
-		if (nn(uriAuthority))
-			return uriAuthority;
-		if (nn(parentContext))
-			return parentContext.getUriAuthority();
-		return null;
+		return uriAuthority.get();
 	}
 
 	/**
@@ -5927,11 +4166,7 @@ public class RestContext extends Context {
 	 * 	<br>If not specified, returns the context path of the ascendant resource.
 	 */
 	public String getUriContext() {
-		if (nn(uriContext))
-			return uriContext;
-		if (nn(parentContext))
-			return parentContext.getUriContext();
-		return null;
+		return uriContext.get();
 	}
 
 	/**
@@ -5945,7 +4180,7 @@ public class RestContext extends Context {
 	 * 	The URI-resolution relativity setting value.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public UriRelativity getUriRelativity() { return uriRelativity; }
+	public UriRelativity getUriRelativity() { return uriRelativity.get(); }
 
 	/**
 	 * Returns the setting on how relative URIs should be resolved.
@@ -5958,7 +4193,7 @@ public class RestContext extends Context {
 	 * 	The URI-resolution setting value.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public UriResolution getUriResolution() { return uriResolution; }
+	public UriResolution getUriResolution() { return uriResolution.get(); }
 
 	/**
 	 * Returns the variable resolver for this servlet.
@@ -6011,7 +4246,20 @@ public class RestContext extends Context {
 	 *
 	 * @return The var resolver in use by this resource.
 	 */
-	public VarResolver getVarResolver() { return varResolver; }
+	public VarResolver getVarResolver() { return varResolverMemo.get(); }
+
+	/**
+	 * Returns the simple (bootstrap-time) variable resolver used during context construction.
+	 *
+	 * <p>
+	 * The simple resolver has the same {@link Var} catalog as {@link #getVarResolver()} but does not have
+	 * {@link Messages} or {@link Config} beans wired in — it is used to resolve annotation attribute values
+	 * (e.g. <c>@Rest(messages=...)</c>) before those beans are built. Override via
+	 * {@link RestInject @RestInject(name="simpleVarResolver")} on a static method of the resource class.
+	 *
+	 * @return The simple var resolver in use by this resource.
+	 */
+	public VarResolver getSimpleVarResolver() { return simpleVarResolverMemo.get(); }
 
 	/**
 	 * Returns whether it's safe to pass the HTTP content as a <js>"content"</js> GET parameter.
@@ -6022,14 +4270,14 @@ public class RestContext extends Context {
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
 	 */
-	public boolean isAllowContentParam() { return allowContentParam; }
+	public boolean isAllowContentParam() { return allowContentParam.get(); }
 
 	/**
 	 * Returns whether it's safe to render stack traces in HTTP responses.
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
 	 */
-	public boolean isRenderResponseStackTraces() { return renderResponseStackTraces; }
+	public boolean isRenderResponseStackTraces() { return renderResponseStackTraces.get(); }
 
 	/**
 	 * Called during servlet initialization to invoke all {@link RestPostInit} child-last methods.
@@ -6049,7 +4297,7 @@ public class RestContext extends Context {
 				throw new ServletException(e.unwrap());
 			}
 		}
-		for (var x : postInitMethods) {
+		for (var x : postInitInvokerPair.get().invokers) {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
@@ -6070,7 +4318,7 @@ public class RestContext extends Context {
 		if (initialized.get())
 			return this;
 		restChildren.postInitChildFirst();
-		for (var x : postInitChildFirstMethods) {
+		for (var x : postInitChildFirstInvokerPair.get().invokers) {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
@@ -6082,7 +4330,7 @@ public class RestContext extends Context {
 	}
 
 	private boolean isDebug(RestSession call) {
-		return debugEnablement.isDebug(this, call.getRequest());
+		return getDebugEnablement().isDebug(this, call.getRequest());
 	}
 
 	private static Set<String> newCaseInsensitiveSet(String value) {
@@ -6096,6 +4344,40 @@ public class RestContext extends Context {
 		};
 		StringUtils.split(value, s::add);
 		return u(s);
+	}
+
+	private LifecycleInvokerPair findDestroyLifecycle() {
+		return buildLifecycleInvokerPair(() -> builder.createDestroyMethods(beanStore, resource));
+	}
+
+	private LifecycleInvokerPair findEndCallLifecycle() {
+		return buildLifecycleInvokerPair(() -> builder.createEndCallMethods(beanStore, resource));
+	}
+
+	private LifecycleInvokerPair findPostInitLifecycle() {
+		return buildLifecycleInvokerPair(() -> builder.createPostInitMethods(beanStore, resource));
+	}
+
+	private LifecycleInvokerPair findPostInitChildFirstLifecycle() {
+		return buildLifecycleInvokerPair(() -> builder.createPostInitChildFirstMethods(beanStore, resource));
+	}
+
+	private LifecycleInvokerPair findStartCallLifecycle() {
+		return buildLifecycleInvokerPair(() -> builder.createStartCallMethods(beanStore, resource));
+	}
+
+	private MethodList findPreCallMethodsList() {
+		return builder.createPreCallMethods(beanStore, resource);
+	}
+
+	private MethodList findPostCallMethodsList() {
+		return builder.createPostCallMethods(beanStore, resource);
+	}
+
+	private LifecycleInvokerPair buildLifecycleInvokerPair(Supplier<MethodList> methods) {
+		var ml = MethodList.of(methods.get());
+		var inv = ml.stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
+		return new LifecycleInvokerPair(ml, inv);
 	}
 
 	private MethodInvoker toMethodInvoker(Method m) {
@@ -6161,7 +4443,7 @@ public class RestContext extends Context {
 	 * @param session The current request.
 	 */
 	protected void endCall(RestSession session) {
-		for (var x : endCallMethods) {
+		for (var x : endCallInvokerPair.get().invokers) {
 			try {
 				x.invoke(session.getBeanStore(), session.getResource());
 			} catch (Exception e) {
@@ -6186,11 +4468,12 @@ public class RestContext extends Context {
 		var ra = new RestOpArg[params.size()];
 
 		beanStore = BasicBeanStore.of(beanStore);
+		var roa = getRestOpArgs();
 
 		for (var i = 0; i < params.size(); i++) {
 			var pi = params.get(i);
 			beanStore.addBean(ParameterInfo.class, pi);
-			for (var c : restOpArgs) {
+			for (var c : roa) {
 				try {
 					ra[i] = BeanCreator.of(RestOpArg.class, beanStore).type(c).run();
 					if (nn(ra[i]))
@@ -6213,7 +4496,7 @@ public class RestContext extends Context {
 	 * @return The cached time-stats object.
 	 */
 	protected MethodExecStats getMethodExecStats(Method m) {
-		return this.methodExecStore.getStats(m);
+		return getMethodExecStore().getStats(m);
 	}
 
 	/**
@@ -6221,14 +4504,49 @@ public class RestContext extends Context {
 	 *
 	 * @return The list of methods to invoke after the actual REST method is called.
 	 */
-	protected MethodList getPostCallMethods() { return postCallMethods; }
+	public MethodList getPostCallMethods() { return postCallMethodsMemo.get(); }
 
 	/**
 	 * Returns the list of methods to invoke before the actual REST method is called.
 	 *
 	 * @return The list of methods to invoke before the actual REST method is called.
 	 */
-	protected MethodList getPreCallMethods() { return preCallMethods; }
+	public MethodList getPreCallMethods() { return preCallMethodsMemo.get(); }
+
+	/**
+	 * Returns the list of methods to invoke during servlet destruction.
+	 *
+	 * @return The destroy method list, never {@code null}.
+	 */
+	public MethodList getDestroyMethods() { return destroyInvokerPair.get().methods; }
+
+	/**
+	 * Returns the list of methods to invoke at the end of each HTTP request.
+	 *
+	 * @return The end-call method list, never {@code null}.
+	 */
+	public MethodList getEndCallMethods() { return endCallInvokerPair.get().methods; }
+
+	/**
+	 * Returns the list of methods to invoke during servlet post-initialization (child-last phase).
+	 *
+	 * @return The post-init method list, never {@code null}.
+	 */
+	public MethodList getPostInitMethods() { return postInitInvokerPair.get().methods; }
+
+	/**
+	 * Returns the list of methods to invoke during servlet post-initialization (child-first phase).
+	 *
+	 * @return The post-init-child-first method list, never {@code null}.
+	 */
+	public MethodList getPostInitChildFirstMethods() { return postInitChildFirstInvokerPair.get().methods; }
+
+	/**
+	 * Returns the list of methods to invoke at the start of each HTTP request.
+	 *
+	 * @return The start-call method list, never {@code null}.
+	 */
+	public MethodList getStartCallMethods() { return startCallInvokerPair.get().methods; }
 
 	/**
 	 * Method for handling response errors.
@@ -6379,8 +4697,9 @@ public class RestContext extends Context {
 
 		// Loop until we find the correct processor for the POJO.
 		int loops = 5;
-		for (var i = 0; i < responseProcessors.length; i++) {
-			var j = responseProcessors[i].process(opSession);
+		var rp = getResponseProcessors();
+		for (var i = 0; i < rp.length; i++) {
+			var j = rp[i].process(opSession);
 			if (j == FINISHED)
 				return;
 			if (j == RESTART) {
@@ -6397,27 +4716,27 @@ public class RestContext extends Context {
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_allowContentParam, allowContentParam)
-			.a(PROP_allowedHeaderParams, allowedHeaderParams)
-			.a(PROP_allowedMethodHeader, allowedMethodHeaders)
-			.a(PROP_allowedMethodParams, allowedMethodParams)
+			.a(PROP_allowContentParam, isAllowContentParam())
+			.a(PROPERTY_allowedHeaderParams, getAllowedHeaderParams())
+			.a(PROPERTY_allowedMethodHeaders, getAllowedMethodHeaders())
+			.a(PROPERTY_allowedMethodParams, getAllowedMethodParams())
 			.a(PROP_beanStore, beanStore)
-			.a(PROP_clientVersionHeader, clientVersionHeader)
+			.a(PROPERTY_clientVersionHeader, getClientVersionHeader())
 			.a(PROP_consumes, consumes)
-			.a(PROP_defaultRequestHeaders, defaultRequestHeaders)
-			.a(PROP_defaultResponseHeaders, defaultResponseHeaders)
-			.a(PROP_partParser, partParser)
-			.a(PROP_partSerializer, partSerializer)
+			.a(PROP_defaultRequestHeaders, getDefaultRequestHeaders())
+			.a(PROP_defaultResponseHeaders, getDefaultResponseHeaders())
+			.a(PROP_partParser, getPartParser())
+			.a(PROP_partSerializer, getPartSerializer())
 			.a(PROP_produces, produces)
-			.a(PROP_renderResponseStackTraces, renderResponseStackTraces)
-			.a(PROP_responseProcessors, responseProcessors)
-			.a(PROP_restOpArgs, restOpArgs)
-			.a(PROP_staticFiles, staticFiles)
-			.a(PROP_swaggerProvider, swaggerProvider)
-			.a(PROP_uriAuthority, uriAuthority)
-			.a(PROP_uriContext, uriContext)
-			.a(PROP_uriRelativity, uriRelativity)
-			.a(PROP_uriResolution, uriResolution);
+			.a(PROPERTY_renderResponseStackTraces, isRenderResponseStackTraces())
+			.a(PROP_responseProcessors, getResponseProcessors())
+			.a(PROP_restOpArgs, getRestOpArgs())
+			.a(PROP_staticFiles, getStaticFiles())
+			.a(PROP_swaggerProvider, getSwaggerProvider())
+			.a(PROPERTY_uriAuthority, getUriAuthority())
+			.a(PROPERTY_uriContext, getUriContext())
+			.a(PROPERTY_uriRelativity, getUriRelativity())
+			.a(PROPERTY_uriResolution, getUriResolution());
 	}
 
 	/**
@@ -6427,7 +4746,7 @@ public class RestContext extends Context {
 	 * @throws BasicHttpException If thrown from call methods.
 	 */
 	protected void startCall(RestSession session) throws BasicHttpException {
-		for (var x : startCallMethods) {
+		for (var x : startCallInvokerPair.get().invokers) {
 			try {
 				x.invoke(session.getBeanStore(), session.getContext().getResource());
 			} catch (IllegalAccessException | IllegalArgumentException e) {

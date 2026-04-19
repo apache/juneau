@@ -131,7 +131,7 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#consumes(MediaType...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext#getSupportedContentTypes()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -178,7 +178,7 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getDebugEnablement()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -211,8 +211,6 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultCharset(Charset)}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultCharset(Charset)}
 	 * 	<li class='ja'>{@link Rest#defaultCharset}
 	 * </ul>
 	 *
@@ -447,11 +445,8 @@ public @interface RestOp {
 	 * </p>
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is:
-	 * <p class='bjava'>
-	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
-	 * 	<jv>builder</jv>.getEncoders().set(<jv>classes</jv>);
-	 * </p>
+	 * For programmatic equivalents, contribute a {@link org.apache.juneau.encoders.EncoderSet} bean via
+	 * {@link RestInject @RestInject(name="encoders")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
@@ -514,8 +509,6 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#maxInput(String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#maxInput(String)}
 	 * 	<li class='ja'>{@link Rest#maxInput}
 	 * </ul>
 	 *
@@ -615,11 +608,8 @@ public @interface RestOp {
 	 * </p>
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is:
-	 * <p class='bjava'>
-	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
-	 * 	<jv>builder</jv>.getParsers().set(<jv>classes</jv>);
-	 * </p>
+	 * For programmatic equivalents, contribute a {@link org.apache.juneau.parser.ParserSet} bean via
+	 * {@link RestInject @RestInject(name="parsers")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
@@ -708,7 +698,7 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#produces(MediaType...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext#getSupportedAcceptTypes()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -894,11 +884,8 @@ public @interface RestOp {
 	 * </p>
 	 *
 	 * <p>
-	 * The programmatic equivalent to this annotation is:
-	 * <p class='bjava'>
-	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
-	 * 	<jv>builder</jv>.getSerializers().set(<jv>classes</jv>);
-	 * </p>
+	 * For programmatic equivalents, contribute a {@link org.apache.juneau.serializer.SerializerSet} bean via
+	 * {@link RestInject @RestInject(name="serializers")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
