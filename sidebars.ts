@@ -783,6 +783,11 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/04.07.JuneauBeanSwagger2',
 							label: '4.7. juneau-bean-swagger-v2',
 						},
+						{
+							type: 'doc',
+							id: 'topics/04.08.JuneauBeanMcp',
+							label: '4.8. juneau-bean-mcp',
+						},
 					],
 				},
 				{
@@ -1488,6 +1493,18 @@ const sidebars: SidebarsConfig = {
 				},
 				{
 					type: 'category',
+					label: '10a. juneau-rest-server-mcp',
+					collapsed: true,
+					items: [
+						{
+							type: 'doc',
+							id: 'topics/10a.01.JuneauRestServerMcpBasics',
+							label: '10a.1. juneau-rest-server-mcp Basics',
+						},
+					],
+				},
+				{
+					type: 'category',
 					label: '11. juneau-rest-server-springboot',
 					collapsed: true,
 					items: [
@@ -1961,6 +1978,18 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/22.01.V9.0-migration-guide',
 							label: '22.1. V9.0 Migration Guide',
+						},
+					],
+				},
+				{
+					type: 'category',
+					label: '23. V9.5 Migration Guide',
+					collapsed: true,
+					items: [
+						{
+							type: 'doc',
+							id: 'topics/23.01.V9.5-migration-guide',
+							label: '23.1. V9.5 Migration Guide',
 						},
 					],
 				},
