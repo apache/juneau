@@ -19,20 +19,12 @@ package org.apache.juneau.rest.annotation;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
-import java.nio.charset.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.guard.*;
-import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link RestOptions @RestOptions} annotation.
@@ -374,42 +366,10 @@ public class RestOptionsAnnotation {
 
 	}
 
-	/**
-	 * Applies {@link RestOptions} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
-	 */
-	public static class RestOpContextApply extends AnnotationApplier<RestOptions,RestOpContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public RestOpContextApply(VarResolverSession vr) {
-			super(RestOptions.class, RestOpContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<RestOptions> ai, RestOpContext.Builder b) {
-			RestOptions a = ai.inner();
-
-			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
-			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
-			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders().setDefault(x));
-			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders().setDefault(x));
-			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes().add(x));
-			stream(a.defaultRequestQueryData()).map(HttpParts::basicPart).forEach(x -> b.defaultRequestQueryData().setDefault(x));
-			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
-			b.converters().append(a.converters());
-			b.guards().append(a.guards());
-			b.matchers().append(a.matchers());
-			string(a.clientVersion()).ifPresent(b::clientVersion);
-			stream(a.path()).forEach(b::path);
-			string(a.value()).ifPresent(b::path);
-			cdl(a.rolesDeclared()).forEach(b::rolesDeclared);
-			string(a.roleGuard()).ifPresent(b::roleGuard);
-		}
-
-	}
+	// Phase D-2 (TODO-16, 2026-04-19): RestOpContextApply removed entirely. All previously-applied
+	// settings are now resolved via direct annotation walking on the corresponding {@code findXxx()}
+	// memoizers in {@link org.apache.juneau.rest.RestOpContext}; the {@code @ContextApply} reference
+	// on {@code @RestOptions} has been dropped.
 
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods

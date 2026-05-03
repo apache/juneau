@@ -510,43 +510,71 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * A synonym for {@link #toString()}
+	 * Serializes this map to a standard JSON string.
 	 *
-	 * @return This object as a JSON string.
+	 * @return This object as a standard JSON string.
 	 */
-	public String asJson() {
-		return toString();
+	public String toJson() {
+		return Json.of(this);
 	}
 
 	/**
-	 * Serialize this object to Simplified JSON using {@link Json5Serializer#DEFAULT_READABLE}.
+	 * Serializes this map to a JSON5 string.
 	 *
-	 * @return This object serialized as a string.
+	 * <p>
+	 * A synonym for {@link #toString()}.
+	 *
+	 * @return This object as a JSON5 string.
 	 */
-	public String asReadableString() {
+	public String toJson5() {
+		return Json5.of(this);
+	}
+
+	/**
+	 * Serializes this map to a JSON Lines string.
+	 *
+	 * @return This object as a JSON Lines string.
+	 */
+	public String toJsonl() {
+		return Jsonl.of(this);
+	}
+
+	/**
+	 * Serializes this map to a canonical JSON string (RFC 8785).
+	 *
+	 * @return This object as a canonical JSON string.
+	 */
+	public String toJcs() {
+		return Jcs.of(this);
+	}
+
+	/**
+	 * Serializes this map to an HJSON string.
+	 *
+	 * @return This object as an HJSON string.
+	 */
+	public String toHjson() {
+		return Hjson.of(this);
+	}
+
+	/**
+	 * Serializes this map to a readable (indented) JSON5 string using {@link Json5Serializer#DEFAULT_READABLE}.
+	 *
+	 * @return This object serialized as a readable JSON5 string.
+	 */
+	public String toReadableJson5() {
 		if (Json5Serializer.DEFAULT_READABLE == null)
 			return s(this);
 		return Json5Serializer.DEFAULT_READABLE.toString(this);
 	}
 
 	/**
-	 * Serialize this object to Simplified JSON using {@link Json5Serializer#DEFAULT}.
-	 *
-	 * @return This object serialized as a string.
-	 */
-	public String asString() {
-		if (Json5Serializer.DEFAULT == null)
-			return s(this);
-		return Json5Serializer.DEFAULT.toString(this);
-	}
-
-	/**
-	 * Serialize this object into a string using the specified serializer.
+	 * Serializes this map to a string using the specified serializer.
 	 *
 	 * @param serializer The serializer to use to convert this object to a string.
 	 * @return This object serialized as a string.
 	 */
-	public String asString(WriterSerializer serializer) {
+	public String toString(WriterSerializer serializer) {
 		return serializer.toString(this);
 	}
 

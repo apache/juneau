@@ -20,15 +20,11 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import java.nio.charset.*;
-
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.guard.*;
-import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.swagger.*;
@@ -47,7 +43,6 @@ import org.apache.juneau.rest.swagger.*;
 @Target(METHOD)
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(RestDeleteAnnotation.RestOpContextApply.class)
 @AnnotationGroup(RestOp.class)
 public @interface RestDelete {
 
@@ -106,9 +101,6 @@ public @interface RestDelete {
 	 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#clientVersionHeader(String)}
-	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
@@ -212,9 +204,7 @@ public @interface RestDelete {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(NamedAttribute...)}
-	 * 	<li class='ja'>{@link Rest#defaultRequestAttributes()}
+	 * <h5 class='section'>See Also:</h5><ul>	 * 	<li class='ja'>{@link Rest#defaultRequestAttributes()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -240,9 +230,6 @@ public @interface RestDelete {
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(org.apache.http.Header...)}
-	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
@@ -296,9 +283,6 @@ public @interface RestDelete {
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(org.apache.http.Header...)}
-	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
@@ -380,9 +364,6 @@ public @interface RestDelete {
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with this method.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#guards()}
-	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
@@ -525,7 +506,7 @@ public @interface RestDelete {
 	 * 	<li class='note'>
 	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
 	 * 	<li class='note'>
-	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}.
+	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()}.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -533,9 +514,6 @@ public @interface RestDelete {
 	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#roleGuard(String)}
-	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
@@ -564,9 +542,6 @@ public @interface RestDelete {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}
-	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */

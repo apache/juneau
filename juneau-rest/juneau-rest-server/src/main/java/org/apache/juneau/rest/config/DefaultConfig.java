@@ -20,7 +20,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.debug.*;
@@ -75,6 +74,7 @@ import org.apache.juneau.serializer.annotation.*;
 		MethodArg.class,
 		ParserArg.class,
 		PathArg.class,
+		PathRemainderArg.class,
 		QueryArg.class,
 		ReaderParserArg.class,
 		RequestBeanArg.class,

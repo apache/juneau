@@ -47,6 +47,13 @@
 			<artifactId>juneau-rest-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<!-- MCP REST server endpoint -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-mcp</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		
 		<!-- Bean modules -->
 		<dependency>
@@ -67,6 +74,11 @@
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-bean-jsonschema</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-mcp</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

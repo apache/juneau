@@ -16,32 +16,23 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
-import java.nio.charset.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.guard.*;
-import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Utility classes and methods for the {@link Rest @Rest} annotation.
@@ -686,67 +677,9 @@ public class RestAnnotation {
 
 	}
 
-	/**
-	 * Applies {@link Rest} annotations to a {@link org.apache.juneau.rest.RestContext.Builder}.
-	 */
-	public static class RestContextApply extends AnnotationApplier<Rest,RestContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public RestContextApply(VarResolverSession vr) {
-			super(Rest.class, RestContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Rest> ai, RestContext.Builder b) {
-			Rest a = ai.inner();
-
-			classes(a.serializers()).ifPresent(x -> b.serializers().add(x));
-			classes(a.parsers()).ifPresent(x -> b.parsers().add(x));
-			type(a.partSerializer()).ifPresent(x -> b.partSerializer().type(x));
-			type(a.partParser()).ifPresent(x -> b.partParser().type(x));
-			stream(a.produces()).map(MediaType::of).forEach(b::produces);
-			stream(a.consumes()).map(MediaType::of).forEach(b::consumes);
-			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(b::defaultRequestAttributes);
-			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(b::defaultRequestHeaders);
-			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(b::defaultResponseHeaders);
-			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(b::defaultRequestHeaders);
-			string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(b::defaultRequestHeaders);
-			b.responseProcessors().add(a.responseProcessors());
-			b.children((java.lang.Object[])a.children());
-			b.restOpArgs(a.restOpArgs());
-			classes(a.encoders()).ifPresent(x -> b.encoders().add(x));
-			string(a.path()).ifPresent(b::path);
-		}
-	}
-
-	/**
-	 * Applies {@link Rest} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
-	 */
-	public static class RestOpContextApply extends AnnotationApplier<Rest,RestOpContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public RestOpContextApply(VarResolverSession vr) {
-			super(Rest.class, RestOpContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Rest> ai, RestOpContext.Builder b) {
-			Rest a = ai.inner();
-
-			b.converters().append(a.converters());
-			b.guards().append(a.guards());
-			cdl(a.rolesDeclared()).forEach(b::rolesDeclared);
-			string(a.roleGuard()).ifPresent(b::roleGuard);
-		}
-	}
+	// RestContextApply (AnnotationApplier<Rest,RestContext.Builder>) was moved into RestContext as a nested
+	// class in TODO-16 Phase D-4a (2026-04-19) so that RestContext.Builder could be demoted to package-private.
+	// See org.apache.juneau.rest.RestContext.RestContextApply.
 
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods

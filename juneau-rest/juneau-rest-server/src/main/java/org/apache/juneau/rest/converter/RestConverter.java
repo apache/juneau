@@ -33,7 +33,6 @@ import org.apache.juneau.serializer.*;
  * <ul class='javatree'>
  * 	<li class='ja'>{@link Rest#converters()}
  * 	<li class='ja'>{@link RestOp#converters()}
- * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
@@ -76,7 +75,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()}
+ * 	<li class='ja'>{@link RestOp#converters()}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  * </ul>

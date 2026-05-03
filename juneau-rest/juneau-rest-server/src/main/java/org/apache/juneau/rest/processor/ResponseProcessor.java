@@ -35,7 +35,7 @@ import jakarta.servlet.http.*;
  * Response processors can be associated with REST resources via the following:
  * <ul>
  * 	<li class='ja'>{@link Rest#responseProcessors}
- * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#responseProcessors()}
+ * 	<li class='ja'>{@link Rest#responseProcessors()}
  * </ul>
  *
  * <p>

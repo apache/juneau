@@ -20,7 +20,6 @@ import java.io.*;
 import java.util.concurrent.*;
 
 import org.eclipse.jetty.client.*;
-import org.eclipse.jetty.http.*;
 import org.apache.juneau.ng.rest.client.*;
 
 /**

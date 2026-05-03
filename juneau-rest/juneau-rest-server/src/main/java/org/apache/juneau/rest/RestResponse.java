@@ -598,7 +598,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link RestContext.Builder#responseProcessors()}
+	 * 	<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#responseProcessors()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
 	 * </ul>
 	 *

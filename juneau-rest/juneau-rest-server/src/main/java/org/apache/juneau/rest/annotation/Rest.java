@@ -16,12 +16,10 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import org.apache.juneau.commons.http.MediaType;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -38,7 +36,6 @@ import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.guard.*;
-import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.servlet.*;
@@ -61,7 +58,7 @@ import org.apache.juneau.serializer.*;
 @Target(TYPE)
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({ RestAnnotation.RestContextApply.class, RestAnnotation.RestOpContextApply.class })
+@ContextApply({ RestContext.RestContextApply.class })
 @AnnotationGroup(Rest.class)
 public @interface Rest {
 
@@ -85,10 +82,6 @@ public @interface Rest {
 	 * 		Use <js>"*"</js> to represent all methods.
 	 * 	<li class='note'>
 	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#allowedHeaderParams(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -145,10 +138,6 @@ public @interface Rest {
 	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#allowedMethodParams(String)}
-	 * </ul>
-	 *
 	 * @return The annotation value.
 	 */
 	String allowedMethodParams() default "";
@@ -192,7 +181,6 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
 	 * </ul>
 	 *
@@ -212,10 +200,6 @@ public @interface Rest {
 	 * 	<li>Children are list parent-to-child in the order they appear in the annotation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#children(Object...)}
-	 * </ul>
-	 *
 	 * @return The annotation value.
 	 */
 	Class<?>[] children() default {};
@@ -230,10 +214,6 @@ public @interface Rest {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#clientVersionHeader(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -260,10 +240,6 @@ public @interface Rest {
 	 * 		returned by the {@link Config#getSystemDefault()}.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#config(Config)}
-	 * </ul>
-	 *
 	 * @return The annotation value.
 	 */
 	String config() default "";
@@ -278,10 +254,6 @@ public @interface Rest {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#consumes(MediaType...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -358,10 +330,6 @@ public @interface Rest {
 	 * 	<li>Converters on child are combined with those on parent class.
 	 * 	<li>Converters are executed child-to-parent in the order they appear in the annotation.
 	 * 	<li>Converters on methods are executed before those on classes.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -648,7 +616,6 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(NamedAttribute...)}
 	 * 	<li class='ja'>{@link RestOp#defaultRequestAttributes()}
 	 * 	<li class='ja'>{@link RestGet#defaultRequestAttributes()}
 	 * 	<li class='ja'>{@link RestPut#defaultRequestAttributes()}
@@ -672,10 +639,6 @@ public @interface Rest {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(org.apache.http.Header...)}
-	 * </ul>
-	 *
 	 * @return The annotation value.
 	 */
 	String[] defaultRequestHeaders() default {};
@@ -690,10 +653,6 @@ public @interface Rest {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -740,10 +699,6 @@ public @interface Rest {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#disableContentParam()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -826,10 +781,6 @@ public @interface Rest {
 	 * 	<li>Guards on child are combined with those on parent class.
 	 * 	<li>Guards are executed child-to-parent in the order they appear in the annotation.
 	 * 	<li>Guards on methods are executed before those on classes.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#guards()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1081,10 +1032,6 @@ public @interface Rest {
 	 * 	<li>Path is searched for in child-to-parent order.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#path(String)}
-	 * </ul>
-	 *
 	 * @return The annotation value.
 	 */
 	String path() default "";
@@ -1120,10 +1067,6 @@ public @interface Rest {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#produces(MediaType...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1196,10 +1139,6 @@ public @interface Rest {
 	 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
 	 * set via {@link RestResponse#setContent(Object)} into appropriate HTTP responses.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#responseProcessors()}
-	 * </ul>
-	 *
 	 * @return The annotation value.
 	 */
 	Class<? extends ResponseProcessor>[] responseProcessors() default {};
@@ -1211,10 +1150,6 @@ public @interface Rest {
 	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
 	 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
 	 * <br>This setting allows you to provide your own resolvers for your own class types that you want resolved.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOpArgs(Class...)}
-	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
@@ -1260,14 +1195,10 @@ public @interface Rest {
 	 * 	<li>
 	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
 	 * 	<li>
-	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}.
+	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()}.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#roleGuard(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1296,10 +1227,6 @@ public @interface Rest {
 	 * 		...
 	 * 	}
 	 * </p>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}
-	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
@@ -1449,10 +1376,6 @@ public @interface Rest {
 	/**
 	 * Swagger provider.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#swaggerProvider(Class)}
-	 * </ul>
-	 *
 	 * @return The annotation value.
 	 */
 	Class<? extends SwaggerProvider> swaggerProvider() default SwaggerProvider.Void.class;
@@ -1492,10 +1415,6 @@ public @interface Rest {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriAuthority(String)}
-	 * </ul>
-	 *
 	 * @return The annotation value.
 	 */
 	String uriAuthority() default "";
@@ -1510,10 +1429,6 @@ public @interface Rest {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriContext(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1535,10 +1450,6 @@ public @interface Rest {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriRelativity(UriRelativity)}
-	 * </ul>
-	 *
 	 * @return The annotation value.
 	 */
 	String uriRelativity() default "";
@@ -1556,10 +1467,6 @@ public @interface Rest {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriResolution(UriResolution)}
 	 * </ul>
 	 *
 	 * @return The annotation value.

@@ -523,11 +523,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * Returns a config file with session-level variable resolution.
 	 *
-	 * The config file is identified via one of the following:
-	 * <ul class='javatree'>
-	 * 	<li class='ja'>{@link Rest#config()}
-	 * 	<li class='jm'>{@link RestContext.Builder#config(Config)}
-	 * </ul>
+	 * The config file is identified via {@link Rest#config()}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1269,8 +1265,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(Class)}
-	 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
+	 * 	<li class='ja'>{@link Rest#swaggerProvider()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
 	 * </ul>
 	 *

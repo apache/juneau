@@ -513,30 +513,60 @@ public class JsonList extends LinkedList<Object> {
 	}
 
 	/**
-	 * A synonym for {@link #toString()}
+	 * Serializes this list to a standard JSON string.
 	 *
-	 * @return This object as a JSON string.
+	 * @return This object as a standard JSON string.
 	 */
-	public String asJson() {
-		return toString();
+	public String toJson() {
+		return Json.of(this);
 	}
 
 	/**
-	 * Serialize this array to Simplified JSON.
+	 * Serializes this list to a JSON5 string.
 	 *
-	 * @return This object as a serialized string.
+	 * <p>
+	 * A synonym for {@link #toString()}.
+	 *
+	 * @return This object as a JSON5 string.
 	 */
-	public String asString() {
-		return Json5Serializer.DEFAULT.toString(this);
+	public String toJson5() {
+		return Json5.of(this);
 	}
 
 	/**
-	 * Serialize this array to a string using the specified serializer.
+	 * Serializes this list to a JSON Lines string.
+	 *
+	 * @return This object as a JSON Lines string.
+	 */
+	public String toJsonl() {
+		return Jsonl.of(this);
+	}
+
+	/**
+	 * Serializes this list to a canonical JSON string (RFC 8785).
+	 *
+	 * @return This object as a canonical JSON string.
+	 */
+	public String toJcs() {
+		return Jcs.of(this);
+	}
+
+	/**
+	 * Serializes this list to an HJSON string.
+	 *
+	 * @return This object as an HJSON string.
+	 */
+	public String toHjson() {
+		return Hjson.of(this);
+	}
+
+	/**
+	 * Serializes this list to a string using the specified serializer.
 	 *
 	 * @param serializer The serializer to use to convert this object to a string.
 	 * @return This object as a serialized string.
 	 */
-	public String asString(WriterSerializer serializer) {
+	public String toString(WriterSerializer serializer) {
 		return serializer.toString(this);
 	}
 

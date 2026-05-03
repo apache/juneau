@@ -363,4 +363,33 @@ class JsonMap_Test extends TestBase {
 		l2 = m.get("b", List.class, Integer.class);
 		assertNull(l2);
 	}
+
+	//====================================================================================================
+	// toX serialization methods
+	//====================================================================================================
+	@Test void a09_toX() {
+		var m = JsonMap.ofJson("{b:'2',a:'1'}");
+
+		// toJson — standard JSON (double-quoted keys)
+		assertString("{\"b\":\"2\",\"a\":\"1\"}", m.toJson());
+
+		// toJson5 — JSON5 (unquoted keys where possible), same as toString()
+		assertString("{b:'2',a:'1'}", m.toJson5());
+		assertString(m.toString(), m.toJson5());
+
+		// toJsonl — one JSON object per line
+		assertNotNull(m.toJsonl());
+
+		// toJcs — canonical JSON (RFC 8785)
+		assertNotNull(m.toJcs());
+
+		// toHjson — HJSON
+		assertNotNull(m.toHjson());
+
+		// toReadableJson5 — indented JSON5
+		assertNotNull(m.toReadableJson5());
+
+		// toString(WriterSerializer) — generalized
+		assertString("{b:'2',a:'1'}", m.toString(org.apache.juneau.json5.Json5Serializer.DEFAULT));
+	}
 }

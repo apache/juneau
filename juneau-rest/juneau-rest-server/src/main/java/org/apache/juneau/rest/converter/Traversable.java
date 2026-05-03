@@ -41,7 +41,7 @@ import org.apache.juneau.rest.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link ObjectRest} - Additional information on addressing elements in a POJO tree using URL notation.
- * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
+ * 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#converters()} - Registering converters with REST resources.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  */

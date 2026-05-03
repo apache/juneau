@@ -84,11 +84,11 @@ def path_to_jacoco_package(path: Path) -> tuple[str | None, str | None]:
 
 
 def run_tests():
-    """Re-run all tests in juneau-utest to refresh the .exec file."""
+    """Re-run tests with upstream modules to refresh the .exec file."""
     print("Running tests to refresh coverage data...")
     result = subprocess.run(
-        ["mvn", "test", "-Drat.skip=true", "-q"],
-        cwd=UTEST_MODULE,
+        ["mvn", "-pl", "juneau-utest", "-am", "test", "-Drat.skip=true", "-q"],
+        cwd=REPO_ROOT,
         capture_output=True,
         text=True
     )

@@ -492,7 +492,7 @@ public class RequestHttpPart {
 	 * Specifies the part parser to use for this part.
 	 *
 	 * <p>
-	 * If not specified, uses the part parser defined on the client by calling {@link org.apache.juneau.rest.RestContext.Builder#partParser()}.
+	 * If not specified, uses the part parser defined on the resource via {@link org.apache.juneau.rest.annotation.Rest#partParser() @Rest(partParser=...)}.
 	 *
 	 * @param value
 	 * 	The new part parser to use for this part.

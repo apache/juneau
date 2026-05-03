@@ -308,6 +308,31 @@
 									<destFileName>org.apache.juneau.bean.jsonschema_${project.version}.jar</destFileName>
 								</artifactItem>
 
+								<!-- juneau-bean-mcp -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-mcp</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-bean-mcp-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-mcp</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-bean-mcp-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-bean-mcp</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.bean.mcp_${project.version}.jar</destFileName>
+								</artifactItem>
+
 								<!-- juneau-bean-openapi-v3 -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
@@ -406,6 +431,31 @@
 									<artifactId>juneau-rest-server</artifactId>
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.rest.server_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-rest-server-mcp -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-mcp</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-server-mcp-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-mcp</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-server-mcp-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-mcp</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.server.mcp_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<!-- juneau-rest-server-springboot -->

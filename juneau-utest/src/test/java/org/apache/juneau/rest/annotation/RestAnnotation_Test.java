@@ -25,7 +25,6 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.debug.*;

@@ -136,4 +136,30 @@ class JsonList_Test extends TestBase {
 		assertList(l2, "123", "456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
 	}
+
+	//====================================================================================================
+	// toX serialization methods
+	//====================================================================================================
+	@Test void a07_toX() {
+		var l = new JsonList("['b','a']");
+
+		// toJson — standard JSON (double-quoted strings)
+		assertString("[\"b\",\"a\"]", l.toJson());
+
+		// toJson5 — JSON5 (single-quoted strings), same as toString()
+		assertString("['b','a']", l.toJson5());
+		assertString(l.toString(), l.toJson5());
+
+		// toJsonl — one element per line
+		assertNotNull(l.toJsonl());
+
+		// toJcs — canonical JSON (RFC 8785)
+		assertNotNull(l.toJcs());
+
+		// toHjson — HJSON
+		assertNotNull(l.toHjson());
+
+		// toString(WriterSerializer) — generalized
+		assertString("['b','a']", l.toString(org.apache.juneau.json5.Json5Serializer.DEFAULT));
+	}
 }

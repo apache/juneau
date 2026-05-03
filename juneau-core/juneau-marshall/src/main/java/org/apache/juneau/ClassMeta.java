@@ -129,13 +129,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	/**
-	 * Checks if the specified category is set in the bitmap.
-	 *
-	 * @param category The category to check.
-	 * @return {@code true} if the category is set, {@code false} otherwise.
-	 */
-
-	/**
 	 * Generated classes shouldn't be cacheable to prevent needlessly filling up the cache.
 	 */
 	private static boolean isCacheable(Class<?> c) {
@@ -985,6 +978,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Boolean}.
 	 */
+	@Override
 	public boolean isBoolean() { return isAny(boolean.class, Boolean.class); }
 
 	/**
@@ -1013,6 +1007,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link CharSequence}.
 	 */
+	@Override
 	public boolean isCharSequence() { return cat.is(CHARSEQ); }
 
 	/**
@@ -1020,6 +1015,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Collection}.
 	 */
+	@Override
 	public boolean isCollection() { return cat != null && cat.is(COLLECTION); }
 
 	/**
@@ -1041,6 +1037,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Date} or {@link Calendar}.
 	 */
+	@Override
 	public boolean isDateOrCalendar() { return cat.is(DATE) || cat.is(CALENDAR); }
 
 	/**
@@ -1055,6 +1052,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Float} or {@link Double}.
 	 */
+	@Override
 	public boolean isDecimal() { return cat.is(DECIMAL); }
 
 	/**
@@ -1070,6 +1068,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is either {@link Double} or <jk>double</jk>.
 	 */
+	@Override
 	public boolean isDouble() { return isAny(Double.class, double.class); }
 
 	/**
@@ -1132,6 +1131,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is either {@link Long} or <jk>long</jk>.
 	 */
+	@Override
 	public boolean isLong() { return isAny(Long.class, long.class); }
 
 	/**
@@ -1139,6 +1139,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Map}.
 	 */
+	@Override
 	public boolean isMap() {
 		// TODO - Figure out how cat can be null.
 		return cat != null && cat.is(MAP);
@@ -1178,6 +1179,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Number}.
 	 */
+	@Override
 	public boolean isNumber() { return cat.is(NUMBER); }
 
 	/**
@@ -1235,6 +1237,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Temporal}.
 	 */
+	@Override
 	public boolean isTemporal() { return cat.is(TEMPORAL); }
 
 	/**

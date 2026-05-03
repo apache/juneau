@@ -104,7 +104,7 @@ public final class OkHttpTransport implements HttpTransport {
 	// Internal helpers
 	// -----------------------------------------------------------------------------------------------------------------
 
-	private static Request buildOkRequest(TransportRequest request) throws TransportException {
+	private static Request buildOkRequest(TransportRequest request) {
 		var builder = new Request.Builder().url(request.getUri().toString());
 		for (var h : request.getHeaders())
 			builder.addHeader(h.name(), h.value());
@@ -142,7 +142,7 @@ public final class OkHttpTransport implements HttpTransport {
 	}
 
 	@SuppressWarnings({
-		"resource" // okResponse is closed via TransportResponse.closeCallback
+		"java:S2095" // okResponse is closed via TransportResponse.closeCallback, not here
 	})
 	private static TransportResponse buildTransportResponse(Response okResponse) throws TransportException {
 		var builder = TransportResponse.builder()
@@ -151,13 +151,10 @@ public final class OkHttpTransport implements HttpTransport {
 			.closeCallback(okResponse);
 		for (var i = 0; i < okResponse.headers().size(); i++)
 			builder.header(okResponse.headers().name(i), okResponse.headers().value(i));
-		var responseBody = okResponse.body();
-		if (responseBody != null) {
-			try {
-				builder.body(responseBody.byteStream());
-			} catch (Exception e) {
-				throw new TransportException("Failed to read response body: " + e.getMessage(), e);
-			}
+		try {
+			builder.body(okResponse.body().byteStream()); // body() is @NonNull in OkHttp 5.x
+		} catch (Exception e) {
+			throw new TransportException("Failed to read response body: " + e.getMessage(), e);
 		}
 		return builder.build();
 	}

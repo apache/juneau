@@ -26,14 +26,15 @@ import java.util.function.Supplier;
 import jakarta.servlet.ServletConfig;
 
 import org.apache.juneau.cp.BasicBeanStore;
+import org.apache.juneau.rest.annotation.Rest;
 
 /**
  * Bootstrap arguments for {@link RestContext}.
  *
  * <p>
  * Bundles the small, fixed set of inputs needed to construct a {@link RestContext} into a single immutable record,
- * replacing the chained {@link RestContext.Builder#init(Supplier)} / {@link RestContext.Builder#path(String)} /
- * {@link RestContext.Builder#children(Object...)} fluent calls of the legacy builder factory.
+ * replacing the chained {@code RestContext.Builder.init(Supplier)} / {@code RestContext.Builder.path(String)} /
+ * {@code RestContext.Builder.children(Object...)} fluent calls of the legacy builder factory.
  *
  * <p>
  * All non-required values default sensibly:
@@ -66,7 +67,7 @@ import org.apache.juneau.cp.BasicBeanStore;
  * {@link org.apache.juneau.rest.annotation.RestOp @RestOp}-method arg-resolver classes:
  * {@link org.apache.juneau.rest.arg.RestSessionArgs RestSessionArgs},
  * {@link org.apache.juneau.rest.arg.RestOpContextArgs RestOpContextArgs}, etc.). The {@code Init} suffix avoids the
- * collision and reads naturally — this record consolidates the legacy {@link RestContext.Builder#init(Supplier)}
+ * collision and reads naturally — this record consolidates the legacy {@code RestContext.Builder.init(Supplier)}
  * fluent method.
  *
  * <h5 class='section'>Example:</h5>

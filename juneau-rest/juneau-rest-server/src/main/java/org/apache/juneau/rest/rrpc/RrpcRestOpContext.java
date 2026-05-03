@@ -47,16 +47,13 @@ public class RrpcRestOpContext extends RestOpContext {
 	 *
 	 * <p>
 	 * Constructs an {@code RrpcRestOpContext} directly from a Java method and its owning {@link RestContext}, mirroring
-	 * {@link RestOpContext#RestOpContext(Method, RestContext) RestOpContext}'s 2-arg ctor and replacing the legacy
-	 * {@code RestOpContext.create(method, context).beanStore(context.getRootBeanStore()).type(RrpcRestOpContext.class).build()}
-	 * fluent chain that {@link org.apache.juneau.rest.RestContext.Builder#createRestOperations(org.apache.juneau.rest.beanstore.BasicBeanStore, java.util.function.Supplier, RestContext) createRestOperations}
-	 * used to call. Per TODO-16 Phase C-3 Route B, the public {@code RestOpContext.create(...)} factory was deleted; this
-	 * ctor is the only supported entry point for instantiating an {@code RrpcRestOpContext}.
+	 * {@link RestOpContext#RestOpContext(Method, RestContext) RestOpContext}'s 2-arg ctor.
 	 *
 	 * <p>
-	 * Internally builds a {@link RestOpContext.Builder} backed by {@link RestContext#getRootBeanStore()} (rather than the
-	 * resource-scoped {@link RestContext#getBeanStore()} used by {@code RestOpContext}'s 2-arg ctor). The root bean store
-	 * is preserved verbatim from the legacy fluent chain to avoid behavioral drift in RRPC builder-time bean creation.
+	 * Internally invokes the protected 3-arg {@link RestOpContext#RestOpContext(Method, RestContext, org.apache.juneau.cp.BasicBeanStore)}
+	 * ctor with the root bean store (rather than the resource-scoped {@link RestContext#getBeanStore()} used by
+	 * {@code RestOpContext}'s 2-arg ctor). The root bean store is preserved verbatim from the legacy fluent chain to
+	 * avoid behavioral drift in RRPC builder-time bean creation.
 	 *
 	 * @param method The Java method this context represents. Must not be <jk>null</jk>.
 	 * @param context The owning {@link RestContext}. Must not be <jk>null</jk>.
@@ -64,23 +61,12 @@ public class RrpcRestOpContext extends RestOpContext {
 	 * @since 9.5.0
 	 */
 	public RrpcRestOpContext(Method method, RestContext context) throws ServletException {
-		this(new RestOpContext.Builder(method, context).beanStore(context.getRootBeanStore()));
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder for this method context.
-	 * @throws ServletException Problem with metadata was detected.
-	 */
-	protected RrpcRestOpContext(RestOpContext.Builder builder) throws ServletException {
-		super(builder);
+		super(method, context, context.getRootBeanStore());
 
 		var interfaceClass = getBeanContext().getClassMeta(getJavaMethod().getGenericReturnType());
 		meta = new RrpcInterfaceMeta(interfaceClass.inner(), null);
 		if (meta.getMethodsByPath().isEmpty())
 			throw new InternalServerError("Method {0} returns an interface {1} that doesn't define any remote methods.", getJavaMethod().getName(), interfaceClass.getNameFull());
-
 	}
 
 	@Override

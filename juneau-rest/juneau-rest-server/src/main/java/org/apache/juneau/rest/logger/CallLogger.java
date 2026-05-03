@@ -87,7 +87,7 @@ import jakarta.servlet.http.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger()}
+ * 	<li class='ja'>{@link Rest#callLogger()}
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getDebugEnablement()}
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}
