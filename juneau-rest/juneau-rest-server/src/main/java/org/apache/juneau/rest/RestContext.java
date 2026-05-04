@@ -164,7 +164,7 @@ public class RestContext extends Context {
 	 * Builder class.
 	 *
 	 * <p>
-	 * Demoted to package-private in TODO-16 Phase D-4a (2026-04-19). User code should construct a
+	 * Demoted to package-private in the April 2026 refactor (2026-04-19). User code should construct a
 	 * {@link RestContext} via the public {@link #RestContext(RestContextInit)} constructor; this Builder
 	 * exists only as internal bootstrap state for the framework and is slated for inlining in a later phase.
 	 */
@@ -280,7 +280,7 @@ public class RestContext extends Context {
 		 * Package-private constructor.
 		 *
 		 * <p>
-		 * Demoted from {@code protected} to package-private in TODO-16 Phase D-4a (2026-04-19). Only
+		 * Demoted from {@code protected} to package-private in the April 2026 refactor (2026-04-19). Only
 		 * {@link RestContext#toBuilder(RestContextInit)} instantiates this type now.
 		 *
 		 * @param resourceClass
@@ -709,7 +709,7 @@ public class RestContext extends Context {
 			// @formatter:off
 			// Note: pre-9.5 this also called .addBean(Builder.class, this) so user code could request the
 			// in-flight RestContext.Builder via @RestInit method parameters or @RestInject method-finder
-			// resolution. That injection protocol was deleted in TODO-16 Phase C-3 (zero non-test callers
+			// resolution. That injection protocol was deleted in the April 2026 refactor (zero non-test callers
 			// across the entire codebase) — the Builder is now a private staging detail of RestContext
 			// construction, not a user-visible bean.
 			beanStore = createBeanStore(resource)
@@ -1185,8 +1185,8 @@ public class RestContext extends Context {
 			// @formatter:off
 			// Note: pre-9.5 this filter also excluded `y.hasParameter(RestOpContext.Builder.class)` because the
 			// per-op `@RestInit(RestOpContext.Builder)` flow handled those separately. That flow was deleted in
-			// TODO-16 Phase C-3 Route B (zero real-world callers), so the exclusion is gone too. Likewise, the
-			// class-level `@RestInit(RestContext.Builder)` injection protocol was deleted in TODO-16 Phase C-3
+			// April 2026 refactor Route B (zero real-world callers), so the exclusion is gone too. Likewise, the
+			// class-level `@RestInit(RestContext.Builder)` injection protocol was deleted in the same refactor
 			// (zero non-test callers anywhere) — `RestContext.Builder` is no longer added to the bean store, so
 			// any straggling `@RestInit` method that still declares either Builder type as a parameter will now
 			// surface a "missing prerequisites" error here, which is the desired loud-failure signal.
@@ -1547,7 +1547,8 @@ public class RestContext extends Context {
 			beanStore.getBean(HttpPartParser.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with this bean.
-			opt(HttpPartParser.class.isInstance(resource.get()) ? HttpPartParser.class.cast(resource.get()) : null).ifPresent(x -> v.get().impl(x));
+			var r = resource.get();
+			opt(r instanceof HttpPartParser x ? x : null).ifPresent(x -> v.get().impl(x));
 
 			// Specify the bean type if its set as a default.
 			beanStore.getBeanType(HttpPartParser.class).ifPresent(x -> v.get().type(x));
@@ -1583,7 +1584,8 @@ public class RestContext extends Context {
 			beanStore.getBean(HttpPartSerializer.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with this bean.
-			opt(HttpPartSerializer.class.isInstance(resource.get()) ? HttpPartSerializer.class.cast(resource.get()) : null).ifPresent(x -> v.get().impl(x));
+			var r = resource.get();
+			opt(r instanceof HttpPartSerializer x ? x : null).ifPresent(x -> v.get().impl(x));
 
 			// Specify the bean type if its set as a default.
 			beanStore.getBeanType(HttpPartSerializer.class).ifPresent(x -> v.get().type(x));
@@ -1863,7 +1865,7 @@ public class RestContext extends Context {
 
 			var rci = ClassInfo.of(resource.get());
 
-			// TODO-16 Phase C-3 (Route B, 2026-04-19): The per-op `@RestInit(RestOpContext.Builder)` protocol
+			// April 2026 refactor (Route B, 2026-04-19): The per-op `@RestInit(RestOpContext.Builder)` protocol
 			// was deleted. Audit confirmed zero real-world callers (only stale javadoc/docs examples). Users who
 			// previously injected `RestOpContext.Builder` per op now configure operations declaratively via
 			// `@RestOp(...)` attributes, `@RestInject`-named beans, or the class-level `@RestInit(RestContext.Builder)`
@@ -2046,7 +2048,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Wired into the annotation-processing machinery via {@link org.apache.juneau.annotation.ContextApply @ContextApply}
-	 * on {@link Rest}. Moved into {@code RestContext} during TODO-16 Phase D-4a (2026-04-19) so that
+	 * on {@link Rest}. Moved into {@code RestContext} during the April 2026 refactor (2026-04-19) so that
 	 * {@link Builder} can be demoted to package-private without breaking the cross-package reference
 	 * that used to live in {@code RestAnnotation.RestContextApply}.
 	 */
@@ -2112,6 +2114,15 @@ public class RestContext extends Context {
 	protected final String path;
 	protected final ThreadLocal<RestSession> localSession = new ThreadLocal<>();
 	protected final UrlPathMatcher pathMatcher;
+	private final Supplier<?> resource;
+
+	// Private accessors used by memoizer lambdas to satisfy Java's definite-assignment rules for blank final fields.
+	private BasicBeanStore beanStore() { return beanStore; }
+	private Builder builder() { return builder; }
+	private Supplier<?> resource() { return resource; }
+	private Class<?> resourceClass() { return resourceClass; }
+	private RestContext parentContext() { return parentContext; }
+	private RestOperations restOperations() { return restOperations; }
 
 	private static final class LifecycleInvokerPair {
 		final MethodList methods;
@@ -2123,97 +2134,37 @@ public class RestContext extends Context {
 		}
 	}
 
-	private final Memoizer<LifecycleInvokerPair> destroyInvokerPair = memoizer(this::findDestroyLifecycle);
-	private final Memoizer<LifecycleInvokerPair> endCallInvokerPair = memoizer(this::findEndCallLifecycle);
-	private final Memoizer<LifecycleInvokerPair> postInitInvokerPair = memoizer(this::findPostInitLifecycle);
-	private final Memoizer<LifecycleInvokerPair> postInitChildFirstInvokerPair = memoizer(this::findPostInitChildFirstLifecycle);
-	private final Memoizer<LifecycleInvokerPair> startCallInvokerPair = memoizer(this::findStartCallLifecycle);
-	private final Memoizer<MethodList> preCallMethodsMemo = memoizer(this::findPreCallMethodsList);
-	private final Memoizer<MethodList> postCallMethodsMemo = memoizer(this::findPostCallMethodsList);
+	/**
+	 * The {@link BeanContext} for this resource.
+	 *
+	 * <p>
+	 * Built from the builder's sub-builder, which is lazy-created and then mutated by the annotation
+	 * apply pass during {@code init()} before this memoizer fires — so the builder is in its final
+	 * configured state by the time {@code build()} is called.
+	 */
+	private final Memoizer<BeanContext> beanContext = memoizer(() -> builder().beanContext().build());
 
-	private final Memoizer<Logger> loggerMemo = memoizer(this::findLogger);
+	/**
+	 * The bootstrap-time {@link VarResolver} — no {@link Messages} or {@link Config} bean available yet.
+	 *
+	 * <p>
+	 * Cached on the builder so that {@code init()} and the {@link #messages} / {@link #config}
+	 * memoizers all see the same instance during construction.
+	 */
+	private final Memoizer<VarResolver> bootstrapVarResolver = memoizer(() -> builder().bootstrapVarResolver());
 
-	private Logger findLogger() {
-		var v = Value.of(Logger.getLogger(cn(resourceClass)));
-		beanStore.getBean(Logger.class).ifPresent(v::set);
-		new BeanCreateMethodFinder<>(Logger.class, resource.get(), beanStore).addBean(Logger.class, v.get()).find(Builder::isRestInjectMethod).run(v::set);
-		return v.get();
-	}
-
-	// Bootstrap-time resolver — no Messages, no Config bean. Cached on the builder so that init()
-	// and findMessages()/findConfig() see the same instance during construction.
-	private final Memoizer<VarResolver> bootstrapVarResolverMemo = memoizer(this::findBootstrapVarResolver);
-
-	private VarResolver findBootstrapVarResolver() {
-		return builder.bootstrapVarResolver();
-	}
-
-	private final Memoizer<Messages> messagesMemo = memoizer(this::findMessages);
-
-	private Messages findMessages() {
-		var b = Messages.create(resourceClass);
-		// Walk @Rest annotations parent-to-child; child wins because location() prepends.
-		var anns = new ArrayList<>(getRestAnnotations());
-		Collections.reverse(anns);
-		// Resolve location strings against the simple resolver — full resolver isn't available yet
-		// (it depends on getMessages()).
-		var vrs = getBootstrapVarResolver().createSession();
-		anns.forEach(ai -> ai.getString(PROPERTY_messages).filter(StringUtils::isNotBlank).ifPresent(s -> b.location(vrs.resolve(s))));
-		beanStore.getBean(Messages.class).ifPresent(b::impl);
-		new BeanCreateMethodFinder<>(Messages.class, resource.get(), beanStore).addBean(Messages.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
-		return b.build();
-	}
-
-	private final Memoizer<ThrownStore> thrownStoreMemo = memoizer(this::findThrownStore);
-
-	private ThrownStore findThrownStore() {
-		var b = ThrownStore.create(beanStore).impl(parentContext == null ? null : parentContext.getThrownStore());
-		beanStore.getBeanType(ThrownStore.class).ifPresent(b::type);
-		beanStore.getBean(ThrownStore.class).ifPresent(b::impl);
-		new BeanCreateMethodFinder<>(ThrownStore.class, resource.get(), beanStore).addBean(ThrownStore.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
-		return b.build();
-	}
-
-	// Depends on getThrownStore() for thrownStoreOnce wiring.
-	private final Memoizer<MethodExecStore> methodExecStoreMemo = memoizer(this::findMethodExecStore);
-
-	private MethodExecStore findMethodExecStore() {
-		var b = MethodExecStore.create(beanStore).thrownStoreOnce(getThrownStore());
-		beanStore.getBeanType(MethodExecStore.class).ifPresent(b::type);
-		beanStore.getBean(MethodExecStore.class).ifPresent(b::impl);
-		new BeanCreateMethodFinder<>(MethodExecStore.class, resource.get(), beanStore).addBean(MethodExecStore.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
-		return b.build();
-	}
-
-	// Runtime resolver — wraps the simple resolver and adds Messages + Config beans.
-	// Depends on getBootstrapVarResolver() and getMessages(); pulls the bootstrap Config from the builder
-	// to avoid an infinite recursion with the runtime Config (which wraps the bootstrap Config in a
-	// session backed by *this* resolver).
-	private final Memoizer<VarResolver> varResolverMemo = memoizer(this::findVarResolver);
-
-	private VarResolver findVarResolver() {
-		var b = getBootstrapVarResolver().copy()
-			.bean(Messages.class, getMessages())
-			.bean(Config.class, builder.config());
-		beanStore.getBean(VarResolver.class).ifPresent(b::impl);
-		new BeanCreateMethodFinder<>(VarResolver.class, resource.get(), beanStore).addBean(VarResolver.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
-		return b.build();
-	}
-
-	private final Memoizer<Config> configMemo = memoizer(this::findConfig);
-
-	private Config findConfig() {
-		// builder.config() returns the unresolved config (already populated in Builder.init() via createConfig());
-		// wrapping with .resolving(varResolver.createSession()) yields the resolving variant exposed by getConfig().
-		return builder.config().resolving(getVarResolver().createSession());
-	}
-
-	private final Memoizer<CallLogger> callLoggerMemo = memoizer(this::findCallLogger);
-
-	private CallLogger findCallLogger() {
-		var creator = BeanCreator.of(CallLogger.class, beanStore).type(BasicCallLogger.class);
+	/**
+	 * The {@link CallLogger} for this resource.
+	 *
+	 * <p>
+	 * Defaults to {@link BasicCallLogger}. {@code @Rest(callLogger=X)} most-derived non-{@code Void} class wins.
+	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 */
+	private final Memoizer<CallLogger> callLogger = memoizer(() -> {
+		var bs = beanStore();
+		var creator = BeanCreator.of(CallLogger.class, bs).type(BasicCallLogger.class);
 		// Order matters — annotations override defaults so they need to be applied last.
-		beanStore.getBeanType(CallLogger.class).ifPresent(creator::type);
+		bs.getBeanType(CallLogger.class).ifPresent(creator::type);
 		// @Rest(callLogger=X) — most-derived non-Void wins.
 		// getRestAnnotationsForProperty(...) yields parent-to-child order (rstream reversal); reduce-last
 		// keeps the most-derived value, mirroring the prior "apply each annotation, child overrides parent" semantics.
@@ -2222,90 +2173,28 @@ public class RestContext extends Context {
 			.filter(c -> c != CallLogger.Void.class)
 			.reduce((first, second) -> second)
 			.ifPresent(creator::type);
-		beanStore.getBean(CallLogger.class).ifPresent(creator::impl);
-		new BeanCreateMethodFinder<>(CallLogger.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
+		bs.getBean(CallLogger.class).ifPresent(creator::impl);
+		new BeanCreateMethodFinder<>(CallLogger.class, resource().get(), bs).find(Builder::isRestInjectMethod).run(creator::impl);
 		return creator.orElse(null);
-	}
+	});
 
-	private final Memoizer<DebugEnablement> debugEnablementMemo = memoizer(this::findDebugEnablement);
+	/**
+	 * The resolving {@link Config} for this resource.
+	 *
+	 * <p>
+	 * Wraps the builder's unresolved config with a {@link VarResolver} session so that SVL variables
+	 * in config values are expanded on access.
+	 */
+	private final Memoizer<Config> config = memoizer(() -> builder().config().resolving(getVarResolver().createSession()));
 
-	private DebugEnablement findDebugEnablement() {
-		// @Rest(debugDefault="ALWAYS|NEVER|CONDITIONAL") — most-derived non-blank value wins, with parent inheritance
-		// gated by @Rest(noInherit={"debugDefault"}). Resolved value is published as an Enablement bean so that
-		// BasicDebugEnablement.init() (and any subclass) can pick it up via beanStore.getBean(Enablement.class).
-		// Annotation value overrides any pre-registered Enablement bean (e.g. mock-client default).
-		// If neither a debugDefault annotation value NOR a pre-registered Enablement bean is present, fall back
-		// to the @Rest(debug=true|false) boolean flag — ALWAYS when set, NEVER otherwise. This used to be done
-		// inside BasicDebugEnablement.init() by reading RestContext.Builder.isDebug() out of the bean store, but
-		// that protocol is gone (TODO-16 Phase C-3, 2026-04-19): no Enablement.class lookup escapes this method
-		// without a value, so subclasses no longer need access to the in-flight Builder.
-		String debugDefaultStr = mergeReplacedStringAttribute(PROPERTY_debugDefault, env("RestContext.debugDefault").orElse(null));
-		Enablement resolvedDebugDefault = null;
-		if (nn(debugDefaultStr) && !debugDefaultStr.isBlank())
-			resolvedDebugDefault = Enablement.fromString(debugDefaultStr);
-		if (nn(resolvedDebugDefault))
-			beanStore.addBean(Enablement.class, resolvedDebugDefault);
-		else if (beanStore.getBean(Enablement.class).isEmpty())
-			beanStore.addBean(Enablement.class, builder.isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
-		var creator = BeanCreator.of(DebugEnablement.class, beanStore).type(BasicDebugEnablement.class);
-		// Order matters — annotations override defaults so they need to be applied last.
-		beanStore.getBeanType(DebugEnablement.class).ifPresent(creator::type);
-		// @Rest(debugEnablement=X) — most-derived non-Void wins. See findCallLogger() for the reduce-last rationale.
-		getRestAnnotationsForProperty(PROPERTY_debugEnablement)
-			.map(ai -> ai.inner().debugEnablement())
-			.filter(c -> c != DebugEnablement.Void.class)
-			.reduce((first, second) -> second)
-			.ifPresent(creator::type);
-		beanStore.getBean(DebugEnablement.class).ifPresent(creator::impl);
-		new BeanCreateMethodFinder<>(DebugEnablement.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
-		return creator.orElse(null);
-	}
-
-	private final Memoizer<StaticFiles> staticFilesMemo = memoizer(this::findStaticFiles);
-
-	private StaticFiles findStaticFiles() {
-		var creator = BeanCreator.of(StaticFiles.class, beanStore).type(BasicStaticFiles.class);
-		// Order matters — annotations override defaults so they need to be applied last.
-		beanStore.getBeanType(StaticFiles.class).ifPresent(creator::type);
-		// @Rest(staticFiles=X) — most-derived non-Void wins. See findCallLogger() for the reduce-last rationale.
-		getRestAnnotationsForProperty(PROPERTY_staticFiles)
-			.map(ai -> ai.inner().staticFiles())
-			.filter(c -> c != StaticFiles.Void.class)
-			.reduce((first, second) -> second)
-			.ifPresent(creator::type);
-		beanStore.getBean(StaticFiles.class).ifPresent(creator::impl);
-		new BeanCreateMethodFinder<>(StaticFiles.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
-		return creator.orElse(null);
-	}
-
-	private final Memoizer<BeanContext> beanContextMemo = memoizer(this::findBeanContext);
-
-	private BeanContext findBeanContext() {
-		// Builder.beanContext() lazy-creates from BeanContext.create() seeded with bean-store overrides
-		// (BeanContext.Builder / BeanContext) and is mutated by init()'s apply(work) call before the ctor
-		// triggers this memoizer — so by the time we build() the builder it's in its final configured state.
-		return builder.beanContext().build();
-	}
-
-	private final Memoizer<List<MediaType>> producesMemo = memoizer(this::findProduces);
-
-	private List<MediaType> findProduces() {
-		// Walk @Rest(produces=...) chain (parent-to-child); concat all entries in chain order.
-		var fromAnnotations = new ArrayList<MediaType>();
-		getRestAnnotationsForProperty(PROPERTY_produces)
-			.forEach(ai -> stream(ai.inner().produces()).map(MediaType::of).forEach(fromAnnotations::add));
-		if (! fromAnnotations.isEmpty())
-			return u(fromAnnotations);
-		// Fall back to the intersection of opContexts' serializer-supported media types — matches legacy behavior.
-		var opContexts = restOperations.getOpContexts();
-		Set<MediaType> s = opContexts.isEmpty() ? emptySet() : toSet(opContexts.get(0).getSerializers().getSupportedMediaTypes());
-		opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
-		return u(toList(s));
-	}
-
-	private final Memoizer<List<MediaType>> consumesMemo = memoizer(this::findConsumes);
-
-	private List<MediaType> findConsumes() {
+	/**
+	 * The supported request content types ({@code Content-Type} media types) for this resource.
+	 *
+	 * <p>
+	 * Walks {@code @Rest(consumes)} annotations parent-to-child and returns the union. When no annotation
+	 * declares types, falls back to the intersection of all op-level parser supported media types.
+	 */
+	private final Memoizer<List<MediaType>> consumes = memoizer(() -> {
 		// Walk @Rest(consumes=...) chain (parent-to-child); concat all entries in chain order.
 		var fromAnnotations = new ArrayList<MediaType>();
 		getRestAnnotationsForProperty(PROPERTY_consumes)
@@ -2313,123 +2202,333 @@ public class RestContext extends Context {
 		if (! fromAnnotations.isEmpty())
 			return u(fromAnnotations);
 		// Fall back to the intersection of opContexts' parser-supported media types — matches legacy behavior.
-		var opContexts = restOperations.getOpContexts();
+		var opContexts = restOperations().getOpContexts();
 		Set<MediaType> s = opContexts.isEmpty() ? emptySet() : toSet(opContexts.get(0).getParsers().getSupportedMediaTypes());
 		opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
 		return u(toList(s));
-	}
+	});
 
-	private final Memoizer<ResponseProcessor[]> responseProcessorsMemo = memoizer(this::findResponseProcessors);
+	/**
+	 * The {@link DebugEnablement} for this resource.
+	 *
+	 * <p>
+	 * Resolved from {@code @Rest(debugDefault)} (most-derived non-blank wins), falling back to
+	 * {@code @Rest(debug=true|false)}. The resolved {@link Enablement} is published into the bean store
+	 * so that {@link BasicDebugEnablement} subclasses can pick it up. Defaults to {@link BasicDebugEnablement}.
+	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 */
+	private final Memoizer<DebugEnablement> debugEnablement = memoizer(() -> {
+		// @Rest(debugDefault="ALWAYS|NEVER|CONDITIONAL") — most-derived non-blank value wins, with parent inheritance
+		// gated by @Rest(noInherit={"debugDefault"}). Resolved value is published as an Enablement bean so that
+		// BasicDebugEnablement.init() (and any subclass) can pick it up via beanStore().getBean(Enablement.class).
+		// Annotation value overrides any pre-registered Enablement bean (e.g. mock-client default).
+		// If neither a debugDefault annotation value NOR a pre-registered Enablement bean is present, fall back
+		// to the @Rest(debug=true|false) boolean flag — ALWAYS when set, NEVER otherwise.
+		var bs = beanStore();
+		String debugDefaultStr = mergeReplacedStringAttribute(PROPERTY_debugDefault, env("RestContext.debugDefault").orElse(null));
+		Enablement resolvedDebugDefault = null;
+		if (nn(debugDefaultStr) && !debugDefaultStr.isBlank())
+			resolvedDebugDefault = Enablement.fromString(debugDefaultStr);
+		if (nn(resolvedDebugDefault))
+			bs.addBean(Enablement.class, resolvedDebugDefault);
+		else if (bs.getBean(Enablement.class).isEmpty())
+			bs.addBean(Enablement.class, builder().isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
+		var creator = BeanCreator.of(DebugEnablement.class, bs).type(BasicDebugEnablement.class);
+		// Order matters — annotations override defaults so they need to be applied last.
+		bs.getBeanType(DebugEnablement.class).ifPresent(creator::type);
+		// @Rest(debugEnablement=X) — most-derived non-Void wins. See callLogger for the reduce-last rationale.
+		getRestAnnotationsForProperty(PROPERTY_debugEnablement)
+			.map(ai -> ai.inner().debugEnablement())
+			.filter(c -> c != DebugEnablement.Void.class)
+			.reduce((first, second) -> second)
+			.ifPresent(creator::type);
+		bs.getBean(DebugEnablement.class).ifPresent(creator::impl);
+		new BeanCreateMethodFinder<>(DebugEnablement.class, resource().get(), bs).find(Builder::isRestInjectMethod).run(creator::impl);
+		return creator.orElse(null);
+	});
 
-	private ResponseProcessor[] findResponseProcessors() {
+	/**
+	 * The default request attributes contributed by {@code @Rest(defaultRequestAttributes)} for this resource.
+	 */
+	private final Memoizer<NamedAttributeMap> defaultRequestAttributes = memoizer(() -> builder().defaultRequestAttributes());
+
+	/**
+	 * The default request headers contributed by {@code @Rest(defaultRequestHeaders)} for this resource.
+	 */
+	private final Memoizer<HeaderList> defaultRequestHeaders = memoizer(() -> builder().defaultRequestHeaders());
+
+	/**
+	 * The default response headers contributed by {@code @Rest(defaultResponseHeaders)} for this resource.
+	 */
+	private final Memoizer<HeaderList> defaultResponseHeaders = memoizer(() -> builder().defaultResponseHeaders());
+
+	/**
+	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestDestroy @RestDestroy} and their invokers.
+	 */
+	private final Memoizer<LifecycleInvokerPair> destroyInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> builder().createDestroyMethods(beanStore(), resource())));
+
+	/**
+	 * The {@link EncoderSet} for this resource, built from the builder's encoder sub-builder.
+	 */
+	private final Memoizer<EncoderSet> encoders = memoizer(() -> builder().encoders().build());
+
+	/**
+	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestEndCall @RestEndCall} and their invokers.
+	 */
+	private final Memoizer<LifecycleInvokerPair> endCallInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> builder().createEndCallMethods(beanStore(), resource())));
+
+	/**
+	 * The {@link JsonSchemaGenerator} for this resource, built from the builder's JSON-schema sub-builder.
+	 */
+	private final Memoizer<JsonSchemaGenerator> jsonSchemaGenerator = memoizer(() -> builder().jsonSchemaGenerator().build());
+
+	/**
+	 * The {@link Logger} for this resource.
+	 *
+	 * <p>
+	 * Defaults to {@code Logger.getLogger(resourceClass.getName())}. A bean-store override or
+	 * {@code @RestInject} factory method REPLACES the default.
+	 */
+	private final Memoizer<Logger> logger = memoizer(() -> {
+		var v = Value.of(Logger.getLogger(cn(resourceClass())));
+		beanStore().getBean(Logger.class).ifPresent(v::set);
+		new BeanCreateMethodFinder<>(Logger.class, resource().get(), beanStore()).addBean(Logger.class, v.get()).find(Builder::isRestInjectMethod).run(v::set);
+		return v.get();
+	});
+
+	/**
+	 * The {@link Messages} bundle for this resource.
+	 *
+	 * <p>
+	 * Walks {@code @Rest} annotations parent-to-child, resolving each {@code messages} location string
+	 * against the bootstrap resolver (full resolver not yet available — it depends on {@code getMessages()}).
+	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 */
+	private final Memoizer<Messages> messages = memoizer(() -> {
+		var b = Messages.create(resourceClass());
+		// Walk @Rest annotations parent-to-child; child wins because location() prepends.
+		var anns = new ArrayList<>(getRestAnnotations());
+		Collections.reverse(anns);
+		// Resolve location strings against the simple resolver — full resolver isn't available yet
+		// (it depends on getMessages()).
+		var vrs = getBootstrapVarResolver().createSession();
+		anns.forEach(ai -> ai.getString(PROPERTY_messages).filter(StringUtils::isNotBlank).ifPresent(s -> b.location(vrs.resolve(s))));
+		beanStore().getBean(Messages.class).ifPresent(b::impl);
+		new BeanCreateMethodFinder<>(Messages.class, resource().get(), beanStore()).addBean(Messages.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
+		return b.build();
+	});
+
+	/**
+	 * The {@link MethodExecStore} for this resource, wired to the {@link ThrownStore}.
+	 *
+	 * <p>
+	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 */
+	private final Memoizer<MethodExecStore> methodExecStore = memoizer(() -> {
+		var bs = beanStore();
+		var b = MethodExecStore.create(bs).thrownStoreOnce(getThrownStore());
+		bs.getBeanType(MethodExecStore.class).ifPresent(b::type);
+		bs.getBean(MethodExecStore.class).ifPresent(b::impl);
+		new BeanCreateMethodFinder<>(MethodExecStore.class, resource().get(), bs).addBean(MethodExecStore.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
+		return b.build();
+	});
+
+	/**
+	 * The {@link ParserSet} for this resource, built from the builder's parser sub-builder.
+	 */
+	private final Memoizer<ParserSet> parsers = memoizer(() -> builder().parsers().build());
+
+	/**
+	 * The {@link HttpPartParser} for this resource, created from the builder's part-parser creator.
+	 */
+	private final Memoizer<HttpPartParser> partParser = memoizer(() -> builder().partParser().create());
+
+	/**
+	 * The {@link HttpPartSerializer} for this resource, created from the builder's part-serializer creator.
+	 */
+	private final Memoizer<HttpPartSerializer> partSerializer = memoizer(() -> builder().partSerializer().create());
+
+	/**
+	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestPostCall @RestPostCall}.
+	 */
+	private final Memoizer<MethodList> postCallMethods = memoizer(() -> builder().createPostCallMethods(beanStore(), resource()));
+
+	/**
+	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestPostInit @RestPostInit}{@code (childFirst=true)} and their invokers.
+	 */
+	private final Memoizer<LifecycleInvokerPair> postInitChildFirstInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> builder().createPostInitChildFirstMethods(beanStore(), resource())));
+
+	/**
+	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestPostInit @RestPostInit} and their invokers.
+	 */
+	private final Memoizer<LifecycleInvokerPair> postInitInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> builder().createPostInitMethods(beanStore(), resource())));
+
+	/**
+	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestPreCall @RestPreCall}.
+	 */
+	private final Memoizer<MethodList> preCallMethods = memoizer(() -> builder().createPreCallMethods(beanStore(), resource()));
+
+	/**
+	 * The supported response content types ({@code Accept} media types) for this resource.
+	 *
+	 * <p>
+	 * Walks {@code @Rest(produces)} annotations parent-to-child and returns the union. When no annotation
+	 * declares types, falls back to the intersection of all op-level serializer supported media types.
+	 */
+	private final Memoizer<List<MediaType>> produces = memoizer(() -> {
+		// Walk @Rest(produces=...) chain (parent-to-child); concat all entries in chain order.
+		var fromAnnotations = new ArrayList<MediaType>();
+		getRestAnnotationsForProperty(PROPERTY_produces)
+			.forEach(ai -> stream(ai.inner().produces()).map(MediaType::of).forEach(fromAnnotations::add));
+		if (! fromAnnotations.isEmpty())
+			return u(fromAnnotations);
+		// Fall back to the intersection of opContexts' serializer-supported media types — matches legacy behavior.
+		var opContexts = restOperations().getOpContexts();
+		Set<MediaType> s = opContexts.isEmpty() ? emptySet() : toSet(opContexts.get(0).getSerializers().getSupportedMediaTypes());
+		opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
+		return u(toList(s));
+	});
+
+	/**
+	 * The ordered array of {@link ResponseProcessor} instances for this resource.
+	 *
+	 * <p>
+	 * Walks {@code @Rest(responseProcessors)} annotations parent-to-child (append order). A bean-store
+	 * override or {@code @RestInject} factory method REPLACES the entire list.
+	 */
+	private final Memoizer<ResponseProcessor[]> responseProcessors = memoizer(() -> {
 		// Walk @Rest(responseProcessors=...) chain (parent-to-child via getRestAnnotationsForProperty).
 		// DefaultConfig contributes the framework defaults at the top of the chain; resource-class entries append.
 		// ResponseProcessorList.Builder.add(...) uses addAll (append) — final order: [DefaultConfig, parent, child].
-		var v = Value.of(ResponseProcessorList.create(beanStore));
+		var bs = beanStore();
+		var v = Value.of(ResponseProcessorList.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_responseProcessors)
 			.forEach(ai -> v.get().add(ai.inner().responseProcessors()));
 		// Bean-store override REPLACES the entire annotation-derived list.
-		beanStore.getBean(ResponseProcessorList.class).ifPresent(x -> v.get().impl(x));
+		bs.getBean(ResponseProcessorList.class).ifPresent(x -> v.get().impl(x));
 		// @RestInject method override REPLACES the entire annotation-derived list.
-		new BeanCreateMethodFinder<>(ResponseProcessorList.class, resource.get(), beanStore)
+		new BeanCreateMethodFinder<>(ResponseProcessorList.class, resource().get(), bs)
 			.addBean(ResponseProcessorList.Builder.class, v.get())
 			.find(Builder::isRestInjectMethod)
 			.run(x -> v.get().impl(x));
 		return v.get().build().toArray();
-	}
+	});
 
-	private final Memoizer<Class<? extends RestOpArg>[]> restOpArgsMemo = memoizer(this::findRestOpArgs);
-
-	private Class<? extends RestOpArg>[] findRestOpArgs() {
+	/**
+	 * The ordered array of {@link RestOpArg} argument-resolver types for this resource.
+	 *
+	 * <p>
+	 * Walks {@code @Rest(restOpArgs)} annotations parent-to-child (prepend order, so child entries
+	 * take priority). A bean-store override or {@code @RestInject} factory method REPLACES the entire list.
+	 */
+	private final Memoizer<Class<? extends RestOpArg>[]> restOpArgs = memoizer(() -> {
 		// Walk @Rest(restOpArgs=...) chain (parent-to-child via getRestAnnotationsForProperty).
 		// DefaultConfig contributes the framework arg-resolver list; resource-class entries override.
 		// RestOpArgList.Builder.add(...) uses prependAll — applying per-annotation in chain order yields
 		// final order: [child, parent, DefaultConfig], matching the legacy apply-pass behavior.
-		var v = Value.of(RestOpArgList.create(beanStore));
+		var bs = beanStore();
+		var v = Value.of(RestOpArgList.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_restOpArgs)
 			.forEach(ai -> v.get().add(ai.inner().restOpArgs()));
 		// Bean-store override REPLACES the entire annotation-derived list.
-		beanStore.getBean(RestOpArgList.class).ifPresent(x -> v.get().impl(x));
+		bs.getBean(RestOpArgList.class).ifPresent(x -> v.get().impl(x));
 		// @RestInject method override REPLACES the entire annotation-derived list.
-		new BeanCreateMethodFinder<>(RestOpArgList.class, resource.get(), beanStore)
+		new BeanCreateMethodFinder<>(RestOpArgList.class, resource().get(), bs)
 			.addBean(RestOpArgList.Builder.class, v.get())
 			.find(Builder::isRestInjectMethod)
 			.run(x -> v.get().impl(x));
 		return v.get().build().asArray();
-	}
+	});
 
-	private final Memoizer<SerializerSet> serializersMemo = memoizer(this::findSerializers);
+	/**
+	 * The {@link SerializerSet} for this resource, built from the builder's serializer sub-builder.
+	 */
+	private final Memoizer<SerializerSet> serializers = memoizer(() -> builder().serializers().build());
 
-	private SerializerSet findSerializers() {
-		return builder.serializers().build();
-	}
+	/**
+	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestStartCall @RestStartCall} and their invokers.
+	 */
+	private final Memoizer<LifecycleInvokerPair> startCallInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> builder().createStartCallMethods(beanStore(), resource())));
 
-	private final Memoizer<ParserSet> parsersMemo = memoizer(this::findParsers);
-
-	private ParserSet findParsers() {
-		return builder.parsers().build();
-	}
-
-	private final Memoizer<HttpPartSerializer> partSerializerMemo = memoizer(this::findPartSerializer);
-
-	private HttpPartSerializer findPartSerializer() {
-		return builder.partSerializer().create();
-	}
-
-	private final Memoizer<HttpPartParser> partParserMemo = memoizer(this::findPartParser);
-
-	private HttpPartParser findPartParser() {
-		return builder.partParser().create();
-	}
-
-	private final Memoizer<JsonSchemaGenerator> jsonSchemaGeneratorMemo = memoizer(this::findJsonSchemaGenerator);
-
-	private JsonSchemaGenerator findJsonSchemaGenerator() {
-		return builder.jsonSchemaGenerator().build();
-	}
-
-	private final Memoizer<EncoderSet> encodersMemo = memoizer(this::findEncoders);
-
-	private EncoderSet findEncoders() {
-		return builder.encoders().build();
-	}
-
-	private final Memoizer<HeaderList> defaultRequestHeadersMemo = memoizer(this::findDefaultRequestHeaders);
-
-	private HeaderList findDefaultRequestHeaders() {
-		return builder.defaultRequestHeaders();
-	}
-
-	private final Memoizer<HeaderList> defaultResponseHeadersMemo = memoizer(this::findDefaultResponseHeaders);
-
-	private HeaderList findDefaultResponseHeaders() {
-		return builder.defaultResponseHeaders();
-	}
-
-	private final Memoizer<NamedAttributeMap> defaultRequestAttributesMemo = memoizer(this::findDefaultRequestAttributes);
-
-	private NamedAttributeMap findDefaultRequestAttributes() {
-		return builder.defaultRequestAttributes();
-	}
-
-	private final Memoizer<SwaggerProvider> swaggerProviderMemo = memoizer(this::findSwaggerProvider);
-
-	private SwaggerProvider findSwaggerProvider() {
-		var creator = BeanCreator.of(SwaggerProvider.class, beanStore).type(BasicSwaggerProvider.class);
+	/**
+	 * The {@link StaticFiles} provider for this resource.
+	 *
+	 * <p>
+	 * Defaults to {@link BasicStaticFiles}. {@code @Rest(staticFiles=X)} most-derived non-{@code Void} class wins.
+	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 */
+	private final Memoizer<StaticFiles> staticFiles = memoizer(() -> {
+		var bs = beanStore();
+		var creator = BeanCreator.of(StaticFiles.class, bs).type(BasicStaticFiles.class);
 		// Order matters — annotations override defaults so they need to be applied last.
-		beanStore.getBeanType(SwaggerProvider.class).ifPresent(creator::type);
-		// @Rest(swaggerProvider=X) — most-derived non-Void wins. See findCallLogger() for the reduce-last rationale.
+		bs.getBeanType(StaticFiles.class).ifPresent(creator::type);
+		// @Rest(staticFiles=X) — most-derived non-Void wins. See callLogger for the reduce-last rationale.
+		getRestAnnotationsForProperty(PROPERTY_staticFiles)
+			.map(ai -> ai.inner().staticFiles())
+			.filter(c -> c != StaticFiles.Void.class)
+			.reduce((first, second) -> second)
+			.ifPresent(creator::type);
+		bs.getBean(StaticFiles.class).ifPresent(creator::impl);
+		new BeanCreateMethodFinder<>(StaticFiles.class, resource().get(), bs).find(Builder::isRestInjectMethod).run(creator::impl);
+		return creator.orElse(null);
+	});
+
+	/**
+	 * The {@link SwaggerProvider} for this resource.
+	 *
+	 * <p>
+	 * Defaults to {@link BasicSwaggerProvider}. {@code @Rest(swaggerProvider=X)} most-derived
+	 * non-{@code Void} class wins. A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 */
+	private final Memoizer<SwaggerProvider> swaggerProvider = memoizer(() -> {
+		var bs = beanStore();
+		var creator = BeanCreator.of(SwaggerProvider.class, bs).type(BasicSwaggerProvider.class);
+		// Order matters — annotations override defaults so they need to be applied last.
+		bs.getBeanType(SwaggerProvider.class).ifPresent(creator::type);
+		// @Rest(swaggerProvider=X) — most-derived non-Void wins. See callLogger for the reduce-last rationale.
 		getRestAnnotationsForProperty(PROPERTY_swaggerProvider)
 			.map(ai -> ai.inner().swaggerProvider())
 			.filter(c -> c != SwaggerProvider.Void.class)
 			.reduce((first, second) -> second)
 			.ifPresent(creator::type);
-		beanStore.getBean(SwaggerProvider.class).ifPresent(creator::impl);
-		new BeanCreateMethodFinder<>(SwaggerProvider.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(creator::impl);
+		bs.getBean(SwaggerProvider.class).ifPresent(creator::impl);
+		new BeanCreateMethodFinder<>(SwaggerProvider.class, resource().get(), bs).find(Builder::isRestInjectMethod).run(creator::impl);
 		return creator.orElse(null);
-	}
+	});
 
-	private final Supplier<?> resource;
+	/**
+	 * The {@link ThrownStore} for this resource, used to track exception statistics.
+	 *
+	 * <p>
+	 * Inherits from the parent context's store when one is present. A bean-store override or
+	 * {@code @RestInject} factory method REPLACES the result.
+	 */
+	private final Memoizer<ThrownStore> thrownStore = memoizer(() -> {
+		var bs = beanStore();
+		var b = ThrownStore.create(bs).impl(parentContext() == null ? null : parentContext().getThrownStore());
+		bs.getBeanType(ThrownStore.class).ifPresent(b::type);
+		bs.getBean(ThrownStore.class).ifPresent(b::impl);
+		new BeanCreateMethodFinder<>(ThrownStore.class, resource().get(), bs).addBean(ThrownStore.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
+		return b.build();
+	});
+
+	/**
+	 * The runtime {@link VarResolver} — wraps the bootstrap resolver and adds {@link Messages} and {@link Config} beans.
+	 *
+	 * <p>
+	 * The bootstrap {@link Config} is pulled from the builder to avoid a circular dependency: the runtime
+	 * {@link Config} wraps the bootstrap config in a session backed by this resolver.
+	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 */
+	private final Memoizer<VarResolver> varResolver = memoizer(() -> {
+		var bs = beanStore();
+		var b = getBootstrapVarResolver().copy()
+			.bean(Messages.class, getMessages())
+			.bean(Config.class, builder().config());
+		bs.getBean(VarResolver.class).ifPresent(b::impl);
+		new BeanCreateMethodFinder<>(VarResolver.class, resource().get(), bs).addBean(VarResolver.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
+		return b.build();
+	});
 
 	/**
 	 * Constructor — record-based entry point.
@@ -2462,7 +2561,7 @@ public class RestContext extends Context {
 	 * Internal constructor.
 	 *
 	 * <p>
-	 * Privatized in TODO-16 Phase D-4a (2026-04-19). External callers must use
+	 * Privatized in the April 2026 refactor (2026-04-19). External callers must use
 	 * {@link #RestContext(RestContextInit)} instead; this constructor only services the internal
 	 * {@link #toBuilder(RestContextInit)} helper.
 	 *
@@ -2532,8 +2631,8 @@ public class RestContext extends Context {
 			restChildren = builder.restChildren(this).build();
 			bs.addBean(SwaggerProvider.class, getSwaggerProvider());
 
-			// produces/consumes are resolved lazily via the producesMemo/consumesMemo memoizers below
-			// (TODO-16 Phase D-1, 2026-04-19) — they walk the @Rest(produces=...) / @Rest(consumes=...)
+			// produces/consumes are resolved lazily via the produces/consumes memoizers below
+			// (April 2026 refactor, 2026-04-19) — they walk the @Rest(produces=...) / @Rest(consumes=...)
 			// chain first, then fall back to deriving the intersection of opContexts' supported media types.
 
 		} catch (BasicHttpException e) {
@@ -2555,6 +2654,40 @@ public class RestContext extends Context {
 	//---------------------------------------------------------------------------------------------
 	// Memoized allowlist fields
 	//---------------------------------------------------------------------------------------------
+
+	/**
+	 * Memoized parser session-option keys from {@code @Rest(allowedParserOptions)}, after SVL resolution and comma expansion.
+	 *
+	 * <p>
+	 * When inheritance is not blocked, keys from {@link #parentContext} are included first, then this resource's own tokens.
+	 * Leading-hyphen tokens (e.g. {@code -foo}) remove earlier positive tokens.
+	 */
+	private final Memoizer<SortedSet<String>> allowedParserOptions = memoizer(() -> {
+		var l = new ArrayList<String>();
+		var p = PROPERTY_allowedParserOptions;
+		var pc = parentContext();
+		if (isInherited(p) && pc != null)
+			l.addAll(pc.getAllowedParserOptions());
+		getRestAnnotationsForProperty(p).forEach(x -> resolveCdl(x.getStringArray(p)).forEach(l::add));
+		return u(treeSetCi(removeNegations(l)));
+	});
+
+	/**
+	 * Memoized serializer session-option keys from {@code @Rest(allowedSerializerOptions)}, after SVL resolution and comma expansion.
+	 *
+	 * <p>
+	 * When inheritance is not blocked, keys from {@link #parentContext} are included first, then this resource's own tokens.
+	 * Leading-hyphen tokens remove earlier positive tokens.
+	 */
+	private final Memoizer<SortedSet<String>> allowedSerializerOptions = memoizer(() -> {
+		var l = new ArrayList<String>();
+		var p = PROPERTY_allowedSerializerOptions;
+		var pc = parentContext();
+		if (isInherited(p) && pc != null)
+			l.addAll(pc.getAllowedSerializerOptions());
+		getRestAnnotationsForProperty(p).forEach(x -> resolveCdl(x.getStringArray(p)).forEach(l::add));
+		return u(treeSetCi(removeNegations(l)));
+	});
 
 	/**
 	 * Memoized value of the {@code noInherit} annotation attribute from the nearest {@code @Rest} annotation.
@@ -2581,9 +2714,7 @@ public class RestContext extends Context {
 	 * {@code DefaultConfig} (transitively or directly) won't get a duplicate entry — the list is dedup'd by the
 	 * {@link Class} the annotation was declared on.
 	 */
-	private final Memoizer<List<AnnotationInfo<Rest>>> restAnnotations = memoizer(this::findRestAnnotations);
-
-	private List<AnnotationInfo<Rest>> findRestAnnotations() {
+	private final Memoizer<List<AnnotationInfo<Rest>>> restAnnotations = memoizer(() -> {
 		var raw = getAnnotationProvider().find(Rest.class, ClassInfo.of(getResourceClass()));
 		var hasDefaultConfig = raw.stream().anyMatch(ai -> ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner()));
 		if (hasDefaultConfig)
@@ -2594,43 +2725,7 @@ public class RestContext extends Context {
 		var combined = new ArrayList<>(raw);
 		combined.addAll(defaultConfigAnnotations);
 		return Collections.unmodifiableList(combined);
-	}
-
-	/**
-	 * Memoized parser session-option keys from {@code @Rest(allowedParserOptions)}, after SVL resolution and comma expansion.
-	 *
-	 * <p>
-	 * When inheritance is not blocked, keys from {@link #parentContext} are included first, then this resource's own tokens.
-	 * Leading-hyphen tokens (e.g. {@code -foo}) remove earlier positive tokens.
-	 */
-	private final Memoizer<SortedSet<String>> allowedParserOptions = memoizer(this::findAllowedParserOptions);
-
-	private SortedSet<String> findAllowedParserOptions() {
-		var l = new ArrayList<String>();
-		var p = PROPERTY_allowedParserOptions;
-		if (isInherited(p) && parentContext != null)
-			l.addAll(parentContext.getAllowedParserOptions());
-		getRestAnnotationsForProperty(p).forEach(x -> resolveCdl(x.getStringArray(p)).forEach(l::add));
-		return u(treeSetCi(removeNegations(l)));
-	}
-
-	/**
-	 * Memoized serializer session-option keys from {@code @Rest(allowedSerializerOptions)}, after SVL resolution and comma expansion.
-	 *
-	 * <p>
-	 * When inheritance is not blocked, keys from {@link #parentContext} are included first, then this resource's own tokens.
-	 * Leading-hyphen tokens remove earlier positive tokens.
-	 */
-	private final Memoizer<SortedSet<String>> allowedSerializerOptions = memoizer(this::findAllowedSerializerOptions);
-
-	private SortedSet<String> findAllowedSerializerOptions() {
-		var l = new ArrayList<String>();
-		var p = PROPERTY_allowedSerializerOptions;
-		if (isInherited(p) && parentContext != null)
-			l.addAll(parentContext.getAllowedSerializerOptions());
-		getRestAnnotationsForProperty(p).forEach(x -> resolveCdl(x.getStringArray(p)).forEach(l::add));
-		return u(treeSetCi(removeNegations(l)));
-	}
+	});
 
 	private Stream<AnnotationInfo<Rest>> restAnnotationsForPropertySortedByRank(String propertyName) {
 		return getRestAnnotationsForProperty(propertyName).sorted(Comparator.comparingInt(AnnotationInfo::getRank));
@@ -2679,45 +2774,27 @@ public class RestContext extends Context {
 		return v.get();
 	}
 
-	private final Memoizer<Set<String>> allowedHeaderParams = memoizer(this::findAllowedHeaderParams);
+	/** Header names that may be passed via URL query parameter; resolved from {@code @Rest(allowedHeaderParams)}, default {@code "Accept,Content-Type"}. */
+	private final Memoizer<Set<String>> allowedHeaderParams      = memoizer(() -> Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedHeaderParams, env("RestContext.allowedHeaderParams", "Accept,Content-Type")))));
+	/** HTTP method names that may be specified via a request header; resolved from {@code @Rest(allowedMethodHeaders)}, default empty. */
+	private final Memoizer<Set<String>> allowedMethodHeaders     = memoizer(() -> Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodHeaders, env("RestContext.allowedMethodHeaders").orElse("")))));
+	/** HTTP method names that may be specified via URL query parameter; resolved from {@code @Rest(allowedMethodParams)}, default {@code "HEAD,OPTIONS"}. */
+	private final Memoizer<Set<String>> allowedMethodParams      = memoizer(() -> Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodParams, env("RestContext.allowedMethodParams", "HEAD,OPTIONS")))));
+	/** Whether a {@code &content=} URL parameter may override the request body; inverse of {@code @Rest(disableContentParam)}. */
+	private final Memoizer<Boolean>     allowContentParam        = memoizer(() -> !mergeReplacedBooleanAttribute(PROPERTY_disableContentParam, env("RestContext.disableContentParam", false)));
+	/** Whether exception stack traces are rendered in error responses; resolved from {@code @Rest(renderResponseStackTraces)}. */
+	private final Memoizer<Boolean>     renderResponseStackTraces = memoizer(() -> mergeReplacedBooleanAttribute(PROPERTY_renderResponseStackTraces, env("RestContext.renderResponseStackTraces", false)));
+	/** The request header used for client-version matching; resolved from {@code @Rest(clientVersionHeader)}, default {@code "Client-Version"}. */
+	private final Memoizer<String>      clientVersionHeader      = memoizer(() -> mergeReplacedStringAttribute(PROPERTY_clientVersionHeader, env("RestContext.clientVersionHeader", "Client-Version")));
 
-	private Set<String> findAllowedHeaderParams() {
-		return Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedHeaderParams, env("RestContext.allowedHeaderParams", "Accept,Content-Type"))));
-	}
-
-	private final Memoizer<Set<String>> allowedMethodHeaders = memoizer(this::findAllowedMethodHeaders);
-
-	private Set<String> findAllowedMethodHeaders() {
-		return Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodHeaders, env("RestContext.allowedMethodHeaders").orElse(""))));
-	}
-
-	private final Memoizer<Set<String>> allowedMethodParams = memoizer(this::findAllowedMethodParams);
-
-	private Set<String> findAllowedMethodParams() {
-		return Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodParams, env("RestContext.allowedMethodParams", "HEAD,OPTIONS"))));
-	}
-
-	private final Memoizer<Boolean> allowContentParam = memoizer(this::findAllowContentParam);
-
-	private boolean findAllowContentParam() {
-		return ! mergeReplacedBooleanAttribute(PROPERTY_disableContentParam, env("RestContext.disableContentParam", false));
-	}
-
-	private final Memoizer<Boolean> renderResponseStackTraces = memoizer(this::findRenderResponseStackTraces);
-
-	private boolean findRenderResponseStackTraces() {
-		return mergeReplacedBooleanAttribute(PROPERTY_renderResponseStackTraces, env("RestContext.renderResponseStackTraces", false));
-	}
-
-	private final Memoizer<String> clientVersionHeader = memoizer(this::findClientVersionHeader);
-
-	private String findClientVersionHeader() {
-		return mergeReplacedStringAttribute(PROPERTY_clientVersionHeader, env("RestContext.clientVersionHeader", "Client-Version"));
-	}
-
-	private final Memoizer<UriRelativity> uriRelativity = memoizer(this::findUriRelativity);
-
-	private UriRelativity findUriRelativity() {
+	/**
+	 * The {@link UriRelativity} strategy for URI resolution in this resource.
+	 *
+	 * <p>
+	 * Resolved from {@code @Rest(uriRelativity)} annotations (most-derived non-blank wins), with env-var
+	 * fallback. Defaults to {@link UriRelativity#RESOURCE}.
+	 */
+	private final Memoizer<UriRelativity> uriRelativity = memoizer(() -> {
 		var v = new AtomicReference<>(
 			parseEnumConstant(UriRelativity.class, resolve(emptyIfNull(env("RestContext.uriRelativity").get())))
 				.orElse(UriRelativity.RESOURCE)
@@ -2726,11 +2803,46 @@ public class RestContext extends Context {
 			parseEnumConstant(UriRelativity.class, resolve(s)).ifPresent(v::set)
 		));
 		return v.get();
-	}
+	});
 
-	private final Memoizer<UriResolution> uriResolution = memoizer(this::findUriResolution);
+	/**
+	 * The URI authority (scheme + host + port) override for this resource.
+	 *
+	 * <p>
+	 * Resolved from {@code @Rest(uriAuthority)} annotations and env-var; inherited from parent when not
+	 * blocked by {@code noInherit}. {@code null} means no override.
+	 */
+	private final Memoizer<String> uriAuthority = memoizer(() -> {
+		String local = mergeReplacedStringAttribute(PROPERTY_uriAuthority, env("RestContext.uriAuthority").orElse(null));
+		if (nn(local))
+			return local;
+		var pc = parentContext();
+		return isInherited(PROPERTY_uriAuthority) && pc != null ? pc.getUriAuthority() : null;
+	});
 
-	private UriResolution findUriResolution() {
+	/**
+	 * The URI context path override for this resource.
+	 *
+	 * <p>
+	 * Resolved from {@code @Rest(uriContext)} annotations and env-var; inherited from parent when not
+	 * blocked by {@code noInherit}. {@code null} means no override.
+	 */
+	private final Memoizer<String> uriContext = memoizer(() -> {
+		String local = mergeReplacedStringAttribute(PROPERTY_uriContext, env("RestContext.uriContext").orElse(null));
+		if (nn(local))
+			return local;
+		var pc = parentContext();
+		return isInherited(PROPERTY_uriContext) && pc != null ? pc.getUriContext() : null;
+	});
+
+	/**
+	 * The {@link UriResolution} strategy for URI resolution in this resource.
+	 *
+	 * <p>
+	 * Resolved from {@code @Rest(uriResolution)} annotations (most-derived non-blank wins), with env-var
+	 * fallback. Defaults to {@link UriResolution#ROOT_RELATIVE}.
+	 */
+	private final Memoizer<UriResolution> uriResolution = memoizer(() -> {
 		var v = new AtomicReference<>(
 			parseEnumConstant(UriResolution.class, resolve(emptyIfNull(env("RestContext.uriResolution").get())))
 				.orElse(UriResolution.ROOT_RELATIVE)
@@ -2739,25 +2851,7 @@ public class RestContext extends Context {
 			parseEnumConstant(UriResolution.class, resolve(s)).ifPresent(v::set)
 		));
 		return v.get();
-	}
-
-	private final Memoizer<String> uriAuthority = memoizer(this::findUriAuthority);
-
-	private String findUriAuthority() {
-		String local = mergeReplacedStringAttribute(PROPERTY_uriAuthority, env("RestContext.uriAuthority").orElse(null));
-		if (nn(local))
-			return local;
-		return isInherited(PROPERTY_uriAuthority) ? parentContext.getUriAuthority() : null;
-	}
-
-	private final Memoizer<String> uriContext = memoizer(this::findUriContext);
-
-	private String findUriContext() {
-		String local = mergeReplacedStringAttribute(PROPERTY_uriContext, env("RestContext.uriContext").orElse(null));
-		if (nn(local))
-			return local;
-		return isInherited(PROPERTY_uriContext) ? parentContext.getUriContext() : null;
-	}
+	});
 
 	/**
 	 * Returns the {@link Rest} annotations on the resource class hierarchy for the specified property,
@@ -2899,7 +2993,7 @@ public class RestContext extends Context {
 
 		// Must be careful not to bleed thread-locals.
 		if (nn(localSession.get()))
-			LOG.warning("WARNING:  Thread-local call object was not cleaned up from previous request.  {}, thread=[{}]", this, Thread.currentThread().getId());
+			LOG.warning("WARNING:  Thread-local call object was not cleaned up from previous request.  {}, thread=[{}]", this, Thread.currentThread().getName());
 
 		RestSession.Builder sb = createSession().resource(resource).req(r1).res(r2).logger(getCallLogger());
 
@@ -3039,7 +3133,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The bean store associated with this context.
 	 */
-	public BeanContext getBeanContext() { return beanContextMemo.get(); }
+	public BeanContext getBeanContext() { return beanContext.get(); }
 
 	BeanContext.Builder         getBeanContextBuilder()          { return builder.beanContext(); }
 	EncoderSet.Builder          getEncodersBuilder()             { return builder.encoders(); }
@@ -3086,7 +3180,7 @@ public class RestContext extends Context {
 	 * 	The call logger to use for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public CallLogger getCallLogger() { return callLoggerMemo.get(); }
+	public CallLogger getCallLogger() { return callLogger.get(); }
 
 	/**
 	 * Returns the name of the client version header name used by this resource.
@@ -3111,7 +3205,7 @@ public class RestContext extends Context {
 	 * 	The resolving config file associated with this servlet.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Config getConfig() { return configMemo.get(); }
+	public Config getConfig() { return config.get(); }
 
 	/**
 	 * Returns the explicit list of supported content types for this resource.
@@ -3126,14 +3220,14 @@ public class RestContext extends Context {
 	 * 	An unmodifiable list of supported <c>Content-Type</c> header values for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public List<MediaType> getConsumes() { return consumesMemo.get(); }
+	public List<MediaType> getConsumes() { return consumes.get(); }
 
 	/**
 	 * Returns the debug enablement bean for this context.
 	 *
 	 * @return The debug enablement bean for this context.
 	 */
-	public DebugEnablement getDebugEnablement() { return debugEnablementMemo.get(); }
+	public DebugEnablement getDebugEnablement() { return debugEnablement.get(); }
 
 	/**
 	 * Returns the default request attributes for this resource.
@@ -3146,7 +3240,7 @@ public class RestContext extends Context {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public NamedAttributeMap getDefaultRequestAttributes() { return defaultRequestAttributesMemo.get(); }
+	public NamedAttributeMap getDefaultRequestAttributes() { return defaultRequestAttributes.get(); }
 
 	/**
 	 * Returns the default request headers for this resource.
@@ -3159,7 +3253,7 @@ public class RestContext extends Context {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultRequestHeaders() { return defaultRequestHeadersMemo.get(); }
+	public HeaderList getDefaultRequestHeaders() { return defaultRequestHeaders.get(); }
 
 	/**
 	 * Returns the default response headers for this resource.
@@ -3172,14 +3266,14 @@ public class RestContext extends Context {
 	 * 	The default response headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultResponseHeaders() { return defaultResponseHeadersMemo.get(); }
+	public HeaderList getDefaultResponseHeaders() { return defaultResponseHeaders.get(); }
 
 	/**
 	 * Returns the encoders associated with this context.
 	 *
 	 * @return The encoders associated with this context.
 	 */
-	public EncoderSet getEncoders() { return encodersMemo.get(); }
+	public EncoderSet getEncoders() { return encoders.get(); }
 
 	/**
 	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
@@ -3203,7 +3297,7 @@ public class RestContext extends Context {
 	 * 	The HTTP-part serializer associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public JsonSchemaGenerator getJsonSchemaGenerator() { return jsonSchemaGeneratorMemo.get(); }
+	public JsonSchemaGenerator getJsonSchemaGenerator() { return jsonSchemaGenerator.get(); }
 
 	/**
 	 * Returns the HTTP call for the current request.
@@ -3225,7 +3319,7 @@ public class RestContext extends Context {
 	 * 	The logger for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Logger getLogger() { return loggerMemo.get(); }
+	public Logger getLogger() { return logger.get(); }
 
 	/**
 	 * Returns the resource bundle used by this resource.
@@ -3234,21 +3328,21 @@ public class RestContext extends Context {
 	 * 	The resource bundle for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Messages getMessages() { return messagesMemo.get(); }
+	public Messages getMessages() { return messages.get(); }
 
 	/**
 	 * Returns the timing statistics on all method executions on this class.
 	 *
 	 * @return The timing statistics on all method executions on this class.
 	 */
-	public MethodExecStore getMethodExecStore() { return methodExecStoreMemo.get(); }
+	public MethodExecStore getMethodExecStore() { return methodExecStore.get(); }
 
 	/**
 	 * Returns the parsers associated with this context.
 	 *
 	 * @return The parsers associated with this context.
 	 */
-	public ParserSet getParsers() { return parsersMemo.get(); }
+	public ParserSet getParsers() { return parsers.get(); }
 
 	/**
 	 * Returns the HTTP-part parser associated with this resource.
@@ -3257,7 +3351,7 @@ public class RestContext extends Context {
 	 * 	The HTTP-part parser associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpPartParser getPartParser() { return partParserMemo.get(); }
+	public HttpPartParser getPartParser() { return partParser.get(); }
 
 	/**
 	 * Returns the HTTP-part serializer associated with this resource.
@@ -3266,7 +3360,7 @@ public class RestContext extends Context {
 	 * 	The HTTP-part serializer associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpPartSerializer getPartSerializer() { return partSerializerMemo.get(); }
+	public HttpPartSerializer getPartSerializer() { return partSerializer.get(); }
 
 	/**
 	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
@@ -3303,7 +3397,7 @@ public class RestContext extends Context {
 	 * 	An unmodifiable list of supported <c>Accept</c> header values for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public List<MediaType> getProduces() { return producesMemo.get(); }
+	public List<MediaType> getProduces() { return produces.get(); }
 
 	/**
 	 * Returns the resource object.
@@ -3341,7 +3435,7 @@ public class RestContext extends Context {
 	 * 	The response processors for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public ResponseProcessor[] getResponseProcessors() { return responseProcessorsMemo.get(); }
+	public ResponseProcessor[] getResponseProcessors() { return responseProcessors.get(); }
 
 	/**
 	 * Returns the {@link RestOpArg} classes registered on this resource.
@@ -3359,7 +3453,7 @@ public class RestContext extends Context {
 	 * 	The REST-op-arg classes for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Class<? extends RestOpArg>[] getRestOpArgs() { return restOpArgsMemo.get(); }
+	public Class<? extends RestOpArg>[] getRestOpArgs() { return restOpArgs.get(); }
 
 	/**
 	 * Returns the child resources associated with this servlet.
@@ -3397,7 +3491,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The serializers associated with this context.
 	 */
-	public SerializerSet getSerializers() { return serializersMemo.get(); }
+	public SerializerSet getSerializers() { return serializers.get(); }
 
 	/**
 	 * Returns the servlet init parameter returned by {@link ServletConfig#getInitParameter(String)}.
@@ -3416,7 +3510,7 @@ public class RestContext extends Context {
 	 * 	The static files for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public StaticFiles getStaticFiles() { return staticFilesMemo.get(); }
+	public StaticFiles getStaticFiles() { return staticFiles.get(); }
 
 	/**
 	 * Gives access to the internal statistics on this context.
@@ -3456,7 +3550,7 @@ public class RestContext extends Context {
 	 * 	The information provider for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public SwaggerProvider getSwaggerProvider() { return swaggerProviderMemo.get(); }
+	public SwaggerProvider getSwaggerProvider() { return swaggerProvider.get(); }
 
 	/**
 	 * Returns the stack trace database associated with this context.
@@ -3465,7 +3559,7 @@ public class RestContext extends Context {
 	 * 	The stack trace database for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public ThrownStore getThrownStore() { return thrownStoreMemo.get(); }
+	public ThrownStore getThrownStore() { return thrownStore.get(); }
 
 	/**
 	 * Returns the authority path of the resource.
@@ -3574,7 +3668,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The var resolver in use by this resource.
 	 */
-	public VarResolver getVarResolver() { return varResolverMemo.get(); }
+	public VarResolver getVarResolver() { return varResolver.get(); }
 
 	/**
 	 * Returns the bootstrap (pre-runtime) variable resolver used during context construction.
@@ -3587,7 +3681,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The bootstrap var resolver in use by this resource.
 	 */
-	public VarResolver getBootstrapVarResolver() { return bootstrapVarResolverMemo.get(); }
+	public VarResolver getBootstrapVarResolver() { return bootstrapVarResolver.get(); }
 
 	/**
 	 * Returns whether it's safe to pass the HTTP content as a <js>"content"</js> GET parameter.
@@ -3672,34 +3766,6 @@ public class RestContext extends Context {
 		};
 		StringUtils.split(value, s::add);
 		return u(s);
-	}
-
-	private LifecycleInvokerPair findDestroyLifecycle() {
-		return buildLifecycleInvokerPair(() -> builder.createDestroyMethods(beanStore, resource));
-	}
-
-	private LifecycleInvokerPair findEndCallLifecycle() {
-		return buildLifecycleInvokerPair(() -> builder.createEndCallMethods(beanStore, resource));
-	}
-
-	private LifecycleInvokerPair findPostInitLifecycle() {
-		return buildLifecycleInvokerPair(() -> builder.createPostInitMethods(beanStore, resource));
-	}
-
-	private LifecycleInvokerPair findPostInitChildFirstLifecycle() {
-		return buildLifecycleInvokerPair(() -> builder.createPostInitChildFirstMethods(beanStore, resource));
-	}
-
-	private LifecycleInvokerPair findStartCallLifecycle() {
-		return buildLifecycleInvokerPair(() -> builder.createStartCallMethods(beanStore, resource));
-	}
-
-	private MethodList findPreCallMethodsList() {
-		return builder.createPreCallMethods(beanStore, resource);
-	}
-
-	private MethodList findPostCallMethodsList() {
-		return builder.createPostCallMethods(beanStore, resource);
 	}
 
 	private LifecycleInvokerPair buildLifecycleInvokerPair(Supplier<MethodList> methods) {
@@ -3832,14 +3898,14 @@ public class RestContext extends Context {
 	 *
 	 * @return The list of methods to invoke after the actual REST method is called.
 	 */
-	public MethodList getPostCallMethods() { return postCallMethodsMemo.get(); }
+	public MethodList getPostCallMethods() { return postCallMethods.get(); }
 
 	/**
 	 * Returns the list of methods to invoke before the actual REST method is called.
 	 *
 	 * @return The list of methods to invoke before the actual REST method is called.
 	 */
-	public MethodList getPreCallMethods() { return preCallMethodsMemo.get(); }
+	public MethodList getPreCallMethods() { return preCallMethods.get(); }
 
 	/**
 	 * Returns the list of methods to invoke during servlet destruction.

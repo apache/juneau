@@ -61,7 +61,8 @@ import org.apache.juneau.rest.annotation.Rest;
  *
  * <h5 class='section'>Note on naming:</h5>
  * <p>
- * Decision #27 in {@code TODO-16} originally settled on the {@code XArgs} suffix for ctor-arg-bundle records, but
+ * Decision #27 in the RestContext refactor plan originally settled on the {@code XArgs} suffix for
+ * ctor-arg-bundle records, but
  * {@code RestContextArgs} is already taken by the {@link org.apache.juneau.rest.arg.RestContextArgs} parameter
  * resolver in the {@link org.apache.juneau.rest.arg} package (one of an entire family of {@code *Args}
  * {@link org.apache.juneau.rest.annotation.RestOp @RestOp}-method arg-resolver classes:
