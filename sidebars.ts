@@ -2193,8 +2193,8 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'release-notes/9.2.1',
-							label: '9.2.1',
+							id: 'release-notes/9.5.0',
+							label: '9.5.0',
 						},
 						{
 							type: 'doc',
