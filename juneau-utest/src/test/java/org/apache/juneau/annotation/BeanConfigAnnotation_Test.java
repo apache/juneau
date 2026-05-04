@@ -144,7 +144,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 		swaps={AB1.class,AB2.class},
 		swaps_replace={AB1.class,AB2.class,AB3.class},
 		propertyNamer=PropertyNamerULC.class,
-		sortProperties="$X{true}",
+		unsortedProperties="$X{false}",
 		timeZone="$X{z}",
 		useEnumNames="$X{true}",
 		useJavaBeanIntrospector="$X{true}"
@@ -180,7 +180,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 		check("foo1,foo2,foo3,java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bs.getNotBeanPackagesNames());
 		check("AB1<String,Integer>,AB2<String,Integer>,AB3<String,Integer>", bs.getSwaps());
 		check("PropertyNamerULC", bs.getPropertyNamer());
-		check("true", bs.isSortProperties());
+		check("false", bs.isUnsortedProperties());
 		check("GMT", bs.getTimeZone());
 		check("true", bs.isUseEnumNames());
 		check("false", bs.isUseInterfaceProxies());
@@ -226,7 +226,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 		check("java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bc.getNotBeanPackagesNames());
 		check("", bc.getSwaps());
 		check("BasicPropertyNamer", bc.getPropertyNamer());
-		check("false", bc.isSortProperties());
+		check("false", bc.isUnsortedProperties());
 		check(null, bc.getDefaultTimeZone());
 		check("false", bc.isUseEnumNames());
 		check("true", bc.isUseInterfaceProxies());
@@ -271,7 +271,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 		check("java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bc.getNotBeanPackagesNames());
 		check("", bc.getSwaps());
 		check("BasicPropertyNamer", bc.getPropertyNamer());
-		check("false", bc.isSortProperties());
+		check("false", bc.isUnsortedProperties());
 		check(null, bc.getDefaultTimeZone());
 		check("false", bc.isUseEnumNames());
 		check("true", bc.isUseInterfaceProxies());

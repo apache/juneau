@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.testutils.pojos;
 
-@org.apache.juneau.annotation.Bean(typeName="TypedBeanImpl", sort=true)
+@org.apache.juneau.annotation.Bean(typeName="TypedBeanImpl")
 public class TypedBeanImpl implements TypedBean {
 	public int a;
 	public String b;

@@ -145,7 +145,7 @@ public abstract class SwaggerElement {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT_SORTED.toString(this);
+		return JsonSerializer.DEFAULT.toString(this);
 	}
 
 	/**

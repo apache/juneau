@@ -360,7 +360,7 @@ public abstract class Context {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// A class annotated with a config annotation.</jc>
-		 * 	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
+		 * 	<ja>@BeanConfig</ja>(unsortedProperties=<js>"$S{unsortedProperties,false}"</js>)
 		 * 	<jk>public class</jk> MyClass {...}
 		 *
 		 * 	<jc>// Find all annotations that themselves are annotated with @ContextPropertiesApply.</jc>
@@ -460,7 +460,7 @@ public abstract class Context {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// A class annotated with a config annotation.</jc>
-		 * 	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
+		 * 	<ja>@BeanConfig</ja>(unsortedProperties=<js>"$S{unsortedProperties,false}"</js>)
 		 * 	<jk>public class</jk> MyClass {...}
 		 *
 		 * 	<jc>// Apply any settings found on the annotations.</jc>
@@ -471,7 +471,7 @@ public abstract class Context {
 		 *
 		 * 	<jc>// A method annotated with a config annotation.</jc>
 		 * 	<jk>public class</jk> MyClass {
-		 * 		<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
+		 * 		<ja>@BeanConfig</ja>(unsortedProperties=<js>"$S{unsortedProperties,false}"</js>)
 		 * 		<jk>public void</jk> myMethod() {...}
 		 * 	}
 		 *

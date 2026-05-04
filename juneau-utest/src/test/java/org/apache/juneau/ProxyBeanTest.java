@@ -16,15 +16,9 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.html.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.msgpack.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
 class ProxyBeanTest extends TestBase {
@@ -39,19 +33,19 @@ class ProxyBeanTest extends TestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		var a = Json5Parser.DEFAULT.parse("{foo:1}", A.class);
+		var a = json5("{foo:1}", A.class);
 		assertEquals(1, a.getFoo());
-		a = XmlParser.DEFAULT.parse("<object><foo>1</foo></object>", A.class);
+		a = xml("<object><foo>1</foo></object>", A.class);
 		assertEquals(1, a.getFoo());
-		a = UonParser.DEFAULT.parse("(foo=1)", A.class);
+		a = uon("(foo=1)", A.class);
 		assertEquals(1, a.getFoo());
-		a = UrlEncodingParser.DEFAULT.parse("foo=1", A.class);
+		a = urlEncoding("foo=1", A.class);
 		assertEquals(1, a.getFoo());
-		a = MsgPackParser.DEFAULT.parse("81A3666F6F01", A.class);
+		a = msgPack("81A3666F6F01", A.class);
 		assertEquals(1, a.getFoo());
-		a = HtmlParser.DEFAULT.parse("<table><tr><td>foo</td><td>1</td></tr></table>", A.class);
+		a = html("<table><tr><td>foo</td><td>1</td></tr></table>", A.class);
 		assertEquals(1, a.getFoo());
-		a = OpenApiParser.DEFAULT.parse("foo=1", A.class);
+		a = openApi("foo=1", A.class);
 		assertEquals(1, a.getFoo());
 	}
 }

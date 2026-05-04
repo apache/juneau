@@ -62,7 +62,7 @@ import org.apache.juneau.swap.*;
  * 		.addRequired(<js>"firstName"</js>, <js>"lastName"</js>);
  *
  * 	<jc>// Serialize to JSON Schema</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_SORTED</jsf>.serialize(<jv>schema</jv>);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>schema</jv>);
  * </p>
  *
  * <p>
@@ -2031,7 +2031,7 @@ public class JsonSchema {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT_SORTED.toString(this);
+		return JsonSerializer.DEFAULT.toString(this);
 	}
 
 	private void setMasterOn(Collection<JsonSchema> ss) {

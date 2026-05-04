@@ -508,14 +508,14 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder sortProperties() {
-			super.sortProperties();
+		public Builder unsortedProperties() {
+			super.unsortedProperties();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder sortProperties(java.lang.Class<?>...on) {
-			super.sortProperties(on);
+		public Builder unsortedProperties(java.lang.Class<?>...on) {
+			super.unsortedProperties(on);
 			return this;
 		}
 

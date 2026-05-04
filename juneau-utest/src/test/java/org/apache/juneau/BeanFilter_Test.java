@@ -39,7 +39,7 @@ class BeanFilter_Test extends TestBase {
 		a1.fb = new B2();
 		((B2)a1.fb).f2 = "f2";
 		var r = s.serialize(a1);
-		assertEquals("{_type:'A1',f0:'f0',fb:{_type:'B2',f0b:'f0b',f2:'f2'},f1:'f1'}", r);
+		assertEquals("{_type:'A1',f0:'f0',f1:'f1',fb:{_type:'B2',f0b:'f0b',f2:'f2'}}", r);
 
 		assertBean(
 			p.parse(r, A.class),
@@ -95,7 +95,7 @@ class BeanFilter_Test extends TestBase {
 		e1.fb = new F2();
 		((F2)e1.fb).f2 = "f2";
 		var r = s.serialize(e1);
-		assertEquals("{_type:'E1',f0:'f0',fb:{_type:'F2',f0b:'f0b',f2:'f2'},f1:'f1'}", r);
+		assertEquals("{_type:'E1',f0:'f0',f1:'f1',fb:{_type:'F2',f0b:'f0b',f2:'f2'}}", r);
 
 		assertBean(
 			p.parse(r, E.class),

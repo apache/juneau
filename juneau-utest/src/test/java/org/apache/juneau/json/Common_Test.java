@@ -267,7 +267,7 @@ class Common_Test extends TestBase {
 	// Basic bean
 	//====================================================================================================
 	@Test void a09_basicBean() throws Exception {
-		var s = JsonSerializer.create().keepNullProperties().sortProperties().build();
+		var s = JsonSerializer.create().keepNullProperties().build();
 
 		var a = new J();
 		a.setF1("J");
@@ -301,7 +301,7 @@ class Common_Test extends TestBase {
 
 	@Test
 	void a10_beanpFormat() throws Exception {
-		var s = JsonSerializer.create().sortProperties().build();
+		var s = JsonSerializer.create().build();
 
 		var bean = new K();
 		var json = s.serialize(bean);

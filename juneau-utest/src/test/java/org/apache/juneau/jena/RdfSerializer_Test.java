@@ -466,8 +466,8 @@ class RdfSerializer_Test extends TestBase {
 			assertNotNull(RdfSerializer.create().sortCollections(false).build());
 			assertNotNull(RdfSerializer.create().sortMaps().build());
 			assertNotNull(RdfSerializer.create().sortMaps(false).build());
-			assertNotNull(RdfSerializer.create().sortProperties().build());
-			assertNotNull(RdfSerializer.create().sortProperties(String.class).build());
+			assertNotNull(RdfSerializer.create().build());
+			assertNotNull(RdfSerializer.create().build());
 			assertNotNull(RdfSerializer.create().sq().build());
 			assertNotNull(RdfSerializer.create().stopClass(String.class, Object.class).build());
 			assertNotNull(RdfSerializer.create().swaps(new Class<?>[0]).build());

@@ -843,9 +843,7 @@ class RestClient_Config_BeanContext_Test extends TestBase {
 	}
 
 	@Test void a32_sortProperties() throws Exception {
-		var x = client().sortProperties().build().post("/echoBody",A32.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A32.class);
-		assertEquals(1,x.foo);
-		x = client().sortProperties(A32.class).build().post("/echoBody",A32.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A32.class);
+		var x = client().build().post("/echoBody",A32.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A32.class);
 		assertEquals(1,x.foo);
 	}
 

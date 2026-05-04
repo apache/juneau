@@ -57,7 +57,7 @@ import org.apache.juneau.swap.*;
  * 			properties(<js>"id,name,email"</js>);  <jc>// Only include these properties</jc>
  * 			excludeProperties(<js>"password"</js>);  <jc>// Exclude sensitive data</jc>
  * 			readOnlyProperties(<js>"id"</js>);  <jc>// ID is read-only</jc>
- * 			sortProperties();  <jc>// Sort properties alphabetically</jc>
+ * 			unsortedProperties();  <jc>// Opt out of default alphabetical sorting</jc>
  * 		}
  * 	}
  *
@@ -96,7 +96,7 @@ public class BeanFilter {
 		private ClassInfo implClass;
 		private ClassInfo interfaceClass;
 		private ClassInfo stopClass;
-		private boolean sortProperties;
+		private boolean unsortedProperties;
 		private boolean fluentSetters;
 		private BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
 		private List<ClassInfo> dictionary;
@@ -124,8 +124,8 @@ public class BeanFilter {
 			annotations.forEach(x -> {
 				if (isAnyNotEmpty(x.properties(), x.p()))
 					properties(x.properties(), x.p());
-				if (x.sort())
-					sortProperties(true);
+				if (x.unsorted())
+					unsortedProperties(true);
 				if (x.findFluentSetters())
 					findFluentSetters();
 				if (isAnyNotEmpty(x.excludeProperties(), x.xp()))
@@ -629,52 +629,32 @@ public class BeanFilter {
 		}
 
 		/**
-		 * Sort bean properties.
+		 * Opt out of alphabetical property sorting for this specific bean.
 		 *
 		 * <p>
-		 * Shortcut for calling <code>sortProperties(<jk>true</jk>)</code>.
+		 * When <jk>true</jk>, the natural JVM-dependent order is used instead of the default alphabetical order.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#sort()}
-		 * 	<li class='jf'>{@link BeanContext.Builder#sortProperties()}
+		 * 	<li class='ja'>{@link Bean#unsorted()}
+		 * 	<li class='jf'>{@link BeanContext.Builder#unsortedProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
 		 */
-		public Builder sortProperties() {
-			sortProperties = true;
+		public Builder unsortedProperties() {
+			unsortedProperties = true;
 			return this;
 		}
 
 		/**
-		 * Sort bean properties.
+		 * Opt out of alphabetical property sorting for this specific bean.
 		 *
 		 * <p>
-		 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
-		 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Define our filter.</jc>
-		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
-		 * 		<jk>public</jk> MyFilter() {
-		 * 			sortProperties();
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Register it with a serializer.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.beanFilters(MyFilter.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Properties will be sorted alphabetically.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
+		 * When <jk>true</jk>, the natural JVM-dependent order is used instead of the default alphabetical order.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#sort()}
-		 * 	<li class='jf'>{@link BeanContext.Builder#sortProperties()}
+		 * 	<li class='ja'>{@link Bean#unsorted()}
+		 * 	<li class='jf'>{@link BeanContext.Builder#unsortedProperties()}
 		 * </ul>
 		 *
 		 * @param value
@@ -682,8 +662,8 @@ public class BeanFilter {
 		 * 	<br>The default is <jk>false</jk>.
 		 * @return This object.
 		 */
-		public Builder sortProperties(boolean value) {
-			sortProperties = value;
+		public Builder unsortedProperties(boolean value) {
+			unsortedProperties = value;
 			return this;
 		}
 
@@ -864,7 +844,7 @@ public class BeanFilter {
 	private final Set<String> properties;
 	private final PropertyNamer propertyNamer;
 	private final Set<String> readOnlyProperties;
-	private final boolean sortProperties;
+	private final boolean unsortedProperties;
 	private final ClassInfo stopClass;
 	private final String typeName;
 	private final Set<String> writeOnlyProperties;
@@ -883,7 +863,7 @@ public class BeanFilter {
 		this.implClass = builder.implClass;
 		this.interfaceClass = builder.interfaceClass;
 		this.stopClass = builder.stopClass;
-		this.sortProperties = builder.sortProperties;
+		this.unsortedProperties = builder.unsortedProperties;
 		this.fluentSetters = builder.fluentSetters;
 		this.propertyNamer = builder.propertyNamer.orElse(null);
 		this.beanDictionary = builder.dictionary == null ? list() : u(copyOf(builder.dictionary));
@@ -990,9 +970,9 @@ public class BeanFilter {
 	 * This method is only used when the {@link #getProperties()} method returns <jk>null</jk>.
 	 * Otherwise, the ordering of the properties in the returned value is used.
 	 *
-	 * @return <jk>true</jk> if bean properties should be sorted.
+	 * @return <jk>true</jk> if this bean opts out of alphabetical property sorting.
 	 */
-	public boolean isSortProperties() { return sortProperties; }
+	public boolean isUnsortedProperties() { return unsortedProperties; }
 
 	/**
 	 * Calls the {@link BeanInterceptor#readProperty(Object, String, Object)} method on the registered property filters.

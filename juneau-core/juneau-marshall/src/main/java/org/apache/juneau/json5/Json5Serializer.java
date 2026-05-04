@@ -617,14 +617,14 @@ public class Json5Serializer extends JsonSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder sortProperties() {
-			super.sortProperties();
+		public Builder unsortedProperties() {
+			super.unsortedProperties();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder sortProperties(java.lang.Class<?>...on) {
-			super.sortProperties(on);
+		public Builder unsortedProperties(java.lang.Class<?>...on) {
+			super.unsortedProperties(on);
 			return this;
 		}
 
@@ -800,9 +800,6 @@ public class Json5Serializer extends JsonSerializer {
 
 	/** Default serializer, single quotes. */
 	public static final Json5Serializer DEFAULT = new Json5Serializer(create());
-
-	/** Default serializer, single quotes, sorted bean properties. */
-	public static final Json5Serializer DEFAULT_SORTED = new Json5Serializer(create().sortProperties());
 
 	/** Default serializer, single quotes, with whitespace. */
 	public static final Json5Serializer DEFAULT_READABLE = new Readable(create());

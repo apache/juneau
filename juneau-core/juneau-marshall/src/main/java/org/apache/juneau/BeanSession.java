@@ -900,13 +900,13 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	public final boolean isIgnoreUnknownNullBeanProperties() { return ctx.isIgnoreUnknownNullBeanProperties(); }
 
 	/**
-	 * Sort bean properties.
+	 * Unsorted properties.
 	 *
-	 * @see BeanContext.Builder#sortProperties()
+	 * @see BeanContext.Builder#unsortedProperties()
 	 * @return
-	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
+	 * 	<jk>true</jk> if bean properties are serialized in natural JVM-dependent order instead of alphabetically.
 	 */
-	public final boolean isSortProperties() { return ctx.isSortProperties(); }
+	public final boolean isUnsortedProperties() { return ctx.isUnsortedProperties(); }
 
 	/**
 	 * Use enum names.

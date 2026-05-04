@@ -18,6 +18,7 @@ package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -217,7 +218,7 @@ class MsgPackSerializerTest extends TestBase {
 	}
 
 	private static void test(Object input, String expected) throws Exception {
-		var b = MsgPackSerializer.DEFAULT.serialize(input);
+		var b = msgPack(input);
 		assertEquals(expected, toSpacedHex(b));
 	}
 }

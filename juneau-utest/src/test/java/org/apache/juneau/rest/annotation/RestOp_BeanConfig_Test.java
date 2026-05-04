@@ -254,16 +254,16 @@ class RestOp_BeanConfig_Test extends TestBase {
 
 	@Test void a07_bpi_negativeMatching() throws Exception {
 		var a7 = MockRestClient.build(A7.class);
-		a7.get("/a").json().run().assertContent("{\"a\":1,\"_b\":\"foo\"}");
-		a7.get("/a").xml().run().assertContent().isContains("<object><a>1</a><_b>foo</_b></object>");
-		a7.get("/a").html().run().assertContent().isContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
-		a7.get("/a").uon().run().assertContent("(a=1,_b=foo)");
-		a7.get("/a").urlEnc().run().assertContent("a=1&_b=foo");
-		a7.get("/b").json().run().assertContent("{\"a\":1,\"_b\":\"foo\"}");
-		a7.get("/b").xml().run().assertContent().isContains("<object><a>1</a><_b>foo</_b></object>");
-		a7.get("/b").html().run().assertContent().isContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
-		a7.get("/b").uon().run().assertContent("(a=1,_b=foo)");
-		a7.get("/b").urlEnc().run().assertContent("a=1&_b=foo");
+		a7.get("/a").json().run().assertContent("{\"_b\":\"foo\",\"a\":1}");
+		a7.get("/a").xml().run().assertContent().isContains("<object><_b>foo</_b><a>1</a></object>");
+		a7.get("/a").html().run().assertContent().isContains("<table><tr><td>_b</td><td>foo</td></tr><tr><td>a</td><td>1</td></tr></table>");
+		a7.get("/a").uon().run().assertContent("(_b=foo,a=1)");
+		a7.get("/a").urlEnc().run().assertContent("_b=foo&a=1");
+		a7.get("/b").json().run().assertContent("{\"_b\":\"foo\",\"a\":1}");
+		a7.get("/b").xml().run().assertContent().isContains("<object><_b>foo</_b><a>1</a></object>");
+		a7.get("/b").html().run().assertContent().isContains("<table><tr><td>_b</td><td>foo</td></tr><tr><td>a</td><td>1</td></tr></table>");
+		a7.get("/b").uon().run().assertContent("(_b=foo,a=1)");
+		a7.get("/b").urlEnc().run().assertContent("_b=foo&a=1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

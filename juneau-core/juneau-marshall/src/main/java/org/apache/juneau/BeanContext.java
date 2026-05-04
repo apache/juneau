@@ -195,7 +195,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	private static final String PROP_notBeanClasses = "notBeanClasses";
 	private static final String PROP_notBeanPackageNames = "notBeanPackageNames";
 	private static final String PROP_notBeanPackagePrefixes = "notBeanPackagePrefixes";
-	private static final String PROP_sortProperties = "sortProperties";
+	private static final String PROP_unsortedProperties = "unsortedProperties";
 	private static final String PROP_swaps = "swaps";
 	private static final String PROP_useEnumNames = "useEnumNames";
 	private static final String PROP_useInterfaceProxies = "useInterfaceProxies";
@@ -251,7 +251,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		private boolean ignoreInvocationExceptionsOnSetters;
 		private boolean ignoreUnknownBeanProperties;
 		private boolean ignoreUnknownEnumValues;
-		private boolean sortProperties;
+		private boolean unsortedProperties;
 		private boolean useEnumNames;
 		private boolean useJavaBeanIntrospector;
 		private String typePropertyName;
@@ -295,7 +295,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			notBeanClasses = new TreeSet<>();
 			notBeanPackages = new TreeSet<>();
 			propertyNamer = null;
-			sortProperties = env("BeanContext.sortProperties", false);
+			unsortedProperties = env("BeanContext.unsortedProperties", false);
 			swaps = list();
 			timeZone = env("BeanContext.timeZone").map(TimeZone::getTimeZone).orElse(null);
 			typePropertyName = env("BeanContext.typePropertyName", "_type");
@@ -335,7 +335,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			notBeanClasses = new TreeSet<>(copyFrom.notBeanClasses);
 			notBeanPackages = toSortedSet(copyFrom.notBeanPackages, false);
 			propertyNamer = copyFrom.propertyNamer;
-			sortProperties = copyFrom.sortProperties;
+			unsortedProperties = copyFrom.unsortedProperties;
 			swaps = copyOf(copyFrom.swaps);
 			timeZone = copyFrom.timeZone;
 			typePropertyName = copyFrom.typePropertyName;
@@ -375,7 +375,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			notBeanClasses = new TreeSet<>(copyFrom.notBeanClasses);
 			notBeanPackages = toSortedSet(copyFrom.notBeanPackages);
 			propertyNamer = copyFrom.propertyNamer;
-			sortProperties = copyFrom.sortProperties;
+			unsortedProperties = copyFrom.unsortedProperties;
 			swaps = copyOf(copyFrom.swaps);
 			timeZone = copyFrom.timeZone;
 			typePropertyName = copyFrom.typePropertyName;
@@ -2287,7 +2287,7 @@ public class BeanContext extends Context implements ConversionFinder {
 					ignoreInvocationExceptionsOnSetters,
 					ignoreUnknownBeanProperties,
 					ignoreUnknownEnumValues,
-					sortProperties,
+					unsortedProperties,
 					useEnumNames,
 					useJavaBeanIntrospector
 				),
@@ -2992,18 +2992,11 @@ public class BeanContext extends Context implements ConversionFinder {
 		}
 
 		/**
-		 * Sort bean properties.
+		 * Disable sorted bean properties.
 		 *
 		 * <p>
-		 * When enabled, all bean properties will be serialized and access in alphabetical order.
-		 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
-		 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
-		 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
-		 *
-		 * <p>
-		 * this setting is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
-		 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
-		 * in the Java file.
+		 * By default, all bean properties are serialized and accessed in alphabetical order.
+		 * Calling this method opts out of that behavior so that the natural JVM order is used instead.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -3014,76 +3007,56 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * 		<jk>public</jk> String <jf>a</jf> = <js>"3"</js>;
 		 * 	}
 		 *
-		 * 	<jc>// Create a serializer that sorts bean properties.</jc>
+		 * 	<jc>// Create a serializer that does NOT sort bean properties.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.sortProperties()
+		 * 		.unsortedProperties()
 		 * 		.build();
 		 *
-		 * 	<jc>// Produces:  {"a":"3","b":"2","c":"1"}</jc>
+		 * 	<jc>// Produces:  {"c":"1","b":"2","a":"3"} (JVM order)</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean#sort() @Bean.sort()} annotation can also be used to sort properties on just a single class.
+		 * 	<li class='note'>The {@link Bean#unsorted() @Bean.unsorted()} annotation can also be used to opt out of sorting on a single class.
 		 * </ul>
 		 *
 		 * @return This object.
 		 */
-		public Builder sortProperties() {
-			sortProperties = true;
-			return sortProperties(true);
+		public Builder unsortedProperties() {
+			return unsortedProperties(true);
 		}
 
 		/**
-		 * Same as {@link #sortProperties()} but allows you to explicitly specify the value.
+		 * Same as {@link #unsortedProperties()} but allows you to explicitly specify the value.
 		 *
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public Builder sortProperties(boolean value) {
-			sortProperties = value;
+		public Builder unsortedProperties(boolean value) {
+			unsortedProperties = value;
 			return this;
 		}
 
 		/**
-		 * Sort bean properties.
+		 * Opt specific bean classes out of alphabetical property sorting.
 		 *
 		 * <p>
-		 * Same as {@link #sortProperties()} but allows you to specify individual bean classes instead of globally.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with 3 properties.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>c</jf> = <js>"1"</js>;
-		 * 		<jk>public</jk> String <jf>b</jf> = <js>"2"</js>;
-		 * 		<jk>public</jk> String <jf>a</jf> = <js>"3"</js>;
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that sorts properties on MyBean.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.sortProperties(MyBean.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  {"a":"3","b":"2","c":"1"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
+		 * Applies the {@link Bean#unsorted() @Bean(unsorted=true)} annotation to the specified classes,
+		 * overriding the default sorted behavior for those specific beans.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#sort() Bean(sort)}
-		 * 	<li class='jm'>{@link #sortProperties()}
+		 * 	<li class='ja'>{@link Bean#unsorted() Bean(unsorted)}
 		 * </ul>
 		 *
-		 * @param on The bean classes to sort properties on.
+		 * @param on The bean classes to opt out of sorted properties.
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public Builder sortProperties(Class<?>...on) {
+		public Builder unsortedProperties(Class<?>...on) {
 			assertArgNoNulls(ARG_on, on);
 			for (var c : on)
-				annotations(BeanApplyAnnotation.create(c).value(BeanAnnotation.create().sort(true).build()).build());
+				annotations(BeanApplyAnnotation.create(c).value(BeanAnnotation.create().unsorted(true).build()).build());
 			return this;
 		}
 
@@ -3638,9 +3611,6 @@ public class BeanContext extends Context implements ConversionFinder {
 	/** Default config.  All default settings. */
 	public static final BeanContext DEFAULT = create().build();
 
-	/** Default config.  All default settings except sort bean properties. */
-	public static final BeanContext DEFAULT_SORTED = create().sortProperties().build();
-
 	/** Default reusable unmodifiable session.  Can be used to avoid overhead of creating a session (for creating BeanMaps for example).*/
 	public static final BeanSession DEFAULT_SESSION = DEFAULT.createSession().unmodifiable().build();
 
@@ -3686,7 +3656,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	private final boolean ignoreUnknownBeanProperties;
 	private final boolean ignoreUnknownEnumValues;
 	private final boolean ignoreUnknownNullBeanProperties;
-	private final boolean sortProperties;
+	private final boolean unsortedProperties;
 	private final boolean useEnumNames;
 	private final boolean useInterfaceProxies;
 	private final boolean useJavaBeanIntrospector;
@@ -3744,7 +3714,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		mediaType = builder.mediaType;
 		notBeanPackages = u(new ArrayList<>(builder.notBeanPackages));
 		propertyNamer = nn(builder.propertyNamer) ? builder.propertyNamer : BasicPropertyNamer.class;
-		sortProperties = builder.sortProperties;
+		unsortedProperties = builder.unsortedProperties;
 		swaps = u(copyOf(builder.swaps));
 		timeZone = builder.timeZone;
 		typePropertyName = opt(builder.typePropertyName).orElse("_type");
@@ -4643,13 +4613,13 @@ public class BeanContext extends Context implements ConversionFinder {
 	public final boolean isIgnoreUnknownNullBeanProperties() { return ignoreUnknownNullBeanProperties; }
 
 	/**
-	 * Sort bean properties.
+	 * Returns whether bean properties are unsorted (i.e. in natural JVM order rather than alphabetical).
 	 *
-	 * @see BeanContext.Builder#sortProperties()
+	 * @see BeanContext.Builder#unsortedProperties()
 	 * @return
-	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
+	 * 	<jk>true</jk> if bean properties are in natural JVM order; <jk>false</jk> (the default) means alphabetical order.
 	 */
-	public final boolean isSortProperties() { return sortProperties; }
+	public final boolean isUnsortedProperties() { return unsortedProperties; }
 
 	/**
 	 * Use enum names.
@@ -4865,7 +4835,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			.a(PROP_notBeanClasses, notBeanClasses)
 			.a(PROP_notBeanPackageNames, notBeanPackageNames)
 			.a(PROP_notBeanPackagePrefixes, notBeanPackagePrefixes)
-			.a(PROP_sortProperties, sortProperties)
+			.a(PROP_unsortedProperties, unsortedProperties)
 			.a(PROP_swaps, swaps)
 			.a(PROP_useEnumNames, useEnumNames)
 			.a(PROP_useInterfaceProxies, useInterfaceProxies)

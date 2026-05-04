@@ -117,7 +117,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 
 	private static final JsonSerializer JSON = Json5Serializer.create().build();
 
-	private static final JsonSerializer JSON_SORTED = Json5Serializer.create().sortProperties().sortCollections().sortMaps().build();
+	private static final JsonSerializer JSON_SORTED = Json5Serializer.create().sortCollections().sortMaps().build();
 
 	private final T value;
 

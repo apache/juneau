@@ -97,14 +97,14 @@ class RestClient_Config_Context_Test extends TestBase {
 		}
 	}
 
-	@BeanApply(on="A6a",value=@Bean(sort=true))
+	@BeanApply(on="A6a",value=@Bean)
 	public static class A6b {}
 
-	@BeanConfig(sortProperties="true")
+	@BeanConfig
 	public static class A6c {}
 
 	public static class A6d {
-		@BeanConfig(sortProperties="true")
+		@BeanConfig
 		public void foo() { /* no-op */ }
 	}
 
@@ -120,7 +120,7 @@ class RestClient_Config_Context_Test extends TestBase {
 	}
 
 	@Test void a09_annotations() throws Exception {
-		client().annotations(BeanApplyAnnotation.create(A6a.class).value(BeanAnnotation.create().sort(true).build()).build()).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
+		client().annotations(BeanApplyAnnotation.create(A6a.class).value(BeanAnnotation.create().build()).build()).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

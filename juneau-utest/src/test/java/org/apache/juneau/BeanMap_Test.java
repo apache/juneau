@@ -957,7 +957,7 @@ class BeanMap_Test extends TestBase {
 	// testPropertyNameFactoryDashedLC2
 	//====================================================================================================
 	@Test void a20_propertyNameFactoryDashedLC2() {
-		var bc2 = BeanContext.DEFAULT_SORTED;
+		var bc2 = BeanContext.DEFAULT;
 		var m = bc2.newBeanMap(P2.class).load("{'foo-bar':1,'baz-bing':2}");
 		assertBean(m, "foo-bar,baz-bing", "1,2");
 		assertBean(m.getBean(), "fooBar,bazBING", "1,2");
@@ -982,7 +982,7 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 	@Test void a21_beanWithFluentStyleSetters() {
 		var t = new Q2();
-		var m = BeanContext.DEFAULT_SORTED.toBeanMap(t);
+		var m = BeanContext.DEFAULT.toBeanMap(t);
 		m.put("f1", 1);
 		m.put("f2", 2);
 		m.put("f3", 3);

@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
@@ -210,7 +210,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	@Test
 	void b05_genericRecord() throws Exception {
 		var in = new Wrapper<>("hello", "greeting");
-		var json = Json5Serializer.DEFAULT.serialize(in);
+		var json = json5(in);
 		assertTrue(json.contains("hello"));
 		assertTrue(json.contains("greeting"));
 	}
@@ -218,7 +218,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	@Test
 	void b06_recordWithArraySerialization() throws Exception {
 		var in = new WithArray("data", new int[]{1, 2, 3});
-		var json = Json5Serializer.DEFAULT.serialize(in);
+		var json = json5(in);
 		assertEquals("{label:'data',values:[1,2,3]}", json);
 	}
 
@@ -255,7 +255,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	@Test
 	void c03_recordAsMapValue() throws Exception {
 		var map = Map.of("p1", new Person("Alice", 30), "p2", new Person("Bob", 25));
-		var json = Json5Serializer.DEFAULT.serialize(map);
+		var json = json5(map);
 		assertTrue(json.contains("Alice"));
 		assertTrue(json.contains("Bob"));
 	}
@@ -263,9 +263,9 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	@Test
 	void c04_beancNonCanonicalConstructor() throws Exception {
 		var in = new WithBeanc("Jane", 0);
-		var json = Json5Serializer.DEFAULT.serialize(in);
+		var json = json5(in);
 		assertTrue(json.contains("Jane"));
-		var out = JsonParser.DEFAULT.parse("{\"name\":\"Jane\"}", WithBeanc.class);
+		var out = json("{\"name\":\"Jane\"}", WithBeanc.class);
 		assertEquals("Jane", out.name());
 		assertEquals(0, out.age());
 	}
@@ -286,7 +286,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	@Test
 	void d01_jsonSerialization() throws Exception {
 		var p = new Person("John", 30);
-		var json = Json5Serializer.DEFAULT.serialize(p);
+		var json = json5(p);
 		assertEquals("{age:30,name:'John'}", json);
 	}
 
@@ -294,41 +294,41 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	void d02_jsonSerializationNested() throws Exception {
 		var person = new Person("Jane", 25);
 		var nested = new Nested(person, "developer");
-		var json = Json5Serializer.DEFAULT.serialize(nested);
+		var json = json5(nested);
 		assertEquals("{person:{age:25,name:'Jane'},role:'developer'}", json);
 	}
 
 	@Test
 	void d03_jsonSerializationEmpty() throws Exception {
 		var empty = new EmptyRecord();
-		var json = Json5Serializer.DEFAULT.serialize(empty);
+		var json = json5(empty);
 		assertEquals("{}", json);
 	}
 
 	@Test
 	void d04_jsonSerializationWithEnum() throws Exception {
 		var status = new WithEnum("task1", Priority.HIGH);
-		var json = Json5Serializer.DEFAULT.serialize(status);
+		var json = json5(status);
 		assertEquals("{name:'task1',priority:'HIGH'}", json);
 	}
 
 	@Test
 	void d05_jsonSerializationBeanpRename() throws Exception {
 		var p = new WithBeanp("John", 30);
-		var json = Json5Serializer.DEFAULT.serialize(p);
+		var json = json5(p);
 		assertEquals("{age:30,fullName:'John'}", json);
 	}
 
 	@Test
 	void d06_jsonSerializationPropertyOrder() throws Exception {
 		var p = new AnnotatedOrder("John", 30);
-		var json = Json5Serializer.DEFAULT.serialize(p);
+		var json = json5(p);
 		assertEquals("{age:30,name:'John'}", json);
 	}
 
 	@Test
 	void d07_jsonParsingRenamedProperty() throws Exception {
-		var parsed = JsonParser.DEFAULT.parse("{\"fullName\":\"John\",\"age\":30}", WithBeanp.class);
+		var parsed = json("{\"fullName\":\"John\",\"age\":30}", WithBeanp.class);
 		assertEquals("John", parsed.name());
 		assertEquals(30, parsed.age());
 	}

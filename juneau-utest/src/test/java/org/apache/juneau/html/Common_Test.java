@@ -379,7 +379,7 @@ class Common_Test extends TestBase {
 	// Basic bean
 	//====================================================================================================
 	@Test void a09_basicBean() throws Exception {
-		var s = HtmlSerializer.create().sq().keepNullProperties().sortProperties().addKeyValueTableHeaders().build();
+		var s = HtmlSerializer.create().sq().keepNullProperties().addKeyValueTableHeaders().build();
 
 		var a = new J();
 		a.setF1("J");
@@ -420,7 +420,7 @@ class Common_Test extends TestBase {
 
 	@Test
 	void a10_beanpFormat() throws Exception {
-		var s = HtmlSerializer.create().sq().sortProperties().addKeyValueTableHeaders().build();
+		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
 
 		var bean = new K();
 		var html = s.serialize(bean);

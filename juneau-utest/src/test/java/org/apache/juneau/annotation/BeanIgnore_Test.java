@@ -67,7 +67,7 @@ class BeanIgnore_Test extends TestBase {
 	}
 
 	@Test void a02_beanIgnoreOnProperties_usingConfig() {
-		assertSerialized(new Ac(), Json5Serializer.DEFAULT.copy().applyAnnotations(AcConfig.class).build(), "{c:'c',a:'a'}");
+		assertSerialized(new Ac(), Json5Serializer.DEFAULT.copy().applyAnnotations(AcConfig.class).build(), "{a:'a',c:'c'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

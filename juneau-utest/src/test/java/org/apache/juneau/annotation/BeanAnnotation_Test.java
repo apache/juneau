@@ -47,7 +47,7 @@ class BeanAnnotation_Test extends TestBase {
 		.propertyNamer(BasicPropertyNamer.class)
 		.readOnlyProperties("g")
 		.ro("h")
-		.sort(true)
+		.unsorted(true)
 		.stopClass(X1.class)
 		.typeName("i")
 		.typePropertyName("j")
@@ -70,7 +70,7 @@ class BeanAnnotation_Test extends TestBase {
 		.propertyNamer(BasicPropertyNamer.class)
 		.readOnlyProperties("g")
 		.ro("h")
-		.sort(true)
+		.unsorted(true)
 		.stopClass(X1.class)
 		.typeName("i")
 		.typePropertyName("j")
@@ -81,8 +81,8 @@ class BeanAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"description,dictionary,example,excludeProperties,findFluentSetters,implClass,interceptor,interfaceClass,p,properties,propertyNamer,readOnlyProperties,ro,sort,stopClass,typeName,typePropertyName,wo,writeOnlyProperties,xp",
-			"[a],[X1],b,c,true,X1,X2,X1,e,f,BasicPropertyNamer,g,h,true,X1,i,j,k,l,m");
+			"description,dictionary,example,excludeProperties,findFluentSetters,implClass,interceptor,interfaceClass,p,properties,propertyNamer,readOnlyProperties,ro,stopClass,typeName,typePropertyName,unsorted,wo,writeOnlyProperties,xp",
+			"[a],[X1],b,c,true,X1,X2,X1,e,f,BasicPropertyNamer,g,h,X1,i,j,true,k,l,m");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -120,7 +120,7 @@ class BeanAnnotation_Test extends TestBase {
 		propertyNamer=BasicPropertyNamer.class,
 		readOnlyProperties="g",
 		ro="h",
-		sort=true,
+		unsorted=true,
 		stopClass=X1.class,
 		typeName="i",
 		typePropertyName="j",
@@ -145,7 +145,7 @@ class BeanAnnotation_Test extends TestBase {
 		propertyNamer=BasicPropertyNamer.class,
 		readOnlyProperties="g",
 		ro="h",
-		sort=true,
+		unsorted=true,
 		stopClass=X1.class,
 		typeName="i",
 		typePropertyName="j",

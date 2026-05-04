@@ -1849,7 +1849,7 @@ class Swagger_Test extends TestBase {
 		}
 	}
 
-	@Bean(sort=true)
+	@Bean
 	public static class T2 {
 		private int f1;
 		public int getF1() { return f1; }

@@ -747,14 +747,14 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder sortProperties() {
-			super.sortProperties();
+		public Builder unsortedProperties() {
+			super.unsortedProperties();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder sortProperties(java.lang.Class<?>...on) {
-			super.sortProperties(on);
+		public Builder unsortedProperties(java.lang.Class<?>...on) {
+			super.unsortedProperties(on);
 			return this;
 		}
 
@@ -930,8 +930,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 	/** Default serializer, all default settings.*/
 	public static final JsonSerializer DEFAULT = new JsonSerializer(create());
-	/** Default serializer, sorted bean properties. */
-	public static final JsonSerializer DEFAULT_SORTED = new JsonSerializer(create().sortProperties());
 
 	/** Default serializer, all default settings.*/
 	public static final JsonSerializer DEFAULT_READABLE = new Readable(create());

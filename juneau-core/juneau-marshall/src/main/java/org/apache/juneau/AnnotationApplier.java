@@ -48,7 +48,7 @@ import org.apache.juneau.svl.*;
  * 	<ja>@ContextApply</ja>(BeanConfigAnnotationApplier.<jk>class</jk>)
  * 	<jk>public</jk> <jk>@interface </jk>BeanConfig {
  *
- * 		String sortProperties() <jk>default</jk> <js>""</js>;
+ * 		String unsortedProperties() <jk>default</jk> <js>""</js>;
  *
  * 	}
  *
@@ -64,20 +64,20 @@ import org.apache.juneau.svl.*;
  * 		<jk>public void</jk> apply(AnnotationInfo&lt;BeanConfig&gt; <jv>annotationInfo</jv>, BeanContext.Builder <jv>builder</jv>) {
  * 			<ja>BeanConfig</ja> <jv>beanConfig</jv> = <jv>annotationInfo</jv>.getAnnotation();
  *
- * 			String <jv>sortProperties</jv> = <jv>beanConfig</jv>.sortProperties();
- * 			<jk>if</jk> (! <jv>sortProperties</jv>.isEmpty())
- * 				<jv>builder</jv>.sortProperties(Boolean.<jsm>parseBoolean</jsm>(<jv>sortProperties</jv>));
+ * 			String <jv>unsortedProperties</jv> = <jv>beanConfig</jv>.unsortedProperties();
+ * 			<jk>if</jk> (! <jv>unsortedProperties</jv>.isEmpty())
+ * 				<jv>builder</jv>.unsortedProperties(Boolean.<jsm>parseBoolean</jsm>(<jv>unsortedProperties</jv>));
  * 		}
  * 	}
  *
- *	<jc>// An annotated class.</jc>
- * 	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)
+ *	<jc>// An annotated class opting out of the default sorted behavior.</jc>
+ * 	<ja>@BeanConfig</ja>(unsortedProperties=<js>"true"</js>)
  * 	<jk>public class</jk> AnnotatedClass {}
  *
  *	<jc>// Putting it together.</jc>
  * 	<jk>public static void</jk> main(String[] <jv>args</jv>) {
  *
- *		<jc>// Create a JSON serializer with sorted properties.</jc>
+ *		<jc>// Create a JSON serializer where AnnotatedClass uses natural JVM order.</jc>
  * 		Serializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().applyAnnotations(AnnotatedClass.<jk>class</jk>).build();
  * 	}
  * </p>

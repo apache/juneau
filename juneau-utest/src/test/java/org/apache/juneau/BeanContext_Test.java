@@ -133,7 +133,7 @@ class BeanContext_Test extends TestBase {
 	@Test void d01_copy() {
 		// Create a BeanContext with some properties set to exercise the copy constructor
 		var original = BeanContext.create()
-			.sortProperties()
+			.unsortedProperties()
 			.locale(Locale.CANADA)
 			.mediaType(MediaType.JSON)
 			.timeZone(TimeZone.getTimeZone("America/New_York"))
@@ -164,7 +164,7 @@ class BeanContext_Test extends TestBase {
 	@Test
 	void e01_impl() {
 		var impl = BeanContext.create()
-			.sortProperties()
+			.unsortedProperties()
 			.locale(Locale.CANADA)
 			.build();
 

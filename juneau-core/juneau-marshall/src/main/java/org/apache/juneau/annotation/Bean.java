@@ -393,26 +393,26 @@ public @interface Bean {
 	String ro() default "";
 
 	/**
-	 * Sort bean properties in alphabetical order.
+	 * Opt out of alphabetical sorting for this specific bean's properties.
 	 *
 	 * <p>
-	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
-	 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
+	 * By default, bean properties are serialized in alphabetical order.
+	 * When <jk>true</jk>, properties of this bean will use the natural JVM-dependent order instead.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Sort bean properties alphabetically during serialization.</jc>
-	 * 	<ja>@Bean</ja>(sort=<jk>true</jk>)
+	 * 	<jc>// Disable sorted properties for this specific bean.</jc>
+	 * 	<ja>@Bean</ja>(unsorted=<jk>true</jk>)
 	 * 	<jk>public class</jk> MyBean {...}
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#sortProperties()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#unsortedProperties()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	boolean sort() default false;
+	boolean unsorted() default false;
 
 	/**
 	 * Identifies a stop class for the annotated class.

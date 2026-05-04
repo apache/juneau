@@ -255,7 +255,7 @@ class Common_Test extends TestBase {
 
 	@Test
 	void a08_beanpFormat() throws Exception {
-		var s = XmlSerializer.create().sq().sortProperties().build();
+		var s = XmlSerializer.create().sq().build();
 
 		var bean = new K();
 		var xml = s.serialize(bean);

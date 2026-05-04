@@ -116,7 +116,6 @@ public class JcsSerializer extends JsonSerializer {
 			super();
 			produces("application/jcs+json");
 			accept("application/jcs+json");
-			sortProperties();
 			quoteChar('"');
 			useWhitespace(false);
 		}

@@ -21,7 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.junit.bct.BctAssertions;
-import org.apache.juneau.marshaller.*;
+import static org.apache.juneau.marshaller.MarshallUtils.*;
 
 /**
  * Utility class for testing bean functionality in a standardized way.
@@ -268,7 +268,7 @@ public class BeanTester<T> {
 	 * @return The JSON representation of the object.
 	 */
 	private static String json(Object o) {
-		return Json5.DEFAULT_SORTED.write(o);
+		return json5(o);
 	}
 
 	/**
@@ -280,7 +280,7 @@ public class BeanTester<T> {
 	 * @return The deserialized object.
 	 */
 	private static <T> T json(String o, Class<T> c) {
-		return safe(()->Json5.DEFAULT_SORTED.read(o, c));
+		return safe(()->json5(o, c));
 	}
 
 	/**

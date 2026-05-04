@@ -2475,90 +2475,37 @@ public abstract class BeanContextable extends Context {
 		}
 
 		/**
-		 * Sort bean properties.
+		 * Opt out of alphabetical property sorting globally.
 		 *
 		 * <p>
-		 * When enabled, all bean properties will be serialized and access in alphabetical order.
-		 * Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
-		 * On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
-		 * On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
-		 *
-		 * <p>
-		 * this setting is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
-		 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
-		 * in the Java file.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with 3 properties.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>c</jf> = <js>"1"</js>;
-		 * 		<jk>public</jk> String <jf>b</jf> = <js>"2"</js>;
-		 * 		<jk>public</jk> String <jf>a</jf> = <js>"3"</js>;
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that sorts bean properties.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.sortProperties()
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  {"a":"3","b":"2","c":"1"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean#sort() @Bean.sort()} annotation can also be used to sort properties on just a single class.
-		 * </ul>
+		 * When called, bean properties will be serialized in natural JVM-dependent order instead of the default alphabetical order.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link BeanContext.Builder#sortProperties()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#unsortedProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
 		 */
-		public Builder sortProperties() {
-			bcBuilder.sortProperties();
+		public Builder unsortedProperties() {
+			bcBuilder.unsortedProperties();
 			return this;
 		}
 
 		/**
-		 * Sort bean properties.
-		 *
-		 * <p>
-		 * Same as {@link #sortProperties()} but allows you to specify individual bean classes instead of globally.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with 3 properties.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>c</jf> = <js>"1"</js>;
-		 * 		<jk>public</jk> String <jf>b</jf> = <js>"2"</js>;
-		 * 		<jk>public</jk> String <jf>a</jf> = <js>"3"</js>;
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that sorts properties on MyBean.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.sortProperties(MyBean.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  {"a":"3","b":"2","c":"1"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
+		 * Opt specific bean classes out of alphabetical property sorting.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#sort() Bean(sort)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#sortProperties()}
+		 * 	<li class='ja'>{@link Bean#unsorted() Bean(unsorted)}
+		 * 	<li class='jm'>{@link BeanContext.Builder#unsortedProperties(Class...)}
 		 * </ul>
 		 *
-		 * @param on The bean classes to sort properties on.
+		 * @param on The bean classes to opt out of sorted properties.
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public Builder sortProperties(Class<?>...on) {
+		public Builder unsortedProperties(Class<?>...on) {
 			assertArgNoNulls(ARG_on, on);
-			bcBuilder.sortProperties(on);
+			bcBuilder.unsortedProperties(on);
 			return this;
 		}
 

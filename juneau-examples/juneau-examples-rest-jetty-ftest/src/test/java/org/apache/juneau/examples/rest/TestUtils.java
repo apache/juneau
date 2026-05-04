@@ -45,7 +45,7 @@ public class TestUtils {
 		.build();
 
 	private static JsonSerializer js3 = Json5Serializer.create()
-		.sortProperties()
+		
 		.build();
 	// @formatter:on
 
@@ -202,8 +202,7 @@ public class TestUtils {
 	}
 
 	/**
-	 * Assert that the object equals the specified string after running it through Json5Serializer.DEFAULT.toString()
-	 * with BEAN_sortProperties set to true.
+	 * Assert that the object equals the specified string after running it through Json5Serializer.DEFAULT.toString().
 	 */
 	public static void assertSortedObjectEquals(String s, Object o) {
 		assertObjectEquals(s, o, js3);

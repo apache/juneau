@@ -367,7 +367,7 @@ public class BeanMeta<T> {
 	private final String notABeanReason;                                       // Readable string explaining why this class wasn't a bean.
 	private final Map<String,BeanPropertyMeta> properties;                     // The properties on the target class.
 	private final Map<Method,String> setterProps;                              // The setter properties on the target class.
-	private final boolean sortProperties;                                      // Whether properties should be sorted.
+	private final boolean unsortedProperties;                                  // Whether properties should use natural JVM-dependent order.
 	private final ClassInfo stopClass;                                          // The stop class for hierarchy traversal.
 	private final BeanPropertyMeta typeProperty;                               // "_type" mock bean property.
 	private final String typePropertyName;                                     // "_type" property actual name.
@@ -419,7 +419,7 @@ public class BeanMeta<T> {
 		var getterPropsMap = CollectionUtils.<Method,String>map();  // Convert to MethodInfo keys
 		var setterPropsMap = CollectionUtils.<Method,String>map();
 		var dynaPropertyValue = Value.<BeanPropertyMeta>empty();
-		var sortPropertiesTemp = false;
+		var unsortedPropertiesTemp = false;
 		var ba = ap.find(Bean.class, cm);
 		var propertyNamer = opt(bf).map(x -> x.getPropertyNamer()).orElse(beanContext.getPropertyNamer());
 
@@ -543,9 +543,9 @@ public class BeanMeta<T> {
 			if (bf == null && beanContext.isBeansRequireSomeProperties() && normalProps.isEmpty() && ! ci.isRecord())
 				notABeanReasonTemp = "No properties detected on bean class";
 
-			sortPropertiesTemp = beanContext.isSortProperties() || bfo.map(x -> x.isSortProperties()).orElse(false) && fixedBeanProps.isEmpty();
+			unsortedPropertiesTemp = beanContext.isUnsortedProperties() || bfo.map(x -> x.isUnsortedProperties()).orElse(false) || !fixedBeanProps.isEmpty();
 
-			propertiesValue.set(sortPropertiesTemp ? sortedMap() : map());
+			propertiesValue.set(unsortedPropertiesTemp ? map() : sortedMap());
 
 			normalProps.forEach((k, v) -> {
 				var pMeta = v.build();
@@ -598,7 +598,7 @@ public class BeanMeta<T> {
 		getterProps = u(getterPropsMap);
 		setterProps = u(setterPropsMap);
 		dynaProperty = dynaPropertyValue.get();
-		sortProperties = sortPropertiesTemp;
+		unsortedProperties = unsortedPropertiesTemp;
 		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(beanContext.string()).beanRegistry(beanRegistry.get()).build();
 		dictionaryName = memoize(this::findDictionaryName);
 		beanProxyInvocationHandler = memoize(()->beanContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
@@ -711,6 +711,8 @@ public class BeanMeta<T> {
 	 * @return The metadata about the property, or <jk>null</jk> if no such property exists on this bean.
 	 */
 	public BeanPropertyMeta getPropertyMeta(String name) {
+		if (name == null)
+			return dynaProperty;
 		var bpm = properties.get(name);
 		if (bpm == null)
 			bpm = hiddenProperties.get(name);
@@ -917,11 +919,11 @@ public class BeanMeta<T> {
 	}
 
 	/**
-	 * Returns whether properties should be sorted for this bean.
+	 * Returns whether this bean has opted out of alphabetical property sorting.
 	 *
-	 * @return <jk>true</jk> if properties should be sorted.
+	 * @return <jk>true</jk> if properties should use natural JVM-dependent order.
 	 */
-	protected boolean isSortProperties() { return sortProperties; }
+	protected boolean isUnsortedProperties() { return unsortedProperties; }
 
 	/**
 	 * Creates a new instance of this bean.

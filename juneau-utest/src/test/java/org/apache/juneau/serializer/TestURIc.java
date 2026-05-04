@@ -23,7 +23,7 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
-@Bean(sort=true)
+@Bean
 public class TestURIc {
 
 	@UriApply(on="Dummy1", value=@Uri)

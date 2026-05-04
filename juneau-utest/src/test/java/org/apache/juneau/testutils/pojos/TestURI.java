@@ -21,7 +21,7 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
-@Bean(sort=true)
+@Bean
 public class TestURI {
 	@Uri
 	@Xml(format=XmlFormat.ATTR)

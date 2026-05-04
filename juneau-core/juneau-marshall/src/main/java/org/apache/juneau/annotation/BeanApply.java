@@ -31,7 +31,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@BeanApply</ja>(on=<js>"com.example.Foo"</js>, value=<ja>@Bean</ja>(sort=<jk>true</jk>))
+ * 	<ja>@BeanApply</ja>(on=<js>"com.example.Foo"</js>, value=<ja>@Bean</ja>(unsorted=<jk>true</jk>))
  * 	<jk>public class</jk> MyConfig {}
  * </p>
  *

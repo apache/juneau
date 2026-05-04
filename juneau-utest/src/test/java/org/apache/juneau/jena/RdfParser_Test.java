@@ -403,8 +403,8 @@ class RdfParser_Test extends TestBase {
 		}
 
 		@Test void d14_sortStopAndOther() {
-			assertNotNull(RdfParser.create().sortProperties().build());
-			assertNotNull(RdfParser.create().sortProperties(String.class).build());
+			assertNotNull(RdfParser.create().build());
+			assertNotNull(RdfParser.create().build());
 			assertNotNull(RdfParser.create().stopClass(String.class, Object.class).build());
 			assertNotNull(RdfParser.create().swaps(new Class<?>[0]).build());
 			assertNotNull(RdfParser.create().swaps(new Object[0]).build());

@@ -66,7 +66,7 @@ public class BeanAnnotation {
 		private String writeOnlyProperties = "";
 		private String xp = "";
 		private boolean findFluentSetters;
-		private boolean sort;
+		private boolean unsorted;
 
 		/**
 		 * Constructor.
@@ -240,13 +240,13 @@ public class BeanAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Bean#sort()} property on this annotation.
+		 * Sets the {@link Bean#unsorted()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder sort(boolean value) {
-			sort = value;
+		public Builder unsorted(boolean value) {
+			unsorted = value;
 			return this;
 		}
 
@@ -325,7 +325,7 @@ public class BeanAnnotation {
 
 		private final String[] description;
 		private final boolean findFluentSetters;
-		private final boolean sort;
+		private final boolean unsorted;
 		private final Class<? extends BeanInterceptor<?>> interceptor;
 		private final Class<? extends PropertyNamer> propertyNamer;
 		private final Class<?> implClass;
@@ -362,7 +362,7 @@ public class BeanAnnotation {
 			propertyNamer = b.propertyNamer;
 			readOnlyProperties = b.readOnlyProperties;
 			ro = b.ro;
-			sort = b.sort;
+			unsorted = b.unsorted;
 			stopClass = b.stopClass;
 			typeName = b.typeName;
 			typePropertyName = b.typePropertyName;
@@ -438,8 +438,8 @@ public class BeanAnnotation {
 		}
 
 		@Override /* Overridden from Bean */
-		public boolean sort() {
-			return sort;
+		public boolean unsorted() {
+			return unsorted;
 		}
 
 		@Override /* Overridden from Bean */

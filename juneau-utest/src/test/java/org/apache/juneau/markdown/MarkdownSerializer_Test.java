@@ -17,6 +17,7 @@
 package org.apache.juneau.markdown;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.apache.juneau.marshaller.*;
 
 import java.util.*;
 
@@ -35,7 +36,7 @@ class MarkdownSerializer_Test {
 		var bean = new A();
 		bean.name = "Alice";
 		bean.age = 30;
-		var md = MarkdownSerializer.DEFAULT.serialize(bean);
+		var md = Markdown.of(bean);
 		assertTrue(md.contains("| Property | Value |"), "Expected header row: " + md);
 		assertTrue(md.contains("| name | Alice |"), "Expected name row: " + md);
 		assertTrue(md.contains("| age | 30 |"), "Expected age row: " + md);
@@ -45,7 +46,7 @@ class MarkdownSerializer_Test {
 		var bean = new A();
 		bean.name = null;
 		bean.age = 30;
-		var md = MarkdownSerializer.DEFAULT.serialize(bean);
+		var md = Markdown.of(bean);
 		assertTrue(md.contains("*null*"), "Expected null marker in: " + md);
 	}
 
@@ -71,7 +72,7 @@ class MarkdownSerializer_Test {
 		var m = new LinkedHashMap<String, String>();
 		m.put("k1", "v1");
 		m.put("k2", "v2");
-		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		var md = Markdown.of(m);
 		assertTrue(md.contains("| Key | Value |"), "Expected header row: " + md);
 		assertTrue(md.contains("| k1 | v1 |"), "Expected k1 row: " + md);
 		assertTrue(md.contains("| k2 | v2 |"), "Expected k2 row: " + md);
@@ -83,7 +84,7 @@ class MarkdownSerializer_Test {
 
 	@Test void c01_serializeBeanListAsMultiColumnTable() throws Exception {
 		var list = List.of(new B("Alice", 30), new B("Bob", 25));
-		var md = MarkdownSerializer.DEFAULT.serialize(list);
+		var md = Markdown.of(list);
 		// Multi-column table with bean properties as headers
 		assertTrue(md.contains("|---"), "Expected separator row: " + md);
 		// Alice and Bob should appear as rows
@@ -104,7 +105,7 @@ class MarkdownSerializer_Test {
 
 	@Test void d01_serializeStringListAsBullets() throws Exception {
 		var list = List.of("alpha", "beta", "gamma");
-		var md = MarkdownSerializer.DEFAULT.serialize(list);
+		var md = Markdown.of(list);
 		assertTrue(md.contains("- alpha"), "Expected bullet alpha: " + md);
 		assertTrue(md.contains("- beta"), "Expected bullet beta: " + md);
 		assertTrue(md.contains("- gamma"), "Expected bullet gamma: " + md);
@@ -112,7 +113,7 @@ class MarkdownSerializer_Test {
 
 	@Test void d02_serializeIntListAsBullets() throws Exception {
 		var list = List.of(1, 2, 3);
-		var md = MarkdownSerializer.DEFAULT.serialize(list);
+		var md = Markdown.of(list);
 		assertTrue(md.contains("- 1"), "Expected bullet 1: " + md);
 		assertTrue(md.contains("- 2"), "Expected bullet 2: " + md);
 		assertTrue(md.contains("- 3"), "Expected bullet 3: " + md);
@@ -128,7 +129,7 @@ class MarkdownSerializer_Test {
 		bean.nested = new A();
 		bean.nested.name = "inner";
 		bean.nested.age = 1;
-		var md = MarkdownSerializer.DEFAULT.serialize(bean);
+		var md = Markdown.of(bean);
 		assertTrue(md.contains("`"), "Expected backtick wrapping for nested value: " + md);
 	}
 
@@ -143,7 +144,7 @@ class MarkdownSerializer_Test {
 
 	@Test void f01_pipeCharacterIsEscaped() throws Exception {
 		var m = Map.of("desc", "hello | world");
-		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		var md = Markdown.of(m);
 		assertTrue(md.contains("\\|"), "Expected escaped pipe: " + md);
 	}
 
@@ -170,7 +171,7 @@ class MarkdownSerializer_Test {
 		bean.count = 42;
 		bean.ratio = 3.14;
 		bean.flag = true;
-		var md = MarkdownSerializer.DEFAULT.serialize(bean);
+		var md = Markdown.of(bean);
 		assertTrue(md.contains("| count | 42 |"), "Expected count row: " + md);
 		assertTrue(md.contains("| ratio | 3.14 |"), "Expected ratio row: " + md);
 		assertTrue(md.contains("| flag | true |"), "Expected flag row: " + md);
@@ -188,8 +189,8 @@ class MarkdownSerializer_Test {
 
 	@Test void i01_roundTripFlatBean() throws Exception {
 		var original = new B("Alice", 30);
-		var md = MarkdownSerializer.DEFAULT.serialize(original);
-		var parsed = MarkdownParser.DEFAULT.parse(md, B.class);
+		var md = Markdown.of(original);
+		var parsed = Markdown.to(md, B.class);
 		assertEquals("Alice", parsed.name);
 		assertEquals(30, parsed.age);
 	}
@@ -198,8 +199,8 @@ class MarkdownSerializer_Test {
 	@SuppressWarnings("unchecked")
 	void i02_roundTripBeanList() throws Exception {
 		var original = List.of(new B("Alice", 30), new B("Bob", 25));
-		var md = MarkdownSerializer.DEFAULT.serialize(original);
-		var parsed = (List<B>) MarkdownParser.DEFAULT.parse(md, List.class, B.class);
+		var md = Markdown.of(original);
+		var parsed = (List<B>) Markdown.to(md, List.class, B.class);
 		assertEquals(2, parsed.size());
 		assertEquals("Alice", parsed.get(0).name);
 		assertEquals(30, parsed.get(0).age);
@@ -211,8 +212,8 @@ class MarkdownSerializer_Test {
 	@SuppressWarnings("unchecked")
 	void i03_roundTripStringList() throws Exception {
 		var original = List.of("foo", "bar", "baz");
-		var md = MarkdownSerializer.DEFAULT.serialize(original);
-		var parsed = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
+		var md = Markdown.of(original);
+		var parsed = (List<String>) Markdown.to(md, List.class, String.class);
 		assertEquals(original, parsed);
 	}
 
@@ -222,8 +223,8 @@ class MarkdownSerializer_Test {
 		var original = new LinkedHashMap<String, String>();
 		original.put("k1", "v1");
 		original.put("k2", "v2");
-		var md = MarkdownSerializer.DEFAULT.serialize(original);
-		var parsed = (Map<String, String>) MarkdownParser.DEFAULT.parse(md, Map.class, String.class, String.class);
+		var md = Markdown.of(original);
+		var parsed = (Map<String, String>) Markdown.to(md, Map.class, String.class, String.class);
 		assertEquals(original, parsed);
 	}
 }

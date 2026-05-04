@@ -813,22 +813,14 @@ public @interface BeanConfig {
 	int rank() default 0;
 
 	/**
-	 * Sort bean properties.
+	 * Disable sorted bean properties.
 	 *
 	 * <p>
-	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
-	 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
-	 * <br>On IBM JVMs, the bean properties are ordered based on their ordering in the Java file.
-	 * <br>On Oracle JVMs, the bean properties are not ordered (which follows the official JVM specs).
-	 *
-	 * <p>
-	 * This property is disabled by default so that IBM JVM users don't have to use {@link Bean @Bean} annotations
-	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
-	 * in the Java file.
+	 * When <jk>true</jk>, bean properties are serialized and accessed in natural JVM order instead of the default alphabetical order.
 	 *
 	 * <ul class='values'>
 	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * 	<li><js>"false"</js> (default — properties are sorted alphabetically)
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -837,12 +829,12 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#sortProperties()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#unsortedProperties()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	String sortProperties() default "";
+	String unsortedProperties() default "";
 
 	/**
 	 * Java object swaps.

@@ -32,7 +32,8 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.junit.bct.*;
-import org.apache.juneau.marshaller.*;
+import static org.apache.juneau.marshaller.MarshallUtils.*;
+
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
@@ -163,7 +164,7 @@ public class TestUtils extends Utils {
 	 * Asserts the JSON5 representation of the specified object.
 	 */
 	public static void assertJson(String expected, Object value) {
-		assertEquals(expected, Json5.DEFAULT_SORTED.write(value));
+		assertEquals(expected, json5(value));
 	}
 
 	/**
@@ -352,11 +353,11 @@ public class TestUtils extends Utils {
 	}
 
 	public static String json(Object o) {
-		return Json5.DEFAULT_SORTED.write(o);
+		return json5(o);
 	}
 
 	public static <T> T json(String o, Class<T> c) {
-		return safe(()->Json5.DEFAULT_SORTED.read(o, c));
+		return safe(()->json5(o, c));
 	}
 
 	public static <T> T jsonRoundTrip(T o, Class<T> c) {

@@ -73,7 +73,7 @@ public class BeanConfigAnnotation {
 			bool(a.ignoreUnknownBeanProperties()).ifPresent(b::ignoreUnknownBeanProperties);
 			bool(a.ignoreUnknownEnumValues()).ifPresent(b::ignoreUnknownEnumValues);
 			bool(a.disableIgnoreUnknownNullBeanProperties()).ifPresent(b::disableIgnoreUnknownNullBeanProperties);
-			bool(a.sortProperties()).ifPresent(b::sortProperties);
+			bool(a.unsortedProperties()).ifPresent(b::unsortedProperties);
 			bool(a.useEnumNames()).ifPresent(b::useEnumNames);
 			bool(a.disableInterfaceProxies()).ifPresent(b::disableInterfaceProxies);
 			bool(a.useJavaBeanIntrospector()).ifPresent(b::useJavaBeanIntrospector);
