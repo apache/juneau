@@ -328,6 +328,20 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	// The annotation work-list produced during construction (replaces builder.getApplied() references).
 	private final AnnotationWorkList appliedAnnotations;
 
+	private RestContext restContext() { return context; }
+	private Method method() { return method; }
+	private BeanContext.Builder beanContextBuilder() { return beanContextBuilder; }
+	private EncoderSet.Builder encodersBuilder() { return encodersBuilder; }
+	private JsonSchemaGenerator.Builder jsonSchemaGeneratorBuilder() { return jsonSchemaGeneratorBuilder; }
+	private ParserSet.Builder parsersBuilder() { return parsersBuilder; }
+	private HttpPartParser.Creator partParserCreator() { return partParserCreator; }
+	private HttpPartSerializer.Creator partSerializerCreator() { return partSerializerCreator; }
+	private SerializerSet.Builder serializersBuilder() { return serializersBuilder; }
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Memoized fields
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** The effective default {@link Charset} for this operation, resolved from op annotations, context, or env. */
 	private final Memoizer<Charset> defaultCharset = memoizer(() -> {
 		var v = findOpString(PROPERTY_defaultCharset);
@@ -413,20 +427,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return normalizeHttpMethod(HttpUtils.detectHttpMethod(method(), true, "GET"));
 	});
 
-	private RestContext restContext() { return context; }
-	private Method method() { return method; }
-	private BeanContext.Builder beanContextBuilder() { return beanContextBuilder; }
-	private EncoderSet.Builder encodersBuilder() { return encodersBuilder; }
-	private JsonSchemaGenerator.Builder jsonSchemaGeneratorBuilder() { return jsonSchemaGeneratorBuilder; }
-	private ParserSet.Builder parsersBuilder() { return parsersBuilder; }
-	private HttpPartParser.Creator partParserCreator() { return partParserCreator; }
-	private HttpPartSerializer.Creator partSerializerCreator() { return partSerializerCreator; }
-	private SerializerSet.Builder serializersBuilder() { return serializersBuilder; }
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Memoized fields
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * All {@link RestOp}-group annotations on this method, in child-to-parent order.
 	 *
@@ -448,7 +448,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			.map(ai -> ai.getStringArray("noInherit").orElse(StringUtils.EMPTY_STRING_ARRAY))
 			.flatMap(this::resolveCdl)
 			.toList();
-		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, l));
+		return u(treeSetCi(l));
 	});
 
 	/** Effective allowed parser session-option keys for this operation. */
@@ -460,7 +460,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		getRestOpAnnotations().stream()
 			.flatMap(ai -> resolveCdl(ai.getStringArray(p).orElse(new String[0])))
 			.forEach(l::add);
-		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
+		return u(treeSetCi(removeNegations(l)));
 	});
 
 	/** Effective allowed serializer session-option keys for this operation. */
@@ -472,7 +472,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		getRestOpAnnotations().stream()
 			.flatMap(ai -> resolveCdl(ai.getStringArray(p).orElse(new String[0])))
 			.forEach(l::add);
-		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
+		return u(treeSetCi(removeNegations(l)));
 	});
 
 	/** The {@link BeanContext} for this operation (op-level annotations applied on top of the parent context). */
@@ -612,7 +612,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestFormData).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(basicPart(s));
 		});
-		applyParameterFormData(v.get());
+		processParameterDefaults((paramAnn, def) -> {
+			if (paramAnn instanceof FormData f) {
+				try {
+					v.get().setDefault(basicPart(firstNonEmpty(f.name(), f.value()), parseIfJson(def)));
+				} catch (ParseException e) {
+					throw new ConfigException(e, "Malformed @FormData annotation");
+				}
+			}
+		});
 		new BeanCreateMethodFinder<>(PartList.class, restContext().getResource(), restContext().getBeanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestFormData))
 			.run(v::set);
@@ -645,7 +653,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			ai.getString(PROPERTY_defaultAccept).filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(accept(s)));
 			ai.getString(PROPERTY_defaultContentType).filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(contentType(s)));
 		});
-		applyParameterHeaders(v.get());
+		processParameterDefaults((paramAnn, def) -> {
+			if (paramAnn instanceof Header h) {
+				try {
+					v.get().set(basicHeader(firstNonEmpty(h.name(), h.value()), parseIfJson(def)));
+				} catch (ParseException e) {
+					throw new ConfigException(e, "Malformed @Header annotation");
+				}
+			}
+		});
 		new BeanCreateMethodFinder<>(HeaderList.class, restContext().getResource(), restContext().getBeanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestHeaders))
 			.run(v::set);
@@ -669,7 +685,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestQueryData).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(basicPart(s));
 		});
-		applyParameterQueryData(v.get());
+		processParameterDefaults((paramAnn, def) -> {
+			if (paramAnn instanceof Query q) {
+				try {
+					v.get().setDefault(basicPart(firstNonEmpty(q.name(), q.value()), parseIfJson(def)));
+				} catch (ParseException e) {
+					throw new ConfigException(e, "Malformed @Query annotation");
+				}
+			}
+		});
 		new BeanCreateMethodFinder<>(PartList.class, restContext().getResource(), restContext().getBeanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestQueryData))
 			.run(v::set);
@@ -700,61 +724,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	});
 
 	/**
-	 * Folds method-parameter {@link Header @Header} annotations (with a {@link Schema#default_()} /
-	 * {@link Schema#df()} default) into the supplied {@link HeaderList} using {@link HeaderList#set}
-	 * (overrides). Used by the {@link #defaultRequestHeaders} memoizer.
-	 */
-	private void applyParameterHeaders(HeaderList list) {
-		processParameterDefaults((paramAnn, def) -> {
-			if (paramAnn instanceof Header h) {
-				try {
-					list.set(basicHeader(firstNonEmpty(h.name(), h.value()), parseIfJson(def)));
-				} catch (ParseException e) {
-					throw new ConfigException(e, "Malformed @Header annotation");
-				}
-			}
-		});
-	}
-
-	/**
 	 * Folds method-parameter {@link Query @Query} annotations (with a {@link Schema#default_()} /
 	 * {@link Schema#df()} default) into the supplied {@link PartList} using {@link PartList#setDefault}
 	 * (first wins). Used by the {@link #defaultRequestQueryData} memoizer.
 	 */
-	private void applyParameterQueryData(PartList list) {
-		processParameterDefaults((paramAnn, def) -> {
-			if (paramAnn instanceof Query q) {
-				try {
-					list.setDefault(basicPart(firstNonEmpty(q.name(), q.value()), parseIfJson(def)));
-				} catch (ParseException e) {
-					throw new ConfigException(e, "Malformed @Query annotation");
-				}
-			}
-		});
-	}
-
-	/**
-	 * Folds method-parameter {@link FormData @FormData} annotations (with a {@link Schema#default_()} /
-	 * {@link Schema#df()} default) into the supplied {@link PartList} using {@link PartList#setDefault}
-	 * (first wins). Used by the {@link #defaultRequestFormData} memoizer.
-	 */
-	private void applyParameterFormData(PartList list) {
-		processParameterDefaults((paramAnn, def) -> {
-			if (paramAnn instanceof FormData f) {
-				try {
-					list.setDefault(basicPart(firstNonEmpty(f.name(), f.value()), parseIfJson(def)));
-				} catch (ParseException e) {
-					throw new ConfigException(e, "Malformed @FormData annotation");
-				}
-			}
-		});
-	}
-
 	/**
 	 * Iterates over each parameter annotation on the operation method, computing the parameter's
 	 * {@link Schema#default_()}/{@link Schema#df()} string (joined-non-blank-first) and dispatching
-	 * each annotation+default pair to the supplied callback. Used by the three
-	 * {@code applyParameter*} helpers above.
+	 * each annotation+default pair to the supplied callback.
 	 */
 	private void processParameterDefaults(java.util.function.BiConsumer<Annotation,String> callback) {
 		for (var aa : method.getParameterAnnotations()) {
@@ -770,18 +747,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 	}
 
-	private static String joinnlFirstNonEmptyArray(String[]...s) {
-		for (var ss : s)
-			if (ss.length > 0)
-				return joinnl(ss);
-		return null;
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <T> Class<? extends T>[] classArray(Class<? extends T> value) {
-		return (Class<? extends T>[])new Class<?>[] { value };
-	}
-
 	/**
 	 * The response-converter array for this operation.
 	 *
@@ -791,7 +756,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code noInherit={"converters"}} cuts off the class-chain contribution. An
 	 * {@code @RestInject RestConverterList} bean (either as a name-anonymous bean in the bean store
 	 * or as a {@code @RestInject} method whose {@code methodScope} matches this operation's method
-	 * name) REPLACES the entire annotation-derived list — see TODO-16 Decision #1 (Phase D-1 lock-in).
+	 * name) REPLACES the entire annotation-derived list.
 	 */
 	private final Memoizer<RestConverter[]> converters = memoizer(() -> {
 		var bs = restContext().getBeanStore();
@@ -966,7 +931,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@link RestOp @RestOp}). When no explicit paths are declared, the operation method name (with
 	 * the verb prefix stripped where applicable) is auto-detected via {@link HttpUtils#detectHttpPath}.
 	 * For RRPC operations with no explicit path, a trailing {@code "/*"} is appended so the matcher
-	 * matches anything below the method's URL — see TODO-16 Decision #17. Op-level
+	 * matches anything below the method's URL.
 	 * {@code noInherit={"path"}} cuts off any further parent-chain contribution. A
 	 * {@code @RestInject UrlPathMatcherList} bean (matching this operation's method scope) REPLACES
 	 * the entire result.
@@ -1018,7 +983,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var p = HttpUtils.detectHttpPath(method(), httpMethod2);
 
 			// RRPC operations match anything below the method's URL when no explicit path is supplied
-			// (TODO-16 Decision #17 — replaces the legacy `Builder.dotAll()` flag).
 			if ("RRPC".equalsIgnoreCase(httpMethod2) && ! p.endsWith("/*"))
 				p += "/*";
 
@@ -1715,4 +1679,18 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	RestOpInvoker[] getPostCallMethods() { return postCallMethods; }
 
 	RestOpInvoker[] getPreCallMethods() { return preCallMethods; }
+	
+	private static String joinnlFirstNonEmptyArray(String[]...s) {
+		for (var ss : s)
+			if (ss.length > 0)
+				return joinnl(ss);
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> Class<? extends T>[] classArray(Class<? extends T> value) {
+		return (Class<? extends T>[])new Class<?>[] { value };
+	}
+
+
 }

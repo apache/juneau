@@ -1888,8 +1888,7 @@ public class RestContext extends Context {
 						// `RestOpContext.create(method, context).beanStore(beanStore).type(RestOpContext.class).build()` →
 						// `new RestOpContext(method, context)`. The `.beanStore(beanStore)` override is equivalent to
 						// the ctor default `BasicBeanStore.of(context.getBeanStore())` since `beanStore` here IS the
-						// resource-context's bean store; `.type(RestOpContext.class)` was the default. See TODO-16
-						// Phase C-3 Route B for the full migration record.
+						// resource-context's bean store; `.type(RestOpContext.class)` was the default. 
 						var roc = new RestOpContext(mi.inner(), restContext);
 
 						String httpMethod = roc.getHttpMethod();
@@ -1902,7 +1901,7 @@ public class RestContext extends Context {
 							// `RestOpContext.create(method, context).beanStore(restContext.getBootstrapBeanStore()).type(RrpcRestOpContext.class).build()` →
 							// `new RrpcRestOpContext(method, context)`. The bean-store override (root, not the
 							// resource-layered store) is preserved verbatim inside the new 2-arg ctor on
-							// `RrpcRestOpContext`. The `.dotAll()` flag was removed per TODO-16 Decision #17 —
+							// `RrpcRestOpContext`.
 							// RRPC operations auto-append `/*` inside `Builder.getPathMatchers()`.
 							RestOpContext roc2 = new RrpcRestOpContext(mi.inner(), restContext);
 							v.get()
@@ -2612,7 +2611,7 @@ public class RestContext extends Context {
 		if (isInherited(p) && parentContext != null)
 			l.addAll(parentContext.getAllowedParserOptions());
 		getRestAnnotationsForProperty(p).forEach(x -> resolveCdl(x.getStringArray(p)).forEach(l::add));
-		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
+		return u(treeSetCi(removeNegations(l)));
 	}
 
 	/**
@@ -2630,7 +2629,7 @@ public class RestContext extends Context {
 		if (isInherited(p) && parentContext != null)
 			l.addAll(parentContext.getAllowedSerializerOptions());
 		getRestAnnotationsForProperty(p).forEach(x -> resolveCdl(x.getStringArray(p)).forEach(l::add));
-		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
+		return u(treeSetCi(removeNegations(l)));
 	}
 
 	private Stream<AnnotationInfo<Rest>> restAnnotationsForPropertySortedByRank(String propertyName) {

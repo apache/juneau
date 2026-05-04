@@ -2096,6 +2096,20 @@ public class CollectionUtils {
 	}
 
 	/**
+	 * Creates a case-insensitive {@link TreeSet} from a collection of strings.
+	 *
+	 * <p>
+	 * Equivalent to <c>treeSet(String.CASE_INSENSITIVE_ORDER, elements)</c>.
+	 * Null elements in the collection are silently skipped.
+	 *
+	 * @param elements The initial elements. Can be <jk>null</jk> (treated as empty).
+	 * @return A new case-insensitive {@link TreeSet} containing all non-null elements from the collection.
+	 */
+	public static SortedSet<String> treeSetCi(Collection<String> elements) {
+		return treeSet(String.CASE_INSENSITIVE_ORDER, elements);
+	}
+
+	/**
 	 * Shortcut for creating a modifiable set out of an array of values.
 	 *
 	 * @param <T> The element type.
@@ -2691,6 +2705,19 @@ public class CollectionUtils {
 	 */
 	public static <T> Set<T> u(Set<? extends T> value) {
 		return value == null ? null : Collections.unmodifiableSet(value);
+	}
+
+	/**
+	 * Creates an unmodifiable view of the specified sorted set.
+	 *
+	 * <p>This is a null-safe wrapper around {@link Collections#unmodifiableSortedSet(SortedSet)}.</p>
+	 *
+	 * @param <T> The element type.
+	 * @param value The sorted set to make unmodifiable. Can be null.
+	 * @return An unmodifiable view of the sorted set, or null if the input was null.
+	 */
+	public static <T> SortedSet<T> u(SortedSet<T> value) {
+		return value == null ? null : Collections.unmodifiableSortedSet(value);
 	}
 
 	private CollectionUtils() {}
