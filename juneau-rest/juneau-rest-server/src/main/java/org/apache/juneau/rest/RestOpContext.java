@@ -82,8 +82,7 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_defaultRequestFormData)
-	"java:S6539"  // Legacy central operation context; decomposition is tracked separately from current TODO scope.
+	"java:S115"  // Constants use UPPER_snakeCase convention (e.g., PROP_defaultRequestFormData)
 })
 public class RestOpContext extends Context implements Comparable<RestOpContext> {
 
@@ -111,13 +110,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	/**
 	 * Internal construction-time state holder.
-	 *
-	 * <p>
-	 * Package-private since 9.5 (TODO-16 Phase D-3). Was previously {@code public static class Builder}; the external
-	 * Builder surface is now deleted &mdash; {@code RestOpContext} is instantiated via the positional
-	 * {@link #RestOpContext(java.lang.reflect.Method, RestContext) 2-arg ctor} or the protected 3-arg ctor used by
-	 * subclasses needing a custom bean store. This class is an internal implementation detail that may be inlined or
-	 * removed entirely in future phases without notice.
 	 */
 	static class Builder extends Context.Builder {
 
@@ -323,7 +315,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	protected final ResponseBeanMeta responseMeta;
 
 	// Sub-builder fields: annotation-applied copies captured from Builder before it is discarded.
-	// Non-null only when op-level annotations actually touched the sub-builder during construction;
+	// Non-null only when op-level annotations actually touched the sub-builder during construction.
 	// null means "no op annotations applied" and the memoizer falls through to the parent context value.
 	private final BeanContext.Builder beanContextBuilder;
 	private final EncoderSet.Builder encodersBuilder;
@@ -336,250 +328,317 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	// The annotation work-list produced during construction (replaces builder.getApplied() references).
 	private final AnnotationWorkList appliedAnnotations;
 
-	// Phase 4: formerly eager scalars — now lazily resolved on first access.
-	private final Memoizer<Charset> defaultCharsetMemo = memoizer(this::findDefaultCharset);
-	private final Memoizer<Long> maxInputMemo = memoizer(this::findMaxInput);
-	private final Memoizer<DebugEnablement> debugEnablementMemo = memoizer(this::findDebugEnablement);
-	private final Memoizer<List<MediaType>> supportedAcceptTypesMemo = memoizer(this::findSupportedAcceptTypes);
-	private final Memoizer<List<MediaType>> supportedContentTypesMemo = memoizer(this::findSupportedContentTypes);
-	private final Memoizer<String> httpMethodMemo = memoizer(this::findHttpMethod);
+	/** The effective default {@link Charset} for this operation, resolved from op annotations, context, or env. */
+	private final Memoizer<Charset> defaultCharset = memoizer(() -> {
+		var v = findOpString(PROPERTY_defaultCharset);
+		if (v.isPresent())
+			return Charset.forName(v.get());
+		if (isInherited(PROPERTY_defaultCharset)) {
+			var rv = restContext().mergeReplacedStringAttribute(PROPERTY_defaultCharset, null);
+			if (rv != null && !rv.isEmpty())
+				return Charset.forName(rv);
+		}
+		return envDefaultRestCharset();
+	});
+
+	/** The effective max-input byte limit for this operation. */
+	private final Memoizer<Long> maxInput = memoizer(() -> {
+		var v = findOpString(PROPERTY_maxInput);
+		if (v.isPresent())
+			return parseLongWithSuffix(v.get());
+		if (isInherited(PROPERTY_maxInput)) {
+			var rv = restContext().mergeReplacedStringAttribute(PROPERTY_maxInput, null);
+			if (rv != null && !rv.isEmpty())
+				return parseLongWithSuffix(rv);
+		}
+		return envDefaultRestMaxInput();
+	});
+
+	/** The effective {@link DebugEnablement} for this operation. */
+	private final Memoizer<DebugEnablement> debugEnablement = memoizer(() -> {
+		var v = findOpString(PROPERTY_debug);
+		if (v.isPresent())
+			return DebugEnablement.create(restContext().getBeanStore()).enable(Enablement.fromString(v.get()), "*").build();
+		if (isInherited(PROPERTY_debug))
+			return restContext().getDebugEnablement();
+		return DebugEnablement.create(restContext().getBeanStore()).build();
+	});
+
+	/**
+	 * The supported response accept types for this operation.
+	 *
+	 * <p>
+	 * Walks op-level {@code @RestOp}-group annotations for {@code produces} (and, when
+	 * {@code noInherit} does not block it, the class-level {@code @Rest(produces)} hierarchy).
+	 * Falls back to the supported media types of the operation's {@link SerializerSet}.
+	 */
+	private final Memoizer<List<MediaType>> supportedAcceptTypes = memoizer(() -> {
+		var result = collectAnnotationMediaTypes(PROPERTY_produces);
+		if (result.isEmpty())
+			return u(getSerializers().getSupportedMediaTypes());
+		return u(result);
+	});
+
+	/**
+	 * The supported request content types for this operation.
+	 *
+	 * <p>
+	 * Walks op-level {@code @RestOp}-group annotations for {@code consumes} (and, when
+	 * {@code noInherit} does not block it, the class-level {@code @Rest(consumes)} hierarchy).
+	 * Falls back to the supported content types of the operation's {@link ParserSet}.
+	 */
+	private final Memoizer<List<MediaType>> supportedContentTypes = memoizer(() -> {
+		var result = collectAnnotationMediaTypes(PROPERTY_consumes);
+		if (result.isEmpty())
+			return u(getParsers().getSupportedMediaTypes());
+		return u(result);
+	});
+
+	/**
+	 * The HTTP method string for this operation (e.g. {@code "GET"}, {@code "*"}).
+	 *
+	 * <p>
+	 * Walks {@code @RestOp}-group annotations child-to-parent; verb-specific annotations
+	 * ({@link RestGet}, etc.) imply their fixed verb. Falls back to
+	 * {@link HttpUtils#detectHttpMethod} when no annotation declares a verb.
+	 */
+	@SuppressWarnings("java:S3776")
+	private final Memoizer<String> httpMethod = memoizer(() -> {
+		var vr = restContext().getVarResolver();
+		for (var ai : getRestOpAnnotations()) {
+			var v = httpMethodFromAnnotation(ai.inner(), vr);
+			if (v != null && !v.isEmpty())
+				return normalizeHttpMethod(v);
+		}
+		return normalizeHttpMethod(HttpUtils.detectHttpMethod(method(), true, "GET"));
+	});
+
+	private RestContext restContext() { return context; }
+	private Method method() { return method; }
+	private BeanContext.Builder beanContextBuilder() { return beanContextBuilder; }
+	private EncoderSet.Builder encodersBuilder() { return encodersBuilder; }
+	private JsonSchemaGenerator.Builder jsonSchemaGeneratorBuilder() { return jsonSchemaGeneratorBuilder; }
+	private ParserSet.Builder parsersBuilder() { return parsersBuilder; }
+	private HttpPartParser.Creator partParserCreator() { return partParserCreator; }
+	private HttpPartSerializer.Creator partSerializerCreator() { return partSerializerCreator; }
+	private SerializerSet.Builder serializersBuilder() { return serializersBuilder; }
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Memoized allowlist fields
+	// Memoized fields
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/** Memoized all {@link RestOp}-group annotations on this method, child-to-parent order. */
-	private final Memoizer<List<AnnotationInfo<?>>> restOpAnnotations = memoizer(this::findRestOpAnnotations);
-
-	private List<AnnotationInfo<?>> findRestOpAnnotations() {
-		// Use the same MethodInfo as {@link Builder}'s annotation traversal (resource class + method), not
-		// {@link MethodInfo#of(Method)} alone, so method-level {@code @RestGet}/@RestOp metadata (e.g. noInherit)
-		// resolves consistently when the implementation class differs from the method's declaring class.
-		var methodInfo = MethodInfo.of(context.getResourceClass(), method).accessible();
-		return context.getAnnotationProvider().find(methodInfo, SELF, MATCHING_METHODS).stream()
+	/**
+	 * All {@link RestOp}-group annotations on this method, in child-to-parent order.
+	 *
+	 * <p>
+	 * Uses the same {@link MethodInfo} as the annotation traversal in the {@link Builder}, so
+	 * method-level metadata (e.g. {@code noInherit}) resolves consistently when the implementation
+	 * class differs from the method's declaring class.
+	 */
+	private final Memoizer<List<AnnotationInfo<?>>> restOpAnnotations = memoizer(() -> {
+		var methodInfo = MethodInfo.of(restContext().getResourceClass(), method()).accessible();
+		return restContext().getAnnotationProvider().find(methodInfo, SELF, MATCHING_METHODS).stream()
 			.filter(ai -> ai.isInGroup(RestOp.class))
 			.toList();
-	}
+	});
 
-	/** Memoized aggregated {@code noInherit} keys from all RestOp-group annotations on this operation. */
-	private final Memoizer<SortedSet<String>> noInheritOp = memoizer(this::findNoInheritOp);
-
-	private SortedSet<String> findNoInheritOp() {
+	/** Aggregated {@code noInherit} keys from all RestOp-group annotations on this operation. */
+	private final Memoizer<SortedSet<String>> noInheritOp = memoizer(() -> {
 		var l = getRestOpAnnotations().stream()
 			.map(ai -> ai.getStringArray("noInherit").orElse(StringUtils.EMPTY_STRING_ARRAY))
 			.flatMap(this::resolveCdl)
 			.toList();
 		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, l));
-	}
+	});
 
-	/** Memoized effective allowed parser option keys for this operation. */
-	private final Memoizer<SortedSet<String>> allowedParserOptions = memoizer(this::findAllowedParserOptions);
-
-	private SortedSet<String> findAllowedParserOptions() {
+	/** Effective allowed parser session-option keys for this operation. */
+	private final Memoizer<SortedSet<String>> allowedParserOptions = memoizer(() -> {
 		var l = new ArrayList<String>();
 		var p = PROPERTY_allowedParserOptions;
 		if (isInherited(p))
-			l.addAll(context.getAllowedParserOptions());
+			l.addAll(restContext().getAllowedParserOptions());
 		getRestOpAnnotations().stream()
 			.flatMap(ai -> resolveCdl(ai.getStringArray(p).orElse(new String[0])))
 			.forEach(l::add);
 		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
-	}
+	});
 
-	/** Memoized effective allowed serializer option keys for this operation. */
-	private final Memoizer<SortedSet<String>> allowedSerializerOptions = memoizer(this::findAllowedSerializerOptions);
-
-	private SortedSet<String> findAllowedSerializerOptions() {
+	/** Effective allowed serializer session-option keys for this operation. */
+	private final Memoizer<SortedSet<String>> allowedSerializerOptions = memoizer(() -> {
 		var l = new ArrayList<String>();
 		var p = PROPERTY_allowedSerializerOptions;
 		if (isInherited(p))
-			l.addAll(context.getAllowedSerializerOptions());
+			l.addAll(restContext().getAllowedSerializerOptions());
 		getRestOpAnnotations().stream()
 			.flatMap(ai -> resolveCdl(ai.getStringArray(p).orElse(new String[0])))
 			.forEach(l::add);
 		return Collections.unmodifiableSortedSet(treeSet(String.CASE_INSENSITIVE_ORDER, removeNegations(l)));
-	}
+	});
 
-	private final Memoizer<BeanContext> beanContextMemo = memoizer(this::findBeanContext);
+	/** The {@link BeanContext} for this operation (op-level annotations applied on top of the parent context). */
+	private final Memoizer<BeanContext> beanContext = memoizer(() ->
+		beanContextBuilder() != null ? beanContextBuilder().build() : restContext().getBeanContext()
+	);
 
-	private BeanContext findBeanContext() {
-		return beanContextBuilder != null ? beanContextBuilder.build() : context.getBeanContext();
-	}
-
-	private final Memoizer<CallLogger> callLoggerMemo = memoizer(this::findCallLogger);
-
-	private CallLogger findCallLogger() {
-		return context.getCallLogger();
-	}
-
-	private final Memoizer<EncoderSet> encodersMemo = memoizer(this::findEncoders);
+	/** The call logger for this operation (delegated to the parent {@link RestContext}). */
+	private final Memoizer<CallLogger> callLogger = memoizer(() -> restContext().getCallLogger());
 
 	/**
-	 * Resolves the encoder group for this operation. Walks the {@code @RestOp(encoders)} chain
-	 * (parent-to-child); each non-empty {@code encoders()} array REPLACES the inherited set
-	 * (with {@link Inherit} as a sentinel that re-injects the prior set's entries at the
-	 * specified position — matches the legacy {@code EncoderSet.Builder.set(...)} semantics).
+	 * The encoder group for this operation.
 	 *
 	 * <p>
-	 * If no op annotation declares encoders, falls through to the class-level
-	 * {@link RestContext#getEncoders()}. An {@code @RestInject EncoderSet} bean (matching this
-	 * operation's method scope) REPLACES the result entirely.
+	 * Walks the {@code @RestOp(encoders)} chain (parent-to-child); each non-empty {@code encoders()}
+	 * array REPLACES the inherited set (with {@link Inherit} as a sentinel that re-injects the prior
+	 * set's entries at the specified position — matches the legacy {@code EncoderSet.Builder.set(...)}
+	 * semantics). Falls through to the class-level {@link RestContext#getEncoders()} when no op
+	 * annotation declares encoders. An {@code @RestInject EncoderSet} bean (matching this operation's
+	 * method scope) REPLACES the result entirely.
 	 */
-	private EncoderSet findEncoders() {
-		var bs = context.getBeanStore();
-		// Seed from class-level builder copy so EncoderSet.Builder.set(...)'s Inherit sentinel
-		// can splice in the inherited entries. If no op annotations touched encoders, fall through
-		// to a fresh copy of the parent builder (mirrors the former Builder.encoders() lazy-init).
-		var b = (encodersBuilder != null ? encodersBuilder : context.builder.encoders()).copy();
+	private final Memoizer<EncoderSet> encoders = memoizer(() -> {
+		var bs = restContext().getBeanStore();
+		var b = (encodersBuilder() != null ? encodersBuilder() : restContext().builder.encoders()).copy();
 		getRestOpAnnotationsForProperty(PROPERTY_encoders).forEach(ai -> {
 			var c = ai.getClassArray("encoders", org.apache.juneau.encoders.Encoder.class).orElse(null);
 			if (nn(c) && c.length > 0)
 				b.set(c);
 		});
 		var v = Value.of(b.build());
-		new BeanCreateMethodFinder<>(EncoderSet.class, context.getResource(), bs)
+		new BeanCreateMethodFinder<>(EncoderSet.class, restContext().getResource(), bs)
 			.find(this::matchesInjectScope)
 			.run(v::set);
 		return v.get();
-	}
+	});
 
-	private final Memoizer<JsonSchemaGenerator> jsonSchemaGeneratorMemo = memoizer(this::findJsonSchemaGenerator);
-
-	private JsonSchemaGenerator findJsonSchemaGenerator() {
-		return jsonSchemaGeneratorBuilder != null ? jsonSchemaGeneratorBuilder.build() : context.getJsonSchemaGenerator();
-	}
-
-	private final Memoizer<ParserSet> parsersMemo = memoizer(this::findParsers);
+	/** The JSON-Schema generator for this operation (op-level annotations applied on top of the parent). */
+	private final Memoizer<JsonSchemaGenerator> jsonSchemaGenerator = memoizer(() ->
+		jsonSchemaGeneratorBuilder() != null ? jsonSchemaGeneratorBuilder().build() : restContext().getJsonSchemaGenerator()
+	);
 
 	/**
-	 * Resolves the parser group for this operation. Walks the {@code @RestOp(parsers)} chain
-	 * (parent-to-child); the most-derived non-empty {@code parsers()} array REPLACES the entire
-	 * inherited set. If no op annotation declares parsers, falls through to the class-level
-	 * {@link RestContext#getParsers()}. An {@code @RestInject ParserSet} bean (matching this
-	 * operation's method scope) REPLACES the result.
+	 * The parser group for this operation.
+	 *
+	 * <p>
+	 * Walks the {@code @RestOp(parsers)} chain (parent-to-child); the most-derived non-empty
+	 * {@code parsers()} array REPLACES the entire inherited set. Falls through to the class-level
+	 * {@link RestContext#getParsers()} when no op annotation declares parsers. An
+	 * {@code @RestInject ParserSet} bean (matching this operation's method scope) REPLACES the result.
 	 */
-	private ParserSet findParsers() {
-		var bs = context.getBeanStore();
-		var b = (parsersBuilder != null ? parsersBuilder : context.builder.parsers()).copy();
+	private final Memoizer<ParserSet> parsers = memoizer(() -> {
+		var bs = restContext().getBeanStore();
+		var b = (parsersBuilder() != null ? parsersBuilder() : restContext().builder.parsers()).copy();
 		getRestOpAnnotationsForProperty(PROPERTY_parsers).forEach(ai -> {
 			var c = ai.getClassArray("parsers", java.lang.Object.class).orElse(null);
 			if (nn(c) && c.length > 0)
 				b.set(c);
 		});
 		var result = Value.of(b.build());
-		new BeanCreateMethodFinder<>(ParserSet.class, context.getResource(), bs)
+		new BeanCreateMethodFinder<>(ParserSet.class, restContext().getResource(), bs)
 			.find(this::matchesInjectScope)
 			.run(result::set);
 		return result.get();
-	}
+	});
 
-	private final Memoizer<HttpPartParser> partParserMemo = memoizer(this::findPartParser);
+	/** The HTTP part parser for this operation (op-level creator applied on top of the parent). */
+	private final Memoizer<HttpPartParser> partParser = memoizer(() ->
+		partParserCreator() != null ? partParserCreator().create() : restContext().getPartParser()
+	);
 
-	private HttpPartParser findPartParser() {
-		return partParserCreator != null ? partParserCreator.create() : context.getPartParser();
-	}
-
-	private final Memoizer<HttpPartSerializer> partSerializerMemo = memoizer(this::findPartSerializer);
-
-	private HttpPartSerializer findPartSerializer() {
-		return partSerializerCreator != null ? partSerializerCreator.create() : context.getPartSerializer();
-	}
-
-	private final Memoizer<SerializerSet> serializersMemo = memoizer(this::findSerializers);
+	/** The HTTP part serializer for this operation (op-level creator applied on top of the parent). */
+	private final Memoizer<HttpPartSerializer> partSerializer = memoizer(() ->
+		partSerializerCreator() != null ? partSerializerCreator().create() : restContext().getPartSerializer()
+	);
 
 	/**
-	 * Resolves the serializer group for this operation. Walks the {@code @RestOp(serializers)} chain
-	 * (parent-to-child); the most-derived non-empty {@code serializers()} array REPLACES the entire
-	 * inherited set. If no op annotation declares serializers, falls through to the class-level
-	 * {@link RestContext#getSerializers()}. An {@code @RestInject SerializerSet} bean (matching this
-	 * operation's method scope) REPLACES the result.
+	 * The serializer group for this operation.
+	 *
+	 * <p>
+	 * Walks the {@code @RestOp(serializers)} chain (parent-to-child); the most-derived non-empty
+	 * {@code serializers()} array REPLACES the entire inherited set. Falls through to the class-level
+	 * {@link RestContext#getSerializers()} when no op annotation declares serializers. An
+	 * {@code @RestInject SerializerSet} bean (matching this operation's method scope) REPLACES the result.
 	 */
-	private SerializerSet findSerializers() {
-		var bs = context.getBeanStore();
-		var b = (serializersBuilder != null ? serializersBuilder : context.builder.serializers()).copy();
+	private final Memoizer<SerializerSet> serializers = memoizer(() -> {
+		var bs = restContext().getBeanStore();
+		var b = (serializersBuilder() != null ? serializersBuilder() : restContext().builder.serializers()).copy();
 		getRestOpAnnotationsForProperty(PROPERTY_serializers).forEach(ai -> {
 			var c = ai.getClassArray("serializers", org.apache.juneau.serializer.Serializer.class).orElse(null);
 			if (nn(c) && c.length > 0)
 				b.set(c);
 		});
 		var result = Value.of(b.build());
-		new BeanCreateMethodFinder<>(SerializerSet.class, context.getResource(), bs)
+		new BeanCreateMethodFinder<>(SerializerSet.class, restContext().getResource(), bs)
 			.find(this::matchesInjectScope)
 			.run(result::set);
 		return result.get();
-	}
-
-	private final Memoizer<NamedAttributeMap> defaultRequestAttributesMemo = memoizer(this::findDefaultRequestAttributes);
+	});
 
 	/**
-	 * Resolves the default request attribute map for this operation. Starts with the class-level
-	 * value (which already incorporates {@code @Rest(defaultRequestAttributes)}), then walks the
-	 * {@code @RestOp}/verb chain (parent-to-child) and adds each entry — {@link NamedAttributeMap#add}
-	 * uses put-semantics so child entries override parent entries by name.
+	 * The default request attribute map for this operation.
 	 *
 	 * <p>
-	 * An {@code @RestInject(name="defaultRequestAttributes") NamedAttributeMap} bean (matching this
+	 * Starts with the class-level value (which already incorporates
+	 * {@code @Rest(defaultRequestAttributes)}), then walks the {@code @RestOp}/verb chain
+	 * (parent-to-child) and adds each entry — {@link NamedAttributeMap#add} uses put-semantics so
+	 * child entries override parent entries by name. An
+	 * {@code @RestInject(name="defaultRequestAttributes") NamedAttributeMap} bean (matching this
 	 * operation's method scope) REPLACES the entire result.
 	 */
-	private NamedAttributeMap findDefaultRequestAttributes() {
-		var v = Value.of(context.getDefaultRequestAttributes().copy());
+	private final Memoizer<NamedAttributeMap> defaultRequestAttributes = memoizer(() -> {
+		var v = Value.of(restContext().getDefaultRequestAttributes().copy());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestAttributes).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestAttributes).orElse(EMPTY_STRING_ARRAY))
 				v.get().add(BasicNamedAttribute.ofPair(s));
 		});
-		new BeanCreateMethodFinder<>(NamedAttributeMap.class, context.getResource(), context.getBeanStore())
+		new BeanCreateMethodFinder<>(NamedAttributeMap.class, restContext().getResource(), restContext().getBeanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestAttributes))
 			.run(v::set);
 		return v.get();
-	}
-
-	private final Memoizer<PartList> defaultRequestFormDataMemo = memoizer(this::findDefaultRequestFormData);
+	});
 
 	/**
-	 * Resolves the default request form-data parts for this operation. Walks the {@code @RestOp}/verb
-	 * chain (parent-to-child); each {@code defaultRequestFormData} entry is applied with
-	 * {@link PartList#setDefault} (first-in-chain wins per name). Method-parameter
-	 * {@link FormData @FormData} annotations with a {@link Schema#default_()}/{@link Schema#df()}
-	 * default are folded in last (also {@code setDefault} = first wins).
+	 * The default request form-data parts for this operation.
 	 *
 	 * <p>
-	 * An {@code @RestInject(name="defaultRequestFormData") PartList} bean (matching this operation's
-	 * method scope) REPLACES the entire result.
+	 * Walks the {@code @RestOp}/verb chain (parent-to-child); each {@code defaultRequestFormData}
+	 * entry is applied with {@link PartList#setDefault} (first-in-chain wins per name).
+	 * Method-parameter {@link FormData @FormData} annotations with a
+	 * {@link Schema#default_()}/{@link Schema#df()} default are folded in last (also
+	 * {@code setDefault} = first wins). An {@code @RestInject(name="defaultRequestFormData") PartList}
+	 * bean (matching this operation's method scope) REPLACES the entire result.
 	 */
-	private PartList findDefaultRequestFormData() {
+	private final Memoizer<PartList> defaultRequestFormData = memoizer(() -> {
 		var v = Value.of(PartList.create());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestFormData).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestFormData).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(basicPart(s));
 		});
 		applyParameterFormData(v.get());
-		new BeanCreateMethodFinder<>(PartList.class, context.getResource(), context.getBeanStore())
+		new BeanCreateMethodFinder<>(PartList.class, restContext().getResource(), restContext().getBeanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestFormData))
 			.run(v::set);
 		return v.get();
-	}
-
-	private final Memoizer<HeaderList> defaultRequestHeadersMemo = memoizer(this::findDefaultRequestHeaders);
+	});
 
 	/**
-	 * Resolves the default request headers for this operation. Starts with the class-level value
-	 * (which already incorporates {@code @Rest(defaultRequestHeaders|defaultAccept|defaultContentType)}),
-	 * then walks the {@code @RestOp}/verb chain (parent-to-child); each annotation's
-	 * {@code defaultRequestHeaders} entries plus its {@code defaultAccept} / {@code defaultContentType}
-	 * (folded into {@code Accept} / {@code Content-Type} headers) are applied with
-	 * {@link HeaderList#setDefault} (first-in-chain wins per name — class-level beats op-level beats
-	 * later op-level entries).
+	 * The default request headers for this operation.
 	 *
 	 * <p>
-	 * Method-parameter {@link Header @Header} annotations with a {@link Schema#default_()}/{@link Schema#df()}
-	 * default are folded in last via {@link HeaderList#set} (overrides any prior entry with the same name).
+	 * Starts with the class-level value (which already incorporates
+	 * {@code @Rest(defaultRequestHeaders|defaultAccept|defaultContentType)}), then walks the
+	 * {@code @RestOp}/verb chain (parent-to-child); each annotation's {@code defaultRequestHeaders}
+	 * entries plus its {@code defaultAccept} / {@code defaultContentType} (folded into
+	 * {@code Accept} / {@code Content-Type} headers) are applied with {@link HeaderList#setDefault}
+	 * (first-in-chain wins per name — class-level beats op-level beats later op-level entries).
 	 *
 	 * <p>
-	 * An {@code @RestInject(name="defaultRequestHeaders") HeaderList} bean (matching this operation's
+	 * Method-parameter {@link Header @Header} annotations with a
+	 * {@link Schema#default_()}/{@link Schema#df()} default are folded in last via
+	 * {@link HeaderList#set} (overrides any prior entry with the same name). An
+	 * {@code @RestInject(name="defaultRequestHeaders") HeaderList} bean (matching this operation's
 	 * method scope) REPLACES the entire result.
 	 */
-	private HeaderList findDefaultRequestHeaders() {
-		var v = Value.of(context.getDefaultRequestHeaders().copy());
+	private final Memoizer<HeaderList> defaultRequestHeaders = memoizer(() -> {
+		var v = Value.of(restContext().getDefaultRequestHeaders().copy());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestHeaders).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestHeaders).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(stringHeader(s));
@@ -587,66 +646,63 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			ai.getString(PROPERTY_defaultContentType).filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(contentType(s)));
 		});
 		applyParameterHeaders(v.get());
-		new BeanCreateMethodFinder<>(HeaderList.class, context.getResource(), context.getBeanStore())
+		new BeanCreateMethodFinder<>(HeaderList.class, restContext().getResource(), restContext().getBeanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestHeaders))
 			.run(v::set);
 		return v.get();
-	}
-
-	private final Memoizer<PartList> defaultRequestQueryDataMemo = memoizer(this::findDefaultRequestQueryData);
+	});
 
 	/**
-	 * Resolves the default request query-data parts for this operation. Walks the {@code @RestOp}/verb
-	 * chain (parent-to-child); each {@code defaultRequestQueryData} entry is applied with
-	 * {@link PartList#setDefault} (first-in-chain wins per name). Method-parameter
-	 * {@link Query @Query} annotations with a {@link Schema#default_()}/{@link Schema#df()} default
-	 * are folded in last (also {@code setDefault} = first wins).
+	 * The default request query-data parts for this operation.
 	 *
 	 * <p>
-	 * An {@code @RestInject(name="defaultRequestQueryData") PartList} bean (matching this operation's
-	 * method scope) REPLACES the entire result.
+	 * Walks the {@code @RestOp}/verb chain (parent-to-child); each {@code defaultRequestQueryData}
+	 * entry is applied with {@link PartList#setDefault} (first-in-chain wins per name).
+	 * Method-parameter {@link Query @Query} annotations with a
+	 * {@link Schema#default_()}/{@link Schema#df()} default are folded in last (also
+	 * {@code setDefault} = first wins). An {@code @RestInject(name="defaultRequestQueryData") PartList}
+	 * bean (matching this operation's method scope) REPLACES the entire result.
 	 */
-	private PartList findDefaultRequestQueryData() {
+	private final Memoizer<PartList> defaultRequestQueryData = memoizer(() -> {
 		var v = Value.of(PartList.create());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestQueryData).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestQueryData).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(basicPart(s));
 		});
 		applyParameterQueryData(v.get());
-		new BeanCreateMethodFinder<>(PartList.class, context.getResource(), context.getBeanStore())
+		new BeanCreateMethodFinder<>(PartList.class, restContext().getResource(), restContext().getBeanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestQueryData))
 			.run(v::set);
 		return v.get();
-	}
-
-	private final Memoizer<HeaderList> defaultResponseHeadersMemo = memoizer(this::findDefaultResponseHeaders);
+	});
 
 	/**
-	 * Resolves the default response headers for this operation. Starts with the class-level value
-	 * (which already incorporates {@code @Rest(defaultResponseHeaders)}), then walks the
-	 * {@code @RestOp}/verb chain (parent-to-child); each annotation's {@code defaultResponseHeaders}
-	 * entries are applied with {@link HeaderList#setDefault} (first-in-chain wins per name).
+	 * The default response headers for this operation.
 	 *
 	 * <p>
-	 * An {@code @RestInject(name="defaultResponseHeaders") HeaderList} bean (matching this operation's
+	 * Starts with the class-level value (which already incorporates
+	 * {@code @Rest(defaultResponseHeaders)}), then walks the {@code @RestOp}/verb chain
+	 * (parent-to-child); each annotation's {@code defaultResponseHeaders} entries are applied with
+	 * {@link HeaderList#setDefault} (first-in-chain wins per name). An
+	 * {@code @RestInject(name="defaultResponseHeaders") HeaderList} bean (matching this operation's
 	 * method scope) REPLACES the entire result.
 	 */
-	private HeaderList findDefaultResponseHeaders() {
-		var v = Value.of(context.getDefaultResponseHeaders().copy());
+	private final Memoizer<HeaderList> defaultResponseHeaders = memoizer(() -> {
+		var v = Value.of(restContext().getDefaultResponseHeaders().copy());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultResponseHeaders).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultResponseHeaders).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(stringHeader(s));
 		});
-		new BeanCreateMethodFinder<>(HeaderList.class, context.getResource(), context.getBeanStore())
+		new BeanCreateMethodFinder<>(HeaderList.class, restContext().getResource(), restContext().getBeanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultResponseHeaders))
 			.run(v::set);
 		return v.get();
-	}
+	});
 
 	/**
 	 * Folds method-parameter {@link Header @Header} annotations (with a {@link Schema#default_()} /
 	 * {@link Schema#df()} default) into the supplied {@link HeaderList} using {@link HeaderList#set}
-	 * (overrides). Used by {@link #findDefaultRequestHeaders()}.
+	 * (overrides). Used by the {@link #defaultRequestHeaders} memoizer.
 	 */
 	private void applyParameterHeaders(HeaderList list) {
 		processParameterDefaults((paramAnn, def) -> {
@@ -663,7 +719,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/**
 	 * Folds method-parameter {@link Query @Query} annotations (with a {@link Schema#default_()} /
 	 * {@link Schema#df()} default) into the supplied {@link PartList} using {@link PartList#setDefault}
-	 * (first wins). Used by {@link #findDefaultRequestQueryData()}.
+	 * (first wins). Used by the {@link #defaultRequestQueryData} memoizer.
 	 */
 	private void applyParameterQueryData(PartList list) {
 		processParameterDefaults((paramAnn, def) -> {
@@ -680,7 +736,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/**
 	 * Folds method-parameter {@link FormData @FormData} annotations (with a {@link Schema#default_()} /
 	 * {@link Schema#df()} default) into the supplied {@link PartList} using {@link PartList#setDefault}
-	 * (first wins). Used by {@link #findDefaultRequestFormData()}.
+	 * (first wins). Used by the {@link #defaultRequestFormData} memoizer.
 	 */
 	private void applyParameterFormData(PartList list) {
 		processParameterDefaults((paramAnn, def) -> {
@@ -726,28 +782,22 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return (Class<? extends T>[])new Class<?>[] { value };
 	}
 
-	private final Memoizer<RestConverter[]> convertersMemo = memoizer(this::findConverters);
-
 	/**
-	 * Resolves the response-converter list for this operation by walking the {@code @Rest(converters)}
-	 * class chain (parent-to-child) followed by the {@code @RestOp(converters)} method chain
-	 * (parent-to-child).
+	 * The response-converter array for this operation.
 	 *
 	 * <p>
-	 * Op-level {@code noInherit={"converters"}} cuts off the class-chain contribution; an op-level
-	 * {@code noInherit} on a parent annotation in the op chain cuts off the rest of the op chain too
-	 * (mirrors the existing {@code allowed*Options} semantics).
-	 *
-	 * <p>
-	 * An {@code @RestInject RestConverterList} bean (either as a name-anonymous bean in the bean store or
-	 * as a {@code @RestInject} method whose {@code methodScope} matches this operation's method name)
-	 * REPLACES the entire annotation-derived list — see TODO-16 Decision #1 (Phase D-1 lock-in).
+	 * Walks the {@code @Rest(converters)} class chain (parent-to-child) followed by the
+	 * {@code @RestOp(converters)} method chain (parent-to-child). Op-level
+	 * {@code noInherit={"converters"}} cuts off the class-chain contribution. An
+	 * {@code @RestInject RestConverterList} bean (either as a name-anonymous bean in the bean store
+	 * or as a {@code @RestInject} method whose {@code methodScope} matches this operation's method
+	 * name) REPLACES the entire annotation-derived list — see TODO-16 Decision #1 (Phase D-1 lock-in).
 	 */
-	private RestConverter[] findConverters() {
-		var bs = context.getBeanStore();
+	private final Memoizer<RestConverter[]> converters = memoizer(() -> {
+		var bs = restContext().getBeanStore();
 		var v = Value.of(RestConverterList.create(bs));
 		if (isInherited(PROPERTY_converters))
-			context.getRestAnnotationsForProperty(PROPERTY_converters)
+			restContext().getRestAnnotationsForProperty(PROPERTY_converters)
 				.forEach(ai -> v.get().append(ai.inner().converters()));
 		getRestOpAnnotationsForProperty(PROPERTY_converters)
 			.forEach(ai -> ai.getClassArray("converters", RestConverter.class).ifPresent(classes -> {
@@ -755,11 +805,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					v.get().append(classArray(c));
 			}));
 		bs.getBean(RestConverterList.class).ifPresent(x -> v.get().impl(x));
-		new BeanCreateMethodFinder<>(RestConverterList.class, context.getResource(), bs)
+		new BeanCreateMethodFinder<>(RestConverterList.class, restContext().getResource(), bs)
 			.find(this::matchesInjectScope)
 			.run(x -> v.get().impl(x));
 		return v.get().build().asArray();
-	}
+	});
 
 	/**
 	 * Returns {@code true} if the given method has a {@code @RestInject} annotation whose
@@ -804,12 +854,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return false;
 	}
 
-	private final Memoizer<RestGuard[]> guardsMemo = memoizer(this::findGuards);
-
 	/**
-	 * Resolves the request-guard list for this operation. <b>Cross-bucket memoizer</b> — folds three
-	 * annotation attributes ({@code guards}, {@code roleGuard}, {@code rolesDeclared}) into a single
-	 * effective {@link RestGuardList}.
+	 * The request-guard array for this operation. <b>Cross-bucket memoizer</b> — folds three
+	 * annotation attributes ({@code guards}, {@code roleGuard}, {@code rolesDeclared}) into a
+	 * single effective {@link RestGuardList}.
 	 *
 	 * <p>
 	 * Walk order: class {@code @Rest} chain (parent-to-child, gated by op-level
@@ -826,8 +874,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * An {@code @RestInject RestGuardList} bean (via the bean store or an {@code @RestInject} method
 	 * with matching {@code methodScope}) REPLACES the entire annotation-derived list (Decision #1).
 	 */
-	private RestGuard[] findGuards() {
-		var bs = context.getBeanStore();
+	private final Memoizer<RestGuard[]> guards = memoizer(() -> {
+		var bs = restContext().getBeanStore();
 		var v = Value.of(RestGuardList.create(bs));
 		var rolesDeclaredSet = new java.util.LinkedHashSet<String>();
 		var roleGuardStrs = new ArrayList<String>();
@@ -844,7 +892,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		};
 
 		if (isInherited(PROPERTY_guards))
-			context.getRestAnnotationsForProperty(PROPERTY_guards).forEach(walk::accept);
+			restContext().getRestAnnotationsForProperty(PROPERTY_guards).forEach(walk::accept);
 		getRestOpAnnotationsForProperty(PROPERTY_guards).forEach(walk);
 
 		// When no @Rest/@RestOp(rolesDeclared) is set, pass null so RoleBasedRestGuard
@@ -860,31 +908,27 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		bs.getBean(RestGuardList.class).ifPresent(x -> v.get().impl(x));
-		new BeanCreateMethodFinder<>(RestGuardList.class, context.getResource(), bs)
+		new BeanCreateMethodFinder<>(RestGuardList.class, restContext().getResource(), bs)
 			.find(this::matchesInjectScope)
 			.run(x -> v.get().impl(x));
 		return v.get().build().asArray();
-	}
-
-	private final Memoizer<RestMatcherList> matchersListMemo = memoizer(this::findMatchersList);
+	});
 
 	/**
-	 * Resolves the request-matcher list for this operation. <b>Cross-bucket memoizer</b> — folds
-	 * {@code matchers} and {@code clientVersion} (both op-level only — neither attribute exists on
-	 * {@code @Rest}) into a single effective {@link RestMatcherList}.
+	 * The request-matcher list for this operation. <b>Cross-bucket memoizer</b> — folds
+	 * {@code matchers} and {@code clientVersion} (both op-level only) into a single effective
+	 * {@link RestMatcherList}.
 	 *
 	 * <p>
-	 * Walks the {@code @RestOp} / verb annotation chain (parent-to-child, gated by op-level
+	 * Walks the {@code @RestOp}/verb annotation chain (parent-to-child, gated by op-level
 	 * {@code noInherit={"matchers"}}). Each annotation contributes its {@code matchers()} classes
 	 * (appended in chain order). The final non-blank {@code clientVersion()} (most-derived wins)
 	 * appends a single {@link ClientVersionMatcher} keyed off the resource's client-version header.
-	 *
-	 * <p>
 	 * An {@code @RestInject RestMatcherList} bean (via the bean store or an {@code @RestInject}
 	 * method with matching {@code methodScope}) REPLACES the entire annotation-derived list.
 	 */
-	private RestMatcherList findMatchersList() {
-		var bs = context.getBeanStore();
+	private final Memoizer<RestMatcherList> matchersList = memoizer(() -> {
+		var bs = restContext().getBeanStore();
 		var v = Value.of(RestMatcherList.create(bs));
 		var clientVersion = new String[]{null};
 
@@ -897,49 +941,38 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		});
 
 		if (nn(clientVersion[0]))
-			v.get().append(new ClientVersionMatcher(context.getClientVersionHeader(), MethodInfo.of(method)));
+			v.get().append(new ClientVersionMatcher(restContext().getClientVersionHeader(), MethodInfo.of(method())));
 
 		bs.getBean(RestMatcherList.class).ifPresent(x -> v.get().impl(x));
-		new BeanCreateMethodFinder<>(RestMatcherList.class, context.getResource(), bs)
+		new BeanCreateMethodFinder<>(RestMatcherList.class, restContext().getResource(), bs)
 			.find(this::matchesInjectScope)
 			.run(x -> v.get().impl(x));
 		return v.get().build();
-	}
+	});
 
-	private final Memoizer<RestMatcher[]> optionalMatchersMemo = memoizer(this::findOptionalMatchers);
+	/** The optional (non-required) matchers extracted from {@link #matchersList}. */
+	private final Memoizer<RestMatcher[]> optionalMatchers = memoizer(() -> matchersList.get().getOptionalEntries());
 
-	private RestMatcher[] findOptionalMatchers() {
-		return matchersListMemo.get().getOptionalEntries();
-	}
-
-	private final Memoizer<RestMatcher[]> requiredMatchersMemo = memoizer(this::findRequiredMatchers);
-
-	private RestMatcher[] findRequiredMatchers() {
-		return matchersListMemo.get().getRequiredEntries();
-	}
-
-	private final Memoizer<UrlPathMatcher[]> pathMatchersMemo = memoizer(this::findPathMatchers);
+	/** The required matchers extracted from {@link #matchersList}. */
+	private final Memoizer<RestMatcher[]> requiredMatchers = memoizer(() -> matchersList.get().getRequiredEntries());
 
 	/**
-	 * Resolves the URL path matchers for this operation by walking the {@code @RestOp}/verb annotation
-	 * chain (parent-to-child) and collecting each annotation's {@code path[]} array plus its
-	 * {@code value()} (the latter being the conventional shortcut form on
+	 * The URL path matchers for this operation.
+	 *
+	 * <p>
+	 * Walks the {@code @RestOp}/verb annotation chain (parent-to-child) and collects each
+	 * annotation's {@code path[]} array plus its {@code value()} (the conventional shortcut form on
 	 * {@link RestGet @RestGet}/{@link RestPost @RestPost}/etc., or the {@code "METHOD path"} pair on
-	 * {@link RestOp @RestOp}). If no explicit paths are declared, the operation method name (with the
-	 * verb prefix stripped where applicable) is auto-detected via {@link HttpUtils#detectHttpPath}.
-	 *
-	 * <p>
-	 * Special case: for an RRPC operation with no explicit path, a trailing {@code "/*"} is appended so
-	 * the matcher matches anything below the method's URL — see TODO-16 Decision #17 (the legacy
-	 * {@code Builder.dotAll()} flag was removed in favor of bake-in here).
-	 *
-	 * <p>
-	 * Op-level {@code noInherit={"path"}} cuts off any further parent-chain contribution. A
-	 * {@code @RestInject UrlPathMatcherList} bean (matching this operation's method scope) REPLACES the
-	 * entire result.
+	 * {@link RestOp @RestOp}). When no explicit paths are declared, the operation method name (with
+	 * the verb prefix stripped where applicable) is auto-detected via {@link HttpUtils#detectHttpPath}.
+	 * For RRPC operations with no explicit path, a trailing {@code "/*"} is appended so the matcher
+	 * matches anything below the method's URL — see TODO-16 Decision #17. Op-level
+	 * {@code noInherit={"path"}} cuts off any further parent-chain contribution. A
+	 * {@code @RestInject UrlPathMatcherList} bean (matching this operation's method scope) REPLACES
+	 * the entire result.
 	 */
 	@SuppressWarnings("java:S3776")
-	private UrlPathMatcher[] findPathMatchers() {
+	private final Memoizer<UrlPathMatcher[]> pathMatchers = memoizer(() -> {
 		var v = Value.of(UrlPathMatcherList.create());
 		getRestOpAnnotationsForProperty(PROPERTY_path).forEach(ai -> {
 			for (var p : ai.getStringArray(PROPERTY_path).orElse(StringUtils.EMPTY_STRING_ARRAY))
@@ -961,7 +994,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		});
 
 		if (v.get().isEmpty()) {
-			var methodInfo2 = MethodInfo.of(method);
+			var methodInfo2 = MethodInfo.of(method());
 			String httpMethod2 = null;
 			if (methodInfo2.hasAnnotation(RestGet.class))
 				httpMethod2 = "get";
@@ -982,7 +1015,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				// @formatter:on
 			}
 
-			var p = HttpUtils.detectHttpPath(method, httpMethod2);
+			var p = HttpUtils.detectHttpPath(method(), httpMethod2);
 
 			// RRPC operations match anything below the method's URL when no explicit path is supplied
 			// (TODO-16 Decision #17 — replaces the legacy `Builder.dotAll()` flag).
@@ -992,13 +1025,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			v.get().add(UrlPathMatcher.of(p));
 		}
 
-		new BeanCreateMethodFinder<>(UrlPathMatcherList.class, context.getResource(), context.getBeanStore())
+		new BeanCreateMethodFinder<>(UrlPathMatcherList.class, restContext().getResource(), restContext().getBeanStore())
 			.addBean(UrlPathMatcherList.class, v.get())
 			.find(this::matchesInjectScope)
 			.run(v::set);
 
 		return v.get().asArray();
-	}
+	});
 
 	private Stream<String> resolveCdl(String...values) {
 		if (values == null || values.length == 0)
@@ -1027,8 +1060,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * <p>
 	 * Mirrors {@link RestContext#getRestAnnotationsForProperty(String)} but for the op-level chain. Used by
-	 * the Phase D-2 op-level memoizers ({@code findConverters}, {@code findGuards}, {@code findMatchersList},
-	 * {@code findEncoders}, etc.) when accumulating values from each {@code @RestOp} / {@code @RestGet} /
+	 * op-level memoizers ({@link #converters}, {@link #guards}, {@link #matchersList},
+	 * {@link #encoders}, etc.) when accumulating values from each {@code @RestOp} / {@code @RestGet} /
 	 * {@code @RestPut} / {@code @RestPost} / {@code @RestDelete} / {@code @RestPatch} / {@code @RestOptions}
 	 * annotation in the method-override chain.
 	 *
@@ -1085,7 +1118,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The resolved string, or empty if no annotation defines it.
 	 */
 	private Optional<String> findOpString(String attr) {
-		var vr = context.getVarResolver();
+		var vr = restContext().getVarResolver();
 		for (var ai : getRestOpAnnotations()) {
 			var s = ai.getString(attr).orElse("");
 			if (!s.isEmpty()) {
@@ -1097,81 +1130,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return Optional.empty();
 	}
 
-	private Charset findDefaultCharset() {
-		var v = findOpString(PROPERTY_defaultCharset);
-		if (v.isPresent())
-			return Charset.forName(v.get());
-		if (isInherited(PROPERTY_defaultCharset)) {
-			var rv = context.mergeReplacedStringAttribute(PROPERTY_defaultCharset, null);
-			if (rv != null && !rv.isEmpty())
-				return Charset.forName(rv);
-		}
-		return envDefaultRestCharset();
-	}
-
-	private long findMaxInput() {
-		var v = findOpString(PROPERTY_maxInput);
-		if (v.isPresent())
-			return parseLongWithSuffix(v.get());
-		if (isInherited(PROPERTY_maxInput)) {
-			var rv = context.mergeReplacedStringAttribute(PROPERTY_maxInput, null);
-			if (rv != null && !rv.isEmpty())
-				return parseLongWithSuffix(rv);
-		}
-		return envDefaultRestMaxInput();
-	}
-
-	private DebugEnablement findDebugEnablement() {
-		var v = findOpString(PROPERTY_debug);
-		if (v.isPresent())
-			return DebugEnablement.create(context.getBeanStore()).enable(Enablement.fromString(v.get()), "*").build();
-		if (isInherited(PROPERTY_debug))
-			return context.getDebugEnablement();
-		return DebugEnablement.create(context.getBeanStore()).build();
-	}
-
-	/**
-	 * Resolves the supported request content types for this operation.
-	 *
-	 * <p>
-	 * Walks the op-level {@code @RestOp}-group annotations for {@code consumes} attributes and (when
-	 * {@code noInherit} does not block it) the class-level {@code @Rest(consumes)} hierarchy. Each
-	 * value is SVL-resolved. If no explicit values are declared, falls back to the supported content
-	 * types of the operation's {@link ParserSet}.
-	 *
-	 * @return An unmodifiable list of media types, never {@code null}.
-	 */
-	private List<MediaType> findSupportedContentTypes() {
-		var result = collectAnnotationMediaTypes(PROPERTY_consumes);
-		if (result.isEmpty())
-			return u(getParsers().getSupportedMediaTypes());
-		return u(result);
-	}
-
-	/**
-	 * Resolves the supported response accept types for this operation.
-	 *
-	 * <p>
-	 * Walks the op-level {@code @RestOp}-group annotations for {@code produces} attributes and (when
-	 * {@code noInherit} does not block it) the class-level {@code @Rest(produces)} hierarchy. Each
-	 * value is SVL-resolved. If no explicit values are declared, falls back to the supported media
-	 * types of the operation's {@link SerializerSet}.
-	 *
-	 * @return An unmodifiable list of media types, never {@code null}.
-	 */
-	private List<MediaType> findSupportedAcceptTypes() {
-		var result = collectAnnotationMediaTypes(PROPERTY_produces);
-		if (result.isEmpty())
-			return u(getSerializers().getSupportedMediaTypes());
-		return u(result);
-	}
-
 	private List<MediaType> collectAnnotationMediaTypes(String attr) {
 		var result = new ArrayList<MediaType>();
-		var vr = context.getVarResolver();
+		var vr = restContext().getVarResolver();
 		// Class-level @Rest(consumes|produces) first (when inheritance is allowed), then op-level overrides append.
 		if (isInherited(attr)) {
-			for (var ai : context.getRestAnnotations())
+			for (var ai : restContext().getRestAnnotations())
 				appendResolvedMediaTypes(ai, attr, vr, result);
 		}
 		for (var ai : getRestOpAnnotations())
@@ -1190,34 +1154,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					result.add(MediaType.of(resolved));
 			}
 		}
-	}
-
-	/**
-	 * Resolves the HTTP method for this operation from {@code @RestOp}-group annotations.
-	 *
-	 * <p>
-	 * Walks the op-level annotations in child-to-parent order:
-	 * <ul>
-	 *   <li>{@code @RestGet}/{@code @RestPut}/{@code @RestPost}/{@code @RestDelete}/{@code @RestPatch}/{@code @RestOptions}
-	 *       imply their fixed verb.
-	 *   <li>{@code @RestOp(method)} is SVL-resolved; if blank, {@code @RestOp(value)} is parsed for a leading verb token.
-	 * </ul>
-	 * <p>
-	 * If no annotation supplies a value, the verb is inferred from the Java method name via
-	 * {@link HttpUtils#detectHttpMethod(Method, boolean, String)}. The literal {@code "METHOD"} is
-	 * normalized to the wildcard {@code "*"}, and the result is upper-cased.
-	 *
-	 * @return The resolved HTTP method, never {@code null}.
-	 */
-	@SuppressWarnings("java:S3776")
-	private String findHttpMethod() {
-		var vr = context.getVarResolver();
-		for (var ai : getRestOpAnnotations()) {
-			var v = httpMethodFromAnnotation(ai.inner(), vr);
-			if (v != null && !v.isEmpty())
-				return normalizeHttpMethod(v);
-		}
-		return normalizeHttpMethod(HttpUtils.detectHttpMethod(method, true, "GET"));
 	}
 
 	@SuppressWarnings("java:S3776")
@@ -1339,7 +1275,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// The 6 formerly-eager scalar fields are now memoized; no eagerness needed here.
 			// Pre-warm httpMethod so it is in the memoizer cache for immediate use by compareTo/match.
-			httpMethodMemo.get();
+			httpMethod.get();
 
 			var pm = getPathMatchers();
 			bs.add(UrlPathMatcher[].class, pm);
@@ -1463,7 +1399,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
 	public RestOpSession.Builder createSession(RestSession session) throws Exception {
-		return RestOpSession.create(this, session).logger(getCallLogger()).debug(debugEnablementMemo.get().isDebug(this, session.getRequest()));
+		return RestOpSession.create(this, session).logger(getCallLogger()).debug(debugEnablement.get().isDebug(this, session.getRequest()));
 	}
 
 	@Override /* Overridden from Object */
@@ -1476,63 +1412,63 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The bean context associated with this context.
 	 */
-	public BeanContext getBeanContext() { return beanContextMemo.get(); }
+	public BeanContext getBeanContext() { return beanContext.get(); }
 
 	/**
 	 * Returns the default charset.
 	 *
 	 * @return The default charset.  Never <jk>null</jk>.
 	 */
-	public Charset getDefaultCharset() { return defaultCharsetMemo.get(); }
+	public Charset getDefaultCharset() { return defaultCharset.get(); }
 
 	/**
 	 * Returns the default request attributes.
 	 *
 	 * @return The default request attributes.  Never <jk>null</jk>.
 	 */
-	public NamedAttributeMap getDefaultRequestAttributes() { return defaultRequestAttributesMemo.get(); }
+	public NamedAttributeMap getDefaultRequestAttributes() { return defaultRequestAttributes.get(); }
 
 	/**
 	 * Returns the default form data parameters.
 	 *
 	 * @return The default form data parameters.  Never <jk>null</jk>.
 	 */
-	public PartList getDefaultRequestFormData() { return defaultRequestFormDataMemo.get(); }
+	public PartList getDefaultRequestFormData() { return defaultRequestFormData.get(); }
 
 	/**
 	 * Returns the default request headers.
 	 *
 	 * @return The default request headers.  Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultRequestHeaders() { return defaultRequestHeadersMemo.get(); }
+	public HeaderList getDefaultRequestHeaders() { return defaultRequestHeaders.get(); }
 
 	/**
 	 * Returns the default request query parameters.
 	 *
 	 * @return The default request query parameters.  Never <jk>null</jk>.
 	 */
-	public PartList getDefaultRequestQueryData() { return defaultRequestQueryDataMemo.get(); }
+	public PartList getDefaultRequestQueryData() { return defaultRequestQueryData.get(); }
 
 	/**
 	 * Returns the default response headers.
 	 *
 	 * @return The default response headers.  Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultResponseHeaders() { return defaultResponseHeadersMemo.get(); }
+	public HeaderList getDefaultResponseHeaders() { return defaultResponseHeaders.get(); }
 
 	/**
 	 * Returns the compression encoders to use for this method.
 	 *
 	 * @return The compression encoders to use for this method.
 	 */
-	public EncoderSet getEncoders() { return encodersMemo.get(); }
+	public EncoderSet getEncoders() { return encoders.get(); }
 
 	/**
 	 * Returns the HTTP method name (e.g. <js>"GET"</js>).
 	 *
 	 * @return The HTTP method name.
 	 */
-	public String getHttpMethod() { return httpMethodMemo.get(); }
+	public String getHttpMethod() { return httpMethod.get(); }
 
 	/**
 	 * Returns the underlying Java method that this context belongs to.
@@ -1546,35 +1482,35 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The JSON-Schema generator applicable to this Java method.
 	 */
-	public JsonSchemaGenerator getJsonSchemaGenerator() { return jsonSchemaGeneratorMemo.get(); }
+	public JsonSchemaGenerator getJsonSchemaGenerator() { return jsonSchemaGenerator.get(); }
 
 	/**
 	 * Returns the max number of bytes to process in the input content.
 	 *
 	 * @return The max number of bytes to process in the input content.
 	 */
-	public long getMaxInput() { return maxInputMemo.get(); }
+	public long getMaxInput() { return maxInput.get(); }
 
 	/**
 	 * Returns the parsers to use for this method.
 	 *
 	 * @return The parsers to use for this method.
 	 */
-	public ParserSet getParsers() { return parsersMemo.get(); }
+	public ParserSet getParsers() { return parsers.get(); }
 
 	/**
 	 * Bean property getter:  <property>partParser</property>.
 	 *
 	 * @return The value of the <property>partParser</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public HttpPartParser getPartParser() { return partParserMemo.get(); }
+	public HttpPartParser getPartParser() { return partParser.get(); }
 
 	/**
 	 * Bean property getter:  <property>partSerializer</property>.
 	 *
 	 * @return The value of the <property>partSerializer</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public HttpPartSerializer getPartSerializer() { return partSerializerMemo.get(); }
+	public HttpPartSerializer getPartSerializer() { return partSerializer.get(); }
 
 	/**
 	 * Returns the path pattern for this method.
@@ -1589,7 +1525,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The URL path matchers for this operation.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public UrlPathMatcher[] getPathMatchers() { return pathMatchersMemo.get(); }
+	public UrlPathMatcher[] getPathMatchers() { return pathMatchers.get(); }
 
 	/**
 	 * Returns the optional matchers for this operation.
@@ -1597,7 +1533,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The optional matchers for this operation.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RestMatcher[] getOptionalMatchers() { return optionalMatchersMemo.get(); }
+	public RestMatcher[] getOptionalMatchers() { return optionalMatchers.get(); }
 
 	/**
 	 * Returns the required matchers for this operation.
@@ -1605,7 +1541,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The required matchers for this operation.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RestMatcher[] getRequiredMatchers() { return requiredMatchersMemo.get(); }
+	public RestMatcher[] getRequiredMatchers() { return requiredMatchers.get(); }
 
 	/**
 	 * Returns the call logger for this operation.
@@ -1613,7 +1549,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The call logger for this operation.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public CallLogger getCallLogger() { return callLoggerMemo.get(); }
+	public CallLogger getCallLogger() { return callLogger.get(); }
 
 	/**
 	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.
@@ -1677,21 +1613,21 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The serializers to use for this method.
 	 */
-	public SerializerSet getSerializers() { return serializersMemo.get(); }
+	public SerializerSet getSerializers() { return serializers.get(); }
 
 	/**
 	 * Returns a list of supported accept types.
 	 *
 	 * @return An unmodifiable list.
 	 */
-	public List<MediaType> getSupportedAcceptTypes() { return supportedAcceptTypesMemo.get(); }
+	public List<MediaType> getSupportedAcceptTypes() { return supportedAcceptTypes.get(); }
 
 	/**
 	 * Returns the list of supported content types.
 	 *
 	 * @return An unmodifiable list.
 	 */
-	public List<MediaType> getSupportedContentTypes() { return supportedContentTypesMemo.get(); }
+	public List<MediaType> getSupportedContentTypes() { return supportedContentTypes.get(); }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
@@ -1770,9 +1706,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			.a(PROP_httpMethod, getHttpMethod());
 	}
 
-	RestConverter[] getConverters() { return convertersMemo.get(); }
+	RestConverter[] getConverters() { return converters.get(); }
 
-	RestGuard[] getGuards() { return guardsMemo.get(); }
+	RestGuard[] getGuards() { return guards.get(); }
 
 	RestOpInvoker getMethodInvoker() { return methodInvoker; }
 
