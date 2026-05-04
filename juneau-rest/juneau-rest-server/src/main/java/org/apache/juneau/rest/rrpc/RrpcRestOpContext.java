@@ -43,25 +43,14 @@ public class RrpcRestOpContext extends RestOpContext {
 	private final RrpcInterfaceMeta meta;
 
 	/**
-	 * 2-arg positional context constructor.
-	 *
-	 * <p>
-	 * Constructs an {@code RrpcRestOpContext} directly from a Java method and its owning {@link RestContext}, mirroring
-	 * {@link RestOpContext#RestOpContext(Method, RestContext) RestOpContext}'s 2-arg ctor.
-	 *
-	 * <p>
-	 * Internally invokes the protected 3-arg {@link RestOpContext#RestOpContext(Method, RestContext, org.apache.juneau.cp.BasicBeanStore)}
-	 * ctor with the root bean store (rather than the resource-scoped {@link RestContext#getBeanStore()} used by
-	 * {@code RestOpContext}'s 2-arg ctor). The root bean store is preserved verbatim from the legacy fluent chain to
-	 * avoid behavioral drift in RRPC builder-time bean creation.
+	 * Constructor.
 	 *
 	 * @param method The Java method this context represents. Must not be <jk>null</jk>.
 	 * @param context The owning {@link RestContext}. Must not be <jk>null</jk>.
 	 * @throws ServletException If context could not be created.
-	 * @since 9.5.0
 	 */
 	public RrpcRestOpContext(Method method, RestContext context) throws ServletException {
-		super(method, context, context.getBootstrapBeanStore());
+		super(method, context);
 
 		var interfaceClass = getBeanContext().getClassMeta(getJavaMethod().getGenericReturnType());
 		meta = new RrpcInterfaceMeta(interfaceClass.inner(), null);

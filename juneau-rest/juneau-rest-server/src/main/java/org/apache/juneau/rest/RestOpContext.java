@@ -1173,25 +1173,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
-	 * 3-arg positional context constructor (for internal subclass use).
-	 *
-	 * <p>
-	 * Allows a subclass (e.g. {@link org.apache.juneau.rest.rrpc.RrpcRestOpContext}) to override the builder-time
-	 * {@link BasicBeanStore} used for constructor-argument resolution. The default, reached via the 2-arg ctor, is
-	 * {@link RestContext#getBeanStore()}.
-	 *
-	 * @param method The Java method this context represents. Must not be <jk>null</jk>.
-	 * @param context The owning {@link RestContext}. Must not be <jk>null</jk>.
-	 * @param beanStoreOverride An optional bean store to use in place of {@code context.getBeanStore()}. May be
-	 * 		<jk>null</jk>, in which case the default store is used.
-	 * @throws ServletException If context could not be created.
-	 * @since 9.5.0
-	 */
-	protected RestOpContext(java.lang.reflect.Method method, RestContext context, BasicBeanStore beanStoreOverride) throws ServletException {
-		this(nn(beanStoreOverride) ? new Builder(method, context).beanStore(beanStoreOverride) : new Builder(method, context));
-	}
-
-	/**
 	 * Context constructor.
 	 *
 	 * @param builder The builder for this object.
