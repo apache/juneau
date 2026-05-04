@@ -61,7 +61,7 @@ public class RrpcRestOpContext extends RestOpContext {
 	 * @since 9.5.0
 	 */
 	public RrpcRestOpContext(Method method, RestContext context) throws ServletException {
-		super(method, context, context.getRootBeanStore());
+		super(method, context, context.getBootstrapBeanStore());
 
 		var interfaceClass = getBeanContext().getClassMeta(getJavaMethod().getGenericReturnType());
 		meta = new RrpcInterfaceMeta(interfaceClass.inner(), null);

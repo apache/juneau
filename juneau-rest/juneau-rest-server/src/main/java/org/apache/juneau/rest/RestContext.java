@@ -151,7 +151,7 @@ public class RestContext extends Context {
 	private static final String PROP_produces = "produces";
 	private static final String PROP_responseProcessors = "responseProcessors";
 	private static final String PROP_restOpArgs = "restOpArgs";
-	private static final String PROP_simpleVarResolver = "simpleVarResolver";
+	private static final String PROP_bootstrapVarResolver = "bootstrapVarResolver";
 	private static final String PROP_staticFiles = "staticFiles";
 	private static final String PROP_swaggerProvider = "swaggerProvider";
 
@@ -216,7 +216,7 @@ public class RestContext extends Context {
 			PROP_defaultRequestAttributes,
 			PROP_defaultRequestHeaders,
 			PROP_defaultResponseHeaders,
-			PROP_simpleVarResolver,
+			PROP_bootstrapVarResolver,
 			"destroyMethods",
 			"endCallMethods",
 			"postCallMethods",
@@ -252,7 +252,7 @@ public class RestContext extends Context {
 
 		private BeanContext.Builder beanContext;
 		private BasicBeanStore beanStore;
-		private BasicBeanStore rootBeanStore;
+		private BasicBeanStore bootstrapBeanStore;
 		private boolean initialized;
 		private final Class<?> resourceClass;
 		private Config config;
@@ -274,7 +274,7 @@ public class RestContext extends Context {
 		private SerializerSet.Builder serializers;
 		private final ServletConfig inner;
 		private String path = null;
-		private VarResolver simpleVarResolver;
+		private VarResolver bootstrapVarResolver;
 
 		/**
 		 * Package-private constructor.
@@ -295,7 +295,7 @@ public class RestContext extends Context {
 			this.parentContext = parentContext;
 
 			if (nn(parentContext))
-				rootBeanStore = parentContext.rootBeanStore;
+				bootstrapBeanStore = parentContext.bootstrapBeanStore;
 		}
 
 		@Override /* Context.Builder is abstract - copy() is not meaningful for the transient RestContext bootstrap state. */
@@ -719,14 +719,14 @@ public class RestContext extends Context {
 				.addBean(ServletContext.class, (nn(inner) ? inner : this).getServletContext());
 			// @formatter:on
 
-			if (rootBeanStore == null) {
-				rootBeanStore = beanStore;
-				beanStore = BasicBeanStore.of(rootBeanStore);
+			if (bootstrapBeanStore == null) {
+				bootstrapBeanStore = beanStore;
+				beanStore = BasicBeanStore.of(bootstrapBeanStore);
 			}
 			var bs = beanStore;
 
 			beanStore.add(BasicBeanStore.class, bs);
-			beanStore.add(VarResolver.class, simpleVarResolver());
+			beanStore.add(VarResolver.class, bootstrapVarResolver());
 			config = beanStore.add(Config.class, createConfig(bs, r, rc));
 
 			var rci = ClassInfo.of(resourceClass);
@@ -756,7 +756,7 @@ public class RestContext extends Context {
 				}
 			});
 
-			var vrs = simpleVarResolver().createSession();
+			var vrs = bootstrapVarResolver().createSession();
 			var work = AnnotationWorkList.of(vrs, rstream(AP.find(rci)).filter(CONTEXT_APPLY_FILTER));
 
 			apply(work);
@@ -1105,16 +1105,16 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Returns the root bean store.
+		 * Returns the bootstrap bean store.
 		 *
 		 * <p>
 		 * This is the bean store inherited from the parent resource and does not include
 		 * any beans added by this class.
 		 *
-		 * @return The root bean store.
+		 * @return The bootstrap bean store.
 		 */
-		public BasicBeanStore rootBeanStore() {
-			return rootBeanStore;
+		public BasicBeanStore bootstrapBeanStore() {
+			return bootstrapBeanStore;
 		}
 
 		/**
@@ -1149,32 +1149,32 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Returns the simple (bootstrap-time) variable resolver for this REST context.
+		 * Returns the bootstrap (pre-runtime) variable resolver for this REST context.
 		 *
 		 * <p>
-		 * The simple resolver is used during context construction to resolve SVL variables in annotation attribute values
+		 * The bootstrap resolver is used during context construction to resolve SVL variables in annotation attribute values
 		 * (e.g. <c>@Rest(messages=...)</c>, <c>@Rest(config=...)</c>) before the runtime {@link VarResolver} — which has
 		 * {@link Messages} and {@link Config} beans wired in — is available. It exposes the same {@link Var} catalog as
 		 * the runtime resolver, but {@link LocalizationVar} and {@link ConfigVar} resolve to empty strings because their
 		 * backing beans haven't been built yet.
 		 *
 		 * <p>
-		 * To override the simple resolver, declare a named {@link RestInject @RestInject} static method on the resource
+		 * To override the bootstrap resolver, declare a named {@link RestInject @RestInject} static method on the resource
 		 * class:
 		 * <p class='bjava'>
-		 * 	<ja>@RestInject</ja>(name=<js>"simpleVarResolver"</js>) <jk>public static</jk> VarResolver mySimpleResolver(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja>(name=<js>"bootstrapVarResolver"</js>) <jk>public static</jk> VarResolver myBootstrapResolver(<i>&lt;args&gt;</i>) {...}
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 		 * </ul>
 		 *
-		 * @return The simple (bootstrap-time) variable resolver. Cached on first call.
+		 * @return The bootstrap (pre-runtime) variable resolver. Cached on first call.
 		 */
-		public VarResolver simpleVarResolver() {
-			if (simpleVarResolver == null)
-				simpleVarResolver = createSimpleVarResolver(beanStore, resource, resourceClass);
-			return simpleVarResolver;
+		public VarResolver bootstrapVarResolver() {
+			if (bootstrapVarResolver == null)
+				bootstrapVarResolver = createBootstrapVarResolver(beanStore, resource, resourceClass);
+			return bootstrapVarResolver;
 		}
 
 		private static void runInitHooks(BasicBeanStore beanStore, Supplier<?> resource) throws ServletException {
@@ -1253,7 +1253,7 @@ public class RestContext extends Context {
 			var v = Value.of(
 				BasicBeanStore
 					.create()
-					.parent(rootBeanStore())
+					.parent(bootstrapBeanStore())
 				);
 			// @formatter:on
 
@@ -1899,7 +1899,7 @@ public class RestContext extends Context {
 						// We override the CallMethod.invoke() method to insert our logic.
 						if ("RRPC".equals(httpMethod)) {
 
-							// `RestOpContext.create(method, context).beanStore(restContext.getRootBeanStore()).type(RrpcRestOpContext.class).build()` →
+							// `RestOpContext.create(method, context).beanStore(restContext.getBootstrapBeanStore()).type(RrpcRestOpContext.class).build()` →
 							// `new RrpcRestOpContext(method, context)`. The bean-store override (root, not the
 							// resource-layered store) is preserved verbatim inside the new 2-arg ctor on
 							// `RrpcRestOpContext`. The `.dotAll()` flag was removed per TODO-16 Decision #17 —
@@ -1978,13 +1978,13 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Creates the simple (bootstrap-time) variable resolver.
+		 * Creates the bootstrap (pre-runtime) variable resolver.
 		 *
 		 * <p>
 		 * Builds the same {@link Var} catalog as the runtime resolver but without {@link Messages} or {@link Config}
 		 * beans wired in — those depend on settings that are themselves resolved against this resolver, so they're
 		 * added later by {@link RestContext#findVarResolver()}. Override via
-		 * {@link RestInject @RestInject(name="simpleVarResolver")} on a static method.
+		 * {@link RestInject @RestInject(name="bootstrapVarResolver")} on a static method.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
@@ -1996,9 +1996,9 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @param resourceClass
 		 * 	The REST servlet/bean type that this context is defined against.
-		 * @return The built simple variable resolver.
+		 * @return The built bootstrap variable resolver.
 		 */
-		protected VarResolver createSimpleVarResolver(BasicBeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
+		protected VarResolver createBootstrapVarResolver(BasicBeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			// Default value.
 			// @formatter:off
@@ -2032,11 +2032,11 @@ public class RestContext extends Context {
 			);
 			// @formatter:on
 
-			// Replace with named bean from bean store (PROP_simpleVarResolver).
-			beanStore.getBean(VarResolver.class, PROP_simpleVarResolver).ifPresent(v::set);
+			// Replace with named bean from bean store (PROP_bootstrapVarResolver).
+			beanStore.getBean(VarResolver.class, PROP_bootstrapVarResolver).ifPresent(v::set);
 
-			// Replace with bean from:  @RestInject(name="simpleVarResolver") public [static] VarResolver xxx(<args>)
-			new BeanCreateMethodFinder<>(VarResolver.class, resource.get(), beanStore).find(x -> isRestInjectMethod(x, PROP_simpleVarResolver)).run(v::set);
+			// Replace with bean from:  @RestInject(name="bootstrapVarResolver") public [static] VarResolver xxx(<args>)
+			new BeanCreateMethodFinder<>(VarResolver.class, resource.get(), beanStore).find(x -> isRestInjectMethod(x, PROP_bootstrapVarResolver)).run(v::set);
 
 			return v.get();
 		}
@@ -2101,7 +2101,7 @@ public class RestContext extends Context {
 	protected final AtomicBoolean initialized = new AtomicBoolean(false);
 	protected final BasicHttpException initException;
 	protected final BasicBeanStore beanStore;
-	protected final BasicBeanStore rootBeanStore;
+	protected final BasicBeanStore bootstrapBeanStore;
 	protected final Builder builder;
 	protected final Class<?> resourceClass;
 	protected final ConcurrentHashMap<Locale,Swagger> swaggerCache = new ConcurrentHashMap<>();
@@ -2143,10 +2143,10 @@ public class RestContext extends Context {
 
 	// Bootstrap-time resolver — no Messages, no Config bean. Cached on the builder so that init()
 	// and findMessages()/findConfig() see the same instance during construction.
-	private final Memoizer<VarResolver> simpleVarResolverMemo = memoizer(this::findSimpleVarResolver);
+	private final Memoizer<VarResolver> bootstrapVarResolverMemo = memoizer(this::findBootstrapVarResolver);
 
-	private VarResolver findSimpleVarResolver() {
-		return builder.simpleVarResolver();
+	private VarResolver findBootstrapVarResolver() {
+		return builder.bootstrapVarResolver();
 	}
 
 	private final Memoizer<Messages> messagesMemo = memoizer(this::findMessages);
@@ -2158,7 +2158,7 @@ public class RestContext extends Context {
 		Collections.reverse(anns);
 		// Resolve location strings against the simple resolver — full resolver isn't available yet
 		// (it depends on getMessages()).
-		var vrs = getSimpleVarResolver().createSession();
+		var vrs = getBootstrapVarResolver().createSession();
 		anns.forEach(ai -> ai.getString(PROPERTY_messages).filter(StringUtils::isNotBlank).ifPresent(s -> b.location(vrs.resolve(s))));
 		beanStore.getBean(Messages.class).ifPresent(b::impl);
 		new BeanCreateMethodFinder<>(Messages.class, resource.get(), beanStore).addBean(Messages.Builder.class, b).find(Builder::isRestInjectMethod).run(b::impl);
@@ -2187,13 +2187,13 @@ public class RestContext extends Context {
 	}
 
 	// Runtime resolver — wraps the simple resolver and adds Messages + Config beans.
-	// Depends on getSimpleVarResolver() and getMessages(); pulls the bootstrap Config from the builder
+	// Depends on getBootstrapVarResolver() and getMessages(); pulls the bootstrap Config from the builder
 	// to avoid an infinite recursion with the runtime Config (which wraps the bootstrap Config in a
 	// session backed by *this* resolver).
 	private final Memoizer<VarResolver> varResolverMemo = memoizer(this::findVarResolver);
 
 	private VarResolver findVarResolver() {
-		var b = getSimpleVarResolver().copy()
+		var b = getBootstrapVarResolver().copy()
 			.bean(Messages.class, getMessages())
 			.bean(Config.class, builder.config());
 		beanStore.getBean(VarResolver.class).ifPresent(b::impl);
@@ -2485,7 +2485,7 @@ public class RestContext extends Context {
 			parentContext = builder.parentContext;
 			resource = builder.resource;
 			resourceClass = builder.resourceClass;
-			rootBeanStore = builder.rootBeanStore();
+			bootstrapBeanStore = builder.bootstrapBeanStore();
 
 			BasicBeanStore bs = beanStore = builder.beanStore();
 			// @formatter:off
@@ -3375,11 +3375,15 @@ public class RestContext extends Context {
 	public RestOperations getRestOperations() { return restOperations; }
 
 	/**
-	 * Returns the root bean store for this context.
+	 * Returns the bootstrap bean store for this context.
 	 *
-	 * @return The root bean store for this context.
+	 * <p>
+	 * This is the bean store inherited from the parent resource and does not include
+	 * any beans added by this class.
+	 *
+	 * @return The bootstrap bean store for this context.
 	 */
-	public BasicBeanStore getRootBeanStore() { return rootBeanStore; }
+	public BasicBeanStore getBootstrapBeanStore() { return bootstrapBeanStore; }
 
 	/**
 	 * Returns the serializers associated with this context.
@@ -3566,17 +3570,17 @@ public class RestContext extends Context {
 	public VarResolver getVarResolver() { return varResolverMemo.get(); }
 
 	/**
-	 * Returns the simple (bootstrap-time) variable resolver used during context construction.
+	 * Returns the bootstrap (pre-runtime) variable resolver used during context construction.
 	 *
 	 * <p>
-	 * The simple resolver has the same {@link Var} catalog as {@link #getVarResolver()} but does not have
+	 * The bootstrap resolver has the same {@link Var} catalog as {@link #getVarResolver()} but does not have
 	 * {@link Messages} or {@link Config} beans wired in — it is used to resolve annotation attribute values
 	 * (e.g. <c>@Rest(messages=...)</c>) before those beans are built. Override via
-	 * {@link RestInject @RestInject(name="simpleVarResolver")} on a static method of the resource class.
+	 * {@link RestInject @RestInject(name="bootstrapVarResolver")} on a static method of the resource class.
 	 *
-	 * @return The simple var resolver in use by this resource.
+	 * @return The bootstrap var resolver in use by this resource.
 	 */
-	public VarResolver getSimpleVarResolver() { return simpleVarResolverMemo.get(); }
+	public VarResolver getBootstrapVarResolver() { return bootstrapVarResolverMemo.get(); }
 
 	/**
 	 * Returns whether it's safe to pass the HTTP content as a <js>"content"</js> GET parameter.

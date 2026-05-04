@@ -1295,7 +1295,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			mi = MethodInfo.of(method).accessible();
 
 			// @formatter:off
-			var bs = BasicBeanStore.of(context.getRootBeanStore())
+			var bs = BasicBeanStore.of(context.getBootstrapBeanStore())
 				.addBean(RestOpContext.class, this)
 				.addBean(Method.class, method)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
