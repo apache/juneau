@@ -33,8 +33,6 @@
 
 - [TODO-18] Investigate possible useful features to add to juneau-rest-server.
 
-- [TODO-19] Remove encoders support from juneau-marshall and juneau-rest-server.
-
 - [TODO-20] Rethink how debugging works in RestServlet.  Can we come up with a simpler system?
 
 - [TODO-21] Rename and relocate bean/inject annotations: reduce confusion with Spring naming, align annotation vocabulary with what each actually does, and move resource/store contribution annotations into `org.apache.juneau.commons.inject`. See `todo/TODO-21-bean-annotations-inject-package.md`.
@@ -42,3 +40,5 @@
 - [TODO-23] New feature support in org.apache.juneau.commons.inject — roadmap for a simplified inject API (not a Spring replacement). See `todo/TODO-23-commons-inject-framework-roadmap.md`.
 
 - [TODO-24] JSR-330 alignment (no `jakarta.inject-api` dependency) + selective Spring-lite features for `commons.inject`. See `todo/TODO-24-jsr330-and-spring-lite-support.md`.
+
+- [TODO-30] Eliminate `RestOpContext.Builder` persistent reference: move annotation-apply results (7 sub-builders + `AnnotationWorkList`) to private final fields on `RestOpContext` so the `Builder` is GC-able after construction, and convert 6 eagerly-resolved scalar fields to memoizers. See `todo/TODO-30-eliminate-restopcontext-builder.md`.

@@ -311,7 +311,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return BeanCreator.of(HttpPartSerializer.class).type(c).orElse(defaultSerializer);
 	}
 
-	protected final Builder builder;
 	protected final int hierarchyDepth;
 	protected final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 	protected final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
@@ -323,13 +322,27 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	protected final RestOpInvoker[] preCallMethods;
 	protected final ResponseBeanMeta responseMeta;
 
-	/** Resolved once at construction from {@link Builder} annotation apply and context fallbacks (TODO-16). */
-	private final Charset resolvedDefaultCharset;
-	private final long resolvedMaxInput;
-	private final DebugEnablement resolvedDebugEnablement;
-	private final List<MediaType> resolvedSupportedAcceptTypes;
-	private final List<MediaType> resolvedSupportedContentTypes;
-	private final String resolvedHttpMethod;
+	// Sub-builder fields: annotation-applied copies captured from Builder before it is discarded.
+	// Non-null only when op-level annotations actually touched the sub-builder during construction;
+	// null means "no op annotations applied" and the memoizer falls through to the parent context value.
+	private final BeanContext.Builder beanContextBuilder;
+	private final EncoderSet.Builder encodersBuilder;
+	private final JsonSchemaGenerator.Builder jsonSchemaGeneratorBuilder;
+	private final ParserSet.Builder parsersBuilder;
+	private final HttpPartParser.Creator partParserCreator;
+	private final HttpPartSerializer.Creator partSerializerCreator;
+	private final SerializerSet.Builder serializersBuilder;
+
+	// The annotation work-list produced during construction (replaces builder.getApplied() references).
+	private final AnnotationWorkList appliedAnnotations;
+
+	// Phase 4: formerly eager scalars — now lazily resolved on first access.
+	private final Memoizer<Charset> defaultCharsetMemo = memoizer(this::findDefaultCharset);
+	private final Memoizer<Long> maxInputMemo = memoizer(this::findMaxInput);
+	private final Memoizer<DebugEnablement> debugEnablementMemo = memoizer(this::findDebugEnablement);
+	private final Memoizer<List<MediaType>> supportedAcceptTypesMemo = memoizer(this::findSupportedAcceptTypes);
+	private final Memoizer<List<MediaType>> supportedContentTypesMemo = memoizer(this::findSupportedContentTypes);
+	private final Memoizer<String> httpMethodMemo = memoizer(this::findHttpMethod);
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Memoized allowlist fields
@@ -390,7 +403,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final Memoizer<BeanContext> beanContextMemo = memoizer(this::findBeanContext);
 
 	private BeanContext findBeanContext() {
-		return builder.getBeanContext().orElse(context.getBeanContext());
+		return beanContextBuilder != null ? beanContextBuilder.build() : context.getBeanContext();
 	}
 
 	private final Memoizer<CallLogger> callLoggerMemo = memoizer(this::findCallLogger);
@@ -415,9 +428,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private EncoderSet findEncoders() {
 		var bs = context.getBeanStore();
 		// Seed from class-level builder copy so EncoderSet.Builder.set(...)'s Inherit sentinel
-		// can splice in the inherited entries. (The OP-level EncoderSet.Builder is itself seeded
-		// from parent.encoders().copy() in createEncoders().)
-		var b = builder.encoders().copy();
+		// can splice in the inherited entries. If no op annotations touched encoders, fall through
+		// to a fresh copy of the parent builder (mirrors the former Builder.encoders() lazy-init).
+		var b = (encodersBuilder != null ? encodersBuilder : context.builder.encoders()).copy();
 		getRestOpAnnotationsForProperty(PROPERTY_encoders).forEach(ai -> {
 			var c = ai.getClassArray("encoders", org.apache.juneau.encoders.Encoder.class).orElse(null);
 			if (nn(c) && c.length > 0)
@@ -433,7 +446,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final Memoizer<JsonSchemaGenerator> jsonSchemaGeneratorMemo = memoizer(this::findJsonSchemaGenerator);
 
 	private JsonSchemaGenerator findJsonSchemaGenerator() {
-		return builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator());
+		return jsonSchemaGeneratorBuilder != null ? jsonSchemaGeneratorBuilder.build() : context.getJsonSchemaGenerator();
 	}
 
 	private final Memoizer<ParserSet> parsersMemo = memoizer(this::findParsers);
@@ -447,7 +460,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private ParserSet findParsers() {
 		var bs = context.getBeanStore();
-		var b = builder.parsers().copy();
+		var b = (parsersBuilder != null ? parsersBuilder : context.builder.parsers()).copy();
 		getRestOpAnnotationsForProperty(PROPERTY_parsers).forEach(ai -> {
 			var c = ai.getClassArray("parsers", java.lang.Object.class).orElse(null);
 			if (nn(c) && c.length > 0)
@@ -463,13 +476,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final Memoizer<HttpPartParser> partParserMemo = memoizer(this::findPartParser);
 
 	private HttpPartParser findPartParser() {
-		return builder.getPartParser().orElse(context.getPartParser());
+		return partParserCreator != null ? partParserCreator.create() : context.getPartParser();
 	}
 
 	private final Memoizer<HttpPartSerializer> partSerializerMemo = memoizer(this::findPartSerializer);
 
 	private HttpPartSerializer findPartSerializer() {
-		return builder.getPartSerializer().orElse(context.getPartSerializer());
+		return partSerializerCreator != null ? partSerializerCreator.create() : context.getPartSerializer();
 	}
 
 	private final Memoizer<SerializerSet> serializersMemo = memoizer(this::findSerializers);
@@ -483,7 +496,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private SerializerSet findSerializers() {
 		var bs = context.getBeanStore();
-		var b = builder.serializers().copy();
+		var b = (serializersBuilder != null ? serializersBuilder : context.builder.serializers()).copy();
 		getRestOpAnnotationsForProperty(PROPERTY_serializers).forEach(ai -> {
 			var c = ai.getClassArray("serializers", org.apache.juneau.serializer.Serializer.class).orElse(null);
 			if (nn(c) && c.length > 0)
@@ -1288,7 +1301,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		super(builder);
 
 		try {
-			this.builder = builder;
+			// Capture the annotation work-list before the builder becomes eligible for GC.
+			appliedAnnotations = builder.getApplied();
+
+			// Capture sub-builder fields (raw field access — null means no op annotations touched that slot).
+			// The memoizer findXxx() methods check for null and fall through to the parent context value.
+			beanContextBuilder = builder.beanContext;
+			encodersBuilder = builder.encoders;
+			jsonSchemaGeneratorBuilder = builder.jsonSchemaGenerator;
+			parsersBuilder = builder.parsers;
+			partParserCreator = builder.partParser;
+			partSerializerCreator = builder.partSerializer;
+			serializersBuilder = builder.serializers;
+
 			context = builder.restContext;
 			method = builder.restMethod;
 
@@ -1298,7 +1323,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var bs = BasicBeanStore.of(context.getBootstrapBeanStore())
 				.addBean(RestOpContext.class, this)
 				.addBean(Method.class, method)
-				.addBean(AnnotationWorkList.class, builder.getApplied());
+				.addBean(AnnotationWorkList.class, appliedAnnotations);
 			// @formatter:on
 			bs.addBean(BasicBeanStore.class, bs);
 
@@ -1312,12 +1337,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			bs.add(HttpPartSerializer.class, getPartSerializer());
 			bs.add(SerializerSet.class, getSerializers());
 
-			resolvedDefaultCharset = findDefaultCharset();
-			resolvedMaxInput = findMaxInput();
-			resolvedDebugEnablement = findDebugEnablement();
-			resolvedSupportedAcceptTypes = findSupportedAcceptTypes();
-			resolvedSupportedContentTypes = findSupportedContentTypes();
-			resolvedHttpMethod = findHttpMethod();
+			// The 6 formerly-eager scalar fields are now memoized; no eagerness needed here.
+			// Pre-warm httpMethod so it is in the memoizer cache for immediate use by compareTo/match.
+			httpMethodMemo.get();
 
 			var pm = getPathMatchers();
 			bs.add(UrlPathMatcher[].class, pm);
@@ -1331,7 +1353,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 		hierarchyDepth = hierarchyDepthTemp;
 
-			responseMeta = ResponseBeanMeta.create(mi, builder.getApplied());
+			responseMeta = ResponseBeanMeta.create(mi, appliedAnnotations);
 
 			preCallMethods = context.getPreCallMethods().stream().map(x -> new RestOpInvoker(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(RestOpInvoker[]::new);
 			postCallMethods = context.getPostCallMethods().stream().map(x -> new RestOpInvoker(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(RestOpInvoker[]::new);
@@ -1441,7 +1463,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
 	public RestOpSession.Builder createSession(RestSession session) throws Exception {
-		return RestOpSession.create(this, session).logger(getCallLogger()).debug(resolvedDebugEnablement.isDebug(this, session.getRequest()));
+		return RestOpSession.create(this, session).logger(getCallLogger()).debug(debugEnablementMemo.get().isDebug(this, session.getRequest()));
 	}
 
 	@Override /* Overridden from Object */
@@ -1461,7 +1483,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The default charset.  Never <jk>null</jk>.
 	 */
-	public Charset getDefaultCharset() { return resolvedDefaultCharset; }
+	public Charset getDefaultCharset() { return defaultCharsetMemo.get(); }
 
 	/**
 	 * Returns the default request attributes.
@@ -1510,7 +1532,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The HTTP method name.
 	 */
-	public String getHttpMethod() { return resolvedHttpMethod; }
+	public String getHttpMethod() { return httpMethodMemo.get(); }
 
 	/**
 	 * Returns the underlying Java method that this context belongs to.
@@ -1531,7 +1553,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The max number of bytes to process in the input content.
 	 */
-	public long getMaxInput() { return resolvedMaxInput; }
+	public long getMaxInput() { return maxInputMemo.get(); }
 
 	/**
 	 * Returns the parsers to use for this method.
@@ -1662,14 +1684,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return An unmodifiable list.
 	 */
-	public List<MediaType> getSupportedAcceptTypes() { return resolvedSupportedAcceptTypes; }
+	public List<MediaType> getSupportedAcceptTypes() { return supportedAcceptTypesMemo.get(); }
 
 	/**
 	 * Returns the list of supported content types.
 	 *
 	 * @return An unmodifiable list.
 	 */
-	public List<MediaType> getSupportedContentTypes() { return resolvedSupportedContentTypes; }
+	public List<MediaType> getSupportedContentTypes() { return supportedContentTypesMemo.get(); }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
