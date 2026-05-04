@@ -1886,7 +1886,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			if (! restContexts.containsKey(c)) {
 				var isClass = restBean instanceof Class;
 				var o = isClass ? ((Class<?>)restBean).getDeclaredConstructor().newInstance() : restBean;
-				RestContext rc = new RestContext(new RestContextInit(o.getClass(), () -> o, bs -> {
+				RestContext rc = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
 					bs.addBean(Enablement.class, CONDITIONAL);
 					bs.addBeanType(CallLogger.class, BasicTestCallLogger.class);
 				})).postInit().postInitChildFirst();

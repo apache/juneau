@@ -52,7 +52,7 @@ class Swagger_Test extends TestBase {
 	public void testMethod() { /* no-op */ }
 
 	private static org.apache.juneau.bean.swagger.Swagger getSwaggerWithFile(Object resource) throws Exception {
-		var rc = new RestContext(new RestContextInit(resource.getClass(), () -> resource,
+		var rc = new RestContext(new RestContext.Args(resource.getClass(), null, null, () -> resource, "",
 			bs -> bs.addBeanType(StaticFiles.class, TestClasspathFileFinder.class)));
 		var roc = new RestOpContext(Swagger_Test.class.getMethod("testMethod"), rc);
 		var call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
@@ -62,7 +62,7 @@ class Swagger_Test extends TestBase {
 	}
 
 	private static org.apache.juneau.bean.swagger.Swagger getSwagger(Object resource) throws Exception {
-		var rc = new RestContext(new RestContextInit(resource.getClass(), () -> resource));
+		var rc = new RestContext(new RestContext.Args(resource.getClass(), null, null, () -> resource, "", null));
 		var roc = new RestOpContext(Swagger_Test.class.getMethod("testMethod"), rc);
 		var call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
 		var req = roc.createRequest(call);

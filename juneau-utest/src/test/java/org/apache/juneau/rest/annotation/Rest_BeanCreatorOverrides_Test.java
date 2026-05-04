@@ -44,7 +44,7 @@ class Rest_BeanCreatorOverrides_Test extends TestBase {
 
 	private static RestContext build(Class<?> resourceClass) throws Exception {
 		var resource = resourceClass.getDeclaredConstructor().newInstance();
-		return new RestContext(new RestContextInit(resourceClass, () -> resource));
+		return new RestContext(new RestContext.Args(resourceClass, null, null, () -> resource, "", null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

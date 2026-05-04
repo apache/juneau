@@ -99,7 +99,7 @@ import jakarta.servlet.http.*;
  * (and inherited from any parent classes), and programmatically through {@link RestInject @RestInject}-annotated
  * methods/fields that contribute named beans (e.g. <c>encoders</c>, <c>parsers</c>, <c>callLogger</c>) to the REST
  * resource's bean store. Where direct construction is needed (test rigs, mock clients, embedded usage),
- * the public constructor takes a {@link RestContextInit} record carrying the bootstrap state.
+ * the public constructor takes a {@link RestContext.Args} record carrying the bootstrap state.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -161,11 +161,68 @@ public class RestContext extends Context {
 	private static final String ARG_restContext = "restContext";
 
 	/**
+	 * Bootstrap arguments for {@link RestContext}.
+	 *
+	 * <p>
+	 * Bundles the small, fixed set of inputs needed to construct a {@link RestContext} into a single immutable record.
+	 *
+	 * <p>
+	 * All non-required values default sensibly:
+	 * <ul>
+	 * 	<li>{@code parentContext}, {@code servletConfig} — {@code null} (top-level resource, no servlet container)
+	 * 	<li>{@code path} — {@code ""} (no path prefix)
+	 * 	<li>{@code beanStoreConfigurer} — no-op (no pre-build bean-store mutation)
+	 * </ul>
+	 *
+	 * <p>
+	 * The {@code beanStoreConfigurer} hook gives test fixtures and integration code a chance to register beans on
+	 * the {@link BasicBeanStore} after the resource has been wired in but before the
+	 * {@code findXxx()} memoizers fire.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>var</jk> <jv>ctx</jv> = <jk>new</jk> RestContext(<jk>new</jk> RestContext.Args(MyResource.<jk>class</jk>, () -&gt; <jk>new</jk> MyResource()));
+	 * </p>
+	 *
+	 * @param resourceClass The {@link Rest @Rest}-annotated REST resource class. Must not be {@code null}.
+	 * @param parentContext The parent {@link RestContext}, or {@code null} if this is a top-level resource.
+	 * @param servletConfig The {@link ServletConfig} from the servlet container, or {@code null} when none is available.
+	 * @param resource The supplier that provides the resource instance during initialization. Must not be {@code null}.
+	 * @param path The path prefix relative to the parent. Defaults to {@code ""}.
+	 * @param beanStoreConfigurer A pre-build hook that runs against the resolved {@link BasicBeanStore}
+	 * 	after the resource has been wired in but before any {@code findXxx()} memoizer fires. Defaults to a no-op.
+	 *
+	 * @since 9.5.0
+	 */
+	public static record Args(
+		Class<?> resourceClass,
+		RestContext parentContext,
+		ServletConfig servletConfig,
+		Supplier<?> resource,
+		String path,
+		Consumer<BasicBeanStore> beanStoreConfigurer
+	) {
+
+		/**
+		 * Compact canonical constructor — null-coalesces optional fields and validates required ones.
+		 */
+		public Args {
+			assertArgNotNull("resourceClass", resourceClass);
+			assertArgNotNull(ARG_resource, resource);
+			if (path == null)
+				path = "";
+			if (beanStoreConfigurer == null)
+				beanStoreConfigurer = bs -> {};
+		}
+
+	}
+
+	/**
 	 * Builder class.
 	 *
 	 * <p>
 	 * Demoted to package-private in the April 2026 refactor (2026-04-19). User code should construct a
-	 * {@link RestContext} via the public {@link #RestContext(RestContextInit)} constructor; this Builder
+	 * {@link RestContext} via the public {@link #RestContext(Args)} constructor; this Builder
 	 * exists only as internal bootstrap state for the framework and is slated for inlining in a later phase.
 	 */
 	static class Builder extends Context.Builder implements ServletConfig {
@@ -253,7 +310,6 @@ public class RestContext extends Context {
 		private BeanContext.Builder beanContext;
 		private BasicBeanStore beanStore;
 		private BasicBeanStore bootstrapBeanStore;
-		private boolean initialized;
 		private final Class<?> resourceClass;
 		private Config config;
 		private EncoderSet.Builder encoders;
@@ -281,21 +337,25 @@ public class RestContext extends Context {
 		 *
 		 * <p>
 		 * Demoted from {@code protected} to package-private in the April 2026 refactor (2026-04-19). Only
-		 * {@link RestContext#toBuilder(RestContextInit)} instantiates this type now.
+		 * {@link RestContext#RestContext(Args)} instantiates this type now.
 		 *
-		 * @param resourceClass
-		 * 	The REST servlet/bean type that this context is defined against.
-		 * @param parentContext The parent context if this is a child of another resource.
-		 * @param servletConfig The servlet config if available.
+		 * @param rci The bootstrap arguments. Must not be {@code null}.
+		 * @throws ServletException If hook method calls failed.
 		 */
-		Builder(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) {
+		Builder(Args rci) throws ServletException {
 
-			this.resourceClass = resourceClass;
-			this.inner = servletConfig;
-			this.parentContext = parentContext;
+			this.resourceClass = rci.resourceClass();
+			this.inner = rci.servletConfig();
+			this.parentContext = rci.parentContext();
 
 			if (nn(parentContext))
 				bootstrapBeanStore = parentContext.bootstrapBeanStore;
+
+			init(rci.resource());
+
+			if (! rci.path().isEmpty())
+				path(rci.path());
+			rci.beanStoreConfigurer().accept(beanStore());
 		}
 
 		@Override /* Context.Builder is abstract - copy() is not meaningful for the transient RestContext bootstrap state. */
@@ -369,7 +429,7 @@ public class RestContext extends Context {
 		 *
 		 * <p>
 		 * Child resources must specify a value for {@link Rest#path() @Rest(path)} that identifies the subpath of the child resource
-		 * relative to the ascendant path unless registered as explicit {@link RestChild} instances.
+		 * relative to the ascendant path.
 		 *
 		 * <p>
 		 * Child resources can be nested arbitrarily deep using this technique (i.e. children can also have children).
@@ -411,7 +471,7 @@ public class RestContext extends Context {
 		 *
 		 * <p>
 		 * For programmatic registration of pre-instantiated child resources, supply them via
-		 * {@link RestContextInit#children()} when constructing the context directly.
+		 * {@link Rest#children() @Rest(children)} when constructing the context directly.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
@@ -430,7 +490,6 @@ public class RestContext extends Context {
 		 * 	<ul>
 		 * 		<li>A class that has a constructor described above.
 		 * 		<li>An instantiated resource object (such as a servlet object instantiated by a servlet container).
-		 * 		<li>An instance of {@link RestChild} containing an instantiated resource object and a subpath.
 		 * 	</ul>
 		 * @return This object.
 		 */
@@ -687,20 +746,7 @@ public class RestContext extends Context {
 		@Override /* Overridden from ServletConfig */
 		public String getServletName() { return inner == null ? null : inner.getServletName(); }
 
-		/**
-		 * Performs initialization on this builder against the specified REST servlet/bean instance.
-		 *
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 * @throws ServletException If hook method calls failed.
-		 */
-		public Builder init(Supplier<?> resource) throws ServletException {
-
-			if (initialized)
-				return this;
-			initialized = true;
+		private Builder init(Supplier<?> resource) throws ServletException {
 
 			this.resource = new ResourceSupplier(resourceClass, assertArgNotNull(ARG_resource, resource));
 			var r = this.resource;
@@ -921,7 +967,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <p>
-		 * For programmatic construction, supply the path via {@link RestContextInit} when building a {@link RestContext}
+		 * For programmatic construction, supply the path via {@link RestContext.Args} when building a {@link RestContext}
 		 * directly.
 		 *
 		 * <p>
@@ -1757,16 +1803,10 @@ public class RestContext extends Context {
 
 			// Initialize our child resources.
 			for (var o : children) {
-				String path2 = null;
 				Supplier<?> so;
 				Class<?> rc2;
 
-				if (o instanceof RestChild o2) {
-					path2 = o2.path;
-					var o3 = o2.resource;
-					so = () -> o3;
-					rc2 = o3.getClass();
-				} else if (o instanceof Class<?> oc) {
+				if (o instanceof Class<?> oc) {
 					// Don't allow specifying yourself as a child.  Causes an infinite loop.
 					if (oc == resourceClass)
 						continue;
@@ -1785,8 +1825,7 @@ public class RestContext extends Context {
 					so = () -> o;
 				}
 
-				var cc = new RestContext(new RestContextInit(rc2, restContext, inner, so,
-					path2 == null ? "" : path2, java.util.List.of()));
+			var cc = new RestContext(new Args(rc2, restContext, inner, so, "", null));
 
 				var mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
 				if (nn(mi))
@@ -2531,30 +2570,14 @@ public class RestContext extends Context {
 	});
 
 	/**
-	 * Constructor — record-based entry point.
+	 * Constructor.
 	 *
-	 * <p>
-	 * Wires {@link RestContextInit#resourceClass()}, {@link RestContextInit#parentContext()},
-	 * {@link RestContextInit#servletConfig()}, {@link RestContextInit#resource()}, {@link RestContextInit#path()},
-	 * {@link RestContextInit#children()}, and {@link RestContextInit#beanStoreConfigurer()} into the resolved
-	 * {@code RestContext}. Replaces the deleted {@code RestContext.create(...)} fluent factory.
-	 *
-	 * @param init The bootstrap arguments. Must not be <jk>null</jk>.
+	 * @param args The bootstrap arguments. Must not be <jk>null</jk>.
 	 * @throws Exception If any initialization problems were encountered.
-	 * @since 9.2.1
+	 * @since 9.5.0
 	 */
-	public RestContext(RestContextInit init) throws Exception {
-		this(toBuilder(init));
-	}
-
-	private static Builder toBuilder(RestContextInit init) throws ServletException {
-		var b = new Builder(init.resourceClass(), init.parentContext(), init.servletConfig()).init(init.resource());
-		if (! init.path().isEmpty())
-			b.path(init.path());
-		if (! init.children().isEmpty())
-			b.children(init.children().toArray());
-		init.beanStoreConfigurer().accept(b.beanStore());
-		return b;
+	public RestContext(Args args) throws Exception {
+		this(new Builder(args));
 	}
 
 	/**
@@ -2562,8 +2585,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Privatized in the April 2026 refactor (2026-04-19). External callers must use
-	 * {@link #RestContext(RestContextInit)} instead; this constructor only services the internal
-	 * {@link #toBuilder(RestContextInit)} helper.
+	 * {@link #RestContext(Args)} instead.
 	 *
 	 * @param builder The builder containing the settings for this bean.
 	 * @throws Exception If any initialization problems were encountered.

@@ -43,7 +43,7 @@ class NoInherit_Test extends TestBase {
 			parentContext = restContext(parentClass);
 		}
 		
-		return new RestContext(new RestContextInit(c, parentContext, null, () -> o, "", java.util.List.of())).postInit().postInitChildFirst();
+		return new RestContext(new RestContext.Args(c, parentContext, null, () -> o, "", null)).postInit().postInitChildFirst();
 	}
 
 	@Rest(allowedSerializerOptions = "parentSer")
@@ -195,7 +195,7 @@ class NoInherit_Test extends TestBase {
 	@Test
 	void a06_restOp_noInherit_defaultCharset_skipsContextCharset() throws Exception {
 		var o = new CharsetNoInheritPlain();
-		var ctx = new RestContext(new RestContextInit(CharsetNoInheritPlain.class, () -> o)).postInit().postInitChildFirst();
+		var ctx = new RestContext(new RestContext.Args(CharsetNoInheritPlain.class, null, null, () -> o, "", null)).postInit().postInitChildFirst();
 		var op = ctx.getRestOperations().getOpContexts().get(0);
 		assertFalse(op.getRestOpAnnotations().isEmpty(), "Expected @RestGet on method for noInherit aggregation");
 		assertFalse(op.isInherited("defaultCharset"), "noInherit=defaultCharset should block @Rest charset fallback");
@@ -207,7 +207,7 @@ class NoInherit_Test extends TestBase {
 	@Test
 	void a07_restOp_withoutNoInherit_defaultCharset_inheritsContext() throws Exception {
 		var o = new CharsetInheritPlain();
-		var ctx = new RestContext(new RestContextInit(CharsetInheritPlain.class, () -> o)).postInit().postInitChildFirst();
+		var ctx = new RestContext(new RestContext.Args(CharsetInheritPlain.class, null, null, () -> o, "", null)).postInit().postInitChildFirst();
 		var op = ctx.getRestOperations().getOpContexts().get(0);
 		assertEquals(StandardCharsets.ISO_8859_1, op.getDefaultCharset());
 	}
@@ -231,7 +231,7 @@ class NoInherit_Test extends TestBase {
 	@Test
 	void a08_restOp_noInherit_maxInput_skipsContextMaxInput() throws Exception {
 		var o = new MaxNoInheritPlain();
-		var ctx = new RestContext(new RestContextInit(MaxNoInheritPlain.class, () -> o)).postInit().postInitChildFirst();
+		var ctx = new RestContext(new RestContext.Args(MaxNoInheritPlain.class, null, null, () -> o, "", null)).postInit().postInitChildFirst();
 		var op = ctx.getRestOperations().getOpContexts().get(0);
 		var expected = env("RestContext.maxInput").map(x -> parseLongWithSuffix(x)).orElse(100_000_000L);
 		assertEquals(expected, op.getMaxInput());
@@ -241,7 +241,7 @@ class NoInherit_Test extends TestBase {
 	@Test
 	void a09_restOp_withoutNoInherit_maxInput_inheritsContext() throws Exception {
 		var o = new MaxInheritPlain();
-		var ctx = new RestContext(new RestContextInit(MaxInheritPlain.class, () -> o)).postInit().postInitChildFirst();
+		var ctx = new RestContext(new RestContext.Args(MaxInheritPlain.class, null, null, () -> o, "", null)).postInit().postInitChildFirst();
 		var op = ctx.getRestOperations().getOpContexts().get(0);
 		assertEquals(parseLongWithSuffix("7M"), op.getMaxInput());
 	}

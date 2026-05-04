@@ -218,7 +218,7 @@ public final class NgMockRestClient implements Closeable {
 				if (!restContextCache.containsKey(c)) {
 					var isClass = impl instanceof Class<?>;
 					var o = isClass ? ((Class<?>)impl).getDeclaredConstructor().newInstance() : impl;
-					RestContext rc = new RestContext(new RestContextInit(o.getClass(), () -> o, bs -> {
+					RestContext rc = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
 						bs.addBean(Enablement.class, CONDITIONAL);
 						bs.addBeanType(CallLogger.class, BasicTestCallLogger.class);
 					})).postInit().postInitChildFirst();
