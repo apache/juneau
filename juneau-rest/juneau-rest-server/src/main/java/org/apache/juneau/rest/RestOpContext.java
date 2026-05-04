@@ -34,8 +34,8 @@ import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
 import java.util.stream.*;
-import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.collections.FluentMap;
@@ -51,7 +51,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.HttpPartSerializer.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
@@ -113,27 +112,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	static class Builder extends Context.Builder {
 
-		private BeanContext.Builder beanContext;
-		private BasicBeanStore beanStore;
-		private EncoderSet.Builder encoders;
-		private HttpPartParser.Creator partParser;
-		private HttpPartSerializer.Creator partSerializer;
-		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
 		private Method restMethod;
-		private ParserSet.Builder parsers;
 		private RestContext restContext;
-		private RestContext.Builder parent;
-		private SerializerSet.Builder serializers;
 
 		Builder(Method method, RestContext context) {
 
 			this.restContext = context;
-			this.parent = context.builder;
 			this.restMethod = method;
 
-			this.beanStore = BasicBeanStore.of(context.getBeanStore()).addBean(Method.class, method);
 			var ap = context.getBeanContext().getAnnotationProvider();
-
 			var mi = MethodInfo.of(context.getResourceClass(), method);
 			var resourceClass = ClassInfo.of(context.getResourceClass());
 
@@ -153,149 +140,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 				apply(work);
 
-				if (context.builder.beanContext().canApply(work))
-					beanContext().apply(work);
-				if (context.builder.serializers().canApply(work))
-					serializers().apply(work);
-				if (context.builder.parsers().canApply(work))
-					parsers().apply(work);
-				if (context.builder.partSerializer().canApply(work))
-					partSerializer().apply(work);
-				if (context.builder.partParser().canApply(work))
-					partParser().apply(work);
-				if (context.builder.jsonSchemaGenerator().canApply(work))
-					jsonSchemaGenerator().apply(work);
-
 			} catch (Exception e) {
 				throw new InternalServerError(e);
 			}
 		}
 
-		Builder beanStore(BasicBeanStore value) {
-			this.beanStore = value;
-			return this;
-		}
-
-		BasicBeanStore beanStore() {
-			return beanStore;
-		}
-
-		BeanContext.Builder beanContext() {
-			if (beanContext == null)
-				beanContext = createBeanContext(beanStore(), parent, resource());
-			return beanContext;
-		}
-
-		EncoderSet.Builder encoders() {
-			if (encoders == null)
-				encoders = createEncoders(parent);
-			return encoders;
-		}
-
-		JsonSchemaGenerator.Builder jsonSchemaGenerator() {
-			if (jsonSchemaGenerator == null)
-				jsonSchemaGenerator = createJsonSchemaGenerator(beanStore(), parent, resource());
-			return jsonSchemaGenerator;
-		}
-
-		ParserSet.Builder parsers() {
-			if (parsers == null)
-				parsers = createParsers(parent);
-			return parsers;
-		}
-
-		HttpPartParser.Creator partParser() {
-			if (partParser == null)
-				partParser = createPartParser(beanStore(), parent, resource());
-			return partParser;
-		}
-
-		HttpPartSerializer.Creator partSerializer() {
-			if (partSerializer == null)
-				partSerializer = createPartSerializer(beanStore(), parent, resource());
-			return partSerializer;
-		}
-
-		SerializerSet.Builder serializers() {
-			if (serializers == null)
-				serializers = createSerializers(parent);
-			return serializers;
-		}
-
-		@SuppressWarnings({
-			"java:S1452" // Wildcard required - Supplier<?> for generic REST resource instance
-		})
-		Supplier<?> resource() {
-			return restContext.builder.resource();
-		}
-
-		Optional<BeanContext> getBeanContext() { return opt(beanContext).map(BeanContext.Builder::build); }
-		Optional<JsonSchemaGenerator> getJsonSchemaGenerator() { return opt(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build); }
-		Optional<HttpPartParser> getPartParser() { return opt(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create); }
-		Optional<HttpPartSerializer> getPartSerializer() { return opt(partSerializer).map(Creator::create); }
-
 		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
-		}
-
-		private boolean matches(MethodInfo annotated) {
-			var a = annotated.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
-			if (nn(a)) {
-				for (var n : a.methodScope()) {
-					if ("*".equals(n) || restMethod.getName().equals(n))
-						return true;
-				}
-			}
-			return false;
-		}
-
-		private BeanContext.Builder createBeanContext(BasicBeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-			Value<BeanContext.Builder> v = Value.of(parent.beanContext().copy());
-			var bs = BasicBeanStore.of(beanStore).addBean(BeanContext.Builder.class, v.get());
-			new BeanCreateMethodFinder<>(BeanContext.class, resource, bs)
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
-			return v.get();
-		}
-
-		private static EncoderSet.Builder createEncoders(RestContext.Builder parent) {
-			return parent.encoders().copy();
-		}
-
-		private JsonSchemaGenerator.Builder createJsonSchemaGenerator(BasicBeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-			Value<JsonSchemaGenerator.Builder> v = Value.of(parent.jsonSchemaGenerator().copy());
-			var bs = BasicBeanStore.of(beanStore).addBean(JsonSchemaGenerator.Builder.class, v.get());
-			new BeanCreateMethodFinder<>(JsonSchemaGenerator.class, resource, bs)
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
-			return v.get();
-		}
-
-		private static ParserSet.Builder createParsers(RestContext.Builder parent) {
-			return parent.parsers().copy();
-		}
-
-		private HttpPartParser.Creator createPartParser(BasicBeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-			Value<HttpPartParser.Creator> v = Value.of(parent.partParser().copy());
-			var bs = BasicBeanStore.of(beanStore).addBean(HttpPartParser.Creator.class, v.get());
-			new BeanCreateMethodFinder<>(HttpPartParser.class, resource, bs)
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
-			return v.get();
-		}
-
-		private HttpPartSerializer.Creator createPartSerializer(BasicBeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-			Value<HttpPartSerializer.Creator> v = Value.of(parent.partSerializer().copy());
-			var bs = BasicBeanStore.of(beanStore).addBean(HttpPartSerializer.Creator.class, v.get());
-			new BeanCreateMethodFinder<>(HttpPartSerializer.class, resource, bs)
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
-			return v.get();
-		}
-
-		private static SerializerSet.Builder createSerializers(RestContext.Builder parent) {
-			return parent.serializers().copy();
 		}
 	}
 
@@ -314,29 +166,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	protected final RestOpInvoker[] preCallMethods;
 	protected final ResponseBeanMeta responseMeta;
 
-	// Sub-builder fields: annotation-applied copies captured from Builder before it is discarded.
-	// Non-null only when op-level annotations actually touched the sub-builder during construction.
-	// null means "no op annotations applied" and the memoizer falls through to the parent context value.
-	private final BeanContext.Builder beanContextBuilder;
-	private final EncoderSet.Builder encodersBuilder;
-	private final JsonSchemaGenerator.Builder jsonSchemaGeneratorBuilder;
-	private final ParserSet.Builder parsersBuilder;
-	private final HttpPartParser.Creator partParserCreator;
-	private final HttpPartSerializer.Creator partSerializerCreator;
-	private final SerializerSet.Builder serializersBuilder;
-
-	// The annotation work-list produced during construction (replaces builder.getApplied() references).
+	// The annotation work-list produced during construction.
 	private final AnnotationWorkList appliedAnnotations;
 
 	private RestContext restContext() { return context; }
 	private Method method() { return method; }
-	private BeanContext.Builder beanContextBuilder() { return beanContextBuilder; }
-	private EncoderSet.Builder encodersBuilder() { return encodersBuilder; }
-	private JsonSchemaGenerator.Builder jsonSchemaGeneratorBuilder() { return jsonSchemaGeneratorBuilder; }
-	private ParserSet.Builder parsersBuilder() { return parsersBuilder; }
-	private HttpPartParser.Creator partParserCreator() { return partParserCreator; }
-	private HttpPartSerializer.Creator partSerializerCreator() { return partSerializerCreator; }
-	private SerializerSet.Builder serializersBuilder() { return serializersBuilder; }
+	private AnnotationWorkList appliedAnnotations() { return appliedAnnotations; }
+	private BasicBeanStore beanStore() { return context.getBeanStore(); }
+	private Object resource() { return context.getResource(); }
+	private VarResolver varResolver() { return context.getVarResolver(); }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Memoized fields
@@ -372,10 +210,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final Memoizer<DebugEnablement> debugEnablement = memoizer(() -> {
 		var v = findOpString(PROPERTY_debug);
 		if (v.isPresent())
-			return DebugEnablement.create(restContext().getBeanStore()).enable(Enablement.fromString(v.get()), "*").build();
+			return DebugEnablement.create(beanStore()).enable(Enablement.fromString(v.get()), "*").build();
 		if (isInherited(PROPERTY_debug))
 			return restContext().getDebugEnablement();
-		return DebugEnablement.create(restContext().getBeanStore()).build();
+		return DebugEnablement.create(beanStore()).build();
 	});
 
 	/**
@@ -418,7 +256,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	@SuppressWarnings("java:S3776")
 	private final Memoizer<String> httpMethod = memoizer(() -> {
-		var vr = restContext().getVarResolver();
+		var vr = varResolver();
 		for (var ai : getRestOpAnnotations()) {
 			var v = httpMethodFromAnnotation(ai.inner(), vr);
 			if (v != null && !v.isEmpty())
@@ -458,7 +296,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (isInherited(p))
 			l.addAll(restContext().getAllowedParserOptions());
 		getRestOpAnnotations().stream()
-			.flatMap(ai -> resolveCdl(ai.getStringArray(p).orElse(new String[0])))
+			.flatMap(ai -> resolveCdl(ai.getStringArray(p).orElse(EMPTY_STRING_ARRAY)))
 			.forEach(l::add);
 		return u(treeSetCi(removeNegations(l)));
 	});
@@ -470,15 +308,27 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (isInherited(p))
 			l.addAll(restContext().getAllowedSerializerOptions());
 		getRestOpAnnotations().stream()
-			.flatMap(ai -> resolveCdl(ai.getStringArray(p).orElse(new String[0])))
+			.flatMap(ai -> resolveCdl(ai.getStringArray(p).orElse(EMPTY_STRING_ARRAY)))
 			.forEach(l::add);
 		return u(treeSetCi(removeNegations(l)));
 	});
 
 	/** The {@link BeanContext} for this operation (op-level annotations applied on top of the parent context). */
-	private final Memoizer<BeanContext> beanContext = memoizer(() ->
-		beanContextBuilder() != null ? beanContextBuilder().build() : restContext().getBeanContext()
-	);
+	private final Memoizer<BeanContext> beanContext = memoizer(() -> {
+		var aa = appliedAnnotations();
+		var parent = restContext().builder.beanContext();
+		if (!parent.canApply(aa))
+			return restContext().getBeanContext();
+		Value<BeanContext.Builder> v = Value.of(parent.copy());
+		v.get().apply(aa);
+		var bs = BasicBeanStore.of(beanStore())
+			.addBean(Method.class, method())
+			.addBean(BeanContext.Builder.class, v.get());
+		new BeanCreateMethodFinder<>(BeanContext.class, resource(), bs)
+			.find(this::matchesInjectScope)
+			.run(x -> v.get().impl(x));
+		return v.get().build();
+	});
 
 	/** The call logger for this operation (delegated to the parent {@link RestContext}). */
 	private final Memoizer<CallLogger> callLogger = memoizer(() -> restContext().getCallLogger());
@@ -495,24 +345,36 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * method scope) REPLACES the result entirely.
 	 */
 	private final Memoizer<EncoderSet> encoders = memoizer(() -> {
-		var bs = restContext().getBeanStore();
-		var b = (encodersBuilder() != null ? encodersBuilder() : restContext().builder.encoders()).copy();
+		var bs = beanStore();
+		var b = restContext().builder.encoders().copy();
 		getRestOpAnnotationsForProperty(PROPERTY_encoders).forEach(ai -> {
-			var c = ai.getClassArray("encoders", org.apache.juneau.encoders.Encoder.class).orElse(null);
+			var c = ai.getClassArray("encoders", Encoder.class).orElse(null);
 			if (nn(c) && c.length > 0)
 				b.set(c);
 		});
 		var v = Value.of(b.build());
-		new BeanCreateMethodFinder<>(EncoderSet.class, restContext().getResource(), bs)
+		new BeanCreateMethodFinder<>(EncoderSet.class, resource(), bs)
 			.find(this::matchesInjectScope)
 			.run(v::set);
 		return v.get();
 	});
 
 	/** The JSON-Schema generator for this operation (op-level annotations applied on top of the parent). */
-	private final Memoizer<JsonSchemaGenerator> jsonSchemaGenerator = memoizer(() ->
-		jsonSchemaGeneratorBuilder() != null ? jsonSchemaGeneratorBuilder().build() : restContext().getJsonSchemaGenerator()
-	);
+	private final Memoizer<JsonSchemaGenerator> jsonSchemaGenerator = memoizer(() -> {
+		var aa = appliedAnnotations();
+		var parent = restContext().builder.jsonSchemaGenerator();
+		if (!parent.canApply(aa))
+			return restContext().getJsonSchemaGenerator();
+		Value<JsonSchemaGenerator.Builder> v = Value.of(parent.copy());
+		v.get().apply(aa);
+		var bs = BasicBeanStore.of(beanStore())
+			.addBean(Method.class, method())
+			.addBean(JsonSchemaGenerator.Builder.class, v.get());
+		new BeanCreateMethodFinder<>(JsonSchemaGenerator.class, resource(), bs)
+			.find(this::matchesInjectScope)
+			.run(x -> v.get().impl(x));
+		return v.get().build();
+	});
 
 	/**
 	 * The parser group for this operation.
@@ -524,29 +386,57 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code @RestInject ParserSet} bean (matching this operation's method scope) REPLACES the result.
 	 */
 	private final Memoizer<ParserSet> parsers = memoizer(() -> {
-		var bs = restContext().getBeanStore();
-		var b = (parsersBuilder() != null ? parsersBuilder() : restContext().builder.parsers()).copy();
+		var aa = appliedAnnotations();
+		var bs = beanStore();
+		var pb = restContext().builder.parsers();
+		var b = pb.copy();
+		if (pb.canApply(aa))
+			b.apply(aa);
 		getRestOpAnnotationsForProperty(PROPERTY_parsers).forEach(ai -> {
 			var c = ai.getClassArray("parsers", java.lang.Object.class).orElse(null);
 			if (nn(c) && c.length > 0)
 				b.set(c);
 		});
 		var result = Value.of(b.build());
-		new BeanCreateMethodFinder<>(ParserSet.class, restContext().getResource(), bs)
+		new BeanCreateMethodFinder<>(ParserSet.class, resource(), bs)
 			.find(this::matchesInjectScope)
 			.run(result::set);
 		return result.get();
 	});
 
 	/** The HTTP part parser for this operation (op-level creator applied on top of the parent). */
-	private final Memoizer<HttpPartParser> partParser = memoizer(() ->
-		partParserCreator() != null ? partParserCreator().create() : restContext().getPartParser()
-	);
+	private final Memoizer<HttpPartParser> partParser = memoizer(() -> {
+		var aa = appliedAnnotations();
+		var parent = restContext().builder.partParser();
+		if (!parent.canApply(aa))
+			return restContext().getPartParser();
+		Value<HttpPartParser.Creator> v = Value.of(parent.copy());
+		v.get().apply(aa);
+		var bs = BasicBeanStore.of(beanStore())
+			.addBean(Method.class, method())
+			.addBean(HttpPartParser.Creator.class, v.get());
+		new BeanCreateMethodFinder<>(HttpPartParser.class, resource(), bs)
+			.find(this::matchesInjectScope)
+			.run(x -> v.get().impl(x));
+		return v.get().create();
+	});
 
 	/** The HTTP part serializer for this operation (op-level creator applied on top of the parent). */
-	private final Memoizer<HttpPartSerializer> partSerializer = memoizer(() ->
-		partSerializerCreator() != null ? partSerializerCreator().create() : restContext().getPartSerializer()
-	);
+	private final Memoizer<HttpPartSerializer> partSerializer = memoizer(() -> {
+		var aa = appliedAnnotations();
+		var parent = restContext().builder.partSerializer();
+		if (!parent.canApply(aa))
+			return restContext().getPartSerializer();
+		Value<HttpPartSerializer.Creator> v = Value.of(parent.copy());
+		v.get().apply(aa);
+		var bs = BasicBeanStore.of(beanStore())
+			.addBean(Method.class, method())
+			.addBean(HttpPartSerializer.Creator.class, v.get());
+		new BeanCreateMethodFinder<>(HttpPartSerializer.class, resource(), bs)
+			.find(this::matchesInjectScope)
+			.run(x -> v.get().impl(x));
+		return v.get().create();
+	});
 
 	/**
 	 * The serializer group for this operation.
@@ -558,15 +448,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code @RestInject SerializerSet} bean (matching this operation's method scope) REPLACES the result.
 	 */
 	private final Memoizer<SerializerSet> serializers = memoizer(() -> {
-		var bs = restContext().getBeanStore();
-		var b = (serializersBuilder() != null ? serializersBuilder() : restContext().builder.serializers()).copy();
+		var aa = appliedAnnotations();
+		var bs = beanStore();
+		var sb = restContext().builder.serializers();
+		var b = sb.copy();
+		if (sb.canApply(aa))
+			b.apply(aa);
 		getRestOpAnnotationsForProperty(PROPERTY_serializers).forEach(ai -> {
-			var c = ai.getClassArray("serializers", org.apache.juneau.serializer.Serializer.class).orElse(null);
+			var c = ai.getClassArray("serializers", Serializer.class).orElse(null);
 			if (nn(c) && c.length > 0)
 				b.set(c);
 		});
 		var result = Value.of(b.build());
-		new BeanCreateMethodFinder<>(SerializerSet.class, restContext().getResource(), bs)
+		new BeanCreateMethodFinder<>(SerializerSet.class, resource(), bs)
 			.find(this::matchesInjectScope)
 			.run(result::set);
 		return result.get();
@@ -589,7 +483,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestAttributes).orElse(EMPTY_STRING_ARRAY))
 				v.get().add(BasicNamedAttribute.ofPair(s));
 		});
-		new BeanCreateMethodFinder<>(NamedAttributeMap.class, restContext().getResource(), restContext().getBeanStore())
+		new BeanCreateMethodFinder<>(NamedAttributeMap.class, resource(), beanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestAttributes))
 			.run(v::set);
 		return v.get();
@@ -621,7 +515,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				}
 			}
 		});
-		new BeanCreateMethodFinder<>(PartList.class, restContext().getResource(), restContext().getBeanStore())
+		new BeanCreateMethodFinder<>(PartList.class, resource(), beanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestFormData))
 			.run(v::set);
 		return v.get();
@@ -662,7 +556,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				}
 			}
 		});
-		new BeanCreateMethodFinder<>(HeaderList.class, restContext().getResource(), restContext().getBeanStore())
+		new BeanCreateMethodFinder<>(HeaderList.class, resource(), beanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestHeaders))
 			.run(v::set);
 		return v.get();
@@ -694,7 +588,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				}
 			}
 		});
-		new BeanCreateMethodFinder<>(PartList.class, restContext().getResource(), restContext().getBeanStore())
+		new BeanCreateMethodFinder<>(PartList.class, resource(), beanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestQueryData))
 			.run(v::set);
 		return v.get();
@@ -717,17 +611,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			for (var s : ai.getStringArray(PROPERTY_defaultResponseHeaders).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(stringHeader(s));
 		});
-		new BeanCreateMethodFinder<>(HeaderList.class, restContext().getResource(), restContext().getBeanStore())
+		new BeanCreateMethodFinder<>(HeaderList.class, resource(), beanStore())
 			.find(x -> matchesInjectScope(x, PROPERTY_defaultResponseHeaders))
 			.run(v::set);
 		return v.get();
 	});
 
-	/**
-	 * Folds method-parameter {@link Query @Query} annotations (with a {@link Schema#default_()} /
-	 * {@link Schema#df()} default) into the supplied {@link PartList} using {@link PartList#setDefault}
-	 * (first wins). Used by the {@link #defaultRequestQueryData} memoizer.
-	 */
 	/**
 	 * Iterates over each parameter annotation on the operation method, computing the parameter's
 	 * {@link Schema#default_()}/{@link Schema#df()} string (joined-non-blank-first) and dispatching
@@ -759,7 +648,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * name) REPLACES the entire annotation-derived list.
 	 */
 	private final Memoizer<RestConverter[]> converters = memoizer(() -> {
-		var bs = restContext().getBeanStore();
+		var bs = beanStore();
 		var v = Value.of(RestConverterList.create(bs));
 		if (isInherited(PROPERTY_converters))
 			restContext().getRestAnnotationsForProperty(PROPERTY_converters)
@@ -770,7 +659,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					v.get().append(classArray(c));
 			}));
 		bs.getBean(RestConverterList.class).ifPresent(x -> v.get().impl(x));
-		new BeanCreateMethodFinder<>(RestConverterList.class, restContext().getResource(), bs)
+		new BeanCreateMethodFinder<>(RestConverterList.class, resource(), bs)
 			.find(this::matchesInjectScope)
 			.run(x -> v.get().impl(x));
 		return v.get().build().asArray();
@@ -840,12 +729,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * with matching {@code methodScope}) REPLACES the entire annotation-derived list (Decision #1).
 	 */
 	private final Memoizer<RestGuard[]> guards = memoizer(() -> {
-		var bs = restContext().getBeanStore();
+		var bs = beanStore();
 		var v = Value.of(RestGuardList.create(bs));
 		var rolesDeclaredSet = new java.util.LinkedHashSet<String>();
 		var roleGuardStrs = new ArrayList<String>();
 
-		java.util.function.Consumer<AnnotationInfo<?>> walk = ai -> {
+		Consumer<AnnotationInfo<?>> walk = ai -> {
 			ai.getClassArray("guards", RestGuard.class).ifPresent(classes -> {
 				for (var c : classes)
 					v.get().append(classArray(c));
@@ -873,7 +762,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		bs.getBean(RestGuardList.class).ifPresent(x -> v.get().impl(x));
-		new BeanCreateMethodFinder<>(RestGuardList.class, restContext().getResource(), bs)
+		new BeanCreateMethodFinder<>(RestGuardList.class, resource(), bs)
 			.find(this::matchesInjectScope)
 			.run(x -> v.get().impl(x));
 		return v.get().build().asArray();
@@ -893,7 +782,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * method with matching {@code methodScope}) REPLACES the entire annotation-derived list.
 	 */
 	private final Memoizer<RestMatcherList> matchersList = memoizer(() -> {
-		var bs = restContext().getBeanStore();
+		var bs = beanStore();
 		var v = Value.of(RestMatcherList.create(bs));
 		var clientVersion = new String[]{null};
 
@@ -909,7 +798,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			v.get().append(new ClientVersionMatcher(restContext().getClientVersionHeader(), MethodInfo.of(method())));
 
 		bs.getBean(RestMatcherList.class).ifPresent(x -> v.get().impl(x));
-		new BeanCreateMethodFinder<>(RestMatcherList.class, restContext().getResource(), bs)
+		new BeanCreateMethodFinder<>(RestMatcherList.class, resource(), bs)
 			.find(this::matchesInjectScope)
 			.run(x -> v.get().impl(x));
 		return v.get().build();
@@ -989,7 +878,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			v.get().add(UrlPathMatcher.of(p));
 		}
 
-		new BeanCreateMethodFinder<>(UrlPathMatcherList.class, restContext().getResource(), restContext().getBeanStore())
+		new BeanCreateMethodFinder<>(UrlPathMatcherList.class, resource(), beanStore())
 			.addBean(UrlPathMatcherList.class, v.get())
 			.find(this::matchesInjectScope)
 			.run(v::set);
@@ -1082,7 +971,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The resolved string, or empty if no annotation defines it.
 	 */
 	private Optional<String> findOpString(String attr) {
-		var vr = restContext().getVarResolver();
+		var vr = varResolver();
 		for (var ai : getRestOpAnnotations()) {
 			var s = ai.getString(attr).orElse("");
 			if (!s.isEmpty()) {
@@ -1096,7 +985,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	private List<MediaType> collectAnnotationMediaTypes(String attr) {
 		var result = new ArrayList<MediaType>();
-		var vr = restContext().getVarResolver();
+		var vr = varResolver();
 		// Class-level @Rest(consumes|produces) first (when inheritance is allowed), then op-level overrides append.
 		if (isInherited(attr)) {
 			for (var ai : restContext().getRestAnnotations())
@@ -1185,16 +1074,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// Capture the annotation work-list before the builder becomes eligible for GC.
 			appliedAnnotations = builder.getApplied();
 
-			// Capture sub-builder fields (raw field access — null means no op annotations touched that slot).
-			// The memoizer findXxx() methods check for null and fall through to the parent context value.
-			beanContextBuilder = builder.beanContext;
-			encodersBuilder = builder.encoders;
-			jsonSchemaGeneratorBuilder = builder.jsonSchemaGenerator;
-			parsersBuilder = builder.parsers;
-			partParserCreator = builder.partParser;
-			partSerializerCreator = builder.partSerializer;
-			serializersBuilder = builder.serializers;
-
 			context = builder.restContext;
 			method = builder.restMethod;
 
@@ -1226,13 +1105,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			bs.add(UrlPathMatcher[].class, pm);
 			bs.addBean(UrlPathMatcher.class, pm.length > 0 ? pm[0] : null);
 
-		int hierarchyDepthTemp = 0;
-		var sc = method.getDeclaringClass().getSuperclass();
-		while (nn(sc)) {
-			hierarchyDepthTemp++;
-			sc = sc.getSuperclass();
-		}
-		hierarchyDepth = hierarchyDepthTemp;
+			int hierarchyDepthTemp = 0;
+			var sc = method.getDeclaringClass().getSuperclass();
+			while (nn(sc)) {
+				hierarchyDepthTemp++;
+				sc = sc.getSuperclass();
+			}
+			hierarchyDepth = hierarchyDepthTemp;
 
 			responseMeta = ResponseBeanMeta.create(mi, appliedAnnotations);
 
