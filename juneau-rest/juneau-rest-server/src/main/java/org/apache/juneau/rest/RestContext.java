@@ -3041,6 +3041,14 @@ public class RestContext extends Context {
 	 */
 	public BeanContext getBeanContext() { return beanContextMemo.get(); }
 
+	BeanContext.Builder         getBeanContextBuilder()          { return builder.beanContext(); }
+	EncoderSet.Builder          getEncodersBuilder()             { return builder.encoders(); }
+	JsonSchemaGenerator.Builder getJsonSchemaGeneratorBuilder()  { return builder.jsonSchemaGenerator(); }
+	ParserSet.Builder           getParsersBuilder()              { return builder.parsers(); }
+	HttpPartParser.Creator      getPartParserCreator()           { return builder.partParser(); }
+	HttpPartSerializer.Creator  getPartSerializerCreator()       { return builder.partSerializer(); }
+	SerializerSet.Builder       getSerializersBuilder()          { return builder.serializers(); }
+
 	/**
 	 * Returns the bean store associated with this context.
 	 *

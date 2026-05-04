@@ -316,7 +316,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/** The {@link BeanContext} for this operation (op-level annotations applied on top of the parent context). */
 	private final Memoizer<BeanContext> beanContext = memoizer(() -> {
 		var aa = appliedAnnotations();
-		var parent = restContext().builder.beanContext();
+		var parent = restContext().getBeanContextBuilder();
 		if (!parent.canApply(aa))
 			return restContext().getBeanContext();
 		Value<BeanContext.Builder> v = Value.of(parent.copy());
@@ -346,7 +346,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private final Memoizer<EncoderSet> encoders = memoizer(() -> {
 		var bs = beanStore();
-		var b = restContext().builder.encoders().copy();
+		var b = restContext().getEncodersBuilder().copy();
 		getRestOpAnnotationsForProperty(PROPERTY_encoders).forEach(ai -> {
 			var c = ai.getClassArray("encoders", Encoder.class).orElse(null);
 			if (nn(c) && c.length > 0)
@@ -362,7 +362,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/** The JSON-Schema generator for this operation (op-level annotations applied on top of the parent). */
 	private final Memoizer<JsonSchemaGenerator> jsonSchemaGenerator = memoizer(() -> {
 		var aa = appliedAnnotations();
-		var parent = restContext().builder.jsonSchemaGenerator();
+		var parent = restContext().getJsonSchemaGeneratorBuilder();
 		if (!parent.canApply(aa))
 			return restContext().getJsonSchemaGenerator();
 		Value<JsonSchemaGenerator.Builder> v = Value.of(parent.copy());
@@ -388,7 +388,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final Memoizer<ParserSet> parsers = memoizer(() -> {
 		var aa = appliedAnnotations();
 		var bs = beanStore();
-		var pb = restContext().builder.parsers();
+		var pb = restContext().getParsersBuilder();
 		var b = pb.copy();
 		if (pb.canApply(aa))
 			b.apply(aa);
@@ -407,7 +407,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/** The HTTP part parser for this operation (op-level creator applied on top of the parent). */
 	private final Memoizer<HttpPartParser> partParser = memoizer(() -> {
 		var aa = appliedAnnotations();
-		var parent = restContext().builder.partParser();
+		var parent = restContext().getPartParserCreator();
 		if (!parent.canApply(aa))
 			return restContext().getPartParser();
 		Value<HttpPartParser.Creator> v = Value.of(parent.copy());
@@ -424,7 +424,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/** The HTTP part serializer for this operation (op-level creator applied on top of the parent). */
 	private final Memoizer<HttpPartSerializer> partSerializer = memoizer(() -> {
 		var aa = appliedAnnotations();
-		var parent = restContext().builder.partSerializer();
+		var parent = restContext().getPartSerializerCreator();
 		if (!parent.canApply(aa))
 			return restContext().getPartSerializer();
 		Value<HttpPartSerializer.Creator> v = Value.of(parent.copy());
@@ -450,7 +450,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final Memoizer<SerializerSet> serializers = memoizer(() -> {
 		var aa = appliedAnnotations();
 		var bs = beanStore();
-		var sb = restContext().builder.serializers();
+		var sb = restContext().getSerializersBuilder();
 		var b = sb.copy();
 		if (sb.canApply(aa))
 			b.apply(aa);
