@@ -677,10 +677,6 @@ public class RestAnnotation {
 
 	}
 
-	// RestContextApply (AnnotationApplier<Rest,RestContext.Builder>) was moved into RestContext as a nested
-	// class in TODO-16 Phase D-4a (2026-04-19) so that RestContext.Builder could be demoted to package-private.
-	// See org.apache.juneau.rest.RestContext.RestContextApply.
-
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})

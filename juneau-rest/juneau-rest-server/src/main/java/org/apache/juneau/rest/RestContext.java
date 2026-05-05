@@ -307,13 +307,11 @@ public class RestContext extends Context {
 		private HttpPartParser.Creator partParser;
 		private HttpPartSerializer.Creator partSerializer;
 		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
-		private List<Object> children = list();
 		private final RestContext parentContext;
 		private RestOpArgList.Builder restOpArgs;
 		private ResponseProcessorList.Builder responseProcessors;
 		private ResourceSupplier resource;
 		private final ServletConfig inner;
-		private String path = null;
 		private VarResolver bootstrapVarResolver;
 
 		/**
@@ -335,10 +333,83 @@ public class RestContext extends Context {
 			if (nn(parentContext))
 				bootstrapBeanStore = parentContext.bootstrapBeanStore;
 
-			init(rci.resource());
+			this.resource = new ResourceSupplier(resourceClass, assertArgNotNull("resource", rci.resource()));
+			var r = this.resource;
+			var rc = resourceClass;
 
-			if (! rci.path().isEmpty())
-				path(rci.path());
+			// @formatter:off
+			// Note: pre-9.5 this also called .addBean(Builder.class, this) so user code could request the
+			// in-flight RestContext.Builder via @RestInit method parameters or @RestInject method-finder
+			// resolution. That injection protocol was deleted in the April 2026 refactor (zero non-test callers
+			// across the entire codebase) — the Builder is now a private staging detail of RestContext
+			// construction, not a user-visible bean.
+			beanStore = createBeanStore(rci.resource())
+				.build()
+				.addBean(ResourceSupplier.class, this.resource)
+				.addBean(ServletConfig.class, nn(inner) ? inner : this)
+				.addBean(ServletContext.class, (nn(inner) ? inner : this).getServletContext());
+			// @formatter:on
+
+			if (bootstrapBeanStore == null) {
+				bootstrapBeanStore = beanStore;
+				beanStore = BasicBeanStore.of(bootstrapBeanStore);
+			}
+			var bs = beanStore;
+
+			beanStore.add(BasicBeanStore.class, bs);
+			beanStore.add(VarResolver.class, bootstrapVarResolver());
+			config = beanStore.add(Config.class, createConfig(bs, r, rc));
+
+			var rci2 = ClassInfo.of(resourceClass);
+
+			// Get @RestInject fields initialized with values.
+			// @formatter:off
+			rci2.getAllFields().stream()
+				.filter(x -> x.hasAnnotation(RestInject.class))
+				.forEach(x -> opt(x.get(rci.resource().get())).ifPresent(
+					y -> beanStore.add(
+						x.getFieldType().inner(),
+						y,
+						RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
+					)
+				));
+			// @formatter:on
+
+			rci2.getAllMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
+				var rt = x.getReturnType().<Object>inner();
+				var name = RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+				if (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
+					// @formatter:off
+					new BeanCreateMethodFinder<>(rt, rci.resource().get(), beanStore)
+						.find(Builder::isRestInjectMethod)
+						.run(y -> beanStore.add(rt, y, name));
+					// @formatter:on
+				}
+			});
+
+			var vrs = bootstrapVarResolver().createSession();
+			var work = AnnotationWorkList.of(vrs, rstream(AP.find(rci2)).filter(CONTEXT_APPLY_FILTER));
+
+			beanContext().apply(work);
+			partSerializer().apply(work);
+			partParser().apply(work);
+			jsonSchemaGenerator().apply(work);
+
+			runInitHooks(bs, resource());
+
+			// Set @RestInject fields not initialized with values.
+			// @formatter:off
+			rci2.getAllFields().stream()
+				.filter(x -> x.hasAnnotation(RestInject.class))
+				.forEach(x -> x.setIfNull(
+					rci.resource().get(),
+					beanStore.getBean(
+						x.getFieldType().inner(),
+						RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
+					).orElse(null)
+				));
+			// @formatter:on
+
 			rci.beanStoreConfigurer().accept(beanStore());
 		}
 
@@ -393,93 +464,6 @@ public class RestContext extends Context {
 		public BasicBeanStore beanStore() {
 			return beanStore;
 		}
-
-		/**
-		 * Child REST resources.
-		 *
-		 * <p>
-		 * Defines children of this resource.
-		 *
-		 * <p>
-		 * A REST child resource is simply another servlet or object that is initialized as part of the ascendant resource and has a
-		 * servlet path directly under the ascendant resource object path.
-		 * <br>The main advantage to defining servlets as REST children is that you do not need to define them in the
-		 * <c>web.xml</c> file of the web application.
-		 * <br>This can cut down on the number of entries that show up in the <c>web.xml</c> file if you are defining
-		 * large numbers of servlets.
-		 *
-		 * <p>
-		 * Child resources must specify a value for {@link Rest#path() @Rest(path)} that identifies the subpath of the child resource
-		 * relative to the ascendant path.
-		 *
-		 * <p>
-		 * Child resources can be nested arbitrarily deep using this technique (i.e. children can also have children).
-		 *
-		 * <dl>
-		 * 	<dt>Servlet initialization:</dt>
-		 * 	<dd>
-		 * 		<p>
-		 * 			A child resource will be initialized immediately after the ascendant servlet/resource is initialized.
-		 * 			<br>The child resource receives the same servlet config as the ascendant servlet/resource.
-		 * 			<br>This allows configuration information such as servlet initialization parameters to filter to child
-		 * 			resources.
-		 * 		</p>
-		 * 	</dd>
-		 * 	<dt>Runtime behavior:</dt>
-		 * 	<dd>
-		 * 		<p>
-		 * 			As a rule, methods defined on the <c>HttpServletRequest</c> object will behave as if the child
-		 * 			servlet were deployed as a top-level resource under the child's servlet path.
-		 * 			<br>For example, the <c>getServletPath()</c> and <c>getPathInfo()</c> methods on the
-		 * 			<c>HttpServletRequest</c> object will behave as if the child resource were deployed using the
-		 * 			child's servlet path.
-		 * 			<br>Therefore, the runtime behavior should be equivalent to deploying the child servlet in the
-		 * 			<c>web.xml</c> file of the web application.
-		 * 		</p>
-		 * 	</dd>
-		 * </dl>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Our child resource.</jc>
-		 * 	<ja>@Rest</ja>(path=<js>"/child"</js>)
-		 * 	<jk>public class</jk> MyChildResource {...}
-		 *
-		 * 	<jc>// Registered via annotation.</jc>
-		 * 	<ja>@Rest</ja>(children={MyChildResource.<jk>class</jk>})
-		 * 	<jk>public class</jk> MyResource { ... }
-		 * </p>
-		 *
-		 * <p>
-		 * For programmatic registration of pre-instantiated child resources, supply them via
-		 * {@link Rest#children() @Rest(children)} when constructing the context directly.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		When defined as classes, instances are resolved using the registered bean store
-		 * 		({@link BasicBeanStore} by default), which instantiates them via their public no-arg
-		 * 		constructor or via bean-store-resolved arguments.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#children()}
-		 * </ul>
-		 *
-		 * @param values The child resources to add.
-		 * 	<br>Cannot contain <jk>null</jk> values.
-		 * 	<br>Objects can be any of the specified types:
-		 * 	<ul>
-		 * 		<li>A class that has a constructor described above.
-		 * 		<li>An instantiated resource object (such as a servlet object instantiated by a servlet container).
-		 * 	</ul>
-		 * @return This object.
-		 */
-		public Builder children(Object...values) {
-			assertArgNoNulls("values", values);
-			addAll(children, values);
-			return this;
-		}
-
 
 		/**
 		 * Returns the external configuration file for this resource.
@@ -538,89 +522,6 @@ public class RestContext extends Context {
 
 		@Override /* Overridden from ServletConfig */
 		public String getServletName() { return inner == null ? null : inner.getServletName(); }
-
-		private Builder init(Supplier<?> resource) throws ServletException {
-
-			this.resource = new ResourceSupplier(resourceClass, assertArgNotNull("resource", resource));
-			var r = this.resource;
-			var rc = resourceClass;
-
-			// @formatter:off
-			// Note: pre-9.5 this also called .addBean(Builder.class, this) so user code could request the
-			// in-flight RestContext.Builder via @RestInit method parameters or @RestInject method-finder
-			// resolution. That injection protocol was deleted in the April 2026 refactor (zero non-test callers
-			// across the entire codebase) — the Builder is now a private staging detail of RestContext
-			// construction, not a user-visible bean.
-			beanStore = createBeanStore(resource)
-				.build()
-				.addBean(ResourceSupplier.class, this.resource)
-				.addBean(ServletConfig.class, nn(inner) ? inner : this)
-				.addBean(ServletContext.class, (nn(inner) ? inner : this).getServletContext());
-			// @formatter:on
-
-			if (bootstrapBeanStore == null) {
-				bootstrapBeanStore = beanStore;
-				beanStore = BasicBeanStore.of(bootstrapBeanStore);
-			}
-			var bs = beanStore;
-
-			beanStore.add(BasicBeanStore.class, bs);
-			beanStore.add(VarResolver.class, bootstrapVarResolver());
-			config = beanStore.add(Config.class, createConfig(bs, r, rc));
-
-			var rci = ClassInfo.of(resourceClass);
-
-			// Get @RestInject fields initialized with values.
-			// @formatter:off
-			rci.getAllFields().stream()
-				.filter(x -> x.hasAnnotation(RestInject.class))
-				.forEach(x -> opt(x.get(resource.get())).ifPresent(
-					y -> beanStore.add(
-						x.getFieldType().inner(),
-						y,
-						RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
-					)
-				));
-			// @formatter:on
-
-			rci.getAllMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
-				var rt = x.getReturnType().<Object>inner();
-				var name = RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-				if (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
-					// @formatter:off
-					new BeanCreateMethodFinder<>(rt, resource.get(), beanStore)
-						.find(Builder::isRestInjectMethod)
-						.run(y -> beanStore.add(rt, y, name));
-					// @formatter:on
-				}
-			});
-
-			var vrs = bootstrapVarResolver().createSession();
-			var work = AnnotationWorkList.of(vrs, rstream(AP.find(rci)).filter(CONTEXT_APPLY_FILTER));
-
-			apply(work);
-			beanContext().apply(work);
-			partSerializer().apply(work);
-			partParser().apply(work);
-			jsonSchemaGenerator().apply(work);
-
-			runInitHooks(bs, resource());
-
-			// Set @RestInject fields not initialized with values.
-			// @formatter:off
-			rci.getAllFields().stream()
-				.filter(x -> x.hasAnnotation(RestInject.class))
-				.forEach(x -> x.setIfNull(
-					resource.get(),
-					beanStore.getBean(
-						x.getFieldType().inner(),
-						RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
-					).orElse(null)
-				));
-			// @formatter:on
-
-			return this;
-		}
 
 		/**
 		 * Returns the JSON schema generator sub-builder.
@@ -710,60 +611,6 @@ public class RestContext extends Context {
 			if (partSerializer == null)
 				partSerializer = createPartSerializer(beanStore(), resource());
 			return partSerializer;
-		}
-
-		/**
-		 * Resource path.
-		 *
-		 * <p>
-		 * Identifies the URL subpath relative to the parent resource.
-		 *
-		 * <p>
-		 * This setting is critical for the routing of HTTP requests from ascendant to child resources.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Defined via annotation.</jc>
-		 * 	<ja>@Rest</ja>(path=<js>"/myResource"</js>)
-		 * 	<jk>public class</jk> MyResource { ... }
-		 * </p>
-		 *
-		 * <p>
-		 * For programmatic construction, supply the path via {@link RestContext.Args} when building a {@link RestContext}
-		 * directly.
-		 *
-		 * <p>
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		This annotation is ignored on top-level servlets (i.e. servlets defined in <c>web.xml</c> files).
-		 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
-		 * 	<li class='note'>
-		 * 		Typically, this setting is only applicable to resources defined as children through the
-		 * 		{@link Rest#children() @Rest(children)} annotation.
-		 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
-		 * 	<li class='note'>
-		 * 		Slashes are trimmed from the path ends.
-		 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
-		 * 	<li class='note'>
-		 * 		This path is available through the following method:
-		 * 		<ul>
-		 * 			<li class='jm'>{@link RestContext#getPath() RestContext.getPath()}
-		 * 		</ul>
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#path}
-		 * </ul>
-		 *
-		 * @param value The new value for this setting.
-		 * 	<br>Can be <jk>null</jk> or empty (path will not be set, defaults to empty string).
-		 * @return This object.
-		 */
-		public Builder path(String value) {
-			value = trimLeadingSlashes(value);
-			if (ne(value))
-				path = value;
-			return this;
 		}
 
 		/**
@@ -1352,65 +1199,6 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Instantiates the REST children list.
-		 *
-		 * @param restContext The rest context.
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new REST children list.
-		 * @throws Exception If a problem occurred instantiating one of the child rest contexts.
-		 */
-		@SuppressWarnings({
-			"java:S3776", // Cognitive complexity acceptable for REST children creation
-			"java:S112"   // throws Exception intentional - callback/lifecycle method
-		})
-		protected RestChildren.Builder createRestChildren(BasicBeanStore beanStore, Supplier<?> resource, RestContext restContext) throws Exception {
-
-			// Default value.
-			Value<RestChildren.Builder> v = Value.of(RestChildren.create(beanStore).type(RestChildren.class));
-
-			// Initialize our child resources.
-			for (var o : children) {
-				Supplier<?> so;
-				Class<?> rc2;
-
-				if (o instanceof Class<?> oc) {
-					// Don't allow specifying yourself as a child.  Causes an infinite loop.
-					if (oc == resourceClass)
-						continue;
-					rc2 = oc;
-					if (beanStore.getBean(oc).isPresent()) {
-						so = () -> beanStore.getBean(oc).get();  // If we resolved via injection, always get it this way.
-					} else {
-						// Decision #23 Phase C-2 (2026-04-19): the legacy ctor-takes-RestContext.Builder injection
-						// protocol is dropped in 9.5.  Child resources now self-configure via @Rest annotations +
-						// @RestInject members instead of imperative builder calls in their constructors.
-						Object o2 = BeanCreator.of(oc, beanStore).run();
-						so = () -> o2;
-					}
-				} else {
-					rc2 = o.getClass();
-					so = () -> o;
-				}
-
-			var cc = new RestContext(new Args(rc2, restContext, inner, so, "", null));
-
-				var mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
-				if (nn(mi))
-					mi.accessible().invoke(so.get(), cc);
-
-				v.get().add(cc);
-			}
-
-			// Replace with bean from:  @RestInject public [static] RestChildren xxx(<args>)
-			new BeanCreateMethodFinder<>(RestChildren.class, resource.get(), beanStore).addBean(RestChildren.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
-
-			return v.get();
-		}
-
-		/**
 		 * Instantiates the REST operation args sub-builder.
 		 *
 		 * <p>
@@ -1616,35 +1404,6 @@ public class RestContext extends Context {
 			new BeanCreateMethodFinder<>(VarResolver.class, resource.get(), beanStore).find(x -> isRestInjectMethod(x, PROP_bootstrapVarResolver)).run(v::set);
 
 			return v.get();
-		}
-	}
-
-	/**
-	 * Applies {@link Rest} annotations to a {@link Builder}.
-	 *
-	 * <p>
-	 * Wired into the annotation-processing machinery via {@link org.apache.juneau.annotation.ContextApply @ContextApply}
-	 * on {@link Rest}. Moved into {@code RestContext} during the April 2026 refactor (2026-04-19) so that
-	 * {@link Builder} can be demoted to package-private without breaking the cross-package reference
-	 * that used to live in {@code RestAnnotation.RestContextApply}.
-	 */
-	public static class RestContextApply extends org.apache.juneau.AnnotationApplier<Rest,Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public RestContextApply(VarResolverSession vr) {
-			super(Rest.class, Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Rest> ai, Builder b) {
-			Rest a = ai.inner();
-
-		b.children((java.lang.Object[])a.children());
-			string(a.path()).ifPresent(b::path);
 		}
 	}
 
@@ -2250,13 +2009,50 @@ public class RestContext extends Context {
 	 * {@link Rest#children() @Rest(children)}.
 	 *
 	 * <p>
-	 * Eagerly initialized in the constructor (via an explicit {@code .get()} call inside the try-catch block)
-	 * so that any exception thrown by {@link Builder#createRestChildren} surfaces at construction time
-	 * rather than lazily. Subsequent calls return the cached instance.
+	 * Reads child classes directly from the {@code @Rest(children)} annotation chain (parent-to-child),
+	 * deduplicates, instantiates each child via the bean store, and builds a {@link RestContext} for each.
+	 * Eagerly initialized in the constructor (via an explicit {@code .get()} call inside the try-catch
+	 * block) so that any construction failure surfaces at initialization time rather than lazily.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // cognitive complexity acceptable for child-context construction
+	})
 	private final Memoizer<RestChildren> restChildren = memoizer(() -> {
 		try {
-			return builder().createRestChildren(beanStore(), resource(), this).build();
+			var bs = beanStore();
+			var servletConfig = bs.getBean(ServletConfig.class).orElse(null);
+			var v = Value.of(RestChildren.create(bs).type(RestChildren.class));
+
+			// Collect child classes from @Rest(children) on the annotation chain (parent-to-child order).
+			// Deduplicate so the same child class registered on both a parent and child annotation
+			// doesn't create two contexts.
+			var seen = new LinkedHashSet<Class<?>>();
+			getRestAnnotations().forEach(ai -> seen.addAll(Arrays.asList(ai.inner().children())));
+
+			for (var rc2 : seen) {
+				if (rc2 == resourceClass())
+					continue;  // Guard against self-reference infinite loop.
+				Supplier<?> so;
+				if (bs.getBean(rc2).isPresent()) {
+					so = () -> bs.getBean(rc2).get();
+				} else {
+					Object o2 = BeanCreator.of(rc2, bs).run();
+					so = () -> o2;
+				}
+				var cc = new RestContext(new Args(rc2, this, servletConfig, so, "", null));
+				var mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
+				if (nn(mi))
+					mi.accessible().invoke(so.get(), cc);
+				v.get().add(cc);
+			}
+
+			// @RestInject override — allows replacing the entire RestChildren instance.
+			new BeanCreateMethodFinder<>(RestChildren.class, resource().get(), bs)
+				.addBean(RestChildren.Builder.class, v.get())
+				.find(Builder::isRestInjectMethod)
+				.run(x -> v.get().impl(x));
+
+			return v.get().build();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -2310,7 +2106,14 @@ public class RestContext extends Context {
 				.addBean(AnnotationWorkList.class, builder.getApplied());
 			// @formatter:on
 
-			path = nn(builder.path) ? builder.path : "";
+				// Path is read directly from the @Rest(path) annotation chain (most-derived class wins),
+			// replacing the prior Builder.path staging field eliminated in the May 2026 refactor.
+			path = getRestAnnotations().stream()
+				.map(ai -> ai.inner().path())
+				.filter(StringUtils::isNotEmpty)
+				.findFirst()
+				.map(s -> trimLeadingSlashes(s))
+				.orElse("");
 			fullPath = (parentContext == null ? "" : (parentContext.fullPath + '/')) + path;
 			var p = path;
 			if (! p.endsWith("/*"))

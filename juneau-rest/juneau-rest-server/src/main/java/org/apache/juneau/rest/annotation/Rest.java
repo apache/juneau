@@ -58,7 +58,6 @@ import org.apache.juneau.serializer.*;
 @Target(TYPE)
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({ RestContext.RestContextApply.class })
 @AnnotationGroup(Rest.class)
 public @interface Rest {
 
