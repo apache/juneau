@@ -226,7 +226,6 @@ public class RestContext extends Context {
 
 		// @formatter:off
 		private static final Set<Class<?>> DELAYED_INJECTION = set(
-			BeanContext.Builder.class,
 			BasicBeanStore.Builder.class,
 			BasicBeanStore.class,
 			CallLogger.class,
@@ -237,10 +236,7 @@ public class RestContext extends Context {
 			FileFinder.Builder.class,
 			FileFinder.class,
 			HttpPartParser.class,
-			HttpPartParser.Creator.class,
 			HttpPartSerializer.class,
-			HttpPartSerializer.Creator.class,
-			JsonSchemaGenerator.Builder.class,
 			JsonSchemaGenerator.class,
 			Logger.class,
 			Messages.class,
@@ -299,14 +295,10 @@ public class RestContext extends Context {
 				.anyMatch(x -> nn(x) && x.methodScope().length == 0 && (n(name) || eq(x.name(), name)));
 		}
 
-		private BeanContext.Builder beanContext;
 		private BasicBeanStore beanStore;
 		private BasicBeanStore bootstrapBeanStore;
 		private final Class<?> resourceClass;
 		private Config config;
-		private HttpPartParser.Creator partParser;
-		private HttpPartSerializer.Creator partSerializer;
-		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
 		private final RestContext parentContext;
 		private RestOpArgList.Builder restOpArgs;
 		private ResponseProcessorList.Builder responseProcessors;
@@ -387,14 +379,6 @@ public class RestContext extends Context {
 				}
 			});
 
-			var vrs = bootstrapVarResolver().createSession();
-			var work = AnnotationWorkList.of(vrs, rstream(AP.find(rci2)).filter(CONTEXT_APPLY_FILTER));
-
-			beanContext().apply(work);
-			partSerializer().apply(work);
-			partParser().apply(work);
-			jsonSchemaGenerator().apply(work);
-
 			runInitHooks(bs, resource());
 
 			// Set @RestInject fields not initialized with values.
@@ -416,26 +400,6 @@ public class RestContext extends Context {
 		@Override /* Context.Builder is abstract - copy() is not meaningful for the transient RestContext bootstrap state. */
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
-		}
-
-		/**
-		 * Returns the bean context sub-builder.
-		 *
-		 * <p>
-		 * The bean context is used to retrieve metadata on Java beans.
-		 *
-		 * <p>
-		 * The default bean context can overridden via any of the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>Injected via bean store.
-		 * </ul>
-		 *
-		 * @return The bean context sub-builder.
-		 */
-		public BeanContext.Builder beanContext() {
-			if (beanContext == null)
-				beanContext = createBeanContext(beanStore(), resource());
-			return beanContext;
 		}
 
 		/**
@@ -522,96 +486,6 @@ public class RestContext extends Context {
 
 		@Override /* Overridden from ServletConfig */
 		public String getServletName() { return inner == null ? null : inner.getServletName(); }
-
-		/**
-		 * Returns the JSON schema generator sub-builder.
-		 *
-		 * <p>
-		 * The JSON schema generator is used for generating JSON schema in the auto-generated Swagger documentation.
-		 *
-		 * <p>
-		 * The default JSON schema generator is a default {@link JsonSchemaGenerator}.
-		 * It can overridden via any of the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestInject @RestInject}-annotated method:
-		 * 		<p class='bjava'>
-		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] JsonSchemaGenerator myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 		</p>
-		 * 		Args can be any injected bean including JsonSchemaGenerator.Builder, the default builder.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
-		 * </ul>
-		 *
-		 * @return The JSON schema generator sub-builder.
-		 */
-		public JsonSchemaGenerator.Builder jsonSchemaGenerator() {
-			if (jsonSchemaGenerator == null)
-				jsonSchemaGenerator = createJsonSchemaGenerator(beanStore(), resource());
-			return jsonSchemaGenerator;
-		}
-
-		/**
-		 * Returns the part parser sub-builder.
-		 *
-		 * <p>
-		 * The part parser is used for parsing HTTP parts such as request headers and query/form/path parameters.
-		 *
-		 * <p>
-		 * The default part parser is an {@link OpenApiParser}.
-		 * It can overridden via any of the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestInject @RestInject}-annotated method:
-		 * 		<p class='bjava'>
-		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] HttpPartParser myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 		</p>
-		 * 		Args can be any injected bean including HttpPartParser.Builder, the default builder.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
-		 * </ul>
-		 *
-		 * @return The part parser sub-builder.
-		 */
-		public HttpPartParser.Creator partParser() {
-			if (partParser == null)
-				partParser = createPartParser(beanStore(), resource());
-			return partParser;
-		}
-
-		/**
-		 * Returns the part serializer sub-builder.
-		 *
-		 * <p>
-		 * The part serializer is used for serializing HTTP parts such as response headers.
-		 *
-		 * <p>
-		 * The default part serializer is an {@link OpenApiSerializer}.
-		 * It can overridden via any of the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestInject @RestInject}-annotated method:
-		 * 		<p class='bjava'>
-		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] HttpPartSerializer myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 		</p>
-		 * 		Args can be any injected bean including HttpPartSerializer.Builder, the default builder.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
-		 * </ul>
-		 *
-		 * @return The part serializer sub-builder.
-		 */
-		public HttpPartSerializer.Creator partSerializer() {
-			if (partSerializer == null)
-				partSerializer = createPartSerializer(beanStore(), resource());
-			return partSerializer;
-		}
 
 		/**
 		 * Returns the REST servlet/bean instance that this context is defined against.
@@ -821,14 +695,6 @@ public class RestContext extends Context {
 			// Default value.
 			Value<BeanContext.Builder> v = Value.of(BeanContext.create());
 
-			// Replace with builder from bean store.
-			// @formatter:off
-			beanStore
-				.getBean(BeanContext.Builder.class)
-				.map(BeanContext.Builder::copy)
-				.ifPresent(v::set);
-			// @formatter:on
-
 			// Replace with bean from bean store.
 			beanStore.getBean(BeanContext.class).ifPresent(x -> v.get().impl(x));
 
@@ -972,14 +838,11 @@ public class RestContext extends Context {
 			// Default value.
 			var v = Value.of(JsonSchemaGenerator.create());
 
-			// Replace with builder from bean store.
-			beanStore.getBean(JsonSchemaGenerator.Builder.class).map(JsonSchemaGenerator.Builder::copy).ifPresent(v::set);
-
 			// Replace with bean from bean store.
 			beanStore.getBean(JsonSchemaGenerator.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] JsonSchemaGenerator xxx(<args>)
-			new BeanCreateMethodFinder<>(JsonSchemaGenerator.class, resource.get(), beanStore).addBean(JsonSchemaGenerator.Builder.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
+			new BeanCreateMethodFinder<>(JsonSchemaGenerator.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -1003,9 +866,6 @@ public class RestContext extends Context {
 			// Default value.
 			Value<HttpPartParser.Creator> v = Value.of(HttpPartParser.creator().type(OpenApiParser.class));
 
-			// Replace with builder from bean store.
-			beanStore.getBean(HttpPartParser.Creator.class).map(HttpPartParser.Creator::copy).ifPresent(v::set);
-
 			// Replace with bean from bean store.
 			beanStore.getBean(HttpPartParser.class).ifPresent(x -> v.get().impl(x));
 
@@ -1017,7 +877,7 @@ public class RestContext extends Context {
 			beanStore.getBeanType(HttpPartParser.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from:  @RestInject public [static] HttpPartParser xxx(<args>)
-			new BeanCreateMethodFinder<>(HttpPartParser.class, resource.get(), beanStore).addBean(HttpPartParser.Creator.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
+			new BeanCreateMethodFinder<>(HttpPartParser.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -1040,9 +900,6 @@ public class RestContext extends Context {
 			// Default value.
 			Value<HttpPartSerializer.Creator> v = Value.of(HttpPartSerializer.creator().type(OpenApiSerializer.class));
 
-			// Replace with builder from bean store.
-			beanStore.getBean(HttpPartSerializer.Creator.class).map(Creator::copy).ifPresent(v::set);
-
 			// Replace with bean from bean store.
 			beanStore.getBean(HttpPartSerializer.class).ifPresent(x -> v.get().impl(x));
 
@@ -1054,7 +911,7 @@ public class RestContext extends Context {
 			beanStore.getBeanType(HttpPartSerializer.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from:  @RestInject public [static] HttpPartSerializer xxx(<args>)
-			new BeanCreateMethodFinder<>(HttpPartSerializer.class, resource.get(), beanStore).addBean(HttpPartSerializer.Creator.class, v.get()).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
+			new BeanCreateMethodFinder<>(HttpPartSerializer.class, resource.get(), beanStore).find(Builder::isRestInjectMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -1438,6 +1295,10 @@ public class RestContext extends Context {
 	protected final ThreadLocal<RestSession> localSession = new ThreadLocal<>();
 	protected final UrlPathMatcher pathMatcher;
 	private final Supplier<?> resource;
+	private BeanContext.Builder beanContextBuilder;
+	private HttpPartParser.Creator partParserCreator;
+	private HttpPartSerializer.Creator partSerializerCreator;
+	private JsonSchemaGenerator.Builder jsonSchemaGeneratorBuilder;
 
 	// Private accessors used by memoizer lambdas to satisfy Java's definite-assignment rules for blank final fields.
 	private BasicBeanStore beanStore() { return beanStore; }
@@ -1465,7 +1326,7 @@ public class RestContext extends Context {
 	 * apply pass during {@code init()} before this memoizer fires — so the builder is in its final
 	 * configured state by the time {@code build()} is called.
 	 */
-	private final Memoizer<BeanContext> beanContext = memoizer(() -> builder().beanContext().build());
+	private final Memoizer<BeanContext> beanContext = memoizer(() -> beanContextBuilder.build());
 
 	/**
 	 * The bootstrap-time {@link VarResolver} — no {@link Messages} or {@link Config} bean available yet.
@@ -1675,7 +1536,7 @@ public class RestContext extends Context {
 	/**
 	 * The {@link JsonSchemaGenerator} for this resource, built from the builder's JSON-schema sub-builder.
 	 */
-	private final Memoizer<JsonSchemaGenerator> jsonSchemaGenerator = memoizer(() -> builder().jsonSchemaGenerator().build());
+	private final Memoizer<JsonSchemaGenerator> jsonSchemaGenerator = memoizer(() -> jsonSchemaGeneratorBuilder.build());
 
 	/**
 	 * The {@link Logger} for this resource.
@@ -1760,7 +1621,7 @@ public class RestContext extends Context {
 	 * annotation in the hierarchy, replacing the factory default.
 	 */
 	private final Memoizer<HttpPartParser> partParser = memoizer(() -> {
-		var creator = builder().partParser();
+		var creator = partParserCreator;
 		getRestAnnotationsForProperty(PROPERTY_partParser)
 			.map(ai -> ai.inner().partParser())
 			.filter(ClassUtils::isNotVoid)
@@ -1778,7 +1639,7 @@ public class RestContext extends Context {
 	 * annotation in the hierarchy, replacing the factory default.
 	 */
 	private final Memoizer<HttpPartSerializer> partSerializer = memoizer(() -> {
-		var creator = builder().partSerializer();
+		var creator = partSerializerCreator;
 		getRestAnnotationsForProperty(PROPERTY_partSerializer)
 			.map(ai -> ai.inner().partSerializer())
 			.filter(ClassUtils::isNotVoid)
@@ -2119,6 +1980,20 @@ public class RestContext extends Context {
 			if (! p.endsWith("/*"))
 				p += "/*";
 			pathMatcher = UrlPathMatcher.of(p);
+
+			// Initialize sub-builders and apply @Rest annotation work (moved here from Builder constructor,
+			// May 2026 refactor — sub-builder fields now live on RestContext rather than Builder).
+			beanContextBuilder = builder.createBeanContext(bs, resource);
+			partParserCreator = builder.createPartParser(bs, resource);
+			partSerializerCreator = builder.createPartSerializer(bs, resource);
+			jsonSchemaGeneratorBuilder = builder.createJsonSchemaGenerator(bs, resource);
+			var rci2 = ClassInfo.of(resourceClass);
+			var vrs = builder.bootstrapVarResolver().createSession();
+			var work = AnnotationWorkList.of(vrs, rstream(AnnotationProvider.INSTANCE.find(rci2)).filter(CONTEXT_APPLY_FILTER));
+			beanContextBuilder.apply(work);
+			partSerializerCreator.apply(work);
+			partParserCreator.apply(work);
+			jsonSchemaGeneratorBuilder.apply(work);
 
 			bs.addBean(BeanContext.class, getBeanContext());
 			bs.add(EncoderSet.class, getEncoders());
@@ -2656,12 +2531,12 @@ public class RestContext extends Context {
 	 */
 	public BeanContext getBeanContext() { return beanContext.get(); }
 
-	BeanContext.Builder         getBeanContextBuilder()          { return builder.beanContext(); }
+	BeanContext.Builder         getBeanContextBuilder()          { return beanContextBuilder; }
 	EncoderSet.Builder          getEncodersBuilder()             { return encodersBuilder.get(); }
-	JsonSchemaGenerator.Builder getJsonSchemaGeneratorBuilder()  { return builder.jsonSchemaGenerator(); }
+	JsonSchemaGenerator.Builder getJsonSchemaGeneratorBuilder()  { return jsonSchemaGeneratorBuilder; }
 	ParserSet.Builder           getParsersBuilder()              { return parsersBuilder.get(); }
-	HttpPartParser.Creator      getPartParserCreator()           { return builder.partParser(); }
-	HttpPartSerializer.Creator  getPartSerializerCreator()       { return builder.partSerializer(); }
+	HttpPartParser.Creator      getPartParserCreator()           { return partParserCreator; }
+	HttpPartSerializer.Creator  getPartSerializerCreator()       { return partSerializerCreator; }
 	SerializerSet.Builder       getSerializersBuilder()          { return serializersBuilder.get(); }
 
 	/**
