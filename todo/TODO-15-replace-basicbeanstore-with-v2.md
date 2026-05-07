@@ -1,15 +1,26 @@
 # Replace `BasicBeanStore` / `BeanCreator` with v2 equivalents
 
-Eliminate the legacy injection stack in `org.apache.juneau.cp` (`BasicBeanStore`, `BeanCreator`, `BeanBuilder`, `BeanCreateMethodFinder`, `ContextBeanCreator`) in favor of the rewritten classes already present in `org.apache.juneau.commons.inject` (`BasicBeanStore2`, `BeanCreator2`, `BeanStore`, `CreatableBeanStore`, etc.). Once the replacement lands, the `2` suffix is dropped and the legacy classes are removed.
+Eliminate the legacy injection stack in `org.apache.juneau.cp` (`BasicBeanStore`, `BeanCreator`, `BeanBuilder`, `BeanCreateMethodFinder`, `ContextBeanCreator`) in favor of the rewritten classes already present in `org.apache.juneau.commons.inject` (`BasicBeanStore2`, `BeanInstantiator`, `BeanStore`, `CreatableBeanStore`, etc.). Once the replacement lands, the `2` suffix is dropped from `BasicBeanStore2` (→ `BasicBeanStore`) and the legacy classes are removed. `BeanInstantiator` already has its final name.
 
 **Target release:** **9.5.0** — semi-major release permitting simple breaking changes. Hard-break migration (no deprecation cycle on the final rename).
 
 **Sequencing:**
 - **Lands before TODO-14.** TODO-14 (SVL → commons) consumes the final, un-suffixed class names produced by this TODO, so this work must complete first.
-- TODO-1 (REST server API → `BeanStore2`) — prerequisite consumer migration, folded into Phase 3 below.
+- ~~TODO-1 (REST server API → `BeanStore2`)~~ — **DONE.** `RestContext` and all rest-server memoizers now use `BasicBeanStore2` / `WritableBeanStore` directly. No `cp.BasicBeanStore` imports remain in `juneau-rest-server` source files. Legacy references in `RestInject.java` / `RestInit.java` are **Javadoc-only**.
 
-**Related 9.5 work that shrinks this migration's footprint:**
-- **TODO-16** — replaces `RestContext.Builder` configuration with memoized/resettable fields on `RestContext` (reference pattern: `RestContext.allowedParserOptions`). Many of the `BeanBuilder<T>` / `BasicBeanStore` consumers currently living under `juneau-rest-server` will disappear as part of that refactor, independent of this TODO. **Consumer inventory (Phase 2 below) must run after TODO-16 Phase 1–2 lands** so we aren't migrating builders that are about to be deleted.
+**Current remaining footprint (as of 2026-05-07):**
+
+| Location | Legacy symbol | Nature |
+|---|---|---|
+| `RestContext.java` | `BeanCreateMethodFinder` | 33 live call sites — the dominant remaining work |
+| `RestOpContext.java` | `BeanCreateMethodFinder` | 16 live call sites |
+| `RestInject.java`, `RestInit.java` | `cp.BasicBeanStore` | Javadoc only — trivial update |
+| `McpPage.java`, `McpTypedHandlers.java` | `cp.BasicBeanStore` | live usage in rest-server-mcp module |
+| `Name.java`, `Named.java` | `cp.BasicBeanStore` | Javadoc / annotation `@see` only |
+| `HttpPartParser.java`, `HttpPartSerializer.java` | `BeanCreateMethodFinder` | 1 reference each — likely Javadoc |
+| `BeanStore_Test.java` | `BeanCreateMethodFinder` | 2 test references |
+
+**The v2 replacement API (`BeanStore.createBeanFromMethod`) is implemented. The critical path is now migrating the 49 `BeanCreateMethodFinder` call sites in `RestContext` and `RestOpContext` to use it.**
 
 ---
 
@@ -23,7 +34,7 @@ Low-risk, independent of the rest of this plan. Can land in an earlier release t
   - `org.apache.juneau.cp.BeanBuilder` *(consumer class `org.apache.juneau.BeanBuilder` — re-evaluate)*
   - `org.apache.juneau.cp.BeanCreateMethodFinder`
   - `org.apache.juneau.cp.ContextBeanCreator`
-- [ ] Do **not** use `forRemoval = true` yet — too many internal consumers still wired to these. Deletion happens in Phase 4.
+- [ ] Do **not** use `forRemoval = true` yet — remaining internal consumers still wired to these. Deletion happens in Phase 4.
 
 ---
 
@@ -49,29 +60,48 @@ Net new v2 surface from this decision: none. The `Builder` class simply goes awa
 - [ ] **`BasicBeanStore.Void.class`** — used as an annotation-default sentinel in `@Rest.beanStore()` and `RestAnnotation`. Either:
   - port a `BasicBeanStore2.Void` sentinel class, or
   - redesign those annotations (e.g., treat `BasicBeanStore2.class` itself as the sentinel and interpret "equal to default" as "unset").
-- [ ] **Executable-resolution helpers** — `getMissingParams(ExecutableInfo, Object)`, `getParams(ExecutableInfo, Object)`, `hasAllParams(ExecutableInfo, Object)`. v2 provides the same capability via `MethodInfo.canResolveAllParameters(store, extras)` and `ClassInfo.inject(bean, store)`. Plan: **migrate callers to the new API** rather than adding compat methods to the store. Verify no external API exposes these three legacy methods.
+- ~~**`BeanCreateMethodFinder` → v2 equivalent**~~ — **DONE.** Replaced by `BeanStore.createBeanFromMethod(Class<T>, Object, Predicate<MethodInfo>, Object...)`. The legacy DSL pattern:
+  ```java
+  new BeanCreateMethodFinder<>(Type.class, resource, beanStore)
+      .addBean(...)
+      .find(RestContext::isRestInjectMethod)
+      .run(result -> ...);
+  ```
+  migrates to:
+  ```java
+  beanStore.createBeanFromMethod(Type.class, resource,
+      RestContext::isRestInjectMethod, extraBean)
+      .ifPresent(result -> ...);
+  ```
+  Also introduced `BeanCreationException` (unchecked) and renamed `BeanCreator2` → `BeanInstantiator` to disambiguate the two APIs.
+- [ ] **Executable-resolution helpers** — `getMissingParams(ExecutableInfo, Object)`, `getParams(ExecutableInfo, Object)`, `hasAllParams(ExecutableInfo, Object)`. Still used in `RestContext` init path. Plan: **migrate callers to the new API** rather than adding compat methods to the store. Verify no external API exposes these three legacy methods.
 
 ### Still to survey
 
 - [ ] **`BasicBeanStore.Entry<T>`** (public/extendable entry record, exposed via protected `createEntry(...)`) — confirm no external subclassers before deleting.
-- [ ] Diff `cp.BeanCreator` vs `commons.inject.BeanCreator2` — note any legacy-only methods / behaviors that need to be ported.
-- [ ] Diff `cp.BeanCreateMethodFinder` and `cp.ContextBeanCreator` against `BeanCreator2` — confirm their functionality is subsumed; list any callers that need rewriting rather than a rename.
+- [ ] Diff `cp.BeanCreator` vs `commons.inject.BeanInstantiator` — note any legacy-only methods / behaviors that need to be ported.
+- [ ] Diff `cp.BeanCreateMethodFinder` and `cp.ContextBeanCreator` against `BeanInstantiator` — confirm their functionality is subsumed; list any callers that need rewriting rather than a rename.
 - [ ] Verify SVL's needs (`VarResolver(.Builder)` / `VarResolverSession`): constructor-based `Var` instantiation, optional session bean lookup, bean-store copy semantics. Cover any gaps here before TODO-14 starts.
 - [ ] Document any residual deltas (missing methods, renamed methods, behavior differences) in this file before proceeding to Phase 2.
 
 ## Phase 2 — Consumer inventory
 
-- [ ] Enumerate direct callers of each legacy class across all modules (`juneau-marshall`, `juneau-rest-*`, `juneau-microservice-*`, `juneau-config`, `juneau-utest`).
-- [ ] Classify each caller as:
-  - **mechanical** — straightforward switch to the `*2` equivalent
-  - **non-trivial** — needs an interface/adapter change (likely callers holding `BasicBeanStore` in public API)
-- [ ] List the public API surfaces that expose `BasicBeanStore` / `BeanCreator` directly (these are the hardest part — every such method is a breaking change when renamed).
+**Much of Phase 2 is already resolved.** The REST server `BasicBeanStore` migration (TODO-1) has landed, leaving only the items in the table above.
+
+Remaining inventory work:
+- [ ] Confirm the `BeanCreateMethodFinder` callers in `RestContext` (33) and `RestOpContext` (16) are all mechanical once the v2 finder API is settled.
+- [ ] Check `McpPage.java` / `McpTypedHandlers.java` in `rest-server-mcp` — likely mechanical.
+- [ ] Enumerate direct callers in `juneau-microservice-*` and `juneau-config` (not yet surveyed).
+- [ ] List any public API surfaces in `juneau-marshall` that still expose `BasicBeanStore` / `BeanCreator` (these are the hard breaking changes). `Name.java` / `Named.java` Javadoc refs are trivial.
 
 ## Phase 3 — Migrate consumers to `*2`
 
-- [ ] Migrate internal consumers first (no public API change, no compat risk).
-- [ ] Migrate each public API surface. Since 9.5 allows simple breaking changes, the old overloads can be **replaced** rather than overloaded — pick whichever path yields the cleaner API per case. Document any breaking signature change in the 9.5 release notes.
-- [ ] Include TODO-1 (REST server) as part of or prior to this phase.
+- ~~Settle and implement the `BeanCreateMethodFinder` → v2 replacement API~~ — **DONE.** `BeanStore.createBeanFromMethod()` is live.
+- [ ] Migrate `RestContext` and `RestOpContext` (49 `BeanCreateMethodFinder` call sites) — now mechanical.
+- [ ] Migrate `McpPage` / `McpTypedHandlers` in `rest-server-mcp`.
+- [ ] Migrate remaining `juneau-microservice-*` / `juneau-config` consumers (if any).
+- [ ] Update Javadoc-only references in `RestInject.java`, `RestInit.java`, `Name.java`, `Named.java`, `HttpPartParser.java`, `HttpPartSerializer.java`.
+- [ ] Migrate each public API surface in `juneau-marshall`. Since 9.5 allows simple breaking changes, replace rather than overload — document each signature change in the 9.5 release notes.
 
 ## Phase 4 — Cutover rename
 
@@ -80,9 +110,9 @@ Once nothing still references the legacy classes:
 - [ ] Delete `org.apache.juneau.cp.BasicBeanStore`, `BeanCreator`, `BeanBuilder`, `BeanCreateMethodFinder`, `ContextBeanCreator`.
 - [ ] Rename the commons classes in place (drop the `2` suffix):
   - `BasicBeanStore2` → `BasicBeanStore`
-  - `BeanCreator2`   → `BeanCreator`
+  - `BeanInstantiator` — **no rename needed** (already has its final name; was `BeanCreator2`)
   - (update any other `*2`-suffixed types and their references)
-- [ ] Repo-wide find/replace of remaining `BasicBeanStore2` / `BeanCreator2` references.
+- [ ] Repo-wide find/replace of remaining `BasicBeanStore2` / `BeanInstantiator` references.
 - [ ] Re-run `./scripts/test.py -f`.
 
 ## Phase 5 — Cleanup
@@ -121,9 +151,9 @@ Answer these before (or early in) Phase 1. They drive the shape of the v2 classe
      - b) Delete it and rewrite each surviving domain builder to hold a plain `BeanStore` reference.
      - c) Replace with a minimal commons equivalent (`org.apache.juneau.commons.inject.BeanBuilder`) with a trimmed surface.
 
-2. **`BeanCreateMethodFinder` replacement.** Used by rest-server / context builders to locate `static Optional<T> createX(...)` factory methods. Does `BeanCreator2`'s existing method discovery cover this, or do we port a dedicated finder?
+2. ~~**`BeanCreateMethodFinder` replacement.**~~ **RESOLVED.** `BeanStore.createBeanFromMethod(Class<T>, Object, Predicate<MethodInfo>, Object...)` is the v2 equivalent. `BeanInstantiator` handles self-instantiation; `createBeanFromMethod` handles external factory-method discovery.
 
-3. **`ContextBeanCreator` replacement.** Thin wrapper used during `Context.Builder` initialization. Is it subsumed by `BeanCreator2`, or does it need to be ported (possibly renamed)?
+3. **`ContextBeanCreator` replacement.** Thin wrapper used during `Context.Builder` initialization. Is it subsumed by `BeanInstantiator`, or does it need to be ported (possibly renamed)?
 
 4. **`BasicBeanStore.Void` sentinel.** Pick one of the two paths listed in Phase 1 (port `Void` vs. redesign `@Rest.beanStore()` default). Affects `@Rest` annotation processing code in rest-server.
 

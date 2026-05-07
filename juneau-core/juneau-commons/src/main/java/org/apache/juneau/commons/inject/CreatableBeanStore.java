@@ -24,10 +24,10 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 /**
- * A bean store that provides convenient access to {@link BeanCreator2} instances for creating beans.
+ * A bean store that provides convenient access to {@link BeanInstantiator} instances for creating beans.
  *
  * <p>
- * This class extends {@link BasicBeanStore2} and adds methods to manage {@link BeanCreator2} instances
+ * This class extends {@link BasicBeanStore2} and adds methods to manage {@link BeanInstantiator} instances
  * for different bean types. Creators are lazily created and cached for efficient reuse.
  *
  * <h5 class='section'>Example:</h5>
@@ -36,7 +36,7 @@ import java.util.function.*;
  * 	CreatableBeanStore <jv>store</jv> = <jk>new</jk> CreatableBeanStore(<jk>null</jk>);
  *
  * 	<jc>// Get or create a creator for MyBean</jc>
- * 	BeanCreator2&lt;MyBean&gt; <jv>creator</jv> = <jv>store</jv>.getCreator(MyBean.<jk>class</jk>);
+ * 	BeanInstantiator&lt;MyBean&gt; <jv>creator</jv> = <jv>store</jv>.getCreator(MyBean.<jk>class</jk>);
  *
  * 	<jc>// Use the creator to create a bean</jc>
  * 	MyBean <jv>bean</jv> = <jv>creator</jv>.create();
@@ -47,7 +47,7 @@ import java.util.function.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link BasicBeanStore2}
- * 	<li class='jc'>{@link BeanCreator2}
+ * 	<li class='jc'>{@link BeanInstantiator}
  * </ul>
  */
 @SuppressWarnings({
@@ -58,7 +58,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_beanType = "beanType";
 
-	private final ConcurrentHashMap<Class<?>, BeanCreator2<?>> creators = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Class<?>, BeanInstantiator<?>> creators = new ConcurrentHashMap<>();
 	private final Object enclosingInstance;
 
 	/**
@@ -79,9 +79,9 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @param beanType The bean type to create a creator for. Cannot be <jk>null</jk>.
 	 * @return The creator that was created and stored.
 	 */
-	public <T> BeanCreator2<T> add(Class<T> beanType) {
+	public <T> BeanInstantiator<T> add(Class<T> beanType) {
 		assertArgNotNull(ARG_beanType, beanType);
-		var creator = BeanCreator2.of(beanType, this, null, enclosingInstance);
+		var creator = BeanInstantiator.of(beanType, this, null, enclosingInstance);
 		creators.put(beanType, creator);
 		return creator;
 	}
@@ -94,15 +94,15 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @param name The bean name. Can be <jk>null</jk>.
 	 * @return The creator that was created and stored.
 	 */
-	public <T> BeanCreator2<T> add(Class<T> beanType, String name) {
+	public <T> BeanInstantiator<T> add(Class<T> beanType, String name) {
 		assertArgNotNull(ARG_beanType, beanType);
-		var creator = BeanCreator2.of(beanType, this, name, enclosingInstance);
+		var creator = BeanInstantiator.of(beanType, this, name, enclosingInstance);
 		creators.put(beanType, creator);
 		return creator;
 	}
 
 	/**
-	 * Creates and stores a {@link BeanCreator2} for the specified bean type.
+	 * Creates and stores a {@link BeanInstantiator} for the specified bean type.
 	 *
 	 * <p>
 	 * If a creator for this type already exists, it is replaced with a new one.
@@ -113,7 +113,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * 	<jv>store</jv>.addCreator(MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Get the creator</jc>
-	 * 	BeanCreator2&lt;MyBean&gt; <jv>creator</jv> = <jv>store</jv>.getCreator(MyBean.<jk>class</jk>);
+	 * 	BeanInstantiator&lt;MyBean&gt; <jv>creator</jv> = <jv>store</jv>.getCreator(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The bean type.
@@ -122,13 +122,13 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 */
 	public <T> CreatableBeanStore addCreator(Class<T> beanType) {
 		assertArgNotNull(ARG_beanType, beanType);
-		var creator = BeanCreator2.of(beanType, this, null, enclosingInstance);
+		var creator = BeanInstantiator.of(beanType, this, null, enclosingInstance);
 		creators.put(beanType, creator);
 		return this;
 	}
 
 	/**
-	 * Creates and stores a {@link BeanCreator2} for the specified bean type with a name.
+	 * Creates and stores a {@link BeanInstantiator} for the specified bean type with a name.
 	 *
 	 * <p>
 	 * If a creator for this type already exists, it is replaced with a new one.
@@ -139,7 +139,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * 	<jv>store</jv>.addCreator(MyBean.<jk>class</jk>, <js>"myBean"</js>);
 	 *
 	 * 	<jc>// Get the creator</jc>
-	 * 	BeanCreator2&lt;MyBean&gt; <jv>creator</jv> = <jv>store</jv>.getCreator(MyBean.<jk>class</jk>, <js>"myBean"</js>);
+	 * 	BeanInstantiator&lt;MyBean&gt; <jv>creator</jv> = <jv>store</jv>.getCreator(MyBean.<jk>class</jk>, <js>"myBean"</js>);
 	 * </p>
 	 *
 	 * @param <T> The bean type.
@@ -149,13 +149,13 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 */
 	public <T> CreatableBeanStore addCreator(Class<T> beanType, String name) {
 		assertArgNotNull(ARG_beanType, beanType);
-		var creator = BeanCreator2.of(beanType, this, name, enclosingInstance);
+		var creator = BeanInstantiator.of(beanType, this, name, enclosingInstance);
 		creators.put(beanType, creator);
 		return this;
 	}
 
 	/**
-	 * Returns the {@link BeanCreator2} for the specified bean type, creating it if it doesn't exist.
+	 * Returns the {@link BeanInstantiator} for the specified bean type, creating it if it doesn't exist.
 	 *
 	 * <p>
 	 * If a creator for this type doesn't exist, a new one is created with this bean store configured
@@ -164,7 +164,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Get or create a creator</jc>
-	 * 	BeanCreator2&lt;MyBean&gt; <jv>creator</jv> = <jv>store</jv>.getCreator(MyBean.<jk>class</jk>);
+	 * 	BeanInstantiator&lt;MyBean&gt; <jv>creator</jv> = <jv>store</jv>.getCreator(MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Use the creator to create a bean</jc>
 	 * 	MyBean <jv>bean</jv> = <jv>creator</jv>.create();
@@ -175,15 +175,15 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @return The creator for the specified bean type. Never <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to BeanCreator2<T>
+		"unchecked" // Type erasure requires cast to BeanInstantiator<T>
 	})
-	public <T> BeanCreator2<T> getCreator(Class<T> beanType) {
+	public <T> BeanInstantiator<T> getCreator(Class<T> beanType) {
 		assertArgNotNull(ARG_beanType, beanType);
-		return (BeanCreator2<T>)creators.computeIfAbsent(beanType, k -> BeanCreator2.of((Class<T>)k, this, null, enclosingInstance));
+		return (BeanInstantiator<T>)creators.computeIfAbsent(beanType, k -> BeanInstantiator.of((Class<T>)k, this, null, enclosingInstance));
 	}
 
 	/**
-	 * Returns the {@link BeanCreator2} for the specified bean type with a name, creating it if it doesn't exist.
+	 * Returns the {@link BeanInstantiator} for the specified bean type with a name, creating it if it doesn't exist.
 	 *
 	 * <p>
 	 * If a creator for this type doesn't exist, a new one is created with this bean store configured
@@ -192,7 +192,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Get or create a creator with a name</jc>
-	 * 	BeanCreator2&lt;MyBean&gt; <jv>creator</jv> = <jv>store</jv>.getCreator(MyBean.<jk>class</jk>, <js>"myBean"</js>);
+	 * 	BeanInstantiator&lt;MyBean&gt; <jv>creator</jv> = <jv>store</jv>.getCreator(MyBean.<jk>class</jk>, <js>"myBean"</js>);
 	 *
 	 * 	<jc>// Use the creator to create a bean</jc>
 	 * 	MyBean <jv>bean</jv> = <jv>creator</jv>.create();
@@ -204,11 +204,11 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 * @return The creator for the specified bean type. Never <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to BeanCreator2<T>
+		"unchecked" // Type erasure requires cast to BeanInstantiator<T>
 	})
-	public <T> BeanCreator2<T> getCreator(Class<T> beanType, String name) {
+	public <T> BeanInstantiator<T> getCreator(Class<T> beanType, String name) {
 		assertArgNotNull(ARG_beanType, beanType);
-		return (BeanCreator2<T>)creators.computeIfAbsent(beanType, k -> BeanCreator2.of((Class<T>)k, this, name, enclosingInstance));
+		return (BeanInstantiator<T>)creators.computeIfAbsent(beanType, k -> BeanInstantiator.of((Class<T>)k, this, name, enclosingInstance));
 	}
 
 	/**

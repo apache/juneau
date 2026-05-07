@@ -38,7 +38,7 @@ import java.util.logging.Level;
 	"java:S1172", // Unused parameters in tests are intentional
 	"java:S1186" // Empty test method intentional for framework testing
 })
-class BeanCreator2_Test extends TestBase {
+class BeanInstantiator_Test extends TestBase {
 
 	private BasicBeanStore2 beanStore;
 
@@ -48,11 +48,11 @@ class BeanCreator2_Test extends TestBase {
 	}
 
 	/**
-	 * Helper method to create a BeanCreator2 instance with the test's beanStore.
-	 * Reduces repetition of BeanCreator2.of(Class, beanStore) pattern.
+	 * Helper method to create a BeanInstantiator instance with the test's beanStore.
+	 * Reduces repetition of BeanInstantiator.of(Class, beanStore) pattern.
 	 */
-	private <T> BeanCreator2<T> bc(Class<T> c) {
-		return BeanCreator2.of(c, beanStore);
+	private <T> BeanInstantiator<T> bc(Class<T> c) {
+		return BeanInstantiator.of(c, beanStore);
 	}
 
 	//====================================================================================================
@@ -950,7 +950,7 @@ class BeanCreator2_Test extends TestBase {
 
 		/**
 		 * Tests creating a bean using builder pattern with auto-detected builder.
-		 * Verifies that BeanCreator2 can automatically detect and use an inner Builder class
+		 * Verifies that BeanInstantiator can automatically detect and use an inner Builder class
 		 * when no explicit builder is specified. The builder is found via the static create()
 		 * method that returns a Builder instance, demonstrating the default builder detection mechanism.
 		 */
@@ -967,7 +967,7 @@ class BeanCreator2_Test extends TestBase {
 		/**
 		 * Tests creating a bean using an explicitly provided builder instance.
 		 * Verifies that when a builder instance is explicitly provided via builder(),
-		 * BeanCreator2 uses that instance instead of creating a new one. This allows
+		 * BeanInstantiator uses that instance instead of creating a new one. This allows
 		 * pre-configuring the builder with specific values before bean creation.
 		 */
 		@Test
@@ -987,7 +987,7 @@ class BeanCreator2_Test extends TestBase {
 		/**
 		 * Tests creating a bean using builder pattern with @Builder annotation.
 		 * Verifies that when a bean class is annotated with @Builder specifying a builder type,
-		 * BeanCreator2 uses that builder type instead of auto-detection. This provides explicit
+		 * BeanInstantiator uses that builder type instead of auto-detection. This provides explicit
 		 * control over which builder class to use for bean creation.
 		 */
 		@Test
@@ -1096,7 +1096,7 @@ class BeanCreator2_Test extends TestBase {
 
 		/**
 		 * Tests creating a bean using builder with protected constructor.
-		 * Verifies that builders with protected constructors can be instantiated by BeanCreator2.
+		 * Verifies that builders with protected constructors can be instantiated by BeanInstantiator.
 		 * This tests the fallback mechanism that searches for protected constructors when no public
 		 * constructor is available, enabling encapsulation while still allowing bean creation.
 		 */
@@ -1181,7 +1181,7 @@ class BeanCreator2_Test extends TestBase {
 		/**
 		 * Tests creating a child bean using child's own builder that extends parent's builder.
 		 * Verifies that when a child class has its own @Builder annotation pointing to a builder
-		 * that extends the parent's builder, BeanCreator2 uses the child's builder annotation
+		 * that extends the parent's builder, BeanInstantiator uses the child's builder annotation
 		 * (which overrides the parent's). The child's builder must override build() to return
 		 * the child type, ensuring type safety.
 		 */
@@ -1274,7 +1274,7 @@ class BeanCreator2_Test extends TestBase {
 		/**
 		 * Tests creating a child bean using child's own builder that extends parent's inner Builder class.
 		 * Verifies that when a child class has its own builder that extends the parent's inner Builder class,
-		 * BeanCreator2 uses the child's builder. The child's builder must override build() to return the
+		 * BeanInstantiator uses the child's builder. The child's builder must override build() to return the
 		 * child type, ensuring type safety. The builder is discovered through the child class's static create() method.
 		 */
 		@Test
@@ -1329,7 +1329,7 @@ class BeanCreator2_Test extends TestBase {
 
 		/**
 		 * Tests creating a bean using builder pattern with static builder() method (instead of create()).
-		 * Verifies that BeanCreator2 recognizes "builder" as a valid builder factory method name alongside
+		 * Verifies that BeanInstantiator recognizes "builder" as a valid builder factory method name alongside
 		 * the default "create" method. This supports alternative naming conventions where classes use
 		 * builder() instead of create() to return builder instances.
 		 */
@@ -1405,7 +1405,7 @@ class BeanCreator2_Test extends TestBase {
 		/**
 		 * Tests creating a bean using builder with create() method instead of build().
 		 * Verifies that builders can use "create" as an alternative to "build" for the method that
-		 * constructs the bean. BeanCreator2 searches for build(), create(), or get() methods on builders,
+		 * constructs the bean. BeanInstantiator searches for build(), create(), or get() methods on builders,
 		 * providing flexibility in builder method naming conventions.
 		 */
 		@Test
@@ -1486,7 +1486,7 @@ class BeanCreator2_Test extends TestBase {
 
 		/**
 		 * Tests creating a bean using builder with build() method that has parameters resolved from bean store.
-		 * Verifies that when a builder's build() method requires parameters, BeanCreator2 resolves them from
+		 * Verifies that when a builder's build() method requires parameters, BeanInstantiator resolves them from
 		 * the bean store via dependency injection. This enables builders to accept additional dependencies
 		 * beyond what's stored in builder fields, providing more flexible bean construction.
 		 */
@@ -1533,7 +1533,7 @@ class BeanCreator2_Test extends TestBase {
 
 		/**
 		 * Tests that deprecated constructors are ignored in favor of non-deprecated ones.
-		 * Verifies that when multiple constructors are available, BeanCreator2 skips deprecated ones
+		 * Verifies that when multiple constructors are available, BeanInstantiator skips deprecated ones
 		 * and prefers non-deprecated alternatives. This ensures that deprecated APIs don't interfere
 		 * with bean creation, allowing graceful deprecation of old constructor signatures.
 		 */
@@ -1568,7 +1568,7 @@ class BeanCreator2_Test extends TestBase {
 
 		/**
 		 * Tests that constructors with unresolvable parameters are ignored, falling back to no-arg constructor.
-		 * Verifies that BeanCreator2 skips constructors whose parameters cannot be resolved from the bean store,
+		 * Verifies that BeanInstantiator skips constructors whose parameters cannot be resolved from the bean store,
 		 * preferring constructors with resolvable or no parameters. This ensures robust bean creation even when
 		 * some constructor signatures cannot be satisfied.
 		 */
@@ -1599,7 +1599,7 @@ class BeanCreator2_Test extends TestBase {
 
 		/**
 		 * Tests creating a bean via static factory method that accepts builder when builder has no build() method.
-		 * Verifies that when a builder lacks build/create/get methods, BeanCreator2 falls back to static factory
+		 * Verifies that when a builder lacks build/create/get methods, BeanInstantiator falls back to static factory
 		 * methods on the bean class that accept the builder. Factory methods are preferred over constructors,
 		 * demonstrating the priority order: builder methods > factory methods > constructors.
 		 */
@@ -1748,7 +1748,7 @@ class BeanCreator2_Test extends TestBase {
 
 		/**
 		 * Tests creating a bean using builder with custom method name when no build/create/get method exists and no constructor accepts builder.
-		 * Verifies the final fallback mechanism where BeanCreator2 searches for any method on the builder that returns
+		 * Verifies the final fallback mechanism where BeanInstantiator searches for any method on the builder that returns
 		 * the bean type. When standard builder methods and constructors aren't available, this "anything" method search
 		 * provides a last-resort mechanism for bean creation, demonstrating maximum flexibility in builder patterns.
 		 */
@@ -1806,7 +1806,7 @@ class BeanCreator2_Test extends TestBase {
 		/**
 		 * Tests that invalid builders (no valid build method, no constructor accepting builder) fail validation and fall back to constructor.
 		 * Verifies that when a builder candidate doesn't meet validation criteria (no valid build method returning bean type,
-		 * no constructor accepting builder), BeanCreator2 rejects it and falls back to direct constructor-based creation.
+		 * no constructor accepting builder), BeanInstantiator rejects it and falls back to direct constructor-based creation.
 		 * This ensures that invalid builder configurations don't prevent bean creation, maintaining robustness.
 		 */
 		@Test
@@ -1856,7 +1856,7 @@ class BeanCreator2_Test extends TestBase {
 		/**
 		 * Tests that ExecutableException is thrown when builder fails to create bean and no fallback is provided.
 		 * Verifies that when a builder's build() method requires unresolvable parameters and no alternative creation
-		 * path exists (no factory methods, no valid constructors), BeanCreator2 throws an ExecutableException.
+		 * path exists (no factory methods, no valid constructors), BeanInstantiator throws an ExecutableException.
 		 * This ensures that unresolvable builder configurations result in clear error reporting rather than silent failures.
 		 */
 		@Test
@@ -1997,11 +1997,11 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void f01_createInnerBean() {
-			var outerInstance = new BeanCreator2_Test();
+			var outerInstance = new BeanInstantiator_Test();
 			var value = "test";
 			beanStore.add(String.class, value);
 
-			var bean = BeanCreator2.of(InnerBean.class, beanStore, null, outerInstance)
+			var bean = BeanInstantiator.of(InnerBean.class, beanStore, null, outerInstance)
 				.run();
 
 			assertEquals(value, bean.getValue());
@@ -2178,7 +2178,7 @@ class BeanCreator2_Test extends TestBase {
 	}
 
 	/**
-	 * Tests converting BeanCreator2 to Supplier interfaces:
+	 * Tests converting BeanInstantiator to Supplier interfaces:
 	 * - asSupplier() conversion
 	 * - asMemoizer() with caching
 	 * - Optional-like methods on suppliers
@@ -2187,7 +2187,7 @@ class BeanCreator2_Test extends TestBase {
 	@Nested class H_supplierConversion extends TestBase {
 
 		/**
-		 * Tests converting BeanCreator2 to a Supplier.
+		 * Tests converting BeanInstantiator to a Supplier.
 		 */
 		@Test
 		void h01_asSupplier() {
@@ -2212,7 +2212,7 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests converting BeanCreator2 to a Memoizer.
+		 * Tests converting BeanInstantiator to a Memoizer.
 		 */
 		@Test
 		void h03_asMemoizer() {
@@ -2326,7 +2326,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void i02_beanSubTypeReturnsThis() {
-			var creator = BeanCreator2.of(ParentBean.class);
+			var creator = BeanInstantiator.of(ParentBean.class);
 			var result = creator.beanSubType(ChildBean.class);
 			assertSame(creator, result);
 		}
@@ -2336,7 +2336,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void i03_addBeanReturnsThis() {
-			var creator = BeanCreator2.of(SimpleBean.class);
+			var creator = BeanInstantiator.of(SimpleBean.class);
 			var result = creator.addBean(TestService.class, new TestService("test"));
 			assertSame(creator, result);
 		}
@@ -2346,7 +2346,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void i05_builderReturnsThis() {
-			var creator = BeanCreator2.of(BeanWithBuilder.class);
+			var creator = BeanInstantiator.of(BeanWithBuilder.class);
 			var result = creator.builder(BeanWithBuilder.create());
 			assertSame(creator, result);
 		}
@@ -2356,8 +2356,8 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void i06_enclosingInstanceCanBeSetViaConstructor() {
-			var outerInstance = new BeanCreator2_Test();
-			var creator = BeanCreator2.of(InnerBean.class, null, null, outerInstance);
+			var outerInstance = new BeanInstantiator_Test();
+			var creator = BeanInstantiator.of(InnerBean.class, null, null, outerInstance);
 			// Verify creator was created successfully
 			assertNotNull(creator);
 		}
@@ -2368,7 +2368,7 @@ class BeanCreator2_Test extends TestBase {
 		@Test
 		void i07_addMethodReturnsBean() {
 			var service = new TestService("test");
-			var creator = BeanCreator2.of(BeanWithDependencies.class);
+			var creator = BeanInstantiator.of(BeanWithDependencies.class);
 
 			var result = creator.add(TestService.class, service);
 
@@ -3356,7 +3356,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void n12_beanSubTypeNullThrows() {
-			var creator = BeanCreator2.of(SimpleBean.class);
+			var creator = BeanInstantiator.of(SimpleBean.class);
 			assertThrows(IllegalArgumentException.class, () -> creator.beanSubType(null));
 		}
 	}
@@ -3381,7 +3381,7 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that BeanCreator2.of(Class, BeanStore) can resolve dependencies from parent bean store.
+		 * Tests that BeanInstantiator.of(Class, BeanStore) can resolve dependencies from parent bean store.
 		 */
 		@Test
 		void o02_ofWithParentStore() {
@@ -3389,7 +3389,7 @@ class BeanCreator2_Test extends TestBase {
 			var testService = new TestService("parent-service");
 			parentStore.addBean(TestService.class, testService);
 
-			var bean = BeanCreator2.of(BeanWithDependencies.class, parentStore)
+			var bean = BeanInstantiator.of(BeanWithDependencies.class, parentStore)
 				.addBean(AnotherService.class, new AnotherService(42))
 				.run();
 
@@ -3398,11 +3398,11 @@ class BeanCreator2_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that BeanCreator2.of(Class, null) works when no parent bean store is provided.
+		 * Tests that BeanInstantiator.of(Class, null) works when no parent bean store is provided.
 		 */
 		@Test
 		void o03_ofWithParentStoreNull() {
-			var bean = BeanCreator2.of(SimpleBean.class, null).run();
+			var bean = BeanInstantiator.of(SimpleBean.class, null).run();
 
 			assertInstanceOf(SimpleBean.class, bean);
 		}
@@ -3417,7 +3417,7 @@ class BeanCreator2_Test extends TestBase {
 			parentStore.addBean(TestService.class, parentService);
 
 			var localService = new TestService("local");
-			var bean = BeanCreator2.of(BeanWithDependencies.class, parentStore)
+			var bean = BeanInstantiator.of(BeanWithDependencies.class, parentStore)
 				.addBean(TestService.class, localService) // Local overrides parent
 				.addBean(AnotherService.class, new AnotherService(42))
 				.run();
@@ -3465,7 +3465,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void p03_getNameReturnsNullWhenNotSet() {
-			var creator = BeanCreator2.of(SimpleBean.class);
+			var creator = BeanInstantiator.of(SimpleBean.class);
 			var name = creator.getName();
 
 			assertNull(name, "getName() should return null when no name is set");
@@ -3476,7 +3476,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void p04_getNameReturnsSetName() {
-			var creator = BeanCreator2.of(SimpleBean.class, beanStore, "myBean", null);
+			var creator = BeanInstantiator.of(SimpleBean.class, beanStore, "myBean", null);
 			var name = creator.getName();
 
 			assertEquals("myBean", name);
@@ -3487,7 +3487,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void p05_getNameReturnsNullWhenSetToNull() {
-			var creator = BeanCreator2.of(SimpleBean.class, beanStore, null, null);
+			var creator = BeanInstantiator.of(SimpleBean.class, beanStore, null, null);
 			var name = creator.getName();
 
 			assertNull(name, "getName() should return null when name is set to null");
@@ -3645,7 +3645,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void p17_nameCanBeSetViaConstructor() {
-			var creator = BeanCreator2.of(SimpleBean.class, null, "testBean", null);
+			var creator = BeanInstantiator.of(SimpleBean.class, null, "testBean", null);
 
 			assertEquals("testBean", creator.getName());
 		}
@@ -3655,7 +3655,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void p18_nameCanBeSetToNull() {
-			var creator = BeanCreator2.of(SimpleBean.class, beanStore, null, null);
+			var creator = BeanInstantiator.of(SimpleBean.class, beanStore, null, null);
 			assertNull(creator.getName(), "name should allow null value");
 		}
 
@@ -3664,7 +3664,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void p19_nameCanBeSetViaConstructor() {
-			var creator = BeanCreator2.of(SimpleBean.class, beanStore, "final", null);
+			var creator = BeanInstantiator.of(SimpleBean.class, beanStore, "final", null);
 
 			assertEquals("final", creator.getName());
 		}
@@ -3736,9 +3736,9 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void q01_loggingOnSimpleBeanCreation() {
-			// Get the logger instance using the same method as BeanCreator2 static field
+			// Get the logger instance using the same method as BeanInstantiator static field
 			// This ensures we get the same cached instance
-			var logger = Logger.getLogger(BeanCreator2.class);
+			var logger = Logger.getLogger(BeanInstantiator.class);
 			logger.setLevel(Level.FINE); // Enable FINE level logging
 
 			try (var capture = logger.captureEvents()) {
@@ -3767,7 +3767,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void q02_loggingOnBuilderBeanCreation() {
-			var logger = Logger.getLogger(BeanCreator2.class);
+			var logger = Logger.getLogger(BeanInstantiator.class);
 			logger.setLevel(Level.FINE); // Enable FINE level logging
 			try (var capture = logger.captureEvents()) {
 				var bean = bc(Q02_BeanWithBuilder.class).run();
@@ -3789,7 +3789,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void q03_logMessagesIncludeBeanTypePrefix() {
-			var logger = Logger.getLogger(BeanCreator2.class);
+			var logger = Logger.getLogger(BeanInstantiator.class);
 			logger.setLevel(Level.FINE); // Enable FINE level logging
 			try (var capture = logger.captureEvents()) {
 				var bean = bc(SimpleBean.class).run();
@@ -3814,7 +3814,7 @@ class BeanCreator2_Test extends TestBase {
 		 */
 		@Test
 		void q04_logMessagesWithFormatArguments() {
-			var logger = Logger.getLogger(BeanCreator2.class);
+			var logger = Logger.getLogger(BeanInstantiator.class);
 			try (var capture = logger.captureEvents()) {
 				// Create a bean that will trigger logging with format arguments
 				var bean = bc(Q02_BeanWithBuilder.class).run();

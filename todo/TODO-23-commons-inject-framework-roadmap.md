@@ -14,7 +14,7 @@ Grow **`org.apache.juneau.commons.inject`** into a **small, predictable** compos
 
 ## Current baseline (inventory)
 
-Today the package is primarily the **bean store** stack (e.g. `BeanStore`, `WritableBeanStore`, `CreatableBeanStore`, `BasicBeanStore2`, `BeanCreator2`). Treat this document as a **wishlist / decision log**: each subsection needs a **yes/no** and **scope** before implementation.
+Today the package is primarily the **bean store** stack (e.g. `BeanStore`, `WritableBeanStore`, `CreatableBeanStore`, `BasicBeanStore2`, `BeanInstantiator`). Treat this document as a **wishlist / decision log**: each subsection needs a **yes/no** and **scope** before implementation.
 
 ---
 

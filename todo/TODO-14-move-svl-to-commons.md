@@ -20,7 +20,7 @@ Relocate `org.apache.juneau.svl` (Simple Variable Language) from `juneau-marshal
 - Both expose an `Optional<String>`-returning API — callers perform any type conversion themselves via `Optional.map(...)`.
 - **Hard break on the package rename.** No deprecated shim classes left in `org.apache.juneau.svl.*`; callers update their imports. Acceptable because 9.5 is the designated "simple breaking changes" release.
 - Marshall-side `collections.Args` and `utils.ManifestFile` are **deleted** in 9.5 — callers move to `org.apache.juneau.commons.runtime.Args` / `ManifestFile`. (No deprecation cycle; 9.5 allows the break.)
-- SVL engine (`VarResolver` / `VarResolverSession`) retargets the commons bean-store stack **after** TODO-15 renames the `*2` classes to their final names. TODO-14 never references `BasicBeanStore2` / `BeanCreator2` directly.
+- SVL engine (`VarResolver` / `VarResolverSession`) retargets the commons bean-store stack **after** TODO-15 renames the `*2` classes to their final names. TODO-14 never references `BasicBeanStore2` / `BeanInstantiator` directly.
 
 ---
 

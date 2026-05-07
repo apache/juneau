@@ -17,7 +17,9 @@
 package org.apache.juneau.commons.inject;
 
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.*;
+
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Spring-bean-like interface for looking up beans by type and name.
@@ -134,5 +136,77 @@ public interface BeanStore {
 	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
 	 */
 	<T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType, String name);
+
+	/**
+	 * Finds and invokes a factory method that produces a bean of type <c>beanType</c>.
+	 *
+	 * <p>
+	 * Scans all public methods of the resource class identified by <c>onClassOrObject</c>:
+	 * <ul>
+	 * 	<li>If <c>onClassOrObject</c> is a {@link Class}, only <jk>static</jk> methods are eligible and
+	 * 		the instance parameter passed to the invoked method is <jk>null</jk>.
+	 * 	<li>If <c>onClassOrObject</c> is any other object, both instance and static methods on its class are
+	 * 		eligible, and the object itself is passed as the receiver.
+	 * </ul>
+	 *
+	 * <p>
+	 * The first method satisfying all of the following is invoked:
+	 * <ol>
+	 * 	<li>Not deprecated.
+	 * 	<li>Return type is assignment-compatible with <c>beanType</c>.
+	 * 	<li>Accepted by <c>filter</c> (if non-<jk>null</jk>; otherwise any method qualifies).
+	 * 	<li>All parameters can be resolved from this store plus any <c>extraBeans</c>.
+	 * </ol>
+	 *
+	 * <p>
+	 * The default implementation returns {@link Optional#empty()}.
+	 * Override in concrete stores (see {@link BasicBeanStore2}) to enable factory-method scanning.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Filter only</jc>
+	 * 	<jv>beanStore</jv>.createBeanFromMethod(CallLogger.<jk>class</jk>, <jv>resource</jv>,
+	 * 		RestContext::isRestInjectMethod)
+	 * 		.ifPresent(<jv>creator</jv>::impl);
+	 *
+	 * 	<jc>// Filter + extra bean not yet in the store</jc>
+	 * 	<jv>beanStore</jv>.createBeanFromMethod(EncoderSet.<jk>class</jk>, <jv>resource</jv>,
+	 * 		RestContext::isRestInjectMethod, <jv>builder</jv>)
+	 * 		.ifPresent(<jv>x</jv> -&gt; <jv>builder</jv>.impl(<jv>x</jv>));
+	 *
+	 * 	<jc>// No filter, no extra beans</jc>
+	 * 	<jv>beanStore</jv>.createBeanFromMethod(CallLogger.<jk>class</jk>, <jv>resource</jv>);
+	 * </p>
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The type of bean to create.  Must not be <jk>null</jk>.
+	 * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.
+	 * 	Must not be <jk>null</jk>.
+	 * @param filter Optional predicate restricting which methods are eligible.  Can be <jk>null</jk>.
+	 * @param extraBeans Optional bean instances visible to parameter resolution for this call only.
+	 * 	These are <em>not</em> registered in the store.
+	 * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching
+	 * 	factory method was found.
+	 * @throws BeanCreationException If a matching method was found but threw an exception during invocation.
+	 * @see BeanInstantiator BeanInstantiator — for instantiating a bean from its own constructors, builders, or factory methods
+	 */
+	default <T> Optional<T> createBeanFromMethod(Class<T> beanType, Object onClassOrObject, Predicate<MethodInfo> filter, Object... extraBeans) {
+		return Optional.empty();
+	}
+
+	/**
+	 * Convenience overload of {@link #createBeanFromMethod(Class, Object, Predicate, Object...)} with no filter and no extra beans.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The type of bean to create.  Must not be <jk>null</jk>.
+	 * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.
+	 * 	Must not be <jk>null</jk>.
+	 * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching
+	 * 	factory method was found.
+	 * @throws BeanCreationException If a matching method was found but threw an exception during invocation.
+	 */
+	default <T> Optional<T> createBeanFromMethod(Class<T> beanType, Object onClassOrObject) {
+		return createBeanFromMethod(beanType, onClassOrObject, null);
+	}
 }
 

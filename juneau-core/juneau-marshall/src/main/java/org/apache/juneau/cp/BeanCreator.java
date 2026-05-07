@@ -268,7 +268,8 @@ public class BeanCreator<T> {
 	 * @throws ExecutableException if bean could not be created and {@link #silent()} was not enabled.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for bean creation with multiple creation strategies
+		"java:S3776", // Cognitive complexity acceptable for bean creation with multiple creation strategies
+		"java:S6541"  // Brain Method: bean creation logic requires handling multiple strategies in sequence
 	})
 	public T run() {
 
@@ -343,7 +344,7 @@ public class BeanCreator<T> {
 
 		// Look for public constructor.
 		var constructorMatch = new Match<ConstructorInfo>();
-		type.getPublicConstructors().stream().forEach(x -> {
+		type.getPublicConstructors().forEach(x -> {
 			found.setIfEmpty("PUBLIC_CONSTRUCTOR");
 			if (hasAllParams(x))
 				constructorMatch.add(x);

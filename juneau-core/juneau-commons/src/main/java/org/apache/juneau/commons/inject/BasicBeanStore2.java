@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.inject;
 
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -24,6 +25,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Basic implementation of {@link WritableBeanStore}.
@@ -426,6 +428,44 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	@Override
 	public <T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType, String name) {
 		return resolve(beanType, name);
+	}
+
+	/**
+	 * Finds and invokes a factory method that produces a bean of type <c>beanType</c>.
+	 *
+	 * <p>
+	 * If <c>onClassOrObject</c> is a {@link Class}, only static methods are eligible.
+	 * Otherwise, both instance and static methods on the object's class are eligible.
+	 * A <jk>null</jk> <c>filter</c> accepts any qualifying method.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The type of bean to create.  Must not be <jk>null</jk>.
+	 * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.
+	 * 	Must not be <jk>null</jk>.
+	 * @param filter Optional predicate restricting which methods are eligible.  Can be <jk>null</jk>.
+	 * @param extraBeans Optional bean instances visible to parameter resolution for this call only.
+	 * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching
+	 * 	factory method was found.
+	 * @throws BeanCreationException If a matching method was found but threw an exception during invocation.
+	 */
+	@Override
+	public <T> Optional<T> createBeanFromMethod(Class<T> beanType, Object onClassOrObject, Predicate<MethodInfo> filter, Object... extraBeans) {
+		Object resource = onClassOrObject instanceof Class ? null : onClassOrObject;
+		Class<?> resourceClass = onClassOrObject instanceof Class<?> c ? c : onClassOrObject.getClass();
+		return info(resourceClass)
+			.getPublicMethod(m ->
+				m.isNotDeprecated()
+				&& m.hasReturnType(beanType)
+				&& (filter == null || filter.test(m))
+				&& (m.isStatic() || nn(resource))
+				&& m.canResolveAllParameters(this, extraBeans))
+			.map(m -> {
+				try {
+					return m.<T>inject(this, resource, extraBeans);
+				} catch (Exception e) {
+					throw new BeanCreationException("Failed to create bean of type [" + beanType.getSimpleName() + "] via method [" + m.getName() + "]", e);
+				}
+			});
 	}
 
 	@Override /* Overridden from Object */

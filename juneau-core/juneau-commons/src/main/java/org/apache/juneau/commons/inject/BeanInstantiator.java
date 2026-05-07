@@ -43,7 +43,7 @@ import org.apache.juneau.commons.reflect.*;
  * <p>
  * This class is instantiated through the following method:
  * <ul class='javatree'>
- * 	<li class='jm'>{@link BeanCreator2#of(Class)}
+ * 	<li class='jm'>{@link BeanInstantiator#of(Class)}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
@@ -99,8 +99,8 @@ import org.apache.juneau.commons.reflect.*;
  * 	}
  * 	}
  *
- * 	<jc>// Create bean using BeanCreator2</jc>
- * 	MyBean <jv>bean</jv> = BeanCreator2
+ * 	<jc>// Create bean using BeanInstantiator</jc>
+ * 	MyBean <jv>bean</jv> = BeanInstantiator
  * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>myBeanStore</jv>)
  * 		.run();
  * </p>
@@ -186,7 +186,7 @@ import org.apache.juneau.commons.reflect.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class BeanCreator2<T> {
+public class BeanInstantiator<T> {
 
 	private static final String CLASSNAME_Autowired = "Autowired";
 	private static final String CLASSNAME_Inject = "Inject";
@@ -219,8 +219,8 @@ public class BeanCreator2<T> {
 	 * @param beanType The bean type to create.
 	 * @return A new bean creator.
 	 */
-	public static <T> BeanCreator2<T> of(Class<T> beanType) {
-		return new BeanCreator2<>(beanType, null, null, null);
+	public static <T> BeanInstantiator<T> of(Class<T> beanType) {
+		return new BeanInstantiator<>(beanType, null, null, null);
 	}
 
 	/**
@@ -231,8 +231,8 @@ public class BeanCreator2<T> {
 	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
 	 * @return A new bean creator.
 	 */
-	public static <T> BeanCreator2<T> of(Class<T> beanType, BeanStore parentStore) {
-		return new BeanCreator2<>(beanType, parentStore, null, null);
+	public static <T> BeanInstantiator<T> of(Class<T> beanType, BeanStore parentStore) {
+		return new BeanInstantiator<>(beanType, parentStore, null, null);
 	}
 
 	/**
@@ -245,8 +245,8 @@ public class BeanCreator2<T> {
 	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk>.
 	 * @return A new bean creator.
 	 */
-	public static <T> BeanCreator2<T> of(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
-		return new BeanCreator2<>(beanType, parentStore, name, enclosingInstance);
+	public static <T> BeanInstantiator<T> of(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
+		return new BeanInstantiator<>(beanType, parentStore, name, enclosingInstance);
 	}
 
 	private final BeanStore parentStore;
@@ -254,7 +254,7 @@ public class BeanCreator2<T> {
 	private final ClassInfoTyped<T> beanType;
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock();
 	private final NullableReference<List<String>> debug = NullableReference.empty();
-	private static final Logger logger = Logger.getLogger(BeanCreator2.class);
+	private static final Logger logger = Logger.getLogger(BeanInstantiator.class);
 
 	private ClassInfoTyped<? extends T> beanSubType;
 	private ClassInfo explicitBuilderType = null;
@@ -284,7 +284,7 @@ public class BeanCreator2<T> {
 	 * @param name The bean name. Can be <jk>null</jk>.
 	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk>.
 	 */
-	protected BeanCreator2(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
+	protected BeanInstantiator(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
 		this.beanType = info(assertArgNotNull(ARG_beanType, beanType));
 		this.beanSubType = this.beanType;
 		this.parentStore = parentStore;
@@ -317,7 +317,7 @@ public class BeanCreator2<T> {
 	 * @param bean The bean instance.
 	 * @return This object.
 	 */
-	public <T2> BeanCreator2<T> addBean(Class<T2> type, T2 bean) {
+	public <T2> BeanInstantiator<T> addBean(Class<T2> type, T2 bean) {
 		try (var writeLock = lock.write()) {
 			store.add(type, bean);
 			reset();
@@ -334,7 +334,7 @@ public class BeanCreator2<T> {
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return This object.
 	 */
-	public <T2> BeanCreator2<T> addBean(Class<T2> type, T2 bean, String name) {
+	public <T2> BeanInstantiator<T> addBean(Class<T2> type, T2 bean, String name) {
 		try (var writeLock = lock.write()) {
 			store.add(type, bean, name);
 			reset();
@@ -369,20 +369,20 @@ public class BeanCreator2<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Try to create, use default if it fails</jc>
-	 * 	MyBean <jv>bean</jv> = BeanCreator2
+	 * 	MyBean <jv>bean</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>myBeanStore</jv>)
 	 * 		.asOptional()
 	 * 		.orElse(<jk>new</jk> DefaultMyBean());
 	 *
 	 * 	<jc>// Chain multiple creation attempts</jc>
-	 * 	MyService <jv>service</jv> = BeanCreator2.<jsm>of</jsm>(AdvancedService.<jk>class</jk>, <jv>store</jv>)
+	 * 	MyService <jv>service</jv> = BeanInstantiator.<jsm>of</jsm>(AdvancedService.<jk>class</jk>, <jv>store</jv>)
 	 * 		.asOptional()
-	 * 		.or(() -&gt; BeanCreator2.<jsm>of</jsm>(BasicService.<jk>class</jk>, <jv>store</jv>)
+	 * 		.or(() -&gt; BeanInstantiator.<jsm>of</jsm>(BasicService.<jk>class</jk>, <jv>store</jv>)
 	 * 			.asOptional())
 	 * 		.orElseGet(() -&gt; <jk>new</jk> FallbackService());
 	 *
 	 * 	<jc>// Check if optional feature is available</jc>
-	 * 	Optional&lt;OptionalFeature&gt; <jv>feature</jv> = BeanCreator2
+	 * 	Optional&lt;OptionalFeature&gt; <jv>feature</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(OptionalFeature.<jk>class</jk>, <jv>store</jv>)
 	 * 		.asOptional();
 	 * 	<jk>if</jk> (<jv>feature</jv>.isPresent()) {
@@ -425,7 +425,7 @@ public class BeanCreator2<T> {
 	 * 	BeanStore <jv>store</jv> = <jk>new</jk> BasicBeanStore2(<jk>null</jk>);
 	 * 	<jv>store</jv>.addBean(String.<jk>class</jk>, <js>"initial"</js>);
 	 *
-	 * 	Memoizer&lt;MyBean&gt; <jv>supplier</jv> = BeanCreator2
+	 * 	Memoizer&lt;MyBean&gt; <jv>supplier</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>store</jv>)
 	 * 		.asMemoizer();
 	 *
@@ -471,7 +471,7 @@ public class BeanCreator2<T> {
 	 * @return This object.
 	 * @throws IllegalArgumentException If value is not a subclass of {@code beanType}.
 	 */
-	public BeanCreator2<T> beanSubType(Class<? extends T> value) {
+	public BeanInstantiator<T> beanSubType(Class<? extends T> value) {
 		assertArgNotNull(ARG_value, value);
 		try (var writeLock = lock.write()) {
 			beanSubType = info(value);
@@ -508,7 +508,7 @@ public class BeanCreator2<T> {
 	 * @return This object.
 	 * @throws IllegalArgumentException If the builder type is invalid (does not have a valid build/create/get method).
 	 */
-	public BeanCreator2<T> builder(Class<?> value) {
+	public BeanInstantiator<T> builder(Class<?> value) {
 		try (var writeLock = lock.write()) {
 			explicitBuilderType = info(assertArgNotNull(ARG_value, value));
 			builderType.set(explicitBuilderType);
@@ -546,7 +546,7 @@ public class BeanCreator2<T> {
 	 * @return This object.
 	 * @throws IllegalArgumentException If the builder instance's class is invalid (does not have a valid build/create/get method).
 	 */
-	public BeanCreator2<T> builder(Object value) {
+	public BeanInstantiator<T> builder(Object value) {
 		try (var writeLock = lock.write()) {
 			builder(value.getClass());
 			explicitBuilder = assertArgNotNull(ARG_value, value);
@@ -559,7 +559,7 @@ public class BeanCreator2<T> {
 	 * Specifies custom class names to look for when auto-detecting builder inner classes.
 	 *
 	 * <p>
-	 * By default, {@code BeanCreator2} looks for inner classes named {@code "Builder"}.
+	 * By default, {@code BeanInstantiator} looks for inner classes named {@code "Builder"}.
 	 * This method allows you to specify alternative class names.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -574,7 +574,7 @@ public class BeanCreator2<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Support alternative builder class naming conventions</jc>
-	 * 	MyBean <jv>bean</jv> = BeanCreator2
+	 * 	MyBean <jv>bean</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>myBeanStore</jv>)
 	 * 		.builderClassNames(<js>"BuilderImpl"</js>, <js>"Factory"</js>)
 	 * 		.run();
@@ -583,7 +583,7 @@ public class BeanCreator2<T> {
 	 * @param names The builder class names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> builderClassNames(String... names) {
+	public BeanInstantiator<T> builderClassNames(String... names) {
 		try (var writeLock = lock.write()) {
 			builderClassNames = set(assertArgNoNulls(ARG_names, names));
 			reset();
@@ -595,7 +595,7 @@ public class BeanCreator2<T> {
 	 * Specifies custom method names to look for when auto-detecting builder factory methods.
 	 *
 	 * <p>
-	 * By default, {@code BeanCreator2} looks for static methods named {@code "create"} or {@code "builder"}
+	 * By default, {@code BeanInstantiator} looks for static methods named {@code "create"} or {@code "builder"}
 	 * that return a builder type. This method allows you to specify alternative method names.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -610,7 +610,7 @@ public class BeanCreator2<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Support alternative builder factory method naming conventions</jc>
-	 * 	MyBean <jv>bean</jv> = BeanCreator2
+	 * 	MyBean <jv>bean</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
 	 * 		.builderMethodNames(<js>"newBuilder"</js>, <js>"instance"</js>)
 		.run();
@@ -619,7 +619,7 @@ public class BeanCreator2<T> {
 	 * @param names The builder factory method names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> builderMethodNames(String... names) {
+	public BeanInstantiator<T> builderMethodNames(String... names) {
 		try (var writeLock = lock.write()) {
 			builderMethodNames = set(assertArgNoNulls(ARG_names, names));
 			reset();
@@ -631,7 +631,7 @@ public class BeanCreator2<T> {
 	 * Specifies custom method names to look for when calling build methods on builder instances.
 	 *
 	 * <p>
-	 * By default, {@code BeanCreator2} looks for instance methods named {@code "build"}, {@code "create"}, or {@code "get"}
+	 * By default, {@code BeanInstantiator} looks for instance methods named {@code "build"}, {@code "create"}, or {@code "get"}
 	 * on the builder that return the bean type. This method allows you to specify alternative method names.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -645,7 +645,7 @@ public class BeanCreator2<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Support alternative build method naming conventions</jc>
-	 * 	MyBean <jv>bean</jv> = BeanCreator2
+	 * 	MyBean <jv>bean</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
 	 * 		.buildMethodNames(<js>"execute"</js>, <js>"make"</js>)
 		.run();
@@ -654,7 +654,7 @@ public class BeanCreator2<T> {
 	 * @param names The build method names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> buildMethodNames(String... names) {
+	public BeanInstantiator<T> buildMethodNames(String... names) {
 		try (var writeLock = lock.write()) {
 			buildMethodNames = set(assertArgNoNulls(ARG_names, names));
 			reset();
@@ -677,7 +677,7 @@ public class BeanCreator2<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Enable caching mode - same instance returned on each run()</jc>
-	 * 	<jk>var</jk> <jv>creator</jv> = BeanCreator2
+	 * 	<jk>var</jk> <jv>creator</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>)
 	 * 		.<jsm>cached</jsm>();
 	 * 	MyBean <jv>bean1</jv> = <jv>creator</jv>.<jsm>run</jsm>();
@@ -687,7 +687,7 @@ public class BeanCreator2<T> {
 	 *
 	 * @return This object.
 	 */
-	public BeanCreator2<T> cached() {
+	public BeanInstantiator<T> cached() {
 		try (var writeLock = lock.write()) {
 			cached = true;
 		}
@@ -749,7 +749,7 @@ public class BeanCreator2<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Enable debug mode</jc>
-	 * 	<jk>var</jk> <jv>creator</jv> = BeanCreator2
+	 * 	<jk>var</jk> <jv>creator</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>store</jv>)
 	 * 		.debug();
 	 *
@@ -761,7 +761,7 @@ public class BeanCreator2<T> {
 	 *
 	 * @return This object.
 	 */
-	public BeanCreator2<T> debug() {
+	public BeanInstantiator<T> debug() {
 		try (var writeLock = lock.write()) {
 			debug.set(synchronizedList(new ArrayList<>()));
 		}
@@ -773,7 +773,7 @@ public class BeanCreator2<T> {
 	 * Specifies custom static factory method names to look for when creating the bean.
 	 *
 	 * <p>
-	 * By default, {@link BeanCreator2} looks for a static {@code getInstance()} method when attempting
+	 * By default, {@link BeanInstantiator} looks for a static {@code getInstance()} method when attempting
 	 * to create beans without a builder. This method allows you to specify alternative
 	 * factory method names to support non-standard naming conventions.
 	 *
@@ -789,7 +789,7 @@ public class BeanCreator2<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Support multiple factory method naming conventions</jc>
-	 * 	MyBean <jv>bean</jv> = BeanCreator2
+	 * 	MyBean <jv>bean</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>myBeanStore</jv>)
 	 * 		.factoryMethodNames(<js>"of"</js>, <js>"from"</js>, <js>"create"</js>, <js>"newInstance"</js>)
 	 * 		.run();
@@ -798,7 +798,7 @@ public class BeanCreator2<T> {
 	 * @param names The factory method names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> factoryMethodNames(String... names) {
+	public BeanInstantiator<T> factoryMethodNames(String... names) {
 		try (var writeLock = lock.write()) {
 			factoryMethodNames = set(assertArgNoNulls(ARG_names, names));
 			reset();
@@ -833,14 +833,14 @@ public class BeanCreator2<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Provide a default instance if creation fails</jc>
-	 * 	MyService <jv>service</jv> = BeanCreator2
+	 * 	MyService <jv>service</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(MyService.<jk>class</jk>, <jv>myBeanStore</jv>)
 	 * 		.fallback(() -&gt; <jk>new</jk> DefaultMyService())
 	 * 		.run();
 	 *
 	 * 	<jc>// Use a pre-created instance as fallback</jc>
 	 * 	MyService <jv>defaultService</jv> = <jk>new</jk> DefaultMyService();
-	 * 	MyService <jv>service2</jv> = BeanCreator2
+	 * 	MyService <jv>service2</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(MyService.<jk>class</jk>, <jv>myBeanStore</jv>)
 	 * 		.fallback(() -&gt; <jv>defaultService</jv>)
 	 * 		.run();
@@ -849,7 +849,7 @@ public class BeanCreator2<T> {
 	 * @param fallback The fallback supplier. Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> fallback(Supplier<? extends T> fallback) {
+	public BeanInstantiator<T> fallback(Supplier<? extends T> fallback) {
 		assertArgNotNull(ARG_fallback, fallback);
 		try (var writeLock = lock.write()) {
 			this.fallbackSupplier = fallback;
@@ -987,7 +987,7 @@ public class BeanCreator2<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>var</jk> <jv>creator</jv> = BeanCreator2.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>store</jv>)
+	 * 	<jk>var</jk> <jv>creator</jv> = BeanInstantiator.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>store</jv>)
 	 * 		.debug();
 	 *
 	 * 	<jk>try</jk> {
@@ -1020,7 +1020,7 @@ public class BeanCreator2<T> {
 	 * @param value The bean implementation instance.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> implementation(T value) {
+	public BeanInstantiator<T> implementation(T value) {
 		try (var writeLock = lock.write()) {
 			this.explicitImplementation = value;
 		}
@@ -1051,7 +1051,7 @@ public class BeanCreator2<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Register multiple post-creation hooks</jc>
-	 * 	MyService <jv>service</jv> = BeanCreator2
+	 * 	MyService <jv>service</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(MyService.<jk>class</jk>, <jv>myBeanStore</jv>)
 	 * 		.postCreateHook(<jv>s</jv> -&gt; <jv>s</jv>.initialize())
 	 * 		.postCreateHook(<jv>s</jv> -&gt; <jv>s</jv>.loadConfiguration())
@@ -1062,7 +1062,7 @@ public class BeanCreator2<T> {
 	 * @param hook The post-creation hook to run after bean creation. Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BeanCreator2<T> postCreateHook(Consumer<T> hook) {
+	public BeanInstantiator<T> postCreateHook(Consumer<T> hook) {
 		assertArgNotNull(ARG_hook, hook);
 		try (var writeLock = lock.write()) {
 			postCreateHooks.add(hook);
@@ -1087,7 +1087,7 @@ public class BeanCreator2<T> {
 	 *
 	 * @return This object.
 	 */
-	public BeanCreator2<T> reset() {
+	public BeanInstantiator<T> reset() {
 		try (var writeLock = lock.write()) {
 			// Only reset builder if no explicit builder instance was set
 			// Explicit builder instances should be preserved across resets
