@@ -100,6 +100,37 @@ public interface WritableBeanStore extends BeanStore {
 	<T> WritableBeanStore addSupplier(Class<T> beanType, Supplier<T> supplier, String name);
 
 	/**
+	 * Adds a fallback supplier for an unnamed bean of the specified type to this store.
+	 *
+	 * <p>
+	 * Default suppliers are consulted only after regular {@linkplain #addBean(Class,Object) entries} and the regular {@linkplain BasicBeanStore2#BasicBeanStore2(BeanStore) parent}
+	 * chain have been searched.  They serve as a "use this if nothing else has provided one" hook,
+	 * useful for memoizer-backed framework defaults that should not shadow explicit user
+	 * registrations or beans inherited from an overriding parent (e.g. a Spring application context).
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type.
+	 * @param supplier The bean supplier.  Must not be <jk>null</jk>.
+	 * @return This object for method chaining.
+	 */
+	<T> WritableBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> supplier);
+
+	/**
+	 * Adds a fallback supplier for a named bean of the specified type to this store.
+	 *
+	 * <p>
+	 * Default suppliers are consulted only after regular {@linkplain #addBean(Class,Object,String) entries} and the regular
+	 * parent chain have been searched.  See {@link #addDefaultSupplier(Class,Supplier)}.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type.
+	 * @param supplier The bean supplier.  Must not be <jk>null</jk>.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
+	 * @return This object for method chaining.
+	 */
+	<T> WritableBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> supplier, String name);
+
+	/**
 	 * Removes all beans from this store.
 	 *
 	 * <p>

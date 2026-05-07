@@ -63,6 +63,9 @@ public final class RestServerConstants {
 	/** The {@code "renderResponseStackTraces"} annotation attribute name — used in {@code noInherit} matching. */
 	public static final String PROPERTY_renderResponseStackTraces = "renderResponseStackTraces";
 
+	/** The {@code "eagerInit"} annotation attribute name — used in {@code noInherit} matching. */
+	public static final String PROPERTY_eagerInit = "eagerInit";
+
 	/** The {@code "clientVersionHeader"} annotation attribute name — used in {@code noInherit} matching. */
 	public static final String PROPERTY_clientVersionHeader = "clientVersionHeader";
 

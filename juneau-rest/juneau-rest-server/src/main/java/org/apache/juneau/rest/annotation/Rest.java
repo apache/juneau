@@ -243,6 +243,31 @@ public @interface Rest {
 	String config() default "";
 
 	/**
+	 * Eagerly initializes framework-managed memoizers during {@link RestContext} construction.
+	 *
+	 * <p>
+	 * When enabled, framework bean memoizers and operation/child-context memoizers are force-fired inside the
+	 * constructor try/catch so startup-time configuration errors fail fast.
+	 *
+	 * <p>
+	 * This setting is disabled by default.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> - Force eager initialization during context construction.
+	 * 	<li><js>"false"</js> - Keep initialization lazy until first use (default).
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String eagerInit() default "";
+
+	/**
 	 * Supported content media types.
 	 *
 	 * <p>
@@ -304,7 +329,7 @@ public @interface Rest {
 	 * <p>
 	 * Accepted values include {@code "allowedParserOptions"}, {@code "allowedSerializerOptions"},
 	 * {@code "allowedHeaderParams"}, {@code "allowedMethodHeaders"}, {@code "allowedMethodParams"},
-	 * {@code "disableContentParam"}, {@code "renderResponseStackTraces"}, {@code "clientVersionHeader"},
+	 * {@code "disableContentParam"}, {@code "renderResponseStackTraces"}, {@code "eagerInit"}, {@code "clientVersionHeader"},
 	 * {@code "uriAuthority"}, {@code "uriContext"}, {@code "uriRelativity"}, and {@code "uriResolution"}.
 	 * Each entry is SVL-resolved then comma-split. Prevents the named property from inheriting values from
 	 * parent {@code @Rest} annotations (router hierarchy). The {@code noInherit} attribute itself is never inherited.

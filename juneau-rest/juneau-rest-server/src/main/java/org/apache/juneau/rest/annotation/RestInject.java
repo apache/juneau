@@ -137,6 +137,33 @@ import org.apache.juneau.svl.*;
  * 		{@link RestInject#methodScope()} annotation can be used to apply to method-level only (when applicable).
  * </ul>
  *
+ * <h5 class='section'>Precedence (since 9.5.0):</h5>
+ * <p>
+ * 	{@code @RestInject} acts as a <i>programmable default</i>, analogous to Spring's
+ * 	<c>&#64;ConditionalOnMissingBean</c>.  When a {@link RestContext} resolves a framework-managed bean
+ * 	(<c>CallLogger</c>, <c>EncoderSet</c>, <c>SerializerSet</c>, <c>ParserSet</c>, <c>ThrownStore</c>,
+ * 	<c>Config</c>, <c>VarResolver</c>, <c>HttpPartSerializer</c>, <c>HttpPartParser</c>, etc.), the lookup
+ * 	walks the following tiers in order, returning the first hit:
+ * </p>
+ * <ol>
+ * 	<li><b>Overriding-parent bean store</b> — Spring beans (in <c>juneau-rest-server-springboot</c> deployments,
+ * 		via <c>SpringBeanStore</c>), or any bean reachable through {@link org.apache.juneau.cp.BasicBeanStore.Builder#overridingParent(org.apache.juneau.cp.BasicBeanStore) overridingParent(...)}.</li>
+ * 	<li><b>{@code @RestInject} method/field on the resource class</b> — registered as a regular bean-store
+ * 		entry, beating the framework default.</li>
+ * 	<li><b>Memoizer-backed framework default</b> — built into {@link RestContext} as a default supplier.</li>
+ * </ol>
+ * <p>
+ * 	In other words: a Spring <c>&#64;Bean</c> of type <c>CallLogger</c> wins over a {@code @RestInject CallLogger}
+ * 	method on the same servlet, which in turn wins over the framework's built-in <c>BasicCallLogger</c>.  Non-Spring
+ * 	deployments have an empty overriding-parent layer, so the chain naturally collapses to
+ * 	{@code @RestInject > default}.
+ * </p>
+ * <p>
+ * 	Prior to 9.5 the order was {@code @RestInject > Spring > default}.  See the 9.5.0 release notes for migration
+ * 	guidance if you need to keep that legacy behavior (typically by removing the Spring <c>&#64;Bean</c> or marking the
+ * 	{@code @RestInject} method's type with a Spring-native override such as <c>&#64;Primary</c>).
+ * </p>
+ *
  * <p>
  * Any of the following types can be customized via injection:
  * <table class='w800 styled'>

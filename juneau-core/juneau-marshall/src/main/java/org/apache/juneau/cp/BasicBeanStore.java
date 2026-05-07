@@ -53,7 +53,19 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li class='jm'>{@link #addBean(Class,Object,String) addBean(Class,Object,String)}
  * 	<li class='jm'>{@link #addSupplier(Class,Supplier) addSupplier(Class,Supplier)}
  * 	<li class='jm'>{@link #addSupplier(Class,Supplier,String) addSupplier(Class,Supplier,String)}
+ * 	<li class='jm'>{@link #addDefaultSupplier(Class,Supplier) addDefaultSupplier(Class,Supplier)} (last-resort fallback)
+ * 	<li class='jm'>{@link #addDefaultSupplier(Class,Supplier,String) addDefaultSupplier(Class,Supplier,String)}
  * </ul>
+ *
+ * <h5 class='section'>Resolution order:</h5>
+ * <p>
+ * Bean lookups consult the following sources in this order, returning the first match:
+ * <ol>
+ * 	<li>{@linkplain Builder#overridingParent(BasicBeanStore) Overriding parent} (e.g. a Spring application context bridge), if non-{@code null}.
+ * 	<li>Local entries added via {@link #addBean(Class,Object) addBean} / {@link #addSupplier(Class,Supplier) addSupplier}.
+ * 	<li>Regular {@linkplain Builder#parent(BasicBeanStore) parent}, if non-{@code null}.
+ * 	<li>Local default suppliers added via {@link #addDefaultSupplier(Class,Supplier) addDefaultSupplier} (memoizer-backed framework defaults).
+ * </ol>
  *
  * <p>
  * Beans are retrieved through the following methods:
@@ -106,6 +118,7 @@ public class BasicBeanStore {
 	public static class Builder {
 
 		BasicBeanStore parent;
+		BasicBeanStore overridingParent;
 		boolean readOnly;
 		boolean threadSafe;
 		Class<? extends BasicBeanStore> type;
@@ -174,6 +187,22 @@ public class BasicBeanStore {
 		 */
 		public Builder parent(BasicBeanStore value) {
 			parent = value;
+			return this;
+		}
+
+		/**
+		 * Specifies an overriding-parent bean store.
+		 *
+		 * <p>
+		 * The overriding parent is consulted <i>before</i> any local entries during bean lookup, allowing an outer
+		 * scope (typically a Spring {@code ApplicationContext} bridge) to take precedence over local registrations.
+		 * The regular {@link #parent(BasicBeanStore)} continues to be consulted as a fallback after local entries.
+		 *
+		 * @param value The overriding-parent bean store.  Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder overridingParent(BasicBeanStore value) {
+			overridingParent = value;
 			return this;
 		}
 
@@ -251,9 +280,12 @@ public class BasicBeanStore {
 
 	private final Deque<Entry<?>> entries;
 	private final Map<Class<?>,Entry<?>> unnamedEntries;
+	private final Deque<Entry<?>> defaults;
+	private final Map<Class<?>,Entry<?>> unnamedDefaults;
 	private final Map<Class<?>,Class<?>> beanTypes;
 
 	final Optional<BasicBeanStore> parent;
+	final Optional<BasicBeanStore> overridingParent;
 	final boolean readOnly;
 	final boolean threadSafe;
 	final SimpleReadWriteLock lock;
@@ -265,11 +297,14 @@ public class BasicBeanStore {
 	 */
 	protected BasicBeanStore(Builder builder) {
 		parent = opt(builder.parent);
+		overridingParent = opt(builder.overridingParent);
 		readOnly = builder.readOnly;
 		threadSafe = builder.threadSafe;
 		lock = threadSafe ? new SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
 		entries = threadSafe ? new ConcurrentLinkedDeque<>() : new LinkedList<>();
 		unnamedEntries = threadSafe ? new ConcurrentHashMap<>() : map();
+		defaults = threadSafe ? new ConcurrentLinkedDeque<>() : new LinkedList<>();
+		unnamedDefaults = threadSafe ? new ConcurrentHashMap<>() : map();
 		beanTypes = threadSafe ? new ConcurrentHashMap<>() : map();
 		var e = createEntry(BasicBeanStore.class, ()->this, null);
 		entries.addFirst(e);
@@ -365,6 +400,47 @@ public class BasicBeanStore {
 	}
 
 	/**
+	 * Adds a fallback supplier for an unnamed bean of the specified type to this factory.
+	 *
+	 * <p>
+	 * Default suppliers are consulted only after local {@linkplain #addBean(Class,Object) entries} and the regular
+	 * {@linkplain Builder#parent(BasicBeanStore) parent} have been searched.  They are intended for memoizer-backed
+	 * framework defaults that should not shadow explicit user registrations or beans inherited from an
+	 * {@linkplain Builder#overridingParent(BasicBeanStore) overriding parent} (e.g. Spring).
+	 *
+	 * @param <T> The class to associate this bean with.
+	 * @param beanType The class to associate this bean with.
+	 * @param bean The bean supplier.
+	 * @return This object.
+	 */
+	public <T> BasicBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> bean) {
+		return addDefaultSupplier(beanType, bean, null);
+	}
+
+	/**
+	 * Adds a fallback supplier for a named bean of the specified type to this factory.
+	 *
+	 * <p>
+	 * See {@link #addDefaultSupplier(Class,Supplier)} for ordering semantics.
+	 *
+	 * @param <T> The class to associate this bean with.
+	 * @param beanType The class to associate this bean with.
+	 * @param bean The bean supplier.
+	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public <T> BasicBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> bean, String name) {
+		assertCanWrite();
+		var e = createEntry(beanType, bean, name);
+		try (var x = lock.write()) {
+			defaults.addFirst(e);
+			if (e(name))
+				unnamedDefaults.put(beanType, e);
+		}
+		return this;
+	}
+
+	/**
 	 * Clears out all bean in this bean store.
 	 *
 	 * <p>
@@ -377,6 +453,8 @@ public class BasicBeanStore {
 		try (var x = lock.write()) {
 			unnamedEntries.clear();
 			entries.clear();
+			unnamedDefaults.clear();
+			defaults.clear();
 			beanTypes.clear();
 		}
 		return this;
@@ -451,11 +529,26 @@ public class BasicBeanStore {
 	})
 	public <T> Optional<T> getBean(Class<T> beanType) {
 		try (var x = lock.read()) {
+			// (1) Overriding parent (e.g. Spring) — wins over local entries.
+			if (overridingParent.isPresent()) {
+				var fromOverriding = overridingParent.get().getBean(beanType);
+				if (fromOverriding.isPresent())
+					return fromOverriding;
+			}
+			// (2) Local entries.
 			var e = (Entry<T>)unnamedEntries.get(beanType);
 			if (nn(e))
 				return opt(e.get());
-			if (parent.isPresent())
-				return parent.get().getBean(beanType);
+			// (3) Regular parent fallback.
+			if (parent.isPresent()) {
+				var fromParent = parent.get().getBean(beanType);
+				if (fromParent.isPresent())
+					return fromParent;
+			}
+			// (4) Local default suppliers.
+			var d = (Entry<T>)unnamedDefaults.get(beanType);
+			if (nn(d))
+				return opt(d.get());
 			return opte();
 		}
 	}
@@ -473,11 +566,26 @@ public class BasicBeanStore {
 	})
 	public <T> Optional<T> getBean(Class<T> beanType, String name) {
 		try (var x = lock.read()) {
+			// (1) Overriding parent.
+			if (overridingParent.isPresent()) {
+				var fromOverriding = overridingParent.get().getBean(beanType, name);
+				if (fromOverriding.isPresent())
+					return fromOverriding;
+			}
+			// (2) Local entries.
 			var e = (Entry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
 			if (nn(e))
 				return opt(e.get());
-			if (parent.isPresent())
-				return parent.get().getBean(beanType, name);
+			// (3) Regular parent fallback.
+			if (parent.isPresent()) {
+				var fromParent = parent.get().getBean(beanType, name);
+				if (fromParent.isPresent())
+					return fromParent;
+			}
+			// (4) Local default suppliers.
+			var d = (Entry<T>)defaults.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
+			if (nn(d))
+				return opt(d.get());
 			return opte();
 		}
 	}
@@ -561,7 +669,10 @@ public class BasicBeanStore {
 	 * @return <jk>true</jk> if this store contains the specified unnamed bean type.
 	 */
 	public boolean hasBean(Class<?> beanType) {
-		return unnamedEntries.containsKey(beanType) || parent.map(x -> x.hasBean(beanType)).orElse(false);
+		return overridingParent.map(x -> x.hasBean(beanType)).orElse(false)
+			|| unnamedEntries.containsKey(beanType)
+			|| parent.map(x -> x.hasBean(beanType)).orElse(false)
+			|| unnamedDefaults.containsKey(beanType);
 	}
 
 	/**
@@ -572,7 +683,43 @@ public class BasicBeanStore {
 	 * @return <jk>true</jk> if this store contains the specified named bean type.
 	 */
 	public boolean hasBean(Class<?> beanType, String name) {
-		return entries.stream().anyMatch(x -> x.matches(beanType, name)) || parent.map(x -> x.hasBean(beanType, name)).orElse(false);
+		return overridingParent.map(x -> x.hasBean(beanType, name)).orElse(false)
+			|| entries.stream().anyMatch(x -> x.matches(beanType, name))
+			|| parent.map(x -> x.hasBean(beanType, name)).orElse(false)
+			|| defaults.stream().anyMatch(x -> x.matches(beanType, name));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this store has a {@linkplain #addDefaultSupplier(Class,Supplier) default supplier}
+	 * registered locally for the specified unnamed bean type.
+	 *
+	 * <p>
+	 * This is intended for callers that need to distinguish "framework default present" from "any binding
+	 * exists" — for example, the {@code RestContext} {@code @RestInject} eager walk uses this signal to
+	 * skip types that are managed by an internal memoizer (replacing the legacy {@code DELAYED_INJECTION}
+	 * skip-list).  Parent and overriding-parent stores are <i>not</i> consulted.
+	 *
+	 * @param beanType The bean type to check.
+	 * @return <jk>true</jk> if a default supplier for the unnamed bean type is registered on this store.
+	 */
+	public boolean hasDefaultSupplier(Class<?> beanType) {
+		return unnamedDefaults.containsKey(beanType);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this store has a {@linkplain #addDefaultSupplier(Class,Supplier,String) default supplier}
+	 * registered locally for the specified bean type and name.
+	 *
+	 * <p>
+	 * See {@link #hasDefaultSupplier(Class)} for the rationale.  Parent and overriding-parent stores are
+	 * <i>not</i> consulted.
+	 *
+	 * @param beanType The bean type to check.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
+	 * @return <jk>true</jk> if a default supplier for the bean type and name is registered on this store.
+	 */
+	public boolean hasDefaultSupplier(Class<?> beanType, String name) {
+		return defaults.stream().anyMatch(x -> x.matches(beanType, name));
 	}
 
 	protected FluentMap<String,Object> properties() {

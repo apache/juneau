@@ -916,5 +916,196 @@ class BasicBeanStore_Test extends TestBase {
 		assertNotNull(result);
 		assertFalse(result.isEmpty());
 	}
+
+	//====================================================================================================
+	// addDefaultSupplier(...) and overriding-parent precedence
+	//====================================================================================================
+
+	@Test
+	void r01_addDefaultSupplier_unnamed_fallsBackWhenNoEntry() {
+		var store = new BasicBeanStore2(null);
+		var defaultBean = new TestBean("default");
+		store.addDefaultSupplier(TestBean.class, () -> defaultBean);
+
+		assertTrue(store.getBean(TestBean.class).isPresent());
+		assertSame(defaultBean, store.getBean(TestBean.class).get());
+	}
+
+	@Test
+	void r02_addDefaultSupplier_localEntryBeatsDefault() {
+		var store = new BasicBeanStore2(null);
+		var defaultBean = new TestBean("default");
+		var localBean = new TestBean("local");
+		store.addDefaultSupplier(TestBean.class, () -> defaultBean);
+		store.addBean(TestBean.class, localBean);
+
+		assertSame(localBean, store.getBean(TestBean.class).orElseThrow());
+	}
+
+	@Test
+	void r03_addDefaultSupplier_regularParentBeatsDefault() {
+		var parent = new BasicBeanStore2(null);
+		parent.addBean(TestBean.class, new TestBean("parent"));
+
+		var store = new BasicBeanStore2(parent);
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("default"));
+
+		assertEquals("parent", store.getBean(TestBean.class).orElseThrow().getName());
+	}
+
+	@Test
+	void r04_addDefaultSupplier_named() {
+		var store = new BasicBeanStore2(null);
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("dn"), "n1");
+
+		assertTrue(store.getBean(TestBean.class, "n1").isPresent());
+		assertEquals("dn", store.getBean(TestBean.class, "n1").orElseThrow().getName());
+		assertFalse(store.getBean(TestBean.class).isPresent());
+		assertFalse(store.getBean(TestBean.class, "other").isPresent());
+	}
+
+	@Test
+	void r05_addDefaultSupplier_clearedByClear() {
+		var store = new BasicBeanStore2(null);
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("d"));
+		assertTrue(store.getBean(TestBean.class).isPresent());
+
+		store.clear();
+		assertFalse(store.getBean(TestBean.class).isPresent());
+	}
+
+	@Test
+	void s01_overridingParent_beatsLocalEntry() {
+		var spring = new BasicBeanStore2(null);
+		spring.addBean(TestBean.class, new TestBean("spring"));
+
+		var store = new BasicBeanStore2(null, spring);
+		store.addBean(TestBean.class, new TestBean("local"));
+
+		assertEquals("spring", store.getBean(TestBean.class).orElseThrow().getName());
+	}
+
+	@Test
+	void s02_overridingParent_beatsDefault() {
+		var spring = new BasicBeanStore2(null);
+		spring.addBean(TestBean.class, new TestBean("spring"));
+
+		var store = new BasicBeanStore2(null, spring);
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("default"));
+
+		assertEquals("spring", store.getBean(TestBean.class).orElseThrow().getName());
+	}
+
+	@Test
+	void s03_overridingParent_localEntryBeatsRegularParent() {
+		var regularParent = new BasicBeanStore2(null);
+		regularParent.addBean(TestBean.class, new TestBean("regular-parent"));
+
+		var spring = new BasicBeanStore2(null);
+		// no spring binding for TestBean
+
+		var store = new BasicBeanStore2(regularParent, spring);
+		store.addBean(TestBean.class, new TestBean("local"));
+
+		assertEquals("local", store.getBean(TestBean.class).orElseThrow().getName());
+	}
+
+	@Test
+	void s04_overridingParent_namedLookup() {
+		var spring = new BasicBeanStore2(null);
+		spring.addBean(TestBean.class, new TestBean("spring"), "primary");
+
+		var store = new BasicBeanStore2(null, spring);
+		store.addBean(TestBean.class, new TestBean("local"), "primary");
+
+		assertEquals("spring", store.getBean(TestBean.class, "primary").orElseThrow().getName());
+		assertFalse(store.getBean(TestBean.class, "other").isPresent());
+	}
+
+	@Test
+	void s05_fullPrecedenceOrder() {
+		// Set up: overriding parent (Spring), regular parent, local entry, local default
+		var regularParent = new BasicBeanStore2(null);
+		regularParent.addBean(TestBean.class, new TestBean("regular-parent"));
+
+		var spring = new BasicBeanStore2(null);
+		spring.addBean(TestBean.class, new TestBean("spring"));
+
+		var store = new BasicBeanStore2(regularParent, spring);
+		store.addBean(TestBean.class, new TestBean("local"));
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("default"));
+
+		// Spring (overriding) wins.
+		assertEquals("spring", store.getBean(TestBean.class).orElseThrow().getName());
+	}
+
+	@Test
+	void s06_precedenceOrder_noOverriding_noEntry() {
+		// Only regular parent and default — regular parent wins over default.
+		var regularParent = new BasicBeanStore2(null);
+		regularParent.addBean(TestBean.class, new TestBean("regular-parent"));
+
+		var store = new BasicBeanStore2(regularParent);
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("default"));
+
+		assertEquals("regular-parent", store.getBean(TestBean.class).orElseThrow().getName());
+	}
+
+	@Test
+	void s07_precedenceOrder_noOverridingMatch_fallsThroughToLocal() {
+		// Spring has no match, local entry should be returned.
+		var spring = new BasicBeanStore2(null);
+		// no binding for TestBean
+
+		var store = new BasicBeanStore2(null, spring);
+		store.addBean(TestBean.class, new TestBean("local"));
+
+		assertEquals("local", store.getBean(TestBean.class).orElseThrow().getName());
+	}
+
+	@Test
+	void s08_overridingParent_getBeanSupplier() {
+		var spring = new BasicBeanStore2(null);
+		spring.addBean(TestBean.class, new TestBean("spring"));
+
+		var store = new BasicBeanStore2(null, spring);
+		store.addBean(TestBean.class, new TestBean("local"));
+
+		var supplier = store.getBeanSupplier(TestBean.class);
+		assertTrue(supplier.isPresent());
+		assertEquals("spring", supplier.get().get().getName());
+	}
+
+	@Test
+	void s09_overridingParent_hasBean() {
+		var spring = new BasicBeanStore2(null);
+		spring.addBean(TestBean.class, new TestBean("spring"));
+
+		var store = new BasicBeanStore2(null, spring);
+		assertTrue(store.hasBean(TestBean.class));
+		assertFalse(store.hasBean(AnotherBean.class));
+	}
+
+	@Test
+	void s10_overridingParent_getBeansOfType_overridesLocalNamed() {
+		var spring = new BasicBeanStore2(null);
+		spring.addBean(TestBean.class, new TestBean("spring-a"), "a");
+		spring.addBean(TestBean.class, new TestBean("spring-b"), "b");
+
+		var store = new BasicBeanStore2(null, spring);
+		store.addBean(TestBean.class, new TestBean("local-a"), "a");
+		store.addBean(TestBean.class, new TestBean("local-c"), "c");
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("default-d"), "d");
+
+		var beans = store.getBeansOfType(TestBean.class);
+		// "a" is in both local and overriding parent — overriding wins.
+		assertEquals("spring-a", beans.get("a").getName());
+		// "b" only in overriding parent.
+		assertEquals("spring-b", beans.get("b").getName());
+		// "c" only local.
+		assertEquals("local-c", beans.get("c").getName());
+		// "d" only in defaults.
+		assertEquals("default-d", beans.get("d").getName());
+	}
 }
 

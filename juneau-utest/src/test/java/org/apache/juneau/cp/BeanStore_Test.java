@@ -724,6 +724,95 @@ class BeanStore_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// Default suppliers and overriding-parent precedence
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_addDefaultSupplier_unnamed_fallsBackWhenNoEntry() {
+		var bs = BasicBeanStore.create().build();
+		bs.addDefaultSupplier(String.class, () -> "default");
+		assertString("default", bs.getBean(String.class).orElseThrow());
+	}
+
+	@Test void e02_addDefaultSupplier_localEntryBeatsDefault() {
+		var bs = BasicBeanStore.create().build();
+		bs.addDefaultSupplier(String.class, () -> "default");
+		bs.addBean(String.class, "local");
+		assertString("local", bs.getBean(String.class).orElseThrow());
+	}
+
+	@Test void e03_addDefaultSupplier_regularParentBeatsDefault() {
+		var parent = BasicBeanStore.create().build().addBean(String.class, "parent");
+		var bs = BasicBeanStore.create().parent(parent).build();
+		bs.addDefaultSupplier(String.class, () -> "default");
+		assertString("parent", bs.getBean(String.class).orElseThrow());
+	}
+
+	@Test void e04_addDefaultSupplier_named() {
+		var bs = BasicBeanStore.create().build();
+		bs.addDefaultSupplier(String.class, () -> "named-default", "n1");
+		assertString("named-default", bs.getBean(String.class, "n1").orElseThrow());
+		assertFalse(bs.getBean(String.class).isPresent());
+		assertFalse(bs.getBean(String.class, "other").isPresent());
+	}
+
+	@Test void e05_addDefaultSupplier_clearedByClear() {
+		var bs = BasicBeanStore.create().build();
+		bs.addDefaultSupplier(String.class, () -> "default");
+		assertTrue(bs.getBean(String.class).isPresent());
+		bs.clear();
+		assertFalse(bs.getBean(String.class).isPresent());
+	}
+
+	@Test void e06_overridingParent_beatsLocalEntry() {
+		var spring = BasicBeanStore.create().build().addBean(String.class, "spring");
+		var bs = BasicBeanStore.create().overridingParent(spring).build();
+		bs.addBean(String.class, "local");
+		assertString("spring", bs.getBean(String.class).orElseThrow());
+	}
+
+	@Test void e07_overridingParent_beatsDefault() {
+		var spring = BasicBeanStore.create().build().addBean(String.class, "spring");
+		var bs = BasicBeanStore.create().overridingParent(spring).build();
+		bs.addDefaultSupplier(String.class, () -> "default");
+		assertString("spring", bs.getBean(String.class).orElseThrow());
+	}
+
+	@Test void e08_overridingParent_localEntryBeatsRegularParent() {
+		var regularParent = BasicBeanStore.create().build().addBean(String.class, "regular-parent");
+		var spring = BasicBeanStore.create().build();
+		var bs = BasicBeanStore.create().parent(regularParent).overridingParent(spring).build();
+		bs.addBean(String.class, "local");
+		assertString("local", bs.getBean(String.class).orElseThrow());
+	}
+
+	@Test void e09_overridingParent_namedLookup() {
+		var spring = BasicBeanStore.create().build().addBean(String.class, "spring", "primary");
+		var bs = BasicBeanStore.create().overridingParent(spring).build();
+		bs.addBean(String.class, "local", "primary");
+		assertString("spring", bs.getBean(String.class, "primary").orElseThrow());
+	}
+
+	@Test void e10_fullPrecedenceOrder() {
+		var regularParent = BasicBeanStore.create().build().addBean(String.class, "regular-parent");
+		var spring = BasicBeanStore.create().build().addBean(String.class, "spring");
+		var bs = BasicBeanStore.create().parent(regularParent).overridingParent(spring).build();
+		bs.addBean(String.class, "local");
+		bs.addDefaultSupplier(String.class, () -> "default");
+		assertString("spring", bs.getBean(String.class).orElseThrow());
+	}
+
+	@Test void e11_hasBean_includesAllTiers() {
+		var spring = BasicBeanStore.create().build().addBean(Integer.class, 1);
+		var bs = BasicBeanStore.create().overridingParent(spring).build();
+		bs.addBean(String.class, "local");
+		bs.addDefaultSupplier(Long.class, () -> 99L);
+		assertTrue(bs.hasBean(Integer.class));    // overriding parent
+		assertTrue(bs.hasBean(String.class));     // local entry
+		assertTrue(bs.hasBean(Long.class));       // default
+		assertFalse(bs.hasBean(Double.class));    // nowhere
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Helpers
 	//-----------------------------------------------------------------------------------------------------------------
 

@@ -83,6 +83,7 @@ public class RestAnnotation {
 		private String allowedMethodParams = "";
 		private String clientVersionHeader = "";
 		private String config = "";
+		private String eagerInit = "";
 		private String debug = "";
 		private String debugDefault = "";
 		private String debugOn = "";
@@ -226,6 +227,17 @@ public class RestAnnotation {
 		 */
 		public Builder config(String value) {
 			config = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#eagerInit()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder eagerInit(String value) {
+			eagerInit = value;
 			return this;
 		}
 
@@ -705,6 +717,7 @@ public class RestAnnotation {
 		private final String allowedMethodParams;
 		private final String clientVersionHeader;
 		private final String config;
+		private final String eagerInit;
 		private final String debug;
 		private final String debugDefault;
 		private final String debugOn;
@@ -748,6 +761,7 @@ public class RestAnnotation {
 			children = copyOf(b.children);
 			clientVersionHeader = b.clientVersionHeader;
 			config = b.config;
+			eagerInit = b.eagerInit;
 			allowedParserOptions = copyOf(b.allowedParserOptions);
 			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
 			noInherit = copyOf(b.noInherit);
@@ -831,6 +845,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String config() {
 			return config;
+		}
+
+		@Override /* Overridden from Rest */
+		public String eagerInit() {
+			return eagerInit;
 		}
 
 		@Override /* Overridden from Rest */
