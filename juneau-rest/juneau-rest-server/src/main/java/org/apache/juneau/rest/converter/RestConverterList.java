@@ -21,8 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.WritableBeanStore;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * A list of {@link RestConverter} objects.
@@ -38,7 +37,7 @@ public class RestConverterList {
 	 */
 	public static class Builder extends BeanBuilder<RestConverterList> {
 
-		List<BeanCreator<RestConverter>> entries;
+		List<BeanInstantiator<RestConverter>> entries;
 
 		/**
 		 * Create an empty builder.
@@ -61,7 +60,7 @@ public class RestConverterList {
 		})
 		public Builder append(Class<? extends RestConverter>...values) {
 			for (var v : values)
-				entries.add(BeanCreator.of(RestConverter.class, beanStore()).type(v));
+				entries.add(BeanInstantiator.of(RestConverter.class, beanStore()).beanSubType(v));
 			return this;
 		}
 
@@ -73,7 +72,7 @@ public class RestConverterList {
 		 */
 		public Builder append(RestConverter...values) {
 			for (var v : values)
-				entries.add(BeanCreator.of(RestConverter.class, beanStore()).impl(v));
+				entries.add(BeanInstantiator.of(RestConverter.class, beanStore()).implementation(v));
 			return this;
 		}
 
@@ -118,7 +117,7 @@ public class RestConverterList {
 			builder
 				.entries
 				.stream()
-				.map(BeanCreator::run)
+				.map(BeanInstantiator::run)
 				.toArray(RestConverter[]::new);
 		// @formatter:on
 	}

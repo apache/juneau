@@ -22,10 +22,8 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.commons.inject.WritableBeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
 
 /**
  * A list of {@link ResponseProcessor} objects.
@@ -104,11 +102,12 @@ public class ResponseProcessorList {
 		return new Builder(beanStore);
 	}
 
+	@SuppressWarnings("unchecked")
 	private static ResponseProcessor instantiate(Object o, BeanStore bs) {
 		if (o instanceof ResponseProcessor o2)
 			return o2;
 		try {
-			return BeanCreator.of(ResponseProcessor.class, bs).type((Class<?>)o).run();
+			return BeanInstantiator.of(ResponseProcessor.class, bs).beanSubType((Class<? extends ResponseProcessor>) o).run();
 		} catch (ExecutableException e) {
 			throw new ConfigException(e, "Could not instantiate class {0}", o);
 		}

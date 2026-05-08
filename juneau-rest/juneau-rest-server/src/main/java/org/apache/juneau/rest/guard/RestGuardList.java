@@ -21,8 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.WritableBeanStore;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * A list of {@link RestGuard} objects.
@@ -38,7 +37,7 @@ public class RestGuardList {
 	 */
 	public static class Builder extends BeanBuilder<RestGuardList> {
 
-		List<BeanCreator<RestGuard>> entries;
+		List<BeanInstantiator<RestGuard>> entries;
 
 		/**
 		 * Constructor.
@@ -61,7 +60,7 @@ public class RestGuardList {
 		})
 		public Builder append(Class<? extends RestGuard>...values) {
 			for (var v : values)
-				entries.add(BeanCreator.of(RestGuard.class, beanStore()).type(v));
+				entries.add(BeanInstantiator.of(RestGuard.class, beanStore()).beanSubType(v));
 			return this;
 		}
 
@@ -73,7 +72,7 @@ public class RestGuardList {
 		 */
 		public Builder append(RestGuard...values) {
 			for (var v : values)
-				entries.add(BeanCreator.of(RestGuard.class, beanStore()).impl(v));
+				entries.add(BeanInstantiator.of(RestGuard.class, beanStore()).implementation(v));
 			return this;
 		}
 
@@ -113,7 +112,7 @@ public class RestGuardList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestGuardList(Builder builder) {
-		entries = builder.entries.stream().map(BeanCreator::run).toArray(RestGuard[]::new);
+		entries = builder.entries.stream().map(BeanInstantiator::run).toArray(RestGuard[]::new);
 	}
 
 	/**

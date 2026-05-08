@@ -21,8 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.WritableBeanStore;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * A list of {@link RestMatcher} objects.
@@ -38,7 +37,7 @@ public class RestMatcherList {
 	 */
 	public static class Builder extends BeanBuilder<RestMatcherList> {
 
-		List<BeanCreator<RestMatcher>> entries;
+		List<BeanInstantiator<RestMatcher>> entries;
 
 		/**
 		 * Constructor.
@@ -61,7 +60,7 @@ public class RestMatcherList {
 		})
 		public Builder append(Class<? extends RestMatcher>...values) {
 			for (var v : values)
-				entries.add(BeanCreator.of(RestMatcher.class, beanStore()).type(v));
+				entries.add(BeanInstantiator.of(RestMatcher.class, beanStore()).beanSubType(v));
 			return this;
 		}
 
@@ -73,7 +72,7 @@ public class RestMatcherList {
 		 */
 		public Builder append(RestMatcher...values) {
 			for (var v : values)
-				entries.add(BeanCreator.of(RestMatcher.class, beanStore()).impl(v));
+				entries.add(BeanInstantiator.of(RestMatcher.class, beanStore()).implementation(v));
 			return this;
 		}
 
@@ -114,7 +113,7 @@ public class RestMatcherList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestMatcherList(Builder builder) {
-		List<RestMatcher> l = builder.entries.stream().map(BeanCreator::run).toList();
+		List<RestMatcher> l = builder.entries.stream().map(BeanInstantiator::run).toList();
 		optionalEntries = l.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 		requiredEntries = l.stream().filter(RestMatcher::required).toArray(RestMatcher[]::new);
 	}
