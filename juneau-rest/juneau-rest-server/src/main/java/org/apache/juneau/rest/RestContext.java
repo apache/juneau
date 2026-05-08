@@ -17,6 +17,7 @@
 package org.apache.juneau.rest;
 
 import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
@@ -490,7 +491,7 @@ public class RestContext extends Context {
 					RequestSwaggerVar.class, SerializedRequestAttrVar.class, ServletInitParamVar.class,
 					SwaggerVar.class, UrlVar.class, UrlEncodeVar.class, HtmlWidgetVar.class
 				).addDefault())
-				.bean(FileFinder.class, FileFinder.create((BasicBeanStore) bs).cp(resourceClass(), null, true).build())
+				.bean(FileFinder.class, FileFinder.create(bs).cp(resourceClass(), null, true).build())
 				.build()
 		);
 		bs.createBeanFromMethod(VarResolver.class, resource().get(), x -> isRestInjectMethod(x, PROP_bootstrapVarResolver)).ifPresent(v::set);
@@ -511,7 +512,7 @@ public class RestContext extends Context {
 		// bean store's entries deque and are returned by bs.getBean(CallLogger.class) before falling
 		// through to this memoizer's default supplier (which is what the @Rest(callLogger) chain
 		// produces).  The memoizer therefore only needs to produce the framework default.
-		var creator = BeanCreator.of(CallLogger.class, (BasicBeanStore) bs).type(BasicCallLogger.class);
+		var creator = BeanCreator.of(CallLogger.class, bs).type(BasicCallLogger.class);
 		bs.getBeanType(CallLogger.class).ifPresent(creator::type);
 		// @Rest(callLogger=X) — most-derived non-Void wins.
 		// getRestAnnotationsForProperty(...) yields parent-to-child order (rstream reversal); reduce-last
@@ -580,7 +581,7 @@ public class RestContext extends Context {
 			bs.addBean(Enablement.class, resolvedDebugDefault);
 		else if (bs.getBean(Enablement.class).isEmpty())
 			bs.addBean(Enablement.class, isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
-		var creator = BeanCreator.of(DebugEnablement.class, (BasicBeanStore) bs).type(BasicDebugEnablement.class);
+		var creator = BeanCreator.of(DebugEnablement.class, bs).type(BasicDebugEnablement.class);
 		bs.getBeanType(DebugEnablement.class).ifPresent(creator::type);
 		// @Rest(debugEnablement=X) — most-derived non-Void wins. See callLogger for the reduce-last rationale.
 		getRestAnnotationsForProperty(PROPERTY_debugEnablement)
@@ -672,7 +673,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<EncoderSet.Builder> encodersBuilder = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(EncoderSet.create((BasicBeanStore) bs));
+		var v = Value.of(EncoderSet.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_encoders).forEach(ai -> v.get().add(ai.inner().encoders()));
 		bs.createBeanFromMethod(EncoderSet.class, resource().get(), RestContext::isRestInjectMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
@@ -749,7 +750,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<MethodExecStore> methodExecStore = memoizer(() -> {
 		var bs = beanStore();
-		var b = MethodExecStore.create((BasicBeanStore) bs).thrownStoreOnce(getThrownStore());
+		var b = MethodExecStore.create(bs).thrownStoreOnce(getThrownStore());
 		bs.createBeanFromMethod(MethodExecStore.class, resource().get(), RestContext::isRestInjectMethod, b).ifPresent(b::impl);
 		return b.build();
 	});
@@ -764,7 +765,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<ParserSet.Builder> parsersBuilder = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(ParserSet.create((BasicBeanStore) bs));
+		var v = Value.of(ParserSet.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_parsers).forEach(ai -> v.get().add(ai.inner().parsers()));
 		bs.createBeanFromMethod(ParserSet.class, resource().get(), RestContext::isRestInjectMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
@@ -910,7 +911,7 @@ public class RestContext extends Context {
 		// DefaultConfig contributes the framework defaults at the top of the chain; resource-class entries append.
 		// ResponseProcessorList.Builder.add(...) uses addAll (append) — final order: [DefaultConfig, parent, child].
 		var bs = beanStore();
-		var v = Value.of(ResponseProcessorList.create((BasicBeanStore) bs));
+		var v = Value.of(ResponseProcessorList.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_responseProcessors)
 			.forEach(ai -> v.get().add(ai.inner().responseProcessors()));
 		// Bean-store override REPLACES the entire annotation-derived list.
@@ -933,7 +934,7 @@ public class RestContext extends Context {
 		// RestOpArgList.Builder.add(...) uses prependAll — applying per-annotation in chain order yields
 		// final order: [child, parent, DefaultConfig], matching the legacy apply-pass behavior.
 		var bs = beanStore();
-		var v = Value.of(RestOpArgList.create((BasicBeanStore) bs));
+		var v = Value.of(RestOpArgList.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_restOpArgs)
 			.forEach(ai -> v.get().add(ai.inner().restOpArgs()));
 		// Bean-store override REPLACES the entire annotation-derived list.
@@ -953,7 +954,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<SerializerSet.Builder> serializersBuilder = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(SerializerSet.create((BasicBeanStore) bs));
+		var v = Value.of(SerializerSet.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_serializers).forEach(ai -> v.get().add(ai.inner().serializers()));
 		bs.createBeanFromMethod(SerializerSet.class, resource().get(), RestContext::isRestInjectMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
@@ -983,7 +984,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<StaticFiles> staticFiles = memoizer(() -> {
 		var bs = beanStore();
-		var creator = BeanCreator.of(StaticFiles.class, (BasicBeanStore) bs).type(BasicStaticFiles.class);
+		var creator = BeanCreator.of(StaticFiles.class, bs).type(BasicStaticFiles.class);
 		bs.getBeanType(StaticFiles.class).ifPresent(creator::type);
 		// @Rest(staticFiles=X) — most-derived non-Void wins. See callLogger for the reduce-last rationale.
 		getRestAnnotationsForProperty(PROPERTY_staticFiles)
@@ -1004,7 +1005,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<SwaggerProvider> swaggerProvider = memoizer(() -> {
 		var bs = beanStore();
-		var creator = BeanCreator.of(SwaggerProvider.class, (BasicBeanStore) bs).type(BasicSwaggerProvider.class);
+		var creator = BeanCreator.of(SwaggerProvider.class, bs).type(BasicSwaggerProvider.class);
 		bs.getBeanType(SwaggerProvider.class).ifPresent(creator::type);
 		// @Rest(swaggerProvider=X) — most-derived non-Void wins. See callLogger for the reduce-last rationale.
 		getRestAnnotationsForProperty(PROPERTY_swaggerProvider)
@@ -1025,7 +1026,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<ThrownStore> thrownStore = memoizer(() -> {
 		var bs = beanStore();
-		var b = ThrownStore.create((BasicBeanStore) bs).impl(parentContext() == null ? null : parentContext().getThrownStore());
+		var b = ThrownStore.create(bs).impl(parentContext() == null ? null : parentContext().getThrownStore());
 		bs.createBeanFromMethod(ThrownStore.class, resource().get(), RestContext::isRestInjectMethod, b).ifPresent(b::impl);
 		return b.build();
 	});
@@ -1060,7 +1061,7 @@ public class RestContext extends Context {
 	private final Memoizer<RestOperations> restOperations = memoizer(() -> safe(() -> {
 		initializeFrameworkBeansForRestOps();
 		var bs = beanStore();
-		var v = Value.of(RestOperations.create((BasicBeanStore) bs));
+		var v = Value.of(RestOperations.create(bs));
 		var ap = getBeanContext().getAnnotationProvider();
 		var rci = ClassInfo.of(resource().get());
 		for (var mi : rci.getPublicMethods()) {
@@ -1106,7 +1107,7 @@ public class RestContext extends Context {
 	private final Memoizer<RestChildren> restChildren = memoizer(() -> safe(() -> {
 		var bs = beanStore();
 		var servletConfig = bs.getBean(ServletConfig.class).orElse(null);
-		var v = Value.of(RestChildren.create((BasicBeanStore) bs).type(RestChildren.class));
+		var v = Value.of(RestChildren.create(bs).type(RestChildren.class));
 
 		// Collect child classes from @Rest(children) on the annotation chain (parent-to-child order).
 		// Deduplicate so the same child class registered on both a parent and child annotation
@@ -1121,7 +1122,7 @@ public class RestContext extends Context {
 			if (bs.getBean(rc2).isPresent()) {
 				so = () -> bs.getBean(rc2).get();
 			} else {
-				Object o2 = BeanCreator.of(rc2, (BasicBeanStore) bs).run();
+				Object o2 = BeanCreator.of(rc2, bs).run();
 				so = () -> o2;
 			}
 			var cc = new RestContext(new Args(rc2, this, servletConfig, so, "", null));
@@ -1194,6 +1195,12 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			// If no parent store, promote bs to bootstrap and layer a fresh per-resource store on top.
+			// NOTE: Stays on legacy `BasicBeanStore.create()...` chain (vs `new BasicBeanStore2(null, X)`)
+			// because downstream consumers (`RestSession.java:240`, `VarResolver.java:260`) still
+			// downcast `RestContext.getBeanStore()` / `builder.beanStore()` to `BasicBeanStore` to call
+			// the legacy `BasicBeanStore.of(...)` static. Migrating those sites requires either
+			// widening the field types of those consumers or porting `BasicBeanStore.of(...)` onto
+			// `BasicBeanStore2` (Phase 4).
 			if (parentBs == null) {
 				bootstrapBeanStore = bs;
 				bs = BasicBeanStore.create().overridingParent((BasicBeanStore) bootstrapBeanStore).build();
@@ -2667,7 +2674,7 @@ public class RestContext extends Context {
 		var params = mi.getParameters();
 		var ra = new RestOpArg[params.size()];
 
-		var bs = BasicBeanStore.of((BasicBeanStore) beanStore);
+		var bs = new BasicBeanStore2(beanStore);
 		var roa = getRestOpArgs();
 
 		for (var i = 0; i < params.size(); i++) {

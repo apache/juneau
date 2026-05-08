@@ -40,6 +40,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.Memoizer;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
@@ -213,7 +214,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getBeanContext();
 		Value<BeanContext.Builder> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = BasicBeanStore.of((BasicBeanStore) beanStore())
+		var bs = new BasicBeanStore2(beanStore())
 			.addBean(Method.class, method())
 			.addBean(BeanContext.Builder.class, v.get());
 		bs.createBeanFromMethod(BeanContext.class, resource(), this::matchesInjectScope)
@@ -433,7 +434,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * method scope) REPLACES the result entirely.
 	 */
 	private final Memoizer<EncoderSet> encoders = memoizer(() -> {
-		var bs = (BasicBeanStore) beanStore();
+		var bs = beanStore();
 		var b = restContext().getEncodersBuilder().copy();
 		getRestOpAnnotationsForProperty(PROPERTY_encoders).forEach(ai -> {
 			var c = ai.getClassArray("encoders", Encoder.class).orElse(null);
@@ -543,7 +544,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getJsonSchemaGenerator();
 		Value<JsonSchemaGenerator.Builder> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = BasicBeanStore.of((BasicBeanStore) beanStore())
+		var bs = new BasicBeanStore2(beanStore())
 			.addBean(Method.class, method())
 			.addBean(JsonSchemaGenerator.Builder.class, v.get());
 		bs.createBeanFromMethod(JsonSchemaGenerator.class, resource(), this::matchesInjectScope)
@@ -661,7 +662,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getPartParser();
 		Value<HttpPartParser.Creator> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = BasicBeanStore.of((BasicBeanStore) beanStore())
+		var bs = new BasicBeanStore2(beanStore())
 			.addBean(Method.class, method())
 			.addBean(HttpPartParser.Creator.class, v.get());
 		bs.createBeanFromMethod(HttpPartParser.class, resource(), this::matchesInjectScope)
@@ -677,7 +678,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getPartSerializer();
 		Value<HttpPartSerializer.Creator> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = BasicBeanStore.of((BasicBeanStore) beanStore())
+		var bs = new BasicBeanStore2(beanStore())
 			.addBean(Method.class, method())
 			.addBean(HttpPartSerializer.Creator.class, v.get());
 		bs.createBeanFromMethod(HttpPartSerializer.class, resource(), this::matchesInjectScope)
