@@ -2697,7 +2697,11 @@ public class RestContext extends Context {
 			bs.addBean(ParameterInfo.class, pi);
 			for (var c : roa) {
 				try {
-					ra[i] = BeanCreator.of(RestOpArg.class, bs).type(c).run();
+					ra[i] = BeanInstantiator.of(RestOpArg.class, bs)
+						.beanSubType(c)
+						.factoryMethodNames("getInstance", "create")
+						.factoryAbstainOnNull()
+						.run();
 					if (nn(ra[i]))
 						break;
 				} catch (ExecutableException e) {

@@ -269,6 +269,7 @@ public class BeanInstantiator<T> {
 	private Supplier<? extends T> fallbackSupplier = null;
 	private final String name;
 	private boolean cached = false;
+	private boolean factoryAbstainOnNull = false;
 
 	private Memoizer<ClassInfo> builderType = memoizer(() -> findBuilderType());
 	private Memoizer<List<ClassInfo>> builderTypes = memoizer(() -> findBuilderTypes());
@@ -708,6 +709,49 @@ public class BeanInstantiator<T> {
 	public BeanInstantiator<T> cached() {
 		try (var writeLock = lock.write()) {
 			cached = true;
+		}
+		return this;
+	}
+
+	/**
+	 * Treat a {@code null} return value from a static factory method as a deliberate "abstain" signal.
+	 *
+	 * <p>
+	 * By default, when a static factory method (one of {@link #factoryMethodNames(String...)}) matches and is
+	 * invoked, but returns {@code null}, {@link #run()} falls through to constructor lookup as if the factory
+	 * method weren't there. This works well when the factory method is just an alternate construction path.
+	 *
+	 * <p>
+	 * Some factory-method patterns instead use a {@code null} return value as a deliberate "this implementation
+	 * does not handle the input — try the next strategy" signal, expecting the caller to interpret the {@code null}
+	 * as a definitive answer. The classic example is a {@code RestOpArg} subclass whose
+	 * {@code static create(ParameterInfo)} returns {@code null} when the parameter isn't annotated with the
+	 * marker the subclass handles, so the caller can move on to the next subclass in the chain. Falling through
+	 * to the (always-present) constructor in that case would silently materialize an arg that doesn't apply.
+	 *
+	 * <p>
+	 * When this flag is enabled, a {@code null} return from the matching factory method is propagated out of
+	 * {@link #run()} unchanged — constructor lookup is skipped. This matches legacy {@code BeanCreator}
+	 * semantics for static {@code create()} / {@code builder()} / {@code getInstance()} methods.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// AttributeArg.create(ParameterInfo) returns null if @Attr is not present.</jc>
+	 * 	<jc>// Without factoryAbstainOnNull, BeanInstantiator would then invoke the AttributeArg(ParameterInfo)</jc>
+	 * 	<jc>// constructor and return a bogus instance.</jc>
+	 * 	RestOpArg <jv>arg</jv> = BeanInstantiator
+	 * 		.<jsm>of</jsm>(RestOpArg.<jk>class</jk>, <jv>store</jv>)
+	 * 		.beanSubType(AttributeArg.<jk>class</jk>)
+	 * 		.factoryMethodNames(<js>"getInstance"</js>, <js>"create"</js>)
+	 * 		.factoryAbstainOnNull()
+	 * 		.run();
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public BeanInstantiator<T> factoryAbstainOnNull() {
+		try (var writeLock = lock.write()) {
+			factoryAbstainOnNull = true;
 		}
 		return this;
 	}
@@ -1284,18 +1328,24 @@ public class BeanInstantiator<T> {
 		log("Attempting Bean.factoryMethod()");
 		// If builder was detected but has no build method, pass it as extra bean for factory methods
 		Object[] factoryMethodExtraBeans = builder2 != null ? new Object[]{builder2} : new Object[0];
-		bean = beanSubType.getPublicMethods().stream()
+		var factoryMethod = beanSubType.getPublicMethods().stream()
 			.filter(x -> x.isAll(STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 			.filter(x -> factoryMethodNames.contains(x.getNameSimple()))
 			.filter(x -> x.hasReturnType(beanSubType))
 			.filter(x -> x.canResolveAllParameters(store2, factoryMethodExtraBeans))
 			.sorted(methodComparator)
-			.findFirst()
-			.map(x -> {
-				log("Found factory method: %s", x.getNameFull());
-				return (T)beanType.cast(x.inject(store2, null, factoryMethodExtraBeans));
-	})
-			.orElse(null);
+			.findFirst();
+		if (factoryMethod.isPresent()) {
+			log("Found factory method: %s", factoryMethod.get().getNameFull());
+			bean = (T) beanType.cast(factoryMethod.get().inject(store2, null, factoryMethodExtraBeans));
+			// When factoryAbstainOnNull is set, treat a null result from the factory method as a
+			// deliberate "abstain" signal and return null without falling through to constructor
+			// lookup.  Used by callers like RestOpArg subclasses whose create(ParameterInfo)
+			// returns null when the parameter isn't annotated with the marker the subclass
+			// handles (e.g. AttributeArg.create() returns null when @Attr isn't present).
+			if (bean == null && factoryAbstainOnNull)
+				return null;
+		}
 
 		// Look for Bean().
 		// Skip constructor invocation when beanSubType is abstract or an interface — Class.newInstance() would
