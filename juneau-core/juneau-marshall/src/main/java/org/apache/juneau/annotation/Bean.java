@@ -68,7 +68,7 @@ public @interface Bean {
 	 * When a factory class is specified, the framework resolves it in the following order:
 	 * <ol>
 	 * 	<li>Look up the factory class in the configured {@link org.apache.juneau.commons.inject.BeanStore}
-	 * 	    (e.g. a Spring {@code ApplicationContext} wrapped in a {@code SpringBeanStore})
+	 * 	    (e.g. a Spring {@code ApplicationContext} wrapped in a {@code SpringBeanStore2})
 	 * 	<li>Attempt direct instantiation via no-arg constructor or {@code getInstance()} static method
 	 * 	<li>Throw {@link IllegalArgumentException} if both fail
 	 * </ol>

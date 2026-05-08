@@ -161,7 +161,7 @@ Remaining inventory work:
 - [ ] **Retire remaining `BeanCreator.of(...)` memoizers.** — punted to **TODO-25**. Six holdouts in `RestContext` (`callLogger`, `debugEnablement`, `staticFiles`, `swaggerProvider`, the user-child-resource `BeanCreator.of(rc2, ...)` path, and `findRestOperationArgs`) plus `RestOpContext.createPartSerializer`. All six call sites already cast-free (via the `BeanCreator.of(Class, BeanStore)` overload landed 2026-05-08). Migration to `BeanInstantiator` blocked on `Basic*.init(BeanStore)` zero-out semantics + builder-default propagation — see TODO-25 plan.
 - [ ] Migrate `McpPage` / `McpTypedHandlers` / `McpEndpoint` / `McpRestServlet` in `rest-server-mcp`.
 - [ ] Migrate remaining `juneau-microservice-*` / `juneau-config` consumers (if any).
-- [ ] Update Javadoc-only references in `RestInject.java`, `RestInit.java`, `Name.java`, `Named.java`, `HttpPartParser.java`, `HttpPartSerializer.java`.
+- ~~Update Javadoc-only references in `RestInject.java`, `RestInit.java`, `Name.java`, `Named.java`, `HttpPartParser.java`, `HttpPartSerializer.java`.~~ — **DONE / N/A (2026-05-08).** Survey shows `RestInject`, `RestInit`, `Name`, `Named` carry zero legacy references (cleaned up earlier — TODO entry was stale). `HttpPartParser` / `HttpPartSerializer` still extend legacy `ContextBeanCreator` (real code, not Javadoc) — gated on the Phase-4 `ContextBeanCreator` migration.
 - [ ] Migrate each public API surface in `juneau-marshall`. Since 9.5 allows simple breaking changes, replace rather than overload — document each signature change in the 9.5 release notes.
 
 ## Phase 4 — Cutover rename

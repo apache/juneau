@@ -147,7 +147,7 @@ import org.apache.juneau.svl.*;
  * </p>
  * <ol>
  * 	<li><b>Overriding-parent bean store</b> — Spring beans (in <c>juneau-rest-server-springboot</c> deployments,
- * 		via <c>SpringBeanStore</c>), or any bean reachable through the configured overriding-parent
+ * 		via <c>SpringBeanStore2</c>), or any bean reachable through the configured overriding-parent
  * 		bean-store chain.</li>
  * 	<li><b>{@code @RestInject} method/field on the resource class</b> — registered as a regular bean-store
  * 		entry, beating the framework default.</li>
