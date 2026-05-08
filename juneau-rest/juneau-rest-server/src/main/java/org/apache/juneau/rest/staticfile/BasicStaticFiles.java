@@ -27,7 +27,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.inject.WritableBeanStore;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
@@ -60,7 +60,7 @@ public class BasicStaticFiles implements StaticFiles {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static StaticFiles.Builder create(WritableBeanStore beanStore) {
+	public static StaticFiles.Builder create(BeanStore beanStore) {
 		return new StaticFiles.Builder(beanStore);
 	}
 
@@ -75,7 +75,7 @@ public class BasicStaticFiles implements StaticFiles {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicStaticFiles(BasicBeanStore beanStore) {
+	public BasicStaticFiles(BeanStore beanStore) {
 		// @formatter:off
 		this(StaticFiles
 			.create(beanStore)

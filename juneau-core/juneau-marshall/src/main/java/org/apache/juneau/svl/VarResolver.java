@@ -81,6 +81,7 @@ public class VarResolver {
 	public static class Builder extends BeanBuilder<VarResolver> {
 
 		final VarList vars;
+		final java.util.LinkedHashMap<Class<?>,Object> userBeans;
 
 		/**
 		 * Constructor.
@@ -88,6 +89,7 @@ public class VarResolver {
 		protected Builder() {
 			super(VarResolver.class, BasicBeanStore.create().build());
 			vars = VarList.create();
+			userBeans = new java.util.LinkedHashMap<>();
 		}
 
 		/**
@@ -98,10 +100,16 @@ public class VarResolver {
 		protected Builder(VarResolver copyFrom) {
 			super(copyFrom.getClass(), copyFrom.beanStore);
 			vars = VarList.of(copyFrom.vars);
+			userBeans = new java.util.LinkedHashMap<>();
 		}
 
 		/**
-		 * Adds a bean to the bean store in this session.
+		 * Adds a bean to the resolved {@link VarResolver}'s local bean store.
+		 *
+		 * <p>
+		 * The bean is stored on this builder and merged into the resolver's local bean store at
+		 * {@link #build()} time.  The parent bean store passed at construction is not mutated, so beans
+		 * added here are isolated to {@link VarResolver}s built from this builder.
 		 *
 		 * @param <T> The bean type.
 		 * @param c The bean type.
@@ -109,7 +117,7 @@ public class VarResolver {
 		 * @return This object .
 		 */
 		public <T> Builder bean(Class<T> c, T value) {
-			super.beanStore().addBean(c, value);
+			userBeans.put(c, value);
 			return this;
 		}
 
@@ -249,6 +257,10 @@ public class VarResolver {
 	 *
 	 * @param builder The builder for this object.
 	 */
+	@SuppressWarnings({
+		"unchecked", // Type erasure on userBeans map: the runtime types match by construction
+		"rawtypes"   // Same reason — Builder.bean(Class<T>, T) ensures Class/value pairing
+	})
 	protected VarResolver(Builder builder) {
 		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore(), x)).toArray(Var[]::new);
 
@@ -257,7 +269,9 @@ public class VarResolver {
 			m.put(v.getName(), v);
 
 		this.varMap = u(m);
-		this.beanStore = new BasicBeanStore2(builder.beanStore());
+		var bs = new BasicBeanStore2(builder.beanStore());
+		builder.userBeans.forEach((c, v) -> bs.addBean((Class) c, v));
+		this.beanStore = bs;
 	}
 
 	/**

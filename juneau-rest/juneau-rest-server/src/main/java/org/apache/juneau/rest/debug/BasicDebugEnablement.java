@@ -23,6 +23,7 @@ import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
 import java.util.*;
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
@@ -54,12 +55,12 @@ public class BasicDebugEnablement extends DebugEnablement {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this enablement.
 	 */
-	public BasicDebugEnablement(BasicBeanStore beanStore) {
+	public BasicDebugEnablement(BeanStore beanStore) {
 		super(beanStore);
 	}
 
 	@Override
-	protected Builder init(BasicBeanStore beanStore) {
+	protected Builder init(BeanStore beanStore) {
 		var b = super.init(beanStore);
 
 		var resource = beanStore.getBean(ResourceSupplier.class).orElseThrow(() -> new IllegalStateException("ResourceSupplier not found"));

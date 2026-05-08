@@ -31,6 +31,7 @@ import java.util.function.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.inject.BeanCreationException;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.commons.reflect.*;
 
@@ -326,6 +327,12 @@ public class BasicBeanStore implements WritableBeanStore {
 		var e = createEntry(BasicBeanStore.class, ()->this, null);
 		entries.addFirst(e);
 		unnamedEntries.put(BasicBeanStore.class, e);
+		var e2 = createEntry(BeanStore.class, ()->this, null);
+		entries.addFirst(e2);
+		unnamedEntries.put(BeanStore.class, e2);
+		var e3 = createEntry(WritableBeanStore.class, ()->this, null);
+		entries.addFirst(e3);
+		unnamedEntries.put(WritableBeanStore.class, e3);
 	}
 
 	BasicBeanStore() {

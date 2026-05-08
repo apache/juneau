@@ -24,7 +24,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.inject.WritableBeanStore;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
@@ -67,7 +67,7 @@ public abstract class DebugEnablement {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(WritableBeanStore beanStore) {
+		protected Builder(BeanStore beanStore) {
 			mapBuilder = ReflectionMap.create(Enablement.class);
 			defaultEnablement = NEVER;
 			conditional = x -> eqic("true", x.getHeader(HEADER_Debug));
@@ -207,7 +207,7 @@ public abstract class DebugEnablement {
 	 * Represents no DebugEnablement.
 	 */
 	public abstract class Void extends DebugEnablement {
-		Void(BasicBeanStore beanStore) {
+		Void(BeanStore beanStore) {
 			super(beanStore);
 		}
 	}
@@ -218,7 +218,7 @@ public abstract class DebugEnablement {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(WritableBeanStore beanStore) {
+	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
@@ -229,11 +229,11 @@ public abstract class DebugEnablement {
 	/**
 	 * Constructor.
 	 * <p>
-	 * Subclasses typically override the {@link #init(BasicBeanStore)} method when using this constructor.
+	 * Subclasses typically override the {@link #init(BeanStore)} method when using this constructor.
 	 *
 	 * @param beanStore The bean store containing injectable beans for this enablement.
 	 */
-	protected DebugEnablement(BasicBeanStore beanStore) {
+	protected DebugEnablement(BeanStore beanStore) {
 		var builder = init(beanStore);
 		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
@@ -308,7 +308,7 @@ public abstract class DebugEnablement {
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 * @return A new builder object.
 	 */
-	protected Builder init(BasicBeanStore beanStore) {
+	protected Builder init(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

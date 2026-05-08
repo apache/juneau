@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.WritableBeanStore;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.cp.*;
 
 /**
@@ -54,7 +54,7 @@ public class ThrownStore {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(WritableBeanStore beanStore) {
+		protected Builder(BeanStore beanStore) {
 			super(ThrownStore.class, beanStore);
 		}
 
@@ -134,13 +134,13 @@ public class ThrownStore {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(WritableBeanStore beanStore) {
+	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
 	private final ConcurrentHashMap<Long,ThrownStats> db = new ConcurrentHashMap<>();
 	private final Optional<ThrownStore> parent;
-	private final WritableBeanStore beanStore;
+	private final BeanStore beanStore;
 	private final Class<? extends ThrownStats> statsImplClass;
 	private final Set<String> ignoreClasses;
 

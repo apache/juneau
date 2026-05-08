@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.cp.*;
 
 /**
@@ -92,7 +93,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicTestCaptureCallLogger(BasicBeanStore beanStore) {
+	public BasicTestCaptureCallLogger(BeanStore beanStore) {
 		super(beanStore);
 	}
 
@@ -175,7 +176,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	}
 
 	@Override
-	protected Builder init(BasicBeanStore beanStore) {
+	protected Builder init(BeanStore beanStore) {
 		// @formatter:off
 		return super.init(beanStore)
 			.normalRules(  // Rules when debugging is not enabled.

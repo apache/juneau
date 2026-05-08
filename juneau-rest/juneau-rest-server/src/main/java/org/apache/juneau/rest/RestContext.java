@@ -1194,20 +1194,10 @@ public class RestContext extends Context {
 				.addBean(ServletContext.class, (nn(builder.inner) ? builder.inner : builder).getServletContext());
 			// @formatter:on
 
-			// If no parent store, promote bs to bootstrap and layer a fresh per-resource store on top.
-			// NOTE: Stays on legacy `BasicBeanStore.create()...` chain (vs `new BasicBeanStore2(null, X)`)
-			// because (1) `BeanCreator` resolves `BasicBeanStore`-typed constructor params (e.g.
-			// `BasicDebugEnablement(BasicBeanStore)`) by walking the parent chain — a `BasicBeanStore2`
-			// here does not satisfy that lookup, and the walk falls through to `bootstrapBeanStore`
-			// (legacy, self-registered as `BasicBeanStore.class`) which does NOT have the
-			// per-resource framework default suppliers, breaking init() Bean lookups; and (2) user-facing
-			// `@RestPostCall void hook(BasicBeanStore bs)` parameters are resolved via `RestOpSessionArgs`
-			// which propagates this same bean store. Migration deferred until either
-			// `BasicDebugEnablement` / `BeanCreator` constructor-param resolution moves off legacy
-			// `BasicBeanStore`, or Phase 4 cutover absorbs the legacy statics into v2.
+			// If no parent store, promote bs to bootstrap and layer a fresh per-resource v2 store on top.
 			if (parentBs == null) {
 				bootstrapBeanStore = bs;
-				bs = BasicBeanStore.create().overridingParent((BasicBeanStore) bootstrapBeanStore).build();
+				bs = new BasicBeanStore2(bootstrapBeanStore);
 			} else {
 				bootstrapBeanStore = parentBs;
 			}

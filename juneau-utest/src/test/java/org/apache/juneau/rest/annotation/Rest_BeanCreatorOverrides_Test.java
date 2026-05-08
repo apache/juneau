@@ -19,6 +19,7 @@ package org.apache.juneau.rest.annotation;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.debug.*;
@@ -52,7 +53,7 @@ class Rest_BeanCreatorOverrides_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class CustomDebugEnablement extends BasicDebugEnablement {
-		public CustomDebugEnablement(BasicBeanStore beanStore) {
+		public CustomDebugEnablement(BeanStore beanStore) {
 			super(beanStore);
 		}
 	}
@@ -80,7 +81,7 @@ class Rest_BeanCreatorOverrides_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class CustomStaticFiles extends BasicStaticFiles {
-		public CustomStaticFiles(BasicBeanStore beanStore) {
+		public CustomStaticFiles(BeanStore beanStore) {
 			super(beanStore);
 		}
 	}
@@ -108,7 +109,7 @@ class Rest_BeanCreatorOverrides_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class CustomSwaggerProvider extends BasicSwaggerProvider {
-		public CustomSwaggerProvider(BasicBeanStore beanStore) {
+		public CustomSwaggerProvider(BeanStore beanStore) {
 			super(beanStore);
 		}
 	}
@@ -136,7 +137,7 @@ class Rest_BeanCreatorOverrides_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class CustomDebugEnablement2 extends BasicDebugEnablement {
-		public CustomDebugEnablement2(BasicBeanStore beanStore) {
+		public CustomDebugEnablement2(BeanStore beanStore) {
 			super(beanStore);
 		}
 	}

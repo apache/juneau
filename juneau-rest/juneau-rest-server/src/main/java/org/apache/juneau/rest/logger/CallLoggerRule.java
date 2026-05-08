@@ -24,6 +24,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.cp.*;
 
 import jakarta.servlet.http.*;
@@ -72,7 +73,7 @@ public class CallLoggerRule {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore beanStore) {
+		protected Builder(BeanStore beanStore) {
 			super(CallLoggerRule.class, beanStore);
 		}
 
@@ -319,7 +320,7 @@ public class CallLoggerRule {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore beanStore) {
+	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

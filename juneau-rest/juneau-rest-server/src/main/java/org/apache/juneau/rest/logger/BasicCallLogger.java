@@ -19,6 +19,7 @@ package org.apache.juneau.rest.logger;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
 
@@ -52,12 +53,12 @@ public class BasicCallLogger extends CallLogger {
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicCallLogger(BasicBeanStore beanStore) {
+	public BasicCallLogger(BeanStore beanStore) {
 		super(beanStore);
 	}
 
 	@Override
-	protected Builder init(BasicBeanStore beanStore) {
+	protected Builder init(BeanStore beanStore) {
 		// @formatter:off
 		return super.init(beanStore)
 			.normalRules(  // Rules when debugging is not enabled.

@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.commons.inject.WritableBeanStore;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.cp.*;
 
 /**
@@ -34,7 +34,7 @@ public class BeanBuilder<T> {
 	private Class<? extends T> type;
 	private Class<? extends T> defaultType;
 	private T impl;
-	private final WritableBeanStore beanStore;
+	private final BeanStore beanStore;
 
 	/**
 	 * Copy constructor.
@@ -51,15 +51,17 @@ public class BeanBuilder<T> {
 	 * Constructor.
 	 *
 	 * <p>
-	 * Accepts any {@link WritableBeanStore} \u2014 legacy {@link BasicBeanStore} (which
-	 * implements {@link WritableBeanStore}) or the v2
-	 * {@link org.apache.juneau.commons.inject.BasicBeanStore2 BasicBeanStore2}.  Cascade-builder
-	 * subclasses no longer need to downcast to {@link BasicBeanStore} when calling {@code super(...)}.
+	 * Accepts any {@link BeanStore} (read-only interface) \u2014 legacy {@link BasicBeanStore}, v2
+	 * {@link org.apache.juneau.commons.inject.BasicBeanStore2 BasicBeanStore2}, or any other
+	 * implementation. Subclasses use the bean store solely for parameter resolution at
+	 * {@link #build()} time; they do not mutate it. Subclasses needing to register additional beans
+	 * for the resolved instance to see should hold them on the builder and merge in {@code build()}
+	 * (see {@code VarResolver.Builder.bean(...)} for an example).
 	 *
-	 * @param beanStore The bean store to use for creating beans.
+	 * @param beanStore The bean store to use for parameter resolution. Must not be <jk>null</jk>.
 	 * @param defaultType The default bean type that this builder creates.
 	 */
-	protected BeanBuilder(Class<? extends T> defaultType, WritableBeanStore beanStore) {
+	protected BeanBuilder(Class<? extends T> defaultType, BeanStore beanStore) {
 		this.defaultType = type = defaultType;
 		this.beanStore = beanStore;
 	}
@@ -69,7 +71,7 @@ public class BeanBuilder<T> {
 	 *
 	 * @return The bean store passed in through the constructor.
 	 */
-	public WritableBeanStore beanStore() {
+	public BeanStore beanStore() {
 		return beanStore;
 	}
 

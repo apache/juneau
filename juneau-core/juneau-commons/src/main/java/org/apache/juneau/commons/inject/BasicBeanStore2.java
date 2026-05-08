@@ -126,6 +126,8 @@ public class BasicBeanStore2 implements WritableBeanStore {
 		defaults = new ConcurrentHashMap<>();
 		typeBindings = new ConcurrentHashMap<>();
 		addSupplier(BasicBeanStore2.class, ()->this, null);
+		addSupplier(BeanStore.class, ()->this, null);
+		addSupplier(WritableBeanStore.class, ()->this, null);
 	}
 
 	/**
