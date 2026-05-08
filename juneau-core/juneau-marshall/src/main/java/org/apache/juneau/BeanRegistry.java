@@ -28,9 +28,9 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.cp.*;
 
 /**
  * A lookup table for resolving bean types by name.
@@ -144,7 +144,7 @@ public class BeanRegistry {
 		try {
 			if (nn(ci) && nn(ci.inner())) {
 				if (ci.isAssignableTo(Collection.class)) {
-					Collection<?> cc = BeanCreator.of(Collection.class).type(ci).run();
+					Collection<?> cc = BeanInstantiator.of(Collection.class).beanSubType(ci).preferZeroArgConstructor().run();
 					cc.forEach(x -> {
 						if (x instanceof Class<?> x2)
 							addClass(info(x2));
@@ -152,7 +152,7 @@ public class BeanRegistry {
 							throw bex("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", ci.getName());
 					});
 				} else if (ci.isAssignableTo(Map.class)) {
-					Map<?,?> m = BeanCreator.of(Map.class).type(ci).run();
+					Map<?,?> m = BeanInstantiator.of(Map.class).beanSubType(ci).preferZeroArgConstructor().run();
 					m.forEach((k, v) -> {
 						var typeName = s(k);
 						ClassMeta<?> val = null;

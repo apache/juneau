@@ -270,6 +270,7 @@ public class BeanInstantiator<T> {
 	private final String name;
 	private boolean cached = false;
 	private boolean factoryAbstainOnNull = false;
+	private boolean preferZeroArgConstructor = false;
 
 	private Memoizer<ClassInfo> builderType = memoizer(() -> findBuilderType());
 	private Memoizer<List<ClassInfo>> builderTypes = memoizer(() -> findBuilderTypes());
@@ -752,6 +753,52 @@ public class BeanInstantiator<T> {
 	public BeanInstantiator<T> factoryAbstainOnNull() {
 		try (var writeLock = lock.write()) {
 			factoryAbstainOnNull = true;
+		}
+		return this;
+	}
+
+	/**
+	 * Prefer a zero-argument constructor when one exists, instead of injecting via the longest constructor.
+	 *
+	 * <p>
+	 * By default, {@code BeanInstantiator} sorts public constructors by parameter count <i>descending</i>: the
+	 * constructor with the most resolvable parameters wins, encouraging full constructor injection. This is the
+	 * right default for most beans, but it doesn't fit every use case.
+	 *
+	 * <p>
+	 * The classic mismatch is parameterized container types like {@link java.util.TreeMap}, which expose:
+	 * <ul>
+	 * 	<li>{@code TreeMap()}
+	 * 	<li>{@code TreeMap(Comparator)}
+	 * 	<li>{@code TreeMap(Map<? extends K, ? extends V>)}
+	 * 	<li>{@code TreeMap(SortedMap)}
+	 * </ul>
+	 * The default selection picks the {@code Map} copy-constructor — but that {@code Map<? extends K, ? extends V>}
+	 * parameter doesn't satisfy v2 inject-collection auto-resolution (which only handles {@code Map<String, T>}),
+	 * so injection fails at runtime even though {@link ParameterInfo#canResolve(BeanStore, Object...)} optimistically
+	 * said yes. Callers that just want "give me a fresh empty container" should use this flag.
+	 *
+	 * <p>
+	 * When this flag is enabled, if {@code beanSubType} declares a public no-arg constructor, that constructor is
+	 * used unconditionally and other constructors are ignored. This matches legacy {@code BeanCreator} behavior for
+	 * the same use case (legacy filtered out the multi-arg ctors via {@code hasAllParams} returning false, since the
+	 * legacy bean store didn't auto-resolve raw {@code Map}/{@code Collection} parameter types).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Instantiating an arbitrary Map subclass — prefer the no-arg ctor over copy-ctors.</jc>
+	 * 	Map&lt;?,?&gt; <jv>m</jv> = BeanInstantiator
+	 * 		.<jsm>of</jsm>(Map.<jk>class</jk>)
+	 * 		.beanSubType(treeMapClass)
+	 * 		.preferZeroArgConstructor()
+	 * 		.run();
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public BeanInstantiator<T> preferZeroArgConstructor() {
+		try (var writeLock = lock.write()) {
+			preferZeroArgConstructor = true;
 		}
 		return this;
 	}
@@ -1353,19 +1400,35 @@ public class BeanInstantiator<T> {
 		// fallthrough below (which honors the registered fallback supplier when present).
 		if (bean == null && ! beanSubType.isInterface() && ! beanSubType.isAbstract()) {
 			log("Attempting Bean() constructor");
+			// If preferZeroArgConstructor is set and a no-arg constructor exists, short-circuit to it.
+			// This skips the longest-resolvable-constructor heuristic for callers that just want a fresh
+			// empty instance — see preferZeroArgConstructor() Javadoc for the parameterized-container rationale.
+			if (preferZeroArgConstructor) {
+				var zeroArgCtor = beanSubType.getPublicConstructors().stream()
+					.filter(x -> x.isAll(NOT_DEPRECATED))
+					.filter(x -> x.isDeclaringClass(beanSubType))
+					.filter(x -> x.getParameterCount() == 0)
+					.findFirst();
+				if (zeroArgCtor.isPresent()) {
+					log("Using zero-arg constructor (preferZeroArgConstructor): %s", zeroArgCtor.get().getNameFull());
+					bean = (T) beanType.cast(zeroArgCtor.get().inject(store2, enclosingInstance));
+				}
+			}
 			// If builder was detected but has no build method, pass it as extra bean for constructors
 			Object[] constructorExtraBeans = builder2 != null ? new Object[]{builder2} : new Object[0];
-			bean = beanSubType.getPublicConstructors().stream()
-				.filter(x -> x.isAll(NOT_DEPRECATED))
-				.filter(x -> x.isDeclaringClass(beanSubType))
-				.filter(x -> x.canResolveAllParameters(store2, enclosingInstance, constructorExtraBeans))
-				.sorted(constructorComparator)
-				.findFirst()
-				.map(x -> {
-					log("Found constructor: %s", x.getNameFull());
-					return (T)beanType.cast(x.inject(store2, enclosingInstance, constructorExtraBeans));
-				})
-				.orElse(null);
+			if (bean == null) {
+				bean = beanSubType.getPublicConstructors().stream()
+					.filter(x -> x.isAll(NOT_DEPRECATED))
+					.filter(x -> x.isDeclaringClass(beanSubType))
+					.filter(x -> x.canResolveAllParameters(store2, enclosingInstance, constructorExtraBeans))
+					.sorted(constructorComparator)
+					.findFirst()
+					.map(x -> {
+						log("Found constructor: %s", x.getNameFull());
+						return (T)beanType.cast(x.inject(store2, enclosingInstance, constructorExtraBeans));
+					})
+					.orElse(null);
+			}
 		}
 
 		if (bean != null) {

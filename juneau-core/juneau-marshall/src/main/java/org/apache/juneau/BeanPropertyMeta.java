@@ -39,7 +39,6 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.ReflectionUtils;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -1103,7 +1102,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					}
 				} else {
 					if (propMap == null) {
-						propMap = BeanCreator.of(Map.class).type(rawTypeMeta).run();
+						propMap = BeanInstantiator.of(Map.class).beanSubType(rawTypeMeta).preferZeroArgConstructor().run();
 					} else {
 						propMap.clear();
 					}
@@ -1162,7 +1161,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					propList.clear();
 				} else {
 					if (propList == null) {
-						propList = BeanCreator.of(Collection.class).type(rawTypeMeta).run();
+						propList = BeanInstantiator.of(Collection.class).beanSubType(rawTypeMeta).preferZeroArgConstructor().run();
 						invokeSetter(bean, pName, propList);
 					} else {
 						propList.clear();
