@@ -40,12 +40,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.Memoizer;
-import org.apache.juneau.commons.inject.BasicBeanStore2;
-import org.apache.juneau.commons.inject.WritableBeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
@@ -156,7 +154,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, HttpPartSerializer defaultSerializer) {
-		return BeanCreator.of(HttpPartSerializer.class).type(c).orElse(defaultSerializer);
+		return c == null
+			? defaultSerializer
+			: BeanInstantiator.of(HttpPartSerializer.class).beanSubType(c).fallback(() -> defaultSerializer).run();
 	}
 
 	private final WritableBeanStore opBeanStore;

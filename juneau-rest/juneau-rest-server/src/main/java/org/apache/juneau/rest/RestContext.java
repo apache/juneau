@@ -18,6 +18,7 @@ package org.apache.juneau.rest;
 
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BeanInstantiator;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 
@@ -1128,7 +1129,7 @@ public class RestContext extends Context {
 			if (bs.getBean(rc2).isPresent()) {
 				so = () -> bs.getBean(rc2).get();
 			} else {
-				Object o2 = BeanCreator.of(rc2, bs).run();
+				Object o2 = BeanInstantiator.of(rc2, bs).run();
 				so = () -> o2;
 			}
 			var cc = new RestContext(new Args(rc2, this, servletConfig, so, "", null));
