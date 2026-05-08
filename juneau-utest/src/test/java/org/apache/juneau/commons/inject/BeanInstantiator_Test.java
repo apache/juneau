@@ -1903,21 +1903,24 @@ class BeanInstantiator_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that an error is thrown when builder's method returns parent type instead of exact bean subtype.
-		 * Verifies that Builder build methods must always return the exact bean subtype being created.
-		 * This ensures type safety and prevents ambiguous builder behavior.
+		 * Tests the loose-builder fallthrough: when the builder's build method declares the parent return
+		 * type and produces a parent-type runtime instance, BeanInstantiator falls through to factory
+		 * methods / constructors on the bean subtype, with the builder passed as an extra bean.  This lets
+		 * "subclass extends parent whose Builder.build() returns parent" patterns resolve cleanly via a
+		 * subclass constructor that accepts the builder.
 		 */
 		@Test
-		void d28_builderMethodReturningParentTypeThrowsError() {
+		void d28_builderMethodReturningParentTypeFallsThroughToConstructor() {
 			var creator = bc(D28_ParentBeanForBuilderMethod.class)
 				.beanSubType(D28_ChildBeanForBuilderMethod.class)
 				.builder(D28_BuilderForParentMethod.class);
 
-			var ex = assertThrows(ExecutableException.class, creator::run);
-			assertContains("Builder method", ex.getMessage());
-			assertContains("returns", ex.getMessage());
-			assertContains("but must return", ex.getMessage());
-			assertContains(D28_ChildBeanForBuilderMethod.class.getSimpleName(), ex.getMessage());
+			// Constructor `D28_ChildBeanForBuilderMethod(D28_BuilderForParentMethod builder)` matches; bean
+			// is constructed with default builder state.
+			var bean = creator.run();
+			assertNotNull(bean);
+			assertInstanceOf(D28_ChildBeanForBuilderMethod.class, bean);
+			assertEquals("default", bean.getValue());
 		}
 
 		// Parent bean type
@@ -3670,8 +3673,10 @@ class BeanInstantiator_Test extends TestBase {
 		}
 
 		/**
-		 * Tests debug logging when builder returns parent type instead of child type.
-		 * Verifies that builder build methods must return the exact bean subtype being created.
+		 * Tests debug logging when the builder returns parent type and the child type has no constructor
+		 * accepting the builder. Loose-builder mode falls through to factory methods / constructors;
+		 * with no compatible constructor on the child bean, instantiation fails — but with a
+		 * "no methods/constructors found" message rather than a strict "must return exact subtype" error.
 		 */
 		@Test
 		void p20_builderReturnsParentTypeNoConstructorAcceptsBuilder() {
@@ -3685,8 +3690,7 @@ class BeanInstantiator_Test extends TestBase {
 			var log = creator.getDebugLog();
 			var logString = log.toString();
 			assertContains("Builder method", logString);
-			assertContains("returns", logString);
-			assertContains("but must return", logString);
+			assertContains("falling through to factory methods/constructors", logString);
 			assertContains(P20_ChildBeanForBuilderTest.class.getSimpleName(), logString);
 			assertContains(P20_BuilderForParentBean.class.getSimpleName(), logString);
 		}

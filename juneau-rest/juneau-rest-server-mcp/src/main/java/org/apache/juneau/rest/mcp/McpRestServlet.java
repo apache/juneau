@@ -96,7 +96,7 @@ public abstract class McpRestServlet extends BasicRestServlet {
 	 */
 	@RestPost(path = "/")
 	public JsonRpcResponse handleMcp(@Content JsonRpcRequest req, RestRequest restReq) {
-		var bs = BasicBeanStore.of(restReq.getContext().getBeanStore())
+		var bs = BasicBeanStore.of((BasicBeanStore) restReq.getContext().getBeanStore())  // TODO - Why do we need a cast?
 			.addBean(RestRequest.class, restReq);
 		return Mcp.handle(req, getMcpConfig(), bs);
 	}

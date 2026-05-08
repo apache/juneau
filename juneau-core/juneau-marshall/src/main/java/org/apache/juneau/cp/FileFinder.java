@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.commons.io.*;
 
 /**
@@ -112,7 +113,7 @@ public interface FileFinder {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore beanStore) {
+		protected Builder(WritableBeanStore beanStore) {
 			super(BasicFileFinder.class, beanStore);
 			roots = set();
 			cachingLimit = -1;
@@ -235,7 +236,7 @@ public interface FileFinder {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	static Builder create(BasicBeanStore beanStore) {
+	static Builder create(WritableBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

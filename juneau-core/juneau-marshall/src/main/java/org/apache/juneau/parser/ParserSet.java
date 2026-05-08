@@ -17,6 +17,7 @@
 package org.apache.juneau.parser;
 
 import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -107,7 +108,7 @@ public class ParserSet {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore beanStore) {
+		protected Builder(WritableBeanStore beanStore) {
 			super(ParserSet.class, beanStore);
 			this.entries = list();
 		}
@@ -462,7 +463,7 @@ public class ParserSet {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore beanStore) {
+	public static Builder create(WritableBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

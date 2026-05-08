@@ -40,6 +40,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.Memoizer;
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
@@ -157,7 +158,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return BeanCreator.of(HttpPartSerializer.class).type(c).orElse(defaultSerializer);
 	}
 
-	private final BasicBeanStore opBeanStore;
+	private final WritableBeanStore opBeanStore;
 	protected final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 	protected final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
 	protected final Method method;
@@ -171,8 +172,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private Method method() { return method; }
 	private MethodInfo methodInfo() { return mi; }
 	private AnnotationWorkList appliedAnnotations() { return appliedAnnotations; }
-	private BasicBeanStore beanStore() { return context.getBeanStore(); }
-	private BasicBeanStore opBeanStore() { return opBeanStore; }
+	private WritableBeanStore beanStore() { return context.getBeanStore(); }// TODO - Should be BeanStore?
+	private WritableBeanStore opBeanStore() { return opBeanStore; }
 	private Object resource() { return context.getResource(); }
 	private VarResolver varResolver() { return context.getVarResolver(); }
 
@@ -212,12 +213,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getBeanContext();
 		Value<BeanContext.Builder> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = BasicBeanStore.of(beanStore())
+		var bs = BasicBeanStore.of((BasicBeanStore) beanStore())
 			.addBean(Method.class, method())
 			.addBean(BeanContext.Builder.class, v.get());
-		new BeanCreateMethodFinder<>(BeanContext.class, resource(), bs)
-			.find(this::matchesInjectScope)
-			.run(x -> v.get().impl(x));
+		bs.createBeanFromMethod(BeanContext.class, resource(), this::matchesInjectScope)
+			.ifPresent(x -> v.get().impl(x));
 		return v.get().build();
 	});
 
@@ -247,9 +247,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					v.get().append(classArray(c));
 			}));
 		bs.getBean(RestConverterList.class).ifPresent(x -> v.get().impl(x));
-		new BeanCreateMethodFinder<>(RestConverterList.class, resource(), bs)
-			.find(this::matchesInjectScope)
-			.run(x -> v.get().impl(x));
+		bs.createBeanFromMethod(RestConverterList.class, resource(), this::matchesInjectScope)
+			.ifPresent(x -> v.get().impl(x));
 		return v.get().build().asArray();
 	});
 
@@ -293,9 +292,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestAttributes).orElse(EMPTY_STRING_ARRAY))
 				v.get().add(BasicNamedAttribute.ofPair(s));
 		});
-		new BeanCreateMethodFinder<>(NamedAttributeMap.class, resource(), beanStore())
-			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestAttributes))
-			.run(v::set);
+		beanStore().createBeanFromMethod(NamedAttributeMap.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestAttributes))
+			.ifPresent(v::set);
 		return v.get();
 	});
 
@@ -325,9 +323,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				}
 			}
 		});
-		new BeanCreateMethodFinder<>(PartList.class, resource(), beanStore())
-			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestFormData))
-			.run(v::set);
+		beanStore().createBeanFromMethod(PartList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestFormData))
+			.ifPresent(v::set);
 		return v.get();
 	});
 
@@ -366,9 +363,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				}
 			}
 		});
-		new BeanCreateMethodFinder<>(HeaderList.class, resource(), beanStore())
-			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestHeaders))
-			.run(v::set);
+		beanStore().createBeanFromMethod(HeaderList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestHeaders))
+			.ifPresent(v::set);
 		return v.get();
 	});
 
@@ -398,9 +394,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				}
 			}
 		});
-		new BeanCreateMethodFinder<>(PartList.class, resource(), beanStore())
-			.find(x -> matchesInjectScope(x, PROPERTY_defaultRequestQueryData))
-			.run(v::set);
+		beanStore().createBeanFromMethod(PartList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestQueryData))
+			.ifPresent(v::set);
 		return v.get();
 	});
 
@@ -421,9 +416,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			for (var s : ai.getStringArray(PROPERTY_defaultResponseHeaders).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(stringHeader(s));
 		});
-		new BeanCreateMethodFinder<>(HeaderList.class, resource(), beanStore())
-			.find(x -> matchesInjectScope(x, PROPERTY_defaultResponseHeaders))
-			.run(v::set);
+		beanStore().createBeanFromMethod(HeaderList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultResponseHeaders))
+			.ifPresent(v::set);
 		return v.get();
 	});
 
@@ -439,7 +433,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * method scope) REPLACES the result entirely.
 	 */
 	private final Memoizer<EncoderSet> encoders = memoizer(() -> {
-		var bs = beanStore();
+		var bs = (BasicBeanStore) beanStore();
 		var b = restContext().getEncodersBuilder().copy();
 		getRestOpAnnotationsForProperty(PROPERTY_encoders).forEach(ai -> {
 			var c = ai.getClassArray("encoders", Encoder.class).orElse(null);
@@ -447,9 +441,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				b.set(c);
 		});
 		var v = Value.of(b.build());
-		new BeanCreateMethodFinder<>(EncoderSet.class, resource(), bs)
-			.find(this::matchesInjectScope)
-			.run(v::set);
+		bs.createBeanFromMethod(EncoderSet.class, resource(), this::matchesInjectScope)
+			.ifPresent(v::set);
 		return v.get();
 	});
 
@@ -507,9 +500,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		bs.getBean(RestGuardList.class).ifPresent(x -> v.get().impl(x));
-		new BeanCreateMethodFinder<>(RestGuardList.class, resource(), bs)
-			.find(this::matchesInjectScope)
-			.run(x -> v.get().impl(x));
+		bs.createBeanFromMethod(RestGuardList.class, resource(), this::matchesInjectScope)
+			.ifPresent(x -> v.get().impl(x));
 		return v.get().build().asArray();
 	});
 
@@ -551,12 +543,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getJsonSchemaGenerator();
 		Value<JsonSchemaGenerator.Builder> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = BasicBeanStore.of(beanStore())
+		var bs = BasicBeanStore.of((BasicBeanStore) beanStore())
 			.addBean(Method.class, method())
 			.addBean(JsonSchemaGenerator.Builder.class, v.get());
-		new BeanCreateMethodFinder<>(JsonSchemaGenerator.class, resource(), bs)
-			.find(this::matchesInjectScope)
-			.run(x -> v.get().impl(x));
+		bs.createBeanFromMethod(JsonSchemaGenerator.class, resource(), this::matchesInjectScope)
+			.ifPresent(x -> v.get().impl(x));
 		return v.get().build();
 	});
 
@@ -590,9 +581,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			v.get().append(new ClientVersionMatcher(restContext().getClientVersionHeader(), MethodInfo.of(method())));
 
 		bs.getBean(RestMatcherList.class).ifPresent(x -> v.get().impl(x));
-		new BeanCreateMethodFinder<>(RestMatcherList.class, resource(), bs)
-			.find(this::matchesInjectScope)
-			.run(x -> v.get().impl(x));
+		bs.createBeanFromMethod(RestMatcherList.class, resource(), this::matchesInjectScope)
+			.ifPresent(x -> v.get().impl(x));
 		return v.get().build();
 	});
 
@@ -658,9 +648,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				b.set(c);
 		});
 		var result = Value.of(b.build());
-		new BeanCreateMethodFinder<>(ParserSet.class, resource(), bs)
-			.find(this::matchesInjectScope)
-			.run(result::set);
+		bs.createBeanFromMethod(ParserSet.class, resource(), this::matchesInjectScope)
+			.ifPresent(result::set);
 		return result.get();
 	});
 
@@ -672,12 +661,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getPartParser();
 		Value<HttpPartParser.Creator> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = BasicBeanStore.of(beanStore())
+		var bs = BasicBeanStore.of((BasicBeanStore) beanStore())
 			.addBean(Method.class, method())
 			.addBean(HttpPartParser.Creator.class, v.get());
-		new BeanCreateMethodFinder<>(HttpPartParser.class, resource(), bs)
-			.find(this::matchesInjectScope)
-			.run(x -> v.get().impl(x));
+		bs.createBeanFromMethod(HttpPartParser.class, resource(), this::matchesInjectScope)
+			.ifPresent(x -> v.get().impl(x));
 		return v.get().create();
 	});
 
@@ -689,12 +677,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getPartSerializer();
 		Value<HttpPartSerializer.Creator> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = BasicBeanStore.of(beanStore())
+		var bs = BasicBeanStore.of((BasicBeanStore) beanStore())
 			.addBean(Method.class, method())
 			.addBean(HttpPartSerializer.Creator.class, v.get());
-		new BeanCreateMethodFinder<>(HttpPartSerializer.class, resource(), bs)
-			.find(this::matchesInjectScope)
-			.run(x -> v.get().impl(x));
+		bs.createBeanFromMethod(HttpPartSerializer.class, resource(), this::matchesInjectScope)
+			.ifPresent(x -> v.get().impl(x));
 		return v.get().create();
 	});
 
@@ -766,10 +753,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			v.get().add(UrlPathMatcher.of(p));
 		}
 
-		new BeanCreateMethodFinder<>(UrlPathMatcherList.class, resource(), beanStore())
-			.addBean(UrlPathMatcherList.class, v.get())
-			.find(this::matchesInjectScope)
-			.run(v::set);
+		beanStore().createBeanFromMethod(UrlPathMatcherList.class, resource(), this::matchesInjectScope, v.get())
+			.ifPresent(v::set);
 
 		return v.get().asArray();
 	});
@@ -817,9 +802,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				b.set(c);
 		});
 		var result = Value.of(b.build());
-		new BeanCreateMethodFinder<>(SerializerSet.class, resource(), bs)
-			.find(this::matchesInjectScope)
-			.run(result::set);
+		bs.createBeanFromMethod(SerializerSet.class, resource(), this::matchesInjectScope)
+			.ifPresent(result::set);
 		return result.get();
 	});
 
@@ -1109,11 +1093,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			mi = MethodInfo.of(method).accessible();
 
 			// @formatter:off
-			var bs = opBeanStore = BasicBeanStore.of(context.getBootstrapBeanStore())
+			var bs = (BasicBeanStore) (opBeanStore = BasicBeanStore.of((BasicBeanStore) context.getBootstrapBeanStore())
 				.addBean(RestOpContext.class, this)
 				.addBean(Method.class, method)
-				.addBean(AnnotationWorkList.class, appliedAnnotations);
+				.addBean(AnnotationWorkList.class, appliedAnnotations));
 			// @formatter:on
+			bs.addBean(WritableBeanStore.class, bs);
 			bs.addBean(BasicBeanStore.class, bs);
 
 			bs.add(BeanContext.class, getBeanContext());

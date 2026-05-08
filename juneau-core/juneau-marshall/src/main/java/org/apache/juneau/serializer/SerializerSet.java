@@ -19,6 +19,7 @@ package org.apache.juneau.serializer;
 import org.apache.juneau.commons.http.MediaRanges;
 import org.apache.juneau.commons.http.MediaRange;
 import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -107,7 +108,7 @@ public class SerializerSet {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore beanStore) {
+		protected Builder(WritableBeanStore beanStore) {
 			super(SerializerSet.class, beanStore);
 			this.entries = list();
 		}
@@ -459,7 +460,7 @@ public class SerializerSet {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore beanStore) {
+	public static Builder create(WritableBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

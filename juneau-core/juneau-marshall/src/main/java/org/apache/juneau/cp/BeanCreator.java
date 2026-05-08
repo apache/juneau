@@ -25,6 +25,9 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 
@@ -152,7 +155,12 @@ public class BeanCreator<T> {
 	}
 
 	/**
-	 * Creates a new bean creator.
+	 * Creates a new bean creator using a legacy {@link BasicBeanStore}.
+	 *
+	 * <p>
+	 * Retained for binary compatibility.  New call sites should prefer
+	 * {@link #of(Class,BeanStore)} so they can pass the v2 {@link BasicBeanStore2 BasicBeanStore2}
+	 * (or any other {@link BeanStore}) without a downcast.
 	 *
 	 * @param <T> The bean type to create.
 	 * @param beanType The bean type to create.
@@ -163,7 +171,25 @@ public class BeanCreator<T> {
 		return new BeanCreator<>(beanType, beanStore);
 	}
 
-	private final BasicBeanStore store;
+	/**
+	 * Creates a new bean creator backed by any {@link BeanStore} implementation.
+	 *
+	 * <p>
+	 * Accepts both legacy {@link BasicBeanStore} and the v2
+	 * {@link BasicBeanStore2 BasicBeanStore2} (or any other {@link BeanStore} subtype).  This is the
+	 * transitional bridge that lets in-flight {@code BeanCreator} call sites continue to work while
+	 * REST-server bean stores migrate to the v2 surface.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.
+	 * @param beanStore The bean store to use for parameter resolution.
+	 * @return A new creator.
+	 */
+	public static <T> BeanCreator<T> of(Class<T> beanType, BeanStore beanStore) {
+		return new BeanCreator<>(beanType, beanStore);
+	}
+
+	private final WritableBeanStore store;
 	private ClassInfo type;
 	private Object builder;
 	private T impl;
@@ -174,12 +200,23 @@ public class BeanCreator<T> {
 	/**
 	 * Constructor.
 	 *
+	 * <p>
+	 * Wraps the supplied parent in a fresh writable child store so that {@link #arg(Class,Object)}
+	 * and {@link #builder(Class,Object)} additions don't mutate the caller's store.  Legacy
+	 * {@link BasicBeanStore} parents are wrapped via {@code BasicBeanStore.of(...)} to preserve
+	 * legacy precedence semantics; any other {@link BeanStore} is wrapped via
+	 * {@code new BasicBeanStore2(parent)}.
+	 *
 	 * @param type The bean type being created.
-	 * @param store The bean store creating this creator.
+	 * @param parent The parent bean store providing beans for parameter resolution.  Can be any
+	 * 	{@link BeanStore} subtype (legacy or v2).
 	 */
-	protected BeanCreator(Class<T> type, BasicBeanStore store) {
+	protected BeanCreator(Class<T> type, BeanStore parent) {
 		this.type = info(type);
-		this.store = BasicBeanStore.of(store);
+		if (parent instanceof BasicBeanStore legacy)
+			this.store = BasicBeanStore.of(legacy);
+		else
+			this.store = new BasicBeanStore2(parent);
 	}
 
 	/**
@@ -202,7 +239,7 @@ public class BeanCreator<T> {
 	 * @return This object.
 	 */
 	public <T2> BeanCreator<T> arg(Class<T2> beanType, T2 bean) {
-		store.add(beanType, bean);
+		store.addBean(beanType, bean);
 		return this;
 	}
 
@@ -225,7 +262,7 @@ public class BeanCreator<T> {
 		builder = value;
 		var t = value.getClass();
 		do {
-			store.add((Class<T>)t, (T)value);
+			store.addBean((Class<T>)t, (T)value);
 			t = t.getSuperclass();
 		} while (nn(t) && ! t.equals(type));
 		return this;

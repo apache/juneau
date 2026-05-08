@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.svl.vars.*;
 
@@ -230,7 +231,7 @@ public class VarResolver {
 		return new Builder();
 	}
 
-	private static Var toVar(BasicBeanStore bs, Object o) {
+	private static Var toVar(BeanStore bs, Object o) {
 		if (o instanceof Class o2)
 			return BeanCreator.of(Var.class, bs).type(o2).run();
 		return (Var)o;
@@ -254,7 +255,9 @@ public class VarResolver {
 			m.put(v.getName(), v);
 
 		this.varMap = u(m);
-		this.beanStore = BasicBeanStore.of(builder.beanStore());
+		// Legacy BasicBeanStore.of(...) static still requires a BasicBeanStore parent; downcast preserves
+		// existing semantics. Will go away when BasicBeanStore.of(...) is widened or removed.
+		this.beanStore = BasicBeanStore.of((BasicBeanStore) builder.beanStore());
 	}
 
 	/**

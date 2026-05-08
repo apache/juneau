@@ -7,20 +7,52 @@ Eliminate the legacy injection stack in `org.apache.juneau.cp` (`BasicBeanStore`
 **Sequencing:**
 - **Lands before TODO-14.** TODO-14 (SVL → commons) consumes the final, un-suffixed class names produced by this TODO, so this work must complete first.
 - ~~TODO-1 (REST server API → `BeanStore2`)~~ — **DONE.** `RestContext` and all rest-server memoizers now use `BasicBeanStore2` / `WritableBeanStore` directly. No `cp.BasicBeanStore` imports remain in `juneau-rest-server` source files. Legacy references in `RestInject.java` / `RestInit.java` are **Javadoc-only**.
+- ~~`RestContext.java` / `RestOpContext.java` `BeanCreateMethodFinder` migration (49 sites)~~ — **DONE (PR landed 2026-05-07).** All 49 call sites rewritten to `bs.createBeanFromMethod(...).ifPresent(...)`. Field types flipped to `WritableBeanStore`. Mock-test clients (`MockRestClient`, `NgMockRestClient`, `Swagger_Test`) re-pointed at the v2 surface. `MethodInvoker.invoke(BasicBeanStore, Object)` → `invoke(BeanStore, Object)`. Full build + tests green.
+- ~~`BeanInstantiator` loose-builder relaxation~~ — **DONE (2026-05-07).** Strict "Builder.build() must return exact beanSubType" check replaced with a runtime check + factory-method/constructor fallthrough. Existing `BeanInstantiator_Test#d28` rewritten to assert the new behavior. Full build + tests green.
+- ~~Cascade-builders signature flip (Phase 3 sub-task)~~ — **DONE (2026-05-08).** Sixteen utility-class `create(BasicBeanStore)` factories flipped to `create(WritableBeanStore)`: `RestConverterList`, `RestGuardList`, `RestMatcherList`, `RestOpArgList`, `ResponseProcessorList`, `RestOperations`, `RestChildren`, `MethodExecStore`, `ThrownStore`, `FileFinder`, `StaticFiles`, `BasicStaticFiles.create(...)`, `DebugEnablement`, `SwaggerProvider`, `EncoderSet`, `ParserSet`, `SerializerSet`. `BeanBuilder<T>` parent constructor still takes legacy `BasicBeanStore`; downcast is performed inside each `Builder` constructor (acceptable transitional state — legacy `BasicBeanStore implements WritableBeanStore` makes the downcast safe). Casts at the call sites in `RestContext` / `RestOpContext` removed. `BasicBeanStore implements WritableBeanStore` ensures all existing legacy callers passing `BasicBeanStore` still compile (auto-upcast to interface). Full build + tests green.
+- ~~`BeanCreator.of(Class, BeanStore)` overload~~ — **DONE (2026-05-08).** Widened `BeanCreator` to accept any `BeanStore` parent (legacy or v2): added `of(Class, BeanStore)` static factory, changed protected ctor to `(Class, BeanStore)` with internal branch (legacy parent → `BasicBeanStore.of(legacy)`; v2 parent → `new BasicBeanStore2(parent)`), widened `store` field to `WritableBeanStore`, replaced `store.add(...)` with `store.addBean(...)`. Legacy `of(Class, BasicBeanStore)` overload retained for binary compat. Net effect: every `BeanCreator.of(...)` call site in `RestContext` / `RestOpContext` / `DebugEnablement.Builder` dropped its `(BasicBeanStore)` downcast (6 casts removed). The remaining `(BasicBeanStore)` casts in `RestContext` / `RestOpContext` are all on direct legacy-static API (`BasicBeanStore.of(...)`, `BasicBeanStore.create().overridingParent(...)`), not `BeanCreator.of(...)`.
+- ~~`BeanBuilder<T>` widening to `WritableBeanStore`~~ — **DONE (2026-05-08).** Field, constructor, and public `beanStore()` accessor all flipped from `BasicBeanStore` to `WritableBeanStore` (chosen over read-only `BeanStore` so callers retaining write access — e.g. `VarResolver.Builder.bean(...)` calling `super.beanStore().addBean(...)` — keep working). All 14 cascade-builder `super(X.class, (BasicBeanStore) beanStore)` casts dropped. Two standalone Builders (`SwaggerProvider.Builder.beanStore`, `ThrownStats.Builder.beanStore`) and one constructor (`BasicSwaggerProvider(BasicBeanStore)`) flipped to match. Two cascade-followon factories (`MethodExecStats.create(...)`, `ThrownStats.create(...)`) flipped. Three internal helper signatures (`ResponseProcessorList.instantiate(...)`, `EncoderSet.instantiate(...)`, `VarResolver.toVar(...)`) widened to `BeanStore`. Two field types (`MethodExecStore.beanStore`, `ThrownStore.beanStore`) flipped to `WritableBeanStore`. Single residual cast: `VarResolver` line 257 still calls `BasicBeanStore.of((BasicBeanStore) builder.beanStore())` because the legacy static `BasicBeanStore.of(...)` requires a legacy parent — will go away when that static is widened or removed in Phase 4. Full build + tests + jetty-ftest green.
+- ~~Four-memoizer migration to `BeanInstantiator` (Phase 3 sub-task)~~ — **ATTEMPTED + REVERTED (2026-05-08).** `callLogger` / `debugEnablement` / `staticFiles` / `swaggerProvider` were migrated to `BeanInstantiator.of(...).beanSubType(...).run()`; this broke documented `@Rest(callLogger=…)` / `@Rest(debugEnablement=…)` / `@Rest(swaggerProvider=…)` annotation overrides (3 `Rest_BeanCreatorOverrides_Test` failures) plus `juneau-examples-rest-jetty-ftest` (static files no longer served — `/htdocs/themes/dark.css` 404s). Root causes: (a) `BeanInstantiator` builder discovery picks parent-type builders whose `build()` produces empty-default state — `BasicStaticFiles.Builder` etc. never apply the bundled `htdocs/` mapping; (b) `Basic*.init(BeanStore)` methods zero-out builder defaults via `.orElse(null)` when optional beans aren't yet registered. All four memoizers reverted to legacy `BeanCreator.of(...)`. Cascade work + `BeanInstantiator` improvements (loose-builder fallthrough, interface-builder search via `getAllParents()`, debug log) preserved. Follow-up work tracked under **TODO-25** (`todo/TODO-25-revisit-rest-context-memoizer-migration.md`).
 
-**Current remaining footprint (as of 2026-05-07):**
+**Current remaining footprint (as of 2026-05-08, post-`BeanCreator` widening):**
 
 | Location | Legacy symbol | Nature |
 |---|---|---|
-| `RestContext.java` | `BeanCreateMethodFinder` | 33 live call sites — the dominant remaining work |
-| `RestOpContext.java` | `BeanCreateMethodFinder` | 16 live call sites |
+| `RestContext.java` | `BasicBeanStore`, `BeanCreator` | 6 `BeanCreator.of(...)` call sites (4 memoizers + user-child-resource path + `findRestOperationArgs`) — **all cast-free** thanks to `BeanCreator.of(Class, BeanStore)`; staying on legacy `BeanCreator` until **TODO-25** lands. Plus 3 direct `BasicBeanStore.of(...)` / `BasicBeanStore.create().overridingParent((BasicBeanStore) parentBs)` calls — these are direct legacy-static API and still require the `(BasicBeanStore)` downcast. |
+| `RestOpContext.java` | `BasicBeanStore`, `BeanCreator` | 6 `BasicBeanStore.of((BasicBeanStore) beanStore())` patterns (legacy `BasicBeanStore.of(...)` static still requires `BasicBeanStore`) + `BeanCreator.of(HttpPartSerializer.class).type(c)` for `partSerializer` (no cast — uses no-arg overload). |
+| ~~`BeanBuilder<T>` cascade builders~~ | ~~`BasicBeanStore` cast in `super(...)`~~ | **RESOLVED (2026-05-08).** All 14 cascade-builder casts dropped after widening `BeanBuilder<T>` to accept `WritableBeanStore`. |
 | `RestInject.java`, `RestInit.java` | `cp.BasicBeanStore` | Javadoc only — trivial update |
-| `McpPage.java`, `McpTypedHandlers.java` | `cp.BasicBeanStore` | live usage in rest-server-mcp module |
+| `McpPage.java`, `McpTypedHandlers.java`, `McpEndpoint.java`, `McpRestServlet.java` | `cp.BasicBeanStore` | live usage in `rest-server-mcp` |
 | `Name.java`, `Named.java` | `cp.BasicBeanStore` | Javadoc / annotation `@see` only |
 | `HttpPartParser.java`, `HttpPartSerializer.java` | `BeanCreateMethodFinder` | 1 reference each — likely Javadoc |
 | `BeanStore_Test.java` | `BeanCreateMethodFinder` | 2 test references |
 
-**The v2 replacement API (`BeanStore.createBeanFromMethod`) is implemented. The critical path is now migrating the 49 `BeanCreateMethodFinder` call sites in `RestContext` and `RestOpContext` to use it.**
+### Residual casts in `RestContext` / `RestOpContext` — root causes
+
+1. ~~**Legacy utility-class signatures (largest source).**~~ — **RESOLVED (2026-05-08).** All ~16 utility classes have been flipped to `create(WritableBeanStore)`. The downcast moved into each `Builder` constructor where it's a transitional implementation detail.
+
+2. ~~**`BeanCreator.of(Class, BasicBeanStore)` casts at call sites.**~~ — **RESOLVED (2026-05-08).** Added `BeanCreator.of(Class, BeanStore)` overload accepting any `BeanStore` (legacy or v2). Six casts dropped from `RestContext` (4 memoizers + user-child-resource + 1 in `DebugEnablement.Builder`).
+
+3. **`BeanInstantiator` four-memoizer migration blocker.** Migrating `callLogger` / `debugEnablement` / `staticFiles` / `swaggerProvider` to `BeanInstantiator` broke documented `@Rest(callLogger=…)` / `@Rest(debugEnablement=…)` / `@Rest(swaggerProvider=…)` annotation overrides plus static-file serving (loose-builder fallthrough still picks empty-default builders for `BasicStaticFiles` etc.; `Basic*.init(BeanStore)` zero-outs builder defaults via `.orElse(null)` when optional beans aren't yet registered). Reverted on 2026-05-08; tracked under **TODO-25** (`todo/TODO-25-revisit-rest-context-memoizer-migration.md`).
+
+4. **Direct `BasicBeanStore.of(...)` / `BasicBeanStore.create().overridingParent(...)` calls.** `RestSession`, `RestOpContext` (4 sites), and `RestContext` (3 sites) construct child bean stores via legacy static API that requires `BasicBeanStore` parents. Eliminating these requires either (a) porting `of(...)` / `create()` / `overridingParent(...)` onto `BasicBeanStore2` / `WritableBeanStore`, or (b) deferring until Phase 4 cutover when `BasicBeanStore2` is renamed to `BasicBeanStore` and the v2 impl absorbs these statics.
+
+5. ~~**`BeanBuilder<T>` parent-ctor signature.**~~ — **RESOLVED (2026-05-08).** `BeanBuilder<T>` field + ctor + public `beanStore()` accessor all flipped to `WritableBeanStore`. All 14 cascade-builder casts dropped.
+
+### v2 API additions made in this PR (already landed)
+
+Promoted to the v2 surface so the `RestContext` / `RestOpContext` migration could land without forcing legacy casts inside those files:
+
+- `BeanStore.getBeanType(Class)` — default returns empty.
+- `BeanStore.hasAllParams(ExecutableInfo, Object)` / `getParams(...)` / `getMissingParams(...)` — default impls reading via `getBean` / `hasBean`.
+- `WritableBeanStore.addBeanType(Class, Class<? extends T>)`.
+- `WritableBeanStore.hasDefaultSupplier(Class)` / `(Class, String)` (added in earlier session).
+- `BasicBeanStore2` — concrete `addBeanType` / `getBeanType` with parent-chain traversal.
+- `MethodInvoker.invoke(BeanStore, Object)` (was `invoke(BasicBeanStore, Object)`).
+
+Legacy `cp.BasicBeanStore` was made to `implements WritableBeanStore` as a transitional bridge so the field-type swap could land without rewriting every cascade consumer in lockstep.
+
+**Subtype-binding semantics — lesson learned.** The plan originally suggested replacing mock-test `bs.addBeanType(X, Y)` with `bs.addSupplier(X, () -> BeanInstantiator.of(Y, bs).run())`. That broke `@Rest(callLogger=…)` overrides because the supplier-shim eagerly built the mock subclass and shadowed the annotation chain. The actual fix kept `addBeanType` (now on `WritableBeanStore`) and its "default subtype that annotations can override" semantics. The plan's earlier text still under "Subtype-binding rewrite" is preserved below for context but should be considered superseded.
 
 ---
 
@@ -74,7 +106,11 @@ Net new v2 surface from this decision: none. The `Builder` class simply goes awa
       .ifPresent(result -> ...);
   ```
   Also introduced `BeanCreationException` (unchecked) and renamed `BeanCreator2` → `BeanInstantiator` to disambiguate the two APIs.
-- [ ] **Executable-resolution helpers** — `getMissingParams(ExecutableInfo, Object)`, `getParams(ExecutableInfo, Object)`, `hasAllParams(ExecutableInfo, Object)`. Still used in `RestContext` init path. Plan: **migrate callers to the new API** rather than adding compat methods to the store. Verify no external API exposes these three legacy methods.
+- ~~**Executable-resolution helpers**~~ — **DONE (2026-05-07).** `hasAllParams`, `getParams`, `getMissingParams` are now default methods on the `BeanStore` interface (deriving from `getBean` / `hasBean`). `MethodInvoker` now takes the interface, not the legacy concrete type.
+- ~~**Type-binding helpers**~~ — **DONE (2026-05-07).** `getBeanType(Class)` on `BeanStore`, `addBeanType(Class, Class<? extends T>)` on `WritableBeanStore`, concrete impl on `BasicBeanStore2` with parent-chain traversal.
+- ~~**`BeanInstantiator` builder-return-type strictness — relaxation phase 1**~~ — **DONE (2026-05-07).** `BeanInstantiator.findBeanImpl` now operates in "loose-builder" mode: when an auto-detected `Builder.build()` declares a parent return type, the runtime instance is examined and accepted only if it's assignment-compatible with `beanSubType`. If not, the call falls through to factory-method / constructor resolution on `beanSubType` instead of throwing. This fixes the legitimate "subclass adds its own constructor" pattern (e.g. `D28_ChildBeanForBuilderMethod(Builder builder)` — `BeanInstantiator_Test#d28` was rewritten to assert the new fallthrough behavior).
+- ~~**`BeanInstantiator` improvements (2026-05-08)**~~ — extended loose-builder fallthrough so a `Builder.build()` returning a parent-type runtime instance triggers factory-method / constructor resolution on the requested `beanSubType` (rather than accepting the parent-type instance silently). Builder discovery (`findBuilderType`) now walks both superclasses and implemented interfaces via `getAllParents()` so interface-level builders (e.g. `SwaggerProvider.Builder`, `StaticFiles.Builder`) are found.
+- [ ] **`BeanInstantiator` four-memoizer blocker — phase 2: `init(BeanStore)` semantics + builder-default propagation.** Tracked under **TODO-25** (`todo/TODO-25-revisit-rest-context-memoizer-migration.md`). The migration of `callLogger` / `debugEnablement` / `staticFiles` / `swaggerProvider` to `BeanInstantiator` was attempted on 2026-05-08 and reverted — see TODO-25 for failure modes (annotation-override path returns null; `BasicStaticFiles.Builder` defaults aren't applied) and viable approaches (tighten `Basic*.init(...)` defenses vs rework `RestContext` init order).
 
 ### Still to survey
 
@@ -89,16 +125,19 @@ Net new v2 surface from this decision: none. The `Builder` class simply goes awa
 **Much of Phase 2 is already resolved.** The REST server `BasicBeanStore` migration (TODO-1) has landed, leaving only the items in the table above.
 
 Remaining inventory work:
-- [ ] Confirm the `BeanCreateMethodFinder` callers in `RestContext` (33) and `RestOpContext` (16) are all mechanical once the v2 finder API is settled.
-- [ ] Check `McpPage.java` / `McpTypedHandlers.java` in `rest-server-mcp` — likely mechanical.
+- ~~Confirm the `BeanCreateMethodFinder` callers in `RestContext` (33) and `RestOpContext` (16) are all mechanical once the v2 finder API is settled.~~ — **DONE.** All 49 sites migrated.
+- [ ] Check `McpPage.java` / `McpTypedHandlers.java` / `McpEndpoint.java` / `McpRestServlet.java` in `rest-server-mcp` — currently compile against legacy via `(BasicBeanStore)` casts that bridge from `WritableBeanStore`-typed callers. Migrate alongside the cascade or in a follow-up.
 - [ ] Enumerate direct callers in `juneau-microservice-*` and `juneau-config` (not yet surveyed).
 - [ ] List any public API surfaces in `juneau-marshall` that still expose `BasicBeanStore` / `BeanCreator` (these are the hard breaking changes). `Name.java` / `Named.java` Javadoc refs are trivial.
+- ~~**Cascade-builders inventory.**~~ — **DONE (2026-05-08).** 16 of the listed 25 factories flipped (those actually called from `RestContext` / `RestOpContext`): `RestConverterList`, `RestGuardList`, `RestMatcherList`, `RestOpArgList`, `ResponseProcessorList`, `RestOperations`, `RestChildren`, `MethodExecStore`, `ThrownStore`, `FileFinder`, `StaticFiles`, `BasicStaticFiles.create(...)`, `DebugEnablement`, `SwaggerProvider`, `EncoderSet`, `ParserSet`, `SerializerSet`. The remaining ~9 (`BasicCallLogger`, `BasicDebugEnablement`, `BasicSwaggerProvider`, `Messages`, `JsonSchemaGenerator.Builder`, `HttpPartParser.Creator`, `HttpPartSerializer.Creator`, `VarResolver.Builder`, `UrlPathMatcherList`, `NamedAttributeMap`) are not on the `RestContext`/`RestOpContext` cascade path; flip them lazily as Phase 4 / TODO-14 needs them, or as part of the legacy-`BeanCreator` retirement.
 
 ## Phase 3 — Migrate consumers to `*2`
 
 - ~~Settle and implement the `BeanCreateMethodFinder` → v2 replacement API~~ — **DONE.** `BeanStore.createBeanFromMethod()` is live.
-- [ ] Migrate `RestContext` and `RestOpContext` (49 `BeanCreateMethodFinder` call sites) — now mechanical.
-- [ ] Migrate `McpPage` / `McpTypedHandlers` in `rest-server-mcp`.
+- ~~Migrate `RestContext` and `RestOpContext` (49 `BeanCreateMethodFinder` call sites)~~ — **DONE (2026-05-07).** Field types flipped, all call sites rewritten, mock-test clients updated, full build green.
+- ~~**Cascade-builders signature flip.**~~ — **DONE (2026-05-08).** Sixteen utility-class factories now accept `WritableBeanStore`: list types (`RestConverterList` / `RestGuardList` / `RestMatcherList` / `RestOpArgList` / `ResponseProcessorList`), rest-server misc (`RestOperations` / `RestChildren` / `MethodExecStore` / `ThrownStore` / `FileFinder` / `StaticFiles` / `BasicStaticFiles.create(...)` / `DebugEnablement` / `SwaggerProvider`), and marshall builders (`EncoderSet` / `ParserSet` / `SerializerSet`). All cascade-induced casts removed from `RestContext` / `RestOpContext`. `BeanBuilder<T>` parent constructor still takes legacy `BasicBeanStore`; the downcast lives inside each `Builder` constructor as a transitional bridge.
+- [ ] **Retire remaining `BeanCreator.of(...)` memoizers.** — punted to **TODO-25**. Six holdouts in `RestContext` (`callLogger`, `debugEnablement`, `staticFiles`, `swaggerProvider`, the user-child-resource `BeanCreator.of(rc2, ...)` path, and `findRestOperationArgs`) plus `RestOpContext.createPartSerializer`. All six call sites already cast-free (via the `BeanCreator.of(Class, BeanStore)` overload landed 2026-05-08). Migration to `BeanInstantiator` blocked on `Basic*.init(BeanStore)` zero-out semantics + builder-default propagation — see TODO-25 plan.
+- [ ] Migrate `McpPage` / `McpTypedHandlers` / `McpEndpoint` / `McpRestServlet` in `rest-server-mcp`.
 - [ ] Migrate remaining `juneau-microservice-*` / `juneau-config` consumers (if any).
 - [ ] Update Javadoc-only references in `RestInject.java`, `RestInit.java`, `Name.java`, `Named.java`, `HttpPartParser.java`, `HttpPartSerializer.java`.
 - [ ] Migrate each public API surface in `juneau-marshall`. Since 9.5 allows simple breaking changes, replace rather than overload — document each signature change in the 9.5 release notes.

@@ -16,6 +16,10 @@
  */
 package org.apache.juneau.commons.inject;
 
+import static java.util.stream.Collectors.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -207,6 +211,111 @@ public interface BeanStore {
 	 */
 	default <T> Optional<T> createBeanFromMethod(Class<T> beanType, Object onClassOrObject) {
 		return createBeanFromMethod(beanType, onClassOrObject, null);
+	}
+
+	/**
+	 * Returns the implementation class registered for the specified bean type, if any.
+	 *
+	 * <p>
+	 * Type bindings let callers register a default implementation class to be instantiated when an
+	 * actual bean of <c>beanType</c> is needed.  Bindings are inherited through the parent chain.
+	 *
+	 * <p>
+	 * The default implementation returns {@link Optional#empty()} (no binding).  Override in concrete
+	 * stores (see {@link BasicBeanStore2}) to enable type binding.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type whose implementation class is being looked up.
+	 * @return The implementation class, or {@link Optional#empty()} if no binding exists.
+	 */
+	default <T> Optional<Class<? extends T>> getBeanType(Class<T> beanType) {
+		return Optional.empty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this store can satisfy every parameter of the specified executable.
+	 *
+	 * <p>
+	 * Skips:
+	 * <ul>
+	 * 	<li>The first parameter when it is an instance of <c>outer</c> (inner-class outer reference).
+	 * 	<li>Parameters typed as {@link Optional} (always considered satisfied).
+	 * </ul>
+	 *
+	 * @param executable The constructor or method to inspect.
+	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if every required parameter can be resolved from this store.
+	 */
+	default boolean hasAllParams(ExecutableInfo executable, Object outer) {
+		for (var i = 0; i < executable.getParameterCount(); i++) {
+			var pi = executable.getParameter(i);
+			var pt = pi.getParameterType();
+			if ((i == 0 && nn(outer) && pt.isInstance(outer)) || pt.is(Optional.class))
+				continue;
+			var beanQualifier = pi.getResolvedQualifier();
+			var ptc = pt.inner();
+			if ((beanQualifier == null && ! hasBean(ptc)) || (nn(beanQualifier) && ! hasBean(ptc, beanQualifier)))
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Resolves every parameter of the specified executable from this store.
+	 *
+	 * <p>
+	 * For {@link Optional}-typed parameters the wrapped {@link Optional} is returned directly; for all
+	 * others the bean instance (or <jk>null</jk> when missing) is returned.  See {@link #hasAllParams}
+	 * for the full skip rules.
+	 *
+	 * @param executable The constructor or method to resolve parameters for.
+	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.
+	 * @return An array of resolved parameter values, one per parameter of <c>executable</c>.
+	 */
+	default Object[] getParams(ExecutableInfo executable, Object outer) {
+		var o = new Object[executable.getParameterCount()];
+		for (var i = 0; i < executable.getParameterCount(); i++) {
+			var pi = executable.getParameter(i);
+			var pt = pi.getParameterType();
+			if (i == 0 && nn(outer) && pt.isInstance(outer)) {
+				o[i] = outer;
+			} else {
+				var beanQualifier = pi.getResolvedQualifier();
+				var ptc = pt.unwrap(Optional.class).inner();
+				var o2 = beanQualifier == null ? getBean(ptc) : getBean(ptc, beanQualifier);
+				o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);
+			}
+		}
+		return o;
+	}
+
+	/**
+	 * Returns a comma-delimited list of parameter type names that cannot be resolved from this store.
+	 *
+	 * <p>
+	 * Intended for diagnostic error messages — see {@link #hasAllParams} for the exact match rules.
+	 * Skipped parameters (outer-instance match, {@link Optional}) never appear in the result.
+	 *
+	 * @param executable The constructor or method to inspect.
+	 * @param outer The outer object to use for inner-class param resolution.  Can be <jk>null</jk>.
+	 * @return A comma-delimited list of missing parameter type names, or <jk>null</jk> when none are missing.
+	 */
+	default String getMissingParams(ExecutableInfo executable, Object outer) {
+		var params = executable.getParameters();
+		List<String> l = list();
+		for (var i = 0; i < params.size(); i++) {
+			var pi = params.get(i);
+			var pt = pi.getParameterType();
+			if ((i == 0 && nn(outer) && pt.isInstance(outer)) || pt.is(Optional.class))
+				continue;
+			var beanName = pi.getResolvedQualifier();
+			var ptc = pt.inner();
+			if (beanName == null && ! hasBean(ptc))
+				l.add(pt.getNameSimple());
+			if (nn(beanName) && ! hasBean(ptc, beanName))
+				l.add(pt.getNameSimple() + '@' + beanName);
+		}
+		return l.isEmpty() ? null : l.stream().sorted().collect(joining(","));
 	}
 }
 

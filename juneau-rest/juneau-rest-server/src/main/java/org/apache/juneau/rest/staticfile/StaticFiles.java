@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
@@ -50,7 +51,7 @@ public interface StaticFiles extends FileFinder {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore beanStore) {
+		protected Builder(WritableBeanStore beanStore) {
 			super(BasicStaticFiles.class, beanStore);
 			headers = list();
 			fileFinder = FileFinder.create(beanStore);
@@ -192,7 +193,7 @@ public interface StaticFiles extends FileFinder {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	static Builder create(BasicBeanStore beanStore) {
+	static Builder create(WritableBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

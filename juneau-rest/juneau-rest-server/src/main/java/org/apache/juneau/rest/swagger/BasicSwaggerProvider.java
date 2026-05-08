@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.*;
@@ -40,14 +41,14 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	private final JsonSchemaGenerator js;
 	private final Messages messages;
 	private final FileFinder fileFinder;
-	private final BasicBeanStore beanStore;
+	private final WritableBeanStore beanStore;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicSwaggerProvider(BasicBeanStore beanStore) {
+	public BasicSwaggerProvider(WritableBeanStore beanStore) {
 		// @formatter:off
 		this(
 			SwaggerProvider

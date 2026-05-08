@@ -24,6 +24,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
@@ -66,7 +67,7 @@ public abstract class DebugEnablement {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore beanStore) {
+		protected Builder(WritableBeanStore beanStore) {
 			mapBuilder = ReflectionMap.create(Enablement.class);
 			defaultEnablement = NEVER;
 			conditional = x -> eqic("true", x.getHeader(HEADER_Debug));
@@ -217,7 +218,7 @@ public abstract class DebugEnablement {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore beanStore) {
+	public static Builder create(WritableBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

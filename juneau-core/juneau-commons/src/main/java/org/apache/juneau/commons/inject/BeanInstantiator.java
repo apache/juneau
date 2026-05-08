@@ -1125,6 +1125,7 @@ public class BeanInstantiator<T> {
 		var methodComparator = comparing(MethodInfo::getParameterCount).reversed();
 		var constructorComparator = comparing(ConstructorInfo::getParameterCount).reversed();
 
+		boolean builderAttempted = false;
 		if (builder2 != null) {
 			log("Builder detected: %s", builder2.getClass().getName());
 
@@ -1156,15 +1157,23 @@ public class BeanInstantiator<T> {
 					log("Method has no parameters, calling without injection");
 				}
 
+				builderAttempted = true;
 				// Call the builder method
 				Object builtBean = method.inject(store2, builder2);
 
-				// Builder build method must return the exact beanSubType
-				if (!returnType.is(beanSubType.inner())) {
-					log("Builder method %s returns %s, but must return %s", method.getNameFull(), returnType.getName(), beanSubType.getName());
-					throw exex("Builder method {0} returns {1}, but must return {2}. Builder build methods must always return the exact bean subtype being created.", method.getNameFull(), returnType.getName(), beanSubType.getName());
+				// Validate the produced bean (loose-builder mode). We accept the result if either:
+				//   1. The build method's declared return type is exactly beanSubType, OR
+				//   2. The runtime instance produced by the build method is assignment-compatible with beanSubType.
+				// Case 2 supports the legacy pattern where a parent class's Builder.build() declares the parent
+				// type but constructs a configured subclass at runtime (e.g. DebugEnablement.Builder.build() returning
+				// a BasicDebugEnablement because the builder's internal type-binding was preset).
+				// If neither matches, we fall through to factory-method / constructor resolution on beanSubType
+				// rather than throwing — that lets standard "subclass adds its own constructor" patterns succeed.
+				if (returnType.is(beanSubType.inner()) || (builtBean != null && beanSubType.inner().isInstance(builtBean))) {
+					bean = (T)beanType.cast(builtBean);
+				} else {
+					log("Builder method %s returned %s but expected %s; falling through to factory methods/constructors", method.getNameFull(), builtBean == null ? "null" : builtBean.getClass().getName(), beanSubType.getName());
 				}
-				bean = (T)beanType.cast(builtBean);
 			}
 
 			if (bean != null) {
@@ -1228,6 +1237,11 @@ public class BeanInstantiator<T> {
 				// Builder has a method returning the right type but not with the expected name
 				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", builder2.getClass().getName(), buildMethodNames);
 				// Fall through to factory methods/constructors
+			} else if (builderAttempted) {
+				// We tried the builder's build method but it produced a runtime instance that wasn't the expected
+				// beanSubType (loose-builder fallthrough above).  Don't throw; fall through to factory-method /
+				// constructor resolution on beanSubType so subclasses with their own constructor/factory still resolve.
+				log("Builder %s build method produced wrong runtime type; falling through to factory methods/constructors", builder2.getClass().getName());
 			} else if (hasBuildMethodWithRightReturnType || isExplicitBuilder || isValidBuilder) {
 				// Builder has a build method with right return type (even if can't be called) or was explicitly set
 				// Throw exception unless fallback exists
@@ -1483,10 +1497,12 @@ public class BeanInstantiator<T> {
 			return builderClass;
 		}
 
-		// 3c: Look for builder in parent classes (skip the first element which is beanSubType itself)
-		var parentClasses = beanSubType.getParents();
-		for (int i = 1; i < parentClasses.size(); i++) {
-			var parentClass = parentClasses.get(i);
+		// 3c: Look for builder in parent classes and implemented interfaces (skip beanSubType itself,
+		// which was already searched in 3b). getAllParents returns parents (child-to-parent) followed by
+		// interfaces, so we walk the whole chain in a uniform order.
+		var allParents = beanSubType.getAllParents();
+		for (int i = 1; i < allParents.size(); i++) {
+			var parentClass = allParents.get(i);
 			r = parentClass.getDeclaredMemberClasses().stream()
 				.filter(x -> builderClassNames.contains(x.getNameSimple()))
 				.findFirst();

@@ -30,6 +30,8 @@ import java.util.function.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.concurrent.*;
+import org.apache.juneau.commons.inject.BeanCreationException;
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.commons.reflect.*;
 
 /**
@@ -99,7 +101,7 @@ import org.apache.juneau.commons.reflect.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class BasicBeanStore {
+public class BasicBeanStore implements WritableBeanStore {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_bean = "bean";
@@ -350,6 +352,7 @@ public class BasicBeanStore {
 	 * @param bean The bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
+	@Override
 	public <T> BasicBeanStore addBean(Class<T> beanType, T bean) {
 		return addBean(beanType, bean, null);
 	}
@@ -363,6 +366,7 @@ public class BasicBeanStore {
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
+	@Override
 	public <T> BasicBeanStore addBean(Class<T> beanType, T bean, String name) {
 		return addSupplier(beanType, () -> bean, name);
 	}
@@ -375,6 +379,7 @@ public class BasicBeanStore {
 	 * @param bean The bean supplier.
 	 * @return This object.
 	 */
+	@Override
 	public <T> BasicBeanStore addSupplier(Class<T> beanType, Supplier<T> bean) {
 		return addSupplier(beanType, bean, null);
 	}
@@ -388,6 +393,7 @@ public class BasicBeanStore {
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
+	@Override
 	public <T> BasicBeanStore addSupplier(Class<T> beanType, Supplier<T> bean, String name) {
 		assertCanWrite();
 		var e = createEntry(beanType, bean, name);
@@ -413,6 +419,7 @@ public class BasicBeanStore {
 	 * @param bean The bean supplier.
 	 * @return This object.
 	 */
+	@Override
 	public <T> BasicBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> bean) {
 		return addDefaultSupplier(beanType, bean, null);
 	}
@@ -429,6 +436,7 @@ public class BasicBeanStore {
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
+	@Override
 	public <T> BasicBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> bean, String name) {
 		assertCanWrite();
 		var e = createEntry(beanType, bean, name);
@@ -448,6 +456,7 @@ public class BasicBeanStore {
 	 *
 	 * @return This object.
 	 */
+	@Override
 	public BasicBeanStore clear() {
 		assertCanWrite();
 		try (var x = lock.write()) {
@@ -524,6 +533,7 @@ public class BasicBeanStore {
 	 * @param beanType The type of bean to return.
 	 * @return The bean.
 	 */
+	@Override
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires unchecked cast
 	})
@@ -561,6 +571,7 @@ public class BasicBeanStore {
 	 * @param name The bean name.  Can be <jk>null</jk>.
 	 * @return The bean.
 	 */
+	@Override
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires unchecked cast
 	})
@@ -588,6 +599,116 @@ public class BasicBeanStore {
 				return opt(d.get());
 			return opte();
 		}
+	}
+
+	/**
+	 * Returns all beans of the specified type, keyed by bean name.
+	 *
+	 * <p>
+	 * Higher-priority sources overwrite lower-priority ones with the same name. The priority order
+	 * mirrors {@link #getBean(Class)}: defaults &lt; parent &lt; local entries &lt; overriding parent.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type.
+	 * @return A map of bean names to bean instances. Never <jk>null</jk>.
+	 */
+	@Override
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked cast
+	})
+	public <T> Map<String,T> getBeansOfType(Class<T> beanType) {
+		try (var x = lock.read()) {
+			Map<String,T> result = map();
+			defaults.stream().filter(e -> e.matches(beanType)).forEach(e -> result.put(emptyIfNull(e.getName()), (T)e.get()));
+			parent.ifPresent(p -> p.getBeansOfType(beanType).forEach(result::put));
+			entries.stream().filter(e -> e.matches(beanType)).forEach(e -> result.put(emptyIfNull(e.getName()), (T)e.get()));
+			overridingParent.ifPresent(op -> op.getBeansOfType(beanType).forEach(result::put));
+			return result;
+		}
+	}
+
+	/**
+	 * Returns the supplier for an unnamed bean of the specified type.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type.
+	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type exists.
+	 */
+	@Override
+	public <T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType) {
+		return getBeanSupplier(beanType, null);
+	}
+
+	/**
+	 * Returns the supplier for a named bean of the specified type.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type.
+	 * @param name The bean name.  Can be <jk>null</jk>.
+	 * @return The supplier, or {@link Optional#empty()} if no supplier of the specified type and name exists.
+	 */
+	@Override
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked cast for supplier resolution
+	})
+	public <T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType, String name) {
+		try (var x = lock.read()) {
+			if (overridingParent.isPresent()) {
+				var fromOverriding = overridingParent.get().getBeanSupplier(beanType, name);
+				if (fromOverriding.isPresent())
+					return fromOverriding;
+			}
+			var e = entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
+			if (nn(e))
+				return opt((Supplier<T>) e.bean);
+			if (parent.isPresent()) {
+				var fromParent = parent.get().getBeanSupplier(beanType, name);
+				if (fromParent.isPresent())
+					return fromParent;
+			}
+			var d = defaults.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
+			if (nn(d))
+				return opt((Supplier<T>) d.bean);
+			return opte();
+		}
+	}
+
+	/**
+	 * Finds and invokes a factory method that produces a bean of type <c>beanType</c>.
+	 *
+	 * <p>
+	 * If <c>onClassOrObject</c> is a {@link Class}, only static methods are eligible.
+	 * Otherwise, both instance and static methods on the object's class are eligible.
+	 * A <jk>null</jk> <c>filter</c> accepts any qualifying method.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The type of bean to create.  Must not be <jk>null</jk>.
+	 * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.
+	 * 	Must not be <jk>null</jk>.
+	 * @param filter Optional predicate restricting which methods are eligible.  Can be <jk>null</jk>.
+	 * @param extraBeans Optional bean instances visible to parameter resolution for this call only.
+	 * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching
+	 * 	factory method was found.
+	 * @throws BeanCreationException If a matching method was found but threw an exception during invocation.
+	 */
+	@Override
+	public <T> Optional<T> createBeanFromMethod(Class<T> beanType, Object onClassOrObject, Predicate<MethodInfo> filter, Object... extraBeans) {
+		Object resource = onClassOrObject instanceof Class ? null : onClassOrObject;
+		Class<?> resourceClass = onClassOrObject instanceof Class<?> c ? c : onClassOrObject.getClass();
+		return info(resourceClass)
+			.getPublicMethod(m ->
+				m.isNotDeprecated()
+				&& m.hasReturnType(beanType)
+				&& (filter == null || filter.test(m))
+				&& (m.isStatic() || nn(resource))
+				&& m.canResolveAllParameters(this, extraBeans))
+			.map(m -> {
+				try {
+					return m.<T>inject(this, resource, extraBeans);
+				} catch (Exception e) {
+					throw new BeanCreationException("Failed to create bean of type [" + beanType.getSimpleName() + "] via method [" + m.getName() + "]", e);
+				}
+			});
 	}
 
 	/**
@@ -668,6 +789,7 @@ public class BasicBeanStore {
 	 * @param beanType The bean type to check.
 	 * @return <jk>true</jk> if this store contains the specified unnamed bean type.
 	 */
+	@Override
 	public boolean hasBean(Class<?> beanType) {
 		return overridingParent.map(x -> x.hasBean(beanType)).orElse(false)
 			|| unnamedEntries.containsKey(beanType)
@@ -682,6 +804,7 @@ public class BasicBeanStore {
 	 * @param name The bean name.
 	 * @return <jk>true</jk> if this store contains the specified named bean type.
 	 */
+	@Override
 	public boolean hasBean(Class<?> beanType, String name) {
 		return overridingParent.map(x -> x.hasBean(beanType, name)).orElse(false)
 			|| entries.stream().anyMatch(x -> x.matches(beanType, name))
@@ -702,6 +825,7 @@ public class BasicBeanStore {
 	 * @param beanType The bean type to check.
 	 * @return <jk>true</jk> if a default supplier for the unnamed bean type is registered on this store.
 	 */
+	@Override
 	public boolean hasDefaultSupplier(Class<?> beanType) {
 		return unnamedDefaults.containsKey(beanType);
 	}
@@ -718,6 +842,7 @@ public class BasicBeanStore {
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return <jk>true</jk> if a default supplier for the bean type and name is registered on this store.
 	 */
+	@Override
 	public boolean hasDefaultSupplier(Class<?> beanType, String name) {
 		return defaults.stream().anyMatch(x -> x.matches(beanType, name));
 	}

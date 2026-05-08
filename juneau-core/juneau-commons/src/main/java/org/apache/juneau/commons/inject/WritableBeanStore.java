@@ -52,6 +52,33 @@ import java.util.function.*;
 public interface WritableBeanStore extends BeanStore {
 
 	/**
+	 * Same as {@link #addBean(Class,Object)} but returns the bean instead of this object for fluent calls.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type.
+	 * @param bean The bean instance.  Can be <jk>null</jk>.
+	 * @return The bean.
+	 */
+	default <T> T add(Class<T> beanType, T bean) {
+		addBean(beanType, bean);
+		return bean;
+	}
+
+	/**
+	 * Same as {@link #addBean(Class,Object,String)} but returns the bean instead of this object for fluent calls.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type.
+	 * @param bean The bean instance.  Can be <jk>null</jk>.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
+	 * @return The bean.
+	 */
+	default <T> T add(Class<T> beanType, T bean, String name) {
+		addBean(beanType, bean, name);
+		return bean;
+	}
+
+	/**
 	 * Adds an unnamed bean of the specified type to this store.
 	 *
 	 * @param <T> The bean type.
@@ -140,5 +167,50 @@ public interface WritableBeanStore extends BeanStore {
 	 * @return This object for method chaining.
 	 */
 	WritableBeanStore clear();
+
+	/**
+	 * Returns <jk>true</jk> if this store has a {@linkplain #addDefaultSupplier(Class,Supplier) default supplier}
+	 * registered locally for the specified unnamed bean type.
+	 *
+	 * <p>
+	 * This is intended for callers that need to distinguish "framework default present" from "any binding
+	 * exists" — for example, REST initialization uses this signal to skip types that are managed by an
+	 * internal memoizer.  Parent and overriding-parent stores are <i>not</i> consulted.
+	 *
+	 * @param beanType The bean type to check.
+	 * @return <jk>true</jk> if a default supplier for the unnamed bean type is registered on this store.
+	 */
+	boolean hasDefaultSupplier(Class<?> beanType);
+
+	/**
+	 * Returns <jk>true</jk> if this store has a {@linkplain #addDefaultSupplier(Class,Supplier,String) default supplier}
+	 * registered locally for the specified bean type and name.
+	 *
+	 * <p>
+	 * See {@link #hasDefaultSupplier(Class)} for the rationale.  Parent and overriding-parent stores are
+	 * <i>not</i> consulted.
+	 *
+	 * @param beanType The bean type to check.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
+	 * @return <jk>true</jk> if a default supplier for the bean type and name is registered on this store.
+	 */
+	boolean hasDefaultSupplier(Class<?> beanType, String name);
+
+	/**
+	 * Registers a default implementation class for the specified bean type.
+	 *
+	 * <p>
+	 * Type bindings are consulted by callers (notably {@link BeanInstantiator} and the various REST
+	 * memoizers) when resolving the impl class to instantiate for <c>beanType</c>.  This is the
+	 * type-binding analogue of {@link #addDefaultSupplier(Class,Supplier) addDefaultSupplier}: it
+	 * provides a deferred-construction default that can be overridden by later resolution steps
+	 * (e.g. an annotation override).
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type to bind.
+	 * @param implType The implementation class to instantiate when this type is resolved.
+	 * @return This object for method chaining.
+	 */
+	<T> WritableBeanStore addBeanType(Class<T> beanType, Class<? extends T> implType);
 }
 

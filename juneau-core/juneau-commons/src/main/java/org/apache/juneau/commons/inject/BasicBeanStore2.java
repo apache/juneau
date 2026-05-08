@@ -74,6 +74,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 
 	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, Supplier<?>>> entries;
 	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, Supplier<?>>> defaults;
+	private final ConcurrentHashMap<Class<?>, Class<?>> typeBindings;
 	private final BeanStore parent;
 	private final BeanStore overridingParent;
 
@@ -112,6 +113,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 		this.overridingParent = overridingParent;
 		entries = new ConcurrentHashMap<>();
 		defaults = new ConcurrentHashMap<>();
+		typeBindings = new ConcurrentHashMap<>();
 		addSupplier(BasicBeanStore2.class, ()->this, null);
 	}
 
@@ -325,6 +327,36 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this store has a default supplier registered locally for the specified unnamed bean type.
+	 *
+	 * <p>
+	 * Parent and overriding-parent stores are <i>not</i> consulted.
+	 *
+	 * @param beanType The bean type to check.
+	 * @return <jk>true</jk> if a default supplier for the unnamed bean type is registered on this store.
+	 */
+	@Override
+	public boolean hasDefaultSupplier(Class<?> beanType) {
+		return hasDefaultSupplier(beanType, null);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this store has a default supplier registered locally for the specified bean type and name.
+	 *
+	 * <p>
+	 * Parent and overriding-parent stores are <i>not</i> consulted.
+	 *
+	 * @param beanType The bean type to check.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
+	 * @return <jk>true</jk> if a default supplier for the bean type and name is registered on this store.
+	 */
+	@Override
+	public boolean hasDefaultSupplier(Class<?> beanType, String name) {
+		var typeMap = defaults.get(beanType);
+		return nn(typeMap) && typeMap.containsKey(emptyIfNull(name));
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this store contains at least one unnamed bean of the specified type.
 	 *
 	 * <p>
@@ -351,6 +383,23 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	@Override
 	public boolean hasBean(Class<?> beanType, String name) {
 		return resolve(beanType, name).isPresent();
+	}
+
+	@Override
+	public <T> WritableBeanStore addBeanType(Class<T> beanType, Class<? extends T> implType) {
+		typeBindings.put(beanType, implType);
+		return this;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> Optional<Class<? extends T>> getBeanType(Class<T> beanType) {
+		var v = (Class<? extends T>) typeBindings.get(beanType);
+		if (nn(v))
+			return opt(v);
+		if (nn(parent))
+			return parent.getBeanType(beanType);
+		return opte();
 	}
 
 	/**

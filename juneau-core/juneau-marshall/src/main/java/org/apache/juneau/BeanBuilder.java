@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.cp.*;
 
 /**
@@ -33,7 +34,7 @@ public class BeanBuilder<T> {
 	private Class<? extends T> type;
 	private Class<? extends T> defaultType;
 	private T impl;
-	private final BasicBeanStore beanStore;
+	private final WritableBeanStore beanStore;
 
 	/**
 	 * Copy constructor.
@@ -49,10 +50,16 @@ public class BeanBuilder<T> {
 	/**
 	 * Constructor.
 	 *
+	 * <p>
+	 * Accepts any {@link WritableBeanStore} \u2014 legacy {@link BasicBeanStore} (which
+	 * implements {@link WritableBeanStore}) or the v2
+	 * {@link org.apache.juneau.commons.inject.BasicBeanStore2 BasicBeanStore2}.  Cascade-builder
+	 * subclasses no longer need to downcast to {@link BasicBeanStore} when calling {@code super(...)}.
+	 *
 	 * @param beanStore The bean store to use for creating beans.
 	 * @param defaultType The default bean type that this builder creates.
 	 */
-	protected BeanBuilder(Class<? extends T> defaultType, BasicBeanStore beanStore) {
+	protected BeanBuilder(Class<? extends T> defaultType, WritableBeanStore beanStore) {
 		this.defaultType = type = defaultType;
 		this.beanStore = beanStore;
 	}
@@ -62,7 +69,7 @@ public class BeanBuilder<T> {
 	 *
 	 * @return The bean store passed in through the constructor.
 	 */
-	public BasicBeanStore beanStore() {
+	public WritableBeanStore beanStore() {
 		return beanStore;
 	}
 

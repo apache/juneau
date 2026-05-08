@@ -40,3 +40,5 @@
 - [TODO-23] New feature support in org.apache.juneau.commons.inject — roadmap for a simplified inject API (not a Spring replacement). See `todo/TODO-23-commons-inject-framework-roadmap.md`.
 
 - [TODO-24] JSR-330 alignment (no `jakarta.inject-api` dependency) + selective Spring-lite features for `commons.inject`. See `todo/TODO-24-jsr330-and-spring-lite-support.md`.
+
+- [TODO-25] Revisit `RestContext` four-memoizer migration to v2 inject API (`callLogger` / `debugEnablement` / `staticFiles` / `swaggerProvider`). Spawned out of TODO-15 after a 2026-05-08 attempt was reverted. See `todo/TODO-25-revisit-rest-context-memoizer-migration.md`.

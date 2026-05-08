@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.cp.*;
 
 /**
@@ -50,7 +51,7 @@ public class MethodExecStore {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(BasicBeanStore beanStore) {
+		protected Builder(WritableBeanStore beanStore) {
 			super(MethodExecStore.class, beanStore);
 		}
 
@@ -127,12 +128,12 @@ public class MethodExecStore {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(BasicBeanStore beanStore) {
+	public static Builder create(WritableBeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 
 	private final ThrownStore thrownStore;
-	private final BasicBeanStore beanStore;
+	private final WritableBeanStore beanStore;
 	private final Class<? extends MethodExecStats> statsImplClass;
 	private final ConcurrentHashMap<Method,MethodExecStats> db = new ConcurrentHashMap<>();
 
