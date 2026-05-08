@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.Named;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.config.*;
@@ -37,50 +37,20 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Rest
 	public static class A1 {
-		@RestInject static BasicBeanStore beanStore;
+		@RestInject static WritableBeanStore beanStore;
 	}
 
 	@Test void a01_createBeanStore_default() {
 		MockRestClient.buildLax(A1.class);
-		assertEquals("BasicBeanStore", A1.beanStore.getClass().getSimpleName());
-	}
-
-	public static class MyBeanStore extends BasicBeanStore {
-		protected MyBeanStore(Builder builder) {
-			super(builder.parent(BasicBeanStore.create().build().addBean(A.class, new A())));
-		}
-	}
-
-	@Rest(beanStore=MyBeanStore.class)
-	public static class A2 {
-		@RestInject static BasicBeanStore beanStore;
-	}
-
-	@Test void a02_createBeanStore_annotation() {
-		MockRestClient.buildLax(A2.class);
-		assertNotNull(A2.beanStore.getBean(A.class));
-	}
-
-	@Rest
-	public static class A3 {
-		@RestInject static BasicBeanStore beanStore;
-
-		@RestInject BasicBeanStore.Builder beanStore(BasicBeanStore.Builder b) {
-			return b.type(MyBeanStore.class);
-		}
-	}
-
-	@Test void a03_createBeanStore_restBean1() {
-		MockRestClient.buildLax(A3.class);
-		assertNotNull(A3.beanStore.getBean(A.class));
+		assertEquals("BasicBeanStore2", A1.beanStore.getClass().getSimpleName());
 	}
 
 	@Rest
 	public static class A4 {
-		@RestInject static BasicBeanStore beanStore;
+		@RestInject static WritableBeanStore beanStore;
 
-		@RestInject BasicBeanStore beanStore() {
-			return BasicBeanStore.create().type(MyBeanStore.class).build();
+		@RestInject WritableBeanStore beanStore() {
+			return new BasicBeanStore2(null).addBean(A.class, new A());
 		}
 	}
 

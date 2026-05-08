@@ -71,7 +71,6 @@ public class RestAnnotation {
 		private Class<? extends RestGuard>[] guards = new Class[0];
 		private Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Void.class;
 		private Class<? extends RestOpArg>[] restOpArgs = new Class[0];
-		private Class<? extends BasicBeanStore> beanStore = BasicBeanStore.Void.class;
 		private Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
 		private Class<? extends Serializer>[] serializers = new Class[0];
 		private Class<?>[] children = {};
@@ -152,17 +151,6 @@ public class RestAnnotation {
 		 */
 		public Builder allowedMethodParams(String value) {
 			allowedMethodParams = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#beanStore()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder beanStore(Class<? extends BasicBeanStore> value) {
-			beanStore = value;
 			return this;
 		}
 
@@ -705,7 +693,6 @@ public class RestAnnotation {
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends SwaggerProvider> swaggerProvider;
 		private final Class<? extends RestOpArg>[] restOpArgs;
-		private final Class<? extends BasicBeanStore> beanStore;
 		private final Class<? extends DebugEnablement> debugEnablement;
 		private final Class<? extends Serializer>[] serializers;
 		private final Class<?>[] children;
@@ -756,7 +743,6 @@ public class RestAnnotation {
 			allowedHeaderParams = b.allowedHeaderParams;
 			allowedMethodHeaders = b.allowedMethodHeaders;
 			allowedMethodParams = b.allowedMethodParams;
-			beanStore = b.beanStore;
 			callLogger = b.callLogger;
 			children = copyOf(b.children);
 			clientVersionHeader = b.clientVersionHeader;
@@ -820,11 +806,6 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String allowedMethodParams() {
 			return allowedMethodParams;
-		}
-
-		@Override /* Overridden from Rest */
-		public Class<? extends BasicBeanStore> beanStore() {
-			return beanStore;
 		}
 
 		@Override /* Overridden from Rest */

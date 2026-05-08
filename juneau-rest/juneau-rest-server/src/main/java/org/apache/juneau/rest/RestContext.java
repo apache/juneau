@@ -18,6 +18,7 @@ package org.apache.juneau.rest;
 
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
@@ -334,27 +335,32 @@ public class RestContext extends Context {
 	/**
 	 * Creates the bean store for this context.
 	 *
+	 * <p>
+	 * The 9.5 precedence model places the parent (Spring or parent-resource bootstrap) as the
+	 * overriding parent so it wins over local entries.  Memoizer-backed framework defaults are
+	 * registered later in the constructor via {@code addDefaultSupplier}, putting them at the
+	 * bottom of the resolution order.
+	 *
+	 * <p>
+	 * Resolution:
+	 * <ol>
+	 * 	<li>If the resource declares an {@code @RestInject} factory method returning a
+	 * 		{@link WritableBeanStore} (e.g. {@code SpringRestServlet.createBeanStore(Optional<BeanStore>)}),
+	 * 		that store is used directly.  Spring integration relies on this hook.
+	 * 	<li>Otherwise a fresh {@link BasicBeanStore2} is created with {@code parentBs} as its
+	 * 		overriding parent.
+	 * </ol>
+	 *
 	 * @param parentBs
 	 * 	The parent (bootstrap) bean store to layer onto, or {@code null} for root resources.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
-	 * @return A new bean store builder.
+	 * @return The bean store for this context.
 	 */
-	private BasicBeanStore.Builder createBeanStore(WritableBeanStore parentBs, Supplier<?> resource) {
-		// The 9.5 precedence model places the parent (Spring or parent-resource bootstrap) as the
-		// overriding parent so it wins over local entries.  Memoizer-backed framework defaults are
-		// registered later in the constructor via addDefaultSupplier, putting them at the bottom of
-		// the resolution order.
-		var v = Value.of(BasicBeanStore.create().overridingParent((BasicBeanStore) parentBs));
-
-		// Apply @Rest(beanStore).
-		rstream(AnnotationProvider.INSTANCE.find(Rest.class, info(resourceClass))).map(x -> x.inner().beanStore()).filter(ClassUtils::isNotVoid).forEach(x -> v.get().type(x));
-
-		// Replace with bean from: @RestInject public [static] BasicBeanStore xxx(<args>)
-		var bs = v.get().build();
-		bs.createBeanFromMethod(BasicBeanStore.class, resource.get(), RestContext::isRestInjectMethod).ifPresent(v.get()::impl);
-
-		return v.get();
+	private WritableBeanStore createBeanStore(WritableBeanStore parentBs, Supplier<?> resource) {
+		var defaultBs = new BasicBeanStore2(parentBs);
+		return defaultBs.createBeanFromMethod(WritableBeanStore.class, resource.get(), RestContext::isRestInjectMethod)
+			.orElse(defaultBs);
 	}
 	private RestContext parentContext() { return parentContext; }
 	private RestOperations restOperations() { return restOperations.get(); }
@@ -1183,12 +1189,11 @@ public class RestContext extends Context {
 			// Determine the parent (bootstrap) store: inherited from parent resource if present.
 			WritableBeanStore parentBs = parentContext != null ? parentContext.bootstrapBeanStore : null;
 
-			// Build the initial beanStore; apply @Rest(beanStore) + optional @RestInject override.
+			// Build the initial beanStore; honor an optional @RestInject WritableBeanStore override.
 			// In the new 9.5 precedence model, the parent (Spring or parent-resource bootstrap) is
 			// installed as the overriding parent so it wins over local entries.
 			// @formatter:off
 			WritableBeanStore bs = createBeanStore(parentBs, rs)
-				.build()
 				.addBean(ResourceSupplier.class, rs)
 				.addBean(ServletConfig.class, nn(builder.inner) ? builder.inner : builder)
 				.addBean(ServletContext.class, (nn(builder.inner) ? builder.inner : builder).getServletContext());
@@ -1238,17 +1243,32 @@ public class RestContext extends Context {
 				));
 			// @formatter:on
 
-			// Run @RestInject methods for non-framework types.  Framework types (those with a default
-			// supplier registered above) handle their @RestInject scan inside the corresponding memoizer
-			// body so that user methods can declare the framework's Builder type as a parameter; running
-			// them again here would either re-invoke side effects or skip them entirely (for Pattern-2
-			// methods whose Builder parameter isn't injected here).  This auto-derives the legacy
+			// Run @RestInject methods and register their results as LOCAL entries (level 2 of resolve()).
+			//
+			// For non-framework types: invoke the @RestInject method directly via createBeanFromMethod
+			// and store the result via addBean.
+			//
+			// For framework types (those with a default supplier registered above): the @RestInject
+			// scan already ran inside the corresponding memoizer body (see e.g. createCallLogger()),
+			// so re-invoking createBeanFromMethod here would create a SECOND instance and produce
+			// inconsistent state between the framework's memoizer-backed bean and the bean store's
+			// local entry.  Instead, PROMOTE the existing default supplier (which is memoizer-backed
+			// and resolves to the @RestInject value when one was supplied) into a local-entry supplier.
+			// Promoting at level 2 means @RestInject results win over a parent (Spring) at level 3.
+			//
+			// Net effect: @RestInject method results uniformly take precedence over Spring/parent
+			// bindings for both framework and user-defined types.  This auto-derives the legacy
 			// DELAYED_INJECTION list from the default-supplier registrations.
 			rci2.getAllMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
 				var rt = x.getReturnType().<Object>inner();
 				var name = RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null));
-				if (beanStore.hasDefaultSupplier(rt, name))
+				// Skip the WritableBeanStore factory (already consumed by createBeanStore()).
+				if (WritableBeanStore.class.equals(rt) || BeanStore.class.equals(rt))
 					return;
+				if (beanStore instanceof BasicBeanStore2 bbs2 && bbs2.hasDefaultSupplier(rt, name)) {
+					bbs2.getDefaultSupplier(rt, name).ifPresent(sup -> beanStore.addSupplier(rt, sup, name));
+					return;
+				}
 				beanStore.createBeanFromMethod(rt, resource.get(), RestContext::isRestInjectMethod)
 					.ifPresent(y -> beanStore.addBean(rt, y, name));
 			});

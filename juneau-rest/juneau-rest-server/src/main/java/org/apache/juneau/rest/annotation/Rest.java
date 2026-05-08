@@ -141,23 +141,6 @@ public @interface Rest {
 	String allowedMethodParams() default "";
 
 	/**
-	 * The resolver used for resolving instances of child resources and various other beans including:
-	 * <ul>
-	 * 	<li>{@link CallLogger}
-	 * 	<li>{@link SwaggerProvider}
-	 * 	<li>{@link FileFinder}
-	 * 	<li>{@link StaticFiles}
-	 * </ul>
-	 *
-	 * <p>
-	 * Note that the <c>SpringRestServlet</c> classes uses the <c>SpringBeanStore</c> class to allow for any
-	 * Spring beans to be injected into your REST resources.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends BasicBeanStore> beanStore() default BasicBeanStore.Void.class;
-
-	/**
 	 * Specifies the logger to use for logging of HTTP requests and responses.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>

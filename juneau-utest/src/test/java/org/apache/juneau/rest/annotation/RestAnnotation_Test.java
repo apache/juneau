@@ -53,7 +53,6 @@ class RestAnnotation_Test extends TestBase {
 		.allowedHeaderParams("b")
 		.allowedMethodHeaders("c")
 		.allowedMethodParams("d")
-		.beanStore(BasicBeanStore.class)
 		.callLogger(CallLogger.class)
 		.children(RestAnnotation_Test.class)
 		.clientVersionHeader("e")
@@ -104,7 +103,6 @@ class RestAnnotation_Test extends TestBase {
 		.allowedHeaderParams("b")
 		.allowedMethodHeaders("c")
 		.allowedMethodParams("d")
-		.beanStore(BasicBeanStore.class)
 		.callLogger(CallLogger.class)
 		.children(RestAnnotation_Test.class)
 		.clientVersionHeader("e")
@@ -149,8 +147,8 @@ class RestAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"allowedHeaderParams,allowedMethodHeaders,allowedMethodParams,allowedParserOptions,allowedSerializerOptions,beanStore,callLogger,children,clientVersionHeader,config,consumes,converters,debug,debugEnablement,debugOn,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestHeaders,defaultResponseHeaders,description,disableContentParam,encoders,guards,maxInput,messages,noInherit,parsers,partParser,partSerializer,path,produces,renderResponseStackTraces,responseProcessors,restOpArgs,roleGuard,rolesDeclared,serializers,siteName,staticFiles,swagger{contact{description,email,name,url},description,externalDocs{description,url},license{description,name,url},tags,termsOfService,title,value,version},swaggerProvider,title,uriAuthority,uriContext,uriRelativity,uriResolution",
-			"b,c,d,[e1],[e2],BasicBeanStore,CallLogger,[RestAnnotation_Test],e,f,[g],[RestConverter],h,DebugEnablement,i,j,k,l,[m],[n],[o],[p],a,[Encoder],[RestGuard],q,r,[e3],[Parser],HttpPartParser,HttpPartSerializer,t,[u],v,[ResponseProcessor],[RestOpArg],w,x,[Serializer],y,StaticFiles,{{[],,,},[],{[],},{[],,},[],[],[],[],},BasicSwaggerProvider,[z],aa,bb,cc,dd");
+			"allowedHeaderParams,allowedMethodHeaders,allowedMethodParams,allowedParserOptions,allowedSerializerOptions,callLogger,children,clientVersionHeader,config,consumes,converters,debug,debugEnablement,debugOn,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestHeaders,defaultResponseHeaders,description,disableContentParam,encoders,guards,maxInput,messages,noInherit,parsers,partParser,partSerializer,path,produces,renderResponseStackTraces,responseProcessors,restOpArgs,roleGuard,rolesDeclared,serializers,siteName,staticFiles,swagger{contact{description,email,name,url},description,externalDocs{description,url},license{description,name,url},tags,termsOfService,title,value,version},swaggerProvider,title,uriAuthority,uriContext,uriRelativity,uriResolution",
+			"b,c,d,[e1],[e2],CallLogger,[RestAnnotation_Test],e,f,[g],[RestConverter],h,DebugEnablement,i,j,k,l,[m],[n],[o],[p],a,[Encoder],[RestGuard],q,r,[e3],[Parser],HttpPartParser,HttpPartSerializer,t,[u],v,[ResponseProcessor],[RestOpArg],w,x,[Serializer],y,StaticFiles,{{[],,,},[],{[],},{[],,},[],[],[],[],},BasicSwaggerProvider,[z],aa,bb,cc,dd");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -181,7 +179,6 @@ class RestAnnotation_Test extends TestBase {
 		allowedHeaderParams="b",
 		allowedMethodHeaders="c",
 		allowedMethodParams="d",
-		beanStore=BasicBeanStore.class,
 		callLogger=CallLogger.class,
 		children=RestAnnotation_Test.class,
 		clientVersionHeader="e",
@@ -234,7 +231,6 @@ class RestAnnotation_Test extends TestBase {
 		allowedHeaderParams="b",
 		allowedMethodHeaders="c",
 		allowedMethodParams="d",
-		beanStore=BasicBeanStore.class,
 		callLogger=CallLogger.class,
 		children=RestAnnotation_Test.class,
 		clientVersionHeader="e",

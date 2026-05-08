@@ -370,6 +370,47 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	}
 
 	/**
+	 * Returns the default supplier registered locally for the specified unnamed bean type, or empty if none.
+	 *
+	 * <p>
+	 * Parent and overriding-parent stores are <i>not</i> consulted.  This returns the supplier itself,
+	 * unwrapped from any resolution chain &mdash; it lets callers promote a memoizer-backed default
+	 * supplier into a higher-precedence layer (e.g. a local entry) without re-invoking the underlying
+	 * factory.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type to look up.
+	 * @return The locally-registered default supplier, or {@link Optional#empty()} if not present.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> Optional<Supplier<T>> getDefaultSupplier(Class<T> beanType) {
+		return getDefaultSupplier(beanType, null);
+	}
+
+	/**
+	 * Returns the default supplier registered locally for the specified bean type and name, or empty if none.
+	 *
+	 * <p>
+	 * Parent and overriding-parent stores are <i>not</i> consulted.  This returns the supplier itself,
+	 * unwrapped from any resolution chain &mdash; it lets callers promote a memoizer-backed default
+	 * supplier into a higher-precedence layer (e.g. a local entry) without re-invoking the underlying
+	 * factory.
+	 *
+	 * @param <T> The bean type.
+	 * @param beanType The bean type to look up.
+	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
+	 * @return The locally-registered default supplier, or {@link Optional#empty()} if not present.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> Optional<Supplier<T>> getDefaultSupplier(Class<T> beanType, String name) {
+		var typeMap = defaults.get(beanType);
+		if (typeMap == null)
+			return opte();
+		var supplier = typeMap.get(emptyIfNull(name));
+		return supplier == null ? opte() : opt((Supplier<T>) supplier);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this store contains at least one unnamed bean of the specified type.
 	 *
 	 * <p>
