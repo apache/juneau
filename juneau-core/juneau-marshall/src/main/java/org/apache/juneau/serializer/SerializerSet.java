@@ -19,6 +19,7 @@ package org.apache.juneau.serializer;
 import org.apache.juneau.commons.http.MediaRanges;
 import org.apache.juneau.commons.http.MediaRange;
 import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
@@ -134,7 +135,7 @@ public class SerializerSet {
 		 * @param copyFrom The serializer group that we're copying settings and serializers from.
 		 */
 		protected Builder(SerializerSet copyFrom) {
-			super(copyFrom.getClass(), BasicBeanStore.INSTANCE);
+			super(copyFrom.getClass(), BasicBeanStore2.INSTANCE);
 			this.entries = list((Object[])copyFrom.entries);
 		}
 
@@ -451,7 +452,7 @@ public class SerializerSet {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BasicBeanStore.INSTANCE);
+		return new Builder(BasicBeanStore2.INSTANCE);
 	}
 
 	/**

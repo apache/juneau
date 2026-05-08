@@ -17,6 +17,7 @@
 package org.apache.juneau.parser;
 
 import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
@@ -134,7 +135,7 @@ public class ParserSet {
 		 * @param copyFrom The parser group that we're copying settings and parsers from.
 		 */
 		protected Builder(ParserSet copyFrom) {
-			super(copyFrom.getClass(), BasicBeanStore.INSTANCE);
+			super(copyFrom.getClass(), BasicBeanStore2.INSTANCE);
 			this.entries = list((Object[])copyFrom.entries);
 		}
 
@@ -454,7 +455,7 @@ public class ParserSet {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BasicBeanStore.INSTANCE);
+		return new Builder(BasicBeanStore2.INSTANCE);
 	}
 
 	/**

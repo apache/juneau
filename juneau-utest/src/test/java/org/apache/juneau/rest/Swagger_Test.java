@@ -28,6 +28,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.commons.annotation.ExternalDocs;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Tag;
@@ -73,7 +74,7 @@ class Swagger_Test extends TestBase {
 	public static class TestClasspathFileFinder extends BasicStaticFiles {
 
 		public TestClasspathFileFinder() {
-			super(StaticFiles.create(BasicBeanStore.INSTANCE).cp(Swagger_Test.class, null, false));
+			super(StaticFiles.create(BasicBeanStore2.INSTANCE).cp(Swagger_Test.class, null, false));
 		}
 
 		@Override /* FileFinder */

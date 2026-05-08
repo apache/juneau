@@ -23,8 +23,7 @@ import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 
 /**
  *
@@ -85,7 +84,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	 * Uses the same settings as {@link CallLogger}.
 	 */
 	public BasicTestCaptureCallLogger() {
-		super(BasicBeanStore.INSTANCE);
+		super(BasicBeanStore2.INSTANCE);
 	}
 
 	/**

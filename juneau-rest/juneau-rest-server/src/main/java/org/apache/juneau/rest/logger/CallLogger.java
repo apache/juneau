@@ -31,7 +31,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.annotation.*;
@@ -426,7 +426,7 @@ public class CallLogger {
 		}
 	}
 
-	private static final CallLoggerRule DEFAULT_RULE = CallLoggerRule.create(BasicBeanStore.INSTANCE).build();
+	private static final CallLoggerRule DEFAULT_RULE = CallLoggerRule.create(BasicBeanStore2.INSTANCE).build();
 
 	/**
 	 * System property name for the default logger name to use for {@link CallLogger} objects.

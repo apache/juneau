@@ -23,7 +23,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.*;
@@ -62,8 +61,8 @@ class RestContext_Precedence_Test extends TestBase {
 	// Marker beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static final CallLogger SPRING_LOGGER = BasicCallLogger.create(BasicBeanStore.INSTANCE).build();
-	private static final CallLogger RESTINJECT_LOGGER = BasicCallLogger.create(BasicBeanStore.INSTANCE).build();
+	private static final CallLogger SPRING_LOGGER = BasicCallLogger.create(BasicBeanStore2.INSTANCE).build();
+	private static final CallLogger RESTINJECT_LOGGER = BasicCallLogger.create(BasicBeanStore2.INSTANCE).build();
 	private static final ThrownStore RESTINJECT_THROWN_STORE = ThrownStore.create().build();
 
 	//-----------------------------------------------------------------------------------------------------------------

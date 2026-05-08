@@ -19,7 +19,7 @@ package org.apache.juneau.rest.logger;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
 
@@ -45,7 +45,7 @@ public class BasicCallLogger extends CallLogger {
 	 * Uses the same settings as {@link CallLogger}.
 	 */
 	public BasicCallLogger() {
-		super(BasicBeanStore.INSTANCE);
+		super(BasicBeanStore2.INSTANCE);
 	}
 
 	/**

@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.commons.reflect.*;
@@ -270,7 +271,7 @@ public class EncoderSet {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BasicBeanStore.INSTANCE);
+		return new Builder(BasicBeanStore2.INSTANCE);
 	}
 
 	/**

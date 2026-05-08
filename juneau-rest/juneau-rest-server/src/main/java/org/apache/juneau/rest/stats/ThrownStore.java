@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -125,7 +125,7 @@ public class ThrownStore {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BasicBeanStore.INSTANCE);
+		return new Builder(BasicBeanStore2.INSTANCE);
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class ThrownStore {
 	 * Constructor.
 	 */
 	public ThrownStore() {
-		this(create(BasicBeanStore.INSTANCE));
+		this(create(BasicBeanStore2.INSTANCE));
 	}
 
 	/**

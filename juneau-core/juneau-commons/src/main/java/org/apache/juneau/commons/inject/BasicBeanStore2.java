@@ -62,6 +62,22 @@ import org.apache.juneau.commons.reflect.*;
 })
 public class BasicBeanStore2 implements WritableBeanStore {
 
+	/**
+	 * Static reusable empty instance.
+	 *
+	 * <p>
+	 * Useful as a placeholder when an API requires a {@link BeanStore} but the caller has no beans to
+	 * register &mdash; e.g. as the parent argument to a builder that only needs the bean store for
+	 * downstream parameter resolution.
+	 *
+	 * <p>
+	 * <b>Treat this instance as read-only.</b>  It's typed as the concrete class so it can be passed
+	 * to APIs that take {@link WritableBeanStore} or {@code BasicBeanStore2}, but callers should not
+	 * call any mutating methods on it &mdash; doing so would leak state between unrelated callers.
+	 * Code that legitimately needs to add beans should construct its own {@code new BasicBeanStore2()}.
+	 */
+	public static final BasicBeanStore2 INSTANCE = new BasicBeanStore2();
+
 	// Property name constants
 	private static final String PROP_bean = "bean";
 	private static final String PROP_defaults = "defaults";
