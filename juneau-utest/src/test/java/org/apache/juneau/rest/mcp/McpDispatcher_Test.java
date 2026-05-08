@@ -23,7 +23,8 @@ import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.junit.jupiter.api.*;
 
 /**
@@ -32,7 +33,7 @@ import org.junit.jupiter.api.*;
 class McpDispatcher_Test {
 
 	private final McpDispatcher dispatcher = new McpDispatcher();
-	private final BasicBeanStore ctx = BasicBeanStore.create().build();
+	private final BeanStore ctx = new BasicBeanStore2();
 
 	private static McpToolHandler tool(String name, java.util.function.Function<Map<String, Object>, CallToolResult> fn) {
 		return new McpToolHandler() {
@@ -42,7 +43,7 @@ class McpDispatcher_Test {
 			}
 
 			@Override
-			public CallToolResult call(Map<String, Object> arguments, BasicBeanStore ctx) {
+			public CallToolResult call(Map<String, Object> arguments, BeanStore ctx) {
 				return fn.apply(arguments);
 			}
 		};
@@ -56,7 +57,7 @@ class McpDispatcher_Test {
 			}
 
 			@Override
-			public GetPromptResult get(Map<String, Object> arguments, BasicBeanStore ctx) {
+			public GetPromptResult get(Map<String, Object> arguments, BeanStore ctx) {
 				return fn.apply(arguments);
 			}
 		};
@@ -70,7 +71,7 @@ class McpDispatcher_Test {
 			}
 
 			@Override
-			public ReadResourceResult read(String u, BasicBeanStore ctx) {
+			public ReadResourceResult read(String u, BeanStore ctx) {
 				return fn.apply(u);
 			}
 		};

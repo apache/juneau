@@ -36,7 +36,7 @@ import jakarta.servlet.*;
  *
  * <p>
  * Method parameters are resolved from the
- * {@link org.apache.juneau.cp.BasicBeanStore bean store} the same way as any other Juneau-injected
+ * {@link org.apache.juneau.commons.inject.BeanStore bean store} the same way as any other Juneau-injected
  * method. {@link jakarta.servlet.ServletConfig}, {@link jakarta.servlet.ServletContext}, the resource instance
  * itself, and any bean registered via {@link org.apache.juneau.rest.annotation.RestInject @RestInject} or the
  * configured bean-store hooks are all resolvable. Zero-argument variants are also supported.

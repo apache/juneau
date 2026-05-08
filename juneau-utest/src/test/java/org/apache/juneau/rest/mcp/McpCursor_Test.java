@@ -21,7 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.junit.jupiter.api.*;
 
 /**
@@ -29,7 +30,7 @@ import org.junit.jupiter.api.*;
  */
 class McpCursor_Test {
 
-	private static final BasicBeanStore CTX = BasicBeanStore.create().build();
+	private static final BeanStore CTX = new BasicBeanStore2();
 
 	@Test
 	void singlePage_returnsAll_withNullCursor() {

@@ -21,7 +21,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BeanStore;
 
 /**
  * Transport-agnostic JSON-RPC dispatcher for the MCP wire protocol.
@@ -30,7 +30,7 @@ import org.apache.juneau.cp.*;
  * The dispatcher contains <em>zero</em> HTTP plumbing; it accepts a parsed {@link JsonRpcRequest},
  * routes by {@code method}, and returns a {@link JsonRpcResponse}. {@link McpRestServlet} is a thin
  * adapter that wraps this dispatcher in a Juneau REST {@code @RestPost} method, but embedders are
- * free to call {@link #dispatch(JsonRpcRequest, McpServerConfig, BasicBeanStore)} directly from
+ * free to call {@link #dispatch(JsonRpcRequest, McpServerConfig, BeanStore)} directly from
  * tests or from a non-Juneau servlet.
  *
  * <p>
@@ -67,7 +67,7 @@ public class McpDispatcher {
 	 * @param ctx Per-request bean store (passed through to handlers). Never {@code null}.
 	 * @return The response, or {@code null} for notification requests.
 	 */
-	public JsonRpcResponse dispatch(JsonRpcRequest req, McpServerConfig config, BasicBeanStore ctx) {
+	public JsonRpcResponse dispatch(JsonRpcRequest req, McpServerConfig config, BeanStore ctx) {
 		if (req == null)
 			return errorResponse(null, CODE_INVALID_REQUEST, "Request envelope is null", null);
 
@@ -94,7 +94,7 @@ public class McpDispatcher {
 		return id == null;
 	}
 
-	private Object invoke(String method, Object params, McpServerConfig config, BasicBeanStore ctx) {
+	private Object invoke(String method, Object params, McpServerConfig config, BeanStore ctx) {
 		switch (method) {
 			case McpMethods.INITIALIZE:
 				return initialize(config);
@@ -146,13 +146,13 @@ public class McpDispatcher {
 	// tools
 	// -------------------------------------------------------------------------------------------
 
-	private static ListToolsResult listTools(McpServerConfig config, Object params, BasicBeanStore ctx) {
+	private static ListToolsResult listTools(McpServerConfig config, Object params, BeanStore ctx) {
 		var descriptors = config.getTools().stream().map(McpToolHandler::descriptor).collect(Collectors.toList());
 		var page = config.getCursor().page(descriptors, cursorOf(params), ctx);
 		return new ListToolsResult().setTools(page.items()).setNextCursor(page.nextCursor());
 	}
 
-	private static CallToolResult callTool(McpServerConfig config, Object params, BasicBeanStore ctx) {
+	private static CallToolResult callTool(McpServerConfig config, Object params, BeanStore ctx) {
 		var p = asMap(params);
 		var name = strParam(p, "name");
 		if (name == null)
@@ -169,13 +169,13 @@ public class McpDispatcher {
 	// prompts
 	// -------------------------------------------------------------------------------------------
 
-	private static ListPromptsResult listPrompts(McpServerConfig config, Object params, BasicBeanStore ctx) {
+	private static ListPromptsResult listPrompts(McpServerConfig config, Object params, BeanStore ctx) {
 		var descriptors = config.getPrompts().stream().map(McpPromptHandler::descriptor).collect(Collectors.toList());
 		var page = config.getCursor().page(descriptors, cursorOf(params), ctx);
 		return new ListPromptsResult().setPrompts(page.items()).setNextCursor(page.nextCursor());
 	}
 
-	private static GetPromptResult getPrompt(McpServerConfig config, Object params, BasicBeanStore ctx) {
+	private static GetPromptResult getPrompt(McpServerConfig config, Object params, BeanStore ctx) {
 		var p = asMap(params);
 		var name = strParam(p, "name");
 		if (name == null)
@@ -192,13 +192,13 @@ public class McpDispatcher {
 	// resources
 	// -------------------------------------------------------------------------------------------
 
-	private static ListResourcesResult listResources(McpServerConfig config, Object params, BasicBeanStore ctx) {
+	private static ListResourcesResult listResources(McpServerConfig config, Object params, BeanStore ctx) {
 		var descriptors = config.getResources().stream().map(McpResourceHandler::descriptor).collect(Collectors.toList());
 		var page = config.getCursor().page(descriptors, cursorOf(params), ctx);
 		return new ListResourcesResult().setResources(page.items()).setNextCursor(page.nextCursor());
 	}
 
-	private static ReadResourceResult readResource(McpServerConfig config, Object params, BasicBeanStore ctx) {
+	private static ReadResourceResult readResource(McpServerConfig config, Object params, BeanStore ctx) {
 		var p = asMap(params);
 		var uri = strParam(p, "uri");
 		if (uri == null)

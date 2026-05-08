@@ -19,14 +19,14 @@ package org.apache.juneau.rest.mcp;
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BeanStore;
 
 /**
  * Handler for a single MCP prompt.
  *
  * <p>
  * Implementations declare a {@link #descriptor() descriptor} (the {@link Prompt} returned by {@code prompts/list})
- * and a {@link #get(Map, BasicBeanStore) get} body invoked when the matching {@code prompts/get} method runs.
+ * and a {@link #get(Map, BeanStore) get} body invoked when the matching {@code prompts/get} method runs.
  */
 @FunctionalInterface
 public interface McpPromptHandler {
@@ -51,5 +51,5 @@ public interface McpPromptHandler {
 	 * @param ctx Per-request bean store. Never {@code null}.
 	 * @return The rendered prompt. Never {@code null}.
 	 */
-	GetPromptResult get(Map<String, Object> arguments, BasicBeanStore ctx);
+	GetPromptResult get(Map<String, Object> arguments, BeanStore ctx);
 }

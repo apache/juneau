@@ -119,7 +119,16 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  *
  * @param <T> The bean type being created.
+ *
+ * @deprecated Since 9.5.0 — replaced by
+ * {@link org.apache.juneau.commons.inject.BeanInstantiator BeanInstantiator}.
+ * Migrate {@code BeanCreator.of(Type.class, beanStore).type(impl).run()} to
+ * {@code BeanInstantiator.of(Type.class, beanStore).beanSubType(impl).run()}.
+ * The v2 instantiator accepts any {@link org.apache.juneau.commons.inject.BeanStore BeanStore} parent
+ * (legacy or v2) — no downcast required at call sites.
+ * {@code forRemoval=true} is intentionally not set yet; final deletion happens in Phase 4 of TODO-15.
  */
+@Deprecated(since = "9.5.0")
 public class BeanCreator<T> {
 
 	static class Match<T extends ExecutableInfo> {

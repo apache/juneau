@@ -18,7 +18,7 @@ package org.apache.juneau.rest.mcp;
 
 import java.util.*;
 
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BeanStore;
 
 /**
  * Pagination strategy for MCP {@code list} dispatchers (tools / prompts / resources).
@@ -43,14 +43,14 @@ public interface McpCursor {
 	 * @param <T> Element type.
 	 * @return A non-{@code null} page.
 	 */
-	<T> McpPage<T> page(List<T> all, String cursor, BasicBeanStore ctx);
+	<T> McpPage<T> page(List<T> all, String cursor, BeanStore ctx);
 
 	/**
 	 * Returns everything in a single page; emits no {@code nextCursor}.
 	 */
 	McpCursor SINGLE_PAGE = new McpCursor() {
 		@Override
-		public <T> McpPage<T> page(List<T> all, String cursor, BasicBeanStore ctx) {
+		public <T> McpPage<T> page(List<T> all, String cursor, BeanStore ctx) {
 			return new McpPage<>(all == null ? List.of() : all, null);
 		}
 	};
@@ -69,7 +69,7 @@ public interface McpCursor {
 			throw new IllegalArgumentException("pageSize must be positive: " + pageSize);
 		return new McpCursor() {
 			@Override
-			public <T> McpPage<T> page(List<T> all, String cursor, BasicBeanStore ctx) {
+			public <T> McpPage<T> page(List<T> all, String cursor, BeanStore ctx) {
 				var src = all == null ? List.<T>of() : all;
 				var offset = parseOffset(cursor);
 				if (offset >= src.size())

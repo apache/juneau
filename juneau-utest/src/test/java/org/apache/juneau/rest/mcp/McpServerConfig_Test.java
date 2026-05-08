@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.junit.jupiter.api.*;
 
 /**
@@ -37,7 +38,7 @@ class McpServerConfig_Test {
 			}
 
 			@Override
-			public CallToolResult call(Map<String, Object> arguments, org.apache.juneau.cp.BasicBeanStore ctx) {
+			public CallToolResult call(Map<String, Object> arguments, BeanStore ctx) {
 				return new CallToolResult();
 			}
 		};
@@ -51,7 +52,7 @@ class McpServerConfig_Test {
 			}
 
 			@Override
-			public GetPromptResult get(Map<String, Object> arguments, org.apache.juneau.cp.BasicBeanStore ctx) {
+			public GetPromptResult get(Map<String, Object> arguments, BeanStore ctx) {
 				return new GetPromptResult();
 			}
 		};
@@ -65,7 +66,7 @@ class McpServerConfig_Test {
 			}
 
 			@Override
-			public ReadResourceResult read(String u, org.apache.juneau.cp.BasicBeanStore ctx) {
+			public ReadResourceResult read(String u, BeanStore ctx) {
 				return new ReadResourceResult();
 			}
 		};

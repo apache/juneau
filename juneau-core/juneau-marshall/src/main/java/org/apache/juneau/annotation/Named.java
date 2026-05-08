@@ -28,7 +28,7 @@ import java.lang.annotation.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jk>public</jk> MyClass(<ja>@Named</ja>(<js>"myBean"</js>) MyBean <jv>bean</jv>) {
- * 		<jc>// Constructor will receive the bean named "myBean" from the BasicBeanStore</jc>
+ * 		<jc>// Constructor will receive the bean named "myBean" from the BeanStore</jc>
  * 	}
  *
  * 	<ja>@Inject</ja>
@@ -49,7 +49,7 @@ import java.lang.annotation.*;
  * <p class='bjava'>
  * 	<jc>// @Named - for bean injection</jc>
  * 	<jk>public</jk> MyService(<ja>@Named</ja>(<js>"primaryDb"</js>) Database <jv>db</jv>) {
- * 		<jc>// Injects the bean named "primaryDb" from BasicBeanStore</jc>
+ * 		<jc>// Injects the bean named "primaryDb" from the BeanStore</jc>
  * 	}
  *
  * 	<jc>// @Name - for parameter naming (when bytecode names unavailable)</jc>
@@ -61,7 +61,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='ja'>{@link Name}
- * 	<li class='jc'>{@link org.apache.juneau.cp.BasicBeanStore}
+ * 	<li class='jc'>{@link org.apache.juneau.commons.inject.BeanStore}
  * </ul>
  */
 @Documented

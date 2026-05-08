@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
 import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -96,7 +96,7 @@ public abstract class McpRestServlet extends BasicRestServlet {
 	 */
 	@RestPost(path = "/")
 	public JsonRpcResponse handleMcp(@Content JsonRpcRequest req, RestRequest restReq) {
-		var bs = BasicBeanStore.of((BasicBeanStore) restReq.getContext().getBeanStore())  // TODO - Why do we need a cast?
+		var bs = new BasicBeanStore2(restReq.getContext().getBeanStore())
 			.addBean(RestRequest.class, restReq);
 		return Mcp.handle(req, getMcpConfig(), bs);
 	}

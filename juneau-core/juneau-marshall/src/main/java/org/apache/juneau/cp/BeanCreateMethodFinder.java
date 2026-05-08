@@ -78,7 +78,15 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  *
  * @param <T> The bean type being created.
+ *
+ * @deprecated Since 9.5.0 — replaced by
+ * {@link org.apache.juneau.commons.inject.BeanStore#createBeanFromMethod(Class, Object, String) BeanStore.createBeanFromMethod(beanType, resource, methodName)}.
+ * The v2 API returns an {@link java.util.Optional Optional} that callers chain with {@code .ifPresent(...)} / {@code .orElseGet(...)} —
+ * no separate {@code .find(...).thenFind(...).withDefault(...).run()} fluent chain is needed. See TODO-15 phase 3 for the bulk
+ * migration that already moved 49 internal call sites in {@code RestContext}/{@code RestOpContext} to the v2 surface.
+ * {@code forRemoval=true} is intentionally not set yet; final deletion happens in Phase 4 of TODO-15.
  */
+@Deprecated(since = "9.5.0")
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })

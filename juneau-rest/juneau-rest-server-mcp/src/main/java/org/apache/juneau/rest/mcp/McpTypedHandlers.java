@@ -19,6 +19,7 @@ package org.apache.juneau.rest.mcp;
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.marshaller.*;
 
 /**
@@ -55,7 +56,7 @@ public final class McpTypedHandlers {
 			}
 
 			@Override
-			public CallToolResult call(Map<String, Object> arguments, org.apache.juneau.cp.BasicBeanStore ctx) {
+			public CallToolResult call(Map<String, Object> arguments, BeanStore ctx) {
 				A bound = bindArguments(arguments, typed.argumentType());
 				R result = typed.call(bound, ctx);
 				return wrapToolResult(result);
@@ -82,7 +83,7 @@ public final class McpTypedHandlers {
 			}
 
 			@Override
-			public GetPromptResult get(Map<String, Object> arguments, org.apache.juneau.cp.BasicBeanStore ctx) {
+			public GetPromptResult get(Map<String, Object> arguments, BeanStore ctx) {
 				A bound = bindArguments(arguments, typed.argumentType());
 				return typed.get(bound, ctx);
 			}

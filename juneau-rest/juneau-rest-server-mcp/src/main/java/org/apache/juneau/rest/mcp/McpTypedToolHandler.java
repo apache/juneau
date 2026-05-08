@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BeanStore;
 
 /**
  * Typed variant of {@link McpToolHandler} where MCP {@code tools/call} arguments bind into a Juneau bean.
@@ -58,5 +58,5 @@ public interface McpTypedToolHandler<A, R> {
 	 * @param ctx Per-request bean store.
 	 * @return The call result.
 	 */
-	R call(A arguments, BasicBeanStore ctx);
+	R call(A arguments, BeanStore ctx);
 }

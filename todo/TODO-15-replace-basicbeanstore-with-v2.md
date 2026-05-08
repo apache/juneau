@@ -60,13 +60,13 @@ Legacy `cp.BasicBeanStore` was made to `implements WritableBeanStore` as a trans
 
 Low-risk, independent of the rest of this plan. Can land in an earlier release than 9.5 if desired.
 
-- [ ] Annotate with `@Deprecated` and Javadoc pointing at `org.apache.juneau.commons.inject`:
-  - `org.apache.juneau.cp.BasicBeanStore`
-  - `org.apache.juneau.cp.BeanCreator`
-  - `org.apache.juneau.cp.BeanBuilder` *(consumer class `org.apache.juneau.BeanBuilder` — re-evaluate)*
-  - `org.apache.juneau.cp.BeanCreateMethodFinder`
-  - `org.apache.juneau.cp.ContextBeanCreator`
-- [ ] Do **not** use `forRemoval = true` yet — remaining internal consumers still wired to these. Deletion happens in Phase 4.
+- [x] **DONE (2026-05-08).** Annotated with `@Deprecated(since = "9.5.0")` and `@deprecated` Javadoc pointing at `org.apache.juneau.commons.inject`:
+  - `org.apache.juneau.cp.BasicBeanStore` → `BeanStore` / `WritableBeanStore` / `BasicBeanStore2`
+  - `org.apache.juneau.cp.BeanCreator` → `BeanInstantiator`
+  - `org.apache.juneau.cp.BeanCreateMethodFinder` → `BeanStore.createBeanFromMethod(...)`
+  - `org.apache.juneau.cp.ContextBeanCreator` → migrate to `BeanInstantiator` once v2 grows context-builder hooks (still extended by `HttpPartParser.Creator` / `HttpPartSerializer.Creator`)
+- [x] **`forRemoval = true` deliberately not set** — remaining internal consumers still wired to these. Deletion happens in Phase 4.
+- ~~`org.apache.juneau.BeanBuilder` (consumer class)~~ — **NOT deprecated.** Lives outside `cp` package; it's the user-facing builder superclass. Internals widened to `WritableBeanStore` (v2 interface) on 2026-05-08, so it stays as a permanent public API.
 
 ---
 
@@ -126,8 +126,8 @@ Net new v2 surface from this decision: none. The `Builder` class simply goes awa
 
 Remaining inventory work:
 - ~~Confirm the `BeanCreateMethodFinder` callers in `RestContext` (33) and `RestOpContext` (16) are all mechanical once the v2 finder API is settled.~~ — **DONE.** All 49 sites migrated.
-- [ ] Check `McpPage.java` / `McpTypedHandlers.java` / `McpEndpoint.java` / `McpRestServlet.java` in `rest-server-mcp` — currently compile against legacy via `(BasicBeanStore)` casts that bridge from `WritableBeanStore`-typed callers. Migrate alongside the cascade or in a follow-up.
-- [ ] Enumerate direct callers in `juneau-microservice-*` and `juneau-config` (not yet surveyed).
+- [x] **DONE (2026-05-08).** `rest-server-mcp` migrated to v2 `BeanStore`. Public handler interfaces (`McpToolHandler`, `McpPromptHandler`, `McpResourceHandler`, `McpTypedToolHandler`, `McpTypedPromptHandler`, `McpCursor`) now take `BeanStore ctx` instead of `BasicBeanStore ctx` (chosen over `WritableBeanStore` because handlers don't mutate). `Mcp.handle(...)`, `McpDispatcher.dispatch(...)` and 7 internal dispatcher methods, plus internal `McpTypedHandlers.adaptTool`/`adaptPrompt` flipped. Servlets (`McpRestServlet`, `McpEndpoint`) replaced legacy `BasicBeanStore.of((BasicBeanStore) restReq.getContext().getBeanStore())` with `new BasicBeanStore2(restReq.getContext().getBeanStore())` — the previous `// TODO: Why do we need a cast?` comments are gone. Six test files updated in lockstep (`McpDispatcher_Test`, `McpTypedHandlers_Test`, `McpRestServlet_Test`, `McpServerConfig_Test`, `McpHandlerDefaults_Test`, `McpCursor_Test`); `BasicBeanStore.create().build()` test ctx instances → `new BasicBeanStore2()`. Added a no-arg `BasicBeanStore2()` constructor (equivalent to `new BasicBeanStore2(null)`) for standalone parent-less stores. Full build + tests + jetty-ftest green. Breaking change: any external consumer implementing `McpToolHandler` / `McpPromptHandler` / `McpResourceHandler` / typed variants / `McpCursor` must change `BasicBeanStore ctx` → `BeanStore ctx`.
+- [x] **DONE (2026-05-08).** Enumerate direct callers in `juneau-microservice-*` and `juneau-config`. **Result: zero.** Neither `juneau-microservice-core` (28 source files), `juneau-microservice-jetty`, nor `juneau-core/juneau-config` (24 source files) reference `BasicBeanStore`, `BeanCreator`, `BeanCreateMethodFinder`, or `ContextBeanCreator`. Both modules are already free of legacy injection types — no Phase-3 migration work needed there.
 - [ ] List any public API surfaces in `juneau-marshall` that still expose `BasicBeanStore` / `BeanCreator` (these are the hard breaking changes). `Name.java` / `Named.java` Javadoc refs are trivial.
 - ~~**Cascade-builders inventory.**~~ — **DONE (2026-05-08).** 16 of the listed 25 factories flipped (those actually called from `RestContext` / `RestOpContext`): `RestConverterList`, `RestGuardList`, `RestMatcherList`, `RestOpArgList`, `ResponseProcessorList`, `RestOperations`, `RestChildren`, `MethodExecStore`, `ThrownStore`, `FileFinder`, `StaticFiles`, `BasicStaticFiles.create(...)`, `DebugEnablement`, `SwaggerProvider`, `EncoderSet`, `ParserSet`, `SerializerSet`. The remaining ~9 (`BasicCallLogger`, `BasicDebugEnablement`, `BasicSwaggerProvider`, `Messages`, `JsonSchemaGenerator.Builder`, `HttpPartParser.Creator`, `HttpPartSerializer.Creator`, `VarResolver.Builder`, `UrlPathMatcherList`, `NamedAttributeMap`) are not on the `RestContext`/`RestOpContext` cascade path; flip them lazily as Phase 4 / TODO-14 needs them, or as part of the legacy-`BeanCreator` retirement.
 

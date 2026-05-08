@@ -17,14 +17,14 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BeanStore;
 
 /**
  * Handler for a single MCP resource.
  *
  * <p>
  * Implementations declare a {@link #descriptor() descriptor} (the {@link Resource} returned by {@code resources/list})
- * and a {@link #read(String, BasicBeanStore) read} body invoked when the matching {@code resources/read} method runs.
+ * and a {@link #read(String, BeanStore) read} body invoked when the matching {@code resources/read} method runs.
  */
 @FunctionalInterface
 public interface McpResourceHandler {
@@ -49,5 +49,5 @@ public interface McpResourceHandler {
 	 * @param ctx Per-request bean store. Never {@code null}.
 	 * @return The resource contents. Never {@code null}.
 	 */
-	ReadResourceResult read(String uri, BasicBeanStore ctx);
+	ReadResourceResult read(String uri, BeanStore ctx);
 }

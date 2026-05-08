@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BeanStore;
 
 /**
  * Typed variant of {@link McpPromptHandler} where MCP {@code prompts/get} arguments bind into a Juneau bean.
@@ -47,5 +47,5 @@ public interface McpTypedPromptHandler<A> {
 	 * @param ctx Per-request bean store.
 	 * @return The rendered prompt.
 	 */
-	GetPromptResult get(A arguments, BasicBeanStore ctx);
+	GetPromptResult get(A arguments, BeanStore ctx);
 }

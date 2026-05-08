@@ -20,7 +20,8 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.junit.jupiter.api.*;
 
 /**
@@ -91,12 +92,12 @@ class McpHandlerDefaults_Test {
 
 	@Test
 	void cursor_passes_ctx_to_strategy() {
-		// Verify ctx parameter reaches the cursor (covers the BasicBeanStore parameter passthrough).
-		var bs = BasicBeanStore.create().build();
+		// Verify ctx parameter reaches the cursor (covers the BeanStore parameter passthrough).
+		var bs = new BasicBeanStore2();
 		var got = new Object[1];
 		McpCursor c = new McpCursor() {
 			@Override
-			public <T> McpPage<T> page(java.util.List<T> all, String cursor, BasicBeanStore ctx) {
+			public <T> McpPage<T> page(java.util.List<T> all, String cursor, BeanStore ctx) {
 				got[0] = ctx;
 				return new McpPage<>(all, null);
 			}

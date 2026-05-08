@@ -19,7 +19,7 @@ package org.apache.juneau.rest.mcp;
 import java.util.*;
 
 /**
- * Slice of MCP descriptors returned by {@link McpCursor#page(List, String, org.apache.juneau.cp.BasicBeanStore)}.
+ * Slice of MCP descriptors returned by {@link McpCursor#page(List, String, org.apache.juneau.commons.inject.BeanStore)}.
  *
  * @param <T> Descriptor element type ({@code Tool}, {@code Prompt}, or {@code Resource}).
  * @param items Items to return on the current page. Never {@code null}.

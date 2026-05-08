@@ -79,6 +79,17 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	private final BeanStore overridingParent;
 
 	/**
+	 * No-arg constructor.  Equivalent to {@code new BasicBeanStore2(null)}.
+	 *
+	 * <p>
+	 * Creates a standalone, parent-less bean store.  All lookups consult only locally-registered beans and
+	 * default suppliers.
+	 */
+	public BasicBeanStore2() {
+		this(null, null);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param parent The parent bean store.  Can be <jk>null</jk>.  Bean searches are performed recursively up this parent chain

@@ -97,7 +97,22 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li class='note'>Bean stores can be made thread-safe using {@link Builder#threadSafe()}.
  * </ul>
  *
+ * @deprecated Since 9.5.0 — replaced by the v2 injection surface in
+ * {@link org.apache.juneau.commons.inject}:
+ * <ul>
+ *   <li>{@link org.apache.juneau.commons.inject.BeanStore BeanStore} — read-only interface (most common consumer surface).
+ *   <li>{@link org.apache.juneau.commons.inject.WritableBeanStore WritableBeanStore} — adds {@code addBean}, {@code addSupplier}, {@code addBeanType}, etc.
+ *   <li>{@link org.apache.juneau.commons.inject.BasicBeanStore2 BasicBeanStore2} — concrete writable implementation (will be renamed to {@code BasicBeanStore} once this legacy class is removed in Phase 4).
+ * </ul>
+ * Bean instantiation moves from {@link BeanCreator#of(Class, BasicBeanStore)} to
+ * {@link org.apache.juneau.commons.inject.BeanInstantiator#of(Class, org.apache.juneau.commons.inject.BeanStore) BeanInstantiator.of(Class, BeanStore)}.
+ * Method-creator lookups ({@link BeanCreateMethodFinder}) move to
+ * {@link org.apache.juneau.commons.inject.BeanStore#createBeanFromMethod(Class, Object, String) BeanStore.createBeanFromMethod(...)}.
+ * <p>
+ * This class still {@code implements WritableBeanStore} as a transitional bridge so existing legacy callers compile unchanged
+ * during the migration. {@code forRemoval=true} is intentionally not set yet — final removal happens in Phase 4 of TODO-15.
  */
+@Deprecated(since = "9.5.0")
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })

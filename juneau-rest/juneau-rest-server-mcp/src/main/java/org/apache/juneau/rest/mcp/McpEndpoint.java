@@ -17,7 +17,8 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -28,7 +29,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Implementing classes provide their {@link McpServerConfig} by implementing {@link #getMcpConfig()}; the
  * default {@link #handleMcpRequest(JsonRpcRequest, RestRequest)} method dispatches incoming requests through
- * {@link Mcp#handle(JsonRpcRequest, McpServerConfig, BasicBeanStore)}.
+ * {@link Mcp#handle(JsonRpcRequest, McpServerConfig, BeanStore)}.
  *
  * <h5 class='section'>Example:</h5>
  * <pre>
@@ -55,7 +56,7 @@ public interface McpEndpoint {
 	 *
 	 * <p>
 	 * Implementations may override this method to customize routing (path / annotations) but must still
-	 * call {@link Mcp#handle(JsonRpcRequest, McpServerConfig, BasicBeanStore)} to dispatch.
+	 * call {@link Mcp#handle(JsonRpcRequest, McpServerConfig, BeanStore)} to dispatch.
 	 *
 	 * @param req JSON-RPC request envelope.
 	 * @param restReq The current REST request.
@@ -63,7 +64,7 @@ public interface McpEndpoint {
 	 */
 	@RestPost(path = "/mcp")
 	default JsonRpcResponse handleMcpRequest(@Content JsonRpcRequest req, RestRequest restReq) {
-		var bs = BasicBeanStore.of((BasicBeanStore) restReq.getContext().getBeanStore())  // TODO - Why do we need a cast?
+		var bs = new BasicBeanStore2(restReq.getContext().getBeanStore())
 			.addBean(RestRequest.class, restReq);
 		return Mcp.handle(req, getMcpConfig(), bs);
 	}

@@ -23,7 +23,8 @@ import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.junit.jupiter.api.*;
 
 /**
@@ -48,7 +49,7 @@ class McpTypedHandlers_Test {
 		public EchoResult setText(String text) { this.text = text; return this; }
 	}
 
-	private final BasicBeanStore ctx = BasicBeanStore.create().build();
+	private final BeanStore ctx = new BasicBeanStore2();
 	private final McpDispatcher dispatcher = new McpDispatcher();
 
 	@Test
@@ -65,7 +66,7 @@ class McpTypedHandlers_Test {
 			}
 
 			@Override
-			public EchoResult call(EchoArgs args, BasicBeanStore ctx) {
+			public EchoResult call(EchoArgs args, BeanStore ctx) {
 				return new EchoResult().setText(args.getMessage() + ":" + args.getRepeat());
 			}
 		};
@@ -98,7 +99,7 @@ class McpTypedHandlers_Test {
 			}
 
 			@Override
-			public CallToolResult call(EchoArgs args, BasicBeanStore ctx) {
+			public CallToolResult call(EchoArgs args, BeanStore ctx) {
 				return ctr;
 			}
 		};
@@ -120,7 +121,7 @@ class McpTypedHandlers_Test {
 			@Override
 			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
 			@Override
-			public String call(EchoArgs args, BasicBeanStore ctx) { return "hello"; }
+			public String call(EchoArgs args, BeanStore ctx) { return "hello"; }
 		};
 		var config = new McpServerConfig().addTool(McpTypedHandlers.adaptTool(typed));
 		var resp = dispatcher.dispatch(new JsonRpcRequest()
@@ -138,7 +139,7 @@ class McpTypedHandlers_Test {
 			@Override
 			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
 			@Override
-			public EchoResult call(EchoArgs args, BasicBeanStore ctx) { return null; }
+			public EchoResult call(EchoArgs args, BeanStore ctx) { return null; }
 		};
 		var config = new McpServerConfig().addTool(McpTypedHandlers.adaptTool(typed));
 		var resp = dispatcher.dispatch(new JsonRpcRequest()
@@ -156,7 +157,7 @@ class McpTypedHandlers_Test {
 			@Override
 			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
 			@Override
-			public String call(EchoArgs args, BasicBeanStore ctx) {
+			public String call(EchoArgs args, BeanStore ctx) {
 				return args == null ? "null" : "not-null";
 			}
 		};
@@ -176,7 +177,7 @@ class McpTypedHandlers_Test {
 			@Override
 			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
 			@Override
-			public String call(EchoArgs args, BasicBeanStore ctx) { return "ok"; }
+			public String call(EchoArgs args, BeanStore ctx) { return "ok"; }
 		};
 		var config = new McpServerConfig().addTool(McpTypedHandlers.adaptTool(typed));
 		// Bad: 'repeat' should be int, supply a non-numeric value to trigger parser failure.
@@ -195,7 +196,7 @@ class McpTypedHandlers_Test {
 			@Override
 			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
 			@Override
-			public GetPromptResult get(EchoArgs args, BasicBeanStore ctx) {
+			public GetPromptResult get(EchoArgs args, BeanStore ctx) {
 				return new GetPromptResult().setDescription(args == null ? "null" : "non-null");
 			}
 		};
@@ -222,7 +223,7 @@ class McpTypedHandlers_Test {
 			@Override
 			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
 			@Override
-			public String call(EchoArgs args, BasicBeanStore ctx) {
+			public String call(EchoArgs args, BeanStore ctx) {
 				return args == null ? "null" : "not-null";
 			}
 		};
@@ -239,7 +240,7 @@ class McpTypedHandlers_Test {
 			@Override
 			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
 			@Override
-			public GetPromptResult get(EchoArgs args, BasicBeanStore ctx) {
+			public GetPromptResult get(EchoArgs args, BeanStore ctx) {
 				return new GetPromptResult().setDescription(args == null ? "null" : "non-null");
 			}
 		};
@@ -256,7 +257,7 @@ class McpTypedHandlers_Test {
 			@Override
 			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
 			@Override
-			public Unserializable call(EchoArgs args, BasicBeanStore ctx) { return new Unserializable(); }
+			public Unserializable call(EchoArgs args, BeanStore ctx) { return new Unserializable(); }
 		};
 		var config = new McpServerConfig().addTool(McpTypedHandlers.adaptTool(typed));
 		var resp = dispatcher.dispatch(new JsonRpcRequest()
@@ -273,7 +274,7 @@ class McpTypedHandlers_Test {
 			@Override
 			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
 			@Override
-			public GetPromptResult get(EchoArgs args, BasicBeanStore ctx) {
+			public GetPromptResult get(EchoArgs args, BeanStore ctx) {
 				return new GetPromptResult().setDescription(args == null ? "null" : args.getMessage());
 			}
 		};

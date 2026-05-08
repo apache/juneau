@@ -23,7 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -54,7 +54,7 @@ class McpRestServlet_Test extends TestBase {
 					}
 
 					@Override
-					public CallToolResult call(Map<String, Object> arguments, BasicBeanStore ctx) {
+					public CallToolResult call(Map<String, Object> arguments, BeanStore ctx) {
 						var ctr = new CallToolResult();
 						ctr.setContent(List.of(new TextContent().setText(String.valueOf(arguments.get("text")))));
 						return ctr;
@@ -121,7 +121,7 @@ class McpRestServlet_Test extends TestBase {
 				public Tool descriptor() { return new Tool().setName("ping"); }
 
 				@Override
-				public CallToolResult call(Map<String, Object> arguments, BasicBeanStore ctx) {
+				public CallToolResult call(Map<String, Object> arguments, BeanStore ctx) {
 					return new CallToolResult().setContent(List.of(new TextContent().setText("pong")));
 				}
 			});

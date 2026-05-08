@@ -19,17 +19,17 @@ package org.apache.juneau.rest.mcp;
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BeanStore;
 
 /**
  * Handler for a single MCP tool.
  *
  * <p>
  * Implementations declare a {@link #descriptor() descriptor} (the {@link Tool} returned by {@code tools/list})
- * and a {@link #call(Map, BasicBeanStore) call} body invoked when the matching {@code tools/call} method runs.
+ * and a {@link #call(Map, BeanStore) call} body invoked when the matching {@code tools/call} method runs.
  *
  * <p>
- * The {@link BasicBeanStore} argument is the per-request bean store, allowing handlers to look up additional
+ * The {@link BeanStore} argument is the per-request bean store, allowing handlers to look up additional
  * services (or the underlying {@code RestRequest}) without making this interface depend on REST runtime types.
  */
 @FunctionalInterface
@@ -55,5 +55,5 @@ public interface McpToolHandler {
 	 * @param ctx Per-request bean store. Never {@code null}.
 	 * @return The call result. Never {@code null}.
 	 */
-	CallToolResult call(Map<String, Object> arguments, BasicBeanStore ctx);
+	CallToolResult call(Map<String, Object> arguments, BeanStore ctx);
 }

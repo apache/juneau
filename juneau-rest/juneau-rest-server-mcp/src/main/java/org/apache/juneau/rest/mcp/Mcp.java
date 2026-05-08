@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.BeanStore;
 
 /**
  * Static façade over {@link McpDispatcher} for embedders that want a single-line dispatch call.
@@ -52,7 +52,7 @@ public final class Mcp {
 	 * @param ctx Per-request bean store.
 	 * @return The response, or {@code null} for notification requests.
 	 */
-	public static JsonRpcResponse handle(JsonRpcRequest req, McpServerConfig config, BasicBeanStore ctx) {
+	public static JsonRpcResponse handle(JsonRpcRequest req, McpServerConfig config, BeanStore ctx) {
 		return DISPATCHER.dispatch(req, config, ctx);
 	}
 }
