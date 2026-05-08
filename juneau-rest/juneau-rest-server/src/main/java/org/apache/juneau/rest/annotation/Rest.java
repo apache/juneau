@@ -25,7 +25,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;

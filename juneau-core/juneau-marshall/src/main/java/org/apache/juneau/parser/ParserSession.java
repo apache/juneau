@@ -36,7 +36,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.swap.*;
@@ -323,7 +323,8 @@ public class ParserSession extends BeanSession {
 		outer = builder.outer;
 		schema = builder.schema;
 		trimStrings = builder.trimStrings;
-		listener = BeanCreator.of(ParserListener.class).type(ctx.getListener()).orElse(null);
+		var listenerCls = ctx.getListener();
+		listener = listenerCls == null ? null : BeanInstantiator.of(listenerCls).fallback(() -> null).run();
 		sbStack = new ArrayDeque<>();
 	}
 

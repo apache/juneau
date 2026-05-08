@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.html.annotation.*;
 
 /**
@@ -41,7 +41,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		boolean noTables;
 		boolean noTableHeaders;
 		HtmlFormat format = HtmlFormat.HTML;
-		BeanCreator<HtmlRender> render = BeanCreator.of(HtmlRender.class);
+		BeanInstantiator<HtmlRender> render = BeanInstantiator.of(HtmlRender.class);
 		String link;
 		String anchorText;
 		String style;
@@ -55,7 +55,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 			if (html.noTableHeaders())
 				noTableHeaders = html.noTableHeaders();
 			if (html.render() != HtmlRender.class)
-				render.type(html.render());
+				render.beanSubType(html.render());
 			if (! html.link().isEmpty())
 				link = html.link();
 			if (! html.anchorText().isEmpty())
@@ -99,7 +99,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		format = b.format;
 		noTables = b.noTables;
 		noTableHeaders = b.noTableHeaders;
-		render = b.render.orElse(null);
+		render = b.render.fallback(() -> null).run();
 		link = b.link;
 		anchorText = b.anchorText;
 		style = b.style;

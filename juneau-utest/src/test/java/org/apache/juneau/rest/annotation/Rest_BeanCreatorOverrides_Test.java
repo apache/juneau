@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.staticfile.*;

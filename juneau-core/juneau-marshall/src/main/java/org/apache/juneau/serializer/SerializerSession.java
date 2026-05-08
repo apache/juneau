@@ -33,7 +33,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.soap.*;
@@ -504,7 +504,8 @@ public class SerializerSession extends BeanTraverseSession {
 		UriContext uriContext = builder.uriContext;
 		uriResolver = UriResolver.of(ctx.getUriResolution(), ctx.getUriRelativity(), uriContext);
 		vrs = builder.resolver;
-		listener = BeanCreator.of(SerializerListener.class).type(ctx.getListener()).orElse(null);
+		var listenerCls = ctx.getListener();
+		listener = listenerCls == null ? null : BeanInstantiator.of(listenerCls).fallback(() -> null).run();
 		keepNullProperties = builder.keepNullProperties;
 		trimStrings = builder.trimStrings;
 		addBeanTypes = builder.addBeanTypes;

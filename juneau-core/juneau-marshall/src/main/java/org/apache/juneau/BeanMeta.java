@@ -37,7 +37,7 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
@@ -973,7 +973,7 @@ public class BeanMeta<T> {
 			if (opt.isPresent())
 				return opt.get();
 		}
-		return (BeanFactory) BeanCreator.of((Class)fc).run();
+		return (BeanFactory) BeanInstantiator.of((Class)fc).run();
 	}
 
 	/*

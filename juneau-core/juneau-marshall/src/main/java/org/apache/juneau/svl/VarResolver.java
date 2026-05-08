@@ -23,9 +23,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.BasicBeanStore2;
-import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.commons.inject.WritableBeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.svl.vars.*;
 
@@ -242,8 +240,11 @@ public class VarResolver {
 	}
 
 	private static Var toVar(BeanStore bs, Object o) {
-		if (o instanceof Class o2)
-			return BeanCreator.of(Var.class, bs).type(o2).run();
+		if (o instanceof Class<?> o2) {
+			@SuppressWarnings("unchecked")
+			var subType = (Class<? extends Var>) o2;
+			return BeanInstantiator.of(Var.class, bs).beanSubType(subType).run();
+		}
 		return (Var)o;
 	}
 

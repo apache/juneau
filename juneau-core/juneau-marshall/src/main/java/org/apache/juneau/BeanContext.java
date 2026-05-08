@@ -41,7 +41,6 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.serializer.*;
@@ -3740,7 +3739,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			} else {
 				var ci = info((Class<?>)x);
 				if (ci.isAssignableTo(ObjectSwap.class))
-					objectSwapsList.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
+					objectSwapsList.add(BeanInstantiator.of(ObjectSwap.class).beanSubType(ci).run());
 				else if (ci.isAssignableTo(Surrogate.class))
 					objectSwapsList.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
 				else

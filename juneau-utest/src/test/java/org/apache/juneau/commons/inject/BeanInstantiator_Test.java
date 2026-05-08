@@ -3360,7 +3360,7 @@ class BeanInstantiator_Test extends TestBase {
 		@Test
 		void n12_beanSubTypeNullThrows() {
 			var creator = BeanInstantiator.of(SimpleBean.class);
-			assertThrows(IllegalArgumentException.class, () -> creator.beanSubType(null));
+			assertThrows(IllegalArgumentException.class, () -> creator.beanSubType((Class<? extends SimpleBean>) null));
 		}
 	}
 

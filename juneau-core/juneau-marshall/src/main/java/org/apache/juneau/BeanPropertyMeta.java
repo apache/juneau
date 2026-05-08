@@ -38,6 +38,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.ReflectionUtils;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -168,7 +169,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		private static ObjectSwap beanpSwap(AnnotationInfo<Beanp> ai) {
 			var p = ai.inner();
 			if (! p.format().isEmpty())
-				return BeanCreator.of(ObjectSwap.class).type(StringFormatSwap.class).arg(String.class, p.format()).run();
+				return BeanInstantiator.of(ObjectSwap.class).beanSubType(StringFormatSwap.class).addBean(String.class, p.format()).run();
 			return null;
 		}
 
@@ -184,7 +185,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return null;
 			var ci = info(c);
 			if (ci.isAssignableTo(ObjectSwap.class)) {
-				var ps = BeanCreator.of(ObjectSwap.class).type(ci).run();
+				var ps = BeanInstantiator.of(ObjectSwap.class).beanSubType(ci).run();
 				if (nn(ps.forMediaTypes()))
 					throw unsupportedOp("TODO - Media types on swaps not yet supported on bean properties.");
 				if (nn(ps.withTemplate()))

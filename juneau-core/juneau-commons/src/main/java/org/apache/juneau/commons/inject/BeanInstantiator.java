@@ -482,6 +482,24 @@ public class BeanInstantiator<T> {
 	}
 
 	/**
+	 * Specifies a subclass of the bean type to create, via a {@link ClassInfo} reference.
+	 *
+	 * <p>
+	 * Convenience overload of {@link #beanSubType(Class)} that accepts {@link ClassInfo} (or any subtype such
+	 * as {@code ClassMeta}).  The underlying class is extracted via {@link ClassInfo#inner()} and the
+	 * subtype-relationship check happens at runtime.
+	 *
+	 * @param value The subclass type to create.  Cannot be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or its underlying class is not a subclass of {@code beanType}.
+	 */
+	@SuppressWarnings("unchecked")
+	public BeanInstantiator<T> beanSubType(ClassInfo value) {
+		assertArgNotNull(ARG_value, value);
+		return beanSubType((Class<? extends T>) value.inner());
+	}
+
+	/**
 	 * Specifies the builder type to use for creating the bean.
 	 *
 	 * <p>
@@ -1280,7 +1298,10 @@ public class BeanInstantiator<T> {
 			.orElse(null);
 
 		// Look for Bean().
-		if (bean == null) {
+		// Skip constructor invocation when beanSubType is abstract or an interface — Class.newInstance() would
+		// throw InstantiationException, masking the more useful "class is abstract"/"class is an interface"
+		// fallthrough below (which honors the registered fallback supplier when present).
+		if (bean == null && ! beanSubType.isInterface() && ! beanSubType.isAbstract()) {
 			log("Attempting Bean() constructor");
 			// If builder was detected but has no build method, pass it as extra bean for constructors
 			Object[] constructorExtraBeans = builder2 != null ? new Object[]{builder2} : new Object[0];

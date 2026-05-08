@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.logger;
 
 import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.cp.*;
 
 /**
  * Default implementation of a {@link CallLogger} that never logs REST calls.

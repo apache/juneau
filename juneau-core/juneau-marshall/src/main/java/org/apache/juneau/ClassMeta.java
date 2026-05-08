@@ -41,7 +41,7 @@ import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.swap.*;
 
@@ -1416,7 +1416,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		var ci = info(c);
 
 		if (ci.isAssignableTo(ObjectSwap.class)) {
-			var ps = BeanCreator.of(ObjectSwap.class).type(ci).run();
+			var ps = BeanInstantiator.of(ObjectSwap.class).beanSubType(ci).run();
 			if (s.mediaTypes().length > 0)
 				ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
 			if (! s.template().isEmpty())

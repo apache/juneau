@@ -26,11 +26,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.BasicBeanStore2;
-import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.commons.inject.WritableBeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
 
 /**
  * Represents the set of {@link Encoder encoders} keyed by codings.
@@ -288,7 +285,9 @@ public class EncoderSet {
 		if (o instanceof Encoder o2)
 			return o2;
 		try {
-			return BeanCreator.of(Encoder.class, bs).type((Class<?>)o).run();
+			@SuppressWarnings("unchecked")
+			var subType = (Class<? extends Encoder>) o;
+			return BeanInstantiator.of(Encoder.class, bs).beanSubType(subType).run();
 		} catch (ExecutableException e) {
 			throw toRex(e);
 		}

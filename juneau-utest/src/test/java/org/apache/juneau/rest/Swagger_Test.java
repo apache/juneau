@@ -29,7 +29,6 @@ import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.commons.annotation.ExternalDocs;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Tag;
 import org.apache.juneau.json.*;
