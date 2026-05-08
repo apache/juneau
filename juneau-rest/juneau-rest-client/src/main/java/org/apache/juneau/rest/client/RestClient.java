@@ -74,6 +74,7 @@ import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
@@ -8022,7 +8023,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		var x = partParsers.get(c);
 		if (x == null) {
 			try {
-				x = BeanCreator.of(c, beanStore).run();
+				x = BeanInstantiator.of(c, beanStore).run();
 			} catch (ExecutableException e) {
 				throw toRex(e);
 			}
@@ -8048,7 +8049,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		var x = partSerializers.get(c);
 		if (x == null) {
 			try {
-				x = BeanCreator.of(c, beanStore).run();
+				x = BeanInstantiator.of(c, beanStore).run();
 			} catch (ExecutableException e) {
 				throw toRex(e);
 			}

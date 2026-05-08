@@ -20,8 +20,8 @@ import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
@@ -65,17 +65,23 @@ public class RemoteOperationArg {
 
 	private final HttpPartSchema schema;
 
+	@SuppressWarnings("unchecked")
 	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema) {
 		this.index = index;
 		this.partType = partType;
-		this.serializer = BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).execute();
+		this.serializer = schema.getSerializer() == null
+			? Optional.empty()
+			: BeanInstantiator.of(HttpPartSerializer.class).beanSubType((Class<? extends HttpPartSerializer>) schema.getSerializer()).asOptional();
 		this.schema = schema;
 	}
 
+	@SuppressWarnings("unchecked")
 	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema, String overrideName) {
 		this.index = index;
 		this.partType = partType;
-		this.serializer = BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).execute();
+		this.serializer = schema.getSerializer() == null
+			? Optional.empty()
+			: BeanInstantiator.of(HttpPartSerializer.class).beanSubType((Class<? extends HttpPartSerializer>) schema.getSerializer()).asOptional();
 		// Create a new schema with the overridden name
 		this.schema = HttpPartSchema.create().name(overrideName).build();
 	}

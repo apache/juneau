@@ -24,8 +24,8 @@ import static org.apache.juneau.httppart.bean.MethodInfoUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 
@@ -43,8 +43,8 @@ public class RequestBeanMeta {
 	static class Builder {
 		ClassMeta<?> cm;
 		AnnotationWorkList annotations;
-		BeanCreator<HttpPartSerializer> serializer = BeanCreator.of(HttpPartSerializer.class);
-		BeanCreator<HttpPartParser> parser = BeanCreator.of(HttpPartParser.class);
+		BeanInstantiator<HttpPartSerializer> serializer = BeanInstantiator.of(HttpPartSerializer.class);
+		BeanInstantiator<HttpPartParser> parser = BeanInstantiator.of(HttpPartParser.class);
 		Map<String,RequestBeanPropertyMeta.Builder> properties = map();
 
 		Builder(AnnotationWorkList annotations) {
@@ -131,8 +131,8 @@ public class RequestBeanMeta {
 
 	RequestBeanMeta(Builder b) {
 		cm = b.cm;
-		serializer = b.serializer.orElse(null);
-		parser = b.parser.orElse(null);
+		serializer = b.serializer.asOptional().orElse(null);
+		parser = b.parser.asOptional().orElse(null);
 		Map<String,RequestBeanPropertyMeta> pm = map();
 		b.properties.forEach((k, v) -> pm.put(k, v.build(serializer, parser)));
 		properties = u(pm);

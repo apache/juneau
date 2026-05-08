@@ -21,8 +21,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
@@ -82,12 +82,17 @@ public class ResponseBeanPropertyMeta {
 
 	private final HttpPartSchema schema;
 
+	@SuppressWarnings("unchecked")
 	ResponseBeanPropertyMeta(Builder b, Optional<HttpPartSerializer> serializer, Optional<HttpPartParser> parser) {
 		partType = b.partType;
 		schema = b.schema;
 		getter = b.getter;
-		this.serializer = serializer.isPresent() ? serializer : BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).execute();
-		this.parser = parser.isPresent() ? parser : BeanCreator.of(HttpPartParser.class).type(schema.getParser()).execute();
+		this.serializer = serializer.isPresent() || schema.getSerializer() == null
+			? serializer
+			: BeanInstantiator.of(HttpPartSerializer.class).beanSubType((Class<? extends HttpPartSerializer>) schema.getSerializer()).asOptional();
+		this.parser = parser.isPresent() || schema.getParser() == null
+			? parser
+			: BeanInstantiator.of(HttpPartParser.class).beanSubType((Class<? extends HttpPartParser>) schema.getParser()).asOptional();
 	}
 
 	/**

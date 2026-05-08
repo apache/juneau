@@ -24,8 +24,8 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
@@ -81,12 +81,13 @@ public class RequestBeanPropertyMeta {
 
 	private final HttpPartSchema schema;
 
+	@SuppressWarnings("unchecked")
 	RequestBeanPropertyMeta(Builder b, HttpPartSerializer serializer, HttpPartParser parser) {
 		partType = b.partType;
 		schema = b.schema;
 		getter = b.getter;
-		this.serializer = opt(schema.getSerializer() == null ? serializer : BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).run());
-		this.parser = schema.getParser() == null ? parser : BeanCreator.of(HttpPartParser.class).type(schema.getParser()).run();
+		this.serializer = opt(schema.getSerializer() == null ? serializer : BeanInstantiator.of(HttpPartSerializer.class).beanSubType((Class<? extends HttpPartSerializer>) schema.getSerializer()).run());
+		this.parser = schema.getParser() == null ? parser : BeanInstantiator.of(HttpPartParser.class).beanSubType((Class<? extends HttpPartParser>) schema.getParser()).run();
 	}
 
 	/**
