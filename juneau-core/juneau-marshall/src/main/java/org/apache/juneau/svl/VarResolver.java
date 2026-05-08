@@ -23,7 +23,9 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.BasicBeanStore2;
 import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.svl.vars.*;
 
@@ -240,7 +242,7 @@ public class VarResolver {
 	final Var[] vars;
 	private final Map<String,Var> varMap;
 
-	final BasicBeanStore beanStore;
+	final WritableBeanStore beanStore;
 
 	/**
 	 * Constructor.
@@ -255,9 +257,7 @@ public class VarResolver {
 			m.put(v.getName(), v);
 
 		this.varMap = u(m);
-		// Legacy BasicBeanStore.of(...) static still requires a BasicBeanStore parent; downcast preserves
-		// existing semantics. Will go away when BasicBeanStore.of(...) is widened or removed.
-		this.beanStore = BasicBeanStore.of((BasicBeanStore) builder.beanStore());
+		this.beanStore = new BasicBeanStore2(builder.beanStore());
 	}
 
 	/**
@@ -297,7 +297,7 @@ public class VarResolver {
 	 * @param beanStore The bean store to associate with this session.
 	 * @return A new resolver session.
 	 */
-	public VarResolverSession createSession(BasicBeanStore beanStore) {
+	public VarResolverSession createSession(WritableBeanStore beanStore) {
 		return new VarResolverSession(this, beanStore);
 	}
 

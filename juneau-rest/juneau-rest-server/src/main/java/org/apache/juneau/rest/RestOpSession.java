@@ -23,6 +23,7 @@ import java.io.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.FluentMap;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.logger.*;
@@ -160,7 +161,7 @@ public class RestOpSession extends ContextSession {
 	 *
 	 * @return The bean store for this session.
 	 */
-	public BasicBeanStore getBeanStore() { return session.getBeanStore(); }
+	public WritableBeanStore getBeanStore() { return session.getBeanStore(); }
 
 	@Override /* Overridden from ContextSession */
 	public RestOpContext getContext() { return ctx; }

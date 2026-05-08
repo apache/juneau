@@ -29,6 +29,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -42,7 +43,7 @@ import org.apache.juneau.cp.*;
  *
  * <p>
  * Instances of this class are created through the {@link VarResolver#createSession()} and
- * {@link VarResolver#createSession(BasicBeanStore)} methods.
+ * {@link VarResolver#createSession(WritableBeanStore)} methods.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='warn'>This class is not guaranteed to be thread safe.
@@ -137,7 +138,7 @@ public class VarResolverSession {
 
 	private final VarResolver context;
 
-	private final BasicBeanStore beanStore;
+	private final WritableBeanStore beanStore;
 
 	/**
 	 * Constructor.
@@ -148,9 +149,9 @@ public class VarResolverSession {
 	 * @param beanStore The bean store to use for resolving beans needed by vars.
 	 *
 	 */
-	public VarResolverSession(VarResolver context, BasicBeanStore beanStore) {
+	public VarResolverSession(VarResolver context, WritableBeanStore beanStore) {
 		this.context = context;
-		this.beanStore = BasicBeanStore.of(beanStore);
+		this.beanStore = new BasicBeanStore2(beanStore);
 	}
 
 	/**

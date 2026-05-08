@@ -1196,11 +1196,15 @@ public class RestContext extends Context {
 
 			// If no parent store, promote bs to bootstrap and layer a fresh per-resource store on top.
 			// NOTE: Stays on legacy `BasicBeanStore.create()...` chain (vs `new BasicBeanStore2(null, X)`)
-			// because downstream consumers (`RestSession.java:240`, `VarResolver.java:260`) still
-			// downcast `RestContext.getBeanStore()` / `builder.beanStore()` to `BasicBeanStore` to call
-			// the legacy `BasicBeanStore.of(...)` static. Migrating those sites requires either
-			// widening the field types of those consumers or porting `BasicBeanStore.of(...)` onto
-			// `BasicBeanStore2` (Phase 4).
+			// because (1) `BeanCreator` resolves `BasicBeanStore`-typed constructor params (e.g.
+			// `BasicDebugEnablement(BasicBeanStore)`) by walking the parent chain — a `BasicBeanStore2`
+			// here does not satisfy that lookup, and the walk falls through to `bootstrapBeanStore`
+			// (legacy, self-registered as `BasicBeanStore.class`) which does NOT have the
+			// per-resource framework default suppliers, breaking init() Bean lookups; and (2) user-facing
+			// `@RestPostCall void hook(BasicBeanStore bs)` parameters are resolved via `RestOpSessionArgs`
+			// which propagates this same bean store. Migration deferred until either
+			// `BasicDebugEnablement` / `BeanCreator` constructor-param resolution moves off legacy
+			// `BasicBeanStore`, or Phase 4 cutover absorbs the legacy statics into v2.
 			if (parentBs == null) {
 				bootstrapBeanStore = bs;
 				bs = BasicBeanStore.create().overridingParent((BasicBeanStore) bootstrapBeanStore).build();
