@@ -38,7 +38,7 @@ import jakarta.servlet.*;
  * Method parameters are resolved from the
  * {@link org.apache.juneau.commons.inject.BeanStore bean store} the same way as any other Juneau-injected
  * method. {@link jakarta.servlet.ServletConfig}, {@link jakarta.servlet.ServletContext}, the resource instance
- * itself, and any bean registered via {@link org.apache.juneau.rest.annotation.RestInject @RestInject} or the
+ * itself, and any bean registered via {@link org.apache.juneau.commons.inject.Bean @Bean} or the
  * configured bean-store hooks are all resolvable. Zero-argument variants are also supported.
  *
  * <p>
@@ -47,17 +47,17 @@ import jakarta.servlet.*;
  * <ul>
  * 	<li><b>Per-operation:</b> {@code @RestInit public void init(RestOpContext.Builder b)} (invoked once per
  * 		<code>@RestOp</code>-annotated method) — replaced by declarative <code>@RestOp(...)</code> attributes,
- * 		<code>@RestInject(name=, methodScope=)</code>-named beans, or class-level <code>@RestInit</code> hooks.
+ * 		<code>@Bean(name=, methodScope=)</code>-named beans, or class-level <code>@RestInit</code> hooks.
  * 	<li><b>Class-level Builder injection:</b> {@code @RestInit public void init(RestContext.Builder b)} (which
  * 		injected the in-flight resource-level builder so the hook could imperatively mutate it) — replaced by the
  * 		same declarative surfaces. Migrate by moving each <code>builder.xxx(...)</code> call to the equivalent
- * 		<code>@Rest(xxx=...)</code> annotation attribute or {@code @RestInject}-named bean.
+ * 		<code>@Rest(xxx=...)</code> annotation attribute or {@code @Bean}-named bean.
  * </ul>
  *
  * <p>
  * The remaining supported {@code @RestInit} hook shape is one whose parameters are bean-store-resolvable
  * (no {@code RestContext.Builder} or {@code RestOpContext.Builder}). The example below uses the resource
- * instance itself, but {@code @RestInject}-supplied beans, {@code ServletConfig}, etc. work the same way.
+ * instance itself, but {@code @Bean}-supplied beans, {@code ServletConfig}, etc. work the same way.
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>

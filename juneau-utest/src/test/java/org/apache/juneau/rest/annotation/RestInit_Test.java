@@ -18,6 +18,7 @@ package org.apache.juneau.rest.annotation;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
@@ -62,8 +63,8 @@ class RestInit_Test extends TestBase {
 			return events;
 		}
 
-		// Bean injected via @RestInject so we can also exercise non-built-in @RestInit parameter resolution.
-		@RestInject
+		// Bean injected via @Bean so we can also exercise non-built-in @RestInit parameter resolution.
+		@Bean
 		public MarkerBean marker() {
 			return new MarkerBean();
 		}

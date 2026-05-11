@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.commons.inject;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -25,20 +25,20 @@ import java.lang.annotation.*;
 import org.apache.juneau.commons.annotation.*;
 
 /**
- * Utility classes and methods for the {@link RestInject RestInject} annotation.
+ * Utility classes and methods for the {@link Bean @Bean} annotation.
  *
  */
-public class RestInjectAnnotation {
+public class BeanAnnotation {
 
 	/**
 	 * Private constructor to prevent instantiation.
 	 */
-	private RestInjectAnnotation() {
+	private BeanAnnotation() {
 		// Utility class - prevent instantiation
 	}
 
 	/**
-	 * A collection of {@link RestInject @RestInject annotations}.
+	 * A collection of {@link Bean @Bean} annotations.
 	 */
 	@Documented
 	@Target({ FIELD, METHOD, TYPE })
@@ -51,7 +51,7 @@ public class RestInjectAnnotation {
 		 *
 		 * @return The annotation value.
 		 */
-		RestInject[] value();
+		Bean[] value();
 	}
 
 	/**
@@ -72,15 +72,15 @@ public class RestInjectAnnotation {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(RestInject.class);
+			super(Bean.class);
 		}
 
 		/**
-		 * Instantiates a new {@link RestInject @RestInject} object initialized with this builder.
+		 * Instantiates a new {@link Bean @Bean} object initialized with this builder.
 		 *
-		 * @return A new {@link RestInject @RestInject} object.
+		 * @return A new {@link Bean @Bean} object.
 		 */
-		public RestInject build() {
+		public Bean build() {
 			return new Object(this);
 		}
 
@@ -96,7 +96,7 @@ public class RestInjectAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestInject#methodScope()} property on this annotation.
+		 * Sets the {@link Bean#methodScope()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -107,7 +107,7 @@ public class RestInjectAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestInject#name()} property on this annotation.
+		 * Sets the {@link Bean#name()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -118,7 +118,7 @@ public class RestInjectAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestInject#value()} property on this annotation.
+		 * Sets the {@link Bean#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -151,14 +151,14 @@ public class RestInjectAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedAnnotationObject implements RestInject {
+	private static class Object extends AppliedAnnotationObject implements Bean {
 
 		private final String[] description;
 		private final String name;
 		private final String value;
 		private final String[] methodScope;
 
-		Object(RestInjectAnnotation.Builder b) {
+		Object(BeanAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
 			name = b.name;
@@ -166,17 +166,17 @@ public class RestInjectAnnotation {
 			methodScope = b.methodScope;
 		}
 
-		@Override /* Overridden from RestInject */
+		@Override /* Overridden from Bean */
 		public String[] methodScope() {
 			return methodScope;
 		}
 
-		@Override /* Overridden from RestInject */
+		@Override /* Overridden from Bean */
 		public String name() {
 			return name;
 		}
 
-		@Override /* Overridden from RestInject */
+		@Override /* Overridden from Bean */
 		public String value() {
 			return value;
 		}
@@ -188,7 +188,7 @@ public class RestInjectAnnotation {
 	}
 
 	/** Default value */
-	public static final RestInject DEFAULT = create().build();
+	public static final Bean DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -200,12 +200,12 @@ public class RestInjectAnnotation {
 	}
 
 	/**
-	 * Pulls the name/value attribute from a {@link RestInject} annotation.
+	 * Pulls the name/value attribute from a {@link Bean} annotation.
 	 *
 	 * @param a The annotation to check.  Can be <jk>null</jk>.
 	 * @return The annotation value, or an empty string if the annotation is <jk>null</jk>.
 	 */
-	public static String name(RestInject a) {
+	public static String name(Bean a) {
 		if (a == null)
 			return "";
 		if (! a.name().isEmpty())

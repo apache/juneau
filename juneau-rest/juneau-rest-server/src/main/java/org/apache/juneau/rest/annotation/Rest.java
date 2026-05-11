@@ -739,7 +739,7 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * For programmatic equivalents, contribute an {@link org.apache.juneau.encoders.EncoderSet} bean via
-	 * {@link RestInject @RestInject(name="encoders")}.
+	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="encoders")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>
@@ -908,7 +908,7 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * For programmatic equivalents, contribute a {@link org.apache.juneau.parser.ParserSet} bean via
-	 * {@link RestInject @RestInject(name="parsers")}.
+	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="parsers")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>
@@ -1273,7 +1273,7 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * For programmatic equivalents, contribute a {@link org.apache.juneau.serializer.SerializerSet} bean via
-	 * {@link RestInject @RestInject(name="serializers")}.
+	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="serializers")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>

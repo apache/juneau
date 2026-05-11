@@ -198,12 +198,12 @@ public interface BeanStore {
 	 * <p class='bjava'>
 	 * 	<jc>// Filter only</jc>
 	 * 	<jv>beanStore</jv>.createBeanFromMethod(CallLogger.<jk>class</jk>, <jv>resource</jv>,
-	 * 		RestContext::isRestInjectMethod)
+	 * 		RestContext::isBeanMethod)
 	 * 		.ifPresent(<jv>creator</jv>::impl);
 	 *
 	 * 	<jc>// Filter + extra bean not yet in the store</jc>
 	 * 	<jv>beanStore</jv>.createBeanFromMethod(EncoderSet.<jk>class</jk>, <jv>resource</jv>,
-	 * 		RestContext::isRestInjectMethod, <jv>builder</jv>)
+	 * 		RestContext::isBeanMethod, <jv>builder</jv>)
 	 * 		.ifPresent(<jv>x</jv> -&gt; <jv>builder</jv>.impl(<jv>x</jv>));
 	 *
 	 * 	<jc>// No filter, no extra beans</jc>

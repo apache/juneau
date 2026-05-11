@@ -232,8 +232,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * Walks the {@code @Rest(converters)} class chain (parent-to-child) followed by the
 	 * {@code @RestOp(converters)} method chain (parent-to-child). Op-level
 	 * {@code noInherit={"converters"}} cuts off the class-chain contribution. An
-	 * {@code @RestInject RestConverterList} bean (either as a name-anonymous bean in the bean store
-	 * or as a {@code @RestInject} method whose {@code methodScope} matches this operation's method
+	 * {@code @Bean RestConverterList} bean (either as a name-anonymous bean in the bean store
+	 * or as a {@code @Bean} method whose {@code methodScope} matches this operation's method
 	 * name) REPLACES the entire annotation-derived list.
 	 */
 	private final Memoizer<RestConverter[]> converters = memoizer(() -> {
@@ -284,7 +284,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code @Rest(defaultRequestAttributes)}), then walks the {@code @RestOp}/verb chain
 	 * (parent-to-child) and adds each entry — {@link NamedAttributeMap#add} uses put-semantics so
 	 * child entries override parent entries by name. An
-	 * {@code @RestInject(name="defaultRequestAttributes") NamedAttributeMap} bean (matching this
+	 * {@code @Bean(name="defaultRequestAttributes") NamedAttributeMap} bean (matching this
 	 * operation's method scope) REPLACES the entire result.
 	 */
 	private final Memoizer<NamedAttributeMap> defaultRequestAttributes = memoizer(() -> {
@@ -306,7 +306,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * entry is applied with {@link PartList#setDefault} (first-in-chain wins per name).
 	 * Method-parameter {@link FormData @FormData} annotations with a
 	 * {@link Schema#default_()}/{@link Schema#df()} default are folded in last (also
-	 * {@code setDefault} = first wins). An {@code @RestInject(name="defaultRequestFormData") PartList}
+	 * {@code setDefault} = first wins). An {@code @Bean(name="defaultRequestFormData") PartList}
 	 * bean (matching this operation's method scope) REPLACES the entire result.
 	 */
 	private final Memoizer<PartList> defaultRequestFormData = memoizer(() -> {
@@ -344,7 +344,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * Method-parameter {@link Header @Header} annotations with a
 	 * {@link Schema#default_()}/{@link Schema#df()} default are folded in last via
 	 * {@link HeaderList#set} (overrides any prior entry with the same name). An
-	 * {@code @RestInject(name="defaultRequestHeaders") HeaderList} bean (matching this operation's
+	 * {@code @Bean(name="defaultRequestHeaders") HeaderList} bean (matching this operation's
 	 * method scope) REPLACES the entire result.
 	 */
 	private final Memoizer<HeaderList> defaultRequestHeaders = memoizer(() -> {
@@ -377,7 +377,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * entry is applied with {@link PartList#setDefault} (first-in-chain wins per name).
 	 * Method-parameter {@link Query @Query} annotations with a
 	 * {@link Schema#default_()}/{@link Schema#df()} default are folded in last (also
-	 * {@code setDefault} = first wins). An {@code @RestInject(name="defaultRequestQueryData") PartList}
+	 * {@code setDefault} = first wins). An {@code @Bean(name="defaultRequestQueryData") PartList}
 	 * bean (matching this operation's method scope) REPLACES the entire result.
 	 */
 	private final Memoizer<PartList> defaultRequestQueryData = memoizer(() -> {
@@ -408,7 +408,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code @Rest(defaultResponseHeaders)}), then walks the {@code @RestOp}/verb chain
 	 * (parent-to-child); each annotation's {@code defaultResponseHeaders} entries are applied with
 	 * {@link HeaderList#setDefault} (first-in-chain wins per name). An
-	 * {@code @RestInject(name="defaultResponseHeaders") HeaderList} bean (matching this operation's
+	 * {@code @Bean(name="defaultResponseHeaders") HeaderList} bean (matching this operation's
 	 * method scope) REPLACES the entire result.
 	 */
 	private final Memoizer<HeaderList> defaultResponseHeaders = memoizer(() -> {
@@ -430,7 +430,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * array REPLACES the inherited set (with {@link Inherit} as a sentinel that re-injects the prior
 	 * set's entries at the specified position — matches the legacy {@code EncoderSet.Builder.set(...)}
 	 * semantics). Falls through to the class-level {@link RestContext#getEncoders()} when no op
-	 * annotation declares encoders. An {@code @RestInject EncoderSet} bean (matching this operation's
+	 * annotation declares encoders. An {@code @Bean EncoderSet} bean (matching this operation's
 	 * method scope) REPLACES the result entirely.
 	 */
 	private final Memoizer<EncoderSet> encoders = memoizer(() -> {
@@ -464,7 +464,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * </ul>
 	 *
 	 * <p>
-	 * An {@code @RestInject RestGuardList} bean (via the bean store or an {@code @RestInject} method
+	 * An {@code @Bean RestGuardList} bean (via the bean store or an {@code @Bean} method
 	 * with matching {@code methodScope}) REPLACES the entire annotation-derived list (Decision #1).
 	 */
 	private final Memoizer<RestGuard[]> guards = memoizer(() -> {
@@ -562,7 +562,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code noInherit={"matchers"}}). Each annotation contributes its {@code matchers()} classes
 	 * (appended in chain order). The final non-blank {@code clientVersion()} (most-derived wins)
 	 * appends a single {@link ClientVersionMatcher} keyed off the resource's client-version header.
-	 * An {@code @RestInject RestMatcherList} bean (via the bean store or an {@code @RestInject}
+	 * An {@code @Bean RestMatcherList} bean (via the bean store or an {@code @Bean}
 	 * method with matching {@code methodScope}) REPLACES the entire annotation-derived list.
 	 */
 	private final Memoizer<RestMatcherList> matchersList = memoizer(() -> {
@@ -634,7 +634,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * Walks the {@code @RestOp(parsers)} chain (parent-to-child); the most-derived non-empty
 	 * {@code parsers()} array REPLACES the entire inherited set. Falls through to the class-level
 	 * {@link RestContext#getParsers()} when no op annotation declares parsers. An
-	 * {@code @RestInject ParserSet} bean (matching this operation's method scope) REPLACES the result.
+	 * {@code @Bean ParserSet} bean (matching this operation's method scope) REPLACES the result.
 	 */
 	private final Memoizer<ParserSet> parsers = memoizer(() -> {
 		var aa = appliedAnnotations();
@@ -698,7 +698,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * For RRPC operations with no explicit path, a trailing {@code "/*"} is appended so the matcher
 	 * matches anything below the method's URL.
 	 * {@code noInherit={"path"}} cuts off any further parent-chain contribution. A
-	 * {@code @RestInject UrlPathMatcherList} bean (matching this operation's method scope) REPLACES
+	 * {@code @Bean UrlPathMatcherList} bean (matching this operation's method scope) REPLACES
 	 * the entire result.
 	 */
 	@SuppressWarnings("java:S3776")
@@ -788,7 +788,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * Walks the {@code @RestOp(serializers)} chain (parent-to-child); the most-derived non-empty
 	 * {@code serializers()} array REPLACES the entire inherited set. Falls through to the class-level
 	 * {@link RestContext#getSerializers()} when no op annotation declares serializers. An
-	 * {@code @RestInject SerializerSet} bean (matching this operation's method scope) REPLACES the result.
+	 * {@code @Bean SerializerSet} bean (matching this operation's method scope) REPLACES the result.
 	 */
 	private final Memoizer<SerializerSet> serializers = memoizer(() -> {
 		var aa = appliedAnnotations();
@@ -858,17 +858,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
-	 * Returns {@code true} if the given method has a {@code @RestInject} annotation whose
+	 * Returns {@code true} if the given method has a {@code @Bean} annotation whose
 	 * {@code methodScope} includes this operation's method name (or {@code "*"}).
 	 *
 	 * <p>
-	 * Used by op-level memoizers when scanning the resource class for {@code @RestInject}-supplied
+	 * Used by op-level memoizers when scanning the resource class for {@code @Bean}-supplied
 	 * composite-bean overrides ({@code RestConverterList}, {@code RestGuardList}, etc.). This is the
 	 * {@link RestOpContext}-scope peer of {@link Builder#matches(MethodInfo)} — kept in sync with that
 	 * one.
 	 */
 	private boolean matchesInjectScope(MethodInfo annotated) {
-		var a = annotated.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		var a = annotated.getAnnotations(Bean.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (a != null) {
 			for (var n : a.methodScope()) {
 				if ("*".equals(n) || method.getName().equals(n))
@@ -880,7 +880,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	/**
 	 * Same as {@link #matchesInjectScope(MethodInfo)} but additionally requires the
-	 * {@link RestInject#name()} attribute to equal {@code beanName}.
+	 * {@link Bean#name()} attribute to equal {@code beanName}.
 	 *
 	 * <p>
 	 * Used for named composite-bean overrides ({@code defaultRequestHeaders}, {@code defaultResponseHeaders},
@@ -888,7 +888,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * response headers).
 	 */
 	private boolean matchesInjectScope(MethodInfo annotated, String beanName) {
-		var a = annotated.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+		var a = annotated.getAnnotations(Bean.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (a != null) {
 			if (! a.name().equals(beanName))
 				return false;

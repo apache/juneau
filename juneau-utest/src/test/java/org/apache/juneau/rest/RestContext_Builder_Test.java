@@ -37,7 +37,7 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Rest
 	public static class A1 {
-		@RestInject static WritableBeanStore beanStore;
+		@Bean static WritableBeanStore beanStore;
 	}
 
 	@Test void a01_createBeanStore_default() {
@@ -47,9 +47,9 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Rest
 	public static class A4 {
-		@RestInject static WritableBeanStore beanStore;
+		@Bean static WritableBeanStore beanStore;
 
-		@RestInject WritableBeanStore beanStore() {
+		@Bean WritableBeanStore beanStore() {
 			return new BasicBeanStore(null).addBean(A.class, new A());
 		}
 	}
@@ -60,7 +60,7 @@ class RestContext_Builder_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @RestInject on fields.
+	// @Bean on fields.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static class B {
@@ -73,11 +73,11 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Rest
 	public static class B1a implements BasicJsonConfig {
-		@RestInject static B b1 = new B(1);
-		@RestInject(name="b2") B b2 = new B(2);
+		@Bean static B b1 = new B(1);
+		@Bean(name="b2") B b2 = new B(2);
 
-		@RestInject static B b3;
-		@RestInject(name="b2") B b4;
+		@Bean static B b3;
+		@Bean(name="b2") B b4;
 
 		@RestGet("/a1") public B a1(B b) { return b; }
 		@RestGet("/a2") public B a2(@Named("b2") B b) { return b; }

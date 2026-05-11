@@ -348,7 +348,7 @@ public @interface RestDelete {
 	 *
 	 * <p>
 	 * For programmatic equivalents, contribute a {@link org.apache.juneau.encoders.EncoderSet} bean via
-	 * {@link RestInject @RestInject(name="encoders")} (use methodScope to scope to specific operation methods).
+	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="encoders")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>

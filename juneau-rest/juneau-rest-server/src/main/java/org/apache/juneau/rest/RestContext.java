@@ -18,6 +18,8 @@ package org.apache.juneau.rest;
 
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.inject.BasicBeanStore;
+import org.apache.juneau.commons.inject.Bean;
+import org.apache.juneau.commons.inject.BeanAnnotation;
 import org.apache.juneau.commons.inject.BeanInstantiator;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.inject.WritableBeanStore;
@@ -99,7 +101,7 @@ import jakarta.servlet.http.*;
  *
  * <p>
  * Configuration is supplied declaratively through the {@link Rest @Rest} annotation on the resource class
- * (and inherited from any parent classes), and programmatically through {@link RestInject @RestInject}-annotated
+ * (and inherited from any parent classes), and programmatically through {@link org.apache.juneau.commons.inject.Bean @Bean}-annotated
  * methods/fields that contribute named beans (e.g. <c>encoders</c>, <c>parsers</c>, <c>callLogger</c>) to the REST
  * resource's bean store. Where direct construction is needed (test rigs, mock clients, embedded usage),
  * the public constructor takes a {@link RestContext.Args} record carrying the bootstrap state.
@@ -110,7 +112,7 @@ import jakarta.servlet.http.*;
  * 	<jk>public class</jk> MyResource {
  *
  * 		<jc>// Programmatically contribute a bean to the resource's bean store.</jc>
- * 		<ja>@RestInject</ja>
+ * 		<ja>@Bean</ja>
  * 		<jk>public</jk> CallLogger callLogger() {
  * 			<jk>return new</jk> MyCustomCallLogger();
  * 		}
@@ -235,7 +237,7 @@ public class RestContext extends Context {
 		 * Package-private constructor.
 		 *
 		 * <p>
-		 * Minimized in the May 2026 refactor — the beanStore setup, {@code @RestInject} processing,
+		 * Minimized in the May 2026 refactor — the beanStore setup, {@code @Bean} processing,
 		 * {@code @RestInit} hooks, and {@code beanStoreConfigurer} call were all moved into
 		 * {@link RestContext#RestContext(Builder)}. The Builder now only stores the three fields
 		 * that are final and needed by the {@link ServletConfig} overrides and factory methods.
@@ -302,12 +304,12 @@ public class RestContext extends Context {
 			.map(y -> y.accessible().inner());
 	}
 
-	private static boolean isRestInjectMethod(MethodInfo mi) {
-		return isRestInjectMethod(mi, null);
+	private static boolean isBeanMethod(MethodInfo mi) {
+		return isBeanMethod(mi, null);
 	}
 
-	private static boolean isRestInjectMethod(MethodInfo mi, String name) {
-		return mi.getAnnotations(RestInject.class)
+	private static boolean isBeanMethod(MethodInfo mi, String name) {
+		return mi.getAnnotations(Bean.class)
 			.map(AnnotationInfo::inner)
 			.anyMatch(x -> nn(x) && x.methodScope().length == 0 && (n(name) || eq(x.name(), name)));
 	}
@@ -345,7 +347,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * Resolution:
 	 * <ol>
-	 * 	<li>If the resource declares an {@code @RestInject} factory method returning a
+	 * 	<li>If the resource declares an {@code @Bean} factory method returning a
 	 * 		{@link WritableBeanStore} (e.g. {@code SpringRestServlet.createBeanStore(Optional<BeanStore>)}),
 	 * 		that store is used directly.  Spring integration relies on this hook.
 	 * 	<li>Otherwise a fresh {@link BasicBeanStore} is created with {@code parentBs} as its
@@ -360,7 +362,7 @@ public class RestContext extends Context {
 	 */
 	private WritableBeanStore createBeanStore(BeanStore parentBs, Supplier<?> resource) {
 		var defaultBs = new BasicBeanStore(parentBs);
-		return defaultBs.createBeanFromMethod(WritableBeanStore.class, resource.get(), RestContext::isRestInjectMethod)
+		return defaultBs.createBeanFromMethod(WritableBeanStore.class, resource.get(), RestContext::isBeanMethod)
 			.orElse(defaultBs);
 	}
 	private RestContext parentContext() { return parentContext; }
@@ -372,10 +374,10 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Default suppliers sit at the bottom of the bean-store resolution order: they fire only when no
-	 * {@link RestInject} method, no programmatic {@code addBean(...)} call, and no Spring/overriding-parent
+	 * {@link org.apache.juneau.commons.inject.Bean @Bean} method, no programmatic {@code addBean(...)} call, and no Spring/overriding-parent
 	 * binding has been registered for the type.  This is the mechanism that replaces the old
 	 * {@code DELAYED_INJECTION} list — by registering the framework's own factories as defaults
-	 * <i>before</i> the {@link RestInject} method walk runs, any {@link RestInject} method whose parameters
+	 * <i>before</i> the {@link org.apache.juneau.commons.inject.Bean @Bean} method walk runs, any {@link org.apache.juneau.commons.inject.Bean @Bean} method whose parameters
 	 * include framework types can now resolve those parameters lazily through the bean store without
 	 * requiring a hand-maintained skip list.
 	 */
@@ -472,7 +474,7 @@ public class RestContext extends Context {
 				cb.name(cf);
 			v.set(cb.build());
 		}
-		bs.createBeanFromMethod(Config.class, resource().get(), RestContext::isRestInjectMethod, v.get()).ifPresent(v::set);
+		bs.createBeanFromMethod(Config.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -501,7 +503,7 @@ public class RestContext extends Context {
 				.bean(FileFinder.class, FileFinder.create(bs).cp(resourceClass(), null, true).build())
 				.build()
 		);
-		bs.createBeanFromMethod(VarResolver.class, resource().get(), x -> isRestInjectMethod(x, PROP_bootstrapVarResolver)).ifPresent(v::set);
+		bs.createBeanFromMethod(VarResolver.class, resource().get(), x -> isBeanMethod(x, PROP_bootstrapVarResolver)).ifPresent(v::set);
 		return v.get();
 	});
 	// @formatter:on
@@ -511,7 +513,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Defaults to {@link BasicCallLogger}. {@code @Rest(callLogger=X)} most-derived non-{@code Void} class wins.
-	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 * A bean-store override or {@code @Bean} factory method REPLACES the result.
 	 */
 	private final Memoizer<CallLogger> callLogger = memoizer(() -> {
 		var bs = beanStore();
@@ -529,7 +531,7 @@ public class RestContext extends Context {
 			.filter(c -> c != CallLogger.Void.class)
 			.reduce((first, second) -> second)
 			.ifPresent(creator::type);
-		bs.createBeanFromMethod(CallLogger.class, resource().get(), RestContext::isRestInjectMethod).ifPresent(creator::impl);
+		bs.createBeanFromMethod(CallLogger.class, resource().get(), RestContext::isBeanMethod).ifPresent(creator::impl);
 		return creator.asOptional().orElse(null);
 	});
 
@@ -570,7 +572,7 @@ public class RestContext extends Context {
 	 * Resolved from {@code @Rest(debugDefault)} (most-derived non-blank wins), falling back to
 	 * {@code @Rest(debug=true|false)}. The resolved {@link Enablement} is published into the bean store
 	 * so that {@link BasicDebugEnablement} subclasses can pick it up. Defaults to {@link BasicDebugEnablement}.
-	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 * A bean-store override or {@code @Bean} factory method REPLACES the result.
 	 */
 	private final Memoizer<DebugEnablement> debugEnablement = memoizer(() -> {
 		// @Rest(debugDefault="ALWAYS|NEVER|CONDITIONAL") — most-derived non-blank value wins, with parent inheritance
@@ -596,7 +598,7 @@ public class RestContext extends Context {
 			.filter(c -> c != DebugEnablement.Void.class)
 			.reduce((first, second) -> second)
 			.ifPresent(creator::type);
-		bs.createBeanFromMethod(DebugEnablement.class, resource().get(), RestContext::isRestInjectMethod).ifPresent(creator::impl);
+		bs.createBeanFromMethod(DebugEnablement.class, resource().get(), RestContext::isBeanMethod).ifPresent(creator::impl);
 		return creator.asOptional().orElse(null);
 	});
 
@@ -605,7 +607,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Walks {@code @Rest} annotations parent-to-child, resolving each attribute string and parsing it as a
-	 * key=value or key:value pair. A named bean-store override or {@code @RestInject} factory method REPLACES
+	 * key=value or key:value pair. A named bean-store override or {@code @Bean} factory method REPLACES
 	 * the accumulated result.
 	 */
 	private final Memoizer<NamedAttributeMap> defaultRequestAttributes = memoizer(() -> {
@@ -616,7 +618,7 @@ public class RestContext extends Context {
 			.filter(StringUtils::isNotBlank)
 			.map(BasicNamedAttribute::ofPair)
 			.forEach(v.get()::add));
-		beanStore().createBeanFromMethod(NamedAttributeMap.class, resource().get(), x -> isRestInjectMethod(x, PROP_defaultRequestAttributes), v.get()).ifPresent(v::set);
+		beanStore().createBeanFromMethod(NamedAttributeMap.class, resource().get(), x -> isBeanMethod(x, PROP_defaultRequestAttributes), v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -626,7 +628,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Walks {@code @Rest} annotations parent-to-child, resolving each header string. A named bean-store
-	 * override or {@code @RestInject} factory method REPLACES the accumulated result.
+	 * override or {@code @Bean} factory method REPLACES the accumulated result.
 	 */
 	private final Memoizer<HeaderList> defaultRequestHeaders = memoizer(() -> {
 		var v = Value.of(HeaderList.create());
@@ -640,7 +642,7 @@ public class RestContext extends Context {
 			if (isNotBlank(defaultContentType))
 				v.get().setDefault(contentType(defaultContentType));
 		});
-		beanStore().createBeanFromMethod(HeaderList.class, resource().get(), x -> isRestInjectMethod(x, PROP_defaultRequestHeaders), v.get()).ifPresent(v::set);
+		beanStore().createBeanFromMethod(HeaderList.class, resource().get(), x -> isBeanMethod(x, PROP_defaultRequestHeaders), v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -649,12 +651,12 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Walks {@code @Rest} annotations parent-to-child, resolving each header string. A named bean-store
-	 * override or {@code @RestInject} factory method REPLACES the accumulated result.
+	 * override or {@code @Bean} factory method REPLACES the accumulated result.
 	 */
 	private final Memoizer<HeaderList> defaultResponseHeaders = memoizer(() -> {
 		var v = Value.of(HeaderList.create());
 		getRestAnnotationsTopDown().forEach(ai -> Arrays.stream(ai.inner().defaultResponseHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(s -> stringHeader(s)).forEach(v.get()::setDefault));
-		beanStore().createBeanFromMethod(HeaderList.class, resource().get(), x -> isRestInjectMethod(x, PROP_defaultResponseHeaders), v.get()).ifPresent(v::set);
+		beanStore().createBeanFromMethod(HeaderList.class, resource().get(), x -> isBeanMethod(x, PROP_defaultResponseHeaders), v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -664,25 +666,25 @@ public class RestContext extends Context {
 	private final Memoizer<LifecycleInvokerPair> destroyInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
 		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestDestroy.class).toList()));
-		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isRestInjectMethod(x, "destroyMethods"), v.get()).ifPresent(v::set);
+		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "destroyMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	}));
 
 	/**
 	 * Fully-configured {@link EncoderSet.Builder} for this resource, populated from the
-	 * {@code @Rest(encoders)} annotation chain and any {@code @RestInject} override.
+	 * {@code @Rest(encoders)} annotation chain and any {@code @Bean} override.
 	 *
 	 * <p>
 	 * Starts with {@link IdentityEncoder} as the implicit default. A bean-store type override
 	 * or bean-store instance override REPLACES the builder or its impl. Annotation entries
-	 * (parent-to-child) are appended after the default. A {@code @RestInject} factory method
+	 * (parent-to-child) are appended after the default. A {@code @Bean} factory method
 	 * REPLACES the impl with the returned value.
 	 */
 	private final Memoizer<EncoderSet.Builder> encodersBuilder = memoizer(() -> {
 		var bs = beanStore();
 		var v = Value.of(EncoderSet.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_encoders).forEach(ai -> v.get().add(ai.inner().encoders()));
-		bs.createBeanFromMethod(EncoderSet.class, resource().get(), RestContext::isRestInjectMethod, v.get()).ifPresent(x -> v.get().impl(x));
+		bs.createBeanFromMethod(EncoderSet.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
 	});
 
@@ -697,7 +699,7 @@ public class RestContext extends Context {
 	private final Memoizer<LifecycleInvokerPair> endCallInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
 		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestEndCall.class).toList()));
-		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isRestInjectMethod(x, "endCallMethods"), v.get()).ifPresent(v::set);
+		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "endCallMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	}));
 
@@ -707,7 +709,7 @@ public class RestContext extends Context {
 	private final Memoizer<JsonSchemaGenerator.Builder> jsonSchemaGeneratorBuilder = memoizer(() -> {
 		var bs = beanStore();
 		var v = Value.of(JsonSchemaGenerator.create());
-		bs.createBeanFromMethod(JsonSchemaGenerator.class, resource().get(), RestContext::isRestInjectMethod).ifPresent(x -> v.get().impl(x));
+		bs.createBeanFromMethod(JsonSchemaGenerator.class, resource().get(), RestContext::isBeanMethod).ifPresent(x -> v.get().impl(x));
 		v.get().apply(annotationWork);
 		return v.get();
 	});
@@ -722,11 +724,11 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Defaults to {@code Logger.getLogger(resourceClass.getName())}. A bean-store override or
-	 * {@code @RestInject} factory method REPLACES the default.
+	 * {@code @Bean} factory method REPLACES the default.
 	 */
 	private final Memoizer<Logger> logger = memoizer(() -> {
 		var v = Value.of(Logger.getLogger(cn(resourceClass())));
-		beanStore().createBeanFromMethod(Logger.class, resource().get(), RestContext::isRestInjectMethod, v.get()).ifPresent(v::set);
+		beanStore().createBeanFromMethod(Logger.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -736,7 +738,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * Walks {@code @Rest} annotations parent-to-child, resolving each {@code messages} location string
 	 * against the bootstrap resolver (full resolver not yet available — it depends on {@code getMessages()}).
-	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 * A bean-store override or {@code @Bean} factory method REPLACES the result.
 	 */
 	private final Memoizer<Messages> messages = memoizer(() -> {
 		var b = Messages.create(resourceClass());
@@ -745,7 +747,7 @@ public class RestContext extends Context {
 		// (it depends on getMessages()).
 		var vrs = getBootstrapVarResolver().createSession();
 		getRestAnnotationsTopDown().forEach(ai -> ai.getString(PROPERTY_messages).filter(StringUtils::isNotBlank).ifPresent(s -> b.location(vrs.resolve(s))));
-		var override = beanStore().createBeanFromMethod(Messages.class, resource().get(), RestContext::isRestInjectMethod, b).orElse(null);
+		var override = beanStore().createBeanFromMethod(Messages.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
 		return nn(override) ? override : b.build();
 	});
 
@@ -753,28 +755,28 @@ public class RestContext extends Context {
 	 * The {@link MethodExecStore} for this resource, wired to the {@link ThrownStore}.
 	 *
 	 * <p>
-	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 * A bean-store override or {@code @Bean} factory method REPLACES the result.
 	 */
 	private final Memoizer<MethodExecStore> methodExecStore = memoizer(() -> {
 		var bs = beanStore();
 		var b = MethodExecStore.create(bs).thrownStoreOnce(getThrownStore());
-		bs.createBeanFromMethod(MethodExecStore.class, resource().get(), RestContext::isRestInjectMethod, b).ifPresent(b::impl);
+		bs.createBeanFromMethod(MethodExecStore.class, resource().get(), RestContext::isBeanMethod, b).ifPresent(b::impl);
 		return b.build();
 	});
 
 	/**
 	 * Fully-configured {@link ParserSet.Builder} for this resource, populated from the
-	 * {@code @Rest(parsers)} annotation chain and any {@code @RestInject} override.
+	 * {@code @Rest(parsers)} annotation chain and any {@code @Bean} override.
 	 *
 	 * <p>
 	 * Starts with an empty set. A bean-store type or instance override REPLACES the builder or its impl.
-	 * Annotation entries (parent-to-child) are appended. A {@code @RestInject} factory method REPLACES the impl.
+	 * Annotation entries (parent-to-child) are appended. A {@code @Bean} factory method REPLACES the impl.
 	 */
 	private final Memoizer<ParserSet.Builder> parsersBuilder = memoizer(() -> {
 		var bs = beanStore();
 		var v = Value.of(ParserSet.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_parsers).forEach(ai -> v.get().add(ai.inner().parsers()));
-		bs.createBeanFromMethod(ParserSet.class, resource().get(), RestContext::isRestInjectMethod, v.get()).ifPresent(x -> v.get().impl(x));
+		bs.createBeanFromMethod(ParserSet.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
 	});
 
@@ -790,7 +792,7 @@ public class RestContext extends Context {
 		var bs = beanStore();
 		Value<HttpPartParser.Creator> v = Value.of(HttpPartParser.creator().type(OpenApiParser.class));
 		opt(resource().get() instanceof HttpPartParser x ? x : null).ifPresent(x -> v.get().impl(x));
-		bs.createBeanFromMethod(HttpPartParser.class, resource().get(), RestContext::isRestInjectMethod).ifPresent(x -> v.get().impl(x));
+		bs.createBeanFromMethod(HttpPartParser.class, resource().get(), RestContext::isBeanMethod).ifPresent(x -> v.get().impl(x));
 		v.get().apply(annotationWork);
 		return v.get();
 	});
@@ -819,7 +821,7 @@ public class RestContext extends Context {
 		var bs = beanStore();
 		Value<HttpPartSerializer.Creator> v = Value.of(HttpPartSerializer.creator().type(OpenApiSerializer.class));
 		opt(resource().get() instanceof HttpPartSerializer x ? x : null).ifPresent(x -> v.get().impl(x));
-		bs.createBeanFromMethod(HttpPartSerializer.class, resource().get(), RestContext::isRestInjectMethod).ifPresent(x -> v.get().impl(x));
+		bs.createBeanFromMethod(HttpPartSerializer.class, resource().get(), RestContext::isBeanMethod).ifPresent(x -> v.get().impl(x));
 		v.get().apply(annotationWork);
 		return v.get();
 	});
@@ -847,7 +849,7 @@ public class RestContext extends Context {
 	private final Memoizer<MethodList> postCallMethods = memoizer(() -> {
 		var bs = beanStore();
 		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestPostCall.class).toList()));
-		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isRestInjectMethod(x, "postCallMethods"), v.get()).ifPresent(v::set);
+		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "postCallMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -859,7 +861,7 @@ public class RestContext extends Context {
 		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestPostInit.class)
 			.filter(m -> rstream(AnnotationProvider.INSTANCE.find(RestPostInit.class, MethodInfo.of(m))).map(AnnotationInfo::inner).anyMatch(RestPostInit::childFirst))
 			.toList()));
-		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isRestInjectMethod(x, "postInitChildFirstMethods"), v.get()).ifPresent(v::set);
+		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "postInitChildFirstMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	}));
 
@@ -871,7 +873,7 @@ public class RestContext extends Context {
 		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestPostInit.class)
 			.filter(m -> rstream(AnnotationProvider.INSTANCE.find(RestPostInit.class, MethodInfo.of(m))).map(AnnotationInfo::inner).anyMatch(x -> !x.childFirst()))
 			.toList()));
-		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isRestInjectMethod(x, "postInitMethods"), v.get()).ifPresent(v::set);
+		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "postInitMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	}));
 
@@ -881,7 +883,7 @@ public class RestContext extends Context {
 	private final Memoizer<MethodList> preCallMethods = memoizer(() -> {
 		var bs = beanStore();
 		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestPreCall.class).toList()));
-		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isRestInjectMethod(x, "preCallMethods"), v.get()).ifPresent(v::set);
+		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "preCallMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -911,7 +913,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Walks {@code @Rest(responseProcessors)} annotations parent-to-child (append order). A bean-store
-	 * override or {@code @RestInject} factory method REPLACES the entire list.
+	 * override or {@code @Bean} factory method REPLACES the entire list.
 	 */
 	private final Memoizer<ResponseProcessor[]> responseProcessors = memoizer(() -> {
 		// Walk @Rest(responseProcessors=...) chain (parent-to-child via getRestAnnotationsForProperty).
@@ -921,8 +923,8 @@ public class RestContext extends Context {
 		var b = ResponseProcessorList.create(bs);
 		getRestAnnotationsForProperty(PROPERTY_responseProcessors)
 			.forEach(ai -> b.add(ai.inner().responseProcessors()));
-		// @RestInject method override REPLACES the entire annotation-derived list.
-		var override = bs.createBeanFromMethod(ResponseProcessorList.class, resource().get(), RestContext::isRestInjectMethod, b).orElse(null);
+		// @Bean method override REPLACES the entire annotation-derived list.
+		var override = bs.createBeanFromMethod(ResponseProcessorList.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
 		return (nn(override) ? override : b.build()).toArray();
 	});
 
@@ -931,7 +933,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Walks {@code @Rest(restOpArgs)} annotations parent-to-child (prepend order, so child entries
-	 * take priority). A bean-store override or {@code @RestInject} factory method REPLACES the entire list.
+	 * take priority). A bean-store override or {@code @Bean} factory method REPLACES the entire list.
 	 */
 	private final Memoizer<Class<? extends RestOpArg>[]> restOpArgs = memoizer(() -> {
 		// Walk @Rest(restOpArgs=...) chain (parent-to-child via getRestAnnotationsForProperty).
@@ -942,24 +944,24 @@ public class RestContext extends Context {
 		var b = RestOpArgList.create(bs);
 		getRestAnnotationsForProperty(PROPERTY_restOpArgs)
 			.forEach(ai -> b.add(ai.inner().restOpArgs()));
-		// @RestInject method override REPLACES the entire annotation-derived list.
-		var override = bs.createBeanFromMethod(RestOpArgList.class, resource().get(), RestContext::isRestInjectMethod, b).orElse(null);
+		// @Bean method override REPLACES the entire annotation-derived list.
+		var override = bs.createBeanFromMethod(RestOpArgList.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
 		return (nn(override) ? override : b.build()).asArray();
 	});
 
 	/**
 	 * Fully-configured {@link SerializerSet.Builder} for this resource, populated from the
-	 * {@code @Rest(serializers)} annotation chain and any {@code @RestInject} override.
+	 * {@code @Rest(serializers)} annotation chain and any {@code @Bean} override.
 	 *
 	 * <p>
 	 * Starts with an empty set. A bean-store type or instance override REPLACES the builder or its impl.
-	 * Annotation entries (parent-to-child) are appended. A {@code @RestInject} factory method REPLACES the impl.
+	 * Annotation entries (parent-to-child) are appended. A {@code @Bean} factory method REPLACES the impl.
 	 */
 	private final Memoizer<SerializerSet.Builder> serializersBuilder = memoizer(() -> {
 		var bs = beanStore();
 		var v = Value.of(SerializerSet.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_serializers).forEach(ai -> v.get().add(ai.inner().serializers()));
-		bs.createBeanFromMethod(SerializerSet.class, resource().get(), RestContext::isRestInjectMethod, v.get()).ifPresent(x -> v.get().impl(x));
+		bs.createBeanFromMethod(SerializerSet.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
 	});
 
@@ -974,7 +976,7 @@ public class RestContext extends Context {
 	private final Memoizer<LifecycleInvokerPair> startCallInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
 		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestStartCall.class).toList()));
-		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isRestInjectMethod(x, "startCallMethods"), v.get()).ifPresent(v::set);
+		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "startCallMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	}));
 
@@ -983,7 +985,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Defaults to {@link BasicStaticFiles}. {@code @Rest(staticFiles=X)} most-derived non-{@code Void} class wins.
-	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 * A bean-store override or {@code @Bean} factory method REPLACES the result.
 	 */
 	private final Memoizer<StaticFiles> staticFiles = memoizer(() -> {
 		var bs = beanStore();
@@ -995,7 +997,7 @@ public class RestContext extends Context {
 			.filter(c -> c != StaticFiles.Void.class)
 			.reduce((first, second) -> second)
 			.ifPresent(creator::type);
-		bs.createBeanFromMethod(StaticFiles.class, resource().get(), RestContext::isRestInjectMethod).ifPresent(creator::impl);
+		bs.createBeanFromMethod(StaticFiles.class, resource().get(), RestContext::isBeanMethod).ifPresent(creator::impl);
 		return creator.asOptional().orElse(null);
 	});
 
@@ -1004,7 +1006,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Defaults to {@link BasicSwaggerProvider}. {@code @Rest(swaggerProvider=X)} most-derived
-	 * non-{@code Void} class wins. A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 * non-{@code Void} class wins. A bean-store override or {@code @Bean} factory method REPLACES the result.
 	 */
 	private final Memoizer<SwaggerProvider> swaggerProvider = memoizer(() -> {
 		var bs = beanStore();
@@ -1019,7 +1021,7 @@ public class RestContext extends Context {
 			.filter(c -> c != SwaggerProvider.Void.class)
 			.reduce((first, second) -> second)
 			.ifPresent(creator::type);
-		bs.createBeanFromMethod(SwaggerProvider.class, resource().get(), RestContext::isRestInjectMethod).ifPresent(creator::impl);
+		bs.createBeanFromMethod(SwaggerProvider.class, resource().get(), RestContext::isBeanMethod).ifPresent(creator::impl);
 		return creator.asOptional().orElse(null);
 	});
 
@@ -1028,12 +1030,12 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Inherits from the parent context's store when one is present. A bean-store override or
-	 * {@code @RestInject} factory method REPLACES the result.
+	 * {@code @Bean} factory method REPLACES the result.
 	 */
 	private final Memoizer<ThrownStore> thrownStore = memoizer(() -> {
 		var bs = beanStore();
 		var b = ThrownStore.create(bs).impl(parentContext() == null ? null : parentContext().getThrownStore());
-		bs.createBeanFromMethod(ThrownStore.class, resource().get(), RestContext::isRestInjectMethod, b).ifPresent(b::impl);
+		bs.createBeanFromMethod(ThrownStore.class, resource().get(), RestContext::isBeanMethod, b).ifPresent(b::impl);
 		return b.build();
 	});
 
@@ -1043,14 +1045,14 @@ public class RestContext extends Context {
 	 * <p>
 	 * The bootstrap {@link Config} is pulled from the {@code rawConfig} memoizer to avoid a circular
 	 * dependency: the runtime {@link Config} wraps the bootstrap config in a session backed by this resolver.
-	 * A bean-store override or {@code @RestInject} factory method REPLACES the result.
+	 * A bean-store override or {@code @Bean} factory method REPLACES the result.
 	 */
 	private final Memoizer<VarResolver> varResolver = memoizer(() -> {
 		var bs = beanStore();
 		var b = getBootstrapVarResolver().copy()
 			.bean(Messages.class, getMessages())
 			.bean(Config.class, rawConfig.get());
-		var override = bs.createBeanFromMethod(VarResolver.class, resource().get(), RestContext::isRestInjectMethod, b).orElse(null);
+		var override = bs.createBeanFromMethod(VarResolver.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
 		return nn(override) ? override : b.build();
 	});
 
@@ -1093,7 +1095,7 @@ public class RestContext extends Context {
 				}
 			}
 		}
-		var override = bs.createBeanFromMethod(RestOperations.class, resource().get(), RestContext::isRestInjectMethod, b).orElse(null);
+		var override = bs.createBeanFromMethod(RestOperations.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
 		return nn(override) ? override : b.build();
 	}));
 
@@ -1138,8 +1140,8 @@ public class RestContext extends Context {
 			b.add(cc);
 		}
 
-		// @RestInject override — allows replacing the entire RestChildren instance.
-		var override = bs.createBeanFromMethod(RestChildren.class, resource().get(), RestContext::isRestInjectMethod, b).orElse(null);
+		// @Bean override — allows replacing the entire RestChildren instance.
+		var override = bs.createBeanFromMethod(RestChildren.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
 		return nn(override) ? override : b.build();
 	}));
 
@@ -1187,7 +1189,7 @@ public class RestContext extends Context {
 			// Determine the parent (bootstrap) store: inherited from parent resource if present.
 			WritableBeanStore parentBs = parentContext != null ? parentContext.bootstrapBeanStore : null;
 
-			// Build the initial beanStore; honor an optional @RestInject WritableBeanStore override.
+			// Build the initial beanStore; honor an optional @Bean WritableBeanStore override.
 			// In the new 9.5 precedence model, the parent (Spring or parent-resource bootstrap) is
 			// installed as the overriding parent so it wins over local entries.
 			// @formatter:off
@@ -1219,47 +1221,47 @@ public class RestContext extends Context {
 			rawConfig.get();
 
 			// Register memoizer-backed defaults for every framework-managed type.  These sit at the
-			// bottom of the precedence order and only fire when no @RestInject method, no programmatic
+			// bottom of the precedence order and only fire when no @Bean method, no programmatic
 			// add, and no Spring/overriding-parent bean has been registered for the type.  This is
-			// what removes the need for the old DELAYED_INJECTION gate-keeping list — the @RestInject
+			// what removes the need for the old DELAYED_INJECTION gate-keeping list — the @Bean
 			// walk below can now invoke any framework type's factory and still resolve framework
 			// dependencies through the bean store.
 			registerFrameworkDefaults(beanStore);
 
 			var rci2 = ClassInfo.of(resourceClass);
 
-			// Register @RestInject fields that already have a value.
+			// Register @Bean fields that already have a value.
 			// @formatter:off
 			rci2.getAllFields().stream()
-				.filter(x -> x.hasAnnotation(RestInject.class))
+				.filter(x -> x.hasAnnotation(Bean.class))
 				.forEach(x -> opt(x.get(resource.get())).ifPresent(
 					y -> beanStore.add(
 						x.getFieldType().inner(),
 						y,
-						RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
+						BeanAnnotation.name(x.getAnnotations(Bean.class).findFirst().map(AnnotationInfo::inner).orElse(null))
 					)
 				));
 			// @formatter:on
 
-			// Run @RestInject methods and register their results as LOCAL entries (level 2 of resolve()).
+			// Run @Bean methods and register their results as LOCAL entries (level 2 of resolve()).
 			//
-			// For non-framework types: invoke the @RestInject method directly via createBeanFromMethod
+			// For non-framework types: invoke the @Bean method directly via createBeanFromMethod
 			// and store the result via addBean.
 			//
-			// For framework types (those with a default supplier registered above): the @RestInject
+			// For framework types (those with a default supplier registered above): the @Bean
 			// scan already ran inside the corresponding memoizer body (see e.g. createCallLogger()),
 			// so re-invoking createBeanFromMethod here would create a SECOND instance and produce
 			// inconsistent state between the framework's memoizer-backed bean and the bean store's
 			// local entry.  Instead, PROMOTE the existing default supplier (which is memoizer-backed
-			// and resolves to the @RestInject value when one was supplied) into a local-entry supplier.
-			// Promoting at level 2 means @RestInject results win over a parent (Spring) at level 3.
+			// and resolves to the @Bean value when one was supplied) into a local-entry supplier.
+			// Promoting at level 2 means @Bean results win over a parent (Spring) at level 3.
 			//
-			// Net effect: @RestInject method results uniformly take precedence over Spring/parent
+			// Net effect: @Bean method results uniformly take precedence over Spring/parent
 			// bindings for both framework and user-defined types.  This auto-derives the legacy
 			// DELAYED_INJECTION list from the default-supplier registrations.
-			rci2.getAllMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
+			rci2.getAllMethods().stream().filter(x -> x.hasAnnotation(Bean.class)).forEach(x -> {
 				var rt = x.getReturnType().<Object>inner();
-				var name = RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null));
+				var name = BeanAnnotation.name(x.getAnnotations(Bean.class).findFirst().map(AnnotationInfo::inner).orElse(null));
 				// Skip the WritableBeanStore factory (already consumed by createBeanStore()).
 				if (WritableBeanStore.class.equals(rt) || BeanStore.class.equals(rt))
 					return;
@@ -1267,7 +1269,7 @@ public class RestContext extends Context {
 					bbs2.getDefaultSupplier(rt, name).ifPresent(sup -> beanStore.addSupplier(rt, sup, name));
 					return;
 				}
-				beanStore.createBeanFromMethod(rt, resource.get(), RestContext::isRestInjectMethod)
+				beanStore.createBeanFromMethod(rt, resource.get(), RestContext::isBeanMethod)
 					.ifPresent(y -> beanStore.addBean(rt, y, name));
 			});
 
@@ -1294,15 +1296,15 @@ public class RestContext extends Context {
 				}
 			}
 
-			// Back-fill @RestInject fields that were null before init hooks ran.
+			// Back-fill @Bean fields that were null before init hooks ran.
 			// @formatter:off
 			rci2.getAllFields().stream()
-				.filter(x -> x.hasAnnotation(RestInject.class))
+				.filter(x -> x.hasAnnotation(Bean.class))
 				.forEach(x -> x.setIfNull(
 					resource.get(),
 					beanStore.getBean(
 						x.getFieldType().inner(),
-						RestInjectAnnotation.name(x.getAnnotations(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null))
+						BeanAnnotation.name(x.getAnnotations(Bean.class).findFirst().map(AnnotationInfo::inner).orElse(null))
 					).orElse(null)
 				));
 			// @formatter:on
@@ -1952,9 +1954,9 @@ public class RestContext extends Context {
 	 * <p>
 	 * The default call logger is {@link BasicCallLogger}. Override via {@link Rest#callLogger() @Rest(callLogger)}
 	 * on the resource class, by registering a {@link CallLogger} bean in the bean store, or by declaring a
-	 * {@link RestInject @RestInject}-annotated static method on the resource class:
+	 * {@link org.apache.juneau.commons.inject.Bean @Bean}-annotated static method on the resource class:
 	 * <p class='bjava'>
-	 * 	<ja>@RestInject</ja> <jk>public static</jk> CallLogger myCallLogger(<i>&lt;args&gt;</i>) {...}
+	 * 	<ja>@Bean</ja> <jk>public static</jk> CallLogger myCallLogger(<i>&lt;args&gt;</i>) {...}
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -2463,7 +2465,7 @@ public class RestContext extends Context {
 	 * The bootstrap resolver has the same {@link Var} catalog as {@link #getVarResolver()} but does not have
 	 * {@link Messages} or {@link Config} beans wired in — it is used to resolve annotation attribute values
 	 * (e.g. <c>@Rest(messages=...)</c>) before those beans are built. Override via
-	 * {@link RestInject @RestInject(name="bootstrapVarResolver")} on a static method of the resource class.
+	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="bootstrapVarResolver")} on a static method of the resource class.
 	 *
 	 * @return The bootstrap var resolver in use by this resource.
 	 */

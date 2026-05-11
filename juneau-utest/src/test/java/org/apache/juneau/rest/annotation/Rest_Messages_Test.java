@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -99,7 +100,7 @@ class Rest_Messages_Test extends TestBase {
 	}
 
 	public static class B3 extends B1 {
-		@RestInject
+		@Bean
 		public static Messages messages(Messages.Builder b) {
 			return b.location(null, "B2x").location(B1.class, "B1x").build();
 		}
