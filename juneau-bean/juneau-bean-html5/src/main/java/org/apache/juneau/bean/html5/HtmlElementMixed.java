@@ -164,7 +164,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @return The children of this element.
 	 */
 	@Xml(format = MIXED)
-	@Beanp(dictionary = HtmlBeanDictionary.class, name = "c")
+	@MarshalledProp(dictionary = HtmlBeanDictionary.class, name = "c")
 	public List<Object> getChildren() { return children; }
 
 	@Override /* Overridden from HtmlElement */
@@ -491,7 +491,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @param children The new children of this element.
 	 * @return This object.
 	 */
-	@Beanp("c")
+	@MarshalledProp("c")
 	public HtmlElement setChildren(List<Object> children) {
 		this.children = children;
 		return this;

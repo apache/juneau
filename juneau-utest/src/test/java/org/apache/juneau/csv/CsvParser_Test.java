@@ -272,10 +272,10 @@ class CsvParser_Test extends TestBase {
 	}
 
 	public static class E {
-		@Beanp(name = "full_name")
+		@MarshalledProp(name = "full_name")
 		public String name;
 
-		@Beanp(name = "years")
+		@MarshalledProp(name = "years")
 		public int age;
 	}
 

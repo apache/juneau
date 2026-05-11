@@ -60,7 +60,7 @@ import org.apache.juneau.commons.inject.*;
  * 		<ul>
  * 			<li>Public fields (same order as {@code Class.getFields()}).
  * 			<li>Properties returned by {@code BeanInfo.getPropertyDescriptors()}.
- * 			<li>Non-standard getters/setters with {@link Beanp @Beanp} annotation defined on them.
+ * 			<li>Non-standard getters/setters with {@link MarshalledProp @MarshalledProp} annotation defined on them.
  * 		</ul>
  * </ul>
  *
@@ -224,8 +224,8 @@ public class BeanMeta<T> {
 			if (bc.isBeansRequireSerializable() && ! cm.isAssignableTo(Serializable.class) && ! ap.has(Marshalled.class, cm))
 				return notABean("Class is not serializable");
 
-			if (ap.has(BeanIgnore.class, cm) || ap.has(org.apache.juneau.commons.annotation.BeanIgnore.class, cm))
-				return notABean("Class is annotated with @BeanIgnore");
+			if (ap.has(MarshalledIgnore.class, cm) || ap.has(org.apache.juneau.commons.annotation.MarshalledIgnore.class, cm))
+				return notABean("Class is annotated with @MarshalledIgnore");
 
 		if ((! bc.getBeanClassVisibility().isVisible(cm.getModifiers()) || cm.isAnonymousClass()) && ! ap.has(Marshalled.class, cm))
 			return notABean("Class is not public");
@@ -242,18 +242,18 @@ public class BeanMeta<T> {
 	}
 
 	/*
-	 * Extracts the property name from {@link Beanp @Beanp} or {@link Name @Name} annotations.
+	 * Extracts the property name from {@link MarshalledProp @MarshalledProp} or {@link Name @Name} annotations.
 	 *
 	 * <p>
 	 * If {@link Name @Name} annotations are present, returns the value from the last one.
-	 * Otherwise, searches through {@link Beanp @Beanp} annotations and returns the first non-empty
-	 * {@link Beanp#value() value()} or {@link Beanp#name() name()} found.
+	 * Otherwise, searches through {@link MarshalledProp @MarshalledProp} annotations and returns the first non-empty
+	 * {@link MarshalledProp#value() value()} or {@link MarshalledProp#name() name()} found.
 	 *
-	 * @param p List of {@link Beanp @Beanp} annotations.
+	 * @param p List of {@link MarshalledProp @MarshalledProp} annotations.
 	 * @param n List of {@link Name @Name} annotations.
 	 * @return The property name, or <jk>null</jk> if no name is found.
 	 */
-	private static String bpName(List<Beanp> p, List<Name> n) {
+	private static String bpName(List<MarshalledProp> p, List<Name> n) {
 		if (p.isEmpty() && n.isEmpty())
 			return null;
 		if (! n.isEmpty())
@@ -307,13 +307,13 @@ public class BeanMeta<T> {
 	}
 
 	/*
-	 * Extracts the property name from a single {@link Beanp @Beanp} or {@link Name @Name} annotation.
+	 * Extracts the property name from a single {@link MarshalledProp @MarshalledProp} or {@link Name @Name} annotation.
 	 *
 	 * <p>
-	 * For {@link Beanp @Beanp} annotations, returns the first non-empty value found in the following order:
+	 * For {@link MarshalledProp @MarshalledProp} annotations, returns the first non-empty value found in the following order:
 	 * <ol>
-	 * 	<li>{@link Beanp#name() name()}
-	 * 	<li>{@link Beanp#value() value()}
+	 * 	<li>{@link MarshalledProp#name() name()}
+	 * 	<li>{@link MarshalledProp#value() value()}
 	 * </ol>
 	 *
 	 * <p>
@@ -323,13 +323,13 @@ public class BeanMeta<T> {
 	 * This method is used to extract property names from individual annotations, typically when processing
 	 * annotation lists in stream operations.
 	 *
-	 * @param ai The annotation info containing either a {@link Beanp @Beanp} or {@link Name @Name} annotation.
+	 * @param ai The annotation info containing either a {@link MarshalledProp @MarshalledProp} or {@link Name @Name} annotation.
 	 * @return The property name extracted from the annotation, or <jk>null</jk> if no name is found.
 	 * @see #bpName(List, List)
 	 */
 	private static String name(AnnotationInfo<?> ai) {
-		if (ai.isType(Beanp.class)) {
-			var p = ai.cast(Beanp.class).inner();
+		if (ai.isType(MarshalledProp.class)) {
+			var p = ai.cast(MarshalledProp.class).inner();
 			if (ne(p.name()))
 				return p.name();
 			if (ne(p.value()))
@@ -453,7 +453,7 @@ public class BeanMeta<T> {
 
 				findBeanFields().forEach(x -> {
 					var name = ap.find(x).stream()
-						.filter(x2 -> x2.isType(Beanp.class) || x2.isType(Name.class))
+						.filter(x2 -> x2.isType(MarshalledProp.class) || x2.isType(Name.class))
 						.map(BeanMeta::name)
 						.filter(Objects::nonNull)
 						.findFirst()
@@ -476,9 +476,9 @@ public class BeanMeta<T> {
 					if (x.methodType == GETTER) {
 						// Two getters.  Pick the best.
 						if (nn(bpm.getter)
-							&& ((! ap.has(Beanp.class, mi) && ap.has(Beanp.class, bpm.getter))
+							&& ((! ap.has(MarshalledProp.class, mi) && ap.has(MarshalledProp.class, bpm.getter))
 								|| (m.getName().startsWith("is") && bpm.getter.getNameSimple().startsWith("get")))) {
-							// @Beanp on existing getter takes precedence; else getX() overrides isX().
+							// @MarshalledProp on existing getter takes precedence; else getX() overrides isX().
 							m = bpm.getter.inner();
 						}
 						bpm.setGetter(info(m));
@@ -535,7 +535,7 @@ public class BeanMeta<T> {
 			for (var fp : beanConstructor.args()) {
 				var m = normalProps.get(fp);
 				if (m == null)
-					throw bex(c, "The property ''{0}'' was defined on the @Beanc(properties=X) annotation but was not found on the class definition.", fp);
+					throw bex(c, "The property ''{0}'' was defined on the @MarshalledCtor(properties=X) annotation but was not found on the class definition.", fp);
 				m.setAsConstructorArg();
 			}
 
@@ -813,7 +813,7 @@ public class BeanMeta<T> {
 	 * <p>
 	 * The constructor is determined by {@link #findBeanConstructor()} and may be:
 	 * <ul>
-	 * 	<li>A constructor annotated with {@link Beanc @Beanc}
+	 * 	<li>A constructor annotated with {@link MarshalledCtor @MarshalledCtor}
 	 * 	<li>An implementation class constructor (if provided)
 	 * 	<li>A no-argument constructor
 	 * 	<li><jk>null</jk> if no suitable constructor was found
@@ -837,7 +837,7 @@ public class BeanMeta<T> {
 	 * <p>
 	 * The property names are determined from:
 	 * <ul>
-	 * 	<li>The {@link Beanc#properties() properties()} value in the {@link Beanc @Beanc} annotation (if present)
+	 * 	<li>The {@link MarshalledCtor#properties() properties()} value in the {@link MarshalledCtor @MarshalledCtor} annotation (if present)
 	 * 	<li>Otherwise, the parameter names from the constructor (if available in bytecode)
 	 * </ul>
 	 *
@@ -901,7 +901,7 @@ public class BeanMeta<T> {
 	 * A bean has a constructor if {@link #findBeanConstructor()} was able to find a suitable constructor,
 	 * which may be:
 	 * <ul>
-	 * 	<li>A constructor annotated with {@link Beanc @Beanc}
+	 * 	<li>A constructor annotated with {@link MarshalledCtor @MarshalledCtor}
 	 * 	<li>An implementation class constructor (if provided)
 	 * 	<li>A no-argument constructor
 	 * </ul>
@@ -982,13 +982,13 @@ public class BeanMeta<T> {
 	 * <p>
 	 * This method searches for a constructor in the following order of precedence:
 	 * <ol>
-	 * 	<li><b>{@link Beanc @Beanc} annotated constructor:</b> If a constructor is annotated with {@link Beanc @Beanc},
+	 * 	<li><b>{@link MarshalledCtor @MarshalledCtor} annotated constructor:</b> If a constructor is annotated with {@link MarshalledCtor @MarshalledCtor},
 	 * 		it is used. The property names are determined from:
 	 * 		<ul>
-	 * 			<li>The {@link Beanc#properties() properties()} value in the annotation, if specified
+	 * 			<li>The {@link MarshalledCtor#properties() properties()} value in the annotation, if specified
 	 * 			<li>Otherwise, the parameter names from the constructor (if available in bytecode)
 	 * 		</ul>
-	 * 		If multiple constructors are annotated with {@link Beanc @Beanc}, an exception is thrown.
+	 * 		If multiple constructors are annotated with {@link MarshalledCtor @MarshalledCtor}, an exception is thrown.
 	 * 	<li><b>Implementation class constructor:</b> If an {@link #implClassConstructor} was provided during bean
 	 * 		metadata creation, it is used with an empty property list.
 	 * 	<li><b>No-arg constructor:</b> Searches for a no-argument constructor. The visibility required depends on
@@ -1008,8 +1008,8 @@ public class BeanMeta<T> {
 	 * </ul>
 	 *
 	 * @return A {@link BeanConstructor} containing the found constructor and its associated property names.
-	 * @throws BeanRuntimeException If multiple constructors are annotated with {@link Beanc @Beanc}, or if
-	 * 	the number of properties specified in {@link Beanc @Beanc} doesn't match the number of constructor parameters,
+	 * @throws BeanRuntimeException If multiple constructors are annotated with {@link MarshalledCtor @MarshalledCtor}, or if
+	 * 	the number of properties specified in {@link MarshalledCtor @MarshalledCtor} doesn't match the number of constructor parameters,
 	 * 	or if parameter names cannot be determined from the bytecode.
 	 */
 	@SuppressWarnings({
@@ -1020,17 +1020,17 @@ public class BeanMeta<T> {
 		var vis = beanContext.getBeanConstructorVisibility();
 		var ci = classMeta;
 
-		var l = ci.getPublicConstructors().stream().filter(x -> ap.has(Beanc.class, x)).toList();
+		var l = ci.getPublicConstructors().stream().filter(x -> ap.has(MarshalledCtor.class, x)).toList();
 		if (l.isEmpty())
-			l = ci.getDeclaredConstructors().stream().filter(x -> ap.has(Beanc.class, x)).toList();
+			l = ci.getDeclaredConstructors().stream().filter(x -> ap.has(MarshalledCtor.class, x)).toList();
 		if (l.size() > 1)
-			throw bex(ci, "Multiple instances of '@Beanc' found.");
+			throw bex(ci, "Multiple instances of '@MarshalledCtor' found.");
 		if (l.size() == 1) {
 			var con = first(l).orElseThrow(() -> bex(ci, "No constructor found.")).accessible();
-			var args = ap.find(Beanc.class, con).stream().map(x -> x.inner().properties()).filter(StringUtils::isNotBlank).map(x -> split(x)).findFirst().orElse(liste());
+			var args = ap.find(MarshalledCtor.class, con).stream().map(x -> x.inner().properties()).filter(StringUtils::isNotBlank).map(x -> split(x)).findFirst().orElse(liste());
 			if (! con.hasNumParameters(args.size())) {
 				if (ne(args))
-					throw bex(ci, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
+					throw bex(ci, "Number of properties defined in '@MarshalledCtor' annotation does not match number of parameters in constructor.");
 				args = con.getParameters().stream().map(x -> x.getName()).toList();
 				for (int i = 0; i < args.size(); i++) {
 					if (isBlank(args.get(i)))
@@ -1060,17 +1060,17 @@ public class BeanMeta<T> {
 	}
 
 	/**
-	 * Resolves the bean property name for a field when {@link Beanp @Beanp} or {@link Name @Name} supplies
+	 * Resolves the bean property name for a field when {@link MarshalledProp @MarshalledProp} or {@link Name @Name} supplies
 	 * <js>"*"</js>.
 	 *
 	 * <p>
 	 * On a {@link Map} field, <js>"*"</js> remains the dyna-property name. On any other field type, <js>"*"</js> is
-	 * treated like an unnamed {@code @Beanp} (apply other attributes) but the property name is taken from the field
+	 * treated like an unnamed {@code @MarshalledProp} (apply other attributes) but the property name is taken from the field
 	 * (via {@link PropertyNamer#getPropertyName(String)}).
 	 * </p>
 	 *
 	 * @param x Field being registered.
-	 * @param nameFromAnnotations Name from {@code @Beanp}/{@code @Name}, or already-resolved default from the field name.
+	 * @param nameFromAnnotations Name from {@code @MarshalledProp}/{@code @Name}, or already-resolved default from the field name.
 	 * @param propertyNamer Namer for raw field names.
 	 * @return Property key to use in {@link BeanMeta}.
 	 */
@@ -1092,8 +1092,8 @@ public class BeanMeta<T> {
 	 * 	<li>Not static
 	 * 	<li>Not transient (unless transient fields are not ignored)
 	 * 	<li>Not annotated with {@link Transient @Transient} (unless transient fields are not ignored)
-	 * 	<li>Not annotated with {@link BeanIgnore @BeanIgnore}
-	 * 	<li>Visible according to the specified visibility level, or annotated with {@link Beanp @Beanp}
+	 * 	<li>Not annotated with {@link MarshalledIgnore @MarshalledIgnore}
+	 * 	<li>Visible according to the specified visibility level, or annotated with {@link MarshalledProp @MarshalledProp}
 	 * </ul>
 	 *
 	 * @return A collection of all bean fields found in the class hierarchy.
@@ -1112,8 +1112,8 @@ public class BeanMeta<T> {
 			.filter(x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
-				&& ! ap.has(BeanIgnore.class, x)
-				&& (v.isVisible(x.inner()) || ap.has(Beanp.class, x)
+				&& ! ap.has(MarshalledIgnore.class, x)
+				&& (v.isVisible(x.inner()) || ap.has(MarshalledProp.class, x)
 					|| (isRecord && recordComponentNames.contains(x.getName()))))
 			.toList();
 		// @formatter:on
@@ -1130,18 +1130,18 @@ public class BeanMeta<T> {
 	 * 		<ul>
 	 * 			<li><c>getX()</c> - standard getter pattern
 	 * 			<li><c>isX()</c> - boolean getter pattern (returns boolean or Boolean)
-	 * 			<li>Methods annotated with {@link Beanp @Beanp} or {@link Name @Name}
-	 * 			<li>Methods with {@link Beanp @Beanp} annotation with value <js>"*"</js> that return a Map
+	 * 			<li>Methods annotated with {@link MarshalledProp @MarshalledProp} or {@link Name @Name}
+	 * 			<li>Methods with {@link MarshalledProp @MarshalledProp} annotation with value <js>"*"</js> that return a Map
 	 * 		</ul>
 	 * 	<li><b>Setters:</b> Methods with one parameter that match patterns like:
 	 * 		<ul>
 	 * 			<li><c>setX(value)</c> - standard setter pattern
 	 * 			<li><c>withX(value)</c> - fluent setter pattern (returns the bean type)
-	 * 			<li>Methods annotated with {@link Beanp @Beanp} or {@link Name @Name}
-	 * 			<li>Methods with {@link Beanp @Beanp} annotation with value <js>"*"</js> that accept a Map
+	 * 			<li>Methods annotated with {@link MarshalledProp @MarshalledProp} or {@link Name @Name}
+	 * 			<li>Methods with {@link MarshalledProp @MarshalledProp} annotation with value <js>"*"</js> that accept a Map
 	 * 			<li>Fluent setters (if enabled) - methods that return the bean type and accept one parameter
 	 * 		</ul>
-	 * 	<li><b>ExtraKeys:</b> Methods with {@link Beanp @Beanp} annotation with value <js>"*"</js> that return a Collection
+	 * 	<li><b>ExtraKeys:</b> Methods with {@link MarshalledProp @MarshalledProp} annotation with value <js>"*"</js> that return a Collection
 	 * </ul>
 	 *
 	 * <p>
@@ -1149,15 +1149,15 @@ public class BeanMeta<T> {
 	 * <ul>
 	 * 	<li>Not static, not bridge methods
 	 * 	<li>Parameter count ≤ 2
-	 * 	<li>Not annotated with {@link BeanIgnore @BeanIgnore}
+	 * 	<li>Not annotated with {@link MarshalledIgnore @MarshalledIgnore}
 	 * 	<li>Not annotated with {@link Transient @Transient}
-	 * 	<li>Visible according to the specified visibility level, or annotated with {@link Beanp @Beanp} or {@link Name @Name}
+	 * 	<li>Visible according to the specified visibility level, or annotated with {@link MarshalledProp @MarshalledProp} or {@link Name @Name}
 	 * </ul>
 	 *
 	 * <p>
 	 * Property names are determined from:
 	 * <ul>
-	 * 	<li>{@link Beanp @Beanp} or {@link Name @Name} annotations (if present)
+	 * 	<li>{@link MarshalledProp @MarshalledProp} or {@link Name @Name} annotations (if present)
 	 * 	<li>Otherwise, derived from the method name using the provided {@link PropertyNamer}
 	 * </ul>
 	 *
@@ -1172,16 +1172,16 @@ public class BeanMeta<T> {
 		var ci = classMeta;
 		var v = beanContext.getBeanMethodVisibility();
 		var pn = opt(beanFilter).map(x -> x.getPropertyNamer()).orElse(beanContext.getPropertyNamer());
-		var suppressedFromBeanIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(pn);
+		var suppressedFromMarshalledIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(pn);
 
 		classHierarchy.get().stream().forEach(c2 -> {
 			for (var m : c2.getDeclaredMethods()) {
 				var mm = m.getMatchingMethods();
-				var beanps = ap.find(Beanp.class, m).stream().map(AnnotationInfo::inner).toList();
+				var beanps = ap.find(MarshalledProp.class, m).stream().map(AnnotationInfo::inner).toList();
 				var names = ap.find(Name.class, m).stream().map(AnnotationInfo::inner).toList();
 				// Skip static, bridge, or methods with >2 params; skip if ignored, transient, or not visible
 				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2
-					|| mm.stream().anyMatch(m2 -> ap.has(BeanIgnore.class, m2, SELF))
+					|| mm.stream().anyMatch(m2 -> ap.has(MarshalledIgnore.class, m2, SELF))
 					|| mm.stream().anyMatch(m2 -> ap.find(Transient.class, m2, SELF).stream().map(x -> x.inner().value()).findFirst().orElse(false))
 					|| ! (m.isVisible(v) || ne(beanps) || ne(names)))
 					continue;
@@ -1259,12 +1259,12 @@ public class BeanMeta<T> {
 				n = pn.getPropertyName(n);
 
 				if ("*".equals(bpName) && methodType == UNKNOWN)
-					throw bex(ci, "Found @Beanp(\"*\") but could not determine method type on method ''{0}''.", m.getNameSimple());
+					throw bex(ci, "Found @MarshalledProp(\"*\") but could not determine method type on method ''{0}''.", m.getNameSimple());
 
 				if (methodType != UNKNOWN) {
 					if (nn(bpName) && ! bpName.isEmpty())
 						n = bpName;
-					if (nn(n) && ! suppressedFromBeanIgnoredFields.contains(n))
+					if (nn(n) && ! suppressedFromMarshalledIgnoredFields.contains(n))
 						l.add(new BeanMethod(n, methodType, m.inner()));
 				}
 			}
@@ -1439,18 +1439,18 @@ public class BeanMeta<T> {
 
 	/*
 	 * Merges standard JavaBeans {@link BeanInfo} property descriptors into {@code normalProps}, skipping the class
-	 * pseudo-property and logical names suppressed when {@link BeanIgnore#ignoreAccessors()} is <jk>true</jk> on a field.
+	 * pseudo-property and logical names suppressed when {@link MarshalledIgnore#ignoreAccessors()} is <jk>true</jk> on a field.
 	 */
 	@SuppressWarnings({
-		"java:S135" // Two continues: skip class pseudo-property and names suppressed via @BeanIgnore(ignoreAccessors)
+		"java:S135" // Two continues: skip class pseudo-property and names suppressed via @MarshalledIgnore(ignoreAccessors)
 	})
 	private void mergeJavaBeanPropertyDescriptorsIntoNormalProps(BeanInfo bi, Map<String,BeanPropertyMeta.Builder> normalProps,
 			PropertyNamer propertyNamer) {
-		var suppressedFromBeanIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(propertyNamer);
+		var suppressedFromMarshalledIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(propertyNamer);
 		for (var pd : bi.getPropertyDescriptors()) {
 			if (PROP_class.equals(pd.getName()))
 				continue;
-			if (suppressedFromBeanIgnoredFields.contains(pd.getName()))
+			if (suppressedFromMarshalledIgnoredFields.contains(pd.getName()))
 				continue;
 			var builder = normalProps.computeIfAbsent(pd.getName(), n -> BeanPropertyMeta.builder(this, n));
 			if (pd.getReadMethod() != null)
@@ -1462,27 +1462,27 @@ public class BeanMeta<T> {
 
 	/*
 	 * Property names suppressed from getter/setter discovery because a non-static field with that logical name is
-	 * annotated with {@link BeanIgnore @BeanIgnore} and {@link BeanIgnore#ignoreAccessors()} is <jk>true</jk>.
+	 * annotated with {@link MarshalledIgnore @MarshalledIgnore} and {@link MarshalledIgnore#ignoreAccessors()} is <jk>true</jk>.
 	 *
 	 * <p>
-	 * When {@link BeanIgnore#ignoreAccessors()} is <jk>false</jk> (the default), ignored fields do not suppress
-	 * JavaBean accessors so patterns such as {@code @BeanIgnore} on a private field with a public {@code getX()} still
+	 * When {@link MarshalledIgnore#ignoreAccessors()} is <jk>false</jk> (the default), ignored fields do not suppress
+	 * JavaBean accessors so patterns such as {@code @MarshalledIgnore} on a private field with a public {@code getX()} still
 	 * expose {@code x} when field visibility excludes the field.
 	 */
 	@SuppressWarnings({
-		"java:S135" // Two continues in inner loop: skip fields without @BeanIgnore or without ignoreAccessors
+		"java:S135" // Two continues in inner loop: skip fields without @MarshalledIgnore or without ignoreAccessors
 	})
 	private Set<String> findSuppressedPropertyNamesFromIgnoredFields(PropertyNamer propertyNamer) {
 		var s = new HashSet<String>();
 		var ap = beanContext.getAnnotationProvider();
 		for (var c2 : classHierarchy.get()) {
 			for (var x : c2.getDeclaredFields()) {
-				if (! x.isNotStatic() || ! ap.has(BeanIgnore.class, x))
+				if (! x.isNotStatic() || ! ap.has(MarshalledIgnore.class, x))
 					continue;
-				if (! fieldBeanIgnoreIgnoresAccessors(x))
+				if (! fieldMarshalledIgnoreIgnoresAccessors(x))
 					continue;
 				var name = ap.find(x).stream()
-					.filter(x2 -> x2.isType(Beanp.class) || x2.isType(Name.class))
+					.filter(x2 -> x2.isType(MarshalledProp.class) || x2.isType(Name.class))
 					.map(BeanMeta::name)
 					.filter(Objects::nonNull)
 					.findFirst()
@@ -1495,8 +1495,8 @@ public class BeanMeta<T> {
 		return s;
 	}
 
-	private static boolean fieldBeanIgnoreIgnoresAccessors(FieldInfo x) {
-		for (var bi : x.inner().getAnnotationsByType(BeanIgnore.class))
+	private static boolean fieldMarshalledIgnoreIgnoresAccessors(FieldInfo x) {
+		for (var bi : x.inner().getAnnotationsByType(MarshalledIgnore.class))
 			if (bi.ignoreAccessors())
 				return true;
 		return false;
@@ -1517,7 +1517,7 @@ public class BeanMeta<T> {
 	 * 	<li>Is not static
 	 * 	<li>Is not transient (unless transient fields are not ignored)
 	 * 	<li>Is not annotated with {@link Transient @Transient} (unless transient fields are not ignored)
-	 * 	<li>Is not annotated with {@link BeanIgnore @BeanIgnore}
+	 * 	<li>Is not annotated with {@link MarshalledIgnore @MarshalledIgnore}
 	 * </ul>
 	 *
 	 * <p>
@@ -1539,7 +1539,7 @@ public class BeanMeta<T> {
 				x -> x.isNotStatic()
 					&& (x.isNotTransient() || noIgnoreTransients)
 					&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
-					&& ! ap.has(BeanIgnore.class, x)
+					&& ! ap.has(MarshalledIgnore.class, x)
 					&& x.hasName(name)
 			).stream())
 			.findFirst();

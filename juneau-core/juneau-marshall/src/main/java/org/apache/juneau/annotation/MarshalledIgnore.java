@@ -24,18 +24,22 @@ import java.lang.annotation.*;
 import org.apache.juneau.commons.reflect.Visibility;
 
 /**
- * Ignore classes, fields, and methods from being interpreted as bean or bean components.
+ * Ignore classes, fields, methods, and constructors from being interpreted as bean components, or skip a type
+ * entirely during serialization and parsing.
  *
  * <p>
- * Can be used in the following locations:
+ * Behavior depends on the target:
  * <ul>
- * 	<li>Classes - Forces bean-like classes to be treated as non-beans.
- * 	<li>Methods - Forces getters/setters to be ignored.
- * 	<li>Fields - Forces bean fields to be ignored.
- * 	<li>
- * 		Fields — Use {@link #ignoreAccessors()} to also exclude matching JavaBean accessors from bean metadata (see
- * 		{@link #ignoreAccessors()}).
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link BeanIgnoreApply @BeanIgnoreApply}.
+ * 	<li><b>TYPE (class)</b> — Skip this type entirely: serializers output {@code null} and parsers return
+ * 		{@code null}. Previously {@code @BeanIgnore} on a type meant "force non-bean, fall through to
+ * 		{@code toString()}". The "use toString" case is now handled by
+ * 		{@link Marshalled @Marshalled}{@code (as=STRING)}.
+ * 	<li><b>FIELD</b> — Exclude the field from bean property discovery. Use {@link #ignoreAccessors()} to also
+ * 		suppress matching JavaBean accessors.
+ * 	<li><b>METHOD</b> — Force getters/setters to be ignored.
+ * 	<li><b>CONSTRUCTOR</b> — Exclude the constructor from constructor detection.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with
+ * 		{@link MarshalledIgnoreApply @MarshalledIgnoreApply}.
  * </ul>
  *
  * <h5 class='section'>Java Records:</h5>
@@ -46,15 +50,14 @@ import org.apache.juneau.commons.reflect.Visibility;
  * output, but the parser will be unable to instantiate the record if the component value is missing from the input.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanIgnoreAnnotation">@BeanIgnore Annotation</a>
-
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledIgnoreAnnotation">@MarshalledIgnore Annotation</a>
  * </ul>
  */
 @Documented
 @Target({ FIELD, METHOD, TYPE, CONSTRUCTOR })
 @Retention(RUNTIME)
 @Inherited
-public @interface BeanIgnore {
+public @interface MarshalledIgnore {
 
 	/**
 	 * Optional description for the exposed API.
@@ -69,7 +72,7 @@ public @interface BeanIgnore {
 	 * <c>isX</c>) for the same logical property are also excluded from bean metadata.
 	 *
 	 * <p>
-	 * Default is <jk>false</jk>: {@code @BeanIgnore} on a field only excludes the field from field-based discovery;
+	 * Default is <jk>false</jk>: {@code @MarshalledIgnore} on a field only excludes the field from field-based discovery;
 	 * accessors can still expose the property (for example when {@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility} is {@link Visibility#NONE NONE}). Set to <jk>true</jk> to
 	 * omit the property from serialization and parsing while keeping accessors for other frameworks.
 	 *

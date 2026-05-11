@@ -26,19 +26,19 @@ import java.lang.annotation.*;
  * serialized as strings).
  *
  * <p>
- * Marshall's {@code org.apache.juneau.annotation.BeanIgnore} is the full-featured annotation (repeatable, dynamically
+ * Marshall's {@code org.apache.juneau.annotation.MarshalledIgnore} is the full-featured annotation (repeatable, dynamically
  * applied, and so on). This annotation is recognized alongside it when classes are analyzed in juneau-marshall.
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanIgnoreAnnotation">@BeanIgnore Annotation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledIgnoreAnnotation">@MarshalledIgnore Annotation</a>
  * </ul>
  */
 @Documented
 @Target({ FIELD, METHOD, TYPE, CONSTRUCTOR })
 @Retention(RUNTIME)
 @Inherited
-public @interface BeanIgnore {
+public @interface MarshalledIgnore {
 
 	/**
 	 * Optional description for the exposed API.

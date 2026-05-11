@@ -32,13 +32,13 @@ import org.apache.juneau.commons.reflect.Visibility;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Methods/Fields - Bean getters/setters and properties.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link BeanpApply @BeanpApply}.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link MarshalledPropApply @MarshalledPropApply}.
  * </ul>
  * <p>
  * This annotation is applied to public fields and public getter/setter methods of beans.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanpAnnotation">@Beanp Annotation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledPropAnnotation">@MarshalledProp Annotation</a>
 
  * </ul>
  */
@@ -46,7 +46,7 @@ import org.apache.juneau.commons.reflect.Visibility;
 @Target({ FIELD, METHOD, PARAMETER })
 @Retention(RUNTIME)
 @Inherited
-public @interface Beanp {
+public @interface MarshalledProp {
 
 	/**
 	 * Optional description for the exposed API.
@@ -97,11 +97,11 @@ public @interface Beanp {
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> OrderCollection {
 	 * 		<jc>// Stream property - element type cannot be inferred at runtime due to erasure</jc>
-	 * 		<ja>@Beanp</ja>(elementType=Order.<jk>class</jk>)
+	 * 		<ja>@MarshalledProp</ja>(elementType=Order.<jk>class</jk>)
 	 * 		<jk>public</jk> Stream&lt;Order&gt; getOrders() { ... }
 	 *
 	 * 		<jc>// BeanChannel with concrete impl specified instead of abstract element type</jc>
-	 * 		<ja>@Beanp</ja>(elementType=ConcreteItem.<jk>class</jk>)
+	 * 		<ja>@MarshalledProp</ja>(elementType=ConcreteItem.<jk>class</jk>)
 	 * 		<jk>public</jk> BeanChannel&lt;AbstractItem&gt; getItems() { ... }
 	 * 	}
 	 * </p>
@@ -134,7 +134,7 @@ public @interface Beanp {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
-	 * 		<ja>@Beanp</ja>(factory=ItemChannelFactory.<jk>class</jk>, elementType=Item.<jk>class</jk>)
+	 * 		<ja>@MarshalledProp</ja>(factory=ItemChannelFactory.<jk>class</jk>, elementType=Item.<jk>class</jk>)
 	 * 		<jk>public</jk> BeanChannel&lt;Item&gt; getItems() { ... }
 	 * 	}
 	 * </p>
@@ -164,7 +164,7 @@ public @interface Beanp {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
+	 * 	<ja>@MarshalledProp</ja>(format=<js>"$%.2f"</js>)
 	 * 	<jk>public float</jk> <jf>price</jf>;
 	 * </p>
 	 *
@@ -175,7 +175,7 @@ public @interface Beanp {
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
-	 * 		<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
+	 * 		<ja>@MarshalledProp</ja>(format=<js>"$%.2f"</js>)
 	 * 		<jk>private float</jk> <jf>price</jf>;
 	 *
 	 * 		<jk>public float</jk> getPrice() {
@@ -220,7 +220,7 @@ public @interface Beanp {
 	 * 	// The field name can be anything.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaField {
 	 *
-	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
+	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>extraStuff</jf> = <jk>new</jk> LinkedHashMap&lt;&gt;();
 	 * 	}
 	 *
@@ -230,12 +230,12 @@ public @interface Beanp {
 	 * 	// Setter must take in two arguments.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaMethods {
 	 *
-	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
+	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,Object&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
 	 *
-	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
+	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public void</jk> setAnExtraField(String <jv>name</jv>, Object <jv>value</jv>) {
 	 * 			...
 	 * 		}
@@ -245,7 +245,7 @@ public @interface Beanp {
 	 * 	// Properties will be added through the getter.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaGetterOnly {
 	 *
-	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
+	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,Object&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
@@ -255,17 +255,17 @@ public @interface Beanp {
 	 * 	// Define a method that returns a Collection&lt;String&gt; with currently-set property names.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaExtraKeys {
 	 *
-	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
+	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Object get(String <jv>name</jv>) {
 	 * 			...
 	 * 		}
 	 *
-	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
+	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public void</jk> set(String <jv>name</jv>, Object <jv>value</jv>) {
 	 * 			...
 	 * 		}
 	 *
-	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
+	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Collection&lt;String&gt; extraKeys() {
 	 * 			...
 	 * 		}
@@ -279,7 +279,7 @@ public @interface Beanp {
 	 * 	<jc>// A serializable type other than Object.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaFieldWithListValues {
 	 *
-	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
+	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
 	 * 		<jk>public</jk> Map&lt;String,List&lt;String&gt;&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
@@ -288,7 +288,7 @@ public @interface Beanp {
 	 * 	<jc>// A swapped value.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaFieldWithSwappedValues {
 	 *
-	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>, swap=TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
+	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>, swap=TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
 	 * 		<jk>public</jk> Map&lt;String,Calendar&gt; getMyExtraStuff() {
 	 * 			...
 	 * 		}
@@ -317,7 +317,7 @@ public @interface Beanp {
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Identify concrete map type with String keys and Integer values.</jc>
-	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
+	 * 		<ja>@MarshalledProp</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
 	 * 		<jk>public</jk> Map <jf>p1</jf>;
 	 * 	}
 	 * </p>
@@ -329,7 +329,7 @@ public @interface Beanp {
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
-	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
+	 * 		<ja>@MarshalledProp</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
 	 * 		<jk>private</jk> Map <jf>p1</jf>;
 	 *
 	 * 		<jk>public</jk> Map getP1() {
@@ -359,7 +359,7 @@ public @interface Beanp {
 	 * 	<jk>public class</jk> MyClass {
 	 *
 	 * 		<jc>// Only render 'f1' when serializing this bean property.</jc>
-	 * 		<ja>@Beanp</ja>(properties=<js>"f1"</js>)
+	 * 		<ja>@MarshalledProp</ja>(properties=<js>"f1"</js>)
 	 * 		<jk>public</jk> MyChildClass <jf>x1</jf> = <jk>new</jk> MyChildClass();
 	 * 	}
 	 *
@@ -379,7 +379,7 @@ public @interface Beanp {
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
-	 * 		<ja>@Beanp</ja>(properties=<js>"f1"</js>)
+	 * 		<ja>@MarshalledProp</ja>(properties=<js>"f1"</js>)
 	 * 		<jk>private</jk> MyChildClass <jf>x1</jf>;
 	 *
 	 * 		<jk>public</jk> MyChildClass getX1() {
@@ -401,7 +401,7 @@ public @interface Beanp {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
-	 * 		<ja>@Beanp</ja>(ro=<js>"true"</js>)
+	 * 		<ja>@MarshalledProp</ja>(ro=<js>"true"</js>)
 	 * 		<jk>public float</jk> <jf>price</jf>;
 	 * 	}
 	 * </p>
@@ -441,7 +441,7 @@ public @interface Beanp {
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Identify concrete map type.</jc>
-	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>)
+	 * 		<ja>@MarshalledProp</ja>(type=HashMap.<jk>class</jk>)
 	 * 		<jk>public</jk> Map <jf>p1</jf>;
 	 * 	}
 	 * </p>
@@ -453,7 +453,7 @@ public @interface Beanp {
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
-	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>)
+	 * 		<ja>@MarshalledProp</ja>(type=HashMap.<jk>class</jk>)
 	 * 		<jk>private</jk> Map <jf>p1</jf>;
 	 *
 	 * 		<jk>public</jk> Map getP1() {
@@ -473,9 +473,9 @@ public @interface Beanp {
 	 * The following annotations are equivalent:
 	 *
 	 * <p class='bjava'>
-	 * 	<ja>@Beanp</ja>(name=<js>"foo"</js>)
+	 * 	<ja>@MarshalledProp</ja>(name=<js>"foo"</js>)
 	 *
-	 * 	<ja>@Beanp</ja>(<js>"foo"</js>)
+	 * 	<ja>@MarshalledProp</ja>(<js>"foo"</js>)
 	 * </p>
 	 *
 	 * @return The annotation value.
@@ -491,7 +491,7 @@ public @interface Beanp {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
-	 * 		<ja>@Beanp</ja>(wo=<js>"true"</js>)
+	 * 		<ja>@MarshalledProp</ja>(wo=<js>"true"</js>)
 	 * 		<jk>public float</jk> <jf>price</jf>;
 	 * 	}
 	 * </p>

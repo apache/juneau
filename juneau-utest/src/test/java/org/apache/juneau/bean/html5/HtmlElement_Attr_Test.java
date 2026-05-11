@@ -99,7 +99,7 @@ class HtmlElement_Attr_Test extends TestBase {
 	}
 
 	@Test void a11_no_serialization_errors() {
-		// Verifies @Beanp annotation inheritance doesn't cause serialization errors
+		// Verifies @MarshalledProp annotation inheritance doesn't cause serialization errors
 		Div x = div()
 			.attr("data-test", "value")
 			.attrUri("data-url", "http://test.com")

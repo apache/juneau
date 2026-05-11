@@ -47,7 +47,7 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@BeanIgnore /* Use toString() to serialize */
+@MarshalledIgnore /* Use toString() to serialize */
 @SuppressWarnings({
 	"resource", // Depends on entity (streams); value equality not practical
 	"java:S1206", // equals/hashCode not overridden; value equality not practical for this class

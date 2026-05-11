@@ -331,7 +331,7 @@ public @interface BeanConfig {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Bean#dictionary()}
-	 * 	<li class='ja'>{@link Beanp#dictionary()}
+	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanDictionaryBasics">Bean Dictionary Basics</a>
@@ -349,7 +349,7 @@ public @interface BeanConfig {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Bean#dictionary()}
-	 * 	<li class='ja'>{@link Beanp#dictionary()}
+	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * </ul>
@@ -707,7 +707,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link BeanIgnore}
+	 * 	<li class='ja'>{@link MarshalledIgnore}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanClasses(Class...)}
 	 * </ul>
 	 *

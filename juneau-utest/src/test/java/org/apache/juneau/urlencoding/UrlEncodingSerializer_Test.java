@@ -566,16 +566,16 @@ class UrlEncodingSerializer_Test extends TestBase {
 	@Marshalled
 	public static class A {
 
-		@Beanp(name="foo")
+		@MarshalledProp(name="foo")
 		public String f1 = "foo";
 
-		@Beanp(name="'foo'")
+		@MarshalledProp(name="'foo'")
 		public String f2 = "'foo'";
 
-		@Beanp(name="(foo)")
+		@MarshalledProp(name="(foo)")
 		public String f3 = "(foo)";
 
-		@Beanp(name="@(foo)")
+		@MarshalledProp(name="@(foo)")
 		public String f4 = "@(foo)";
 	}
 }

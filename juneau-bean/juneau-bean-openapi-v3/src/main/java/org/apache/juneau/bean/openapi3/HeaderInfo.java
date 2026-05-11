@@ -219,7 +219,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("x-example")
+	@MarshalledProp("x-example")
 	public Object getExample() { return example; }
 
 	/**
@@ -247,7 +247,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("$ref")
+	@MarshalledProp("$ref")
 	public String getRef() { return ref; }
 
 	/**
@@ -406,7 +406,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@Beanp("x-example")
+	@MarshalledProp("x-example")
 	public HeaderInfo setExample(Object value) {
 		example = value;
 		return this;
@@ -454,7 +454,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@Beanp("$ref")
+	@MarshalledProp("$ref")
 	public HeaderInfo setRef(String value) {
 		ref = value;
 		return this;

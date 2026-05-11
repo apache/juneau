@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"java:S1186" // Empty test method intentional for framework testing
 })
-class BeanpAnnotation_Test extends TestBase {
+class MarshalledPropAnnotation_Test extends TestBase {
 
 	public static class X1 {}
 
@@ -34,7 +34,7 @@ class BeanpAnnotation_Test extends TestBase {
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	Beanp a1 = BeanpAnnotation.create()
+	MarshalledProp a1 = MarshalledPropAnnotation.create()
 		.description("a")
 		.dictionary(X1.class)
 		.format("b")
@@ -47,7 +47,7 @@ class BeanpAnnotation_Test extends TestBase {
 		.wo("h")
 		.build();
 
-	Beanp a2 = BeanpAnnotation.create()
+	MarshalledProp a2 = MarshalledPropAnnotation.create()
 		.description("a")
 		.dictionary(X1.class)
 		.format("b")
@@ -85,7 +85,7 @@ class BeanpAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class D1 {
-		@Beanp(
+		@MarshalledProp(
 			description={ "a" },
 			dictionary=X1.class,
 			format="b",
@@ -101,7 +101,7 @@ class BeanpAnnotation_Test extends TestBase {
 	}
 
 	public static class D2 {
-		@Beanp(
+		@MarshalledProp(
 			description={ "a" },
 			dictionary=X1.class,
 			format="b",
@@ -116,11 +116,11 @@ class BeanpAnnotation_Test extends TestBase {
 		public int f;
 	}
 
-	Beanp d1, d2;
+	MarshalledProp d1, d2;
 	{
 		try {
-			d1 = D1.class.getField("f").getAnnotationsByType(Beanp.class)[0];
-			d2 = D2.class.getField("f").getAnnotationsByType(Beanp.class)[0];
+			d1 = D1.class.getField("f").getAnnotationsByType(MarshalledProp.class)[0];
+			d2 = D2.class.getField("f").getAnnotationsByType(MarshalledProp.class)[0];
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

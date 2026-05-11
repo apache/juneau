@@ -23,18 +23,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class BeancAnnotation_Test extends TestBase {
+class MarshalledCtorAnnotation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	Beanc a1 = BeancAnnotation.create()
+	MarshalledCtor a1 = MarshalledCtorAnnotation.create()
 		.description("a")
 		.properties("c")
 		.build();
 
-	Beanc a2 = BeancAnnotation.create()
+	MarshalledCtor a2 = MarshalledCtorAnnotation.create()
 		.description("a")
 		.properties("c")
 		.build();
@@ -64,7 +64,7 @@ class BeancAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class D1 {
-		@Beanc(
+		@MarshalledCtor(
 			description={ "a" },
 			properties="c"
 		)
@@ -72,18 +72,18 @@ class BeancAnnotation_Test extends TestBase {
 	}
 
 	public static class D2 {
-		@Beanc(
+		@MarshalledCtor(
 			description={ "a" },
 			properties="c"
 		)
 		public D2() {}
 	}
 
-	Beanc d1, d2;
+	MarshalledCtor d1, d2;
 	{
 		try {
-			d1 = D1.class.getConstructor().getAnnotationsByType(Beanc.class)[0];
-			d2 = D2.class.getConstructor().getAnnotationsByType(Beanc.class)[0];
+			d1 = D1.class.getConstructor().getAnnotationsByType(MarshalledCtor.class)[0];
+			d2 = D2.class.getConstructor().getAnnotationsByType(MarshalledCtor.class)[0];
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

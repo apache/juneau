@@ -45,6 +45,7 @@ public class MarshalledAnnotation {
 	 */
 	public static class Builder extends AnnotationObject.Builder {
 
+		private MarshalledAs as = MarshalledAs.DETECT;
 		private String[] description = {};
 		private Class<?>[] dictionary = new Class[0];
 		private Class<?> implClass = void.class;
@@ -82,6 +83,17 @@ public class MarshalledAnnotation {
 		 */
 		public Marshalled build() {
 			return new Object(this);
+		}
+
+		/**
+		 * Sets the {@link Marshalled#as()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder as(MarshalledAs value) {
+			as = value;
+			return this;
 		}
 
 		/**
@@ -323,6 +335,7 @@ public class MarshalledAnnotation {
 	})
 	private static class Object extends AnnotationObject implements Marshalled {
 
+		private final MarshalledAs as;
 		private final String[] description;
 		private final boolean findFluentSetters;
 		private final boolean unsorted;
@@ -348,6 +361,7 @@ public class MarshalledAnnotation {
 
 		Object(MarshalledAnnotation.Builder b) {
 			super(b);
+			as = b.as;
 			description = copyOf(b.description);
 			dictionary = copyOf(b.dictionary);
 			example = b.example;
@@ -369,6 +383,11 @@ public class MarshalledAnnotation {
 			wo = b.wo;
 			writeOnlyProperties = b.writeOnlyProperties;
 			xp = b.xp;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public MarshalledAs as() {
+			return as;
 		}
 
 		@Override /* Overridden from Marshalled */

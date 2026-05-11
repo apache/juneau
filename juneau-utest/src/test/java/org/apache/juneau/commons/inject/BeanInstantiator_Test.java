@@ -626,7 +626,7 @@ class BeanInstantiator_Test extends TestBase {
 		 * Tests that deprecated getInstance() methods are ignored in favor of non-deprecated ones.
 		 */
 		@Test
-		void c03_createBeanIgnoresDeprecatedGetInstance() {
+		void c03_createMarshalledIgnoresDeprecatedGetInstance() {
 			var bean = bc(C03_BeanWithDeprecatedGetInstance.class).run();
 
 			assertSame(C03_BeanWithDeprecatedGetInstance.INSTANCE, bean);
@@ -653,7 +653,7 @@ class BeanInstantiator_Test extends TestBase {
 		 * Tests that non-static getInstance() methods are ignored (only static factory methods are used).
 		 */
 		@Test
-		void c04_createBeanIgnoresNonStaticGetInstance() {
+		void c04_createMarshalledIgnoresNonStaticGetInstance() {
 			var bean = bc(C04_BeanWithNonStaticGetInstance.class).run();
 
 			assertInstanceOf(C04_BeanWithNonStaticGetInstance.class, bean);
@@ -1538,7 +1538,7 @@ class BeanInstantiator_Test extends TestBase {
 		 * with bean creation, allowing graceful deprecation of old constructor signatures.
 		 */
 		@Test
-		void d19_createBeanIgnoresDeprecatedConstructor() {
+		void d19_createMarshalledIgnoresDeprecatedConstructor() {
 			beanStore.add(String.class, "should-not-use-this");
 
 			var bean = bc(D19_BeanWithDeprecatedConstructor.class).run();
@@ -1573,7 +1573,7 @@ class BeanInstantiator_Test extends TestBase {
 		 * some constructor signatures cannot be satisfied.
 		 */
 		@Test
-		void d20_createBeanIgnoresUnresolvableConstructor() {
+		void d20_createMarshalledIgnoresUnresolvableConstructor() {
 			var bean = bc(D20_BeanWithUnresolvableConstructor.class).run();
 
 			assertInstanceOf(D20_BeanWithUnresolvableConstructor.class, bean);

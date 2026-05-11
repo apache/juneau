@@ -14,39 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.swaps;
+package org.apache.juneau.swap;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.swap.*;
 
 /**
- * Built-in object swap implementation class for the {@link MarshalledProp#format() @MarshalledProp(format)} annotation.
+ * A dynamic string swap that serializes objects via {@link Object#toString()} and deserializes via
+ * {@code fromString(String)}, {@code valueOf(String)}, or a single-{@code String}-argument constructor.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
- * </ul>
+ * <p>
+ * Installed automatically when a class is annotated with
+ * {@link org.apache.juneau.annotation.Marshalled @Marshalled}{@code (as=STRING)}.
+ *
+ * @param <T> The normal class type.
  */
-public class StringFormatSwap extends StringSwap<Object> {
+public class AutoStringSwap<T> extends StringSwap<T> {
 
-	private final String format;
+	private final ClassMeta<T> classMeta;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param format The string format string.
+	 * @param classMeta The class meta for the normal class.
 	 */
-	public StringFormatSwap(String format) {
-		this.format = format;
+	public AutoStringSwap(ClassMeta<T> classMeta) {
+		super(classMeta.inner());
+		this.classMeta = classMeta;
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	public String swap(BeanSession session, Object o) throws Exception {
-		return String.format(format, o);
+	public String swap(BeanSession session, T o) {
+		return o.toString();
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	public Object unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
-		return session.convertToType(f, hint);
+	public T unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
+		return classMeta.newInstanceFromString(null, s);
 	}
 }

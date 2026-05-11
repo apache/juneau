@@ -82,7 +82,7 @@ class BasicBeans_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class B {
-		@Beanp(name="*")
+		@MarshalledProp(name="*")
 		public Map<String,Integer> f1 = new TreeMap<>();
 
 		public static B create() {

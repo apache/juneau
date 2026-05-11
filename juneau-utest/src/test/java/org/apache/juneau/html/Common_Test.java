@@ -188,7 +188,7 @@ class Common_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// @Beanp.bpi annotation.
+	// @MarshalledProp.bpi annotation.
 	//====================================================================================================
 	@Test void a05_beanPropertyProperties() throws Exception {
 		var s = HtmlSerializer.create().sq().addKeyValueTableHeaders().build();
@@ -262,12 +262,12 @@ class Common_Test extends TestBase {
 	}
 
 	public static class E1 {
-		@Beanp(properties="f1") public E2 x1 = new E2();
-		@Beanp(properties="f1") public Map<String,Integer> x2 = m("f1",3,"f2",4);
-		@Beanp(properties="f1") public E2[] x3 = {new E2()};
-		@Beanp(properties="f1") public List<E2> x4 = l(new E2());
-		@Beanp(properties="f1") public JsonMap[] x5 = {JsonMap.of("f1",5,"f2",6)};
-		@Beanp(properties="f1") public List<JsonMap> x6 = l(JsonMap.of("f1",7,"f2",8));
+		@MarshalledProp(properties="f1") public E2 x1 = new E2();
+		@MarshalledProp(properties="f1") public Map<String,Integer> x2 = m("f1",3,"f2",4);
+		@MarshalledProp(properties="f1") public E2[] x3 = {new E2()};
+		@MarshalledProp(properties="f1") public List<E2> x4 = l(new E2());
+		@MarshalledProp(properties="f1") public JsonMap[] x5 = {JsonMap.of("f1",5,"f2",6)};
+		@MarshalledProp(properties="f1") public List<JsonMap> x6 = l(JsonMap.of("f1",7,"f2",8));
 	}
 
 	public static class E2 {
@@ -276,7 +276,7 @@ class Common_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// @Beanp.bpi annotation on list of beans.
+	// @MarshalledProp.bpi annotation on list of beans.
 	//====================================================================================================
 	@Test void a06_beanPropertyPropertiesOnListOfBeans() throws Exception {
 		var s = HtmlSerializer.DEFAULT_SQ;
@@ -302,7 +302,7 @@ class Common_Test extends TestBase {
 	}
 
 	public static class F {
-		@Beanp(properties="x2") public List<F> x1 = new LinkedList<>();
+		@MarshalledProp(properties="x2") public List<F> x1 = new LinkedList<>();
 		public int x2 = 2;
 	}
 
@@ -415,7 +415,7 @@ class Common_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// @Beanp(format) tests
+	// @MarshalledProp(format) tests
 	//====================================================================================================
 
 	@Test
@@ -438,30 +438,30 @@ class Common_Test extends TestBase {
 	}
 
 	public static class K {
-		@Beanp(format="%.2f")
+		@MarshalledProp(format="%.2f")
 		public float floatField = 3.14159f;
 
-		@Beanp(format="$%.2f")
+		@MarshalledProp(format="$%.2f")
 		public float floatWithCurrency = 19.987f;
 
-		@Beanp(format="%.3f")
+		@MarshalledProp(format="%.3f")
 		public double doubleField = 2.71828;
 
-		@Beanp(format="%05d")
+		@MarshalledProp(format="%05d")
 		public int intField = 42;
 
-		@Beanp(format="%016d")
+		@MarshalledProp(format="%016d")
 		public long longField = 1234567890L;
 
-		@Beanp(format="0x%06X")
+		@MarshalledProp(format="0x%06X")
 		public int hexField = 0xFF00FF;
 
-		@Beanp(format="%.3e")
+		@MarshalledProp(format="%.3e")
 		public double scientificField = 6.02214076e23;
 
 		public String name = "Test";
 
-		@Beanp(format="%.2f")
+		@MarshalledProp(format="%.2f")
 		private float privateField = 9.876f;
 
 		public float getPrivateField() { return privateField; }

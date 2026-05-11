@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.annotation.BeanIgnore;
+import org.apache.juneau.commons.annotation.MarshalledIgnore;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.annotation.BeanIgnore;
 
  * </ul>
  */
-@BeanIgnore
+@MarshalledIgnore
 public class StringRange {
 
 	private static HeaderElement parse(String value) {

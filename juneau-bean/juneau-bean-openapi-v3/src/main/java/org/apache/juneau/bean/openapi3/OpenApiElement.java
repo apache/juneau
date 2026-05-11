@@ -72,7 +72,7 @@ public abstract class OpenApiElement {
 	 * 	All the non-standard keys on this element.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	@Beanp("*")
+	@MarshalledProp("*")
 	public Set<String> extraKeys() {
 		return extra == null ? Collections.emptySet() : extra.keySet();
 	}
@@ -86,7 +86,7 @@ public abstract class OpenApiElement {
 	 * @param property The property name to retrieve.  Must not be <jk>null</jk>.
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
-	@Beanp("*")
+	@MarshalledProp("*")
 	public Object get(String property) {
 		assertArgNotNull(ARG_property, property);
 		return opt(extra).map(x -> x.get(property)).orElse(null);
@@ -130,7 +130,7 @@ public abstract class OpenApiElement {
 	 * @return This object
 	 * @throws RuntimeException if strict mode is enabled.
 	 */
-	@Beanp("*")
+	@MarshalledProp("*")
 	public OpenApiElement set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		if (strict)

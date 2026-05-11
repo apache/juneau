@@ -1077,7 +1077,7 @@ public class ParserSession extends BeanSession {
 	protected final ClassMeta<?> getClassMeta(String typeName, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 		BeanRegistry br = null;
 
-		// Resolve via @Beanp(dictionary={})
+		// Resolve via @MarshalledProp(dictionary={})
 		if (nn(pMeta)) {
 			br = pMeta.getBeanRegistry();
 			if (nn(br) && br.hasName(typeName))

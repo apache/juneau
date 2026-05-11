@@ -231,10 +231,10 @@ class MarkdownParser_Test {
 	}
 
 	public static class F {
-		@Beanp(name = "full_name")
+		@MarshalledProp(name = "full_name")
 		public String name;
 
-		@Beanp(name = "years")
+		@MarshalledProp(name = "years")
 		public int age;
 	}
 

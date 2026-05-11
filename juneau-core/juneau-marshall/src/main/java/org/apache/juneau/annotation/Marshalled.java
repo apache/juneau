@@ -51,6 +51,19 @@ import org.apache.juneau.swap.*;
 public @interface Marshalled {
 
 	/**
+	 * Specifies the marshalling strategy for this type.
+	 *
+	 * <p>
+	 * Defaults to {@link MarshalledAs#DETECT} (auto-detection).
+	 * Use {@link MarshalledAs#STRING} to serialize via {@code toString()} and deserialize via
+	 * {@code fromString}/{@code valueOf}/single-String constructor — equivalent to the former
+	 * {@code BeanStringSwap} pattern.
+	 *
+	 * @return The marshalling strategy.
+	 */
+	MarshalledAs as() default MarshalledAs.DETECT;
+
+	/**
 	 * Optional description for the exposed API.
 	 *
 	 * @return The annotation value.
@@ -65,7 +78,7 @@ public @interface Marshalled {
 	 * The list of classes that make up the bean dictionary for all properties in this class and all subclasses.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link Beanp#dictionary()}
+	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
 	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
@@ -157,7 +170,7 @@ public @interface Marshalled {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanFactory}
-	 * 	<li class='ja'>{@link Beanp#factory()}
+	 * 	<li class='ja'>{@link MarshalledProp#factory()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanStore(org.apache.juneau.commons.inject.BeanStore)}
 	 * </ul>
 	 *

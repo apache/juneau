@@ -65,14 +65,14 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Classes are ignored if any of the following are true:
  * <ul>
- * 	<li>Classes annotated with {@link BeanIgnore @BeanIgnore}.
+ * 	<li>Classes annotated with {@link MarshalledIgnore @MarshalledIgnore}.
  * 	<li>Non-static member classes.
  * </ul>
  *
  * <p>
  * Members/constructors are ignored if any of the following are true:
  * <ul>
- * 	<li>Members/constructors annotated with {@link BeanIgnore @BeanIgnore}.
+ * 	<li>Members/constructors annotated with {@link MarshalledIgnore @MarshalledIgnore}.
  * 	<li>Deprecated members/constructors.
  * </ul>
  *
@@ -133,7 +133,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasReturnTypeParent(List.class)
 			&& mi.hasParameterTypesLenient(BeanSession.class)
-			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(BeanIgnore.class, m2));
+			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(MarshalledIgnore.class, m2));
 		// @formatter:on
 	}
 
@@ -143,7 +143,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 			cs.isNotDeprecated()
 				&& cs.isVisible(bc.getBeanConstructorVisibility())
 				&& cs.hasParameterTypeParents(rt)
-				&& ! bc.getAnnotationProvider().has(BeanIgnore.class, cs);
+				&& ! bc.getAnnotationProvider().has(MarshalledIgnore.class, cs);
 		// @formatter:on
 	}
 
@@ -156,12 +156,12 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(BeanIgnore.class, m2));
+			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(MarshalledIgnore.class, m2));
 		// @formatter:on
 	}
 
 	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
-		return ci.isNonStaticMemberClass() || bc.getAnnotationProvider().has(BeanIgnore.class, ci);
+		return ci.isNonStaticMemberClass() || bc.getAnnotationProvider().has(MarshalledIgnore.class, ci);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -272,7 +272,7 @@ class RestOp_BeanConfig_Test extends TestBase {
 
 	public static class X1 {
 		public int a;
-		@Beanp("_b") public String b;
+		@MarshalledProp("_b") public String b;
 
 		X1 init() {
 			a = 1;
@@ -284,7 +284,7 @@ class RestOp_BeanConfig_Test extends TestBase {
 	@Marshalled(properties="_b,a")
 	public static class X2 {
 		public int a;
-		@Beanp("_b") public String b;
+		@MarshalledProp("_b") public String b;
 
 		X2 init() {
 			a = 1;

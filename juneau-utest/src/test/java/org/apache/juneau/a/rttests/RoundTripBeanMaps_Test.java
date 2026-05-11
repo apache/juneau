@@ -271,7 +271,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	@MethodSource("testers")
 	void a05_implMap2(RoundTrip_Tester t) throws Exception {
 		if (isMarkdown(t))
-			return;  // @BeanIgnore / getter-only properties
+			return;  // @MarshalledIgnore / getter-only properties
 		var b = new A(1);
 		b = t.roundTrip(b);
 		if (t.returnOriginalObject || t.getParser() == null)
@@ -301,13 +301,13 @@ class RoundTripBeanMaps_Test extends TestBase {
 
 	public static class A {
 
-		@BeanIgnore
+		@MarshalledIgnore
 		public int f1, f2;
 		public int f3, f4;
 
 		private int f5, f6;
 
-		@BeanIgnore
+		@MarshalledIgnore
 		public int getF5() { return f5; }
 		public void setF5(int v) { f5 = v; }
 
@@ -970,8 +970,8 @@ class RoundTripBeanMaps_Test extends TestBase {
 			return t;
 		}
 
-		@BeanIgnore public KEnum getA() { return KEnum.FOO; }
-		@Beanp(name="a") public String getA2() { return a.toString(); }
+		@MarshalledIgnore public KEnum getA() { return KEnum.FOO; }
+		@MarshalledProp(name="a") public String getA2() { return a.toString(); }
 		public void setA(KEnum v) {
 			// This method should not be interpreted as the setter for this
 			// property because it doesn't match the getter return type above.

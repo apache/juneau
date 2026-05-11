@@ -347,7 +347,7 @@ public class Items extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("$ref")
+	@MarshalledProp("$ref")
 	public String getRef() { return ref; }
 
 	/**
@@ -724,7 +724,7 @@ public class Items extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@Beanp("$ref")
+	@MarshalledProp("$ref")
 	public Items setRef(Object value) {
 		ref = s(value);
 		return this;

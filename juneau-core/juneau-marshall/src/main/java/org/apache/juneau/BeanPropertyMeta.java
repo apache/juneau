@@ -165,7 +165,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return this;
 		}
 
-		private static ObjectSwap beanpSwap(AnnotationInfo<Beanp> ai) {
+		private static ObjectSwap beanpSwap(AnnotationInfo<MarshalledProp> ai) {
 			var p = ai.inner();
 			if (! p.format().isEmpty())
 				return BeanInstantiator.of(ObjectSwap.class).type(StringFormatSwap.class).addBean(String.class, p.format()).run();
@@ -321,9 +321,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			var si = setter;
 
 			if (nn(innerField)) {
-				var lp = ap.find(Beanp.class, ifi);
+				var lp = ap.find(MarshalledProp.class, ifi);
 				if (nn(field) || ne(lp)) {
-					// Only use field type if it's a bean property or has @Beanp annotation.
+					// Only use field type if it's a bean property or has @MarshalledProp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
 					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).orElse(null), innerField.getFieldType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
@@ -345,7 +345,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			}
 
 			if (nn(getter)) {
-				var lp = ap.find(Beanp.class, gi);
+				var lp = ap.find(MarshalledProp.class, gi);
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).orElse(null), getter.getReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, gi));
@@ -365,7 +365,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			}
 
 			if (nn(setter)) {
-				var lp = ap.find(Beanp.class, si);
+				var lp = ap.find(MarshalledProp.class, si);
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).orElse(null), setter.getParameterTypes().get(0), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, si));
@@ -490,11 +490,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final boolean isUri;                                     // True if this is a URL/URI or annotated with @URI.
 	private final String name;                                       // The name of the property.
 	private final Object overrideValue;                              // The bean property value (if it's an overridden delegate).
-	private final List<String> properties;                           // The value of the @Beanp(properties) annotation (unmodifiable).
+	private final List<String> properties;                           // The value of the @MarshalledProp(properties) annotation (unmodifiable).
 	private final ClassMeta<?> rawTypeMeta;                          // The real class type of the bean property.
 	private final boolean readOnly;                                  // True if this property is read-only.
 	private final MethodInfo setter;                                 // The bean property setter.
-	private final ObjectSwap swap;                                   // ObjectSwap defined only via @Beanp annotation.
+	private final ObjectSwap swap;                                   // ObjectSwap defined only via @MarshalledProp annotation.
 	private final ClassMeta<?> typeMeta;                             // The transformed class type of the bean property.
 	private final boolean writeOnly;                                 // True if this property is write-only.
 
@@ -819,7 +819,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * <p>
 	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
-	 * 	<li>Dictionary defined via {@link Beanp#dictionary() @Beanp(dictionary)}.
+	 * 	<li>Dictionary defined via {@link MarshalledProp#dictionary() @MarshalledProp(dictionary)}.
 	 * 	<li>Dictionary defined via {@link BeanContext.Builder#beanDictionary(Class...)}.
 	 * </ol>
 	 *
@@ -907,7 +907,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public String getName() { return name; }
 
 	/**
-	 * Returns the override list of properties defined through a {@link Beanp#properties() @Beanp(properties)} annotation
+	 * Returns the override list of properties defined through a {@link MarshalledProp#properties() @MarshalledProp(properties)} annotation
 	 * on this property.
 	 *
 	 * @return An unmodifiable list of override properties, or <jk>null</jk> if annotation not specified.
@@ -1344,7 +1344,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	private Object swap(BeanSession session, Object o) throws SerializeException {
 		try {
-			// First use swap defined via @Beanp.
+			// First use swap defined via @MarshalledProp.
 			if (nn(swap))
 				return swap.swap(session, o);
 			if (o == null)

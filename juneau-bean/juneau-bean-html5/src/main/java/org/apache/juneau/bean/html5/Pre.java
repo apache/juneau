@@ -166,7 +166,7 @@ public class Pre extends HtmlElementMixed {
 	}
 
 	@Xml(format = MIXED_PWS)
-	@Beanp(dictionary = HtmlBeanDictionary.class, name = "c")
+	@MarshalledProp(dictionary = HtmlBeanDictionary.class, name = "c")
 	@Override
 	public List<Object> getChildren() { return super.getChildren(); }
 

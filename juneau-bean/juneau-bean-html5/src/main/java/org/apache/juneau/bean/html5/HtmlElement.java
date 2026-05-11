@@ -202,7 +202,7 @@ public abstract class HtmlElement {
 	 * @return The attributes of this element.
 	 */
 	@Xml(format = ATTRS)
-	@Beanp("a")
+	@MarshalledProp("a")
 	public java.util.Map<String,Object> getAttrs() { return attrs; }
 
 	/**
@@ -1046,7 +1046,7 @@ public abstract class HtmlElement {
 	 * @param value The new attributes for this element.
 	 * @return This object.
 	 */
-	@Beanp("a")
+	@MarshalledProp("a")
 	public HtmlElement setAttrs(java.util.Map<String,Object> value) {
 		if (nn(value)) {
 			value.entrySet().forEach(x -> {

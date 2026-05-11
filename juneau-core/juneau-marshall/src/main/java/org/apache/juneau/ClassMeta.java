@@ -1513,6 +1513,23 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 		var ap = beanContext.getAnnotationProvider();
 		ap.find(Swap.class, this).stream().map(AnnotationInfo::inner).forEach(x -> list.add(createSwap(x)));
+
+		// @Marshalled(as=STRING) installs an AutoStringSwap before any auto-detection.
+		if (list.isEmpty()) {
+			var marshalledList = ap.find(Marshalled.class, this);
+			if (marshalledList.stream().anyMatch(x -> x.inner().as() == MarshalledAs.STRING))
+				list.add(new AutoStringSwap<>(this));
+		}
+
+		// @MarshalledIgnore on TYPE — skip entirely: serialize as null, parse as null.
+		// Use String.class (not Object.class) as swapClass so sType.isObject() stays false
+		// and the serializer correctly emits "null" when swap() returns null.
+		if (list.isEmpty() && ap.has(MarshalledIgnore.class, this))
+			list.add(new ObjectSwap<T,String>(inner(), String.class) {
+				@Override public String swap(BeanSession session, T o) { return null; }
+				@Override public T unswap(BeanSession session, String s, ClassMeta<?> hint) { return null; }
+			});
+
 		var ds = DefaultSwaps.find(this);
 		if (ds == null && !isStreamable()) {
 			ds = AutoObjectSwap.find(beanContext, this);

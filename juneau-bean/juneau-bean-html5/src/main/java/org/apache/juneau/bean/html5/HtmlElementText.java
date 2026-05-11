@@ -72,7 +72,7 @@ public class HtmlElementText extends HtmlElement {
 	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
 	 */
 	@Xml(format = XmlFormat.TEXT)
-	@Beanp("c")
+	@MarshalledProp("c")
 	public Object getText() { return text; }
 
 	@Override /* Overridden from HtmlElement */
@@ -399,7 +399,7 @@ public class HtmlElementText extends HtmlElement {
 	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
 	 * @return This object.
 	 */
-	@Beanp("c")
+	@MarshalledProp("c")
 	public HtmlElement setText(Object text) {
 		this.text = text;
 		return this;

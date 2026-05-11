@@ -77,7 +77,7 @@ public class JsonSimpleExample {
 		var l3 = jsonParser.parse(json, Long.class);
 		var f3 = jsonParser.parse(json, Float.class);
 
-		// The object above can be parsed thanks to the @Beanc(properties = id,name) annotation on Pojo
+		// The object above can be parsed thanks to the @MarshalledCtor(properties = id,name) annotation on Pojo
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
 	}
 }

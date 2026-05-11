@@ -370,7 +370,7 @@ class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			return x;
 		}
 
-		@Beanp
+		@MarshalledProp
 		public HBuilder fooBar(int fooBar) {
 			this.fooBar = fooBar;
 			return this;

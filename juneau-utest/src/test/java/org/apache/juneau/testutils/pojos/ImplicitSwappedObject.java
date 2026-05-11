@@ -20,7 +20,7 @@ import static org.apache.juneau.utest.utils.Constants.*;
 
 import org.apache.juneau.annotation.*;
 
-@BeanIgnore
+@Marshalled(as=MarshalledAs.STRING)
 public class ImplicitSwappedObject {
 	public boolean wasUnswapped;
 

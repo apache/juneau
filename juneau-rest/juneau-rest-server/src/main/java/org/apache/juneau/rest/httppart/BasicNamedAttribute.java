@@ -34,7 +34,7 @@ import org.apache.juneau.http.part.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
-@BeanIgnore
+@Marshalled(as=MarshalledAs.STRING)
 public class BasicNamedAttribute implements NamedAttribute {
 
 	/**

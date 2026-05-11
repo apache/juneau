@@ -290,7 +290,7 @@ class Xml_Test extends TestBase {
 
 	@Marshalled(typeName="foo")
 	public static class J1 {
-		@Beanp(properties="f2") public List<J2> f1 = l(new J2());
+		@MarshalledProp(properties="f2") public List<J2> f1 = l(new J2());
 	}
 
 	@Marshalled(typeName="bar")
@@ -459,8 +459,8 @@ class Xml_Test extends TestBase {
 
 	@Marshalled(properties="url2,id2,name")
 	public static class O {
-		@Beanp(name="url2") @Xml(format=ELEMENT) public URL url;
-		@Beanp(name="id2") public int id;
+		@MarshalledProp(name="url2") @Xml(format=ELEMENT) public URL url;
+		@MarshalledProp(name="id2") public int id;
 		public String name;
 		public O() {}
 		public O(String url, int id, String name) {
@@ -491,8 +491,8 @@ class Xml_Test extends TestBase {
 
 	@Marshalled(properties="url2,id2,name")
 	public static class P {
-		@Beanp(name="url2") @Xml(format=ATTR) public URL url;
-		@Beanp(name="id2") @Xml(format=ATTR) public int id;
+		@MarshalledProp(name="url2") @Xml(format=ATTR) public URL url;
+		@MarshalledProp(name="id2") @Xml(format=ATTR) public int id;
 		public String name;
 		public P() {}
 		public P(String url, int id, String name) {
@@ -992,7 +992,7 @@ class Xml_Test extends TestBase {
 		@Xml(format=ATTR)
 		public String f2;
 
-		@Beanp(name="x3")
+		@MarshalledProp(name="x3")
 		@Xml(format=ATTR, prefix="nsf3", namespace="http://nsf3")
 		public String f3;
 

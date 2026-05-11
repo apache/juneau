@@ -24,15 +24,15 @@ import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.function.*;
 
 /**
- * Utility classes and methods for the {@link Beanp @Beanp} annotation.
+ * Utility classes and methods for the {@link MarshalledProp @MarshalledProp} annotation.
  *
  */
-public class BeanpAnnotation {
+public class MarshalledPropAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private BeanpAnnotation() {}
+	private MarshalledPropAnnotation() {}
 
 	/**
 	 * Builder class.
@@ -61,15 +61,15 @@ public class BeanpAnnotation {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(Beanp.class);
+			super(MarshalledProp.class);
 		}
 
 		/**
-		 * Instantiates a new {@link Beanp @Beanp} object initialized with this builder.
+		 * Instantiates a new {@link MarshalledProp @MarshalledProp} object initialized with this builder.
 		 *
-		 * @return A new {@link Beanp @Beanp} object.
+		 * @return A new {@link MarshalledProp @MarshalledProp} object.
 		 */
-		public Beanp build() {
+		public MarshalledProp build() {
 			return new Object(this);
 		}
 
@@ -85,7 +85,7 @@ public class BeanpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanp#dictionary()} property on this annotation.
+		 * Sets the {@link MarshalledProp#dictionary()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -96,7 +96,7 @@ public class BeanpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanp#elementType()} property on this annotation.
+		 * Sets the {@link MarshalledProp#elementType()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -107,7 +107,7 @@ public class BeanpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanp#factory()} property on this annotation.
+		 * Sets the {@link MarshalledProp#factory()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -119,7 +119,7 @@ public class BeanpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanp#format()} property on this annotation.
+		 * Sets the {@link MarshalledProp#format()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -130,7 +130,7 @@ public class BeanpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanp#name()} property on this annotation.
+		 * Sets the {@link MarshalledProp#name()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -141,7 +141,7 @@ public class BeanpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanp#params()} property on this annotation.
+		 * Sets the {@link MarshalledProp#params()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -152,7 +152,7 @@ public class BeanpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanp#properties()} property on this annotation.
+		 * Sets the {@link MarshalledProp#properties()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -163,7 +163,7 @@ public class BeanpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanp#ro()} property on this annotation.
+		 * Sets the {@link MarshalledProp#ro()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -174,7 +174,7 @@ public class BeanpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanp#type()} property on this annotation.
+		 * Sets the {@link MarshalledProp#type()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -185,7 +185,7 @@ public class BeanpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanp#value()} property on this annotation.
+		 * Sets the {@link MarshalledProp#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -196,7 +196,7 @@ public class BeanpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanp#wo()} property on this annotation.
+		 * Sets the {@link MarshalledProp#wo()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -211,7 +211,7 @@ public class BeanpAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AnnotationObject implements Beanp {
+	private static class Object extends AnnotationObject implements MarshalledProp {
 
 		private final String[] description;
 		private final Class<?> type;
@@ -227,7 +227,7 @@ public class BeanpAnnotation {
 		private final String ro;
 		private final String wo;
 
-		Object(BeanpAnnotation.Builder b) {
+		Object(MarshalledPropAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
 			dictionary = copyOf(b.dictionary);
@@ -243,58 +243,58 @@ public class BeanpAnnotation {
 			wo = b.wo;
 		}
 
-		@Override /* Overridden from Beanp */
+		@Override /* Overridden from MarshalledProp */
 		public Class<?>[] dictionary() {
 			return dictionary;
 		}
 
-		@Override /* Overridden from Beanp */
+		@Override /* Overridden from MarshalledProp */
 		public Class<?> elementType() {
 			return elementType;
 		}
 
-		@Override /* Overridden from Beanp */
+		@Override /* Overridden from MarshalledProp */
 		@SuppressWarnings("rawtypes")
 		public Class<? extends BeanFactory> factory() {
 			return factory;
 		}
 
-		@Override /* Overridden from Beanp */
+		@Override /* Overridden from MarshalledProp */
 		public String format() {
 			return format;
 		}
 
-		@Override /* Overridden from Beanp */
+		@Override /* Overridden from MarshalledProp */
 		public String name() {
 			return name;
 		}
 
-		@Override /* Overridden from Beanp */
+		@Override /* Overridden from MarshalledProp */
 		public Class<?>[] params() {
 			return params;
 		}
 
-		@Override /* Overridden from Beanp */
+		@Override /* Overridden from MarshalledProp */
 		public String properties() {
 			return properties;
 		}
 
-		@Override /* Overridden from Beanp */
+		@Override /* Overridden from MarshalledProp */
 		public String ro() {
 			return ro;
 		}
 
-		@Override /* Overridden from Beanp */
+		@Override /* Overridden from MarshalledProp */
 		public Class<?> type() {
 			return type;
 		}
 
-		@Override /* Overridden from Beanp */
+		@Override /* Overridden from MarshalledProp */
 		public String value() {
 			return value;
 		}
 
-		@Override /* Overridden from Beanp */
+		@Override /* Overridden from MarshalledProp */
 		public String wo() {
 			return wo;
 		}
@@ -306,7 +306,7 @@ public class BeanpAnnotation {
 	}
 
 	/** Default value */
-	public static final Beanp DEFAULT = create().build();
+	public static final MarshalledProp DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.

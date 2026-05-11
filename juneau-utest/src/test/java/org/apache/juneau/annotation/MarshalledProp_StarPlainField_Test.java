@@ -25,26 +25,26 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.Test;
 
 /**
- * {@link Beanp @Beanp} with name/value {@code "*"} on non-{@link Map} fields exposes a normal property named after the
+ * {@link MarshalledProp @MarshalledProp} with name/value {@code "*"} on non-{@link Map} fields exposes a normal property named after the
  * field; {@code Map} fields keep the dyna property {@code *}.
  */
-class Beanp_StarPlainField_Test extends TestBase {
+class MarshalledProp_StarPlainField_Test extends TestBase {
 
-	/** {@code *} via shorthand {@link Beanp#value()}. */
+	/** {@code *} via shorthand {@link MarshalledProp#value()}. */
 	public static class A {
-		@Beanp("*")
+		@MarshalledProp("*")
 		public String taggedValue;
 	}
 
-	/** {@code *} via {@link Beanp#name()}. */
+	/** {@code *} via {@link MarshalledProp#name()}. */
 	public static class B {
-		@Beanp(name = "*")
+		@MarshalledProp(name = "*")
 		public int count;
 	}
 
 	/** Dynamic {@code Map} field must remain the dyna property {@code *}. */
 	public static class C {
-		@Beanp("*")
+		@MarshalledProp("*")
 		public Map<String, Object> extra = new LinkedHashMap<>();
 	}
 

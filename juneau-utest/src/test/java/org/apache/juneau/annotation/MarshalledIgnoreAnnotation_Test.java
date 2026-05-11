@@ -26,17 +26,17 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"java:S1186" // Empty test method intentional for framework testing
 })
-class BeanIgnoreAnnotation_Test extends TestBase {
+class MarshalledIgnoreAnnotation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	BeanIgnore a1 = BeanIgnoreAnnotation.create()
+	MarshalledIgnore a1 = MarshalledIgnoreAnnotation.create()
 		.description("a")
 		.build();
 
-	BeanIgnore a2 = BeanIgnoreAnnotation.create()
+	MarshalledIgnore a2 = MarshalledIgnoreAnnotation.create()
 		.description("a")
 		.build();
 
@@ -65,17 +65,17 @@ class BeanIgnoreAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore(
+	@MarshalledIgnore(
 		description={ "a" }
 	)
 	public static class D1 {}
-	BeanIgnore d1 = D1.class.getAnnotationsByType(BeanIgnore.class)[0];
+	MarshalledIgnore d1 = D1.class.getAnnotationsByType(MarshalledIgnore.class)[0];
 
-	@BeanIgnore(
+	@MarshalledIgnore(
 		description={ "a" }
 	)
 	public static class D2 {}
-	BeanIgnore d2 = D2.class.getAnnotationsByType(BeanIgnore.class)[0];
+	MarshalledIgnore d2 = D2.class.getAnnotationsByType(MarshalledIgnore.class)[0];
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);

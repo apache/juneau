@@ -173,7 +173,7 @@ public class MediaType extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("x-example")
+	@MarshalledProp("x-example")
 	public Object getExample() { return example; }
 
 	/**
@@ -244,7 +244,7 @@ public class MediaType extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@Beanp("x-example")
+	@MarshalledProp("x-example")
 	public MediaType setExample(Object value) {
 		example = value;
 		return this;

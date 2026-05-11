@@ -22,16 +22,16 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Dynamically applies a {@link Beanp @Beanp} annotation to specified classes, methods, or fields.
+ * Dynamically applies a {@link MarshalledIgnore @MarshalledIgnore} annotation to specified classes, methods, or fields.
  *
  * <p>
  * This annotation separates the <b>targeting</b> concern ({@link #on()}/{@link #onClass()}) from the
- * <b>content</b> concern ({@link #value()}), enabling {@link Beanp @Beanp} to be a pure data annotation
+ * <b>content</b> concern ({@link #value()}), enabling {@link MarshalledIgnore @MarshalledIgnore} to be a pure data annotation
  * without marshall-specific application machinery.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@BeanpApply</ja>(on=<js>"com.example.Foo.bar"</js>, value=<ja>@Beanp</ja>(ro=<js>"true"</js>))
+ * 	<ja>@MarshalledIgnoreApply</ja>(on=<js>"com.example.Foo"</js>, value=<ja>@MarshalledIgnore</ja>())
  * 	<jk>public class</jk> MyConfig {}
  * </p>
  *
@@ -42,19 +42,22 @@ import java.lang.annotation.*;
 @Documented
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
-@Repeatable(BeanpApply.Array.class)
-@ContextApply(BeanpApplyAnnotation.Applier.class)
-public @interface BeanpApply {
+@Repeatable(MarshalledIgnoreApply.Array.class)
+@ContextApply(MarshalledIgnoreApplyAnnotation.Applier.class)
+public @interface MarshalledIgnoreApply {
 
 	/**
-	 * The {@link Beanp @Beanp} annotation to apply.
+	 * The {@link MarshalledIgnore @MarshalledIgnore} annotation to apply.
 	 *
 	 * @return The annotation value.
 	 */
-	Beanp value();
+	MarshalledIgnore value();
 
 	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
+	 *
+	 * <p>
+	 * Identifies the targets this annotation applies to using fully-qualified names.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
@@ -79,7 +82,7 @@ public @interface BeanpApply {
 	Class<?>[] onClass() default {};
 
 	/**
-	 * A collection of {@link BeanpApply @BeanpApply annotations}.
+	 * A collection of {@link MarshalledIgnoreApply @MarshalledIgnoreApply annotations}.
 	 */
 	@Documented
 	@Target({ TYPE, METHOD })
@@ -91,6 +94,6 @@ public @interface BeanpApply {
 		 *
 		 * @return The annotation value.
 		 */
-		BeanpApply[] value();
+		MarshalledIgnoreApply[] value();
 	}
 }

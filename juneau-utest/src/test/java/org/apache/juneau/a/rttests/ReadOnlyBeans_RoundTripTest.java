@@ -50,7 +50,7 @@ class ReadOnlyBeans_RoundTripTest extends RoundTripTest_Base {
 		private B f1;
 		private final B f2;
 
-		@Beanc(properties="f2")
+		@MarshalledCtor(properties="f2")
 		public A(B f2) {
 			this.f2 = f2;
 		}
@@ -70,7 +70,7 @@ class ReadOnlyBeans_RoundTripTest extends RoundTripTest_Base {
 		private int f1;
 		private final String f2;
 
-		@Beanc(properties="f2")
+		@MarshalledCtor(properties="f2")
 		public B(String sField) {
 			this.f2 = sField;
 		}

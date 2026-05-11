@@ -27,20 +27,20 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Utility classes and methods for the {@link BeanIgnoreApply @BeanIgnoreApply} annotation.
+ * Utility classes and methods for the {@link MarshalledPropApply @MarshalledPropApply} annotation.
  *
  */
-public class BeanIgnoreApplyAnnotation {
+public class MarshalledPropApplyAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private BeanIgnoreApplyAnnotation() {}
+	private MarshalledPropApplyAnnotation() {}
 
 	/**
-	 * Applies targeted {@link BeanIgnoreApply} annotations to a {@link org.apache.juneau.Context.Builder}.
+	 * Applies targeted {@link MarshalledPropApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<BeanIgnoreApply,Context.Builder> {
+	public static class Applier extends AnnotationApplier<MarshalledPropApply,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -48,12 +48,12 @@ public class BeanIgnoreApplyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(BeanIgnoreApply.class, Context.Builder.class, vr);
+			super(MarshalledPropApply.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<BeanIgnoreApply> ai, Context.Builder b) {
-			BeanIgnoreApply a = ai.inner();
+		public void apply(AnnotationInfo<MarshalledPropApply> ai, Context.Builder b) {
+			MarshalledPropApply a = ai.inner();
 			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
 				return;
 			b.annotations(a);
@@ -69,22 +69,22 @@ public class BeanIgnoreApplyAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
-		BeanIgnore value = BeanIgnoreAnnotation.DEFAULT;
+		MarshalledProp value = MarshalledPropAnnotation.DEFAULT;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(BeanIgnoreApply.class);
+			super(MarshalledPropApply.class);
 		}
 
 		/**
-		 * Sets the {@link BeanIgnoreApply#value()} property on this annotation.
+		 * Sets the {@link MarshalledPropApply#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder value(BeanIgnore value) {
+		public Builder value(MarshalledProp value) {
 			this.value = value;
 			return this;
 		}
@@ -144,11 +144,11 @@ public class BeanIgnoreApplyAnnotation {
 		}
 
 		/**
-		 * Instantiates a new {@link BeanIgnoreApply @BeanIgnoreApply} object initialized with this builder.
+		 * Instantiates a new {@link MarshalledPropApply @MarshalledPropApply} object initialized with this builder.
 		 *
-		 * @return A new {@link BeanIgnoreApply} object.
+		 * @return A new {@link MarshalledPropApply} object.
 		 */
-		public BeanIgnoreApply build() {
+		public MarshalledPropApply build() {
 			return new Object(this);
 		}
 	}
@@ -156,33 +156,33 @@ public class BeanIgnoreApplyAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedOnClassAnnotationObject implements BeanIgnoreApply {
+	private static class Object extends AppliedOnClassAnnotationObject implements MarshalledPropApply {
 
-		private final BeanIgnore value;
+		private final MarshalledProp value;
 
-		Object(BeanIgnoreApplyAnnotation.Builder b) {
+		Object(MarshalledPropApplyAnnotation.Builder b) {
 			super(b);
 			value = b.value;
 		}
 
-		@Override /* Overridden from BeanIgnoreApply */
-		public BeanIgnore value() {
+		@Override /* Overridden from MarshalledPropApply */
+		public MarshalledProp value() {
 			return value;
 		}
 
-		@Override /* Overridden from BeanIgnoreApply */
+		@Override /* Overridden from MarshalledPropApply */
 		public String[] on() {
 			return super.on();
 		}
 
-		@Override /* Overridden from BeanIgnoreApply */
+		@Override /* Overridden from MarshalledPropApply */
 		public Class<?>[] onClass() {
 			return super.onClass();
 		}
 	}
 
 	/** Default value */
-	public static final BeanIgnoreApply DEFAULT = create().build();
+	public static final MarshalledPropApply DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -219,7 +219,7 @@ public class BeanIgnoreApplyAnnotation {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(BeanIgnoreApply a) {
+	public static boolean empty(MarshalledPropApply a) {
 		return a == null || DEFAULT.equals(a);
 	}
 }

@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.annotation.BeanIgnore;
+import org.apache.juneau.commons.annotation.MarshalledIgnore;
 import org.apache.juneau.commons.collections.*;
 
 /**
@@ -53,7 +53,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
-@BeanIgnore
+@MarshalledIgnore
 public class MediaRanges {
 
 	/** Represents an empty media ranges object. */

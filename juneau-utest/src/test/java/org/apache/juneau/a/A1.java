@@ -26,7 +26,7 @@ public class A1 {
 	int f3;
 	private int f4;
 
-	@BeanIgnore
+	@MarshalledIgnore
 	private int f5, f6, f7, f8;
 
 	public int getF5() { return f5; }
@@ -98,7 +98,7 @@ public class A1 {
 		int f3;
 		private int f4;
 
-		@BeanIgnore
+		@MarshalledIgnore
 		private int f5, f6, f7, f8;
 
 		public int getF5() { return f5; }
@@ -122,7 +122,7 @@ public class A1 {
 		int f3;
 		private int f4;
 
-		@BeanIgnore
+		@MarshalledIgnore
 		private int f5, f6, f7, f8;
 
 		public int getF5() { return f5; }
@@ -146,7 +146,7 @@ public class A1 {
 		int f3;
 		private int f4;
 
-		@BeanIgnore
+		@MarshalledIgnore
 		private int f5, f6, f7, f8;
 
 		public int getF5() { return f5; }
@@ -170,7 +170,7 @@ public class A1 {
 		int f3;
 		private int f4;
 
-		@BeanIgnore
+		@MarshalledIgnore
 		private int f5, f6, f7, f8;
 
 		public int getF5() { return f5; }

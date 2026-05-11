@@ -28,14 +28,14 @@ import org.junit.jupiter.api.*;
 class ReadWriteOnlyProperties_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Beanp(ro/wo)
+	// @MarshalledProp(ro/wo)
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A {
-		@Beanp(ro="true")
+		@MarshalledProp(ro="true")
 		public int f1;
 
-		@Beanp(wo="true")
+		@MarshalledProp(wo="true")
 		public int f2;
 
 		static A create() {
@@ -62,8 +62,8 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 
 	@Marshalled(readOnlyProperties="f1", writeOnlyProperties="f2")
 	public static class B {
-		@Beanp(ro="true") public int f1;
-		@Beanp(wo="true") public int f2;
+		@MarshalledProp(ro="true") public int f1;
+		@MarshalledProp(wo="true") public int f2;
 
 		static B create() {
 			var x = new B();
@@ -86,8 +86,8 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 	@MarshalledApply(on="Dummy1",value=@Marshalled(readOnlyProperties="f1",writeOnlyProperties="f2"))
 	@MarshalledApply(on="Bc",value=@Marshalled(readOnlyProperties="f1",writeOnlyProperties="f2"))
 	@MarshalledApply(on="Dummy2",value=@Marshalled(readOnlyProperties="f1",writeOnlyProperties="f2"))
-	@BeanpApply(on="Bc.f1",value=@Beanp(ro="true"))
-	@BeanpApply(on="Bc.f2",value=@Beanp(wo="true"))
+	@MarshalledPropApply(on="Bc.f1",value=@MarshalledProp(ro="true"))
+	@MarshalledPropApply(on="Bc.f2",value=@MarshalledProp(wo="true"))
 	private static class BcConfig {}
 
 	public static class Bc {

@@ -172,7 +172,7 @@ class AutoListSwapTest extends TestBase {
 	// Ignore class
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore
+	@MarshalledIgnore
 	public static class D01 {
 		public List<String> toList() {
 			return STRINGLIST;
@@ -194,7 +194,7 @@ class AutoListSwapTest extends TestBase {
 		assertNull(find(D02.D02A.class));
 	}
 
-	@BeanIgnoreApply(on="D01c",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="D01c",value=@MarshalledIgnore())
 	private static class D01cConfig {}
 
 	public static class D01c {
@@ -222,11 +222,11 @@ class AutoListSwapTest extends TestBase {
 	// Ignore swap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnoreApply(on="E01c.toList",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="E01c.toList",value=@MarshalledIgnore())
 	private static class E01Config {}
 
 	public static class E01 {
-		@BeanIgnore
+		@MarshalledIgnore
 		public List<String> toList() {
 			return STRINGLIST;
 		}
@@ -286,14 +286,14 @@ class AutoListSwapTest extends TestBase {
 	// Ignore unswap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnoreApply(on="F01c.create",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="F01c.create",value=@MarshalledIgnore())
 	private static class F01Config {}
 
 	public static class F01 {
 		public List<String> toList() {
 			return STRINGLIST;
 		}
-		@BeanIgnore
+		@MarshalledIgnore
 		public static F01 create(List<String> o) {
 			return null;
 		}
@@ -387,11 +387,11 @@ class AutoListSwapTest extends TestBase {
 	// Ignore constructor
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnoreApply(on="G01c(List)",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="G01c(List)",value=@MarshalledIgnore())
 	private static class G01Config {}
 
 	public static class G01 {
-		@BeanIgnore
+		@MarshalledIgnore
 		public G01(List<String> o) {}
 		public List<String> toList() {
 			return STRINGLIST;

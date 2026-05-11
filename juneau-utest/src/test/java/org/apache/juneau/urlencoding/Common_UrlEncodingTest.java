@@ -151,7 +151,7 @@ class Common_UrlEncodingTest extends TestBase {
 	}
 
 	//====================================================================================================
-	// @Beanp.bpi annotation.
+	// @MarshalledProp.bpi annotation.
 	//====================================================================================================
 	@Test void a05_beanPropertyProperies() throws Exception {
 		var s = UrlEncodingSerializer.DEFAULT;
@@ -160,12 +160,12 @@ class Common_UrlEncodingTest extends TestBase {
 	}
 
 	public static class E1 {
-		@Beanp(properties="f1") public E2 x1 = new E2();
-		@Beanp(properties="f1") public Map<String,Integer> x2 = m("f1",1,"f2",2);
-		@Beanp(properties="f1") public E2[] x3 = {new E2()};
-		@Beanp(properties="f1") public List<E2> x4 = l(new E2());
-		@Beanp(properties="f1") public JsonMap[] x5 = {JsonMap.of("f1",1,"f2",2)};
-		@Beanp(properties="f1") public List<JsonMap> x6 = l(JsonMap.of("f1",1,"f2",2));
+		@MarshalledProp(properties="f1") public E2 x1 = new E2();
+		@MarshalledProp(properties="f1") public Map<String,Integer> x2 = m("f1",1,"f2",2);
+		@MarshalledProp(properties="f1") public E2[] x3 = {new E2()};
+		@MarshalledProp(properties="f1") public List<E2> x4 = l(new E2());
+		@MarshalledProp(properties="f1") public JsonMap[] x5 = {JsonMap.of("f1",1,"f2",2)};
+		@MarshalledProp(properties="f1") public List<JsonMap> x6 = l(JsonMap.of("f1",1,"f2",2));
 	}
 
 	public static class E2 {
@@ -174,7 +174,7 @@ class Common_UrlEncodingTest extends TestBase {
 	}
 
 	//====================================================================================================
-	// @Beanp.bpi annotation on list of beans.
+	// @MarshalledProp.bpi annotation on list of beans.
 	//====================================================================================================
 	@Test void a06_beanPropertyPropertiesOnListOfBeans() throws Exception {
 		var s = UrlEncodingSerializer.DEFAULT;
@@ -190,7 +190,7 @@ class Common_UrlEncodingTest extends TestBase {
 	}
 
 	public static class F {
-		@Beanp(properties="x2") public List<F> x1 = new LinkedList<>();
+		@MarshalledProp(properties="x2") public List<F> x1 = new LinkedList<>();
 		public int x2 = 2;
 	}
 

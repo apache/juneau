@@ -50,7 +50,7 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@BeanIgnore /* Use toString() to serialize */
+@Marshalled(as=MarshalledAs.STRING)
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_status)
 })

@@ -288,17 +288,17 @@ public class TestUtils extends Utils {
 			var f = (Field)null;
 			var c = o.getClass();
 			var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
-			var m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("is"+n) && x.getParameterCount() == 0 && x.getAnnotation(BeanIgnore.class) == null).findFirst().orElse(null);
+			var m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("is"+n) && x.getParameterCount() == 0 && x.getAnnotation(MarshalledIgnore.class) == null).findFirst().orElse(null);
 			if (m != null) {
 				m.setAccessible(true);
 				return m.invoke(o);
 			}
-			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get"+n) && x.getParameterCount() == 0 && x.getAnnotation(BeanIgnore.class) == null).findFirst().orElse(null);
+			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get"+n) && x.getParameterCount() == 0 && x.getAnnotation(MarshalledIgnore.class) == null).findFirst().orElse(null);
 			if (m != null) {
 				m.setAccessible(true);
 				return m.invoke(o);
 			}
-			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class && x.getAnnotation(BeanIgnore.class) == null).findFirst().orElse(null);
+			m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class && x.getAnnotation(MarshalledIgnore.class) == null).findFirst().orElse(null);
 			if (m != null) {
 				m.setAccessible(true);
 				return m.invoke(o, name);

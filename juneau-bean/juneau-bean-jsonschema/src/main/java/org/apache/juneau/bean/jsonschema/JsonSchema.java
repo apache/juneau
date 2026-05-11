@@ -686,7 +686,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchemaArray}.
 	 */
-	@BeanIgnore
+	@MarshalledIgnore
 	public Boolean getAdditionalItemsAsBoolean() { return additionalItemsBoolean; }
 
 	/**
@@ -698,7 +698,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
-	@BeanIgnore
+	@MarshalledIgnore
 	public List<JsonSchema> getAdditionalItemsAsSchemaArray() { return additionalItemsSchemaArray; }
 
 	/**
@@ -725,7 +725,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchema}.
 	 */
-	@BeanIgnore
+	@MarshalledIgnore
 	public Boolean getAdditionalPropertiesAsBoolean() { return additionalPropertiesBoolean; }
 
 	/**
@@ -737,7 +737,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
-	@BeanIgnore
+	@MarshalledIgnore
 	public JsonSchema getAdditionalPropertiesAsSchema() { return additionalPropertiesSchema; }
 
 	/**
@@ -807,7 +807,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>$defs</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("$defs")
+	@MarshalledProp("$defs")
 	public Map<String,JsonSchema> getDefs() {
 		return defs; // Return only defs, not definitions (to avoid double serialization)
 	}
@@ -855,7 +855,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>else</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("else")
+	@MarshalledProp("else")
 	public JsonSchema getElse() { return else_; }
 
 	/**
@@ -927,7 +927,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>$id</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("$id")
+	@MarshalledProp("$id")
 	public URI getIdUri() {
 		return idUri; // Return only idUri, not id (to avoid double serialization)
 	}
@@ -940,7 +940,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>if</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("if")
+	@MarshalledProp("if")
 	public JsonSchema getIf() { return if_; }
 
 	/**
@@ -965,7 +965,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchemaArray}.
 	 */
-	@BeanIgnore
+	@MarshalledIgnore
 	public JsonSchema getItemsAsSchema() { return itemsSchema; }
 
 	/**
@@ -976,7 +976,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchema}.
 	 */
-	@BeanIgnore
+	@MarshalledIgnore
 	public JsonSchemaArray getItemsAsSchemaArray() { return itemsSchemaArray; }
 
 	/**
@@ -1052,7 +1052,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@BeanIgnore
+	@MarshalledIgnore
 	public String getName() { return name; }
 
 	/**
@@ -1155,7 +1155,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>$ref</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("$ref")
+	@MarshalledProp("$ref")
 	public URI getRef() { return ref; }
 
 	/**
@@ -1170,7 +1170,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>$schema</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("$schema")
+	@MarshalledProp("$schema")
 	public URI getSchemaVersionUri() { return schemaVersion; }
 
 	/**
@@ -1181,7 +1181,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>then</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("then")
+	@MarshalledProp("then")
 	public JsonSchema getThen() { return then_; }
 
 	/**
@@ -1214,7 +1214,7 @@ public class JsonSchema {
 	 * @return
 	 * 	The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonTypeArray}.
 	 */
-	@BeanIgnore
+	@MarshalledIgnore
 	public JsonType getTypeAsJsonType() { return typeJsonType; }
 
 	/**
@@ -1225,7 +1225,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonType}.
 	 */
-	@BeanIgnore
+	@MarshalledIgnore
 	public JsonTypeArray getTypeAsJsonTypeArray() { return typeJsonTypeArray; }
 
 	/**
@@ -1319,7 +1319,7 @@ public class JsonSchema {
 	 * @return This object.
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
-	@Beanp(dictionary = { JsonSchema.class })
+	@MarshalledProp(dictionary = { JsonSchema.class })
 	public JsonSchema setAdditionalProperties(Object value) {
 		this.additionalPropertiesBoolean = null;
 		this.additionalPropertiesSchema = null;
@@ -1424,7 +1424,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>$defs</property> property on this bean.
 	 * @return This object.
 	 */
-	@Beanp("$defs")
+	@MarshalledProp("$defs")
 	public JsonSchema setDefs(Map<String,JsonSchema> value) {
 		this.defs = value;
 		if (nn(value))
@@ -1495,7 +1495,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>else</property> property on this bean.
 	 * @return This object.
 	 */
-	@Beanp("else")
+	@MarshalledProp("else")
 	public JsonSchema setElse(JsonSchema value) {
 		this.else_ = value;
 		setMasterOn(value);
@@ -1600,7 +1600,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>$id</property> property on this bean.
 	 * @return This object.
 	 */
-	@Beanp("$id")
+	@MarshalledProp("$id")
 	public JsonSchema setIdUri(Object value) {
 		this.idUri = toUri(value);
 		return this;
@@ -1615,7 +1615,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>if</property> property on this bean.
 	 * @return This object.
 	 */
-	@Beanp("if")
+	@MarshalledProp("if")
 	public JsonSchema setIf(JsonSchema value) {
 		this.if_ = value;
 		setMasterOn(value);
@@ -1756,7 +1756,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>name</property> property on this bean.
 	 * @return This object.
 	 */
-	@BeanIgnore
+	@MarshalledIgnore
 	public JsonSchema setName(String value) {
 		this.name = value;
 		return this;
@@ -1875,7 +1875,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>$ref</property> property on this bean.
 	 * @return This object.
 	 */
-	@Beanp("$ref")
+	@MarshalledProp("$ref")
 	public JsonSchema setRef(Object value) {
 		this.ref = toUri(value);
 		return this;
@@ -1899,7 +1899,7 @@ public class JsonSchema {
 	 * @param value The schema map to associate with this schema.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	@BeanIgnore
+	@MarshalledIgnore
 	public JsonSchema setSchemaMap(JsonSchemaMap value) {
 		this.schemaMap = value;
 		return this;
@@ -1918,7 +1918,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>schemaVersion</property> property on this bean.
 	 * @return This object.
 	 */
-	@Beanp("$schema")
+	@MarshalledProp("$schema")
 	public JsonSchema setSchemaVersionUri(Object value) {
 		this.schemaVersion = toUri(value);
 		return this;
@@ -1933,7 +1933,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>then</property> property on this bean.
 	 * @return This object.
 	 */
-	@Beanp("then")
+	@MarshalledProp("then")
 	public JsonSchema setThen(JsonSchema value) {
 		this.then_ = value;
 		setMasterOn(value);

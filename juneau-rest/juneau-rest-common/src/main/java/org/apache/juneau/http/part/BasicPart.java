@@ -48,7 +48,7 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@BeanIgnore
+@Marshalled(as=MarshalledAs.STRING)
 @SuppressWarnings({
 	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_value)
 	"java:S3740"  // Raw Supplier/Object types used where HTTP part value type cannot be parameterized at this abstraction level

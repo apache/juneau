@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class BeanMapErrors_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @Beanp(name) on method not in @Marshalled(properties)
+	// @MarshalledProp(name) on method not in @Marshalled(properties)
 	// JUNEAU-248: Shouldn't be found in keySet()/entrySet()/containsKey() but should be accessible via get()/put()
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void beanPropertyMethodNotInBeanProperties() {
@@ -49,7 +49,7 @@ class BeanMapErrors_Test extends TestBase {
 		public int f1;
 
 		private int f2 = -1;
-		@Beanp("f2") public int f2() { return f2; }
+		@MarshalledProp("f2") public int f2() { return f2; }
 		public void setF2(int v) { f2 = v; }
 	}
 
@@ -67,20 +67,20 @@ class BeanMapErrors_Test extends TestBase {
 
 	@MarshalledApply(on="Dummy",value=@Marshalled(p="dummy"))
 	@MarshalledApply(on="B1",value=@Marshalled(p="f1"))
-	@BeanpApply(on="Dummy",value=@Beanp("dummy"))
-	@BeanpApply(on="B1.f2",value=@Beanp("f2"))
+	@MarshalledPropApply(on="Dummy",value=@MarshalledProp("dummy"))
+	@MarshalledPropApply(on="B1.f2",value=@MarshalledProp("f2"))
 	private static class B1Config {}
 
 	public static class B1 {
 		public int f1;
 
 		private int f2 = -1;
-		@Beanp("f2") public int f2() { return f2; }
+		@MarshalledProp("f2") public int f2() { return f2; }
 		public void setF2(int v) { f2 = v; }
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @Beanp(name) on field not in @Marshalled(properties)
+	// @MarshalledProp(name) on field not in @Marshalled(properties)
 	// JUNEAU-248: Shouldn't be found in keySet()/entrySet()/containsKey() but should be accessible via get()/put()
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void beanPropertyFieldNotInBeanProperties() {
@@ -99,7 +99,7 @@ class BeanMapErrors_Test extends TestBase {
 	public static class A2 {
 		public int f1;
 
-		@Beanp("f2")
+		@MarshalledProp("f2")
 		public int f2 = -1;
 	}
 
@@ -117,8 +117,8 @@ class BeanMapErrors_Test extends TestBase {
 
 	@MarshalledApply(on="Dummy",value=@Marshalled(p="dummy"))
 	@MarshalledApply(on="B2",value=@Marshalled(p="f1"))
-	@BeanpApply(on="Dummy",value=@Beanp("dummy"))
-	@BeanpApply(on="B2.f2",value=@Beanp("f2"))
+	@MarshalledPropApply(on="Dummy",value=@MarshalledProp("dummy"))
+	@MarshalledPropApply(on="B2.f2",value=@MarshalledProp("f2"))
 	private static class B2Config {}
 
 	public static class B2 {

@@ -23,15 +23,15 @@ import java.lang.annotation.*;
 import org.apache.juneau.commons.annotation.*;
 
 /**
- * Utility classes and methods for the {@link BeanIgnore @BeanIgnore} annotation.
+ * Utility classes and methods for the {@link MarshalledIgnore @MarshalledIgnore} annotation.
  *
  */
-public class BeanIgnoreAnnotation {
+public class MarshalledIgnoreAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private BeanIgnoreAnnotation() {}
+	private MarshalledIgnoreAnnotation() {}
 
 	/**
 	 * Builder class.
@@ -49,15 +49,15 @@ public class BeanIgnoreAnnotation {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(BeanIgnore.class);
+			super(MarshalledIgnore.class);
 		}
 
 		/**
-		 * Instantiates a new {@link BeanIgnore @BeanIgnore} object initialized with this builder.
+		 * Instantiates a new {@link MarshalledIgnore @MarshalledIgnore} object initialized with this builder.
 		 *
-		 * @return A new {@link BeanIgnore @BeanIgnore} object.
+		 * @return A new {@link MarshalledIgnore @MarshalledIgnore} object.
 		 */
-		public BeanIgnore build() {
+		public MarshalledIgnore build() {
 			return new Object(this);
 		}
 
@@ -73,7 +73,7 @@ public class BeanIgnoreAnnotation {
 		}
 
 		/**
-		 * Sets {@link BeanIgnore#ignoreAccessors()}.
+		 * Sets {@link MarshalledIgnore#ignoreAccessors()}.
 		 *
 		 * @param value The new value.
 		 * @return This object.
@@ -88,30 +88,30 @@ public class BeanIgnoreAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AnnotationObject implements BeanIgnore {
+	private static class Object extends AnnotationObject implements MarshalledIgnore {
 
 		private final String[] description;
 		private final boolean ignoreAccessors;
 
-		Object(BeanIgnoreAnnotation.Builder b) {
+		Object(MarshalledIgnoreAnnotation.Builder b) {
 			super(b);
 			this.description = copyOf(b.description);
 			this.ignoreAccessors = b.ignoreAccessors;
 		}
 
-		@Override /* Overridden from BeanIgnore */
+		@Override /* Overridden from MarshalledIgnore */
 		public String[] description() {
 			return description;
 		}
 
-		@Override /* Overridden from BeanIgnore */
+		@Override /* Overridden from MarshalledIgnore */
 		public boolean ignoreAccessors() {
 			return ignoreAccessors;
 		}
 	}
 
 	/** Default value */
-	public static final BeanIgnore DEFAULT = create().build();
+	public static final MarshalledIgnore DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.

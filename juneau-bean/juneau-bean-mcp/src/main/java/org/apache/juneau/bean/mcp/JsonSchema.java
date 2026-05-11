@@ -32,7 +32,7 @@ public class JsonSchema {
 	private Object additionalProperties;
 	private JsonSchema items;
 
-	@Beanp(name = "$defs")
+	@MarshalledProp(name = "$defs")
 	private Map<String, JsonSchema> defs;
 
 	/**

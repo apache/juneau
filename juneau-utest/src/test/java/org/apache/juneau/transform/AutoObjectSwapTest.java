@@ -174,10 +174,10 @@ class AutoObjectSwapTest extends TestBase {
 	// Ignore class
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnoreApply(on="D01c",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="D01c",value=@MarshalledIgnore())
 	private static class D01Config {}
 
-	@BeanIgnore
+	@MarshalledIgnore
 	public static class D01 {
 		public Map<String,String> swap() {
 			return STRINGMAP;
@@ -212,11 +212,11 @@ class AutoObjectSwapTest extends TestBase {
 	// Ignore swap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnoreApply(on="E01c.swap",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="E01c.swap",value=@MarshalledIgnore())
 	private static class E01Config {}
 
 	public static class E01 {
-		@BeanIgnore
+		@MarshalledIgnore
 		public Map<String,String> swap() {
 			return STRINGMAP;
 		}
@@ -267,14 +267,14 @@ class AutoObjectSwapTest extends TestBase {
 	// Ignore unswap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnoreApply(on="F01c.create(java.util.Map)",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="F01c.create(java.util.Map)",value=@MarshalledIgnore())
 	private static class F01Config {}
 
 	public static class F01 {
 		public Map<String,String> swap() {
 			return STRINGMAP;
 		}
-		@BeanIgnore
+		@MarshalledIgnore
 		public static F01 create(Map<String,String> o) {
 			return null;
 		}
@@ -368,11 +368,11 @@ class AutoObjectSwapTest extends TestBase {
 	// Ignore constructor
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnoreApply(on="G01c(Map)",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="G01c(Map)",value=@MarshalledIgnore())
 	private static class G01Config {}
 
 	public static class G01 {
-		@BeanIgnore
+		@MarshalledIgnore
 		public G01(Map<String,String> o) {}
 		public Map<String,String> swap() {
 			return STRINGMAP;

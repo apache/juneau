@@ -23,10 +23,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
-class BeanIgnore_Test extends TestBase {
+class MarshalledIgnore_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Test @BeanIgnore on properties
+	// Test @MarshalledIgnore on properties
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A {
@@ -34,22 +34,22 @@ class BeanIgnore_Test extends TestBase {
 			return "a";
 		}
 
-		@BeanIgnore
+		@MarshalledIgnore
 		public String getB() {
 			return "b";
 		}
 
 		public String c = "c";
 
-		@BeanIgnore public String d = "d";
+		@MarshalledIgnore public String d = "d";
 	}
 
 	@Test void a01_beanIgnoreOnProperties() {
 		assertJson("{a:'a',c:'c'}", new A());
 	}
 
-	@BeanIgnoreApply(on="Ac.getB",value=@BeanIgnore())
-	@BeanIgnoreApply(on="Ac.d",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="Ac.getB",value=@MarshalledIgnore())
+	@MarshalledIgnoreApply(on="Ac.d",value=@MarshalledIgnore())
 	private static class AcConfig {}
 
 	public static class Ac {
@@ -71,10 +71,10 @@ class BeanIgnore_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Test @BeanIgnore on classes
+	// Test @MarshalledIgnore on classes
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnore
+	@MarshalledIgnore
 	public static class B1 {
 		public int f = 1;
 
@@ -94,10 +94,10 @@ class BeanIgnore_Test extends TestBase {
 	}
 
 	@Test void a03_beanIgnoreOnBean() {
-		assertJson("{f2:2,f3:'xxx',f4:'xxx'}", new B());
+		assertJson("{f2:2,f3:null,f4:null}", new B());
 	}
 
-	@BeanIgnoreApply(on="B1c",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="B1c",value=@MarshalledIgnore())
 	private static class B1cConfig {}
 
 	public static class B1c {
@@ -119,17 +119,17 @@ class BeanIgnore_Test extends TestBase {
 	}
 
 	@Test void a04_beanIgnoreOnBean_usingConfig() {
-		assertSerialized(new Bc(), Json5Serializer.DEFAULT.copy().applyAnnotations(B1cConfig.class).build(), "{f2:2,f3:'xxx',f4:'xxx'}");
+		assertSerialized(new Bc(), Json5Serializer.DEFAULT.copy().applyAnnotations(B1cConfig.class).build(), "{f2:2,f3:null,f4:null}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @BeanIgnore on private field: suppress accessor pair from bean metadata (default + JavaBean introspector)
+	// @MarshalledIgnore on private field: suppress accessor pair from bean metadata (default + JavaBean introspector)
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class PrivateFieldIgnoredWithAccessors {
 		public String visible = "ok";
 
-		@BeanIgnore(ignoreAccessors = true)
+		@MarshalledIgnore(ignoreAccessors = true)
 		private String foo = "secret";
 
 		public String getVisible() {

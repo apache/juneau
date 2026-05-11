@@ -807,11 +807,11 @@ class XmlIgnoreComments_Test extends TestBase {
 	}
 
 	public static class BeanWithMapProperties {
-		@Beanp(type=MapWithStrings.class)
+		@MarshalledProp(type=MapWithStrings.class)
 		public Map<String,String> a;
-		@Beanp(type=MapWithNumbers.class)
+		@MarshalledProp(type=MapWithNumbers.class)
 		public Map<String,Number> b;
-		@Beanp(type=MapWithObjects.class)
+		@MarshalledProp(type=MapWithObjects.class)
 		public Map<String,Object> c;
 
 		BeanWithMapProperties init() {
@@ -900,10 +900,10 @@ class XmlIgnoreComments_Test extends TestBase {
 
 	public static class BeanWithChildTypeNames {
 		public BeanX a;
-		@Beanp(dictionary=BeanX.class)
+		@MarshalledProp(dictionary=BeanX.class)
 		public Object b;
 		public BeanX[] c;
-		@Beanp(dictionary=BeanX.class)
+		@MarshalledProp(dictionary=BeanX.class)
 		public Object[] d;
 		BeanWithChildTypeNames init() {
 			a = new BeanX().init();
@@ -1023,7 +1023,7 @@ class XmlIgnoreComments_Test extends TestBase {
 
 	public static class BeanWithMixedContent {
 		@Xml(format=XmlFormat.MIXED)
-		@Beanp(dictionary={BeanXSimple.class, BeanYSimple.class})
+		@MarshalledProp(dictionary={BeanXSimple.class, BeanYSimple.class})
 		public Object[] a;
 		BeanWithMixedContent init() {
 			a = a(
@@ -1087,7 +1087,7 @@ class XmlIgnoreComments_Test extends TestBase {
 	@Marshalled(typeName="  \b\f\n\t\r  ")
 	public static class BeanWithSpecialCharacters2 {
 
-		@Beanp(name="  \b\f\n\t\r  ")
+		@MarshalledProp(name="  \b\f\n\t\r  ")
 		public String a;
 
 		BeanWithSpecialCharacters2 init() {

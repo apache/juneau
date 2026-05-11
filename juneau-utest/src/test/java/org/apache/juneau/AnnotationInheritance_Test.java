@@ -31,13 +31,13 @@ import org.junit.jupiter.api.*;
  * Tests for annotation inheritance on overridden methods in bean properties.
  *
  * <p>Validates that when a child class overrides a parent method, annotations like
- * {@link Beanp}, {@link Xml}, {@link Name}, etc. are properly inherited from the parent method.
+ * {@link MarshalledProp}, {@link Xml}, {@link Name}, etc. are properly inherited from the parent method.
  * This ensures consistent property names and serialization behavior across inheritance hierarchies.
  */
 class AnnotationInheritance_Test extends TestBase {
 
 	//====================================================================================================
-	// @Beanp annotation inheritance
+	// @MarshalledProp annotation inheritance
 	//====================================================================================================
 
 	public static class A1_Parent {
@@ -47,7 +47,7 @@ class AnnotationInheritance_Test extends TestBase {
 			return value;
 		}
 
-		@Beanp("v")
+		@MarshalledProp("v")
 		public A1_Parent setValue(String value) {
 			this.value = value;
 			return this;
@@ -55,7 +55,7 @@ class AnnotationInheritance_Test extends TestBase {
 	}
 
 	public static class A1_Child extends A1_Parent {
-		// Override without @Beanp - should inherit property name "v" from parent
+		// Override without @MarshalledProp - should inherit property name "v" from parent
 		@Override
 		public A1_Child setValue(String value) {
 			super.setValue(value);
@@ -67,11 +67,11 @@ class AnnotationInheritance_Test extends TestBase {
 	void a01_beanp_propertyName_inheritance() {
 		var bc = BeanContext.DEFAULT;
 
-		// Property should be named "v" (from parent's @Beanp), inherited via BeanMeta.inheritParentAnnotations
+		// Property should be named "v" (from parent's @MarshalledProp), inherited via BeanMeta.inheritParentAnnotations
 		var bm = bc.getBeanMeta(A1_Child.class);
 		var prop = bm.getPropertyMeta("v");
 
-		assertNotNull(prop, "Property 'v' should exist (inherited from @Beanp in parent)");
+		assertNotNull(prop, "Property 'v' should exist (inherited from @MarshalledProp in parent)");
 	}
 
 	@Test
@@ -92,7 +92,7 @@ class AnnotationInheritance_Test extends TestBase {
 			return items;
 		}
 
-		@Beanp("i")
+		@MarshalledProp("i")
 		@Xml(format=XmlFormat.COLLAPSED, childName="item")
 		public B1_Parent setItems(List<String> items) {
 			this.items = items;
@@ -101,7 +101,7 @@ class AnnotationInheritance_Test extends TestBase {
 	}
 
 	public static class B1_Child extends B1_Parent {
-		// Override without annotations - should inherit BOTH @Beanp AND @Xml
+		// Override without annotations - should inherit BOTH @MarshalledProp AND @Xml
 		@Override
 		public B1_Child setItems(List<String> items) {
 			super.setItems(items);
@@ -115,7 +115,7 @@ class AnnotationInheritance_Test extends TestBase {
 		var bm = bc.getBeanMeta(B1_Child.class);
 		var prop = bm.getPropertyMeta("i");
 
-		assertNotNull(prop, "Property 'i' should exist (inherited from @Beanp)");
+		assertNotNull(prop, "Property 'i' should exist (inherited from @MarshalledProp)");
 	}
 
 	//====================================================================================================
@@ -129,7 +129,7 @@ class AnnotationInheritance_Test extends TestBase {
 			return name;
 		}
 
-		@Beanp(name="n", ro="false")
+		@MarshalledProp(name="n", ro="false")
 		public C1_Parent setName(String name) {
 			this.name = name;
 			return this;
@@ -164,7 +164,7 @@ class AnnotationInheritance_Test extends TestBase {
 			return count;
 		}
 
-		@Beanp("c")
+		@MarshalledProp("c")
 		public D1_GrandParent setCount(int count) {
 			this.count = count;
 			return this;
@@ -194,7 +194,7 @@ class AnnotationInheritance_Test extends TestBase {
 	public static class E1_Parent {
 		private String data;
 
-		@Beanp("d")
+		@MarshalledProp("d")
 		public String getData() {
 			return data;
 		}
@@ -205,7 +205,7 @@ class AnnotationInheritance_Test extends TestBase {
 	}
 
 	public static class E1_Child extends E1_Parent {
-		// Override getter without @Beanp
+		// Override getter without @MarshalledProp
 		@Override
 		public String getData() {
 			return super.getData();
@@ -218,7 +218,7 @@ class AnnotationInheritance_Test extends TestBase {
 		var bm = bc.getBeanMeta(E1_Child.class);
 		var prop = bm.getPropertyMeta("d");
 
-		assertNotNull(prop, "Property 'd' should exist (inherited from getter's @Beanp)");
+		assertNotNull(prop, "Property 'd' should exist (inherited from getter's @MarshalledProp)");
 
 		var bean = new E1_Child();
 		bean.setData("test");
@@ -237,7 +237,7 @@ class AnnotationInheritance_Test extends TestBase {
 			return tags;
 		}
 
-		@Beanp("t")
+		@MarshalledProp("t")
 		public F1_Parent setTags(List<String> tags) {
 			this.tags = tags;
 			return this;
@@ -265,12 +265,12 @@ class AnnotationInheritance_Test extends TestBase {
 		private List<Object> children;
 
 		@Xml(format=XmlFormat.ELEMENTS)
-		@Beanp(name="c")
+		@MarshalledProp(name="c")
 		public List<Object> getChildren() {
 			return children;
 		}
 
-		@Beanp("c")
+		@MarshalledProp("c")
 		public G1_Parent setChildren(List<Object> children) {
 			this.children = children;
 			return this;
@@ -279,7 +279,7 @@ class AnnotationInheritance_Test extends TestBase {
 
 	public static class G1_Child extends G1_Parent {
 		// This override previously caused "ELEMENTS and ELEMENT properties cannot be mixed" error
-		// Now it should work because @Beanp("c") is inherited, keeping the same property name
+		// Now it should work because @MarshalledProp("c") is inherited, keeping the same property name
 		@Override
 		public G1_Child setChildren(List<Object> children) {
 			super.setChildren(children);

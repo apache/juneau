@@ -23,15 +23,15 @@ import java.lang.annotation.*;
 import org.apache.juneau.commons.annotation.*;
 
 /**
- * Utility classes and methods for the {@link Beanc @Beanc} annotation.
+ * Utility classes and methods for the {@link MarshalledCtor @MarshalledCtor} annotation.
  *
  */
-public class BeancAnnotation {
+public class MarshalledCtorAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private BeancAnnotation() {}
+	private MarshalledCtorAnnotation() {}
 
 	/**
 	 * Builder class.
@@ -49,15 +49,15 @@ public class BeancAnnotation {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(Beanc.class);
+			super(MarshalledCtor.class);
 		}
 
 		/**
-		 * Instantiates a new {@link Beanc @Beanc} object initialized with this builder.
+		 * Instantiates a new {@link MarshalledCtor @MarshalledCtor} object initialized with this builder.
 		 *
-		 * @return A new {@link Beanc @Beanc} object.
+		 * @return A new {@link MarshalledCtor @MarshalledCtor} object.
 		 */
-		public Beanc build() {
+		public MarshalledCtor build() {
 			return new Object(this);
 		}
 
@@ -73,7 +73,7 @@ public class BeancAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Beanc#properties()}  property on this annotation.
+		 * Sets the {@link MarshalledCtor#properties()}  property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -88,30 +88,30 @@ public class BeancAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AnnotationObject implements Beanc {
+	private static class Object extends AnnotationObject implements MarshalledCtor {
 
 		private final String[] description;
 		private final String properties;
 
-		Object(BeancAnnotation.Builder b) {
+		Object(MarshalledCtorAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
 			properties = b.properties;
 		}
 
-		@Override /* Overridden from Beanc */
+		@Override /* Overridden from MarshalledCtor */
 		public String[] description() {
 			return description;
 		}
 
-		@Override /* Overridden from Beanc */
+		@Override /* Overridden from MarshalledCtor */
 		public String properties() {
 			return properties;
 		}
 	}
 
 	/** Default value */
-	public static final Beanc DEFAULT = create().build();
+	public static final MarshalledCtor DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.

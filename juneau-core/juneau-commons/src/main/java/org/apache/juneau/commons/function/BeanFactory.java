@@ -75,7 +75,7 @@ public interface BeanFactory<T> {
 
 	/**
 	 * Sentinel class used as the default value for {@code @Marshalled(factory=...)} and
-	 * {@code @Beanp(factory=...)} when no factory is specified.
+	 * {@code @MarshalledProp(factory=...)} when no factory is specified.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw type required for use as annotation sentinel

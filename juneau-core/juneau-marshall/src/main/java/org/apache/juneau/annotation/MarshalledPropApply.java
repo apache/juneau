@@ -22,16 +22,16 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Dynamically applies a {@link BeanIgnore @BeanIgnore} annotation to specified classes, methods, or fields.
+ * Dynamically applies a {@link MarshalledProp @MarshalledProp} annotation to specified classes, methods, or fields.
  *
  * <p>
  * This annotation separates the <b>targeting</b> concern ({@link #on()}/{@link #onClass()}) from the
- * <b>content</b> concern ({@link #value()}), enabling {@link BeanIgnore @BeanIgnore} to be a pure data annotation
+ * <b>content</b> concern ({@link #value()}), enabling {@link MarshalledProp @MarshalledProp} to be a pure data annotation
  * without marshall-specific application machinery.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@BeanIgnoreApply</ja>(on=<js>"com.example.Foo"</js>, value=<ja>@BeanIgnore</ja>())
+ * 	<ja>@MarshalledPropApply</ja>(on=<js>"com.example.Foo.bar"</js>, value=<ja>@MarshalledProp</ja>(ro=<js>"true"</js>))
  * 	<jk>public class</jk> MyConfig {}
  * </p>
  *
@@ -42,22 +42,19 @@ import java.lang.annotation.*;
 @Documented
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
-@Repeatable(BeanIgnoreApply.Array.class)
-@ContextApply(BeanIgnoreApplyAnnotation.Applier.class)
-public @interface BeanIgnoreApply {
+@Repeatable(MarshalledPropApply.Array.class)
+@ContextApply(MarshalledPropApplyAnnotation.Applier.class)
+public @interface MarshalledPropApply {
 
 	/**
-	 * The {@link BeanIgnore @BeanIgnore} annotation to apply.
+	 * The {@link MarshalledProp @MarshalledProp} annotation to apply.
 	 *
 	 * @return The annotation value.
 	 */
-	BeanIgnore value();
+	MarshalledProp value();
 
 	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
-	 *
-	 * <p>
-	 * Identifies the targets this annotation applies to using fully-qualified names.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
@@ -82,7 +79,7 @@ public @interface BeanIgnoreApply {
 	Class<?>[] onClass() default {};
 
 	/**
-	 * A collection of {@link BeanIgnoreApply @BeanIgnoreApply annotations}.
+	 * A collection of {@link MarshalledPropApply @MarshalledPropApply annotations}.
 	 */
 	@Documented
 	@Target({ TYPE, METHOD })
@@ -94,6 +91,6 @@ public @interface BeanIgnoreApply {
 		 *
 		 * @return The annotation value.
 		 */
-		BeanIgnoreApply[] value();
+		MarshalledPropApply[] value();
 	}
 }

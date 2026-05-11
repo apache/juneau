@@ -53,7 +53,7 @@ import org.apache.juneau.commons.utils.*;
  *
  * @serial exclude
  */
-@BeanIgnore
+@Marshalled(as=MarshalledAs.STRING)
 public class BasicHeader implements Header, Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final HeaderElement[] EMPTY_HEADER_ELEMENTS = {};

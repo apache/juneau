@@ -432,7 +432,7 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#readOnlyProperties()}
-		 * 	<li class='ja'>{@link Beanp#ro()}
+		 * 	<li class='ja'>{@link MarshalledProp#ro()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(String, String)}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(Map)}
@@ -542,7 +542,7 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#writeOnlyProperties()}
-		 * 	<li class='ja'>{@link Beanp#wo()}
+		 * 	<li class='ja'>{@link MarshalledProp#wo()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesWriteOnly(Class, String)}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesWriteOnly(String, String)}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesWriteOnly(Map)}

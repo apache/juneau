@@ -86,27 +86,27 @@ class Marshalled_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Beanc and @Beanp annotations overrides visibility rules on constructors/properties.
+	// @MarshalledCtor and @MarshalledProp annotations overrides visibility rules on constructors/properties.
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class B1 {
 
-		@Beanp
+		@MarshalledProp
 		private int f1;
 
 		private int f2;
 
-		@Beanp
+		@MarshalledProp
 		private void setF2(int f2) {
 			this.f2 = f2;
 		}
 
-		@Beanp
+		@MarshalledProp
 		private int getF2() {
 			return f2;
 		}
 
-		@Beanc
+		@MarshalledCtor
 		private B1() {}
 
 		public static B1 create() {
@@ -125,10 +125,10 @@ class Marshalled_Test extends TestBase {
 		assertEquals("{f1:1,f2:2}", json);
 	}
 
-	@BeancApply(on="B2()",value=@Beanc())
-	@BeanpApply(on="B2.f1",value=@Beanp())
-	@BeanpApply(on="B2.setF2",value=@Beanp())
-	@BeanpApply(on="B2.getF2",value=@Beanp())
+	@MarshalledCtorApply(on="B2()",value=@MarshalledCtor())
+	@MarshalledPropApply(on="B2.f1",value=@MarshalledProp())
+	@MarshalledPropApply(on="B2.setF2",value=@MarshalledProp())
+	@MarshalledPropApply(on="B2.getF2",value=@MarshalledProp())
 	private static class B2Config {}
 
 	public static class B2 {

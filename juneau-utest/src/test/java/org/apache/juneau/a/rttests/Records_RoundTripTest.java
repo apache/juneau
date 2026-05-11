@@ -57,7 +57,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	@Marshalled(properties="age,name")
 	public record AnnotatedOrder(String name, int age) {}
 
-	public record WithBeanp(@Beanp(name="fullName") String name, int age) {}
+	public record WithMarshalledProp(@MarshalledProp(name="fullName") String name, int age) {}
 
 	public record WithCompactConstructor(String name, int age) {
 		public WithCompactConstructor {
@@ -71,9 +71,9 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	public record WithNullValues(String required, String optional) {}
 
 	@Marshalled(properties="name")
-	public record WithBeanc(String name, int age) {
-		@Beanc(properties="name")
-		public WithBeanc(String name) {
+	public record WithMarshalledCtor(String name, int age) {
+		@MarshalledCtor(properties="name")
+		public WithMarshalledCtor(String name) {
 			this(name, 0);
 		}
 	}
@@ -188,8 +188,8 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void b02_beanpRename(RoundTrip_Tester t) throws Exception {
-		var in = new WithBeanp("John", 30);
-		var out = t.roundTrip(in, WithBeanp.class);
+		var in = new WithMarshalledProp("John", 30);
+		var out = t.roundTrip(in, WithMarshalledProp.class);
 		assertEquals("John", out.name());
 		assertEquals(30, out.age());
 	}
@@ -197,8 +197,8 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void b03_beancCustomConstructor(RoundTrip_Tester t) throws Exception {
-		var in = new WithBeanc("John", 0);
-		var out = t.roundTrip(in, WithBeanc.class);
+		var in = new WithMarshalledCtor("John", 0);
+		var out = t.roundTrip(in, WithMarshalledCtor.class);
 		assertEquals("John", out.name());
 		assertEquals(0, out.age());
 	}
@@ -262,10 +262,10 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 
 	@Test
 	void c04_beancNonCanonicalConstructor() throws Exception {
-		var in = new WithBeanc("Jane", 0);
+		var in = new WithMarshalledCtor("Jane", 0);
 		var json = json5(in);
 		assertTrue(json.contains("Jane"));
-		var out = json("{\"name\":\"Jane\"}", WithBeanc.class);
+		var out = json("{\"name\":\"Jane\"}", WithMarshalledCtor.class);
 		assertEquals("Jane", out.name());
 		assertEquals(0, out.age());
 	}
@@ -313,8 +313,8 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	}
 
 	@Test
-	void d05_jsonSerializationBeanpRename() throws Exception {
-		var p = new WithBeanp("John", 30);
+	void d05_jsonSerializationMarshalledPropRename() throws Exception {
+		var p = new WithMarshalledProp("John", 30);
 		var json = json5(p);
 		assertEquals("{age:30,fullName:'John'}", json);
 	}
@@ -328,7 +328,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 
 	@Test
 	void d07_jsonParsingRenamedProperty() throws Exception {
-		var parsed = json("{\"fullName\":\"John\",\"age\":30}", WithBeanp.class);
+		var parsed = json("{\"fullName\":\"John\",\"age\":30}", WithMarshalledProp.class);
 		assertEquals("John", parsed.name());
 		assertEquals(30, parsed.age());
 	}

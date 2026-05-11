@@ -21,7 +21,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * Same as {@link BeanMeta}, except the list of bean properties are limited by a  {@link Beanp#properties() @Beanp(properties)} annotation.
+ * Same as {@link BeanMeta}, except the list of bean properties are limited by a  {@link MarshalledProp#properties() @MarshalledProp(properties)} annotation.
  *
  *
  * @param <T> The class type that this metadata applies to.

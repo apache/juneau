@@ -14,27 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.xml.xml1b;
+package org.apache.juneau.annotation;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.xml.annotation.*;
+/**
+ * Specifies the marshalling strategy for a type annotated with {@link Marshalled @Marshalled}.
+ */
+public enum MarshalledAs {
 
-@Marshalled
-public class T7 {
+	/**
+	 * Auto-detect the marshalling strategy (default).
+	 *
+	 * <p>
+	 * The marshalling engine inspects the type and selects the best strategy
+	 * (bean, map, collection, string swap, etc.).
+	 */
+	DETECT,
 
-	@MarshalledProp(name="g1") public int f1 = 1;
-
-	@Xml(prefix="bar",namespace="http://bar") @MarshalledProp(name="g2") public int f2 = 2;
-
-	private int f3 = 3;
-	@MarshalledProp(name="g3") public int getF3() { return f3; }
-	@MarshalledProp(name="g3") public void setF3(int v) { f3 = v; }
-
-	private int f4 = 4;
-	@MarshalledProp(name="g4") @Xml(prefix="baz",namespace="http://baz") public int getF4() { return f4; }
-	@MarshalledProp(name="g4") public void setF4(int v) { f4 = v; }
-
-	public boolean equals(T7 x) {
-		return x.f1 == f1 && x.f2 == f2 && x.f3 == f3 && x.f4 == f4;
-	}
+	/**
+	 * Serialize using {@link Object#toString()} and deserialize using a {@code fromString(String)},
+	 * {@code valueOf(String)}, or single-{@code String}-argument constructor.
+	 *
+	 * <p>
+	 * Replaces the common {@code BeanStringSwap} use case without requiring a separate swap class.
+	 */
+	STRING
 }

@@ -321,7 +321,7 @@ class BeanConfig_Test extends TestBase {
 	public static class ReadOnlyPerson {
 		private final int age;
 
-		@Beanc(properties="name,age")
+		@MarshalledCtor(properties="name,age")
 		public ReadOnlyPerson(String name, int age) {
 			this.name = name;
 			this.age = age;
@@ -370,9 +370,9 @@ class BeanConfig_Test extends TestBase {
 	@MarshalledApply(on="Dummy1",value=@Marshalled(p="dummy"))
 	@MarshalledApply(on="ReadOnlyPerson2",value=@Marshalled(p="name,age"))
 	@MarshalledApply(on="Dummy2",value=@Marshalled(p="dummy"))
-	@BeancApply(on="Dummy1",value=@Beanc(properties="dummy"))
-	@BeancApply(on="ReadOnlyPerson2(String,int)",value=@Beanc(properties="name,age"))
-	@BeancApply(on="Dummy2",value=@Beanc(properties="dummy"))
+	@MarshalledCtorApply(on="Dummy1",value=@MarshalledCtor(properties="dummy"))
+	@MarshalledCtorApply(on="ReadOnlyPerson2(String,int)",value=@MarshalledCtor(properties="name,age"))
+	@MarshalledCtorApply(on="Dummy2",value=@MarshalledCtor(properties="dummy"))
 	private static class ReadOnlyPerson2Config {}
 
 	//====================================================================================================

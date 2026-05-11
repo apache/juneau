@@ -30,7 +30,7 @@ import org.apache.juneau.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Bean constructors.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link BeancApply @BeancApply}.
+ * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link MarshalledCtorApply @MarshalledCtorApply}.
  * </ul>
 
  * <p>
@@ -61,14 +61,14 @@ import org.apache.juneau.*;
  * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeancAnnotation">@Beanc Annotation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledCtorAnnotation">@MarshalledCtor Annotation</a>
  * </ul>
  */
 @Documented
 @Target({ CONSTRUCTOR })
 @Retention(RUNTIME)
 @Inherited
-public @interface Beanc {
+public @interface MarshalledCtor {
 
 	/**
 	 * Optional description for the exposed API.
@@ -82,7 +82,7 @@ public @interface Beanc {
 	 * The names of the properties of the constructor arguments.
 	 *
 	 * <p>
-	 * The {@link org.apache.juneau.annotation.Beanc @Beanc} annotation is used to map constructor arguments to property
+	 * The {@link org.apache.juneau.annotation.MarshalledCtor @MarshalledCtor} annotation is used to map constructor arguments to property
 	 * names on bean with read-only properties.
 	 * <br>Since method parameter names are lost during compilation, this annotation essentially redefines them so that
 	 * they are available at runtime.
@@ -95,7 +95,7 @@ public @interface Beanc {
 	 *			<jk>private final</jk> String <jf>name</jf>;
 	 *			<jk>private final int</jk> <jf>age</jf>;
 	 *
-	 *			<ja>@Beanc</ja>(properties=<js>"name,age"</js>)
+	 *			<ja>@MarshalledCtor</ja>(properties=<js>"name,age"</js>)
 	 *			<jk>public</jk> Person(String <jv>name</jv>, <jk>int</jk> <jv>age</jv>) {
 	 *				<jk>this</jk>.<jf>name</jf> = <jv>name</jv>;
 	 *				<jk>this</jk>.<jf>age</jf> = <jv>age</jv>;

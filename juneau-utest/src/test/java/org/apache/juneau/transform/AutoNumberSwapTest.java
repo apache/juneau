@@ -564,10 +564,10 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore class
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnoreApply(on="D01c",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="D01c",value=@MarshalledIgnore())
 	private static class D01Config {}
 
-	@BeanIgnore
+	@MarshalledIgnore
 	public static class D01 {
 		public Integer toInteger() {
 			return 1;
@@ -612,11 +612,11 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore swap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnoreApply(on="E01c.toInteger",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="E01c.toInteger",value=@MarshalledIgnore())
 	private static class E01Config {}
 
 	public static class E01 {
-		@BeanIgnore
+		@MarshalledIgnore
 		public Integer toInteger() {
 			return 1;
 		}
@@ -676,14 +676,14 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore unswap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnoreApply(on="F01c.create(java.lang.Integer)",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="F01c.create(java.lang.Integer)",value=@MarshalledIgnore())
 	private static class F01Config {}
 
 	public static class F01 {
 		public Integer toInteger() {
 			return 1;
 		}
-		@BeanIgnore
+		@MarshalledIgnore
 		public static F01 create(Integer o) {
 			return null;
 		}
@@ -777,11 +777,11 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore constructor
 	//------------------------------------------------------------------------------------------------------------------
 
-	@BeanIgnoreApply(on="G01c(java.lang.Integer)",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="G01c(java.lang.Integer)",value=@MarshalledIgnore())
 	private static class G01Config {}
 
 	public static class G01 {
-		@BeanIgnore
+		@MarshalledIgnore
 		public G01(Integer o) {}
 		public Integer toInteger() {
 			return 1;

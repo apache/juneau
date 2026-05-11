@@ -166,7 +166,7 @@ public abstract class BeanContextable extends Context {
 		 * <h5 class='section'>Notes:</h5>
 		 * <ul>
 		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a non-public bean class to override this setting.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.
+		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a public bean class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5>
@@ -215,8 +215,8 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Beanc @Beanc} annotation can also be used to expose a non-public constructor.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean constructor to ignore it.
+		 * 	<li class='note'>The {@link MarshalledCtor @MarshalledCtor} annotation can also be used to expose a non-public constructor.
+		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a public bean constructor to ignore it.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -370,7 +370,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#dictionary()}
-		 * 	<li class='ja'>{@link Beanp#dictionary()}
+		 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 		 * 	<li class='ja'>{@link BeanConfig#dictionary()}
 		 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
 		 * </ul>
@@ -425,8 +425,8 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used to expose a non-public field.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
+		 * 	<li class='note'>The {@link MarshalledProp @MarshalledProp} annotation can also be used to expose a non-public field.
+		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -565,8 +565,8 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used to expose a non-public method.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
+		 * 	<li class='note'>The {@link MarshalledProp @MarshalledProp} annotation can also be used to expose a non-public method.
+		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1317,7 +1317,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a bean class to override this setting.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
+		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1365,7 +1365,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a bean class to override this setting.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
+		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1410,8 +1410,8 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can be used on the getter to override this setting.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
+		 * 	<li class='note'>The {@link MarshalledProp @MarshalledProp} annotation can be used on the getter to override this setting.
+		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on getters to ignore them as bean properties.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1563,7 +1563,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
+		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on getters and fields to ignore them.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1602,7 +1602,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on transient fields to keep them from being ignored.
+		 * 	<li class='note'>The {@link MarshalledProp @MarshalledProp} annotation can also be used on transient fields to keep them from being ignored.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1808,7 +1808,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
+		 * 	<li class='note'>The {@link MarshalledProp @MarshalledProp} annotation can also be used on methods to individually identify them as fluent setters.
 		 * 	<li class='note'>The {@link Bean#findFluentSetters() @Marshalled.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
 		 * </ul>
 		 *
@@ -2313,11 +2313,11 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on classes to prevent them from being recognized as beans.
+		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on classes to prevent them from being recognized as beans.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanIgnore}
+		 * 	<li class='ja'>{@link MarshalledIgnore}
 		 * 	<li class='ja'>{@link BeanConfig#notBeanClasses()}
 		 * 	<li class='jf'>{@link BeanContext.Builder#notBeanClasses()}
 		 * </ul>

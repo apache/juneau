@@ -555,7 +555,7 @@ class BeanMap_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// @Beanp tests
+	// @MarshalledProp tests
 	//====================================================================================================
 	@Test void a09_beanPropertyAnnotation() {
 		var t6 = new G1();
@@ -594,10 +594,10 @@ class BeanMap_Test extends TestBase {
 
 		public List<G> l2 = new LinkedList<>();
 
-		@Beanp(type=List.class,params={G.class})
+		@MarshalledProp(type=List.class,params={G.class})
 		public List<G> l3;
 
-		@Beanp(type=LinkedList.class,params={G.class})
+		@MarshalledProp(type=LinkedList.class,params={G.class})
 		public List<G> l4;
 
 		private List<G> m1;
@@ -609,16 +609,16 @@ class BeanMap_Test extends TestBase {
 		public void setM2(List<G> v) { m2 = v; }
 
 		private List<G> m3;
-		@Beanp(type=List.class,params={G.class})
+		@MarshalledProp(type=List.class,params={G.class})
 		public List<G> getM3() { return m3; }
 		public void setM3(List<G> v) { m3 = v; }
 
 		private List<G> m4;
-		@Beanp(type=LinkedList.class,params={G.class})
+		@MarshalledProp(type=LinkedList.class,params={G.class})
 		public List<G> getM4() { return m4; }
 		public void setM4(List<G> v) { m4 = v; }
 
-		@Beanp(type=LinkedList.class,params={G.class})
+		@MarshalledProp(type=LinkedList.class,params={G.class})
 		private List<G> m5;
 		public List<G> getM5() { return m5; }
 		public void setM5(List<G> v) { m5 = v; }
@@ -706,12 +706,12 @@ class BeanMap_Test extends TestBase {
 	}
 
 	public static class J {
-		@Beanp(params={Float.class}) public List<String> p1;
-		@Beanp(params={Float.class}) public List<Integer> getP2() { return null; }
-		@Beanp(params={Float.class}) public List<? extends Integer> p3;
-		@Beanp(params={Object.class, Float.class}) public Map<String,Integer> p4;
-		@Beanp(params={Object.class, Float.class}) public Map<String,Integer> getP5() { return null; }
-		@Beanp(params={String.class, Float.class}) public Map<String,? extends Integer> p6;
+		@MarshalledProp(params={Float.class}) public List<String> p1;
+		@MarshalledProp(params={Float.class}) public List<Integer> getP2() { return null; }
+		@MarshalledProp(params={Float.class}) public List<? extends Integer> p3;
+		@MarshalledProp(params={Object.class, Float.class}) public Map<String,Integer> p4;
+		@MarshalledProp(params={Object.class, Float.class}) public Map<String,Integer> getP5() { return null; }
+		@MarshalledProp(params={String.class, Float.class}) public Map<String,? extends Integer> p6;
 	}
 
 	//====================================================================================================
@@ -731,12 +731,12 @@ class BeanMap_Test extends TestBase {
 	}
 
 	public static class K {
-		@Beanp(params=Float.class) public List<String> p1;
-		@Beanp(params=Float.class) public List<Integer> getP2() { return null; }
-		@Beanp(params=Float.class) public List<? extends Integer> p3;
-		@Beanp(params={String.class,Float.class}) public Map<String,Integer> p4;
-		@Beanp(params={String.class,Float.class}) public Map<String,Integer> getP5() { return null; }
-		@Beanp(params={String.class,Float.class}) public Map<String,? extends Integer> p6;
+		@MarshalledProp(params=Float.class) public List<String> p1;
+		@MarshalledProp(params=Float.class) public List<Integer> getP2() { return null; }
+		@MarshalledProp(params=Float.class) public List<? extends Integer> p3;
+		@MarshalledProp(params={String.class,Float.class}) public Map<String,Integer> p4;
+		@MarshalledProp(params={String.class,Float.class}) public Map<String,Integer> getP5() { return null; }
+		@MarshalledProp(params={String.class,Float.class}) public Map<String,? extends Integer> p6;
 	}
 
 	//====================================================================================================
@@ -1597,13 +1597,13 @@ class BeanMap_Test extends TestBase {
 		public void setA(String v) { a = v; }
 
 		public String b;
-		@BeanIgnore public String getB() { return b; }
+		@MarshalledIgnore public String getB() { return b; }
 		public void setB(String v) { this.b = v+"(setter)"; }
 
-		@BeanIgnore public String c;
+		@MarshalledIgnore public String c;
 
-		@BeanIgnore public String getD() { return null; }
-		@BeanIgnore public void setD(String v) {}
+		@MarshalledIgnore public String getD() { return null; }
+		@MarshalledIgnore public void setD(String v) {}
 	}
 
 	@Test void a34_hiddenProperties_usingConfig() {
@@ -1625,9 +1625,9 @@ class BeanMap_Test extends TestBase {
 		assertEquals("b(setter)", t.b);
 	}
 
-	@BeanIgnoreApply(on="Dummy1",value=@BeanIgnore())
-	@BeanIgnoreApply(on="Uc.getB,Uc.c,Uc.getD,Uc.setD",value=@BeanIgnore())
-	@BeanIgnoreApply(on="Dummy2",value=@BeanIgnore())
+	@MarshalledIgnoreApply(on="Dummy1",value=@MarshalledIgnore())
+	@MarshalledIgnoreApply(on="Uc.getB,Uc.c,Uc.getD,Uc.setD",value=@MarshalledIgnore())
+	@MarshalledIgnoreApply(on="Dummy2",value=@MarshalledIgnore())
 	private static class UcConfig {}
 
 	public static class Uc {
@@ -1636,13 +1636,13 @@ class BeanMap_Test extends TestBase {
 		public void setA(String v) { a = v; }
 
 		public String b;
-		@BeanIgnore public String getB() { return b; }
+		@MarshalledIgnore public String getB() { return b; }
 		public void setB(String b) { this.b = b+"(setter)"; }
 
-		@BeanIgnore public String c;
+		@MarshalledIgnore public String c;
 
-		@BeanIgnore public String getD() { return null; }
-		@BeanIgnore public void setD(String v) {}
+		@MarshalledIgnore public String getD() { return null; }
+		@MarshalledIgnore public void setD(String v) {}
 	}
 
 	//====================================================================================================
@@ -1794,7 +1794,7 @@ class BeanMap_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// containsKey with plain beans vs @Beanp(name="*") dyna/extras map
+	// containsKey with plain beans vs @MarshalledProp(name="*") dyna/extras map
 	//====================================================================================================
 
 	@Test void z01_containsKey_plainBean_unknownPropertyIsAbsent() {
@@ -1805,14 +1805,14 @@ class BeanMap_Test extends TestBase {
 
 	/** Bean with a Map-backed dyna property for extra entries (see BasicBeans_Test.B). */
 	public static class DynaExtrasBean {
-		@Beanp(name = "*")
+		@MarshalledProp(name = "*")
 		public Map<String, Object> extras = new LinkedHashMap<>();
 	}
 
 	@Test void z02_containsKey_dynaBean_unknownKeyNotInExtrasMap() {
 		var bean = new DynaExtrasBean();
 		var m = BeanContext.DEFAULT.toBeanMap(bean);
-		// Dyna map is empty; @Beanp(name="*") does not make arbitrary keys appear as present.
+		// Dyna map is empty; @MarshalledProp(name="*") does not make arbitrary keys appear as present.
 		assertFalse(m.containsKey("notDefinedAnywhere"));
 		assertEquals(set(), m.keySet());
 	}

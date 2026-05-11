@@ -22,16 +22,16 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Dynamically applies a {@link Beanc @Beanc} annotation to specified classes, methods, or fields.
+ * Dynamically applies a {@link MarshalledCtor @MarshalledCtor} annotation to specified classes, methods, or fields.
  *
  * <p>
  * This annotation separates the <b>targeting</b> concern ({@link #on()}/{@link #onClass()}) from the
- * <b>content</b> concern ({@link #value()}), enabling {@link Beanc @Beanc} to be a pure data annotation
+ * <b>content</b> concern ({@link #value()}), enabling {@link MarshalledCtor @MarshalledCtor} to be a pure data annotation
  * without marshall-specific application machinery.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@BeancApply</ja>(on=<js>"Person(String,int)"</js>, value=<ja>@Beanc</ja>(properties=<js>"name,age"</js>))
+ * 	<ja>@MarshalledCtorApply</ja>(on=<js>"Person(String,int)"</js>, value=<ja>@MarshalledCtor</ja>(properties=<js>"name,age"</js>))
  * 	<jk>public class</jk> MyConfig {}
  * </p>
  *
@@ -42,16 +42,16 @@ import java.lang.annotation.*;
 @Documented
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
-@Repeatable(BeancApply.Array.class)
-@ContextApply(BeancApplyAnnotation.Applier.class)
-public @interface BeancApply {
+@Repeatable(MarshalledCtorApply.Array.class)
+@ContextApply(MarshalledCtorApplyAnnotation.Applier.class)
+public @interface MarshalledCtorApply {
 
 	/**
-	 * The {@link Beanc @Beanc} annotation to apply.
+	 * The {@link MarshalledCtor @MarshalledCtor} annotation to apply.
 	 *
 	 * @return The annotation value.
 	 */
-	Beanc value();
+	MarshalledCtor value();
 
 	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
@@ -79,7 +79,7 @@ public @interface BeancApply {
 	Class<?>[] onClass() default {};
 
 	/**
-	 * A collection of {@link BeancApply @BeancApply annotations}.
+	 * A collection of {@link MarshalledCtorApply @MarshalledCtorApply annotations}.
 	 */
 	@Documented
 	@Target({ TYPE, METHOD })
@@ -91,6 +91,6 @@ public @interface BeancApply {
 		 *
 		 * @return The annotation value.
 		 */
-		BeancApply[] value();
+		MarshalledCtorApply[] value();
 	}
 }

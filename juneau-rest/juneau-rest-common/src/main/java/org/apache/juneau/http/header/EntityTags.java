@@ -28,7 +28,7 @@ import org.apache.juneau.commons.collections.*;
 /**
  * A list of {@link EntityTag} beans.
  */
-@BeanIgnore
+@Marshalled(as=MarshalledAs.STRING)
 public class EntityTags {
 
 	/** Represents an empty entity tags object. */

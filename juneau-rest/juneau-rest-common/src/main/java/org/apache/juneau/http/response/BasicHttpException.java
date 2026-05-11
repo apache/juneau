@@ -54,7 +54,7 @@ import org.apache.juneau.http.header.*;
  *
  * @serial exclude
  */
-@BeanIgnore /* Use toString() to serialize */
+@Marshalled(as=MarshalledAs.STRING)
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_status)
 })

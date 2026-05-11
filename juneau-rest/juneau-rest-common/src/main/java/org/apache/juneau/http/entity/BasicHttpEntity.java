@@ -48,7 +48,7 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@BeanIgnore
+@MarshalledIgnore
 
 @SuppressWarnings({
 	"resource", // Content may be streams; value equality not practical

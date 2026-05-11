@@ -158,7 +158,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @return The children of this element.
 	 */
 	@Xml(format = ELEMENTS)
-	@Beanp(dictionary = HtmlBeanDictionary.class, name = "c")
+	@MarshalledProp(dictionary = HtmlBeanDictionary.class, name = "c")
 	public List<Object> getChildren() { return children; }
 
 	@Override /* Overridden from HtmlElement */
@@ -485,7 +485,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @param children The new children for this container.
 	 * @return This object.
 	 */
-	@Beanp("c")
+	@MarshalledProp("c")
 	public HtmlElementContainer setChildren(List<Object> children) {
 		this.children = children;
 		return this;

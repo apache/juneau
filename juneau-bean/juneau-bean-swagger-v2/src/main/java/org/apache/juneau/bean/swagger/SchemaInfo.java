@@ -563,7 +563,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Beanp("$ref")
+	@MarshalledProp("$ref")
 	public String getRef() { return ref; }
 
 	/**
@@ -1103,7 +1103,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	@Beanp("$ref")
+	@MarshalledProp("$ref")
 	public SchemaInfo setRef(String value) {
 		ref = value;
 		return this;

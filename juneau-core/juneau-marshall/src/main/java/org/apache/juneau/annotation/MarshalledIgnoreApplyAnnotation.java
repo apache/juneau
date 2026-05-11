@@ -27,20 +27,20 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Utility classes and methods for the {@link BeancApply @BeancApply} annotation.
+ * Utility classes and methods for the {@link MarshalledIgnoreApply @MarshalledIgnoreApply} annotation.
  *
  */
-public class BeancApplyAnnotation {
+public class MarshalledIgnoreApplyAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private BeancApplyAnnotation() {}
+	private MarshalledIgnoreApplyAnnotation() {}
 
 	/**
-	 * Applies targeted {@link BeancApply} annotations to a {@link org.apache.juneau.Context.Builder}.
+	 * Applies targeted {@link MarshalledIgnoreApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<BeancApply,Context.Builder> {
+	public static class Applier extends AnnotationApplier<MarshalledIgnoreApply,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -48,12 +48,12 @@ public class BeancApplyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(BeancApply.class, Context.Builder.class, vr);
+			super(MarshalledIgnoreApply.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<BeancApply> ai, Context.Builder b) {
-			BeancApply a = ai.inner();
+		public void apply(AnnotationInfo<MarshalledIgnoreApply> ai, Context.Builder b) {
+			MarshalledIgnoreApply a = ai.inner();
 			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
 				return;
 			b.annotations(a);
@@ -69,22 +69,22 @@ public class BeancApplyAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
-		Beanc value = BeancAnnotation.DEFAULT;
+		MarshalledIgnore value = MarshalledIgnoreAnnotation.DEFAULT;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(BeancApply.class);
+			super(MarshalledIgnoreApply.class);
 		}
 
 		/**
-		 * Sets the {@link BeancApply#value()} property on this annotation.
+		 * Sets the {@link MarshalledIgnoreApply#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder value(Beanc value) {
+		public Builder value(MarshalledIgnore value) {
 			this.value = value;
 			return this;
 		}
@@ -144,11 +144,11 @@ public class BeancApplyAnnotation {
 		}
 
 		/**
-		 * Instantiates a new {@link BeancApply @BeancApply} object initialized with this builder.
+		 * Instantiates a new {@link MarshalledIgnoreApply @MarshalledIgnoreApply} object initialized with this builder.
 		 *
-		 * @return A new {@link BeancApply} object.
+		 * @return A new {@link MarshalledIgnoreApply} object.
 		 */
-		public BeancApply build() {
+		public MarshalledIgnoreApply build() {
 			return new Object(this);
 		}
 	}
@@ -156,33 +156,33 @@ public class BeancApplyAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedOnClassAnnotationObject implements BeancApply {
+	private static class Object extends AppliedOnClassAnnotationObject implements MarshalledIgnoreApply {
 
-		private final Beanc value;
+		private final MarshalledIgnore value;
 
-		Object(BeancApplyAnnotation.Builder b) {
+		Object(MarshalledIgnoreApplyAnnotation.Builder b) {
 			super(b);
 			value = b.value;
 		}
 
-		@Override /* Overridden from BeancApply */
-		public Beanc value() {
+		@Override /* Overridden from MarshalledIgnoreApply */
+		public MarshalledIgnore value() {
 			return value;
 		}
 
-		@Override /* Overridden from BeancApply */
+		@Override /* Overridden from MarshalledIgnoreApply */
 		public String[] on() {
 			return super.on();
 		}
 
-		@Override /* Overridden from BeancApply */
+		@Override /* Overridden from MarshalledIgnoreApply */
 		public Class<?>[] onClass() {
 			return super.onClass();
 		}
 	}
 
 	/** Default value */
-	public static final BeancApply DEFAULT = create().build();
+	public static final MarshalledIgnoreApply DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -219,7 +219,7 @@ public class BeancApplyAnnotation {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(BeancApply a) {
+	public static boolean empty(MarshalledIgnoreApply a) {
 		return a == null || DEFAULT.equals(a);
 	}
 }
