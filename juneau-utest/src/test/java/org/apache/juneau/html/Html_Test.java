@@ -392,10 +392,10 @@ class Html_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @Bean(bpi) on collections of beans
+	// @Marshalled(bpi) on collections of beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Bean(p="f3,f2,f1")
+	@Marshalled(p="f3,f2,f1")
 	public static class E {
 		public Integer f1, f2, f3;
 

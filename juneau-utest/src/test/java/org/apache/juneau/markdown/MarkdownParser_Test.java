@@ -223,7 +223,7 @@ class MarkdownParser_Test {
 	// h - Bean property annotations
 	//====================================================================================================
 
-	@Test void h01_parseBeanAnnotations() throws Exception {
+	@Test void h01_parseMarshalledAnnotations() throws Exception {
 		var md = "| Property | Value |\n|---|---|\n| full_name | Alice |\n| years | 30 |";
 		var r = MarkdownParser.DEFAULT.parse(md, F.class);
 		assertEquals("Alice", r.name);

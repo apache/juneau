@@ -33,17 +33,17 @@ class RestOp_BeanConfig_Test extends TestBase {
 
 	public static class A1 extends BasicRestServlet {
 		@RestGet
-		@BeanApply(onClass=X1.class, value=@Bean(properties="a,_b"))
+		@MarshalledApply(onClass=X1.class, value=@Marshalled(properties="a,_b"))
 		public Object a() {
 			return new X1().init();
 		}
 		@RestGet
-		@BeanApply(onClass=X1.class, value=@Bean(p="a"))
+		@MarshalledApply(onClass=X1.class, value=@Marshalled(p="a"))
 		public Object b() {
 			return new X1().init();
 		}
 		@RestGet
-		@BeanApply(onClass=X1.class, value=@Bean(p="_b"))
+		@MarshalledApply(onClass=X1.class, value=@Marshalled(p="_b"))
 		public Object c() {
 			return new X1().init();
 		}
@@ -74,17 +74,17 @@ class RestOp_BeanConfig_Test extends TestBase {
 
 	public static class A2 extends BasicRestServlet {
 		@RestGet
-		@BeanApply(on="X1", value=@Bean(excludeProperties="a,_b"))
+		@MarshalledApply(on="X1", value=@Marshalled(excludeProperties="a,_b"))
 		public Object a() {
 			return new X1().init();
 		}
 		@RestGet
-		@BeanApply(on="X1", value=@Bean(xp="a"))
+		@MarshalledApply(on="X1", value=@Marshalled(xp="a"))
 		public Object b() {
 			return new X1().init();
 		}
 		@RestGet
-		@BeanApply(on="X1", value=@Bean(xp="_b"))
+		@MarshalledApply(on="X1", value=@Marshalled(xp="_b"))
 		public Object c() {
 			return new X1().init();
 		}
@@ -110,22 +110,22 @@ class RestOp_BeanConfig_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @BeanConfig(bpi) and @Bean(bpi)
+	// @BeanConfig(bpi) and @Marshalled(bpi)
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A3 extends BasicRestServlet {
 		@RestGet
-		@BeanApply(onClass=X2.class, value=@Bean(p="a,_b"))
+		@MarshalledApply(onClass=X2.class, value=@Marshalled(p="a,_b"))
 		public Object a() {
 			return new X2().init();
 		}
 		@RestGet
-		@BeanApply(onClass=X2.class, value=@Bean(p="a"))
+		@MarshalledApply(onClass=X2.class, value=@Marshalled(p="a"))
 		public Object b() {
 			return new X2().init();
 		}
 		@RestGet
-		@BeanApply(onClass=X2.class, value=@Bean(p="_b"))
+		@MarshalledApply(onClass=X2.class, value=@Marshalled(p="_b"))
 		public Object c() {
 			return new X2().init();
 		}
@@ -151,22 +151,22 @@ class RestOp_BeanConfig_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @BeanConfig(bpx) and @Bean(bpi)
+	// @BeanConfig(bpx) and @Marshalled(bpi)
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A4 extends BasicRestServlet {
 		@RestGet
-		@BeanApply(onClass=X2.class, value=@Bean(xp="a,_b"))
+		@MarshalledApply(onClass=X2.class, value=@Marshalled(xp="a,_b"))
 		public Object a() {
 			return new X2().init();
 		}
 		@RestGet
-		@BeanApply(onClass=X2.class, value=@Bean(xp="a"))
+		@MarshalledApply(onClass=X2.class, value=@Marshalled(xp="a"))
 		public Object b() {
 			return new X2().init();
 		}
 		@RestGet
-		@BeanApply(onClass=X2.class, value=@Bean(xp="_b"))
+		@MarshalledApply(onClass=X2.class, value=@Marshalled(xp="_b"))
 		public Object c() {
 			return new X2().init();
 		}
@@ -197,7 +197,7 @@ class RestOp_BeanConfig_Test extends TestBase {
 
 	public static class A5 extends BasicRestServlet {
 		@RestGet
-		@BeanApply(on="*", value=@Bean(p="a"))
+		@MarshalledApply(on="*", value=@Marshalled(p="a"))
 		public Object a() {
 			return new X1().init();
 		}
@@ -218,7 +218,7 @@ class RestOp_BeanConfig_Test extends TestBase {
 
 	public static class A6 extends BasicRestServlet {
 		@RestGet
-		@BeanApply(on="org.apache.juneau.rest.annotation.RestOp_BeanConfig_Test$X1", value=@Bean(p="a"))
+		@MarshalledApply(on="org.apache.juneau.rest.annotation.RestOp_BeanConfig_Test$X1", value=@Marshalled(p="a"))
 		public Object a() {
 			return new X1().init();
 		}
@@ -239,13 +239,13 @@ class RestOp_BeanConfig_Test extends TestBase {
 
 	public static class A7 extends BasicRestServlet {
 		@RestGet
-		@BeanApply(on="MyBean", value=@Bean(p="a"))
+		@MarshalledApply(on="MyBean", value=@Marshalled(p="a"))
 		public Object a() {
 			// Should not match.
 			return new X1().init();
 		}
 		@RestGet
-		@BeanApply(on="MyBean", value=@Bean(p="a"))
+		@MarshalledApply(on="MyBean", value=@Marshalled(p="a"))
 		public Object b() {
 			// Should not match.  We don't support meta-matches in class names.
 			return new X1().init();
@@ -281,7 +281,7 @@ class RestOp_BeanConfig_Test extends TestBase {
 		}
 	}
 
-	@Bean(properties="_b,a")
+	@Marshalled(properties="_b,a")
 	public static class X2 {
 		public int a;
 		@Beanp("_b") public String b;

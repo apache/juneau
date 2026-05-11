@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Declared argument for an MCP prompt.
  */
-@Bean
+@Marshalled
 public class PromptArgument {
 
 	private String name;

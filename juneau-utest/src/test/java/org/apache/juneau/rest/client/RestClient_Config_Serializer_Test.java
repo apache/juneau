@@ -69,7 +69,7 @@ class RestClient_Config_Serializer_Test extends TestBase {
 		client().addBeanTypes().build().post("/echoBody",l1).run().assertContent("{f1:{_type:'L',f2:1}}");
 	}
 
-	@org.apache.juneau.annotation.Bean(typeName="L")
+	@org.apache.juneau.annotation.Marshalled(typeName="L")
 	public static class A2 {
 		public int f2;
 		static A2 get() {

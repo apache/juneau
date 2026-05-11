@@ -171,10 +171,10 @@ public abstract class Context {
 		 * As a rule, any Juneau annotation with an <l>on()</l> method can be used with this setting.
 		 *
 		 * <p>
-		 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation:
+		 * The following example shows the equivalent methods for applying the {@link Bean @Marshalled} annotation:
 		 * <p class='bjava'>
 		 * 	<jc>// Class with explicit annotation.</jc>
-		 * 	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
+		 * 	<ja>@Marshalled</ja>(properties=<js>"street,city,state"</js>)
 		 * 	<jk>public class</jk> A {...}
 		 *
 		 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
@@ -182,7 +182,7 @@ public abstract class Context {
 		 *
 		 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
 		 * 	<ja>@RestGet</ja>(...)
-		 * 	<ja>@Bean</ja>(on=<js>"B"</js>, properties=<js>"street,city,state"</js>)
+		 * 	<ja>@Marshalled</ja>(on=<js>"B"</js>, properties=<js>"street,city,state"</js>)
 		 * 	<jk>public void</jk> doFoo() {...}
 		 * </p>
 		 *
@@ -191,8 +191,8 @@ public abstract class Context {
 		 * config annotations.  However, concrete implementations of annotations are also provided that can be passed
 		 * directly into builder classes like so:
 		 * <p class='bjava'>
-		 * 	<jc>// Create a concrete @Bean annotation.</jc>
-		 * 	<ja>Bean</ja> <jv>annotation</jv> = BeanAnnotation.<jsm>create</jsm>(B.<jk>class</jk>).properties(<js>"street,city,state"</js>).build();
+		 * 	<jc>// Create a concrete @Marshalled annotation.</jc>
+		 * 	<ja>Bean</ja> <jv>annotation</jv> = MarshalledAnnotation.<jsm>create</jsm>(B.<jk>class</jk>).properties(<js>"street,city,state"</js>).build();
 		 *
 		 * 	<jc>// Apply it to a serializer.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().annotations(<jv>annotation</jv>).build();
@@ -205,7 +205,7 @@ public abstract class Context {
 		 * The following is the list of annotations builders provided that can be constructed
 		 * and passed into the builder class:
 		 * <ul class='javatreec'>
-		 * 	<li class='ja'>{@link BeanAnnotation}
+		 * 	<li class='ja'>{@link MarshalledAnnotation}
 		 * 	<li class='ja'>{@link BeancAnnotation}
 		 * 	<li class='ja'>{@link BeanIgnoreAnnotation}
 		 * 	<li class='ja'>{@link BeanpAnnotation}

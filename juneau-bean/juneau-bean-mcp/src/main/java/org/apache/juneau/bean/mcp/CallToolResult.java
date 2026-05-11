@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Result payload for {@value org.apache.juneau.bean.mcp.McpMethods#TOOLS_CALL}.
  */
-@Bean
+@Marshalled
 public class CallToolResult {
 
 	private List<Content> content;

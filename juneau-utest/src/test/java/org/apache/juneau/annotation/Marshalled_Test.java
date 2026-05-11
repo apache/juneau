@@ -28,17 +28,17 @@ import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"unused" // Private and package classes required for @Bean visibility testing
+	"unused" // Private and package classes required for @Marshalled visibility testing
 })
-class Bean_Test extends TestBase {
+class Marshalled_Test extends TestBase {
 
 	static VarResolverSession vr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Bean annotation overrides visibility rules on class and constructor.
+	// @Marshalled annotation overrides visibility rules on class and constructor.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Bean
+	@Marshalled
 	private static class A1 {
 		public int f1;
 
@@ -57,9 +57,9 @@ class Bean_Test extends TestBase {
 		assertEquals("{f1:1}", json);
 	}
 
-	@BeanApply(on="Dummy1",value=@Bean())
-	@BeanApply(on="A2",value=@Bean())
-	@BeanApply(on="Dummy2",value=@Bean())
+	@MarshalledApply(on="Dummy1",value=@Marshalled())
+	@MarshalledApply(on="A2",value=@Marshalled())
+	@MarshalledApply(on="Dummy2",value=@Marshalled())
 	private static class A2Config {}
 
 	private static class A2 {
@@ -169,10 +169,10 @@ class Bean_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @Bean(on=X,properties=) should override @Bean(properties=)
+	// @Marshalled(on=X,properties=) should override @Marshalled(properties=)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Bean(properties="a,b,c", excludeProperties="b")
+	@Marshalled(properties="a,b,c", excludeProperties="b")
 	static class D1 {
 		public int a, b, c, d;
 
@@ -186,7 +186,7 @@ class Bean_Test extends TestBase {
 		}
 	}
 
-	@Bean(p="a,b,c", xp="b")
+	@Marshalled(p="a,b,c", xp="b")
 	static class D2 {
 		public int a, b, c, d;
 
@@ -200,9 +200,9 @@ class Bean_Test extends TestBase {
 		}
 	}
 
-	@BeanApply(on="Dummy",value=@Bean(p="b,c,d",xp="c"))
-	@BeanApply(on="D1",value=@Bean(properties="b,c,d",excludeProperties="c"))
-	@BeanApply(on="D2",value=@Bean(p="b,c,d",xp="c"))
+	@MarshalledApply(on="Dummy",value=@Marshalled(p="b,c,d",xp="c"))
+	@MarshalledApply(on="D1",value=@Marshalled(properties="b,c,d",excludeProperties="c"))
+	@MarshalledApply(on="D2",value=@Marshalled(p="b,c,d",xp="c"))
 	static class DConfig {}
 
 	private static ClassInfo dConfig = ClassInfo.of(DConfig.class);
@@ -248,7 +248,7 @@ class Bean_Test extends TestBase {
 	}
 
 	@Test void d05_beanPropertiesExcludePropertiesCombined_beanContextBuilderOverride() throws Exception {
-		var ba = BeanApplyAnnotation.create("D1").value(BeanAnnotation.create().properties("b,c,d").excludeProperties("c").build()).build();
+		var ba = MarshalledApplyAnnotation.create("D1").value(MarshalledAnnotation.create().properties("b,c,d").excludeProperties("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
@@ -260,7 +260,7 @@ class Bean_Test extends TestBase {
 	}
 
 	@Test void d06_beanPXpCombined_beanContextBuilderOverride() throws Exception {
-		var ba = BeanApplyAnnotation.create("D2").value(BeanAnnotation.create().p("b,c,d").xp("c").build()).build();
+		var ba = MarshalledApplyAnnotation.create("D2").value(MarshalledAnnotation.create().p("b,c,d").xp("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
@@ -272,15 +272,15 @@ class Bean_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @BeanConfig(bpi/bpx) should override @Bean(bpi/bpx)
+	// @BeanConfig(bpi/bpx) should override @Marshalled(bpi/bpx)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Bean(properties="a,b,c")
+	@Marshalled(properties="a,b,c")
 	static class E1a {
 		public int a, b, c, d;
 	}
 
-	@Bean(excludeProperties="b")
+	@Marshalled(excludeProperties="b")
 	static class E1 extends E1a {
 
 		public static E1 create() {
@@ -293,12 +293,12 @@ class Bean_Test extends TestBase {
 		}
 	}
 
-	@Bean(p="a,b,c")
+	@Marshalled(p="a,b,c")
 	static class E2a {
 		public int a, b, c, d;
 	}
 
-	@Bean(xp="b")
+	@Marshalled(xp="b")
 	static class E2 extends E2a {
 
 		public static E2 create() {
@@ -311,14 +311,14 @@ class Bean_Test extends TestBase {
 		}
 	}
 
-	@BeanApply(on="Dummy",value=@Bean(p="b,c,d",xp="c"))
-	@BeanApply(on="E1",value=@Bean(properties="b,c,d",excludeProperties="c"))
-	@BeanApply(on="E2",value=@Bean(p="b,c,d",xp="c"))
+	@MarshalledApply(on="Dummy",value=@Marshalled(p="b,c,d",xp="c"))
+	@MarshalledApply(on="E1",value=@Marshalled(properties="b,c,d",excludeProperties="c"))
+	@MarshalledApply(on="E2",value=@Marshalled(p="b,c,d",xp="c"))
 	static class EConfig {}
 
 	private static ClassInfo eConfig = ClassInfo.of(EConfig.class);
 
-	@Test void e01_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
+	@Test void e01_beanPropertiesExcludePropertiesCombined_multipleMarshalledAnnotations_noBeanConfig() throws Exception {
 		var json = Json5.of(E1.create());
 		assertEquals("{a:1,c:3}", json);
 		var e = Json5.DEFAULT.read(json, E1.class);
@@ -326,7 +326,7 @@ class Bean_Test extends TestBase {
 		assertEquals("{a:1,c:3}", json);
 	}
 
-	@Test void e02_beanPXpCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
+	@Test void e02_beanPXpCombined_multipleMarshalledAnnotations_noBeanConfig() throws Exception {
 		var json = Json5.of(E2.create());
 		assertEquals("{a:1,c:3}", json);
 		var e = Json5.DEFAULT.read(json, E2.class);
@@ -334,7 +334,7 @@ class Bean_Test extends TestBase {
 		assertEquals("{a:1,c:3}", json);
 	}
 
-	@Test void e03_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
+	@Test void e03_beanPropertiesExcludePropertiesCombined_multipleMarshalledAnnotations_beanConfigOverride() throws Exception {
 		var al = AnnotationWorkList.of(vr, rstream(eConfig.getAnnotations()));
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = Json5Parser.create().apply(al).build();
@@ -346,7 +346,7 @@ class Bean_Test extends TestBase {
 		assertEquals("{b:2,d:4}", json);
 	}
 
-	@Test void e04_beanPXpCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
+	@Test void e04_beanPXpCombined_multipleMarshalledAnnotations_beanConfigOverride() throws Exception {
 		var al = AnnotationWorkList.of(vr, rstream(eConfig.getAnnotations()));
 		var js = Json5Serializer.create().apply(al).build();
 		var jp = Json5Parser.create().apply(al).build();
@@ -358,8 +358,8 @@ class Bean_Test extends TestBase {
 		assertEquals("{b:2,d:4}", json);
 	}
 
-	@Test void e05_beanPropertiersExcludePropertiesCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
-		var ba = BeanApplyAnnotation.create("E1").value(BeanAnnotation.create().properties("b,c,d").excludeProperties("c").build()).build();
+	@Test void e05_beanPropertiersExcludePropertiesCombined_multipleMarshalledAnnotations_beanContextBuilderOverride() throws Exception {
+		var ba = MarshalledApplyAnnotation.create("E1").value(MarshalledAnnotation.create().properties("b,c,d").excludeProperties("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
@@ -370,8 +370,8 @@ class Bean_Test extends TestBase {
 		assertEquals("{b:2,d:4}", json);
 	}
 
-	@Test void e06_beanBpiBpxCombined_multipleBeanAnnotations_beanContextBuilderOverride() throws Exception {
-		var ba = BeanApplyAnnotation.create("E2").value(BeanAnnotation.create().p("b,c,d").xp("c").build()).build();
+	@Test void e06_beanBpiBpxCombined_multipleMarshalledAnnotations_beanContextBuilderOverride() throws Exception {
+		var ba = MarshalledApplyAnnotation.create("E2").value(MarshalledAnnotation.create().p("b,c,d").xp("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 

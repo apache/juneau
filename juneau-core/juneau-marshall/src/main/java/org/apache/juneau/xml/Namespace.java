@@ -39,7 +39,7 @@ import org.apache.juneau.annotation.*;
 @SuppressWarnings({
 	"java:S3740" // Raw Comparable type used intentionally for namespace ordering where the generic bound cannot be expressed
 })
-@Bean
+@Marshalled
 public class Namespace {
 
 	private static final ConcurrentHashMap<String,Namespace> CACHE = new ConcurrentHashMap<>();

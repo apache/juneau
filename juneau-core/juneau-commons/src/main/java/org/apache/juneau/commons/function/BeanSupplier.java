@@ -44,7 +44,7 @@ package org.apache.juneau.commons.function;
  *
  * <h5 class='section'>Example (DB-backed supplier via JDBC cursor):</h5>
  * <p class='bjava'>
- * 	<ja>@Bean</ja>(factory=ItemSupplierFactory.<jk>class</jk>)
+ * 	<ja>@Marshalled</ja>(factory=ItemSupplierFactory.<jk>class</jk>)
  * 	<jk>public class</jk> ItemSupplier <jk>implements</jk> BeanSupplier&lt;Item&gt; {
  * 		<jk>private</jk> Connection <jv>conn</jv>;
  * 		<jk>private</jk> ResultSet <jv>rs</jv>;

@@ -237,7 +237,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 		.build();
 		 *
 		 * 	<jc>// Our map of beans to serialize.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+		 * 	<ja>@Marshalled</ja>(typeName=<js>"mybean"</js>)
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 		 * 	}
@@ -275,7 +275,7 @@ public class Serializer extends BeanTraverseContext {
 		 * type information that might normally be included to determine the data type will not be serialized.
 		 *
 		 * <p>
-		 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean(typeName)} value, a
+		 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Marshalled(typeName)} value, a
 		 * <js>'_type'</js> attribute will only be added when this setting is enabled.
 		 *
 		 * <p>
@@ -294,7 +294,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 		.build();
 		 *
 		 * 	<jc>// Our bean to serialize.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+		 * 	<ja>@Marshalled</ja>(typeName=<js>"mybean"</js>)
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 		 * 	}

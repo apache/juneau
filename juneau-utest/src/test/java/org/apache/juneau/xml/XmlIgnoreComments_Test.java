@@ -822,7 +822,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="X")
+	@Marshalled(typeName="X")
 	public static class BeanWithTypeName {
 		public int a;
 		public String b;
@@ -834,7 +834,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(dictionary={B.class})
+	@Marshalled(dictionary={B.class})
 	public static class BeanWithPropertiesWithTypeNames {
 		public B b1;
 		public Object b2;
@@ -846,7 +846,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(dictionary={B.class})
+	@Marshalled(dictionary={B.class})
 	public static class BeanWithPropertiesWithArrayTypeNames {
 		public B[] b1;
 		public Object[] b2;
@@ -860,7 +860,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(dictionary={B.class})
+	@Marshalled(dictionary={B.class})
 	public static class BeanWithPropertiesWith2dArrayTypeNames {
 		public B[][] b1;
 		public Object[][] b2;
@@ -874,7 +874,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(dictionary={B.class})
+	@Marshalled(dictionary={B.class})
 	public static class BeanWithPropertiesWithMapTypeNames {
 		public Map<String,B> b1;
 		public Map<String,Object> b2;
@@ -888,7 +888,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="B")
+	@Marshalled(typeName="B")
 	public static class B {
 		public String b;
 
@@ -1037,7 +1037,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="X")
+	@Marshalled(typeName="X")
 	public static class BeanX {
 		public String fx;
 		BeanX init() {
@@ -1046,7 +1046,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="X")
+	@Marshalled(typeName="X")
 	public static class BeanXSimple {
 		@Xml(format=XmlFormat.ATTR)
 		public String fx;
@@ -1056,7 +1056,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="Y")
+	@Marshalled(typeName="Y")
 	public static class BeanY {
 		public String fy;
 		BeanY init() {
@@ -1065,7 +1065,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="Y")
+	@Marshalled(typeName="Y")
 	public static class BeanYSimple {
 		@Xml(format=XmlFormat.ATTR)
 		public String fy;
@@ -1084,7 +1084,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="  \b\f\n\t\r  ")
+	@Marshalled(typeName="  \b\f\n\t\r  ")
 	public static class BeanWithSpecialCharacters2 {
 
 		@Beanp(name="  \b\f\n\t\r  ")
@@ -1101,7 +1101,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		public String[] b;
 	}
 
-	@Bean(dictionary={A.class})
+	@Marshalled(dictionary={A.class})
 	public static class BeanWithAbstractFields {
 		public A a;
 		public IA ia;
@@ -1117,7 +1117,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(dictionary={A.class})
+	@Marshalled(dictionary={A.class})
 	public static class BeanWithAbstractArrayFields {
 		public A[] a;
 		public IA[] ia1, ia2;
@@ -1136,7 +1136,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(dictionary={A.class})
+	@Marshalled(dictionary={A.class})
 	public static class BeanWithAbstractMapFields {
 		public Map<String,A> a;
 		public Map<String,AA> b;
@@ -1153,7 +1153,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		}
 	}
 
-	@Bean(dictionary={A.class})
+	@Marshalled(dictionary={A.class})
 	public static class BeanWithAbstractMapArrayFields {
 		public Map<String,A[]> a;
 		public Map<String,IA[]> ia;
@@ -1183,7 +1183,7 @@ class XmlIgnoreComments_Test extends TestBase {
 
 	public abstract static class AA implements IA {}
 
-	@Bean(typeName="A")
+	@Marshalled(typeName="A")
 	public static class A extends AA {
 		private String a;
 		@Override public String getA() { return a; }

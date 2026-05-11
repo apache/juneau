@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Parameters for {@value org.apache.juneau.bean.mcp.McpMethods#RESOURCES_READ}.
  */
-@Bean
+@Marshalled
 public class ReadResourceRequest {
 
 	private String uri;

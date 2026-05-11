@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Server capability flags for resources.
  */
-@Bean
+@Marshalled
 public class ResourceCapability {
 
 	private Boolean listChanged;

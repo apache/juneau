@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * MCP {@code initialize} request parameters.
  */
-@Bean
+@Marshalled
 public class InitializeRequest {
 
 	private String protocolVersion;

@@ -67,7 +67,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
-@Bean(typeName = "icon")
+@Marshalled(typeName = "icon")
 public class Icon extends Common {
 
 	private URI uri;

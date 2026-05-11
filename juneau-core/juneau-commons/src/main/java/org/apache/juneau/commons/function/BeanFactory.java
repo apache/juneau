@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.function;
 
 /**
- * A universal factory interface used with <ja>@Bean</ja><c>(factory=X.class)</c> for any bean type the
+ * A universal factory interface used with <ja>@Marshalled</ja><c>(factory=X.class)</c> for any bean type the
  * framework needs to instantiate.
  *
  * <p>
@@ -26,7 +26,7 @@ package org.apache.juneau.commons.function;
  * and any ordinary bean class parsed from JSON/XML/etc.
  *
  * <p>
- * When a class annotated with <ja>@Bean</ja><c>(factory=MyFactory.class)</c> needs to be instantiated,
+ * When a class annotated with <ja>@Marshalled</ja><c>(factory=MyFactory.class)</c> needs to be instantiated,
  * the framework resolves the factory as follows:
  * <ol>
  * 	<li>Look up the factory class in the {@code BeanStore} (e.g. Spring {@code ApplicationContext})
@@ -49,7 +49,7 @@ package org.apache.juneau.commons.function;
  * 	}
  *
  * 	<jc>// The target class declares which factory creates it</jc>
- * 	<ja>@Bean</ja>(factory=ItemChannelFactory.<jk>class</jk>)
+ * 	<ja>@Marshalled</ja>(factory=ItemChannelFactory.<jk>class</jk>)
  * 	<jk>public class</jk> ItemChannel <jk>implements</jk> BeanChannel&lt;Item&gt; { ... }
  * </p>
  *
@@ -74,7 +74,7 @@ public interface BeanFactory<T> {
 	T create() throws Exception;
 
 	/**
-	 * Sentinel class used as the default value for {@code @Bean(factory=...)} and
+	 * Sentinel class used as the default value for {@code @Marshalled(factory=...)} and
 	 * {@code @Beanp(factory=...)} when no factory is specified.
 	 */
 	@SuppressWarnings({

@@ -783,7 +783,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <ul>
-	 * 	<li>{@code @Bean(on=MyClass)} - Annotation on a class
+	 * 	<li>{@code @Marshalled(on=MyClass)} - Annotation on a class
 	 * 	<li>{@code @Inject(on=MyClass.myField)} - Annotation on a field
 	 * 	<li>{@code @PackageAnnotation(on=my.package)} - Annotation on a package
 	 * </ul>

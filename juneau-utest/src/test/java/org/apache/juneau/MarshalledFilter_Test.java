@@ -25,7 +25,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
-class BeanFilter_Test extends TestBase {
+class MarshalledFilter_Test extends TestBase {
 
 	//====================================================================================================
 	// Test sub types
@@ -55,33 +55,33 @@ class BeanFilter_Test extends TestBase {
 		);
 	}
 
-	@Bean(dictionary={A1.class, A2.class})
+	@Marshalled(dictionary={A1.class, A2.class})
 	public abstract static class A {
 		public String f0 = "f0";
 		public B fb;
 	}
 
-	@Bean(typeName="A1")
+	@Marshalled(typeName="A1")
 	public static class A1 extends A {
 		public String f1;
 	}
 
-	@Bean(typeName="A2")
+	@Marshalled(typeName="A2")
 	public static class A2 extends A {
 		public String f2;
 	}
 
-	@Bean(dictionary={B1.class,B2.class})
+	@Marshalled(dictionary={B1.class,B2.class})
 	public abstract static class B {
 		public String f0b = "f0b";
 	}
 
-	@Bean(typeName="B1")
+	@Marshalled(typeName="B1")
 	public static class B1 extends B {
 		public String f1;
 	}
 
-	@Bean(typeName="B2")
+	@Marshalled(typeName="B2")
 	public static class B2 extends B {
 		public String f2;
 	}
@@ -112,12 +112,12 @@ class BeanFilter_Test extends TestBase {
 		);
 	}
 
-	@BeanApply(on="E",value=@Bean(dictionary={E1.class, E2.class}))
-	@BeanApply(on="E1",value=@Bean(typeName="E1"))
-	@BeanApply(on="E2",value=@Bean(typeName="E2"))
-	@BeanApply(on="F",value=@Bean(dictionary={F1.class,F2.class}))
-	@BeanApply(on="F1",value=@Bean(typeName="F1"))
-	@BeanApply(on="F2",value=@Bean(typeName="F2"))
+	@MarshalledApply(on="E",value=@Marshalled(dictionary={E1.class, E2.class}))
+	@MarshalledApply(on="E1",value=@Marshalled(typeName="E1"))
+	@MarshalledApply(on="E2",value=@Marshalled(typeName="E2"))
+	@MarshalledApply(on="F",value=@Marshalled(dictionary={F1.class,F2.class}))
+	@MarshalledApply(on="F1",value=@Marshalled(typeName="F1"))
+	@MarshalledApply(on="F2",value=@Marshalled(typeName="F2"))
 	private static class EConfig {}
 
 	private static class EConfig2 extends EConfig {}

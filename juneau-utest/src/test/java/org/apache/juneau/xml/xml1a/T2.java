@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 @Xml(prefix="foo",namespace="http://foo")
-@Bean(typeName="T2")
+@Marshalled(typeName="T2")
 public class T2 {
 
 	public int f1 = 1;

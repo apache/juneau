@@ -23,7 +23,7 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
-@Bean
+@Marshalled
 public class TestURI {
 
 	// String annotated as a URI

@@ -66,7 +66,7 @@ import org.apache.juneau.swap.*;
  *
  * @param <T> The class type of the wrapped class.
  */
-@Bean(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
+@Marshalled(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 @SuppressWarnings({
 	"java:S1200",  // Class has 23 dependencies, acceptable for this core reflection metadata class
 	"java:S1452",  // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, etc. for element/component types
@@ -485,7 +485,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * Returns the bean registry for this class.
 	 *
 	 * <p>
-	 * This bean registry contains names specified in the {@link Bean#dictionary() @Bean(dictionary)} annotation
+	 * This bean registry contains names specified in the {@link Bean#dictionary() @Marshalled(dictionary)} annotation
 	 * defined on the class, regardless of whether the class is an actual bean.
 	 * This allows interfaces to define subclasses with type names.
 	 *
@@ -512,7 +512,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * Returns the bean dictionary name associated with this class.
 	 *
 	 * <p>
-	 * The lexical name is defined by {@link Bean#typeName() @Bean(typeName)}.
+	 * The lexical name is defined by {@link Bean#typeName() @Marshalled(typeName)}.
 	 *
 	 * @return
 	 * 	The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this
@@ -1440,13 +1440,13 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (nn(d))
 			return d;
 
-		// Note that @Bean(typeName) can be defined on non-bean types, so
+		// Note that @Marshalled(typeName) can be defined on non-bean types, so
 		// we have to check again.
-		return beanContext.getAnnotationProvider().find(Bean.class, this)
+		return beanContext.getAnnotationProvider().find(Marshalled.class, this)
 			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> ! x.typeName().isEmpty())
-			.map(Bean::typeName)
+			.map(Marshalled::typeName)
 			.findFirst()
 			.orElse(null);
 	}
@@ -1558,7 +1558,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private String findExample() {
 
-		var ex = beanMeta.get().optBeanMeta().map(x -> x.getBeanFilter()).map(x -> x.getExample()).orElse(null);
+		var ex = beanMeta.get().optBeanMeta().map(x -> x.getMarshalledFilter()).map(x -> x.getExample()).orElse(null);
 
 		if (ex == null)
 			ex = marshalledFilter.map(x -> x.getExample()).orElse(null);
@@ -1641,12 +1641,13 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (is(Object.class))
 			return null;
 
-		var v = beanContext.getAnnotationProvider().find(Bean.class, this).stream().map(x -> x.inner()).filter(x -> neq(x.implClass(), void.class)).map(ClassInfo::of).findFirst().orElse(null);
-
-		if (v == null)
-			v = marshalledFilter.map(x -> x.getImplClass()).map(ReflectionUtils::info).orElse(null);
-
-		return (ClassInfoTyped<? extends T>)v;
+		var mf = marshalledFilter.get();
+		if (mf == null)
+			return null;
+		var implClassInfo = mf.getImplClass();
+		if (implClassInfo == null)
+			return null;
+		return (ClassInfoTyped<? extends T>)implClassInfo;
 	}
 
 	private MarshalledFilter findMarshalledFilter() {

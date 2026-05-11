@@ -79,7 +79,7 @@ class CommonParser_Test extends TestBase {
 		assertEquals("value1", t1.list.get(1).value);
 	}
 
-	@Bean(typeName="A1")
+	@Marshalled(typeName="A1")
 	public static class A1 {
 		public A2 list;
 	}

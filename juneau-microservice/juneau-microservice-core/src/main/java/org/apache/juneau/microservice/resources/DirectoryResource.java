@@ -133,7 +133,7 @@ public class DirectoryResource extends BasicRestServlet {
 	/** File or directory details for REST response. */
 	@Response
 	@Schema(description = "File or directory details")
-	@Bean(properties = "type,name,size,lastModified,actions,files")
+	@Marshalled(properties = "type,name,size,lastModified,actions,files")
 	public class FileResource {
 		private final File f;
 		private final String path;

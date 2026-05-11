@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * MCP {@code initialize} result payload.
  */
-@Bean
+@Marshalled
 public class InitializeResult {
 
 	private String protocolVersion;

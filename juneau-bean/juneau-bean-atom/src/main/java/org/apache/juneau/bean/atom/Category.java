@@ -77,7 +77,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
-@Bean(typeName = "category")
+@Marshalled(typeName = "category")
 public class Category extends Common {
 
 	private String term;

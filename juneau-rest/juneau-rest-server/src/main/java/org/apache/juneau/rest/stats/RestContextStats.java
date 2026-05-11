@@ -30,7 +30,7 @@ import org.apache.juneau.swaps.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
  * </ul>
  */
-@Bean(properties = "startTime,upTime,methodStats")
+@Marshalled(properties = "startTime,upTime,methodStats")
 public class RestContextStats {
 	private final Instant startTime;
 	private final List<MethodExecStats> methodStats;

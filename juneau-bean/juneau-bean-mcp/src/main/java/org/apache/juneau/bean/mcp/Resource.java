@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * MCP resource descriptor ({@code resources/list} entry).
  */
-@Bean
+@Marshalled
 public class Resource {
 
 	private String uri;

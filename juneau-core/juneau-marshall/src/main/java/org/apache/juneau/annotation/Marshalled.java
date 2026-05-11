@@ -19,9 +19,12 @@ package org.apache.juneau.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
+import java.beans.*;
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Annotation that can be applied to classes to control how they are marshalled.
@@ -29,19 +32,22 @@ import org.apache.juneau.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Marshalled classes.
+ * 	<li>Bean classes and parent interfaces.
+ * 	<li>Non-bean marshalled classes.
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link MarshalledApply @MarshalledApply}.
  * </ul>
  *
- * <p>
- * This annotation is typically only applied to non-bean classes.  The {@link Bean @Bean} annotation contains equivalent
- * functionality for bean classes.
- *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledAnnotation">@Marshalled Annotation</a>
+ * </ul>
  */
 @Documented
 @Target({ TYPE })
 @Retention(RUNTIME)
 @Inherited
+@SuppressWarnings({
+	"java:S1452"  // Wildcard required - Class<? extends BeanInterceptor<?>> for interceptor definition
+})
 public @interface Marshalled {
 
 	/**
@@ -51,6 +57,23 @@ public @interface Marshalled {
 	 * @since 9.2.0
 	 */
 	String[] description() default {};
+
+	/**
+	 * Bean dictionary.
+	 *
+	 * <p>
+	 * The list of classes that make up the bean dictionary for all properties in this class and all subclasses.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Beanp#dictionary()}
+	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
+	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	Class<?>[] dictionary() default {};
 
 	/**
 	 * POJO example.
@@ -93,6 +116,92 @@ public @interface Marshalled {
 	String example() default "";
 
 	/**
+	 * Bean property excludes.
+	 *
+	 * <p>
+	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Exclude the 'city' and 'state' properties from the Address class.</jc>
+	 * 	<ja>@Marshalled</ja>(excludeProperties=<js>"city,state"</js>})
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		{@link #xp()} is a shortened synonym for this value.
+	 * 	<li class='note'>
+	 * 		<b>Java Records:</b> Excluding record components is not supported during parsing.
+	 * 		Because records are immutable, all components must be provided to the canonical constructor.
+	 * 		Excluded components will be omitted from serialization output, but the parser will be unable to
+	 * 		instantiate the record if the excluded component values are missing from the input.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(Map)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String excludeProperties() default "";
+
+	/**
+	 * Bean factory class.
+	 *
+	 * <p>
+	 * Specifies a {@link org.apache.juneau.commons.function.BeanFactory} class to use for instantiating
+	 * this class instead of relying on a no-arg constructor or static {@code getInstance()} method.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanFactory}
+	 * 	<li class='ja'>{@link Beanp#factory()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanStore(org.apache.juneau.commons.inject.BeanStore)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	@SuppressWarnings({
+		"rawtypes" // Raw BeanFactory type required for annotation attribute declaration
+	})
+	Class<? extends org.apache.juneau.commons.function.BeanFactory> factory() default org.apache.juneau.commons.function.BeanFactory.Void.class;
+
+	/**
+	 * Find fluent setters.
+	 *
+	 * <p>
+	 * When <jk>true</jk>, fluent setters will be detected on beans.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Marshalled</ja>(findFluentSetters=<jk>true</jk>)
+	 * 	<jk>public class</jk> MyBean {
+	 * 		<jk>public int</jk> getId() {...}
+	 * 		<jk>public</jk> MyBean id(<jk>int</jk> <jv>id</jv>) {...}
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * Fluent setters must have the following attributes:
+	 * <ul>
+	 * 	<li>Public.
+	 * 	<li>Not static.
+	 * 	<li>Take in one parameter.
+	 * 	<li>Return the bean itself.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link BeanConfig#findFluentSetters()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#findFluentSetters()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	boolean findFluentSetters() default false;
+
+	/**
 	 * Implementation class.
 	 *
 	 * <p>
@@ -110,4 +219,289 @@ public @interface Marshalled {
 	 */
 	Class<?> implClass() default void.class;
 
+	/**
+	 * Bean property interceptor.
+	 *
+	 * <p>
+	 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link BeanInterceptor}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	Class<? extends BeanInterceptor<?>> interceptor() default BeanInterceptor.Void.class;
+
+	/**
+	 * Identifies a class to be used as the interface class for this and all subclasses.
+	 *
+	 * <p>
+	 * When specified, only the list of properties defined on the interface class will be used during serialization.
+	 * Additional properties on subclasses will be ignored.
+	 *
+	 * <p class='bjava'>
+	 * 	<jc>// Parent class</jc>
+	 * 	<ja>@Marshalled</ja>(interfaceClass=A.<jk>class</jk>)
+	 * 	<jk>public abstract class</jk> A {
+	 * 		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Sub class</jc>
+	 * 	<jk>public class</jk> A1 <jk>extends</jk> A {
+	 * 		<jk>public</jk> String <jf>f1</jf> = <js>"f1"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Produces "{f0:'f0'}"</jc>
+	 * 	String <jv>json</jv> = Json5Serializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> A1());
+	 * </p>
+	 *
+	 * <p>
+	 * Note that this annotation can be used on the parent class so that it filters to all child classes,
+	 * or can be set individually on the child classes.
+	 *
+	 * @return The annotation value.
+	 */
+	Class<?> interfaceClass() default void.class;
+
+	/**
+	 * Synonym for {@link #properties()}.
+	 *
+	 * @return The annotation value.
+	 */
+	String p() default "";
+
+	/**
+	 * Bean property includes.
+	 *
+	 * <p>
+	 * The set and order of names of properties associated with a bean class.
+	 *
+	 * <p>
+	 * The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and
+	 * related methods.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
+	 * 	<ja>@Marshalled</ja>(properties=<js>"street,city,state"</js>)
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		{@link #p()} is a shortened synonym for this value.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(Map)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String properties() default "";
+
+	/**
+	 * Associates a {@link PropertyNamer} with this bean to tailor the names of the bean properties.
+	 *
+	 * <p>
+	 * Property namers are used to transform bean property names from standard form to some other form.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Define a class with dashed-lowercase property names.</jc>
+	 * 	<ja>@Marshalled</ja>(propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#propertyNamer(Class)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	Class<? extends PropertyNamer> propertyNamer() default PropertyNamer.Void.class;
+
+	/**
+	 * Read-only bean properties.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
+	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Exclude the 'city' and 'state' properties from being parsed, but not serialized.</jc>
+	 * 	<ja>@Marshalled</ja>(readOnlyProperties=<js>"city,state"</js>})
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		{@link #ro()} is a shortened synonym for this value.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Map)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String readOnlyProperties() default "";
+
+	/**
+	 * Synonym for {@link #readOnlyProperties()}.
+	 *
+	 * @return The annotation value.
+	 */
+	String ro() default "";
+
+	/**
+	 * Identifies a stop class for the annotated class.
+	 *
+	 * <p>
+	 * Identical in purpose to the stop class specified by {@link Introspector#getBeanInfo(Class, Class)}.
+	 * Any properties in the stop class or in its base classes will be ignored during analysis.
+	 *
+	 * <p>
+	 * For example, in the following class hierarchy, instances of <c>C3</c> will include property <c>p3</c>,
+	 * but not <c>p1</c> or <c>p2</c>.
+	 * <p class='bjava'>
+	 * 	<jk>public class</jk> C1 {
+	 * 		<jk>public int</jk> getP1();
+	 * 	}
+	 *
+	 * 	<jk>public class</jk> C2 <jk>extends</jk> C1 {
+	 * 		<jk>public int</jk> getP2();
+	 * 	}
+	 *
+	 * 	<ja>@Marshalled</ja>(stopClass=C2.<jk>class</jk>)
+	 * 	<jk>public class</jk> C3 <jk>extends</jk> C2 {
+	 * 		<jk>public int</jk> getP3();
+	 * 	}
+	 * </p>
+	 *
+	 * @return The annotation value.
+	 */
+	Class<?> stopClass() default void.class;
+
+	/**
+	 * An identifying name for this class.
+	 *
+	 * <p>
+	 * The name is used to identify the class type during parsing when it cannot be inferred through reflection.
+	 * <br>For example, if a bean property is of type <c>Object</c>, then the serializer will add the name to the
+	 * output so that the class can be determined during parsing.
+	 *
+	 * <p>
+	 * It is also used to specify element names in XML.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Use _type='mybean' to identify this bean.</jc>
+	 * 	<ja>@Marshalled</ja>(typeName=<js>"mybean"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String typeName() default "";
+
+	/**
+	 * The property name to use for representing the type name.
+	 *
+	 * <p>
+	 * This can be used to override the name used for the <js>"_type"</js> property used by the {@link #typeName()} setting.
+	 *
+	 * <p>
+	 * The default value if not specified is <js>"_type"</js>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Use 'type' instead of '_type' for bean names.</jc>
+	 * 	<ja>@Marshalled</ja>(typePropertyName=<js>"type"</js>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link BeanConfig#typePropertyName()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String typePropertyName() default "";
+
+	/**
+	 * Synonym for {@link #writeOnlyProperties()}.
+	 *
+	 * @return The annotation value.
+	 */
+	String wo() default "";
+
+	/**
+	 * Write-only bean properties.
+	 *
+	 * <p>
+	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
+	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Exclude the 'city' and 'state' properties from being serialized, but not parsed.</jc>
+	 * 	<ja>@Marshalled</ja>(writeOnlyProperties=<js>"city,state"</js>})
+	 * 	<jk>public class</jk> Address {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		{@link #wo()} is a shortened synonym for this value.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Map)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String writeOnlyProperties() default "";
+
+	/**
+	 * Synonym for {@link #excludeProperties()}.
+	 *
+	 * @return The annotation value.
+	 */
+	String xp() default "";
+
+	/**
+	 * Opt out of alphabetical sorting for this specific bean's properties.
+	 *
+	 * <p>
+	 * By default, bean properties are serialized in alphabetical order.
+	 * When <jk>true</jk>, properties of this bean will use the natural JVM-dependent order instead.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Disable sorted properties for this specific bean.</jc>
+	 * 	<ja>@Marshalled</ja>(unsorted=<jk>true</jk>)
+	 * 	<jk>public class</jk> MyBean {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#unsortedProperties()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	boolean unsorted() default false;
 }

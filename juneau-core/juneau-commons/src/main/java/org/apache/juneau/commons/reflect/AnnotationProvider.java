@@ -106,7 +106,7 @@ import org.apache.juneau.commons.lang.*;
  * <p>
  * <b>How Runtime Annotations Work:</b>
  * <ul>
- * 	<li>Runtime annotations are Java objects that implement annotation interfaces (e.g., {@code @Bean})
+ * 	<li>Runtime annotations are Java objects that implement annotation interfaces (e.g., {@code @Marshalled})
  * 	<li>They use special methods like {@code on()} or {@code onClass()} to specify their targets
  * 	<li>They always take precedence over declared annotations at the same level
  * 	<li>They are particularly useful for applying annotations to classes you don't control
@@ -114,7 +114,7 @@ import org.apache.juneau.commons.lang.*;
  *
  * <p class='bjava'>
  * 	<jc>// Example: Creating a runtime annotation</jc>
- * 	Bean <jv>runtimeAnnotation</jv> = BeanAnnotation
+ * 	Bean <jv>runtimeAnnotation</jv> = MarshalledAnnotation
  * 		.<jsm>create</jsm>()
  * 		.onClass(MyClass.<jk>class</jk>)  <jc>// Target class</jc>
  * 		.typeName(<js>"MyType"</js>)         <jc>// Annotation property</jc>
@@ -126,7 +126,7 @@ import org.apache.juneau.commons.lang.*;
  * 		.addRuntimeAnnotations(<jv>runtimeAnnotation</jv>)
  * 		.build();
  *
- * 	<jc>// Now MyClass will be found with @Bean annotation</jc>
+ * 	<jc>// Now MyClass will be found with @Marshalled annotation</jc>
  * 	Stream&lt;AnnotationInfo&lt;Bean&gt;&gt; <jv>annotations</jv> = <jv>provider</jv>.find(Bean.<jk>class</jk>, MyClass.<jk>class</jk>);
  * </p>
  *
@@ -139,7 +139,7 @@ import org.apache.juneau.commons.lang.*;
  *
  * <p>
  * Runtime annotations are evaluated before declared annotations at each level, giving them higher priority.
- * For example, a runtime {@code @Bean} annotation on a class will be found before any {@code @Bean} annotation
+ * For example, a runtime {@code @Marshalled} annotation on a class will be found before any {@code @Marshalled} annotation
  * declared directly on that class.
  *
  * <h5 class='section'>Comparison with ElementInfo Methods:</h5>
@@ -231,7 +231,7 @@ public class AnnotationProvider {
 		 *
 		 * <p class='bjava'>
 		 * 	<jc>// Example: Add multiple runtime annotations using varargs</jc>
-		 * 	Bean <jv>beanAnnotation</jv> = BeanAnnotation
+		 * 	Bean <jv>beanAnnotation</jv> = MarshalledAnnotation
 		 * 		.<jsm>create</jsm>()
 		 * 		.onClass(MyClass.<jk>class</jk>)
 		 * 		.typeName(<js>"MyType"</js>)
@@ -262,13 +262,13 @@ public class AnnotationProvider {
 		 * Adds runtime annotations to be applied to classes, methods, fields, and constructors.
 		 *
 		 * <p>
-		 * Runtime annotations are concrete Java objects that implement annotation interfaces (e.g., {@code @Bean}).
+		 * Runtime annotations are concrete Java objects that implement annotation interfaces (e.g., {@code @Marshalled}).
 		 * They allow you to dynamically apply annotations to code elements at runtime without modifying source code.
 		 *
 		 * <p>
 		 * <b>How It Works:</b>
 		 * <ol>
-		 * 	<li>Create annotation objects using builder classes (e.g., {@code BeanAnnotation.create()})
+		 * 	<li>Create annotation objects using builder classes (e.g., {@code MarshalledAnnotation.create()})
 		 * 	<li>Specify targets using {@code on()} or {@code onClass()} methods
 		 * 	<li>Set annotation properties (e.g., {@code typeName()}, {@code properties()})
 		 * 	<li>Build the annotation object
@@ -290,7 +290,7 @@ public class AnnotationProvider {
 		 *
 		 * <p class='bjava'>
 		 * 	<jc>// Example 1: Target a specific class using type-safe targeting</jc>
-		 * 	Bean <jv>beanAnnotation</jv> = BeanAnnotation
+		 * 	Bean <jv>beanAnnotation</jv> = MarshalledAnnotation
 		 * 		.<jsm>create</jsm>()
 		 * 		.onClass(MyClass.<jk>class</jk>)  <jc>// Targets MyClass</jc>
 		 * 		.typeName(<js>"MyType"</js>)
@@ -298,14 +298,14 @@ public class AnnotationProvider {
 		 * 		.build();
 		 *
 		 * 	<jc>// Example 2: Target multiple classes</jc>
-		 * 	Bean <jv>multiAnnotation</jv> = BeanAnnotation
+		 * 	Bean <jv>multiAnnotation</jv> = MarshalledAnnotation
 		 * 		.<jsm>create</jsm>()
 		 * 		.onClass(MyClass.<jk>class</jk>, OtherClass.<jk>class</jk>)
 		 * 		.sort(<jk>true</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Example 3: Target using string names (useful for dynamic/reflection scenarios)</jc>
-		 * 	Bean <jv>stringAnnotation</jv> = BeanAnnotation
+		 * 	Bean <jv>stringAnnotation</jv> = MarshalledAnnotation
 		 * 		.<jsm>create</jsm>()
 		 * 		.on(<js>"com.example.MyClass"</js>)
 		 * 		.findFluentSetters(<jk>true</jk>)

@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 /**
  * MCP server capability advertisement in {@link InitializeResult}.
  */
-@Bean
+@Marshalled
 public class ServerCapabilities {
 
 	private ToolCapability tools;

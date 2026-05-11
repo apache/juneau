@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * MCP {@code image} content block (base64 data).
  */
-@Bean(typeName = "image")
+@Marshalled(typeName = "image")
 public class ImageContent implements Content {
 
 	private String data;

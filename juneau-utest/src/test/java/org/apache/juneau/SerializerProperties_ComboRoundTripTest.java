@@ -339,7 +339,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		return TESTERS;
 	}
 
-	@Bean(typeName="BwT")
+	@Marshalled(typeName="BwT")
 	public static class T0 {
 		public int f;
 
@@ -389,12 +389,12 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	@Bean(typeName="T11")
+	@Marshalled(typeName="T11")
 	public static class T11 {
 		public T11a[] f = {new T11a()};
 	}
 
-	@Bean(typeName="T11a")
+	@Marshalled(typeName="T11a")
 	public static class T11a {
 		public String[] f = {" foo "};
 	}

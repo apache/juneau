@@ -1111,7 +1111,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<ja>@Bean</ja>
+	 * 	<ja>@Marshalled</ja>
 	 * 	<jk>public class</jk> MyHeaders {
 	 * 		<jk>public</jk> String getFooBar() { <jk>return</jk> <js>"baz"</js>; }
 	 * 		<jk>public</jk> Integer getQux() { <jk>return</jk> 123; }

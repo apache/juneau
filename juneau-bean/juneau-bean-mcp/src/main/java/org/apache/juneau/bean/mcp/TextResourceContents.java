@@ -25,7 +25,7 @@ import org.apache.juneau.annotation.*;
  * Discriminator {@code type} value is {@code resourceText} to avoid colliding with {@link TextContent}'s MCP
  * wire value {@code text} in the same JSON-RPC payload.
  */
-@Bean(typeName = "resourceText")
+@Marshalled(typeName = "resourceText")
 public class TextResourceContents implements ResourceContents {
 
 	private String uri;

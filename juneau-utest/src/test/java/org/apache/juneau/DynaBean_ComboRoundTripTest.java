@@ -195,7 +195,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		return TESTERS;
 	}
 
-	@Bean
+	@Marshalled
 	public static class BeanWithDynaField {
 		public int f1;
 		@Beanp(name="*")
@@ -210,7 +210,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	@Bean
+	@Marshalled
 	public static class BeanWithDynaMethods {
 
 		private Map<String,Object> f2 = map();
@@ -243,7 +243,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	@Bean
+	@Marshalled
 	public static class BeanWithDynaMethodsAndExtraKeys {
 
 		private Map<String,Object> f2 = map();
@@ -281,7 +281,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	@Bean
+	@Marshalled
 	public static class BeanWithDynaGetterOnly {
 
 		private Map<String,Object> f2 = map();
@@ -307,7 +307,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	@Bean
+	@Marshalled
 	public static class BeanWithDynaFieldSwapped {
 		@Beanp(name="*")
 		@Swap(TemporalCalendarSwap.IsoInstant.class)
@@ -319,7 +319,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	@Bean
+	@Marshalled
 	public static class BeanWithDynaFieldStringList {
 		@Beanp(name="*")
 		public Map<String,List<String>> f1 = map();

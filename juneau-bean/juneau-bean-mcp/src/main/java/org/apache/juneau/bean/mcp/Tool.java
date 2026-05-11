@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * MCP tool descriptor ({@code tools/list} entry).
  */
-@Bean
+@Marshalled
 public class Tool {
 
 	private String name;

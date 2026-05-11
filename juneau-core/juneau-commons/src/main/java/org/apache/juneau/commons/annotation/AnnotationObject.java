@@ -39,14 +39,14 @@ import org.apache.juneau.commons.utils.*;
  * <p>
  * Java annotations are typically declared statically on classes, methods, fields, etc. at compile-time:
  * <p class='bjava'>
- * 	<ja>@Bean</ja>(sort=<jk>true</jk>)
+ * 	<ja>@Marshalled</ja>(sort=<jk>true</jk>)
  * 	<jk>public class</jk> MyClass {...}
  * </p>
  *
  * <p>
  * This class allows you to create those same annotations programmatically:
  * <p class='bjava'>
- * 	Bean <jv>annotation</jv> = BeanAnnotation
+ * 	Bean <jv>annotation</jv> = MarshalledAnnotation
  * 		.<jsm>create</jsm>()
  * 		.sort(<jk>true</jk>)
  * 		.build();
@@ -60,11 +60,11 @@ import org.apache.juneau.commons.utils.*;
  *
  * <p class='bjava'>
  * 	<jc>// These two annotations are equal:</jc>
- * 	<ja>@Bean</ja>(sort=<jk>true</jk>)
+ * 	<ja>@Marshalled</ja>(sort=<jk>true</jk>)
  * 	<jk>class</jk> MyClass {}
  *
  * 	Bean <jv>declared</jv> = MyClass.<jk>class</jk>.getAnnotation(Bean.<jk>class</jk>);
- * 	Bean <jv>programmatic</jv> = BeanAnnotation.<jsm>create</jsm>().sort(<jk>true</jk>).build();
+ * 	Bean <jv>programmatic</jv> = MarshalledAnnotation.<jsm>create</jsm>().sort(<jk>true</jk>).build();
  *
  * 	<jsm>assertEquals</jsm>(<jv>declared</jv>, <jv>programmatic</jv>);  <jc>// true</jc>
  * 	<jsm>assertEquals</jsm>(<jv>declared</jv>.hashCode(), <jv>programmatic</jv>.hashCode());  <jc>// true</jc>

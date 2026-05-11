@@ -97,7 +97,7 @@ class RestClient_Config_Context_Test extends TestBase {
 		}
 	}
 
-	@BeanApply(on="A6a",value=@Bean)
+	@MarshalledApply(on="A6a",value=@Marshalled)
 	public static class A6b {}
 
 	@BeanConfig
@@ -120,7 +120,7 @@ class RestClient_Config_Context_Test extends TestBase {
 	}
 
 	@Test void a09_annotations() throws Exception {
-		client().annotations(BeanApplyAnnotation.create(A6a.class).value(BeanAnnotation.create().build()).build()).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
+		client().annotations(MarshalledApplyAnnotation.create(A6a.class).value(MarshalledAnnotation.create().build()).build()).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

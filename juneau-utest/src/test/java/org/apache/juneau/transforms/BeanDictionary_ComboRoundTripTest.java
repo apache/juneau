@@ -624,10 +624,10 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		return TESTERS;
 	}
 
-	@Bean(dictionary={A.class})
+	@Marshalled(dictionary={A.class})
 	public interface IA {}
 
-	@Bean(typeName="A")
+	@Marshalled(typeName="A")
 	public static class A implements IA {
 		public int a;
 
@@ -637,10 +637,10 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	@Bean(dictionary={B.class}, typePropertyName="z")
+	@Marshalled(dictionary={B.class}, typePropertyName="z")
 	public interface IB {}
 
-	@Bean(typeName="B")
+	@Marshalled(typeName="B")
 	public static class B implements IB {
 		public int b;
 

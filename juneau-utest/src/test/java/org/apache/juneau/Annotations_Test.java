@@ -43,7 +43,7 @@ class Annotations_Test extends TestBase {
 	}
 
 	/** Class with explicitly specified properties */
-	@Bean(properties="age,name")
+	@Marshalled(properties="age,name")
 	public static class Person1 {
 		public int age;
 
@@ -66,7 +66,7 @@ class Annotations_Test extends TestBase {
 	}
 
 	/** Class with explicitly specified properties */
-	@Bean(p="age,name")
+	@Marshalled(p="age,name")
 	public static class Person2 {
 		public int age;
 
@@ -89,7 +89,7 @@ class Annotations_Test extends TestBase {
 	}
 
 	/** Class with explicitly specified properties */
-	@Bean(properties="age",p="name")
+	@Marshalled(properties="age",p="name")
 	public static class Person3 {
 		public int age;
 
@@ -120,7 +120,7 @@ class Annotations_Test extends TestBase {
 		public void setName(String v) { name = v; }
 	}
 
-	@BeanApply(on="Person4",value=@Bean(properties="age,name"))
+	@MarshalledApply(on="Person4",value=@Marshalled(properties="age,name"))
 	public static class PersonConfig {}
 
 	//====================================================================================================

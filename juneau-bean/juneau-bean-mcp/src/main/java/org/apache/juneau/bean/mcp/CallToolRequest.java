@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Parameters for {@value org.apache.juneau.bean.mcp.McpMethods#TOOLS_CALL}.
  */
-@Bean
+@Marshalled
 public class CallToolRequest {
 
 	private String name;

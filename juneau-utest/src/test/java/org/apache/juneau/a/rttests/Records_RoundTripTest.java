@@ -54,7 +54,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 
 	public record WithEnum(String name, Priority priority) {}
 
-	@Bean(properties="age,name")
+	@Marshalled(properties="age,name")
 	public record AnnotatedOrder(String name, int age) {}
 
 	public record WithBeanp(@Beanp(name="fullName") String name, int age) {}
@@ -70,7 +70,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 
 	public record WithNullValues(String required, String optional) {}
 
-	@Bean(properties="name")
+	@Marshalled(properties="name")
 	public record WithBeanc(String name, int age) {
 		@Beanc(properties="name")
 		public WithBeanc(String name) {
@@ -86,13 +86,13 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 
 	public record IdentifiableRecord(String id, String data) implements Identifiable {}
 
-	@Bean(dictionary={DogRecord.class, CatRecord.class})
+	@Marshalled(dictionary={DogRecord.class, CatRecord.class})
 	public interface AnimalRecord {}
 
-	@Bean(typeName="dog")
+	@Marshalled(typeName="dog")
 	public record DogRecord(String name, String breed) implements AnimalRecord {}
 
-	@Bean(typeName="cat")
+	@Marshalled(typeName="cat")
 	public record CatRecord(String name, int lives) implements AnimalRecord {}
 
 	public record AnimalHolder(AnimalRecord animal) {}

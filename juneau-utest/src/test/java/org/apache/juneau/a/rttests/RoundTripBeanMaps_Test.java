@@ -322,7 +322,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Test @Bean(subTypes=xxx)
+	// Test @Marshalled(subTypes=xxx)
 	//====================================================================================================
 
 	@ParameterizedTest
@@ -356,14 +356,14 @@ class RoundTripBeanMaps_Test extends TestBase {
 		assertSerialized(b, js, "{_type:'B3',f0:'f0',f3:'2001-01-01T12:34:56.789Z'}");
 	}
 
-	@Bean(
+	@Marshalled(
 		dictionary={B1.class,B2.class,B3.class}
 	)
 	public abstract static class B {
 		public String f0 = "f0";
 	}
 
-	@Bean(typeName="B1")
+	@Marshalled(typeName="B1")
 	public static class B1 extends B {
 		public String f1;
 		public static B1 create() {
@@ -374,7 +374,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="B2")
+	@Marshalled(typeName="B2")
 	public static class B2 extends B {
 		public int f2;
 		public static B2 create() {
@@ -385,7 +385,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="B3")
+	@Marshalled(typeName="B3")
 	public static class B3 extends B {
 		public XMLGregorianCalendar f3;
 		public static B3 create() throws Exception {
@@ -397,12 +397,12 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Test @Bean(subTypes=xxx) using BeanFilter
+	// Test @Marshalled(subTypes=xxx) using MarshalledFilter
 	//====================================================================================================
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a07_subTypesUsingBeanFilter(RoundTrip_Tester t) throws Exception {
+	void a07_subTypesUsingMarshalledFilter(RoundTrip_Tester t) throws Exception {
 		var js = Json5Serializer.create().build();
 
 		// Skip validation-only tests
@@ -474,7 +474,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Test @Bean(subTypeProperty=xxx) with real bean property
+	// Test @Marshalled(subTypeProperty=xxx) with real bean property
 	//====================================================================================================
 
 	@ParameterizedTest
@@ -493,12 +493,12 @@ class RoundTripBeanMaps_Test extends TestBase {
 		assertBean(b, "class{simpleName},f0a,f0b,f1", "{BA1},f0a,f0b,f1");
 	}
 
-	@Bean(dictionary={BA1.class,BA2.class})
+	@Marshalled(dictionary={BA1.class,BA2.class})
 	public abstract static class BA {
 		public String f0a, f0b;
 	}
 
-	@Bean(typeName="BA1")
+	@Marshalled(typeName="BA1")
 	public static class BA1 extends BA {
 		public String f1;
 		public static BA1 create() {
@@ -510,24 +510,24 @@ class RoundTripBeanMaps_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="BA2")
+	@Marshalled(typeName="BA2")
 	public static class BA2 extends BA {
 		public String f2;
 	}
 
 	//====================================================================================================
-	// Test @Bean(subTypes=xxx) with real bean property using BeanFilter
+	// Test @Marshalled(subTypes=xxx) with real bean property using MarshalledFilter
 	//====================================================================================================
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a09_subTypePropertyWithRealPropertyUsingBeanFilter(RoundTrip_Tester t) throws Exception {
+	void a09_subTypePropertyWithRealPropertyUsingMarshalledFilter(RoundTrip_Tester t) throws Exception {
 		// Skip validation-only tests
 		if (t.isValidationOnly())
 			return;
 
-		var s = t.getSerializer().copy().annotations(BeanApplyAnnotation.create(CA.class).value(BeanAnnotation.create().dictionary(CAFilterDictionaryMap.class).build()).build()).build();
-		var p = t.getParser().copy().annotations(BeanApplyAnnotation.create(CA.class).value(BeanAnnotation.create().dictionary(CAFilterDictionaryMap.class).build()).build()).build();
+		var s = t.getSerializer().copy().annotations(MarshalledApplyAnnotation.create(CA.class).value(MarshalledAnnotation.create().dictionary(CAFilterDictionaryMap.class).build()).build()).build();
+		var p = t.getParser().copy().annotations(MarshalledApplyAnnotation.create(CA.class).value(MarshalledAnnotation.create().dictionary(CAFilterDictionaryMap.class).build()).build()).build();
 
 		var c1 = CA1.create();
 		var r = s.serialize(c1);
@@ -562,7 +562,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Test @Bean(bpi=xxx)
+	// Test @Marshalled(bpi=xxx)
 	//====================================================================================================
 
 	@ParameterizedTest
@@ -582,7 +582,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		assertBean(d, "f3,f2", "f3,f2");
 	}
 
-	@Bean(p="f3,f2")
+	@Marshalled(p="f3,f2")
 	public static class D1 {
 		public String f1, f2, f3;
 		public D1 init() {
@@ -594,12 +594,12 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Test @Bean(bpi=xxx) using BeanFilter
+	// Test @Marshalled(bpi=xxx) using MarshalledFilter
 	//====================================================================================================
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a11_propertiesUsingBeanFilter(RoundTrip_Tester t) throws Exception {
+	void a11_propertiesUsingMarshalledFilter(RoundTrip_Tester t) throws Exception {
 		var js = Json5Serializer.create().beanProperties(D2.class, "f3,f2").build();
 
 		// Skip validation-only tests
@@ -627,7 +627,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Test @Bean(bpx=xxx)
+	// Test @Marshalled(bpx=xxx)
 	//====================================================================================================
 
 	@ParameterizedTest
@@ -646,7 +646,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		assertBean(e, "f1,f3", "f1,f3");
 	}
 
-	@Bean(excludeProperties="f2")
+	@Marshalled(excludeProperties="f2")
 	public static class E1 {
 		public String f1, f2, f3;
 		public E1 init() {
@@ -658,12 +658,12 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Test @Bean(bpx=xxx) using BeanFilter
+	// Test @Marshalled(bpx=xxx) using MarshalledFilter
 	//====================================================================================================
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a13_excludePropertiesUsingBeanFilter(RoundTrip_Tester t) throws Exception {
+	void a13_excludePropertiesUsingMarshalledFilter(RoundTrip_Tester t) throws Exception {
 		// Skip validation-only tests
 		if (t.isValidationOnly())
 			return;
@@ -688,7 +688,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Test @Bean(interfaceClass=xxx)
+	// Test @Marshalled(interfaceClass=xxx)
 	//====================================================================================================
 
 	@ParameterizedTest
@@ -707,7 +707,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		assertBean(x, "f1", "f1");
 	}
 
-	@Bean(interfaceClass=FA1.class)
+	@Marshalled(interfaceClass=FA1.class)
 	public static class FA1 {
 		public String f1;
 	}
@@ -722,12 +722,12 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Test @Bean(interfaceClass=xxx) using BeanFilter
+	// Test @Marshalled(interfaceClass=xxx) using MarshalledFilter
 	//====================================================================================================
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void a15_interfaceClassUsingBeanFilter(RoundTrip_Tester t) throws Exception {
+	void a15_interfaceClassUsingMarshalledFilter(RoundTrip_Tester t) throws Exception {
 		var s = t.getSerializer().copy();
 		var p = t.getParser() == null ? null : t.getParser().copy();
 		FB2 x;
@@ -737,7 +737,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		if (t.isValidationOnly() || p == null)
 			return;
 
-		// --- BeanFilter defined on parent class ---
+		// --- MarshalledFilter defined on parent class ---
 		s.interfaces(FB1.class);
 		p.interfaces(FB1.class);
 
@@ -746,7 +746,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		x = p.build().parse(r, FB2.class);
 		assertBean(x, "f1", "f1");
 
-		// --- BeanFilter defined on child class class ---
+		// --- MarshalledFilter defined on child class class ---
 		s.interfaces(FB1.class);
 		p.interfaces(FB1.class);
 
@@ -755,7 +755,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		x = p.build().parse(r, FB2.class);
 		assertBean(x, "f1", "f1");
 
-		// --- BeanFilter defined as plain class ---
+		// --- MarshalledFilter defined as plain class ---
 		s.interfaces(FB1.class);
 		p.interfaces(FB1.class);
 

@@ -27,7 +27,7 @@ public class XBeans {
 
 	private XBeans() {}
 
-	@Bean
+	@Marshalled
 	public static class XA {
 		public String a;
 		public int b;
@@ -43,7 +43,7 @@ public class XBeans {
 
 	}
 
-	@Bean
+	@Marshalled
 	public static class XB {
 		public String[] f01;
 		public List<String> f02;
@@ -147,7 +147,7 @@ public class XBeans {
 		public static final XC INSTANCE = get();
 	}
 
-	@BeanApply(on="XD,XE,XF",value=@Bean)
+	@MarshalledApply(on="XD,XE,XF",value=@Marshalled)
 	@UrlEncodingApply(on="C",value=@UrlEncoding(expandedParams=true))
 	public static class Annotations {}
 

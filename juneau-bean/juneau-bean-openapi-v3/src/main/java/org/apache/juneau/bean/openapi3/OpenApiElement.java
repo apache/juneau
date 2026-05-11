@@ -31,7 +31,7 @@ import org.apache.juneau.json.*;
 /**
  * Root class for all Swagger beans.
  */
-@Bean
+@Marshalled
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })

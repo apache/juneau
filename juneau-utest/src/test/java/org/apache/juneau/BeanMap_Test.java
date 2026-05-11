@@ -458,7 +458,7 @@ class BeanMap_Test extends TestBase {
 		public D2[] ab2 = {};
 	}
 
-	@Bean(typeName="D2")
+	@Marshalled(typeName="D2")
 	public static class D2 {
 		public String s = "default";
 	}
@@ -493,9 +493,9 @@ class BeanMap_Test extends TestBase {
 		assertBean(t, "ab2{class{simpleName}},ab2{0{class{simpleName},s}}", "{{D2c[]}},{{{D2c},foobar}}");
 	}
 
-	@BeanApply(on="Dummy1",value=@Bean(typeName="dummy"))
-	@BeanApply(on="D2c",value=@Bean(typeName="D2"))
-	@BeanApply(on="Dummy2",value=@Bean(typeName="dummy"))
+	@MarshalledApply(on="Dummy1",value=@Marshalled(typeName="dummy"))
+	@MarshalledApply(on="D2c",value=@Marshalled(typeName="D2"))
+	@MarshalledApply(on="Dummy2",value=@Marshalled(typeName="dummy"))
 	private static class D1cConfig {}
 
 	public static class D1c {
@@ -526,7 +526,7 @@ class BeanMap_Test extends TestBase {
 		assertEquals("{s:['foo'],s2:[['foo']],i:[0,0,0],i2:[[0,0,0],[0,0,0]]}", Json5Serializer.DEFAULT.serialize(t));
 	}
 
-	@Bean(p="s,s2,i,i2")
+	@Marshalled(p="s,s2,i,i2")
 	public static class E {
 		public String[] s;
 		public String[][] s2;
@@ -654,7 +654,7 @@ class BeanMap_Test extends TestBase {
 		ONE, TWO, THREE
 	}
 
-	@Bean(typeName="H")
+	@Marshalled(typeName="H")
 	public static class H {
 
 		public HEnum enum1;
@@ -929,7 +929,7 @@ class BeanMap_Test extends TestBase {
 		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "4,5,6");
 	}
 
-	@Bean(propertyNamer=PropertyNamerDLC.class)
+	@Marshalled(propertyNamer=PropertyNamerDLC.class)
 	public static class P1 {
 		public int foo, barBaz, bingBooURL;
 	}
@@ -944,9 +944,9 @@ class BeanMap_Test extends TestBase {
 		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "4,5,6");
 	}
 
-	@BeanApply(on="Dummy1",value=@Bean(propertyNamer=PropertyNamerDLC.class))
-	@BeanApply(on="P1c",value=@Bean(propertyNamer=PropertyNamerDLC.class))
-	@BeanApply(on="Dummy2",value=@Bean(propertyNamer=PropertyNamerDLC.class))
+	@MarshalledApply(on="Dummy1",value=@Marshalled(propertyNamer=PropertyNamerDLC.class))
+	@MarshalledApply(on="P1c",value=@Marshalled(propertyNamer=PropertyNamerDLC.class))
+	@MarshalledApply(on="Dummy2",value=@Marshalled(propertyNamer=PropertyNamerDLC.class))
 	private static class P1cConfig {}
 
 	public static class P1c {
@@ -966,7 +966,7 @@ class BeanMap_Test extends TestBase {
 		assertBean(m.getBean(), "fooBar,bazBING", "3,4");
 	}
 
-	@Bean(propertyNamer=PropertyNamerDLC.class)
+	@Marshalled(propertyNamer=PropertyNamerDLC.class)
 	public static class P2 {
 		private int fooBar;
 		public int getFooBar() { return fooBar; }
@@ -1661,7 +1661,7 @@ class BeanMap_Test extends TestBase {
 		public String a3="3", a4="4";
 	}
 
-	@Bean(stopClass=V.class)
+	@Marshalled(stopClass=V.class)
 	public static class V3 extends V2 {
 		public String a5="5", a6="6";
 	}
@@ -1672,9 +1672,9 @@ class BeanMap_Test extends TestBase {
 		assertEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", ws.toString(new V3c()));
 	}
 
-	@BeanApply(on="Dummy1",value=@Bean(stopClass=Vc.class))
-	@BeanApply(on="V3c",value=@Bean(stopClass=Vc.class))
-	@BeanApply(on="Dummy2",value=@Bean(stopClass=Vc.class))
+	@MarshalledApply(on="Dummy1",value=@Marshalled(stopClass=Vc.class))
+	@MarshalledApply(on="V3c",value=@Marshalled(stopClass=Vc.class))
+	@MarshalledApply(on="Dummy2",value=@Marshalled(stopClass=Vc.class))
 	private static class VcConfig {}
 
 	public static class Vc {
@@ -1707,7 +1707,7 @@ class BeanMap_Test extends TestBase {
 		public String getA4() {return "4";}
 	}
 
-	@Bean(stopClass=W.class)
+	@Marshalled(stopClass=W.class)
 	public static class W3 extends W2 {
 		public String getA5() {return "5";}
 		public String getA6() {return "6";}

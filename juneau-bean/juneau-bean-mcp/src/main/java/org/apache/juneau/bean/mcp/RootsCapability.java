@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Client roots capability.
  */
-@Bean
+@Marshalled
 public class RootsCapability {
 
 	private Boolean listChanged;

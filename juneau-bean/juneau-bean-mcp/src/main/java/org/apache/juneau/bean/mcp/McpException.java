@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Runtime exception carrying JSON-RPC error fields for mapping to {@link JsonRpcError}.
  */
-@Bean
+@Marshalled
 public class McpException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;

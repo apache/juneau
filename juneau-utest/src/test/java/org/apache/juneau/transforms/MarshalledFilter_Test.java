@@ -23,12 +23,12 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
-class BeanFilter_Test extends TestBase {
+class MarshalledFilter_Test extends TestBase {
 
 	//====================================================================================================
 	// Interface bean filters
 	//====================================================================================================
-	@Test void a01_interfaceBeanFilters() {
+	@Test void a01_interfaceMarshalledFilters() {
 		var session = BeanContext.create().interfaces(A1.class).build().getSession();
 		var bm = session.newBeanMap(A3.class);
 		assertEquals("f1", bm.get("f1"));
@@ -59,7 +59,7 @@ class BeanFilter_Test extends TestBase {
 	//====================================================================================================
 	// Abstract class bean filters
 	//====================================================================================================
-	@Test void a02_abstractClassBeanFilters() {
+	@Test void a02_abstractClassMarshalledFilters() {
 		var session = BeanContext.create().interfaces(B1.class).build().getSession();
 		var bm = session.newBeanMap(Test2.class);
 		assertEquals("f1", bm.get("f1"));
@@ -107,7 +107,7 @@ class BeanFilter_Test extends TestBase {
 		public int getP2() { return 2; }
 	}
 
-	@Bean(stopClass=C2.class)
+	@Marshalled(stopClass=C2.class)
 	public class C3 extends C2 {
 		public int f3 = 3;
 		public int getP3() { return 3; }
@@ -123,7 +123,7 @@ class BeanFilter_Test extends TestBase {
 		public int getP1() { return 1; }
 	}
 
-	@Bean(stopClass=D2.class)
+	@Marshalled(stopClass=D2.class)
 	public class D2 extends D1 {
 		public int f2 = 2;
 		public int getP2() { return 2; }
@@ -144,13 +144,13 @@ class BeanFilter_Test extends TestBase {
 		public int getP1() { return 1; }
 	}
 
-	@Bean(stopClass=E2.class)
+	@Marshalled(stopClass=E2.class)
 	public class E2 extends E1 {
 		public int f2 = 2;
 		public int getP2() { return 2; }
 	}
 
-	@Bean(xp="foo")
+	@Marshalled(xp="foo")
 	public class E3 extends E2 {
 		public int f3 = 3;
 		public int getP3() { return 3; }
@@ -161,7 +161,7 @@ class BeanFilter_Test extends TestBase {
 		assertJson("{f3:3,p3:3}", e3);
 	}
 
-	@Bean(stopClass=F1.class)
+	@Marshalled(stopClass=F1.class)
 	public class F1 {
 		public int f1 = 1;
 		public int getP1() { return 1; }
@@ -172,7 +172,7 @@ class BeanFilter_Test extends TestBase {
 		public int getP2() { return 2; }
 	}
 
-	@Bean(stopClass=F2.class)
+	@Marshalled(stopClass=F2.class)
 	public class F3 extends F2 {
 		public int f3 = 3;
 		public int getP3() { return 3; }

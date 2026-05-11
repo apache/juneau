@@ -25,7 +25,7 @@ import org.apache.juneau.urlencoding.annotation.*;
 
 public class DTOs {
 
-	@Bean
+	@Marshalled
 	public static class A {
 		public String a;
 		public int b;
@@ -41,7 +41,7 @@ public class DTOs {
 
 	}
 
-	@Bean
+	@Marshalled
 	public static class B {
 		public String[] f01;
 		public List<String> f02;
@@ -114,7 +114,7 @@ public class DTOs {
 	}
 
 	@UrlEncoding(expandedParams=true)
-	@Bean
+	@Marshalled
 	public static class C extends B {
 		static C create() {
 			var t = new C();

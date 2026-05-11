@@ -57,10 +57,10 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Bean(bpro/bpwo)
+	// @Marshalled(bpro/bpwo)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Bean(readOnlyProperties="f1", writeOnlyProperties="f2")
+	@Marshalled(readOnlyProperties="f1", writeOnlyProperties="f2")
 	public static class B {
 		@Beanp(ro="true") public int f1;
 		@Beanp(wo="true") public int f2;
@@ -83,9 +83,9 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 		assertEquals(2, x.f2);
 	}
 
-	@BeanApply(on="Dummy1",value=@Bean(readOnlyProperties="f1",writeOnlyProperties="f2"))
-	@BeanApply(on="Bc",value=@Bean(readOnlyProperties="f1",writeOnlyProperties="f2"))
-	@BeanApply(on="Dummy2",value=@Bean(readOnlyProperties="f1",writeOnlyProperties="f2"))
+	@MarshalledApply(on="Dummy1",value=@Marshalled(readOnlyProperties="f1",writeOnlyProperties="f2"))
+	@MarshalledApply(on="Bc",value=@Marshalled(readOnlyProperties="f1",writeOnlyProperties="f2"))
+	@MarshalledApply(on="Dummy2",value=@Marshalled(readOnlyProperties="f1",writeOnlyProperties="f2"))
 	@BeanpApply(on="Bc.f1",value=@Beanp(ro="true"))
 	@BeanpApply(on="Bc.f2",value=@Beanp(wo="true"))
 	private static class BcConfig {}
@@ -203,10 +203,10 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Bean(bpro="*")
+	// @Marshalled(bpro="*")
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Bean(readOnlyProperties="*")
+	@Marshalled(readOnlyProperties="*")
 	public static class D {
 		public int f1;
 		public int f2;
@@ -229,7 +229,7 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 		assertEquals(0, x.f2);
 	}
 
-	@BeanApply(on="Dc",value=@Bean(readOnlyProperties="*"))
+	@MarshalledApply(on="Dc",value=@Marshalled(readOnlyProperties="*"))
 	private static class DcConfig {}
 
 	public static class Dc {
@@ -255,10 +255,10 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Bean(bpwo="*")
+	// @Marshalled(bpwo="*")
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Bean(writeOnlyProperties="*")
+	@Marshalled(writeOnlyProperties="*")
 	public static class E {
 		public int f1;
 		public int f2;
@@ -281,7 +281,7 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 		assertEquals(2, x.f2);
 	}
 
-	@BeanApply(on="Ec",value=@Bean(writeOnlyProperties="*"))
+	@MarshalledApply(on="Ec",value=@Marshalled(writeOnlyProperties="*"))
 	private static class EcConfig {}
 
 	public static class Ec {

@@ -52,7 +52,7 @@ package org.apache.juneau.commons.function;
  *
  * <h5 class='section'>Example (DB-backed round-trip channel):</h5>
  * <p class='bjava'>
- * 	<ja>@Bean</ja>(factory=ItemChannelFactory.<jk>class</jk>)
+ * 	<ja>@Marshalled</ja>(factory=ItemChannelFactory.<jk>class</jk>)
  * 	<jk>public class</jk> ItemChannel <jk>implements</jk> BeanChannel&lt;Item&gt; {
  * 		<jk>private</jk> Connection <jv>conn</jv>;
  * 		<jk>private boolean</jk> <jv>writeMode</jv>;

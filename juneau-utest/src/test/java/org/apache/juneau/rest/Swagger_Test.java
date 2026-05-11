@@ -1830,7 +1830,7 @@ class Swagger_Test extends TestBase {
 		assertBean(getSwaggerWithFile(new S5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema(), "ref", "l-foo");
 	}
 
-	@Bean(typeName="Foo")
+	@Marshalled(typeName="Foo")
 	public static class X {
 		public int a;
 	}
@@ -1849,7 +1849,7 @@ class Swagger_Test extends TestBase {
 		}
 	}
 
-	@Bean
+	@Marshalled
 	public static class T2 {
 		private int f1;
 		public int getF1() { return f1; }

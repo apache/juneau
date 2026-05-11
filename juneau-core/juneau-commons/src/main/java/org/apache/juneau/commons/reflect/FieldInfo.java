@@ -228,8 +228,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * <p>
 	 * <b>Note on Repeatable Annotations:</b>
 	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
-	 * expanded into their individual annotation instances. For example, if a field has multiple {@code @Bean} annotations,
-	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.
+	 * expanded into their individual annotation instances. For example, if a field has multiple {@code @Marshalled} annotations,
+	 * this method returns each {@code @Marshalled} annotation separately, rather than the container annotation.
 	 *
 	 * @return
 	 * 	An unmodifiable list of all annotations declared on this field.

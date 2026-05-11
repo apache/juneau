@@ -263,7 +263,7 @@ class CsvParser_Test extends TestBase {
 	// j - Bean annotations
 	//====================================================================================================
 
-	@Test void j01_parseWithBeanAnnotations() throws Exception {
+	@Test void j01_parseWithMarshalledAnnotations() throws Exception {
 		var csv = "full_name,years\nJohn,35\n";
 		var r = parseList(csv, E.class);
 		assertEquals(1, r.size());

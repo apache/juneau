@@ -80,7 +80,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://www.iana.org/assignments/link-relations/link-relations.xhtml">IANA Link Relations</a>
  * </ul>
  */
-@Bean(typeName = "link")
+@Marshalled(typeName = "link")
 public class Link extends Common {
 
 	private String href;

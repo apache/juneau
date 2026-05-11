@@ -47,21 +47,21 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Using onClass() for type-safe targeting</jc>
- * 	BeanAnnotation <jv>annotation</jv> = BeanAnnotation
+ * 	MarshalledAnnotation <jv>annotation</jv> = MarshalledAnnotation
  * 		.<jsm>create</jsm>()
  * 		.onClass(MyClass.<jk>class</jk>, MyOtherClass.<jk>class</jk>)
  * 		.sort(<jk>true</jk>)
  * 		.build();
  *
  * 	<jc>// Using on() for string-based targeting</jc>
- * 	BeanAnnotation <jv>annotation2</jv> = BeanAnnotation
+ * 	MarshalledAnnotation <jv>annotation2</jv> = MarshalledAnnotation
  * 		.<jsm>create</jsm>()
  * 		.on(<js>"com.example.MyClass"</js>, <js>"com.example.MyOtherClass"</js>)
  * 		.sort(<jk>true</jk>)
  * 		.build();
  *
  * 	<jc>// Can use both together</jc>
- * 	BeanAnnotation <jv>annotation3</jv> = BeanAnnotation
+ * 	MarshalledAnnotation <jv>annotation3</jv> = MarshalledAnnotation
  * 		.<jsm>create</jsm>()
  * 		.on(<js>"com.example.MyClass"</js>)  <jc>// String-based</jc>
  * 		.onClass(MyOtherClass.<jk>class</jk>)  <jc>// Type-safe</jc>

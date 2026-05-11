@@ -152,7 +152,7 @@ class RdfSerializer_Test extends TestBase {
 			assertNotNull(RdfSerializer.create().beanContext(BeanContext.create()).build());
 		}
 
-		@Bean(typeName="myDictBean")
+		@Marshalled(typeName="myDictBean")
 		static class B03_DictBean {}
 
 		@Test void b03_beanDictionary() {

@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Result payload for {@value org.apache.juneau.bean.mcp.McpMethods#RESOURCES_READ}.
  */
-@Bean
+@Marshalled
 public class ReadResourceResult {
 
 	private List<ResourceContents> contents;

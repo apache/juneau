@@ -21,14 +21,13 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({
-	"java:S1186" // Empty test method intentional for framework testing
-})
 class MarshalledAnnotation_Test extends TestBase {
 
 	private static class X1 {}
+	private  static class X2 extends BeanInterceptor<MarshalledAnnotation_Test> {}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -36,23 +35,60 @@ class MarshalledAnnotation_Test extends TestBase {
 
 	Marshalled a1 = MarshalledAnnotation.create()
 		.description("a")
+		.dictionary(X1.class)
 		.example("b")
+		.excludeProperties("c")
+		.findFluentSetters(true)
 		.implClass(X1.class)
+		.interceptor(X2.class)
+		.interfaceClass(X1.class)
+		.p("e")
+		.properties("f")
+		.propertyNamer(BasicPropertyNamer.class)
+		.readOnlyProperties("g")
+		.ro("h")
+		.unsorted(true)
+		.stopClass(X1.class)
+		.typeName("i")
+		.typePropertyName("j")
+		.wo("k")
+		.writeOnlyProperties("l")
+		.xp("m")
 		.build();
 
 	Marshalled a2 = MarshalledAnnotation.create()
 		.description("a")
+		.dictionary(X1.class)
 		.example("b")
+		.excludeProperties("c")
+		.findFluentSetters(true)
 		.implClass(X1.class)
+		.interceptor(X2.class)
+		.interfaceClass(X1.class)
+		.p("e")
+		.properties("f")
+		.propertyNamer(BasicPropertyNamer.class)
+		.readOnlyProperties("g")
+		.ro("h")
+		.unsorted(true)
+		.stopClass(X1.class)
+		.typeName("i")
+		.typePropertyName("j")
+		.wo("k")
+		.writeOnlyProperties("l")
+		.xp("m")
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,example,implClass", "[a],b,X1");
+		assertBean(a1,
+			"description,dictionary,example,excludeProperties,findFluentSetters,implClass,interceptor,interfaceClass,p,properties,propertyNamer,readOnlyProperties,ro,stopClass,typeName,typePropertyName,unsorted,wo,writeOnlyProperties,xp",
+			"[a],[X1],b,c,true,X1,X2,X1,e,f,BasicPropertyNamer,g,h,X1,i,j,true,k,l,m");
 	}
 
 	@Test void a02_testEquivalency() {
 		assertEquals(a2, a1);
-		assertNotEqualsAny(a1.hashCode(), 0, -1);
+		assertNotEquals(0, a1.hashCode());
+		assertNotEquals(-1, a1.hashCode());
 		assertEquals(a1.hashCode(), a2.hashCode());
 	}
 
@@ -61,9 +97,9 @@ class MarshalledAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_testEquivalencyInPropertyStores() {
-		var bc1 = BeanContext.create().annotations(a1).build();
-		var bc2 = BeanContext.create().annotations(a2).build();
-		assertSame(bc1, bc2);
+		var b1 = BeanContext.create().annotations(a1).build();
+		var b2 = BeanContext.create().annotations(a2).build();
+		assertSame(b1, b2);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -72,16 +108,50 @@ class MarshalledAnnotation_Test extends TestBase {
 
 	@Marshalled(
 		description={ "a" },
+		dictionary=X1.class,
 		example="b",
-		implClass=X1.class
+		excludeProperties="c",
+		findFluentSetters=true,
+		implClass=X1.class,
+		interceptor=X2.class,
+		interfaceClass=X1.class,
+		p="e",
+		properties="f",
+		propertyNamer=BasicPropertyNamer.class,
+		readOnlyProperties="g",
+		ro="h",
+		unsorted=true,
+		stopClass=X1.class,
+		typeName="i",
+		typePropertyName="j",
+		wo="k",
+		writeOnlyProperties="l",
+		xp="m"
 	)
 	public static class D1 {}
 	Marshalled d1 = D1.class.getAnnotationsByType(Marshalled.class)[0];
 
 	@Marshalled(
 		description={ "a" },
+		dictionary=X1.class,
 		example="b",
-		implClass=X1.class
+		excludeProperties="c",
+		findFluentSetters=true,
+		implClass=X1.class,
+		interceptor=X2.class,
+		interfaceClass=X1.class,
+		p="e",
+		properties="f",
+		propertyNamer=BasicPropertyNamer.class,
+		readOnlyProperties="g",
+		ro="h",
+		unsorted=true,
+		stopClass=X1.class,
+		typeName="i",
+		typePropertyName="j",
+		wo="k",
+		writeOnlyProperties="l",
+		xp="m"
 	)
 	public static class D2 {}
 	Marshalled d2 = D2.class.getAnnotationsByType(Marshalled.class)[0];

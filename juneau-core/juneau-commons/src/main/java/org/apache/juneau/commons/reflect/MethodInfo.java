@@ -245,8 +245,8 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * <p>
 	 * <b>Note on Repeatable Annotations:</b>
 	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
-	 * expanded into their individual annotation instances. For example, if a method has multiple {@code @Bean} annotations,
-	 * this method returns each {@code @Bean} annotation separately, rather than the container annotation.
+	 * expanded into their individual annotation instances. For example, if a method has multiple {@code @Marshalled} annotations,
+	 * this method returns each {@code @Marshalled} annotation separately, rather than the container annotation.
 	 *
 	 * <p>
 	 * List is unmodifiable.
@@ -276,9 +276,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Get all @Bean annotations on this method and overridden methods</jc>
+	 * 	<jc>// Get all @Marshalled annotations on this method and overridden methods</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;Bean&gt;&gt; <jv>beans</jv> = <jv>methodInfo</jv>.getAnnotations(Bean.<jk>class</jk>);
-	 * 	<jc>// If method has @Beans({@Bean(...), @Bean(...)}), both individual @Bean instances are returned</jc>
+	 * 	<jc>// If method has @Beans({@Marshalled(...), @Marshalled(...)}), both individual @Marshalled instances are returned</jc>
 	 * </p>
 	 *
 	 * @param <A> The annotation type.

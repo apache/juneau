@@ -212,7 +212,7 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 
 	public abstract static class AA implements IA {}
 
-	@Bean(typeName="A")
+	@Marshalled(typeName="A")
 	public static class A extends AA {
 		private String f1;
 
@@ -265,7 +265,7 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 		assertBean(x, "f2a{f1},f2b{f1},f2c{f1},f2d{f1}", "{foo},{foo},{foo},{foo}");
 	}
 
-	@Bean(typeName="B")
+	@Marshalled(typeName="B")
 	public static class B {
 		public A f2a;
 		public AA f2b;
@@ -294,7 +294,7 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 		assertBean(x, "f3a{foo{f1}},f3b{foo{f1}},f3c{foo{f1}},f3d{foo{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
 	}
 
-	@Bean(typeName="C")
+	@Marshalled(typeName="C")
 	public static class C {
 		public Map<String,A> f3a = new HashMap<>();
 		public Map<String,A> f3b = new HashMap<>();
@@ -329,7 +329,7 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 		assertBean(x, "f4a{0{f1}},f4b{0{f1}},f4c{0{f1}},f4d{0{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
 	}
 
-	@Bean(typeName="D")
+	@Marshalled(typeName="D")
 	public static class D {
 		public A[] f4a;
 		public AA[] f4b;
@@ -364,7 +364,7 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 		assertBean(x, "f5a{0{f1}},f5b{0{f1}},f5c{0{f1}},f5d{0{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
 	}
 
-	@Bean(typeName="E")
+	@Marshalled(typeName="E")
 	public static class E {
 		public List<A> f5a = new LinkedList<>();
 		public List<AA> f5b = new LinkedList<>();
@@ -399,7 +399,7 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 		assertBean(x, "f6a{0{0{f1}}},f6b{0{0{f1}}},f6c{0{0{f1}}},f6d{0{0{f1}}}", "{{{foo}}},{{{foo}}},{{{foo}}},{{{foo}}}");
 	}
 
-	@Bean(typeName="F")
+	@Marshalled(typeName="F")
 	public static class F {
 		public List<A[]> f6a = new LinkedList<>();
 		public List<AA[]> f6b = new LinkedList<>();

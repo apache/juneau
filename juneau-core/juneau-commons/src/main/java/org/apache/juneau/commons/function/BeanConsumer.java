@@ -49,7 +49,7 @@ package org.apache.juneau.commons.function;
  *
  * <h5 class='section'>Example (DB-backed consumer with batch commits):</h5>
  * <p class='bjava'>
- * 	<ja>@Bean</ja>(factory=ItemConsumerFactory.<jk>class</jk>)
+ * 	<ja>@Marshalled</ja>(factory=ItemConsumerFactory.<jk>class</jk>)
  * 	<jk>public class</jk> ItemConsumer <jk>implements</jk> BeanConsumer&lt;Item&gt; {
  * 		<jk>private</jk> Connection <jv>conn</jv>;
  * 		<jk>private</jk> PreparedStatement <jv>stmt</jv>;

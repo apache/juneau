@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  * Wire objects carry a {@code type} discriminator with values {@code text}, {@code image}, or {@code resource}.
  */
-@Bean(
+@Marshalled(
 	typePropertyName = "type",
 	dictionary = { TextContent.class, ImageContent.class, EmbeddedResourceContent.class }
 )

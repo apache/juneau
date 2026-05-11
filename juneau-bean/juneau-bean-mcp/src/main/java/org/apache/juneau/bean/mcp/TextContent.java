@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * MCP {@code text} content block.
  */
-@Bean(typeName = "text")
+@Marshalled(typeName = "text")
 public class TextContent implements Content {
 
 	private String text;

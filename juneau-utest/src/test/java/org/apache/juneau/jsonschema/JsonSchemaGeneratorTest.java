@@ -427,12 +427,12 @@ class JsonSchemaGeneratorTest extends TestBase {
 		}
 	}
 
-	@Test void addExample_BEAN_exampleBeanAnnotation() throws Exception {
+	@Test void addExample_BEAN_exampleMarshalledAnnotation() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).build().getSession();
 		assertJson("{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}", s.getSchema(B4.class));
 	}
 
-	@Test void addExample_BEAN_exampleBeanAnnotation_2darray() throws Exception {
+	@Test void addExample_BEAN_exampleMarshalledAnnotation_2darray() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).build().getSession();
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}", s.getSchema(B4[][].class));
 	}
@@ -440,12 +440,12 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@Example("{f1:'foobar'}")
 	public static class B4 extends SimpleBean {}
 
-	@Test void addExample_BEAN_exampleBeanAnnotation_usingConfig() throws Exception {
+	@Test void addExample_BEAN_exampleMarshalledAnnotation_usingConfig() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B4cConfig.class).build().getSession();
 		assertJson("{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}", s.getSchema(B4c.class));
 	}
 
-	@Test void addExample_BEAN_exampleBeanAnnotation_2darray_usingConfig() throws Exception {
+	@Test void addExample_BEAN_exampleMarshalledAnnotation_2darray_usingConfig() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(BEAN).applyAnnotations(B4cConfig.class).build().getSession();
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},example:{f1:'foobar'}}}}", s.getSchema(B4c[][].class));
 	}
@@ -570,12 +570,12 @@ class JsonSchemaGeneratorTest extends TestBase {
 		}
 	}
 
-	@Test void addExample_MAP_exampleBeanAnnotation() throws Exception {
+	@Test void addExample_MAP_exampleMarshalledAnnotation() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).build().getSession();
 		assertJson("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'baz'}}}", s.getSchema(C3.class));
 	}
 
-	@Test void addExample_MAP_exampleBeanAnnotation_2darray() throws Exception {
+	@Test void addExample_MAP_exampleMarshalledAnnotation_2darray() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).build().getSession();
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'baz'}}}}}", s.getSchema(C3[][].class));
 	}
@@ -583,12 +583,12 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@Example("{'123':{f1:'baz'}}")
 	public static class C3 extends BeanMap {}
 
-	@Test void addExample_MAP_exampleBeanAnnotation_usingConfig() throws Exception {
+	@Test void addExample_MAP_exampleMarshalledAnnotation_usingConfig() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).applyAnnotations(C3cConfig.class).build().getSession();
 		assertJson("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'baz'}}}", s.getSchema(C3c.class));
 	}
 
-	@Test void addExample_MAP_exampleBeanAnnotation_2darray_usingConfig() throws Exception {
+	@Test void addExample_MAP_exampleMarshalledAnnotation_2darray_usingConfig() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(MAP).applyAnnotations(C3cConfig.class).build().getSession();
 		assertJson("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},example:{'123':{f1:'baz'}}}}}", s.getSchema(C3c[][].class));
 	}
@@ -713,12 +713,12 @@ class JsonSchemaGeneratorTest extends TestBase {
 		}
 	}
 
-	@Test void addExample_COLLECTION_exampleBeanAnnotation() throws Exception {
+	@Test void addExample_COLLECTION_exampleMarshalledAnnotation() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).build().getSession();
 		assertJson("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'baz'}]}", s.getSchema(D3.class));
 	}
 
-	@Test void addExample_ARRAY_exampleBeanAnnotation_2darray() throws Exception {
+	@Test void addExample_ARRAY_exampleMarshalledAnnotation_2darray() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(ARRAY).build().getSession();
 		assertJson("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},example:[[[{f1:'baz'}]]]}", s.getSchema(D3[][].class));
 	}
@@ -726,12 +726,12 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@Example("[{f1:'baz'}]")
 	public static class D3 extends BeanList {}
 
-	@Test void addExample_COLLECTION_exampleBeanAnnotation_usingConfig() throws Exception {
+	@Test void addExample_COLLECTION_exampleMarshalledAnnotation_usingConfig() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(COLLECTION).applyAnnotations(D3cConfig.class).build().getSession();
 		assertJson("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},example:[{f1:'baz'}]}", s.getSchema(D3c.class));
 	}
 
-	@Test void addExample_ARRAY_exampleBeanAnnotation_2darray_usingConfig() throws Exception {
+	@Test void addExample_ARRAY_exampleMarshalledAnnotation_2darray_usingConfig() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.copy().addExamplesTo(ARRAY).applyAnnotations(D3cConfig.class).build().getSession();
 		assertJson("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},example:[[[{f1:'baz'}]]]}", s.getSchema(D3c[][].class));
 	}

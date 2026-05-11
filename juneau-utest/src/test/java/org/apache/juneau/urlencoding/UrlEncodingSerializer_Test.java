@@ -563,7 +563,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)&foo=foo", s2.serialize(a));
 	}
 
-	@Bean
+	@Marshalled
 	public static class A {
 
 		@Beanp(name="foo")

@@ -73,8 +73,8 @@ class BeanConfigAnnotation_Test extends TestBase {
 			if (t instanceof Map.Entry e) {
 				return apply(e.getKey()) + "=" + apply(e.getValue());
 			}
-			if (t instanceof BeanFilter)
-				return ((BeanFilter)t).getBeanClass().getNameSimple();
+			if (t instanceof MarshalledFilter)
+				return ((MarshalledFilter)t).getBeanClass().getNameSimple();
 			if (t instanceof Class)
 				return ((Class<?>)t).getSimpleName();
 			if (t instanceof ClassInfo)
@@ -93,17 +93,17 @@ class BeanConfigAnnotation_Test extends TestBase {
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Bean(typeName="A1")
+	@Marshalled(typeName="A1")
 	public static class A1 {
 		public int foo;
 		@Override
 		public String toString() {return Json5.of(this);}
 	}
-	@Bean(typeName="A2")
+	@Marshalled(typeName="A2")
 	public static class A2 {
 		public int foo;
 	}
-	@Bean(typeName="A3")
+	@Marshalled(typeName="A3")
 	public static class A3 {
 		public int foo;
 	}

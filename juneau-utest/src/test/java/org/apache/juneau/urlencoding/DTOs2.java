@@ -25,9 +25,9 @@ import org.apache.juneau.urlencoding.annotation.*;
 
 public class DTOs2 {
 
-	@BeanApply(on="Dummy1",value=@Bean)
-	@BeanApply(on="A,B,C",value=@Bean)
-	@BeanApply(on="Dummy2",value=@Bean)
+	@MarshalledApply(on="Dummy1",value=@Marshalled)
+	@MarshalledApply(on="A,B,C",value=@Marshalled)
+	@MarshalledApply(on="Dummy2",value=@Marshalled)
 	@UrlEncodingApply(on="Dummy1",value=@UrlEncoding(expandedParams=true))
 	@UrlEncodingApply(on="C",value=@UrlEncoding(expandedParams=true))
 	@UrlEncodingApply(on="Dummy2",value=@UrlEncoding(expandedParams=true))

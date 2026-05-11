@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Single message line inside {@link GetPromptResult}.
  */
-@Bean
+@Marshalled
 public class PromptMessage {
 
 	private Role role;

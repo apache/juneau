@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
 })
 class JsonlRoundTrip_Test extends TestBase {
 
-	@Bean(properties = "name,age")
+	@Marshalled(properties = "name,age")
 	public static class Person {
 		public String name;
 		public int age;
@@ -49,7 +49,7 @@ class JsonlRoundTrip_Test extends TestBase {
 		}
 	}
 
-	@Bean(properties = "name,address,tags")
+	@Marshalled(properties = "name,address,tags")
 	public static class ComplexPerson {
 		public String name;
 		public Address address;
@@ -63,7 +63,7 @@ class JsonlRoundTrip_Test extends TestBase {
 		}
 	}
 
-	@Bean(properties = "street,city")
+	@Marshalled(properties = "street,city")
 	public static class Address {
 		public String street;
 		public String city;

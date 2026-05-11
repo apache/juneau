@@ -44,7 +44,7 @@ import org.apache.juneau.serializer.*;
  *
  */
 @HtmlLink
-@Bean(findFluentSetters = true)
+@Marshalled(findFluentSetters = true)
 public class LinkString implements Comparable<LinkString> {
 	private String name;
 	private java.net.URI uri;

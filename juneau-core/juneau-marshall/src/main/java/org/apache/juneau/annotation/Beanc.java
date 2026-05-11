@@ -47,7 +47,7 @@ import org.apache.juneau.*;
  * For Java records, the canonical constructor and its property mappings are automatically detected, so this
  * annotation is not required.  It can still be used to specify a non-canonical constructor if needed, for example
  * to provide default values for certain components.  When using a non-canonical constructor on a record, use
- * {@link Bean#properties() @Bean(properties)} to limit the visible properties to match the constructor parameters.
+ * {@link Bean#properties() @Marshalled(properties)} to limit the visible properties to match the constructor parameters.
  *
  * <p>
  * When present, bean instantiation is delayed until the call to {@link BeanMap#getBean()}.

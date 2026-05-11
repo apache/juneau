@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Result payload for {@value org.apache.juneau.bean.mcp.McpMethods#PROMPTS_GET}.
  */
-@Bean
+@Marshalled
 public class GetPromptResult {
 
 	private String description;

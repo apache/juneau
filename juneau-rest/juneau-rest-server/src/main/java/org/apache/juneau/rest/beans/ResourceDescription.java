@@ -39,7 +39,7 @@ import org.apache.juneau.http.annotation.*;
 
  * </ul>
  */
-@Bean(properties = "name,description", findFluentSetters = true)
+@Marshalled(properties = "name,description", findFluentSetters = true)
 @Response(schema = @Schema(ignore = true))
 public class ResourceDescription implements Comparable<ResourceDescription> {
 

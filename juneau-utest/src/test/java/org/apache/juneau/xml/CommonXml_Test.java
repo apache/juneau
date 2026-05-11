@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 class CommonXml_Test extends TestBase {
 
 	//====================================================================================================
-	// Test 18a - @Bean.uri annotation
+	// Test 18a - @Marshalled.uri annotation
 	//====================================================================================================
 	@Test void a01_beanUriAnnotation() throws Exception {
 		var p = XmlParser.DEFAULT;
@@ -48,7 +48,7 @@ class CommonXml_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Bean(p="url,id,name")
+	@Marshalled(p="url,id,name")
 	public static class A {
 		@Xml(format=XmlFormat.ATTR) public URL url;
 		@Xml(format=ATTR) public int id;

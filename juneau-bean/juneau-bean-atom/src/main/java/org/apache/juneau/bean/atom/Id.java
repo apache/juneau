@@ -76,7 +76,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://www.ietf.org/rfc/rfc4151.txt">RFC 4151 - Tag URI Scheme</a>
  * </ul>
  */
-@Bean(typeName = "id")
+@Marshalled(typeName = "id")
 public class Id extends Common {
 
 	private String text;

@@ -16,6 +16,6 @@
  */
 package org.apache.juneau.testutils.pojos;
 
-@org.apache.juneau.annotation.Bean(dictionary={TypedBeanImpl.class})
+@org.apache.juneau.annotation.Marshalled(dictionary={TypedBeanImpl.class})
 public interface TypedBean {
 }

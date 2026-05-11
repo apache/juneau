@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  */
 class Jsonl_Test extends TestBase {
 
-	@Bean(properties = "name,age")
+	@Marshalled(properties = "name,age")
 	public static class Person {
 		public String name;
 		public int age;

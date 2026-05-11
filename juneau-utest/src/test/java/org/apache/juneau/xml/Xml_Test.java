@@ -163,7 +163,7 @@ class Xml_Test extends TestBase {
 	}
 
 	/** Class with explicitly specified properties */
-	@Bean(typeName="Person1", properties="name,age")
+	@Marshalled(typeName="Person1", properties="name,age")
 	public static class Person1 {
 		public int age;
 		protected Person1(String name, int age) {
@@ -200,7 +200,7 @@ class Xml_Test extends TestBase {
 		validateXml(t);
 	}
 
-	@Bean(typeName="foo")
+	@Marshalled(typeName="foo")
 	public static class A {
 		public int f1 = 1;
 	}
@@ -230,7 +230,7 @@ class Xml_Test extends TestBase {
 		validateXml(t);
 	}
 
-	@Bean(typeName="foo")
+	@Marshalled(typeName="foo")
 	public interface C1 {}
 	public static class C2 implements C1 {}
 	public static class C3 extends C2 {
@@ -250,7 +250,7 @@ class Xml_Test extends TestBase {
 		validateXml(t);
 	}
 
-	@Bean(typeName="~!@#$%^&*()_+`-={}|[]\\:\";'<>?,.\n\r\t\b")
+	@Marshalled(typeName="~!@#$%^&*()_+`-={}|[]\\:\";'<>?,.\n\r\t\b")
 	public static class D {
 		public int f1 = 1;
 	}
@@ -270,10 +270,10 @@ class Xml_Test extends TestBase {
 		validateXml(t);
 	}
 
-	@Bean(typeName="foo")
+	@Marshalled(typeName="foo")
 	public static class F extends LinkedList<String>{}
 
-	@Bean(typeName="bar")
+	@Marshalled(typeName="bar")
 	public static class G {
 		public F f1 = new F();
 	}
@@ -288,12 +288,12 @@ class Xml_Test extends TestBase {
 		assertEquals("<foo><f1><bar><f2>2</f2></bar></f1></foo>", r);
 	}
 
-	@Bean(typeName="foo")
+	@Marshalled(typeName="foo")
 	public static class J1 {
 		@Beanp(properties="f2") public List<J2> f1 = l(new J2());
 	}
 
-	@Bean(typeName="bar")
+	@Marshalled(typeName="bar")
 	public static class J2 {
 		public int f2 = 2;
 		public int f3 = 3;
@@ -407,7 +407,7 @@ class Xml_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// @Bean.uri annotation formatted as element
+	// @Marshalled.uri annotation formatted as element
 	//====================================================================================================
 	@Test void a15_beanUriAnnotationFormattedAsElement() throws Exception {
 		var p = XmlParser.DEFAULT;
@@ -425,7 +425,7 @@ class Xml_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Bean(properties="url,id,name")
+	@Marshalled(properties="url,id,name")
 	public static class N {
 		@Xml(format=ELEMENT) public URL url;
 		public int id;
@@ -439,7 +439,7 @@ class Xml_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// @Bean.uri as elements, overridden element names
+	// @Marshalled.uri as elements, overridden element names
 	//====================================================================================================
 	@Test void a16_overriddenBeanUriAsElementNames() throws Exception {
 		var p = XmlParser.DEFAULT;
@@ -457,7 +457,7 @@ class Xml_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Bean(properties="url2,id2,name")
+	@Marshalled(properties="url2,id2,name")
 	public static class O {
 		@Beanp(name="url2") @Xml(format=ELEMENT) public URL url;
 		@Beanp(name="id2") public int id;
@@ -471,7 +471,7 @@ class Xml_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// @Bean.uri and @Bean.id annotations, overridden attribute names
+	// @Marshalled.uri and @Marshalled.id annotations, overridden attribute names
 	//====================================================================================================
 	@Test void a17_overriddenBeanUriAndIdAnnotations() throws Exception {
 		var p = XmlParser.DEFAULT;
@@ -489,7 +489,7 @@ class Xml_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Bean(properties="url2,id2,name")
+	@Marshalled(properties="url2,id2,name")
 	public static class P {
 		@Beanp(name="url2") @Xml(format=ATTR) public URL url;
 		@Beanp(name="id2") @Xml(format=ATTR) public int id;

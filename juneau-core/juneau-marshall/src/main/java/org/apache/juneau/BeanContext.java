@@ -56,7 +56,7 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		Provides the ability to wrap beans inside {@link Map} interfaces.
  * 	<li>
- * 		Serves as a repository for metadata on POJOs, such as associated {@link Bean @Bean} annotations,
+ * 		Serves as a repository for metadata on POJOs, such as associated {@link Bean @Marshalled} annotations,
  * 		{@link PropertyNamer PropertyNamers}, etc...  which are used to tailor how POJOs are serialized and parsed.
  * </ul>
  *
@@ -434,7 +434,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a non-public bean class to override this setting.
+		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a non-public bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.
 		 * </ul>
 		 *
@@ -540,7 +540,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <p>
 		 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
-		 * through reflection.  The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined
+		 * through reflection.  The names are defined through the {@link Bean#typeName() @Marshalled(typeName)} annotation defined
 		 * on the bean class.  For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up
 		 * serialized as <js>"{_type:'myfoo',...}"</js> in JSON
 		 * or <js>"&lt;myfoo&gt;...&lt;/myfoo&gt;"</js> in XML.
@@ -551,7 +551,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * Values can consist of any of the following types:
 		 * <ul>
-		 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
+		 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Marshalled(typeName)}.
 		 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
 		 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 		 * 	<li>Any array or collection of the objects above.
@@ -559,10 +559,10 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+		 * 	<jc>// POJOs with @Marshalled(name) annotations.</jc>
+		 * 	<ja>@Marshalled</ja>(typeName=<js>"foo"</js>)
 		 * 	<jk>public class</jk> Foo {...}
-		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+		 * 	<ja>@Marshalled</ja>(typeName=<js>"bar"</js>)
 		 * 	<jk>public class</jk> Bar {...}
 		 *
 		 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
@@ -587,7 +587,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p class='bjava'>
 		 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
 		 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
-		 * 	<ja>@Bean</ja>(dictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
+		 * 	<ja>@Marshalled</ja>(dictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;  <jc>// May contain Foo or Bar object.</jc>
 		 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>myMapField</jf>;  <jc>// May contain Foo or Bar objects.</jc>
@@ -608,7 +608,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#dictionary()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
@@ -753,7 +753,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().interceptor(value).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().interceptor(value).build()).build());
 		}
 
 		/**
@@ -891,7 +891,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).properties(<jv>properties</jv>).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).properties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -907,7 +907,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanProperties(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanApplyAnnotation.create(beanClass).value(BeanAnnotation.create().p(properties).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(beanClass).value(MarshalledAnnotation.create().p(properties).build()).build());
 		}
 
 		/**
@@ -954,7 +954,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code for each entry:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).properties(<jv>value</jv>.toString()).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>key</jv>).properties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -970,7 +970,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanProperties(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(BeanApplyAnnotation.create(k).value(BeanAnnotation.create().p(s(v)).build()).build()));
+			values.forEach((k, v) -> annotations(MarshalledApplyAnnotation.create(k).value(MarshalledAnnotation.create().p(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1018,7 +1018,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).properties(<jv>properties</jv>).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).properties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1035,7 +1035,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanProperties(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanApplyAnnotation.create(beanClassName).value(BeanAnnotation.create().p(properties).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(beanClassName).value(MarshalledAnnotation.create().p(properties).build()).build());
 		}
 
 		/**
@@ -1074,7 +1074,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).excludeProperties(<jv>properties</jv>).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).excludeProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1090,7 +1090,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanApplyAnnotation.create(beanClass).value(BeanAnnotation.create().xp(properties).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(beanClass).value(MarshalledAnnotation.create().xp(properties).build()).build());
 		}
 
 		/**
@@ -1129,7 +1129,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code for each entry:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).excludeProperties(<jv>value</jv>.toString()).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>key</jv>).excludeProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1145,7 +1145,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(BeanApplyAnnotation.create(k).value(BeanAnnotation.create().xp(s(v)).build()).build()));
+			values.forEach((k, v) -> annotations(MarshalledApplyAnnotation.create(k).value(MarshalledAnnotation.create().xp(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1185,7 +1185,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).excludeProperties(<jv>properties</jv>).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).excludeProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1203,7 +1203,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanApplyAnnotation.create(beanClassName).value(BeanAnnotation.create().xp(properties).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(beanClassName).value(MarshalledAnnotation.create().xp(properties).build()).build());
 		}
 
 		/**
@@ -1245,7 +1245,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).readOnlyProperties(<jv>properties</jv>).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).readOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1261,7 +1261,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanApplyAnnotation.create(beanClass).value(BeanAnnotation.create().ro(properties).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(beanClass).value(MarshalledAnnotation.create().ro(properties).build()).build());
 		}
 
 		/**
@@ -1303,7 +1303,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code for each entry:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).readOnlyProperties(<jv>value</jv>.toString()).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>key</jv>).readOnlyProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1319,7 +1319,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(BeanApplyAnnotation.create(k).value(BeanAnnotation.create().ro(s(v)).build()).build()));
+			values.forEach((k, v) -> annotations(MarshalledApplyAnnotation.create(k).value(MarshalledAnnotation.create().ro(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1362,7 +1362,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).readOnlyProperties(<jv>properties</jv>).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).readOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1378,7 +1378,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanApplyAnnotation.create(beanClassName).value(BeanAnnotation.create().ro(properties).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(beanClassName).value(MarshalledAnnotation.create().ro(properties).build()).build());
 		}
 
 		/**
@@ -1419,7 +1419,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).writeOnlyProperties(<jv>properties</jv>).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).writeOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1435,7 +1435,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanApplyAnnotation.create(beanClass).value(BeanAnnotation.create().wo(properties).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(beanClass).value(MarshalledAnnotation.create().wo(properties).build()).build());
 		}
 
 		/**
@@ -1476,7 +1476,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code for each entry:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).writeOnlyProperties(<jv>value</jv>.toString()).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>key</jv>).writeOnlyProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1492,7 +1492,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(BeanApplyAnnotation.create(k).value(BeanAnnotation.create().wo(s(v)).build()).build()));
+			values.forEach((k, v) -> annotations(MarshalledApplyAnnotation.create(k).value(MarshalledAnnotation.create().wo(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1534,7 +1534,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <p>
 		 * This method is functionally equivalent to the following code:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).writeOnlyProperties(<jv>properties</jv>).build());
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).writeOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1550,7 +1550,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(BeanApplyAnnotation.create(beanClassName).value(BeanAnnotation.create().wo(properties).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(beanClassName).value(MarshalledAnnotation.create().wo(properties).build()).build());
 		}
 
 		/**
@@ -1590,7 +1590,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
+		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
@@ -1647,7 +1647,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
+		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
@@ -1728,7 +1728,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <p>
 		 * The bean store is used to resolve {@link BeanFactory} instances registered via
-		 * <ja>@Bean</ja><c>(factory=X.class)</c> and <ja>@Beanp</ja><c>(factory=X.class)</c> annotations.
+		 * <ja>@Marshalled</ja><c>(factory=X.class)</c> and <ja>@Beanp</ja><c>(factory=X.class)</c> annotations.
 		 * When a factory class is encountered, the framework first looks it up in the bean store
 		 * before attempting direct instantiation.
 		 *
@@ -1793,10 +1793,10 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+		 * 	<jc>// POJOs with @Marshalled(name) annotations.</jc>
+		 * 	<ja>@Marshalled</ja>(typeName=<js>"foo"</js>)
 		 * 	<jk>public class</jk> Foo {...}
-		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+		 * 	<ja>@Marshalled</ja>(typeName=<js>"bar"</js>)
 		 * 	<jk>public class</jk> Bar {...}
 		 *
 		 * 	<jc>// A bean with a field with an indeterminate type.</jc>
@@ -1830,7 +1830,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNoNulls(ARG_values, values);
-			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().dictionary(values).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().dictionary(values).build()).build());
 		}
 
 		/**
@@ -1841,7 +1841,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 		 *
 		 * <p>
-		 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
+		 * The {@link Bean @Marshalled} annotation can be used on a class to override this setting when <jk>true</jk>.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -1860,7 +1860,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
+		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on the class to force it to be recognized as a bean class
 		 * 		even if it has no properties.
 		 * </ul>
 		 *
@@ -2192,11 +2192,11 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
-		 * 	<li class='note'>The {@link Bean#findFluentSetters() @Bean.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
+		 * 	<li class='note'>The {@link Bean#findFluentSetters() @Marshalled.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#findFluentSetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#findFluentSetters()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
 		 * </ul>
 		 *
@@ -2255,7 +2255,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 */
 		public Builder findFluentSetters(Class<?> on) {
 			assertArgNotNull(ARG_on, on);
-			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().findFluentSetters(true).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().findFluentSetters(true).build()).build());
 		}
 
 		@Override /* Overridden from Context.Builder */
@@ -2588,7 +2588,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * individually on the child classes.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
+		 * 	<li class='note'>The {@link Bean#interfaceClass() @Marshalled(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
 		 * @param on The class that the interface class applies to.
@@ -2601,7 +2601,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().interfaceClass(value).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().interfaceClass(value).build()).build());
 		}
 
 		/**
@@ -2637,7 +2637,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * individually on the child classes.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
+		 * 	<li class='note'>The {@link Bean#interfaceClass() @Marshalled(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
 		 * @param value
@@ -2648,7 +2648,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder interfaces(Class<?>...value) {
 			assertArgNoNulls(ARG_value, value);
 			for (var v : value)
-				annotations(BeanApplyAnnotation.create(v).value(BeanAnnotation.create().interfaceClass(v).build()).build());
+				annotations(MarshalledApplyAnnotation.create(v).value(MarshalledAnnotation.create().interfaceClass(v).build()).build());
 			return this;
 		}
 
@@ -2945,7 +2945,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().propertyNamer(value).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().propertyNamer(value).build()).build());
 		}
 
 		/**
@@ -3017,7 +3017,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean#unsorted() @Bean.unsorted()} annotation can also be used to opt out of sorting on a single class.
+		 * 	<li class='note'>The {@link Bean#unsorted() @Marshalled.unsorted()} annotation can also be used to opt out of sorting on a single class.
 		 * </ul>
 		 *
 		 * @return This object.
@@ -3041,7 +3041,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * Opt specific bean classes out of alphabetical property sorting.
 		 *
 		 * <p>
-		 * Applies the {@link Bean#unsorted() @Bean(unsorted=true)} annotation to the specified classes,
+		 * Applies the {@link Bean#unsorted() @Marshalled(unsorted=true)} annotation to the specified classes,
 		 * overriding the default sorted behavior for those specific beans.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -3055,7 +3055,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder unsortedProperties(Class<?>...on) {
 			assertArgNoNulls(ARG_on, on);
 			for (var c : on)
-				annotations(BeanApplyAnnotation.create(c).value(BeanAnnotation.create().unsorted(true).build()).build());
+				annotations(MarshalledApplyAnnotation.create(c).value(MarshalledAnnotation.create().unsorted(true).build()).build());
 			return this;
 		}
 
@@ -3104,7 +3104,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().stopClass(value).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().stopClass(value).build()).build());
 		}
 
 		/**
@@ -3381,7 +3381,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder typeName(Class<?> on, String value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().typeName(value).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().typeName(value).build()).build());
 		}
 
 		/**
@@ -3392,10 +3392,10 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+		 * 	<jc>// POJOs with @Marshalled(name) annotations.</jc>
+		 * 	<ja>@Marshalled</ja>(typeName=<js>"foo"</js>)
 		 * 	<jk>public class</jk> Foo {...}
-		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+		 * 	<ja>@Marshalled</ja>(typeName=<js>"bar"</js>)
 		 * 	<jk>public class</jk> Bar {...}
 		 *
 		 * 	<jc>// A bean with a field with an indeterminate type.</jc>
@@ -3429,7 +3429,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		public Builder typePropertyName(Class<?> on, String value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(BeanApplyAnnotation.create(on).value(BeanAnnotation.create().typePropertyName(value).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().typePropertyName(value).build()).build());
 		}
 
 		/**
@@ -3441,10 +3441,10 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+		 * 	<jc>// POJOs with @Marshalled(name) annotations.</jc>
+		 * 	<ja>@Marshalled</ja>(typeName=<js>"foo"</js>)
 		 * 	<jk>public class</jk> Foo {...}
-		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+		 * 	<ja>@Marshalled</ja>(typeName=<js>"bar"</js>)
 		 * 	<jk>public class</jk> Bar {...}
 		 *
 		 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
@@ -3474,7 +3474,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#typePropertyName()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#typePropertyName()}
 		 * </ul>
 		 *
@@ -3545,7 +3545,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <p>
 		 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
-		 * <br>Most {@link Bean @Bean} annotations will be ignored.
+		 * <br>Most {@link Bean @Marshalled} annotations will be ignored.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>

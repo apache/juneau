@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Server capability flags for prompts.
  */
-@Bean
+@Marshalled
 public class PromptCapability {
 
 	private Boolean listChanged;

@@ -76,7 +76,7 @@
  * 	<p class='bjava'>
  * 	<jk>package</jk> com.example;
  *
- * 	<ja>@Bean</ja>(factory=EmployeeSupplier.Factory.<jk>class</jk>)
+ * 	<ja>@Marshalled</ja>(factory=EmployeeSupplier.Factory.<jk>class</jk>)
  * 	<jk>public class</jk> EmployeeSupplier <jk>implements</jk> BeanSupplier&lt;Employee&gt; {
  *
  * 		<jk>private final</jk> DataSource <jv>ds</jv>;
@@ -165,7 +165,7 @@
  *
  * 	<h5 class='figure'>BeanConsumer with batch commits</h5>
  * 	<p class='bjava'>
- * 	<ja>@Bean</ja>(factory=EmployeeConsumer.Factory.<jk>class</jk>)
+ * 	<ja>@Marshalled</ja>(factory=EmployeeConsumer.Factory.<jk>class</jk>)
  * 	<jk>public class</jk> EmployeeConsumer <jk>implements</jk> BeanConsumer&lt;Employee&gt; {
  *
  * 		<jk>private static final int</jk> <jsf>BATCH_SIZE</jsf> = 500;
@@ -300,7 +300,7 @@
  *
  * 	<h5 class='figure'>Database-backed channel</h5>
  * 	<p class='bjava'>
- * 	<ja>@Bean</ja>(factory=EmployeeChannel.Factory.<jk>class</jk>)
+ * 	<ja>@Marshalled</ja>(factory=EmployeeChannel.Factory.<jk>class</jk>)
  * 	<jk>public class</jk> EmployeeChannel <jk>implements</jk> BeanChannel&lt;Employee&gt; {
  *
  * 		<jk>private final</jk> DataSource <jv>ds</jv>;
@@ -390,17 +390,17 @@
  * 	<ja>@Configuration</ja>
  * 	<jk>public class</jk> JuneauStreamingConfig {
  *
- * 		<ja>@Bean</ja>
+ * 		<ja>@Marshalled</ja>
  * 		<jk>public</jk> EmployeeSupplier.Factory employeeSupplierFactory(DataSource <jv>ds</jv>) {
  * 			<jk>return new</jk> EmployeeSupplier.Factory(<jv>ds</jv>);
  * 		}
  *
- * 		<ja>@Bean</ja>
+ * 		<ja>@Marshalled</ja>
  * 		<jk>public</jk> EmployeeConsumer.Factory employeeConsumerFactory(DataSource <jv>ds</jv>) {
  * 			<jk>return new</jk> EmployeeConsumer.Factory(<jv>ds</jv>);
  * 		}
  *
- * 		<ja>@Bean</ja>
+ * 		<ja>@Marshalled</ja>
  * 		<jk>public</jk> EmployeeChannel.Factory employeeChannelFactory(DataSource <jv>ds</jv>) {
  * 			<jk>return new</jk> EmployeeChannel.Factory(<jv>ds</jv>);
  * 		}
@@ -425,7 +425,7 @@
  *
  * 	<p>
  * 	With this wiring in place, any class annotated with
- * 	{@code @Bean(factory=EmployeeSupplier.Factory.class)} is automatically instantiated by
+ * 	{@code @Marshalled(factory=EmployeeSupplier.Factory.class)} is automatically instantiated by
  * 	retrieving the factory from the Spring {@code ApplicationContext} and calling
  * 	{@link org.apache.juneau.commons.function.BeanFactory#create()}. No manual construction or
  * 	injection is needed in individual REST methods.
@@ -443,7 +443,7 @@
  * 			<th>Purpose</th>
  * 		</tr>
  * 		<tr>
- * 			<td>{@code @Bean(factory=X.class)}</td>
+ * 			<td>{@code @Marshalled(factory=X.class)}</td>
  * 			<td>Class</td>
  * 			<td>Specifies the {@link org.apache.juneau.commons.function.BeanFactory} class used to instantiate this type during parsing. The factory is resolved from the {@code BeanStore}.</td>
  * 		</tr>

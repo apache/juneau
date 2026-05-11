@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * JSON-RPC 2.0 error object.
  */
-@Bean
+@Marshalled
 public class JsonRpcError {
 
 	private int code;

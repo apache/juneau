@@ -20,7 +20,10 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Utility classes and methods for the {@link Marshalled @Marshalled} annotation.
@@ -43,8 +46,27 @@ public class MarshalledAnnotation {
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
+		private Class<?>[] dictionary = new Class[0];
 		private Class<?> implClass = void.class;
+		private Class<?> interfaceClass = void.class;
+		private Class<?> stopClass = void.class;
+		private Class<? extends BeanInterceptor<?>> interceptor = BeanInterceptor.Void.class;
+		private Class<? extends PropertyNamer> propertyNamer = BasicPropertyNamer.class;
+		@SuppressWarnings("rawtypes")
+		private Class<? extends BeanFactory> factory = BeanFactory.Void.class;
 		private String example = "";
+		private String excludeProperties = "";
+		private String p = "";
+		private String properties = "";
+		private String readOnlyProperties = "";
+		private String ro = "";
+		private String typeName = "";
+		private String typePropertyName = "";
+		private String wo = "";
+		private String writeOnlyProperties = "";
+		private String xp = "";
+		private boolean findFluentSetters;
+		private boolean unsorted;
 
 		/**
 		 * Constructor.
@@ -74,6 +96,29 @@ public class MarshalledAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Marshalled#dictionary()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder dictionary(Class<?>...value) {
+			dictionary = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#factory()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		@SuppressWarnings("rawtypes")
+		public Builder factory(Class<? extends BeanFactory> value) {
+			factory = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Marshalled#example()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -81,6 +126,28 @@ public class MarshalledAnnotation {
 		 */
 		public Builder example(String value) {
 			example = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#excludeProperties()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder excludeProperties(String value) {
+			excludeProperties = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#findFluentSetters()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder findFluentSetters(boolean value) {
+			findFluentSetters = value;
 			return this;
 		}
 
@@ -95,6 +162,160 @@ public class MarshalledAnnotation {
 			return this;
 		}
 
+		/**
+		 * Sets the {@link Marshalled#interceptor()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder interceptor(Class<? extends BeanInterceptor<?>> value) {
+			interceptor = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#interfaceClass()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder interfaceClass(Class<?> value) {
+			interfaceClass = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#p()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder p(String value) {
+			p = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#properties()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder properties(String value) {
+			properties = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#propertyNamer()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
+			propertyNamer = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#readOnlyProperties()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder readOnlyProperties(String value) {
+			readOnlyProperties = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#ro()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder ro(String value) {
+			ro = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#unsorted()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder unsorted(boolean value) {
+			unsorted = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#stopClass()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder stopClass(Class<?> value) {
+			stopClass = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#typeName()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder typeName(String value) {
+			typeName = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#typePropertyName()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder typePropertyName(String value) {
+			typePropertyName = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#wo()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder wo(String value) {
+			wo = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#writeOnlyProperties()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder writeOnlyProperties(String value) {
+			writeOnlyProperties = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#xp()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder xp(String value) {
+			xp = value;
+			return this;
+		}
+
 	}
 
 	@SuppressWarnings({
@@ -103,14 +324,62 @@ public class MarshalledAnnotation {
 	private static class Object extends AnnotationObject implements Marshalled {
 
 		private final String[] description;
+		private final boolean findFluentSetters;
+		private final boolean unsorted;
+		private final Class<? extends BeanInterceptor<?>> interceptor;
+		private final Class<? extends PropertyNamer> propertyNamer;
 		private final Class<?> implClass;
+		private final Class<?> interfaceClass;
+		private final Class<?> stopClass;
+		private final Class<?>[] dictionary;
+		@SuppressWarnings("rawtypes")
+		private final Class<? extends BeanFactory> factory;
 		private final String example;
+		private final String excludeProperties;
+		private final String p;
+		private final String properties;
+		private final String readOnlyProperties;
+		private final String ro;
+		private final String typeName;
+		private final String typePropertyName;
+		private final String wo;
+		private final String writeOnlyProperties;
+		private final String xp;
 
 		Object(MarshalledAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
+			dictionary = copyOf(b.dictionary);
 			example = b.example;
+			excludeProperties = b.excludeProperties;
+			factory = b.factory;
+			findFluentSetters = b.findFluentSetters;
 			implClass = b.implClass;
+			interceptor = b.interceptor;
+			interfaceClass = b.interfaceClass;
+			p = b.p;
+			properties = b.properties;
+			propertyNamer = b.propertyNamer;
+			readOnlyProperties = b.readOnlyProperties;
+			ro = b.ro;
+			unsorted = b.unsorted;
+			stopClass = b.stopClass;
+			typeName = b.typeName;
+			typePropertyName = b.typePropertyName;
+			wo = b.wo;
+			writeOnlyProperties = b.writeOnlyProperties;
+			xp = b.xp;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public Class<?>[] dictionary() {
+			return dictionary;
+		}
+
+		@Override /* Overridden from Marshalled */
+		@SuppressWarnings("rawtypes")
+		public Class<? extends BeanFactory> factory() {
+			return factory;
 		}
 
 		@Override /* Overridden from Marshalled */
@@ -119,8 +388,88 @@ public class MarshalledAnnotation {
 		}
 
 		@Override /* Overridden from Marshalled */
+		public String excludeProperties() {
+			return excludeProperties;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public boolean findFluentSetters() {
+			return findFluentSetters;
+		}
+
+		@Override /* Overridden from Marshalled */
 		public Class<?> implClass() {
 			return implClass;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public Class<? extends BeanInterceptor<?>> interceptor() {
+			return interceptor;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public Class<?> interfaceClass() {
+			return interfaceClass;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public String p() {
+			return p;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public String properties() {
+			return properties;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public Class<? extends PropertyNamer> propertyNamer() {
+			return propertyNamer;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public String readOnlyProperties() {
+			return readOnlyProperties;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public String ro() {
+			return ro;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public boolean unsorted() {
+			return unsorted;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public Class<?> stopClass() {
+			return stopClass;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public String typeName() {
+			return typeName;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public String typePropertyName() {
+			return typePropertyName;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public String wo() {
+			return wo;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public String writeOnlyProperties() {
+			return writeOnlyProperties;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public String xp() {
+			return xp;
 		}
 
 		@Override /* Overridden from annotation */

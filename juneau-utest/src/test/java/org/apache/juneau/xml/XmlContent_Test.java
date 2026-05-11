@@ -118,7 +118,7 @@ class XmlContent_Test extends TestBase {
 		assertEquals(json(t2), json(t));
 	}
 
-	@Bean(typeName="A")
+	@Marshalled(typeName="A")
 	public static class A {
 		@Xml(format=ATTR) public String f1;
 		@Xml(format=TEXT) public String f2;
@@ -235,7 +235,7 @@ class XmlContent_Test extends TestBase {
 		assertEquals(json(t2), json(t));
 	}
 
-	@Bean(typeName="A")
+	@Marshalled(typeName="A")
 	public static class B {
 		@Xml(format=ATTR) public String f1;
 		@Xml(format=TEXT) public String f2;

@@ -51,10 +51,10 @@ import org.apache.juneau.swap.*;
  * methods are as follows:
  * <ul class='spaced-list'>
  * 	<li>
- * 		If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties
+ * 		If {@link Bean @Marshalled} annotation is specified on class, then the order is the same as the list of properties
  * 		in the annotation.
  * 	<li>
- * 		If {@link Bean @Bean} annotation is not specified on the class, then the order is the same as that returned
+ * 		If {@link Bean @Marshalled} annotation is not specified on the class, then the order is the same as that returned
  * 		by the {@link java.beans.BeanInfo} class (i.e. ordered by definition in the class).
  * </ul>
  *

@@ -46,14 +46,14 @@ package org.apache.juneau.swap;
  * <p>
  * Bean interceptors are registered in the following way:
  * <ul class='javatree'>
- * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#interceptor() @Bean(interceptor)}
+ * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#interceptor() @Marshalled(interceptor)}
  * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanInterceptor(Class,Class)}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Register interceptor on bean class.</jc>
- * 	<ja>@Bean</ja>(interceptor=AddressInterceptor.<jk>class</jk>)
+ * 	<ja>@Marshalled</ja>(interceptor=AddressInterceptor.<jk>class</jk>)
  * 	<jk>public class</jk> Address {
  * 		<jk>public</jk> String getTaxInfo() {...}
  * 		<jk>public void</jk> setTaxInfo(String <jv>value</jv>) {...}

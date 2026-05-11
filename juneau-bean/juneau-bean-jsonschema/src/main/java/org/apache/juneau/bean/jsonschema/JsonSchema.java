@@ -196,7 +196,7 @@ import org.apache.juneau.swap.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a>
  * </ul>
  */
-@Bean(typeName = "schema")
+@Marshalled(typeName = "schema")
 @SuppressWarnings({
 	"java:S116" // Field names follow OpenAPI/JSON Schema spec
 })

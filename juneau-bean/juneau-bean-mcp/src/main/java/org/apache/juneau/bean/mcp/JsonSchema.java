@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 /**
  * JSON Schema subset used by MCP tool {@code inputSchema} objects.
  */
-@Bean
+@Marshalled
 public class JsonSchema {
 
 	private String type;

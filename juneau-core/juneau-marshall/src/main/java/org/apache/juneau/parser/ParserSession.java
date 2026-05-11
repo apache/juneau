@@ -1084,7 +1084,7 @@ public class ParserSession extends BeanSession {
 				return br.getClassMeta(typeName);
 		}
 
-		// Resolve via @Bean(dictionary={}) on the expected type where the
+		// Resolve via @Marshalled(dictionary={}) on the expected type where the
 		// expected type is an interface with subclasses.
 		if (nn(eType)) {
 			br = eType.getBeanRegistry();

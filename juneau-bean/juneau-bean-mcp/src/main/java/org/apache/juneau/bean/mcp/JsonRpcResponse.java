@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  * Exactly one of {@code result} or {@code error} should be present for a valid response.
  */
-@Bean
+@Marshalled
 public class JsonRpcResponse {
 
 	private String jsonrpc;

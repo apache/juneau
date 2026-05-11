@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class BeanMapErrors_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @Beanp(name) on method not in @Bean(properties)
+	// @Beanp(name) on method not in @Marshalled(properties)
 	// JUNEAU-248: Shouldn't be found in keySet()/entrySet()/containsKey() but should be accessible via get()/put()
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void beanPropertyMethodNotInBeanProperties() {
@@ -44,7 +44,7 @@ class BeanMapErrors_Test extends TestBase {
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
-	@Bean(p="f1")
+	@Marshalled(p="f1")
 	public static class A1 {
 		public int f1;
 
@@ -65,8 +65,8 @@ class BeanMapErrors_Test extends TestBase {
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
-	@BeanApply(on="Dummy",value=@Bean(p="dummy"))
-	@BeanApply(on="B1",value=@Bean(p="f1"))
+	@MarshalledApply(on="Dummy",value=@Marshalled(p="dummy"))
+	@MarshalledApply(on="B1",value=@Marshalled(p="f1"))
 	@BeanpApply(on="Dummy",value=@Beanp("dummy"))
 	@BeanpApply(on="B1.f2",value=@Beanp("f2"))
 	private static class B1Config {}
@@ -80,7 +80,7 @@ class BeanMapErrors_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @Beanp(name) on field not in @Bean(properties)
+	// @Beanp(name) on field not in @Marshalled(properties)
 	// JUNEAU-248: Shouldn't be found in keySet()/entrySet()/containsKey() but should be accessible via get()/put()
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void beanPropertyFieldNotInBeanProperties() {
@@ -95,7 +95,7 @@ class BeanMapErrors_Test extends TestBase {
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
-	@Bean(p="f1")
+	@Marshalled(p="f1")
 	public static class A2 {
 		public int f1;
 
@@ -115,8 +115,8 @@ class BeanMapErrors_Test extends TestBase {
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
-	@BeanApply(on="Dummy",value=@Bean(p="dummy"))
-	@BeanApply(on="B2",value=@Bean(p="f1"))
+	@MarshalledApply(on="Dummy",value=@Marshalled(p="dummy"))
+	@MarshalledApply(on="B2",value=@Marshalled(p="f1"))
 	@BeanpApply(on="Dummy",value=@Beanp("dummy"))
 	@BeanpApply(on="B2.f2",value=@Beanp("f2"))
 	private static class B2Config {}

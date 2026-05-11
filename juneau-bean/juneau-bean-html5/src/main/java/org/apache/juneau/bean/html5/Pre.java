@@ -100,7 +100,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName = "pre")
+@Marshalled(typeName = "pre")
 public class Pre extends HtmlElementMixed {
 
 	/**

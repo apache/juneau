@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Server logging capability marker (structure may grow with the spec).
  */
-@Bean
+@Marshalled
 public class LoggingCapability {
 
 	private String level;

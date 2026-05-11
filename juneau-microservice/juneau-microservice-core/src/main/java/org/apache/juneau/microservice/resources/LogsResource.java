@@ -100,7 +100,7 @@ public class LogsResource extends BasicRestServlet {
 
 	/** File or directory details for REST response. */
 	@Response(schema = @Schema(description = "File or directory details"))
-	@Bean(properties = "type,name,size,lastModified,actions,files")
+	@Marshalled(properties = "type,name,size,lastModified,actions,files")
 	@SuppressWarnings({
 		"java:S1135" // TODO in getFiles() - will address later
 	})

@@ -39,7 +39,7 @@ import org.apache.juneau.commons.utils.*;
  * In a nutshell, provides a simple mapping of bean class objects to identifying names.
  *
  * <p>
- * Class names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation.
+ * Class names are defined through the {@link Bean#typeName() @Marshalled(typeName)} annotation.
  *
  * <p>
  * The dictionary is used by the framework in the following ways:
@@ -85,7 +85,7 @@ public class BeanRegistry {
 	 * Gets the class metadata for the specified bean type name.
 	 *
 	 * @param typeName
-	 * 	The bean type name as defined by {@link Bean#typeName() @Bean(typeName)}.
+	 * 	The bean type name as defined by {@link Bean#typeName() @Marshalled(typeName)}.
 	 * 	Can include multi-dimensional array type names (e.g. <js>"X^^"</js>).
 	 * @return The class metadata for the bean.
 	 */
@@ -166,12 +166,12 @@ public class BeanRegistry {
 					});
 				} else {
 					// @formatter:off
-					var typeName = ap.find(Bean.class, ci)
+					var typeName = ap.find(Marshalled.class, ci)
 						.stream()
 						.map(x -> x.inner().typeName())
 						.filter(Utils::ne)
 						.findFirst()
-						.orElseThrow(() -> bex("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", ci.getName()));
+						.orElseThrow(() -> bex("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Marshalled(typeName) annotation defined.", ci.getName()));
 					// @formatter:on
 					addToMap(typeName, bc.getClassMeta(ci.inner()));
 				}

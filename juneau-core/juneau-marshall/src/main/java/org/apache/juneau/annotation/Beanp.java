@@ -63,7 +63,7 @@ public @interface Beanp {
 	 * The list of classes that make up the bean dictionary this bean property.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}

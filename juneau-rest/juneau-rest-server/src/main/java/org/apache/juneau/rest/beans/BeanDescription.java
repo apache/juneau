@@ -37,9 +37,9 @@ import org.apache.juneau.annotation.*;
 
  * </ul>
  */
-@Bean(properties = "type,properties")
+@Marshalled(properties = "type,properties")
 @SuppressWarnings({
-	"java:S1104" // Public fields required for @Bean serialization
+	"java:S1104" // Public fields required for @Marshalled serialization
 })
 public class BeanDescription {
 

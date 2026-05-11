@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Result payload for {@value org.apache.juneau.bean.mcp.McpMethods#PROMPTS_LIST}.
  */
-@Bean
+@Marshalled
 public class ListPromptsResult {
 
 	private List<Prompt> prompts;

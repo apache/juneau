@@ -194,7 +194,7 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 			return new Builder();
 		}
 
-		@Bean(findFluentSetters=true)
+		@Marshalled(findFluentSetters=true)
 		public static class Builder {
 
 			private int f1;
@@ -216,9 +216,9 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 		assertBean(x, "f1", "1");
 	}
 
-	@BeanApply(on="Dummy1",value=@Bean(findFluentSetters=true))
-	@BeanApply(on="Builder",value=@Bean(findFluentSetters=true))
-	@BeanApply(on="Dummy2",value=@Bean(findFluentSetters=true))
+	@MarshalledApply(on="Dummy1",value=@Marshalled(findFluentSetters=true))
+	@MarshalledApply(on="Builder",value=@Marshalled(findFluentSetters=true))
+	@MarshalledApply(on="Dummy2",value=@Marshalled(findFluentSetters=true))
 	private static class AcConfig {}
 
 	public static class Ac {
@@ -268,7 +268,7 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 			return new Builder();
 		}
 
-		@Bean(findFluentSetters=true)
+		@Marshalled(findFluentSetters=true)
 		public static class Builder {
 
 			private A f1;
@@ -308,7 +308,7 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 		assertJson("{f1:[{f1:1}],f2:[{f1:2}],f3:[[{f1:3}]],f4:[[{f1:4}]],f5:[[[{f1:5}]]],f6:{foo:{f1:6}},f7:{foo:{bar:{f1:7}}},f8:{foo:[{f1:8}]},f9:{foo:[[{f1:9}]]}}", x);
 	}
 
-	@Bean
+	@Marshalled
 	public static class A3 {
 		private final A[] f1;
 
@@ -338,7 +338,7 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 			return new Builder();
 		}
 
-		@Bean(findFluentSetters=true)
+		@Marshalled(findFluentSetters=true)
 		public static class Builder {
 
 			private A[] f1;

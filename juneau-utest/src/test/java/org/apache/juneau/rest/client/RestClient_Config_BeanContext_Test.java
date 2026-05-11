@@ -513,7 +513,7 @@ class RestClient_Config_BeanContext_Test extends TestBase {
 		assertThrowsWithMessage(Exception.class, "Recursion occurred", ()->client().debug().build().post("/echo",x).run());
 	}
 
-	@org.apache.juneau.annotation.Bean(typeName="foo")
+	@org.apache.juneau.annotation.Marshalled(typeName="foo")
 	public static class A15a {
 		public String foo;
 		static A15a get() {
@@ -523,7 +523,7 @@ class RestClient_Config_BeanContext_Test extends TestBase {
 		}
 	}
 
-	@org.apache.juneau.annotation.Bean(typeName="bar")
+	@org.apache.juneau.annotation.Marshalled(typeName="bar")
 	public static class A15b {
 		public String foo;
 		static A15b get() {

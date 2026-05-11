@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Server capability flags for tools.
  */
-@Bean
+@Marshalled
 public class ToolCapability {
 
 	private Boolean listChanged;

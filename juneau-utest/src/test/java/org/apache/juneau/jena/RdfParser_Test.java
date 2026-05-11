@@ -262,7 +262,7 @@ class RdfParser_Test extends TestBase {
 
 	@Nested class D_inheritedBuilderMethods extends TestBase {
 
-		@Bean(typeName = "D01_DictBean")
+		@Marshalled(typeName = "D01_DictBean")
 		static class D01_DictBean {}
 
 		static class D10_TestParserListener extends ParserListener {}

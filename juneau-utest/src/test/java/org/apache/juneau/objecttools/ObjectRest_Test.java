@@ -219,7 +219,7 @@ class ObjectRest_Test extends TestBase {
 		}
 	}
 
-	@Bean(p="street,city,state,zip,isCurrent")
+	@Marshalled(p="street,city,state,zip,isCurrent")
 	public static class Address {
 		public String street;
 		public String city;
@@ -242,7 +242,7 @@ class ObjectRest_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="Person",p="name,age,addresses")
+	@Marshalled(typeName="Person",p="name,age,addresses")
 	public static class Person {
 		public String name;
 		public int age;

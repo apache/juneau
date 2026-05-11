@@ -465,7 +465,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 		assertEquals("{\"_type\":\"C3\",\"f1\":{\"f2\":\"f2\",\"f3\":3}}", r);
 	}
 
-	@Bean(dictionary={C3.class})
+	@Marshalled(dictionary={C3.class})
 	public interface C1<T> extends Serializable {
 		void setF1(T f1);
 		T getF1();
@@ -477,7 +477,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 		@Override /* C1 */ public void setF1(T v) { f1 = v; }
 	}
 
-	@Bean(typeName="C3")
+	@Marshalled(typeName="C3")
 	public static class C3<T> extends C2<T> {
 
 		public static C3 create() {

@@ -57,7 +57,7 @@ class Generics_RoundTripTest extends RoundTripTest_Base {
 	}
 
 	// Class with unbound type variables.
-	@Bean(p="s,t")
+	@Marshalled(p="s,t")
 	public static class Pair<S,T> {
 
 		public Pair() {}

@@ -211,7 +211,7 @@ public @interface BeanConfig {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li class='note'>
-	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
+	 * 		The {@link Bean @Marshalled} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -238,7 +238,7 @@ public @interface BeanConfig {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * 	<li class='note'>
-	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
+	 * 		The {@link Bean @Marshalled} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -322,7 +322,7 @@ public @interface BeanConfig {
 	 * <p>
 	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
 	 * through reflection.
-	 * <br>The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined on the bean class.
+	 * <br>The names are defined through the {@link Bean#typeName() @Marshalled(typeName)} annotation defined on the bean class.
 	 * <br>For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up serialized
 	 * as <js>"{_type:'myfoo',...}"</js>.
 	 *
@@ -647,7 +647,7 @@ public @interface BeanConfig {
 	 * individually on the child classes.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
+	 * 	<li class='note'>The {@link Bean#interfaceClass() @Marshalled(interfaceClass)} annotation is the equivalent annotation-based solution.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -951,7 +951,7 @@ public @interface BeanConfig {
 	 *
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
-	 * <br>Most {@link Bean @Bean} annotations will be ignored.
+	 * <br>Most {@link Bean @Marshalled} annotations will be ignored.
 	 *
 	 * <ul class='values'>
 	 * 	<li><js>"true"</js>

@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  * Discriminator {@code type} value is {@code resourceBlob} (distinct from generic {@code blob} tokens elsewhere).
  */
-@Bean(typeName = "resourceBlob")
+@Marshalled(typeName = "resourceBlob")
 public class BlobResourceContents implements ResourceContents {
 
 	private String uri;

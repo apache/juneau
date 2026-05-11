@@ -19,6 +19,7 @@ package org.apache.juneau.annotation;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
@@ -72,7 +73,7 @@ public class MarshalledApplyAnnotation {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
-	public static class Builder extends AppliedAnnotationObject.BuilderT {
+	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
 		Marshalled value = MarshalledAnnotation.DEFAULT;
 
@@ -112,6 +113,18 @@ public class MarshalledApplyAnnotation {
 			return this;
 		}
 
+		@Override /* Overridden from AppliedAnnotationObject.BuilderM */
+		public Builder on(Method...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderMF */
+		public Builder on(Field...value) {
+			super.on(value);
+			return this;
+		}
+
 		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
 		public Builder on(ClassInfo...value) {
 			super.on(value);
@@ -121,6 +134,18 @@ public class MarshalledApplyAnnotation {
 		@Override /* Overridden from AppliedAnnotationObject.BuilderT */
 		public Builder onClass(ClassInfo...value) {
 			super.onClass(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderTMF */
+		public Builder on(FieldInfo...value) {
+			super.on(value);
+			return this;
+		}
+
+		@Override /* Overridden from AppliedAnnotationObject.BuilderTMF */
+		public Builder on(MethodInfo...value) {
+			super.on(value);
 			return this;
 		}
 

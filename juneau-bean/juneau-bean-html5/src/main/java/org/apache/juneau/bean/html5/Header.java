@@ -109,7 +109,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName = "header")
+@Marshalled(typeName = "header")
 public class Header extends HtmlElementMixed {
 
 	/**

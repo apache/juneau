@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  * MCP {@code Implementation} object ({@code name} / {@code version}).
  */
-@Bean
+@Marshalled
 public class Implementation {
 
 	private String name;

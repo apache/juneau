@@ -183,7 +183,7 @@ class XmlCollapsed_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Bean(properties="f1,f2,f3,f4")
+	@Marshalled(properties="f1,f2,f3,f4")
 	public static class D {
 		private List<String> f1 = new LinkedList<>();
 		@Xml(format=COLLAPSED) public List<String> getF1() { return f1; }
@@ -222,7 +222,7 @@ class XmlCollapsed_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Bean(properties="f1,f2")
+	@Marshalled(properties="f1,f2")
 	public static class E {
 		private ArrayList<String> f1;
 		@Xml(format=COLLAPSED) public ArrayList<String> getF1() { return f1; }
@@ -280,7 +280,7 @@ class XmlCollapsed_Test extends TestBase {
 		}
 	}
 
-	@Bean(typeName="xf1")
+	@Marshalled(typeName="xf1")
 	public static class F1 {
 		@Xml(format=TEXT) public String text;
 

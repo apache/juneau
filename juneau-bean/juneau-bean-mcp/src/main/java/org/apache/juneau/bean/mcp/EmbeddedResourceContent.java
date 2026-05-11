@@ -25,7 +25,7 @@ import org.apache.juneau.annotation.*;
  * The nested {@link #getResource() resource} value uses the same {@code text} / {@code blob} shapes as
  * {@link ReadResourceResult} entries, carried as {@link ResourceContents} implementations.
  */
-@Bean(typeName = "resource")
+@Marshalled(typeName = "resource")
 public class EmbeddedResourceContent implements Content {
 
 	private ResourceContents resource;

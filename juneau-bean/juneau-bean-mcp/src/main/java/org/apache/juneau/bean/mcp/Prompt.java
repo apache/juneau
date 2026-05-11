@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 /**
  * MCP prompt descriptor ({@code prompts/list} entry).
  */
-@Bean
+@Marshalled
 public class Prompt {
 
 	private String name;

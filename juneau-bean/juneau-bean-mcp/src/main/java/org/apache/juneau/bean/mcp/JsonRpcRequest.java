@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  * The {@code id} field may be a {@link String}, integral {@link Number}, or {@code null} (notification).
  */
-@Bean
+@Marshalled
 public class JsonRpcRequest {
 
 	private String jsonrpc;

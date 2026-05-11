@@ -317,7 +317,7 @@ class BeanConfig_Test extends TestBase {
 		assertEquals(1, bc.convertToType(o2, ReadOnlyPerson[].class)[0].getAge());
 	}
 
-	@Bean(p="name,age")
+	@Marshalled(p="name,age")
 	public static class ReadOnlyPerson {
 		private final int age;
 
@@ -367,9 +367,9 @@ class BeanConfig_Test extends TestBase {
 		}
 	}
 
-	@BeanApply(on="Dummy1",value=@Bean(p="dummy"))
-	@BeanApply(on="ReadOnlyPerson2",value=@Bean(p="name,age"))
-	@BeanApply(on="Dummy2",value=@Bean(p="dummy"))
+	@MarshalledApply(on="Dummy1",value=@Marshalled(p="dummy"))
+	@MarshalledApply(on="ReadOnlyPerson2",value=@Marshalled(p="name,age"))
+	@MarshalledApply(on="Dummy2",value=@Marshalled(p="dummy"))
 	@BeancApply(on="Dummy1",value=@Beanc(properties="dummy"))
 	@BeancApply(on="ReadOnlyPerson2(String,int)",value=@Beanc(properties="name,age"))
 	@BeancApply(on="Dummy2",value=@Beanc(properties="dummy"))

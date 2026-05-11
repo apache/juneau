@@ -26,7 +26,7 @@ import org.apache.juneau.annotation.*;
  * For Juneau dictionary parsing, include {@code type} with values {@code resourceText} or {@code resourceBlob}
  * when serializing mixed arrays; a transport layer may inject {@code type} when bridging from minimal wire forms.
  */
-@Bean(
+@Marshalled(
 	typePropertyName = "type",
 	dictionary = { TextResourceContents.class, BlobResourceContents.class }
 )

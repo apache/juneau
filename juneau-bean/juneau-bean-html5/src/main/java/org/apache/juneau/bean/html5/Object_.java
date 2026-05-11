@@ -97,7 +97,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName = "object")
+@Marshalled(typeName = "object")
 @SuppressWarnings({
 	"java:S100", // Class name uses underscore suffix to avoid conflict with java.lang.Object
 	"java:S101" // Class name uses underscore suffix to avoid conflict with java.lang.Object

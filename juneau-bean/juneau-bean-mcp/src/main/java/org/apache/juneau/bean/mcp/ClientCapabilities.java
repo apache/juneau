@@ -23,7 +23,7 @@ import org.apache.juneau.annotation.*;
 /**
  * MCP client capability advertisement in {@link InitializeRequest}.
  */
-@Bean
+@Marshalled
 public class ClientCapabilities {
 
 	private RootsCapability roots;

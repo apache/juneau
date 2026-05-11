@@ -26,14 +26,14 @@ import org.apache.juneau.annotation.*;
  * <p>
  * The classes in the list must be one of the following:
  * <ul>
- * 	<li>Beans that provide a dictionary name using the {@link Bean#typeName() @Bean(typeName)} annotation.
+ * 	<li>Beans that provide a dictionary name using the {@link Bean#typeName() @Marshalled(typeName)} annotation.
  * 	<li>Other subclasses of {@link BeanDictionaryList}.
  * 	<li>Other subclasses of {@link BeanDictionaryMap}.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jc>// A bean dictionary list consisting of classes with @Bean(typeName) annotations.</jc>
+ * 	<jc>// A bean dictionary list consisting of classes with @Marshalled(typeName) annotations.</jc>
  * 	<jk>public class</jk> MyBeanDictionaryList <jk>extends</jk> BeanDictionaryList {
  *
  * 		<jc>// Must provide a no-arg constructor!</jc>
@@ -63,7 +63,7 @@ public class BeanDictionaryList extends ArrayList<Class<?>> {
 	 *
 	 * @param c
 	 * 	The list of bean classes to add to this dictionary.
-	 * 	Classes must either specify a {@link Bean#typeName() @Bean(typeName)} value or be another subclass of
+	 * 	Classes must either specify a {@link Bean#typeName() @Marshalled(typeName)} value or be another subclass of
 	 * 	<c>BeanDictionaryList</c>.
 	 */
 	protected BeanDictionaryList(Class<?>...c) {
@@ -75,7 +75,7 @@ public class BeanDictionaryList extends ArrayList<Class<?>> {
 	 *
 	 * @param c
 	 * 	The list of bean classes to add to this dictionary.
-	 * 	Classes must either specify a {@link Bean#typeName() @Bean(typeName)} value or be another subclass of
+	 * 	Classes must either specify a {@link Bean#typeName() @Marshalled(typeName)} value or be another subclass of
 	 * 	<c>BeanDictionaryList</c>.
 	 * @return This object.
 	 */

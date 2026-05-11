@@ -94,13 +94,13 @@ import org.apache.juneau.commons.reflect.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a Bean annotation that applies to MyClass</jc>
- * 	BeanAnnotation <jv>annotation</jv> = BeanAnnotation
+ * 	MarshalledAnnotation <jv>annotation</jv> = MarshalledAnnotation
  * 		.<jsm>create</jsm>(MyClass.<jk>class</jk>)
  * 		.sort(<jk>true</jk>)
  * 		.build();
  *
  * 	<jc>// Or target by string name</jc>
- * 	BeanAnnotation <jv>annotation2</jv> = BeanAnnotation
+ * 	MarshalledAnnotation <jv>annotation2</jv> = MarshalledAnnotation
  * 		.<jsm>create</jsm>()
  * 		.on(<js>"com.example.MyClass"</js>)
  * 		.sort(<jk>true</jk>)

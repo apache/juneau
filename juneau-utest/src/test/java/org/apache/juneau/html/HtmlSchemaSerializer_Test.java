@@ -57,14 +57,14 @@ class HtmlSchemaSerializer_Test extends TestBase {
 	// Documentation examples
 	//====================================================================================================
 
-	@Bean(properties="name,birthDate,addresses")
+	@Marshalled(properties="name,birthDate,addresses")
 	public static class Person {
 		public String name;
 		public Calendar birthDate;
 		public List<Address> addresses;
 	}
 
-	@Bean(properties="street,city,state,zip,isCurrent")
+	@Marshalled(properties="street,city,state,zip,isCurrent")
 	public static class Address {
 		public String street, city;
 		public StateEnum state;
