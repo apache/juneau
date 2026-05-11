@@ -28,20 +28,20 @@ import org.springframework.beans.factory.*;
 import org.springframework.context.*;
 
 /**
- * Tests for {@link SpringBeanStore2}.
+ * Tests for {@link SpringBeanStore}.
  */
 @SuppressWarnings({
 	"unchecked" // getBean(String, Class) invocation in test
 })
-class SpringBeanStore2_Test extends TestBase {
+class SpringBeanStore_Test extends TestBase {
 
 	private ApplicationContext mockAppContext;
-	private SpringBeanStore2 beanStore;
+	private SpringBeanStore beanStore;
 
 	@BeforeEach
 	void setUp() {
 		mockAppContext = mock(ApplicationContext.class);
-		beanStore = new SpringBeanStore2(mockAppContext, null);
+		beanStore = new SpringBeanStore(mockAppContext, null);
 	}
 
 	//====================================================================================================
@@ -75,20 +75,20 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void a01_constructorWithNullContext() {
-		var store = new SpringBeanStore2(null, null);
+		var store = new SpringBeanStore(null, null);
 		assertNotNull(store);
 	}
 
 	@Test
 	void a02_constructorWithNullParent() {
-		var store = new SpringBeanStore2(mockAppContext, null);
+		var store = new SpringBeanStore(mockAppContext, null);
 		assertNotNull(store);
 	}
 
 	@Test
 	void a03_constructorWithParent() {
 		var parent = new BasicBeanStore(null);
-		var store = new SpringBeanStore2(mockAppContext, parent);
+		var store = new SpringBeanStore(mockAppContext, parent);
 		assertNotNull(store);
 	}
 
@@ -114,7 +114,7 @@ class SpringBeanStore2_Test extends TestBase {
 		var service = new TestService("parent");
 		parent.addBean(TestService.class, service);
 
-		var store = new SpringBeanStore2(mockAppContext, parent);
+		var store = new SpringBeanStore(mockAppContext, parent);
 		var result = store.getBean(TestService.class);
 
 		assertTrue(result.isPresent());
@@ -129,7 +129,7 @@ class SpringBeanStore2_Test extends TestBase {
 		parent.addBean(TestService.class, parentService);
 
 		var localService = new TestService("local");
-		var store = new SpringBeanStore2(mockAppContext, parent);
+		var store = new SpringBeanStore(mockAppContext, parent);
 		store.addBean(TestService.class, localService);
 
 		var result = store.getBean(TestService.class);
@@ -179,7 +179,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void c04_getBean_nullAppContext() {
-		var store = new SpringBeanStore2(null, null);
+		var store = new SpringBeanStore(null, null);
 
 		var result = store.getBean(TestService.class);
 
@@ -225,7 +225,7 @@ class SpringBeanStore2_Test extends TestBase {
 		var service = new TestService("parent");
 		parent.addBean(TestService.class, service, "myBean");
 
-		var store = new SpringBeanStore2(mockAppContext, parent);
+		var store = new SpringBeanStore(mockAppContext, parent);
 		var result = store.getBean(TestService.class, "myBean");
 
 		assertTrue(result.isPresent());
@@ -285,7 +285,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void e04_getBeanNamed_nullNameSkipsSpring() {
-		var store = new SpringBeanStore2(mockAppContext, null);
+		var store = new SpringBeanStore(mockAppContext, null);
 
 		var result = store.getBean(TestService.class, null);
 
@@ -364,7 +364,7 @@ class SpringBeanStore2_Test extends TestBase {
 		var parentService = new TestService("parent");
 		parent.addBean(TestService.class, parentService, "parent");
 
-		var store = new SpringBeanStore2(mockAppContext, parent);
+		var store = new SpringBeanStore(mockAppContext, parent);
 		var localService = new TestService("local");
 		store.addBean(TestService.class, localService, "local");
 
@@ -410,7 +410,7 @@ class SpringBeanStore2_Test extends TestBase {
 		var parent = new BasicBeanStore(null);
 		parent.addBean(TestService.class, new TestService("parent"));
 
-		var store = new SpringBeanStore2(mockAppContext, parent);
+		var store = new SpringBeanStore(mockAppContext, parent);
 
 		assertTrue(store.hasBean(TestService.class));
 		verifyNoInteractions(mockAppContext);
@@ -439,7 +439,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void g06_hasBean_nullAppContext() {
-		var store = new SpringBeanStore2(null, null);
+		var store = new SpringBeanStore(null, null);
 
 		assertFalse(store.hasBean(TestService.class));
 	}
@@ -461,7 +461,7 @@ class SpringBeanStore2_Test extends TestBase {
 		var parent = new BasicBeanStore(null);
 		parent.addBean(TestService.class, new TestService("parent"), "myBean");
 
-		var store = new SpringBeanStore2(mockAppContext, parent);
+		var store = new SpringBeanStore(mockAppContext, parent);
 
 		assertTrue(store.hasBean(TestService.class, "myBean"));
 		verifyNoInteractions(mockAppContext);
@@ -507,7 +507,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void h08_hasBeanNamed_nullAppContext() {
-		var store = new SpringBeanStore2(null, null);
+		var store = new SpringBeanStore(null, null);
 
 		assertFalse(store.hasBean(TestService.class, "myBean"));
 	}
@@ -580,7 +580,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void i06_getBeanSupplier_nullAppContext() {
-		var store = new SpringBeanStore2(null, null);
+		var store = new SpringBeanStore(null, null);
 
 		var supplier = store.getBeanSupplier(TestService.class);
 
@@ -663,7 +663,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void j07_getBeanSupplierNamed_nullAppContext() {
-		var store = new SpringBeanStore2(null, null);
+		var store = new SpringBeanStore(null, null);
 
 		var supplier = store.getBeanSupplier(TestService.class, "myBean");
 
@@ -672,7 +672,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void j08_getBeanSupplierNamed_nullName() {
-		var store = new SpringBeanStore2(mockAppContext, null);
+		var store = new SpringBeanStore(mockAppContext, null);
 
 		var supplier = store.getBeanSupplier(TestService.class, null);
 
@@ -709,7 +709,7 @@ class SpringBeanStore2_Test extends TestBase {
 		var parent = new BasicBeanStore(null);
 		parent.addBean(TestService.class, new TestService("parent"));
 
-		var store = new SpringBeanStore2(mockAppContext, parent);
+		var store = new SpringBeanStore(mockAppContext, parent);
 		store.addBean(AnotherService.class, new AnotherService(42));
 
 		store.clear();
@@ -736,11 +736,11 @@ class SpringBeanStore2_Test extends TestBase {
 		var service1 = new TestService("grandparent");
 		grandparent.addBean(TestService.class, service1, "bean1");
 
-		var parent = new SpringBeanStore2(null, grandparent);
+		var parent = new SpringBeanStore(null, grandparent);
 		var service2 = new TestService("parent");
 		parent.addBean(TestService.class, service2, "bean2");
 
-		var child = new SpringBeanStore2(mockAppContext, parent);
+		var child = new SpringBeanStore(mockAppContext, parent);
 		var service3 = new TestService("child");
 		child.addBean(TestService.class, service3, "bean3");
 

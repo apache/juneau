@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.commons.inject.WritableBeanStore;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -35,7 +35,7 @@ public class RestOperations {
 	 */
 	public static class Builder {
 
-		private final WritableBeanStore beanStore;
+		private final BeanStore beanStore;
 		TreeMap<String,TreeSet<RestOpContext>> map;
 		Set<RestOpContext> set;
 
@@ -44,7 +44,7 @@ public class RestOperations {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(WritableBeanStore beanStore) {
+		protected Builder(BeanStore beanStore) {
 			this.beanStore = beanStore;
 			map = new TreeMap<>();
 			set = set();
@@ -55,7 +55,7 @@ public class RestOperations {
 		 *
 		 * @return The bean store used by this builder.
 		 */
-		public WritableBeanStore beanStore() {
+		public BeanStore beanStore() {
 			return beanStore;
 		}
 
@@ -123,7 +123,7 @@ public class RestOperations {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(WritableBeanStore beanStore) {
+	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

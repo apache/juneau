@@ -266,6 +266,59 @@ public class BeanInstantiator<T> {
 		return new Builder<>(beanType, parentStore, name, enclosingInstance);
 	}
 
+	/**
+	 * Instantiates a bean of the given type, or returns <jk>null</jk> if the type is <jk>null</jk> or instantiation fails.
+	 *
+	 * <p>
+	 * Shorthand for the common pattern:
+	 * <p class='bjava'>
+	 * 	<jv>cls</jv> == <jk>null</jk> ? <jk>null</jk> : BeanInstantiator.<jsm>of</jsm>(<jv>cls</jv>).fallback(() -> <jk>null</jk>).run()
+	 * </p>
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.  Can be <jk>null</jk>.
+	 * @return A new bean instance, or <jk>null</jk> if the type is <jk>null</jk> or instantiation fails.
+	 */
+	public static <T> T createOrNull(Class<T> beanType) {
+		return beanType == null ? null : of(beanType).fallback(() -> null).run();
+	}
+
+	/**
+	 * Instantiates a bean of the given type and wraps it in an {@link Optional}, or returns {@link Optional#empty()}
+	 * if the type is <jk>null</jk> or instantiation fails.
+	 *
+	 * <p>
+	 * Shorthand for the common pattern:
+	 * <p class='bjava'>
+	 * 	<jv>cls</jv> == <jk>null</jk> ? Optional.empty() : BeanInstantiator.<jsm>of</jsm>(<jv>cls</jv>).asOptional()
+	 * </p>
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.  Can be <jk>null</jk>.
+	 * @return An {@link Optional} containing the created bean, or {@link Optional#empty()} if the type is <jk>null</jk> or instantiation fails.
+	 */
+	public static <T> Optional<T> optionalOf(Class<T> beanType) {
+		return beanType == null ? Optional.empty() : of(beanType).asOptional();
+	}
+
+	/**
+	 * Instantiates a bean of the given type, or returns a default value if the type is <jk>null</jk>.
+	 *
+	 * <p>
+	 * Shorthand for the common pattern:
+	 * <p class='bjava'>
+	 * 	<jv>cls</jv> == <jk>null</jk> ? <jv>defaultValue</jv> : BeanInstantiator.<jsm>of</jsm>(<jv>cls</jv>).run()
+	 * </p>
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.  Can be <jk>null</jk>.
+	 * @param defaultValue The value to return if {@code beanType} is <jk>null</jk>.  Can be <jk>null</jk>.
+	 * @return A new bean instance, or {@code defaultValue} if the type is <jk>null</jk>.
+	 */
+	public static <T> T createOrDefault(Class<T> beanType, T defaultValue) {
+		return beanType == null ? defaultValue : of(beanType).run();
+	}
+
 	// =========================================================================
 	// Outer (immutable) wrapper state and methods
 	// =========================================================================

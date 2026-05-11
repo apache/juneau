@@ -358,7 +358,7 @@ public class RestContext extends Context {
 	 * 	The REST servlet/bean instance that this context is defined against.
 	 * @return The bean store for this context.
 	 */
-	private WritableBeanStore createBeanStore(WritableBeanStore parentBs, Supplier<?> resource) {
+	private WritableBeanStore createBeanStore(BeanStore parentBs, Supplier<?> resource) {
 		var defaultBs = new BasicBeanStore(parentBs);
 		return defaultBs.createBeanFromMethod(WritableBeanStore.class, resource.get(), RestContext::isRestInjectMethod)
 			.orElse(defaultBs);
@@ -2680,7 +2680,7 @@ public class RestContext extends Context {
 	 * 	<br>Created during context bootstrap.
 	 * @return The array of resolvers.
 	 */
-	protected RestOpArg[] findRestOperationArgs(Method m, WritableBeanStore beanStore) {
+	protected RestOpArg[] findRestOperationArgs(Method m, BeanStore beanStore) {
 
 		var mi = MethodInfo.of(m);
 		var params = mi.getParameters();
@@ -2839,7 +2839,7 @@ public class RestContext extends Context {
 	 * @param session The HTTP call.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	void invokeRestInitMethod(MethodInfo m, Supplier<?> resource, WritableBeanStore beanStore) throws ServletException {
+	void invokeRestInitMethod(MethodInfo m, Supplier<?> resource, BeanStore beanStore) throws ServletException {
 		try {
 			m.inject(beanStore, resource.get());
 		} catch (Exception e) {

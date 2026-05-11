@@ -78,7 +78,7 @@ public class VarResolver {
 
 		private WritableBeanStore beanStore;
 		final VarList vars;
-		final java.util.LinkedHashMap<Class<?>,Object> userBeans;
+		final LinkedHashMap<Class<?>,Object> userBeans;
 
 		/**
 		 * Constructor.
@@ -86,7 +86,7 @@ public class VarResolver {
 		protected Builder() {
 			this.beanStore = new BasicBeanStore();
 			vars = VarList.create();
-			userBeans = new java.util.LinkedHashMap<>();
+			userBeans = new LinkedHashMap<>();
 		}
 
 		/**
@@ -97,7 +97,7 @@ public class VarResolver {
 		protected Builder(VarResolver copyFrom) {
 			this.beanStore = copyFrom.beanStore;
 			vars = VarList.of(copyFrom.vars);
-			userBeans = new java.util.LinkedHashMap<>();
+			userBeans = new LinkedHashMap<>();
 		}
 
 		/**

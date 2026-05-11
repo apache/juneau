@@ -504,8 +504,7 @@ public class SerializerSession extends BeanTraverseSession {
 		UriContext uriContext = builder.uriContext;
 		uriResolver = UriResolver.of(ctx.getUriResolution(), ctx.getUriRelativity(), uriContext);
 		vrs = builder.resolver;
-		var listenerCls = ctx.getListener();
-		listener = listenerCls == null ? null : BeanInstantiator.of(listenerCls).fallback(() -> null).run();
+		listener = BeanInstantiator.createOrNull(ctx.getListener());
 		keepNullProperties = builder.keepNullProperties;
 		trimStrings = builder.trimStrings;
 		addBeanTypes = builder.addBeanTypes;

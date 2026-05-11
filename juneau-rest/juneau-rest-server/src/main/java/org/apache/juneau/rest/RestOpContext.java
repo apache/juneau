@@ -173,7 +173,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private Method method() { return method; }
 	private MethodInfo methodInfo() { return mi; }
 	private AnnotationWorkList appliedAnnotations() { return appliedAnnotations; }
-	private WritableBeanStore beanStore() { return context.getBeanStore(); } // Kept writable for operation-scope bean registrations.
+	private BeanStore beanStore() { return context.getBeanStore(); }
 	private WritableBeanStore opBeanStore() { return opBeanStore; }
 	private Object resource() { return context.getResource(); }
 	private VarResolver varResolver() { return context.getVarResolver(); }

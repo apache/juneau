@@ -1733,7 +1733,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * before attempting direct instantiation.
 		 *
 		 * <p>
-		 * Typically set to a {@code SpringBeanStore2} wrapping the application's
+		 * Typically set to a {@code SpringBeanStore} wrapping the application's
 		 * {@code ApplicationContext} so that Spring-managed factories are resolved automatically.
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -1743,7 +1743,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * 		<ja>@Override</ja>
 		 * 		<jk>protected</jk> BeanContext createBeanContext(BeanContext.Builder <jv>builder</jv>) {
-		 * 			<jk>return</jk> <jv>builder</jv>.beanStore(<jk>new</jk> SpringBeanStore2(<jv>ctx</jv>)).build();
+		 * 			<jk>return</jk> <jv>builder</jv>.beanStore(<jk>new</jk> SpringBeanStore(<jv>ctx</jv>)).build();
 		 * 		}
 		 * 	}
 		 * </p>

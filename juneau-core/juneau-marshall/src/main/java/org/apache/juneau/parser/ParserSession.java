@@ -323,8 +323,7 @@ public class ParserSession extends BeanSession {
 		outer = builder.outer;
 		schema = builder.schema;
 		trimStrings = builder.trimStrings;
-		var listenerCls = ctx.getListener();
-		listener = listenerCls == null ? null : BeanInstantiator.of(listenerCls).fallback(() -> null).run();
+		listener = BeanInstantiator.createOrNull(ctx.getListener());
 		sbStack = new ArrayDeque<>();
 	}
 

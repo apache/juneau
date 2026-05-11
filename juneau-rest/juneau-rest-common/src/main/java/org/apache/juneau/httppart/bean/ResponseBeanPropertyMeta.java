@@ -87,12 +87,8 @@ public class ResponseBeanPropertyMeta {
 		partType = b.partType;
 		schema = b.schema;
 		getter = b.getter;
-		this.serializer = serializer.isPresent() || schema.getSerializer() == null
-			? serializer
-			: BeanInstantiator.of(HttpPartSerializer.class).type((Class<? extends HttpPartSerializer>) schema.getSerializer()).asOptional();
-		this.parser = parser.isPresent() || schema.getParser() == null
-			? parser
-			: BeanInstantiator.of(HttpPartParser.class).type((Class<? extends HttpPartParser>) schema.getParser()).asOptional();
+		this.serializer = serializer.or(() -> BeanInstantiator.optionalOf((Class<HttpPartSerializer>) schema.getSerializer()));
+		this.parser = parser.or(() -> BeanInstantiator.optionalOf((Class<HttpPartParser>) schema.getParser()));
 	}
 
 	/**

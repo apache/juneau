@@ -69,9 +69,7 @@ public class RemoteOperationArg {
 	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema) {
 		this.index = index;
 		this.partType = partType;
-		this.serializer = schema.getSerializer() == null
-			? Optional.empty()
-			: BeanInstantiator.of(HttpPartSerializer.class).type((Class<? extends HttpPartSerializer>) schema.getSerializer()).asOptional();
+		this.serializer = BeanInstantiator.optionalOf((Class<HttpPartSerializer>) schema.getSerializer());
 		this.schema = schema;
 	}
 
@@ -79,9 +77,7 @@ public class RemoteOperationArg {
 	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema, String overrideName) {
 		this.index = index;
 		this.partType = partType;
-		this.serializer = schema.getSerializer() == null
-			? Optional.empty()
-			: BeanInstantiator.of(HttpPartSerializer.class).type((Class<? extends HttpPartSerializer>) schema.getSerializer()).asOptional();
+		this.serializer = BeanInstantiator.optionalOf((Class<HttpPartSerializer>) schema.getSerializer());
 		// Create a new schema with the overridden name
 		this.schema = HttpPartSchema.create().name(overrideName).build();
 	}

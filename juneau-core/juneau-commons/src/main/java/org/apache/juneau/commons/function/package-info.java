@@ -381,7 +381,7 @@
  * 	<p>
  * 	Spring-managed beans (e.g. a {@code DataSource}) can be injected into streaming implementations
  * 	without constructor scanning or reflection. Register the factories as Spring beans, then wire
- * 	the {@code SpringBeanStore2} into the Juneau context so the marshaller can resolve them at
+ * 	the {@code SpringBeanStore} into the Juneau context so the marshaller can resolve them at
  * 	runtime.
  * 	</p>
  *
@@ -407,7 +407,7 @@
  * 	}
  * 	</p>
  *
- * 	<h5 class='figure'>Wiring the SpringBeanStore2 into a REST resource</h5>
+ * 	<h5 class='figure'>Wiring the SpringBeanStore into a REST resource</h5>
  * 	<p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> EmployeeResource <jk>extends</jk> BasicSpringRestServlet {
@@ -418,7 +418,7 @@
  * 		<ja>@Override</ja>
  * 		<jk>protected</jk> BeanContext.Builder createBeanContext(RestContext.Builder <jv>rcBuilder</jv>) {
  * 			<jk>return super</jk>.createBeanContext(<jv>rcBuilder</jv>)
- * 				.beanStore(<jk>new</jk> SpringBeanStore2(<jv>appCtx</jv>));
+ * 				.beanStore(<jk>new</jk> SpringBeanStore(<jv>appCtx</jv>));
  * 		}
  * 	}
  * 	</p>

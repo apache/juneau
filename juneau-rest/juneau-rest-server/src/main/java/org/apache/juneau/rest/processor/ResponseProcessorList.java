@@ -39,7 +39,7 @@ public class ResponseProcessorList {
 	 */
 	public static class Builder {
 
-		private final WritableBeanStore beanStore;
+		private final BeanStore beanStore;
 		List<Object> entries;
 
 		/**
@@ -47,7 +47,7 @@ public class ResponseProcessorList {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(WritableBeanStore beanStore) {
+		protected Builder(BeanStore beanStore) {
 			this.beanStore = beanStore;
 			this.entries = list();
 		}
@@ -57,7 +57,7 @@ public class ResponseProcessorList {
 		 *
 		 * @return The bean store used by this builder.
 		 */
-		public WritableBeanStore beanStore() {
+		public BeanStore beanStore() {
 			return beanStore;
 		}
 
@@ -100,7 +100,7 @@ public class ResponseProcessorList {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(WritableBeanStore beanStore) {
+	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

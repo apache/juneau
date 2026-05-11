@@ -35,7 +35,7 @@ import org.springframework.context.*;
  * <p class='bjava'>
  * 	<jc>// Create a Spring bean store</jc>
  * 	ApplicationContext <jv>appContext</jv> = ...;
- * 	SpringBeanStore2 <jv>beanStore</jv> = <jk>new</jk> SpringBeanStore2(<jv>appContext</jv>, <jk>null</jk>);
+ * 	SpringBeanStore <jv>beanStore</jv> = <jk>new</jk> SpringBeanStore(<jv>appContext</jv>, <jk>null</jk>);
  *
  * 	<jc>// Get bean from Spring context</jc>
  * 	Optional&lt;MyService&gt; <jv>service</jv> = <jv>beanStore</jv>.getBean(MyService.<jk>class</jk>);
@@ -53,7 +53,7 @@ import org.springframework.context.*;
  * 	<li class='jic'>{@link BeanStore}
  * </ul>
  */
-public class SpringBeanStore2 extends BasicBeanStore {
+public class SpringBeanStore extends BasicBeanStore {
 
 	private final ApplicationContext appContext;
 
@@ -63,13 +63,13 @@ public class SpringBeanStore2 extends BasicBeanStore {
 	 * @param appContext The Spring application context used to resolve beans. Can be <jk>null</jk>.
 	 * @param parent The parent bean store. Can be <jk>null</jk>.
 	 */
-	public SpringBeanStore2(ApplicationContext appContext, BeanStore parent) {
+	public SpringBeanStore(ApplicationContext appContext, BeanStore parent) {
 		super(parent);
 		this.appContext = appContext;
 	}
 
 	@Override
-	public SpringBeanStore2 clear() {
+	public SpringBeanStore clear() {
 		super.clear();
 		return this;
 	}

@@ -20,7 +20,7 @@ import org.apache.juneau.commons.http.MediaRanges;
 import org.apache.juneau.commons.http.MediaRange;
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.inject.BasicBeanStore;
-import org.apache.juneau.commons.inject.WritableBeanStore;
+import org.apache.juneau.commons.inject.BeanStore;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -100,7 +100,7 @@ public class SerializerSet {
 
 		private static final String CLASS_Inherit = "Inherit";
 
-		private final WritableBeanStore beanStore;
+		private final BeanStore beanStore;
 		private SerializerSet impl;
 
 		List<Object> entries;
@@ -111,7 +111,7 @@ public class SerializerSet {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(WritableBeanStore beanStore) {
+		protected Builder(BeanStore beanStore) {
 			this.beanStore = beanStore;
 			this.entries = list();
 		}
@@ -147,7 +147,7 @@ public class SerializerSet {
 		 *
 		 * @return The bean store used by this builder.
 		 */
-		public WritableBeanStore beanStore() {
+		public BeanStore beanStore() {
 			return beanStore;
 		}
 
@@ -479,7 +479,7 @@ public class SerializerSet {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(WritableBeanStore beanStore) {
+	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

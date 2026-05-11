@@ -42,7 +42,7 @@ import org.junit.jupiter.api.*;
  * 		{@code @RestInject} uniformly wins.
  * 	<li>User-supplied bean store from
  * 		{@code @RestInject WritableBeanStore createBeanStore(...)}, including its
- * 		{@link org.apache.juneau.rest.springboot.SpringBeanStore2}-style fallback to a backing
+ * 		{@link org.apache.juneau.rest.springboot.SpringBeanStore}-style fallback to a backing
  * 		{@code ApplicationContext}.  Consulted only when no {@code @RestInject} factory method
  * 		exists for the type.
  * 	<li>Memoizer-backed framework defaults (e.g. {@link BasicCallLogger}).  Fire only when neither
@@ -67,7 +67,7 @@ class RestContext_Precedence_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Spring-substitute bean store
 	//
-	// Simulates SpringBeanStore2: holds bindings in an internal "Spring app context" map that's
+	// Simulates SpringBeanStore: holds bindings in an internal "Spring app context" map that's
 	// only consulted from getBean(...) AFTER super.getBean(...) returns empty.  This places the
 	// "Spring" layer at the BOTTOM of the resolution chain, below local entries and below
 	// memoizer-backed default suppliers \u2014 exactly where real Spring sits.

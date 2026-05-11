@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.commons.inject.WritableBeanStore;
+import org.apache.juneau.commons.inject.BeanStore;
 
 /**
  * A list of {@link RestOpArg} classes.
@@ -37,7 +37,7 @@ public class RestOpArgList {
 	 */
 	public static class Builder {
 
-		private final WritableBeanStore beanStore;
+		private final BeanStore beanStore;
 		List<Class<? extends RestOpArg>> entries;
 
 		/**
@@ -45,7 +45,7 @@ public class RestOpArgList {
 		 *
 		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(WritableBeanStore beanStore) {
+		protected Builder(BeanStore beanStore) {
 			this.beanStore = beanStore;
 			entries = list();
 		}
@@ -55,7 +55,7 @@ public class RestOpArgList {
 		 *
 		 * @return The bean store used by this builder.
 		 */
-		public WritableBeanStore beanStore() {
+		public BeanStore beanStore() {
 			return beanStore;
 		}
 
@@ -87,7 +87,7 @@ public class RestOpArgList {
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create(WritableBeanStore beanStore) {
+	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
 

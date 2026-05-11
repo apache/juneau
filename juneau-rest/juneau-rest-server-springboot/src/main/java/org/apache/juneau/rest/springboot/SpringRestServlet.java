@@ -55,6 +55,6 @@ public abstract class SpringRestServlet extends RestServlet {
 	 */
 	@RestInject
 	public WritableBeanStore createBeanStore(Optional<BeanStore> parent) {
-		return new SpringBeanStore2(appContext.orElse(null), parent.orElse(null));
+		return new SpringBeanStore(appContext.orElse(null), parent.orElse(null));
 	}
 }
