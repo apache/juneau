@@ -100,11 +100,11 @@ class RestClient_Config_Context_Test extends TestBase {
 	@MarshalledApply(on="A6a",value=@Marshalled)
 	public static class A6b {}
 
-	@BeanConfig
+	@MarshalledConfig
 	public static class A6c {}
 
 	public static class A6d {
-		@BeanConfig
+		@MarshalledConfig
 		public void foo() { /* no-op */ }
 	}
 

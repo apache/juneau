@@ -103,7 +103,7 @@ class BeanMapErrors_Test extends TestBase {
 		public int f2 = -1;
 	}
 
-	@Test void beanPropertyFieldNotInBeanConfig() {
+	@Test void beanPropertyFieldNotInMarshalledConfig() {
 		var bc = BeanContext.create().applyAnnotations(B2Config.class).build();
 
 		var bm = bc.newBeanMap(B2.class);

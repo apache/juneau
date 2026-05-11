@@ -26,20 +26,20 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Utility classes and methods for the {@link BeanConfig @BeanConfig} annotation.
+ * Utility classes and methods for the {@link MarshalledConfig @MarshalledConfig} annotation.
  *
  */
-public class BeanConfigAnnotation {
+public class MarshalledConfigAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private BeanConfigAnnotation() {}
+	private MarshalledConfigAnnotation() {}
 
 	/**
-	 * Applies {@link BeanConfig} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Applies {@link MarshalledConfig} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<BeanConfig,BeanContext.Builder> {
+	public static class Applier extends AnnotationApplier<MarshalledConfig,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -47,12 +47,12 @@ public class BeanConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(BeanConfig.class, BeanContext.Builder.class, vr);
+			super(MarshalledConfig.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<BeanConfig> ai, BeanContext.Builder b) {
-			BeanConfig a = ai.inner();
+		public void apply(AnnotationInfo<MarshalledConfig> ai, BeanContext.Builder b) {
+			MarshalledConfig a = ai.inner();
 
 			// @formatter:off
 			string(a.beanClassVisibility()).map(Visibility::valueOf).ifPresent(b::beanClassVisibility);

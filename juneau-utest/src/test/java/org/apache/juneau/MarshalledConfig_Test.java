@@ -41,7 +41,7 @@ import org.junit.jupiter.api.*;
 	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"cast" // Explicit cast needed for type testing
 })
-class BeanConfig_Test extends TestBase {
+class MarshalledConfig_Test extends TestBase {
 
 	//====================================================================================================
 	// testBasic

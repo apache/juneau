@@ -25,10 +25,10 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"serial" // Serialization not relevant in test code
 })
-class RestOp_BeanConfig_Test extends TestBase {
+class RestOp_MarshalledConfig_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @BeanConfig(bpi)
+	// @MarshalledConfig(bpi)
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A1 extends BasicRestServlet {
@@ -69,7 +69,7 @@ class RestOp_BeanConfig_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @BeanConfig(bpx)
+	// @MarshalledConfig(bpx)
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A2 extends BasicRestServlet {
@@ -110,7 +110,7 @@ class RestOp_BeanConfig_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @BeanConfig(bpi) and @Marshalled(bpi)
+	// @MarshalledConfig(bpi) and @Marshalled(bpi)
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A3 extends BasicRestServlet {
@@ -151,7 +151,7 @@ class RestOp_BeanConfig_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @BeanConfig(bpx) and @Marshalled(bpi)
+	// @MarshalledConfig(bpx) and @Marshalled(bpi)
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A4 extends BasicRestServlet {
@@ -192,7 +192,7 @@ class RestOp_BeanConfig_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @BeanConfig(bpi), meta-matching
+	// @MarshalledConfig(bpi), meta-matching
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A5 extends BasicRestServlet {
@@ -213,12 +213,12 @@ class RestOp_BeanConfig_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @BeanConfig(bpi), fully-qualified class name
+	// @MarshalledConfig(bpi), fully-qualified class name
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A6 extends BasicRestServlet {
 		@RestGet
-		@MarshalledApply(on="org.apache.juneau.rest.annotation.RestOp_BeanConfig_Test$X1", value=@Marshalled(p="a"))
+		@MarshalledApply(on="org.apache.juneau.rest.annotation.RestOp_MarshalledConfig_Test$X1", value=@Marshalled(p="a"))
 		public Object a() {
 			return new X1().init();
 		}
@@ -234,7 +234,7 @@ class RestOp_BeanConfig_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @BeanConfig(bpi), negative matching
+	// @MarshalledConfig(bpi), negative matching
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A7 extends BasicRestServlet {

@@ -439,7 +439,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanClassVisibility()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beanClassVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -488,7 +488,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanConstructorVisibility()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beanConstructorVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -610,8 +610,8 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#dictionary()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledProp#dictionary()}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#dictionary()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#dictionary_replace()}
 		 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(ClassInfo...)}
 		 * </ul>
 		 *
@@ -684,7 +684,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanFieldVisibility()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beanFieldVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -780,7 +780,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMapPutReturnsOldValue()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beanMapPutReturnsOldValue()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -834,7 +834,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beanMethodVisibility()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beanMethodVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -1595,7 +1595,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireDefaultConstructor()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beansRequireDefaultConstructor()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1652,7 +1652,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSerializable()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beansRequireSerializable()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1865,7 +1865,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableBeansRequireSomeProperties()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#disableBeansRequireSomeProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1916,7 +1916,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreMissingSetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#disableIgnoreMissingSetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1964,7 +1964,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreTransientFields()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#disableIgnoreTransientFields()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2009,7 +2009,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreUnknownNullBeanProperties()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#disableIgnoreUnknownNullBeanProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2038,7 +2038,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * Otherwise, throws a {@link BeanRuntimeException}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableInterfaceProxies()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#disableInterfaceProxies()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2197,7 +2197,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#findFluentSetters()}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#findFluentSetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2327,7 +2327,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnGetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#ignoreInvocationExceptionsOnGetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2374,7 +2374,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnSetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#ignoreInvocationExceptionsOnSetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2419,7 +2419,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownBeanProperties()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#ignoreUnknownBeanProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2446,7 +2446,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * When enabled, unknown enum values will be set to <jk>null</jk> instead of throwing an exception.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownEnumValues()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#ignoreUnknownEnumValues()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2682,7 +2682,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#locale()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#locale()}
 		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#locale(Locale)}
 		 * </ul>
 		 *
@@ -2725,7 +2725,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#mediaType()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#mediaType()}
 		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#mediaType(MediaType)}
 		 * </ul>
 		 *
@@ -2806,7 +2806,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledIgnore}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#notBeanClasses()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#notBeanClasses()}
 		 * </ul>
 		 *
 		 * @param values
@@ -3315,7 +3315,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#timeZone()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#timeZone()}
 		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#timeZone(TimeZone)}
 		 * </ul>
 		 *
@@ -3475,7 +3475,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#typePropertyName()}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#typePropertyName()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#typePropertyName()}
 		 * </ul>
 		 *
 		 * @param value

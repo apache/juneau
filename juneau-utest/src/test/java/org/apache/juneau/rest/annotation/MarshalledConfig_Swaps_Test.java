@@ -28,7 +28,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-class BeanConfig_Swaps_Test extends TestBase {
+class MarshalledConfig_Swaps_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -84,11 +84,11 @@ class BeanConfig_Swaps_Test extends TestBase {
 	}
 
 	@Rest(serializers=Json5Serializer.class, parsers=Json5Parser.class)
-	@BeanConfig(swaps={SwapA1.class})
+	@MarshalledConfig(swaps={SwapA1.class})
 	public static class A2 {}
 
 	@Rest
-	@BeanConfig(swaps={SwapA2.class})
+	@MarshalledConfig(swaps={SwapA2.class})
 	public static class A1 extends A2 {
 
 		@RestGet
@@ -104,17 +104,17 @@ class BeanConfig_Swaps_Test extends TestBase {
 			return a; // Should return "A2-1".
 		}
 		@RestGet
-		@BeanConfig(swaps={SwapA3.class})
+		@MarshalledConfig(swaps={SwapA3.class})
 		public A d() {
 			return new A(); // Should return "A3-1".
 		}
 		@RestPut
-		@BeanConfig(swaps={SwapA3.class})
+		@MarshalledConfig(swaps={SwapA3.class})
 		public A e(@Content A a) {
 			return a; // Should return "A3-1".
 		}
 		@RestPut(path="/f/{a}")
-		@BeanConfig(swaps={SwapA3.class})
+		@MarshalledConfig(swaps={SwapA3.class})
 		public A f(@Path("a") A a) {
 			return a; // Should return "A3-1".
 		}

@@ -175,7 +175,7 @@ public interface BasicRestOperations {
 		// Never show aside contents of page inherited from class.
 		aside="NONE"
 	)
-	@BeanConfig(
+	@MarshalledConfig(
 		// POJO swaps to apply to all serializers/parsers on this method.
 		swaps={
 			// Use the SwaggerUI swap when rendering Swagger beans.

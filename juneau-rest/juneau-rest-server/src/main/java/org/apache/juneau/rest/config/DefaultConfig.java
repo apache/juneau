@@ -126,7 +126,7 @@ import org.apache.juneau.serializer.annotation.*;
 	staticFiles=StaticFiles.Void.class,  // Defaults to BasicStaticFiles.
 	swaggerProvider=SwaggerProvider.Void.class  // Defaults to BasicSwaggerProvider.
 )
-@BeanConfig(
+@MarshalledConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
 	ignoreUnknownBeanProperties="true",
 	ignoreUnknownEnumValues="true"

@@ -79,8 +79,8 @@ public @interface Marshalled {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
-	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
-	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
+	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
+	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
@@ -206,7 +206,7 @@ public @interface Marshalled {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link BeanConfig#findFluentSetters()}
+	 * 	<li class='ja'>{@link MarshalledConfig#findFluentSetters()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#findFluentSetters()}
 	 * </ul>
 	 *
@@ -445,7 +445,7 @@ public @interface Marshalled {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link BeanConfig#typePropertyName()}
+	 * 	<li class='ja'>{@link MarshalledConfig#typePropertyName()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}
 	 * </ul>
 	 *

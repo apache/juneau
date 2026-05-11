@@ -89,7 +89,7 @@ public @interface RestGet {
 	 *
 	 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
 	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
-	 * 	<ja>@BeanConfig(swaps=NewToOldSwap.<jk>class</jk>)
+	 * 	<ja>@MarshalledConfig(swaps=NewToOldSwap.<jk>class</jk>)
 	 * 	<jk>public</jk> NewPojo oldMethod() {
 	 * 		<jk>return</jk> newMethod();
 	 * 	}

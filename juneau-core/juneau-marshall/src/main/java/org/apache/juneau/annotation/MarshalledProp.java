@@ -64,8 +64,8 @@ public @interface MarshalledProp {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#dictionary()}
+	 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#dictionary_replace()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *

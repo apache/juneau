@@ -33,17 +33,17 @@ import org.apache.juneau.swap.*;
  * Annotation for specifying config properties defined in {@link BeanContext} and {@link BeanTraverseContext}.
  *
  * <p>
- * Used primarily for specifying bean configuration properties on REST classes and methods.
+ * Used primarily for specifying marshalling configuration properties on REST classes and methods.
  *
  */
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply(BeanConfigAnnotation.Applier.class)
+@ContextApply(MarshalledConfigAnnotation.Applier.class)
 @SuppressWarnings({
 	"java:S100" // Annotation methods use underscore suffix to avoid Java keyword conflicts
 })
-public @interface BeanConfig {
+public @interface MarshalledConfig {
 
 	/**
 	 * Minimum bean class visibility.
@@ -332,7 +332,7 @@ public @interface BeanConfig {
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Bean#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
-	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
+	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanDictionaryBasics">Bean Dictionary Basics</a>
 	 * </ul>
@@ -350,7 +350,7 @@ public @interface BeanConfig {
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Bean#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
-	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
+	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
@@ -635,7 +635,7 @@ public @interface BeanConfig {
 	 * 	}
 	 *
 	 * 	<jc>// Apply it to a config</jc>
-	 * 	<ja>@BeanConfig</ja>(
+	 * 	<ja>@MarshalledConfig</ja>(
 	 * 		interfaces={
 	 * 			A.<jk>class</jk>
 	 * 		}

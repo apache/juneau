@@ -207,7 +207,7 @@ class Marshalled_Test extends TestBase {
 
 	private static ClassInfo dConfig = ClassInfo.of(DConfig.class);
 
-	@Test void d01_beanPropertiesExcludePropertiesCombined_noBeanConfig() throws Exception {
+	@Test void d01_beanPropertiesExcludePropertiesCombined_noMarshalledConfig() throws Exception {
 		var json = Json5.of(D1.create());
 		assertEquals("{a:1,c:3}", json);
 		var x = Json5.DEFAULT.read(json, D1.class);
@@ -215,7 +215,7 @@ class Marshalled_Test extends TestBase {
 		assertEquals("{a:1,c:3}", json);
 	}
 
-	@Test void d02_beanPXpCombined_noBeanConfig() throws Exception {
+	@Test void d02_beanPXpCombined_noMarshalledConfig() throws Exception {
 		var json = Json5.of(D2.create());
 		assertEquals("{a:1,c:3}", json);
 		var x = Json5.DEFAULT.read(json, D2.class);
@@ -272,7 +272,7 @@ class Marshalled_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @BeanConfig(bpi/bpx) should override @Marshalled(bpi/bpx)
+	// @MarshalledConfig(bpi/bpx) should override @Marshalled(bpi/bpx)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Marshalled(properties="a,b,c")
@@ -318,7 +318,7 @@ class Marshalled_Test extends TestBase {
 
 	private static ClassInfo eConfig = ClassInfo.of(EConfig.class);
 
-	@Test void e01_beanPropertiesExcludePropertiesCombined_multipleMarshalledAnnotations_noBeanConfig() throws Exception {
+	@Test void e01_beanPropertiesExcludePropertiesCombined_multipleMarshalledAnnotations_noMarshalledConfig() throws Exception {
 		var json = Json5.of(E1.create());
 		assertEquals("{a:1,c:3}", json);
 		var e = Json5.DEFAULT.read(json, E1.class);
@@ -326,7 +326,7 @@ class Marshalled_Test extends TestBase {
 		assertEquals("{a:1,c:3}", json);
 	}
 
-	@Test void e02_beanPXpCombined_multipleMarshalledAnnotations_noBeanConfig() throws Exception {
+	@Test void e02_beanPXpCombined_multipleMarshalledAnnotations_noMarshalledConfig() throws Exception {
 		var json = Json5.of(E2.create());
 		assertEquals("{a:1,c:3}", json);
 		var e = Json5.DEFAULT.read(json, E2.class);

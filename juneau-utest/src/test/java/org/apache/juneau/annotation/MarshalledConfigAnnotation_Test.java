@@ -34,12 +34,12 @@ import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests the @BeanConfig annotation.
+ * Tests the @MarshalledConfig annotation.
  */
 @SuppressWarnings({
 	"java:S5961" // High assertion count acceptable in comprehensive test
 })
-class BeanConfigAnnotation_Test extends TestBase {
+class MarshalledConfigAnnotation_Test extends TestBase {
 
 	private static void check(String expected, Object o) {
 		assertEquals(expected, TO_STRING.apply(o));
@@ -114,7 +114,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 	public static class AB3 extends ObjectSwap<String,Integer> {
 	}
 
-	@BeanConfig(
+	@MarshalledConfig(
 		beanClassVisibility="$X{PRIVATE}",
 		beanConstructorVisibility="$X{PRIVATE}",
 		dictionary={A1.class,A2.class},
@@ -191,7 +191,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 	// Annotation with no values.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@BeanConfig()
+	@MarshalledConfig()
 	static class B {}
 	static ClassInfo b = ClassInfo.of(B.class);
 

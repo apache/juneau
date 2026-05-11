@@ -88,9 +88,9 @@ import org.apache.juneau.xml.*;
  * 			<li class='jma'>{@link Rest#config() config}:  <js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
  *		</ul>
  *	</li>
- * 	<li class='ja'>{@link BeanConfig}:
+ * 	<li class='ja'>{@link MarshalledConfig}:
  * 		<ul>
- * 			<li class='jma'>{@link BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}:  <js>"true"</js>
+ * 			<li class='jma'>{@link MarshalledConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}:  <js>"true"</js>
  * 		</ul>
  * 	</li>
  * 	<li class='ja'>{@link SerializerConfig}:

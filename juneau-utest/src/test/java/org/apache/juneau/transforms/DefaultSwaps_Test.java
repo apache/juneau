@@ -117,7 +117,7 @@ class DefaultSwaps_Test extends TestBase {
 	@SwapApply(on="Dummy1.f2", value=@Swap(AcSwap.class))
 	@SwapApply(on="AcBean.f2", value=@Swap(AcSwap.class))
 	@SwapApply(on="Dummy2.f2", value=@Swap(AcSwap.class))
-	private static class AcBeanConfig {}
+	private static class AcMarshalledConfig {}
 
 	public static class AcBean {
 		public Enumeration<String> f1 = A.elements();
@@ -126,15 +126,15 @@ class DefaultSwaps_Test extends TestBase {
 	}
 
 	@Test void a01c_Enumeration_usingConfig() throws Exception {
-		test2("['foo','bar']", A_C.elements(), AcBeanConfig.class);
+		test2("['foo','bar']", A_C.elements(), AcMarshalledConfig.class);
 	}
 
 	@Test void a02c_Enumeration_overrideSwap_usingConfig() throws Exception {
-		test4("'FOO'", A_C.elements(), AcSwap.class, AcBeanConfig.class);
+		test4("'FOO'", A_C.elements(), AcSwap.class, AcMarshalledConfig.class);
 	}
 
 	@Test void a03c_Enumeration_overrideAnnotation_usingConfig() throws Exception {
-		test2("{f1:['foo','bar'],f2:'FOO'}", new AcBean(), AcBeanConfig.class);
+		test2("{f1:['foo','bar'],f2:'FOO'}", new AcBean(), AcMarshalledConfig.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -179,7 +179,7 @@ class DefaultSwaps_Test extends TestBase {
 	@SwapApply(on="Dummy1.f2", value=@Swap(BcSwap.class))
 	@SwapApply(on="BcBean.f2", value=@Swap(BcSwap.class))
 	@SwapApply(on="Dummy2.f2", value=@Swap(BcSwap.class))
-	private static class BcBeanConfig {}
+	private static class BcMarshalledConfig {}
 
 	public static class BcBean {
 		public Iterator<?> f1 = B.iterator();
@@ -187,15 +187,15 @@ class DefaultSwaps_Test extends TestBase {
 	}
 
 	@Test void b01c_Iterator_usingConfig() throws Exception {
-		test2("['foo','bar']", B_C.iterator(), BcBeanConfig.class);
+		test2("['foo','bar']", B_C.iterator(), BcMarshalledConfig.class);
 	}
 
 	@Test void b02c_Iterator_overrideSwap_usingConfig() throws Exception {
-		test4("'FOO'", B_C.iterator(), BcSwap.class, BcBeanConfig.class);
+		test4("'FOO'", B_C.iterator(), BcSwap.class, BcMarshalledConfig.class);
 	}
 
 	@Test void b03c_Iterator_overrideAnnotation_usingConfig() throws Exception {
-		test2("{f1:['foo','bar'],f2:'FOO'}", new BcBean(), BcBeanConfig.class);
+		test2("{f1:['foo','bar'],f2:'FOO'}", new BcBean(), BcMarshalledConfig.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

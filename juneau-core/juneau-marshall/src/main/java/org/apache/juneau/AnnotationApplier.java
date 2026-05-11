@@ -32,7 +32,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Class used to add properties to a context builder (e.g. {@link BeanContext.Builder}) from an annotation (e.g. {@link BeanConfig}).
+ * Class used to add properties to a context builder (e.g. {@link BeanContext.Builder}) from an annotation (e.g. {@link MarshalledConfig}).
  *
  * <p>
  * Used by {@link Context.Builder#applyAnnotations(Class...)} and {@link Context.Builder#applyAnnotations(Object...)} to apply
@@ -45,24 +45,24 @@ import org.apache.juneau.svl.*;
  * 	<jc>// The annotation applied to classes and methods.</jc>
  * 	<ja>@Target</ja>({METHOD,TYPE})
  * 	<ja>@Retention</ja>(<jsf>RUNTIME</jsf>)
- * 	<ja>@ContextApply</ja>(BeanConfigAnnotationApplier.<jk>class</jk>)
- * 	<jk>public</jk> <jk>@interface </jk>BeanConfig {
+ * 	<ja>@ContextApply</ja>(MarshalledConfigAnnotationApplier.<jk>class</jk>)
+ * 	<jk>public</jk> <jk>@interface </jk>MarshalledConfig {
  *
  * 		String unsortedProperties() <jk>default</jk> <js>""</js>;
  *
  * 	}
  *
  * 	<jc>// The applier that applies the annotation to the bean context builder.</jc>
- * 	<jk>public class</jk> BeanConfigAnnotationApplier <jk>extends</jk> AnnotationApplier&lt;<ja>BeanConfig</ja>,BeanContext.Builder&gt; {
+ * 	<jk>public class</jk> MarshalledConfigAnnotationApplier <jk>extends</jk> AnnotationApplier&lt;<ja>MarshalledConfig</ja>,BeanContext.Builder&gt; {
  *
  *		<jc>// Required constructor. </jc>
  * 		<jk>public</jk> Applier(VarResolverSession <jv>vr</jv>) {
- * 			<jk>super</jk>(BeanConfig.<jk>class</jk>, BeanContext.Builder.<jk>class</jk>, <jv>vr</jv>);
+ * 			<jk>super</jk>(MarshalledConfig.<jk>class</jk>, BeanContext.Builder.<jk>class</jk>, <jv>vr</jv>);
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public void</jk> apply(AnnotationInfo&lt;BeanConfig&gt; <jv>annotationInfo</jv>, BeanContext.Builder <jv>builder</jv>) {
- * 			<ja>BeanConfig</ja> <jv>beanConfig</jv> = <jv>annotationInfo</jv>.getAnnotation();
+ * 		<jk>public void</jk> apply(AnnotationInfo&lt;MarshalledConfig&gt; <jv>annotationInfo</jv>, BeanContext.Builder <jv>builder</jv>) {
+ * 			<ja>MarshalledConfig</ja> <jv>beanConfig</jv> = <jv>annotationInfo</jv>.getAnnotation();
  *
  * 			String <jv>unsortedProperties</jv> = <jv>beanConfig</jv>.unsortedProperties();
  * 			<jk>if</jk> (! <jv>unsortedProperties</jv>.isEmpty())
@@ -71,7 +71,7 @@ import org.apache.juneau.svl.*;
  * 	}
  *
  *	<jc>// An annotated class opting out of the default sorted behavior.</jc>
- * 	<ja>@BeanConfig</ja>(unsortedProperties=<js>"true"</js>)
+ * 	<ja>@MarshalledConfig</ja>(unsortedProperties=<js>"true"</js>)
  * 	<jk>public class</jk> AnnotatedClass {}
  *
  *	<jc>// Putting it together.</jc>

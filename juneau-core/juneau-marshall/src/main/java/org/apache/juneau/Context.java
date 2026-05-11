@@ -177,10 +177,10 @@ public abstract class Context {
 		 * 	<ja>@Marshalled</ja>(properties=<js>"street,city,state"</js>)
 		 * 	<jk>public class</jk> A {...}
 		 *
-		 * 	<jc>// Class with annotation applied via @BeanConfig</jc>
+		 * 	<jc>// Class with annotation applied via @MarshalledConfig</jc>
 		 * 	<jk>public class</jk> B {...}
 		 *
-		 * 	<jc>// Java REST method with @BeanConfig annotation.</jc>
+		 * 	<jc>// Java REST method with @MarshalledConfig annotation.</jc>
 		 * 	<ja>@RestGet</ja>(...)
 		 * 	<ja>@Marshalled</ja>(on=<js>"B"</js>, properties=<js>"street,city,state"</js>)
 		 * 	<jk>public void</jk> doFoo() {...}
@@ -323,7 +323,7 @@ public abstract class Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig}
+		 * 	<li class='ja'>{@link MarshalledConfig}
 		 * </ul>
 		 *
 		 * @param values
@@ -360,7 +360,7 @@ public abstract class Context {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// A class annotated with a config annotation.</jc>
-		 * 	<ja>@BeanConfig</ja>(unsortedProperties=<js>"$S{unsortedProperties,false}"</js>)
+		 * 	<ja>@MarshalledConfig</ja>(unsortedProperties=<js>"$S{unsortedProperties,false}"</js>)
 		 * 	<jk>public class</jk> MyClass {...}
 		 *
 		 * 	<jc>// Find all annotations that themselves are annotated with @ContextPropertiesApply.</jc>
@@ -405,7 +405,7 @@ public abstract class Context {
 		 * Any annotations found that themselves are annotated with {@link ContextApply} will be resolved and
 		 * applied as properties to this builder.  These annotations include:
 		 * <ul class='javatreec'>
-		 * 	<li class='ja'>{@link BeanConfig}
+		 * 	<li class='ja'>{@link MarshalledConfig}
 		 * 	<li class='ja'>{@link BsonConfig}
 		 * 	<li class='ja'>{@link CborConfig}
 		 * 	<li class='ja'>{@link CsvConfig}
@@ -460,7 +460,7 @@ public abstract class Context {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// A class annotated with a config annotation.</jc>
-		 * 	<ja>@BeanConfig</ja>(unsortedProperties=<js>"$S{unsortedProperties,false}"</js>)
+		 * 	<ja>@MarshalledConfig</ja>(unsortedProperties=<js>"$S{unsortedProperties,false}"</js>)
 		 * 	<jk>public class</jk> MyClass {...}
 		 *
 		 * 	<jc>// Apply any settings found on the annotations.</jc>
@@ -471,7 +471,7 @@ public abstract class Context {
 		 *
 		 * 	<jc>// A method annotated with a config annotation.</jc>
 		 * 	<jk>public class</jk> MyClass {
-		 * 		<ja>@BeanConfig</ja>(unsortedProperties=<js>"$S{unsortedProperties,false}"</js>)
+		 * 		<ja>@MarshalledConfig</ja>(unsortedProperties=<js>"$S{unsortedProperties,false}"</js>)
 		 * 		<jk>public void</jk> myMethod() {...}
 		 * 	}
 		 *
@@ -657,7 +657,7 @@ public abstract class Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#debug()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#debug()}
 		 * 	<li class='jm'>{@link org.apache.juneau.ContextSession.Builder#debug(Boolean)}
 		 * </ul>
 		 *

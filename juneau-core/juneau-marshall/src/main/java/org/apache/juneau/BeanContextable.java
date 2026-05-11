@@ -171,7 +171,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5>
 		 * <ul>
-		 * 	<li class='ja'>{@link BeanConfig#beanClassVisibility()}
+		 * 	<li class='ja'>{@link MarshalledConfig#beanClassVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -220,7 +220,7 @@ public abstract class BeanContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#beanConstructorVisibility()}
+		 * 	<li class='ja'>{@link MarshalledConfig#beanConstructorVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -371,8 +371,8 @@ public abstract class BeanContextable extends Context {
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#dictionary()}
 		 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
-		 * 	<li class='ja'>{@link BeanConfig#dictionary()}
-		 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
+		 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
+		 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
 		 * </ul>
 		 *
 		 * @param values
@@ -430,7 +430,7 @@ public abstract class BeanContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#beanFieldVisibility()}
+		 * 	<li class='ja'>{@link MarshalledConfig#beanFieldVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -525,7 +525,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#beanMapPutReturnsOldValue()}
+		 * 	<li class='ja'>{@link MarshalledConfig#beanMapPutReturnsOldValue()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beanMapPutReturnsOldValue()}
 		 * </ul>
 		 *
@@ -570,7 +570,7 @@ public abstract class BeanContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#beanMethodVisibility()}
+		 * 	<li class='ja'>{@link MarshalledConfig#beanMethodVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -1321,7 +1321,7 @@ public abstract class BeanContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#beansRequireDefaultConstructor()}
+		 * 	<li class='ja'>{@link MarshalledConfig#beansRequireDefaultConstructor()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireDefaultConstructor()}
 		 * </ul>
 		 *
@@ -1369,7 +1369,7 @@ public abstract class BeanContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#beansRequireSerializable()}
+		 * 	<li class='ja'>{@link MarshalledConfig#beansRequireSerializable()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireSerializable()}
 		 * </ul>
 		 *
@@ -1415,7 +1415,7 @@ public abstract class BeanContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#beansRequireSettersForGetters()}
+		 * 	<li class='ja'>{@link MarshalledConfig#beansRequireSettersForGetters()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireSettersForGetters()}
 		 * </ul>
 		 *
@@ -1525,7 +1525,7 @@ public abstract class BeanContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#disableBeansRequireSomeProperties()}
+		 * 	<li class='ja'>{@link MarshalledConfig#disableBeansRequireSomeProperties()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#disableBeansRequireSomeProperties()}
 		 * </ul>
 		 *
@@ -1567,7 +1567,7 @@ public abstract class BeanContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreMissingSetters()}
+		 * 	<li class='ja'>{@link MarshalledConfig#disableIgnoreMissingSetters()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreMissingSetters()}
 		 * </ul>
 		 *
@@ -1606,7 +1606,7 @@ public abstract class BeanContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreTransientFields()}
+		 * 	<li class='ja'>{@link MarshalledConfig#disableIgnoreTransientFields()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreTransientFields()}
 		 * </ul>
 		 *
@@ -1642,7 +1642,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreUnknownNullBeanProperties()}
+		 * 	<li class='ja'>{@link MarshalledConfig#disableIgnoreUnknownNullBeanProperties()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()}
 		 * </ul>
 		 *
@@ -1662,7 +1662,7 @@ public abstract class BeanContextable extends Context {
 		 * Otherwise, throws a {@link BeanRuntimeException}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#disableInterfaceProxies()}
+		 * 	<li class='ja'>{@link MarshalledConfig#disableInterfaceProxies()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#disableInterfaceProxies()}
 		 * </ul>
 		 *
@@ -1814,7 +1814,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
-		 * 	<li class='ja'>{@link BeanConfig#findFluentSetters()}
+		 * 	<li class='ja'>{@link MarshalledConfig#findFluentSetters()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#findFluentSetters()}
 		 * </ul>
 		 *
@@ -1904,7 +1904,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#ignoreInvocationExceptionsOnGetters()}
+		 * 	<li class='ja'>{@link MarshalledConfig#ignoreInvocationExceptionsOnGetters()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreInvocationExceptionsOnGetters()}
 		 * </ul>
 		 *
@@ -1942,7 +1942,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#ignoreInvocationExceptionsOnSetters()}
+		 * 	<li class='ja'>{@link MarshalledConfig#ignoreInvocationExceptionsOnSetters()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreInvocationExceptionsOnSetters()}
 		 * </ul>
 		 *
@@ -1978,7 +1978,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#ignoreUnknownBeanProperties()}
+		 * 	<li class='ja'>{@link MarshalledConfig#ignoreUnknownBeanProperties()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreUnknownBeanProperties()}
 		 * </ul>
 		 *
@@ -1996,7 +1996,7 @@ public abstract class BeanContextable extends Context {
 		 * When enabled, unknown enum values are set to <jk>null</jk> instead of throwing a parse exception.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#ignoreUnknownEnumValues()}
+		 * 	<li class='ja'>{@link MarshalledConfig#ignoreUnknownEnumValues()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreUnknownEnumValues()}
 		 * </ul>
 		 *
@@ -2219,7 +2219,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#locale()}
+		 * 	<li class='ja'>{@link MarshalledConfig#locale()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#locale(Locale)}
 		 * 	<li class='jm'>{@link BeanSession.Builder#locale(Locale)}
 		 * </ul>
@@ -2263,7 +2263,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#mediaType()}
+		 * 	<li class='ja'>{@link MarshalledConfig#mediaType()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#mediaType(MediaType)}
 		 * 	<li class='jm'>{@link BeanSession.Builder#mediaType(MediaType)}
 		 * </ul>
@@ -2318,7 +2318,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledIgnore}
-		 * 	<li class='ja'>{@link BeanConfig#notBeanClasses()}
+		 * 	<li class='ja'>{@link MarshalledConfig#notBeanClasses()}
 		 * 	<li class='jf'>{@link BeanContext.Builder#notBeanClasses()}
 		 * </ul>
 		 *
@@ -2752,7 +2752,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#timeZone()}
+		 * 	<li class='ja'>{@link MarshalledConfig#timeZone()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#timeZone(TimeZone)}
 		 * 	<li class='jm'>{@link BeanSession.Builder#timeZone(TimeZone)}
 		 * </ul>
@@ -2909,7 +2909,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#typePropertyName()}
-		 * 	<li class='ja'>{@link BeanConfig#typePropertyName()}
+		 * 	<li class='ja'>{@link MarshalledConfig#typePropertyName()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#typePropertyName(String)}
 		 * </ul>
 		 *

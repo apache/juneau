@@ -124,7 +124,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 		 * If not specified, defaults to {@link BeanContext.Builder#locale(Locale)}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#locale()}
+		 * 	<li class='ja'>{@link MarshalledConfig#locale()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#locale(Locale)}
 		 * </ul>
 		 *
@@ -148,7 +148,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 		 * If not specified, defaults to {@link BeanContext.Builder#mediaType(MediaType)}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#mediaType()}
+		 * 	<li class='ja'>{@link MarshalledConfig#mediaType()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#mediaType(MediaType)}
 		 * </ul>
 		 *
@@ -211,7 +211,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 		 * If not specified, defaults to {@link BeanContext.Builder#timeZone(TimeZone)}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#timeZone()}
+		 * 	<li class='ja'>{@link MarshalledConfig#timeZone()}
 		 * 	<li class='jm'>{@link BeanContext.Builder#timeZone(TimeZone)}
 		 * </ul>
 		 *
