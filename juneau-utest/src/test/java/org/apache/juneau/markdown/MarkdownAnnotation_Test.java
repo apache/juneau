@@ -40,7 +40,7 @@ class MarkdownAnnotation_Test {
 	}
 
 	@Test void e01_formatTable() {
-		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E01_Bean.class));
+		var cm = serializer().getMarkdownClassMeta(serializer().getMarshallingContext().getClassMeta(E01_Bean.class));
 		assertEquals(MarkdownFormat.TABLE, cm.getFormat());
 	}
 
@@ -54,7 +54,7 @@ class MarkdownAnnotation_Test {
 	}
 
 	@Test void e02_formatList() {
-		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E02_Bean.class));
+		var cm = serializer().getMarkdownClassMeta(serializer().getMarshallingContext().getClassMeta(E02_Bean.class));
 		assertEquals(MarkdownFormat.LIST, cm.getFormat());
 	}
 
@@ -68,7 +68,7 @@ class MarkdownAnnotation_Test {
 	}
 
 	@Test void e03_formatCode() {
-		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E03_Bean.class));
+		var cm = serializer().getMarkdownClassMeta(serializer().getMarshallingContext().getClassMeta(E03_Bean.class));
 		assertEquals(MarkdownFormat.CODE, cm.getFormat());
 	}
 
@@ -82,7 +82,7 @@ class MarkdownAnnotation_Test {
 	}
 
 	@Test void e04_formatPlainText() {
-		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E04_Bean.class));
+		var cm = serializer().getMarkdownClassMeta(serializer().getMarshallingContext().getClassMeta(E04_Bean.class));
 		assertEquals(MarkdownFormat.PLAIN_TEXT, cm.getFormat());
 	}
 
@@ -96,7 +96,7 @@ class MarkdownAnnotation_Test {
 	}
 
 	@Test void e05_formatJson5() {
-		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E05_Bean.class));
+		var cm = serializer().getMarkdownClassMeta(serializer().getMarshallingContext().getClassMeta(E05_Bean.class));
 		assertEquals(MarkdownFormat.JSON5, cm.getFormat());
 	}
 
@@ -110,7 +110,7 @@ class MarkdownAnnotation_Test {
 	}
 
 	@Test void e06_noTables() {
-		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E06_Bean.class));
+		var cm = serializer().getMarkdownClassMeta(serializer().getMarshallingContext().getClassMeta(E06_Bean.class));
 		assertTrue(cm.isNoTables());
 	}
 
@@ -124,7 +124,7 @@ class MarkdownAnnotation_Test {
 	}
 
 	@Test void e07_noHeaders() {
-		var cm = serializer().getMarkdownClassMeta(serializer().getBeanContext().getClassMeta(E07_Bean.class));
+		var cm = serializer().getMarkdownClassMeta(serializer().getMarshallingContext().getClassMeta(E07_Bean.class));
 		assertTrue(cm.isNoHeaders());
 	}
 
@@ -138,7 +138,7 @@ class MarkdownAnnotation_Test {
 	}
 
 	@Test void e08_customHeading() {
-		var bm = serializer().getBeanContext().getBeanMeta(E08_Bean.class);
+		var bm = serializer().getMarshallingContext().getBeanMeta(E08_Bean.class);
 		var pm = bm.getPropertyMeta("name");
 		var mpm = serializer().getMarkdownBeanPropertyMeta(pm);
 		assertEquals("Custom Name", mpm.getHeading());
@@ -154,7 +154,7 @@ class MarkdownAnnotation_Test {
 	}
 
 	@Test void e09_code() {
-		var bm = serializer().getBeanContext().getBeanMeta(E09_Bean.class);
+		var bm = serializer().getMarshallingContext().getBeanMeta(E09_Bean.class);
 		var pm = bm.getPropertyMeta("value");
 		var mpm = serializer().getMarkdownBeanPropertyMeta(pm);
 		assertTrue(mpm.isCode());
@@ -170,7 +170,7 @@ class MarkdownAnnotation_Test {
 	}
 
 	@Test void e10_link() {
-		var bm = serializer().getBeanContext().getBeanMeta(E10_Bean.class);
+		var bm = serializer().getMarshallingContext().getBeanMeta(E10_Bean.class);
 		var pm = bm.getPropertyMeta("url");
 		var mpm = serializer().getMarkdownBeanPropertyMeta(pm);
 		assertEquals("https://example.com/{value}", mpm.getLink());

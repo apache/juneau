@@ -30,7 +30,7 @@ class BeanMap_Test extends TestBase {
 	// testFilteredEntry
 	//====================================================================================================
 	@Test void a01_filteredEntry() {
-		var session = BeanContext.create().swaps(ByteArraySwap.Base64.class).build().getSession();
+		var session = MarshallingContext.create().swaps(ByteArraySwap.Base64.class).build().getSession();
 		var m = session.toBeanMap(new A());
 
 		assertEquals("AQID", m.get("f1"));
@@ -51,12 +51,12 @@ class BeanMap_Test extends TestBase {
 	// When bean properties can have multiple filters applied to them, pick the first match.
 	//====================================================================================================
 	@Test void a02_filteredEntryWithMultipleMatchingFilters() {
-		var session = BeanContext.create().swaps(B2Swap.class, B1Swap.class).build().getSession();
+		var session = MarshallingContext.create().swaps(B2Swap.class, B1Swap.class).build().getSession();
 		var bm = session.toBeanMap(B.create());
 		var m = (JsonMap)bm.get("b1");
 		assertEquals("b2", m.getString("type"));
 
-		session = BeanContext.create().swaps(B1Swap.class, B2Swap.class).build().getSession();
+		session = MarshallingContext.create().swaps(B1Swap.class, B2Swap.class).build().getSession();
 		bm = session.toBeanMap(B.create());
 		m = (JsonMap)bm.get("b1");
 		assertEquals("b1", m.getString("type"));
@@ -85,14 +85,14 @@ class BeanMap_Test extends TestBase {
 
 	public static class B1Swap extends MapSwap<B1> {
 		@Override /* ObjectSwap */
-		public JsonMap swap(BeanSession session, B1 b1) {
+		public JsonMap swap(MarshallingSession session, B1 b1) {
 			return JsonMap.of("type", "b1", "f1", b1.f1);
 		}
 	}
 
 	public static class B2Swap extends MapSwap<B2> {
 		@Override /* ObjectSwap */
-		public JsonMap swap(BeanSession session, B2 b2) {
+		public JsonMap swap(MarshallingSession session, B2 b2) {
 			return JsonMap.of("type", "b2", "f1", b2.f1);
 		}
 	}

@@ -39,7 +39,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.swap.*;
 
 /**
- * Session object that lives for the duration of a single use of {@link BeanContext}.
+ * Session object that lives for the duration of a single use of {@link MarshallingContext}.
  *
  * <ul class='spaced-list'>
  * 	<li class='info'>Typically session objects are not thread safe nor reusable.  However, bean sessions do not maintain any state and
@@ -53,15 +53,15 @@ import org.apache.juneau.swap.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - ClassMeta<?>, ObjectSwap<?,?>, etc. for bean metadata
 })
-public class BeanSession extends ContextSession implements ConverterSession {
+public class MarshallingSession extends ContextSession implements ConverterSession {
 
 	// Property name constants
 	private static final String PROP_locale = "locale";
 	private static final String PROP_mediaType = "mediaType";
 	private static final String PROP_timeZone = "timeZone";
-	private static final String PROP_BeanSession_locale = "BeanSession.locale";
-	private static final String PROP_BeanSession_mediaType = "BeanSession.mediaType";
-	private static final String PROP_BeanSession_timeZone = "BeanSession.timeZone";
+	private static final String PROP_BeanSession_locale = "MarshallingSession.locale";
+	private static final String PROP_BeanSession_mediaType = "MarshallingSession.mediaType";
+	private static final String PROP_BeanSession_timeZone = "MarshallingSession.timeZone";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -74,7 +74,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 */
 	public static class Builder extends ContextSession.Builder {
 
-		private BeanContext ctx;
+		private MarshallingContext ctx;
 		private Locale locale;
 		private MediaType mediaType;
 		private TimeZone timeZone;
@@ -85,7 +85,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 		 * @param ctx The context creating this session.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
-		protected Builder(BeanContext ctx) {
+		protected Builder(MarshallingContext ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 			mediaType = ctx.getMediaType();
@@ -104,8 +104,8 @@ public class BeanSession extends ContextSession implements ConverterSession {
 		 * @return The built object.
 		 */
 		@Override
-		public BeanSession build() {
-			return new BeanSession(this);
+		public MarshallingSession build() {
+			return new MarshallingSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -121,16 +121,16 @@ public class BeanSession extends ContextSession implements ConverterSession {
 		 * Specifies the default locale for serializer and parser sessions.
 		 *
 		 * <p>
-		 * If not specified, defaults to {@link BeanContext.Builder#locale(Locale)}.
+		 * If not specified, defaults to {@link MarshallingContext.Builder#locale(Locale)}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#locale()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#locale(Locale)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#locale(Locale)}
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>If <jk>null</jk> defaults to {@link BeanContext#getLocale()}
+		 * 	<br>If <jk>null</jk> defaults to {@link MarshallingContext#getLocale()}
 		 * @return This object.
 		 */
 		public Builder locale(Locale value) {
@@ -145,16 +145,16 @@ public class BeanSession extends ContextSession implements ConverterSession {
 		 * Specifies the default media type value for serializer and parser sessions.
 		 *
 		 * <p>
-		 * If not specified, defaults to {@link BeanContext.Builder#mediaType(MediaType)}.
+		 * If not specified, defaults to {@link MarshallingContext.Builder#mediaType(MediaType)}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#mediaType()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#mediaType(MediaType)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#mediaType(MediaType)}
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>If <jk>null</jk> defaults to {@link BeanContext#getMediaType()}.
+		 * 	<br>If <jk>null</jk> defaults to {@link MarshallingContext#getMediaType()}.
 		 * @return This object.
 		 */
 		public Builder mediaType(MediaType value) {
@@ -208,16 +208,16 @@ public class BeanSession extends ContextSession implements ConverterSession {
 		 * Specifies the default timezone for serializer and parser sessions.
 		 *
 		 * <p>
-		 * If not specified, defaults to {@link BeanContext.Builder#timeZone(TimeZone)}.
+		 * If not specified, defaults to {@link MarshallingContext.Builder#timeZone(TimeZone)}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#timeZone()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#timeZone(TimeZone)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#timeZone(TimeZone)}
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>If <jk>null</jk> defaults to {@link BeanContext#getTimeZone()}.
+		 * 	<br>If <jk>null</jk> defaults to {@link MarshallingContext#getTimeZone()}.
 		 * @return This object.
 		 */
 		public Builder timeZone(TimeZone value) {
@@ -246,7 +246,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 		}
 	}
 
-	private static final Logger LOG = Logger.getLogger(cn(BeanSession.class));
+	private static final Logger LOG = Logger.getLogger(cn(MarshallingSession.class));
 
 	/**
 	 * Creates a builder of this object.
@@ -255,7 +255,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	public static Builder create(BeanContext ctx) {
+	public static Builder create(MarshallingContext ctx) {
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
@@ -267,7 +267,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 */
 	public static final String NAME_PROPERTY_NAME = "_name";
 
-	private final BeanContext ctx;
+	private final MarshallingContext ctx;
 	private final Locale locale;
 	private final MediaType mediaType;
 
@@ -278,7 +278,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected BeanSession(Builder builder) {
+	protected MarshallingSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
 		locale = opt(builder.locale).orElse(ctx.getLocale());
@@ -508,7 +508,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Minimum bean class visibility.
 	 *
-	 * @see BeanContext.Builder#beanClassVisibility(Visibility)
+	 * @see MarshallingContext.Builder#beanClassVisibility(Visibility)
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
@@ -517,7 +517,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Minimum bean constructor visibility.
 	 *
-	 * @see BeanContext.Builder#beanConstructorVisibility(Visibility)
+	 * @see MarshallingContext.Builder#beanConstructorVisibility(Visibility)
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
@@ -526,7 +526,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Bean dictionary.
 	 *
-	 * @see BeanContext.Builder#beanDictionary(ClassInfo...)
+	 * @see MarshallingContext.Builder#beanDictionary(ClassInfo...)
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 * 	<br>Never <jk>null</jk>.
@@ -538,7 +538,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * Minimum bean field visibility.
 	 *
 	 *
-	 * @see BeanContext.Builder#beanFieldVisibility(Visibility)
+	 * @see MarshallingContext.Builder#beanFieldVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
@@ -562,14 +562,14 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Minimum bean method visibility.
 	 *
-	 * @see BeanContext.Builder#beanMethodVisibility(Visibility)
+	 * @see MarshallingContext.Builder#beanMethodVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */
 	public final Visibility getBeanMethodVisibility() { return ctx.getBeanMethodVisibility(); }
 
 	/**
-	 * Returns the bean registry defined in this bean context defined by {@link BeanContext.Builder#beanDictionary(ClassInfo...)}.
+	 * Returns the bean registry defined in this bean context defined by {@link MarshallingContext.Builder#beanDictionary(ClassInfo...)}.
 	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
@@ -578,14 +578,14 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Bean type property name.
 	 *
-	 * @see BeanContext.Builder#typePropertyName(String)
+	 * @see MarshallingContext.Builder#typePropertyName(String)
 	 * @return
 	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
 	public final String getBeanTypePropertyName() { return ctx.getBeanTypePropertyName(); }
 
 	/**
-	 * Returns the type property name as defined by {@link BeanContext.Builder#typePropertyName(String)}.
+	 * Returns the type property name as defined by {@link MarshallingContext.Builder#typePropertyName(String)}.
 	 *
 	 * @param cm
 	 * 	The class meta of the type we're trying to resolve the type name for.
@@ -677,11 +677,11 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * The locale is determined in the following order:
 	 * <ol>
 	 * 	<li><c>locale</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext.Builder#locale(Locale)} setting on bean context.
+	 * 	<li>{@link MarshallingContext.Builder#locale(Locale)} setting on bean context.
 	 * 	<li>Locale returned by {@link Locale#getDefault()}.
 	 * </ol>
 	 *
-	 * @see BeanContext.Builder#locale(Locale)
+	 * @see MarshallingContext.Builder#locale(Locale)
 	 * @return The session locale.
 	 */
 	public Locale getLocale() { return locale; }
@@ -692,7 +692,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * <p>
 	 * For example, <js>"application/json"</js>.
 	 *
-	 * @see BeanContext.Builder#mediaType(MediaType)
+	 * @see MarshallingContext.Builder#mediaType(MediaType)
 	 * @return The media type for this session, or <jk>null</jk> if not specified.
 	 */
 	public final MediaType getMediaType() { return mediaType; }
@@ -700,7 +700,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Bean class exclusions.
 	 *
-	 * @see BeanContext.Builder#notBeanClasses(ClassInfo...)
+	 * @see MarshallingContext.Builder#notBeanClasses(ClassInfo...)
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
 	 * 	<br>Never <jk>null</jk>.
@@ -711,7 +711,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Bean package exclusions.
 	 *
-	 * @see BeanContext.Builder#notBeanPackages(String...)
+	 * @see MarshallingContext.Builder#notBeanPackages(String...)
 	 * @return
 	 * 	The set of fully-qualified package names to exclude from being classified as beans.
 	 * 	<br>Never <jk>null</jk>.
@@ -722,7 +722,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Bean property namer.
 	 *
-	 * @see BeanContext.Builder#propertyNamer(Class)
+	 * @see MarshallingContext.Builder#propertyNamer(Class)
 	 * @return
 	 * 	The interface used to calculate bean property names.
 	 */
@@ -731,7 +731,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Java object swaps.
 	 *
-	 * @see BeanContext.Builder#swaps(Class...)
+	 * @see MarshallingContext.Builder#swaps(Class...)
 	 * @return
 	 * 	The list POJO swaps defined.
 	 * 	<br>Never <jk>null</jk>.
@@ -746,10 +746,10 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * The timezone is determined in the following order:
 	 * <ol>
 	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext.Builder#timeZone(TimeZone)} setting on bean context.
+	 * 	<li>{@link MarshallingContext.Builder#timeZone(TimeZone)} setting on bean context.
 	 * </ol>
 	 *
-	 * @see BeanContext.Builder#timeZone(TimeZone)
+	 * @see MarshallingContext.Builder#timeZone(TimeZone)
 	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
 	 */
 	public final TimeZone getTimeZone() { return timeZone; }
@@ -761,10 +761,10 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * The timezone is determined in the following order:
 	 * <ol>
 	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext.Builder#timeZone(TimeZone)} setting on bean context.
+	 * 	<li>{@link MarshallingContext.Builder#timeZone(TimeZone)} setting on bean context.
 	 * </ol>
 	 *
-	 * @see BeanContext.Builder#timeZone(TimeZone)
+	 * @see MarshallingContext.Builder#timeZone(TimeZone)
 	 * @return The session timezone, or the system timezone if not specified.  Never <jk>null</jk>.
 	 */
 	public final ZoneId getTimeZoneId() { return timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId(); }
@@ -794,7 +794,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * BeanMap.put() returns old property value.
 	 *
-	 * @see BeanContext.Builder#beanMapPutReturnsOldValue()
+	 * @see MarshallingContext.Builder#beanMapPutReturnsOldValue()
 	 * @return
 	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
 	 * 	<br>Otherwise, it returns <jk>null</jk>.
@@ -804,7 +804,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Beans require no-arg constructors.
 	 *
-	 * @see BeanContext.Builder#beansRequireDefaultConstructor()
+	 * @see MarshallingContext.Builder#beansRequireDefaultConstructor()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -814,7 +814,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Beans require Serializable interface.
 	 *
-	 * @see BeanContext.Builder#beansRequireSerializable()
+	 * @see MarshallingContext.Builder#beansRequireSerializable()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -824,7 +824,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Beans require setters for getters.
 	 *
-	 * @see BeanContext.Builder#beansRequireSettersForGetters()
+	 * @see MarshallingContext.Builder#beansRequireSettersForGetters()
 	 * @return
 	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
 	 * 	<br>Otherwise, they are ignored.
@@ -834,7 +834,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Beans require at least one property.
 	 *
-	 * @see BeanContext.Builder#disableBeansRequireSomeProperties()
+	 * @see MarshallingContext.Builder#disableBeansRequireSomeProperties()
 	 * @return
 	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
@@ -847,7 +847,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 *
-	 * @see BeanContext.Builder#findFluentSetters()
+	 * @see MarshallingContext.Builder#findFluentSetters()
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
@@ -856,7 +856,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Ignore invocation errors on getters.
 	 *
-	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnGetters()
+	 * @see MarshallingContext.Builder#ignoreInvocationExceptionsOnGetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
 	 */
@@ -865,7 +865,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Ignore invocation errors on setters.
 	 *
-	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnSetters()
+	 * @see MarshallingContext.Builder#ignoreInvocationExceptionsOnSetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
 	 */
@@ -874,7 +874,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Silently ignore missing setters.
 	 *
-	 * @see BeanContext.Builder#disableIgnoreMissingSetters()
+	 * @see MarshallingContext.Builder#disableIgnoreMissingSetters()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
@@ -883,7 +883,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Ignore unknown properties.
 	 *
-	 * @see BeanContext.Builder#ignoreUnknownBeanProperties()
+	 * @see MarshallingContext.Builder#ignoreUnknownBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
@@ -893,7 +893,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Ignore unknown properties with null values.
 	 *
-	 * @see BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()
+	 * @see MarshallingContext.Builder#disableIgnoreUnknownNullBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should not throw a {@link BeanRuntimeException}.
 	 */
@@ -902,7 +902,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Unsorted properties.
 	 *
-	 * @see BeanContext.Builder#unsortedProperties()
+	 * @see MarshallingContext.Builder#unsortedProperties()
 	 * @return
 	 * 	<jk>true</jk> if bean properties are serialized in natural JVM-dependent order instead of alphabetically.
 	 */
@@ -911,7 +911,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Use enum names.
 	 *
-	 * @see BeanContext.Builder#useEnumNames()
+	 * @see MarshallingContext.Builder#useEnumNames()
 	 * @return
 	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
 	 */
@@ -920,7 +920,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Use interface proxies.
 	 *
-	 * @see BeanContext.Builder#disableInterfaceProxies()
+	 * @see MarshallingContext.Builder#disableInterfaceProxies()
 	 * @return
 	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
@@ -930,7 +930,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	/**
 	 * Use Java Introspector.
 	 *
-	 * @see BeanContext.Builder#useJavaBeanIntrospector()
+	 * @see MarshallingContext.Builder#useJavaBeanIntrospector()
 	 * @return
 	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
 	 */
@@ -943,7 +943,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a new instance of the specified bean class</jc>
-	 * 	Person <jv>person</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
+	 * 	Person <jv>person</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the bean being created.
@@ -995,7 +995,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.
@@ -1076,7 +1076,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.
@@ -1099,10 +1099,10 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map for new bean using only properties defined in a superclass</jc>
-	 * 	BeanMap&lt;MySubBean&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
+	 * 	BeanMap&lt;MySubBean&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Construct a bean map for new bean using only properties defined in an interface</jc>
-	 * 	BeanMap&lt;MySubBean&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> MySubBean(), MySuperInterface.<jk>class</jk>);
+	 * 	BeanMap&lt;MySubBean&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> MySubBean(), MySuperInterface.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.
@@ -1137,7 +1137,7 @@ public class BeanSession extends ContextSession implements ConverterSession {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person(), PropertyNamerDLC.<jsf>INSTANCE</jsf>);
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person(), PropertyNamerDLC.<jsf>INSTANCE</jsf>);
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.

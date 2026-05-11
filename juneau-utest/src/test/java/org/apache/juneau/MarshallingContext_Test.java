@@ -31,8 +31,8 @@ import org.junit.jupiter.api.*;
 
 class BeanContext_Test extends TestBase {
 
-	BeanContext bc = BeanContext.DEFAULT;
-	BeanSession bs = BeanContext.DEFAULT_SESSION;
+	MarshallingContext bc = MarshallingContext.DEFAULT;
+	MarshallingSession bs = MarshallingContext.DEFAULT_SESSION;
 
 	@AfterEach
 	void tearDown() {
@@ -55,7 +55,7 @@ class BeanContext_Test extends TestBase {
 	}
 
 	@Test void a02_lambdaExpressionsNotCached() throws ExecutableException {
-		var bc2 = BeanContext.DEFAULT;
+		var bc2 = MarshallingContext.DEFAULT;
 		var fi = (A2)System.out::println;
 		var cm1 = bc2.getClassMeta(fi.getClass());
 		var cm2 = bc2.getClassMeta(fi.getClass());
@@ -78,13 +78,13 @@ class BeanContext_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// BeanContext.Builder locale, mediaType, and timeZone from Settings
+	// MarshallingContext.Builder locale, mediaType, and timeZone from Settings
 	//====================================================================================================
 
 	@Test void c01_locale_fromSettings() {
-		Settings.get().setLocal("BeanContext.locale", "fr-CA");
+		Settings.get().setLocal("MarshallingContext.locale", "fr-CA");
 		try {
-			var bc2 = BeanContext.create().build();
+			var bc2 = MarshallingContext.create().build();
 			assertEquals(Locale.forLanguageTag("fr-CA"), bc2.getLocale());
 		} finally {
 			Settings.get().clearLocal();
@@ -92,14 +92,14 @@ class BeanContext_Test extends TestBase {
 	}
 
 	@Test void c02_locale_defaultWhenNotSet() {
-		var bc2 = BeanContext.create().build();
+		var bc2 = MarshallingContext.create().build();
 		assertEquals(Locale.getDefault(), bc2.getLocale());
 	}
 
 	@Test void c03_mediaType_fromSettings() {
-		Settings.get().setLocal("BeanContext.mediaType", "application/json");
+		Settings.get().setLocal("MarshallingContext.mediaType", "application/json");
 		try {
-			var bc2 = BeanContext.create().build();
+			var bc2 = MarshallingContext.create().build();
 			assertEquals(MediaType.of("application/json"), bc2.getMediaType());
 		} finally {
 			Settings.get().clearLocal();
@@ -107,14 +107,14 @@ class BeanContext_Test extends TestBase {
 	}
 
 	@Test void c04_mediaType_nullWhenNotSet() {
-		var bc2 = BeanContext.create().build();
+		var bc2 = MarshallingContext.create().build();
 		assertNull(bc2.getMediaType());
 	}
 
 	@Test void c05_timeZone_fromSettings() {
-		Settings.get().setLocal("BeanContext.timeZone", "America/New_York");
+		Settings.get().setLocal("MarshallingContext.timeZone", "America/New_York");
 		try {
-			var bc2 = BeanContext.create().build();
+			var bc2 = MarshallingContext.create().build();
 			assertEquals(TimeZone.getTimeZone("America/New_York"), bc2.getTimeZone());
 		} finally {
 			Settings.get().clearLocal();
@@ -122,25 +122,25 @@ class BeanContext_Test extends TestBase {
 	}
 
 	@Test void c06_timeZone_nullWhenNotSet() {
-		var bc2 = BeanContext.create().build();
+		var bc2 = MarshallingContext.create().build();
 		assertNull(bc2.getTimeZone());
 	}
 
 	//====================================================================================================
-	// BeanContext.copy() - Copy constructor coverage
+	// MarshallingContext.copy() - Copy constructor coverage
 	//====================================================================================================
 
 	@Test void d01_copy() {
-		// Create a BeanContext with some properties set to exercise the copy constructor
-		var original = BeanContext.create()
+		// Create a MarshallingContext with some properties set to exercise the copy constructor
+		var original = MarshallingContext.create()
 			.unsortedProperties()
 			.locale(Locale.CANADA)
 			.mediaType(MediaType.JSON)
 			.timeZone(TimeZone.getTimeZone("America/New_York"))
 			.build();
 
-		// Call copy() which uses the copy constructor Builder(BeanContext copyFrom)
-		// This exercises lines 273-277 which convert boolean fields from BeanContext to Builder disable flags
+		// Call copy() which uses the copy constructor Builder(MarshallingContext copyFrom)
+		// This exercises lines 273-277 which convert boolean fields from MarshallingContext to Builder disable flags
 		var builder = original.copy();
 
 		// Build a new context from the copied builder
@@ -158,17 +158,17 @@ class BeanContext_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// BeanContext.Builder.impl() - Line 2372 coverage
+	// MarshallingContext.Builder.impl() - Line 2372 coverage
 	//====================================================================================================
 
 	@Test
 	void e01_impl() {
-		var impl = BeanContext.create()
+		var impl = MarshallingContext.create()
 			.unsortedProperties()
 			.locale(Locale.CANADA)
 			.build();
 
-		var builder = BeanContext.create()
+		var builder = MarshallingContext.create()
 			.impl(impl);
 
 		// Build should return the pre-instantiated context

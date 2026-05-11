@@ -158,7 +158,7 @@ public class MarkdownDoc extends CharMarshaller {
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public static <T> T to(Object input, Type type, Type...args) throws ParseException, IOException {
 		return DEFAULT.read(input, type, args);
@@ -194,7 +194,7 @@ public class MarkdownDoc extends CharMarshaller {
 	 * 	The type arguments of the class if it's a collection or map.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public static <T> T to(String input, Type type, Type...args) throws ParseException {
 		return DEFAULT.read(input, type, args);

@@ -211,7 +211,7 @@ public abstract class Marshaller {
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T read(Object input, Type type, Type...args) throws ParseException, IOException {
 		return p.parse(input, type, args);

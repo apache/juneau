@@ -24,7 +24,7 @@ import org.apache.juneau.swap.*;
  *
  * <p>
  * Allows you to specify classes that should just be converted to {@code Strings} instead of potentially
- * being turned into Maps by the {@link BeanContext} (or worse, throwing
+ * being turned into Maps by the {@link MarshallingContext} (or worse, throwing
  * {@link org.apache.juneau.commons.reflect.BeanRuntimeException BeanRuntimeExceptions}).
  *
  * <p>
@@ -39,13 +39,13 @@ import org.apache.juneau.swap.*;
  *
  * @param <T> The class type of the bean.
  */
-public class BeanStringSwap<T> extends StringSwap<T> {
+public class MarshallingStringSwap<T> extends StringSwap<T> {
 
 	/**
 	 * Converts the specified bean to a {@link String}.
 	 */
 	@Override /* Overridden from ObjectSwap */
-	public String swap(BeanSession session, T o) {
+	public String swap(MarshallingSession session, T o) {
 		return o.toString();
 	}
 }

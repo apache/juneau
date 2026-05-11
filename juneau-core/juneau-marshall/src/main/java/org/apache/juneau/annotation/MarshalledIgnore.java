@@ -73,7 +73,7 @@ public @interface MarshalledIgnore {
 	 *
 	 * <p>
 	 * Default is <jk>false</jk>: {@code @MarshalledIgnore} on a field only excludes the field from field-based discovery;
-	 * accessors can still expose the property (for example when {@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility} is {@link Visibility#NONE NONE}). Set to <jk>true</jk> to
+	 * accessors can still expose the property (for example when {@link org.apache.juneau.MarshallingContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility} is {@link Visibility#NONE NONE}). Set to <jk>true</jk> to
 	 * omit the property from serialization and parsing while keeping accessors for other frameworks.
 	 *
 	 * @return The annotation value.

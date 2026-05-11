@@ -79,7 +79,7 @@ public class ConverterUtils {
 	 * Converts the specified object to the specified type.
 	 *
 	 * <p>
-	 * Uses the full {@link BeanContextConverter} to support bean-aware conversions such as
+	 * Uses the full {@link MarshallingContextConverter} to support bean-aware conversions such as
 	 * {@link java.util.Map} to bean, bean to bean, and {@link org.apache.juneau.swap.ObjectSwap} transforms.
 	 *
 	 * @param <T> The class type to convert the value to.
@@ -88,7 +88,7 @@ public class ConverterUtils {
 	 * @return The converted value.
 	 */
 	public static <T> T toType(Object value, Class<T> type) {
-		return BeanContextConverter.INSTANCE.to(value, type);
+		return MarshallingContextConverter.INSTANCE.to(value, type);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class ConverterUtils {
 	 * @return A new {@link Lists} containing the converted elements.
 	 */
 	public static <T> Lists<T> toListBuilder(Object value, Class<T> type) {
-		return listb(type).elementFunction(o -> BeanContextConverter.INSTANCE.to(o, type)).addAny(value);
+		return listb(type).elementFunction(o -> MarshallingContextConverter.INSTANCE.to(o, type)).addAny(value);
 	}
 
 	/**
@@ -132,8 +132,8 @@ public class ConverterUtils {
 	 */
 	public static <K,V> Maps<K,V> toMapBuilder(Object value, Class<K> keyType, Class<V> valueType) {
 		return mapb(keyType, valueType)
-			.keyFunction(o -> BeanContextConverter.INSTANCE.to(o, keyType))
-			.valueFunction(o -> BeanContextConverter.INSTANCE.to(o, valueType))
+			.keyFunction(o -> MarshallingContextConverter.INSTANCE.to(o, keyType))
+			.valueFunction(o -> MarshallingContextConverter.INSTANCE.to(o, valueType))
 			.addAny(value);
 	}
 
@@ -158,6 +158,6 @@ public class ConverterUtils {
 	 * @return A new {@link Sets} containing the converted elements.
 	 */
 	public static <T> Sets<T> toSetBuilder(Object value, Class<T> type) {
-		return setb(type).elementFunction(o -> BeanContextConverter.INSTANCE.to(o, type)).addAny(value);
+		return setb(type).elementFunction(o -> MarshallingContextConverter.INSTANCE.to(o, type)).addAny(value);
 	}
 }

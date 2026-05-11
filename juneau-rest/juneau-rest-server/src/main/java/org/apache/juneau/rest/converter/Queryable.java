@@ -138,7 +138,7 @@ public class Queryable implements RestConverter {
 
 		Value<Object> v = Value.of(o);
 		RequestQueryParams params = req.getQueryParams();
-		BeanSession bs = req.getBeanSession();
+		MarshallingSession bs = req.getMarshallingSession();
 
 		params.getSearchArgs().ifPresent(x -> v.set(ObjectSearcher.create().run(bs, v.get(), x)));
 		params.getSortArgs().ifPresent(x -> v.set(ObjectSorter.create().run(bs, v.get(), x)));

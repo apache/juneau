@@ -55,7 +55,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		super(bpm);
 		this.xmlMetaProvider = mp;
 
-		bpm.getAnnotations(Xml.class).forEach(x -> findXmlInfo(x.inner(), bpm.getClassMeta().getBeanContext().getAnnotationProvider()));
+		bpm.getAnnotations(Xml.class).forEach(x -> findXmlInfo(x.inner(), bpm.getClassMeta().getMarshallingContext().getAnnotationProvider()));
 
 		if (namespace == null)
 			namespace = mp.getXmlClassMeta(bpm.getBeanMeta().getClassMeta()).getNamespace();
@@ -114,7 +114,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		var cmBean = bpm.getBeanMeta().getClassMeta();
 		var name = bpm.getName();
 
-		var ap = bpm.getClassMeta().getBeanContext().getAnnotationProvider();
+		var ap = bpm.getClassMeta().getMarshallingContext().getAnnotationProvider();
 		var xmls = new MultiList<>(
 			rstream(ap.find(Xml.class, bpm.getBeanMeta().getClassMeta())).map(AnnotationInfo::inner).toList(),
 			reverse(bpm.getAnnotations(Xml.class).map(AnnotationInfo::inner).toList())

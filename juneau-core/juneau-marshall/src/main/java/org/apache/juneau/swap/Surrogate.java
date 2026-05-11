@@ -49,7 +49,7 @@ import org.apache.juneau.annotation.*;
  * </p>
  *
  * <p>
- * Surrogate classes are associated with serializers and parsers using the {@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
+ * Surrogate classes are associated with serializers and parsers using the {@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...)}
  * method.
  * <p class='bjava'>
  * 	JsonSerializer <jv>serializer</jv> = JsonSerializer

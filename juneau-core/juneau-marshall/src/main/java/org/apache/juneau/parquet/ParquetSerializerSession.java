@@ -113,21 +113,21 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 			var elementType = getClassMetaForObject(bm.getBean());
 			// For collection root: use element type for flat row schema (root.name, root.age).
 			// Each collection element becomes one Parquet row. Avoids list column format issues.
-			schema = new ParquetSchemaBuilder(ctx.getBeanContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling).buildSchema(elementType, first);
+			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling).buildSchema(elementType, first);
 		} else if (first instanceof Map<?,?> mapFirst) {
 			if (rootType.isMap() && o instanceof Map<?, ?> origMap && !origMap.isEmpty()
 				&& !(origMap.keySet().iterator().next() instanceof String)) {
-				schema = new ParquetSchemaBuilder(ctx.getBeanContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling)
+				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling)
 					.buildSchemaForKeyValuePairs(mapFirst.get("key"), mapFirst.get("value"));
 			} else {
-				schema = new ParquetSchemaBuilder(ctx.getBeanContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling).buildSchemaFromMap((Map<?, ?>) first);
+				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling).buildSchemaFromMap((Map<?, ?>) first);
 			}
 		} else {
 			var elementType = getClassMetaForObject(first);
 			var cm = (rootType.isCollection() || rootType.isArray())
-				? ctx.getBeanContext().getClassMeta(List.class, elementType.inner())
+				? ctx.getMarshallingContext().getClassMeta(List.class, elementType.inner())
 				: elementType;
-			schema = new ParquetSchemaBuilder(ctx.getBeanContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling).buildSchema(cm, first);
+			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling).buildSchema(cm, first);
 		}
 		var leafColumns = ParquetSchemaBuilder.getLeafColumns(schema);
 		writeMagic(out);
@@ -443,7 +443,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 			return Iso8601Utils.format(key, cm, getTimeZone());
 		}
 		if (key instanceof Enum<?> e)
-			return ctx.getBeanContext().isUseEnumNames() ? e.name() : e.toString();
+			return ctx.getMarshallingContext().isUseEnumNames() ? e.name() : e.toString();
 		return trim(String.valueOf(generalize(key, getClassMetaForObject(key))));
 	}
 
@@ -737,7 +737,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 		if (v instanceof String s)
 			return trim(s).getBytes(StandardCharsets.UTF_8);
 		if (v instanceof Enum<?> e)
-			return (ctx.getBeanContext().isUseEnumNames() ? e.name() : e.toString()).getBytes(StandardCharsets.UTF_8);
+			return (ctx.getMarshallingContext().isUseEnumNames() ? e.name() : e.toString()).getBytes(StandardCharsets.UTF_8);
 		if (v instanceof Duration d)
 			return d.toString().getBytes(StandardCharsets.UTF_8);
 	// BigDecimal is stored as a UTF-8 string (same as JSON/CBOR) so fall through to String.valueOf below.

@@ -231,7 +231,7 @@ class Common_UonTest extends TestBase {
 		r3.r1 = r1;
 
 		// No recursion detection - DEBUG: Check what exception is thrown
-		assertThrowsWithMessage(Exception.class, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->{
+		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->{
 			try {
 				s.build().serialize(r1);
 			} catch (Throwable t) {

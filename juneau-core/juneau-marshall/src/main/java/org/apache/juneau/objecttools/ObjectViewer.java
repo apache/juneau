@@ -83,7 +83,7 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 	}
 
 	@Override /* Overridden from ObjectTool */
-	public Object run(BeanSession session, Object input, ViewArgs args) {
+	public Object run(MarshallingSession session, Object input, ViewArgs args) {
 
 		if (input == null)
 			return null;
@@ -141,7 +141,7 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 	 * @return The extracted properties from the collection of objects.
 	 */
 	public List<Map> run(Object input, String args) {
-		return (List<Map>)run(BeanContext.DEFAULT_SESSION, input, ViewArgs.create(args));
+		return (List<Map>)run(MarshallingContext.DEFAULT_SESSION, input, ViewArgs.create(args));
 	}
 
 	/**
@@ -152,6 +152,6 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 	 * @return The extracted properties from the object.
 	 */
 	public Map runSingle(Object input, String args) {
-		return (Map)run(BeanContext.DEFAULT_SESSION, input, ViewArgs.create(args));
+		return (Map)run(MarshallingContext.DEFAULT_SESSION, input, ViewArgs.create(args));
 	}
 }

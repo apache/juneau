@@ -73,7 +73,7 @@ import org.apache.juneau.serializer.annotation.*;
 @SerializerConfig(
 	// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
 	// String comparisons.
-	// You can apply any of the Serializer/Parser/BeanContext settings this way.
+	// You can apply any of the Serializer/Parser/MarshallingContext settings this way.
 	quoteChar="'"
 )
 @SuppressWarnings({

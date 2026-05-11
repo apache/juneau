@@ -77,7 +77,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		protected Builder() {
 			produces("text/html");
 			accept("text/html+schema");
-			generatorBuilder = JsonSchemaGenerator.create().beanContext(beanContext());
+			generatorBuilder = JsonSchemaGenerator.create().marshallingContext(marshallingContext());
 		}
 
 		/**
@@ -87,7 +87,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
-			generatorBuilder = copyFrom.generatorBuilder.copy().beanContext(beanContext());
+			generatorBuilder = copyFrom.generatorBuilder.copy().marshallingContext(marshallingContext());
 		}
 
 		/**
@@ -97,7 +97,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 */
 		protected Builder(HtmlSchemaDocSerializer copyFrom) {
 			super(copyFrom);
-			generatorBuilder = copyFrom.generator.copy().beanContext(beanContext());
+			generatorBuilder = copyFrom.generator.copy().marshallingContext(marshallingContext());
 		}
 
 		@Override /* Overridden from Builder */
@@ -170,7 +170,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * <p>
 		 * Identifies which categories of types that examples should be automatically added to generated schemas.
 		 * <p>
-		 * The examples come from calling {@link ClassMeta#getExample(BeanSession,JsonParserSession)} which in turn gets examples
+		 * The examples come from calling {@link ClassMeta#getExample(MarshallingSession,JsonParserSession)} which in turn gets examples
 		 * from the following:
 		 * <ul class='javatree'>
 		 * 	<li class='ja'>{@link Example}
@@ -310,14 +310,14 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext.Builder value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
@@ -340,7 +340,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
 		 * @return This object.
 		 */
-		public Builder beanDefMapper(Class<? extends BeanDefMapper> value) {
+		public Builder beanDefMapper(Class<? extends MarshallingDefMapper> value) {
 			generatorBuilder.beanDefMapper(value);
 			return this;
 		}
@@ -358,7 +358,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.MarshallingInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}
@@ -1118,7 +1118,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	public HtmlSchemaDocSerializer(HtmlDocSerializer.Builder builder) {
 		super(builder.detectRecursions().ignoreRecursions());
 
-		generator = JsonSchemaGenerator.create().beanContext(getBeanContext()).build();
+		generator = JsonSchemaGenerator.create().marshallingContext(getMarshallingContext()).build();
 	}
 
 	@Override /* Overridden from Context */

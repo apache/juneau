@@ -85,11 +85,11 @@ class Csv_Test extends TestBase {
 	public static class DateSwap extends StringSwap<Date> {
 		private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		@Override
-		public String swap(BeanSession session, Date date) {
+		public String swap(MarshallingSession session, Date date) {
 			return df.format(date);
 		}
 		@Override
-		public Date unswap(BeanSession session, String str, ClassMeta<?> hint) throws java.text.ParseException {
+		public Date unswap(MarshallingSession session, String str, ClassMeta<?> hint) throws java.text.ParseException {
 			return df.parse(str);
 		}
 	}
@@ -196,12 +196,12 @@ class Csv_Test extends TestBase {
 
 	public static class AddressSwap extends StringSwap<Address> {
 		@Override
-		public String swap(BeanSession session, Address address) {
+		public String swap(MarshallingSession session, Address address) {
 			if (address == null) return null;
 			return address.street + "|" + address.city + "|" + address.state;
 		}
 		@Override
-		public Address unswap(BeanSession session, String str, ClassMeta<?> hint) {
+		public Address unswap(MarshallingSession session, String str, ClassMeta<?> hint) {
 			if (str == null) return null;
 			var parts = str.split("\\|");
 			return new Address(parts[0], parts[1], parts[2]);

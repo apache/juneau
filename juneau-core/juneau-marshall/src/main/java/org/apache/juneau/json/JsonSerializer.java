@@ -73,7 +73,7 @@ import org.apache.juneau.serializer.*;
  * The types above are considered "JSON-primitive" object types.
  * Any non-JSON-primitive object types are transformed into JSON-primitive object types through
  * {@link org.apache.juneau.swap.ObjectSwap ObjectSwaps} associated through the
- * {@link org.apache.juneau.BeanContext.Builder#swaps(Class...)} method.
+ * {@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
  *
  * <p>
@@ -277,14 +277,14 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext.Builder value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
@@ -301,7 +301,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.MarshallingInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}
@@ -999,7 +999,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	public JsonSchemaSerializer getSchemaSerializer() {
 		JsonSchemaSerializer result = schemaSerializer.get();
 		if (result == null) {
-			result = JsonSchemaSerializer.create().beanContext(getBeanContext()).build();
+			result = JsonSchemaSerializer.create().marshallingContext(getMarshallingContext()).build();
 			if (! schemaSerializer.compareAndSet(null, result)) {
 				result = schemaSerializer.get();
 			}

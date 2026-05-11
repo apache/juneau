@@ -416,7 +416,7 @@
  * 		<jk>private</jk> ApplicationContext <jv>appCtx</jv>;
  *
  * 		<ja>@Override</ja>
- * 		<jk>protected</jk> BeanContext.Builder createBeanContext(RestContext.Builder <jv>rcBuilder</jv>) {
+ * 		<jk>protected</jk> MarshallingContext.Builder createBeanContext(RestContext.Builder <jv>rcBuilder</jv>) {
  * 			<jk>return super</jk>.createBeanContext(<jv>rcBuilder</jv>)
  * 				.beanStore(<jk>new</jk> SpringBeanStore(<jv>appCtx</jv>));
  * 		}

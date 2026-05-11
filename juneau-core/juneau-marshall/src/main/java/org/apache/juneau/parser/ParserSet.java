@@ -104,7 +104,7 @@ public class ParserSet {
 		private ParserSet impl;
 
 		List<Object> entries;
-		private BeanContext.Builder bcBuilder;
+		private MarshallingContext.Builder bcBuilder;
 
 		/**
 		 * Create an empty parser group builder.
@@ -222,9 +222,9 @@ public class ParserSet {
 		 * @param value The bean contest builder to associate.
 		 * @return This object.
 		 */
-		public Builder beanContext(BeanContext.Builder value) {
+		public Builder marshallingContext(MarshallingContext.Builder value) {
 			bcBuilder = value;
-			forEach(x -> x.beanContext(value));
+			forEach(x -> x.marshallingContext(value));
 			return this;
 		}
 
@@ -234,7 +234,7 @@ public class ParserSet {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
+		public final Builder marshallingContext(Consumer<MarshallingContext.Builder> operation) {
 			if (nn(bcBuilder))
 				operation.accept(bcBuilder);
 			return this;
@@ -399,7 +399,7 @@ public class ParserSet {
 					throw rex("Copy method not implemented on class {0}", cn(x));
 				x = x2;
 				if (nn(bcBuilder))
-					x.beanContext(bcBuilder);
+					x.marshallingContext(bcBuilder);
 				return x;
 			}
 			return o;
@@ -419,7 +419,7 @@ public class ParserSet {
 				})
 				Parser.Builder b = Parser.createParserBuilder((Class<? extends Parser>)o);
 				if (nn(bcBuilder))
-					b.beanContext(bcBuilder);
+					b.marshallingContext(bcBuilder);
 				o = b;
 			}
 			return o;

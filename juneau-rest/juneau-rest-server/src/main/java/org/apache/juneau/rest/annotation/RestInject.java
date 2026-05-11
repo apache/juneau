@@ -169,7 +169,7 @@ import org.apache.juneau.svl.*;
  * Any of the following types can be customized via injection:
  * <table class='w800 styled'>
  * 	<tr><th>Bean class</td><th>Bean qualifying names</th><th>Scope</th></tr>
- * 	<tr><td>{@link BeanContext}<br>{@link org.apache.juneau.BeanContext.Builder}</td><td></td><td>class<br>method</td></tr>
+ * 	<tr><td>{@link MarshallingContext}<br>{@link org.apache.juneau.MarshallingContext.Builder}</td><td></td><td>class<br>method</td></tr>
  * 	<tr><td>{@link org.apache.juneau.commons.inject.BeanStore BeanStore}<br>{@link org.apache.juneau.commons.inject.WritableBeanStore WritableBeanStore}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link CallLogger}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link Config}</td><td></td><td>class</td></tr>

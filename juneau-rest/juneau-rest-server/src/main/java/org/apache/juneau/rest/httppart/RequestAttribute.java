@@ -87,7 +87,7 @@ public class RequestAttribute extends BasicNamedAttribute {
 	 * @throws BasicHttpException If value could not be parsed.
 	 */
 	public <T> Optional<T> as(Class<T> type) {
-		return opt(req.getBeanSession().convertToType(getValue(), type));
+		return opt(req.getMarshallingSession().convertToType(getValue(), type));
 	}
 
 	/**

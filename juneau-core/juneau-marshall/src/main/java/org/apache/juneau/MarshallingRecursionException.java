@@ -26,7 +26,7 @@ import java.text.*;
  *
  * @serial exclude
  */
-public class BeanRecursionException extends Exception {
+public class MarshallingRecursionException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,7 +36,7 @@ public class BeanRecursionException extends Exception {
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public BeanRecursionException(String message, Object...args) {
+	public MarshallingRecursionException(String message, Object...args) {
 		super(f(message, args));
 	}
 }

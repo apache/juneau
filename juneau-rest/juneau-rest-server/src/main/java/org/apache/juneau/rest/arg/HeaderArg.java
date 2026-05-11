@@ -195,7 +195,7 @@ public class HeaderArg implements RestOpArg {
 		var req = opSession.getRequest();
 		var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		var rh = req.getHeaders();
-		var bs = req.getBeanSession();
+		var bs = req.getMarshallingSession();
 		var cm = bs.getClassMeta(type.innerType());
 
 		if (multi) {
@@ -214,7 +214,7 @@ public class HeaderArg implements RestOpArg {
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 			var m = new JsonMap();
 			rh.forEach(x -> m.put(x.getName(), x.parser(ps).schema(schema == null ? null : schema.getProperty(x.getName())).as(cm.getValueType()).orElse(null)));
-			return req.getBeanSession().convertToType(m, cm);
+			return req.getMarshallingSession().convertToType(m, cm);
 		}
 
 		return rh.getLast(name).parser(ps).schema(schema).def(def).as(type.innerType()).orElse(null);

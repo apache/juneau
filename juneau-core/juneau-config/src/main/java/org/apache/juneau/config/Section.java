@@ -117,7 +117,7 @@ public class Section {
 
 		var keys = configMap.getKeys(name);
 
-		var bm = config.beanSession.newBeanMap(c);
+		var bm = config.marshallingSession.newBeanMap(c);
 		for (var k : keys) {
 			var bpm = bm.getPropertyMeta(k);
 			if (bpm == null) {
@@ -256,7 +256,7 @@ public class Section {
 
 		var keys = configMap.getKeys(name);
 
-		var bm = config.beanSession.toBeanMap(bean);
+		var bm = config.marshallingSession.toBeanMap(bean);
 		for (var k : keys) {
 			var bpm = bm.getPropertyMeta(k);
 			if (bpm == null) {

@@ -115,7 +115,7 @@ class ParquetRoundTrip_Test extends TestBase {
 	void a07a_schemaWithSampleForListOfBean() {
 		var members = List.of(new Person("Alice", 30), new Person("Bob", 25));
 		var in = new Team("devs", members);
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var beanMap = bc.toBeanMap(in);
 		var schema = new ParquetSchemaBuilder(bc, false, ParquetCycleHandling.NULL).buildSchema(bc.getClassMeta(Team.class), beanMap);
 		var leaves = ParquetSchemaBuilder.getLeafColumns(schema);

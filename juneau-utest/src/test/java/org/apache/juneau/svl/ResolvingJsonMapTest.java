@@ -135,7 +135,7 @@ class ResolvingJsonMapTest extends TestBase {
 		assertEquals("1", m.get("test"));
 
 		// Test session() returns same instance
-		BeanSession session = BeanContext.DEFAULT.getSession();
+		MarshallingSession session = MarshallingContext.DEFAULT.getSession();
 		assertSame(m, m.session(session));
 
 		// Test append(String, Object) returns same instance

@@ -586,7 +586,7 @@ public class Config extends Context implements ConfigEventListener {
 	protected final boolean readOnly;
 	protected final int binaryLineLength;
 	protected final BinaryFormat binaryFormat;
-	protected final BeanSession beanSession;
+	protected final MarshallingSession marshallingSession;
 	protected final ConfigStore store;
 	protected final Map<Character,Mod> mods;
 	protected final ReaderParser parser;
@@ -619,13 +619,13 @@ public class Config extends Context implements ConfigEventListener {
 		varResolver = builder.varResolver;
 		configMap = store.getMap(name);
 		configMap.register(this);
-		beanSession = parser.getBeanContext().getSession();
+		marshallingSession = parser.getMarshallingContext().getSession();
 		varSession = varResolver.copy().vars(ConfigVar.class).bean(Config.class, this).build().createSession();
 	}
 
 	Config(Config copyFrom, VarResolverSession varSession) {
 		super(copyFrom);
-		beanSession = copyFrom.beanSession;
+		marshallingSession = copyFrom.marshallingSession;
 		binaryFormat = copyFrom.binaryFormat;
 		binaryLineLength = copyFrom.binaryLineLength;
 		configMap = copyFrom.configMap;

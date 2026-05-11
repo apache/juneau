@@ -31,12 +31,12 @@ import org.apache.juneau.swap.*;
 public class LocaleSwap extends StringSwap<Locale> {
 
 	@Override /* Overridden from ObjectSwap */
-	public String swap(BeanSession session, Locale o) throws Exception {
+	public String swap(MarshallingSession session, Locale o) throws Exception {
 		return o == null ? null : o.toLanguageTag();
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	public Locale unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+	public Locale unswap(MarshallingSession session, String o, ClassMeta<?> hint) throws Exception {
 		return o == null ? null : Locale.forLanguageTag(o);
 	}
 }

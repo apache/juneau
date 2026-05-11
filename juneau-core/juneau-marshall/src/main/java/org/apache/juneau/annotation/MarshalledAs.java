@@ -35,7 +35,7 @@ public enum MarshalledAs {
 	 * {@code valueOf(String)}, or single-{@code String}-argument constructor.
 	 *
 	 * <p>
-	 * Replaces the common {@code BeanStringSwap} use case without requiring a separate swap class.
+	 * Replaces the common {@code MarshallingStringSwap} use case without requiring a separate swap class.
 	 */
 	STRING
 }

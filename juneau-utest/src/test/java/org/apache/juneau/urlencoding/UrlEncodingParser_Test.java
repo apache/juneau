@@ -34,7 +34,7 @@ import org.junit.jupiter.api.*;
 class UrlEncodingParser_Test extends TestBase {
 
 	static UrlEncodingParser p = UrlEncodingParser.DEFAULT;
-	static BeanSession bs = p.getBeanContext().getSession();
+	static MarshallingSession bs = p.getMarshallingContext().getSession();
 
 	//====================================================================================================
 	// Basic test

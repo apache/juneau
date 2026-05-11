@@ -55,7 +55,7 @@ public class PlainTextPojoProcessor implements ResponseProcessor {
 		if (o == null)
 			w.append("null");
 		else
-			w.append(req.getBeanSession().getClassMetaForObject(o).toString(o));
+			w.append(req.getMarshallingSession().getClassMetaForObject(o).toString(o));
 		w.flush();
 		w.finish();
 

@@ -134,7 +134,7 @@ public class Entry {
 			if (isEmpty())
 				return opte();
 			if (isSimpleType(type))
-				return opt((T)config.beanSession.convertToType(v, (Class<?>)type));
+				return opt((T)config.marshallingSession.convertToType(v, (Class<?>)type));
 
 			if (parser instanceof JsonParser) {
 				var s1 = firstNonWhitespaceChar(v);

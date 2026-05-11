@@ -47,7 +47,7 @@ public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast for Map operations
 	})
-	public DelegateMap(T m, BeanSession session) {
+	public DelegateMap(T m, MarshallingSession session) {
 		this.classMeta = session.getClassMetaForObject(m);
 		m.forEach((k, v) -> put(s(k), v));
 	}

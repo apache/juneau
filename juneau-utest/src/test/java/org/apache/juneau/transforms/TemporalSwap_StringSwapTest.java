@@ -47,9 +47,9 @@ class TemporalSwap_StringSwapTest extends StringSwapTest_Base {
 		unsetTimeZone();
 	}
 
-	private static final BeanSession
-		BS_DEFAULT = BeanContext.DEFAULT_SESSION,
-		BS_PST = BeanContext.DEFAULT.createSession().timeZone(TimeZone.getTimeZone("PST")).build();
+	private static final MarshallingSession
+		BS_DEFAULT = MarshallingContext.DEFAULT_SESSION,
+		BS_PST = MarshallingContext.DEFAULT.createSession().timeZone(TimeZone.getTimeZone("PST")).build();
 
 	private static final Temporal
 		DT_ZonedDateTime = ZonedDateTime.parse("2012-12-21T12:34:56Z"),
@@ -68,7 +68,7 @@ class TemporalSwap_StringSwapTest extends StringSwapTest_Base {
 		DT_MinguoDate = MinguoDate.from(DT_ZonedDateTime),
 		DT_ThaiBuddhistDate = ThaiBuddhistDate.from(DT_ZonedDateTime);
 
-	private static <T> StringSwap_Tester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession bs) {
+	private static <T> StringSwap_Tester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, MarshallingSession bs) {
 		return StringSwap_Tester.create(index, label, object, swap, expected, bs).build();
 	}
 

@@ -23,7 +23,7 @@ import java.lang.reflect.*;
  *
  * <p>
  * Use {@link BasicConverter#INSTANCE} for a default singleton implementation that supports
- * a wide range of common type conversions without requiring a {@code BeanContext} or {@code BeanSession}.
+ * a wide range of common type conversions without requiring a {@code MarshallingContext} or {@code MarshallingSession}.
  */
 public interface Converter {
 

@@ -57,7 +57,7 @@ import org.apache.juneau.utils.Iso8601Utils;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class ParserSession extends BeanSession {
+public class ParserSession extends MarshallingSession {
 
 	// Property name constants
 	private static final String PROP_javaMethod = "javaMethod";
@@ -76,7 +76,7 @@ public class ParserSession extends BeanSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanSession.Builder {
+	public static class Builder extends MarshallingSession.Builder {
 
 		private HttpPartSchema schema;
 		private Method javaMethod;
@@ -91,7 +91,7 @@ public class ParserSession extends BeanSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
 		protected Builder(Parser ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx).getBeanContext());
+			super(assertArgNotNull(ARG_ctx, ctx).getMarshallingContext());
 			this.ctx = ctx;
 			mediaTypeDefault(ctx.getPrimaryMediaType());
 			trimStrings = ctx.isTrimStrings();
@@ -537,7 +537,7 @@ public class ParserSession extends BeanSession {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
 	@SuppressWarnings({
@@ -647,7 +647,7 @@ public class ParserSession extends BeanSession {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast to T for generic type parsing
@@ -899,7 +899,7 @@ public class ParserSession extends BeanSession {
 		var cm = getClassMeta(typeName, pMeta, eType);
 
 		if (nn(cm)) {
-			var bm = m.getBeanSession().newBeanMap(cm.inner());
+			var bm = m.getMarshallingSession().newBeanMap(cm.inner());
 
 			// Iterate through all the entries in the map and set the individual field values.
 			m.forEach((k, v) -> {
@@ -1210,7 +1210,7 @@ public class ParserSession extends BeanSession {
 	 * @param beanMap The bean that doesn't have the expected property.
 	 * @param value The parsed value.
 	 * @throws ParseException
-	 * 	Automatically thrown if {@link org.apache.juneau.BeanContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
+	 * 	Automatically thrown if {@link org.apache.juneau.MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
 	 * 	<jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
@@ -1223,7 +1223,7 @@ public class ParserSession extends BeanSession {
 			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().inner(), beanMap.getBean());
 	}
 
-	@Override /* Overridden from BeanSession */
+	@Override /* Overridden from MarshallingSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(PROP_javaMethod, javaMethod)

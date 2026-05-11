@@ -1071,7 +1071,7 @@ import org.apache.juneau.xml.*;
 	"java:S106",  // System.err is the intentional default fallback for the configurable console PrintStream
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 })
-public class RestClient extends BeanContextable implements HttpClient, Closeable {
+public class RestClient extends MarshallingContextable implements HttpClient, Closeable {
 
 	// Property name constants
 	private static final String PROP_errorCodes = "errorCodes";
@@ -1092,7 +1092,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanContextable.Builder {
+	public static class Builder extends MarshallingContextable.Builder {
 
 		private BeanInstantiator.Builder<RestCallHandler> callHandler;
 		private WritableBeanStore beanStore = new BasicBeanStore();
@@ -1417,14 +1417,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext.Builder value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
@@ -1441,7 +1441,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.MarshallingInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}
@@ -1958,7 +1958,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
 		 * <br>In general, unchecked recursions cause stack-overflow-errors.
-		 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
+		 * <br>These show up as {@link MarshallingRecursionException MarshallingRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
@@ -1992,7 +1992,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#detectRecursions()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2910,7 +2910,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#ignoreRecursions()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2981,7 +2981,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#initialDepth(int)}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#initialDepth(int)}
 		 * </ul>
 		 *
 		 * @param value
@@ -3570,7 +3570,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#maxDepth(int)}
 		 * </ul>
 		 *
 		 * @param value
@@ -6297,7 +6297,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return A new parser group sub-builder.
 		 */
 		protected ParserSet.Builder createParsers() {
-			return ParserSet.create().beanContext(beanContext());
+			return ParserSet.create().marshallingContext(marshallingContext());
 		}
 
 		/**
@@ -6306,7 +6306,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return A new part parser sub-builder.
 		 */
 		protected HttpPartParser.Creator createPartParser() {
-			return HttpPartParser.creator().type(OpenApiParser.class).beanContext(beanContext());
+			return HttpPartParser.creator().type(OpenApiParser.class).marshallingContext(marshallingContext());
 		}
 
 		/**
@@ -6315,7 +6315,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return A new part serializer sub-builder.
 		 */
 		protected HttpPartSerializer.Creator createPartSerializer() {
-			return HttpPartSerializer.creator().type(OpenApiSerializer.class).beanContext(beanContext());
+			return HttpPartSerializer.creator().type(OpenApiSerializer.class).marshallingContext(marshallingContext());
 		}
 
 		/**
@@ -6356,7 +6356,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return A new serializer group sub-builder.
 		 */
 		protected SerializerSet.Builder createSerializers() {
-			return SerializerSet.create().beanContext(beanContext());
+			return SerializerSet.create().marshallingContext(marshallingContext());
 		}
 
 		/**
@@ -6365,7 +6365,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return A new URL-encoding serializer sub-builder.
 		 */
 		protected UrlEncodingSerializer.Builder createUrlEncodingSerializer() {
-			return UrlEncodingSerializer.create().beanContext(beanContext());
+			return UrlEncodingSerializer.create().marshallingContext(marshallingContext());
 		}
 
 		final CloseableHttpClient getHttpClient() { return nn(httpClient) ? httpClient : createHttpClient(); }
@@ -8202,7 +8202,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 	}
 
-	@Override /* Overridden from BeanContextable */
+	@Override /* Overridden from MarshallingContextable */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(PROP_errorCodes, errorCodes)
@@ -8359,9 +8359,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	<T extends Context> T getInstance(Class<T> c) {
 		var o = requestContexts.computeIfAbsent(c, k -> {
 			if (Serializer.class.isAssignableFrom(k)) {
-				return Serializer.createSerializerBuilder((Class<? extends Serializer>)k).beanContext(getBeanContext()).build();
+				return Serializer.createSerializerBuilder((Class<? extends Serializer>)k).marshallingContext(getMarshallingContext()).build();
 			} else if (Parser.class.isAssignableFrom(k)) {
-				return Parser.createParserBuilder((Class<? extends Parser>)k).beanContext(getBeanContext()).build();
+				return Parser.createParserBuilder((Class<? extends Parser>)k).marshallingContext(getMarshallingContext()).build();
 			}
 			return null;
 		});

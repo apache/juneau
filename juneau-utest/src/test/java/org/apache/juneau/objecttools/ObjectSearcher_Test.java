@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  */
 public class ObjectSearcher_Test extends TestBase {
 
-	private static BeanSession bs = BeanContext.DEFAULT_SESSION;
+	private static MarshallingSession bs = MarshallingContext.DEFAULT_SESSION;
 	private static ObjectSearcher os = ObjectSearcher.DEFAULT;
 	private static WriterSerializer ws = Json5Serializer.create().swaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
 

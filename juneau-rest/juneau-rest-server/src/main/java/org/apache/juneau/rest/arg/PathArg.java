@@ -145,7 +145,7 @@ public class PathArg implements RestOpArg {
 		if (name.equals("*")) {
 			var m = new JsonMap();
 			req.getPathParams().stream().forEach(x -> m.put(x.getName(), x.getValue()));
-			return req.getBeanSession().convertToType(m, type);
+			return req.getMarshallingSession().convertToType(m, type);
 		}
 		var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		return req.getPathParams().get(name).parser(ps).schema(schema).def(def).as(type).orElse(null);

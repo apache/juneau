@@ -63,7 +63,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast for BeanMap creation
 	})
-	public DelegateBeanMap(T bean, BeanSession session) {
+	public DelegateBeanMap(T bean, MarshallingSession session) {
 		super(session, bean, session.getBeanMeta((Class<T>)bean.getClass()));
 	}
 

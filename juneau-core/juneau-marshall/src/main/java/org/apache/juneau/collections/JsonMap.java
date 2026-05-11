@@ -304,7 +304,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		return c2;
 	}
 
-	private transient BeanSession session;
+	private transient MarshallingSession session;
 	private transient Map<String,Object> inner;
 
 	private transient ObjectRest objectRest;
@@ -321,7 +321,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param session The bean session to use for creating beans.
 	 */
-	public JsonMap(BeanSession session) {
+	public JsonMap(MarshallingSession session) {
 		this.session = session;
 	}
 
@@ -349,7 +349,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public JsonMap(CharSequence in, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
+		this(p == null ? MarshallingContext.DEFAULT_SESSION : p.getMarshallingContext().getSession());
 		if (p == null)
 			p = Json5Parser.DEFAULT;
 		if (ne(in))
@@ -410,7 +410,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public JsonMap(Reader in, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
+		this(p == null ? MarshallingContext.DEFAULT_SESSION : p.getMarshallingContext().getSession());
 		parse(in, p);
 	}
 
@@ -594,7 +594,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		"unchecked" // Type erasure requires unchecked casts
 	})
 	public <T> T cast(Class<T> type) {
-		BeanSession bs = bs();
+		MarshallingSession bs = bs();
 		ClassMeta<?> c2 = bs.getClassMeta(type);
 		String typePropertyName = bs.getBeanTypePropertyName(c2);
 		ClassMeta<?> c1 = bs.getBeanRegistry().getClassMeta((String)get(typePropertyName));
@@ -617,7 +617,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		"unchecked" // Type erasure requires cast for ClassMeta<T>
 	})
 	public <T> T cast(ClassMeta<T> cm) {
-		BeanSession bs = bs();
+		MarshallingSession bs = bs();
 		var c1 = bs.getBeanRegistry().getClassMeta((String)get(bs.getBeanTypePropertyName(cm)));
 		var c = narrowClassMeta(c1, cm);
 		return (T)cast2(c);
@@ -806,7 +806,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * Casts or converts the value to the specified class type.
 	 *
 	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * See {@link MarshallingSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param type The class type to convert the value to.
 	 * @param <T> The class type to convert the value to.
@@ -978,7 +978,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * </p>
 	 *
 	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * See {@link MarshallingSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param key The key.
 	 * @param <T> The class type returned.
@@ -1025,7 +1025,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
 	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * See {@link MarshallingSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
@@ -1092,11 +1092,11 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Returns the {@link BeanSession} currently associated with this map.
+	 * Returns the {@link MarshallingSession} currently associated with this map.
 	 *
-	 * @return The {@link BeanSession} currently associated with this map.
+	 * @return The {@link MarshallingSession} currently associated with this map.
 	 */
-	public BeanSession getBeanSession() { return session; }
+	public MarshallingSession getMarshallingSession() { return session; }
 
 	/**
 	 * Returns the specified entry value converted to a {@link Boolean}.
@@ -1773,7 +1773,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * Override the default bean session used for converting POJOs.
 	 *
 	 * <p>
-	 * Default is {@link BeanContext#DEFAULT}, which is sufficient in most cases.
+	 * Default is {@link MarshallingContext#DEFAULT}, which is sufficient in most cases.
 	 *
 	 * <p>
 	 * Useful if you're serializing/parsing beans with transforms defined.
@@ -1781,18 +1781,18 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @param session The new bean session.
 	 * @return This object.
 	 */
-	public JsonMap session(BeanSession session) {
+	public JsonMap session(MarshallingSession session) {
 		this.session = session;
 		return this;
 	}
 
 	/**
-	 * Sets the {@link BeanSession} currently associated with this map.
+	 * Sets the {@link MarshallingSession} currently associated with this map.
 	 *
-	 * @param value The {@link BeanSession} currently associated with this map.
+	 * @param value The {@link MarshallingSession} currently associated with this map.
 	 * @return This object.
 	 */
-	public JsonMap setBeanSession(BeanSession value) {
+	public JsonMap setBeanSession(MarshallingSession value) {
 		session = value;
 		return this;
 	}
@@ -1827,9 +1827,9 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		return this;
 	}
 
-	private BeanSession bs() {
+	private MarshallingSession bs() {
 		if (session == null)
-			session = BeanContext.DEFAULT_SESSION;
+			session = MarshallingContext.DEFAULT_SESSION;
 		return session;
 	}
 
@@ -1843,7 +1843,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	})
 	private <T> T cast2(ClassMeta<T> cm) {
 
-		BeanSession bs = bs();
+		MarshallingSession bs = bs();
 		try {
 			Object value = get("value");
 

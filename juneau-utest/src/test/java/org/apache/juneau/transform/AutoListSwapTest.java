@@ -42,15 +42,15 @@ class AutoListSwapTest extends TestBase {
 	private static final JsonList JSONLIST = JsonList.ofJsonOrCdl("foo");
 
 	private static ObjectSwap find(Class<?> c) {
-		return AutoListSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));
+		return AutoListSwap.find(MarshallingContext.DEFAULT, ClassInfo.of(c));
 	}
 
-	private static ObjectSwap find(BeanContext bc, Class<?> c) {
+	private static ObjectSwap find(MarshallingContext bc, Class<?> c) {
 		return AutoListSwap.find(bc, ClassInfo.of(c));
 	}
 
-	private static BeanContext bc(Class<?> applyAnnotations) {
-		return BeanContext.DEFAULT.copy().applyAnnotations(applyAnnotations).build();
+	private static MarshallingContext bc(Class<?> applyAnnotations) {
+		return MarshallingContext.DEFAULT.copy().applyAnnotations(applyAnnotations).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -263,7 +263,7 @@ class AutoListSwapTest extends TestBase {
 	}
 
 	@Test void e01c_ignoreSwapMethod_beanIgnore_usingConfig() {
-		assertNull(find(BeanContext.DEFAULT.copy().applyAnnotations(E01Config.class).build(), E01c.class));
+		assertNull(find(MarshallingContext.DEFAULT.copy().applyAnnotations(E01Config.class).build(), E01c.class));
 	}
 
 	@Test void e02_ignoreSwapMethod_deprecated() {

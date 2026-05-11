@@ -41,7 +41,7 @@ public class MatchResultSwap extends ObjectSwap<MatchResult,List<String>> {
 	 * Converts the specified {@link Enumeration} to a {@link List}.
 	 */
 	@Override /* Overridden from ObjectSwap */
-	public List<String> swap(BeanSession session, MatchResult o) {
+	public List<String> swap(MarshallingSession session, MatchResult o) {
 		List<String> l = listOfSize(o.groupCount());
 		for (var i = 0; i <= o.groupCount(); i++)
 			l.add(o.group(i));

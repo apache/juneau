@@ -11,13 +11,13 @@ the opt-out.  Also fully removed the deprecated `sortProperties`-flavored API an
 
 ## Phase 1 — Default flip and new API
 
-- Inverted the internal `sortProperties` flag in `BeanContext`, `BeanFilter`, `BeanSession`,
+- Inverted the internal `sortProperties` flag in `MarshallingContext`, `BeanFilter`, `MarshallingSession`,
   and `BeanMeta` so sorted is now the default and unsorted is the opt-in.
 - Added `@Bean(unsorted)` annotation attribute (replaces `@Bean(sort)`).
-- Added `BeanContext.Builder.unsortedProperties()` and `unsortedProperties(Class<?>...on)`.
-- Added `BeanContextable.Builder.unsortedProperties()` and `unsortedProperties(Class<?>...on)`.
+- Added `MarshallingContext.Builder.unsortedProperties()` and `unsortedProperties(Class<?>...on)`.
+- Added `MarshallingContextable.Builder.unsortedProperties()` and `unsortedProperties(Class<?>...on)`.
 - Added `BeanFilter.Builder.unsortedProperties()` and `BeanFilter.isUnsortedProperties()`.
-- Added `BeanSession.isUnsortedProperties()`.
+- Added `MarshallingSession.isUnsortedProperties()`.
 - Deprecated the old `sortProperties*` / `isSortProperties()` family with `@Deprecated(forRemoval=true)`.
 
 ## Phase 2 — Serializer/parser builder overrides
@@ -44,18 +44,18 @@ Removed the corresponding `sortProperties()` overrides from those same builders.
   `Object.sort()` override from `BeanAnnotation.java`.
 - Removed the `else if (x.sort()) unsortedProperties(false)` branch from `BeanFilter.Builder`.
 
-### `sortProperties` methods on `BeanContext.Builder`
+### `sortProperties` methods on `MarshallingContext.Builder`
 - Removed `sortProperties()`, `sortProperties(boolean)`, `sortProperties(Class<?>...on)`.
 - Removed `isSortProperties()` deprecated getter.
 
-### `sortProperties` methods on `BeanContextable.Builder`
+### `sortProperties` methods on `MarshallingContextable.Builder`
 - Removed `sortProperties()` and `sortProperties(Class<?>...on)`.
 
 ### `sortProperties` methods on `BeanFilter.Builder`
 - Removed `sortProperties()` and `sortProperties(boolean)`.
 - Removed `BeanFilter.isSortProperties()`.
 
-### `isSortProperties()` on `BeanSession` and `BeanMeta`
+### `isSortProperties()` on `MarshallingSession` and `BeanMeta`
 - Removed the deprecated `isSortProperties()` getters.
 
 ### Serializer/parser builder `sortProperties()` overrides

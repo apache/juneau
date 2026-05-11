@@ -52,7 +52,7 @@ public class RrpcRestOpContext extends RestOpContext {
 	public RrpcRestOpContext(Method method, RestContext context) throws ServletException {
 		super(method, context);
 
-		var interfaceClass = getBeanContext().getClassMeta(getJavaMethod().getGenericReturnType());
+		var interfaceClass = getMarshallingContext().getClassMeta(getJavaMethod().getGenericReturnType());
 		meta = new RrpcInterfaceMeta(interfaceClass.inner(), null);
 		if (meta.getMethodsByPath().isEmpty())
 			throw new InternalServerError("Method {0} returns an interface {1} that doesn't define any remote methods.", getJavaMethod().getName(), interfaceClass.getNameFull());

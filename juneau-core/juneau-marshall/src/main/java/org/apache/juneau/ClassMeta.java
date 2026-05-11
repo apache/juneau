@@ -49,10 +49,10 @@ import org.apache.juneau.swap.*;
  * A wrapper class around the {@link Class} object that provides cached information about that class.
  *
  * <p>
- * Instances of this class can be created through the {@link BeanContext#getClassMeta(Class)} method.
+ * Instances of this class can be created through the {@link MarshallingContext#getClassMeta(Class)} method.
  *
  * <p>
- * The {@link BeanContext} class will cache and reuse instances of this class except for the following class types:
+ * The {@link MarshallingContext} class will cache and reuse instances of this class except for the following class types:
  * <ul>
  * 	<li>Arrays
  * 	<li>Maps with non-Object key/values.
@@ -60,7 +60,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  *
  * <p>
- * This class is tied to the {@link BeanContext} class because it's that class that makes the determination of what is
+ * This class is tied to the {@link MarshallingContext} class because it's that class that makes the determination of what is
  * a bean.
  *
  *
@@ -138,7 +138,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	private final List<ClassMeta<?>> args;                                     // Arg types if this is an array of args.
-	private final BeanContext beanContext;                                     // The bean context that created this object.
+	private final MarshallingContext marshallingContext;                                     // The bean context that created this object.
 	private final Supplier<BuilderSwap<T,?>> builderSwap;                      // The builder swap associated with this bean (if it has one).
 	private final Categories cat;                                              // The class category.
 	private final Cache<Class<?>,ObjectSwap<?,?>> childSwapMap;                // Maps normal subclasses to ObjectSwaps.
@@ -172,7 +172,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.
 	 *
 	 * @param innerClass The class being wrapped.
-	 * @param beanContext The bean context that created this object.
+	 * @param marshallingContext The bean context that created this object.
 	 * @param delayedInit
 	 * 	Don't call init() in constructor.
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
@@ -180,16 +180,16 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for ClassMeta initialization with category detection
 	})
-	ClassMeta(Class<T> innerClass, BeanContext beanContext) {
+	ClassMeta(Class<T> innerClass, MarshallingContext marshallingContext) {
 		super(innerClass);
-		this.beanContext = beanContext;
+		this.marshallingContext = marshallingContext;
 		this.cat = new Categories();
 
 		// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
-		if (nn(beanContext) && nn(beanContext.getCmCache()) && isCacheable(innerClass))
-			beanContext.getCmCache().put(innerClass, this);
+		if (nn(marshallingContext) && nn(marshallingContext.getCmCache()) && isCacheable(innerClass))
+			marshallingContext.getCmCache().put(innerClass, this);
 
-		var ap = beanContext.getAnnotationProvider();
+		var ap = marshallingContext.getAnnotationProvider();
 
 		if (isAssignableTo(Delegate.class)) {
 			cat.set(DELEGATE);
@@ -294,7 +294,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.childSwapMap = null;
 		this.childUnswapMap = null;
 		this.cat = new Categories().set(ARGS);
-		this.beanContext = null;
+		this.marshallingContext = null;
 		this.elementType = memoize(this::findElementType);
 		this.keyValueTypes = memoize(this::findKeyValueTypes);
 		this.beanMeta = memoize(this::findBeanMeta);
@@ -329,7 +329,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.childUnswapMap = mainType.childUnswapMap;
 		this.cat = mainType.cat;
 		this.fromStringMethod = mainType.fromStringMethod;
-		this.beanContext = mainType.beanContext;
+		this.marshallingContext = mainType.marshallingContext;
 		this.elementType = elementType != null ? memoize(()->elementType) : mainType.elementType;
 		this.keyValueTypes = (keyType != null || valueType != null) ? memoize(()->new KeyValueTypes(keyType, valueType)) : mainType.keyValueTypes;
 		this.beanMeta = mainType.beanMeta;
@@ -437,8 +437,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @return This object.
 	 */
 	public <A extends Annotation> ClassMeta<T> forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		if (beanContext != null) {
-			beanContext.getAnnotationProvider().find(type, this).stream().map(AnnotationInfo::inner).filter(x -> filter == null || filter.test(x)).forEach(action::accept);
+		if (marshallingContext != null) {
+			marshallingContext.getAnnotationProvider().find(type, this).stream().map(AnnotationInfo::inner).filter(x -> filter == null || filter.test(x)).forEach(action::accept);
 		}
 		return this;
 	}
@@ -464,11 +464,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public List<ClassMeta<?>> getArgs() { return args; }
 
 	/**
-	 * Returns the {@link BeanContext} that created this object.
+	 * Returns the {@link MarshallingContext} that created this object.
 	 *
 	 * @return The bean context.
 	 */
-	public BeanContext getBeanContext() { return beanContext; }
+	public MarshallingContext getMarshallingContext() { return marshallingContext; }
 
 	/**
 	 * Returns the {@link BeanMeta} associated with this class.
@@ -504,7 +504,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * @param session The current bean session.
 	 * @return The builder swap associated with this class, or <jk>null</jk> if it doesn't exist.
 	 */
-	public BuilderSwap<T,?> getBuilderSwap(BeanSession session) {
+	public BuilderSwap<T,?> getBuilderSwap(MarshallingSession session) {
 		return builderSwap.get();
 	}
 
@@ -543,7 +543,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		"unchecked", // Type erasure requires unchecked casts
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 	})
-	public T getExample(BeanSession session, JsonParserSession jpSession) {
+	public T getExample(MarshallingSession session, JsonParserSession jpSession) {
 		try {
 			if (example.isPresent())
 				return jpSession.parse(example.get(), this);
@@ -725,7 +725,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	<br>Required because the swap used may depend on the media type being serialized or parsed.
 	 * @return The serialized class type, or this object if no swap is associated with the class.
 	 */
-	public ClassMeta<?> getSerializedClassMeta(BeanSession session) {
+	public ClassMeta<?> getSerializedClassMeta(MarshallingSession session) {
 		var ps = getSwap(session);
 		return (ps == null ? this : ps.getSwapClassMeta(session));
 	}
@@ -742,7 +742,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * 	The {@link ObjectSwap} associated with this class, or <jk>null</jk> if there are no POJO swaps associated with
 	 * 	this class.
 	 */
-	public ObjectSwap<T,?> getSwap(BeanSession session) {
+	public ObjectSwap<T,?> getSwap(MarshallingSession session) {
 		var swapsList = swaps.get();
 		if (! swapsList.isEmpty()) {
 			var matchQuant = 0;
@@ -862,11 +862,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		// Exclude strict supertype: if this type is already a strict supertype of c, it's assignability only.
 		if (inner().isAssignableFrom(c))
 			return false;
-		// Exclude array→array: BeanSession handles those directly; BasicConverter infers
+		// Exclude array→array: MarshallingSession handles those directly; BasicConverter infers
 		// array conversions from element types, which can produce false positives here.
 		if (inner().isArray() && c.isArray())
 			return false;
-		// Exclude Collections and Maps — BeanSession handles collection/map conversion directly.
+		// Exclude Collections and Maps — MarshallingSession handles collection/map conversion directly.
 		// BasicConverter's generic conversions produce false positives that Mutaters never did.
 		if (Collection.class.isAssignableFrom(inner()) || Map.class.isAssignableFrom(inner()))
 			return false;
@@ -900,11 +900,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		// Exclude strict supertype: if the target is already a strict supertype of this type, it's assignability only.
 		if (c.isAssignableFrom(inner()))
 			return false;
-		// Exclude array→array: BeanSession handles those directly; BasicConverter infers
+		// Exclude array→array: MarshallingSession handles those directly; BasicConverter infers
 		// array conversions from element types, which can produce false positives here.
 		if (inner().isArray() && c.isArray())
 			return false;
-		// Exclude Collection/Map targets — BeanSession handles collection/map conversion directly.
+		// Exclude Collection/Map targets — MarshallingSession handles collection/map conversion directly.
 		// BasicConverter's generic conversions produce false positives that Mutaters never did.
 		if (Collection.class.isAssignableFrom(c) || Map.class.isAssignableFrom(c))
 			return false;
@@ -944,7 +944,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	 * <p>
 	 * Delegates to {@link #hasMutaterFrom(Class)} with {@link String} as the source type, which applies the
 	 * same exclusions: supertypes of {@link String} (e.g. {@link Object}), arrays, and {@link Collection}/{@link Map}
-	 * targets are excluded because those are handled by parsers or {@code BeanSession}, not explicit string transforms.
+	 * targets are excluded because those are handled by parsers or {@code MarshallingSession}, not explicit string transforms.
 	 *
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from a String.
 	 */
@@ -1348,7 +1348,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 		if (isEnum()) {
 			var t = (T)enumValues.get().getKey(arg);
-			if (t == null && ! beanContext.isIgnoreUnknownEnumValues())
+			if (t == null && ! marshallingContext.isIgnoreUnknownEnumValues())
 				throw new ExecutableException("Could not resolve enum value ''{0}'' on class ''{1}''", arg, cn(inner()));
 			return t;
 		}
@@ -1401,7 +1401,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	public String toString(Object t) {
 		if (t == null)
 			return null;
-		if (isEnum() && beanContext.isUseEnumNames())
+		if (isEnum() && marshallingContext.isUseEnumNames())
 			return ((Enum<?>)t).name();
 		return t.toString();
 	}
@@ -1425,7 +1425,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		}
 
 		if (ci.isAssignableTo(Surrogate.class)) {
-			List<SurrogateSwap<?,?>> l = SurrogateSwap.findObjectSwaps(c, beanContext);
+			List<SurrogateSwap<?,?>> l = SurrogateSwap.findObjectSwaps(c, marshallingContext);
 			return first(l).map(x -> (ObjectSwap<T,?>)x).orElse(null);
 		}
 
@@ -1433,7 +1433,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	private String findBeanDictionaryName() {
-		if (beanContext == null)
+		if (marshallingContext == null)
 			return null;
 
 		var d = beanMeta.get().optBeanMeta().map(x -> x.getDictionaryName()).orElse(null);
@@ -1442,7 +1442,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 		// Note that @Marshalled(typeName) can be defined on non-bean types, so
 		// we have to check again.
-		return beanContext.getAnnotationProvider().find(Marshalled.class, this)
+		return marshallingContext.getAnnotationProvider().find(Marshalled.class, this)
 			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> ! x.typeName().isEmpty())
@@ -1460,26 +1460,26 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private KeyValueTypes findKeyValueTypes() {
 		if (cat.is(MAP) && ! cat.is(BEANMAP)) {
 			// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
-			var typeParams = beanContext.findParameters(inner(), inner());
+			var typeParams = marshallingContext.findParameters(inner(), inner());
 			if (nn(typeParams) && typeParams.length == 2) {
 				return new KeyValueTypes(typeParams[0], typeParams[1]);
 			}
-			return new KeyValueTypes(beanContext.getClassMeta(Object.class), beanContext.getClassMeta(Object.class));
+			return new KeyValueTypes(marshallingContext.getClassMeta(Object.class), marshallingContext.getClassMeta(Object.class));
 		}
 		return new KeyValueTypes(null, null);
 	}
 
 	private ClassMeta<?> findElementType() {
-		if (beanContext == null)
+		if (marshallingContext == null)
 			return null;
 		if (cat.is(ARRAY)) {
-			return beanContext.getClassMeta(inner().getComponentType());
+			return marshallingContext.getClassMeta(inner().getComponentType());
 		} else if (cat.is(COLLECTION) || cat.is(ITERABLE) || cat.is(ITERATOR) || cat.is(STREAM) || is(Optional.class)) {
-			var typeParams = beanContext.findParameters(inner(), inner());
+			var typeParams = marshallingContext.findParameters(inner(), inner());
 			if (nn(typeParams) && typeParams.length == 1) {
 				return typeParams[0];
 			}
-			return beanContext.getClassMeta(Object.class);
+			return marshallingContext.getClassMeta(Object.class);
 		}
 		return null;
 	}
@@ -1488,7 +1488,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		"unchecked" // Type erasure requires cast for BuilderSwap<T,?>
 	})
 	private BuilderSwap<T,?> findBuilderSwap() {
-		var bc = beanContext;
+		var bc = marshallingContext;
 		if (bc == null)
 			return null;
 		return (BuilderSwap<T,?>)BuilderSwap.findSwapFromObjectClass(bc, inner(), bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
@@ -1499,11 +1499,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		"java:S3776"   // Cognitive complexity acceptable for swap resolution logic
 	})
 	private List<ObjectSwap<T,?>> findSwaps() {
-		if (beanContext == null)
+		if (marshallingContext == null)
 			return l();
 
 		var list = new ArrayList<ObjectSwap<T,?>>();
-		var swapArray = beanContext.getSwaps();
+		var swapArray = marshallingContext.getSwaps();
 		if (! swapArray.isEmpty()) {
 			var innerClass = inner();
 			for (var f : swapArray)
@@ -1511,7 +1511,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 					list.add((ObjectSwap<T,?>)f);
 		}
 
-		var ap = beanContext.getAnnotationProvider();
+		var ap = marshallingContext.getAnnotationProvider();
 		ap.find(Swap.class, this).stream().map(AnnotationInfo::inner).forEach(x -> list.add(createSwap(x)));
 
 		// @Marshalled(as=STRING) installs an AutoStringSwap before any auto-detection.
@@ -1526,19 +1526,19 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		// and the serializer correctly emits "null" when swap() returns null.
 		if (list.isEmpty() && ap.has(MarshalledIgnore.class, this))
 			list.add(new ObjectSwap<T,String>(inner(), String.class) {
-				@Override public String swap(BeanSession session, T o) { return null; }
-				@Override public T unswap(BeanSession session, String s, ClassMeta<?> hint) { return null; }
+				@Override public String swap(MarshallingSession session, T o) { return null; }
+				@Override public T unswap(MarshallingSession session, String s, ClassMeta<?> hint) { return null; }
 			});
 
 		var ds = DefaultSwaps.find(this);
 		if (ds == null && !isStreamable()) {
-			ds = AutoObjectSwap.find(beanContext, this);
+			ds = AutoObjectSwap.find(marshallingContext, this);
 		if (ds == null)
-			ds = AutoNumberSwap.find(beanContext, this);
+			ds = AutoNumberSwap.find(marshallingContext, this);
 		if (ds == null)
-			ds = AutoMapSwap.find(beanContext, this);
+			ds = AutoMapSwap.find(marshallingContext, this);
 		if (ds == null)
-			ds = AutoListSwap.find(beanContext, this);
+			ds = AutoListSwap.find(marshallingContext, this);
 		}
 
 		if (nn(ds))
@@ -1548,9 +1548,9 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	private List<ObjectSwap<?,?>> findChildSwaps() {
-		if (beanContext == null)
+		if (marshallingContext == null)
 			return l();
-		var swapArray = beanContext.getSwaps();
+		var swapArray = marshallingContext.getSwaps();
 		if (swapArray.isEmpty())
 			return l();
 		var list = new ArrayList<ObjectSwap<?,?>>();
@@ -1565,7 +1565,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (! isEnum())
 			return BidiMap.<Object,String>create().unmodifiable().build();
 
-		var bc = beanContext;
+		var bc = marshallingContext;
 		var useEnumNames = nn(bc) && bc.isUseEnumNames();
 
 		var m = BidiMap.<Object,String>create().unmodifiable();
@@ -1580,8 +1580,8 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		if (ex == null)
 			ex = marshalledFilter.map(x -> x.getExample()).orElse(null);
 
-		if (ex == null && nn(beanContext))
-			ex = beanContext.getAnnotationProvider().find(Example.class, this).stream().map(x -> x.inner().value()).filter(Utils::ne).findFirst().orElse(null);
+		if (ex == null && nn(marshallingContext))
+			ex = marshallingContext.getAnnotationProvider().find(Example.class, this).stream().map(x -> x.inner().value()).filter(Utils::ne).findFirst().orElse(null);
 
 		if (ex == null) {
 			if (isAny(boolean.class, Boolean.class)) {
@@ -1592,7 +1592,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 				ex = "foo";
 			} else if (cat.is(ENUM)) {
 				Optional<Enum<?>> e = first(EnumSet.allOf(asEnumClass(inner())));
-				ex = e.map(x -> beanContext.isUseEnumNames() ? x.name() : x.toString()).orElse(null);
+				ex = e.map(x -> marshallingContext.isUseEnumNames() ? x.name() : x.toString()).orElse(null);
 			} else if (isAny(float.class, Float.class, double.class, Double.class)) {
 				ex = "1.0";
 			} else if (isAny(short.class, Short.class, int.class, Integer.class, long.class, Long.class)) {
@@ -1604,7 +1604,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	private FieldInfo findExampleField() {
-		var ap = beanContext.getAnnotationProvider();
+		var ap = marshallingContext.getAnnotationProvider();
 
 		return getDeclaredFields()
 			.stream()
@@ -1616,11 +1616,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 	private MethodInfo findExampleMethod() {
 		// @formatter:off
-		var ap = beanContext.getAnnotationProvider();
+		var ap = marshallingContext.getAnnotationProvider();
 
 		// Option 1:  Public example() or @Example method.
 		var m = getPublicMethod(
-			x -> x.isStatic() && x.isNotDeprecated() && (x.hasName("example") || ap.has(Example.class, x)) && x.hasParameterTypesLenient(BeanSession.class)
+			x -> x.isStatic() && x.isNotDeprecated() && (x.hasName("example") || ap.has(Example.class, x)) && x.hasParameterTypesLenient(MarshallingSession.class)
 		);
 		if (m.isPresent()) return m.get();
 
@@ -1668,7 +1668,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	}
 
 	private MarshalledFilter findMarshalledFilter() {
-		var ap = beanContext.getAnnotationProvider();
+		var ap = marshallingContext.getAnnotationProvider();
 		var l = ap.find(Marshalled.class, this);
 		if (l.isEmpty())
 			return null;
@@ -1679,7 +1679,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		"java:S3776" // Cognitive complexity acceptable for name property detection with annotation traversal
 	})
 	private Property<T,Object> findNameProperty() {
-		var ap = beanContext.getAnnotationProvider();
+		var ap = marshallingContext.getAnnotationProvider();
 
 		var s = getAllFields()
 			.stream()
@@ -1774,7 +1774,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		"java:S3776" // Cognitive complexity acceptable for parent property detection with annotation traversal
 	})
 	private Property<T,Object> findParentProperty() {
-		var ap = beanContext.getAnnotationProvider();
+		var ap = marshallingContext.getAnnotationProvider();
 
 		var s = getAllFields()
 			.stream()

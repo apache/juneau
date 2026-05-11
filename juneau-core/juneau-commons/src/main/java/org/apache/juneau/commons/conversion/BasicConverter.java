@@ -30,7 +30,7 @@ import org.apache.juneau.commons.reflect.*;
 
 /**
  * A concrete {@link CachingConverter} that supports common type conversions without
- * requiring a {@code BeanContext} or {@code BeanSession}.
+ * requiring a {@code MarshallingContext} or {@code MarshallingSession}.
  *
  * <p>
  * The following conversions are supported:

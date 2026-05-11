@@ -114,11 +114,11 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
 
     * Session.Builder.property(String, Object) and properties(Map) now dispatch to typed
       session-level setter methods, enabling per-request override of serializer/parser configuration.
-    * Both short names (e.g., "locale") and fully-qualified names (e.g., "BeanSession.locale") are
+    * Both short names (e.g., "locale") and fully-qualified names (e.g., "MarshallingSession.locale") are
       accepted as property keys.
     * New properties exposed as session-level overrides:
         - ParserSession: trimStrings
-        - BeanTraverseSession: initialDepth
+        - MarshallingTraverseSession: initialDepth
         - SerializerSession: keepNullProperties, trimStrings, addBeanTypes, addRootType,
           sortCollections, sortMaps, trimEmptyCollections, trimEmptyMaps
         - WriterSerializerSession: maxIndent, quoteChar
@@ -167,7 +167,7 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
       JSON5 syntax (single quotes, trailing commas, comments, etc.).
     * JsonSerializer.json5() and JsonParser.Strict have been removed. Use Json5Serializer
       and Json5Parser directly for JSON5 support.
-    * BeanContext.beanToStringSerializer now uses Json5Serializer for toString() output
+    * MarshallingContext.beanToStringSerializer now uses Json5Serializer for toString() output
       (more human-readable with single quotes).
     * ComboRoundTripTest framework now distinguishes json vs json5; use json()/json5()
       builder methods on ComboRoundTrip_Tester accordingly.
@@ -204,13 +204,13 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
     * Default date/time swaps removed from DefaultSwaps; existing swap classes
       (TemporalCalendarSwap, TemporalDateSwap, CalendarSwap, DateSwap, TemporalSwap)
       remain available as override mechanisms for customizing output format.
-    * BeanSession.convertToMemberType() and SerializerSession.toString() updated to
+    * MarshallingSession.convertToMemberType() and SerializerSession.toString() updated to
       use ISO 8601 formatting for date/time/Duration types.
     * All parser sessions updated with date/time/Duration dispatch in parseAnything().
 
 ** New Features - Converter Framework (juneau-commons)
 
-    * New org.apache.juneau.commons.conversion package providing a lightweight, BeanContext-free
+    * New org.apache.juneau.commons.conversion package providing a lightweight, MarshallingContext-free
       type conversion framework:
 
     * Converter interface:
@@ -231,7 +231,7 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
 
     * BasicConverter class:
         - Concrete CachingConverter with a thread-safe BasicConverter.INSTANCE singleton.
-        - Supports a wide range of common conversions without requiring BeanContext/BeanSession:
+        - Supports a wide range of common conversions without requiring MarshallingContext/MarshallingSession:
             - Identity / widening cast (any type to same or supertype).
             - Numeric narrowing/widening: Number to Integer, Long, Short, Float, Double, Byte,
               AtomicInteger, AtomicLong, and primitive equivalents.
@@ -259,8 +259,8 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
         - Message format: "Cannot convert <inType> to <outType>".
         - Callers can pre-check with canConvert() to avoid the exception.
 
-    * BeanContextConverter (renamed from GenericConverter) in org.apache.juneau.utils:
-        - Implements Converter and delegates to the default BeanContext session for type conversion.
+    * MarshallingContextConverter (renamed from GenericConverter) in org.apache.juneau.utils:
+        - Implements Converter and delegates to the default MarshallingContext session for type conversion.
         - Provides access to the full Juneau framework conversion logic including bean mapping.
 
 ** New Features - Large-Dataset Streaming APIs (BeanSupplier / BeanConsumer / BeanChannel)
@@ -311,7 +311,7 @@ Release Notes - Juneau - Version 9.2.1 - YYYY-MM-DD
     * BeanFactory<T> (juneau-commons) - universal @FunctionalInterface for creating instances of any
       type T; BeanFactory.Void is a sentinel class for annotation defaults.
 
-    * BeanContext.Builder.beanStore(BeanStore) - new builder method for injecting a BeanStore (e.g.
+    * MarshallingContext.Builder.beanStore(BeanStore) - new builder method for injecting a BeanStore (e.g.
       SpringBeanStore) for factory resolution during bean creation.
 
 Release Notes - Juneau - Version 9.2.0 - 2025-12-30
@@ -486,7 +486,7 @@ Release Notes - Juneau - Version 8.2.0 - 2020-10-01
     * [JUNEAU-208] - Version 7.2.2 is missing from https://juneau.apache.org/#whatsnew.html
     * [JUNEAU-227] - BEAN_methodVisibility and BEAN_constructorVisibility doesn't affect swap methods.
     * [JUNEAU-228] - Make it easier to create bean filters programmatically.
-    * [JUNEAU-235] - New BeanInterceptor API for intercepting calls to getters/setters.
+    * [JUNEAU-235] - New MarshallingInterceptor API for intercepting calls to getters/setters.
     * [JUNEAU-236] - BEAN_addRootType doesn't work without BEAN_addBeanTypes
     * [JUNEAU-240] - RestContext should be subclassible.
     

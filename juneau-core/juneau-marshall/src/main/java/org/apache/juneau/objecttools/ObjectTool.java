@@ -37,5 +37,5 @@ public interface ObjectTool<T> {
 	 * @param args The arguments.
 	 * @return The output POJO.
 	 */
-	Object run(BeanSession session, Object input, T args);
+	Object run(MarshallingSession session, Object input, T args);
 }

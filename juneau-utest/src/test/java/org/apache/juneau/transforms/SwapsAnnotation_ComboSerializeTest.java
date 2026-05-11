@@ -506,43 +506,43 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 
 	public static class SwapJson extends ObjectSwap<Object,Object> {
 		@Override
-		public Object swap(BeanSession session, Object o) throws Exception {
+		public Object swap(MarshallingSession session, Object o) throws Exception {
 			return "JSON";
 		}
 	}
 	public static class SwapXml extends ObjectSwap<Object,Object> {
 		@Override
-		public Object swap(BeanSession session, Object o) throws Exception {
+		public Object swap(MarshallingSession session, Object o) throws Exception {
 			return "XML";
 		}
 	}
 	public static class SwapHtml extends ObjectSwap<Object,Object> {
 		@Override
-		public Object swap(BeanSession session, Object o) throws Exception {
+		public Object swap(MarshallingSession session, Object o) throws Exception {
 			return "HTML";
 		}
 	}
 	public static class SwapUon extends ObjectSwap<Object,Object> {
 		@Override
-		public Object swap(BeanSession session, Object o) throws Exception {
+		public Object swap(MarshallingSession session, Object o) throws Exception {
 			return "UON";
 		}
 	}
 	public static class SwapUrlEncoding extends ObjectSwap<Object,Object> {
 		@Override
-		public Object swap(BeanSession session, Object o) throws Exception {
+		public Object swap(MarshallingSession session, Object o) throws Exception {
 			return "URLENCODING";
 		}
 	}
 	public static class SwapMsgPack extends ObjectSwap<Object,Object> {
 		@Override
-		public Object swap(BeanSession session, Object o) throws Exception {
+		public Object swap(MarshallingSession session, Object o) throws Exception {
 			return "MSGPACK";
 		}
 	}
 	public static class SwapRdfXml extends ObjectSwap<Object,Object> {
 		@Override
-		public Object swap(BeanSession session, Object o) throws Exception {
+		public Object swap(MarshallingSession session, Object o) throws Exception {
 			return "RDFXML";
 		}
 	}
@@ -561,7 +561,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 
 	public static class TemplateSwap extends ObjectSwap<Object,Object> {
 		@Override
-		public Object swap(BeanSession session, Object o, String template) throws Exception {
+		public Object swap(MarshallingSession session, Object o, String template) throws Exception {
 			return reader(template);
 		}
 	}
@@ -650,7 +650,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 
 	public static class ContextSwap extends ObjectSwap<TestContextSwap,Object> {
 		@Override
-		public Object swap(BeanSession session, TestContextSwap o, String template) throws Exception {
+		public Object swap(MarshallingSession session, TestContextSwap o, String template) throws Exception {
 			return reader(template);
 		}
 		@Override
@@ -663,7 +663,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 
 	public static class ContextSwapJson extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
-		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+		public Object swap(MarshallingSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
 		}
 		@Override
@@ -677,7 +677,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	}
 	public static class ContextSwapXml extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
-		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+		public Object swap(MarshallingSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
 		}
 		@Override
@@ -691,7 +691,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	}
 	public static class ContextSwapHtml extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
-		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+		public Object swap(MarshallingSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
 		}
 		@Override
@@ -705,7 +705,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	}
 	public static class ContextSwapUon extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
-		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+		public Object swap(MarshallingSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
 		}
 		@Override
@@ -719,7 +719,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	}
 	public static class ContextSwapUrlEncoding extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
-		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+		public Object swap(MarshallingSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
 		}
 		@Override
@@ -733,7 +733,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	}
 	public static class ContextSwapMsgPack extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
-		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+		public Object swap(MarshallingSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
 		}
 		@Override
@@ -747,7 +747,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	}
 	public static class ContextSwapRdfXml extends ObjectSwap<TestContextSwaps,Object> {
 		@Override
-		public Object swap(BeanSession session, TestContextSwaps o, String template) throws Exception {
+		public Object swap(MarshallingSession session, TestContextSwaps o, String template) throws Exception {
 			return reader(template);
 		}
 		@Override
@@ -777,7 +777,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 
 	public static class BeanSwap extends ObjectSwap<Object,Object> {
 		@Override
-		public Object swap(BeanSession session, Object o, String template) throws Exception {
+		public Object swap(MarshallingSession session, Object o, String template) throws Exception {
 			return reader("SWAPPED");
 		}
 	}

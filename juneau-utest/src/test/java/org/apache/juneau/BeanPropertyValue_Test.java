@@ -28,7 +28,7 @@ class BeanPropertyValue_Test extends TestBase {
 		public boolean active;
 	}
 
-	BeanContext bc = BeanContext.DEFAULT;
+	MarshallingContext bc = MarshallingContext.DEFAULT;
 
 	//====================================================================================================
 	// compareTo() - Line 51 coverage

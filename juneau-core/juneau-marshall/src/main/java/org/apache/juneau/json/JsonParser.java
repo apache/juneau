@@ -63,7 +63,7 @@ import org.apache.juneau.parser.*;
  * 		JSON objects (<js>"{...}"</js>) are converted to {@link JsonMap JsonMaps}.
  * 		<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an
  * 		attempt is made to convert the object to an instance of the specified Java bean class.
- * 		See the {@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)} setting for more information about parsing
+ * 		See the {@link org.apache.juneau.MarshallingContext.Builder#typePropertyName(String)} setting for more information about parsing
  * 		beans from JSON.
  * 	<li>
  * 		JSON arrays (<js>"[...]"</js>) are converted to {@link JsonList JsonLists}.
@@ -220,14 +220,14 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext.Builder value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
@@ -244,7 +244,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.MarshallingInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}

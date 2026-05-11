@@ -30,7 +30,7 @@ public abstract class ComboRoundTripTest_Base extends TestBase {
 	 * Creates a ClassMeta for the given types.
 	 */
 	protected static final Type getType(Type type, Type...args) {
-		return BeanContext.DEFAULT_SESSION.getClassMeta(type, args);
+		return MarshallingContext.DEFAULT_SESSION.getClassMeta(type, args);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

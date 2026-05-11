@@ -116,13 +116,13 @@ public class ResolvingJsonMap extends JsonMap {
 	}
 
 	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap session(BeanSession session) {
+	public ResolvingJsonMap session(MarshallingSession session) {
 		super.session(session);
 		return this;
 	}
 
 	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap setBeanSession(BeanSession value) {
+	public ResolvingJsonMap setBeanSession(MarshallingSession value) {
 		super.setBeanSession(value);
 		return this;
 	}

@@ -47,12 +47,12 @@ class ObjectSwap_Test extends TestBase {
 
 	public static class ASwap extends StringSwap<String> {
 		@Override
-		public String swap(BeanSession session, String o) throws SerializeException {
+		public String swap(MarshallingSession session, String o) throws SerializeException {
 			return "x" + o + "x";
 		}
 
 		@Override
-		public String unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
+		public String unswap(MarshallingSession session, String f, ClassMeta<?> hint) throws ParseException {
 			return f.substring(1, f.length()-1);
 		}
 	}

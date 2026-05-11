@@ -295,7 +295,7 @@ public class IniSerializerSession extends WriterSerializerSession {
 	}
 
 	private JsonSerializer getJson5Serializer() {
-		var b = Json5Serializer.create().beanContext((BeanContext)getContext());
+		var b = Json5Serializer.create().marshallingContext((MarshallingContext)getContext());
 		if (isAddBeanTypes())
 			b.addBeanTypes();
 		if (isAddRootType())

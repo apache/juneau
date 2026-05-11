@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
 })
 class ClassMeta_Test extends TestBase {
 
-	BeanContext bc = BeanContext.DEFAULT;
+	MarshallingContext bc = MarshallingContext.DEFAULT;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -113,7 +113,7 @@ class ClassMeta_Test extends TestBase {
 
 	@Test void b01_swaps() {
 
-		var bc2 = BeanContext.DEFAULT;
+		var bc2 = MarshallingContext.DEFAULT;
 		var bs = bc2.getSession();
 		var ooo = bc2.getClassMeta(Object.class);
 		var hi1 = bc2.getClassMeta(BI1.class);
@@ -136,7 +136,7 @@ class ClassMeta_Test extends TestBase {
 		assertEquals(hi2.getSerializedClassMeta(bs).inner(), BI2.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).inner(), BC2.class);
 
-		bc2 = BeanContext.create().swaps(BI1Swap.class).build();
+		bc2 = MarshallingContext.create().swaps(BI1Swap.class).build();
 		bs = bc2.getSession();
 		ooo = bc2.getClassMeta(Object.class);
 		hi1 = bc2.getClassMeta(BI1.class);
@@ -159,7 +159,7 @@ class ClassMeta_Test extends TestBase {
 		assertEquals(hi2.getSerializedClassMeta(bs).inner(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).inner(), Map.class);
 
-		bc2 = BeanContext.create().swaps(BC1Swap.class).build();
+		bc2 = MarshallingContext.create().swaps(BC1Swap.class).build();
 		bs = bc2.getSession();
 		ooo = bc2.getClassMeta(Object.class);
 		hi1 = bc2.getClassMeta(BI1.class);
@@ -182,7 +182,7 @@ class ClassMeta_Test extends TestBase {
 		assertEquals(hi2.getSerializedClassMeta(bs).inner(), BI2.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).inner(), Map.class);
 
-		bc2 = BeanContext.create().swaps(BI2Swap.class).build();
+		bc2 = MarshallingContext.create().swaps(BI2Swap.class).build();
 		bs = bc2.getSession();
 		ooo = bc2.getClassMeta(Object.class);
 		hi1 = bc2.getClassMeta(BI1.class);
@@ -205,7 +205,7 @@ class ClassMeta_Test extends TestBase {
 		assertEquals(hi2.getSerializedClassMeta(bs).inner(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).inner(), Map.class);
 
-		bc2 = BeanContext.create().swaps(BC2Swap.class).build();
+		bc2 = MarshallingContext.create().swaps(BC2Swap.class).build();
 		bs = bc2.getSession();
 		ooo = bc2.getClassMeta(Object.class);
 		hi1 = bc2.getClassMeta(BI1.class);
@@ -228,7 +228,7 @@ class ClassMeta_Test extends TestBase {
 		assertEquals(hi2.getSerializedClassMeta(bs).inner(), BI2.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).inner(), Map.class);
 
-		bc2 = BeanContext.create().swaps(BI1Swap.class,BC1Swap.class,BI2Swap.class, BC2Swap.class).build();
+		bc2 = MarshallingContext.create().swaps(BI1Swap.class,BC1Swap.class,BI2Swap.class, BC2Swap.class).build();
 		bs = bc2.getSession();
 		ooo = bc2.getClassMeta(Object.class);
 		hi1 = bc2.getClassMeta(BI1.class);
@@ -251,7 +251,7 @@ class ClassMeta_Test extends TestBase {
 		assertEquals(hi2.getSerializedClassMeta(bs).inner(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).inner(), Map.class);
 
-		bc2 = BeanContext.create().swaps(BC2Swap.class,BI2Swap.class,BC1Swap.class, BI1Swap.class).build();
+		bc2 = MarshallingContext.create().swaps(BC2Swap.class,BI2Swap.class,BC1Swap.class, BI1Swap.class).build();
 		bs = bc2.getSession();
 		ooo = bc2.getClassMeta(Object.class);
 		hi1 = bc2.getClassMeta(BI1.class);

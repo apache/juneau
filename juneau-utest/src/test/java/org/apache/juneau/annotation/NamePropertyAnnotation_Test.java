@@ -56,8 +56,8 @@ class NamePropertyAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_testEquivalencyInPropertyStores() {
-		var bc1 = BeanContext.create().annotations(a1).build();
-		var bc2 = BeanContext.create().annotations(a2).build();
+		var bc1 = MarshallingContext.create().annotations(a1).build();
+		var bc2 = MarshallingContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
 	}
 
@@ -118,7 +118,7 @@ class NamePropertyAnnotation_Test extends TestBase {
 	}
 
 	@Test void e01_namePropertyField() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(TestBeanWithNamePropertyField.class);
 		var prop = cm.getNameProperty();
 		assertNotNull(prop, "NameProperty should be found");
@@ -132,7 +132,7 @@ class NamePropertyAnnotation_Test extends TestBase {
 	}
 
 	@Test void e02_namePropertyMethod() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(TestBeanWithNamePropertyMethod.class);
 		var prop = cm.getNameProperty();
 		assertNotNull(prop, "NameProperty should be found");
@@ -146,7 +146,7 @@ class NamePropertyAnnotation_Test extends TestBase {
 	}
 
 	@Test void e03_namePropertyNotFound() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(String.class);
 		var prop = cm.getNameProperty();
 		assertNull(prop, "NameProperty should not be found on String class");
@@ -171,7 +171,7 @@ class NamePropertyAnnotation_Test extends TestBase {
 	}
 
 	@Test void e04_namePropertyWithIntegerField() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(TestBeanWithNamePropertyIntegerField.class);
 		var prop = cm.getNameProperty();
 		assertNotNull(prop, "NameProperty should be found");
@@ -185,7 +185,7 @@ class NamePropertyAnnotation_Test extends TestBase {
 	}
 
 	@Test void e05_namePropertyWithIntegerMethod() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(TestBeanWithNamePropertyIntegerMethod.class);
 		var prop = cm.getNameProperty();
 		assertNotNull(prop, "NameProperty should be found");
@@ -208,7 +208,7 @@ class NamePropertyAnnotation_Test extends TestBase {
 	}
 
 	@Test void e06_readOnlyNameProperty() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(TestBeanWithReadOnlyNameProperty.class);
 		var prop = cm.getNameProperty();
 		assertNotNull(prop, "NameProperty should be found even if read-only");

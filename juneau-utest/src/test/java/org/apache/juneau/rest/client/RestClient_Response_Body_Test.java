@@ -341,7 +341,7 @@ class RestClient_Response_Body_Test extends TestBase {
 	}
 
 	private static <T> ClassMeta<T> cm(Class<T> t) {
-		 return BeanContext.DEFAULT.getClassMeta(t);
+		 return MarshallingContext.DEFAULT.getClassMeta(t);
 	}
 
 	private static InputStream badStream() {

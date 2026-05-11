@@ -66,7 +66,7 @@ class JsonMaps_RoundTripTest extends RoundTripTest_Base {
 			this.f1 = m.getString("f1");
 			this.f2 = m.getInt("f2");
 		}
-		public JsonMap swap(BeanSession session) {
+		public JsonMap swap(MarshallingSession session) {
 			return JsonMap.of("f1", f1, "f2", f2);
 		}
 	}

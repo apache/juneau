@@ -103,7 +103,7 @@ public class BuilderSwap<T,B> {
 		"java:S1172",   // Parameter kept to match ObjectSwap interface signature
 		"java:S1452"   // Wildcard required - BuilderSwap<?,?> for dynamically discovered builder types
 	})
-	public static BuilderSwap<?,?> findSwapFromObjectClass(BeanContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {
+	public static BuilderSwap<?,?> findSwapFromObjectClass(MarshallingContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {
 		var builderClass = Value.<Class<?>>empty();
 		MethodInfo objectCreateMethod;
 		MethodInfo builderCreateMethod;
@@ -225,7 +225,7 @@ public class BuilderSwap<T,B> {
 	 * @return A new object.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public T build(BeanSession session, B builder, ClassMeta<?> hint) throws ExecutableException {
+	public T build(MarshallingSession session, B builder, ClassMeta<?> hint) throws ExecutableException {
 		if (nn(createObjectMethod))
 			return (T)createObjectMethod.invoke(builder);
 		try {
@@ -243,7 +243,7 @@ public class BuilderSwap<T,B> {
 	 * @return A new object.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public B create(BeanSession session, ClassMeta<?> hint) throws ExecutableException {
+	public B create(MarshallingSession session, ClassMeta<?> hint) throws ExecutableException {
 		if (nn(createBuilderMethod))
 			return (B)createBuilderMethod.invoke(null);
 		try {
@@ -274,7 +274,7 @@ public class BuilderSwap<T,B> {
 	@SuppressWarnings({
 		"java:S1452"  // Wildcard required - ClassMeta<?> for builder class type
 	})
-	public ClassMeta<?> getBuilderClassMeta(BeanSession session) {
+	public ClassMeta<?> getBuilderClassMeta(MarshallingSession session) {
 		if (builderClassMeta == null)
 			builderClassMeta = session.getClassMeta(getBuilderClass());
 		return builderClassMeta;

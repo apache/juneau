@@ -43,15 +43,15 @@ class AutoMapSwapTest extends TestBase {
 	private static final JsonMap JSONMAP = JsonMap.of("foo","bar");
 
 	private static ObjectSwap find(Class<?> c) {
-		return AutoMapSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));
+		return AutoMapSwap.find(MarshallingContext.DEFAULT, ClassInfo.of(c));
 	}
 
-	private static ObjectSwap find(BeanContext bc, Class<?> c) {
+	private static ObjectSwap find(MarshallingContext bc, Class<?> c) {
 		return AutoMapSwap.find(bc, ClassInfo.of(c));
 	}
 
-	private static BeanContext bc(Class<?> applyAnnotations) {
-		return BeanContext.DEFAULT.copy().applyAnnotations(applyAnnotations).build();
+	private static MarshallingContext bc(Class<?> applyAnnotations) {
+		return MarshallingContext.DEFAULT.copy().applyAnnotations(applyAnnotations).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

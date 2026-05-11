@@ -97,7 +97,7 @@ public class RequestHttpPart {
 	 * @throws BasicHttpException If value could not be parsed.
 	 */
 	public <T> Optional<T> as(Class<T> type) throws BasicHttpException {
-		return as(request.getBeanSession().getClassMeta(type));
+		return as(request.getMarshallingSession().getClassMeta(type));
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class RequestHttpPart {
 	 * @throws BasicHttpException If value could not be parsed.
 	 */
 	public <T> Optional<T> as(Type type, Type...args) throws BasicHttpException {
-		return as(request.getBeanSession().getClassMeta(type, args));
+		return as(request.getMarshallingSession().getClassMeta(type, args));
 	}
 
 	/**

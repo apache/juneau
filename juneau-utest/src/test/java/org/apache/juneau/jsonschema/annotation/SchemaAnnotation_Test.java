@@ -160,8 +160,8 @@ class SchemaAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_testEquivalencyInPropertyStores() {
-		var bc1 = BeanContext.create().annotations(a1).build();
-		var bc2 = BeanContext.create().annotations(a2).build();
+		var bc1 = MarshallingContext.create().annotations(a1).build();
+		var bc2 = MarshallingContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
 	}
 
@@ -348,8 +348,8 @@ class SchemaAnnotation_Test extends TestBase {
 	}
 
 	@Test void e03_draft2020_testEquivalencyInPropertyStores() {
-		var bc1 = BeanContext.create().annotations(draft20201).build();
-		var bc2 = BeanContext.create().annotations(draft20202).build();
+		var bc1 = MarshallingContext.create().annotations(draft20201).build();
+		var bc2 = MarshallingContext.create().annotations(draft20202).build();
 		assertSame(bc1, bc2);
 	}
 

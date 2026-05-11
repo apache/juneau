@@ -29,13 +29,13 @@ class MarshalledFilter_Test extends TestBase {
 	// Interface bean filters
 	//====================================================================================================
 	@Test void a01_interfaceMarshalledFilters() {
-		var session = BeanContext.create().interfaces(A1.class).build().getSession();
+		var session = MarshallingContext.create().interfaces(A1.class).build().getSession();
 		var bm = session.newBeanMap(A3.class);
 		assertEquals("f1", bm.get("f1"));
 		assertNull(bm.get("f2"));
 		assertNull(bm.get("f3"));
 
-		session = BeanContext.create().interfaces(A2.class).build().getSession();
+		session = MarshallingContext.create().interfaces(A2.class).build().getSession();
 		bm = session.newBeanMap(A3.class);
 		assertEquals("f1", bm.get("f1"));
 		assertEquals("f2", bm.get("f2"));
@@ -60,13 +60,13 @@ class MarshalledFilter_Test extends TestBase {
 	// Abstract class bean filters
 	//====================================================================================================
 	@Test void a02_abstractClassMarshalledFilters() {
-		var session = BeanContext.create().interfaces(B1.class).build().getSession();
+		var session = MarshallingContext.create().interfaces(B1.class).build().getSession();
 		var bm = session.newBeanMap(Test2.class);
 		assertEquals("f1", bm.get("f1"));
 		assertNull(bm.get("f2"));
 		assertNull(bm.get("f3"));
 
-		session = BeanContext.create().interfaces(B2.class).build().getSession();
+		session = MarshallingContext.create().interfaces(B2.class).build().getSession();
 		bm = session.newBeanMap(Test2.class);
 		assertEquals("f1", bm.get("f1"));
 		assertEquals("f2", bm.get("f2"));

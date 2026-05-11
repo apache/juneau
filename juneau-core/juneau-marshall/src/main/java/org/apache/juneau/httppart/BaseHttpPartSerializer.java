@@ -36,7 +36,7 @@ import org.apache.juneau.serializer.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public abstract class BaseHttpPartSerializer extends BeanContextable implements HttpPartSerializer {
+public abstract class BaseHttpPartSerializer extends MarshallingContextable implements HttpPartSerializer {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_builder = "builder";
@@ -44,7 +44,7 @@ public abstract class BaseHttpPartSerializer extends BeanContextable implements 
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder extends BeanContextable.Builder {
+	public abstract static class Builder extends MarshallingContextable.Builder {
 
 		/**
 		 * Constructor.

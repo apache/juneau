@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
 class UonPartParser_Test extends TestBase {
 
 	private static UonParserSession p = UonParser.DEFAULT.getSession();
-	private static BeanSession bs = p;
+	private static MarshallingSession bs = p;
 
 	private static <T> T parse(String input, ClassMeta<T> type) throws SchemaValidationException, ParseException {
 		return p.parse((HttpPartType)null, (HttpPartSchema)null, input, type);
@@ -271,7 +271,7 @@ class UonPartParser_Test extends TestBase {
 
 	@Test void a04_parseParameterJsonMap() throws Exception {
 		var in = "(name='foo bar')";
-		var r = parse(in, BeanContext.DEFAULT.getClassMeta(JsonMap.class));
+		var r = parse(in, MarshallingContext.DEFAULT.getClassMeta(JsonMap.class));
 		assertEquals("{name:'foo bar'}", Json5Serializer.DEFAULT.toString(r));
 	}
 }

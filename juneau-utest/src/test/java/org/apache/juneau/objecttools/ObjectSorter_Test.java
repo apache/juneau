@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class ObjectSorter_Test extends TestBase {
 
 	ObjectSorter os = new ObjectSorter();
-	BeanSession bs = BeanContext.DEFAULT_SESSION;
+	MarshallingSession bs = MarshallingContext.DEFAULT_SESSION;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Null input

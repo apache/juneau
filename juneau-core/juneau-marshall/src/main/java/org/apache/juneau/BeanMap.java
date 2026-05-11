@@ -43,7 +43,7 @@ import org.apache.juneau.swap.*;
  * object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.
  *
  * <p>
- * Use the {@link BeanContext} class to create instances of this class.
+ * Use the {@link MarshallingContext} class to create instances of this class.
  *
  * <h5 class='topic'>Bean property order</h5>
  *
@@ -80,7 +80,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return A new {@link BeanMap} instance wrapping the bean.
 	 */
 	public static <T> BeanMap<T> of(T bean) {
-		return BeanContext.DEFAULT_SESSION.toBeanMap(bean);
+		return MarshallingContext.DEFAULT_SESSION.toBeanMap(bean);
 	}
 
 	/** The wrapped object. */
@@ -94,18 +94,18 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/** The BeanMeta associated with the class of the object. */
 	protected BeanMeta<T> meta;
-	private final BeanSession session;
+	private final MarshallingSession session;
 
 	private final String typePropertyName;
 
 	/**
-	 * Instance of this class are instantiated through the BeanContext class.
+	 * Instance of this class are instantiated through the MarshallingContext class.
 	 *
 	 * @param session The bean session object that created this bean map.
 	 * @param bean The bean to wrap inside this map.
 	 * @param meta The metadata associated with the bean class.
 	 */
-	protected BeanMap(BeanSession session, T bean, BeanMeta<T> meta) {
+	protected BeanMap(MarshallingSession session, T bean, BeanMeta<T> meta) {
 		this.session = session;
 		this.bean = bean;
 		this.meta = meta;
@@ -127,7 +127,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public void add(String property, Object value) {
 		var p = getPropertyMeta(property);
 		if (p == null) {
-			if (meta.getBeanContext().isIgnoreUnknownBeanProperties())
+			if (meta.getMarshallingContext().isIgnoreUnknownBeanProperties())
 				return;
 			throw bex(meta.getClassMeta(), "Bean property ''{0}'' not found.", property);
 		}
@@ -310,10 +310,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	<jv>person</jv>.setBirthDate(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
 	 *
 	 * 	<jc>// Create a bean context and add the ISO8601 date-time swap</jc>
-	 * 	BeanContext <jv>beanContext</jv> = BeanContext.<jsm>create</jsm>().swaps(DateSwap.ISO8601DT.<jk>class</jk>).build();
+	 * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsm>create</jsm>().swaps(DateSwap.ISO8601DT.<jk>class</jk>).build();
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = <jv>beanContext</jv>.toBeanMap(<jv>person</jv>);
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = <jv>marshallingContext</jv>.toBeanMap(<jv>person</jv>);
 	 *
 	 * 	<jc>// Get the field as a string (i.e. "'1901-03-03T04:05:06-5000'")</jc>
 	 * 	String <jv>birthDate</jv> = <jv>beanMap</jv>.get(<js>"birthDate"</js>);
@@ -428,7 +428,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				var propName = props.get(i);
 				var rawVal = propertyCache.remove(propName);
 				// Convert value to expected property type if it's not already the correct type.
-				// Uses the same logic as BeanSession.convertToMemberType's early-return check:
+				// Uses the same logic as MarshallingSession.convertToMemberType's early-return check:
 				// collections/maps with specific element/value types always need conversion.
 				if (rawVal != null) {
 					var pm = getPropertyMeta(propName);
@@ -462,7 +462,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * @return The bean session that created this bean map.
 	 */
-	public final BeanSession getBeanSession() { return session; }
+	public final MarshallingSession getMarshallingSession() { return session; }
 
 	/**
 	 * Returns the {@link ClassMeta} of the wrapped bean.
@@ -625,10 +625,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	Person <jv>person</jv> = <jk>new</jk> Person();
 	 *
 	 * 	<jc>// Create a bean context and add the ISO8601 date-time swap</jc>
-	 * 	BeanContext <jv>beanContext</jv> = BeanContext.<jsm>create</jsm>().swaps(DateSwap.ISO8601DT.<jk>class</jk>).build();
+	 * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsm>create</jsm>().swaps(DateSwap.ISO8601DT.<jk>class</jk>).build();
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = <jv>beanContext</jv>.toBeanMap(<jv>person</jv>);
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = <jv>marshallingContext</jv>.toBeanMap(<jv>person</jv>);
 	 *
 	 * 	<jc>// Set the field</jc>
 	 * 	<jv>beanMap</jv>.put(<js>"birthDate"</js>, <js>"'1901-03-03T04:05:06-5000'"</js>);
@@ -652,7 +652,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public Object put(String property, Object value) {
 		var p = getPropertyMeta(property);
 		if (p == null) {
-			if (meta.getBeanContext().isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
+			if (meta.getMarshallingContext().isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
 				return meta.onWriteProperty(bean, property, null);
 
 			p = getPropertyMeta("*");

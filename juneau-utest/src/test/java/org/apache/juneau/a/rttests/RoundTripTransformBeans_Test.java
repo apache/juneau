@@ -386,11 +386,11 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 	public static class BSwap extends StringSwap<B> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, B o) throws SerializeException {
+		public String swap(MarshallingSession session, B o) throws SerializeException {
 			return o.f1;
 		}
 		@Override /* ObjectSwap */
-		public B unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
+		public B unswap(MarshallingSession session, String f, ClassMeta<?> hint) throws ParseException {
 			var b1 = new B();
 			b1.f1 = f;
 			return b1;
@@ -418,11 +418,11 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 	public static class BcSwap extends StringSwap<Bc> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, Bc o) throws SerializeException {
+		public String swap(MarshallingSession session, Bc o) throws SerializeException {
 			return o.f1;
 		}
 		@Override /* ObjectSwap */
-		public Bc unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
+		public Bc unswap(MarshallingSession session, String f, ClassMeta<?> hint) throws ParseException {
 			var b1 = new Bc();
 			b1.f1 = f;
 			return b1;

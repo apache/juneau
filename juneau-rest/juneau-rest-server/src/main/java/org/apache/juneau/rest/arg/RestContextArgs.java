@@ -35,7 +35,7 @@ import org.apache.juneau.rest.stats.*;
  * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link RestContext} object.
  *
  * <ul class='javatree'>
- * 	<li class='jc'>{@link BeanContext}
+ * 	<li class='jc'>{@link MarshallingContext}
  * 	<li class='jc'>{@link Config}
  * 	<li class='jc'>{@link DebugEnablement}
  * 	<li class='jc'>{@link EncoderSet}
@@ -64,8 +64,8 @@ public class RestContextArgs extends SimpleRestOperationArg {
 	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
 	public static RestContextArgs create(ParameterInfo paramInfo) {
-		if (paramInfo.isType(BeanContext.class))
-			return new RestContextArgs(RestContext::getBeanContext);
+		if (paramInfo.isType(MarshallingContext.class))
+			return new RestContextArgs(RestContext::getMarshallingContext);
 		if (paramInfo.isType(Config.class))
 			return new RestContextArgs(RestContext::getConfig);
 		if (paramInfo.isType(DebugEnablement.class))

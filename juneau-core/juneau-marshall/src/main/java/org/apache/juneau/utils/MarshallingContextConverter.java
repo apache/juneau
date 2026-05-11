@@ -26,7 +26,7 @@ import org.apache.juneau.commons.conversion.*;
  *
  * <p>
  * A simple implementation of the {@link Converter} interface that delegates to the default
- * {@link BeanContext} session for type conversion.
+ * {@link MarshallingContext} session for type conversion.
  *
  * <p>
  * This converter provides a convenient way to convert objects between different types using
@@ -48,8 +48,8 @@ import org.apache.juneau.commons.conversion.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jm'>{@link Converter}
- * 	<li class='jm'>{@link BeanContext#DEFAULT_SESSION}
- * 	<li class='jm'>{@link BeanSession#convertToType(Object, Class)}
+ * 	<li class='jm'>{@link MarshallingContext#DEFAULT_SESSION}
+ * 	<li class='jm'>{@link MarshallingSession#convertToType(Object, Class)}
  * </ul>
  */
 @SuppressWarnings({
@@ -57,7 +57,7 @@ import org.apache.juneau.commons.conversion.*;
 	"java:S6542", // Singleton required for stateless Converter; thread-safe shared instance
 	"java:S6548"  // Singleton pattern is intentional; INSTANCE is a stateless, thread-safe shared converter
 })
-public class BeanContextConverter implements Converter {
+public class MarshallingContextConverter implements Converter {
 
 	/**
 	 * Singleton instance of the generic converter.
@@ -65,18 +65,18 @@ public class BeanContextConverter implements Converter {
 	 * <p>
 	 * This instance can be safely shared across multiple threads and reused for all conversion operations.
 	 */
-	public static final BeanContextConverter INSTANCE = new BeanContextConverter();
+	public static final MarshallingContextConverter INSTANCE = new MarshallingContextConverter();
 
 	/**
 	 * Constructor.
 	 */
-	private BeanContextConverter() {}
+	private MarshallingContextConverter() {}
 
 	/**
 	 * Converts the specified object to the specified type.
 	 *
 	 * <p>
-	 * This method delegates to the default {@link BeanContext} session for the actual conversion logic.
+	 * This method delegates to the default {@link MarshallingContext} session for the actual conversion logic.
 	 * It supports all the same conversion types that are supported by the framework's bean conversion system.
 	 *
 	 * <p>
@@ -99,14 +99,14 @@ public class BeanContextConverter implements Converter {
 	 */
 	@Override
 	public <T> T to(Object o, Class<T> type) {
-		return BeanContext.DEFAULT_SESSION.convertToType(o, type);
+		return MarshallingContext.DEFAULT_SESSION.convertToType(o, type);
 	}
 
 	/**
 	 * Converts the specified object to the specified parameterized type.
 	 *
 	 * <p>
-	 * This method delegates to the default {@link BeanContext} session for the actual conversion logic,
+	 * This method delegates to the default {@link MarshallingContext} session for the actual conversion logic,
 	 * supporting complex parameterized types such as collections and maps.
 	 *
 	 * @param o The object to convert.
@@ -118,7 +118,7 @@ public class BeanContextConverter implements Converter {
 	 */
 	@Override
 	public <T> T to(Object o, Type mainType, Type... args) {
-		return BeanContext.DEFAULT_SESSION.convertToType(o, mainType, args);
+		return MarshallingContext.DEFAULT_SESSION.convertToType(o, mainType, args);
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class BeanContextConverter implements Converter {
 	 */
 	@Override
 	public <T> T to(Object o, Object memberOf, ConverterSession session, Class<T> type) {
-		return BeanContext.DEFAULT_SESSION.convertToMemberType(memberOf, o, type);
+		return MarshallingContext.DEFAULT_SESSION.convertToMemberType(memberOf, o, type);
 	}
 
 	/**
@@ -155,6 +155,6 @@ public class BeanContextConverter implements Converter {
 	@Override
 	public <T> T to(Object o, Object memberOf, ConverterSession session, Type mainType, Type... args) {
 		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);
-		return BeanContext.DEFAULT_SESSION.convertToMemberType(memberOf, o, rawType);
+		return MarshallingContext.DEFAULT_SESSION.convertToMemberType(memberOf, o, rawType);
 	}
 }

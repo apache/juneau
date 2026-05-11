@@ -126,7 +126,7 @@ class DataConversion_Test extends TestBase {
 	//====================================================================================================
 	@Test void a02_objectSwaps() throws Exception {
 		var s = "2001-12-21T12:34:56Z";
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var c = bc.convertToType(s, GregorianCalendar.class);
 		assertEquals(2001, c.get(Calendar.YEAR));
 		var c2 = bc.convertToType(s, Calendar.class);

@@ -66,26 +66,26 @@ import org.apache.juneau.utils.*;
  * <h5 class='topic'>Bean Contexts</h5>
  *
  * <p>
- * Bean contexts are created through the {@link BeanContext#create() BeanContext.create()} and {@link Builder#build()} methods.
+ * Bean contexts are created through the {@link MarshallingContext#create() MarshallingContext.create()} and {@link Builder#build()} methods.
  * <br>These context objects are read-only, reusable, and thread-safe.
  *
  * <p>
  * Each bean context maintains a cache of {@link ClassMeta} objects that describe information about classes encountered.
  * These <c>ClassMeta</c> objects are time-consuming to construct.
- * Therefore, instances of {@link BeanContext} that share the same <js>"BeanContext.*"</js> property values share
+ * Therefore, instances of {@link MarshallingContext} that share the same <js>"MarshallingContext.*"</js> property values share
  * the same cache.  This allows for efficient reuse of <c>ClassMeta</c> objects so that the information about
  * classes only needs to be calculated once.
- * Because of this, many of the properties defined on the {@link BeanContext} class cannot be overridden on the session.
+ * Because of this, many of the properties defined on the {@link MarshallingContext} class cannot be overridden on the session.
  *
  * <h5 class='topic'>Bean Sessions</h5>
  *
  * <p>
- * Whereas <c>BeanContext</c> objects are permanent, unchangeable, cached, and thread-safe,
- * {@link BeanSession} objects are ephemeral and not thread-safe.
+ * Whereas <c>MarshallingContext</c> objects are permanent, unchangeable, cached, and thread-safe,
+ * {@link MarshallingSession} objects are ephemeral and not thread-safe.
  * They are meant to be used as quickly-constructed scratchpads for creating bean maps.
  * {@link BeanMap} objects can only be created through the session.
  *
- * <h5 class='topic'>BeanContext configuration properties</h5>
+ * <h5 class='topic'>MarshallingContext configuration properties</h5>
  *
  * <p>
  * <c>BeanContexts</c> have several configuration properties that can be used to tweak behavior on how beans are
@@ -109,7 +109,7 @@ import org.apache.juneau.utils.*;
  *
  * <p class='bjava'>
  * 	<jc>// Construct a context from scratch.</jc>
- * 	BeanContext <jv>beanContext</jv> = BeanContext
+ * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext
  * 		.<jsm>create</jsm>()
  * 		.beansRequireDefaultConstructor()
  * 		.notBeanClasses(Foo.<jk>class</jk>)
@@ -125,9 +125,9 @@ import org.apache.juneau.utils.*;
  * <p>
  * Bean maps are created in two ways...
  * <ol>
- * 	<li>{@link BeanSession#toBeanMap(Object) BeanSession.toBeanMap()} - Wraps an existing bean inside a {@code Map}
+ * 	<li>{@link MarshallingSession#toBeanMap(Object) MarshallingSession.toBeanMap()} - Wraps an existing bean inside a {@code Map}
  * 		wrapper.
- * 	<li>{@link BeanSession#newBeanMap(Class) BeanSession.newBeanMap()} - Create a new bean instance wrapped in a
+ * 	<li>{@link MarshallingSession#newBeanMap(Class) MarshallingSession.newBeanMap()} - Create a new bean instance wrapped in a
  * 		{@code Map} wrapper.
  * </ol>
  *
@@ -143,7 +143,7 @@ import org.apache.juneau.utils.*;
  * 	}
  *
  * 	<jc>// Create a new bean session</jc>
- * 	BeanSession <jv>session</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession();
+ * 	MarshallingSession <jv>session</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.createSession();
  *
  * 	<jc>// Wrap an existing bean in a new bean map</jc>
  * 	BeanMap&lt;Person&gt; <jv>map1</jv> = <jv>session</jv>.toBeanMap(<jk>new</jk> Person());
@@ -173,7 +173,7 @@ import org.apache.juneau.utils.*;
 	"java:S1452", // Wildcard required - ClassMeta<?> for parameter resolution and type variables
 	"java:S1612"  // Lambdas used instead of method references for readability in complex chained expressions
 })
-public class BeanContext extends Context implements ConversionFinder {
+public class MarshallingContext extends Context implements ConversionFinder {
 
 	// Property name constants
 	private static final String PROP_beanClassVisibility = "beanClassVisibility";
@@ -224,7 +224,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	 */
 	public static class Builder extends Context.Builder {
 
-		private static final Cache<HashKey,BeanContext> CACHE = Cache.of(HashKey.class, BeanContext.class).build();
+		private static final Cache<HashKey,MarshallingContext> CACHE = Cache.of(HashKey.class, MarshallingContext.class).build();
 
 		private static int integer(boolean...values) {
 			var n = 0;
@@ -270,36 +270,36 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * All default settings.
 		 */
 		protected Builder() {
-			beanClassVisibility = env("BeanContext.beanClassVisibility", PUBLIC);
-			beanConstructorVisibility = env("BeanContext.beanConstructorVisibility", PUBLIC);
+			beanClassVisibility = env("MarshallingContext.beanClassVisibility", PUBLIC);
+			beanConstructorVisibility = env("MarshallingContext.beanConstructorVisibility", PUBLIC);
 			beanDictionary = list();
-			beanFieldVisibility = env("BeanContext.beanFieldVisibility", PUBLIC);
-			beanMapPutReturnsOldValue = env("BeanContext.beanMapPutReturnsOldValue", false);
-			beanMethodVisibility = env("BeanContext.beanMethodVisibility", PUBLIC);
-			beansRequireDefaultConstructor = env("BeanContext.beansRequireDefaultConstructor", false);
-			beansRequireSerializable = env("BeanContext.beansRequireSerializable", false);
-			beansRequireSettersForGetters = env("BeanContext.beansRequireSettersForGetters", false);
-			disableBeansRequireSomeProperties = env("BeanContext.disableBeansRequireSomeProperties", false);
-			disableIgnoreMissingSetters = env("BeanContext.disableIgnoreMissingSetters", false);
-			disableIgnoreTransientFields = env("BeanContext.disableIgnoreTransientFields", false);
-			disableIgnoreUnknownNullBeanProperties = env("BeanContext.disableIgnoreUnknownNullBeanProperties", false);
-			disableInterfaceProxies = env("BeanContext.disableInterfaceProxies", false);
-			findFluentSetters = env("BeanContext.findFluentSetters", false);
-			ignoreInvocationExceptionsOnGetters = env("BeanContext.ignoreInvocationExceptionsOnGetters", false);
-			ignoreInvocationExceptionsOnSetters = env("BeanContext.ignoreInvocationExceptionsOnSetters", false);
-			ignoreUnknownBeanProperties = env("BeanContext.ignoreUnknownBeanProperties", false);
-			ignoreUnknownEnumValues = env("BeanContext.ignoreUnknownEnumValues", false);
-			locale = env("BeanContext.locale").map(Locale::forLanguageTag).orElse(Locale.getDefault());
-			mediaType = env("BeanContext.mediaType").map(MediaType::of).orElse(null);
+			beanFieldVisibility = env("MarshallingContext.beanFieldVisibility", PUBLIC);
+			beanMapPutReturnsOldValue = env("MarshallingContext.beanMapPutReturnsOldValue", false);
+			beanMethodVisibility = env("MarshallingContext.beanMethodVisibility", PUBLIC);
+			beansRequireDefaultConstructor = env("MarshallingContext.beansRequireDefaultConstructor", false);
+			beansRequireSerializable = env("MarshallingContext.beansRequireSerializable", false);
+			beansRequireSettersForGetters = env("MarshallingContext.beansRequireSettersForGetters", false);
+			disableBeansRequireSomeProperties = env("MarshallingContext.disableBeansRequireSomeProperties", false);
+			disableIgnoreMissingSetters = env("MarshallingContext.disableIgnoreMissingSetters", false);
+			disableIgnoreTransientFields = env("MarshallingContext.disableIgnoreTransientFields", false);
+			disableIgnoreUnknownNullBeanProperties = env("MarshallingContext.disableIgnoreUnknownNullBeanProperties", false);
+			disableInterfaceProxies = env("MarshallingContext.disableInterfaceProxies", false);
+			findFluentSetters = env("MarshallingContext.findFluentSetters", false);
+			ignoreInvocationExceptionsOnGetters = env("MarshallingContext.ignoreInvocationExceptionsOnGetters", false);
+			ignoreInvocationExceptionsOnSetters = env("MarshallingContext.ignoreInvocationExceptionsOnSetters", false);
+			ignoreUnknownBeanProperties = env("MarshallingContext.ignoreUnknownBeanProperties", false);
+			ignoreUnknownEnumValues = env("MarshallingContext.ignoreUnknownEnumValues", false);
+			locale = env("MarshallingContext.locale").map(Locale::forLanguageTag).orElse(Locale.getDefault());
+			mediaType = env("MarshallingContext.mediaType").map(MediaType::of).orElse(null);
 			notBeanClasses = new TreeSet<>();
 			notBeanPackages = new TreeSet<>();
 			propertyNamer = null;
-			unsortedProperties = env("BeanContext.unsortedProperties", false);
+			unsortedProperties = env("MarshallingContext.unsortedProperties", false);
 			swaps = list();
-			timeZone = env("BeanContext.timeZone").map(TimeZone::getTimeZone).orElse(null);
-			typePropertyName = env("BeanContext.typePropertyName", "_type");
-			useEnumNames = env("BeanContext.useEnumNames", false);
-			useJavaBeanIntrospector = env("BeanContext.useJavaBeanIntrospector", false);
+			timeZone = env("MarshallingContext.timeZone").map(TimeZone::getTimeZone).orElse(null);
+			typePropertyName = env("MarshallingContext.typePropertyName", "_type");
+			useEnumNames = env("MarshallingContext.useEnumNames", false);
+			useJavaBeanIntrospector = env("MarshallingContext.useJavaBeanIntrospector", false);
 			beanStore = null;
 		}
 
@@ -308,7 +308,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * @param copyFrom The bean to copy from.
 		 */
-		protected Builder(BeanContext copyFrom) {
+		protected Builder(MarshallingContext copyFrom) {
 			super(copyFrom);
 			beanClassVisibility = copyFrom.beanClassVisibility;
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
@@ -612,7 +612,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledProp#dictionary()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#dictionary()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#dictionary_replace()}
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(ClassInfo...)}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(ClassInfo...)}
 		 * </ul>
 		 *
 		 * @param values
@@ -707,7 +707,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Interceptor that strips out sensitive information.</jc>
-		 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
+		 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> MarshallingInterceptor&lt;Address&gt; {
 		 *
 		 * 		<jk>public</jk> Object readProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
 		 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>))
@@ -739,7 +739,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jc'>{@link BeanInterceptor}
+		 * 	<li class='jc'>{@link MarshallingInterceptor}
 		 * 	<li class='ja'>{@link Bean#interceptor() Bean(interceptor)}
 		 * </ul>
 		 *
@@ -750,7 +750,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends MarshallingInterceptor<?>> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
 			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().interceptor(value).build()).build());
@@ -769,7 +769,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a context that creates BeanMaps with normal put() behavior.</jc>
-		 * 	BeanContext <jv>context</jv> = BeanContext
+		 * 	MarshallingContext <jv>context</jv> = MarshallingContext
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanMapPutReturnsOldValue()
 		 * 		.build();
@@ -1742,7 +1742,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * 		<ja>@Autowired</ja> ApplicationContext <jv>ctx</jv>;
 		 *
 		 * 		<ja>@Override</ja>
-		 * 		<jk>protected</jk> BeanContext createBeanContext(BeanContext.Builder <jv>builder</jv>) {
+		 * 		<jk>protected</jk> MarshallingContext createBeanContext(MarshallingContext.Builder <jv>builder</jv>) {
 		 * 			<jk>return</jk> <jv>builder</jv>.beanStore(<jk>new</jk> SpringBeanStore(<jv>ctx</jv>)).build();
 		 * 		}
 		 * 	}
@@ -1757,8 +1757,8 @@ public class BeanContext extends Context implements ConversionFinder {
 		}
 
 		@Override /* Overridden from Context.Builder */
-		public BeanContext build() {
-			return cache(CACHE).build(BeanContext.class);
+		public MarshallingContext build() {
+			return cache(CACHE).build(MarshallingContext.class);
 		}
 
 		@Override /* Overridden from Builder */
@@ -2089,8 +2089,8 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * POJO examples can also be defined on classes via the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>A static field annotated with {@link Example @Example}.
-		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link MarshallingSession} argument.
+		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link MarshallingSession} argument.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -2142,8 +2142,8 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <ul class='spaced-list'>
 		 * 	<li>The {@link Marshalled#example()} annotation on the class itself.
 		 * 	<li>A static field annotated with {@link Example @Example}.
-		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link MarshallingSession} argument.
+		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link MarshallingSession} argument.
 		 * </ul>
 		 *
 		 * @param <T> The POJO class.
@@ -2656,17 +2656,17 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Locale.
 		 *
 		 * <p>
-		 * Specifies the default locale for serializer and parser sessions when not specified via {@link BeanSession.Builder#locale(Locale)}.
+		 * Specifies the default locale for serializer and parser sessions when not specified via {@link MarshallingSession.Builder#locale(Locale)}.
 		 * Typically used for POJO swaps that need to deal with locales such as swaps that convert <l>Date</l> and <l>Calendar</l>
-		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(BeanSession, Object)} and
-		 * {@link ObjectSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
+		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(MarshallingSession, Object)} and
+		 * {@link ObjectSwap#unswap(MarshallingSession, Object, ClassMeta, String)} methods.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Define a POJO swap that skips serializing beans if we're in the UK.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> String swap(MarshallingSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>if</jk> (<jv>session</jv>.getLocale().equals(Locale.<jsf>UK</jsf>))
 		 * 				<jk>return null</jk>;
 		 * 			<jk>return</jk> <jv>bean</jv>.toString();
@@ -2683,7 +2683,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#locale()}
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#locale(Locale)}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingSession.Builder#locale(Locale)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -2699,7 +2699,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Media type.
 		 *
 		 * <p>
-		 * Specifies the default media type for serializer and parser sessions when not specified via {@link BeanSession.Builder#mediaType(MediaType)}.
+		 * Specifies the default media type for serializer and parser sessions when not specified via {@link MarshallingSession.Builder#mediaType(MediaType)}.
 		 * Typically used for POJO swaps that need to serialize the same POJO classes differently depending on
 		 * the specific requested media type.   For example, a swap could handle a request for media types <js>"application/json"</js>
 		 * and <js>"application/json+foo"</js> slightly differently even though they're both being handled by the same JSON
@@ -2710,7 +2710,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * 	<jc>// Define a POJO swap that skips serializing beans if the media type is application/json.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> String swap(MarshallingSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>if</jk> (<jv>session</jv>.getMediaType().equals(<js>"application/json"</js>))
 		 * 				<jk>return null</jk>;
 		 * 			<jk>return</jk> <jv>bean</jv>.toString();
@@ -2726,7 +2726,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#mediaType()}
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#mediaType(MediaType)}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingSession.Builder#mediaType(MediaType)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -3230,12 +3230,12 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * 		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
 		 *
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, Date <jv>date</jv>) {
+		 * 		<jk>public</jk> String swap(MarshallingSession <jv>session</jv>, Date <jv>date</jv>) {
 		 * 			<jk>return</jk> <jf>format</jf>.format(<jv>date</jv>);
 		 * 		}
 		 *
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> Date unswap(BeanSession <jv>session</jv>, String <jv>string</jv>, ClassMeta <jv>hint</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> Date unswap(MarshallingSession <jv>session</jv>, String <jv>string</jv>, ClassMeta <jv>hint</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>return</jk> <jf>format</jf>.parse(<jv>string</jv>);
 		 * 		}
 		 * 	}
@@ -3290,17 +3290,17 @@ public class BeanContext extends Context implements ConversionFinder {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  TimeZone.
 		 *
 		 * <p>
-		 * Specifies the default time zone for serializer and parser sessions when not specified via {@link BeanSession.Builder#timeZone(TimeZone)}.
+		 * Specifies the default time zone for serializer and parser sessions when not specified via {@link MarshallingSession.Builder#timeZone(TimeZone)}.
 		 * Typically used for POJO swaps that need to deal with timezones such as swaps that convert <l>Date</l> and <l>Calendar</l>
-		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(BeanSession, Object)} and
-		 * {@link ObjectSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
+		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(MarshallingSession, Object)} and
+		 * {@link ObjectSwap#unswap(MarshallingSession, Object, ClassMeta, String)} methods.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Define a POJO swap that skips serializing beans if the time zone is GMT.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> String swap(MarshallingSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>if</jk> (<jv>session</jv>.getTimeZone().equals(TimeZone.<jsf>GMT</jsf>))
 		 * 				<jk>return null</jk>;
 		 * 			<jk>return</jk> <jv>bean</jv>.toString();
@@ -3316,7 +3316,7 @@ public class BeanContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#timeZone()}
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#timeZone(TimeZone)}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingSession.Builder#timeZone(TimeZone)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -3608,10 +3608,10 @@ public class BeanContext extends Context implements ConversionFinder {
 	// @formatter:on
 
 	/** Default config.  All default settings. */
-	public static final BeanContext DEFAULT = create().build();
+	public static final MarshallingContext DEFAULT = create().build();
 
 	/** Default reusable unmodifiable session.  Can be used to avoid overhead of creating a session (for creating BeanMaps for example).*/
-	public static final BeanSession DEFAULT_SESSION = DEFAULT.createSession().unmodifiable().build();
+	public static final MarshallingSession DEFAULT_SESSION = DEFAULT.createSession().unmodifiable().build();
 
 	/**
 	 * Creates a new builder for this object.
@@ -3640,7 +3640,7 @@ public class BeanContext extends Context implements ConversionFinder {
 
 	private final NullableSupplier<WriterSerializer> beanToStringSerializer;
 	private final BeanRegistry beanRegistry;
-	private final BeanSession defaultSession;
+	private final MarshallingSession defaultSession;
 	private final ConfigurableConverter converter;
 	private final boolean beanMapPutReturnsOldValue;
 	private final boolean beansRequireDefaultConstructor;
@@ -3687,7 +3687,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public BeanContext(Builder builder) {
+	public MarshallingContext(Builder builder) {
 		super(builder);
 
 		beanClassVisibility = builder.beanClassVisibility;
@@ -3743,7 +3743,7 @@ public class BeanContext extends Context implements ConversionFinder {
 				else if (ci.isAssignableTo(Surrogate.class))
 					objectSwapsList.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
 				else
-					throw rex("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", cn(ci.inner()));
+					throw rex("Invalid class {0} specified in MarshallingContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", cn(ci.inner()));
 			}
 		});
 		objectSwaps = u(objectSwapsList);
@@ -3755,7 +3755,7 @@ public class BeanContext extends Context implements ConversionFinder {
 
 		beanRegistry = new BeanRegistry(this, null, list());
 		defaultSession = createSession().unmodifiable().build();
-		beanToStringSerializer = memoize(() -> Json5Serializer.create().beanContext(this).build());
+		beanToStringSerializer = memoize(() -> Json5Serializer.create().marshallingContext(this).build());
 	}
 
 	/**
@@ -3769,7 +3769,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	 * @param type The class type to convert the value to.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
-	 * @see BeanSession#convertToType(Object, Class)
+	 * @see MarshallingSession#convertToType(Object, Class)
 	 */
 	public final <T> T convertToType(Object value, Class<T> type) throws InvalidDataConversionException {
 		return defaultSession.convertToType(value, type);
@@ -3781,14 +3781,14 @@ public class BeanContext extends Context implements ConversionFinder {
 	}
 
 	@Override /* Overridden from Context */
-	public BeanSession.Builder createSession() {
-		return BeanSession.create(this);
+	public MarshallingSession.Builder createSession() {
+		return MarshallingSession.create(this);
 	}
 
 	/**
 	 * Minimum bean class visibility.
 	 *
-	 * @see BeanContext.Builder#beanClassVisibility(Visibility)
+	 * @see MarshallingContext.Builder#beanClassVisibility(Visibility)
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
@@ -3797,7 +3797,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Minimum bean constructor visibility.
 	 *
-	 * @see BeanContext.Builder#beanConstructorVisibility(Visibility)
+	 * @see MarshallingContext.Builder#beanConstructorVisibility(Visibility)
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
@@ -3806,7 +3806,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * The bean store used for factory-based instantiation.
 	 *
-	 * @see BeanContext.Builder#beanStore(BeanStore)
+	 * @see MarshallingContext.Builder#beanStore(BeanStore)
 	 * @return The bean store, or <jk>null</jk> if none configured.
 	 */
 	public final BeanStore getBeanStore() { return beanStore; }
@@ -3814,7 +3814,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Bean dictionary.
 	 *
-	 * @see BeanContext.Builder#beanDictionary()
+	 * @see MarshallingContext.Builder#beanDictionary()
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 * 	<br>Never <jk>null</jk>.
@@ -3826,7 +3826,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	 * Minimum bean field visibility.
 	 *
 	 *
-	 * @see BeanContext.Builder#beanFieldVisibility(Visibility)
+	 * @see MarshallingContext.Builder#beanFieldVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
@@ -3840,7 +3840,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	public final ConfigurableConverter getConverter() { return converter; }
 
 	/**
-	 * Implements {@link ConversionFinder} to provide all BeanContext-specific type conversions that cannot
+	 * Implements {@link ConversionFinder} to provide all MarshallingContext-specific type conversions that cannot
 	 * be expressed in {@link BasicConverter} (which has no dependency on {@code juneau-marshall}).
 	 *
 	 * <p>
@@ -3877,7 +3877,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			if (nc.isAssignableFrom(outType) && (fc.isAssignableFrom(inType) || Map.class.isAssignableFrom(inType) || Number.class.isAssignableFrom(inType))) {
 				return (in, memberOf, session, args) -> {
 					try {
-						var bs = beanSession(session);
+						var bs = marshallingSession(session);
 						var resolvedSwap = bs != null ? toMeta.getSwap(bs) : null;
 						var activeSwap = (ObjectSwap<Object,Object>) (resolvedSwap != null ? resolvedSwap : swap);
 						var swapClass = activeSwap.getSwapClass().inner();
@@ -3900,7 +3900,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			if (nc.isAssignableFrom(inType) && fc.isAssignableFrom(outType)) {
 				return (in, memberOf, session, args) -> {
 					try {
-						var bs = beanSession(session);
+						var bs = marshallingSession(session);
 						return ((ObjectSwap<Object,Object>) swap).swap(bs, in);
 					} catch (Exception e) {
 						throw rex(e);
@@ -3919,7 +3919,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			if (fcBoxed.isAssignableFrom(inType) || Map.class.isAssignableFrom(inType) || Number.class.isAssignableFrom(inType)) {
 				return (in, memberOf, session, args) -> {
 					try {
-					var bs = beanSession(session);
+					var bs = marshallingSession(session);
 					var activeSwap = (ObjectSwap<Object,Object>) toMeta.getSwap(bs);
 						if (activeSwap == null) return null;
 						// Use boxed swap class to handle primitive return types (e.g. int.class → Integer.class)
@@ -3943,7 +3943,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			if (fcBoxed.isAssignableFrom(outType) || outType == Object.class) {
 				return (in, memberOf, session, args) -> {
 					try {
-					var bs = beanSession(session);
+					var bs = marshallingSession(session);
 					var activeSwap = (ObjectSwap<Object,Object>) fromMeta.getSwap(bs);
 						if (activeSwap == null) return null;
 						return activeSwap.swap(bs, in);
@@ -4250,7 +4250,7 @@ public class BeanContext extends Context implements ConversionFinder {
 
 	// --- Object → Bean via toString() + BeanMap.load() (fallback for bean-compatible types) ---
 	// Replicates the old convertToMemberType fallback for beans (newBeanMap + load + getBean).
-	// Excludes cases where input is already assignable to output (handled by BeanSession isInstance shortcut).
+	// Excludes cases where input is already assignable to output (handled by MarshallingSession isInstance shortcut).
 		if (toMeta.isBean() && !Map.class.isAssignableFrom(inType) && !CharSequence.class.isAssignableFrom(inType)
 				&& !outType.isAssignableFrom(inType)) {
 			return (in, memberOf, session, args) -> {
@@ -4270,12 +4270,12 @@ public class BeanContext extends Context implements ConversionFinder {
 		return session == null ? null : session.get(TimeZone.class).orElse(null);
 	}
 
-	private static BeanSession beanSession(ConverterSession session) {
-		return session instanceof BeanSession bs ? bs : null;
+	private static MarshallingSession marshallingSession(ConverterSession session) {
+		return session instanceof MarshallingSession bs ? bs : null;
 	}
 
-	private BeanSession beanSessionOrDefault(ConverterSession session) {
-		return session instanceof BeanSession bs ? bs : defaultSession;
+	private MarshallingSession beanSessionOrDefault(ConverterSession session) {
+		return session instanceof MarshallingSession bs ? bs : defaultSession;
 	}
 
 	private static Collection<Object> newCollection(Class<?> outType) {
@@ -4310,7 +4310,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Minimum bean method visibility.
 	 *
-	 * @see BeanContext.Builder#beanMethodVisibility(Visibility)
+	 * @see MarshallingContext.Builder#beanMethodVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */
@@ -4320,7 +4320,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Bean type property name.
 	 *
-	 * @see BeanContext.Builder#typePropertyName(String)
+	 * @see MarshallingContext.Builder#typePropertyName(String)
 	 * @return
 	 * The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
@@ -4420,7 +4420,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Locale.
 	 *
-	 * @see BeanContext.Builder#locale(Locale)
+	 * @see MarshallingContext.Builder#locale(Locale)
 	 * @return
 	 * 	The default locale for serializer and parser sessions.
 	 */
@@ -4429,7 +4429,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Media type.
 	 *
-	 * @see BeanContext.Builder#mediaType(MediaType)
+	 * @see MarshallingContext.Builder#mediaType(MediaType)
 	 * @return
 	 * 	The default media type value for serializer and parser sessions.
 	 */
@@ -4438,7 +4438,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Time zone.
 	 *
-	 * @see BeanContext.Builder#timeZone(TimeZone)
+	 * @see MarshallingContext.Builder#timeZone(TimeZone)
 	 * @return
 	 * 	The default timezone for serializer and parser sessions.
 	 */
@@ -4447,7 +4447,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Bean package exclusions.
 	 *
-	 * @see BeanContext.Builder#notBeanPackages(String...)
+	 * @see MarshallingContext.Builder#notBeanPackages(String...)
 	 * @return
 	 * 	The set of fully-qualified package names to exclude from being classified as beans.
 	 * 	<br>Never <jk>null</jk>.
@@ -4459,19 +4459,19 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Bean property namer.
 	 *
-	 * @see BeanContext.Builder#propertyNamer(Class)
+	 * @see MarshallingContext.Builder#propertyNamer(Class)
 	 * @return
 	 * 	The interface used to calculate bean property names.
 	 */
 	public final PropertyNamer getPropertyNamer() { return propertyNamerBean; }
 
 	@Override /* Overridden from Context */
-	public BeanSession getSession() { return defaultSession; }
+	public MarshallingSession getSession() { return defaultSession; }
 
 	/**
 	 * Java object swaps.
 	 *
-	 * @see BeanContext.Builder#swaps(Class...)
+	 * @see MarshallingContext.Builder#swaps(Class...)
 	 * @return
 	 * 	The list POJO swaps defined.
 	 * 	<br>Never <jk>null</jk>.
@@ -4489,7 +4489,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return <jk>true</jk> if the bean contexts have equivalent settings and thus share caches.
 	 */
-	public final boolean hasSameCache(BeanContext bc) {
+	public final boolean hasSameCache(MarshallingContext bc) {
 		assertArgNotNull(ARG_bc, bc);
 		return bc.getCmCache() == this.getCmCache();
 	}
@@ -4497,7 +4497,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * BeanMap.put() returns old property value.
 	 *
-	 * @see BeanContext.Builder#beanMapPutReturnsOldValue()
+	 * @see MarshallingContext.Builder#beanMapPutReturnsOldValue()
 	 * @return
 	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
 	 * 	<br>Otherwise, it returns <jk>null</jk>.
@@ -4507,7 +4507,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Beans require no-arg constructors.
 	 *
-	 * @see BeanContext.Builder#beansRequireDefaultConstructor()
+	 * @see MarshallingContext.Builder#beansRequireDefaultConstructor()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -4517,7 +4517,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Beans require Serializable interface.
 	 *
-	 * @see BeanContext.Builder#beansRequireSerializable()
+	 * @see MarshallingContext.Builder#beansRequireSerializable()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -4527,7 +4527,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Beans require setters for getters.
 	 *
-	 * @see BeanContext.Builder#beansRequireSettersForGetters()
+	 * @see MarshallingContext.Builder#beansRequireSettersForGetters()
 	 * @return
 	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
 	 * 	<br>Otherwise, they are ignored.
@@ -4537,7 +4537,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Beans require at least one property.
 	 *
-	 * @see BeanContext.Builder#disableBeansRequireSomeProperties()
+	 * @see MarshallingContext.Builder#disableBeansRequireSomeProperties()
 	 * @return
 	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
@@ -4550,7 +4550,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 *
-	 * @see BeanContext.Builder#findFluentSetters()
+	 * @see MarshallingContext.Builder#findFluentSetters()
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
@@ -4559,7 +4559,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Ignore invocation errors on getters.
 	 *
-	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnGetters()
+	 * @see MarshallingContext.Builder#ignoreInvocationExceptionsOnGetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
 	 */
@@ -4568,7 +4568,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Ignore invocation errors on setters.
 	 *
-	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnSetters()
+	 * @see MarshallingContext.Builder#ignoreInvocationExceptionsOnSetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
 	 */
@@ -4577,7 +4577,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Silently ignore missing setters.
 	 *
-	 * @see BeanContext.Builder#disableIgnoreMissingSetters()
+	 * @see MarshallingContext.Builder#disableIgnoreMissingSetters()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
@@ -4586,7 +4586,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Ignore unknown properties.
 	 *
-	 * @see BeanContext.Builder#ignoreUnknownBeanProperties()
+	 * @see MarshallingContext.Builder#ignoreUnknownBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
@@ -4596,7 +4596,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Ignore unknown enum values.
 	 *
-	 * @see BeanContext.Builder#ignoreUnknownEnumValues()
+	 * @see MarshallingContext.Builder#ignoreUnknownEnumValues()
 	 * @return
 	 * 	<jk>true</jk> if unknown enum values should be set as <jk>null</jk> instead of throwing an exception.
 	 */
@@ -4605,7 +4605,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Ignore unknown properties with null values.
 	 *
-	 * @see BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()
+	 * @see MarshallingContext.Builder#disableIgnoreUnknownNullBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should throw a {@link BeanRuntimeException}.
 	 */
@@ -4614,7 +4614,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Returns whether bean properties are unsorted (i.e. in natural JVM order rather than alphabetical).
 	 *
-	 * @see BeanContext.Builder#unsortedProperties()
+	 * @see MarshallingContext.Builder#unsortedProperties()
 	 * @return
 	 * 	<jk>true</jk> if bean properties are in natural JVM order; <jk>false</jk> (the default) means alphabetical order.
 	 */
@@ -4623,7 +4623,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Use enum names.
 	 *
-	 * @see BeanContext.Builder#useEnumNames()
+	 * @see MarshallingContext.Builder#useEnumNames()
 	 * @return
 	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
 	 */
@@ -4632,7 +4632,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Use interface proxies.
 	 *
-	 * @see BeanContext.Builder#disableInterfaceProxies()
+	 * @see MarshallingContext.Builder#disableInterfaceProxies()
 	 * @return
 	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
@@ -4642,7 +4642,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Use Java Introspector.
 	 *
-	 * @see BeanContext.Builder#useJavaBeanIntrospector()
+	 * @see MarshallingContext.Builder#useJavaBeanIntrospector()
 	 * @return
 	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
 	 */
@@ -4658,14 +4658,14 @@ public class BeanContext extends Context implements ConversionFinder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.
 	 * @param c The name of the class to create a new instance of.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new instance of the class.
-	 * @see BeanSession#newBeanMap(Class)
+	 * @see MarshallingSession#newBeanMap(Class)
 	 */
 	public <T> BeanMap<T> newBeanMap(Class<T> c) {
 		assertArgNotNull(ARG_c, c);
@@ -4681,14 +4681,14 @@ public class BeanContext extends Context implements ConversionFinder {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.
 	 * @param object The object to wrap in a map interface.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return The wrapped object.
-	 * @see BeanSession#toBeanMap(Object)
+	 * @see MarshallingSession#toBeanMap(Object)
 	 */
 	public <T> BeanMap<T> toBeanMap(T object) {
 		assertArgNotNull(ARG_object, object);
@@ -4703,7 +4703,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	protected final BeanRegistry getBeanRegistry() { return beanRegistry; }
 
 	/**
-	 * Returns the serializer to use for serializing beans when using the {@link BeanSession#convertToType(Object, Class)}
+	 * Returns the serializer to use for serializing beans when using the {@link MarshallingSession#convertToType(Object, Class)}
 	 * and related methods.
 	 *
 	 * @return The serializer.  May be <jk>null</jk> if all initialization has occurred.
@@ -4744,7 +4744,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Bean class exclusions.
 	 *
-	 * @see BeanContext.Builder#notBeanClasses(ClassInfo...)
+	 * @see MarshallingContext.Builder#notBeanClasses(ClassInfo...)
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
 	 * 	<br>Never <jk>null</jk>.
@@ -4762,7 +4762,7 @@ public class BeanContext extends Context implements ConversionFinder {
 	/**
 	 * Ignore transient fields.
 	 *
-	 * @see BeanContext.Builder#disableIgnoreTransientFields()
+	 * @see MarshallingContext.Builder#disableIgnoreTransientFields()
 	 * @return
 	 * 	<jk>true</jk> if fields and methods marked as transient should not be ignored.
 	 */
@@ -4977,7 +4977,7 @@ public class BeanContext extends Context implements ConversionFinder {
 
 			// This classmeta could have been created by a different context.
 			// Need to re-resolve it to pick up ObjectSwaps and stuff on this context.
-			if (cm.getBeanContext() == this)
+			if (cm.getMarshallingContext() == this)
 				return cm;
 			if (cm.isMap())
 				return getClassMeta(cm.inner(), cm.getKeyType(), cm.getValueType());

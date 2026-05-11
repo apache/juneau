@@ -48,7 +48,7 @@ class MarshalledConfig_Test extends TestBase {
 	//====================================================================================================
 	@Test void a01_basic() {
 
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 
 		var p1 = new Person();
 		p1.setName("John Doe");
@@ -196,10 +196,10 @@ class MarshalledConfig_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Exhaustive test of BeanContext.convertToType()
+	// Exhaustive test of MarshallingContext.convertToType()
 	//====================================================================================================
 	@Test void a01_beanContextConvertToType() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var o = (Object)null;
 
 		// Primitive nulls.
@@ -306,7 +306,7 @@ class MarshalledConfig_Test extends TestBase {
 	// Test properties set through a constructor.
 	//====================================================================================================
 	@Test void a02_readOnlyProperties() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var o = new ReadOnlyPerson("x", 123);
 
 		// Bean to String
@@ -338,7 +338,7 @@ class MarshalledConfig_Test extends TestBase {
 	}
 
 	@Test void a03_readOnlyProperties_usingConfig() throws Exception {
-		var bc = BeanContext.DEFAULT.copy().applyAnnotations(ReadOnlyPerson2Config.class).build();
+		var bc = MarshallingContext.DEFAULT.copy().applyAnnotations(ReadOnlyPerson2Config.class).build();
 		var o = new ReadOnlyPerson2("x", 123);
 
 		// Bean to String
@@ -379,7 +379,7 @@ class MarshalledConfig_Test extends TestBase {
 	// testEnums
 	//====================================================================================================
 	@Test void a04_enums() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var o = "ENUM2";
 
 		// Enum
@@ -399,7 +399,7 @@ class MarshalledConfig_Test extends TestBase {
 	// testProxyHandler
 	//====================================================================================================
 	@Test void a05_proxyHandler() {
-		var session = BeanContext.DEFAULT_SESSION;
+		var session = MarshallingContext.DEFAULT_SESSION;
 
 		var f1 = (A) Proxy.newProxyInstance(this.getClass().getClassLoader(), a(A.class), new AHandler());
 
@@ -465,7 +465,7 @@ class MarshalledConfig_Test extends TestBase {
 	//====================================================================================================
 	@Test void a06_fluentStyleSetters() {
 		var t = new B2().init();
-		var m = BeanContext.DEFAULT.toBeanMap(t);
+		var m = MarshallingContext.DEFAULT.toBeanMap(t);
 		m.put("f1", 2);
 		assertEquals(2, t.f1);
 	}
@@ -569,9 +569,9 @@ class MarshalledConfig_Test extends TestBase {
 		assertDifferentCache(p1.notBeanPackages("baz").notBeanPackages("bing"), p2);
 		assertSameCache(p2.notBeanPackages("bing").notBeanPackages("baz"), p2);
 
-		p1.beanContext().notBeanPackages().remove("bar");
+		p1.marshallingContext().notBeanPackages().remove("bar");
 		assertDifferentCache(p1, p2);
-		p2.beanContext().notBeanPackages().remove("bar");
+		p2.marshallingContext().notBeanPackages().remove("bar");
 		assertSameCache(p1, p2);
 
 		assertDifferentCache(p1.swaps(DummyPojoSwapA.class), p2);
@@ -587,20 +587,20 @@ class MarshalledConfig_Test extends TestBase {
 	private static void assertSameCache(Parser.Builder p1b, Parser.Builder p2b) {
 		var p1 = p1b.build();
 		var p2 = p2b.build();
-		assertTrue(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
+		assertTrue(p1.getMarshallingContext().hasSameCache(p2.getMarshallingContext()));
 	}
 
 	private static void assertDifferentCache(Parser.Builder p1b, Parser.Builder p2b) {
 		var p1 = p1b.build();
 		var p2 = p2b.build();
-		assertFalse(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
+		assertFalse(p1.getMarshallingContext().hasSameCache(p2.getMarshallingContext()));
 	}
 
 	//====================================================================================================
 	// testNotABeanReasons
 	//====================================================================================================
 	@Test void a08_notABeanNonStaticInnerClass() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(C1.class);
 		assertFalse(cm.canCreateNewInstance());
 	}
@@ -618,7 +618,7 @@ class MarshalledConfig_Test extends TestBase {
 	// Should be around 100ms at most.
 	@Test void a09_addingToArrayProperty() {
 		assertTimeout(Duration.ofSeconds(1), () -> {
-			var bc = BeanContext.DEFAULT;
+			var bc = MarshallingContext.DEFAULT;
 			var bm = bc.newBeanMap(D.class);
 			for (var i = 0; i < 5000; i++) {
 				bm.add("f1", i);
@@ -647,15 +647,15 @@ class MarshalledConfig_Test extends TestBase {
 	// Make sure we can get ClassMeta objects against the Class class.
 	//====================================================================================================
 	@Test void a10_classClassMeta() {
-		assertNotNull(BeanContext.DEFAULT.getClassMeta(Class.class));
-		assertNotNull(BeanContext.DEFAULT.getClassMeta(Class[].class));
+		assertNotNull(MarshallingContext.DEFAULT.getClassMeta(Class.class));
+		assertNotNull(MarshallingContext.DEFAULT.getClassMeta(Class[].class));
 	}
 
 	//====================================================================================================
 	// testBlanks
 	//====================================================================================================
 	@Test void a11_blanks() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 
 		// Blanks get interpreted as the default value for primitives and null for boxed objects.
 		assertEquals(0, (int)bc.convertToType("", int.class));

@@ -45,15 +45,15 @@ class IgnoredClasses_Test extends TestBase {
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));
 		s.notBeanPackages("org.apache.juneau");
 		assertEquals("'isNotBean'", s.build().serialize(a));
-		s.beanContext().notBeanPackages().remove("org.apache.juneau");
+		s.marshallingContext().notBeanPackages().remove("org.apache.juneau");
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));
 		s.notBeanPackages("org.apache.juneau.*");
 		assertEquals("'isNotBean'", s.build().serialize(a));
-		s.beanContext().notBeanPackages().remove("org.apache.juneau.*");
+		s.marshallingContext().notBeanPackages().remove("org.apache.juneau.*");
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));
 		s.notBeanPackages("org.apache.juneau.*");
 		assertEquals("'isNotBean'", s.build().serialize(a));
-		s.beanContext().notBeanPackages().remove("org.apache.juneau.*");
+		s.marshallingContext().notBeanPackages().remove("org.apache.juneau.*");
 		assertEquals("{f1:'isBean'}", s.build().serialize(a));
 		s.notBeanPackages("org.apache.juneau");
 		assertEquals("'isNotBean'", s.build().serialize(a));

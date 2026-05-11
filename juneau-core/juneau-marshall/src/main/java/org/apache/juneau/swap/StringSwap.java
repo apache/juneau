@@ -25,12 +25,12 @@ package org.apache.juneau.swap;
  * 	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> StringSwap&lt;<jk>byte</jk>[]&gt; {
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, <jk>byte</jk>[] <jv>bytes</jv>) <jk>throws</jk> Exception {
+ * 		<jk>public</jk> String swap(MarshallingSession <jv>session</jv>, <jk>byte</jk>[] <jv>bytes</jv>) <jk>throws</jk> Exception {
  * 			<jk>return</jk> StringUtils.<jsm>base64Encode</jsm>(<jv>bytes</jv>);
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public byte</jk>[] unswap(BeanSession <jv>session</jv>, String <jv>string</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
+ * 		<jk>public byte</jk>[] unswap(MarshallingSession <jv>session</jv>, String <jv>string</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
  * 			<jk>return</jk> StringUtils.<jsm>base64Decode</jsm>(<jv>string</jv>);
  * 		}
  * 	}

@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
 class OpenApiUI_Test extends TestBase {
 
 	private static final OpenApiUI UI = new OpenApiUI();
-	private static final BeanSession SESSION = BeanContext.DEFAULT_SESSION;
+	private static final MarshallingSession SESSION = MarshallingContext.DEFAULT_SESSION;
 
 	// Calls swap() with a minimal OpenApi document (no info, no paths, no tags).
 	@Test void a01_swap_minimal() throws Exception {

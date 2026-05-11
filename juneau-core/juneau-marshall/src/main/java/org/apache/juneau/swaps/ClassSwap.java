@@ -29,12 +29,12 @@ import org.apache.juneau.swap.*;
 public class ClassSwap extends StringSwap<Class<?>> {
 
 	@Override /* Overridden from ObjectSwap */
-	public String swap(BeanSession session, Class<?> o) throws Exception {
+	public String swap(MarshallingSession session, Class<?> o) throws Exception {
 		return o == null ? null : o.getName();
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	public Class<?> unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
+	public Class<?> unswap(MarshallingSession session, String o, ClassMeta<?> hint) throws Exception {
 		return o == null ? null : Class.forName(o);
 	}
 }

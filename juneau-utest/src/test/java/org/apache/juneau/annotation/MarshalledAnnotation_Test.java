@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 class MarshalledAnnotation_Test extends TestBase {
 
 	private static class X1 {}
-	private  static class X2 extends BeanInterceptor<MarshalledAnnotation_Test> {}
+	private  static class X2 extends MarshallingInterceptor<MarshalledAnnotation_Test> {}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -97,8 +97,8 @@ class MarshalledAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_testEquivalencyInPropertyStores() {
-		var b1 = BeanContext.create().annotations(a1).build();
-		var b2 = BeanContext.create().annotations(a2).build();
+		var b1 = MarshallingContext.create().annotations(a1).build();
+		var b2 = MarshallingContext.create().annotations(a2).build();
 		assertSame(b1, b2);
 	}
 

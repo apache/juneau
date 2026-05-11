@@ -154,7 +154,7 @@ public @interface SerializerConfig {
 	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 	 *
 	 * <p>
-	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}.
+	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.MarshallingTraverseContext.Builder#ignoreRecursions()}.
 	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
@@ -177,7 +177,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#detectRecursions()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -218,12 +218,12 @@ public @interface SerializerConfig {
 	 * Ignore recursion errors.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}.
+	 * Used in conjunction with {@link org.apache.juneau.MarshallingTraverseContext.Builder#detectRecursions()}.
 	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <js>"false"</js>.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 * <br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
+	 * <br>Otherwise, a {@link MarshallingRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
 	 *
 	 * <ul class='values'>
 	 * 	<li><js>"true"</js>
@@ -236,7 +236,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#ignoreRecursions()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -260,7 +260,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#initialDepth(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#initialDepth(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -329,7 +329,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#maxDepth(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.

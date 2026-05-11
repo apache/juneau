@@ -66,12 +66,12 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 	private static class SortEntry implements Comparable {
 		Object o;
 		ClassMeta<?> cm;
-		BeanSession bs;
+		MarshallingSession bs;
 
 		Object sortVal;
 		boolean isDesc;
 
-		SortEntry(BeanSession bs, Object o) {
+		SortEntry(MarshallingSession bs, Object o) {
 			this.o = o;
 			this.bs = bs;
 			this.cm = bs.getClassMetaForObject(o);
@@ -130,7 +130,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 	}
 
 	@Override /* Overridden from ObjectTool */
-	public Object run(BeanSession session, Object input, SortArgs args) {
+	public Object run(MarshallingSession session, Object input, SortArgs args) {
 		if (input == null)
 			return null;
 
@@ -189,7 +189,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		"java:S1168"     // TODO: null when result not list/collection/array. Consider empty list.
 	})
 	public <R> List<R> run(Object input, String sortArgs) {
-		var r = run(BeanContext.DEFAULT_SESSION, input, SortArgs.create(sortArgs));
+		var r = run(MarshallingContext.DEFAULT_SESSION, input, SortArgs.create(sortArgs));
 		if (r instanceof List r2)
 			return r2;
 		if (r instanceof Collection r2)

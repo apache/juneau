@@ -66,7 +66,7 @@ public @interface MarshalledProp {
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#dictionary()}
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * <p>
@@ -142,7 +142,7 @@ public @interface MarshalledProp {
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanFactory}
 	 * 	<li class='ja'>{@link Bean#factory()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanStore(org.apache.juneau.commons.inject.BeanStore)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanStore(org.apache.juneau.commons.inject.BeanStore)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -160,7 +160,7 @@ public @interface MarshalledProp {
 	 *
 	 * <p>
 	 * During parsing, we will attempt to convert the value to the original form by using the
-	 * {@link BeanSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
+	 * {@link MarshallingSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -196,7 +196,7 @@ public @interface MarshalledProp {
 	 * However, this property can be used to assign a different property name from the automatically inferred value.
 	 *
 	 * <p>
-	 * If the {@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility)} setting on the bean context excludes this field (e.g. the
+	 * If the {@link org.apache.juneau.MarshallingContext.Builder#beanFieldVisibility(Visibility)} setting on the bean context excludes this field (e.g. the
 	 * visibility is set to PUBLIC, but the field is PROTECTED), this annotation can be used to force the field to be
 	 * identified as a property.
 	 *
@@ -297,7 +297,7 @@ public @interface MarshalledProp {
 	 *
 	 * <div class='info'>
 	 * 	Note that if you're not interested in these additional properties, you can also use the
-	 * 	{@link org.apache.juneau.BeanContext.Builder#ignoreUnknownBeanProperties()} setting to ignore values that don't fit into existing
+	 * 	{@link org.apache.juneau.MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting to ignore values that don't fit into existing
 	 * 	properties.
 	 * </div>
 	 * <div class='info'>
@@ -415,9 +415,9 @@ public @interface MarshalledProp {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(String, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesReadOnly(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesReadOnly(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesReadOnly(Map)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -497,9 +497,9 @@ public @interface MarshalledProp {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Class, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(String, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesWriteOnly(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesWriteOnly(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesWriteOnly(Map)}
 	 * </ul>
 	 *
 	 * @return The annotation value.

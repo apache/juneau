@@ -243,7 +243,7 @@ public class ObjectIntrospector {
 	public Object invokeMethod(String method, String args) throws NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
 		if (object == null)
 			return null;
-		var m = parser.getBeanContext()
+		var m = parser.getMarshallingContext()
 			.getClassMeta(object.getClass())
 			.getPublicMethods()
 			.stream()

@@ -44,21 +44,21 @@ import org.apache.juneau.serializer.*;
  * <h5 class='figure'>Valid swap methods (S = Swapped type)</h5>
  * <ul>
  * 	<li class='jm'><c><jk>public</jk> S toMap()</c>
- * 	<li class='jm'><c><jk>public</jk> S toMap(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toMap(MarshallingSession)</c>
  * 	<li class='jm'><c><jk>public</jk> S toJsonMap()</c>
- * 	<li class='jm'><c><jk>public</jk> S toJsonMap(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toJsonMap(MarshallingSession)</c>
  * </ul>
  *
  * <h5 class='figure'>Valid unswap methods (N = Normal type, S = Swapped type)</h5>
  * <ul>
  * 	<li class='jm'><c><jk>public static</jk> N fromMap(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromMap(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromMap(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N fromJsonMap(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromJsonMap(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromJsonMap(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N create(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N create(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N create(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N valueOf(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N valueOf(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N valueOf(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public</jk> N(S)</c>
  * </ul>
  *
@@ -98,7 +98,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 		"rawtypes", // Raw types necessary for generic type handling
 		"java:S1452"  // Wildcard required - ObjectSwap<?,?> for dynamically discovered swap types
 	})
-	public static ObjectSwap<?,?> find(BeanContext bc, ClassInfo ci) {
+	public static ObjectSwap<?,?> find(MarshallingContext bc, ClassInfo ci) {
 
 		if (shouldIgnore(bc, ci))
 			return null;
@@ -124,7 +124,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 		return null;
 	}
 
-	private static boolean isSwapMethod(BeanContext bc, MethodInfo mi) {
+	private static boolean isSwapMethod(MarshallingContext bc, MethodInfo mi) {
 		// @formatter:off
 		return
 			mi.isNotDeprecated()
@@ -132,12 +132,12 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasReturnTypeParent(Map.class)
-			&& mi.hasParameterTypesLenient(BeanSession.class)
+			&& mi.hasParameterTypesLenient(MarshallingSession.class)
 			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(MarshalledIgnore.class, m2));
 		// @formatter:on
 	}
 
-	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
+	private static boolean isUnswapConstructor(MarshallingContext bc, ConstructorInfo cs, ClassInfo rt) {
 		// @formatter:off
 		return
 			cs.isNotDeprecated()
@@ -147,20 +147,20 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 		// @formatter:on
 	}
 
-	private static boolean isUnswapMethod(BeanContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {
+	private static boolean isUnswapMethod(MarshallingContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {
 		// @formatter:off
 		return
 			mi.isNotDeprecated()
 			&& mi.isStatic()
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
-			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
+			&& mi.hasParameterTypesLenient(MarshallingSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
 			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(MarshalledIgnore.class, m2));
 		// @formatter:on
 	}
 
-	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
+	private static boolean shouldIgnore(MarshallingContext bc, ClassInfo ci) {
 		return ci.isNonStaticMemberClass() || bc.getAnnotationProvider().has(MarshalledIgnore.class, ci);
 	}
 
@@ -170,7 +170,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 	private final Method unswapMethod;
 	private final Constructor<?> unswapConstructor;
 
-	private AutoMapSwap(BeanContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
+	private AutoMapSwap(MarshallingContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
 		super(ci.inner(), swapMethod.inner().getReturnType());
 		this.swapMethod = bc.getBeanMethodVisibility().transform(swapMethod.inner());
 		this.unswapMethod = unswapMethod == null ? null : bc.getBeanMethodVisibility().transform(unswapMethod.inner());
@@ -178,7 +178,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	public Map<?,?> swap(BeanSession session, Object o) throws SerializeException {
+	public Map<?,?> swap(MarshallingSession session, Object o) throws SerializeException {
 		try {
 			return (Map<?,?>)swapMethod.invoke(o, getMatchingArgs(swapMethod.getParameterTypes(), session));
 		} catch (Exception e) {
@@ -190,7 +190,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 		"unchecked" // Type erasure requires cast to T
 	})
 	@Override /* Overridden from ObjectSwap */
-	public T unswap(BeanSession session, Map<?,?> o, ClassMeta<?> hint) throws ParseException {
+	public T unswap(MarshallingSession session, Map<?,?> o, ClassMeta<?> hint) throws ParseException {
 		try {
 			if (nn(unswapMethod))
 				return (T)unswapMethod.invoke(null, getMatchingArgs(unswapMethod.getParameterTypes(), session, o));

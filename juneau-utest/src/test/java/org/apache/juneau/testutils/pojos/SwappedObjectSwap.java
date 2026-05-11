@@ -26,12 +26,12 @@ import org.apache.juneau.swap.*;
 
 public class SwappedObjectSwap extends ObjectSwap<SwappedObject,String> {
 	@Override
-	public String swap(BeanSession session, SwappedObject c) throws SerializeException {
+	public String swap(MarshallingSession session, SwappedObject c) throws SerializeException {
 		return SWAP;
 	}
 
 	@Override
-	public SwappedObject unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
+	public SwappedObject unswap(MarshallingSession session, String f, ClassMeta<?> hint) throws ParseException {
 		var c = new SwappedObject();
 		if (eq(f, SWAP))
 			c.wasUnswapped = true;

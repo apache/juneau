@@ -33,7 +33,7 @@ import org.apache.juneau.swap.*;
  * 	Person <jv>person</jv> = <jk>new</jk> Person();
  *
  * 	<jc>// Wrap it in a bean map</jc>
- * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jv>person</jv>);
+ * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.toBeanMap(<jv>person</jv>);
  *
  * 	<jc>// Get a reference to the birthDate property</jc>
  * 	BeanMapEntry <jv>birthDate</jv> = <jv>beanMap</jv>.getProperty(<js>"birthDate"</js>);

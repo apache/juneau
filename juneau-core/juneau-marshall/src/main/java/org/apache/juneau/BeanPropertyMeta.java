@@ -84,7 +84,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 */
 	public static class Builder {
 		BeanMeta<?> beanMeta;  // Package-private for BeanMeta access
-		BeanContext bc;  // Package-private for BeanMeta access
+		MarshallingContext bc;  // Package-private for BeanMeta access
 		String name;  // Package-private for BeanMeta access
 		FieldInfo field;  // Package-private for BeanMeta access
 		FieldInfo innerField;  // Package-private for BeanMeta access
@@ -109,7 +109,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
-			this.bc = beanMeta.getBeanContext();
+			this.bc = beanMeta.getMarshallingContext();
 			this.name = name;
 		}
 
@@ -302,7 +302,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			"java:S112",  // Generic exception thrown; acceptable for framework/lifecycle methods
 			"java:S6541"  // Brain Method: validate() intentionally consolidates property metadata resolution
 		})
-		public boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
+		public boolean validate(MarshallingContext bc, BeanRegistry parentBeanRegistry, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			var bdClasses = list();
 			var ap = bc.getAnnotationProvider();
@@ -474,7 +474,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	private final AnnotationProvider ap;                             // Annotation provider for finding annotations on this property.
 	private final Supplier<List<AnnotationInfo<?>>> annotations;     // Memoized list of all annotations on this property.
-	private final BeanContext bc;                                    // The context that created this meta.
+	private final MarshallingContext bc;                                    // The context that created this meta.
 	private final BeanMeta<?> beanMeta;                              // The bean that this property belongs to.
 	private final BeanRegistry beanRegistry;                         // Bean registry for resolving bean types in this property.
 	private final boolean canRead;                                   // True if this property can be read.
@@ -554,12 +554,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new JsonList(m.getBeanSession()));
+				m.propertyCache.put(name, new JsonList(m.getMarshallingSession()));
 			((JsonList)m.propertyCache.get(name)).add(value);
 			return;
 		}
 
-		var session = m.getBeanSession();
+		var session = m.getMarshallingSession();
 
 		var isCollection = rawTypeMeta.isCollection();
 		var isArray = rawTypeMeta.isArray();
@@ -643,12 +643,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new JsonMap(m.getBeanSession()));
+				m.propertyCache.put(name, new JsonMap(m.getMarshallingSession()));
 			((JsonMap)m.propertyCache.get(name)).append(key, value);
 			return;
 		}
 
-		var session = m.getBeanSession();
+		var session = m.getMarshallingSession();
 
 		var isMap = rawTypeMeta.isMap();
 		var isBean = rawTypeMeta.isBean();
@@ -820,7 +820,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
 	 * 	<li>Dictionary defined via {@link MarshalledProp#dictionary() @MarshalledProp(dictionary)}.
-	 * 	<li>Dictionary defined via {@link BeanContext.Builder#beanDictionary(Class...)}.
+	 * 	<li>Dictionary defined via {@link MarshallingContext.Builder#beanDictionary(Class...)}.
 	 * </ol>
 	 *
 	 * @return The bean dictionary in use for this bean property.  Never <jk>null</jk>.
@@ -1012,7 +1012,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (readOnly)
 				return null;
 
-			var session = m.getBeanSession();
+			var session = m.getMarshallingSession();
 
 			// Convert to raw form.
 			value1 = unswap(session, value1);
@@ -1047,7 +1047,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		"java:S3776", // Cognitive complexity acceptable for complex property setter
 		"java:S6541" // Brain method acceptable - complex property value setting logic requires high LOC/complexity
 	})
-	private Object setPropertyValue(BeanMap<?> m, String pName, Object value1, Object bean, boolean isMap, boolean isCollection, BeanSession session) throws ParseException {
+	private Object setPropertyValue(BeanMap<?> m, String pName, Object value1, Object bean, boolean isMap, boolean isCollection, MarshallingSession session) throws ParseException {
 		try {
 			var r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
 			var propertyClass = rawTypeMeta.inner();
@@ -1216,7 +1216,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return r(properties());
 	}
 
-	private Object applyChildPropertiesFilter(BeanSession session, ClassMeta cm, Object o) {
+	private Object applyChildPropertiesFilter(MarshallingSession session, ClassMeta cm, Object o) {
 		if (o == null)
 			return null;
 		if (cm.isBean())
@@ -1254,7 +1254,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (bean == null)
 				return m.propertyCache.get(name);
 
-	var session = m.getBeanSession();
+	var session = m.getMarshallingSession();
 	var o = getRaw(m, pName);
 
 	return swapAndFilterProperty(session, o);
@@ -1269,7 +1269,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 	}
 
-	private Object swapAndFilterProperty(BeanSession session, Object o) {
+	private Object swapAndFilterProperty(MarshallingSession session, Object o) {
 		try {
 			o = swap(session, o);
 			if (o == null)
@@ -1342,7 +1342,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			getClassMeta().getName(), cn(val));
 	}
 
-	private Object swap(BeanSession session, Object o) throws SerializeException {
+	private Object swap(MarshallingSession session, Object o) throws SerializeException {
 		try {
 			// First use swap defined via @MarshalledProp.
 			if (nn(swap))
@@ -1363,7 +1363,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 	}
 
-	private Object unswap(BeanSession session, Object o) throws ParseException {
+	private Object unswap(MarshallingSession session, Object o) throws ParseException {
 		try {
 			if (nn(swap))
 				return swap.unswap(session, o, rawTypeMeta);

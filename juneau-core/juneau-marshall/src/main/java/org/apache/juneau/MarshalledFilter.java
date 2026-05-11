@@ -73,7 +73,7 @@ import org.apache.juneau.swap.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='ja'>{@link Marshalled @Marshalled}
- * 	<li class='jc'>{@link BeanInterceptor}
+ * 	<li class='jc'>{@link MarshallingInterceptor}
  * 	<li class='jc'>{@link PropertyNamer}
  * </ul>
  */
@@ -103,7 +103,7 @@ public class MarshalledFilter {
 		private boolean fluentSetters;
 		private BeanInstantiator.Builder<PropertyNamer> propertyNamer = BeanInstantiator.of(PropertyNamer.class);
 		private List<ClassInfo> dictionary;
-		private BeanInstantiator.Builder<BeanInterceptor> interceptor = BeanInstantiator.of(BeanInterceptor.class);
+		private BeanInstantiator.Builder<MarshallingInterceptor> interceptor = BeanInstantiator.of(MarshallingInterceptor.class);
 
 		/**
 		 * Constructor for non-bean POJO filters.
@@ -185,7 +185,7 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#dictionary()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanDictionary(Class...)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
 		 * </ul>
 		 *
 		 * @param values The values to add to this property.
@@ -234,9 +234,9 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#excludeProperties()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesExcludes(Class, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesExcludes(String, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesExcludes(Map)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesExcludes(Class, String)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesExcludes(String, String)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesExcludes(Map)}
 		 * </ul>
 		 *
 		 * @param value
@@ -259,7 +259,7 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#findFluentSetters()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#findFluentSetters()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#findFluentSetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -302,17 +302,17 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#interceptor()}
-		 * 	<li class='jc'>{@link BeanInterceptor}
+		 * 	<li class='jc'>{@link MarshallingInterceptor}
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * 	<br>The default value is {@link BeanInterceptor}.
+		 * 	<br>The default value is {@link MarshallingInterceptor}.
 		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder interceptor(Class<?> value) {
-			interceptor.type((Class<? extends BeanInterceptor>) value);
+			interceptor.type((Class<? extends MarshallingInterceptor>) value);
 			return this;
 		}
 
@@ -371,9 +371,9 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#properties()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanProperties(Class, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanProperties(String, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanProperties(Map)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanProperties(Class, String)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanProperties(String, String)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanProperties(Map)}
 		 * </ul>
 		 *
 		 * @param value
@@ -396,7 +396,7 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#propertyNamer()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#propertyNamer(Class)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#propertyNamer(Class)}
 		 * 	<li class='jc'>{@link PropertyNamer}
 		 * </ul>
 		 *
@@ -433,9 +433,9 @@ public class MarshalledFilter {
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#readOnlyProperties()}
 		 * 	<li class='ja'>{@link MarshalledProp#ro()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(String, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(Map)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesReadOnly(Class, String)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesReadOnly(String, String)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesReadOnly(Map)}
 		 * </ul>
 		 *
 		 * @param value
@@ -455,7 +455,7 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#unsorted()}
-		 * 	<li class='jf'>{@link BeanContext.Builder#unsortedProperties()}
+		 * 	<li class='jf'>{@link MarshallingContext.Builder#unsortedProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -470,7 +470,7 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#unsorted()}
-		 * 	<li class='jf'>{@link BeanContext.Builder#unsortedProperties()}
+		 * 	<li class='jf'>{@link MarshallingContext.Builder#unsortedProperties()}
 		 * </ul>
 		 *
 		 * @param value
@@ -543,9 +543,9 @@ public class MarshalledFilter {
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#writeOnlyProperties()}
 		 * 	<li class='ja'>{@link MarshalledProp#wo()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesWriteOnly(Class, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesWriteOnly(String, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesWriteOnly(Map)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesWriteOnly(Class, String)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesWriteOnly(String, String)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesWriteOnly(Map)}
 		 * </ul>
 		 *
 		 * @param value
@@ -591,7 +591,7 @@ public class MarshalledFilter {
 	private final boolean fluentSetters;
 	private final ClassInfo implClass;
 	private final ClassInfo interfaceClass;
-	private final BeanInterceptor interceptor;
+	private final MarshallingInterceptor interceptor;
 	private final Set<String> properties;
 	private final PropertyNamer propertyNamer;
 	private final Set<String> readOnlyProperties;
@@ -621,7 +621,7 @@ public class MarshalledFilter {
 		this.fluentSetters = builder.fluentSetters;
 		this.propertyNamer = builder.propertyNamer.asOptional().orElse(null);
 		this.beanDictionary = builder.dictionary == null ? list() : u(copyOf(builder.dictionary));
-		this.interceptor = builder.interceptor.asOptional().orElse(BeanInterceptor.DEFAULT);
+		this.interceptor = builder.interceptor.asOptional().orElse(MarshallingInterceptor.DEFAULT);
 	}
 
 	/**
@@ -736,7 +736,7 @@ public class MarshalledFilter {
 	public boolean isUnsortedProperties() { return unsortedProperties; }
 
 	/**
-	 * Calls the {@link BeanInterceptor#readProperty(Object, String, Object)} method on the registered property filters.
+	 * Calls the {@link MarshallingInterceptor#readProperty(Object, String, Object)} method on the registered property filters.
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.
@@ -751,7 +751,7 @@ public class MarshalledFilter {
 	}
 
 	/**
-	 * Calls the {@link BeanInterceptor#writeProperty(Object, String, Object)} method on the registered property filters.
+	 * Calls the {@link MarshallingInterceptor#writeProperty(Object, String, Object)} method on the registered property filters.
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.

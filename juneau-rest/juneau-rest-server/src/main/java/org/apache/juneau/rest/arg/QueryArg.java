@@ -154,7 +154,7 @@ public class QueryArg implements RestOpArg {
 		var req = opSession.getRequest();
 		var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		var rh = req.getQueryParams();
-		var bs = req.getBeanSession();
+		var bs = req.getMarshallingSession();
 		var cm = bs.getClassMeta(type.innerType());
 
 		if (multi) {
@@ -173,7 +173,7 @@ public class QueryArg implements RestOpArg {
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 			var m = new JsonMap();
 			rh.forEach(e -> m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).as(cm.getValueType()).orElse(null)));
-			return req.getBeanSession().convertToType(m, cm);
+			return req.getMarshallingSession().convertToType(m, cm);
 		}
 
 		return rh.getLast(name).parser(ps).schema(schema).def(def).as(type.innerType()).orElse(null);

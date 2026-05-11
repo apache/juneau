@@ -237,7 +237,7 @@ class Common_Test extends TestBase {
 		r3.r1 = r1;
 
 		// No recursion detection
-		assertThrowsWithMessage(Exception.class, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, "It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.", ()->s.build().serialize(r1));
 
 		// Recursion detection, no ignore
 		s.detectRecursions();

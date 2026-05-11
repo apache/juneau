@@ -30,7 +30,7 @@ import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.utils.*;
 
 /**
- * ContextSession that lives for the duration of a single use of {@link BeanTraverseContext}.
+ * ContextSession that lives for the duration of a single use of {@link MarshallingTraverseContext}.
  *
  * <p>
  * Used by serializers and other classes that traverse POJOs for the following purposes:
@@ -52,13 +52,13 @@ import org.apache.juneau.commons.utils.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - ClassMeta<?>, ObjectSwap<?,?> for traversal metadata
 })
-public class BeanTraverseSession extends BeanSession {
+public class MarshallingTraverseSession extends MarshallingSession {
 
 	// Property name constants
 	private static final String PROP_indent = "indent";
 	private static final String PROP_depth = "depth";
 	private static final String PROP_initialDepth = "initialDepth";
-	private static final String PROP_BeanTraverseSession_initialDepth = "BeanTraverseSession.initialDepth";
+	private static final String PROP_BeanTraverseSession_initialDepth = "MarshallingTraverseSession.initialDepth";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -66,9 +66,9 @@ public class BeanTraverseSession extends BeanSession {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder extends BeanSession.Builder {
+	public abstract static class Builder extends MarshallingSession.Builder {
 
-		private BeanTraverseContext ctx;
+		private MarshallingTraverseContext ctx;
 		private int initialDepth;
 
 		/**
@@ -77,8 +77,8 @@ public class BeanTraverseSession extends BeanSession {
 		 * @param ctx The context creating this session.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
-		protected Builder(BeanTraverseContext ctx) {
-			super(assertArgNotNull(ARG_ctx, ctx).getBeanContext());
+		protected Builder(MarshallingTraverseContext ctx) {
+			super(assertArgNotNull(ARG_ctx, ctx).getMarshallingContext());
 			this.ctx = ctx;
 			initialDepth = ctx.getInitialDepth();
 		}
@@ -182,13 +182,13 @@ public class BeanTraverseSession extends BeanSession {
 			var sb = new StringBuilder().append('[').append(depth).append(']').append(' ');
 			sb.append(e(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
-			if (aType != aType.getSerializedClassMeta(BeanTraverseSession.this))
-				sb.append('/').append(aType.getSerializedClassMeta(BeanTraverseSession.this).toString(simple));
+			if (aType != aType.getSerializedClassMeta(MarshallingTraverseSession.this))
+				sb.append('/').append(aType.getSerializedClassMeta(MarshallingTraverseSession.this).toString(simple));
 			return sb.toString();
 		}
 	}
 
-	private final BeanTraverseContext ctx;
+	private final MarshallingTraverseContext ctx;
 	private final LinkedList<StackElement> stack = new LinkedList<>();              // Contains the current objects in the current branch of the model.
 	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
 	private BeanPropertyMeta currentProperty;
@@ -206,7 +206,7 @@ public class BeanTraverseSession extends BeanSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected BeanTraverseSession(Builder builder) {
+	protected MarshallingTraverseSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
 		indent = builder.initialDepth;
@@ -220,7 +220,7 @@ public class BeanTraverseSession extends BeanSession {
 	/**
 	 * Initial depth.
 	 *
-	 * @see BeanTraverseContext.Builder#initialDepth(int)
+	 * @see MarshallingTraverseContext.Builder#initialDepth(int)
 	 * @return
 	 * 	The initial indentation level at the root.
 	 */
@@ -246,7 +246,7 @@ public class BeanTraverseSession extends BeanSession {
 	/**
 	 * Max traversal depth.
 	 *
-	 * @see BeanTraverseContext.Builder#maxDepth(int)
+	 * @see MarshallingTraverseContext.Builder#maxDepth(int)
 	 * @return
 	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
 	 *	<br>If this depth is exceeded, an exception is thrown.
@@ -256,7 +256,7 @@ public class BeanTraverseSession extends BeanSession {
 	/**
 	 * Automatically detect POJO recursions.
 	 *
-	 * @see BeanTraverseContext.Builder#detectRecursions()
+	 * @see MarshallingTraverseContext.Builder#detectRecursions()
 	 * @return
 	 * 	<jk>true</jk> if recursions should be checked for during traversal.
 	 */
@@ -265,10 +265,10 @@ public class BeanTraverseSession extends BeanSession {
 	/**
 	 * Ignore recursion errors.
 	 *
-	 * @see BeanTraverseContext.Builder#ignoreRecursions()
+	 * @see MarshallingTraverseContext.Builder#ignoreRecursions()
 	 * @return
 	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 * 	<br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
+	 * 	<br>Otherwise, a {@link MarshallingRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
 	 */
 	public final boolean isIgnoreRecursions() { return ctx.isIgnoreRecursions(); }
 
@@ -368,7 +368,7 @@ public class BeanTraverseSession extends BeanSession {
 		isBottom = false;
 	}
 
-	@Override /* Overridden from BeanSession */
+	@Override /* Overridden from MarshallingSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(PROP_indent, indent)
@@ -384,9 +384,9 @@ public class BeanTraverseSession extends BeanSession {
 	 * @return
 	 * 	The {@link ClassMeta} of the object so that <c>instanceof</c> operations only need to be performed
 	 * 	once (since they can be expensive).
-	 * @throws BeanRecursionException If recursion occurred.
+	 * @throws MarshallingRecursionException If recursion occurred.
 	 */
-	protected final ClassMeta<?> push(String attrName, Object o, ClassMeta<?> eType) throws BeanRecursionException {
+	protected final ClassMeta<?> push(String attrName, Object o, ClassMeta<?> eType) throws MarshallingRecursionException {
 		indent++;
 		depth++;
 		isBottom = true;
@@ -439,22 +439,22 @@ public class BeanTraverseSession extends BeanSession {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if {@link BeanTraverseContext.Builder#detectRecursions()} is enabled, and the specified
+	 * Returns <jk>true</jk> if {@link MarshallingTraverseContext.Builder#detectRecursions()} is enabled, and the specified
 	 * object is already higher up in the traversal chain.
 	 *
 	 * @param attrName The bean property attribute name, or some other identifier.
 	 * @param o The object to check for recursion.
 	 * @param cm The metadata on the object class.
 	 * @return <jk>true</jk> if recursion detected.
-	 * @throws BeanRecursionException If recursion occurred.
+	 * @throws MarshallingRecursionException If recursion occurred.
 	 */
-	protected final boolean willRecurse(String attrName, Object o, ClassMeta<?> cm) throws BeanRecursionException {
+	protected final boolean willRecurse(String attrName, Object o, ClassMeta<?> cm) throws MarshallingRecursionException {
 		if (! (isDetectRecursions() || isDebug()) || ! set.containsKey(o))
 			return false;
 		if (isIgnoreRecursions() && ! isDebug())
 			return true;
 
 		stack.add(new StackElement(stack.size(), attrName, o, cm));
-		throw new BeanRecursionException("Recursion occurred, stack={0}", getStack(true));
+		throw new MarshallingRecursionException("Recursion occurred, stack={0}", getStack(true));
 	}
 }

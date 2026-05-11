@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class ObjectViewer_Test extends TestBase {
 
 	ObjectViewer ov = new ObjectViewer();
-	BeanSession bs = BeanContext.DEFAULT_SESSION;
+	MarshallingSession bs = MarshallingContext.DEFAULT_SESSION;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Null input

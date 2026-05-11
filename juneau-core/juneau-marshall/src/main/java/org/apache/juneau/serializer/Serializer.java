@@ -76,7 +76,7 @@ import org.apache.juneau.soap.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class Serializer extends BeanTraverseContext {
+public class Serializer extends MarshallingTraverseContext {
 
 	// Property name constants
 	private static final String PROP_addBeanTypes = "addBeanTypes";
@@ -98,7 +98,7 @@ public class Serializer extends BeanTraverseContext {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanTraverseContext.Builder {
+	public static class Builder extends MarshallingTraverseContext.Builder {
 
 		private boolean addBeanTypes;
 		private boolean addRootType;
@@ -357,14 +357,14 @@ public class Serializer extends BeanTraverseContext {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext.Builder value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
@@ -381,7 +381,7 @@ public class Serializer extends BeanTraverseContext {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.MarshallingInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}
@@ -1621,7 +1621,7 @@ public class Serializer extends BeanTraverseContext {
 	 */
 	protected final boolean isTrimStrings() { return trimStrings; }
 
-	@Override /* Overridden from BeanTraverseContext */
+	@Override /* Overridden from MarshallingTraverseContext */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(PROP_addBeanTypes, addBeanTypes)

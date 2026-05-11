@@ -85,7 +85,7 @@ public class ComboRoundTrip_Tester<T> {
 			this.in = in;
 		}
 
-		public Builder<T> beanContext(Consumer<BeanContext.Builder> c) { apply(BeanContext.Builder.class, c); return this; }
+		public Builder<T> marshallingContext(Consumer<MarshallingContext.Builder> c) { apply(MarshallingContext.Builder.class, c); return this; }
 
 		public <T2> Builder<T> apply(Class<T2> t, Consumer<T2> c) { applies.add(Tuple2.of(t, c)); return this; }
 
@@ -278,14 +278,14 @@ public class ComboRoundTrip_Tester<T> {
 		tb.serializerApply.accept(sb);
 		sb.swaps(tb.swaps);
 		tb.applies.forEach(x -> {
-			if (x.getA().equals(BeanContext.Builder.class))
-				sb.beanContext((Consumer<BeanContext.Builder>) x.getB());
+			if (x.getA().equals(MarshallingContext.Builder.class))
+				sb.marshallingContext((Consumer<MarshallingContext.Builder>) x.getB());
 		});
 	}
 
 	private void applySerializerBuilderSubtypeApplies(Builder<?> tb, Serializer.Builder sb) {
 		tb.applies.forEach(x -> {
-			if (!x.getA().equals(BeanContext.Builder.class) && x.getA().isInstance(sb))
+			if (!x.getA().equals(MarshallingContext.Builder.class) && x.getA().isInstance(sb))
 				sb.asSubtype(Serializer.Builder.class).ifPresent((Consumer<Serializer.Builder>) x.getB());
 		});
 	}
@@ -300,8 +300,8 @@ public class ComboRoundTrip_Tester<T> {
 		tb.parserApply.accept(pb);
 		pb.swaps(tb.swaps);
 		tb.applies.forEach(x -> {
-			if (x.getA().equals(BeanContext.Builder.class))
-				pb.beanContext((Consumer<BeanContext.Builder>) x.getB());
+			if (x.getA().equals(MarshallingContext.Builder.class))
+				pb.marshallingContext((Consumer<MarshallingContext.Builder>) x.getB());
 			else if (x.getA().isInstance(pb))
 				pb.asSubtype(Parser.Builder.class).ifPresent((Consumer<Parser.Builder>) x.getB());
 		});

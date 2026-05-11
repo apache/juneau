@@ -49,7 +49,7 @@ import org.apache.juneau.serializer.*;
  * <c>ObjectSwaps</c> are associated with serializers and parsers through the following:
  * <ul class='javatree'>
  * 	<li class='ja'>{@link Swap @Swap}
- * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
+ * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...)}
  * </ul>
  *
  * <p>
@@ -218,7 +218,7 @@ public abstract class ObjectSwap<T,S> {
 	 * 	This is always going to be the same bean context that created this swap.
 	 * @return The {@link ClassMeta} of the transformed class type.
 	 */
-	public ClassMeta<?> getSwapClassMeta(BeanSession session) {
+	public ClassMeta<?> getSwapClassMeta(MarshallingSession session) {
 		if (swapClassMeta == null)
 			swapClassMeta = session.getClassMeta(swapClass);
 		return swapClassMeta;
@@ -274,7 +274,7 @@ public abstract class ObjectSwap<T,S> {
 	 * @param session The bean session.
 	 * @return Zero if swap doesn't match the session, or a positive number if it does.
 	 */
-	public int match(BeanSession session) {
+	public int match(MarshallingSession session) {
 		if (forMediaTypes == null)
 			return 1;
 		int i = 0;
@@ -316,12 +316,12 @@ public abstract class ObjectSwap<T,S> {
 	 * @return The transformed object.
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
-	public S swap(BeanSession session, T o) throws Exception {
+	public S swap(MarshallingSession session, T o) throws Exception {
 		return swap(session, o, template);
 	}
 
 	/**
-	 * Same as {@link #swap(BeanSession, Object)}, but can be used if your swap has a template associated with it.
+	 * Same as {@link #swap(MarshallingSession, Object)}, but can be used if your swap has a template associated with it.
 	 *
 	 * @param session
 	 * 	The bean session to use to get the class meta.
@@ -335,7 +335,7 @@ public abstract class ObjectSwap<T,S> {
 	@SuppressWarnings({
 		"java:S112" // throws Exception intentional - callback/lifecycle method for user implementations
 	})
-	public S swap(BeanSession session, T o, String template) throws Exception {
+	public S swap(MarshallingSession session, T o, String template) throws Exception {
 		throw new SerializeException("Swap method not implemented on ObjectSwap ''{0}''", cn(this));
 	}
 
@@ -362,12 +362,12 @@ public abstract class ObjectSwap<T,S> {
 	@SuppressWarnings({
 		"java:S112" // throws Exception intentional - callback/lifecycle method for user implementations
 	})
-	public T unswap(BeanSession session, S f, ClassMeta<?> hint) throws Exception {
+	public T unswap(MarshallingSession session, S f, ClassMeta<?> hint) throws Exception {
 		return unswap(session, f, hint, template);
 	}
 
 	/**
-	 * Same as {@link #unswap(BeanSession, Object, ClassMeta)}, but can be used if your swap has a template associated with it.
+	 * Same as {@link #unswap(MarshallingSession, Object, ClassMeta)}, but can be used if your swap has a template associated with it.
 	 *
 	 * @param session
 	 * 	The bean session to use to get the class meta.
@@ -386,7 +386,7 @@ public abstract class ObjectSwap<T,S> {
 	@SuppressWarnings({
 		"java:S112" // throws Exception intentional - callback/lifecycle method for user implementations
 	})
-	public T unswap(BeanSession session, S f, ClassMeta<?> hint, String template) throws Exception {
+	public T unswap(MarshallingSession session, S f, ClassMeta<?> hint, String template) throws Exception {
 		throw new ParseException("Unswap method not implemented on ObjectSwap ''{0}''", cn(this));
 	}
 

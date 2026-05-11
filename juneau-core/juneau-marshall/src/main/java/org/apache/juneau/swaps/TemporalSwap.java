@@ -59,7 +59,7 @@ import org.apache.juneau.swap.*;
  * <p>
  * Date/time types are now serialized as ISO 8601 strings by default without needing a swap.
  * These swap classes can be used to override the default format (e.g., using RFC 1123 instead of ISO 8601).
- * They can be registered globally via {@link org.apache.juneau.BeanContext.Builder#swaps(Class[]) BeanContext.Builder.swaps(Class...)} or per-field via the {@link Swap} annotation.
+ * They can be registered globally via {@link org.apache.juneau.MarshallingContext.Builder#swaps(Class[]) MarshallingContext.Builder.swaps(Class...)} or per-field via the {@link Swap} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
@@ -372,7 +372,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	public String swap(BeanSession session, Temporal o) throws Exception {
+	public String swap(MarshallingSession session, Temporal o) throws Exception {
 		if (o == null)
 			return null;
 		o = convertToSerializable(session, o);
@@ -383,7 +383,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 		"unchecked" // Type erasure requires unchecked casts
 	})
 	@Override /* Overridden from ObjectSwap */
-	public Temporal unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
+	public Temporal unswap(MarshallingSession session, String f, ClassMeta<?> hint) throws Exception {
 		if (f == null)
 			return null;
 		if (hint == null)
@@ -412,7 +412,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 * @param t The temporal object to convert.
 	 * @return The converted temporal object.
 	 */
-	protected Temporal convertToSerializable(BeanSession session, Temporal t) {
+	protected Temporal convertToSerializable(MarshallingSession session, Temporal t) {
 
 		var zoneId = session.getTimeZoneId();
 		var tc = t.getClass();

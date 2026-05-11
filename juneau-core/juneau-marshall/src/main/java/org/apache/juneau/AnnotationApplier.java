@@ -32,7 +32,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Class used to add properties to a context builder (e.g. {@link BeanContext.Builder}) from an annotation (e.g. {@link MarshalledConfig}).
+ * Class used to add properties to a context builder (e.g. {@link MarshallingContext.Builder}) from an annotation (e.g. {@link MarshalledConfig}).
  *
  * <p>
  * Used by {@link Context.Builder#applyAnnotations(Class...)} and {@link Context.Builder#applyAnnotations(Object...)} to apply
@@ -53,15 +53,15 @@ import org.apache.juneau.svl.*;
  * 	}
  *
  * 	<jc>// The applier that applies the annotation to the bean context builder.</jc>
- * 	<jk>public class</jk> MarshalledConfigAnnotationApplier <jk>extends</jk> AnnotationApplier&lt;<ja>MarshalledConfig</ja>,BeanContext.Builder&gt; {
+ * 	<jk>public class</jk> MarshalledConfigAnnotationApplier <jk>extends</jk> AnnotationApplier&lt;<ja>MarshalledConfig</ja>,MarshallingContext.Builder&gt; {
  *
  *		<jc>// Required constructor. </jc>
  * 		<jk>public</jk> Applier(VarResolverSession <jv>vr</jv>) {
- * 			<jk>super</jk>(MarshalledConfig.<jk>class</jk>, BeanContext.Builder.<jk>class</jk>, <jv>vr</jv>);
+ * 			<jk>super</jk>(MarshalledConfig.<jk>class</jk>, MarshallingContext.Builder.<jk>class</jk>, <jv>vr</jv>);
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public void</jk> apply(AnnotationInfo&lt;MarshalledConfig&gt; <jv>annotationInfo</jv>, BeanContext.Builder <jv>builder</jv>) {
+ * 		<jk>public void</jk> apply(AnnotationInfo&lt;MarshalledConfig&gt; <jv>annotationInfo</jv>, MarshallingContext.Builder <jv>builder</jv>) {
  * 			<ja>MarshalledConfig</ja> <jv>beanConfig</jv> = <jv>annotationInfo</jv>.getAnnotation();
  *
  * 			String <jv>unsortedProperties</jv> = <jv>beanConfig</jv>.unsortedProperties();

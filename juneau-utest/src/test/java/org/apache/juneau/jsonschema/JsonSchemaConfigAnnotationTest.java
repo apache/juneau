@@ -44,7 +44,7 @@ class JsonSchemaConfigAnnotationTest extends TestBase {
 				.stream()
 				.map(JsonSchemaConfigAnnotationTest.TO_STRING)
 				.collect(Collectors.joining(","));
-		if (t instanceof BeanDefMapper)
+		if (t instanceof MarshallingDefMapper)
 			return t.getClass().getSimpleName();
 		return t.toString();
 	};

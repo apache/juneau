@@ -40,7 +40,7 @@ public class MarshalledAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AnnotationObject.Builder {
@@ -51,7 +51,7 @@ public class MarshalledAnnotation {
 		private Class<?> implClass = void.class;
 		private Class<?> interfaceClass = void.class;
 		private Class<?> stopClass = void.class;
-		private Class<? extends BeanInterceptor<?>> interceptor = BeanInterceptor.Void.class;
+		private Class<? extends MarshallingInterceptor<?>> interceptor = MarshallingInterceptor.Void.class;
 		private Class<? extends PropertyNamer> propertyNamer = BasicPropertyNamer.class;
 		@SuppressWarnings("rawtypes")
 		private Class<? extends BeanFactory> factory = BeanFactory.Void.class;
@@ -180,7 +180,7 @@ public class MarshalledAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder interceptor(Class<? extends BeanInterceptor<?>> value) {
+		public Builder interceptor(Class<? extends MarshallingInterceptor<?>> value) {
 			interceptor = value;
 			return this;
 		}
@@ -339,7 +339,7 @@ public class MarshalledAnnotation {
 		private final String[] description;
 		private final boolean findFluentSetters;
 		private final boolean unsorted;
-		private final Class<? extends BeanInterceptor<?>> interceptor;
+		private final Class<? extends MarshallingInterceptor<?>> interceptor;
 		private final Class<? extends PropertyNamer> propertyNamer;
 		private final Class<?> implClass;
 		private final Class<?> interfaceClass;
@@ -422,7 +422,7 @@ public class MarshalledAnnotation {
 		}
 
 		@Override /* Overridden from Marshalled */
-		public Class<? extends BeanInterceptor<?>> interceptor() {
+		public Class<? extends MarshallingInterceptor<?>> interceptor() {
 			return interceptor;
 		}
 

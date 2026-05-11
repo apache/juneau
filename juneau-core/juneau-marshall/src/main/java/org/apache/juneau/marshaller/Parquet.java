@@ -194,7 +194,7 @@ public class Parquet extends StreamMarshaller {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public static <T> T to(byte[] input, Type type, Type... args) throws ParseException {
 		return DEFAULT.read(input, type, args);

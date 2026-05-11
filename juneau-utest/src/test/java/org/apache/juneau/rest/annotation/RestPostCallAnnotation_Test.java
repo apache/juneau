@@ -55,8 +55,8 @@ class RestPostCallAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_testEquivalencyInPropertyStores() {
-		var bc1 = BeanContext.create().annotations(a1).build();
-		var bc2 = BeanContext.create().annotations(a2).build();
+		var bc1 = MarshallingContext.create().annotations(a1).build();
+		var bc2 = MarshallingContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
 	}
 

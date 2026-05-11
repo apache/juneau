@@ -30,7 +30,7 @@ class Annotations_Test extends TestBase {
 	// Bean with explicitly specified properties.
 	//====================================================================================================
 	@Test void a01_beanWithExplicitProperties() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 
 		// Basic test
 		var bm = bc.newBeanMap(Person1.class).load("{age:21,name:'foobar'}");
@@ -53,7 +53,7 @@ class Annotations_Test extends TestBase {
 	}
 
 	@Test void a02_beanWithExplicitProperties2() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 
 		// Basic test
 		var bm = bc.newBeanMap(Person2.class).load("{age:21,name:'foobar'}");
@@ -76,7 +76,7 @@ class Annotations_Test extends TestBase {
 	}
 
 	@Test void a03_beanWithExplicitProperties3() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 
 		// Basic test
 		var bm = bc.newBeanMap(Person3.class).load("{age:21,name:'foobar'}");
@@ -99,7 +99,7 @@ class Annotations_Test extends TestBase {
 	}
 
 	@Test void a04_beanWithExplicitProperties_usingConfig() throws Exception {
-		var bc = BeanContext.DEFAULT.copy().applyAnnotations(PersonConfig.class).build();
+		var bc = MarshallingContext.DEFAULT.copy().applyAnnotations(PersonConfig.class).build();
 
 		// Basic test
 		var bm = bc.newBeanMap(Person4.class).load("{age:21,name:'foobar'}");
@@ -127,7 +127,7 @@ class Annotations_Test extends TestBase {
 	// Private/protected/default fields should be ignored.
 	//====================================================================================================
 	@Test void a05_forOnlyPublicFields() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 
 		// Make sure only public fields are detected
 		var bm = bc.newBeanMap(A.class).load("{publicField:123}");

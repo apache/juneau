@@ -225,24 +225,24 @@ class SerializerSet_Test extends TestBase {
 	}
 
 	@Test void b12_builder_beanContext_propagatesToBuilders() {
-		var bcb = BeanContext.create();
+		var bcb = MarshallingContext.create();
 		var sb = SerializerSet.create().add(JsonSerializer.class);
-		sb.beanContext(bcb);
+		sb.marshallingContext(bcb);
 		assertNotNull(sb.beanStore());
 	}
 
 	@Test void b13_builder_beanContext_consumer_withNonNullBcBuilder() {
 		boolean[] called = {false};
 		var sb = SerializerSet.create().add(JsonSerializer.class);
-		sb.beanContext(BeanContext.create());
-		sb.beanContext((BeanContext.Builder b) -> called[0] = true);
+		sb.marshallingContext(MarshallingContext.create());
+		sb.marshallingContext((MarshallingContext.Builder b) -> called[0] = true);
 		assertTrue(called[0]);
 	}
 
 	@Test void b14_builder_beanContext_consumer_withNullBcBuilder_isNoop() {
 		boolean[] called = {false};
 		var sb = SerializerSet.create().add(JsonSerializer.class);
-		sb.beanContext((BeanContext.Builder b) -> called[0] = true);
+		sb.marshallingContext((MarshallingContext.Builder b) -> called[0] = true);
 		assertFalse(called[0]);
 	}
 
@@ -260,14 +260,14 @@ class SerializerSet_Test extends TestBase {
 
 	@Test void b17_builder_copy_withBcBuilder_propagatesBcBuilder() {
 		var sb = SerializerSet.create().add(JsonSerializer.class);
-		sb.beanContext(BeanContext.create());
+		sb.marshallingContext(MarshallingContext.create());
 		var copy = sb.copy();
 		assertNotNull(copy.beanStore());
 	}
 
 	@Test void b18_builder_addAfterBcBuilder_propagatesContext() {
 		var sb = SerializerSet.create();
-		sb.beanContext(BeanContext.create());
+		sb.marshallingContext(MarshallingContext.create());
 		sb.add(JsonSerializer.class);
 		assertFalse(sb.inner().isEmpty());
 	}

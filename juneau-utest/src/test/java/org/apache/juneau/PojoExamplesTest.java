@@ -37,7 +37,7 @@ class PojoExamplesTest extends TestBase {
 	// test BEAN_examples
 	//====================================================================================================
 	@Test void a01_property() {
-		var bs = BeanContext.create().example(A.class, new A().init()).build().getSession();
+		var bs = MarshallingContext.create().example(A.class, new A().init()).build().getSession();
 		assertJson("{f1:'f1a'}", bs.getClassMeta(A.class).getExample(bs,session));
 	}
 
@@ -54,7 +54,7 @@ class PojoExamplesTest extends TestBase {
 	// test @Example on public field
 	//====================================================================================================
 	@Test void a02_exampleField() {
-		var bs = BeanContext.DEFAULT_SESSION;
+		var bs = MarshallingContext.DEFAULT_SESSION;
 		assertJson("{f1:'f1b'}", bs.getClassMeta(B1.class).getExample(bs,session));
 	}
 
@@ -71,7 +71,7 @@ class PojoExamplesTest extends TestBase {
 	}
 
 	@Test void a03_exampleField_usingConfig() {
-		var bs = BeanContext.create().applyAnnotations(B1cConfig.class).build().getSession();
+		var bs = MarshallingContext.create().applyAnnotations(B1cConfig.class).build().getSession();
 		assertJson("{f1:'f1b'}", bs.getClassMeta(B1c.class).getExample(bs,session));
 	}
 
@@ -95,7 +95,7 @@ class PojoExamplesTest extends TestBase {
 	// test @Example on private field
 	//====================================================================================================
 	@Test void a04_exampleFieldPrivate() {
-		var bs = BeanContext.DEFAULT_SESSION;
+		var bs = MarshallingContext.DEFAULT_SESSION;
 		assertJson("{f1:'f1b'}", bs.getClassMeta(B2.class).getExample(bs,session));
 	}
 
@@ -112,7 +112,7 @@ class PojoExamplesTest extends TestBase {
 	}
 
 	@Test void a05_exampleFieldPrivate_usingConfig() {
-		var bs = BeanContext.create().applyAnnotations(B2cConfig.class).build().getSession();
+		var bs = MarshallingContext.create().applyAnnotations(B2cConfig.class).build().getSession();
 		assertJson("{f1:'f1b'}", bs.getClassMeta(B2c.class).getExample(bs,session));
 	}
 
@@ -136,7 +136,7 @@ class PojoExamplesTest extends TestBase {
 	// test @Example on public no-arg method.
 	//====================================================================================================
 	@Test void a06_exampleOnPublicNoArgMethod() {
-		var bs = BeanContext.DEFAULT_SESSION;
+		var bs = MarshallingContext.DEFAULT_SESSION;
 		assertJson("{f1:'f1c'}", bs.getClassMeta(C1.class).getExample(bs,session));
 	}
 
@@ -155,7 +155,7 @@ class PojoExamplesTest extends TestBase {
 	}
 
 	@Test void a07_exampleOnPublicNoArgMethod_usingConfig() {
-		var bs = BeanContext.create().applyAnnotations(C1cConfig.class).build().getSession();
+		var bs = MarshallingContext.create().applyAnnotations(C1cConfig.class).build().getSession();
 		assertJson("{f1:'f1c'}", bs.getClassMeta(C1c.class).getExample(bs,session));
 	}
 
@@ -181,7 +181,7 @@ class PojoExamplesTest extends TestBase {
 	// test @Example on private no-arg method.
 	//====================================================================================================
 	@Test void a08_exampleOnPrivateNoArgMethod() {
-		var bs = BeanContext.DEFAULT_SESSION;
+		var bs = MarshallingContext.DEFAULT_SESSION;
 		assertJson("{f1:'f1c'}", bs.getClassMeta(C2.class).getExample(bs,session));
 	}
 
@@ -200,7 +200,7 @@ class PojoExamplesTest extends TestBase {
 	}
 
 	@Test void a09_exampleOnPrivateNoArgMethod_usingConfig() {
-		var bs = BeanContext.create().applyAnnotations(C2cConfig.class).build().getSession();
+		var bs = MarshallingContext.create().applyAnnotations(C2cConfig.class).build().getSession();
 		assertJson("{f1:'f1c'}", bs.getClassMeta(C2c.class).getExample(bs,session));
 	}
 
@@ -226,7 +226,7 @@ class PojoExamplesTest extends TestBase {
 	// test @Example on public 1-arg method
 	//====================================================================================================
 	@Test void a10_exampleOnPublicOneArgMethod() {
-		var bs = BeanContext.DEFAULT_SESSION;
+		var bs = MarshallingContext.DEFAULT_SESSION;
 		assertJson("{f1:'f1d'}", bs.getClassMeta(D1.class).getExample(bs,session));
 	}
 
@@ -239,19 +239,19 @@ class PojoExamplesTest extends TestBase {
 		}
 
 		@Example
-		public static D1 x(BeanSession bs) {
+		public static D1 x(MarshallingSession bs) {
 			return new D1().init();
 		}
 	}
 
 	@Test void a11_exampleOnPublicOneArgMethod_usingConfig() {
-		var bs = BeanContext.create().applyAnnotations(D1cConfig.class).build().getSession();
+		var bs = MarshallingContext.create().applyAnnotations(D1cConfig.class).build().getSession();
 		assertJson("{f1:'f1d'}", bs.getClassMeta(D1c.class).getExample(bs,session));
 	}
 
-	@ExampleApply(on="Dummy1.x(BeanSession)", value=@Example)
-	@ExampleApply(on="D1c.x(BeanSession)", value=@Example)
-	@ExampleApply(on="Dummy2.x(BeanSession)", value=@Example)
+	@ExampleApply(on="Dummy1.x(MarshallingSession)", value=@Example)
+	@ExampleApply(on="D1c.x(MarshallingSession)", value=@Example)
+	@ExampleApply(on="Dummy2.x(MarshallingSession)", value=@Example)
 	private static class D1cConfig {}
 
 	public static class D1c {
@@ -262,7 +262,7 @@ class PojoExamplesTest extends TestBase {
 			return this;
 		}
 
-		public static D1c x(BeanSession bs) {
+		public static D1c x(MarshallingSession bs) {
 			return new D1c().init();
 		}
 	}
@@ -271,7 +271,7 @@ class PojoExamplesTest extends TestBase {
 	// test example() method, no annotation.
 	//====================================================================================================
 	@Test void a12_exampleMethod() {
-		var bs = BeanContext.DEFAULT_SESSION;
+		var bs = MarshallingContext.DEFAULT_SESSION;
 		assertJson("{f1:'f1e'}", bs.getClassMeta(E1.class).getExample(bs,session));
 	}
 
@@ -289,10 +289,10 @@ class PojoExamplesTest extends TestBase {
 	}
 
 	//====================================================================================================
-	// test example(BeanSession) method, no annotation.
+	// test example(MarshallingSession) method, no annotation.
 	//====================================================================================================
 	@Test void a13_exampleBeanSessionMethod() {
-		var bs = BeanContext.DEFAULT_SESSION;
+		var bs = MarshallingContext.DEFAULT_SESSION;
 		assertJson("{f1:'f1e'}", bs.getClassMeta(E2.class).getExample(bs,session));
 	}
 
@@ -304,7 +304,7 @@ class PojoExamplesTest extends TestBase {
 			return this;
 		}
 
-		public static E2 example(BeanSession bs) {
+		public static E2 example(MarshallingSession bs) {
 			return new E2().init();
 		}
 	}

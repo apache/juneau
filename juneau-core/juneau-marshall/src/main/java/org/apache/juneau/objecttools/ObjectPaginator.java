@@ -70,7 +70,7 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 		"unchecked", // Type erasure requires unchecked casts
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 	})
-	public Object run(BeanSession session, Object input, PageArgs args) {
+	public Object run(MarshallingSession session, Object input, PageArgs args) {
 
 		if (input == null)
 			return null;
@@ -126,8 +126,8 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 		"unchecked" // Type erasure requires cast to R for list elements
 	})
 	public <R> List<R> run(Object input, int pos, int limit) {
-		var bs = BeanContext.DEFAULT_SESSION;
-		var r = run(BeanContext.DEFAULT_SESSION, input, PageArgs.create(pos, limit));
+		var bs = MarshallingContext.DEFAULT_SESSION;
+		var r = run(MarshallingContext.DEFAULT_SESSION, input, PageArgs.create(pos, limit));
 		if (r instanceof List r2)
 			return r2;
 		return bs.convertToType(r, List.class);

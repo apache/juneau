@@ -926,7 +926,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 			var schema = pm.getSchema();
 			var pt = pm.getPartType();
 			var name = pm.getPartName().orElse(null);
-			var type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
+			var type = rc.getMarshallingContext().getClassMeta(method.getGenericReturnType());
 			if (pt == RESPONSE_HEADER)
 				return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
 			if (pt == RESPONSE_STATUS)

@@ -19,7 +19,7 @@
 
 - [TODO-11] Next-generation RestClient transport abstraction: decouple `RestClient` from Apache HttpClient 4.5 so any HTTP transport can be plugged in. See `todo/TODO-11-restclient2-transport-abstraction.md`.
 
-- [TODO-12] Schema validation mode for parsers and serializers: wire `@Schema` validation into the bean property get/set lifecycle gated by a new `validateSchema` flag on `BeanContext`. See `todo/TODO-12-schema-validation.md`.
+- [TODO-12] Schema validation mode for parsers and serializers: wire `@Schema` validation into the bean property get/set lifecycle gated by a new `validateSchema` flag on `MarshallingContext`. See `todo/TODO-12-schema-validation.md`.
 
 - [TODO-13] Convert Juneau system properties to the `Settings` class in `juneau-commons`. See `todo/TODO-13-system-properties-to-settings-conversion.md`.
 

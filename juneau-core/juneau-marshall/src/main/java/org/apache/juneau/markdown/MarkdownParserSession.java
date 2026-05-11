@@ -603,7 +603,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 	 */
 	private JsonParser getJson5Parser() {
 		if (json5Parser == null) {
-			var b = Json5Parser.create().beanContext((BeanContext) getContext());
+			var b = Json5Parser.create().marshallingContext((MarshallingContext) getContext());
 			if (isTrimStrings())
 				b = b.trimStrings();
 			json5Parser = b.build();

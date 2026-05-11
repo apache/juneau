@@ -28,7 +28,7 @@ import org.apache.juneau.serializer.Serializer.Builder;
 import org.apache.juneau.xml.*;
 
 /**
- * Exhaustive serialization tests for BeanTraverseContext properties.
+ * Exhaustive serialization tests for MarshallingTraverseContext properties.
  */
 @SuppressWarnings({})
 class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
@@ -60,7 +60,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("a=(\n\t_type=BwT,\n\tf=1\n)")
 			.msgPack("81A16182A55F74797065A3427754A16601")
 			.msgPackT("81A16182A174A3427754A16601")
-			.beanContext(x -> x.beanDictionary(T0.class))
+			.marshallingContext(x -> x.beanDictionary(T0.class))
 			.apply(Serializer.Builder.class, Builder::addBeanTypes)
 			.build(),
 		tester(2, "SERIALIZER_addRootType", T0.class, T0.create())
@@ -85,7 +85,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("_type=BwT\n&f=1")
 			.msgPack("82A55F74797065A3427754A16601")
 			.msgPackT("82A174A3427754A16601")
-			.beanContext(x -> x.beanDictionary(T0.class))
+			.marshallingContext(x -> x.beanDictionary(T0.class))
 			.apply(Serializer.Builder.class, Builder::addRootType)
 			.build(),
 		tester(3, "SERIALIZER_sortCollections", String[].class, a("c","a","b"))

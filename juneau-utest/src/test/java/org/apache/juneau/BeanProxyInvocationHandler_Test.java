@@ -45,7 +45,7 @@ class BeanProxyInvocationHandler_Test extends TestBase {
 		public String toString(String format) { return ""; }  // Wrong: should be toString()
 	}
 
-	BeanContext bc = BeanContext.DEFAULT;
+	MarshallingContext bc = MarshallingContext.DEFAULT;
 
 	//====================================================================================================
 	// Constructor

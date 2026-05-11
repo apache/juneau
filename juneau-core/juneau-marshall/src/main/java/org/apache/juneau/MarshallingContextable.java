@@ -35,7 +35,7 @@ import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.swap.*;
 
 /**
- * Context class for classes that use {@link BeanContext} objects.
+ * Context class for classes that use {@link MarshallingContext} objects.
  *
  * <p>
  * This abstraction exists to allow different kinds of subclasses (e.g. JsonSerilalizer, XmlParser...) to share bean context objects since
@@ -48,10 +48,10 @@ import org.apache.juneau.swap.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_beanContext, ARG_value)
 })
-public abstract class BeanContextable extends Context {
+public abstract class MarshallingContextable extends Context {
 
 	// Property name constants
-	private static final String PROP_beanContext = "beanContext";
+	private static final String PROP_beanContext = "marshallingContext";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
@@ -76,8 +76,8 @@ public abstract class BeanContextable extends Context {
 	})
 	public abstract static class Builder extends Context.Builder {
 
-		private BeanContext.Builder bcBuilder;
-		private BeanContext bc;
+		private MarshallingContext.Builder bcBuilder;
+		private MarshallingContext bc;
 
 		/**
 		 * Constructor.
@@ -85,7 +85,7 @@ public abstract class BeanContextable extends Context {
 		 * All default settings.
 		 */
 		protected Builder() {
-			this.bcBuilder = BeanContext.create();
+			this.bcBuilder = MarshallingContext.create();
 			registerBuilders(bcBuilder);
 		}
 
@@ -94,9 +94,9 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @param copyFrom The bean to copy from.
 		 */
-		protected Builder(BeanContextable copyFrom) {
+		protected Builder(MarshallingContextable copyFrom) {
 			super(copyFrom);
-			this.bcBuilder = copyFrom.getBeanContext().copy();
+			this.bcBuilder = copyFrom.getMarshallingContext().copy();
 			registerBuilders(bcBuilder);
 		}
 
@@ -239,7 +239,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * @return The inner bean context builder.
 		 */
-		public BeanContext.Builder beanContext() {
+		public MarshallingContext.Builder marshallingContext() {
 			return bcBuilder;
 		}
 
@@ -248,14 +248,14 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <p>
 		 * Provides an optimization for cases where serializers and parsers can use an existing
-		 * bean context without having to go through <c><jv>beanContext</jv>.copy().build()</c>.
-		 * An example is {@link BeanContext#getBeanToStringSerializer()}.
+		 * bean context without having to go through <c><jv>marshallingContext</jv>.copy().build()</c>.
+		 * An example is {@link MarshallingContext#getBeanToStringSerializer()}.
 		 *
 		 * @param value The bean context to use.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanContext(BeanContext value) {
+		public Builder marshallingContext(MarshallingContext value) {
 			bc = assertArgNotNull(ARG_value, value);
 			return this;
 		}
@@ -272,7 +272,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanContext(BeanContext.Builder value) {
+		public Builder marshallingContext(MarshallingContext.Builder value) {
 			bcBuilder = assertArgNotNull(ARG_value, value);
 			return this;
 		}
@@ -284,9 +284,9 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
+		public final Builder marshallingContext(Consumer<MarshallingContext.Builder> operation) {
 			assertArgNotNull(ARG_operation, operation);
-			operation.accept(beanContext());
+			operation.accept(marshallingContext());
 			return this;
 		}
 
@@ -453,7 +453,7 @@ public abstract class BeanContextable extends Context {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Interceptor that strips out sensitive information.</jc>
-		 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
+		 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> MarshallingInterceptor&lt;Address&gt; {
 		 *
 		 * 		<jk>public</jk> Object readProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
 		 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>))
@@ -485,7 +485,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jc'>{@link BeanInterceptor}
+		 * 	<li class='jc'>{@link MarshallingInterceptor}
 		 * 	<li class='ja'>{@link Bean#interceptor() Bean(interceptor)}
 		 * </ul>
 		 *
@@ -496,7 +496,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends MarshallingInterceptor<?>> value) {
 			bcBuilder.beanInterceptor(assertArgNotNull(ARG_on, on), assertArgNotNull(ARG_value, value));
 			return this;
 		}
@@ -514,7 +514,7 @@ public abstract class BeanContextable extends Context {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a context that creates BeanMaps with normal put() behavior.</jc>
-		 * 	BeanContext <jv>context</jv> = BeanContext
+		 * 	MarshallingContext <jv>context</jv> = MarshallingContext
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanMapPutReturnsOldValue()
 		 * 		.build();
@@ -526,7 +526,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#beanMapPutReturnsOldValue()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanMapPutReturnsOldValue()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanMapPutReturnsOldValue()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1322,7 +1322,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#beansRequireDefaultConstructor()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireDefaultConstructor()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beansRequireDefaultConstructor()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1370,7 +1370,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#beansRequireSerializable()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireSerializable()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beansRequireSerializable()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1416,7 +1416,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#beansRequireSettersForGetters()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireSettersForGetters()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beansRequireSettersForGetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1477,7 +1477,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#dictionary()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanDictionary(Class...)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
 		 * </ul>
 		 *
 		 * @param on The class that the dictionary values apply to.
@@ -1526,7 +1526,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#disableBeansRequireSomeProperties()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#disableBeansRequireSomeProperties()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#disableBeansRequireSomeProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1568,7 +1568,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#disableIgnoreMissingSetters()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreMissingSetters()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#disableIgnoreMissingSetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1607,7 +1607,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#disableIgnoreTransientFields()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreTransientFields()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#disableIgnoreTransientFields()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1643,7 +1643,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#disableIgnoreUnknownNullBeanProperties()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#disableIgnoreUnknownNullBeanProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1663,7 +1663,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#disableInterfaceProxies()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#disableInterfaceProxies()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#disableInterfaceProxies()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1704,8 +1704,8 @@ public abstract class BeanContextable extends Context {
 		 * POJO examples can also be defined on classes via the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>A static field annotated with {@link Example @Example}.
-		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link MarshallingSession} argument.
+		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link MarshallingSession} argument.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1758,8 +1758,8 @@ public abstract class BeanContextable extends Context {
 		 * <ul class='spaced-list'>
 		 * 	<li>The {@link Marshalled#example()} annotation on the class itself.
 		 * 	<li>A static field annotated with {@link Example @Example}.
-		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link MarshallingSession} argument.
+		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link MarshallingSession} argument.
 		 * </ul>
 		 *
 		 * @param <T> The POJO class.
@@ -1815,7 +1815,7 @@ public abstract class BeanContextable extends Context {
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
 		 * 	<li class='ja'>{@link MarshalledConfig#findFluentSetters()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#findFluentSetters()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#findFluentSetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1854,7 +1854,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#findFluentSetters()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#findFluentSetters()}
 		 * </ul>
 		 *
 		 * @param on The class that this applies to.
@@ -1905,7 +1905,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#ignoreInvocationExceptionsOnGetters()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreInvocationExceptionsOnGetters()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#ignoreInvocationExceptionsOnGetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1943,7 +1943,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#ignoreInvocationExceptionsOnSetters()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreInvocationExceptionsOnSetters()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#ignoreInvocationExceptionsOnSetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1979,7 +1979,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#ignoreUnknownBeanProperties()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreUnknownBeanProperties()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#ignoreUnknownBeanProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1997,7 +1997,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#ignoreUnknownEnumValues()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreUnknownEnumValues()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#ignoreUnknownEnumValues()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2193,17 +2193,17 @@ public abstract class BeanContextable extends Context {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Locale.
 		 *
 		 * <p>
-		 * Specifies the default locale for serializer and parser sessions when not specified via {@link BeanSession.Builder#locale(Locale)}.
+		 * Specifies the default locale for serializer and parser sessions when not specified via {@link MarshallingSession.Builder#locale(Locale)}.
 		 * Typically used for POJO swaps that need to deal with locales such as swaps that convert <l>Date</l> and <l>Calendar</l>
-		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(BeanSession, Object)} and
-		 * {@link ObjectSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
+		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(MarshallingSession, Object)} and
+		 * {@link ObjectSwap#unswap(MarshallingSession, Object, ClassMeta, String)} methods.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Define a POJO swap that skips serializing beans if we're in the UK.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> String swap(MarshallingSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>if</jk> (<jv>session</jv>.getLocale().equals(Locale.<jsf>UK</jsf>))
 		 * 				<jk>return null</jk>;
 		 * 			<jk>return</jk> <jv>bean</jv>.toString();
@@ -2220,8 +2220,8 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#locale()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#locale(Locale)}
-		 * 	<li class='jm'>{@link BeanSession.Builder#locale(Locale)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#locale(Locale)}
+		 * 	<li class='jm'>{@link MarshallingSession.Builder#locale(Locale)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -2237,7 +2237,7 @@ public abstract class BeanContextable extends Context {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Media type.
 		 *
 		 * <p>
-		 * Specifies the default media type for serializer and parser sessions when not specified via {@link BeanSession.Builder#mediaType(MediaType)}.
+		 * Specifies the default media type for serializer and parser sessions when not specified via {@link MarshallingSession.Builder#mediaType(MediaType)}.
 		 * Typically used for POJO swaps that need to serialize the same POJO classes differently depending on
 		 * the specific requested media type.   For example, a swap could handle a request for media types <js>"application/json"</js>
 		 * and <js>"application/json+foo"</js> slightly differently even though they're both being handled by the same JSON
@@ -2248,7 +2248,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jc>// Define a POJO swap that skips serializing beans if the media type is application/json.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> String swap(MarshallingSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>if</jk> (<jv>session</jv>.getMediaType().equals(<js>"application/json"</js>))
 		 * 				<jk>return null</jk>;
 		 * 			<jk>return</jk> <jv>bean</jv>.toString();
@@ -2264,8 +2264,8 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#mediaType()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#mediaType(MediaType)}
-		 * 	<li class='jm'>{@link BeanSession.Builder#mediaType(MediaType)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#mediaType(MediaType)}
+		 * 	<li class='jm'>{@link MarshallingSession.Builder#mediaType(MediaType)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -2319,7 +2319,7 @@ public abstract class BeanContextable extends Context {
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledIgnore}
 		 * 	<li class='ja'>{@link MarshalledConfig#notBeanClasses()}
-		 * 	<li class='jf'>{@link BeanContext.Builder#notBeanClasses()}
+		 * 	<li class='jf'>{@link MarshallingContext.Builder#notBeanClasses()}
 		 * </ul>
 		 *
 		 * @param values
@@ -2342,7 +2342,7 @@ public abstract class BeanContextable extends Context {
 		 * Bean package exclusions.
 		 *
 		 * <p>
-		 * Used as a convenient way of defining the {@link BeanContext.Builder#notBeanClasses(Class...)} property for entire packages.
+		 * Used as a convenient way of defining the {@link MarshallingContext.Builder#notBeanClasses(Class...)} property for entire packages.
 		 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
 		 *
 		 * <p>
@@ -2365,7 +2365,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link BeanContext.Builder#notBeanPackages(String...)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#notBeanPackages(String...)}
 		 * </ul>
 		 *
 		 * @param values
@@ -2411,7 +2411,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#propertyNamer(Class)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#propertyNamer(Class)}
 		 * </ul>
 		 *
 		 * @param on The class that the namer applies to.
@@ -2460,7 +2460,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link BeanContext.Builder#propertyNamer(Class)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#propertyNamer(Class)}
 		 * </ul>
 		 *
 		 * @param value
@@ -2481,7 +2481,7 @@ public abstract class BeanContextable extends Context {
 		 * When called, bean properties will be serialized in natural JVM-dependent order instead of the default alphabetical order.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link BeanContext.Builder#unsortedProperties()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#unsortedProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2496,7 +2496,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#unsorted() Bean(unsorted)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#unsortedProperties(Class...)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#unsortedProperties(Class...)}
 		 * </ul>
 		 *
 		 * @param on The bean classes to opt out of sorted properties.
@@ -2663,12 +2663,12 @@ public abstract class BeanContextable extends Context {
 		 * 		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
 		 *
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, Date <jv>date</jv>) {
+		 * 		<jk>public</jk> String swap(MarshallingSession <jv>session</jv>, Date <jv>date</jv>) {
 		 * 			<jk>return</jk> <jf>format</jf>.format(<jv>date</jv>);
 		 * 		}
 		 *
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> Date unswap(BeanSession <jv>session</jv>, String <jv>string</jv>, ClassMeta <jv>hint</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> Date unswap(MarshallingSession <jv>session</jv>, String <jv>string</jv>, ClassMeta <jv>hint</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>return</jk> <jf>format</jf>.parse(<jv>string</jv>);
 		 * 		}
 		 * 	}
@@ -2703,7 +2703,7 @@ public abstract class BeanContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jf'>{@link BeanContext.Builder#swaps(Class...)}
+		 * 	<li class='jf'>{@link MarshallingContext.Builder#swaps(Class...)}
 		 * </ul>
 		 *
 		 * @param values
@@ -2727,17 +2727,17 @@ public abstract class BeanContextable extends Context {
 		 * <i><l>Context</l> configuration property:&emsp;</i>  TimeZone.
 		 *
 		 * <p>
-		 * Specifies the default time zone for serializer and parser sessions when not specified via {@link BeanSession.Builder#timeZone(TimeZone)}.
+		 * Specifies the default time zone for serializer and parser sessions when not specified via {@link MarshallingSession.Builder#timeZone(TimeZone)}.
 		 * Typically used for POJO swaps that need to deal with timezones such as swaps that convert <l>Date</l> and <l>Calendar</l>
-		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(BeanSession, Object)} and
-		 * {@link ObjectSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
+		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(MarshallingSession, Object)} and
+		 * {@link ObjectSwap#unswap(MarshallingSession, Object, ClassMeta, String)} methods.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Define a POJO swap that skips serializing beans if the time zone is GMT.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> String swap(MarshallingSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>if</jk> (<jv>session</jv>.getTimeZone().equals(TimeZone.<jsf>GMT</jsf>))
 		 * 				<jk>return null</jk>;
 		 * 			<jk>return</jk> <jv>bean</jv>.toString();
@@ -2753,8 +2753,8 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#timeZone()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#timeZone(TimeZone)}
-		 * 	<li class='jm'>{@link BeanSession.Builder#timeZone(TimeZone)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#timeZone(TimeZone)}
+		 * 	<li class='jm'>{@link MarshallingSession.Builder#timeZone(TimeZone)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -2804,7 +2804,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jc'>{@link Bean#typeName() Bean(typeName)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanDictionary(Class...)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
 		 * </ul>
 		 *
 		 * @param on
@@ -2851,7 +2851,7 @@ public abstract class BeanContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#typePropertyName(String)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#typePropertyName(String)}
 		 * </ul>
 		 *
 		 * @param on The class the type property name applies to.
@@ -2910,7 +2910,7 @@ public abstract class BeanContextable extends Context {
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Bean#typePropertyName()}
 		 * 	<li class='ja'>{@link MarshalledConfig#typePropertyName()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#typePropertyName(String)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#typePropertyName(String)}
 		 * </ul>
 		 *
 		 * @param value
@@ -2959,7 +2959,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link BeanContext.Builder#useEnumNames()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#useEnumNames()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2986,7 +2986,7 @@ public abstract class BeanContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jmf'>{@link BeanContext.Builder#useJavaBeanIntrospector()}
+		 * 	<li class='jmf'>{@link MarshallingContext.Builder#useJavaBeanIntrospector()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2997,16 +2997,16 @@ public abstract class BeanContextable extends Context {
 		}
 	}
 
-	protected final BeanContext beanContext;
+	protected final MarshallingContext marshallingContext;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param b The builder for this object.
 	 */
-	protected BeanContextable(Builder b) {
+	protected MarshallingContextable(Builder b) {
 		super(b);
-		beanContext = nn(b.bc) ? b.bc : b.bcBuilder.build();
+		marshallingContext = nn(b.bc) ? b.bc : b.bcBuilder.build();
 	}
 
 	/**
@@ -3014,11 +3014,11 @@ public abstract class BeanContextable extends Context {
 	 *
 	 * @return The bean context for this object.
 	 */
-	public BeanContext getBeanContext() { return beanContext; }
+	public MarshallingContext getMarshallingContext() { return marshallingContext; }
 
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_beanContext, beanContext.properties());
+			.a(PROP_beanContext, marshallingContext.properties());
 	}
 }

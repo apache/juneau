@@ -204,7 +204,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try {
 			super.doSerialize(out, genSession.getSchema(o));
-		} catch (BeanRecursionException e) {
+		} catch (MarshallingRecursionException e) {
 			throw new SerializeException(e);
 		}
 	}

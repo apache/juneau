@@ -185,7 +185,7 @@ public class OpenApiParserSession extends UonParserSession {
 	}
 
 	// Cache these for faster lookup
-	private static final BeanContext BC = BeanContext.DEFAULT;
+	private static final MarshallingContext BC = MarshallingContext.DEFAULT;
 	private static final ClassMeta<Long> CM_Long = BC.getClassMeta(Long.class);
 	private static final ClassMeta<Integer> CM_Integer = BC.getClassMeta(Integer.class);
 	private static final ClassMeta<Double> CM_Double = BC.getClassMeta(Double.class);
@@ -427,7 +427,7 @@ public class OpenApiParserSession extends UonParserSession {
 				}
 
 				if (type.isBean()) {
-					var m = ctx.getBeanContext().newBeanMap(type.inner());
+					var m = ctx.getMarshallingContext().newBeanMap(type.inner());
 					for (var s : ss) {
 						var kv = StringUtils.splita(s, '=', 2);
 						if (kv.length != 2)

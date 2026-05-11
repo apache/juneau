@@ -407,7 +407,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	@Override
-	public Div swap(BeanSession beanSession, Swagger swagger) throws Exception {
+	public Div swap(MarshallingSession marshallingSession, Swagger swagger) throws Exception {
 		// @formatter:off
 		var s = new Session(swagger);
 

@@ -475,11 +475,11 @@ public class RequestContent {
 	}
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
-		return req.getBeanSession().getClassMeta(type);
+		return req.getMarshallingSession().getClassMeta(type);
 	}
 
 	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
-		return req.getBeanSession().getClassMeta(type, args);
+		return req.getMarshallingSession().getClassMeta(type, args);
 	}
 
 	private Encoder getEncoder() throws UnsupportedMediaType {

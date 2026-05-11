@@ -50,7 +50,7 @@ class MarshalledProp_StarPlainField_Test extends TestBase {
 
 	@Test
 	void a01_beanpStarOnStringField_isPropertyNamedAfterField() {
-		var cm = BeanContext.DEFAULT.getClassMeta(A.class);
+		var cm = MarshallingContext.DEFAULT.getClassMeta(A.class);
 		assertTrue(cm.isBean(), cm.getNotABeanReason());
 		var bm = cm.getBeanMeta();
 		assertNotNull(bm);
@@ -64,7 +64,7 @@ class MarshalledProp_StarPlainField_Test extends TestBase {
 
 	@Test
 	void a02_beanpNameStarOnPrimitiveField_isPropertyNamedAfterField() {
-		var cm = BeanContext.DEFAULT.getClassMeta(B.class);
+		var cm = MarshallingContext.DEFAULT.getClassMeta(B.class);
 		assertTrue(cm.isBean(), cm.getNotABeanReason());
 		var bm = cm.getBeanMeta();
 		assertNotNull(bm);
@@ -78,7 +78,7 @@ class MarshalledProp_StarPlainField_Test extends TestBase {
 
 	@Test
 	void b01_beanpStarOnMapField_staysDynaProperty() {
-		var cm = BeanContext.DEFAULT.getClassMeta(C.class);
+		var cm = MarshallingContext.DEFAULT.getClassMeta(C.class);
 		assertTrue(cm.isBean(), cm.getNotABeanReason());
 		var bm = cm.getBeanMeta();
 		assertNotNull(bm);

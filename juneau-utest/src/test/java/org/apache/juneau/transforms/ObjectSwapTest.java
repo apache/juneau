@@ -43,7 +43,7 @@ class ObjectSwapTest extends TestBase {
 		}
 
 		@Override
-		public String swap(BeanSession session, MyPojo o) throws Exception {
+		public String swap(MarshallingSession session, MyPojo o) throws Exception {
 			return "It's JSON!";
 		}
 	}
@@ -56,7 +56,7 @@ class ObjectSwapTest extends TestBase {
 		}
 
 		@Override
-		public String swap(BeanSession session, MyPojo o) throws Exception {
+		public String swap(MarshallingSession session, MyPojo o) throws Exception {
 			return "It's XML!";
 		}
 	}
@@ -69,7 +69,7 @@ class ObjectSwapTest extends TestBase {
 		}
 
 		@Override
-		public String swap(BeanSession session, MyPojo o) throws Exception {
+		public String swap(MarshallingSession session, MyPojo o) throws Exception {
 			return "It's something else!";
 		}
 	}

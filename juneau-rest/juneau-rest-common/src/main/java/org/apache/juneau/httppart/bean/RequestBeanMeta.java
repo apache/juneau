@@ -52,8 +52,8 @@ public class RequestBeanMeta {
 		}
 
 		Builder apply(Class<?> c) {
-			this.cm = BeanContext.DEFAULT.getClassMeta(c);
-			var ap = cm.getBeanContext().getAnnotationProvider();
+			this.cm = MarshallingContext.DEFAULT.getClassMeta(c);
+			var ap = cm.getMarshallingContext().getAnnotationProvider();
 			apply(ap.find(Request.class, cm).stream().findFirst().map(x -> x.inner()).orElse(null));
 			cm.getPublicMethods().stream().forEach(x -> {
 				var n = x.getNameSimple();

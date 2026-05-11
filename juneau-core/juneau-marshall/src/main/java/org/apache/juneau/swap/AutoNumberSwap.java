@@ -46,43 +46,43 @@ import org.apache.juneau.serializer.*;
  * <h5 class='figure'>Valid swap methods (S = Swapped type)</h5>
  * <ul>
  * 	<li class='jm'><c><jk>public</jk> S toNumber()</c>
- * 	<li class='jm'><c><jk>public</jk> S toNumber(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toNumber(MarshallingSession)</c>
  * 	<li class='jm'><c><jk>public</jk> S toInteger()</c>
- * 	<li class='jm'><c><jk>public</jk> S toInteger(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toInteger(MarshallingSession)</c>
  * 	<li class='jm'><c><jk>public</jk> S toInt()</c>
- * 	<li class='jm'><c><jk>public</jk> S toInt(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toInt(MarshallingSession)</c>
  * 	<li class='jm'><c><jk>public</jk> S toLong()</c>
- * 	<li class='jm'><c><jk>public</jk> S toLong(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toLong(MarshallingSession)</c>
  * 	<li class='jm'><c><jk>public</jk> S toFloat()</c>
- * 	<li class='jm'><c><jk>public</jk> S toFloat(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toFloat(MarshallingSession)</c>
  * 	<li class='jm'><c><jk>public</jk> S toDouble()</c>
- * 	<li class='jm'><c><jk>public</jk> S toDouble(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toDouble(MarshallingSession)</c>
  * 	<li class='jm'><c><jk>public</jk> S toShort()</c>
- * 	<li class='jm'><c><jk>public</jk> S toShort(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toShort(MarshallingSession)</c>
  * 	<li class='jm'><c><jk>public</jk> S toByte()</c>
- * 	<li class='jm'><c><jk>public</jk> S toByte(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toByte(MarshallingSession)</c>
  * </ul>
  *
  * <h5 class='figure'>Valid unswap methods (N = Normal type, S = Swapped type)</h5>
  * <ul>
  * 	<li class='jm'><c><jk>public static</jk> N fromInteger(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromInteger(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromInteger(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N fromInt(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromInt(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromInt(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N fromLong(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromLong(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromLong(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N fromFloat(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromFloat(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromFloat(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N fromDouble(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromDouble(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromDouble(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N fromShort(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromShort(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromShort(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N fromByte(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromByte(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromByte(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N create(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N create(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N create(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N valueOf(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N valueOf(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N valueOf(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public</jk> N(S)</c>
  * </ul>
  * <p>
@@ -122,7 +122,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		"java:S1452", // Wildcard required - ObjectSwap<?,?> for dynamically discovered swap types
 		"java:S3776"  // Cognitive complexity acceptable for exhaustive number type detection heuristic
 	})
-	public static ObjectSwap<?,?> find(BeanContext bc, ClassInfo ci) {
+	public static ObjectSwap<?,?> find(MarshallingContext bc, ClassInfo ci) {
 
 		if (shouldIgnore(bc, ci))
 			return null;
@@ -149,7 +149,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		return null;
 	}
 
-	private static boolean isSwapMethod(BeanContext bc, MethodInfo mi) {
+	private static boolean isSwapMethod(MarshallingContext bc, MethodInfo mi) {
 		var rt = mi.getReturnType();
 		// @formatter:off
 		return
@@ -158,12 +158,12 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& (rt.isAssignableTo(Number.class) || (rt.isPrimitive() && rt.isAny(int.class, short.class, long.class, float.class, double.class, byte.class)))
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
-			&& mi.hasParameterTypesLenient(BeanSession.class)
+			&& mi.hasParameterTypesLenient(MarshallingSession.class)
 			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(MarshalledIgnore.class, m2));
 		// @formatter:on
 	}
 
-	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
+	private static boolean isUnswapConstructor(MarshallingContext bc, ConstructorInfo cs, ClassInfo rt) {
 		// @formatter:off
 		return
 			cs.isNotDeprecated()
@@ -173,20 +173,20 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		// @formatter:on
 	}
 
-	private static boolean isUnswapMethod(BeanContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {
+	private static boolean isUnswapMethod(MarshallingContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {
 		// @formatter:off
 		return
 			mi.isNotDeprecated()
 			&& mi.isStatic()
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
-			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
+			&& mi.hasParameterTypesLenient(MarshallingSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
 			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(MarshalledIgnore.class, m2));
 		// @formatter:on
 	}
 
-	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
+	private static boolean shouldIgnore(MarshallingContext bc, ClassInfo ci) {
 		// @formatter:off
 		return
 			ci.isNonStaticMemberClass()
@@ -206,7 +206,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 	@SuppressWarnings({
 		"null" // Method info variables are checked for null before use in method body
 	})
-	private AutoNumberSwap(BeanContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
+	private AutoNumberSwap(MarshallingContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
 		super(ci.inner(), swapMethod.inner().getReturnType());
 		this.swapMethod = bc.getBeanMethodVisibility().transform(swapMethod.inner());
 		this.unswapMethod = unswapMethod == null ? null : bc.getBeanMethodVisibility().transform(unswapMethod.inner());
@@ -215,14 +215,14 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		Class<?> unswapType2 = null;
 		if (nn(unswapMethod)) {
 			for (var pi : unswapMethod.getParameters())
-				if (! pi.getParameterType().is(BeanSession.class)) {
+				if (! pi.getParameterType().is(MarshallingSession.class)) {
 					var wrap = pi.getParameterType().getWrapperIfPrimitive();
 					if (nn(wrap))
 						unswapType2 = wrap.inner();
 				}
 		} else if (nn(unswapConstructor)) {
 			for (var pi : unswapConstructor.getParameters())
-				if (! pi.getParameterType().is(BeanSession.class)) {
+				if (! pi.getParameterType().is(MarshallingSession.class)) {
 					var wrap = pi.getParameterType().getWrapperIfPrimitive();
 					if (nn(wrap))
 						unswapType2 = wrap.inner();
@@ -232,7 +232,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	public Number swap(BeanSession session, Object o) throws SerializeException {
+	public Number swap(MarshallingSession session, Object o) throws SerializeException {
 		try {
 			return (Number)swapMethod.invoke(o, getMatchingArgs(swapMethod.getParameterTypes(), session));
 		} catch (Exception e) {
@@ -244,7 +244,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		"unchecked" // Type erasure requires cast to T
 	})
 	@Override /* Overridden from ObjectSwap */
-	public T unswap(BeanSession session, Number o, ClassMeta<?> hint) throws ParseException {
+	public T unswap(MarshallingSession session, Number o, ClassMeta<?> hint) throws ParseException {
 		if (unswapType == null)
 			throw new ParseException("No unparse methodology found for object.");
 		try {

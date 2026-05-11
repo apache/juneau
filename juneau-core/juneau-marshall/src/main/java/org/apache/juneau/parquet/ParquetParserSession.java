@@ -145,13 +145,13 @@ public class ParquetParserSession extends InputStreamParserSession {
 			effectiveType = type.getElementType();
 		var elementType = effectiveType.isCollection() ? effectiveType.getElementType() : effectiveType;
 		if (elementType == null || elementType.isObject())
-			elementType = ctx.getBeanContext().getClassMeta(Map.class);
+			elementType = ctx.getMarshallingContext().getClassMeta(Map.class);
 		// For scalar types, use Map so reassembleRows keeps raw map rows for unwrap logic
 		if (!effectiveType.isMap() && !effectiveType.isCollection() && !effectiveType.isArray()) {
 			var inner = effectiveType.inner();
 			if (inner != null && (inner.isPrimitive() || inner == String.class || inner == Boolean.class
 				|| inner == Character.class || Number.class.isAssignableFrom(inner)))
-				elementType = ctx.getBeanContext().getClassMeta(Map.class);
+				elementType = ctx.getMarshallingContext().getClassMeta(Map.class);
 		}
 		var rows = readAllRows(bytes, meta, elementType, meta.schemaRepetition());
 		// Unwrap ValueHolder {value: X} when single row has "value" key and target expects scalar (not Map/List<Map>)
@@ -188,7 +188,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 			var keyType = type.getKeyType();
 			if (keyType != null && !keyType.isAssignableTo(String.class) && isKeyValuePairFormat(rows)) {
 				var valueType = type.getValueType();
-				if (valueType == null) valueType = ctx.getBeanContext().getClassMeta(Object.class);
+				if (valueType == null) valueType = ctx.getMarshallingContext().getClassMeta(Object.class);
 				var result = new LinkedHashMap<>();
 				for (var row : rows) {
 					var rowMap = (Map<?, ?>)row;
@@ -1071,7 +1071,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 		}
 	}
 
-	/** Collapses Parquet optional-group {value: X} wrappers so BeanSession receives unwrapped values for Optional properties. */
+	/** Collapses Parquet optional-group {value: X} wrappers so MarshallingSession receives unwrapped values for Optional properties. */
 	@SuppressWarnings({
 		"unchecked" // (Map<String,Object>) cast for mutating optional-group structure
 	})
@@ -1094,7 +1094,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 				var elemType = propType.getElementType();
 				boolean absent = isAbsentOptionalMap(m, elemType);
 				// Detect absent inner Optional: all-null map, empty map, or nested {value:{all-null}} structure.
-				// Use null so BeanSession's null→Optional<Optional<X>> conversion produces Optional.of(Optional.empty()).
+				// Use null so MarshallingSession's null→Optional<Optional<X>> conversion produces Optional.of(Optional.empty()).
 				if (absent) {
 					((Map<String,Object>)row).put(name, null);
 				} else if (m.size() == 1 && m.containsKey("value")) {
@@ -1109,7 +1109,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 
 	/**
 	 * Returns true if the map represents an absent Optional value that should be treated as null,
-	 * allowing BeanSession's null→Optional<Optional<X>> conversion to produce Optional.of(Optional.empty()).
+	 * allowing MarshallingSession's null→Optional<Optional<X>> conversion to produce Optional.of(Optional.empty()).
 	 *
 	 * <p>Absent patterns:
 	 * <ul>
@@ -1153,7 +1153,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 			return null;
 		if (targetType != null && targetType.isOptional() && val instanceof Map<?,?> m) {
 			if (isAbsentOptionalMap(m, targetType))
-				return null;  // Let BeanSession convert null to Optional.of(Optional.empty())
+				return null;  // Let MarshallingSession convert null to Optional.of(Optional.empty())
 			if (m.size() == 1 && m.containsKey("value"))
 				return collapseOptionalValue(m.get("value"), targetType.getElementType());
 		}
@@ -1205,7 +1205,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 		return value;
 	}
 
-	/** Unwraps ValueHolder map {value: X} to X when target is scalar; else converts via BeanSession. */
+	/** Unwraps ValueHolder map {value: X} to X when target is scalar; else converts via MarshallingSession. */
 	private Object unwrapValueHolder(Object row, ClassMeta<?> targetType) throws ParseException {
 		if (row == null)
 			return null;
@@ -1236,7 +1236,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 	private Object toCollection(List<Object> values, ClassMeta<?> collectionType) throws ParseException {
 		var elemType = collectionType.getElementType();
 		if (elemType == null)
-			elemType = ctx.getBeanContext().getClassMeta(Object.class);
+			elemType = ctx.getMarshallingContext().getClassMeta(Object.class);
 		Collection<Object> result;
 		try {
 			result = collectionType.canCreateNewInstance() ? (Collection<Object>)collectionType.newInstance() : null;

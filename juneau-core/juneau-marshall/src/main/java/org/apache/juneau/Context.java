@@ -626,7 +626,7 @@ public abstract class Context {
 		 * 		When bean getters throws exceptions, the exception includes the object stack information
 		 * 		in order to determine how that method was invoked.
 		 * 	<li>
-		 * 		Enables {@link BeanTraverseContext.Builder#detectRecursions()}.
+		 * 		Enables {@link MarshallingTraverseContext.Builder#detectRecursions()}.
 		 * </ul>
 		 *
 		 * <p>

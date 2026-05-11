@@ -82,7 +82,7 @@ class Html5Template_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			this.value2 = value2;
 		}
 
-		public Form swap(BeanSession session) {
+		public Form swap(MarshallingSession session) {
 			return form(action,
 				input("text").name("v1").value(value1),
 				input("text").name("v2").value(value2)

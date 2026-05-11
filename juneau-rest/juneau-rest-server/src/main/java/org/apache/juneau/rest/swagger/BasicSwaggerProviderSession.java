@@ -227,7 +227,7 @@ public class BasicSwaggerProviderSession {
 
 		var is = ff.getStream(rci.getNameSimple() + ".json", locale).orElse(null);
 
-		var ap = this.context.getBeanContext().getAnnotationProvider();
+		var ap = this.context.getMarshallingContext().getAnnotationProvider();
 
 		Predicate<String> ne = Utils::ne;
 		Predicate<Collection<?>> nec = Utils::ne;
@@ -354,7 +354,7 @@ public class BasicSwaggerProviderSession {
 		// Iterate through all the @RestOp methods.
 		for (var sm : context.getRestOperations().getOpContexts()) {
 
-			var bs = sm.getBeanContext().getSession();
+			var bs = sm.getMarshallingContext().getSession();
 
 			var m = sm.getJavaMethod();
 			var mi = MethodInfo.of(m);
@@ -811,7 +811,7 @@ public class BasicSwaggerProviderSession {
 	@SuppressWarnings({
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
-	private JsonMap getSchema(JsonMap schema, Type type, BeanSession bs) throws Exception {
+	private JsonMap getSchema(JsonMap schema, Type type, MarshallingSession bs) throws Exception {
 
 		if (type == Swagger.class)
 			return JsonMap.create();

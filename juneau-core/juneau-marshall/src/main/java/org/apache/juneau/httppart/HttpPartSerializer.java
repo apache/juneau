@@ -66,8 +66,8 @@ public interface HttpPartSerializer {
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public Creator beanContext(BeanContext.Builder value) {
-			builder(BeanContextable.Builder.class).ifPresent(x -> x.beanContext(value));
+		public Creator marshallingContext(MarshallingContext.Builder value) {
+			builder(MarshallingContextable.Builder.class).ifPresent(x -> x.marshallingContext(value));
 			return this;
 		}
 

@@ -178,13 +178,13 @@ public class ManifestFile extends JsonMap {
 	}
 
 	@Override /* Overridden from JsonMap */
-	public ManifestFile session(BeanSession session) {
+	public ManifestFile session(MarshallingSession session) {
 		super.session(session);
 		return this;
 	}
 
 	@Override /* Overridden from JsonMap */
-	public ManifestFile setBeanSession(BeanSession value) {
+	public ManifestFile setBeanSession(MarshallingSession value) {
 		super.setBeanSession(value);
 		return this;
 	}

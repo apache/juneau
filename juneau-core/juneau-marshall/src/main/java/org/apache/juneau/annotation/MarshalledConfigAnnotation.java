@@ -37,9 +37,9 @@ public class MarshalledConfigAnnotation {
 	private MarshalledConfigAnnotation() {}
 
 	/**
-	 * Applies {@link MarshalledConfig} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Applies {@link MarshalledConfig} annotations to a {@link org.apache.juneau.MarshallingContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<MarshalledConfig,BeanContext.Builder> {
+	public static class Applier extends AnnotationApplier<MarshalledConfig,MarshallingContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -47,11 +47,11 @@ public class MarshalledConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(MarshalledConfig.class, BeanContext.Builder.class, vr);
+			super(MarshalledConfig.class, MarshallingContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<MarshalledConfig> ai, BeanContext.Builder b) {
+		public void apply(AnnotationInfo<MarshalledConfig> ai, MarshallingContext.Builder b) {
 			MarshalledConfig a = ai.inner();
 
 			// @formatter:off

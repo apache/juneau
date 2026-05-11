@@ -33,7 +33,7 @@ class BeanMapErrors_Test extends TestBase {
 	// JUNEAU-248: Shouldn't be found in keySet()/entrySet()/containsKey() but should be accessible via get()/put()
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void beanPropertyMethodNotInBeanProperties() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 
 		var bm = bc.newBeanMap(A1.class);
 		assertFalse(bm.containsKey("f2"));  // JUNEAU-248: Now consistent with keySet()
@@ -54,7 +54,7 @@ class BeanMapErrors_Test extends TestBase {
 	}
 
 	@Test void beanPropertyMethodNotInBeanProperties_usingConfig() {
-		var bc = BeanContext.create().applyAnnotations(B1Config.class).build();
+		var bc = MarshallingContext.create().applyAnnotations(B1Config.class).build();
 
 		var bm = bc.newBeanMap(B1.class);
 		assertFalse(bm.containsKey("f2"));  // JUNEAU-248: Now consistent with keySet()
@@ -84,7 +84,7 @@ class BeanMapErrors_Test extends TestBase {
 	// JUNEAU-248: Shouldn't be found in keySet()/entrySet()/containsKey() but should be accessible via get()/put()
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void beanPropertyFieldNotInBeanProperties() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 
 		var bm = bc.newBeanMap(A2.class);
 		assertFalse(bm.containsKey("f2"));  // JUNEAU-248: Now consistent with keySet()
@@ -104,7 +104,7 @@ class BeanMapErrors_Test extends TestBase {
 	}
 
 	@Test void beanPropertyFieldNotInMarshalledConfig() {
-		var bc = BeanContext.create().applyAnnotations(B2Config.class).build();
+		var bc = MarshallingContext.create().applyAnnotations(B2Config.class).build();
 
 		var bm = bc.newBeanMap(B2.class);
 		assertFalse(bm.containsKey("f2"));  // JUNEAU-248: Now consistent with keySet()

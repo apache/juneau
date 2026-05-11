@@ -198,7 +198,7 @@ class MarshalledConfigAnnotation_Test extends TestBase {
 	@Test void b01_noValues() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var js = JsonSerializer.create().apply(al).build();
-		var bc = js.getBeanContext();
+		var bc = js.getMarshallingContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
 		check("", bc.getBeanDictionary());
@@ -243,7 +243,7 @@ class MarshalledConfigAnnotation_Test extends TestBase {
 	@Test void c01_noAnnotation() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var js = JsonSerializer.create().apply(al).build();
-		var bc = js.getBeanContext();
+		var bc = js.getMarshallingContext();
 		check("PUBLIC", bc.getBeanClassVisibility());
 		check("PUBLIC", bc.getBeanConstructorVisibility());
 		check("", bc.getBeanDictionary());

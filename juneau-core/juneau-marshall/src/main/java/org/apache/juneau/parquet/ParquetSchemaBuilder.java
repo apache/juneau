@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.juneau.BeanContext;
+import org.apache.juneau.MarshallingContext;
 import org.apache.juneau.BeanPropertyMeta;
 import org.apache.juneau.ClassMeta;
 import org.apache.juneau.annotation.ParentProperty;
@@ -49,19 +49,19 @@ import org.apache.juneau.commons.reflect.AnnotationProvider;
 })
 public final class ParquetSchemaBuilder {
 
-	private final BeanContext beanContext;
+	private final MarshallingContext marshallingContext;
 	private final boolean writeDatesAsTimestamp;
 	private final ParquetCycleHandling cycleHandling;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param beanContext The bean context for type resolution.
+	 * @param marshallingContext The bean context for type resolution.
 	 * @param writeDatesAsTimestamp If true, Date/Calendar/Temporal map to INT64+TIMESTAMP_MILLIS; else to BYTE_ARRAY+STRING.
 	 * @param cycleHandling How to handle structural cycles when building schema.
 	 */
-	public ParquetSchemaBuilder(BeanContext beanContext, boolean writeDatesAsTimestamp, ParquetCycleHandling cycleHandling) {
-		this.beanContext = beanContext;
+	public ParquetSchemaBuilder(MarshallingContext marshallingContext, boolean writeDatesAsTimestamp, ParquetCycleHandling cycleHandling) {
+		this.marshallingContext = marshallingContext;
 		this.writeDatesAsTimestamp = writeDatesAsTimestamp;
 		this.cycleHandling = cycleHandling != null ? cycleHandling : ParquetCycleHandling.NULL;
 	}
@@ -117,7 +117,7 @@ public final class ParquetSchemaBuilder {
 		var typesInProgress = new HashSet<Class<?>>();
 		for (var key : keys) {
 			var val = map.get(key);
-			var cm = beanContext.getClassMeta(val != null ? val.getClass() : Object.class);
+			var cm = marshallingContext.getClassMeta(val != null ? val.getClass() : Object.class);
 			addSchemaElements(elements, cm, key, "root", false, null, typesInProgress);
 		}
 		return elements;
@@ -136,8 +136,8 @@ public final class ParquetSchemaBuilder {
 	public List<ParquetSchemaElement> buildSchemaForKeyValuePairs(Object keySample, Object valueSample) {
 		var elements = new ArrayList<ParquetSchemaElement>();
 		var typesInProgress = new HashSet<Class<?>>();
-		var keyCm = beanContext.getClassMeta(keySample != null ? keySample.getClass() : Object.class);
-		var valueCm = beanContext.getClassMeta(valueSample != null ? valueSample.getClass() : Object.class);
+		var keyCm = marshallingContext.getClassMeta(keySample != null ? keySample.getClass() : Object.class);
+		var valueCm = marshallingContext.getClassMeta(valueSample != null ? valueSample.getClass() : Object.class);
 		elements.add(new ParquetSchemaElement("root", null, null, null, 2, null, null, null, null, null));
 		addSchemaElements(elements, keyCm, "key", "root", false, null, typesInProgress);
 		addSchemaElements(elements, valueCm, "value", "root", false, null, typesInProgress);
@@ -165,7 +165,7 @@ public final class ParquetSchemaBuilder {
 	private void addOptionalSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Set<Class<?>> typesInProgress) {
 		var et = cm.getElementType();
 		if (et == null)
-			et = beanContext.getClassMeta(Object.class);
+			et = marshallingContext.getClassMeta(Object.class);
 		Object innerSample = sampleBean instanceof Optional<?> o ? o.orElse(null) : sampleBean;
 		var optPath = parentPath != null ? parentPath + "." + name : name;
 		elements.add(new ParquetSchemaElement(name, null, null, isRoot ? null : OPTIONAL, 1, null, null, null, null, optPath));
@@ -185,12 +185,12 @@ public final class ParquetSchemaBuilder {
 				var path = parentPath != null ? parentPath + "." + name : name;
 				throw new SerializeException("Cyclic type reference at ''{0}'' (type ''{1}''). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", path, beanClass.getName());
 			}
-			addLeafSchema(elements, beanContext.getClassMeta(String.class), name, parentPath, isRoot);
+			addLeafSchema(elements, marshallingContext.getClassMeta(String.class), name, parentPath, isRoot);
 			return;
 		}
 		typesInProgress.add(beanClass);
 		try {
-			var ap = beanContext.getAnnotationProvider();
+			var ap = marshallingContext.getAnnotationProvider();
 			var props = bm.getProperties().values().stream()
 				.filter(BeanPropertyMeta::canRead)
 				.filter(p -> !isParentProperty(ap, p))
@@ -215,7 +215,7 @@ public final class ParquetSchemaBuilder {
 				var propCm = p.getClassMeta();
 				// When property type is Object, infer from sample so Map/Collection get proper schema (2.2)
 				if ((propCm == null || propCm.isObject()) && childSample != null)
-					propCm = beanContext.getClassMeta(childSample.getClass());
+					propCm = marshallingContext.getClassMeta(childSample.getClass());
 				addSchemaElements(elements, propCm, p.getName(), childParentPath, false, childSample, typesInProgress);
 			}
 		} finally {
@@ -244,7 +244,7 @@ public final class ParquetSchemaBuilder {
 		if (sampleCollection != null && !sampleCollection.isEmpty()) {
 			var first = sampleCollection.iterator().next();
 			if (first != null)
-				et = beanContext.getClassMeta(first.getClass());
+				et = marshallingContext.getClassMeta(first.getClass());
 		}
 		var listPath = parentPath != null ? parentPath + "." + name : name;
 		elements.add(new ParquetSchemaElement(name, null, null, isRoot ? null : OPTIONAL, 1, CONVERTED_LIST, null, null, null, null));
@@ -265,7 +265,7 @@ public final class ParquetSchemaBuilder {
 		var vt = cm.getValueType();
 		// Parquet MAP stores keys as STRING; non-String keys (e.g. Enum) are serialized via toString/name()
 		if (vt == null)
-			vt = beanContext.getClassMeta(Object.class);
+			vt = marshallingContext.getClassMeta(Object.class);
 		var mapPath = parentPath != null ? parentPath + "." + name : name;
 		elements.add(new ParquetSchemaElement(name, null, null, isRoot ? null : OPTIONAL, 1, CONVERTED_MAP, null, null, null, null));
 		elements.add(new ParquetSchemaElement("key_value", null, null, REPEATED, 2, null, null, null, null, null));
@@ -311,7 +311,7 @@ public final class ParquetSchemaBuilder {
 			elements.add(new ParquetSchemaElement(name, TYPE_BYTE_ARRAY, null, repetition, null, CONVERTED_UTF8, LOGICAL_TYPE_STRING, null, null, path));
 		} else if (cm.isDecimal()) {
 			// Store as UTF-8 string to match JSON/CBOR behavior; DECIMAL binary encoding is not used since
-			// the reader always reads BYTE_ARRAY as a UTF-8 string for type conversion via BeanSession.
+			// the reader always reads BYTE_ARRAY as a UTF-8 string for type conversion via MarshallingSession.
 			elements.add(new ParquetSchemaElement(name, TYPE_BYTE_ARRAY, null, repetition, null, CONVERTED_UTF8, LOGICAL_TYPE_STRING, null, null, path));
 		} else if (cm.isAssignableTo(UUID.class)) {
 			elements.add(new ParquetSchemaElement(name, TYPE_FIXED_LEN_BYTE_ARRAY, 16, repetition, null, null, LOGICAL_TYPE_UUID, null, null, path));

@@ -215,7 +215,7 @@ public class ObjectRest {
 
 	private ReaderParser parser = Json5Parser.DEFAULT;
 
-	final BeanSession session;
+	final MarshallingSession session;
 
 	/** If true, the root cannot be overwritten */
 	private boolean rootLocked;
@@ -227,7 +227,7 @@ public class ObjectRest {
 	 * Create a new instance of a REST interface over the specified object.
 	 *
 	 * <p>
-	 * Uses {@link BeanContext#DEFAULT} for working with Java beans.
+	 * Uses {@link MarshallingContext#DEFAULT} for working with Java beans.
 	 *
 	 * @param o The object to be wrapped.
 	 */
@@ -245,7 +245,7 @@ public class ObjectRest {
 	 * @param parser The parser to use for parsing arguments and converting objects to the correct data type.
 	 */
 	public ObjectRest(Object o, ReaderParser parser) {
-		this.session = parser == null ? BeanContext.DEFAULT_SESSION : parser.getBeanContext().getSession();
+		this.session = parser == null ? MarshallingContext.DEFAULT_SESSION : parser.getMarshallingContext().getSession();
 		if (parser == null)
 			parser = Json5Parser.DEFAULT;
 		this.parser = parser;
@@ -283,7 +283,7 @@ public class ObjectRest {
 	 * Retrieves the element addressed by the URL as the specified object type.
 	 *
 	 * <p>
-	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, Class)}.
+	 * Will convert object to the specified type per {@link MarshallingSession#convertToType(Object, Class)}.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
@@ -321,7 +321,7 @@ public class ObjectRest {
 	 * Retrieves the element addressed by the URL as the specified object type.
 	 *
 	 * <p>
-	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, Class)}.
+	 * Will convert object to the specified type per {@link MarshallingSession#convertToType(Object, Class)}.
 	 *
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).

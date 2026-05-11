@@ -61,7 +61,7 @@ import org.apache.juneau.serializer.*;
  * The types above are considered "Hjson-primitive" object types.
  * Any non-Hjson-primitive object types are transformed into Hjson-primitive object types through
  * {@link org.apache.juneau.swap.ObjectSwap ObjectSwaps} associated through the
- * {@link org.apache.juneau.BeanContext.Builder#swaps(Class...) BeanContext.Builder.swaps(Class...)} method.
+ * {@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...) MarshallingContext.Builder.swaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc.
  *
  * <h5 class='section'>Example:</h5>

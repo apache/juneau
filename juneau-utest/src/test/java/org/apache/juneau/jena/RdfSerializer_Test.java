@@ -148,8 +148,8 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void b02_beanContext() {
-			assertNotNull(RdfSerializer.create().beanContext(BeanContext.create().build()).build());
-			assertNotNull(RdfSerializer.create().beanContext(BeanContext.create()).build());
+			assertNotNull(RdfSerializer.create().marshallingContext(MarshallingContext.create().build()).build());
+			assertNotNull(RdfSerializer.create().marshallingContext(MarshallingContext.create()).build());
 		}
 
 		@Marshalled(typeName="myDictBean")
@@ -164,7 +164,7 @@ class RdfSerializer_Test extends TestBase {
 			"rawtypes" // (Class) cast required by beanInterceptor API
 		})
 		@Test void b04_beanInterceptor() {
-			assertNotNull(RdfSerializer.create().beanInterceptor(String.class, (Class)BeanInterceptor.class).build());
+			assertNotNull(RdfSerializer.create().beanInterceptor(String.class, (Class)MarshallingInterceptor.class).build());
 		}
 
 		@Test void b05_beanMapPutReturnsOldValue() {
@@ -286,7 +286,7 @@ class RdfSerializer_Test extends TestBase {
 			// ap.find(Rdf.class, ChildBean.classMeta) traverses PARENTS → finds both @Rdf annotations
 			// This should populate rdfs and execute forEach body at lines 67-71
 			var s = (RdfSerializer) RdfSerializer.create().language("N-TRIPLE").build();
-			var bc = s.getBeanContext();
+			var bc = s.getMarshallingContext();
 			var cm = bc.getClassMeta(E01_ChildBean.class);
 			var bm = cm.getBeanMeta();
 			assertNotNull(bm);
@@ -327,7 +327,7 @@ class RdfSerializer_Test extends TestBase {
 			// cm.forEachAnnotation(Rdf.class) with PARENTS+PACKAGE traversal finds @Rdf on the parent
 			// SEQ != DEFAULT so the filter at line 54 passes and collectionFormat = SEQ (true branch)
 			var s = (RdfSerializer) RdfSerializer.create().language("N-TRIPLE").build();
-			var bc = s.getBeanContext();
+			var bc = s.getMarshallingContext();
 			var cm = bc.getClassMeta(E02_BeanWithRdfParent.class);
 			var rdfCm = s.getRdfClassMeta(cm);
 			assertNotNull(rdfCm);
@@ -341,7 +341,7 @@ class RdfSerializer_Test extends TestBase {
 			// E03_BeanWithNoCollectionFormat has a parent with @Rdf but no collectionFormat
 			// The filter at line 54 returns false for DEFAULT, so orElse(DEFAULT) is used (false branch)
 			var s = (RdfSerializer) RdfSerializer.create().language("N-TRIPLE").build();
-			var bc = s.getBeanContext();
+			var bc = s.getMarshallingContext();
 			var cm = bc.getClassMeta(E03_BeanWithNoCollectionFormat.class);
 			var rdfCm = s.getRdfClassMeta(cm);
 			assertNotNull(rdfCm);
@@ -531,7 +531,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void g04_streamSerializer_getDelegationMethods() {
 			// Exercise the delegation methods in RdfStreamSerializer
 			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
-			var bc = s.getBeanContext();
+			var bc = s.getMarshallingContext();
 			var cm = bc.getClassMeta(String.class);
 			assertNotNull(s.getRdfClassMeta(cm));
 			assertNotNull(s.getCollectionFormat());
@@ -574,7 +574,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void g09_streamParser_getDelegationMethods() {
 			// Exercise the delegation methods in RdfStreamParser
 			var p = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build();
-			var bc = p.getBeanContext();
+			var bc = p.getMarshallingContext();
 			var cm = bc.getClassMeta(String.class);
 			assertNotNull(p.getRdfClassMeta(cm));
 			assertNotNull(p.getLanguage());
@@ -590,7 +590,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void g11_rdfSerializer_xmlMetaProviderMethods() {
 			// Cover getXmlBeanMeta and getXmlBeanPropertyMeta in RdfSerializer
 			var s = RdfSerializer.create().build();
-			var bc = s.getBeanContext();
+			var bc = s.getMarshallingContext();
 			var bm = bc.getBeanMeta(NamedBean.class);
 			assertNotNull(bm);
 			assertNotNull(s.getXmlBeanMeta(bm));

@@ -27,12 +27,12 @@ import org.apache.juneau.collections.*;
  * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> MapSwap&lt;<jk>byte</jk>[]&gt; {
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> JsonMap swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
+ * 		<jk>public</jk> JsonMap swap(MarshallingSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
  * 			<jk>return</jk> JsonMap.<jsm>of</jsm>(<js>"foo"</js>, <jv>bean</jv>.getFoo());
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> MyBean unswap(BeanSession <jv>session</jv>, JsonMap <jv>map</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
+ * 		<jk>public</jk> MyBean unswap(MarshallingSession <jv>session</jv>, JsonMap <jv>map</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
  * 			<jk>return</jk> new</jk> MyBean(<jv>map</jv>.get(<js>"foo"</js>));
  * 		}
  * 	}

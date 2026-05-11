@@ -38,7 +38,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 })
 class SwaggerUI_Test extends TestBase {
 
-	private final BeanSession bs = BeanContext.DEFAULT_SESSION;
+	private final MarshallingSession bs = MarshallingContext.DEFAULT_SESSION;
 
 	/**
 	 * Test method for media types.

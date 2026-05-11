@@ -329,7 +329,7 @@ public class JsonList extends LinkedList<Object> {
 		return in == null ? null : new JsonList(in);
 	}
 
-	transient BeanSession session = null;
+	transient MarshallingSession session = null;
 
 	private transient ObjectRest objectRest;
 
@@ -343,7 +343,7 @@ public class JsonList extends LinkedList<Object> {
 	 *
 	 * @param session The bean session to use for creating beans.
 	 */
-	public JsonList(BeanSession session) {
+	public JsonList(MarshallingSession session) {
 		this.session = session;
 	}
 
@@ -371,7 +371,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public JsonList(CharSequence in, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
+		this(p == null ? MarshallingContext.DEFAULT_SESSION : p.getMarshallingContext().getSession());
 		if (p == null)
 			p = Json5Parser.DEFAULT;
 		if (nn(in))
@@ -422,7 +422,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public JsonList(Reader in, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
+		this(p == null ? MarshallingContext.DEFAULT_SESSION : p.getMarshallingContext().getSession());
 		parse(in, p);
 	}
 
@@ -631,7 +631,7 @@ public class JsonList extends LinkedList<Object> {
 	 * the next element cannot be converted to the specified type.
 	 *
 	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for a description of valid conversions.
+	 * See {@link MarshallingSession#convertToType(Object, ClassMeta)} for a description of valid conversions.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -708,7 +708,7 @@ public class JsonList extends LinkedList<Object> {
 	 * </p>
 	 *
 	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * See {@link MarshallingSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param index The index into this list.
 	 * @param type The type of object to convert the entry to.
@@ -755,7 +755,7 @@ public class JsonList extends LinkedList<Object> {
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
 	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * See {@link MarshallingSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param index The index into this list.
 	 * @param type The type of object to convert the entry to.
@@ -813,11 +813,11 @@ public class JsonList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Returns the {@link BeanSession} currently associated with this list.
+	 * Returns the {@link MarshallingSession} currently associated with this list.
 	 *
-	 * @return The {@link BeanSession} currently associated with this list.
+	 * @return The {@link MarshallingSession} currently associated with this list.
 	 */
-	public BeanSession getBeanSession() { return session; }
+	public MarshallingSession getMarshallingSession() { return session; }
 
 	/**
 	 * Shortcut for calling <code>get(index, Boolean.<jk>class</jk>)</code>.
@@ -1004,7 +1004,7 @@ public class JsonList extends LinkedList<Object> {
 	 * Override the default bean session used for converting POJOs.
 	 *
 	 * <p>
-	 * Default is {@link BeanContext#DEFAULT}, which is sufficient in most cases.
+	 * Default is {@link MarshallingContext#DEFAULT}, which is sufficient in most cases.
 	 *
 	 * <p>
 	 * Useful if you're serializing/parsing beans with transforms defined.
@@ -1012,18 +1012,18 @@ public class JsonList extends LinkedList<Object> {
 	 * @param session The new bean session.
 	 * @return This object.
 	 */
-	public JsonList session(BeanSession session) {
+	public JsonList session(MarshallingSession session) {
 		this.session = session;
 		return this;
 	}
 
 	/**
-	 * Sets the {@link BeanSession} currently associated with this list.
+	 * Sets the {@link MarshallingSession} currently associated with this list.
 	 *
-	 * @param value The {@link BeanSession} currently associated with this list.
+	 * @param value The {@link MarshallingSession} currently associated with this list.
 	 * @return This object.
 	 */
-	public JsonList setBeanSession(BeanSession value) {
+	public JsonList setBeanSession(MarshallingSession value) {
 		session = value;
 		return this;
 	}
@@ -1070,9 +1070,9 @@ public class JsonList extends LinkedList<Object> {
 		p.parseIntoCollection(r, this, bs().object());
 	}
 
-	BeanSession bs() {
+	MarshallingSession bs() {
 		if (session == null)
-			session = BeanContext.DEFAULT_SESSION;
+			session = MarshallingContext.DEFAULT_SESSION;
 		return session;
 	}
 }

@@ -93,7 +93,7 @@ public class HasFormDataArg implements RestOpArg {
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		var req = opSession.getRequest();
-		var bs = req.getBeanSession();
+		var bs = req.getMarshallingSession();
 		return bs.convertToType(req.getFormParams().contains(name), bs.getClassMeta(type));
 	}
 }

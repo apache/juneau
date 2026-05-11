@@ -279,8 +279,8 @@ class CborSerializer_Test extends TestBase {
 
 	public static class LowercaseStringSwap extends ObjectSwap<String,String> {
 		@Override
-		public String swap(BeanSession session, String o) { return o == null ? null : o.toLowerCase(); }
+		public String swap(MarshallingSession session, String o) { return o == null ? null : o.toLowerCase(); }
 		@Override
-		public String unswap(BeanSession session, String o, ClassMeta<?> hint, String attrName) { return o; }
+		public String unswap(MarshallingSession session, String o, ClassMeta<?> hint, String attrName) { return o; }
 	}
 }

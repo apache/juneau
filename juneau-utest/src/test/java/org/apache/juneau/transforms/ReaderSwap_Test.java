@@ -28,10 +28,10 @@ class ReaderSwap_Test extends OneWayStringSwapTest_Base {
 	// Setup
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static final BeanSession BS = BeanContext.DEFAULT_SESSION;
+	private static final MarshallingSession BS = MarshallingContext.DEFAULT_SESSION;
 	private static final ReaderSwap SWAP = new ReaderSwap();
 
-	private static <T> OneWayStringSwap_Tester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession bs) {
+	private static <T> OneWayStringSwap_Tester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, MarshallingSession bs) {
 		return OneWayStringSwap_Tester.create(index, label, object, swap, expected, bs).build();
 	}
 

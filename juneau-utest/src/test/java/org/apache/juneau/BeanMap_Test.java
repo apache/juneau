@@ -46,10 +46,10 @@ class BeanMap_Test extends TestBase {
 
 	JsonSerializer serializer = Json5Serializer.DEFAULT.copy().addBeanTypes().addRootType().build();
 
-	BeanContext bc = BeanContext.create()
+	MarshallingContext bc = MarshallingContext.create()
 			.beanDictionary(MyBeanDictionaryMap.class)
 			.build();
-	BeanSession session = bc.getSession();
+	MarshallingSession session = bc.getSession();
 
 	public static class MyBeanDictionaryMap extends BeanDictionaryMap {
 		public MyBeanDictionaryMap() {
@@ -637,8 +637,8 @@ class BeanMap_Test extends TestBase {
 		assertEquals("{_type:'H',enum1:'ONE',enum2:'TWO'}", serializer.serialize(t7));
 		assertBean(t7, "enum1,enum2", "ONE,TWO");
 
-		// Use BeanContext to create bean instance.
-		m = BeanContext.DEFAULT.newBeanMap(H.class).load("{enum1:'TWO',enum2:'THREE'}");
+		// Use MarshallingContext to create bean instance.
+		m = MarshallingContext.DEFAULT.newBeanMap(H.class).load("{enum1:'TWO',enum2:'THREE'}");
 		assertEquals("{_type:'H',enum1:'TWO',enum2:'THREE'}", serializer.serialize(m.getBean()));
 		t7 = m.getBean();
 		assertBean(t7, "enum1,enum2", "TWO,THREE");
@@ -668,7 +668,7 @@ class BeanMap_Test extends TestBase {
 	// Automatic detection of generic types
 	//====================================================================================================
 	@Test void a11_automaticDetectionOfGenericTypes() {
-		var bm = BeanContext.DEFAULT.newBeanMap(I.class);
+		var bm = MarshallingContext.DEFAULT.newBeanMap(I.class);
 		assertEquals(String.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().inner());
 		assertEquals(Integer.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().inner());
 		assertEquals(Object.class, bm.getProperty("p3").getMeta().getClassMeta().getElementType().inner());
@@ -693,7 +693,7 @@ class BeanMap_Test extends TestBase {
 	// Overriding detection of generic types.
 	//====================================================================================================
 	@Test void a12_overridingDetectionOfGenericTypes() {
-		var bm = BeanContext.DEFAULT.newBeanMap(J.class);
+		var bm = MarshallingContext.DEFAULT.newBeanMap(J.class);
 		assertEquals(Float.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().inner());
 		assertEquals(Float.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().inner());
 		assertEquals(Float.class, bm.getProperty("p3").getMeta().getClassMeta().getElementType().inner());
@@ -957,7 +957,7 @@ class BeanMap_Test extends TestBase {
 	// testPropertyNameFactoryDashedLC2
 	//====================================================================================================
 	@Test void a20_propertyNameFactoryDashedLC2() {
-		var bc2 = BeanContext.DEFAULT;
+		var bc2 = MarshallingContext.DEFAULT;
 		var m = bc2.newBeanMap(P2.class).load("{'foo-bar':1,'baz-bing':2}");
 		assertBean(m, "foo-bar,baz-bing", "1,2");
 		assertBean(m.getBean(), "fooBar,bazBING", "1,2");
@@ -982,7 +982,7 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 	@Test void a21_beanWithFluentStyleSetters() {
 		var t = new Q2();
-		var m = BeanContext.DEFAULT.toBeanMap(t);
+		var m = MarshallingContext.DEFAULT.toBeanMap(t);
 		m.put("f1", 1);
 		m.put("f2", 2);
 		m.put("f3", 3);
@@ -1574,7 +1574,7 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 	@Test void a33_hiddenProperties() {
 		var s = Json5Serializer.DEFAULT;
-		var bm = s.getBeanContext().getBeanMeta(U.class);
+		var bm = s.getMarshallingContext().getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
 		assertNotNull(bm.getPropertyMeta("b"));
 		assertNull(bm.getPropertyMeta("c"));
@@ -1608,7 +1608,7 @@ class BeanMap_Test extends TestBase {
 
 	@Test void a34_hiddenProperties_usingConfig() {
 		var s = Json5Serializer.DEFAULT.copy().applyAnnotations(UcConfig.class).build();
-		var bm = s.getBeanContext().getBeanMeta(U.class);
+		var bm = s.getMarshallingContext().getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
 		assertNotNull(bm.getPropertyMeta("b"));
 		assertNull(bm.getPropertyMeta("c"));
@@ -1766,7 +1766,7 @@ class BeanMap_Test extends TestBase {
 	}
 
 	@Test void a39_settingCollectionPropertyMultipleTimes() {
-		var m = BeanContext.DEFAULT.newBeanMap(Y.class);
+		var m = MarshallingContext.DEFAULT.newBeanMap(Y.class);
 		m.put("f1", JsonList.ofJsonOrCdl("a"));
 		m.put("f1",  JsonList.ofJsonOrCdl("b"));
 		assertEquals("{f1=[b]}", m.toString());
@@ -1781,7 +1781,7 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 	@Test void a40_collectionSetters_preferSetter() {
 		var aa = new AA();
-		var bm = BeanContext.DEFAULT.toBeanMap(aa);
+		var bm = MarshallingContext.DEFAULT.toBeanMap(aa);
 
 		bm.put("a", l("x"));
 		assertList(aa.a, "x");
@@ -1798,7 +1798,7 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void z01_containsKey_plainBean_unknownPropertyIsAbsent() {
-		var m = BeanContext.DEFAULT.toBeanMap(new A());
+		var m = MarshallingContext.DEFAULT.toBeanMap(new A());
 		assertTrue(m.containsKey("i1"));
 		assertFalse(m.containsKey("noSuchProperty_xyz"));
 	}
@@ -1811,7 +1811,7 @@ class BeanMap_Test extends TestBase {
 
 	@Test void z02_containsKey_dynaBean_unknownKeyNotInExtrasMap() {
 		var bean = new DynaExtrasBean();
-		var m = BeanContext.DEFAULT.toBeanMap(bean);
+		var m = MarshallingContext.DEFAULT.toBeanMap(bean);
 		// Dyna map is empty; @MarshalledProp(name="*") does not make arbitrary keys appear as present.
 		assertFalse(m.containsKey("notDefinedAnywhere"));
 		assertEquals(set(), m.keySet());
@@ -1819,7 +1819,7 @@ class BeanMap_Test extends TestBase {
 
 	@Test void z03_containsKey_dynaBean_trueAfterPutIntoExtras() {
 		var bean = new DynaExtrasBean();
-		var m = BeanContext.DEFAULT.toBeanMap(bean);
+		var m = MarshallingContext.DEFAULT.toBeanMap(bean);
 		m.put("dynamicOnly", 123);
 		assertTrue(m.containsKey("dynamicOnly"));
 		assertEquals(123, bean.extras.get("dynamicOnly"));
@@ -1832,7 +1832,7 @@ class BeanMap_Test extends TestBase {
 	 */
 	@Test void z04_getPropertyMetaMayFallbackToDyna_containsKeyStillFalseForUnknownKey() {
 		var bean = new DynaExtrasBean();
-		var m = BeanContext.DEFAULT.toBeanMap(bean);
+		var m = MarshallingContext.DEFAULT.toBeanMap(bean);
 		assertNotNull(m.getPropertyMeta("phantomKey"));
 		assertFalse(m.containsKey("phantomKey"));
 	}

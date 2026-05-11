@@ -38,15 +38,15 @@ import org.junit.jupiter.api.*;
 class AutoNumberSwapTest extends TestBase {
 
 	private static ObjectSwap find(Class<?> c) {
-		return AutoNumberSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));
+		return AutoNumberSwap.find(MarshallingContext.DEFAULT, ClassInfo.of(c));
 	}
 
-	private static ObjectSwap find(BeanContext bc, Class<?> c) {
+	private static ObjectSwap find(MarshallingContext bc, Class<?> c) {
 		return AutoNumberSwap.find(bc, ClassInfo.of(c));
 	}
 
-	private static BeanContext bc(Class<?> applyAnnotations) {
-		return BeanContext.DEFAULT.copy().applyAnnotations(applyAnnotations).build();
+	private static MarshallingContext bc(Class<?> applyAnnotations) {
+		return MarshallingContext.DEFAULT.copy().applyAnnotations(applyAnnotations).build();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

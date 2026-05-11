@@ -18,10 +18,10 @@ package org.apache.juneau;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.BeanTraverseContext.*;
+import org.apache.juneau.MarshallingTraverseContext.*;
 
 /**
- * Exhaustive serialization tests for BeanTraverseContext properties.
+ * Exhaustive serialization tests for MarshallingTraverseContext properties.
  */
 class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
@@ -52,7 +52,7 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.urlEncR("\t\tf=1")
 			.msgPack("81A16601")
 			.msgPackT("81A16601")
-			.apply(BeanTraverseContext.Builder.class, x -> x.initialDepth(2))
+			.apply(MarshallingTraverseContext.Builder.class, x -> x.initialDepth(2))
 			.build(),
 		tester(2, "BEANTRAVERSE_detectRecursions", B.class, new B().initRecursion())
 			.json5("x")
@@ -76,7 +76,7 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.urlEncR("x")
 			.msgPack("x")
 			.msgPackT("x")
-			.apply(BeanTraverseContext.Builder.class, Builder::detectRecursions)
+			.apply(MarshallingTraverseContext.Builder.class, Builder::detectRecursions)
 			.exceptionMsg("Recursion occurred")
 			.build(),
 		tester(3, "BEANTRAVERSE_ignoreRecursions", B.class, new B().initRecursion())
@@ -101,7 +101,7 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.urlEncR("")
 			.msgPack("80")
 			.msgPackT("80")
-			.apply(BeanTraverseContext.Builder.class, Builder::ignoreRecursions)
+			.apply(MarshallingTraverseContext.Builder.class, Builder::ignoreRecursions)
 			.build(),
 		tester(4, "BEANTRAVERSE_maxDepth", B.class, new B().initA())
 			.json5("{}")
@@ -125,7 +125,7 @@ class BeanTraverseProperties_ComboRoundTripTest extends ComboRoundTripTest_Base 
 			.urlEncR("")
 			.msgPack("80")
 			.msgPackT("80")
-			.apply(BeanTraverseContext.Builder.class, x -> x.maxDepth(1))
+			.apply(MarshallingTraverseContext.Builder.class, x -> x.maxDepth(1))
 			.build()
 	};
 

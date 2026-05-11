@@ -81,7 +81,7 @@ the Markdown parser session.
 When constructing the embedded `Json5Parser` in `getJson5Parser()`, copy the `implClass` mappings
 from the current Markdown parser/session into the Json5Parser builder:
 ```java
-Json5Parser.create().beanContext((BeanContext) getContext())
+Json5Parser.create().marshallingContext((MarshallingContext) getContext())
     .implClasses(getImplClasses())
     .build();
 ```
@@ -131,9 +131,9 @@ parser then receives an unwrapped bean where a wrapped one is expected.
 
 ### Fix idea
 Ensure the embedded `Json5Serializer` in `getJson5Serializer()` is built from the full bean context
-(including all config-annotation registrations), not just the base `BeanContext`. Since the
+(including all config-annotation registrations), not just the base `MarshallingContext`. Since the
 Markdown session's `getContext()` already carries the resolved bean context, passing it as-is
-(which we do via `.beanContext((BeanContext) getContext())`) *should* carry config annotations.
+(which we do via `.marshallingContext((MarshallingContext) getContext())`) *should* carry config annotations.
 The actual root cause may be more subtle — it is worth running the test with added diagnostics to
 confirm whether the `wrapperAttr` is visible to the embedded serializer or not, then adjusting the
 `Json5Serializer` builder to copy the relevant setting explicitly if needed.

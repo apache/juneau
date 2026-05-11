@@ -45,7 +45,7 @@ try {
 | **ThrowableUtils** | `Settings.get().get("juneau.enableVerboseExceptions").asBoolean()` | Reference implementation |
 | **Cache** (Cache, Cache2, Cache3, Cache4, Cache5) | `Utils.env("juneau.cache.mode", ...)` | Utils.env delegates to Settings |
 | **CallLogger** | `Utils.env(SP_*, ...)` | Uses SP_ constants, env() delegates to Settings |
-| **BeanContext** | `BeanContext.locale`, `mediaType`, `timeZone` from Settings | BeanContext_Test verifies |
+| **MarshallingContext** | `MarshallingContext.locale`, `mediaType`, `timeZone` from Settings | BeanContext_Test verifies |
 | **Utils.env()** | `Settings.get().get(name)` | Central entry point |
 
 ### Direct System.getProperty() Usage - Conversion Candidates
@@ -167,7 +167,7 @@ For each conversion:
 
 After conversion:
 
-1. **docs/pages/topics/01.02.Marshalling.md** - Update references to "BeanContext.sortProperties" system property / env var
+1. **docs/pages/topics/01.02.Marshalling.md** - Update references to "MarshallingContext.sortProperties" system property / env var
 2. **docs/pages/topics/...** - Ensure all documented system properties list Settings as the mechanism
 3. **RELEASE-NOTES.txt** - Document the migration (e.g., "juneau.shutdown.quiet" → "juneau.shutdown.verbose" flip noted in existing notes)
 4. Create **SYSTEM_PROPERTIES.md** (or add to existing docs) - Comprehensive list of all Juneau properties with:

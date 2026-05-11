@@ -41,7 +41,7 @@ import org.apache.juneau.commons.reflect.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_detectRecursions)
 })
-public abstract class BeanTraverseContext extends BeanContextable {
+public abstract class MarshallingTraverseContext extends MarshallingContextable {
 
 	// Property name constants
 	private static final String PROP_detectRecursions = "detectRecursions";
@@ -52,7 +52,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder extends BeanContextable.Builder {
+	public abstract static class Builder extends MarshallingContextable.Builder {
 
 		private boolean detectRecursions;
 		private boolean ignoreRecursions;
@@ -63,10 +63,10 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			detectRecursions = env("BeanTraverseContext.detectRecursions", false);
-			ignoreRecursions = env("BeanTraverseContext.ignoreRecursions", false);
-			initialDepth = env("BeanTraverseContext.initialDepth", 0);
-			maxDepth = env("BeanTraverseContext.maxDepth", 100);
+			detectRecursions = env("MarshallingTraverseContext.detectRecursions", false);
+			ignoreRecursions = env("MarshallingTraverseContext.ignoreRecursions", false);
+			initialDepth = env("MarshallingTraverseContext.initialDepth", 0);
+			maxDepth = env("MarshallingTraverseContext.maxDepth", 100);
 		}
 
 		/**
@@ -74,7 +74,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 *
 		 * @param copyFrom The bean to copy from.
 		 */
-		protected Builder(BeanTraverseContext copyFrom) {
+		protected Builder(MarshallingTraverseContext copyFrom) {
 			super(copyFrom);
 			detectRecursions = copyFrom.getDetectRecursions();
 			ignoreRecursions = copyFrom.getIgnoreRecursions();
@@ -132,14 +132,14 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext.Builder value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
@@ -156,7 +156,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.MarshallingInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}
@@ -293,7 +293,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * <p>
 		 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
 		 * <br>In general, unchecked recursions cause stack-overflow-errors.
-		 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
+		 * <br>These show up as {@link MarshallingRecursionException MarshallingRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
@@ -717,7 +717,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected BeanTraverseContext(Builder builder) {
+	protected MarshallingTraverseContext(Builder builder) {
 		super(builder);
 
 		detectRecursions = builder.detectRecursions;
@@ -789,7 +789,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	 */
 	protected final boolean getIgnoreRecursions() { return ignoreRecursions; }
 
-	@Override /* Overridden from BeanContextable */
+	@Override /* Overridden from MarshallingContextable */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(PROP_detectRecursions, detectRecursions)

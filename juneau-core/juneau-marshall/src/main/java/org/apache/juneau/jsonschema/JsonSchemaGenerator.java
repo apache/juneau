@@ -52,7 +52,7 @@ import org.apache.juneau.json5.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {
+public class JsonSchemaGenerator extends MarshallingTraverseContext implements JsonSchemaMetaProvider {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
@@ -71,7 +71,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanTraverseContext.Builder {
+	public static class Builder extends MarshallingTraverseContext.Builder {
 
 		private static final Cache<HashKey,JsonSchemaGenerator> CACHE = Cache.of(HashKey.class, JsonSchemaGenerator.class).build();
 
@@ -81,7 +81,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		private boolean allowNestedDescriptions;
 		private boolean allowNestedExamples;
 		private boolean useBeanDefs;
-		private Class<? extends BeanDefMapper> beanDefMapper;
+		private Class<? extends MarshallingDefMapper> beanDefMapper;
 		private SortedSet<TypeCategory> addDescriptionsTo;
 		private SortedSet<TypeCategory> addExamplesTo;
 		private SortedSet<String> ignoreTypes;
@@ -90,9 +90,9 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			BeanContext.Builder bc = beanContext();
-			jsonSerializerBuilder = JsonSerializer.create().beanContext(bc);
-			jsonParserBuilder = Json5Parser.create().beanContext(bc);
+			MarshallingContext.Builder bc = marshallingContext();
+			jsonSerializerBuilder = JsonSerializer.create().marshallingContext(bc);
+			jsonParserBuilder = Json5Parser.create().marshallingContext(bc);
 			registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
 			addDescriptionsTo = null;
 			addExamplesTo = null;
@@ -111,9 +111,9 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-			BeanContext.Builder bc = beanContext();
-			jsonSerializerBuilder = copyFrom.jsonSerializerBuilder.copy().beanContext(bc);
-			jsonParserBuilder = copyFrom.jsonParserBuilder.copy().beanContext(bc);
+			MarshallingContext.Builder bc = marshallingContext();
+			jsonSerializerBuilder = copyFrom.jsonSerializerBuilder.copy().marshallingContext(bc);
+			jsonParserBuilder = copyFrom.jsonParserBuilder.copy().marshallingContext(bc);
 			registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
 			addDescriptionsTo = copyFrom.addDescriptionsTo == null ? null : new TreeSet<>(copyFrom.addDescriptionsTo);
 			addExamplesTo = copyFrom.addExamplesTo == null ? null : new TreeSet<>(copyFrom.addExamplesTo);
@@ -132,9 +132,9 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 */
 		protected Builder(JsonSchemaGenerator copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-			BeanContext.Builder bc = beanContext();
-			jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContext(bc);
-			jsonParserBuilder = copyFrom.jsonParser.copy().beanContext(bc);
+			MarshallingContext.Builder bc = marshallingContext();
+			jsonSerializerBuilder = copyFrom.jsonSerializer.copy().marshallingContext(bc);
+			jsonParserBuilder = copyFrom.jsonParser.copy().marshallingContext(bc);
 			registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
 			addDescriptionsTo = copyFrom.addDescriptionsTo.isEmpty() ? null : new TreeSet<>(copyFrom.addDescriptionsTo);
 			addExamplesTo = copyFrom.addExamplesTo.isEmpty() ? null : new TreeSet<>(copyFrom.addExamplesTo);
@@ -183,7 +183,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * <p>
 		 * Identifies which categories of types that examples should be automatically added to generated schemas.
 		 * <p>
-		 * The examples come from calling {@link ClassMeta#getExample(BeanSession,JsonParserSession)} which in turn gets examples
+		 * The examples come from calling {@link ClassMeta#getExample(MarshallingSession,JsonParserSession)} which in turn gets examples
 		 * from the following:
 		 * <ul class='javatree'>
 		 * 	<li class='ja'>{@link Example}
@@ -300,14 +300,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext.Builder value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
@@ -327,7 +327,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanDefMapper(Class<? extends BeanDefMapper> value) {
+		public Builder beanDefMapper(Class<? extends MarshallingDefMapper> value) {
 			beanDefMapper = assertArgNotNull(ARG_value, value);
 			return this;
 		}
@@ -345,7 +345,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.MarshallingInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}
@@ -860,13 +860,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	protected final boolean allowNestedDescriptions;
 	protected final boolean allowNestedExamples;
 	protected final boolean useBeanDefs;
-	protected final Class<? extends BeanDefMapper> beanDefMapper;
+	protected final Class<? extends MarshallingDefMapper> beanDefMapper;
 	protected final JsonParser jsonParser;
 	protected final JsonSerializer jsonSerializer;
 	protected final Set<TypeCategory> addDescriptionsTo;
 	protected final Set<TypeCategory> addExamplesTo;
 	protected final Set<String> ignoreTypes;
-	private final BeanDefMapper beanDefMapperBean;
+	private final MarshallingDefMapper beanDefMapperBean;
 	private final Map<BeanPropertyMeta,JsonSchemaBeanPropertyMeta> jsonSchemaBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
 	private final List<Pattern> ignoreTypePatterns;
@@ -898,7 +898,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		jsonSerializer = builder.jsonSerializerBuilder.build();
-		jsonParser = builder.jsonParserBuilder.beanContext(getBeanContext()).build();
+		jsonParser = builder.jsonParserBuilder.marshallingContext(getMarshallingContext()).build();
 	}
 
 	@Override /* Overridden from Context */
@@ -977,7 +977,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return
 	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
 	 */
-	protected final BeanDefMapper getBeanDefMapper() { return beanDefMapperBean; }
+	protected final MarshallingDefMapper getBeanDefMapper() { return beanDefMapperBean; }
 
 	/**
 	 * Allow nested descriptions.
@@ -1006,7 +1006,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 */
 	protected final boolean isUseBeanDefs() { return useBeanDefs; }
 
-	@Override /* Overridden from BeanTraverseContext */
+	@Override /* Overridden from MarshallingTraverseContext */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(PROP_addDescriptionsTo, addDescriptionsTo)

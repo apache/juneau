@@ -209,7 +209,7 @@ class HttpParts_Test extends TestBase {
 	}
 
 	@Test void a25_getName_header() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(A24_HeaderBean.class);
 		var name = getName(HttpPartType.HEADER, cm);
 		assertTrue(name.isPresent());
@@ -217,7 +217,7 @@ class HttpParts_Test extends TestBase {
 	}
 
 	@Test void a26_getName_query() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(A25_QueryBean.class);
 		var name = getName(HttpPartType.QUERY, cm);
 		assertTrue(name.isPresent());
@@ -225,7 +225,7 @@ class HttpParts_Test extends TestBase {
 	}
 
 	@Test void a27_getName_formdata() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(A26_FormDataBean.class);
 		var name = getName(HttpPartType.FORMDATA, cm);
 		assertTrue(name.isPresent());
@@ -233,7 +233,7 @@ class HttpParts_Test extends TestBase {
 	}
 
 	@Test void a28_getName_path() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(A27_PathBean.class);
 		var name = getName(HttpPartType.PATH, cm);
 		assertTrue(name.isPresent());
@@ -241,7 +241,7 @@ class HttpParts_Test extends TestBase {
 	}
 
 	@Test void a29_getName_default() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(String.class);
 		// BODY type is not a known header/query/formdata/path type
 		var name = getName(HttpPartType.BODY, cm);
@@ -253,7 +253,7 @@ class HttpParts_Test extends TestBase {
 	// ------------------------------------------------------------------------------------------------------------------
 
 	@Test void a30_getConstructor_singleString() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(BasicPart.class);
 		// BasicPart has constructor(String name, String value) which takes two strings
 		var ctor = getConstructor(cm);

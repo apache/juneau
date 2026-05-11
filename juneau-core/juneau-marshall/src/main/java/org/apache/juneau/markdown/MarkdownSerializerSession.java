@@ -502,7 +502,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 	 * Creates a new serializer each time to ensure settings are current.
 	 */
 	private JsonSerializer getJson5Serializer() {
-		var b = Json5Serializer.create().beanContext((BeanContext) getContext());
+		var b = Json5Serializer.create().marshallingContext((MarshallingContext) getContext());
 		if (isAddBeanTypes())
 			b = b.addBeanTypes();
 		if (isAddRootType())

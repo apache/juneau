@@ -85,7 +85,7 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Identifies which categories of types that examples should be automatically added to generated schemas.
 	 * <p>
-	 * The examples come from calling {@link ClassMeta#getExample(BeanSession,JsonParserSession)} which in turn gets examples
+	 * The examples come from calling {@link ClassMeta#getExample(MarshallingSession,JsonParserSession)} which in turn gets examples
 	 * from the following:
 	 * <ul class='javatree'>
 	 * 	<li class='ja'>{@link Example}
@@ -186,7 +186,7 @@ public @interface JsonSchemaConfig {
 	 *
 	 * @return The annotation value.
 	 */
-	Class<? extends BeanDefMapper> beanDefMapper() default BeanDefMapper.Void.class;
+	Class<? extends MarshallingDefMapper> beanDefMapper() default MarshallingDefMapper.Void.class;
 
 	/**
 	 * Automatically detect POJO recursions.
@@ -200,7 +200,7 @@ public @interface JsonSchemaConfig {
 	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 	 *
 	 * <p>
-	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}.
+	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.MarshallingTraverseContext.Builder#ignoreRecursions()}.
 	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
@@ -223,7 +223,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#detectRecursions()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -234,12 +234,12 @@ public @interface JsonSchemaConfig {
 	 * Ignore recursion errors.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}.
+	 * Used in conjunction with {@link org.apache.juneau.MarshallingTraverseContext.Builder#detectRecursions()}.
 	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <js>"false"</js>.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 * <br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
+	 * <br>Otherwise, a {@link MarshallingRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
 	 *
 	 * <ul class='values'>
 	 * 	<li><js>"true"</js>
@@ -252,7 +252,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#ignoreRecursions()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -298,7 +298,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#initialDepth(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#initialDepth(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -322,7 +322,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#maxDepth(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.

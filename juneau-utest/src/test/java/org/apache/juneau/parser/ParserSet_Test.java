@@ -160,17 +160,17 @@ class ParserSet_Test extends TestBase {
 	}
 
 	@Test void b13_builder_beanContext_propagatesToBuilders() {
-		var bcb = BeanContext.create();
+		var bcb = MarshallingContext.create();
 		var sb = ParserSet.create().add(JsonParser.class);
-		sb.beanContext(bcb);
+		sb.marshallingContext(bcb);
 		assertNotNull(sb.beanStore());
 	}
 
 	@Test void b14_builder_beanContext_consumer_withNonNullBcBuilder() {
 		boolean[] called = {false};
 		var sb = ParserSet.create().add(JsonParser.class);
-		sb.beanContext(BeanContext.create());
-		sb.beanContext((BeanContext.Builder b) -> called[0] = true);
+		sb.marshallingContext(MarshallingContext.create());
+		sb.marshallingContext((MarshallingContext.Builder b) -> called[0] = true);
 		assertTrue(called[0]);
 	}
 
@@ -178,7 +178,7 @@ class ParserSet_Test extends TestBase {
 		boolean[] called = {false};
 		var sb = ParserSet.create().add(JsonParser.class);
 		// bcBuilder is null by default — consumer should NOT be called
-		sb.beanContext((BeanContext.Builder b) -> called[0] = true);
+		sb.marshallingContext((MarshallingContext.Builder b) -> called[0] = true);
 		assertFalse(called[0]);
 	}
 
@@ -196,14 +196,14 @@ class ParserSet_Test extends TestBase {
 
 	@Test void b18_builder_copy_withBcBuilder_propagatesBcBuilder() {
 		var sb = ParserSet.create().add(JsonParser.class);
-		sb.beanContext(BeanContext.create());
+		sb.marshallingContext(MarshallingContext.create());
 		var copy = sb.copy();
 		assertNotNull(copy.beanStore());
 	}
 
 	@Test void b19_builder_addAfterBcBuilder_propagatesContext() {
 		var sb = ParserSet.create();
-		sb.beanContext(BeanContext.create());
+		sb.marshallingContext(MarshallingContext.create());
 		sb.add(JsonParser.class);
 		assertFalse(sb.inner().isEmpty());
 	}

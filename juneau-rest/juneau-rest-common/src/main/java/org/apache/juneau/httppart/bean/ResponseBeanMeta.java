@@ -77,7 +77,7 @@ public class ResponseBeanMeta {
 
 		Builder apply(Type t) {
 			var c = toClass(t);
-			this.cm = BeanContext.DEFAULT.getClassMeta(c);
+			this.cm = MarshallingContext.DEFAULT.getClassMeta(c);
 			cm.getPublicMethods().stream().forEach(x -> {
 				assertNoInvalidAnnotations(x, Query.class, FormData.class);
 				if (x.hasAnnotation(Header.class)) {

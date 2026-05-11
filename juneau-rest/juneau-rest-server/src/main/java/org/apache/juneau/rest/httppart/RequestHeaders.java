@@ -318,7 +318,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return The bean, never <jk>null</jk>.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		var cm = req.getBeanSession().getClassMeta(type);
+		var cm = req.getMarshallingSession().getClassMeta(type);
 		var name = HttpParts.getName(HEADER, cm).orElseThrow(() -> rex("@Header(name) not found on class {0}", cn(type)));
 		return get(name).as(type);
 	}

@@ -156,7 +156,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		try {
 			var passThroughHeaders = request.getHeaderParam("x-response-headers").orElse(null);
 			if (nn(passThroughHeaders)) {
-				var m = context.getPartParser().getPartSession().parse(HEADER, null, passThroughHeaders, BeanContext.DEFAULT.getClassMeta(JsonMap.class));
+				var m = context.getPartParser().getPartSession().parse(HEADER, null, passThroughHeaders, MarshallingContext.DEFAULT.getClassMeta(JsonMap.class));
 				for (var e : m.entrySet())
 					addHeader(e.getKey(), resolveUris(e.getValue()));
 			}

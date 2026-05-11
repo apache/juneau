@@ -129,7 +129,7 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 	 * Converts the specified {@link Reader} to an {@link Object} whose type is determined by the contents of the reader.
 	 */
 	@Override /* Overridden from ObjectSwap */
-	public Object swap(BeanSession session, Reader o) throws Exception {
+	public Object swap(MarshallingSession session, Reader o) throws Exception {
 		if (parser == null)
 			return read(o);
 		return parser.parse(o, Object.class);

@@ -29,8 +29,8 @@ import org.apache.juneau.swap.*;
  */
 public class StringSwap_Tester<T> {
 
-	public static <T> Builder<T> create(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession beanSession) {
-		return new Builder<>("["+index+"] " + label, ()->object, swap, expected, beanSession);
+	public static <T> Builder<T> create(int index, String label, T object, StringSwap<T> swap, String expected, MarshallingSession marshallingSession) {
+		return new Builder<>("["+index+"] " + label, ()->object, swap, expected, marshallingSession);
 	}
 
 	public static class Builder<T> {
@@ -38,15 +38,15 @@ public class StringSwap_Tester<T> {
 		private Supplier<T> objectSupplier;
 		private StringSwap<T> swap;
 		private String expected;
-		private BeanSession beanSession;
+		private MarshallingSession marshallingSession;
 		private String exceptionMsg;
 
-		public Builder(String label, Supplier<T> objectSupplier, StringSwap<T> swap, String expected, BeanSession beanSession) {
+		public Builder(String label, Supplier<T> objectSupplier, StringSwap<T> swap, String expected, MarshallingSession marshallingSession) {
 			this.label = label;
 			this.objectSupplier = objectSupplier;
 			this.swap = swap;
 			this.expected = expected;
-			this.beanSession = beanSession;
+			this.marshallingSession = marshallingSession;
 		}
 
 		public Builder<T> exceptionMsg(String v) {
@@ -63,7 +63,7 @@ public class StringSwap_Tester<T> {
 	private final Supplier<T> objectSupplier;
 	private final StringSwap<T> swap;
 	private final String expected;
-	private final BeanSession beanSession;
+	private final MarshallingSession marshallingSession;
 	private final String exceptionMsg;
 
 	private StringSwap_Tester(Builder<T> b) {
@@ -71,14 +71,14 @@ public class StringSwap_Tester<T> {
 		objectSupplier = b.objectSupplier;
 		swap = b.swap;
 		expected = b.expected;
-		beanSession = b.beanSession;
+		marshallingSession = b.marshallingSession;
 		exceptionMsg = b.exceptionMsg;
 	}
 
 	public void testSwap() throws Exception {
 		try {
 			var o = objectSupplier.get();
-			var s = swap.swap(beanSession, o);
+			var s = swap.swap(marshallingSession, o);
 			if (neq(expected, s)) {
 				if (expected.isEmpty()) {
 					if (! label.startsWith("[]"))
@@ -102,9 +102,9 @@ public class StringSwap_Tester<T> {
 	public void testUnswap() throws Exception {
 		try {
 			var o = objectSupplier.get();
-			var s = swap.swap(beanSession, o);
-			var o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
-			var s2 = swap.swap(beanSession, o2);
+			var s = swap.swap(marshallingSession, o);
+			var o2 = swap.unswap(marshallingSession, s, marshallingSession.getClassMetaForObject(o));
+			var s2 = swap.swap(marshallingSession, o2);
 			if (neq(s, s2)) {
 				if (expected.isEmpty())
 					fail("Test [" + label + " unswap] failed - expected was empty");

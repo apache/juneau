@@ -122,7 +122,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			this.restContext = context;
 			this.restMethod = method;
 
-			var ap = context.getBeanContext().getAnnotationProvider();
+			var ap = context.getMarshallingContext().getAnnotationProvider();
 			var mi = MethodInfo.of(context.getResourceClass(), method);
 			var resourceClass = ClassInfo.of(context.getResourceClass());
 
@@ -206,18 +206,18 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return u(treeSetCi(removeNegations(l)));
 	});
 
-	/** The {@link BeanContext} for this operation (op-level annotations applied on top of the parent context). */
-	private final Memoizer<BeanContext> beanContext = memoizer(() -> {
+	/** The {@link MarshallingContext} for this operation (op-level annotations applied on top of the parent context). */
+	private final Memoizer<MarshallingContext> marshallingContext = memoizer(() -> {
 		var aa = appliedAnnotations();
 		var parent = restContext().getBeanContextBuilder();
 		if (!parent.canApply(aa))
-			return restContext().getBeanContext();
-		Value<BeanContext.Builder> v = Value.of(parent.copy());
+			return restContext().getMarshallingContext();
+		Value<MarshallingContext.Builder> v = Value.of(parent.copy());
 		v.get().apply(aa);
 		var bs = new BasicBeanStore(beanStore())
 			.addBean(Method.class, method())
-			.addBean(BeanContext.Builder.class, v.get());
-		bs.createBeanFromMethod(BeanContext.class, resource(), this::matchesInjectScope)
+			.addBean(MarshallingContext.Builder.class, v.get());
+		bs.createBeanFromMethod(MarshallingContext.class, resource(), this::matchesInjectScope)
 			.ifPresent(x -> v.get().impl(x));
 		return v.get().build();
 	});
@@ -1099,7 +1099,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			bs.addBean(AnnotationWorkList.class, appliedAnnotations);
 			opBeanStore = bs;
 
-			bs.add(BeanContext.class, getBeanContext());
+			bs.add(MarshallingContext.class, getMarshallingContext());
 			bs.add(RestConverter[].class, getConverters());
 			bs.add(EncoderSet.class, getEncoders());
 			bs.add(RestGuard[].class, getGuards());
@@ -1235,7 +1235,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The bean context associated with this context.
 	 */
-	public BeanContext getBeanContext() { return beanContext.get(); }
+	public MarshallingContext getMarshallingContext() { return marshallingContext.get(); }
 
 	/**
 	 * Returns the default charset.

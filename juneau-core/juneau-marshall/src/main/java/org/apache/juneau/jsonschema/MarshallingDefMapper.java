@@ -27,12 +27,12 @@ import org.apache.juneau.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
-public interface BeanDefMapper {
+public interface MarshallingDefMapper {
 
 	/**
 	 * Represents the absence of a bean definition mapper class.
 	 */
-	public interface Void extends BeanDefMapper {}
+	public interface Void extends MarshallingDefMapper {}
 
 	/**
 	 * Returns the ID for the specified class.

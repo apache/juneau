@@ -63,11 +63,11 @@ public class BeanRegistry {
 
 	private final Map<String,ClassMeta<?>> map;
 	private final Map<Class<?>,String> reverseMap;
-	private final BeanContext bc;
+	private final MarshallingContext bc;
 	private final AnnotationProvider ap;
 	private final boolean isEmpty;
 
-	BeanRegistry(BeanContext bc, BeanRegistry parent, List<ClassInfo> classes) {
+	BeanRegistry(MarshallingContext bc, BeanRegistry parent, List<ClassInfo> classes) {
 		assertArgNotNull(ARG_bc, bc);
 		assertArgNotNull(ARG_classes, classes);
 		this.bc = bc;

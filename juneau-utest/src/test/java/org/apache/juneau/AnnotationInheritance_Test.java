@@ -65,7 +65,7 @@ class AnnotationInheritance_Test extends TestBase {
 
 	@Test
 	void a01_beanp_propertyName_inheritance() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 
 		// Property should be named "v" (from parent's @MarshalledProp), inherited via BeanMeta.inheritParentAnnotations
 		var bm = bc.getBeanMeta(A1_Child.class);
@@ -111,7 +111,7 @@ class AnnotationInheritance_Test extends TestBase {
 
 	@Test
 	void b01_xml_format_inheritance() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var bm = bc.getBeanMeta(B1_Child.class);
 		var prop = bm.getPropertyMeta("i");
 
@@ -146,7 +146,7 @@ class AnnotationInheritance_Test extends TestBase {
 
 	@Test
 	void c01_multiple_beanp_attributes_inheritance() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var bm = bc.getBeanMeta(C1_Child.class);
 		var prop = bm.getPropertyMeta("n");
 
@@ -214,7 +214,7 @@ class AnnotationInheritance_Test extends TestBase {
 
 	@Test
 	void e01_getter_annotation_inheritance() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var bm = bc.getBeanMeta(E1_Child.class);
 		var prop = bm.getPropertyMeta("d");
 

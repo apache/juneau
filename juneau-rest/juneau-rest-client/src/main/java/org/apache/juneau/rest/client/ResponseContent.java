@@ -184,26 +184,26 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	BeanContext <jv>beanContext</jv> = BeanContext.<jsf>DEFAULT</jsf>;
+	 * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm1</jv> = <jv>beanContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm1</jv> = <jv>marshallingContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm1</jv>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm2</jv> = <jv>beanContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm2</jv> = <jv>marshallingContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm2</jv>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm3</jv> = <jv>beanContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm3</jv> = <jv>marshallingContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm3</jv>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm4</jv> = <jv>beanContext</jv>.getClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm4</jv> = <jv>marshallingContext</jv>.getClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 * 	Map&lt;String,String&gt; <jv>map4</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm4</jv>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm5</jv> = <jv>beanContext</jv>.getClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm5</jv> = <jv>marshallingContext</jv>.getClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map5</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm5</jv>);
 	 * </p>
 	 *
@@ -224,7 +224,7 @@ public class ResponseContent implements HttpEntity {
 	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * 		<li>If a connection error occurred.
 	 * 	</ul>
-	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
+	 * @see MarshallingSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
 	@SuppressWarnings({
 		"unchecked", // Type erasure requires unchecked casts in content parsing
@@ -387,7 +387,7 @@ public class ResponseContent implements HttpEntity {
 	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * 		<li>If a connection error occurred.
 	 * 	</ul>
-	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
+	 * @see MarshallingSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
 	public <T> T as(Type type, Type...args) throws RestCallException {
 		return as(getClassMeta(type, args));
@@ -1293,13 +1293,13 @@ public class ResponseContent implements HttpEntity {
 		pipeTo(outstream);
 	}
 
-	private BeanContext getBeanContext() { return parser == null ? BeanContext.DEFAULT : parser.getBeanContext(); }
+	private MarshallingContext getMarshallingContext() { return parser == null ? MarshallingContext.DEFAULT : parser.getMarshallingContext(); }
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> c) {
-		return getBeanContext().getClassMeta(c);
+		return getMarshallingContext().getClassMeta(c);
 	}
 
 	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
-		return getBeanContext().getClassMeta(type, args);
+		return getMarshallingContext().getClassMeta(type, args);
 	}
 }

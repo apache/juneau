@@ -37,8 +37,8 @@ class FilteredMapTest extends TestBase {
 	@Test void a01_basic() throws Exception {
 		var m = JsonMap.ofJson("{a:'1',b:'2'}");
 
-		ClassMeta<Map<String,Object>> cm = BeanContext.DEFAULT.getClassMeta(Map.class, String.class, Object.class);
-		ClassMeta<Map<String,String>> cm2 = BeanContext.DEFAULT.getClassMeta(Map.class, String.class, String.class);
+		ClassMeta<Map<String,Object>> cm = MarshallingContext.DEFAULT.getClassMeta(Map.class, String.class, Object.class);
+		ClassMeta<Map<String,String>> cm2 = MarshallingContext.DEFAULT.getClassMeta(Map.class, String.class, String.class);
 
 		var m2 = new FilteredKeyMap<>(cm, m, a("a"));
 

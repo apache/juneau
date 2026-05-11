@@ -248,7 +248,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	}
 
 	// Cache these for faster lookup
-	private static final BeanContext BC = BeanContext.DEFAULT;
+	private static final MarshallingContext BC = MarshallingContext.DEFAULT;
 	private static final ClassMeta<byte[]> CM_ByteArray = BC.getClassMeta(byte[].class);
 	private static final ClassMeta<String[]> CM_StringArray = BC.getClassMeta(String[].class);
 	private static final ClassMeta<Calendar> CM_Calendar = BC.getClassMeta(Calendar.class);

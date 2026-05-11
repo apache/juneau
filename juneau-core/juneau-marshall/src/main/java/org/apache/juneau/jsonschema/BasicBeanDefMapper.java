@@ -24,7 +24,7 @@ import java.text.*;
 import org.apache.juneau.*;
 
 /**
- * Simple implementation of the {@link BeanDefMapper} interface.
+ * Simple implementation of the {@link MarshallingDefMapper} interface.
  *
  * <p>
  * IDs are created by calling {@link Class#getSimpleName()}.
@@ -35,7 +35,7 @@ import org.apache.juneau.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
-public class BasicBeanDefMapper implements BeanDefMapper {
+public class BasicBeanDefMapper implements MarshallingDefMapper {
 
 	private final MessageFormat format;
 
@@ -55,17 +55,17 @@ public class BasicBeanDefMapper implements BeanDefMapper {
 		format = new MessageFormat(uriPattern);
 	}
 
-	@Override /* Overridden from BeanDefMapper */
+	@Override /* Overridden from MarshallingDefMapper */
 	public String getId(ClassMeta<?> cm) {
 		return cm.getNameSimple();
 	}
 
-	@Override /* Overridden from BeanDefMapper */
+	@Override /* Overridden from MarshallingDefMapper */
 	public URI getURI(ClassMeta<?> cm) {
 		return getURI(getId(cm));
 	}
 
-	@Override /* Overridden from BeanDefMapper */
+	@Override /* Overridden from MarshallingDefMapper */
 	public URI getURI(String id) {
 		return URI.create(format.format(a(id)));
 	}

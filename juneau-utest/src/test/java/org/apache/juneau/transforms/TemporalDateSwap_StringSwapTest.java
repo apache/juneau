@@ -42,13 +42,13 @@ class TemporalDateSwap_StringSwapTest extends StringSwapTest_Base {
 		unsetTimeZone();
 	}
 
-	private static BeanSession
-		BS_DEFAULT = BeanContext.DEFAULT_SESSION,
-		BS_PST = BeanContext.DEFAULT.createSession().timeZone(TimeZone.getTimeZone("PST")).build();
+	private static MarshallingSession
+		BS_DEFAULT = MarshallingContext.DEFAULT_SESSION,
+		BS_PST = MarshallingContext.DEFAULT.createSession().timeZone(TimeZone.getTimeZone("PST")).build();
 
 	private static Date T_Date = Date.from(Instant.from(DateTimeFormatter.ISO_INSTANT.parse("2012-12-21T12:34:56Z")));
 
-	private static <T> StringSwap_Tester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, BeanSession bs) {
+	private static <T> StringSwap_Tester<T> tester(int index, String label, T object, StringSwap<T> swap, String expected, MarshallingSession bs) {
 		return StringSwap_Tester.create(index, label, object, swap, expected, bs).build();
 	}
 

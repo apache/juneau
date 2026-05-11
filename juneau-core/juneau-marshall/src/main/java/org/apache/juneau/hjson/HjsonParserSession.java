@@ -287,7 +287,7 @@ public class HjsonParserSession extends ReaderParserSession {
 		// For array types, convert to the appropriate array
 		if (type.inner() != null && type.inner().isArray())
 			return toArray(type, converted);
-		// For specific collection subtypes (e.g. Vector, LinkedList), convert via BeanSession
+		// For specific collection subtypes (e.g. Vector, LinkedList), convert via MarshallingSession
 		if (!type.isObject())
 			return convertToMemberType(null, converted, type);
 		return converted;

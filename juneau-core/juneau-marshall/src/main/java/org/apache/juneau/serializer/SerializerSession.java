@@ -69,7 +69,7 @@ import org.apache.juneau.utils.Iso8601Utils;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class SerializerSession extends BeanTraverseSession {
+public class SerializerSession extends MarshallingTraverseSession {
 
 	// Property name constants
 	private static final String PROP_javaMethod = "javaMethod";
@@ -101,7 +101,7 @@ public class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanTraverseSession.Builder {
+	public static class Builder extends MarshallingTraverseSession.Builder {
 
 		private static final String ARG_ctx = "ctx";
 
@@ -443,7 +443,7 @@ public class SerializerSession extends BeanTraverseSession {
 			throw causedBy2;
 		if (causedBy instanceof StackOverflowError)
 			throw new SerializeException(
-				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		if (causedBy instanceof SerializeException causedBy2)
 			throw causedBy2;
 		throw new SerializeException(causedBy);
@@ -564,7 +564,7 @@ public class SerializerSession extends BeanTraverseSession {
 		try {
 			if ((! isKeepNullProperties()) && (willRecurse(attrName, value, cm) || willExceedDepth()))
 				return true;
-		} catch (BeanRecursionException e) {
+		} catch (MarshallingRecursionException e) {
 			throw new SerializeException(e);
 		}
 
@@ -819,7 +819,7 @@ public class SerializerSession extends BeanTraverseSession {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new SerializeException(this,
-				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		} catch (Exception e) {
 			throw new SerializeException(this, e);
 		} finally {
@@ -1272,14 +1272,14 @@ public class SerializerSession extends BeanTraverseSession {
 		super.onError(t, msg, args);
 	}
 
-	@Override /* Overridden from BeanTraverseSession */
+	@Override /* Overridden from MarshallingTraverseSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(PROP_uriResolver, uriResolver);
 	}
 
 	/**
-	 * Same as {@link #push(String, Object, ClassMeta)} but wraps {@link BeanRecursionException} inside {@link SerializeException}.
+	 * Same as {@link #push(String, Object, ClassMeta)} but wraps {@link MarshallingRecursionException} inside {@link SerializeException}.
 	 *
 	 * @param attrName The attribute name.
 	 * @param o The current object being traversed.
@@ -1295,7 +1295,7 @@ public class SerializerSession extends BeanTraverseSession {
 	protected final ClassMeta<?> push2(String attrName, Object o, ClassMeta<?> eType) throws SerializeException {
 		try {
 			return super.push(attrName, o, eType);
-		} catch (BeanRecursionException e) {
+		} catch (MarshallingRecursionException e) {
 			throw new SerializeException(e);
 		}
 	}

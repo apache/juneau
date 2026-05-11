@@ -56,7 +56,7 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 		"rawtypes", // Raw types necessary for generic type handling
 		"java:S1452"  // Wildcard required - List<SurrogateSwap<?,?>> for multiple constructor-based swaps
 	})
-	public static List<SurrogateSwap<?,?>> findObjectSwaps(Class<?> c, BeanContext bc) {
+	public static List<SurrogateSwap<?,?>> findObjectSwaps(Class<?> c, MarshallingContext bc) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		var ci = info(c);
 		ci.getPublicConstructors().stream().filter(x -> ! bc.getAnnotationProvider().has(MarshalledIgnore.class, x) && x.hasNumParameters(1) && x.isPublic()).forEach(x -> {
@@ -88,7 +88,7 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	public F swap(BeanSession session, T o) throws SerializeException {
+	public F swap(MarshallingSession session, T o) throws SerializeException {
 		try {
 			return constructor.newInstance(o);
 		} catch (Exception e) {
@@ -100,7 +100,7 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast to T
 	})
-	public T unswap(BeanSession session, F f, ClassMeta<?> hint) throws ParseException {
+	public T unswap(MarshallingSession session, F f, ClassMeta<?> hint) throws ParseException {
 		if (unswapMethod == null)
 			throw new ParseException("unswap() method not implement on surrogate class ''{1}'': {0}", cn(f), getNormalClass().getNameFull());
 		try {

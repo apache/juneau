@@ -319,7 +319,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @return The bean, never <jk>null</jk>.
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		var cm = req.getBeanSession().getClassMeta(type);
+		var cm = req.getMarshallingSession().getClassMeta(type);
 		var name = HttpParts.getName(PATH, cm).orElseThrow(() -> rex("@Path(name) not found on class {0}", cn(type)));
 		return get(name).as(type);
 	}

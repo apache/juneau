@@ -150,14 +150,14 @@ class MarshalledIgnore_Test extends TestBase {
 	}
 
 	@Test void a05_beanIgnoreOnPrivateFieldSuppressesGetterProperty() {
-		var bm = BeanContext.DEFAULT.getBeanMeta(PrivateFieldIgnoredWithAccessors.class);
+		var bm = MarshallingContext.DEFAULT.getBeanMeta(PrivateFieldIgnoredWithAccessors.class);
 		assertFalse(bm.getProperties().containsKey("foo"), () -> "properties: " + bm.getProperties().keySet());
 		assertJson("{visible:'ok'}", new PrivateFieldIgnoredWithAccessors());
 	}
 
 	@Test void a06_beanIgnoreOnPrivateField_suppressedWithJavaBeanIntrospector() {
-		var bc = BeanContext.create().useJavaBeanIntrospector().build();
-		var s = Json5Serializer.DEFAULT.copy().beanContext(bc).build();
+		var bc = MarshallingContext.create().useJavaBeanIntrospector().build();
+		var s = Json5Serializer.DEFAULT.copy().marshallingContext(bc).build();
 		assertFalse(bc.getBeanMeta(PrivateFieldIgnoredWithAccessors.class).getProperties().containsKey("foo"));
 		assertEquals("{visible:'ok'}", s.serialize(new PrivateFieldIgnoredWithAccessors()));
 	}

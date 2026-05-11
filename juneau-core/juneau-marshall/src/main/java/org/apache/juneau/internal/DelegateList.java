@@ -44,7 +44,7 @@ public class DelegateList<T extends Collection<?>> extends JsonList implements D
 	 */
 	public DelegateList(ClassMeta<T> classMeta) {
 		if (classMeta.isArray())
-			classMeta = classMeta.getBeanContext().<T>getClassMeta(List.class, classMeta.getElementType());
+			classMeta = classMeta.getMarshallingContext().<T>getClassMeta(List.class, classMeta.getElementType());
 		this.classMeta = classMeta;
 	}
 

@@ -78,7 +78,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class ASwap extends StringSwap<Enumeration<?>> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, Enumeration<?> o) throws Exception {
+		public String swap(MarshallingSession session, Enumeration<?> o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -109,7 +109,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class AcSwap extends StringSwap<Enumeration<?>> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, Enumeration<?> o) throws Exception {
+		public String swap(MarshallingSession session, Enumeration<?> o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -144,7 +144,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class BSwap extends StringSwap<Iterator<?>> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, Iterator<?> o) throws Exception {
+		public String swap(MarshallingSession session, Iterator<?> o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -171,7 +171,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class BcSwap extends StringSwap<Iterator<?>> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, Iterator<?> o) throws Exception {
+		public String swap(MarshallingSession session, Iterator<?> o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -205,7 +205,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class CSwap extends StringSwap<Locale> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, Locale o) throws Exception {
+		public String swap(MarshallingSession session, Locale o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -235,7 +235,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class DSwap extends StringSwap<Calendar> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, Calendar o) throws Exception {
+		public String swap(MarshallingSession session, Calendar o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -265,7 +265,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class ESwap extends StringSwap<Date> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, Date o) throws Exception {
+		public String swap(MarshallingSession session, Date o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -295,7 +295,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class FASwap extends StringSwap<Instant> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, Instant o) throws Exception {
+		public String swap(MarshallingSession session, Instant o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -325,7 +325,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class FBSwap extends StringSwap<ZonedDateTime> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, ZonedDateTime o) throws Exception {
+		public String swap(MarshallingSession session, ZonedDateTime o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -355,7 +355,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class FCSwap extends StringSwap<LocalDate> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, LocalDate o) throws Exception {
+		public String swap(MarshallingSession session, LocalDate o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -385,7 +385,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class FDSwap extends StringSwap<LocalDateTime> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, LocalDateTime o) throws Exception {
+		public String swap(MarshallingSession session, LocalDateTime o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -415,7 +415,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class FESwap extends StringSwap<LocalTime> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, LocalTime o) throws Exception {
+		public String swap(MarshallingSession session, LocalTime o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -445,7 +445,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class FFSwap extends StringSwap<OffsetDateTime> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, OffsetDateTime o) throws Exception {
+		public String swap(MarshallingSession session, OffsetDateTime o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -475,7 +475,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class FGSwap extends StringSwap<OffsetTime> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, OffsetTime o) throws Exception {
+		public String swap(MarshallingSession session, OffsetTime o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -505,7 +505,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class FHSwap extends StringSwap<Year> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, Year o) throws Exception {
+		public String swap(MarshallingSession session, Year o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -535,7 +535,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class FISwap extends StringSwap<YearMonth> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, YearMonth o) throws Exception {
+		public String swap(MarshallingSession session, YearMonth o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -565,7 +565,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class FJSwap extends StringSwap<Temporal> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, Temporal o) throws Exception {
+		public String swap(MarshallingSession session, Temporal o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -595,7 +595,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class GSwap extends StringSwap<TimeZone> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, TimeZone o) throws Exception {
+		public String swap(MarshallingSession session, TimeZone o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -625,7 +625,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class HSwap extends StringSwap<XMLGregorianCalendar> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, XMLGregorianCalendar o) throws Exception {
+		public String swap(MarshallingSession session, XMLGregorianCalendar o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -655,7 +655,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class ISwap extends StringSwap<ZoneId> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, ZoneId o) throws Exception {
+		public String swap(MarshallingSession session, ZoneId o) throws Exception {
 			return "FOO";
 		}
 	}
@@ -685,7 +685,7 @@ class DefaultSwaps_Test extends TestBase {
 
 	public static class JSwap extends StringSwap<java.time.Duration> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, java.time.Duration o) throws Exception {
+		public String swap(MarshallingSession session, java.time.Duration o) throws Exception {
 			return "FOO";
 		}
 	}

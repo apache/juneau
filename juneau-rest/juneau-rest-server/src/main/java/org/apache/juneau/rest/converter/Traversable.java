@@ -56,7 +56,7 @@ public class Traversable implements RestConverter {
 
 		if (nn(pathRemainder)) {
 			try {
-				BeanSession bs = req.getBeanSession();
+				MarshallingSession bs = req.getMarshallingSession();
 				var swap = bs.getClassMetaForObject(o).getSwap(bs);
 				if (nn(swap))
 					o = swap.swap(bs, o);

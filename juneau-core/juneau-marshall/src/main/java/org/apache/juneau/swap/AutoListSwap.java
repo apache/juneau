@@ -44,21 +44,21 @@ import org.apache.juneau.serializer.*;
  * <h5 class='figure'>Valid swap methods (S = Swapped type)</h5>
  * <ul>
  * 	<li class='jm'><c><jk>public</jk> S toList()</c>
- * 	<li class='jm'><c><jk>public</jk> S toList(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toList(MarshallingSession)</c>
  * 	<li class='jm'><c><jk>public</jk> S toJsonList()</c>
- * 	<li class='jm'><c><jk>public</jk> S toJsonList(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toJsonList(MarshallingSession)</c>
  * </ul>
  *
  * <h5 class='figure'>Valid unswap methods (N = Normal type, S = Swapped type)</h5>
  * <ul>
  * 	<li class='jm'><c><jk>public static</jk> N fromList(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromList(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromList(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N fromJsonList(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromJsonList(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromJsonList(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N create(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N create(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N create(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N valueOf(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N valueOf(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N valueOf(MarshallingSession, S)</c>
  * 	<li class='jm'><c><jk>public</jk> N(S)</c>
  * </ul>
  *
@@ -98,7 +98,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 		"rawtypes", // Raw types necessary for generic type handling
 		"java:S1452"  // Wildcard required - ObjectSwap<?,?> for dynamically discovered swap types
 	})
-	public static ObjectSwap<?,?> find(BeanContext bc, ClassInfo ci) {
+	public static ObjectSwap<?,?> find(MarshallingContext bc, ClassInfo ci) {
 
 		if (shouldIgnore(bc, ci))
 			return null;
@@ -124,7 +124,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 		return null;
 	}
 
-	private static boolean isSwapMethod(BeanContext bc, MethodInfo mi) {
+	private static boolean isSwapMethod(MarshallingContext bc, MethodInfo mi) {
 		// @formatter:off
 		return
 			mi.isNotDeprecated()
@@ -132,12 +132,12 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasReturnTypeParent(List.class)
-			&& mi.hasParameterTypesLenient(BeanSession.class)
+			&& mi.hasParameterTypesLenient(MarshallingSession.class)
 			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(MarshalledIgnore.class, m2));
 		// @formatter:on
 	}
 
-	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
+	private static boolean isUnswapConstructor(MarshallingContext bc, ConstructorInfo cs, ClassInfo rt) {
 		// @formatter:off
 		return
 			cs.isNotDeprecated()
@@ -147,20 +147,20 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 		// @formatter:on
 	}
 
-	private static boolean isUnswapMethod(BeanContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {
+	private static boolean isUnswapMethod(MarshallingContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {
 		// @formatter:off
 		return
 			mi.isNotDeprecated()
 			&& mi.isStatic()
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
-			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
+			&& mi.hasParameterTypesLenient(MarshallingSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
 			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(MarshalledIgnore.class, m2));
 		// @formatter:on
 	}
 
-	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
+	private static boolean shouldIgnore(MarshallingContext bc, ClassInfo ci) {
 		return ci.isNonStaticMemberClass() || bc.getAnnotationProvider().has(MarshalledIgnore.class, ci);
 	}
 
@@ -170,7 +170,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 	private final Method unswapMethod;
 	private final Constructor<?> unswapConstructor;
 
-	private AutoListSwap(BeanContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
+	private AutoListSwap(MarshallingContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
 		super(ci.inner(), swapMethod.getReturnType().inner());
 		this.swapMethod = bc.getBeanMethodVisibility().transform(swapMethod.inner());
 		this.unswapMethod = unswapMethod == null ? null : bc.getBeanMethodVisibility().transform(unswapMethod.inner());
@@ -178,7 +178,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	public List<?> swap(BeanSession session, Object o) throws SerializeException {
+	public List<?> swap(MarshallingSession session, Object o) throws SerializeException {
 		try {
 			return (List<?>)swapMethod.invoke(o, getMatchingArgs(swapMethod.getParameterTypes(), session));
 		} catch (Exception e) {
@@ -190,7 +190,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 		"unchecked" // Type erasure requires cast to T
 	})
 	@Override /* Overridden from ObjectSwap */
-	public T unswap(BeanSession session, List<?> o, ClassMeta<?> hint) throws ParseException {
+	public T unswap(MarshallingSession session, List<?> o, ClassMeta<?> hint) throws ParseException {
 		try {
 			if (nn(unswapMethod))
 				return (T)unswapMethod.invoke(null, getMatchingArgs(unswapMethod.getParameterTypes(), session, o));

@@ -38,7 +38,7 @@ import org.apache.juneau.parser.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public abstract class BaseHttpPartParser extends BeanContextable implements HttpPartParser {
+public abstract class BaseHttpPartParser extends MarshallingContextable implements HttpPartParser {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_toType = "toType";
@@ -48,7 +48,7 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder extends BeanContextable.Builder {
+	public abstract static class Builder extends MarshallingContextable.Builder {
 
 		/**
 		 * Constructor.
@@ -77,12 +77,12 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 
 	@Override /* Overridden from HttpPartParser */
 	public <T> ClassMeta<T> getClassMeta(Class<T> c) {
-		return BeanContext.DEFAULT.getClassMeta(c);
+		return MarshallingContext.DEFAULT.getClassMeta(c);
 	}
 
 	@Override /* Overridden from HttpPartParser */
 	public <T> ClassMeta<T> getClassMeta(Type t, Type...args) {
-		return BeanContext.DEFAULT.getClassMeta(t, args);
+		return MarshallingContext.DEFAULT.getClassMeta(t, args);
 	}
 
 	/**

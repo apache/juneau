@@ -69,14 +69,14 @@ public class FunctionalSwap<T,S> extends ObjectSwap<T,S> {
 	}
 
 	@Override
-	public S swap(BeanSession session, T o, String template) throws Exception {
+	public S swap(MarshallingSession session, T o, String template) throws Exception {
 		if (swapFunction == null)
 			return super.swap(session, o, template);
 		return swapFunction.applyThrows(o);
 	}
 
 	@Override
-	public T unswap(BeanSession session, S f, ClassMeta<?> hint, String template) throws Exception {
+	public T unswap(MarshallingSession session, S f, ClassMeta<?> hint, String template) throws Exception {
 		if (unswapFunction == null)
 			return super.unswap(session, f, hint, template);
 		return unswapFunction.applyThrows(f);

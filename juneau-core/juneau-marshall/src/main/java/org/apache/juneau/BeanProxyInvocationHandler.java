@@ -30,7 +30,7 @@ import org.apache.juneau.json5.*;
  *
  * <p>
  * This class enables the creation of bean instances from interfaces without requiring concrete implementations.
- * When the {@code useInterfaceProxies} setting is enabled in {@link BeanContext}, this handler is used to create
+ * When the {@code useInterfaceProxies} setting is enabled in {@link MarshallingContext}, this handler is used to create
  * proxy instances that implement bean interfaces.
  *
  * <p>
@@ -58,7 +58,7 @@ import org.apache.juneau.json5.*;
  * 	}
  *
  * 	<jc>// Create a proxy instance</jc>
- * 	<jk>var</jk> bc = <jsm>BeanContext</jsm>.<jsm>create</jsm>().<jsm>useInterfaceProxies</jsm>().<jsm>build</jsm>();
+ * 	<jk>var</jk> bc = <jsm>MarshallingContext</jsm>.<jsm>create</jsm>().<jsm>useInterfaceProxies</jsm>().<jsm>build</jsm>();
  * 	<jk>var</jk> person = bc.<jsm>getClassMeta</jsm>(Person.<jk>class</jk>).<jsm>newInstance</jsm>();
  *
  * 	<jc>// Use it like a regular bean</jc>
@@ -68,7 +68,7 @@ import org.apache.juneau.json5.*;
  * </p>
  *
  * @param <T> The interface class type
- * @see BeanContext#isUseInterfaceProxies()
+ * @see MarshallingContext#isUseInterfaceProxies()
  * @see BeanMeta#getBeanProxyInvocationHandler()
  * @see Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)
  */
@@ -133,7 +133,7 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 					return beanProps.equals(ih2.beanProps);
 				}
 			}
-			return eq(beanProps, meta.getBeanContext().toBeanMap(arg));
+			return eq(beanProps, meta.getMarshallingContext().toBeanMap(arg));
 		}
 
 		if (mi.hasName("hashCode") && mi.getParameterCount() == 0)

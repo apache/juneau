@@ -86,7 +86,7 @@ Per-setting blocks below add setting-specific questions on top of these three:
 | R11 | `uriRelativity` | Memoize | S | 320 | 5052 | No |
 | R12 | `uriResolution` | Memoize | S | 321 | 5053 | No |
 | R13 | `path` / `fullPath` / `pathMatcher` | Bootstrap-only (parent chain) | — | 316 | 5046 / 5045 / 5054 | No |
-| R14 | `beanContext` | Composite-bean-lookup | S | 265 | 5008 | Yes |
+| R14 | `marshallingContext` | Composite-bean-lookup | S | 265 | 5008 | Yes |
 | R15 | `beanStore` | Bootstrap-only (foundational) | — | 270 | 5009 | Self |
 | R16 | `rootBeanStore` | Bootstrap-only | — | 271 | 5010 | Self |
 | R17 | `config` | Composite-bean-lookup | S | 279 | 5017 | Yes |
@@ -216,14 +216,14 @@ Per-setting blocks below add setting-specific questions on top of these three:
 - **Specific questions:**
   - Q-R13.1: Does the `pathMatcher` ever need re-computation after construction? (If not, keep as a plain `final` field.)
 
-##### R14. `beanContext` ✓ DONE — *(conservative: builder API retained)*
+##### R14. `marshallingContext` ✓ DONE — *(conservative: builder API retained)*
 
-- **Status:** `protected final BeanContext beanContext` context field deleted. New `private final Memoizer<BeanContext> beanContextMemo = memoizer(this::findBeanContext)` plus `findBeanContext()` method on `RestContext` that simply returns `builder.beanContext().build()`. The ctor's `beanContext = bs.add(BeanContext.class, builder.beanContext().build());` collapsed to `bs.addBean(BeanContext.class, getBeanContext());`. `getBeanContext()` returns `beanContextMemo.get()`.
-- **Why the conservative pattern (vs the Tier-E full deletion of the builder API):** `Builder.beanContext()` returns a `BeanContext.Builder` sub-builder that `init()` mutates via `apply(work)` (annotation work derived from `@BeanConfig`-style annotations), and that users may chain off (`b.beanContext().notBeanClasses(...)`). Deleting the sub-builder would require routing all `@BeanConfig`-style annotation processing through a new `findBeanContext()` annotation walk, plus migrating user-facing chained config to `@RestInject(name="beanContext") BeanContext.Builder` overrides. That's a separate, larger refactor. R14 just memoizes the `.build()` step on the `RestContext` side so other Tier-C work (R26/R31/R30/R32/R33) can layer on top later without churning the field-vs-memoizer plumbing again.
+- **Status:** `protected final MarshallingContext marshallingContext` context field deleted. New `private final Memoizer<MarshallingContext> beanContextMemo = memoizer(this::findBeanContext)` plus `findBeanContext()` method on `RestContext` that simply returns `builder.marshallingContext().build()`. The ctor's `marshallingContext = bs.add(MarshallingContext.class, builder.marshallingContext().build());` collapsed to `bs.addBean(MarshallingContext.class, getMarshallingContext());`. `getMarshallingContext()` returns `beanContextMemo.get()`.
+- **Why the conservative pattern (vs the Tier-E full deletion of the builder API):** `Builder.marshallingContext()` returns a `MarshallingContext.Builder` sub-builder that `init()` mutates via `apply(work)` (annotation work derived from `@BeanConfig`-style annotations), and that users may chain off (`b.marshallingContext().notBeanClasses(...)`). Deleting the sub-builder would require routing all `@BeanConfig`-style annotation processing through a new `findBeanContext()` annotation walk, plus migrating user-facing chained config to `@RestInject(name="marshallingContext") MarshallingContext.Builder` overrides. That's a separate, larger refactor. R14 just memoizes the `.build()` step on the `RestContext` side so other Tier-C work (R26/R31/R30/R32/R33) can layer on top later without churning the field-vs-memoizer plumbing again.
 - **Resolved:**
   - Q-R14.1 — Deferred. Not needed for the memoization move; `init()`'s `apply(work)` still mutates the builder before the memoizer fires.
-  - Q-R14.2 — Deferred. `bs.addBean(BeanContext.class, getBeanContext())` in the ctor still eagerly resolves; switching to `bs.addSupplier(...)` is a downstream optimization once the rest of the construction sequence is supplier-friendly.
-  - Q-R14.3 — N/A; nothing in the codebase relies on `getBeanContext()` as a side-effecting trigger.
+  - Q-R14.2 — Deferred. `bs.addBean(MarshallingContext.class, getMarshallingContext())` in the ctor still eagerly resolves; switching to `bs.addSupplier(...)` is a downstream optimization once the rest of the construction sequence is supplier-friendly.
+  - Q-R14.3 — N/A; nothing in the codebase relies on `getMarshallingContext()` as a side-effecting trigger.
 
 ##### R15. `beanStore` *(Bootstrap-only)*
 
@@ -531,7 +531,7 @@ With both builders deleted, these become **constructor arguments** on `RestConte
 | — | `noInheritOp` | Already-memoized | — | — | 2200 | No |
 | — | `allowedParserOptions` | Already-memoized (reference) | L | — | 2211 | No |
 | — | `allowedSerializerOptions` | Already-memoized (reference) | L | — | 2225 | No |
-| Op1 | `beanContext` | Composite-bean-lookup | S | 110 | 2153 | Yes |
+| Op1 | `marshallingContext` | Composite-bean-lookup | S | 110 | 2153 | Yes |
 | Op2 | `beanStore` | Bootstrap-only | — | 111 | — | Self |
 | Op3 | `dotAll` | Memoize | S | 112 | 2150 | No |
 | Op4 | `defaultCharset` | Memoize | S | 113 | 2155 | No |
@@ -567,17 +567,17 @@ With both builders deleted, these become **constructor arguments** on `RestConte
 
 > Standard migration questions S1–S8 apply to every Memoize / Composite-bean-lookup entry.
 
-##### Op1. `beanContext` ✓ DONE
+##### Op1. `marshallingContext` ✓ DONE
 
-- **Current:** Builder field 110; accessor `beanContext()` 223 (lazy via `createBeanContext` 1450). Context field 2153. Ctor 2315 `bs.add(BeanContext.class, builder.getBeanContext().orElse(context.getBeanContext()))`. Getter 2483. Applied via `apply(work)` ctor 174–175.
+- **Current:** Builder field 110; accessor `marshallingContext()` 223 (lazy via `createBeanContext` 1450). Context field 2153. Ctor 2315 `bs.add(MarshallingContext.class, builder.getMarshallingContext().orElse(context.getMarshallingContext()))`. Getter 2483. Applied via `apply(work)` ctor 174–175.
 - **Resolved:**
-  - Q-Op1.1: `findBeanContext()` falls back to `context.getBeanContext()` if no `@RestInject(name="beanContext")` bean and no `@RestOp`-derived override exists. Standard parent-fallback per Resolved Decision #19.
-  - Q-Op1.2 ✓ Resolved Decision #14 — `BeanCreateMethodFinder<BeanContext>` replaced by `@RestInject(name="beanContext")` static method.
+  - Q-Op1.1: `findBeanContext()` falls back to `context.getMarshallingContext()` if no `@RestInject(name="marshallingContext")` bean and no `@RestOp`-derived override exists. Standard parent-fallback per Resolved Decision #19.
+  - Q-Op1.2 ✓ Resolved Decision #14 — `BeanCreateMethodFinder<MarshallingContext>` replaced by `@RestInject(name="marshallingContext")` static method.
 - **Done (Phase 2 / Op1, conservative):**
-  - Removed `protected final BeanContext beanContext` field on `RestOpContext`.
-  - Added `private final Memoizer<BeanContext> beanContextMemo = memoizer(this::findBeanContext)` and `findBeanContext()` returning `builder.getBeanContext().orElse(context.getBeanContext())` — preserves the parent-fallback shape and the `@RestInject(name="beanContext")` slot via the builder's `Optional` resolution.
-  - Updated `getBeanContext()` to return the memoizer.
-  - Updated ctor wiring: `bs.add(BeanContext.class, getBeanContext())`.
+  - Removed `protected final MarshallingContext marshallingContext` field on `RestOpContext`.
+  - Added `private final Memoizer<MarshallingContext> beanContextMemo = memoizer(this::findBeanContext)` and `findBeanContext()` returning `builder.getMarshallingContext().orElse(context.getMarshallingContext())` — preserves the parent-fallback shape and the `@RestInject(name="marshallingContext")` slot via the builder's `Optional` resolution.
+  - Updated `getMarshallingContext()` to return the memoizer.
+  - Updated ctor wiring: `bs.add(MarshallingContext.class, getMarshallingContext())`.
   - Added `protected final Builder builder` field on `RestOpContext` (assigned in ctor) so the lazy memoizers can read from it post-construction — same pattern as `RestContext`.
   - Build clean; full test suite passes.
 

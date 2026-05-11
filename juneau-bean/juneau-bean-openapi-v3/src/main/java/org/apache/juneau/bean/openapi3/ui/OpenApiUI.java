@@ -379,7 +379,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	@Override
-	public Div swap(BeanSession beanSession, OpenApi openApi) throws Exception {
+	public Div swap(MarshallingSession marshallingSession, OpenApi openApi) throws Exception {
 
 		var s = new Session(openApi);
 

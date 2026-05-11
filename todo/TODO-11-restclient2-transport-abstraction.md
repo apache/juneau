@@ -3,7 +3,7 @@
 ## Problem Statement
 
 The current `RestClient` in [`juneau-rest-client`](../juneau-rest/juneau-rest-client/pom.xml) is tightly coupled to Apache HttpClient 4.5.14:
-- `RestClient` directly extends `BeanContextable` and **implements `org.apache.http.client.HttpClient`**
+- `RestClient` directly extends `MarshallingContextable` and **implements `org.apache.http.client.HttpClient`**
 - `RestRequest` implements `HttpUriRequest` and wraps `HttpRequestBase` / `HttpEntityEnclosingRequestBase`
 - `RestResponse` implements `org.apache.http.HttpResponse`
 - `ResponseContent` implements `org.apache.http.HttpEntity`
@@ -522,7 +522,7 @@ public class TransportException extends IOException {
 ### `RestClient`
 
 The main client class. Key differences from current `RestClient`:
-- **Does NOT implement `org.apache.http.client.HttpClient`** and does NOT extend `BeanContextable`
+- **Does NOT implement `org.apache.http.client.HttpClient`** and does NOT extend `MarshallingContextable`
 - **Does NOT implement `Closeable`** — has an explicit `shutdown()` method instead, signalling this is an app-lifecycle operation, not a per-call operation. The transport (connection pool, thread pool) is created externally and its lifecycle is managed by whoever created it (e.g., Spring).
 - Composes an `HttpTransport` instead of extending/wrapping `CloseableHttpClient`
 - Holds a single pre-instantiated `Serializer` and/or `Parser` (or `Marshaller`); no serializer configuration on the builder
@@ -571,7 +571,7 @@ public class RestClient {
 
 ### `RestClient.Builder`
 
-Builder is a plain builder (no `BeanContextable` inheritance) with a deliberately minimal API.
+Builder is a plain builder (no `MarshallingContextable` inheritance) with a deliberately minimal API.
 
 **Design principles**:
 - `RestClient.Builder` contains **only Juneau-specific concerns** — serialization, default headers, interceptors, logging, root URL, etc. No transport-specific methods.
@@ -1439,7 +1439,7 @@ A systematic review of all existing `RestClient` and `@Remote` unit tests identi
 
 | Test file | Excluded scenarios |
 |---|---|
-| `RestClient_Config_BeanContext_Test` | All BeanContext configuration on builder (visibility, bpi/bpx, swaps, dictionaries, etc.) — configure on the serializer/parser externally |
+| `RestClient_Config_BeanContext_Test` | All MarshallingContext configuration on builder (visibility, bpi/bpx, swaps, dictionaries, etc.) — configure on the serializer/parser externally |
 | `RestClient_Marshalls_Test` | Multi-language marshaller registration, universal client, per-request language override, format shortcuts (`json()`, `xml()`, etc.) |
 | `RestClient_Config_OpenApi_Test` | `openApi()` client shortcut; collection format schemas on parts (pipes, csv) — removed with partSerializer |
 | `RestClient_Config_Context_Test` | `applyAnnotations`, annotation-driven context config — configure on serializer externally |

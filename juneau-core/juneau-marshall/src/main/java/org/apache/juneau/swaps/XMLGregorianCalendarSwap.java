@@ -37,7 +37,7 @@ import org.apache.juneau.swap.*;
  * <p>
  * Date/time types are now serialized as ISO 8601 strings by default without needing a swap.
  * These swap classes can be used to override the default format (e.g., using RFC 1123 instead of ISO 8601).
- * They can be registered globally via {@link org.apache.juneau.BeanContext.Builder#swaps(Class[]) BeanContext.Builder.swaps(Class...)} or per-field via the {@link Swap} annotation.
+ * They can be registered globally via {@link org.apache.juneau.MarshallingContext.Builder#swaps(Class[]) MarshallingContext.Builder.swaps(Class...)} or per-field via the {@link Swap} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
@@ -63,7 +63,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 	 * Converts the specified <c>XMLGregorianCalendar</c> to a {@link String}.
 	 */
 	@Override /* Overridden from ObjectSwap */
-	public String swap(BeanSession session, XMLGregorianCalendar b) throws Exception {
+	public String swap(MarshallingSession session, XMLGregorianCalendar b) throws Exception {
 		return b.toXMLFormat();
 	}
 
@@ -71,7 +71,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 	 * Converts the specified {@link String} to an <c>XMLGregorianCalendar</c>.
 	 */
 	@Override /* Overridden from ObjectSwap */
-	public XMLGregorianCalendar unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
+	public XMLGregorianCalendar unswap(MarshallingSession session, String s, ClassMeta<?> hint) throws Exception {
 		if (e(s))
 			return null;
 		return dtf.newXMLGregorianCalendar(s);

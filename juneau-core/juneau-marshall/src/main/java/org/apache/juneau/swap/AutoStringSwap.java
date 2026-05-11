@@ -43,12 +43,12 @@ public class AutoStringSwap<T> extends StringSwap<T> {
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	public String swap(BeanSession session, T o) {
+	public String swap(MarshallingSession session, T o) {
 		return o.toString();
 	}
 
 	@Override /* Overridden from ObjectSwap */
-	public T unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
+	public T unswap(MarshallingSession session, String s, ClassMeta<?> hint) throws Exception {
 		return classMeta.newInstanceFromString(null, s);
 	}
 }

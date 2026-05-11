@@ -43,8 +43,8 @@ public class ComboInput<T> {
 		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR, rdfThrift, rdfThriftT, rdfProto, rdfProtoT, csv, yaml, yamlT, yamlR, toml, markdown;
 	List<Tuple2<Class<?>,Consumer<?>>> applies = list();
 
-	public ComboInput<T> beanContext(Consumer<BeanContext.Builder> c) {
-		apply(BeanContext.Builder.class, c);
+	public ComboInput<T> marshallingContext(Consumer<MarshallingContext.Builder> c) {
+		apply(MarshallingContext.Builder.class, c);
 		return this;
 	}
 

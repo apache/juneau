@@ -30,7 +30,7 @@ import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.swap.*;
 
 /**
- * Annotation for specifying config properties defined in {@link BeanContext} and {@link BeanTraverseContext}.
+ * Annotation for specifying config properties defined in {@link MarshallingContext} and {@link MarshallingTraverseContext}.
  *
  * <p>
  * Used primarily for specifying marshalling configuration properties on REST classes and methods.
@@ -69,7 +69,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanClassVisibility(Visibility)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanClassVisibility(Visibility)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -100,7 +100,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanConstructorVisibility(Visibility)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanConstructorVisibility(Visibility)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -131,7 +131,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanFieldVisibility(Visibility)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -157,7 +157,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanMapPutReturnsOldValue()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanMapPutReturnsOldValue()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -188,7 +188,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanMethodVisibility(Visibility)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanMethodVisibility(Visibility)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -215,7 +215,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireDefaultConstructor()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beansRequireDefaultConstructor()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -242,7 +242,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireSerializable()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beansRequireSerializable()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -267,7 +267,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireSettersForGetters()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beansRequireSettersForGetters()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -284,7 +284,7 @@ public @interface MarshalledConfig {
 	 * 		When bean getters throws exceptions, the exception includes the object stack information
 	 * 		in order to determine how that method was invoked.
 	 * 	<li>
-	 * 		Enables {@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}.
+	 * 		Enables {@link org.apache.juneau.MarshallingTraverseContext.Builder#detectRecursions()}.
 	 * </ul>
 	 *
 	 * <p>
@@ -333,7 +333,7 @@ public @interface MarshalledConfig {
 	 * 	<li class='ja'>{@link Bean#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanDictionaryBasics">Bean Dictionary Basics</a>
 	 * </ul>
 	 *
@@ -351,7 +351,7 @@ public @interface MarshalledConfig {
 	 * 	<li class='ja'>{@link Bean#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -376,7 +376,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableBeansRequireSomeProperties()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#disableBeansRequireSomeProperties()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -401,7 +401,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreMissingSetters()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#disableIgnoreMissingSetters()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -425,7 +425,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreTransientFields()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#disableIgnoreTransientFields()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -450,7 +450,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#disableIgnoreUnknownNullBeanProperties()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -476,7 +476,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableInterfaceProxies()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#disableInterfaceProxies()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -510,7 +510,7 @@ public @interface MarshalledConfig {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Bean#findFluentSetters()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#findFluentSetters()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#findFluentSetters()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -535,7 +535,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreInvocationExceptionsOnGetters()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#ignoreInvocationExceptionsOnGetters()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -560,7 +560,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreInvocationExceptionsOnSetters()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#ignoreInvocationExceptionsOnSetters()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -585,7 +585,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreUnknownBeanProperties()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#ignoreUnknownBeanProperties()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -609,7 +609,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreUnknownEnumValues()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#ignoreUnknownEnumValues()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -666,8 +666,8 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#locale(Locale)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#locale(Locale)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingSession.Builder#locale(Locale)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#locale(Locale)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -686,8 +686,8 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#mediaType(MediaType)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#mediaType(MediaType)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingSession.Builder#mediaType(MediaType)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#mediaType(MediaType)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -708,7 +708,7 @@ public @interface MarshalledConfig {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link MarshalledIgnore}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanClasses(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#notBeanClasses(Class...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -722,7 +722,7 @@ public @interface MarshalledConfig {
 	 * Same as {@link #notBeanClasses()} but replaces any existing value.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanClasses(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#notBeanClasses(Class...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -759,7 +759,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanPackages(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#notBeanPackages(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -773,7 +773,7 @@ public @interface MarshalledConfig {
 	 * Same as {@link #notBeanPackages()} but replaces any existing value.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanPackages(String...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#notBeanPackages(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -795,7 +795,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#propertyNamer(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#propertyNamer(Class)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -829,7 +829,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#unsortedProperties()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#unsortedProperties()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -852,7 +852,7 @@ public @interface MarshalledConfig {
 	 * {@link ObjectSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PerMediaTypeSwaps">Per-media-type Swaps</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OneWaySwaps">One-way Swaps</a>
@@ -872,7 +872,7 @@ public @interface MarshalledConfig {
 	 * Same as {@link #swaps()} but replaces any existing value.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -891,8 +891,8 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#timeZone(TimeZone)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#timeZone(TimeZone)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingSession.Builder#timeZone(TimeZone)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#timeZone(TimeZone)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -915,7 +915,7 @@ public @interface MarshalledConfig {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Bean#typePropertyName()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#typePropertyName(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -939,7 +939,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#useEnumNames()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#useEnumNames()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -964,7 +964,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#useJavaBeanIntrospector()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#useJavaBeanIntrospector()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

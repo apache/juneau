@@ -36,7 +36,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-class RestClient_Config_BeanContext_Test extends TestBase {
+class RestClient_Config_MarshallingContext_Test extends TestBase {
 
 	@Rest
 	public static class A extends BasicRestObject {
@@ -791,7 +791,7 @@ class RestClient_Config_BeanContext_Test extends TestBase {
 		}
 	}
 
-	public static class A30b extends BeanInterceptor<A30a> {
+	public static class A30b extends MarshallingInterceptor<A30a> {
 		static boolean getterCalled,setterCalled;
 		@Override
 		public Object readProperty(A30a bean,String name,Object value) {
@@ -877,8 +877,8 @@ class RestClient_Config_BeanContext_Test extends TestBase {
 	}
 
 	public static class A34b extends ObjectSwap<A34a,Integer> {
-		@Override public Integer swap(BeanSession session,A34a o) { return o.foo; }
-		@Override public A34a unswap(BeanSession session,Integer f,ClassMeta<?> hint) {return A34a.get(); }
+		@Override public Integer swap(MarshallingSession session,A34a o) { return o.foo; }
+		@Override public A34a unswap(MarshallingSession session,Integer f,ClassMeta<?> hint) {return A34a.get(); }
 	}
 
 	@Test void a34_swaps() throws Exception {

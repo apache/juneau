@@ -37,7 +37,7 @@ public class ReaderSwap extends StringSwap<Reader> {
 	 * Converts the specified {@link InputStream} to a {@link String}.
 	 */
 	@Override /* Overridden from ObjectSwap */
-	public String swap(BeanSession session, Reader r) throws Exception {
+	public String swap(MarshallingSession session, Reader r) throws Exception {
 		return read(r);
 	}
 }

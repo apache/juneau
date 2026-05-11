@@ -218,12 +218,12 @@ public class JsonSchema {
 	public static class BooleanOrSchemaArraySwap extends ObjectSwap<Object,Object> {
 
 		@Override /* Overridden from ObjectSwap */
-		public Object swap(BeanSession session, Object o) throws SerializeException {
+		public Object swap(MarshallingSession session, Object o) throws SerializeException {
 			return o;
 		}
 
 		@Override /* Overridden from ObjectSwap */
-		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
+		public Object unswap(MarshallingSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			var cm = (o instanceof Collection ? session.getClassMeta(JsonSchemaArray.class) : session.getClassMeta(Boolean.class));
 			return session.convertToType(o, cm);
 		}
@@ -245,12 +245,12 @@ public class JsonSchema {
 	public static class BooleanOrSchemaSwap extends ObjectSwap<Object,Object> {
 
 		@Override /* Overridden from ObjectSwap */
-		public Object swap(BeanSession session, Object o) throws SerializeException {
+		public Object swap(MarshallingSession session, Object o) throws SerializeException {
 			return o;
 		}
 
 		@Override /* Overridden from ObjectSwap */
-		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
+		public Object unswap(MarshallingSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			var cm = (o instanceof Boolean ? session.getClassMeta(Boolean.class) : session.getClassMeta(JsonSchema.class));
 			return session.convertToType(o, cm);
 		}
@@ -272,12 +272,12 @@ public class JsonSchema {
 	public static class JsonSchemaOrSchemaArraySwap extends ObjectSwap<Object,Object> {
 
 		@Override /* Overridden from ObjectSwap */
-		public Object swap(BeanSession session, Object o) throws SerializeException {
+		public Object swap(MarshallingSession session, Object o) throws SerializeException {
 			return o;
 		}
 
 		@Override /* Overridden from ObjectSwap */
-		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
+		public Object unswap(MarshallingSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			var cm = (o instanceof Collection ? session.getClassMeta(JsonSchemaArray.class) : session.getClassMeta(JsonSchema.class));
 			return session.convertToType(o, cm);
 		}
@@ -299,12 +299,12 @@ public class JsonSchema {
 	public static class JsonTypeOrJsonTypeArraySwap extends ObjectSwap<Object,Object> {
 
 		@Override /* Overridden from ObjectSwap */
-		public Object swap(BeanSession session, Object o) throws SerializeException {
+		public Object swap(MarshallingSession session, Object o) throws SerializeException {
 			return o;
 		}
 
 		@Override /* Overridden from ObjectSwap */
-		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
+		public Object unswap(MarshallingSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			var cm = (o instanceof Collection ? session.getClassMeta(JsonTypeArray.class) : session.getClassMeta(JsonType.class));
 			return session.convertToType(o, cm);
 		}

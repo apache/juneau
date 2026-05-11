@@ -40,11 +40,11 @@ class MarshalledConfig_Swaps_Test extends TestBase {
 
 	public static class SwapA1 extends StringSwap<A> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, A a) throws SerializeException {
+		public String swap(MarshallingSession session, A a) throws SerializeException {
 			return "A1-" + a.f1;
 		}
 		@Override /* ObjectSwap */
-		public A unswap(BeanSession session, String in, ClassMeta<?> hint) throws ParseException {
+		public A unswap(MarshallingSession session, String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A1"))
 				throw new IllegalArgumentException("Invalid input for SwapA1!");
 			var a = new A();
@@ -55,11 +55,11 @@ class MarshalledConfig_Swaps_Test extends TestBase {
 
 	public static class SwapA2 extends StringSwap<A> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, A a) throws SerializeException {
+		public String swap(MarshallingSession session, A a) throws SerializeException {
 			return "A2-" + a.f1;
 		}
 		@Override /* ObjectSwap */
-		public A unswap(BeanSession session, String in, ClassMeta<?> hint) throws ParseException {
+		public A unswap(MarshallingSession session, String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A2"))
 				throw new IllegalArgumentException("Invalid input for SwapA2!");
 			var a = new A();
@@ -70,11 +70,11 @@ class MarshalledConfig_Swaps_Test extends TestBase {
 
 	public static class SwapA3 extends StringSwap<A> {
 		@Override /* ObjectSwap */
-		public String swap(BeanSession session, A a) throws SerializeException {
+		public String swap(MarshallingSession session, A a) throws SerializeException {
 			return "A3-" + a.f1;
 		}
 		@Override /* ObjectSwap */
-		public A unswap(BeanSession session, String in, ClassMeta<?> hint) throws ParseException {
+		public A unswap(MarshallingSession session, String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A3"))
 				throw new IllegalArgumentException("Invalid input for SwapA3!");
 			var a = new A();

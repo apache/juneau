@@ -75,7 +75,7 @@ public @interface Swap {
 	 * 	<jk>public class</jk> MyBean { ... }
 	 *
 	 * 	<jk>public class</jk> ToStringSwap <jk>extends</jk> ObjectSwap&lt;Object,String&gt; {
-	 * 			<jk>public</jk> String swap(BeanSession <jv>session</jv>, Object <jv>value</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>public</jk> String swap(MarshallingSession <jv>session</jv>, Object <jv>value</jv>) <jk>throws</jk> Exception {
 	 * 				<jk>return</jk> <jv>value</jv>.toString();
 	 * 			}
 	 * 		}
@@ -109,7 +109,7 @@ public @interface Swap {
 	 * 			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
 	 * 		}
 	 *
-	 * 		<jk>public</jk> Reader swap(BeanSession <jv>session</jv>, Object <jv>value</jv>, String <jv>template</jv>) <jk>throws</jk> Exception {
+	 * 		<jk>public</jk> Reader swap(MarshallingSession <jv>session</jv>, Object <jv>value</jv>, String <jv>template</jv>) <jk>throws</jk> Exception {
 	 * 			<jk>return</jk> <jsm>getFreeMarkerReader</jsm>(<jv>template</jv>, <jv>value</jv>);  <jc>// Some method that creates raw HTML.</jc>
 	 * 		}
 	 * 	}

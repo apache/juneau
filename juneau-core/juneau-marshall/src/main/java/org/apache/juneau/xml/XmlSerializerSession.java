@@ -742,7 +742,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		try {
 			aType = push(null, o, null);
-		} catch (BeanRecursionException e) {
+		} catch (MarshallingRecursionException e) {
 			throw new SerializeException(e);
 		}
 
@@ -1070,7 +1070,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 						out.attr(dns, getBeanTypePropertyName(eType), type);
 				}
 				if (nn(name))
-					out.attr(BeanSession.NAME_PROPERTY_NAME, name);
+					out.attr(MarshallingSession.NAME_PROPERTY_NAME, name);
 			} else {
 				out.i(i);
 			}

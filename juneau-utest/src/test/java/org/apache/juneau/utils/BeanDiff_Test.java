@@ -97,7 +97,7 @@ class BeanDiff_Test extends TestBase {
 	}
 
 	@Test void a11_differentBeanContext() {
-		var bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).beanContext(BeanContext.DEFAULT).build();
+		var bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).marshallingContext(MarshallingContext.DEFAULT).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1={f1=1},v2={f1=2,f2=b}}", bd.toString());
 	}

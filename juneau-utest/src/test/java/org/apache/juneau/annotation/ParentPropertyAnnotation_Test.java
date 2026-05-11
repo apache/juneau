@@ -56,8 +56,8 @@ class ParentPropertyAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_testEquivalencyInPropertyStores() {
-		var bc1 = BeanContext.create().annotations(a1).build();
-		var bc2 = BeanContext.create().annotations(a2).build();
+		var bc1 = MarshallingContext.create().annotations(a1).build();
+		var bc2 = MarshallingContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
 	}
 
@@ -122,7 +122,7 @@ class ParentPropertyAnnotation_Test extends TestBase {
 	}
 
 	@Test void e01_parentPropertyField() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(TestBeanWithParentPropertyField.class);
 		var prop = cm.getParentProperty();
 		assertNotNull(prop, "ParentProperty should be found");
@@ -137,7 +137,7 @@ class ParentPropertyAnnotation_Test extends TestBase {
 	}
 
 	@Test void e02_parentPropertyMethod() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(TestBeanWithParentPropertyMethod.class);
 		var prop = cm.getParentProperty();
 		assertNotNull(prop, "ParentProperty should be found");
@@ -152,7 +152,7 @@ class ParentPropertyAnnotation_Test extends TestBase {
 	}
 
 	@Test void e03_parentPropertyNotFound() {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(String.class);
 		var prop = cm.getParentProperty();
 		assertNull(prop, "ParentProperty should not be found on String class");
@@ -168,7 +168,7 @@ class ParentPropertyAnnotation_Test extends TestBase {
 	}
 
 	@Test void e04_readOnlyParentProperty() throws Exception {
-		var bc = BeanContext.DEFAULT;
+		var bc = MarshallingContext.DEFAULT;
 		var cm = bc.getClassMeta(TestBeanWithReadOnlyParentProperty.class);
 		var prop = cm.getParentProperty();
 		assertNotNull(prop, "ParentProperty should be found even if read-only");

@@ -113,9 +113,9 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 
 		String searchPattern;
 		AbstractMatcher[] matchers;
-		BeanSession bs;
+		MarshallingSession bs;
 
-		ColumnMatcher(BeanSession bs, String searchPattern) {
+		ColumnMatcher(MarshallingSession bs, String searchPattern) {
 			this.bs = bs;
 			this.searchPattern = searchPattern;
 			this.matchers = new AbstractMatcher[factories.length];
@@ -157,12 +157,12 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	private class RowMatcher {
 
 		Map<String,ColumnMatcher> entryMatchers = new HashMap<>();
-		BeanSession bs;
+		MarshallingSession bs;
 
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires unchecked cast for Map query
 		})
-		RowMatcher(BeanSession bs, Map query) {
+		RowMatcher(MarshallingSession bs, Map query) {
 			this.bs = bs;
 			query.forEach((k, v) -> entryMatchers.put(s(k), new ColumnMatcher(bs, s(v))));
 		}
@@ -246,7 +246,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	}
 
 	@Override /* Overridden from ObjectTool */
-	public Object run(BeanSession session, Object input, SearchArgs args) {
+	public Object run(MarshallingSession session, Object input, SearchArgs args) {
 
 		var type = session.getClassMetaForObject(input);
 		Map<String,String> search = args.getSearch();
@@ -292,7 +292,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 		"unchecked", // Type erasure requires unchecked casts
 	})
 	public <R> List<R> run(Object input, String searchArgs) {
-		Object r = run(BeanContext.DEFAULT_SESSION, input, SearchArgs.create(searchArgs));
+		Object r = run(MarshallingContext.DEFAULT_SESSION, input, SearchArgs.create(searchArgs));
 		if (r instanceof List r2)
 			return r2;
 		if (r instanceof Collection r3)

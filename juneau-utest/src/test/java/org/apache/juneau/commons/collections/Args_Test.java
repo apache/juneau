@@ -91,7 +91,7 @@ class Args_Test extends TestBase {
 		assertSame(a, a.inner(innerMap));
 
 		// Test session() returns same instance
-		BeanSession session = BeanContext.DEFAULT.getSession();
+		MarshallingSession session = MarshallingContext.DEFAULT.getSession();
 		assertSame(a, a.session(session));
 
 		// Test append(String, Object) returns same instance

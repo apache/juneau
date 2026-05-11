@@ -57,7 +57,7 @@ class ManifestFile_Test extends TestBase {
 		assertSame(mf, mf.inner(innerMap));
 
 		// Test session() returns same instance
-		BeanSession session = BeanContext.DEFAULT.getSession();
+		MarshallingSession session = MarshallingContext.DEFAULT.getSession();
 		assertSame(mf, mf.session(session));
 
 		// Test append(String, Object) returns same instance

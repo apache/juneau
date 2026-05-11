@@ -65,7 +65,7 @@ public class BeanDiff {
 	public static class Builder<T> {
 		T first;
 		T second;
-		BeanContext beanContext = BeanContext.DEFAULT;
+		MarshallingContext marshallingContext = MarshallingContext.DEFAULT;
 		Set<String> include;
 		Set<String> exclude;
 
@@ -73,13 +73,13 @@ public class BeanDiff {
 		 * Specifies the bean context to use for introspecting beans.
 		 *
 		 * <p>
-		 * If not specified, uses {@link BeanContext#DEFAULT}.
+		 * If not specified, uses {@link MarshallingContext#DEFAULT}.
 		 *
 		 * @param value The bean context to use for introspecting beans.
 		 * @return This object.
 		 */
-		public Builder<T> beanContext(BeanContext value) {
-			beanContext = value;
+		public Builder<T> marshallingContext(MarshallingContext value) {
+			marshallingContext = value;
 			return this;
 		}
 
@@ -89,7 +89,7 @@ public class BeanDiff {
 		 * @return A new {@link BeanDiff} object.
 		 */
 		public BeanDiff build() {
-			return new BeanDiff(beanContext, first, second, include, exclude);
+			return new BeanDiff(marshallingContext, first, second, include, exclude);
 		}
 
 		/**
@@ -198,7 +198,7 @@ public class BeanDiff {
 		"null", // Null handling verified by context or framework
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 	})
-	public <T> BeanDiff(BeanContext bc, T first, T second, Set<String> include, Set<String> exclude) {
+	public <T> BeanDiff(MarshallingContext bc, T first, T second, Set<String> include, Set<String> exclude) {
 		if (first == null && second == null)
 			return;
 		var bm1 = first == null ? null : bc.toBeanMap(first);

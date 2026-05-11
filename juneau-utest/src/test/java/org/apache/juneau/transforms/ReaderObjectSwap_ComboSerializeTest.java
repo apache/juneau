@@ -307,7 +307,7 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 
 	public static class PojoToSimpleReaderSwap extends ObjectSwap<PojoToSimpleReader,Reader> {
 		@Override
-		public Reader swap(BeanSession session, PojoToSimpleReader o) throws Exception {
+		public Reader swap(MarshallingSession session, PojoToSimpleReader o) throws Exception {
 			return reader("foo");
 		}
 	}
@@ -322,7 +322,7 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 
 	public static class PojoToDynamicReaderSwap extends ObjectSwap<PojoToDynamicReader,Object> {
 		@Override
-		public Object swap(BeanSession session, PojoToDynamicReader o) throws Exception {
+		public Object swap(MarshallingSession session, PojoToDynamicReader o) throws Exception {
 			return reader(o.f + "-" + session.getMediaType().getSubTypes().get(0));
 		}
 	}
@@ -337,7 +337,7 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 
 	public static class SometimesSwappedBeanSwap1 extends ObjectSwap<SometimesSwappedBean1,Object> {
 		@Override
-		public Object swap(BeanSession session, SometimesSwappedBean1 o) throws Exception {
+		public Object swap(MarshallingSession session, SometimesSwappedBean1 o) throws Exception {
 			var mt = session.getMediaType();
 			if (mt.hasSubType("json5") || mt.hasSubType("xml"))
 				return reader(o.f + "-" + mt);
@@ -355,7 +355,7 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 
 	public static class SometimesSwappedBeanSwap2 extends ObjectSwap<SometimesSwappedBean2,Object> {
 		@Override
-		public Object swap(BeanSession session, SometimesSwappedBean2 o) throws Exception {
+		public Object swap(MarshallingSession session, SometimesSwappedBean2 o) throws Exception {
 			var mt = session.getMediaType();
 			if (mt.hasSubType("json5") || mt.hasSubType("xml"))
 				return o;

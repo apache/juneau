@@ -40,7 +40,7 @@ public abstract class ByteArraySwap extends StringSwap<byte[]> {
 		 * Converts the specified <code><jk>byte</jk>[]</code> to a {@link String}.
 		 */
 		@Override /* Overridden from ObjectSwap */
-		public String swap(BeanSession session, byte[] b) throws Exception {
+		public String swap(MarshallingSession session, byte[] b) throws Exception {
 			return base64Encode(b);
 		}
 
@@ -48,7 +48,7 @@ public abstract class ByteArraySwap extends StringSwap<byte[]> {
 		 * Converts the specified {@link String} to a <code><jk>byte</jk>[]</code>.
 		 */
 		@Override /* Overridden from ObjectSwap */
-		public byte[] unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
+		public byte[] unswap(MarshallingSession session, String s, ClassMeta<?> hint) throws Exception {
 			return base64Decode(s);
 		}
 	}
@@ -62,7 +62,7 @@ public abstract class ByteArraySwap extends StringSwap<byte[]> {
 		 * Converts the specified <code><jk>byte</jk>[]</code> to a {@link String}.
 		 */
 		@Override /* Overridden from ObjectSwap */
-		public String swap(BeanSession session, byte[] b) throws Exception {
+		public String swap(MarshallingSession session, byte[] b) throws Exception {
 			return toHex(b);
 		}
 
@@ -70,7 +70,7 @@ public abstract class ByteArraySwap extends StringSwap<byte[]> {
 		 * Converts the specified {@link String} to a <code><jk>byte</jk>[]</code>.
 		 */
 		@Override /* Overridden from ObjectSwap */
-		public byte[] unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
+		public byte[] unswap(MarshallingSession session, String s, ClassMeta<?> hint) throws Exception {
 			return fromHex(s);
 		}
 	}
@@ -84,7 +84,7 @@ public abstract class ByteArraySwap extends StringSwap<byte[]> {
 		 * Converts the specified <code><jk>byte</jk>[]</code> to a {@link String}.
 		 */
 		@Override /* Overridden from ObjectSwap */
-		public String swap(BeanSession session, byte[] b) throws Exception {
+		public String swap(MarshallingSession session, byte[] b) throws Exception {
 			return toSpacedHex(b);
 		}
 
@@ -92,7 +92,7 @@ public abstract class ByteArraySwap extends StringSwap<byte[]> {
 		 * Converts the specified {@link String} to a <code><jk>byte</jk>[]</code>.
 		 */
 		@Override /* Overridden from ObjectSwap */
-		public byte[] unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
+		public byte[] unswap(MarshallingSession session, String s, ClassMeta<?> hint) throws Exception {
 			return fromSpacedHex(s);
 		}
 	}

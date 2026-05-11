@@ -71,9 +71,9 @@ class RestClient_Config_Context_Test extends TestBase {
 
 	public static class A3b extends ObjectSwap<A3a,Integer> {
 		@Override
-		public Integer swap(BeanSession session, A3a o) { return o.foo; }
+		public Integer swap(MarshallingSession session, A3a o) { return o.foo; }
 		@Override
-		public A3a unswap(BeanSession session, Integer f, ClassMeta<?> hint) {return A3a.get(); }
+		public A3a unswap(MarshallingSession session, Integer f, ClassMeta<?> hint) {return A3a.get(); }
 	}
 
 	@Test void a03_appendToStringObject() throws Exception {

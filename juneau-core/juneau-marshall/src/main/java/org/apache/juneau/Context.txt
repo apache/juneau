@@ -20,22 +20,22 @@ Classes that extend Context (directly or indirectly)
 
 Direct subclasses of Context:
 -----------------------------
-1. BeanContext
+1. MarshallingContext
 2. Config
 3. RestContext
 4. RestOpContext
-5. BeanContextable (abstract)
+5. MarshallingContextable (abstract)
 6. ConfigStore (abstract)
 
-Classes extending BeanContextable:
+Classes extending MarshallingContextable:
 -----------------------------------
 7. Parser
 8. RestClient
-9. BeanTraverseContext (abstract)
+9. MarshallingTraverseContext (abstract)
 10. BaseHttpPartSerializer (abstract)
 11. BaseHttpPartParser (abstract)
 
-Classes extending BeanTraverseContext:
+Classes extending MarshallingTraverseContext:
 --------------------------------------
 12. Serializer
 13. JsonSchemaGenerator

@@ -30,10 +30,10 @@ import java.lang.reflect.*;
  * <p>
  * Used in conjunction with the following bean context properties:
  * <ul class='javatree'>
- * 	<li class='jm'>BeanContext.Builder.beanConstructorVisibility
- * 	<li class='jm'>BeanContext.Builder.beanClassVisibility
- * 	<li class='jm'>BeanContext.Builder.beanFieldVisibility
- * 	<li class='jm'>BeanContext.Builder.beanMethodVisibility
+ * 	<li class='jm'>MarshallingContext.Builder.beanConstructorVisibility
+ * 	<li class='jm'>MarshallingContext.Builder.beanClassVisibility
+ * 	<li class='jm'>MarshallingContext.Builder.beanFieldVisibility
+ * 	<li class='jm'>MarshallingContext.Builder.beanMethodVisibility
  * </ul>
  *
  */

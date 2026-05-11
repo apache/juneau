@@ -143,7 +143,7 @@ import jakarta.servlet.http.*;
  * 			<li class='jm'>{@link RestRequest#getAttribute(String) getAttribute(String)}
  * 			<li class='jm'>{@link RestRequest#getAttributes() getAttributes()}
  * 			<li class='jm'>{@link RestRequest#getAuthorityPath() getAuthorityPath()}
- * 			<li class='jm'>{@link RestRequest#getBeanSession() getBeanSession()}
+ * 			<li class='jm'>{@link RestRequest#getMarshallingSession() getMarshallingSession()}
  * 			<li class='jm'>{@link RestRequest#getCharset() getCharset()}
  * 			<li class='jm'>{@link RestRequest#getConfig() getConfig()}
  * 			<li class='jm'>{@link RestRequest#getContext() getContext()}
@@ -204,7 +204,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	private final RestContext context;
 	private final RestOpContext opContext;
 	private final RequestContent content;
-	private final BeanSession beanSession;
+	private final MarshallingSession marshallingSession;
 	private final RequestQueryParams queryParams;
 	private final RequestPathParams pathParams;
 	private final RequestHeaders headers;
@@ -256,7 +256,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		pathParams = new RequestPathParams(session, this, true);
 
-		beanSession = opContext.getBeanContext().getSession();
+		marshallingSession = opContext.getMarshallingContext().getSession();
 
 		partParserSession = opContext.getPartParser().getPartSession();
 
@@ -487,11 +487,11 @@ public class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the {@link BeanSession} associated with this request.
+	 * Returns the {@link MarshallingSession} associated with this request.
 	 *
 	 * @return The request bean session.
 	 */
-	public BeanSession getBeanSession() { return beanSession; }
+	public MarshallingSession getMarshallingSession() { return marshallingSession; }
 
 	/**
 	 * Returns the charset specified on the <c>Content-Type</c> header, or <js>"UTF-8"</js> if not specified.
@@ -1177,7 +1177,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public <T> T getRequest(RequestBeanMeta rbm) {
 		try {
 			var c = (Class<T>)rbm.getClassMeta().inner();
-			final BeanSession bs = getBeanSession();
+			final MarshallingSession bs = getMarshallingSession();
 			final BeanMeta<T> bm = bs.getBeanMeta(c);
 			return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
 				RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());

@@ -2,13 +2,13 @@
 
 ## Architecture Overview
 
-The `@Schema` annotation and `HttpPartSchema.validateOutput()` / `validateInput()` validation logic already exist. The goal is to wire this validation into the bean property get/set lifecycle, gated by a new `validateSchema` flag on `BeanContext`.
+The `@Schema` annotation and `HttpPartSchema.validateOutput()` / `validateInput()` validation logic already exist. The goal is to wire this validation into the bean property get/set lifecycle, gated by a new `validateSchema` flag on `MarshallingContext`.
 
 ```mermaid
 flowchart TD
     subgraph config [Configuration]
-        Builder["BeanContext.Builder\n.validateSchema()"]
-        BC["BeanContext\nvalidateSchema=true"]
+        Builder["MarshallingContext.Builder\n.validateSchema()"]
+        BC["MarshallingContext\nvalidateSchema=true"]
     end
     subgraph metadata [Metadata - Built Once]
         BPM["BeanPropertyMeta\nhttpPartSchema field"]
@@ -31,9 +31,9 @@ flowchart TD
 
 ## Key Files to Modify
 
-### 1. Add `validateSchema` flag to `BeanContext`
+### 1. Add `validateSchema` flag to `MarshallingContext`
 
-Follow the established pattern (e.g., `ignoreUnknownBeanProperties`) in [BeanContext.java](../juneau-core/juneau-marshall/src/main/java/org/apache/juneau/BeanContext.java):
+Follow the established pattern (e.g., `ignoreUnknownBeanProperties`) in [MarshallingContext.java](../juneau-core/juneau-marshall/src/main/java/org/apache/juneau/MarshallingContext.java):
 
 - Add `PROP_validateSchema` constant (~line 191)
 - Add `private boolean validateSchema` to `Builder` (~line 248)
@@ -41,14 +41,14 @@ Follow the established pattern (e.g., `ignoreUnknownBeanProperties`) in [BeanCon
 - Copy in all `Builder` copy constructors
 - Add `validateSchema()` and `validateSchema(boolean)` builder methods (following pattern of `ignoreUnknownBeanProperties()` ~line 2384)
 - Add to `hashKey()` method for proper caching
-- Add `private final boolean validateSchema` to `BeanContext` (~line 3647)
-- Assign in `BeanContext` constructor (~line 3694)
+- Add `private final boolean validateSchema` to `MarshallingContext` (~line 3647)
+- Assign in `MarshallingContext` constructor (~line 3694)
 - Add `isValidateSchema()` getter
 - Add to `properties()` method
 
-### 2. Expose flag in `BeanSession`
+### 2. Expose flag in `MarshallingSession`
 
-In [BeanSession.java](../juneau-core/juneau-marshall/src/main/java/org/apache/juneau/BeanSession.java):
+In [MarshallingSession.java](../juneau-core/juneau-marshall/src/main/java/org/apache/juneau/MarshallingSession.java):
 
 - Add `isValidateSchema()` delegating to `ctx.isValidateSchema()`
 
@@ -97,9 +97,9 @@ public Object get(BeanMap<?> m, String pName) {
 }
 ```
 
-### 6. Expose through `BeanContextable.Builder`
+### 6. Expose through `MarshallingContextable.Builder`
 
-In [BeanContextable.java](../juneau-core/juneau-marshall/src/main/java/org/apache/juneau/BeanContextable.java) `Builder` class:
+In [MarshallingContextable.java](../juneau-core/juneau-marshall/src/main/java/org/apache/juneau/MarshallingContextable.java) `Builder` class:
 
 Add `validateSchema()` and `validateSchema(boolean)` methods delegating to `bcBuilder.validateSchema()`, following the pattern of other delegated methods. This makes the flag available on `Parser.Builder`, `Serializer.Builder`, and all subclasses.
 
@@ -192,7 +192,7 @@ public static class MyBean {
 
 ## Documentation
 
-### Javadoc on `BeanContext.Builder.validateSchema()`
+### Javadoc on `MarshallingContext.Builder.validateSchema()`
 
 Add detailed Javadoc explaining:
 - What the flag does

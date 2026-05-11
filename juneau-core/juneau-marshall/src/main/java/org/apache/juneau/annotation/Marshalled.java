@@ -46,7 +46,7 @@ import org.apache.juneau.swap.*;
 @Retention(RUNTIME)
 @Inherited
 @SuppressWarnings({
-	"java:S1452"  // Wildcard required - Class<? extends BeanInterceptor<?>> for interceptor definition
+	"java:S1452"  // Wildcard required - Class<? extends MarshallingInterceptor<?>> for interceptor definition
 })
 public @interface Marshalled {
 
@@ -57,7 +57,7 @@ public @interface Marshalled {
 	 * Defaults to {@link MarshalledAs#DETECT} (auto-detection).
 	 * Use {@link MarshalledAs#STRING} to serialize via {@code toString()} and deserialize via
 	 * {@code fromString}/{@code valueOf}/single-String constructor — equivalent to the former
-	 * {@code BeanStringSwap} pattern.
+	 * {@code MarshallingStringSwap} pattern.
 	 *
 	 * @return The marshalling strategy.
 	 */
@@ -81,7 +81,7 @@ public @interface Marshalled {
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -113,8 +113,8 @@ public @interface Marshalled {
 	 * 		POJO examples can also be defined on classes via the following:
 	 * 		<ul class='spaced-list'>
 	 * 			<li>A static field annotated with {@link Example @Example}.
-	 * 			<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-	 * 			<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+	 * 			<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link MarshallingSession} argument.
+	 * 			<li>A static method with name <c>example</c> with no arguments or one {@link MarshallingSession} argument.
 	 * 		</ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
@@ -152,9 +152,9 @@ public @interface Marshalled {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(Class, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(String, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesExcludes(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesExcludes(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesExcludes(Map)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -171,7 +171,7 @@ public @interface Marshalled {
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanFactory}
 	 * 	<li class='ja'>{@link MarshalledProp#factory()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanStore(org.apache.juneau.commons.inject.BeanStore)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanStore(org.apache.juneau.commons.inject.BeanStore)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -207,7 +207,7 @@ public @interface Marshalled {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link MarshalledConfig#findFluentSetters()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#findFluentSetters()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#findFluentSetters()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -239,12 +239,12 @@ public @interface Marshalled {
 	 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link BeanInterceptor}
+	 * 	<li class='jc'>{@link MarshallingInterceptor}
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	Class<? extends BeanInterceptor<?>> interceptor() default BeanInterceptor.Void.class;
+	Class<? extends MarshallingInterceptor<?>> interceptor() default MarshallingInterceptor.Void.class;
 
 	/**
 	 * Identifies a class to be used as the interface class for this and all subclasses.
@@ -307,9 +307,9 @@ public @interface Marshalled {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(Class, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(String, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanProperties(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanProperties(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanProperties(Map)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -330,7 +330,7 @@ public @interface Marshalled {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#propertyNamer(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#propertyNamer(Class)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -357,9 +357,9 @@ public @interface Marshalled {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(String, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesReadOnly(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesReadOnly(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesReadOnly(Map)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -421,7 +421,7 @@ public @interface Marshalled {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -446,7 +446,7 @@ public @interface Marshalled {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link MarshalledConfig#typePropertyName()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#typePropertyName(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -480,9 +480,9 @@ public @interface Marshalled {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Class, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(String, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Map)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesWriteOnly(Class, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesWriteOnly(String, String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesWriteOnly(Map)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -511,7 +511,7 @@ public @interface Marshalled {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#unsortedProperties()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#unsortedProperties()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

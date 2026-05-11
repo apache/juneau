@@ -124,8 +124,8 @@ class RestClient_Response_Headers_Test extends TestBase {
 		var m2 = Value.empty();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m2,LinkedList.class,Integer.class);
 
-		ClassMeta<LinkedList<Integer>> cm1 = BeanContext.DEFAULT.getClassMeta(LinkedList.class, Integer.class);
-		var cm2 = BeanContext.DEFAULT.getClassMeta(Integer.class);
+		ClassMeta<LinkedList<Integer>> cm1 = MarshallingContext.DEFAULT.getClassMeta(LinkedList.class, Integer.class);
+		var cm2 = MarshallingContext.DEFAULT.getClassMeta(Integer.class);
 
 		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(cm1).get();
 		assertList(l, "1", "2");

@@ -218,7 +218,7 @@
 		<p>
 			The following example shows how an HTML5 form template object can be created that gets serialized as a 
 			populated HTML5 {@link org.apache.juneau.bean.html5.Form} bean.
-			It takes advantage of the special <code>swap(BeanSession)</code> method that serializers will use to 
+			It takes advantage of the special <code>swap(MarshallingSession)</code> method that serializers will use to 
 			convert the object to a serialized form before serialization.
 			The return type of this method can be any serializable type.
 			In this case, we are defining a template for a reusable HTML form with two simple fields.  
@@ -245,7 +245,7 @@
 		
 		<jc>// Special swap method that converts this template to a serializable bean,
 		// in this case an HTML5 Form bean. </jc>
-		<jk>public</jk> Form swap(BeanSession <jv>session</jv>) {
+		<jk>public</jk> Form swap(MarshallingSession <jv>session</jv>) {
 			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
 				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
 				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)
@@ -295,7 +295,7 @@
 			<jk>this</jk>.<jf>value2</jf> = <jv>value2</jv>;
 		}
 		
-		<jk>public</jk> Form swap(BeanSession <jv>session</jv>) {
+		<jk>public</jk> Form swap(MarshallingSession <jv>session</jv>) {
 			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
 				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
 				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)

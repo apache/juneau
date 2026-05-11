@@ -113,7 +113,7 @@ import org.apache.juneau.xml.*;
 	"resource",   // Resource management handled externally
 	"java:S3740"  // Raw Class/Supplier types used for fluent REST request building where response type is unknown at construction time
 })
-public class RestRequest extends BeanSession implements HttpUriRequest, Configurable, AutoCloseable {
+public class RestRequest extends MarshallingSession implements HttpUriRequest, Configurable, AutoCloseable {
 
 	// Property name constants
 	private static final String PROP_ignoreErrors = "ignoreErrors";
@@ -245,7 +245,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
 	protected RestRequest(RestClient client, URI uri, String method, boolean hasBody) throws RestCallException {
-		super(assertArgNotNull(ARG_client, client).getBeanContext().createSession());
+		super(assertArgNotNull(ARG_client, client).getMarshallingContext().createSession());
 		this.client = client;
 		this.request = createInnerRequest(assertArgNotNull(ARG_method, method), assertArgNotNull(ARG_uri, uri), hasBody);
 		this.errorCodes = client.errorCodes;
@@ -2141,7 +2141,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 								"Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
 						throw new RestCallException(null, null, "No matching serializer for media type ''{0}''", contentType);
 					}
-					entity = stringEntity(input2 == null ? "" : BeanContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN));
+					entity = stringEntity(input2 == null ? "" : MarshallingContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN));
 				}
 
 				request2.setEntity(entity);
@@ -2675,7 +2675,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return new SerializedPart(name, value, type, getPartSerializerSession(serializer), schema, skipIfEmpty);
 	}
 
-	@Override /* Overridden from BeanSession */
+	@Override /* Overridden from MarshallingSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(ARG_client, client.properties())

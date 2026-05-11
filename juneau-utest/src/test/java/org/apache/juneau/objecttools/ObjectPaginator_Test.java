@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class ObjectPaginator_Test extends TestBase {
 
 	ObjectPaginator op = ObjectPaginator.create();
-	BeanSession bs = BeanContext.DEFAULT_SESSION;
+	MarshallingSession bs = MarshallingContext.DEFAULT_SESSION;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Null input

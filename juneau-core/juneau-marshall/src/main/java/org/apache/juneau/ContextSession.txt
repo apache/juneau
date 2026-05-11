@@ -22,17 +22,17 @@ Base class: ContextSession (abstract)
 
 Direct subclasses of ContextSession:
 ------------------------------------
-1. BeanSession
+1. MarshallingSession
 2. RestSession
 3. RestOpSession
 
-Classes extending BeanSession:
+Classes extending MarshallingSession:
 -------------------------------
 4. ParserSession
-5. BeanTraverseSession
-6. RestRequest (in rest-client, extends BeanSession)
+5. MarshallingTraverseSession
+6. RestRequest (in rest-client, extends MarshallingSession)
 
-Classes extending BeanTraverseSession:
+Classes extending MarshallingTraverseSession:
 --------------------------------------
 7. SerializerSession
 8. JsonSchemaGeneratorSession

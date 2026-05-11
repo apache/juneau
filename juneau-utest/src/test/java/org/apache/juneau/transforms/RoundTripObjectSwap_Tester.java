@@ -30,8 +30,8 @@ import org.apache.juneau.swap.*;
  */
 public class RoundTripObjectSwap_Tester<T,S> {
 
-	public static <T,S> Builder<T,S> create(int index, String label, T object, ObjectSwap<T,S> swap, S expected, BeanSession beanSession) {
-		return new Builder<>(index, label, ()->object, swap, expected, beanSession);
+	public static <T,S> Builder<T,S> create(int index, String label, T object, ObjectSwap<T,S> swap, S expected, MarshallingSession marshallingSession) {
+		return new Builder<>(index, label, ()->object, swap, expected, marshallingSession);
 	}
 
 	public static class Builder<T,S> {
@@ -40,16 +40,16 @@ public class RoundTripObjectSwap_Tester<T,S> {
 		private Supplier<T> objectSupplier;
 		private ObjectSwap<T,S> swap;
 		private S expected;
-		private BeanSession beanSession;
+		private MarshallingSession marshallingSession;
 		private String exceptionMsg;
 
-		public Builder(int index, String label, Supplier<T> objectSupplier, ObjectSwap<T,S> swap, S expected, BeanSession beanSession) {
+		public Builder(int index, String label, Supplier<T> objectSupplier, ObjectSwap<T,S> swap, S expected, MarshallingSession marshallingSession) {
 			this.index = index;
 			this.label = label;
 			this.objectSupplier = objectSupplier;
 			this.swap = swap;
 			this.expected = expected;
-			this.beanSession = beanSession;
+			this.marshallingSession = marshallingSession;
 		}
 
 		public Builder<T,S> exceptionMsg(String v) {
@@ -66,7 +66,7 @@ public class RoundTripObjectSwap_Tester<T,S> {
 	private final Supplier<T> objectSupplier;
 	private final ObjectSwap<T,S> swap;
 	private final S expected;
-	private final BeanSession beanSession;
+	private final MarshallingSession marshallingSession;
 	private final String exceptionMsg;
 
 	private RoundTripObjectSwap_Tester(Builder<T,S> b) {
@@ -74,14 +74,14 @@ public class RoundTripObjectSwap_Tester<T,S> {
 		objectSupplier = b.objectSupplier;
 		swap = b.swap;
 		expected = b.expected;
-		beanSession = b.beanSession;
+		marshallingSession = b.marshallingSession;
 		exceptionMsg = b.exceptionMsg;
 	}
 
 	public void testSwap() throws Exception {
 		try {
 			var o = objectSupplier.get();
-			var s = swap.swap(beanSession, o);
+			var s = swap.swap(marshallingSession, o);
 			if (neq(expected, s)) {
 				fail("Test [" + label + " swap] failed. Expected=[" + expected + "], Actual=[" + s + "]");
 			}
@@ -99,9 +99,9 @@ public class RoundTripObjectSwap_Tester<T,S> {
 	public void testUnswap() throws Exception {
 		try {
 			var o = objectSupplier.get();
-			var s = swap.swap(beanSession, o);
-			var o2 = swap.unswap(beanSession, s, beanSession.getClassMetaForObject(o));
-			var s2 = swap.swap(beanSession, o2);
+			var s = swap.swap(marshallingSession, o);
+			var o2 = swap.unswap(marshallingSession, s, marshallingSession.getClassMetaForObject(o));
+			var s2 = swap.swap(marshallingSession, o2);
 			if (neq(s, s2)) {
 				System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");  // NOT DEBUG
 				fail("Test [" + label + " unswap] failed. Expected=[" + s + "], Actual=[" + s2 + "]");

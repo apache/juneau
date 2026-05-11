@@ -142,7 +142,7 @@ import org.apache.juneau.xml.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_autoCloseStreams)
 })
-public class Parser extends BeanContextable {
+public class Parser extends MarshallingContextable {
 
 	// Property name constants
 	private static final String PROP_autoCloseStreams = "autoCloseStreams";
@@ -154,7 +154,7 @@ public class Parser extends BeanContextable {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanContextable.Builder {
+	public static class Builder extends MarshallingContextable.Builder {
 
 		private boolean autoCloseStreams;
 		private boolean trimStrings;
@@ -280,14 +280,14 @@ public class Parser extends BeanContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
+		public Builder marshallingContext(MarshallingContext.Builder value) {
+			super.marshallingContext(value);
 			return this;
 		}
 
@@ -304,7 +304,7 @@ public class Parser extends BeanContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.MarshallingInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}
@@ -1164,7 +1164,7 @@ public class Parser extends BeanContextable {
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
 		return getSession().parse(input, type, args);
@@ -1369,7 +1369,7 @@ public class Parser extends BeanContextable {
 	 */
 	protected final boolean isUnbuffered() { return unbuffered; }
 
-	@Override /* Overridden from BeanContextable */
+	@Override /* Overridden from MarshallingContextable */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
 			.a(PROP_autoCloseStreams, autoCloseStreams)

@@ -50,7 +50,7 @@ import org.apache.juneau.serializer.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class JsonSchemaGeneratorSession extends BeanTraverseSession {
+public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -73,7 +73,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanTraverseSession.Builder {
+	public static class Builder extends MarshallingTraverseSession.Builder {
 
 		private JsonSchemaGenerator ctx;
 
@@ -262,10 +262,10 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 *
 	 * @param cm The object type.
 	 * @return The schema for the type.
-	 * @throws BeanRecursionException Bean recursion occurred.
+	 * @throws MarshallingRecursionException Bean recursion occurred.
 	 * @throws SerializeException Error occurred.
 	 */
-	public JsonMap getSchema(ClassMeta<?> cm) throws BeanRecursionException, SerializeException {
+	public JsonMap getSchema(ClassMeta<?> cm) throws MarshallingRecursionException, SerializeException {
 		return getSchema(cm, "root", null, false, false, null);
 	}
 
@@ -276,10 +276,10 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * 	The object.
 	 * 	<br>Can either be a POJO or a <c>Class</c>/<c>Type</c>.
 	 * @return The schema for the type.
-	 * @throws BeanRecursionException Bean recursion occurred.
+	 * @throws MarshallingRecursionException Bean recursion occurred.
 	 * @throws SerializeException Error occurred.
 	 */
-	public JsonMap getSchema(Object o) throws BeanRecursionException, SerializeException {
+	public JsonMap getSchema(Object o) throws MarshallingRecursionException, SerializeException {
 		return getSchema(toClassMeta(o), "root", null, false, false, null);
 	}
 
@@ -288,10 +288,10 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 *
 	 * @param type The object type.
 	 * @return The schema for the type.
-	 * @throws BeanRecursionException Bean recursion occurred.
+	 * @throws MarshallingRecursionException Bean recursion occurred.
 	 * @throws SerializeException Error occurred.
 	 */
-	public JsonMap getSchema(Type type) throws BeanRecursionException, SerializeException {
+	public JsonMap getSchema(Type type) throws MarshallingRecursionException, SerializeException {
 		return getSchema(getClassMeta(type), "root", null, false, false, null);
 	}
 
@@ -335,7 +335,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		"unchecked", // Type erasure requires unchecked casts
 	})
 	private JsonMap getSchema(ClassMeta<?> eType, String attrName, List<String> pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
-		throws BeanRecursionException, SerializeException {
+		throws MarshallingRecursionException, SerializeException {
 
 		if (ctx.isIgnoredType(eType))
 			return null;
@@ -537,7 +537,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return
 	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
 	 */
-	protected final BeanDefMapper getBeanDefMapper() { return ctx.getBeanDefMapper(); }
+	protected final MarshallingDefMapper getBeanDefMapper() { return ctx.getBeanDefMapper(); }
 
 	/**
 	 * Ignore types from schema definitions.

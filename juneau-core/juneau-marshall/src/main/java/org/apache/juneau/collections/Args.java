@@ -325,13 +325,13 @@ public class Args extends JsonMap {
 	}
 
 	@Override /* Overridden from JsonMap */
-	public Args session(BeanSession session) {
+	public Args session(MarshallingSession session) {
 		super.session(session);
 		return this;
 	}
 
 	@Override /* Overridden from JsonMap */
-	public Args setBeanSession(BeanSession value) {
+	public Args setBeanSession(MarshallingSession value) {
 		super.setBeanSession(value);
 		return this;
 	}

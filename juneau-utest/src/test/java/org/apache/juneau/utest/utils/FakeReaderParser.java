@@ -102,11 +102,11 @@ public class FakeReaderParser extends ReaderParser implements HttpPartParser {
 
 	@Override
 	public <T> ClassMeta<T> getClassMeta(Class<T> c) {
-		return this.getBeanContext().getClassMeta(c);
+		return this.getMarshallingContext().getClassMeta(c);
 	}
 
 	@Override
 	public <T> ClassMeta<T> getClassMeta(Type t, Type... args) {
-		return this.getBeanContext().getClassMeta(t, args);
+		return this.getMarshallingContext().getClassMeta(t, args);
 	}
 }

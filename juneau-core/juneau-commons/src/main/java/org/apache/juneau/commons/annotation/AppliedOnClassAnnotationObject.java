@@ -84,7 +84,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
  */
 // java:S2160: Intentionally inherit equals/hashCode from AnnotationObject. Overriding would require
 // instanceof AppliedOnClassAnnotationObject, which breaks comparison with declarative annotations (JDK proxies),
-// causing BeanContext/PropertyStore cache misses and schema validation failures (see XmlAnnotation_Test, FormData_Test).
+// causing MarshallingContext/PropertyStore cache misses and schema validation failures (see XmlAnnotation_Test, FormData_Test).
 @SuppressWarnings({
 	"java:S2160" // Inherits equals/hashCode from parent; annotation identity based on type and attributes
 })

@@ -382,7 +382,7 @@ public class RestContext extends Context {
 	private void registerFrameworkDefaults(WritableBeanStore bs) {
 		// @formatter:off
 		// Unnamed framework types backed by per-resource memoizers.
-		bs.addDefaultSupplier(BeanContext.class, beanContext::get);
+		bs.addDefaultSupplier(MarshallingContext.class, marshallingContext::get);
 		bs.addDefaultSupplier(EncoderSet.class, encoders::get);
 		bs.addDefaultSupplier(SerializerSet.class, serializers::get);
 		bs.addDefaultSupplier(ParserSet.class, parsers::get);
@@ -430,22 +430,22 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * The {@link BeanContext} for this resource.
+	 * The {@link MarshallingContext} for this resource.
 	 *
 	 * <p>
 	 * Triggered eagerly in the constructor after {@code annotationWork} is set, so that annotation
 	 * work is applied before the builder is used by any other memoizer.
 	 */
-	private final Memoizer<BeanContext.Builder> beanContextBuilder = memoizer(() -> {
-		var v = Value.of(BeanContext.create());
+	private final Memoizer<MarshallingContext.Builder> beanContextBuilder = memoizer(() -> {
+		var v = Value.of(MarshallingContext.create());
 		v.get().apply(annotationWork);
 		return v.get();
 	});
 
 	/**
-	 * The {@link BeanContext} for this resource.
+	 * The {@link MarshallingContext} for this resource.
 	 */
-	private final Memoizer<BeanContext> beanContext = memoizer(() -> beanContextBuilder.get().build());
+	private final Memoizer<MarshallingContext> marshallingContext = memoizer(() -> beanContextBuilder.get().build());
 
 	/**
 	 * The unresolved (bootstrap-time) {@link Config} for this resource.
@@ -1068,7 +1068,7 @@ public class RestContext extends Context {
 		initializeFrameworkBeansForRestOps();
 		var bs = beanStore();
 		var b = RestOperations.create(bs);
-		var ap = getBeanContext().getAnnotationProvider();
+		var ap = getMarshallingContext().getAnnotationProvider();
 		var rci = ClassInfo.of(resource().get());
 		for (var mi : rci.getPublicMethods()) {
 			var al = rstream(ap.find(mi)).filter(REST_OP_GROUP).collect(Collectors.toList());
@@ -1919,9 +1919,9 @@ public class RestContext extends Context {
 	 *
 	 * @return The bean store associated with this context.
 	 */
-	public BeanContext getBeanContext() { return beanStore.getBean(BeanContext.class).orElse(null); }
+	public MarshallingContext getMarshallingContext() { return beanStore.getBean(MarshallingContext.class).orElse(null); }
 
-	BeanContext.Builder         getBeanContextBuilder()          { return beanContextBuilder.get(); }
+	MarshallingContext.Builder         getBeanContextBuilder()          { return beanContextBuilder.get(); }
 	EncoderSet.Builder          getEncodersBuilder()             { return encodersBuilder.get(); }
 	JsonSchemaGenerator.Builder getJsonSchemaGeneratorBuilder()  { return jsonSchemaGeneratorBuilder.get(); }
 	ParserSet.Builder           getParsersBuilder()              { return parsersBuilder.get(); }
@@ -2557,7 +2557,7 @@ public class RestContext extends Context {
 	 * have run before {@link RestOpContext} instances are built.
 	 */
 	private void initializeFrameworkBeansForRestOps() {
-		getBeanContext();
+		getMarshallingContext();
 		getEncoders();
 		getSerializers();
 		getParsers();
