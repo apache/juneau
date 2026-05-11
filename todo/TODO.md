@@ -32,7 +32,6 @@
 
 - [TODO-20] Rethink how debugging works in RestServlet.  Can we come up with a simpler system?
 
-- [TODO-21] Rename and relocate bean/inject annotations: reduce confusion with Spring naming, align annotation vocabulary with what each actually does, and move resource/store contribution annotations into `org.apache.juneau.commons.inject`. See `todo/TODO-21-bean-annotations-inject-package.md`.
 
 - [TODO-23] New feature support in org.apache.juneau.commons.inject — roadmap for a simplified inject API (not a Spring replacement). See `todo/TODO-23-commons-inject-framework-roadmap.md`.
 
