@@ -117,6 +117,34 @@ public interface BeanStore {
 	boolean hasBean(Class<?> beanType, String name);
 
 	/**
+	 * Convenience shortcut for instantiating a bean of the specified type using this store.
+	 *
+	 * <p>
+	 * Equivalent to:
+	 * <p class='bjava'>
+	 * 	BeanInstantiator.<jsm>of</jsm>(<jv>type</jv>, <jk>this</jk>).run()
+	 * </p>
+	 *
+	 * <p>
+	 * Use this when you don't need any of {@link BeanInstantiator}'s configuration options
+	 * (subtype, factory-method names, builder hooks, etc.).  For more control over instantiation,
+	 * use {@link BeanInstantiator#of(Class, BeanStore)} directly.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Instantiate a bean using this store for parameter resolution</jc>
+	 * 	MyService <jv>service</jv> = <jv>beanStore</jv>.instantiate(MyService.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The bean type.
+	 * @param type The bean type to instantiate.
+	 * @return The instantiated bean.
+	 */
+	default <T> T instantiate(Class<T> type) {
+		return BeanInstantiator.of(type, this).run();
+	}
+
+	/**
 	 * Returns the supplier for an unnamed bean of the specified type.
 	 *
 	 * <p>
@@ -164,7 +192,7 @@ public interface BeanStore {
 	 *
 	 * <p>
 	 * The default implementation returns {@link Optional#empty()}.
-	 * Override in concrete stores (see {@link BasicBeanStore2}) to enable factory-method scanning.
+	 * Override in concrete stores (see {@link BasicBeanStore}) to enable factory-method scanning.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -222,7 +250,7 @@ public interface BeanStore {
 	 *
 	 * <p>
 	 * The default implementation returns {@link Optional#empty()} (no binding).  Override in concrete
-	 * stores (see {@link BasicBeanStore2}) to enable type binding.
+	 * stores (see {@link BasicBeanStore}) to enable type binding.
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The bean type whose implementation class is being looked up.

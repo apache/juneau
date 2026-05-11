@@ -22,7 +22,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 
 /**
@@ -40,10 +39,14 @@ public class MethodExecStore {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<MethodExecStore> {
+	public static class Builder {
 
+		final BeanStore beanStore;
 		ThrownStore thrownStore;
 		Class<? extends MethodExecStats> statsImplClass;
+
+		private MethodExecStore impl;
+		private Class<? extends MethodExecStore> type;
 
 		/**
 		 * Constructor.
@@ -51,12 +54,26 @@ public class MethodExecStore {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(BeanStore beanStore) {
-			super(MethodExecStore.class, beanStore);
+			this.beanStore = beanStore;
 		}
 
-		@Override /* Overridden from BeanBuilder */
+		/**
+		 * Returns the bean store.
+		 *
+		 * @return The bean store.
+		 */
+		public BeanStore beanStore() {
+			return beanStore;
+		}
+
+		/**
+		 * Overrides the bean returned by the {@link #build()} method with a pre-instantiated instance.
+		 *
+		 * @param value The setting value.
+		 * @return This object.
+		 */
 		public Builder impl(Object value) {
-			super.impl(value);
+			impl = (MethodExecStore) value;
 			return this;
 		}
 
@@ -100,15 +117,33 @@ public class MethodExecStore {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
+		/**
+		 * Overrides the bean type produced by the {@link #build()} method.
+		 *
+		 * @param value The setting value.
+		 * @return This object.
+		 */
+		@SuppressWarnings("unchecked")
 		public Builder type(Class<?> value) {
-			super.type(value);
+			type = (Class<? extends MethodExecStore>) value;
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected MethodExecStore buildDefault() {
-			return new MethodExecStore(this);
+		/**
+		 * Creates the bean.
+		 *
+		 * @return A new bean.
+		 */
+		public MethodExecStore build() {
+			if (nn(impl))
+				return impl;
+			if (type == null || type == MethodExecStore.class)
+				return new MethodExecStore(this);
+			return BeanInstantiator.of(MethodExecStore.class, beanStore)
+				.type(type)
+				.noBuilder()
+				.addBean(Builder.class, this)
+				.run();
 		}
 	}
 
@@ -118,7 +153,7 @@ public class MethodExecStore {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BasicBeanStore2.INSTANCE);
+		return new Builder(BasicBeanStore.INSTANCE);
 	}
 
 	/**

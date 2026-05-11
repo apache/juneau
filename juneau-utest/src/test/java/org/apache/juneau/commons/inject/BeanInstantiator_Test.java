@@ -40,18 +40,18 @@ import java.util.logging.Level;
 })
 class BeanInstantiator_Test extends TestBase {
 
-	private BasicBeanStore2 beanStore;
+	private BasicBeanStore beanStore;
 
 	@BeforeEach
 	void setUp() {
-		beanStore = new BasicBeanStore2(null);
+		beanStore = new BasicBeanStore(null);
 	}
 
 	/**
 	 * Helper method to create a BeanInstantiator instance with the test's beanStore.
 	 * Reduces repetition of BeanInstantiator.of(Class, beanStore) pattern.
 	 */
-	private <T> BeanInstantiator<T> bc(Class<T> c) {
+	private <T> BeanInstantiator.Builder<T> bc(Class<T> c) {
 		return BeanInstantiator.of(c, beanStore);
 	}
 
@@ -1188,7 +1188,7 @@ class BeanInstantiator_Test extends TestBase {
 		@Test
 		void d10_createChildBeanUsingParentBuilderAnnotation() {
 			var bc = bc(D10_ParentBeanWithBuilderAnnotation.class)
-				.beanSubType(D10_ChildBeanWithInheritedBuilderAnnotation.class)
+				.type(D10_ChildBeanWithInheritedBuilderAnnotation.class)
 				.debug();
 
 			D10_ParentBeanWithBuilderAnnotation bean = bc.run();
@@ -1280,7 +1280,7 @@ class BeanInstantiator_Test extends TestBase {
 		@Test
 		void d12_createChildBeanUsingParentInnerBuilderClass() {
 			var bean = bc(D12_ParentWithInnerBuilderClass.class)
-				.beanSubType(D12_ChildWithInheritedInnerBuilderClass.class)
+				.type(D12_ChildWithInheritedInnerBuilderClass.class)
 				.run();
 
 			assertInstanceOf(D12_ChildWithInheritedInnerBuilderClass.class, bean);
@@ -1912,7 +1912,7 @@ class BeanInstantiator_Test extends TestBase {
 		@Test
 		void d28_builderMethodReturningParentTypeFallsThroughToConstructor() {
 			var creator = bc(D28_ParentBeanForBuilderMethod.class)
-				.beanSubType(D28_ChildBeanForBuilderMethod.class)
+				.type(D28_ChildBeanForBuilderMethod.class)
 				.builder(D28_BuilderForParentMethod.class);
 
 			// Constructor `D28_ChildBeanForBuilderMethod(D28_BuilderForParentMethod builder)` matches; bean
@@ -1970,18 +1970,18 @@ class BeanInstantiator_Test extends TestBase {
 
 	/**
 	 * Tests type specification and subtype creation:
-	 * - Creating beans with specified subtypes using beanSubType()
+	 * - Creating beans with specified subtypes using type()
 	 * - Parent/child bean relationships
 	 * - Type resolution and validation
 	 */
 	@Nested class E_typeSpecification extends TestBase {
 
 		/**
-		 * Tests creating a bean with a specified subtype using beanSubType() method.
+		 * Tests creating a bean with a specified subtype using type() method.
 		 */
 		@Test
 		void e01_createWithBeanSubType() {
-			var bean = bc(ParentBean.class).beanSubType(ChildBean.class).run();
+			var bean = bc(ParentBean.class).type(ChildBean.class).run();
 
 			assertInstanceOf(ChildBean.class, bean);
 		}
@@ -2319,18 +2319,18 @@ class BeanInstantiator_Test extends TestBase {
 	/**
 	 * Tests method chaining and fluent API:
 	 * - Methods that return 'this' for chaining
-	 * - addBean(), builder(), beanSubType(), etc.
+	 * - addBean(), builder(), type(), etc.
 	 * - Fluent API usage patterns
 	 */
 	@Nested class I_methodChaining extends TestBase {
 
 		/**
-		 * Tests that beanSubType() returns this for method chaining.
+		 * Tests that type() returns this for method chaining.
 		 */
 		@Test
 		void i02_beanSubTypeReturnsThis() {
 			var creator = BeanInstantiator.of(ParentBean.class);
-			var result = creator.beanSubType(ChildBean.class);
+			var result = creator.type(ChildBean.class);
 			assertSame(creator, result);
 		}
 
@@ -2389,7 +2389,7 @@ class BeanInstantiator_Test extends TestBase {
 		void i08_implementationMethodSetsExistingBean() {
 			var preConfiguredBean = new SimpleBean();
 
-			var result = bc(SimpleBean.class).implementation(preConfiguredBean).run();
+			var result = bc(SimpleBean.class).impl(preConfiguredBean).run();
 
 			assertSame(preConfiguredBean, result);
 		}
@@ -2406,7 +2406,7 @@ class BeanInstantiator_Test extends TestBase {
 			};
 
 			var result = bc(SimpleBean.class)
-				.implementation(bean)
+				.impl(bean)
 				.run();
 
 			assertSame(bean, result);
@@ -2490,7 +2490,7 @@ class BeanInstantiator_Test extends TestBase {
 		void k05_cachedWithImplementation() {
 			var preConfiguredBean = new SimpleBean();
 
-			var creator = bc(SimpleBean.class).implementation(preConfiguredBean).cached();
+			var creator = bc(SimpleBean.class).impl(preConfiguredBean).cached();
 
 			var bean1 = creator.run();
 			var bean2 = creator.run();
@@ -2798,7 +2798,7 @@ class BeanInstantiator_Test extends TestBase {
 			var hookRan = Flag.create();
 
 			var bean = bc(InitializableBean.class)
-				.implementation(preConfiguredBean)
+				.impl(preConfiguredBean)
 				.postCreateHook(b -> {
 					b.initialize();
 					hookRan.set();
@@ -3319,7 +3319,7 @@ class BeanInstantiator_Test extends TestBase {
 		@Test
 		void n08_debugWithImplementation() {
 			var impl = new SimpleBean();
-			var creator = bc(SimpleBean.class).implementation(impl).debug();
+			var creator = bc(SimpleBean.class).impl(impl).debug();
 
 			creator.run();
 
@@ -3355,12 +3355,12 @@ class BeanInstantiator_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that passing null to beanSubType() throws IllegalArgumentException.
+		 * Tests that passing null to type() throws IllegalArgumentException.
 		 */
 		@Test
 		void n12_beanSubTypeNullThrows() {
 			var creator = BeanInstantiator.of(SimpleBean.class);
-			assertThrows(IllegalArgumentException.class, () -> creator.beanSubType((Class<? extends SimpleBean>) null));
+			assertThrows(IllegalArgumentException.class, () -> creator.type((Class<? extends SimpleBean>) null));
 		}
 	}
 
@@ -3388,7 +3388,7 @@ class BeanInstantiator_Test extends TestBase {
 		 */
 		@Test
 		void o02_ofWithParentStore() {
-			var parentStore = new BasicBeanStore2(null);
+			var parentStore = new BasicBeanStore(null);
 			var testService = new TestService("parent-service");
 			parentStore.addBean(TestService.class, testService);
 
@@ -3415,7 +3415,7 @@ class BeanInstantiator_Test extends TestBase {
 		 */
 		@Test
 		void o04_ofWithParentStoreLocalOverrides() {
-			var parentStore = new BasicBeanStore2(null);
+			var parentStore = new BasicBeanStore(null);
 			var parentService = new TestService("parent");
 			parentStore.addBean(TestService.class, parentService);
 
@@ -3451,12 +3451,12 @@ class BeanInstantiator_Test extends TestBase {
 		}
 
 		/**
-		 * Tests that getBeanSubType() returns the set subtype when beanSubType() is called (protected method test).
+		 * Tests that getBeanSubType() returns the set subtype when type() is called (protected method test).
 		 */
 		@Test
 		void p02_getBeanSubTypeReturnsSubtypeWhenSet() {
 			var creator = bc(ParentBean.class);
-			creator.beanSubType(ChildBean.class);
+			creator.type(ChildBean.class);
 			var beanSubType = creator.getBeanSubType();
 
 			assertEquals(ChildBean.class.getName(), beanSubType.getName());
@@ -3514,7 +3514,7 @@ class BeanInstantiator_Test extends TestBase {
 		@Test
 		void p07_getBeanSubTypesReturnsHierarchyWhenSubtypeSet() {
 			var creator = bc(ParentBean.class);
-			creator.beanSubType(ChildBean.class);
+			creator.type(ChildBean.class);
 			var beanSubTypes = creator.getBeanSubTypes();
 
 			assertTrue(beanSubTypes.size() >= 2, "Should have at least beanSubType and beanType");
@@ -3530,7 +3530,7 @@ class BeanInstantiator_Test extends TestBase {
 		@Test
 		void p08_getBeanSubTypesIsCached() {
 			var creator = bc(ParentBean.class);
-			creator.beanSubType(ChildBean.class);
+			creator.type(ChildBean.class);
 
 			var beanSubTypes1 = creator.getBeanSubTypes();
 			var beanSubTypes2 = creator.getBeanSubTypes();
@@ -3681,7 +3681,7 @@ class BeanInstantiator_Test extends TestBase {
 		@Test
 		void p20_builderReturnsParentTypeNoConstructorAcceptsBuilder() {
 			var creator = bc(P20_ParentBeanForBuilderTest.class)
-				.beanSubType(P20_ChildBeanForBuilderTest.class)
+				.type(P20_ChildBeanForBuilderTest.class)
 				.builder(P20_BuilderForParentBean.class)
 				.debug();
 
@@ -3866,6 +3866,255 @@ class BeanInstantiator_Test extends TestBase {
 					return new Builder();
 				}
 			}
+		}
+	}
+
+	//====================================================================================================
+	// R - Phase 4 general-purpose API: silent, description, wrap, validate, copy, scope, or
+	//====================================================================================================
+	@Nested
+	@DisplayName("R - Phase 4 general-purpose API")
+	class R_phase4Api {
+
+		public static class R_SimpleBean {
+			public int value;
+			public R_SimpleBean() { this.value = 1; }
+			public R_SimpleBean(int v) { this.value = v; }
+		}
+
+		@Test
+		@DisplayName("R01 - wrap() applies a single transformer to the result")
+		void r01_wrapApplied() {
+			var bean = bc(R_SimpleBean.class)
+				.wrap(b -> { b.value = 99; return b; })
+				.run();
+			assertEquals(99, bean.value);
+		}
+
+		@Test
+		@DisplayName("R02 - wrap() applies multiple transformers in order")
+		void r02_wrapMultiple() {
+			var bean = bc(R_SimpleBean.class)
+				.wrap(b -> { b.value += 10; return b; })
+				.wrap(b -> { b.value *= 2; return b; })
+				.run();
+			assertEquals(22, bean.value);
+		}
+
+		@Test
+		@DisplayName("R03 - validate() throws when predicate fails")
+		void r03_validateThrows() {
+			var ex = assertThrows(RuntimeException.class, () ->
+				bc(R_SimpleBean.class).validate(b -> b.value > 100, "value must be > 100").run()
+			);
+			assertTrue(ex.getMessage().contains("value must be > 100"), "Message should mention validator failure");
+		}
+
+		@Test
+		@DisplayName("R04 - validate() passes when predicate succeeds")
+		void r04_validatePasses() {
+			var bean = bc(R_SimpleBean.class)
+				.validate(b -> b.value == 1, "value must be 1")
+				.run();
+			assertEquals(1, bean.value);
+		}
+
+		@Test
+		@DisplayName("R05 - scope(SINGLETON) caches the bean across calls")
+		void r05_scopeSingleton() {
+			var creator = bc(R_SimpleBean.class).scope(BeanInstantiator.Scope.SINGLETON);
+			var b1 = creator.run();
+			var b2 = creator.run();
+			assertSame(b1, b2, "Scope.SINGLETON should reuse the same instance");
+		}
+
+		@Test
+		@DisplayName("R06 - scope(PROTOTYPE) creates a new bean each call")
+		void r06_scopePrototype() {
+			var creator = bc(R_SimpleBean.class).scope(BeanInstantiator.Scope.PROTOTYPE);
+			var b1 = creator.run();
+			var b2 = creator.run();
+			assertNotSame(b1, b2, "Scope.PROTOTYPE should create new instances");
+		}
+
+		@Test
+		@DisplayName("R07 - copy() produces an independent builder with the same configuration")
+		void r07_copyIndependent() {
+			var orig = bc(R_SimpleBean.class).wrap(b -> { b.value = 7; return b; });
+			var copy = orig.copy();
+			copy.wrap(b -> { b.value = 42; return b; });
+			assertEquals(7, orig.run().value, "Original builder should be unchanged");
+			assertEquals(42, copy.run().value, "Copy should pick up its own wrappers");
+		}
+
+		@Test
+		@DisplayName("R08 - or() falls back to alternative when primary fails")
+		void r08_orAlternativeUsed() {
+			var primary = bc(R_SimpleBean.class)
+				.validate(b -> b.value > 100, "primary failed");
+			var alt = bc(R_SimpleBean.class)
+				.wrap(b -> { b.value = 200; return b; });
+			var bean = primary.or(alt).run();
+			assertEquals(200, bean.value, "Alternative should be used when primary validates false");
+		}
+
+		@Test
+		@DisplayName("R09 - or() uses primary when it succeeds")
+		void r09_orPrimaryWins() {
+			var primary = bc(R_SimpleBean.class)
+				.wrap(b -> { b.value = 5; return b; });
+			var alt = bc(R_SimpleBean.class)
+				.wrap(b -> { b.value = 200; return b; });
+			var bean = primary.or(alt).run();
+			assertEquals(5, bean.value);
+		}
+
+		@Test
+		@DisplayName("R10 - silent() suppresses log output but does not affect result")
+		void r10_silentSuppressesLog() {
+			var creator = bc(R_SimpleBean.class).silent();
+			var bean = creator.run();
+			assertNotNull(bean);
+		}
+
+		@Test
+		@DisplayName("R11 - description() is non-null on builder after set")
+		void r11_descriptionSet() {
+			var creator = bc(R_SimpleBean.class).description("test bean creator");
+			assertNotNull(creator.run());
+		}
+
+		@Test
+		@DisplayName("R12 - build() produces an immutable BeanInstantiator usable for run()")
+		void r12_buildProducesRunnable() {
+			BeanInstantiator<R_SimpleBean> compiled = bc(R_SimpleBean.class).build();
+			var bean = compiled.run();
+			assertNotNull(bean);
+		}
+
+		@Test
+		@DisplayName("R13 - build().run() and Builder.run() share cached state")
+		void r13_buildRunSharesCache() {
+			var builder = bc(R_SimpleBean.class).cached();
+			var compiled = builder.build();
+			var b1 = builder.run();
+			var b2 = compiled.run();
+			assertSame(b1, b2, "Compiled and builder run() should share cached bean");
+		}
+	}
+
+	//====================================================================================================
+	// S - Phase 5: pre-registered builder in bean store wins over static factory
+	//====================================================================================================
+	@Nested
+	@DisplayName("S - Phase 5 builder bean store lookup")
+	class S_phase5BuilderInStore {
+
+		public static class S_Bean {
+			final String value;
+			public S_Bean(String v) { this.value = v; }
+		}
+
+		public static class S_BeanBuilder {
+			String value = "default";
+			public S_BeanBuilder value(String v) { this.value = v; return this; }
+			public S_Bean build() { return new S_Bean(value); }
+			public static S_BeanBuilder create() { return new S_BeanBuilder(); }
+		}
+
+		@Test
+		@DisplayName("S01 - pre-registered builder is used instead of static create()")
+		void s01_preregisteredBuilderUsed() {
+			var preconfigured = new S_BeanBuilder().value("preconfigured");
+			beanStore.add(S_BeanBuilder.class, preconfigured);
+
+			var bean = bc(S_Bean.class).builder(S_BeanBuilder.class).run();
+			assertEquals("preconfigured", bean.value, "Should use pre-registered builder rather than create() factory");
+		}
+
+		@Test
+		@DisplayName("S02 - falls back to static create() when no builder is registered")
+		void s02_fallsBackToCreate() {
+			var bean = bc(S_Bean.class).builder(S_BeanBuilder.class).run();
+			assertEquals("default", bean.value, "Should fall back to static create() factory");
+		}
+	}
+
+	//====================================================================================================
+	// T - Phase 6: builderInitializer / injectBuilder / autoWireBuilder
+	//====================================================================================================
+	@Nested
+	@DisplayName("T - Phase 6 builder hooks and auto-wire")
+	class T_phase6BuilderHooks {
+
+		public static class T_Bean {
+			final String name;
+			final String greeting;
+			public T_Bean(String name, String greeting) {
+				this.name = name;
+				this.greeting = greeting;
+			}
+		}
+
+		public static class T_BeanBuilder {
+			String name = "default-name";
+			String greeting = "default-greeting";
+			public T_BeanBuilder name(String n) { this.name = n; return this; }
+			public T_BeanBuilder greeting(String g) { this.greeting = g; return this; }
+			public T_Bean build() { return new T_Bean(name, greeting); }
+			public static T_BeanBuilder create() { return new T_BeanBuilder(); }
+		}
+
+		@Test
+		@DisplayName("T01 - builderInitializer is applied before build()")
+		void t01_builderInitializerApplied() {
+			var bean = bc(T_Bean.class)
+				.builder(T_BeanBuilder.class)
+				.builderInitializer(b -> ((T_BeanBuilder) b).name("from-initializer"))
+				.run();
+			assertEquals("from-initializer", bean.name);
+			assertEquals("default-greeting", bean.greeting);
+		}
+
+		@Test
+		@DisplayName("T02 - multiple builderInitializers run in registration order")
+		void t02_builderInitializersOrdered() {
+			var bean = bc(T_Bean.class)
+				.builder(T_BeanBuilder.class)
+				.builderInitializer(b -> ((T_BeanBuilder) b).name("first"))
+				.builderInitializer(b -> ((T_BeanBuilder) b).name("second"))
+				.run();
+			assertEquals("second", bean.name, "Last initializer should win since it is applied last");
+		}
+
+		@Test
+		@DisplayName("T03 - autoWireBuilder() invokes setters with matching beans from store")
+		void t03_autoWireBuilderInvokesSetters() {
+			beanStore.add(String.class, "wired-greeting");
+			var bean = bc(T_Bean.class)
+				.builder(T_BeanBuilder.class)
+				.autoWireBuilder()
+				.run();
+			assertEquals("wired-greeting", bean.greeting, "Auto-wire should set greeting from String bean");
+			assertEquals("wired-greeting", bean.name, "Both setters take String, both should be auto-wired");
+		}
+
+		@Test
+		@DisplayName("T04 - autoWireBuilder() with no matching beans leaves defaults unchanged")
+		void t04_autoWireBuilderNoMatches() {
+			var bean = bc(T_Bean.class)
+				.builder(T_BeanBuilder.class)
+				.autoWireBuilder()
+				.run();
+			assertEquals("default-name", bean.name);
+			assertEquals("default-greeting", bean.greeting);
+		}
+
+		@Test
+		@DisplayName("T05 - injectBuilder() default is off (no auto-injection of builder fields)")
+		void t05_injectBuilderDefaultOff() {
+			var bean = bc(T_Bean.class).builder(T_BeanBuilder.class).run();
+			assertEquals("default-name", bean.name);
 		}
 	}
 

@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BasicBeanStore;
 import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -56,7 +56,7 @@ import org.apache.juneau.serializer.annotation.*;
 public abstract class McpRestServlet extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	private McpServerConfig config;
+	private transient McpServerConfig config;
 
 	/**
 	 * Returns the {@link McpServerConfig} backing this servlet.
@@ -96,7 +96,7 @@ public abstract class McpRestServlet extends BasicRestServlet {
 	 */
 	@RestPost(path = "/")
 	public JsonRpcResponse handleMcp(@Content JsonRpcRequest req, RestRequest restReq) {
-		var bs = new BasicBeanStore2(restReq.getContext().getBeanStore())
+		var bs = new BasicBeanStore(restReq.getContext().getBeanStore())
 			.addBean(RestRequest.class, restReq);
 		return Mcp.handle(req, getMcpConfig(), bs);
 	}

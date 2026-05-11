@@ -28,7 +28,7 @@ import org.springframework.context.*;
  * A bean store that uses Spring bean resolution to find beans if they're not already in this store.
  *
  * <p>
- * This implementation extends {@link BasicBeanStore2} and delegates to Spring's {@link ApplicationContext}
+ * This implementation extends {@link BasicBeanStore} and delegates to Spring's {@link ApplicationContext}
  * for bean resolution when beans are not found in the local store or parent stores.
  *
  * <h5 class='section'>Example:</h5>
@@ -49,11 +49,11 @@ import org.springframework.context.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>
- * 	<li class='jc'>{@link BasicBeanStore2}
+ * 	<li class='jc'>{@link BasicBeanStore}
  * 	<li class='jic'>{@link BeanStore}
  * </ul>
  */
-public class SpringBeanStore2 extends BasicBeanStore2 {
+public class SpringBeanStore2 extends BasicBeanStore {
 
 	private final ApplicationContext appContext;
 

@@ -19,7 +19,7 @@ package org.apache.juneau.serializer;
 import org.apache.juneau.commons.http.MediaRanges;
 import org.apache.juneau.commons.http.MediaRange;
 import org.apache.juneau.commons.http.MediaType;
-import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BasicBeanStore;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
@@ -96,9 +96,12 @@ public class SerializerSet {
 	@SuppressWarnings({
 		"java:S115" // Constants use UPPER_snakeCase convention (e.g., CLASS_Inherit)
 	})
-	public static class Builder extends BeanBuilder<SerializerSet> {
+	public static class Builder {
 
 		private static final String CLASS_Inherit = "Inherit";
+
+		private final WritableBeanStore beanStore;
+		private SerializerSet impl;
 
 		List<Object> entries;
 		private BeanContext.Builder bcBuilder;
@@ -109,7 +112,7 @@ public class SerializerSet {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(WritableBeanStore beanStore) {
-			super(SerializerSet.class, beanStore);
+			this.beanStore = beanStore;
 			this.entries = list();
 		}
 
@@ -122,7 +125,8 @@ public class SerializerSet {
 		 * @param copyFrom The serializer group that we're copying settings and serializers from.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			this.beanStore = copyFrom.beanStore;
+			this.impl = copyFrom.impl;
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
 			entries = list();
 			copyFrom.entries.stream().map(this::copyBuilder).forEach(entries::add);
@@ -134,8 +138,17 @@ public class SerializerSet {
 		 * @param copyFrom The serializer group that we're copying settings and serializers from.
 		 */
 		protected Builder(SerializerSet copyFrom) {
-			super(copyFrom.getClass(), BasicBeanStore2.INSTANCE);
+			this.beanStore = BasicBeanStore.INSTANCE;
 			this.entries = list((Object[])copyFrom.entries);
+		}
+
+		/**
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public WritableBeanStore beanStore() {
+			return beanStore;
 		}
 
 		/**
@@ -300,9 +313,14 @@ public class SerializerSet {
 			return forEach(WriterSerializer.Builder.class, action);
 		}
 
-		@Override /* Overridden from BeanBuilder */
+		/**
+		 * Overrides the bean returned by the {@link #build()} method with a pre-built instance.
+		 *
+		 * @param value The pre-built instance.
+		 * @return This object.
+		 */
 		public Builder impl(Object value) {
-			super.impl(value);
+			impl = (SerializerSet) value;
 			return this;
 		}
 
@@ -366,11 +384,6 @@ public class SerializerSet {
 			return entries.stream().map(this::toString).collect(joining(",", "[", "]"));
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
 
 		private <T extends Serializer.Builder> Stream<T> builders(Class<T> type) {
 			return entries.stream().filter(type::isInstance).map(type::cast);
@@ -417,8 +430,14 @@ public class SerializerSet {
 			return "serializer:" + cn(o);
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected SerializerSet buildDefault() {
+		/**
+		 * Builds the serializer set.
+		 *
+		 * @return A new {@link SerializerSet}.
+		 */
+		public SerializerSet build() {
+			if (nn(impl))
+				return impl;
 			return new SerializerSet(this);
 		}
 	}
@@ -451,7 +470,7 @@ public class SerializerSet {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BasicBeanStore2.INSTANCE);
+		return new Builder(BasicBeanStore.INSTANCE);
 	}
 
 	/**

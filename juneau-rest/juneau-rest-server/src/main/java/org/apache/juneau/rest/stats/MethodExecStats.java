@@ -23,9 +23,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * Method execution statistics.
@@ -56,10 +55,14 @@ public class MethodExecStats {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<MethodExecStats> {
+	public static class Builder {
 
+		final BeanStore beanStore;
 		Method method;
 		ThrownStore thrownStore;
+
+		private MethodExecStats impl;
+		private Class<? extends MethodExecStats> type;
 
 		/**
 		 * Constructor.
@@ -67,12 +70,26 @@ public class MethodExecStats {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(BeanStore beanStore) {
-			super(MethodExecStats.class, beanStore);
+			this.beanStore = beanStore;
 		}
 
-		@Override /* Overridden from BeanBuilder */
+		/**
+		 * Returns the bean store.
+		 *
+		 * @return The bean store.
+		 */
+		public BeanStore beanStore() {
+			return beanStore;
+		}
+
+		/**
+		 * Overrides the bean returned by the {@link #build()} method with a pre-instantiated instance.
+		 *
+		 * @param value The setting value.
+		 * @return This object.
+		 */
 		public Builder impl(Object value) {
-			super.impl(value);
+			impl = (MethodExecStats) value;
 			return this;
 		}
 
@@ -98,15 +115,33 @@ public class MethodExecStats {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
+		/**
+		 * Overrides the bean type produced by the {@link #build()} method.
+		 *
+		 * @param value The setting value.
+		 * @return This object.
+		 */
+		@SuppressWarnings("unchecked")
 		public Builder type(Class<?> value) {
-			super.type(value);
+			type = (Class<? extends MethodExecStats>) value;
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected MethodExecStats buildDefault() {
-			return new MethodExecStats(this);
+		/**
+		 * Creates the bean.
+		 *
+		 * @return A new bean.
+		 */
+		public MethodExecStats build() {
+			if (nn(impl))
+				return impl;
+			if (type == null || type == MethodExecStats.class)
+				return new MethodExecStats(this);
+			return BeanInstantiator.of(MethodExecStats.class, beanStore)
+				.type(type)
+				.noBuilder()
+				.addBean(Builder.class, this)
+				.run();
 		}
 	}
 

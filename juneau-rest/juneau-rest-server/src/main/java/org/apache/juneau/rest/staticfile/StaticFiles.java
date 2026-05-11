@@ -22,7 +22,6 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.*;
@@ -40,8 +39,9 @@ public interface StaticFiles extends FileFinder {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<StaticFiles> {
+	public static class Builder {
 
+		private final BeanStore beanStore;
 		List<Header> headers;
 		MimeTypeDetector mimeTypes;
 		FileFinder.Builder fileFinder;
@@ -52,10 +52,19 @@ public interface StaticFiles extends FileFinder {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(BeanStore beanStore) {
-			super(BasicStaticFiles.class, beanStore);
+			this.beanStore = beanStore;
 			headers = list();
 			fileFinder = FileFinder.create(beanStore);
 			mimeTypes = MimeTypeDetector.DEFAULT;
+		}
+
+		/**
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public BeanStore beanStore() {
+			return beanStore;
 		}
 
 		/**
@@ -131,11 +140,6 @@ public interface StaticFiles extends FileFinder {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
 
 		/**
 		 * Specifies the regular expression file name patterns to use to include files being retrieved from the file source.
@@ -172,14 +176,12 @@ public interface StaticFiles extends FileFinder {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected StaticFiles buildDefault() {
+		/**
+		 * Builds the static files.
+		 *
+		 * @return A new {@link BasicStaticFiles}.
+		 */
+		public StaticFiles build() {
 			return new BasicStaticFiles(this);
 		}
 	}

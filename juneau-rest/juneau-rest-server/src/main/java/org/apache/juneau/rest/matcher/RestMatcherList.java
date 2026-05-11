@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 
 /**
@@ -35,9 +34,10 @@ public class RestMatcherList {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<RestMatcherList> {
+	public static class Builder {
 
-		List<BeanInstantiator<RestMatcher>> entries;
+		private final WritableBeanStore beanStore;
+		List<BeanInstantiator.Builder<RestMatcher>> entries;
 
 		/**
 		 * Constructor.
@@ -45,8 +45,17 @@ public class RestMatcherList {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(WritableBeanStore beanStore) {
-			super(RestMatcherList.class, beanStore);
+			this.beanStore = beanStore;
 			entries = list();
+		}
+
+		/**
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public WritableBeanStore beanStore() {
+			return beanStore;
 		}
 
 		/**
@@ -60,7 +69,7 @@ public class RestMatcherList {
 		})
 		public Builder append(Class<? extends RestMatcher>...values) {
 			for (var v : values)
-				entries.add(BeanInstantiator.of(RestMatcher.class, beanStore()).beanSubType(v));
+				entries.add(BeanInstantiator.of(RestMatcher.class, beanStore).type(v));
 			return this;
 		}
 
@@ -72,24 +81,16 @@ public class RestMatcherList {
 		 */
 		public Builder append(RestMatcher...values) {
 			for (var v : values)
-				entries.add(BeanInstantiator.of(RestMatcher.class, beanStore()).implementation(v));
+				entries.add(BeanInstantiator.of(RestMatcher.class, beanStore).impl(v));
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected RestMatcherList buildDefault() {
+		/**
+		 * Builds the list.
+		 *
+		 * @return A new {@link RestMatcherList}.
+		 */
+		public RestMatcherList build() {
 			return new RestMatcherList(this);
 		}
 	}
@@ -113,7 +114,7 @@ public class RestMatcherList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestMatcherList(Builder builder) {
-		List<RestMatcher> l = builder.entries.stream().map(BeanInstantiator::run).toList();
+		List<RestMatcher> l = builder.entries.stream().map(BeanInstantiator.Builder::run).toList();
 		optionalEntries = l.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 		requiredEntries = l.stream().filter(RestMatcher::required).toArray(RestMatcher[]::new);
 	}

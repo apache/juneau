@@ -168,7 +168,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		private static ObjectSwap beanpSwap(AnnotationInfo<Beanp> ai) {
 			var p = ai.inner();
 			if (! p.format().isEmpty())
-				return BeanInstantiator.of(ObjectSwap.class).beanSubType(StringFormatSwap.class).addBean(String.class, p.format()).run();
+				return BeanInstantiator.of(ObjectSwap.class).type(StringFormatSwap.class).addBean(String.class, p.format()).run();
 			return null;
 		}
 
@@ -184,7 +184,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return null;
 			var ci = info(c);
 			if (ci.isAssignableTo(ObjectSwap.class)) {
-				var ps = BeanInstantiator.of(ObjectSwap.class).beanSubType(ci).run();
+				var ps = BeanInstantiator.of(ObjectSwap.class).type(ci).run();
 				if (nn(ps.forMediaTypes()))
 					throw unsupportedOp("TODO - Media types on swaps not yet supported on bean properties.");
 				if (nn(ps.withTemplate()))
@@ -1102,7 +1102,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					}
 				} else {
 					if (propMap == null) {
-						propMap = BeanInstantiator.of(Map.class).beanSubType(rawTypeMeta).preferZeroArgConstructor().run();
+						propMap = BeanInstantiator.of(Map.class).type(rawTypeMeta).preferZeroArgConstructor().run();
 					} else {
 						propMap.clear();
 					}
@@ -1161,7 +1161,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					propList.clear();
 				} else {
 					if (propList == null) {
-						propList = BeanInstantiator.of(Collection.class).beanSubType(rawTypeMeta).preferZeroArgConstructor().run();
+						propList = BeanInstantiator.of(Collection.class).type(rawTypeMeta).preferZeroArgConstructor().run();
 						invokeSetter(bean, pName, propList);
 					} else {
 						propList.clear();

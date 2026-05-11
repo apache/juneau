@@ -130,7 +130,7 @@ public interface WritableBeanStore extends BeanStore {
 	 * Adds a fallback supplier for an unnamed bean of the specified type to this store.
 	 *
 	 * <p>
-	 * Default suppliers are consulted only after regular {@linkplain #addBean(Class,Object) entries} and the regular {@linkplain BasicBeanStore2#BasicBeanStore2(BeanStore) parent}
+	 * Default suppliers are consulted only after regular {@linkplain #addBean(Class,Object) entries} and the regular {@linkplain BasicBeanStore#BasicBeanStore(BeanStore) parent}
 	 * chain have been searched.  They serve as a "use this if nothing else has provided one" hook,
 	 * useful for memoizer-backed framework defaults that should not shadow explicit user
 	 * registrations or beans inherited from an overriding parent (e.g. a Spring application context).

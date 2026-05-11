@@ -934,11 +934,11 @@ class MethodInfo_Test extends TestBase {
 		public static void staticMethod(TestService service) {}
 	}
 
-	private BasicBeanStore2 beanStore;
+	private BasicBeanStore beanStore;
 
 	@BeforeEach
 	void setUpBeanStore() {
-		beanStore = new BasicBeanStore2(null);
+		beanStore = new BasicBeanStore(null);
 	}
 
 	//====================================================================================================

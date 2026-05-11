@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.commons.inject.BeanInstantiator;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
@@ -50,7 +51,8 @@ public interface SwaggerProvider {
 		Supplier<JsonSchemaGenerator> jsonSchemaGenerator;
 		Supplier<Messages> messages;
 		Supplier<FileFinder> fileFinder;
-		BeanCreator<SwaggerProvider> creator;
+		private SwaggerProvider impl;
+		private Class<? extends SwaggerProvider> implType;
 
 		/**
 		 * Constructor.
@@ -59,7 +61,6 @@ public interface SwaggerProvider {
 		 */
 		protected Builder(BeanStore beanStore) {
 			this.beanStore = beanStore;
-			this.creator = BeanCreator.of(SwaggerProvider.class, this.beanStore).type(BasicSwaggerProvider.class).builder(Builder.class, this);
 		}
 
 		/**
@@ -73,7 +74,14 @@ public interface SwaggerProvider {
 		 */
 		public SwaggerProvider build() {
 			try {
-				return creator.run();
+				if (impl != null)
+					return impl;
+				var t = implType != null ? implType : BasicSwaggerProvider.class;
+				return BeanInstantiator.of(SwaggerProvider.class, beanStore)
+					.type(t)
+					.noBuilder()
+					.addBean(Builder.class, this)
+					.run();
 			} catch (Exception e) {
 				throw new InternalServerError(e);
 			}
@@ -106,7 +114,7 @@ public interface SwaggerProvider {
 		 * @return  This object.
 		 */
 		public Builder impl(SwaggerProvider value) {
-			creator.impl(value);
+			this.impl = value;
 			return this;
 		}
 
@@ -157,7 +165,7 @@ public interface SwaggerProvider {
 		 * @return  This object.
 		 */
 		public Builder type(Class<? extends SwaggerProvider> value) {
-			creator.type(value == null ? BasicSwaggerProvider.class : value);
+			implType = opt(value).isPresent() ? value : BasicSwaggerProvider.class;
 			return this;
 		}
 

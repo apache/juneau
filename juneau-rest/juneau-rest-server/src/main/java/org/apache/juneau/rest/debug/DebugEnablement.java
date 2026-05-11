@@ -24,9 +24,9 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.inject.BeanInstantiator;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -57,10 +57,12 @@ public abstract class DebugEnablement {
 	 */
 	public static class Builder {
 
+		final BeanStore beanStore;
 		ReflectionMap.Builder<Enablement> mapBuilder;
 		Enablement defaultEnablement = NEVER;
 		Predicate<HttpServletRequest> conditional;
-		BeanCreator<DebugEnablement> creator;
+		private DebugEnablement impl;
+		private Class<? extends DebugEnablement> implType;
 
 		/**
 		 * Constructor.
@@ -68,10 +70,10 @@ public abstract class DebugEnablement {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(BeanStore beanStore) {
+			this.beanStore = beanStore;
 			mapBuilder = ReflectionMap.create(Enablement.class);
 			defaultEnablement = NEVER;
 			conditional = x -> eqic("true", x.getHeader(HEADER_Debug));
-			creator = BeanCreator.of(DebugEnablement.class, beanStore).type(BasicDebugEnablement.class).builder(Builder.class, this);
 		}
 
 		/**
@@ -85,7 +87,14 @@ public abstract class DebugEnablement {
 		 */
 		public DebugEnablement build() {
 			try {
-				return creator.run();
+				if (impl != null)
+					return impl;
+				var t = implType != null ? implType : BasicDebugEnablement.class;
+				return BeanInstantiator.of(DebugEnablement.class, beanStore)
+					.type(t)
+					.noBuilder()
+					.addBean(Builder.class, this)
+					.run();
 			} catch (Exception e) {
 				throw new InternalServerError(e);
 			}
@@ -187,7 +196,7 @@ public abstract class DebugEnablement {
 		 * @return This object.
 		 */
 		public Builder impl(DebugEnablement value) {
-			creator.impl(value);
+			this.impl = value;
 			return this;
 		}
 
@@ -198,7 +207,7 @@ public abstract class DebugEnablement {
 		 * @return  This object.
 		 */
 		public Builder type(Class<? extends DebugEnablement> value) {
-			creator.type(value == null ? BasicDebugEnablement.class : value);
+			implType = opt(value).isPresent() ? value : BasicDebugEnablement.class;
 			return this;
 		}
 	}

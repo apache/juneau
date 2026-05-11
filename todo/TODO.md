@@ -1,8 +1,6 @@
 # TODO
 
 
-- [TODO-1] Update REST server API to use new BeanStore2.
-
 - [TODO-2] On RestClient when logging with FULL, calling RestResponse.getContent().asString() causes a stream closed exception.
 
 - [TODO-3] Possibility of adding convenience classes for okhttp3.mockwebserver.Dispatcher?
@@ -27,7 +25,6 @@
 
 - [TODO-14] Move SVL (`org.apache.juneau.svl`) from `juneau-marshall` into `juneau-commons` so `VarResolver` can be used without the full marshall dependency. See `todo/TODO-14-move-svl-to-commons.md`.
 
-- [TODO-15] Replace `BasicBeanStore` / `BeanCreator` with the v2 equivalents in `juneau-commons.inject`, then drop the `2` suffix and remove the legacy classes. See `todo/TODO-15-replace-basicbeanstore-with-v2.md`.
 
 - [TODO-17] Audit 9.2.x changes (juneau-docs release notes 9.2.0 / 9.5.0 + git history since 9.1.0) for breaking changes and populate the v9.5 Migration Guide at juneau-docs/pages/topics/23.01.V9.5-migration-guide.md with Old→New rows for each. Focus on removed APIs, renamed annotations/classes/methods, changed default behaviors, and any annotation-attribute semantics changes.
 
@@ -41,4 +38,3 @@
 
 - [TODO-24] JSR-330 alignment (no `jakarta.inject-api` dependency) + selective Spring-lite features for `commons.inject`. See `todo/TODO-24-jsr330-and-spring-lite-support.md`.
 
-- [TODO-25] Revisit `RestContext` four-memoizer migration to v2 inject API (`callLogger` / `debugEnablement` / `staticFiles` / `swaggerProvider`). Spawned out of TODO-15 after a 2026-05-08 attempt was reverted. See `todo/TODO-25-revisit-rest-context-memoizer-migration.md`.

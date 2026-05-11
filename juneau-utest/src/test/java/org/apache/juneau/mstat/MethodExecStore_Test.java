@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.stats.*;
 import org.junit.jupiter.api.*;
 
@@ -77,9 +77,9 @@ class MethodExecStore_Test extends TestBase {
 	}
 
 	@Test void a05_builder_beanFactory() {
-		var bs = BasicBeanStore.create().build();
+		var bs = new BasicBeanStore();
 
-		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A5a", ()->MethodExecStore.create(bs).type(A5b.class).build());
+		assertThrowsWithMessage(Exception.class, "Could not instantiate class", ()->MethodExecStore.create(bs).type(A5b.class).build());
 		assertInstanceOf(A5c.class, MethodExecStore.create(bs).type(A5c.class).build());
 
 		bs.addBean(A5a.class, new A5a());
@@ -106,10 +106,10 @@ class MethodExecStore_Test extends TestBase {
 	}
 
 	@Test void a06_builder_statsImplClass() throws Exception {
-		var bs = BasicBeanStore.create().build();
+		var bs = new BasicBeanStore();
 		var m = MethodExecStore_Test.class.getDeclaredMethod("a06_builder_statsImplClass");
 
-		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: A6a", ()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
+		assertThrowsWithMessage(Exception.class, "Could not instantiate class", ()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m));
 		assertInstanceOf(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
 
 		bs.addBean(A6a.class, new A6a());
@@ -127,7 +127,7 @@ class MethodExecStore_Test extends TestBase {
 		assertSame(s, store.getThrownStore());
 
 		var s2 = ThrownStore.create().build();
-		var bs = BasicBeanStore.create().build().addBean(ThrownStore.class, s2);
+		var bs = new BasicBeanStore().addBean(ThrownStore.class, s2);
 		store = MethodExecStore.create(bs).build();
 		assertSame(s2, store.getThrownStore());
 	}

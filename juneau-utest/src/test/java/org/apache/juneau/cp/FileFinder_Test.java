@@ -26,6 +26,7 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.sub.*;
 import org.junit.jupiter.api.*;
@@ -653,12 +654,8 @@ public class FileFinder_Test extends TestBase {
 	}
 
 	@Test void e03_subclassing() {
-		var x = E03b
-			.create()
-			.dir(".")
-			.caching(100_000_000)
-			.type(E03b.class)
-			.build();
+		var b = (E03a) E03b.create().dir(".").caching(100_000_000);
+		var x = new E03b(b);
 		assertInstanceOf(E03b.class, x);
 	}
 

@@ -61,9 +61,8 @@ class RestContext_Precedence_Test extends TestBase {
 	// Marker beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static final CallLogger SPRING_LOGGER = BasicCallLogger.create(BasicBeanStore2.INSTANCE).build();
-	private static final CallLogger RESTINJECT_LOGGER = BasicCallLogger.create(BasicBeanStore2.INSTANCE).build();
-	private static final ThrownStore RESTINJECT_THROWN_STORE = ThrownStore.create().build();
+	private static final CallLogger SPRING_LOGGER = BasicCallLogger.create(BasicBeanStore.INSTANCE).build();
+	private static final CallLogger RESTINJECT_LOGGER = BasicCallLogger.create(BasicBeanStore.INSTANCE).build();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Spring-substitute bean store
@@ -75,7 +74,7 @@ class RestContext_Precedence_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@SuppressWarnings("unchecked")
-	public static class SpringLikeBeanStore extends BasicBeanStore2 {
+	public static class SpringLikeBeanStore extends BasicBeanStore {
 
 		private final Map<Class<?>, Object> springBindings = new HashMap<>();
 

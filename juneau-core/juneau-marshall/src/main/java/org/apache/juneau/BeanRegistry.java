@@ -144,7 +144,7 @@ public class BeanRegistry {
 		try {
 			if (nn(ci) && nn(ci.inner())) {
 				if (ci.isAssignableTo(Collection.class)) {
-					Collection<?> cc = BeanInstantiator.of(Collection.class).beanSubType(ci).preferZeroArgConstructor().run();
+					Collection<?> cc = BeanInstantiator.of(Collection.class).type(ci).preferZeroArgConstructor().run();
 					cc.forEach(x -> {
 						if (x instanceof Class<?> x2)
 							addClass(info(x2));
@@ -152,7 +152,7 @@ public class BeanRegistry {
 							throw bex("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", ci.getName());
 					});
 				} else if (ci.isAssignableTo(Map.class)) {
-					Map<?,?> m = BeanInstantiator.of(Map.class).beanSubType(ci).preferZeroArgConstructor().run();
+					Map<?,?> m = BeanInstantiator.of(Map.class).type(ci).preferZeroArgConstructor().run();
 					m.forEach((k, v) -> {
 						var typeName = s(k);
 						ClassMeta<?> val = null;

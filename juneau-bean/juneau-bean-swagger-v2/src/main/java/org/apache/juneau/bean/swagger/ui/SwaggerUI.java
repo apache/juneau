@@ -60,7 +60,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	// @formatter:off
 	static final FileFinder RESOURCES = FileFinder
-		.create(BasicBeanStore2.INSTANCE)
+		.create(BasicBeanStore.INSTANCE)
 		.cp(SwaggerUI.class, null, true)
 		.dir(",")
 		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000) // HTT - system property branch only triggers when property is set

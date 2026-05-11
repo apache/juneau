@@ -84,7 +84,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	 * Uses the same settings as {@link CallLogger}.
 	 */
 	public BasicTestCaptureCallLogger() {
-		super(BasicBeanStore2.INSTANCE);
+		super(BasicBeanStore.INSTANCE);
 	}
 
 	/**

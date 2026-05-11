@@ -873,11 +873,11 @@ class ConstructorInfo_Test extends TestBase {
 		}
 	}
 
-	private BasicBeanStore2 beanStore;
+	private BasicBeanStore beanStore;
 
 	@BeforeEach
 	void setUpBeanStore() {
-		beanStore = new BasicBeanStore2(null);
+		beanStore = new BasicBeanStore(null);
 	}
 
 	//====================================================================================================

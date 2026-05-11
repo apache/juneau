@@ -26,8 +26,8 @@ import java.beans.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -98,9 +98,9 @@ public class BeanFilter {
 		private ClassInfo stopClass;
 		private boolean unsortedProperties;
 		private boolean fluentSetters;
-		private BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
+		private BeanInstantiator.Builder<PropertyNamer> propertyNamer = BeanInstantiator.of(PropertyNamer.class);
 		private List<ClassInfo> dictionary;
-		private BeanCreator<BeanInterceptor> interceptor = BeanCreator.of(BeanInterceptor.class);
+		private BeanInstantiator.Builder<BeanInterceptor> interceptor = BeanInstantiator.of(BeanInterceptor.class);
 
 		/**
 		 * Constructor.
@@ -376,8 +376,9 @@ public class BeanFilter {
 		 * 	<br>The default value is {@link BeanInterceptor}.
 		 * @return This object.
 		 */
+		@SuppressWarnings("unchecked")
 		public Builder interceptor(Class<?> value) {
-			interceptor.type(value);
+			interceptor.type((Class<? extends BeanInterceptor>) value);
 			return this;
 		}
 
@@ -865,9 +866,9 @@ public class BeanFilter {
 		this.stopClass = builder.stopClass;
 		this.unsortedProperties = builder.unsortedProperties;
 		this.fluentSetters = builder.fluentSetters;
-		this.propertyNamer = builder.propertyNamer.orElse(null);
+		this.propertyNamer = builder.propertyNamer.asOptional().orElse(null);
 		this.beanDictionary = builder.dictionary == null ? list() : u(copyOf(builder.dictionary));
-		this.interceptor = builder.interceptor.orElse(BeanInterceptor.DEFAULT);
+		this.interceptor = builder.interceptor.asOptional().orElse(BeanInterceptor.DEFAULT);
 	}
 
 	/**

@@ -70,7 +70,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 		// RestContext.findDebugEnablement() unconditionally pre-publishes an Enablement bean derived from
 		// @Rest(debugDefault=...) → pre-registered Enablement bean → @Rest(debug) boolean flag. Subclasses
 		// only need to read it back here. (Pre-9.5 this method also resolved RestContext.Builder out of the
-		// bean store to read isDebug(); that protocol was deleted in TODO-16 Phase C-3.)
+		// bean store to read isDebug(); that legacy protocol has been removed.)
 		var debugDefault = beanStore.getBean(Enablement.class).orElse(Enablement.NEVER);
 		b.defaultEnable(debugDefault);
 
@@ -87,7 +87,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 
 		// Gather @RestOp(debug) settings.
 		// @formatter:off
-		ci.getPublicMethods().stream()
+		ci.getPublicMethods()
 			.forEach(x ->
 				rstream(ap.find(x))
 					.filter(REST_OP_GROUP)

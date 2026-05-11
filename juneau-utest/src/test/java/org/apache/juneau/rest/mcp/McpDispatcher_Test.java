@@ -23,7 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BasicBeanStore;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.junit.jupiter.api.*;
 
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
 class McpDispatcher_Test {
 
 	private final McpDispatcher dispatcher = new McpDispatcher();
-	private final BeanStore ctx = new BasicBeanStore2();
+	private final BeanStore ctx = new BasicBeanStore();
 
 	private static McpToolHandler tool(String name, java.util.function.Function<Map<String, Object>, CallToolResult> fn) {
 		return new McpToolHandler() {

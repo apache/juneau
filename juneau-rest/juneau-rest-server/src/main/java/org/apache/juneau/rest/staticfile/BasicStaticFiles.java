@@ -79,7 +79,6 @@ public class BasicStaticFiles implements StaticFiles {
 		// @formatter:off
 		this(StaticFiles
 			.create(beanStore)
-			.type(BasicStaticFiles.class)
 			.dir("static")
 			.dir("htdocs")
 			.cp(beanStore.getBean(ResourceSupplier.class).orElseThrow(() -> new IllegalStateException("ResourceSupplier not found")).getResourceClass(), "htdocs", true)

@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.stats.*;
 import org.junit.jupiter.api.*;
 
@@ -226,9 +226,9 @@ class ThrownStore_Test extends TestBase {
 	}
 
 	@Test void b05_builder_beanFactory() {
-		var bs = BasicBeanStore.create().build();
+		var bs = new BasicBeanStore();
 
-		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: B5a", ()->ThrownStore.create(bs).type(B5b.class).build());
+		assertThrowsWithMessage(Exception.class, "Could not instantiate class", ()->ThrownStore.create(bs).type(B5b.class).build());
 		assertInstanceOf(B5c.class, ThrownStore.create(bs).type(B5c.class).build());
 
 		bs.addBean(B5a.class, new B5a());
@@ -255,12 +255,12 @@ class ThrownStore_Test extends TestBase {
 	}
 
 	@Test void b06_statsImplClass() {
-		var bs = BasicBeanStore.create().build();
+		var bs = new BasicBeanStore();
 
 		var t1 = new Throwable();
 		t1.fillInStackTrace();
 
-		assertThrowsWithMessage(Exception.class, "Public constructor found but could not find prerequisites: B6a", ()->ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1));
+		assertThrowsWithMessage(Exception.class, "Could not instantiate class", ()->ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1));
 		assertInstanceOf(B6c.class, ThrownStore.create(bs).statsImplClass(B6c.class).build().add(t1));
 
 		bs.addBean(B6a.class, new B6a());

@@ -44,7 +44,7 @@ public class BasicCallLogger extends CallLogger {
 	 * Uses the same settings as {@link CallLogger}.
 	 */
 	public BasicCallLogger() {
-		super(BasicBeanStore2.INSTANCE);
+		super(BasicBeanStore.INSTANCE);
 	}
 
 	/**

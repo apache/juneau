@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 
 /**
@@ -35,9 +34,10 @@ public class RestConverterList {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<RestConverterList> {
+	public static class Builder {
 
-		List<BeanInstantiator<RestConverter>> entries;
+		private final WritableBeanStore beanStore;
+		List<BeanInstantiator.Builder<RestConverter>> entries;
 
 		/**
 		 * Create an empty builder.
@@ -45,12 +45,21 @@ public class RestConverterList {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(WritableBeanStore beanStore) {
-			super(RestConverterList.class, beanStore);
+			this.beanStore = beanStore;
 			this.entries = list();
 		}
 
 		/**
-		 * Appends the specified rest matcher classes to the list.
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public WritableBeanStore beanStore() {
+			return beanStore;
+		}
+
+		/**
+		 * Appends the specified rest converter classes to the list.
 		 *
 		 * @param values The values to add.
 		 * @return This object.
@@ -60,36 +69,28 @@ public class RestConverterList {
 		})
 		public Builder append(Class<? extends RestConverter>...values) {
 			for (var v : values)
-				entries.add(BeanInstantiator.of(RestConverter.class, beanStore()).beanSubType(v));
+				entries.add(BeanInstantiator.of(RestConverter.class, beanStore).type(v));
 			return this;
 		}
 
 		/**
-		 * Appends the specified rest matcher objects to the list.
+		 * Appends the specified rest converter objects to the list.
 		 *
 		 * @param values The values to add.
 		 * @return This object.
 		 */
 		public Builder append(RestConverter...values) {
 			for (var v : values)
-				entries.add(BeanInstantiator.of(RestConverter.class, beanStore()).implementation(v));
+				entries.add(BeanInstantiator.of(RestConverter.class, beanStore).impl(v));
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected RestConverterList buildDefault() {
+		/**
+		 * Builds the list.
+		 *
+		 * @return A new {@link RestConverterList}.
+		 */
+		public RestConverterList build() {
 			return new RestConverterList(this);
 		}
 	}
@@ -117,7 +118,7 @@ public class RestConverterList {
 			builder
 				.entries
 				.stream()
-				.map(BeanInstantiator::run)
+				.map(BeanInstantiator.Builder::run)
 				.toArray(RestConverter[]::new);
 		// @formatter:on
 	}

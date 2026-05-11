@@ -3770,11 +3770,11 @@ public class ClassInfo_Test extends TestBase {
 		abstract void abstractMethod(TestService service);
 	}
 
-	private BasicBeanStore2 beanStore;
+	private BasicBeanStore beanStore;
 
 	@BeforeEach
 	void setUpBeanStore() {
-		beanStore = new BasicBeanStore2(null);
+		beanStore = new BasicBeanStore(null);
 	}
 
 	//====================================================================================================

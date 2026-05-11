@@ -425,7 +425,7 @@ public class CallLogger {
 		}
 	}
 
-	private static final CallLoggerRule DEFAULT_RULE = CallLoggerRule.create(BasicBeanStore2.INSTANCE).build();
+	private static final CallLoggerRule DEFAULT_RULE = CallLoggerRule.create(BasicBeanStore.INSTANCE).build();
 
 	/**
 	 * System property name for the default logger name to use for {@link CallLogger} objects.

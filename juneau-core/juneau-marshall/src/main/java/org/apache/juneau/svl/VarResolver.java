@@ -22,9 +22,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.svl.vars.*;
 
 /**
@@ -76,8 +74,9 @@ public class VarResolver {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<VarResolver> {
+	public static class Builder {
 
+		private WritableBeanStore beanStore;
 		final VarList vars;
 		final java.util.LinkedHashMap<Class<?>,Object> userBeans;
 
@@ -85,7 +84,7 @@ public class VarResolver {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(VarResolver.class, BasicBeanStore.create().build());
+			this.beanStore = new BasicBeanStore();
 			vars = VarList.create();
 			userBeans = new java.util.LinkedHashMap<>();
 		}
@@ -96,9 +95,18 @@ public class VarResolver {
 		 * @param copyFrom The bean to copy from.
 		 */
 		protected Builder(VarResolver copyFrom) {
-			super(copyFrom.getClass(), copyFrom.beanStore);
+			this.beanStore = copyFrom.beanStore;
 			vars = VarList.of(copyFrom.vars);
 			userBeans = new java.util.LinkedHashMap<>();
+		}
+
+		/**
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public WritableBeanStore beanStore() {
+			return beanStore;
 		}
 
 		/**
@@ -149,17 +157,6 @@ public class VarResolver {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
 
 		/**
 		 * Register new variables with this resolver.
@@ -201,8 +198,12 @@ public class VarResolver {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected VarResolver buildDefault() {
+		/**
+		 * Builds the var resolver.
+		 *
+		 * @return A new {@link VarResolver}.
+		 */
+		public VarResolver build() {
 			return new VarResolver(this);
 		}
 	}
@@ -243,7 +244,7 @@ public class VarResolver {
 		if (o instanceof Class<?> o2) {
 			@SuppressWarnings("unchecked")
 			var subType = (Class<? extends Var>) o2;
-			return BeanInstantiator.of(Var.class, bs).beanSubType(subType).run();
+			return BeanInstantiator.of(Var.class, bs).type(subType).run();
 		}
 		return (Var)o;
 	}
@@ -270,7 +271,7 @@ public class VarResolver {
 			m.put(v.getName(), v);
 
 		this.varMap = u(m);
-		var bs = new BasicBeanStore2(builder.beanStore());
+		var bs = new BasicBeanStore(builder.beanStore());
 		builder.userBeans.forEach((c, v) -> bs.addBean((Class) c, v));
 		this.beanStore = bs;
 	}

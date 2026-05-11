@@ -33,14 +33,7 @@ import org.apache.juneau.*;
  *
  *
  * @param <T> The bean type.
- *
- * @deprecated Since 9.5.0 — slated for removal in Phase 4 of TODO-15. The two known consumers
- * ({@link org.apache.juneau.httppart.HttpPartParser.Creator HttpPartParser.Creator} and
- * {@link org.apache.juneau.httppart.HttpPartSerializer.Creator HttpPartSerializer.Creator}) extend this class.
- * They will migrate to {@link org.apache.juneau.commons.inject.BeanInstantiator BeanInstantiator} once the v2 surface
- * grows the equivalent context-builder hooks. {@code forRemoval=true} is intentionally not set yet.
  */
-@Deprecated(since = "9.5.0")
 public class ContextBeanCreator<T> {
 
 	/**

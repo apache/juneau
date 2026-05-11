@@ -23,6 +23,7 @@ import java.io.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.cp.*;
 
@@ -224,11 +225,11 @@ public class Assertion {
 		if (nn(throwable)) {
 			try {
 				// @formatter:off
-				throw BeanCreator
+				throw BeanInstantiator
 					.of(throwable)
-					.arg(Throwable.class, cause)
-					.arg(String.class, msg)
-					.arg(Object[].class,new Object[0])
+					.addBean(Throwable.class, cause)
+					.addBean(String.class, msg)
+					.addBean(Object[].class, new Object[0])
 					.run();
 			// @formatter:on
 			} catch (@SuppressWarnings("unused") ExecutableException e) {

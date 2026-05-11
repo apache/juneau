@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
@@ -34,8 +33,9 @@ public class RestOperations {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<RestOperations> {
+	public static class Builder {
 
+		private final WritableBeanStore beanStore;
 		TreeMap<String,TreeSet<RestOpContext>> map;
 		Set<RestOpContext> set;
 
@@ -45,9 +45,18 @@ public class RestOperations {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(WritableBeanStore beanStore) {
-			super(RestOperations.class, beanStore);
+			this.beanStore = beanStore;
 			map = new TreeMap<>();
 			set = set();
+		}
+
+		/**
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public WritableBeanStore beanStore() {
+			return beanStore;
 		}
 
 		/**
@@ -74,20 +83,12 @@ public class RestOperations {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected RestOperations buildDefault() {
+		/**
+		 * Builds the operations.
+		 *
+		 * @return A new {@link RestOperations}.
+		 */
+		public RestOperations build() {
 			return new RestOperations(this);
 		}
 	}

@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
@@ -40,8 +39,9 @@ public class RestChildren {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<RestChildren> {
+	public static class Builder {
 
+		private final WritableBeanStore beanStore;
 		final List<RestContext> list;
 
 		/**
@@ -50,8 +50,17 @@ public class RestChildren {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(WritableBeanStore beanStore) {
-			super(RestChildren.class, beanStore);
+			this.beanStore = beanStore;
 			list = list();
+		}
+
+		/**
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public WritableBeanStore beanStore() {
+			return beanStore;
 		}
 
 		/**
@@ -65,20 +74,12 @@ public class RestChildren {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected RestChildren buildDefault() {
+		/**
+		 * Builds the children.
+		 *
+		 * @return A new {@link RestChildren}.
+		 */
+		public RestChildren build() {
 			return new RestChildren(this);
 		}
 	}

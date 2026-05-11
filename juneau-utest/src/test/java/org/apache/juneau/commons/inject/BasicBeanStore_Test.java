@@ -57,19 +57,19 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void a01_constructor_noParent() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		assertNotNull(store);
-		assertTrue(store.getBean(BasicBeanStore2.class).isPresent());
-		assertSame(store, store.getBean(BasicBeanStore2.class).get());
+		assertTrue(store.getBean(BasicBeanStore.class).isPresent());
+		assertSame(store, store.getBean(BasicBeanStore.class).get());
 	}
 
 	@Test
 	void a02_constructor_withParent() {
-		var parent = new BasicBeanStore2(null);
-		var store = new BasicBeanStore2(parent);
+		var parent = new BasicBeanStore(null);
+		var store = new BasicBeanStore(parent);
 		assertNotNull(store);
-		assertTrue(store.getBean(BasicBeanStore2.class).isPresent());
-		assertSame(store, store.getBean(BasicBeanStore2.class).get());
+		assertTrue(store.getBean(BasicBeanStore.class).isPresent());
+		assertSame(store, store.getBean(BasicBeanStore.class).get());
 	}
 
 	//====================================================================================================
@@ -78,7 +78,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void b01_addBean_unnamed() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		store.addBean(TestBean.class, bean);
 
@@ -89,7 +89,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void b02_addBean_unnamed_nullValue() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		store.addBean(TestBean.class, null);
 
 		var result = store.getBean(TestBean.class);
@@ -99,14 +99,14 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void b03_addBean_unnamed_returnsThis() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var result = store.addBean(TestBean.class, new TestBean("test1"));
 		assertSame(store, result);
 	}
 
 	@Test
 	void b04_addBean_unnamed_replaceExisting() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean1 = new TestBean("test1");
 		var bean2 = new TestBean("test2");
 		store.addBean(TestBean.class, bean1);
@@ -124,7 +124,7 @@ class BasicBeanStore_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("addBeanNamedProvider")
 	void c01_addBean_named(String name, boolean useNamedGetter) {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		store.addBean(TestBean.class, bean, name);
 
@@ -143,7 +143,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void c04_addBean_named_multipleNames() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean1 = new TestBean("test1");
 		var bean2 = new TestBean("test2");
 		var bean3 = new TestBean("test3");
@@ -158,7 +158,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void c05_addBean_named_replaceExisting() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean1 = new TestBean("test1");
 		var bean2 = new TestBean("test2");
 		store.addBean(TestBean.class, bean1, "name1");
@@ -175,7 +175,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void d01_add_unnamed_returnsBean() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		var result = store.add(TestBean.class, bean);
 
@@ -185,7 +185,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void d02_add_named_returnsBean() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		var result = store.add(TestBean.class, bean, "name1");
 
@@ -199,7 +199,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void e01_addSupplier_unnamed() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		store.addSupplier(TestBean.class, () -> bean);
 
@@ -210,7 +210,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void e02_addSupplier_unnamed_lazyEvaluation() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var callCount = new int[1];
 		store.addSupplier(TestBean.class, () -> {
 			callCount[0]++;
@@ -227,7 +227,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void e03_addSupplier_unnamed_nullValue() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		store.addSupplier(TestBean.class, () -> null);
 
 		var result = store.getBean(TestBean.class);
@@ -241,7 +241,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void f01_addSupplier_named() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		store.addSupplier(TestBean.class, () -> bean, "name1");
 
@@ -252,7 +252,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void f02_addSupplier_named_lazyEvaluation() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var callCount = new int[1];
 		store.addSupplier(TestBean.class, () -> {
 			callCount[0]++;
@@ -273,14 +273,14 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void g01_getBean_unnamed_notFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var result = store.getBean(TestBean.class);
 		assertFalse(result.isPresent());
 	}
 
 	@Test
 	void g02_getBean_unnamed_found() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		store.addBean(TestBean.class, bean);
 
@@ -291,11 +291,11 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void g03_getBean_unnamed_withParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentBean = new TestBean("parent");
 		parent.addBean(TestBean.class, parentBean);
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		var result = store.getBean(TestBean.class);
 		assertTrue(result.isPresent());
 		assertSame(parentBean, result.get());
@@ -303,11 +303,11 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void g04_getBean_unnamed_childOverridesParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentBean = new TestBean("parent");
 		parent.addBean(TestBean.class, parentBean);
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		var childBean = new TestBean("child");
 		store.addBean(TestBean.class, childBean);
 
@@ -318,7 +318,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void g05_getBean_unnamed_typeMapExistsButNoUnnamedBean() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		// Add a named bean - this creates the typeMap but no "" key
 		store.addBean(TestBean.class, new TestBean("test1"), "name1");
 
@@ -333,7 +333,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void h01_getBean_named_notFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var result = store.getBean(TestBean.class, "name1");
 		assertFalse(result.isPresent());
 	}
@@ -341,7 +341,7 @@ class BasicBeanStore_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("getBeanNamedTestData")
 	void h02_getBean_named(String name) {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		store.addBean(TestBean.class, bean, name);
 
@@ -360,11 +360,11 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void h05_getBean_named_withParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentBean = new TestBean("parent");
 		parent.addBean(TestBean.class, parentBean, "name1");
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		var result = store.getBean(TestBean.class, "name1");
 		assertTrue(result.isPresent());
 		assertSame(parentBean, result.get());
@@ -372,11 +372,11 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void h06_getBean_named_childOverridesParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentBean = new TestBean("parent");
 		parent.addBean(TestBean.class, parentBean, "name1");
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		var childBean = new TestBean("child");
 		store.addBean(TestBean.class, childBean, "name1");
 
@@ -387,7 +387,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void h07_getBean_named_typeMapExistsButSupplierNull() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		// Add a bean with different name - this creates the typeMap but not the requested key
 		store.addBean(TestBean.class, new TestBean("test1"), "name1");
 
@@ -402,7 +402,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void i01_getBeansOfType_notFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var result = store.getBeansOfType(TestBean.class);
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
@@ -410,7 +410,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void i02_getBeansOfType_singleUnnamed() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		store.addBean(TestBean.class, bean);
 
@@ -421,7 +421,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void i03_getBeansOfType_singleNamed() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		store.addBean(TestBean.class, bean, "name1");
 
@@ -432,7 +432,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void i04_getBeansOfType_multipleNamed() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean1 = new TestBean("test1");
 		var bean2 = new TestBean("test2");
 		var bean3 = new TestBean("test3");
@@ -449,13 +449,13 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void i05_getBeansOfType_withParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentBean1 = new TestBean("parent1");
 		var parentBean2 = new TestBean("parent2");
 		parent.addBean(TestBean.class, parentBean1, "name1");
 		parent.addBean(TestBean.class, parentBean2, "name2");
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		var result = store.getBeansOfType(TestBean.class);
 		assertEquals(2, result.size());
 		assertSame(parentBean1, result.get("name1"));
@@ -464,11 +464,11 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void i06_getBeansOfType_childOverridesParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentBean = new TestBean("parent");
 		parent.addBean(TestBean.class, parentBean, "name1");
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		var childBean = new TestBean("child");
 		store.addBean(TestBean.class, childBean, "name1");
 
@@ -479,13 +479,13 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void i07_getBeansOfType_childAndParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentBean1 = new TestBean("parent1");
 		var parentBean2 = new TestBean("parent2");
 		parent.addBean(TestBean.class, parentBean1, "name1");
 		parent.addBean(TestBean.class, parentBean2, "name2");
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		var childBean = new TestBean("child");
 		store.addBean(TestBean.class, childBean, "name3");
 
@@ -498,7 +498,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void i08_getBeansOfType_differentTypes() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var testBean = new TestBean("test1");
 		var anotherBean = new AnotherBean(42);
 		store.addBean(TestBean.class, testBean);
@@ -519,56 +519,56 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void j01_hasBean_unnamed_notFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		assertFalse(store.hasBean(TestBean.class));
 	}
 
 	@Test
 	void j02_hasBean_unnamed_found() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		store.addBean(TestBean.class, new TestBean("test1"));
 		assertTrue(store.hasBean(TestBean.class));
 	}
 
 	@Test
 	void j03_hasBean_unnamed_onlyNamedExists() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		store.addBean(TestBean.class, new TestBean("test1"), "name1");
 		assertFalse(store.hasBean(TestBean.class));
 	}
 
 	@Test
 	void j04_hasBean_unnamed_withParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestBean.class, new TestBean("parent"));
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		assertTrue(store.hasBean(TestBean.class));
 	}
 
 	@Test
 	void j05_hasBean_unnamed_childOverridesParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestBean.class, new TestBean("parent"));
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		store.addBean(TestBean.class, new TestBean("child"));
 		assertTrue(store.hasBean(TestBean.class));
 	}
 
 	@Test
 	void j06_hasBean_unnamed_notInCurrentButInParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestBean.class, new TestBean("parent"));
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		// Store has no beans, but parent does
 		assertTrue(store.hasBean(TestBean.class));
 	}
 
 	@Test
 	void j07_hasBean_unnamed_noParentAndNotFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		assertFalse(store.hasBean(TestBean.class));
 	}
 
@@ -578,14 +578,14 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void k01_hasBean_named_notFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		assertFalse(store.hasBean(TestBean.class, "name1"));
 	}
 
 	@ParameterizedTest
 	@MethodSource("hasBeanNamedProvider")
 	void k02_hasBean_named(String name, boolean expected) {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		store.addBean(TestBean.class, new TestBean("test1"), name);
 		assertEquals(expected, store.hasBean(TestBean.class, name));
 	}
@@ -600,43 +600,43 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void k04_hasBean_named_emptyString() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		store.addBean(TestBean.class, new TestBean("test1"), "");
 		assertTrue(store.hasBean(TestBean.class, ""));
 	}
 
 	@Test
 	void k05_hasBean_named_withParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestBean.class, new TestBean("parent"), "name1");
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		assertTrue(store.hasBean(TestBean.class, "name1"));
 	}
 
 	@Test
 	void k06_hasBean_named_childOverridesParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestBean.class, new TestBean("parent"), "name1");
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		store.addBean(TestBean.class, new TestBean("child"), "name1");
 		assertTrue(store.hasBean(TestBean.class, "name1"));
 	}
 
 	@Test
 	void k07_hasBean_named_notInCurrentButInParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestBean.class, new TestBean("parent"), "name1");
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		// Store has no beans, but parent does
 		assertTrue(store.hasBean(TestBean.class, "name1"));
 	}
 
 	@Test
 	void k08_hasBean_named_typeMapExistsButKeyNotFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		// Add a bean with different name - this creates the typeMap but not the requested key
 		store.addBean(TestBean.class, new TestBean("test1"), "name1");
 
@@ -646,7 +646,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void k09_hasBean_named_noParentAndNotFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		assertFalse(store.hasBean(TestBean.class, "name1"));
 	}
 
@@ -656,7 +656,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void m01_clear() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		store.addBean(TestBean.class, new TestBean("test1"));
 		store.addBean(TestBean.class, new TestBean("test2"), "name1");
 		store.addBean(AnotherBean.class, new AnotherBean(42));
@@ -670,17 +670,17 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void m02_clear_returnsThis() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var result = store.clear();
 		assertSame(store, result);
 	}
 
 	@Test
 	void m03_clear_doesNotAffectParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestBean.class, new TestBean("parent"));
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		store.addBean(TestBean.class, new TestBean("child"));
 		store.clear();
 
@@ -697,7 +697,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void n01_concurrentAccess() throws InterruptedException {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var threads = new Thread[10];
 		var exceptions = Collections.synchronizedList(new ArrayList<Exception>());
 
@@ -751,14 +751,14 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void o01_getBeanSupplier_unnamed_notFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var result = store.getBeanSupplier(TestBean.class);
 		assertFalse(result.isPresent());
 	}
 
 	@Test
 	void o02_getBeanSupplier_unnamed_found() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		store.addBean(TestBean.class, bean);
 
@@ -771,7 +771,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void o03_getBeanSupplier_unnamed_typeMapExistsButSupplierNull() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		// Add a named bean - this creates the typeMap but no "" key
 		store.addBean(TestBean.class, new TestBean("test1"), "name1");
 
@@ -781,11 +781,11 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void o04_getBeanSupplier_unnamed_withParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentBean = new TestBean("parent");
 		parent.addBean(TestBean.class, parentBean);
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		var result = store.getBeanSupplier(TestBean.class);
 		assertTrue(result.isPresent());
 		var supplier = result.get();
@@ -794,11 +794,11 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void o05_getBeanSupplier_unnamed_childOverridesParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentBean = new TestBean("parent");
 		parent.addBean(TestBean.class, parentBean);
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		var childBean = new TestBean("child");
 		store.addBean(TestBean.class, childBean);
 
@@ -810,7 +810,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void o06_getBeanSupplier_unnamed_noParentAndNotFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		// No beans, no parent - should hit line 304
 		var result = store.getBeanSupplier(TestBean.class);
 		assertFalse(result.isPresent());
@@ -822,14 +822,14 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void p01_getBeanSupplier_named_notFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var result = store.getBeanSupplier(TestBean.class, "name1");
 		assertFalse(result.isPresent());
 	}
 
 	@Test
 	void p02_getBeanSupplier_named_found() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var bean = new TestBean("test1");
 		store.addBean(TestBean.class, bean, "name1");
 
@@ -842,7 +842,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void p03_getBeanSupplier_named_typeMapExistsButSupplierNull() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		// Add a bean with different name - this creates the typeMap but not the requested key
 		store.addBean(TestBean.class, new TestBean("test1"), "name1");
 
@@ -852,11 +852,11 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void p04_getBeanSupplier_named_withParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentBean = new TestBean("parent");
 		parent.addBean(TestBean.class, parentBean, "name1");
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		var result = store.getBeanSupplier(TestBean.class, "name1");
 		assertTrue(result.isPresent());
 		var supplier = result.get();
@@ -865,11 +865,11 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void p05_getBeanSupplier_named_childOverridesParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentBean = new TestBean("parent");
 		parent.addBean(TestBean.class, parentBean, "name1");
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		var childBean = new TestBean("child");
 		store.addBean(TestBean.class, childBean, "name1");
 
@@ -881,7 +881,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void p06_getBeanSupplier_named_noParentAndNotFound() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		// No beans, no parent - should hit line 330
 		var result = store.getBeanSupplier(TestBean.class, "name1");
 		assertFalse(result.isPresent());
@@ -893,7 +893,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void q01_toString() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		store.addBean(TestBean.class, new TestBean("test1"), "name1");
 		store.addBean(AnotherBean.class, new AnotherBean(42));
 
@@ -901,15 +901,15 @@ class BasicBeanStore_Test extends TestBase {
 		assertNotNull(result);
 		assertFalse(result.isEmpty());
 		// Should contain some representation of the store
-		assertTrue(result.contains("BasicBeanStore2") || result.contains("entries") || !result.isEmpty());
+		assertTrue(result.contains("BasicBeanStore") || result.contains("entries") || !result.isEmpty());
 	}
 
 	@Test
 	void q02_toString_withParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestBean.class, new TestBean("parent"));
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		store.addBean(AnotherBean.class, new AnotherBean(42));
 
 		var result = store.toString();
@@ -923,7 +923,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void r01_addDefaultSupplier_unnamed_fallsBackWhenNoEntry() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var defaultBean = new TestBean("default");
 		store.addDefaultSupplier(TestBean.class, () -> defaultBean);
 
@@ -933,7 +933,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void r02_addDefaultSupplier_localEntryBeatsDefault() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		var defaultBean = new TestBean("default");
 		var localBean = new TestBean("local");
 		store.addDefaultSupplier(TestBean.class, () -> defaultBean);
@@ -944,10 +944,10 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void r03_addDefaultSupplier_regularParentBeatsDefault() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestBean.class, new TestBean("parent"));
 
-		var store = new BasicBeanStore2(parent);
+		var store = new BasicBeanStore(parent);
 		store.addDefaultSupplier(TestBean.class, () -> new TestBean("default"));
 
 		assertEquals("parent", store.getBean(TestBean.class).orElseThrow().getName());
@@ -955,7 +955,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void r04_addDefaultSupplier_named() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		store.addDefaultSupplier(TestBean.class, () -> new TestBean("dn"), "n1");
 
 		assertTrue(store.getBean(TestBean.class, "n1").isPresent());
@@ -966,7 +966,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void r05_addDefaultSupplier_clearedByClear() {
-		var store = new BasicBeanStore2(null);
+		var store = new BasicBeanStore(null);
 		store.addDefaultSupplier(TestBean.class, () -> new TestBean("d"));
 		assertTrue(store.getBean(TestBean.class).isPresent());
 
@@ -976,10 +976,10 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void s01_overridingParent_beatsLocalEntry() {
-		var spring = new BasicBeanStore2(null);
+		var spring = new BasicBeanStore(null);
 		spring.addBean(TestBean.class, new TestBean("spring"));
 
-		var store = new BasicBeanStore2(null, spring);
+		var store = new BasicBeanStore(null, spring);
 		store.addBean(TestBean.class, new TestBean("local"));
 
 		assertEquals("spring", store.getBean(TestBean.class).orElseThrow().getName());
@@ -987,10 +987,10 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void s02_overridingParent_beatsDefault() {
-		var spring = new BasicBeanStore2(null);
+		var spring = new BasicBeanStore(null);
 		spring.addBean(TestBean.class, new TestBean("spring"));
 
-		var store = new BasicBeanStore2(null, spring);
+		var store = new BasicBeanStore(null, spring);
 		store.addDefaultSupplier(TestBean.class, () -> new TestBean("default"));
 
 		assertEquals("spring", store.getBean(TestBean.class).orElseThrow().getName());
@@ -998,13 +998,13 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void s03_overridingParent_localEntryBeatsRegularParent() {
-		var regularParent = new BasicBeanStore2(null);
+		var regularParent = new BasicBeanStore(null);
 		regularParent.addBean(TestBean.class, new TestBean("regular-parent"));
 
-		var spring = new BasicBeanStore2(null);
+		var spring = new BasicBeanStore(null);
 		// no spring binding for TestBean
 
-		var store = new BasicBeanStore2(regularParent, spring);
+		var store = new BasicBeanStore(regularParent, spring);
 		store.addBean(TestBean.class, new TestBean("local"));
 
 		assertEquals("local", store.getBean(TestBean.class).orElseThrow().getName());
@@ -1012,10 +1012,10 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void s04_overridingParent_namedLookup() {
-		var spring = new BasicBeanStore2(null);
+		var spring = new BasicBeanStore(null);
 		spring.addBean(TestBean.class, new TestBean("spring"), "primary");
 
-		var store = new BasicBeanStore2(null, spring);
+		var store = new BasicBeanStore(null, spring);
 		store.addBean(TestBean.class, new TestBean("local"), "primary");
 
 		assertEquals("spring", store.getBean(TestBean.class, "primary").orElseThrow().getName());
@@ -1025,13 +1025,13 @@ class BasicBeanStore_Test extends TestBase {
 	@Test
 	void s05_fullPrecedenceOrder() {
 		// Set up: overriding parent (Spring), regular parent, local entry, local default
-		var regularParent = new BasicBeanStore2(null);
+		var regularParent = new BasicBeanStore(null);
 		regularParent.addBean(TestBean.class, new TestBean("regular-parent"));
 
-		var spring = new BasicBeanStore2(null);
+		var spring = new BasicBeanStore(null);
 		spring.addBean(TestBean.class, new TestBean("spring"));
 
-		var store = new BasicBeanStore2(regularParent, spring);
+		var store = new BasicBeanStore(regularParent, spring);
 		store.addBean(TestBean.class, new TestBean("local"));
 		store.addDefaultSupplier(TestBean.class, () -> new TestBean("default"));
 
@@ -1042,10 +1042,10 @@ class BasicBeanStore_Test extends TestBase {
 	@Test
 	void s06_precedenceOrder_noOverriding_noEntry() {
 		// Only regular parent and default — regular parent wins over default.
-		var regularParent = new BasicBeanStore2(null);
+		var regularParent = new BasicBeanStore(null);
 		regularParent.addBean(TestBean.class, new TestBean("regular-parent"));
 
-		var store = new BasicBeanStore2(regularParent);
+		var store = new BasicBeanStore(regularParent);
 		store.addDefaultSupplier(TestBean.class, () -> new TestBean("default"));
 
 		assertEquals("regular-parent", store.getBean(TestBean.class).orElseThrow().getName());
@@ -1054,10 +1054,10 @@ class BasicBeanStore_Test extends TestBase {
 	@Test
 	void s07_precedenceOrder_noOverridingMatch_fallsThroughToLocal() {
 		// Spring has no match, local entry should be returned.
-		var spring = new BasicBeanStore2(null);
+		var spring = new BasicBeanStore(null);
 		// no binding for TestBean
 
-		var store = new BasicBeanStore2(null, spring);
+		var store = new BasicBeanStore(null, spring);
 		store.addBean(TestBean.class, new TestBean("local"));
 
 		assertEquals("local", store.getBean(TestBean.class).orElseThrow().getName());
@@ -1065,10 +1065,10 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void s08_overridingParent_getBeanSupplier() {
-		var spring = new BasicBeanStore2(null);
+		var spring = new BasicBeanStore(null);
 		spring.addBean(TestBean.class, new TestBean("spring"));
 
-		var store = new BasicBeanStore2(null, spring);
+		var store = new BasicBeanStore(null, spring);
 		store.addBean(TestBean.class, new TestBean("local"));
 
 		var supplier = store.getBeanSupplier(TestBean.class);
@@ -1078,21 +1078,21 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void s09_overridingParent_hasBean() {
-		var spring = new BasicBeanStore2(null);
+		var spring = new BasicBeanStore(null);
 		spring.addBean(TestBean.class, new TestBean("spring"));
 
-		var store = new BasicBeanStore2(null, spring);
+		var store = new BasicBeanStore(null, spring);
 		assertTrue(store.hasBean(TestBean.class));
 		assertFalse(store.hasBean(AnotherBean.class));
 	}
 
 	@Test
 	void s10_overridingParent_getBeansOfType_overridesLocalNamed() {
-		var spring = new BasicBeanStore2(null);
+		var spring = new BasicBeanStore(null);
 		spring.addBean(TestBean.class, new TestBean("spring-a"), "a");
 		spring.addBean(TestBean.class, new TestBean("spring-b"), "b");
 
-		var store = new BasicBeanStore2(null, spring);
+		var store = new BasicBeanStore(null, spring);
 		store.addBean(TestBean.class, new TestBean("local-a"), "a");
 		store.addBean(TestBean.class, new TestBean("local-c"), "c");
 		store.addDefaultSupplier(TestBean.class, () -> new TestBean("default-d"), "d");

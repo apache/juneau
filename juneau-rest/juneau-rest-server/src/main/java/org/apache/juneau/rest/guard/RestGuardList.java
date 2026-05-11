@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 
 /**
@@ -35,9 +34,10 @@ public class RestGuardList {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<RestGuardList> {
+	public static class Builder {
 
-		List<BeanInstantiator<RestGuard>> entries;
+		private final WritableBeanStore beanStore;
+		List<BeanInstantiator.Builder<RestGuard>> entries;
 
 		/**
 		 * Constructor.
@@ -45,12 +45,21 @@ public class RestGuardList {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(WritableBeanStore beanStore) {
-			super(RestGuardList.class, beanStore);
+			this.beanStore = beanStore;
 			entries = list();
 		}
 
 		/**
-		 * Appends the specified rest matcher classes to the list.
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public WritableBeanStore beanStore() {
+			return beanStore;
+		}
+
+		/**
+		 * Appends the specified rest guard classes to the list.
 		 *
 		 * @param values The values to add.
 		 * @return This object.
@@ -60,36 +69,28 @@ public class RestGuardList {
 		})
 		public Builder append(Class<? extends RestGuard>...values) {
 			for (var v : values)
-				entries.add(BeanInstantiator.of(RestGuard.class, beanStore()).beanSubType(v));
+				entries.add(BeanInstantiator.of(RestGuard.class, beanStore).type(v));
 			return this;
 		}
 
 		/**
-		 * Appends the specified rest matcher objects to the list.
+		 * Appends the specified rest guard objects to the list.
 		 *
 		 * @param values The values to add.
 		 * @return This object.
 		 */
 		public Builder append(RestGuard...values) {
 			for (var v : values)
-				entries.add(BeanInstantiator.of(RestGuard.class, beanStore()).implementation(v));
+				entries.add(BeanInstantiator.of(RestGuard.class, beanStore).impl(v));
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected RestGuardList buildDefault() {
+		/**
+		 * Builds the list.
+		 *
+		 * @return A new {@link RestGuardList}.
+		 */
+		public RestGuardList build() {
 			return new RestGuardList(this);
 		}
 	}
@@ -112,7 +113,7 @@ public class RestGuardList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestGuardList(Builder builder) {
-		entries = builder.entries.stream().map(BeanInstantiator::run).toArray(RestGuard[]::new);
+		entries = builder.entries.stream().map(BeanInstantiator.Builder::run).toArray(RestGuard[]::new);
 	}
 
 	/**

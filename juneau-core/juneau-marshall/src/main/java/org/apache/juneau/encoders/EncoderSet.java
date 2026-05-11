@@ -25,7 +25,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 
@@ -81,7 +80,7 @@ public class EncoderSet {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<EncoderSet> {
+	public static class Builder {
 		private static String toString(Object o) {
 			if (o == null)
 				return "null";
@@ -89,6 +88,9 @@ public class EncoderSet {
 				return "class:" + cns(o);
 			return "object:" + cns(o);
 		}
+
+		private final WritableBeanStore beanStore;
+		private EncoderSet impl;
 
 		List<Object> entries;
 
@@ -100,7 +102,7 @@ public class EncoderSet {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(WritableBeanStore beanStore) {
-			super(EncoderSet.class, beanStore);
+			this.beanStore = beanStore;
 			entries = list();
 		}
 
@@ -110,8 +112,18 @@ public class EncoderSet {
 		 * @param copyFrom The builder being copied.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			this.beanStore = copyFrom.beanStore;
+			this.impl = copyFrom.impl;
 			entries = copyOf(copyFrom.entries);
+		}
+
+		/**
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public WritableBeanStore beanStore() {
+			return beanStore;
 		}
 
 		/**
@@ -173,9 +185,14 @@ public class EncoderSet {
 			return new Builder(this);
 		}
 
-		@Override /* Overridden from BeanBuilder */
+		/**
+		 * Overrides the bean returned by the {@link #build()} method with a pre-built instance.
+		 *
+		 * @param value The pre-built instance.
+		 * @return This object.
+		 */
 		public Builder impl(Object value) {
-			super.impl(value);
+			impl = (EncoderSet) value;
 			return this;
 		}
 
@@ -236,14 +253,14 @@ public class EncoderSet {
 			return entries.stream().map(Builder::toString).collect(joining(",", "[", "]"));
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected EncoderSet buildDefault() {
+		/**
+		 * Builds the encoder set.
+		 *
+		 * @return A new {@link EncoderSet}.
+		 */
+		public EncoderSet build() {
+			if (nn(impl))
+				return impl;
 			return new EncoderSet(this);
 		}
 	}
@@ -268,7 +285,7 @@ public class EncoderSet {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BasicBeanStore2.INSTANCE);
+		return new Builder(BasicBeanStore.INSTANCE);
 	}
 
 	/**
@@ -287,7 +304,7 @@ public class EncoderSet {
 		try {
 			@SuppressWarnings("unchecked")
 			var subType = (Class<? extends Encoder>) o;
-			return BeanInstantiator.of(Encoder.class, bs).beanSubType(subType).run();
+			return BeanInstantiator.of(Encoder.class, bs).type(subType).run();
 		} catch (ExecutableException e) {
 			throw toRex(e);
 		}

@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.Enablement;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.BeanStore;
 import jakarta.servlet.http.*;
@@ -53,8 +53,10 @@ public class CallLoggerRule {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<CallLoggerRule> {
+	public static class Builder {
 
+		@SuppressWarnings("unused")
+		private final BeanStore beanStore;
 		Predicate<Integer> statusFilter;
 		Predicate<HttpServletRequest> requestFilter;
 		Predicate<HttpServletResponse> responseFilter;
@@ -72,7 +74,7 @@ public class CallLoggerRule {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(BeanStore beanStore) {
-			super(CallLoggerRule.class, beanStore);
+			this.beanStore = beanStore;
 		}
 
 		/**
@@ -163,11 +165,6 @@ public class CallLoggerRule {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
 
 		/**
 		 * The logging level to use for logging the request/response.
@@ -300,14 +297,12 @@ public class CallLoggerRule {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected CallLoggerRule buildDefault() {
+		/**
+		 * Builds the logger rule.
+		 *
+		 * @return A new {@link CallLoggerRule}.
+		 */
+		public CallLoggerRule build() {
 			return new CallLoggerRule(this);
 		}
 	}

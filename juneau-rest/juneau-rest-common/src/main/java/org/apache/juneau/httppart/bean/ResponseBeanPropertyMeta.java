@@ -89,10 +89,10 @@ public class ResponseBeanPropertyMeta {
 		getter = b.getter;
 		this.serializer = serializer.isPresent() || schema.getSerializer() == null
 			? serializer
-			: BeanInstantiator.of(HttpPartSerializer.class).beanSubType((Class<? extends HttpPartSerializer>) schema.getSerializer()).asOptional();
+			: BeanInstantiator.of(HttpPartSerializer.class).type((Class<? extends HttpPartSerializer>) schema.getSerializer()).asOptional();
 		this.parser = parser.isPresent() || schema.getParser() == null
 			? parser
-			: BeanInstantiator.of(HttpPartParser.class).beanSubType((Class<? extends HttpPartParser>) schema.getParser()).asOptional();
+			: BeanInstantiator.of(HttpPartParser.class).type((Class<? extends HttpPartParser>) schema.getParser()).asOptional();
 	}
 
 	/**

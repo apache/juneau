@@ -156,7 +156,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, HttpPartSerializer defaultSerializer) {
 		return c == null
 			? defaultSerializer
-			: BeanInstantiator.of(HttpPartSerializer.class).beanSubType(c).fallback(() -> defaultSerializer).run();
+			: BeanInstantiator.of(HttpPartSerializer.class).type(c).fallback(() -> defaultSerializer).run();
 	}
 
 	private final WritableBeanStore opBeanStore;
@@ -173,7 +173,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private Method method() { return method; }
 	private MethodInfo methodInfo() { return mi; }
 	private AnnotationWorkList appliedAnnotations() { return appliedAnnotations; }
-	private WritableBeanStore beanStore() { return context.getBeanStore(); }// TODO - Should be BeanStore?
+	private WritableBeanStore beanStore() { return context.getBeanStore(); } // Kept writable for operation-scope bean registrations.
 	private WritableBeanStore opBeanStore() { return opBeanStore; }
 	private Object resource() { return context.getResource(); }
 	private VarResolver varResolver() { return context.getVarResolver(); }
@@ -214,7 +214,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getBeanContext();
 		Value<BeanContext.Builder> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = new BasicBeanStore2(beanStore())
+		var bs = new BasicBeanStore(beanStore())
 			.addBean(Method.class, method())
 			.addBean(BeanContext.Builder.class, v.get());
 		bs.createBeanFromMethod(BeanContext.class, resource(), this::matchesInjectScope)
@@ -238,19 +238,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private final Memoizer<RestConverter[]> converters = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(RestConverterList.create(bs));
+		var b = RestConverterList.create(bs);
 		if (isInherited(PROPERTY_converters))
 			restContext().getRestAnnotationsForProperty(PROPERTY_converters)
-				.forEach(ai -> v.get().append(ai.inner().converters()));
+				.forEach(ai -> b.append(ai.inner().converters()));
 		getRestOpAnnotationsForProperty(PROPERTY_converters)
 			.forEach(ai -> ai.getClassArray("converters", RestConverter.class).ifPresent(classes -> {
 				for (var c : classes)
-					v.get().append(classArray(c));
+					b.append(classArray(c));
 			}));
-		bs.getBean(RestConverterList.class).ifPresent(x -> v.get().impl(x));
-		bs.createBeanFromMethod(RestConverterList.class, resource(), this::matchesInjectScope)
-			.ifPresent(x -> v.get().impl(x));
-		return v.get().build().asArray();
+		var override = bs.createBeanFromMethod(RestConverterList.class, resource(), this::matchesInjectScope).orElse(null);
+		if (override == null)
+			override = bs.getBean(RestConverterList.class).orElse(null);
+		return (nn(override) ? override : b.build()).asArray();
 	});
 
 	/** The effective {@link DebugEnablement} for this operation. */
@@ -469,14 +469,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private final Memoizer<RestGuard[]> guards = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(RestGuardList.create(bs));
+		var b = RestGuardList.create(bs);
 		var rolesDeclaredSet = new java.util.LinkedHashSet<String>();
 		var roleGuardStrs = new ArrayList<String>();
 
 		Consumer<AnnotationInfo<?>> walk = ai -> {
 			ai.getClassArray("guards", RestGuard.class).ifPresent(classes -> {
 				for (var c : classes)
-					v.get().append(classArray(c));
+					b.append(classArray(c));
 			});
 			// rolesDeclared is a single CDL string (not an array) on every annotation in the chain.
 			ai.getString("rolesDeclared").filter(StringUtils::isNotBlank)
@@ -494,16 +494,16 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var declaredRoles = rolesDeclaredSet.isEmpty() ? null : rolesDeclaredSet;
 		for (var rg : roleGuardStrs) {
 			try {
-				v.get().append(new RoleBasedRestGuard(declaredRoles, rg));
+				b.append(new RoleBasedRestGuard(declaredRoles, rg));
 			} catch (java.text.ParseException e) {
 				throw toRex(e);
 			}
 		}
 
-		bs.getBean(RestGuardList.class).ifPresent(x -> v.get().impl(x));
-		bs.createBeanFromMethod(RestGuardList.class, resource(), this::matchesInjectScope)
-			.ifPresent(x -> v.get().impl(x));
-		return v.get().build().asArray();
+		var override = bs.createBeanFromMethod(RestGuardList.class, resource(), this::matchesInjectScope).orElse(null);
+		if (override == null)
+			override = bs.getBean(RestGuardList.class).orElse(null);
+		return (nn(override) ? override : b.build()).asArray();
 	});
 
 	/** The depth of the declaring class in the inheritance chain. */
@@ -544,7 +544,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getJsonSchemaGenerator();
 		Value<JsonSchemaGenerator.Builder> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = new BasicBeanStore2(beanStore())
+		var bs = new BasicBeanStore(beanStore())
 			.addBean(Method.class, method())
 			.addBean(JsonSchemaGenerator.Builder.class, v.get());
 		bs.createBeanFromMethod(JsonSchemaGenerator.class, resource(), this::matchesInjectScope)
@@ -567,24 +567,24 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	private final Memoizer<RestMatcherList> matchersList = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(RestMatcherList.create(bs));
+		var b = RestMatcherList.create(bs);
 		var clientVersion = new String[]{null};
 
 		getRestOpAnnotationsForProperty(PROPERTY_matchers).forEach(ai -> {
 			ai.getClassArray("matchers", RestMatcher.class).ifPresent(classes -> {
 				for (var c : classes)
-					v.get().append(classArray(c));
+					b.append(classArray(c));
 			});
 			ai.getString("clientVersion").filter(StringUtils::isNotBlank).ifPresent(s -> clientVersion[0] = s);
 		});
 
 		if (nn(clientVersion[0]))
-			v.get().append(new ClientVersionMatcher(restContext().getClientVersionHeader(), MethodInfo.of(method())));
+			b.append(new ClientVersionMatcher(restContext().getClientVersionHeader(), MethodInfo.of(method())));
 
-		bs.getBean(RestMatcherList.class).ifPresent(x -> v.get().impl(x));
-		bs.createBeanFromMethod(RestMatcherList.class, resource(), this::matchesInjectScope)
-			.ifPresent(x -> v.get().impl(x));
-		return v.get().build();
+		var override = bs.createBeanFromMethod(RestMatcherList.class, resource(), this::matchesInjectScope).orElse(null);
+		if (override == null)
+			override = bs.getBean(RestMatcherList.class).orElse(null);
+		return nn(override) ? override : b.build();
 	});
 
 	/** The invoker for the operation method itself. */
@@ -662,7 +662,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getPartParser();
 		Value<HttpPartParser.Creator> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = new BasicBeanStore2(beanStore())
+		var bs = new BasicBeanStore(beanStore())
 			.addBean(Method.class, method())
 			.addBean(HttpPartParser.Creator.class, v.get());
 		bs.createBeanFromMethod(HttpPartParser.class, resource(), this::matchesInjectScope)
@@ -678,7 +678,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return restContext().getPartSerializer();
 		Value<HttpPartSerializer.Creator> v = Value.of(parent.copy());
 		v.get().apply(aa);
-		var bs = new BasicBeanStore2(beanStore())
+		var bs = new BasicBeanStore(beanStore())
 			.addBean(Method.class, method())
 			.addBean(HttpPartSerializer.Creator.class, v.get());
 		bs.createBeanFromMethod(HttpPartSerializer.class, resource(), this::matchesInjectScope)
@@ -1093,13 +1093,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			mi = MethodInfo.of(method).accessible();
 
-			// @formatter:off
-			var bs = new BasicBeanStore2(context.getBootstrapBeanStore())
-				.addBean(RestOpContext.class, this)
-				.addBean(Method.class, method)
-				.addBean(AnnotationWorkList.class, appliedAnnotations);
+			var bs = new BasicBeanStore(context.getBootstrapBeanStore());
+			bs.addBean(RestOpContext.class, this);
+			bs.addBean(Method.class, method);
+			bs.addBean(AnnotationWorkList.class, appliedAnnotations);
 			opBeanStore = bs;
-			// @formatter:on
 
 			bs.add(BeanContext.class, getBeanContext());
 			bs.add(RestConverter[].class, getConverters());

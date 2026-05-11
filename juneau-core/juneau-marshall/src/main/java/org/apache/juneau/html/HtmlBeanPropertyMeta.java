@@ -41,7 +41,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		boolean noTables;
 		boolean noTableHeaders;
 		HtmlFormat format = HtmlFormat.HTML;
-		BeanInstantiator<HtmlRender> render = BeanInstantiator.of(HtmlRender.class);
+		BeanInstantiator.Builder<HtmlRender> render = BeanInstantiator.of(HtmlRender.class);
 		String link;
 		String anchorText;
 		String style;
@@ -55,7 +55,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 			if (html.noTableHeaders())
 				noTableHeaders = html.noTableHeaders();
 			if (html.render() != HtmlRender.class)
-				render.beanSubType(html.render());
+				render.type(html.render());
 			if (! html.link().isEmpty())
 				link = html.link();
 			if (! html.anchorText().isEmpty())

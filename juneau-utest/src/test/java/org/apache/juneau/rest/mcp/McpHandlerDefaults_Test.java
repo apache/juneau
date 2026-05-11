@@ -20,7 +20,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BasicBeanStore;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.junit.jupiter.api.*;
 
@@ -93,7 +93,7 @@ class McpHandlerDefaults_Test {
 	@Test
 	void cursor_passes_ctx_to_strategy() {
 		// Verify ctx parameter reaches the cursor (covers the BeanStore parameter passthrough).
-		var bs = new BasicBeanStore2();
+		var bs = new BasicBeanStore();
 		var got = new Object[1];
 		McpCursor c = new McpCursor() {
 			@Override

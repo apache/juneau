@@ -27,7 +27,7 @@ import java.util.function.*;
  * A bean store that provides convenient access to {@link BeanInstantiator} instances for creating beans.
  *
  * <p>
- * This class extends {@link BasicBeanStore2} and adds methods to manage {@link BeanInstantiator} instances
+ * This class extends {@link BasicBeanStore} and adds methods to manage {@link BeanInstantiator} instances
  * for different bean types. Creators are lazily created and cached for efficient reuse.
  *
  * <h5 class='section'>Example:</h5>
@@ -46,14 +46,14 @@ import java.util.function.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicBeanStore2}
+ * 	<li class='jc'>{@link BasicBeanStore}
  * 	<li class='jc'>{@link BeanInstantiator}
  * </ul>
  */
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class CreatableBeanStore extends BasicBeanStore2 {
+public class CreatableBeanStore extends BasicBeanStore {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_beanType = "beanType";
@@ -81,7 +81,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 */
 	public <T> BeanInstantiator<T> add(Class<T> beanType) {
 		assertArgNotNull(ARG_beanType, beanType);
-		var creator = BeanInstantiator.of(beanType, this, null, enclosingInstance);
+		var creator = BeanInstantiator.of(beanType, this, null, enclosingInstance).build();
 		creators.put(beanType, creator);
 		return creator;
 	}
@@ -96,7 +96,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 */
 	public <T> BeanInstantiator<T> add(Class<T> beanType, String name) {
 		assertArgNotNull(ARG_beanType, beanType);
-		var creator = BeanInstantiator.of(beanType, this, name, enclosingInstance);
+		var creator = BeanInstantiator.of(beanType, this, name, enclosingInstance).build();
 		creators.put(beanType, creator);
 		return creator;
 	}
@@ -122,7 +122,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 */
 	public <T> CreatableBeanStore addCreator(Class<T> beanType) {
 		assertArgNotNull(ARG_beanType, beanType);
-		var creator = BeanInstantiator.of(beanType, this, null, enclosingInstance);
+		var creator = BeanInstantiator.of(beanType, this, null, enclosingInstance).build();
 		creators.put(beanType, creator);
 		return this;
 	}
@@ -149,7 +149,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	 */
 	public <T> CreatableBeanStore addCreator(Class<T> beanType, String name) {
 		assertArgNotNull(ARG_beanType, beanType);
-		var creator = BeanInstantiator.of(beanType, this, name, enclosingInstance);
+		var creator = BeanInstantiator.of(beanType, this, name, enclosingInstance).build();
 		creators.put(beanType, creator);
 		return this;
 	}
@@ -179,7 +179,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	})
 	public <T> BeanInstantiator<T> getCreator(Class<T> beanType) {
 		assertArgNotNull(ARG_beanType, beanType);
-		return (BeanInstantiator<T>)creators.computeIfAbsent(beanType, k -> BeanInstantiator.of((Class<T>)k, this, null, enclosingInstance));
+		return (BeanInstantiator<T>)creators.computeIfAbsent(beanType, k -> BeanInstantiator.of((Class<T>)k, this, null, enclosingInstance).build());
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class CreatableBeanStore extends BasicBeanStore2 {
 	})
 	public <T> BeanInstantiator<T> getCreator(Class<T> beanType, String name) {
 		assertArgNotNull(ARG_beanType, beanType);
-		return (BeanInstantiator<T>)creators.computeIfAbsent(beanType, k -> BeanInstantiator.of((Class<T>)k, this, name, enclosingInstance));
+		return (BeanInstantiator<T>)creators.computeIfAbsent(beanType, k -> BeanInstantiator.of((Class<T>)k, this, name, enclosingInstance).build());
 	}
 
 	/**

@@ -28,7 +28,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
-import org.apache.juneau.rest.util.*;
 
 /**
  * Resolves method parameters annotated with {@link PathRemainder} on {@link RestOp}-annotated Java methods.
@@ -67,13 +66,9 @@ public class PathRemainderArg implements RestOpArg {
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
-	 * @param pathMatcher Path matcher for the specified method (not used, but included for BasicBeanStore compatibility).
 	 * @return A new {@link PathRemainderArg}, or <jk>null</jk> if the parameter is not annotated with {@link PathRemainder}.
 	 */
-	@SuppressWarnings({
-		"java:S1172" // Parameter pathMatcher is kept for BasicBeanStore compatibility
-	})
-	public static PathRemainderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
+	public static PathRemainderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		if (AP.has(PathRemainder.class, paramInfo))
 			return new PathRemainderArg(paramInfo, annotations);
 		return null;

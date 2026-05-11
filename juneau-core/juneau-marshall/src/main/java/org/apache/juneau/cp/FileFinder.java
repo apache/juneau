@@ -25,8 +25,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.io.*;
 
 /**
@@ -65,7 +64,7 @@ import org.apache.juneau.commons.io.*;
  *
  * <p>
  * The default implementation of this interface is {@link BasicFileFinder}.
- * The {@link Builder#type(Class)} method is provided for instantiating other instances.
+ * To instantiate subclasses, create a subclass-specific builder and pass it to the subclass constructor.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -76,7 +75,8 @@ import org.apache.juneau.commons.io.*;
  * 	}
  *
  * 	<jc>// Instantiate subclass.</jc>
- * 	FileFinder <jv>myFinder</jv> = FileFinder.<jsm>create</jsm>().type(MyFileFinder.<jk>class</jk>).build();
+ * 	FileFinder.Builder <jv>b</jv> = FileFinder.<jsm>create</jsm>();
+ * 	FileFinder <jv>myFinder</jv> = <jk>new</jk> MyFileFinder(<jv>b</jv>);
  * </p>
  *
  * <p>
@@ -101,8 +101,9 @@ public interface FileFinder {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<FileFinder> {
+	public static class Builder {
 
+		private final BeanStore beanStore;
 		final Set<LocalDir> roots;
 		long cachingLimit;
 		Pattern[] include;
@@ -114,11 +115,20 @@ public interface FileFinder {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(BeanStore beanStore) {
-			super(BasicFileFinder.class, beanStore);
+			this.beanStore = beanStore;
 			roots = set();
 			cachingLimit = -1;
 			include = a(Pattern.compile(".*"));
 			exclude = a();
+		}
+
+		/**
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public BeanStore beanStore() {
+			return beanStore;
 		}
 
 		/**
@@ -176,11 +186,6 @@ public interface FileFinder {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
 
 		/**
 		 * Specifies the regular expression file name patterns to use to include files being retrieved from the file source.
@@ -206,14 +211,12 @@ public interface FileFinder {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected FileFinder buildDefault() {
+		/**
+		 * Builds the file finder.
+		 *
+		 * @return A new {@link BasicFileFinder}.
+		 */
+		public FileFinder build() {
 			return new BasicFileFinder(this);
 		}
 	}

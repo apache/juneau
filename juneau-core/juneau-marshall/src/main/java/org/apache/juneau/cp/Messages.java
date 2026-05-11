@@ -26,7 +26,6 @@ import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
@@ -116,7 +115,7 @@ public class Messages extends ResourceBundle {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<Messages> {
+	public static class Builder {
 
 		private static class MessagesString {
 			private String name;
@@ -139,7 +138,6 @@ public class Messages extends ResourceBundle {
 		 * @param forClass The base class.
 		 */
 		protected Builder(Class<?> forClass) {
-			super(Messages.class, BasicBeanStore.INSTANCE);
 			this.forClass = forClass;
 			this.name = cns(forClass);
 			locations = list();
@@ -165,11 +163,6 @@ public class Messages extends ResourceBundle {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
 
 		/**
 		 * Specifies the locale.
@@ -243,18 +236,16 @@ public class Messages extends ResourceBundle {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-
+		/**
+		 * Builds the messages bundle.
+		 *
+		 * @return A new {@link Messages}, or <jk>null</jk> if no locations are configured.
+		 */
 		@SuppressWarnings({
 			"unchecked", // Type erasure requires unchecked casts for message bundle access
 			"java:S3776", // Cognitive complexity acceptable for this specific logic
 		})
-		@Override /* Overridden from BeanBuilder */
-		protected Messages buildDefault() {
+		public Messages build() {
 
 			if (! locations.isEmpty()) {
 				Tuple2<Class<?>,String>[] mbl = locations.toArray(new Tuple2[0]);
@@ -474,7 +465,7 @@ public class Messages extends ResourceBundle {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		var m = filteredBeanPropertyMap();
-		keySet().stream().forEach(x -> m.a(x, getString(x)));
+		keySet().forEach(x -> m.a(x, getString(x)));
 		return m;
 		// @formatter:on
 	}

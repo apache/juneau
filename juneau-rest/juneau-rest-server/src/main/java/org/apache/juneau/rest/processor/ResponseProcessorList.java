@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.ConfigException;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 
@@ -37,8 +37,9 @@ public class ResponseProcessorList {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BeanBuilder<ResponseProcessorList> {
+	public static class Builder {
 
+		private final WritableBeanStore beanStore;
 		List<Object> entries;
 
 		/**
@@ -47,8 +48,17 @@ public class ResponseProcessorList {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(WritableBeanStore beanStore) {
-			super(ResponseProcessorList.class, beanStore);
+			this.beanStore = beanStore;
 			this.entries = list();
+		}
+
+		/**
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public WritableBeanStore beanStore() {
+			return beanStore;
 		}
 
 		/**
@@ -74,20 +84,12 @@ public class ResponseProcessorList {
 			return this;
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected ResponseProcessorList buildDefault() {
+		/**
+		 * Builds the list.
+		 *
+		 * @return A new {@link ResponseProcessorList}.
+		 */
+		public ResponseProcessorList build() {
 			return new ResponseProcessorList(this);
 		}
 	}
@@ -107,7 +109,7 @@ public class ResponseProcessorList {
 		if (o instanceof ResponseProcessor o2)
 			return o2;
 		try {
-			return BeanInstantiator.of(ResponseProcessor.class, bs).beanSubType((Class<? extends ResponseProcessor>) o).run();
+			return BeanInstantiator.of(ResponseProcessor.class, bs).type((Class<? extends ResponseProcessor>) o).run();
 		} catch (ExecutableException e) {
 			throw new ConfigException(e, "Could not instantiate class {0}", o);
 		}

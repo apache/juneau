@@ -23,8 +23,8 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.inject.BeanInstantiator;
 import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.cp.*;
 
 /**
  * Represents an entry in {@link ThrownStore}.
@@ -60,7 +60,7 @@ public class ThrownStats {
 		List<String> stackTrace;
 		ThrownStats causedBy;
 
-		BeanCreator<ThrownStats> creator;
+		private Class<? extends ThrownStats> implType;
 
 		/**
 		 * Constructor.
@@ -69,7 +69,6 @@ public class ThrownStats {
 		 */
 		protected Builder(BeanStore beanStore) {
 			this.beanStore = beanStore;
-			this.creator = BeanCreator.of(ThrownStats.class, beanStore).builder(Builder.class, this);
 		}
 
 		/**
@@ -78,7 +77,12 @@ public class ThrownStats {
 		 * @return A new {@link ThrownStats}
 		 */
 		public ThrownStats build() {
-			return creator.run();
+			var t = implType != null ? implType : ThrownStats.class;
+			return BeanInstantiator.of(ThrownStats.class, beanStore)
+				.type(t)
+				.noBuilder()
+				.addBean(Builder.class, this)
+				.run();
 		}
 
 		/**
@@ -132,7 +136,7 @@ public class ThrownStats {
 		 * @return This object.
 		 */
 		public Builder type(Class<? extends ThrownStats> value) {
-			creator.type(value == null ? ThrownStats.class : value);
+			implType = opt(value).isPresent() ? value : ThrownStats.class;
 			return this;
 		}
 	}

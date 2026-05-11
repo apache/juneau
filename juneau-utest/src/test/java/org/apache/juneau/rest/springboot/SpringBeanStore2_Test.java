@@ -87,7 +87,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void a03_constructorWithParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var store = new SpringBeanStore2(mockAppContext, parent);
 		assertNotNull(store);
 	}
@@ -110,7 +110,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void b02_getBean_fromParentStore() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var service = new TestService("parent");
 		parent.addBean(TestService.class, service);
 
@@ -124,7 +124,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void b03_getBean_localOverridesParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentService = new TestService("parent");
 		parent.addBean(TestService.class, parentService);
 
@@ -221,7 +221,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void d02_getBeanNamed_fromParentStore() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var service = new TestService("parent");
 		parent.addBean(TestService.class, service, "myBean");
 
@@ -360,7 +360,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void f05_getBeansOfType_includesParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		var parentService = new TestService("parent");
 		parent.addBean(TestService.class, parentService, "parent");
 
@@ -407,7 +407,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void g02_hasBean_inParentStore() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestService.class, new TestService("parent"));
 
 		var store = new SpringBeanStore2(mockAppContext, parent);
@@ -458,7 +458,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void h02_hasBeanNamed_inParentStore() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestService.class, new TestService("parent"), "myBean");
 
 		var store = new SpringBeanStore2(mockAppContext, parent);
@@ -706,7 +706,7 @@ class SpringBeanStore2_Test extends TestBase {
 
 	@Test
 	void k02_clear_doesNotAffectParent() {
-		var parent = new BasicBeanStore2(null);
+		var parent = new BasicBeanStore(null);
 		parent.addBean(TestService.class, new TestService("parent"));
 
 		var store = new SpringBeanStore2(mockAppContext, parent);
@@ -732,7 +732,7 @@ class SpringBeanStore2_Test extends TestBase {
 	@Test
 	void l01_integration_multiLevelHierarchy() {
 		// Set up: grandparent -> parent -> child
-		var grandparent = new BasicBeanStore2(null);
+		var grandparent = new BasicBeanStore(null);
 		var service1 = new TestService("grandparent");
 		grandparent.addBean(TestService.class, service1, "bean1");
 

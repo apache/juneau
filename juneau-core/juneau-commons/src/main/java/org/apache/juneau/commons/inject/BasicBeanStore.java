@@ -46,9 +46,9 @@ import org.apache.juneau.commons.reflect.*;
  * <p>
  * Bean lookups consult the following sources in this order, returning the first match:
  * <ol>
- * 	<li>{@linkplain #BasicBeanStore2(BeanStore,BeanStore) Overriding parent} (e.g. a Spring application context bridge), if non-{@code null}.
+ * 	<li>{@linkplain #BasicBeanStore(BeanStore,BeanStore) Overriding parent} (e.g. a Spring application context bridge), if non-{@code null}.
  * 	<li>Local entries added via {@link #addBean(Class,Object) addBean} / {@link #addSupplier(Class,Supplier) addSupplier}.
- * 	<li>Regular {@linkplain #BasicBeanStore2(BeanStore) parent}, if non-{@code null}.
+ * 	<li>Regular {@linkplain #BasicBeanStore(BeanStore) parent}, if non-{@code null}.
  * 	<li>Local default suppliers added via {@link #addDefaultSupplier(Class,Supplier) addDefaultSupplier} (memoizer-backed framework defaults).
  * </ol>
  *
@@ -60,7 +60,7 @@ import org.apache.juneau.commons.reflect.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_bean)
 })
-public class BasicBeanStore2 implements WritableBeanStore {
+public class BasicBeanStore implements WritableBeanStore {
 
 	/**
 	 * Static reusable empty instance.
@@ -72,11 +72,11 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 *
 	 * <p>
 	 * <b>Treat this instance as read-only.</b>  It's typed as the concrete class so it can be passed
-	 * to APIs that take {@link WritableBeanStore} or {@code BasicBeanStore2}, but callers should not
+	 * to APIs that take {@link WritableBeanStore} or {@code BasicBeanStore}, but callers should not
 	 * call any mutating methods on it &mdash; doing so would leak state between unrelated callers.
-	 * Code that legitimately needs to add beans should construct its own {@code new BasicBeanStore2()}.
+	 * Code that legitimately needs to add beans should construct its own {@code new BasicBeanStore()}.
 	 */
-	public static final BasicBeanStore2 INSTANCE = new BasicBeanStore2();
+	public static final BasicBeanStore INSTANCE = new BasicBeanStore();
 
 	// Property name constants
 	private static final String PROP_bean = "bean";
@@ -95,13 +95,13 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	private final BeanStore overridingParent;
 
 	/**
-	 * No-arg constructor.  Equivalent to {@code new BasicBeanStore2(null)}.
+	 * No-arg constructor.  Equivalent to {@code new BasicBeanStore(null)}.
 	 *
 	 * <p>
 	 * Creates a standalone, parent-less bean store.  All lookups consult only locally-registered beans and
 	 * default suppliers.
 	 */
-	public BasicBeanStore2() {
+	public BasicBeanStore() {
 		this(null, null);
 	}
 
@@ -111,7 +111,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @param parent The parent bean store.  Can be <jk>null</jk>.  Bean searches are performed recursively up this parent chain
 	 * 	<i>after</i> local entries are checked.
 	 */
-	public BasicBeanStore2(BeanStore parent) {
+	public BasicBeanStore(BeanStore parent) {
 		this(parent, null);
 	}
 
@@ -135,13 +135,13 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @param parent The parent bean store, used as a fallback after local entries.  Can be <jk>null</jk>.
 	 * @param overridingParent The overriding parent bean store, consulted before local entries.  Can be <jk>null</jk>.
 	 */
-	public BasicBeanStore2(BeanStore parent, BeanStore overridingParent) {
+	public BasicBeanStore(BeanStore parent, BeanStore overridingParent) {
 		this.parent = parent;
 		this.overridingParent = overridingParent;
 		entries = new ConcurrentHashMap<>();
 		defaults = new ConcurrentHashMap<>();
 		typeBindings = new ConcurrentHashMap<>();
-		addSupplier(BasicBeanStore2.class, ()->this, null);
+		addSupplier(BasicBeanStore.class, ()->this, null);
 		addSupplier(BeanStore.class, ()->this, null);
 		addSupplier(WritableBeanStore.class, ()->this, null);
 	}
@@ -182,7 +182,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
-	public <T> BasicBeanStore2 addBean(Class<T> beanType, T bean) {
+	public <T> BasicBeanStore addBean(Class<T> beanType, T bean) {
 		return addBean(beanType, bean, null);
 	}
 
@@ -196,7 +196,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
-	public <T> BasicBeanStore2 addBean(Class<T> beanType, T bean, String name) {
+	public <T> BasicBeanStore addBean(Class<T> beanType, T bean, String name) {
 		return addSupplier(beanType, () -> bean, name);
 	}
 
@@ -212,7 +212,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
-	public <T> BasicBeanStore2 addSupplier(Class<T> beanType, Supplier<T> bean) {
+	public <T> BasicBeanStore addSupplier(Class<T> beanType, Supplier<T> bean) {
 		return addSupplier(beanType, bean, null);
 	}
 
@@ -229,7 +229,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
-	public <T> BasicBeanStore2 addSupplier(Class<T> beanType, Supplier<T> bean, String name) {
+	public <T> BasicBeanStore addSupplier(Class<T> beanType, Supplier<T> bean, String name) {
 		var typeMap = entries.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
 		var key = emptyIfNull(name);
 		typeMap.put(key, bean);
@@ -241,9 +241,9 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 *
 	 * <p>
 	 * Default suppliers are consulted only after local {@linkplain #addBean(Class,Object) entries} and the regular
-	 * {@linkplain #BasicBeanStore2(BeanStore) parent} have been searched.  They are intended for memoizer-backed
+	 * {@linkplain #BasicBeanStore(BeanStore) parent} have been searched.  They are intended for memoizer-backed
 	 * framework defaults that should not shadow explicit user registrations or beans inherited from an
-	 * {@linkplain #BasicBeanStore2(BeanStore,BeanStore) overriding parent} (e.g. Spring).
+	 * {@linkplain #BasicBeanStore(BeanStore,BeanStore) overriding parent} (e.g. Spring).
 	 *
 	 * @param <T> The bean type.
 	 * @param beanType The bean type.
@@ -251,7 +251,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
-	public <T> BasicBeanStore2 addDefaultSupplier(Class<T> beanType, Supplier<T> supplier) {
+	public <T> BasicBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> supplier) {
 		return addDefaultSupplier(beanType, supplier, null);
 	}
 
@@ -268,7 +268,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
-	public <T> BasicBeanStore2 addDefaultSupplier(Class<T> beanType, Supplier<T> supplier, String name) {
+	public <T> BasicBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> supplier, String name) {
 		var typeMap = defaults.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
 		var key = emptyIfNull(name);
 		typeMap.put(key, supplier);
@@ -284,7 +284,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
-	public BasicBeanStore2 clear() {
+	public BasicBeanStore clear() {
 		entries.clear();
 		defaults.clear();
 		return this;
@@ -398,7 +398,6 @@ public class BasicBeanStore2 implements WritableBeanStore {
 	 * @param beanType The bean type to look up.
 	 * @return The locally-registered default supplier, or {@link Optional#empty()} if not present.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> Optional<Supplier<T>> getDefaultSupplier(Class<T> beanType) {
 		return getDefaultSupplier(beanType, null);
 	}
@@ -606,7 +605,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 			.a(PROP_name, name))));
 		Object overridingParentValue = null;
 		if (nn(overridingParent)) {
-			if (overridingParent instanceof BasicBeanStore2 op2)
+			if (overridingParent instanceof BasicBeanStore op2)
 				overridingParentValue = op2.properties();
 			else
 				overridingParentValue = s(overridingParent);
@@ -616,7 +615,7 @@ public class BasicBeanStore2 implements WritableBeanStore {
 			.a(PROP_defaults, defaultList.isEmpty() ? null : defaultList)
 			.a(PROP_overridingParent, overridingParentValue)
 			.a(PROP_identity, id(this))
-			.a(PROP_parent, parent instanceof BasicBeanStore2 parent2 ? parent2.properties() : s(parent));
+			.a(PROP_parent, parent instanceof BasicBeanStore parent2 ? parent2.properties() : s(parent));
 		// @formatter:on
 	}
 }

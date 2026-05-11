@@ -150,7 +150,7 @@ public class VarResolverSession {
 	 */
 	public VarResolverSession(VarResolver context, WritableBeanStore beanStore) {
 		this.context = context;
-		this.beanStore = new BasicBeanStore2(beanStore);
+		this.beanStore = new BasicBeanStore(beanStore);
 	}
 
 	/**

@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BasicBeanStore;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.rest.*;
@@ -64,7 +64,7 @@ public interface McpEndpoint {
 	 */
 	@RestPost(path = "/mcp")
 	default JsonRpcResponse handleMcpRequest(@Content JsonRpcRequest req, RestRequest restReq) {
-		var bs = new BasicBeanStore2(restReq.getContext().getBeanStore())
+		var bs = new BasicBeanStore(restReq.getContext().getBeanStore())
 			.addBean(RestRequest.class, restReq);
 		return Mcp.handle(req, getMcpConfig(), bs);
 	}

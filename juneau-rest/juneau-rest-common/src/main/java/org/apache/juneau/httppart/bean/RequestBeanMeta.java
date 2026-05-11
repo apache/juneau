@@ -43,8 +43,8 @@ public class RequestBeanMeta {
 	static class Builder {
 		ClassMeta<?> cm;
 		AnnotationWorkList annotations;
-		BeanInstantiator<HttpPartSerializer> serializer = BeanInstantiator.of(HttpPartSerializer.class);
-		BeanInstantiator<HttpPartParser> parser = BeanInstantiator.of(HttpPartParser.class);
+		BeanInstantiator.Builder<HttpPartSerializer> serializer = BeanInstantiator.of(HttpPartSerializer.class);
+		BeanInstantiator.Builder<HttpPartParser> parser = BeanInstantiator.of(HttpPartParser.class);
 		Map<String,RequestBeanPropertyMeta.Builder> properties = map();
 
 		Builder(AnnotationWorkList annotations) {

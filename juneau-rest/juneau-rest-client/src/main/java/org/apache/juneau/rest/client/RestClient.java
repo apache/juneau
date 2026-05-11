@@ -76,7 +76,6 @@ import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
@@ -1095,8 +1094,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	public static class Builder extends BeanContextable.Builder {
 
-		private BeanCreator<RestCallHandler> callHandler;
-		private BasicBeanStore beanStore = BasicBeanStore.create().build();
+		private BeanInstantiator.Builder<RestCallHandler> callHandler;
+		private WritableBeanStore beanStore = new BasicBeanStore();
 		private BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
 		private boolean detectLeaks;
 		private boolean executorServiceShutdownOnClose;
@@ -1581,9 +1580,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='note'>
 		 * 		The {@link RestClient#run(HttpHost, HttpRequest, HttpContext)} method can also be overridden to produce the same results.
 		 * 	<li class='note'>
-		 * 		Use {@link BeanCreator#impl(Object)} to specify an already instantiated instance.
+		 * 		Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder} <c>impl(Object)</c> to specify an already instantiated instance.
 		 * 	<li class='note'>
-		 * 		Use {@link BeanCreator#type(Class)} to specify a subtype to instantiate.
+		 * 		Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder} <c>type(Class)</c> to specify a subtype to instantiate.
 		 * 		<br>Subclass must have a public constructor that takes in any args available
 		 * 		in the bean store of this builder (including {@link RestClient} itself).
 		 * </ul>
@@ -1592,9 +1591,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jic'>{@link RestCallHandler}
 		 * </ul>
 		 *
-		 * @return The creator for the rest call handler.
+		 * @return The instantiator for the rest call handler.
 		 */
-		public final BeanCreator<RestCallHandler> callHandler() {
+		public final BeanInstantiator.Builder<RestCallHandler> callHandler() {
 			if (callHandler == null)
 				callHandler = createCallHandler();
 			return callHandler;
@@ -6156,13 +6155,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Subclasses can override this method to provide their own implementation.
 		 *
 		 * <p>
-		 * The default behavior creates a bean creator initialized to return a {@link BasicRestCallHandler}.
+		 * The default behavior creates a bean instantiator initialized to return a {@link BasicRestCallHandler}.
 		 *
 		 * @return The creator for the rest call handler.
 		 * @see #callHandler()
 		 */
-		protected BeanCreator<RestCallHandler> createCallHandler() {
-			return BeanCreator.of(RestCallHandler.class, beanStore).type(BasicRestCallHandler.class);
+		protected BeanInstantiator.Builder<RestCallHandler> createCallHandler() {
+			return BeanInstantiator.of(RestCallHandler.class, beanStore).type(BasicRestCallHandler.class);
 		}
 
 		/**
@@ -6406,7 +6405,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	protected final SerializerSet serializers;
 	protected final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	Predicate<Integer> errorCodes;
-	private final BasicBeanStore beanStore;
+	private final WritableBeanStore beanStore;
 	private final HttpClientConnectionManager connectionManager;
 	private final Logger logger;
 	private final Map<Class<?>,HttpPartParser> partParsers = new ConcurrentHashMap<>();

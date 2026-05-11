@@ -42,7 +42,7 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Test void a01_createBeanStore_default() {
 		MockRestClient.buildLax(A1.class);
-		assertEquals("BasicBeanStore2", A1.beanStore.getClass().getSimpleName());
+		assertEquals("BasicBeanStore", A1.beanStore.getClass().getSimpleName());
 	}
 
 	@Rest
@@ -50,7 +50,7 @@ class RestContext_Builder_Test extends TestBase {
 		@RestInject static WritableBeanStore beanStore;
 
 		@RestInject WritableBeanStore beanStore() {
-			return new BasicBeanStore2(null).addBean(A.class, new A());
+			return new BasicBeanStore(null).addBean(A.class, new A());
 		}
 	}
 

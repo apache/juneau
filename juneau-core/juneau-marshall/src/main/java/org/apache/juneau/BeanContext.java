@@ -3739,7 +3739,7 @@ public class BeanContext extends Context implements ConversionFinder {
 			} else {
 				var ci = info((Class<?>)x);
 				if (ci.isAssignableTo(ObjectSwap.class))
-					objectSwapsList.add(BeanInstantiator.of(ObjectSwap.class).beanSubType(ci).run());
+					objectSwapsList.add(BeanInstantiator.of(ObjectSwap.class).type(ci).run());
 				else if (ci.isAssignableTo(Surrogate.class))
 					objectSwapsList.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
 				else

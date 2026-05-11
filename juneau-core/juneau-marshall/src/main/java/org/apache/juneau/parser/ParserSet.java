@@ -17,7 +17,7 @@
 package org.apache.juneau.parser;
 
 import org.apache.juneau.commons.http.MediaType;
-import org.apache.juneau.commons.inject.BasicBeanStore2;
+import org.apache.juneau.commons.inject.BasicBeanStore;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
@@ -95,10 +95,13 @@ public class ParserSet {
 	@SuppressWarnings({
 		"java:S115" // Constants use UPPER_snakeCase convention (e.g., CLASS_NoInherit)
 	})
-	public static class Builder extends BeanBuilder<ParserSet> {
+	public static class Builder {
 
 		private static final String CLASS_NoInherit = "NoInherit";
 		private static final String CLASS_Inherit = "Inherit";
+
+		private final WritableBeanStore beanStore;
+		private ParserSet impl;
 
 		List<Object> entries;
 		private BeanContext.Builder bcBuilder;
@@ -109,7 +112,7 @@ public class ParserSet {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(WritableBeanStore beanStore) {
-			super(ParserSet.class, beanStore);
+			this.beanStore = beanStore;
 			this.entries = list();
 		}
 
@@ -122,7 +125,8 @@ public class ParserSet {
 		 * @param copyFrom The parser group that we're copying settings and parsers from.
 		 */
 		protected Builder(Builder copyFrom) {
-			super(copyFrom);
+			this.beanStore = copyFrom.beanStore;
+			this.impl = copyFrom.impl;
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
 			entries = list();
 			copyFrom.entries.stream().map(this::copyBuilder).forEach(entries::add);
@@ -134,8 +138,17 @@ public class ParserSet {
 		 * @param copyFrom The parser group that we're copying settings and parsers from.
 		 */
 		protected Builder(ParserSet copyFrom) {
-			super(copyFrom.getClass(), BasicBeanStore2.INSTANCE);
+			this.beanStore = BasicBeanStore.INSTANCE;
 			this.entries = list((Object[])copyFrom.entries);
+		}
+
+		/**
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public WritableBeanStore beanStore() {
+			return beanStore;
 		}
 
 		/**
@@ -303,9 +316,14 @@ public class ParserSet {
 			return forEach(ReaderParser.Builder.class, action);
 		}
 
-		@Override /* Overridden from BeanBuilder */
+		/**
+		 * Overrides the bean returned by the {@link #build()} method with a pre-built instance.
+		 *
+		 * @param value The pre-built instance.
+		 * @return This object.
+		 */
 		public Builder impl(Object value) {
-			super.impl(value);
+			impl = (ParserSet) value;
 			return this;
 		}
 
@@ -369,11 +387,6 @@ public class ParserSet {
 			return entries.stream().map(this::toString).collect(joining(",", "[", "]"));
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
 
 		private <T extends Parser.Builder> Stream<T> builders(Class<T> type) {
 			return entries.stream().filter(type::isInstance).map(type::cast);
@@ -420,8 +433,14 @@ public class ParserSet {
 			return "parser:" + cn(o);
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected ParserSet buildDefault() {
+		/**
+		 * Builds the parser set.
+		 *
+		 * @return A new {@link ParserSet}.
+		 */
+		public ParserSet build() {
+			if (nn(impl))
+				return impl;
 			return new ParserSet(this);
 		}
 	}
@@ -454,7 +473,7 @@ public class ParserSet {
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder(BasicBeanStore2.INSTANCE);
+		return new Builder(BasicBeanStore.INSTANCE);
 	}
 
 	/**

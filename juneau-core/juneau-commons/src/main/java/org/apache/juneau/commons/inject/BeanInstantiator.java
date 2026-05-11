@@ -28,7 +28,6 @@ import static java.util.Collections.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.logging.*;
@@ -129,13 +128,13 @@ import org.apache.juneau.commons.reflect.*;
  * <p>
  * Builders are detected in the following priority order:
  * <ol class='spaced-list'>
- * 	<li>Explicitly set via {@link #builder(Object)} or {@link #builder(Class)}.
- * 	<li>{@link Builder @Builder} annotation on the bean subtype.
- * 	<li>{@link Builder @Builder} annotation on the bean type.
+ * 	<li>Explicitly set via {@link Builder#builder(Object)} or {@link Builder#builder(Class)}.
+ * 	<li>{@link org.apache.juneau.commons.annotation.Builder @Builder} annotation on the bean subtype.
+ * 	<li>{@link org.apache.juneau.commons.annotation.Builder @Builder} annotation on the bean type.
  * 	<li>Auto-detection:
  * 		<ul>
  * 			<li>Static <c>create()</c> or <c>builder()</c> method that returns a builder type
- * 				(method names can be customized via {@link #builderMethodNames(String...)}).
+ * 				(method names can be customized via {@link Builder#builderMethodNames(String...)}).
  * 			<li>Inner class named <c>Builder</c>.
  * 		</ul>
  * </ol>
@@ -152,17 +151,18 @@ import org.apache.juneau.commons.reflect.*;
  *
  * <h5 class='section'>Caching:</h5>
  * <p>
- * By default, each call to {@link #run()} creates a new bean instance. To enable caching, call {@link #cached()}.
+ * By default, each call to {@link #run()} creates a new bean instance. To enable caching, call {@link Builder#cached()}.
  * When caching is enabled, bean instances are cached using {@link Memoizer}, so multiple calls to {@link #run()}
  * will return the same instance unless {@link #reset()} is called or configuration changes. Explicit implementations set via
- * {@link #implementation(Object)} and explicit builder instances set via {@link #builder(Object)} are preserved
+ * {@link Builder#impl(Object)} and explicit builder instances set via {@link Builder#builder(Object)} are preserved
  * across resets.
  *
  * <h5 class='section'>Thread Safety:</h5>
  * <p>
- * This class is thread-safe. All configuration methods and bean creation use {@link SimpleReadWriteLock} to ensure
- * safe concurrent access. Multiple threads can safely call {@link #run()} simultaneously, and configuration changes
- * are properly synchronized.
+ * Configuration is performed on the inner {@link Builder} which is <b>not</b> thread-safe. Configure on a single
+ * thread, then call {@link Builder#build()} to produce an immutable {@link BeanInstantiator} that is safe for
+ * shared concurrent use. The {@link Builder#run()} shorthand is equivalent to {@code build().run()} and is
+ * appropriate for one-shot bean creation from a single thread.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>Builders must have a <c>build()</c>, <c>create()</c>, or <c>get()</c> method that returns the bean type.
@@ -178,7 +178,7 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicBeanStore2}
+ * 	<li class='jc'>{@link BasicBeanStore}
  * </ul>
  *
  * @param <T> The bean type being created.
@@ -212,49 +212,215 @@ public class BeanInstantiator<T> {
 	/** Default builder class names for auto-detection. */
 	protected static final Set<String> DEFAULT_BUILDER_CLASS_NAMES = u(set("Builder"));
 
+	private static final Logger logger = Logger.getLogger(BeanInstantiator.class);
+
 	/**
-	 * Creates a new bean creator.
+	 * Lifecycle scope for the bean being created.
 	 *
-	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
-	 * @return A new bean creator.
+	 * <p>
+	 * Maps to {@link Builder#cached()} so that {@link Builder#scope(Scope)} provides a more declarative alternative.
+	 *
+	 * @see Builder#scope(Scope)
 	 */
-	public static <T> BeanInstantiator<T> of(Class<T> beanType) {
-		return new BeanInstantiator<>(beanType, null, null, null);
+	public enum Scope {
+		/** A new bean instance is produced on every call to {@link Builder#run()}. */
+		PROTOTYPE,
+		/** A single bean instance is created and reused for the lifetime of the builder. */
+		SINGLETON
 	}
 
 	/**
-	 * Creates a new bean creator with a parent bean store.
+	 * Creates a new bean creator builder.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.
+	 * @return A new bean creator builder.
+	 */
+	public static <T> Builder<T> of(Class<T> beanType) {
+		return new Builder<>(beanType, null, null, null);
+	}
+
+	/**
+	 * Creates a new bean creator builder with a parent bean store.
 	 *
 	 * @param <T> The bean type to create.
 	 * @param beanType The bean type to create.
 	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
-	 * @return A new bean creator.
+	 * @return A new bean creator builder.
 	 */
-	public static <T> BeanInstantiator<T> of(Class<T> beanType, BeanStore parentStore) {
-		return new BeanInstantiator<>(beanType, parentStore, null, null);
+	public static <T> Builder<T> of(Class<T> beanType, BeanStore parentStore) {
+		return new Builder<>(beanType, parentStore, null, null);
 	}
 
 	/**
-	 * Creates a new bean creator with a parent bean store, name, and enclosing instance.
+	 * Creates a new bean creator builder with a parent bean store, name, and enclosing instance.
 	 *
 	 * @param <T> The bean type to create.
 	 * @param beanType The bean type to create.
 	 * @param parentStore The parent bean store to use for resolving dependencies. Can be <jk>null</jk>.
 	 * @param name The bean name. Can be <jk>null</jk>.
 	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk>.
-	 * @return A new bean creator.
+	 * @return A new bean creator builder.
 	 */
-	public static <T> BeanInstantiator<T> of(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
-		return new BeanInstantiator<>(beanType, parentStore, name, enclosingInstance);
+	public static <T> Builder<T> of(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
+		return new Builder<>(beanType, parentStore, name, enclosingInstance);
 	}
 
-	private final BeanStore parentStore;
-	private final BasicBeanStore2 store;
-	private final ClassInfoTyped<T> beanType;
-	private final SimpleReadWriteLock lock = new SimpleReadWriteLock();
-	private final NullableReference<List<String>> debug = NullableReference.empty();
-	private static final Logger logger = Logger.getLogger(BeanInstantiator.class);
+	// =========================================================================
+	// Outer (immutable) wrapper state and methods
+	// =========================================================================
+
+	private final Builder<T> b;
+
+	BeanInstantiator(Builder<T> b) {
+		this.b = b;
+	}
+
+	/**
+	 * Creates the bean.
+	 *
+	 * <p>
+	 * After creating the bean, this method automatically injects dependencies into fields and methods
+	 * annotated with {@code @Inject} or {@code @Autowired} using {@link ClassInfo#inject(Object, BeanStore)}.
+	 *
+	 * @return A new bean with all dependencies injected.
+	 * @throws ExecutableException if bean could not be created.
+	 */
+	public T run() {
+		return b.runImpl();
+	}
+
+	/**
+	 * Attempts to create the bean, returning an {@link Optional} instead of throwing an exception on failure.
+	 *
+	 * @return An {@link Optional} containing the created bean, or {@link Optional#empty()} if creation failed.
+	 */
+	public Optional<T> asOptional() {
+		try {
+			return Optional.of(run());
+		} catch (@SuppressWarnings("unused") ExecutableException e) {
+			return Optional.empty();
+		}
+	}
+
+	/**
+	 * Converts this creator into a memoizer.
+	 *
+	 * @return A resettable supplier that caches the created bean until reset.
+	 */
+	public Memoizer<T> asMemoizer() {
+		return new Memoizer<>(this::run);
+	}
+
+	/**
+	 * Converts this creator into a supplier.
+	 *
+	 * @return A supplier that returns the results of the {@link #run()} method.
+	 */
+	public Supplier<T> asSupplier() {
+		return this::run;
+	}
+
+	/**
+	 * Resets the cached bean instance and the inner Builder's resolved memoizers.
+	 *
+	 * @return This object.
+	 */
+	public BeanInstantiator<T> reset() {
+		b.reset();
+		return this;
+	}
+
+	/**
+	 * Returns the name of the bean being created.
+	 *
+	 * @return The bean name, or <jk>null</jk> if not set.
+	 */
+	public String getName() {
+		return b.name;
+	}
+
+	/**
+	 * Returns the bean subtype class info if specified, or the normal bean type if not.
+	 *
+	 * @return The bean subtype class info, or the bean type class info if no subtype was specified.
+	 */
+	protected ClassInfo getBeanSubType() {
+		return b.beanSubType;
+	}
+
+	/**
+	 * Returns the list of bean subtype classes, including the bean subtype, bean type, and all classes in between.
+	 *
+	 * @return A list of bean subtype class info objects, never <jk>null</jk>.
+	 */
+	protected List<ClassInfo> getBeanSubTypes() {
+		return b.getBeanSubTypes();
+	}
+
+	/**
+	 * Returns the builder instance if one has been created or specified.
+	 *
+	 * @param <B> The builder type.
+	 * @return The builder instance wrapped in an {@link Optional}, or an empty optional if no builder exists.
+	 */
+	public <B> Optional<B> getBuilder() {
+		return b.getBuilder();
+	}
+
+	/**
+	 * Returns the builder type class info determined by builder type detection.
+	 *
+	 * @return The builder type class info, or <jk>null</jk> if no builder type was determined.
+	 */
+	protected ClassInfo getBuilderType() {
+		return b.getBuilderType();
+	}
+
+	/**
+	 * Returns the list of builder types, including the primary builder type and any builder types found in the builder's parent hierarchy.
+	 *
+	 * @return A list of builder type class info objects, never <jk>null</jk>.
+	 */
+	protected List<ClassInfo> getBuilderTypes() {
+		return b.getBuilderTypes();
+	}
+
+	/**
+	 * Returns an unmodifiable list of debug log entries from the last bean creation attempt.
+	 *
+	 * @return An unmodifiable list of debug log entries.
+	 */
+	public List<String> getDebugLog() {
+		return b.getDebugLog();
+	}
+
+	// =========================================================================
+	// Builder (mutable, single-thread configuration) inner class
+	// =========================================================================
+
+	/**
+	 * Builder for {@link BeanInstantiator}.
+	 *
+	 * <p>
+	 * Holds all mutable configuration. Configure on a single thread, then call {@link #build()} to obtain
+	 * an immutable {@link BeanInstantiator} suitable for shared concurrent use. Most call sites use the
+	 * {@link #run()} shorthand which is equivalent to {@code build().run()}.
+	 *
+	 * <h5 class='section'>Thread Safety:</h5>
+	 * <p>
+	 * Builder instances are <b>not</b> thread-safe. Configure on one thread, then either call {@link #build()}
+	 * to produce a thread-safe immutable {@link BeanInstantiator}, or call {@link #run()} to one-shot create a
+	 * bean from a single thread.
+	 *
+	 * @param <T> The bean type being created.
+	 */
+	public static class Builder<T> {
+
+	final BeanStore parentStore;
+	final BasicBeanStore store;
+	final ClassInfoTyped<T> beanType;
+	final NullableReference<List<String>> debug = NullableReference.empty();
 
 	private ClassInfoTyped<? extends T> beanSubType;
 	private ClassInfo explicitBuilderType = null;
@@ -271,12 +437,22 @@ public class BeanInstantiator<T> {
 	private boolean cached = false;
 	private boolean factoryAbstainOnNull = false;
 	private boolean preferZeroArgConstructor = false;
+	private boolean silent = false;
+	private String description = null;
+	private List<UnaryOperator<T>> wrappers = new ArrayList<>();
+	private List<Validation<T>> validators = new ArrayList<>();
+	private List<Builder<? extends T>> alternatives = new ArrayList<>();
+	private List<Consumer<Object>> builderInitializers = new ArrayList<>();
+	private boolean injectBuilder = false;
+	private boolean autoWireBuilder = false;
+	private boolean autoWireUnwrapSuppliers = true;
+	private boolean noBuilder = false;
 
 	private Memoizer<ClassInfo> builderType = memoizer(() -> findBuilderType());
 	private Memoizer<List<ClassInfo>> builderTypes = memoizer(() -> findBuilderTypes());
 	private Memoizer<List<ClassInfo>> beanSubTypes = memoizer(() -> findBeanSubTypes());
-	private Memoizer<Object> builder = memoizer(() -> findBuilder());
-	private Memoizer<T> beanImpl = memoizer(() -> findBeanImpl());
+	private Memoizer<Object> builderMemoizer = memoizer(() -> findBuilder());
+	private Memoizer<T> beanImpl = memoizer(() -> processBean(findBeanImpl()));
 
 	/**
 	 * Constructor.
@@ -286,11 +462,11 @@ public class BeanInstantiator<T> {
 	 * @param name The bean name. Can be <jk>null</jk>.
 	 * @param enclosingInstance The enclosing instance object. Can be <jk>null</jk>.
 	 */
-	protected BeanInstantiator(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
+	protected Builder(Class<T> beanType, BeanStore parentStore, String name, Object enclosingInstance) {
 		this.beanType = info(assertArgNotNull(ARG_beanType, beanType));
 		this.beanSubType = this.beanType;
 		this.parentStore = parentStore;
-		this.store = new BasicBeanStore2(this.parentStore);
+		this.store = new BasicBeanStore(this.parentStore);
 		this.name = name;
 		this.enclosingInstance = enclosingInstance;
 	}
@@ -304,10 +480,8 @@ public class BeanInstantiator<T> {
 	 * @return The bean that was added.
 	 */
 	public <T2> T2 add(Class<T2> type, T2 bean) {
-		try (var writeLock = lock.write()) {
-			store.add(type, bean);
-			reset();
-		}
+		store.add(type, bean);
+		reset();
 		return bean;
 	}
 
@@ -319,11 +493,9 @@ public class BeanInstantiator<T> {
 	 * @param bean The bean instance.
 	 * @return This object.
 	 */
-	public <T2> BeanInstantiator<T> addBean(Class<T2> type, T2 bean) {
-		try (var writeLock = lock.write()) {
-			store.add(type, bean);
-			reset();
-		}
+	public <T2> Builder<T> addBean(Class<T2> type, T2 bean) {
+		store.add(type, bean);
+		reset();
 		return this;
 	}
 
@@ -336,11 +508,9 @@ public class BeanInstantiator<T> {
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return This object.
 	 */
-	public <T2> BeanInstantiator<T> addBean(Class<T2> type, T2 bean, String name) {
-		try (var writeLock = lock.write()) {
-			store.add(type, bean, name);
-			reset();
-		}
+	public <T2> Builder<T> addBean(Class<T2> type, T2 bean, String name) {
+		store.add(type, bean, name);
+		reset();
 		return this;
 	}
 
@@ -395,11 +565,7 @@ public class BeanInstantiator<T> {
 	 * @return An {@link Optional} containing the created bean, or {@link Optional#empty()} if creation failed.
 	 */
 	public Optional<T> asOptional() {
-		try {
-		return Optional.of(run());
-		} catch (@SuppressWarnings("unused") ExecutableException e) {
-		return Optional.empty();
-		}
+		return build().asOptional();
 	}
 
 	/**
@@ -424,7 +590,7 @@ public class BeanInstantiator<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Create a memoizer for a bean with dependencies</jc>
-	 * 	BeanStore <jv>store</jv> = <jk>new</jk> BasicBeanStore2(<jk>null</jk>);
+	 * 	BeanStore <jv>store</jv> = <jk>new</jk> BasicBeanStore(<jk>null</jk>);
 	 * 	<jv>store</jv>.addBean(String.<jk>class</jk>, <js>"initial"</js>);
 	 *
 	 * 	Memoizer&lt;MyBean&gt; <jv>supplier</jv> = BeanInstantiator
@@ -450,7 +616,7 @@ public class BeanInstantiator<T> {
 	 * @return A resettable supplier that caches the created bean until reset.
 	 */
 	public Memoizer<T> asMemoizer() {
-		return new Memoizer<>(this::run);
+		return build().asMemoizer();
 	}
 
 	/**
@@ -459,7 +625,7 @@ public class BeanInstantiator<T> {
 	 * @return A supplier that returns the results of the {@link #run()} method.
 	 */
 	public Supplier<T> asSupplier() {
-		return this::run;
+		return build().asSupplier();
 	}
 
 	/**
@@ -473,13 +639,11 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 * @throws IllegalArgumentException If value is not a subclass of {@code beanType}.
 	 */
-	public BeanInstantiator<T> beanSubType(Class<? extends T> value) {
+	public Builder<T> type(Class<? extends T> value) {
 		assertArgNotNull(ARG_value, value);
-		try (var writeLock = lock.write()) {
-			beanSubType = info(value);
-			assertArg(beanType.isParentOf(beanSubType), "beanSubType must be a subclass of beanType. beanType={0}, beanSubType={1}", cn(beanType), cn(beanSubType));
-			reset();
-		}
+		beanSubType = info(value);
+		assertArg(beanType.isAssignableFrom(beanSubType), "type must be a subclass of beanType. beanType={0}, type={1}", cn(beanType), cn(beanSubType));
+		reset();
 		return this;
 	}
 
@@ -487,7 +651,7 @@ public class BeanInstantiator<T> {
 	 * Specifies a subclass of the bean type to create, via a {@link ClassInfo} reference.
 	 *
 	 * <p>
-	 * Convenience overload of {@link #beanSubType(Class)} that accepts {@link ClassInfo} (or any subtype such
+	 * Convenience overload of {@link #type(Class)} that accepts {@link ClassInfo} (or any subtype such
 	 * as {@code ClassMeta}).  The underlying class is extracted via {@link ClassInfo#inner()} and the
 	 * subtype-relationship check happens at runtime.
 	 *
@@ -496,9 +660,9 @@ public class BeanInstantiator<T> {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or its underlying class is not a subclass of {@code beanType}.
 	 */
 	@SuppressWarnings("unchecked")
-	public BeanInstantiator<T> beanSubType(ClassInfo value) {
+	public Builder<T> type(ClassInfo value) {
 		assertArgNotNull(ARG_value, value);
-		return beanSubType((Class<? extends T>) value.inner());
+		return type((Class<? extends T>) value.inner());
 	}
 
 	/**
@@ -528,14 +692,12 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 * @throws IllegalArgumentException If the builder type is invalid (does not have a valid build/create/get method).
 	 */
-	public BeanInstantiator<T> builder(Class<?> value) {
-		try (var writeLock = lock.write()) {
-			explicitBuilderType = info(assertArgNotNull(ARG_value, value));
-			builderType.set(explicitBuilderType);
-			assertArg(isValidBuilderType(explicitBuilderType), "Invalid builder type {0} for bean type {1}. Builder must have a build(), create(), or get() method that returns {1} (or a parent of {1}). The method may have @Inject annotation to allow injected parameters; otherwise, it must have no parameters.", cn(explicitBuilderType), cn(beanType));
-			builderTypes.get();  // Triggers validation on type hierarchy.
-			reset();
-		}
+	public Builder<T> builder(Class<?> value) {
+		explicitBuilderType = info(assertArgNotNull(ARG_value, value));
+		builderType.set(explicitBuilderType);
+		assertArg(isValidBuilderType(explicitBuilderType), "Invalid builder type {0} for bean type {1}. Builder must have a build(), create(), or get() method that returns {1} (or a parent of {1}). The method may have @Inject annotation to allow injected parameters; otherwise, it must have no parameters.", cn(explicitBuilderType), cn(beanType));
+		builderTypes.get();  // Triggers validation on type hierarchy.
+		reset();
 		return this;
 	}
 
@@ -566,12 +728,10 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 * @throws IllegalArgumentException If the builder instance's class is invalid (does not have a valid build/create/get method).
 	 */
-	public BeanInstantiator<T> builder(Object value) {
-		try (var writeLock = lock.write()) {
-			builder(value.getClass());
-			explicitBuilder = assertArgNotNull(ARG_value, value);
-			reset();
-		}
+	public Builder<T> builder(Object value) {
+		builder(value.getClass());
+		explicitBuilder = assertArgNotNull(ARG_value, value);
+		reset();
 		return this;
 	}
 
@@ -603,11 +763,9 @@ public class BeanInstantiator<T> {
 	 * @param names The builder class names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> builderClassNames(String... names) {
-		try (var writeLock = lock.write()) {
-			builderClassNames = set(assertArgNoNulls(ARG_names, names));
-			reset();
-		}
+	public Builder<T> builderClassNames(String... names) {
+		builderClassNames = set(assertArgNoNulls(ARG_names, names));
+		reset();
 		return this;
 	}
 
@@ -639,11 +797,9 @@ public class BeanInstantiator<T> {
 	 * @param names The builder factory method names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> builderMethodNames(String... names) {
-		try (var writeLock = lock.write()) {
-			builderMethodNames = set(assertArgNoNulls(ARG_names, names));
-			reset();
-		}
+	public Builder<T> builderMethodNames(String... names) {
+		builderMethodNames = set(assertArgNoNulls(ARG_names, names));
+		reset();
 		return this;
 	}
 
@@ -674,11 +830,9 @@ public class BeanInstantiator<T> {
 	 * @param names The build method names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> buildMethodNames(String... names) {
-		try (var writeLock = lock.write()) {
-			buildMethodNames = set(assertArgNoNulls(ARG_names, names));
-			reset();
-		}
+	public Builder<T> buildMethodNames(String... names) {
+		buildMethodNames = set(assertArgNoNulls(ARG_names, names));
+		reset();
 		return this;
 	}
 
@@ -707,10 +861,8 @@ public class BeanInstantiator<T> {
 	 *
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> cached() {
-		try (var writeLock = lock.write()) {
-			cached = true;
-		}
+	public Builder<T> cached() {
+		cached = true;
 		return this;
 	}
 
@@ -742,7 +894,7 @@ public class BeanInstantiator<T> {
 	 * 	<jc>// constructor and return a bogus instance.</jc>
 	 * 	RestOpArg <jv>arg</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(RestOpArg.<jk>class</jk>, <jv>store</jv>)
-	 * 		.beanSubType(AttributeArg.<jk>class</jk>)
+	 * 		.type(AttributeArg.<jk>class</jk>)
 	 * 		.factoryMethodNames(<js>"getInstance"</js>, <js>"create"</js>)
 	 * 		.factoryAbstainOnNull()
 	 * 		.run();
@@ -750,10 +902,8 @@ public class BeanInstantiator<T> {
 	 *
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> factoryAbstainOnNull() {
-		try (var writeLock = lock.write()) {
-			factoryAbstainOnNull = true;
-		}
+	public Builder<T> factoryAbstainOnNull() {
+		factoryAbstainOnNull = true;
 		return this;
 	}
 
@@ -789,51 +939,91 @@ public class BeanInstantiator<T> {
 	 * 	<jc>// Instantiating an arbitrary Map subclass — prefer the no-arg ctor over copy-ctors.</jc>
 	 * 	Map&lt;?,?&gt; <jv>m</jv> = BeanInstantiator
 	 * 		.<jsm>of</jsm>(Map.<jk>class</jk>)
-	 * 		.beanSubType(treeMapClass)
+	 * 		.type(treeMapClass)
 	 * 		.preferZeroArgConstructor()
 	 * 		.run();
 	 * </p>
 	 *
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> preferZeroArgConstructor() {
-		try (var writeLock = lock.write()) {
-			preferZeroArgConstructor = true;
-		}
+	public Builder<T> preferZeroArgConstructor() {
+		preferZeroArgConstructor = true;
 		return this;
 	}
 
 	/**
-	 * Creates the bean.
+	 * Compiles this builder into a {@link BeanInstantiator}.
 	 *
 	 * <p>
-	 * After creating the bean, this method automatically injects dependencies into fields and methods
-	 * annotated with {@code @Inject} or {@code @Autowired} using {@link ClassInfo#inject(Object, BeanStore)}.
+	 * The returned instance exposes only run/read methods (no setters). The compiled instance shares
+	 * its caching state with this builder so that {@link #cached()} memoization is consistent across
+	 * both compiled and shorthand call paths.
+	 *
+	 * @return A new {@link BeanInstantiator} backed by this builder's configuration.
+	 */
+	public BeanInstantiator<T> build() {
+		return new BeanInstantiator<>(this);
+	}
+
+	/**
+	 * Shortcut for {@code build().run()}.
+	 *
+	 * <p>
+	 * Most call sites do not store the {@link BeanInstantiator} and therefore call this shortcut.
+	 * Repeated calls share caching with any compiled {@link BeanInstantiator} produced by {@link #build()}.
 	 *
 	 * @return A new bean with all dependencies injected.
 	 * @throws ExecutableException if bean could not be created.
 	 */
 	public T run() {
+		return runImpl();
+	}
+
+	T runImpl() {
 		debug.ifPresent(x -> x.clear());
 
-		try (var readLock = lock.read()) {
-
-			if (neq(beanSubType, beanType))
-				log("Subtype specified: %s", beanSubType.getName());
-
-			if (explicitImplementation != null) {
-				log("Using pre-configured impl() instance");
-				return runPostCreateHooks(inject(explicitImplementation));
+		try {
+			return runImplOnce();
+		} catch (RuntimeException e) {
+			if (alternatives.isEmpty())
+				throw e;
+			for (var alt : alternatives) {
+				try {
+					return processBean(alt.runImpl());
+				} catch (@SuppressWarnings("unused") RuntimeException ignored) {
+					// Try next alternative
+				}
 			}
-
-			if (cached) {
-				log("Using cached instance");
-				return beanImpl.get();
-			}
-
-			log("Using new instance");
-			return findBeanImpl();
+			throw e;
 		}
+	}
+
+	private T runImplOnce() {
+		if (neq(beanSubType, beanType))
+			log("Subtype specified: %s", beanSubType.getName());
+
+		if (explicitImplementation != null) {
+			log("Using pre-configured impl() instance");
+			return processBean(runPostCreateHooks(inject(explicitImplementation)));
+		}
+
+		if (cached) {
+			log("Using cached instance");
+			return beanImpl.get();
+		}
+
+		log("Using new instance");
+		return processBean(findBeanImpl());
+	}
+
+	private T processBean(T bean) {
+		for (var w : wrappers)
+			bean = w.apply(bean);
+		for (var v : validators) {
+			if (! v.predicate().test(bean))
+				throw new ExecutableException(v.message() + " (bean=" + bean + ")");
+		}
+		return bean;
 	}
 
 	/**
@@ -870,10 +1060,8 @@ public class BeanInstantiator<T> {
 	 *
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> debug() {
-		try (var writeLock = lock.write()) {
-			debug.set(synchronizedList(new ArrayList<>()));
-		}
+	public Builder<T> debug() {
+		debug.set(synchronizedList(new ArrayList<>()));
 		return this;
 	}
 
@@ -907,11 +1095,9 @@ public class BeanInstantiator<T> {
 	 * @param names The factory method names to look for. Cannot be <jk>null</jk> or contain <jk>null</jk> elements.
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> factoryMethodNames(String... names) {
-		try (var writeLock = lock.write()) {
-			factoryMethodNames = set(assertArgNoNulls(ARG_names, names));
-			reset();
-		}
+	public Builder<T> factoryMethodNames(String... names) {
+		factoryMethodNames = set(assertArgNoNulls(ARG_names, names));
+		reset();
 		return this;
 	}
 
@@ -958,11 +1144,9 @@ public class BeanInstantiator<T> {
 	 * @param fallback The fallback supplier. Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> fallback(Supplier<? extends T> fallback) {
+	public Builder<T> fallback(Supplier<? extends T> fallback) {
 		assertArgNotNull(ARG_fallback, fallback);
-		try (var writeLock = lock.write()) {
-			this.fallbackSupplier = fallback;
-		}
+		this.fallbackSupplier = fallback;
 		return this;
 	}
 
@@ -970,15 +1154,13 @@ public class BeanInstantiator<T> {
 	 * Returns the bean subtype class info if specified, or the normal bean type if not.
 	 *
 	 * <p>
-	 * If {@link #beanSubType(Class)} was called to specify a subtype, returns that subtype.
+	 * If {@link #type(Class)} was called to specify a subtype, returns that subtype.
 	 * Otherwise, returns the original bean type passed to {@link #of(Class)}.
 	 *
 	 * @return The bean subtype class info, or the bean type class info if no subtype was specified.
 	 */
 	protected ClassInfo getBeanSubType() {
-		try (var readLock = lock.read()) {
-			return beanSubType;
-		}
+		return beanSubType;
 	}
 
 	/**
@@ -990,9 +1172,7 @@ public class BeanInstantiator<T> {
 	 * @return The bean name, or <jk>null</jk> if not set.
 	 */
 	public String getName() {
-		try (var readLock = lock.read()) {
-			return name;
-		}
+		return name;
 	}
 
 	/**
@@ -1012,9 +1192,7 @@ public class BeanInstantiator<T> {
 	 * @return A list of bean subtype class info objects, never <jk>null</jk>.
 	 */
 	protected List<ClassInfo> getBeanSubTypes() {
-		try (var readLock = lock.read()) {
-			return beanSubTypes.get();
-		}
+		return beanSubTypes.get();
 	}
 
 	/**
@@ -1027,10 +1205,8 @@ public class BeanInstantiator<T> {
 		"unchecked" // Type erasure requires cast to B for builder retrieval
 	})
 	public <B> Optional<B> getBuilder() {
-		try (var writeLock = lock.write()) {
-			beanImpl.reset();
-			return (Optional<B>)builder.toOptional();
-		}
+		beanImpl.reset();
+		return (Optional<B>)builderMemoizer.toOptional();
 	}
 
 	/**
@@ -1039,9 +1215,7 @@ public class BeanInstantiator<T> {
 	 * @return The builder type class info, or <jk>null</jk> if no builder type was determined.
 	 */
 	protected ClassInfo getBuilderType() {
-		try (var readLock = lock.read()) {
-			return builderType.get();
-		}
+		return builderType.get();
 	}
 
 	/**
@@ -1073,9 +1247,7 @@ public class BeanInstantiator<T> {
 	 * @return A list of builder type class info objects, never <jk>null</jk>.
 	 */
 	protected List<ClassInfo> getBuilderTypes() {
-		try (var readLock = lock.read()) {
-			return builderTypes.get();
-		}
+		return builderTypes.get();
 	}
 
 	/**
@@ -1129,10 +1301,8 @@ public class BeanInstantiator<T> {
 	 * @param value The bean implementation instance.
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> implementation(T value) {
-		try (var writeLock = lock.write()) {
-			this.explicitImplementation = value;
-		}
+	public Builder<T> impl(T value) {
+		this.explicitImplementation = value;
 		return this;
 	}
 
@@ -1171,14 +1341,246 @@ public class BeanInstantiator<T> {
 	 * @param hook The post-creation hook to run after bean creation. Cannot be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> postCreateHook(Consumer<T> hook) {
+	public Builder<T> postCreateHook(Consumer<T> hook) {
 		assertArgNotNull(ARG_hook, hook);
-		try (var writeLock = lock.write()) {
-			postCreateHooks.add(hook);
-		}
+		postCreateHooks.add(hook);
 		return this;
 	}
 
+	/**
+	 * Suppresses warning-level log output from this builder.
+	 *
+	 * <p>
+	 * Useful when {@link #asOptional()} is preferred and you don't want the underlying log noise that
+	 * accompanies fallback or factory-abstention paths.
+	 *
+	 * <p>
+	 * Errors and exceptions are still thrown normally; only descriptive log entries are suppressed.
+	 *
+	 * @return This object.
+	 */
+	public Builder<T> silent() {
+		silent = true;
+		return this;
+	}
+
+	/**
+	 * Sets a human-readable description used in log entries and error messages.
+	 *
+	 * <p>
+	 * Useful when the bean type alone doesn't provide enough context (e.g. multiple instances of the same type).
+	 *
+	 * @param value The description. Cannot be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Builder<T> description(String value) {
+		assertArgNotNull(ARG_value, value);
+		description = value;
+		return this;
+	}
+
+	/**
+	 * Registers a transformation to apply to the created bean before it is returned.
+	 *
+	 * <p>
+	 * Multiple wrappers may be registered; they are applied in registration order. Each wrapper receives
+	 * the output of the previous wrapper.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	BeanInstantiator.<jsm>of</jsm>(MyService.<jk>class</jk>, store)
+	 * 		.wrap(LoggingProxy::wrap)
+	 * 		.wrap(MetricsProxy::wrap)
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param wrapper The wrapper. Cannot be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Builder<T> wrap(UnaryOperator<T> wrapper) {
+		assertArgNotNull(ARG_value, wrapper);
+		wrappers.add(wrapper);
+		return this;
+	}
+
+	/**
+	 * Registers a post-creation validator.
+	 *
+	 * <p>
+	 * The predicate is invoked on the created bean. If it returns <jk>false</jk>, an
+	 * {@link ExecutableException} is thrown with the supplied message.
+	 *
+	 * @param predicate The predicate. Cannot be <jk>null</jk>.
+	 * @param message The error message used when the predicate returns <jk>false</jk>. Cannot be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Builder<T> validate(Predicate<T> predicate, String message) {
+		assertArgNotNull(ARG_value, predicate);
+		assertArgNotNull(ARG_value, message);
+		validators.add(new Validation<>(predicate, message));
+		return this;
+	}
+
+	/**
+	 * Registers an alternative {@link BeanInstantiator.Builder} to consult if this builder fails to create the bean.
+	 *
+	 * <p>
+	 * Multiple alternatives may be registered. They are tried in registration order. The first one that
+	 * succeeds returns its bean; if all fail, the last exception is propagated.
+	 *
+	 * @param alternative The alternative builder. Cannot be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Builder<T> or(Builder<? extends T> alternative) {
+		assertArgNotNull(ARG_value, alternative);
+		alternatives.add(alternative);
+		return this;
+	}
+
+	/**
+	 * Registers a callback that is invoked on the builder instance before {@code build()} is called.
+	 *
+	 * <p>
+	 * Multiple initializers may be registered; they are applied in registration order. The callback
+	 * receives the builder instance after it has been retrieved (from the bean store, static factory,
+	 * or constructor) but before any auto-wiring or {@link #injectBuilder() inject-based} processing.
+	 *
+	 * <p>
+	 * The callback is typed as {@code Consumer<Object>} because the builder type is generally not
+	 * statically known at the call site (an unchecked cast will typically be required inside the
+	 * lambda).
+	 *
+	 * @param initializer The initializer. Cannot be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Builder<T> builderInitializer(Consumer<Object> initializer) {
+		assertArgNotNull(ARG_value, initializer);
+		builderInitializers.add(initializer);
+		return this;
+	}
+
+	/**
+	 * Enables {@code @Inject} / {@code @Autowired} field and method injection on the builder instance.
+	 *
+	 * <p>
+	 * When set, after the builder is retrieved (from the bean store, static factory, or constructor),
+	 * its fields and methods annotated with {@code @Inject} or {@code @Autowired} are auto-resolved
+	 * from the bean store. This is similar to the post-construction injection performed on the
+	 * resulting bean, but applied to the builder.
+	 *
+	 * <p>
+	 * Default is <jk>false</jk> (opt-in).
+	 *
+	 * @return This object.
+	 */
+	public Builder<T> injectBuilder() {
+		injectBuilder = true;
+		return this;
+	}
+
+	/**
+	 * Enables auto-wiring of bean store entries into matching setter methods on the builder.
+	 *
+	 * <p>
+	 * When set, after the builder is retrieved, every public single-argument setter method is
+	 * inspected. If the bean store has a bean of a type assignable to the setter's parameter type,
+	 * the setter is invoked with that bean.
+	 *
+	 * <p>
+	 * If a parameter is of type {@code Supplier<X>} and the bean store has a bean of type {@code X},
+	 * the bean is wrapped in a supplier and passed to the setter (when {@code unwrapSuppliers}
+	 * defaulting to true).
+	 *
+	 * <p>
+	 * Default is <jk>false</jk> (opt-in).
+	 *
+	 * @return This object.
+	 */
+	public Builder<T> autoWireBuilder() {
+		autoWireBuilder = true;
+		return this;
+	}
+
+	/**
+	 * Disables builder-based bean creation entirely.
+	 *
+	 * <p>
+	 * When set, builder detection is skipped and the bean is instantiated directly via static factory
+	 * methods or constructors. This is useful when a Builder class is co-located with the bean type
+	 * (e.g. {@code Foo.Builder}) but the caller wants to use a builder-taking constructor instead.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	BeanInstantiator.<jsm>of</jsm>(BasicSwaggerProvider.<jk>class</jk>, beanStore)
+	 * 		.add(SwaggerProvider.Builder.<jk>class</jk>, <jv>this</jv>)
+	 * 		.noBuilder()
+	 * 		.run();
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public Builder<T> noBuilder() {
+		noBuilder = true;
+		return this;
+	}
+
+	/**
+	 * Sets the lifecycle scope of the bean being created.
+	 *
+	 * <p>
+	 * {@link Scope#SINGLETON} is equivalent to calling {@link #cached()};
+	 * {@link Scope#PROTOTYPE} resets the cached flag.
+	 *
+	 * @param value The scope. Cannot be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Builder<T> scope(Scope value) {
+		assertArgNotNull(ARG_value, value);
+		cached = (value == Scope.SINGLETON);
+		return this;
+	}
+
+	/**
+	 * Returns a copy of this builder with the same configuration.
+	 *
+	 * <p>
+	 * The returned builder shares no mutable state with this one and may be configured independently.
+	 *
+	 * @return A new builder pre-populated with this builder's configuration.
+	 */
+	public Builder<T> copy() {
+		var c = new Builder<T>(beanType.inner(), parentStore, name, enclosingInstance);
+		c.beanSubType = beanSubType;
+		c.explicitBuilderType = explicitBuilderType;
+		c.explicitBuilder = explicitBuilder;
+		c.explicitImplementation = explicitImplementation;
+		c.postCreateHooks = new ArrayList<>(postCreateHooks);
+		c.factoryMethodNames = factoryMethodNames;
+		c.builderMethodNames = builderMethodNames;
+		c.buildMethodNames = buildMethodNames;
+		c.builderClassNames = builderClassNames;
+		c.fallbackSupplier = fallbackSupplier;
+		c.cached = cached;
+		c.factoryAbstainOnNull = factoryAbstainOnNull;
+		c.preferZeroArgConstructor = preferZeroArgConstructor;
+		c.silent = silent;
+		c.description = description;
+		c.wrappers = new ArrayList<>(wrappers);
+		c.validators = new ArrayList<>(validators);
+		c.alternatives = new ArrayList<>(alternatives);
+		c.builderInitializers = new ArrayList<>(builderInitializers);
+		c.injectBuilder = injectBuilder;
+		c.autoWireBuilder = autoWireBuilder;
+		c.autoWireUnwrapSuppliers = autoWireUnwrapSuppliers;
+		c.noBuilder = noBuilder;
+		debug.ifPresent(x -> c.debug.set(new ArrayList<>()));
+		return c;
+	}
+
+	/**
+	 * Holds a single validator predicate plus its error message.
+	 */
+	private static record Validation<T>(Predicate<T> predicate, String message) {}
 
 	/**
 	 * Resets the builder, builderType, and beanImpl suppliers.
@@ -1189,26 +1591,20 @@ public class BeanInstantiator<T> {
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>If an explicit builder instance was set via {@link #builder(Object)},
 	 * 		it is preserved and not cleared by this method.
-	 * 	<li class='note'>If an explicit implementation was set via {@link #implementation(Object)},
+	 * 	<li class='note'>If an explicit implementation was set via {@link #impl(Object)},
 	 * 		it is preserved and not cleared by this method.
 	 * 	<li class='note'>Only the cached results from suppliers are reset, not the configuration itself.
 	 * </ul>
 	 *
 	 * @return This object.
 	 */
-	public BeanInstantiator<T> reset() {
-		try (var writeLock = lock.write()) {
-			// Only reset builder if no explicit builder instance was set
-			// Explicit builder instances should be preserved across resets
-			if (explicitBuilder == null) {
-				builder.reset();
-			}
-			builderType.reset();
-			// Only reset beanImpl if no explicit implementation was set
-			// Explicit implementations should be preserved across resets
-			if (explicitImplementation == null) {
-				beanImpl.reset();
-			}
+	public Builder<T> reset() {
+		if (explicitBuilder == null) {
+			builderMemoizer.reset();
+		}
+		builderType.reset();
+		if (explicitImplementation == null) {
+			beanImpl.reset();
 		}
 		return this;
 	}
@@ -1229,7 +1625,7 @@ public class BeanInstantiator<T> {
 	})
 	private T findBeanImpl() {
 		var store2 = this.store;
-		var builder2 = explicitBuilder != null ? explicitBuilder : this.builder.get();  // Use explicit builder if set, otherwise get from supplier
+		var builder2 = explicitBuilder != null ? explicitBuilder : this.builderMemoizer.get();  // Use explicit builder if set, otherwise get from supplier
 		T bean = null;
 		var methodComparator = comparing(MethodInfo::getParameterCount).reversed();
 		var constructorComparator = comparing(ConstructorInfo::getParameterCount).reversed();
@@ -1237,6 +1633,18 @@ public class BeanInstantiator<T> {
 		boolean builderAttempted = false;
 		if (builder2 != null) {
 			log("Builder detected: %s", builder2.getClass().getName());
+
+			// Phase 6 hooks: builder initializers, then optional inject, then optional auto-wire.
+			for (var init : builderInitializers)
+				init.accept(builder2);
+			if (injectBuilder) {
+				log("Injecting builder via @Inject/@Autowired");
+				inject(builder2);
+			}
+			if (autoWireBuilder) {
+				log("Auto-wiring builder setters from bean store");
+				autoWireBuilder(builder2, store2);
+			}
 
 			// Look for Builder.build()/create()/get() - REQUIRED
 			// Uses buildMethodNames configuration (defaults to "build", "create", "get")
@@ -1429,6 +1837,21 @@ public class BeanInstantiator<T> {
 					})
 					.orElse(null);
 			}
+			// Fallback: try protected constructors (legacy BeanCreator behavior).
+			// Many framework classes use a protected (Builder) constructor with public static create() factory.
+			if (bean == null) {
+				bean = beanSubType.getDeclaredConstructors().stream()
+					.filter(x -> x.isAll(PROTECTED, NOT_DEPRECATED))
+					.filter(x -> x.isDeclaringClass(beanSubType))
+					.filter(x -> x.canResolveAllParameters(store2, enclosingInstance, constructorExtraBeans))
+					.sorted(constructorComparator)
+					.findFirst()
+					.map(x -> {
+						log("Found protected constructor: %s", x.getNameFull());
+						return (T)beanType.cast(x.inject(store2, enclosingInstance, constructorExtraBeans));
+					})
+					.orElse(null);
+			}
 		}
 
 		if (bean != null) {
@@ -1520,6 +1943,10 @@ public class BeanInstantiator<T> {
 
 	private Object findBuilder() {
 
+		// noBuilder() short-circuits all builder detection.
+		if (noBuilder)
+			return null;
+
 		var bs = store;
 		var builderType2 = this.builderType.get();
 
@@ -1528,6 +1955,15 @@ public class BeanInstantiator<T> {
 			return null;
 
 		Optional<Object> r;
+
+		// Step 0: Look for a pre-registered builder of the builder type in the bean store.
+		// This handles scenarios where the caller has already configured a builder externally
+		// (e.g. legacy framework code that registers a configured builder bean).
+		r = bs.getBean(builderType2.inner()).map(Object.class::cast);
+		if (r.isPresent()) {
+			log("Using pre-registered builder from bean store: %s", builderType2.getName());
+			return r.get();
+		}
 
 		// Step 1: Look for a static create/builder method that returns the builder type
 		r = beanSubType.getPublicMethods().stream()
@@ -1575,6 +2011,12 @@ public class BeanInstantiator<T> {
 	private ClassInfo findBuilderType() {
 		log("Finding builder type...");
 
+		// noBuilder() short-circuits all builder detection.
+		if (noBuilder) {
+			log("noBuilder() set; skipping builder type detection");
+			return null;
+		}
+
 		// Priority 1: Explicitly set builderType
 		if (explicitBuilderType != null) {
 			log("Using explicitly set builder type: %s", explicitBuilderType.getName());
@@ -1584,8 +2026,8 @@ public class BeanInstantiator<T> {
 		// Priority 2: @Builder annotation on beanSubType
 		// Check declared annotations first to ensure child's annotation overrides parent's
 		var r = beanSubType.getDeclaredAnnotations().stream()
-			.filter(a -> a.isType(Builder.class))
-			.map(a -> (AnnotationInfo<Builder>)a)
+			.filter(a -> a.isType(org.apache.juneau.commons.annotation.Builder.class))
+			.map(a -> (AnnotationInfo<org.apache.juneau.commons.annotation.Builder>)a)
 			.map(x -> ClassInfo.class.cast(info(x.inner().value())))
 			.findFirst();
 		if (r.isPresent()) {
@@ -1593,7 +2035,7 @@ public class BeanInstantiator<T> {
 			return r.get();
 		}
 		// Fall back to inherited annotations if no declared annotation found
-		r = beanSubType.getAnnotations(Builder.class)
+		r = beanSubType.getAnnotations(org.apache.juneau.commons.annotation.Builder.class)
 			.map(x -> ClassInfo.class.cast(info(x.inner().value())))
 			.findFirst();
 		if (r.isPresent()) {
@@ -1727,6 +2169,61 @@ public class BeanInstantiator<T> {
 	}
 
 	/**
+	 * Auto-wires bean store entries into matching public single-argument setter methods of the builder.
+	 *
+	 * <p>
+	 * Setters are public, non-static, non-deprecated methods taking exactly one argument. The bean store
+	 * is queried for a bean assignable to the parameter's type. If the parameter is {@code Supplier<X>}
+	 * and {@link #autoWireUnwrapSuppliers} is true, the bean of type {@code X} is wrapped before being
+	 * passed in.
+	 *
+	 * <p>
+	 * Setters whose argument cannot be resolved are silently skipped.
+	 */
+	@SuppressWarnings({
+		"java:S3776", // Best-effort auto-wiring branches on reflection and type-shape checks.
+		"java:S3011" // Reflection access override is required for invoking discovered setters uniformly.
+	})
+	private void autoWireBuilder(Object builder2, BeanStore bs) {
+		var ci = info(builder2.getClass());
+		ci.getPublicMethods().stream()
+			.filter(m -> m.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
+			.filter(m -> m.getParameterCount() == 1)
+			.forEach(m -> {
+				try {
+					var p0 = m.getParameterTypes().get(0);
+					Class<?> rawType = p0.inner();
+					Object value = null;
+					if (autoWireUnwrapSuppliers && Supplier.class.isAssignableFrom(rawType)) {
+						// Best-effort: try to resolve the wrapped type from the parameter's parameterized signature.
+						var generic = m.inner().getGenericParameterTypes()[0];
+						if (generic instanceof java.lang.reflect.ParameterizedType pt) {
+							var args = pt.getActualTypeArguments();
+							if (args.length == 1 && args[0] instanceof Class<?> wrapped) {
+								var wrappedBean = bs.getBean(wrapped);
+								if (wrappedBean.isPresent()) {
+									Object wb = wrappedBean.get();
+									value = (Supplier<Object>) () -> wb;
+								}
+							}
+						}
+					} else {
+						var bean = bs.getBean(rawType);
+						if (bean.isPresent())
+							value = bean.get();
+					}
+					if (value != null) {
+						m.inner().setAccessible(true);
+						m.inner().invoke(builder2, value);
+						log("Auto-wired setter %s with bean of type %s", m.getNameSimple(), rawType.getName());
+					}
+				} catch (@SuppressWarnings("unused") Exception e) {
+					// Swallow auto-wire errors silently; auto-wire is a best-effort.
+				}
+			});
+	}
+
+	/**
 	 * Checks if a type can be used as a builder.
 	 * A valid builder type must have:
 	 * - A build/create/get method that returns the bean type or a parent of the bean type
@@ -1756,14 +2253,16 @@ public class BeanInstantiator<T> {
 	}
 
 	private void log(String message, Object... args) {
-		// Log to Logger at FINE level
-		logger.fine(beanType.getName() + ": " + message, args);
-		// Also add to debug log if enabled
+		if (silent && ! debug.isPresent())
+			return;
+		var prefix = description != null ? (description + " (" + beanType.getName() + ")") : beanType.getName();
+		logger.fine(prefix + ": " + message, args);
 		debug.ifPresent(x -> x.add(args.length == 0 ? message : String.format(message, args)));
 	}
 
-	private T runPostCreateHooks(T bean) {
+	T runPostCreateHooks(T bean) {
 		postCreateHooks.forEach(x -> x.accept(bean));
 		return bean;
 	}
+	} // class Builder
 }
