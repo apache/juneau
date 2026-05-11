@@ -112,7 +112,7 @@ public class ResponseBeanPropertyMeta {
 	 *
 	 * @return The HTTP part name, or <jk>null</jk> if it doesn't have a part name.
 	 */
-	public Optional<String> getPartName() { return opt(schema == null ? null : schema.getName()); }
+	public Optional<String> getPartName() { return opt(schema.getName()); }
 
 	/**
 	 * Returns the HTTP part type for this property (query parameter for example).

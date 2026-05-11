@@ -2228,7 +2228,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Per-op {@link RestOpArg} instances are resolved separately at per-op setup via the bean store
-	 * (see {@link #findRestOperationArgs(Method, WritableBeanStore)}); this getter returns the class list
+	 * (see {@link #findRestOperationArgs(Method, BeanStore)}); this getter returns the class list
 	 * that drives that resolution.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

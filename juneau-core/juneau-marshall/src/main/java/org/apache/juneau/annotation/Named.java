@@ -61,7 +61,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='ja'>{@link Name}
- * 	<li class='jc'>{@link BeanStore}
+ * 	<li class='jc'>{@link org.apache.juneau.commons.inject.BeanStore}
  * </ul>
  */
 @Documented

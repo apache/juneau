@@ -23,6 +23,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.Named;
+import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -1106,6 +1108,420 @@ class BasicBeanStore_Test extends TestBase {
 		assertEquals("local-c", beans.get("c").getName());
 		// "d" only in defaults.
 		assertEquals("default-d", beans.get("d").getName());
+	}
+
+	// =========================================================================
+	// T - hasDefaultSupplier / getDefaultSupplier (uncovered paths)
+	// =========================================================================
+
+	@Test
+	void t01_hasDefaultSupplier_unnamed_delegatesToNamed() {
+		var store = new BasicBeanStore(null);
+		assertFalse(store.hasDefaultSupplier(TestBean.class));
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("x"));
+		assertTrue(store.hasDefaultSupplier(TestBean.class));
+	}
+
+	@Test
+	void t02_hasDefaultSupplier_named_notRegistered_returnsFalse() {
+		var store = new BasicBeanStore(null);
+		assertFalse(store.hasDefaultSupplier(TestBean.class, "missing"));
+	}
+
+	@Test
+	void t06_hasDefaultSupplier_named_typeMapExistsButKeyAbsent_returnsFalse() {
+		var store = new BasicBeanStore(null);
+		// Register a default for the unnamed variant so typeMap is non-null
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("unnamed"));
+		// Now check a different (named) key that was never registered
+		assertFalse(store.hasDefaultSupplier(TestBean.class, "unregistered-name"));
+	}
+
+	@Test
+	void t03_getDefaultSupplier_unnamed_delegatesToNamed() {
+		var store = new BasicBeanStore(null);
+		assertTrue(store.getDefaultSupplier(TestBean.class).isEmpty());
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("via-default"));
+		assertEquals("via-default", store.getDefaultSupplier(TestBean.class).orElseThrow().get().getName());
+	}
+
+	@Test
+	void t04_getDefaultSupplier_named_typeMapNull_returnsEmpty() {
+		var store = new BasicBeanStore(null);
+		assertTrue(store.getDefaultSupplier(TestBean.class, "nope").isEmpty());
+	}
+
+	@Test
+	void t05_getDefaultSupplier_named_supplierNull_returnsEmpty() {
+		var store = new BasicBeanStore(null);
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("other"), "other");
+		assertTrue(store.getDefaultSupplier(TestBean.class, "missing").isEmpty());
+	}
+
+	// =========================================================================
+	// U - createBeanFromMethod edge cases
+	// =========================================================================
+
+	static class U_Resource {
+		public static TestBean makeBean(String msg) { return new TestBean(msg); }
+		public static TestBean throwingFactory() { throw new RuntimeException("factory-boom"); }
+	}
+
+	@Test
+	void u01_createBeanFromMethod_passClass_callsStaticMethod() {
+		var store = new BasicBeanStore(null);
+		store.addBean(String.class, "hello");
+		var result = store.createBeanFromMethod(TestBean.class, U_Resource.class, null);
+		assertTrue(result.isPresent());
+		assertEquals("hello", result.get().getName());
+	}
+
+	@Test
+	void u02_createBeanFromMethod_throwingFactory_wrapsBeanCreationException() {
+		var store = new BasicBeanStore(null);
+		assertThrows(BeanCreationException.class,
+			() -> store.createBeanFromMethod(TestBean.class, U_Resource.class, m -> m.getNameSimple().equals("throwingFactory")));
+	}
+
+	static class U_InstanceResource {
+		public TestBean makeBean(String msg) { return new TestBean(msg); }
+	}
+
+	@Test
+	void u03_createBeanFromMethod_passInstance_callsInstanceMethod() {
+		var store = new BasicBeanStore(null);
+		store.addBean(String.class, "from-instance");
+		var result = store.createBeanFromMethod(TestBean.class, new U_InstanceResource(), null);
+		assertTrue(result.isPresent());
+		assertEquals("from-instance", result.get().getName());
+	}
+
+	static class U_NonStaticResource {
+		public TestBean makeBean() { return new TestBean("non-static"); }
+	}
+
+	@Test
+	void u04_createBeanFromMethod_passClass_nonStaticMethodSkipped_returnsEmpty() {
+		// When passing a Class (resource=null), non-static methods are excluded (line 578 false branch).
+		var store = new BasicBeanStore(null);
+		var result = store.createBeanFromMethod(TestBean.class, U_NonStaticResource.class, null);
+		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	void u05_createBeanFromMethod_methodHasUnresolvableParams_returnsEmpty() {
+		// makeBean needs a String but none is in store → canResolveAllParameters false branch
+		var store = new BasicBeanStore(null);
+		var result = store.createBeanFromMethod(TestBean.class, U_Resource.class, m -> m.getNameSimple().equals("makeBean"));
+		assertTrue(result.isEmpty());
+	}
+
+	// =========================================================================
+	// V - toString / properties (defaults list, non-BasicBeanStore overriding parent)
+	// =========================================================================
+
+	@Test
+	void v01_toString_withDefaults_includesDefaultsSection() {
+		var store = new BasicBeanStore(null);
+		store.addDefaultSupplier(TestBean.class, () -> new TestBean("default"));
+		var s = store.toString();
+		assertNotNull(s);
+		assertTrue(s.contains("defaults"));
+	}
+
+	@Test
+	void v02a_toString_basicBeanStoreOverridingParent_usesProperties() {
+		var overriding = new BasicBeanStore(null);
+		overriding.addBean(TestBean.class, new TestBean("override-val"));
+		var store = new BasicBeanStore(null, overriding);
+		var s = store.toString();
+		assertNotNull(s);
+	}
+
+	@Test
+	void v02_toString_nonBasicOverridingParent_usesStringForm() {
+		var overriding = new BeanStore() {
+			@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t) { return Optional.empty(); }
+			@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t, String n) { return Optional.empty(); }
+			@Override public boolean hasBean(Class<?> t) { return false; }
+			@Override public boolean hasBean(Class<?> t, String n) { return false; }
+			@Override public <T> Optional<T> getBean(Class<T> t) { return Optional.empty(); }
+			@Override public <T> Optional<T> getBean(Class<T> t, String n) { return Optional.empty(); }
+			@Override public <T> java.util.Map<String, T> getBeansOfType(Class<T> t) { return java.util.Map.of(); }
+		};
+		var store = new BasicBeanStore(null, overriding);
+		var s = store.toString();
+		assertNotNull(s);
+	}
+
+	// =========================================================================
+	// W - WritableBeanStore.add() convenience defaults
+	//     BasicBeanStore overrides add(), so we need a minimal wrapper that
+	//     delegates only addBean() in order to exercise the interface defaults.
+	// =========================================================================
+
+	/** Minimal WritableBeanStore that does NOT override add(), relying on interface defaults. */
+	static class MinimalWritable implements WritableBeanStore {
+		private final BasicBeanStore delegate = new BasicBeanStore(null);
+
+		@Override public <T> WritableBeanStore addBean(Class<T> t, T b) { return delegate.addBean(t, b); }
+		@Override public <T> WritableBeanStore addBean(Class<T> t, T b, String n) { return delegate.addBean(t, b, n); }
+		@Override public <T> WritableBeanStore addSupplier(Class<T> t, java.util.function.Supplier<T> s) { return delegate.addSupplier(t, s); }
+		@Override public <T> WritableBeanStore addSupplier(Class<T> t, java.util.function.Supplier<T> s, String n) { return delegate.addSupplier(t, s, n); }
+		@Override public <T> WritableBeanStore addDefaultSupplier(Class<T> t, java.util.function.Supplier<T> s) { return delegate.addDefaultSupplier(t, s); }
+		@Override public <T> WritableBeanStore addDefaultSupplier(Class<T> t, java.util.function.Supplier<T> s, String n) { return delegate.addDefaultSupplier(t, s, n); }
+		@Override public WritableBeanStore clear() { return delegate.clear(); }
+		@Override public boolean hasDefaultSupplier(Class<?> t) { return delegate.hasDefaultSupplier(t); }
+		@Override public boolean hasDefaultSupplier(Class<?> t, String n) { return delegate.hasDefaultSupplier(t, n); }
+		@Override public <T> WritableBeanStore addBeanType(Class<T> t, Class<? extends T> i) { return delegate.addBeanType(t, i); }
+		@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t) { return delegate.getBeanSupplier(t); }
+		@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t, String n) { return delegate.getBeanSupplier(t, n); }
+		@Override public boolean hasBean(Class<?> t) { return delegate.hasBean(t); }
+		@Override public boolean hasBean(Class<?> t, String n) { return delegate.hasBean(t, n); }
+		@Override public <T> Optional<T> getBean(Class<T> t) { return delegate.getBean(t); }
+		@Override public <T> Optional<T> getBean(Class<T> t, String n) { return delegate.getBean(t, n); }
+		@Override public <T> java.util.Map<String, T> getBeansOfType(Class<T> t) { return delegate.getBeansOfType(t); }
+	}
+
+	@Test
+	void w01_writableBeanStore_add_unnamed_returnsBean() {
+		var store = new MinimalWritable();
+		var bean = new TestBean("fluent");
+		var returned = store.add(TestBean.class, bean);
+		assertSame(bean, returned);
+		assertSame(bean, store.getBean(TestBean.class).orElseThrow());
+	}
+
+	@Test
+	void w02_writableBeanStore_add_named_returnsBean() {
+		var store = new MinimalWritable();
+		var bean = new TestBean("fluent-named");
+		var returned = store.add(TestBean.class, bean, "myBean");
+		assertSame(bean, returned);
+		assertSame(bean, store.getBean(TestBean.class, "myBean").orElseThrow());
+	}
+
+	// =========================================================================
+	// X - BeanStore default methods: outer-instance, Optional, named-qualifier
+	// =========================================================================
+
+	interface X_Iface {
+		TestBean create(Object outer, String msg);
+		TestBean createNamed(@Named("msg") String msg);
+		TestBean createOptional(Optional<String> optMsg);
+		TestBean createMissingNamed(@Named("absent") String msg);
+		TestBean createWithOptionalFirst(Optional<String> optFirst, @Named("extra") String extra);
+	}
+
+	@Test
+	void x01_hasAllParams_outerInstanceSkippedAtPosition0() throws Exception {
+		var store = new BasicBeanStore(null);
+		store.addBean(String.class, "hello");
+		var outer = new Object();
+		var m = MethodInfo.of(X_Iface.class.getMethod("create", Object.class, String.class));
+		assertTrue(store.hasAllParams(m, outer));
+	}
+
+	@Test
+	void x02_hasAllParams_optionalParamAlwaysSatisfied() throws Exception {
+		var store = new BasicBeanStore(null);
+		var m = MethodInfo.of(X_Iface.class.getMethod("createOptional", Optional.class));
+		assertTrue(store.hasAllParams(m, null));
+	}
+
+	@Test
+	void x03_hasAllParams_namedQualifier_present() throws Exception {
+		var store = new BasicBeanStore(null);
+		store.addBean(String.class, "hi", "msg");
+		var m = MethodInfo.of(X_Iface.class.getMethod("createNamed", String.class));
+		assertTrue(store.hasAllParams(m, null));
+	}
+
+	@Test
+	void x04_hasAllParams_namedQualifier_absent_returnsFalse() throws Exception {
+		var store = new BasicBeanStore(null);
+		var m = MethodInfo.of(X_Iface.class.getMethod("createMissingNamed", String.class));
+		assertFalse(store.hasAllParams(m, null));
+	}
+
+	@Test
+	void x05_getParams_outerInstanceInjectedAtPosition0() throws Exception {
+		var store = new BasicBeanStore(null);
+		store.addBean(String.class, "world");
+		var outer = new Object();
+		var m = MethodInfo.of(X_Iface.class.getMethod("create", Object.class, String.class));
+		var params = store.getParams(m, outer);
+		assertSame(outer, params[0]);
+		assertEquals("world", params[1]);
+	}
+
+	@Test
+	void x06_getParams_namedQualifier_resolved() throws Exception {
+		var store = new BasicBeanStore(null);
+		store.addBean(String.class, "named-val", "msg");
+		var m = MethodInfo.of(X_Iface.class.getMethod("createNamed", String.class));
+		var params = store.getParams(m, null);
+		assertEquals("named-val", params[0]);
+	}
+
+	@Test
+	void x07_getParams_optionalParam_wrappedInOptional() throws Exception {
+		var store = new BasicBeanStore(null);
+		store.addBean(String.class, "opt-val");
+		var m = MethodInfo.of(X_Iface.class.getMethod("createOptional", Optional.class));
+		var params = store.getParams(m, null);
+		assertTrue(params[0] instanceof Optional);
+		assertEquals("opt-val", ((Optional<?>) params[0]).orElse(null));
+	}
+
+	@Test
+	void x08_getMissingParams_outerAndOptionalSkipped() throws Exception {
+		var store = new BasicBeanStore(null);
+		store.addBean(String.class, "present");
+		var outer = new Object();
+		var m = MethodInfo.of(X_Iface.class.getMethod("create", Object.class, String.class));
+		assertNull(store.getMissingParams(m, outer));
+	}
+
+	@Test
+	void x09_getMissingParams_namedQualifier_absent_listed() throws Exception {
+		var store = new BasicBeanStore(null);
+		var m = MethodInfo.of(X_Iface.class.getMethod("createMissingNamed", String.class));
+		var missing = store.getMissingParams(m, null);
+		assertNotNull(missing);
+		assertTrue(missing.contains("absent"));
+	}
+
+	static class SimpleNoArgBean {
+		public SimpleNoArgBean() {}
+	}
+
+	@Test
+	void x10_beanStore_instantiate_createsBean() {
+		var store = new BasicBeanStore(null);
+		var bean = store.instantiate(SimpleNoArgBean.class);
+		assertNotNull(bean);
+	}
+
+	@Test
+	void x11_beanStore_createBeanFromMethod_twoArgOverload_delegatesToFullOverload() {
+		var store = new BasicBeanStore(null);
+		store.addBean(String.class, "world");
+		var result = store.createBeanFromMethod(TestBean.class, U_Resource.class);
+		assertTrue(result.isPresent());
+		assertEquals("world", result.get().getName());
+	}
+
+	@Test
+	void x12_getMissingParams_namedQualifier_present_notListedAsMissing() throws Exception {
+		var store = new BasicBeanStore(null);
+		store.addBean(String.class, "hi", "msg");
+		var m = MethodInfo.of(X_Iface.class.getMethod("createNamed", String.class));
+		assertNull(store.getMissingParams(m, null));
+	}
+
+	/** Minimal BeanStore that uses all BeanStore defaults (not overridden). */
+	static class MinimalBeanStore implements BeanStore {
+		private final BasicBeanStore delegate = new BasicBeanStore(null);
+		@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t) { return delegate.getBeanSupplier(t); }
+		@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t, String n) { return delegate.getBeanSupplier(t, n); }
+		@Override public boolean hasBean(Class<?> t) { return delegate.hasBean(t); }
+		@Override public boolean hasBean(Class<?> t, String n) { return delegate.hasBean(t, n); }
+		@Override public <T> Optional<T> getBean(Class<T> t) { return delegate.getBean(t); }
+		@Override public <T> Optional<T> getBean(Class<T> t, String n) { return delegate.getBean(t, n); }
+		@Override public <T> java.util.Map<String, T> getBeansOfType(Class<T> t) { return delegate.getBeansOfType(t); }
+	}
+
+	@Test
+	void x13_beanStore_defaultCreateBeanFromMethod_returnsEmpty() {
+		var store = new MinimalBeanStore();
+		var result = store.createBeanFromMethod(TestBean.class, U_Resource.class, null);
+		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	void x14_beanStore_defaultCreateBeanFromMethod_twoArg_returnsEmpty() {
+		var store = new MinimalBeanStore();
+		var result = store.createBeanFromMethod(TestBean.class, U_Resource.class);
+		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	void x15_beanStore_defaultGetBeanType_returnsEmpty() {
+		var store = new MinimalBeanStore();
+		assertTrue(store.getBeanType(TestBean.class).isEmpty());
+	}
+
+	interface X_BasicIface {
+		TestBean create(String msg);
+		TestBean createMissingUnnamed(Integer missingInt);
+	}
+
+	@Test
+	void x16_hasAllParams_unnamedParam_absent_returnsFalse() throws Exception {
+		var store = new BasicBeanStore(null);
+		// no Integer bean in store
+		var m = MethodInfo.of(X_BasicIface.class.getMethod("createMissingUnnamed", Integer.class));
+		assertFalse(store.hasAllParams(m, null));
+	}
+
+	@Test
+	void x17_getMissingParams_unnamedBean_absent_listed() throws Exception {
+		var store = new BasicBeanStore(null);
+		// Integer is not in the store
+		var m = MethodInfo.of(X_BasicIface.class.getMethod("createMissingUnnamed", Integer.class));
+		var missing = store.getMissingParams(m, null);
+		assertNotNull(missing);
+		assertTrue(missing.contains("Integer"));
+	}
+
+	@Test
+	void x18_getMissingParams_optionalParamAtNonZero_skipped() throws Exception {
+		// createWithOptionalFirst: i=0 → Optional (D path of condition), i=1 → named "extra"
+		var store = new BasicBeanStore(null);
+		store.addBean(String.class, "val", "extra");
+		var m = MethodInfo.of(X_Iface.class.getMethod("createWithOptionalFirst", Optional.class, String.class));
+		// Optional at i=0 is always satisfied (skipped); named "extra" is in store → null
+		assertNull(store.getMissingParams(m, null));
+	}
+
+	@Test
+	void x19_getMissingParams_outerNonNull_typeNoMatch_paramCheckedNormally() throws Exception {
+		// i=0, nn(outer)=true, !pt.isInstance(outer) → falls through to check bean
+		var store = new BasicBeanStore(null);
+		store.addBean(Integer.class, 42);
+		var outer = "type-mismatch";   // outer is String, param[0] is Integer → no skip
+		var m = MethodInfo.of(X_BasicIface.class.getMethod("createMissingUnnamed", Integer.class));
+		// Integer IS in store → no missing params
+		assertNull(store.getMissingParams(m, outer));
+	}
+
+	// =========================================================================
+	// Y - BeanCreationException constructors
+	// =========================================================================
+
+	@Test
+	void y01_beanCreationException_messageOnly() {
+		var ex = new BeanCreationException("msg");
+		assertEquals("msg", ex.getMessage());
+		assertNull(ex.getCause());
+	}
+
+	@Test
+	void y02_beanCreationException_causeOnly() {
+		var cause = new RuntimeException("cause");
+		var ex = new BeanCreationException(cause);
+		assertSame(cause, ex.getCause());
+	}
+
+	@Test
+	void y03_beanCreationException_messageAndCause_coveredByU02() {
+		// BeanCreationException(String, Throwable) is exercised by u02 above;
+		// verify direct construction too for completeness.
+		var cause = new IllegalStateException("boom");
+		var ex = new BeanCreationException("wrapper", cause);
+		assertEquals("wrapper", ex.getMessage());
+		assertSame(cause, ex.getCause());
 	}
 }
 

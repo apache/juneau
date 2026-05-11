@@ -4118,5 +4118,69 @@ class BeanInstantiator_Test extends TestBase {
 		}
 	}
 
+	//====================================================================================================
+	// U - Convenience statics: createOrNull, optionalOf, createOrDefault
+	//====================================================================================================
+	@Nested
+	@DisplayName("U - Convenience statics")
+	class U_convenienceStatics {
+
+		public static class U_Bean {
+			final String value;
+			public U_Bean() { this.value = "created"; }
+		}
+
+		// --- createOrNull ---
+
+		@Test
+		@DisplayName("U01 - createOrNull(null) returns null")
+		void u01_createOrNull_null() {
+			assertNull(BeanInstantiator.createOrNull(null));
+		}
+
+		@Test
+		@DisplayName("U02 - createOrNull(Class) instantiates the bean")
+		void u02_createOrNull_nonNull() {
+			var bean = BeanInstantiator.createOrNull(U_Bean.class);
+			assertNotNull(bean);
+			assertEquals("created", bean.value);
+		}
+
+		// --- optionalOf ---
+
+		@Test
+		@DisplayName("U03 - optionalOf(null) returns Optional.empty()")
+		void u03_optionalOf_null() {
+			assertTrue(BeanInstantiator.optionalOf(null).isEmpty());
+		}
+
+		@Test
+		@DisplayName("U04 - optionalOf(Class) returns Optional containing the bean")
+		void u04_optionalOf_nonNull() {
+			var opt = BeanInstantiator.optionalOf(U_Bean.class);
+			assertTrue(opt.isPresent());
+			assertEquals("created", opt.get().value);
+		}
+
+		// --- createOrDefault ---
+
+		@Test
+		@DisplayName("U05 - createOrDefault(null, default) returns the default")
+		void u05_createOrDefault_null() {
+			var fallback = new U_Bean();
+			var result = BeanInstantiator.createOrDefault(null, fallback);
+			assertSame(fallback, result);
+		}
+
+		@Test
+		@DisplayName("U06 - createOrDefault(Class, default) instantiates the bean")
+		void u06_createOrDefault_nonNull() {
+			var fallback = new U_Bean();
+			var result = BeanInstantiator.createOrDefault(U_Bean.class, fallback);
+			assertNotNull(result);
+			assertNotSame(fallback, result, "Should create a new instance, not return the default");
+		}
+	}
+
 }
 

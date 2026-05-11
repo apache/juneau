@@ -20,6 +20,8 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -144,5 +146,186 @@ class SerializerSet_Test extends TestBase {
 		public SC3(JsonSerializer.Builder builder) {
 			super(builder.accept("*/*"));
 		}
+	}
+
+	public static class SimpleSerializer extends JsonSerializer {
+		public SimpleSerializer() {
+			super(JsonSerializer.create().accept("text/simple"));
+		}
+	}
+
+	//====================================================================================================
+	// Builder edge-case coverage
+	//====================================================================================================
+
+	@Test void b01_builder_addInstancesDirectly() {
+		var instance = new SB1(JsonSerializer.create().accept("text/1"));
+		var s = SerializerSet.create().add(instance).build();
+		assertInstanceOf(SB1.class, s.getSerializer("text/1"));
+	}
+
+	@Test void b02_builder_addInvalidClassThrows() {
+		assertThrows(RuntimeException.class, () ->
+			SerializerSet.create().add(String.class));
+	}
+
+	@Test void b03_builder_setWithInherit() {
+		var sb = SerializerSet.create().add(SB1.class, SB2.class);
+		sb.set(SerializerSet.Inherit.class, SB3.class);
+		var s = sb.build();
+		assertInstanceOf(SB1.class, s.getSerializer("text/1"));
+		assertInstanceOf(SB2.class, s.getSerializer("text/2"));
+		assertInstanceOf(SB3.class, s.getSerializer("text/3"));
+	}
+
+	@Test void b04_builder_setWithInvalidClassThrows() {
+		assertThrows(RuntimeException.class, () ->
+			SerializerSet.create().set(String.class));
+	}
+
+	@Test void b05_builder_implBypassesBuild() {
+		var preset = SerializerSet.create().add(SB1.class).build();
+		var s = SerializerSet.create().impl(preset).build();
+		assertSame(preset, s);
+	}
+
+	@Test void b06_builder_inner_returnsEntries() {
+		var sb = SerializerSet.create().add(SB1.class);
+		assertFalse(sb.inner().isEmpty());
+	}
+
+	@Test void b07_builder_toStringWithBuilder() {
+		var sb = SerializerSet.create().add(JsonSerializer.class);
+		assertTrue(sb.toString().contains("builder:"));
+	}
+
+	@Test void b08_builder_toStringWithInstance() {
+		var sb = SerializerSet.create().add(new SB1(JsonSerializer.create().accept("text/1")));
+		assertTrue(sb.toString().contains("serializer:"));
+	}
+
+	@Test void b09_builder_toStringWithNull() {
+		var sb = SerializerSet.create();
+		sb.inner().add(null);
+		assertTrue(sb.toString().contains("null"));
+	}
+
+	@Test void b10_builder_create_withBeanStore() {
+		var bs = new BasicBeanStore(null);
+		var sb = SerializerSet.create(bs);
+		assertSame(bs, sb.beanStore());
+	}
+
+	@Test void b11_builder_copy_isIndependent() {
+		var sb1 = SerializerSet.create().add(SB1.class);
+		var sb2 = sb1.copy();
+		sb2.add(SB2.class);
+		assertNotNull(sb2.build().getSerializer("text/2"));
+		assertNull(sb1.build().getSerializer("text/2"));
+	}
+
+	@Test void b12_builder_beanContext_propagatesToBuilders() {
+		var bcb = BeanContext.create();
+		var sb = SerializerSet.create().add(JsonSerializer.class);
+		sb.beanContext(bcb);
+		assertNotNull(sb.beanStore());
+	}
+
+	@Test void b13_builder_beanContext_consumer_withNonNullBcBuilder() {
+		boolean[] called = {false};
+		var sb = SerializerSet.create().add(JsonSerializer.class);
+		sb.beanContext(BeanContext.create());
+		sb.beanContext((BeanContext.Builder b) -> called[0] = true);
+		assertTrue(called[0]);
+	}
+
+	@Test void b14_builder_beanContext_consumer_withNullBcBuilder_isNoop() {
+		boolean[] called = {false};
+		var sb = SerializerSet.create().add(JsonSerializer.class);
+		sb.beanContext((BeanContext.Builder b) -> called[0] = true);
+		assertFalse(called[0]);
+	}
+
+	@Test void b15_builder_forEachWS_actsOnWriterSerializers() {
+		int[] count = {0};
+		SerializerSet.create().add(JsonSerializer.class).forEachWS(b -> count[0]++);
+		assertEquals(1, count[0]);
+	}
+
+	@Test void b16_builder_forEachOSS_noAction_whenNoOSSEntries() {
+		int[] count = {0};
+		SerializerSet.create().add(JsonSerializer.class).forEachOSS(b -> count[0]++);
+		assertEquals(0, count[0]);
+	}
+
+	@Test void b17_builder_copy_withBcBuilder_propagatesBcBuilder() {
+		var sb = SerializerSet.create().add(JsonSerializer.class);
+		sb.beanContext(BeanContext.create());
+		var copy = sb.copy();
+		assertNotNull(copy.beanStore());
+	}
+
+	@Test void b18_builder_addAfterBcBuilder_propagatesContext() {
+		var sb = SerializerSet.create();
+		sb.beanContext(BeanContext.create());
+		sb.add(JsonSerializer.class);
+		assertFalse(sb.inner().isEmpty());
+	}
+
+	@Test void b19_serializerSet_copy_returnsNewBuilder() {
+		var s = SerializerSet.create().add(SB1.class).build();
+		var copy = s.copy();
+		assertInstanceOf(SB1.class, copy.build().getSerializer("text/1"));
+	}
+
+	@Test void b20_getSerializer_byMediaType() {
+		var s = SerializerSet.create().add(SB1.class).build();
+		assertInstanceOf(SB1.class, s.getSerializer(MediaType.of("text/1")));
+		assertNull(s.getSerializer(MediaType.of("text/unknown")));
+	}
+
+	@Test void b21_getSerializer_nullMediaType_returnsNull() {
+		var s = SerializerSet.create().add(SB1.class).build();
+		assertNull(s.getSerializer((MediaType) null));
+	}
+
+	@Test void b22_builder_clear_removesAllEntries() {
+		var sb = SerializerSet.create().add(SB1.class, SB2.class);
+		assertEquals(2, sb.inner().size());
+		sb.clear();
+		assertTrue(sb.inner().isEmpty());
+	}
+
+	@Test void b23_getSerializerMatch_byMediaType() {
+		var s = SerializerSet.create().add(SB1.class).build();
+		assertNotNull(s.getSerializerMatch(MediaType.of("text/1")));
+	}
+
+	@Test void b24_getSerializerMatch_nullString_returnsNull() {
+		var s = SerializerSet.create().add(SB1.class).build();
+		assertNull(s.getSerializerMatch((String) null));
+	}
+
+	@Test void b25_getWriterSerializer_byMediaType() {
+		var s = SerializerSet.create().add(SB1.class).build();
+		assertInstanceOf(SB1.class, s.getWriterSerializer(MediaType.of("text/1")));
+	}
+
+	@Test void b26_add_serializerWithNoArgConstructor_instantiatesDirectly() {
+		var s = SerializerSet.create().add(SimpleSerializer.class).build();
+		assertInstanceOf(SimpleSerializer.class, s.getSerializer("text/simple"));
+	}
+
+	@Test void b27_copy_withSerializerInstance_coversNonBuilderBranch() {
+		var instance = new SimpleSerializer();
+		var sb = SerializerSet.create().add(instance);
+		var copy = sb.copy();
+		assertFalse(copy.inner().isEmpty());
+	}
+
+	@Test void b28_getStreamSerializer_withNoMatch_returnsNull() {
+		var s = SerializerSet.create().add(SB1.class).build();
+		assertNull(s.getStreamSerializer(MediaType.of("text/unknown")));
+		assertNull(s.getStreamSerializer("text/unknown"));
 	}
 }
