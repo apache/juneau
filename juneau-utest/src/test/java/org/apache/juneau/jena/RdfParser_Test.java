@@ -280,7 +280,7 @@ class RdfParser_Test extends TestBase {
 			assertNotNull(RdfParser.create().marshallingContext(MarshallingContext.DEFAULT).build());
 			assertNotNull(RdfParser.create().marshallingContext(MarshallingContext.create()).build());
 			assertNotNull(RdfParser.create().beanDictionary(D01_DictBean.class).build());
-			assertNotNull(RdfParser.create().beanInterceptor(String.class, (Class)MarshallingInterceptor.class).build());
+			assertNotNull(RdfParser.create().beanInterceptor(String.class, (Class)BeanInterceptor.class).build());
 			assertNotNull(RdfParser.create().beanMapPutReturnsOldValue().build());
 		}
 

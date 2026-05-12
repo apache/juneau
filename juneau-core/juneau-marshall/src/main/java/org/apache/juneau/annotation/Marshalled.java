@@ -22,6 +22,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -50,7 +51,7 @@ import org.apache.juneau.swap.*;
 @Retention(RUNTIME)
 @Inherited
 @SuppressWarnings({
-	"java:S1452"  // Wildcard required - Class<? extends MarshallingInterceptor<?>> for interceptor definition
+	"java:S1452"  // Wildcard required - Class<? extends BeanInterceptor<?>> for interceptor definition
 })
 public @interface Marshalled {
 
@@ -157,12 +158,12 @@ public @interface Marshalled {
 	 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link MarshallingInterceptor}
+	 * 	<li class='jc'>{@link BeanInterceptor}
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	Class<? extends MarshallingInterceptor<?>> interceptor() default MarshallingInterceptor.Void.class;
+	Class<? extends BeanInterceptor<?>> interceptor() default BeanInterceptor.Void.class;
 
 	/**
 	 * An identifying name for this class.

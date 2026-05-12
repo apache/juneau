@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.swap;
+package org.apache.juneau.commons.bean;
 
 /**
  * Bean interceptor.
@@ -25,7 +25,7 @@ package org.apache.juneau.swap;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Interceptor that strips out sensitive information on Address beans.</jc>
- * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> MarshallingInterceptor&lt;Address&gt; {
+ * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
  *
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> Object readProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
@@ -46,8 +46,8 @@ package org.apache.juneau.swap;
  * <p>
  * Bean interceptors are registered in the following way:
  * <ul class='javatree'>
- * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#interceptor() @Marshalled(interceptor)}
- * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanInterceptor(Class,Class)}
+ * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#interceptor() @Marshalled(interceptor)}
+ * 	<li class='jm'>{@code MarshallingContext.Builder#beanInterceptor(Class,Class)}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
@@ -66,15 +66,15 @@ package org.apache.juneau.swap;
  *
  * @param <T> The bean type.
  */
-public class MarshallingInterceptor<T> {
+public class BeanInterceptor<T> {
 
 	/** Non-existent bean interceptor. */
-	public static final class Void extends MarshallingInterceptor<Object> {}
+	public static final class Void extends BeanInterceptor<Object> {}
 
 	/**
 	 * Default reusable property filter instance.
 	 */
-	public static final MarshallingInterceptor<Object> DEFAULT = new MarshallingInterceptor<>();
+	public static final BeanInterceptor<Object> DEFAULT = new BeanInterceptor<>();
 
 	/**
 	 * Property read interceptor.
@@ -85,7 +85,7 @@ public class MarshallingInterceptor<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Address filter that strips out sensitive information.</jc>
-	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> MarshallingInterceptor&lt;Address&gt; {
+	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
 	 *
 	 * 		<jk>public</jk> Object readProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
 	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>))
@@ -114,7 +114,7 @@ public class MarshallingInterceptor<T> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Address filter that strips out sensitive information.</jc>
-	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> MarshallingInterceptor&lt;Address&gt; {
+	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
 	 *
 	 * 		<jk>public</jk> Object writeProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
 	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>) &amp;&amp; <js>"redacted"</js>.equals(<jv>value</jv>))

@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -47,7 +48,7 @@ public class MarshalledAnnotation {
 		private String[] description = {};
 		private Class<?>[] dictionary = new Class[0];
 		private Class<?> implClass = void.class;
-		private Class<? extends MarshallingInterceptor<?>> interceptor = MarshallingInterceptor.Void.class;
+		private Class<? extends BeanInterceptor<?>> interceptor = BeanInterceptor.Void.class;
 		private String example = "";
 		private String typeName = "";
 		private String typePropertyName = "";
@@ -129,7 +130,7 @@ public class MarshalledAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder interceptor(Class<? extends MarshallingInterceptor<?>> value) {
+		public Builder interceptor(Class<? extends BeanInterceptor<?>> value) {
 			interceptor = value;
 			return this;
 		}
@@ -164,7 +165,7 @@ public class MarshalledAnnotation {
 
 		private final MarshalledAs as;
 		private final String[] description;
-		private final Class<? extends MarshallingInterceptor<?>> interceptor;
+		private final Class<? extends BeanInterceptor<?>> interceptor;
 		private final Class<?> implClass;
 		private final Class<?>[] dictionary;
 		private final String example;
@@ -204,7 +205,7 @@ public class MarshalledAnnotation {
 		}
 
 		@Override /* Overridden from Marshalled */
-		public Class<? extends MarshallingInterceptor<?>> interceptor() {
+		public Class<? extends BeanInterceptor<?>> interceptor() {
 			return interceptor;
 		}
 

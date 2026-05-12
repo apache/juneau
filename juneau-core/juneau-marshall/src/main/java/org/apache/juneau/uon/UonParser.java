@@ -192,7 +192,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.MarshallingInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.commons.bean.BeanInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
 			return this;
 		}

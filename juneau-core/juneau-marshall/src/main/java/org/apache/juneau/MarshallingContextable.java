@@ -454,7 +454,7 @@ public abstract class MarshallingContextable extends Context {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Interceptor that strips out sensitive information.</jc>
-		 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> MarshallingInterceptor&lt;Address&gt; {
+		 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
 		 *
 		 * 		<jk>public</jk> Object readProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
 		 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>))
@@ -486,7 +486,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jc'>{@link MarshallingInterceptor}
+		 * 	<li class='jc'>{@link BeanInterceptor}
 		 * 	<li class='ja'>{@link Bean#interceptor() Bean(interceptor)}
 		 * </ul>
 		 *
@@ -497,7 +497,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanInterceptor(Class<?> on, Class<? extends MarshallingInterceptor<?>> value) {
+		public Builder beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
 			bcBuilder.beanInterceptor(assertArgNotNull(ARG_on, on), assertArgNotNull(ARG_value, value));
 			return this;
 		}

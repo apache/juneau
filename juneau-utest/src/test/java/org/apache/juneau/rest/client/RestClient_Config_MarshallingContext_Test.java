@@ -792,7 +792,7 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 		}
 	}
 
-	public static class A30b extends MarshallingInterceptor<A30a> {
+	public static class A30b extends BeanInterceptor<A30a> {
 		static boolean getterCalled,setterCalled;
 		@Override
 		public Object readProperty(A30a bean,String name,Object value) {

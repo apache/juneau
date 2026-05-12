@@ -7,6 +7,8 @@
 
 - [TODO-4] Duration.ofDays(7) serialized in hours?
 
+- [TODO-5] Finish Phase 5 of the bean-layer split: physically move `BeanMap`, `BeanMeta`, `BeanPropertyMeta`, `BeanMapEntry`, `BeanPropertyValue`, `BeanPropertyConsumer`, `BeanProxyInvocationHandler`, and `BeanMetaFiltered` from `juneau-marshall` into `org.apache.juneau.commons.bean` in `juneau-commons`. Requires untangling `ClassMeta` / `MarshallingContext` / `ObjectSwap` / `BeanRegistry` dependencies (introduce a `BeanConfigContext` runtime POJO, swap `ClassMeta` for `ClassInfo`, hoist swap-aware logic out of `BeanPropertyMeta`). `MarshallingInterceptor` → `commons.bean.BeanInterceptor` already landed (Phase 5a). See `todo/TODO-5-bean-runtime-types-to-commons.md`.
+
 - [TODO-6] Add an `ai` / `shortDescription` field to `@Schema` (and related annotations) for concise LLM/AI-consumption descriptions that stay under token budgets. See `todo/TODO-6-ai-short-description.md`.
 
 - [TODO-7] Decouple `juneau-rest-common` from `juneau-marshall` by breaking the compile dependency so REST annotations and beans can be used without pulling in the full serialization stack. See `todo/TODO-7-decouple-rest-common-from-marshall.md`.

@@ -165,7 +165,7 @@ class RdfSerializer_Test extends TestBase {
 			"rawtypes" // (Class) cast required by beanInterceptor API
 		})
 		@Test void b04_beanInterceptor() {
-			assertNotNull(RdfSerializer.create().beanInterceptor(String.class, (Class)MarshallingInterceptor.class).build());
+			assertNotNull(RdfSerializer.create().beanInterceptor(String.class, (Class)BeanInterceptor.class).build());
 		}
 
 		@Test void b05_beanMapPutReturnsOldValue() {

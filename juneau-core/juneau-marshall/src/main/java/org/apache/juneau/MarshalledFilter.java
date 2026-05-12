@@ -74,7 +74,7 @@ import org.apache.juneau.swap.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='ja'>{@link Marshalled @Marshalled}
- * 	<li class='jc'>{@link MarshallingInterceptor}
+ * 	<li class='jc'>{@link BeanInterceptor}
  * 	<li class='jc'>{@link PropertyNamer}
  * </ul>
  */
@@ -104,7 +104,7 @@ public class MarshalledFilter {
 		private boolean fluentSetters;
 		private BeanInstantiator.Builder<PropertyNamer> propertyNamer = BeanInstantiator.of(PropertyNamer.class);
 		private List<ClassInfo> dictionary;
-		private BeanInstantiator.Builder<MarshallingInterceptor> interceptor = BeanInstantiator.of(MarshallingInterceptor.class);
+		private BeanInstantiator.Builder<BeanInterceptor> interceptor = BeanInstantiator.of(BeanInterceptor.class);
 
 		/**
 		 * Constructor for non-bean POJO filters.
@@ -317,17 +317,17 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Marshalled#interceptor()}
-		 * 	<li class='jc'>{@link MarshallingInterceptor}
+		 * 	<li class='jc'>{@link BeanInterceptor}
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * 	<br>The default value is {@link MarshallingInterceptor}.
+		 * 	<br>The default value is {@link BeanInterceptor}.
 		 * @return This object.
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder interceptor(Class<?> value) {
-			interceptor.type((Class<? extends MarshallingInterceptor>) value);
+			interceptor.type((Class<? extends BeanInterceptor>) value);
 			return this;
 		}
 
@@ -606,7 +606,7 @@ public class MarshalledFilter {
 	private final boolean fluentSetters;
 	private final ClassInfo implClass;
 	private final ClassInfo interfaceClass;
-	private final MarshallingInterceptor interceptor;
+	private final BeanInterceptor interceptor;
 	private final Set<String> properties;
 	private final PropertyNamer propertyNamer;
 	private final Set<String> readOnlyProperties;
@@ -636,7 +636,7 @@ public class MarshalledFilter {
 		this.fluentSetters = builder.fluentSetters;
 		this.propertyNamer = builder.propertyNamer.asOptional().orElse(null);
 		this.beanDictionary = builder.dictionary == null ? list() : u(copyOf(builder.dictionary));
-		this.interceptor = builder.interceptor.asOptional().orElse(MarshallingInterceptor.DEFAULT);
+		this.interceptor = builder.interceptor.asOptional().orElse(BeanInterceptor.DEFAULT);
 	}
 
 	/**
@@ -751,7 +751,7 @@ public class MarshalledFilter {
 	public boolean isUnsortedProperties() { return unsortedProperties; }
 
 	/**
-	 * Calls the {@link MarshallingInterceptor#readProperty(Object, String, Object)} method on the registered property filters.
+	 * Calls the {@link BeanInterceptor#readProperty(Object, String, Object)} method on the registered property filters.
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.
@@ -766,7 +766,7 @@ public class MarshalledFilter {
 	}
 
 	/**
-	 * Calls the {@link MarshallingInterceptor#writeProperty(Object, String, Object)} method on the registered property filters.
+	 * Calls the {@link BeanInterceptor#writeProperty(Object, String, Object)} method on the registered property filters.
 	 *
 	 * @param bean The bean from which the property was read.
 	 * @param name The property name.

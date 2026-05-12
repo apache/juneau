@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
 class MarshalledAnnotation_Test extends TestBase {
 
 	private static class X1 {}
-	private  static class X2 extends MarshallingInterceptor<MarshalledAnnotation_Test> {}
+	private  static class X2 extends BeanInterceptor<MarshalledAnnotation_Test> {}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
