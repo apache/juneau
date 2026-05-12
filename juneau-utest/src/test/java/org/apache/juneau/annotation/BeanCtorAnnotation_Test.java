@@ -21,20 +21,21 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.junit.jupiter.api.*;
 
-class MarshalledCtorAnnotation_Test extends TestBase {
+class BeanCtorAnnotation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	MarshalledCtor a1 = MarshalledCtorAnnotation.create()
+	BeanCtor a1 = BeanCtorAnnotation.create()
 		.description("a")
 		.properties("c")
 		.build();
 
-	MarshalledCtor a2 = MarshalledCtorAnnotation.create()
+	BeanCtor a2 = BeanCtorAnnotation.create()
 		.description("a")
 		.properties("c")
 		.build();
@@ -64,7 +65,7 @@ class MarshalledCtorAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class D1 {
-		@MarshalledCtor(
+		@BeanCtor(
 			description={ "a" },
 			properties="c"
 		)
@@ -72,18 +73,18 @@ class MarshalledCtorAnnotation_Test extends TestBase {
 	}
 
 	public static class D2 {
-		@MarshalledCtor(
+		@BeanCtor(
 			description={ "a" },
 			properties="c"
 		)
 		public D2() {}
 	}
 
-	MarshalledCtor d1, d2;
+	BeanCtor d1, d2;
 	{
 		try {
-			d1 = D1.class.getConstructor().getAnnotationsByType(MarshalledCtor.class)[0];
-			d2 = D2.class.getConstructor().getAnnotationsByType(MarshalledCtor.class)[0];
+			d1 = D1.class.getConstructor().getAnnotationsByType(BeanCtor.class)[0];
+			d2 = D2.class.getConstructor().getAnnotationsByType(BeanCtor.class)[0];
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

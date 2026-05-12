@@ -17,6 +17,7 @@
 package org.apache.juneau.examples.core.pojo;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Sample pojo class.
@@ -30,7 +31,7 @@ public class Pojo {
 	 * @param id The <bc>id</bc> property value.
 	 * @param name The <bc>name</bc> property value.
 	 */
-	@MarshalledCtor
+	@BeanCtor
 	public Pojo(@Name("id") String id, @Name("name") String name) {
 		this.id = id;
 		this.name = name;

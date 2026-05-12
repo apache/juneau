@@ -287,7 +287,7 @@
  * 		<jk>private final</jk> ListBeanChannel&lt;Employee&gt; <jv>employees</jv> = <jk>new</jk> ListBeanChannel&lt;&gt;();
  *
  * 		<jc>// No setter needed — parser calls acceptThrows() on the existing instance.</jc>
- * 		<ja>@MarshalledProp</ja>(elementType=Employee.<jk>class</jk>)
+ * 		<ja>@BeanProp</ja>(elementType=Employee.<jk>class</jk>)
  * 		<jk>public</jk> ListBeanChannel&lt;Employee&gt; getEmployees() { <jk>return</jk> <jv>employees</jv>; }
  * 	}
  *
@@ -448,12 +448,12 @@
  * 			<td>Specifies the {@link org.apache.juneau.commons.function.BeanFactory} class used to instantiate this type during parsing. The factory is resolved from the {@code BeanStore}.</td>
  * 		</tr>
  * 		<tr>
- * 			<td>{@code @MarshalledProp(factory=X.class)}</td>
+ * 			<td>{@code @BeanProp(factory=X.class)}</td>
  * 			<td>Bean property</td>
  * 			<td>Specifies a property-level factory for instantiating the value of a specific bean property.</td>
  * 		</tr>
  * 		<tr>
- * 			<td>{@code @MarshalledProp(elementType=Y.class)}</td>
+ * 			<td>{@code @BeanProp(elementType=Y.class)}</td>
  * 			<td>Bean property</td>
  * 			<td>Declares the element type for generic streaming properties ({@code Stream&lt;Y&gt;}, {@code BeanSupplier&lt;Y&gt;}, etc.) overcoming Java type erasure. Also supports narrowing to concrete implementation types.</td>
  * 		</tr>
@@ -494,3 +494,5 @@
  * </div>
  */
 package org.apache.juneau.commons.function;
+
+import org.apache.juneau.commons.bean.*;

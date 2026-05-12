@@ -36,7 +36,7 @@ import java.util.*;
  * 	<jk>public class</jk> ItemCollection {
  * 		<jk>private final</jk> ListBeanChannel&lt;Item&gt; <jv>items</jv> = <jk>new</jk> ListBeanChannel&lt;&gt;();
  *
- * 		<ja>@MarshalledProp</ja>(elementType=Item.<jk>class</jk>)
+ * 		<ja>@BeanProp</ja>(elementType=Item.<jk>class</jk>)
  * 		<jk>public</jk> ListBeanChannel&lt;Item&gt; getItems() { <jk>return</jk> <jv>items</jv>; }
  * 		<jc>// No setter needed — parser calls acceptThrows() on the existing instance</jc>
  * 	}

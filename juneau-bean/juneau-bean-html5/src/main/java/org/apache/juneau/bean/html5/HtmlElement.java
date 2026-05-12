@@ -26,6 +26,7 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.xml.annotation.*;
@@ -202,7 +203,7 @@ public abstract class HtmlElement {
 	 * @return The attributes of this element.
 	 */
 	@Xml(format = ATTRS)
-	@MarshalledProp("a")
+	@BeanProp("a")
 	public java.util.Map<String,Object> getAttrs() { return attrs; }
 
 	/**
@@ -1046,7 +1047,7 @@ public abstract class HtmlElement {
 	 * @param value The new attributes for this element.
 	 * @return This object.
 	 */
-	@MarshalledProp("a")
+	@BeanProp("a")
 	public HtmlElement setAttrs(java.util.Map<String,Object> value) {
 		if (nn(value)) {
 			value.entrySet().forEach(x -> {

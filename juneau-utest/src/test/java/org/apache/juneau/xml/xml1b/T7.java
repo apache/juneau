@@ -17,22 +17,23 @@
 package org.apache.juneau.xml.xml1b;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.xml.annotation.*;
 
 @Marshalled
 public class T7 {
 
-	@MarshalledProp(name="g1") public int f1 = 1;
+	@BeanProp(name="g1") public int f1 = 1;
 
-	@Xml(prefix="bar",namespace="http://bar") @MarshalledProp(name="g2") public int f2 = 2;
+	@Xml(prefix="bar",namespace="http://bar") @BeanProp(name="g2") public int f2 = 2;
 
 	private int f3 = 3;
-	@MarshalledProp(name="g3") public int getF3() { return f3; }
-	@MarshalledProp(name="g3") public void setF3(int v) { f3 = v; }
+	@BeanProp(name="g3") public int getF3() { return f3; }
+	@BeanProp(name="g3") public void setF3(int v) { f3 = v; }
 
 	private int f4 = 4;
-	@MarshalledProp(name="g4") @Xml(prefix="baz",namespace="http://baz") public int getF4() { return f4; }
-	@MarshalledProp(name="g4") public void setF4(int v) { f4 = v; }
+	@BeanProp(name="g4") @Xml(prefix="baz",namespace="http://baz") public int getF4() { return f4; }
+	@BeanProp(name="g4") public void setF4(int v) { f4 = v; }
 
 	public boolean equals(T7 x) {
 		return x.f1 == f1 && x.f2 == f2 && x.f3 == f3 && x.f4 == f4;

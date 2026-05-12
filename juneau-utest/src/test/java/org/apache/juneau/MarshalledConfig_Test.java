@@ -322,7 +322,7 @@ class MarshalledConfig_Test extends TestBase {
 	public static class ReadOnlyPerson {
 		private final int age;
 
-		@MarshalledCtor(properties="name,age")
+		@BeanCtor(properties="name,age")
 		public ReadOnlyPerson(String name, int age) {
 			this.name = name;
 			this.age = age;
@@ -371,9 +371,9 @@ class MarshalledConfig_Test extends TestBase {
 	@BeanTypeApply(on="Dummy1",value=@BeanType(p="dummy"))
 	@BeanTypeApply(on="ReadOnlyPerson2",value=@BeanType(p="name,age"))
 	@BeanTypeApply(on="Dummy2",value=@BeanType(p="dummy"))
-	@MarshalledCtorApply(on="Dummy1",value=@MarshalledCtor(properties="dummy"))
-	@MarshalledCtorApply(on="ReadOnlyPerson2(String,int)",value=@MarshalledCtor(properties="name,age"))
-	@MarshalledCtorApply(on="Dummy2",value=@MarshalledCtor(properties="dummy"))
+	@BeanCtorApply(on="Dummy1",value=@BeanCtor(properties="dummy"))
+	@BeanCtorApply(on="ReadOnlyPerson2(String,int)",value=@BeanCtor(properties="name,age"))
+	@BeanCtorApply(on="Dummy2",value=@BeanCtor(properties="dummy"))
 	private static class ReadOnlyPerson2Config {}
 
 	//====================================================================================================

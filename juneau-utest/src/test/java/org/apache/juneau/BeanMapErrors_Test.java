@@ -50,7 +50,7 @@ class BeanMapErrors_Test extends TestBase {
 		public int f1;
 
 		private int f2 = -1;
-		@MarshalledProp("f2") public int f2() { return f2; }
+		@BeanProp("f2") public int f2() { return f2; }
 		public void setF2(int v) { f2 = v; }
 	}
 
@@ -68,15 +68,15 @@ class BeanMapErrors_Test extends TestBase {
 
 	@BeanTypeApply(on="Dummy",value=@BeanType(p="dummy"))
 	@BeanTypeApply(on="B1",value=@BeanType(p="f1"))
-	@MarshalledPropApply(on="Dummy",value=@MarshalledProp("dummy"))
-	@MarshalledPropApply(on="B1.f2",value=@MarshalledProp("f2"))
+	@BeanPropApply(on="Dummy",value=@BeanProp("dummy"))
+	@BeanPropApply(on="B1.f2",value=@BeanProp("f2"))
 	private static class B1Config {}
 
 	public static class B1 {
 		public int f1;
 
 		private int f2 = -1;
-		@MarshalledProp("f2") public int f2() { return f2; }
+		@BeanProp("f2") public int f2() { return f2; }
 		public void setF2(int v) { f2 = v; }
 	}
 
@@ -100,7 +100,7 @@ class BeanMapErrors_Test extends TestBase {
 	public static class A2 {
 		public int f1;
 
-		@MarshalledProp("f2")
+		@BeanProp("f2")
 		public int f2 = -1;
 	}
 
@@ -118,8 +118,8 @@ class BeanMapErrors_Test extends TestBase {
 
 	@BeanTypeApply(on="Dummy",value=@BeanType(p="dummy"))
 	@BeanTypeApply(on="B2",value=@BeanType(p="f1"))
-	@MarshalledPropApply(on="Dummy",value=@MarshalledProp("dummy"))
-	@MarshalledPropApply(on="B2.f2",value=@MarshalledProp("f2"))
+	@BeanPropApply(on="Dummy",value=@BeanProp("dummy"))
+	@BeanPropApply(on="B2.f2",value=@BeanProp("f2"))
 	private static class B2Config {}
 
 	public static class B2 {

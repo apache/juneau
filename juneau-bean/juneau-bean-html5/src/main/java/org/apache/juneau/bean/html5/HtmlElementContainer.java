@@ -21,6 +21,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -158,7 +159,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @return The children of this element.
 	 */
 	@Xml(format = ELEMENTS)
-	@MarshalledProp(dictionary = HtmlBeanDictionary.class, name = "c")
+	@BeanProp(name="c") @MarshalledProp(dictionary=HtmlBeanDictionary.class)
 	public List<Object> getChildren() { return children; }
 
 	@Override /* Overridden from HtmlElement */
@@ -485,7 +486,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @param children The new children for this container.
 	 * @return This object.
 	 */
-	@MarshalledProp("c")
+	@BeanProp("c")
 	public HtmlElementContainer setChildren(List<Object> children) {
 		this.children = children;
 		return this;

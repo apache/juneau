@@ -27,6 +27,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -807,7 +808,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>$defs</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledProp("$defs")
+	@BeanProp("$defs")
 	public Map<String,JsonSchema> getDefs() {
 		return defs; // Return only defs, not definitions (to avoid double serialization)
 	}
@@ -855,7 +856,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>else</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledProp("else")
+	@BeanProp("else")
 	public JsonSchema getElse() { return else_; }
 
 	/**
@@ -927,7 +928,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>$id</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledProp("$id")
+	@BeanProp("$id")
 	public URI getIdUri() {
 		return idUri; // Return only idUri, not id (to avoid double serialization)
 	}
@@ -940,7 +941,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>if</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledProp("if")
+	@BeanProp("if")
 	public JsonSchema getIf() { return if_; }
 
 	/**
@@ -1155,7 +1156,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>$ref</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledProp("$ref")
+	@BeanProp("$ref")
 	public URI getRef() { return ref; }
 
 	/**
@@ -1170,7 +1171,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>$schema</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledProp("$schema")
+	@BeanProp("$schema")
 	public URI getSchemaVersionUri() { return schemaVersion; }
 
 	/**
@@ -1181,7 +1182,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>then</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledProp("then")
+	@BeanProp("then")
 	public JsonSchema getThen() { return then_; }
 
 	/**
@@ -1319,7 +1320,7 @@ public class JsonSchema {
 	 * @return This object.
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
-	@MarshalledProp(dictionary = { JsonSchema.class })
+	@MarshalledProp(dictionary={ JsonSchema.class })
 	public JsonSchema setAdditionalProperties(Object value) {
 		this.additionalPropertiesBoolean = null;
 		this.additionalPropertiesSchema = null;
@@ -1424,7 +1425,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>$defs</property> property on this bean.
 	 * @return This object.
 	 */
-	@MarshalledProp("$defs")
+	@BeanProp("$defs")
 	public JsonSchema setDefs(Map<String,JsonSchema> value) {
 		this.defs = value;
 		if (nn(value))
@@ -1495,7 +1496,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>else</property> property on this bean.
 	 * @return This object.
 	 */
-	@MarshalledProp("else")
+	@BeanProp("else")
 	public JsonSchema setElse(JsonSchema value) {
 		this.else_ = value;
 		setMasterOn(value);
@@ -1600,7 +1601,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>$id</property> property on this bean.
 	 * @return This object.
 	 */
-	@MarshalledProp("$id")
+	@BeanProp("$id")
 	public JsonSchema setIdUri(Object value) {
 		this.idUri = toUri(value);
 		return this;
@@ -1615,7 +1616,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>if</property> property on this bean.
 	 * @return This object.
 	 */
-	@MarshalledProp("if")
+	@BeanProp("if")
 	public JsonSchema setIf(JsonSchema value) {
 		this.if_ = value;
 		setMasterOn(value);
@@ -1875,7 +1876,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>$ref</property> property on this bean.
 	 * @return This object.
 	 */
-	@MarshalledProp("$ref")
+	@BeanProp("$ref")
 	public JsonSchema setRef(Object value) {
 		this.ref = toUri(value);
 		return this;
@@ -1918,7 +1919,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>schemaVersion</property> property on this bean.
 	 * @return This object.
 	 */
-	@MarshalledProp("$schema")
+	@BeanProp("$schema")
 	public JsonSchema setSchemaVersionUri(Object value) {
 		this.schemaVersion = toUri(value);
 		return this;
@@ -1933,7 +1934,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>then</property> property on this bean.
 	 * @return This object.
 	 */
-	@MarshalledProp("then")
+	@BeanProp("then")
 	public JsonSchema setThen(JsonSchema value) {
 		this.then_ = value;
 		setMasterOn(value);

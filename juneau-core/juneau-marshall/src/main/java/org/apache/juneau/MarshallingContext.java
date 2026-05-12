@@ -484,7 +484,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link MarshalledCtor @MarshalledCtor} annotation can also be used to expose a non-public constructor.
+		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanCtor @BeanCtor} annotation can also be used to expose a non-public constructor.
 		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a public bean constructor to ignore it.
 		 * </ul>
 		 *
@@ -680,7 +680,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link MarshalledProp @MarshalledProp} annotation can also be used to expose a non-public field.
+		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can also be used to expose a non-public field.
 		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
 		 * </ul>
 		 *
@@ -830,7 +830,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link MarshalledProp @MarshalledProp} annotation can also be used to expose a non-public method.
+		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can also be used to expose a non-public method.
 		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
 		 * </ul>
 		 *
@@ -1703,7 +1703,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link MarshalledProp @MarshalledProp} annotation can be used on the getter to override this setting.
+		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can be used on the getter to override this setting.
 		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on getters to ignore them as bean properties.
 		 * </ul>
 		 *
@@ -1729,7 +1729,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 *
 		 * <p>
 		 * The bean store is used to resolve {@link BeanFactory} instances registered via
-		 * <ja>@Marshalled</ja><c>(factory=X.class)</c> and <ja>@MarshalledProp</ja><c>(factory=X.class)</c> annotations.
+		 * <ja>@BeanType</ja><c>(factory=X.class)</c> and <ja>@BeanProp</ja><c>(factory=X.class)</c> annotations.
 		 * When a factory class is encountered, the framework first looks it up in the bean store
 		 * before attempting direct instantiation.
 		 *
@@ -1961,7 +1961,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link MarshalledProp @MarshalledProp} annotation can also be used on transient fields to keep them from being ignored.
+		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can also be used on transient fields to keep them from being ignored.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -2192,7 +2192,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link MarshalledProp @MarshalledProp} annotation can also be used on methods to individually identify them as fluent setters.
+		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can also be used on methods to individually identify them as fluent setters.
 		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanType#findFluentSetters() @BeanType.findFluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
 		 * </ul>
 		 *
@@ -4843,7 +4843,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 	}
 
 	/**
-	 * Used for determining the class type on a method or field where a {@code @MarshalledProp} annotation may be present.
+	 * Used for determining the class type on a method or field where a {@code @BeanProp} annotation may be present.
 	 *
 	 * @param <T> The class type we're wrapping.
 	 * @param p The property annotation info on the type if there is one.
@@ -4857,7 +4857,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for ClassMeta resolution with property annotations
 	})
-	protected final <T> ClassMeta<T> resolveClassMeta(AnnotationInfo<MarshalledProp> p, ClassInfo ci, TypeVariables typeVarImpls) {
+	protected final <T> ClassMeta<T> resolveClassMeta(AnnotationInfo<org.apache.juneau.commons.bean.BeanProp> p, ClassInfo ci, TypeVariables typeVarImpls) {
 		var cm = resolveClassMeta(ci, typeVarImpls);
 		var cm2 = cm;
 
@@ -4897,7 +4897,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 				return new ClassMeta<>(cm2, null, null, elementType);
 			}
 
-			// Handle @MarshalledProp(elementType=) for BeanSupplier, BeanConsumer, BeanChannel, and Stream properties.
+			// Handle @BeanProp(elementType=) for BeanSupplier, BeanConsumer, BeanChannel, and Stream properties.
 			if (isNotVoid(beanp.elementType()) && (cm2.isIterable() || cm2.isStream())) {
 				var elementType = resolveClassMeta(beanp.elementType(), typeVarImpls);
 				if (! elementType.isObject())

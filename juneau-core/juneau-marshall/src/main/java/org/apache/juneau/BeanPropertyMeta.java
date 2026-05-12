@@ -34,6 +34,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
@@ -165,7 +166,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return this;
 		}
 
-		private static ObjectSwap beanpSwap(AnnotationInfo<MarshalledProp> ai) {
+		private static ObjectSwap marshalledPropSwap(AnnotationInfo<MarshalledProp> ai) {
 			var p = ai.inner();
 			if (! p.format().isEmpty())
 				return BeanInstantiator.of(ObjectSwap.class).type(StringFormatSwap.class).addBean(String.class, p.format()).run();
@@ -321,65 +322,77 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			var si = setter;
 
 			if (nn(innerField)) {
-				var lp = ap.find(MarshalledProp.class, ifi);
-				if (nn(field) || ne(lp)) {
-					// Only use field type if it's a bean property or has @MarshalledProp annotation.
+				var lbp = ap.find(BeanProp.class, ifi);
+				var lmp = ap.find(MarshalledProp.class, ifi);
+				if (nn(field) || ne(lbp)) {
+					// Only use field type if it's a bean property or has @BeanProp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
-					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).orElse(null), innerField.getFieldType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(opt(last(lbp)).orElse(null), innerField.getFieldType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
 				}
-				lp.forEach(x -> {
+				lbp.forEach(x -> {
 					var beanp = x.inner();
-					if (swap == null)
-						swap = beanpSwap(x);
-					if (ne(beanp.properties()))
-						properties = split(beanp.properties());
-					bdClasses.addAll(l(beanp.dictionary()));
 					if (ne(beanp.ro()))
 						readOnly = bool(beanp.ro());
 					if (ne(beanp.wo()))
 						writeOnly = bool(beanp.wo());
+				});
+				lmp.forEach(x -> {
+					var beanp = x.inner();
+					if (swap == null)
+						swap = marshalledPropSwap(x);
+					if (ne(beanp.properties()))
+						properties = split(beanp.properties());
+					bdClasses.addAll(l(beanp.dictionary()));
 				});
 				ap.find(Swap.class, ifi).stream().findFirst().ifPresent(x -> swap = swapSwap(x));
 				isUri |= ap.has(Uri.class, ifi);
 			}
 
 			if (nn(getter)) {
-				var lp = ap.find(MarshalledProp.class, gi);
+				var lbp = ap.find(BeanProp.class, gi);
+				var lmp = ap.find(MarshalledProp.class, gi);
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).orElse(null), getter.getReturnType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(opt(last(lbp)).orElse(null), getter.getReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, gi));
-				lp.forEach(x -> {
+				lbp.forEach(x -> {
 					var beanp = x.inner();
-					if (swap == null)
-						swap = beanpSwap(x);
-					if (nn(properties) && ne(beanp.properties()))
-						properties = split(beanp.properties());
-					bdClasses.addAll(l(beanp.dictionary()));
 					if (ne(beanp.ro()))
 						readOnly = bool(beanp.ro());
 					if (ne(beanp.wo()))
 						writeOnly = bool(beanp.wo());
 				});
+				lmp.forEach(x -> {
+					var beanp = x.inner();
+					if (swap == null)
+						swap = marshalledPropSwap(x);
+					if (nn(properties) && ne(beanp.properties()))
+						properties = split(beanp.properties());
+					bdClasses.addAll(l(beanp.dictionary()));
+				});
 				ap.find(Swap.class, gi).stream().forEach(x -> swap = swapSwap(x));
 			}
 
 			if (nn(setter)) {
-				var lp = ap.find(MarshalledProp.class, si);
+				var lbp = ap.find(BeanProp.class, si);
+				var lmp = ap.find(MarshalledProp.class, si);
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(opt(last(lp)).orElse(null), setter.getParameterTypes().get(0), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(opt(last(lbp)).orElse(null), setter.getParameterTypes().get(0), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, si));
-				lp.forEach(x -> {
+				lbp.forEach(x -> {
 					var beanp = x.inner();
-					if (swap == null)
-						swap = beanpSwap(x);
-					if (nn(properties) && ne(beanp.properties()))
-						properties = split(beanp.properties());
-					bdClasses.addAll(l(beanp.dictionary()));
 					if (ne(beanp.ro()))
 						readOnly = bool(beanp.ro());
 					if (ne(beanp.wo()))
 						writeOnly = bool(beanp.wo());
+				});
+				lmp.forEach(x -> {
+					var beanp = x.inner();
+					if (swap == null)
+						swap = marshalledPropSwap(x);
+					if (nn(properties) && ne(beanp.properties()))
+						properties = split(beanp.properties());
+					bdClasses.addAll(l(beanp.dictionary()));
 				});
 				ap.find(Swap.class, si).stream().forEach(x -> swap = swapSwap(x));
 			}
@@ -494,7 +507,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final ClassMeta<?> rawTypeMeta;                          // The real class type of the bean property.
 	private final boolean readOnly;                                  // True if this property is read-only.
 	private final MethodInfo setter;                                 // The bean property setter.
-	private final ObjectSwap swap;                                   // ObjectSwap defined only via @MarshalledProp annotation.
+	private final ObjectSwap swap;                                   // ObjectSwap defined only via @MarshalledProp(format=...) annotation.
 	private final ClassMeta<?> typeMeta;                             // The transformed class type of the bean property.
 	private final boolean writeOnly;                                 // True if this property is write-only.
 

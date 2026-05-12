@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
 
@@ -190,7 +191,7 @@ public class UriContext {
 	 * @param pathInfo
 	 * 	The path info (e.g. <js>"/path-info"</js>, or <js>"path-info"</js>)
 	 */
-	@MarshalledCtor
+	@BeanCtor
 	public UriContext(@Name("authority") String authority, @Name("contextRoot") String contextRoot, @Name("servletPath") String servletPath, @Name("pathInfo") String pathInfo) {
 		this.authority = nullIfEmpty(trimSlashes(authority));
 		this.contextRoot = nullIfEmpty(trimSlashes(contextRoot));

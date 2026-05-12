@@ -33,10 +33,10 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A {
-		@MarshalledProp(ro="true")
+		@BeanProp(ro="true")
 		public int f1;
 
-		@MarshalledProp(wo="true")
+		@BeanProp(wo="true")
 		public int f2;
 
 		static A create() {
@@ -63,8 +63,8 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 
 	@BeanType(readOnlyProperties="f1", writeOnlyProperties="f2")
 	public static class B {
-		@MarshalledProp(ro="true") public int f1;
-		@MarshalledProp(wo="true") public int f2;
+		@BeanProp(ro="true") public int f1;
+		@BeanProp(wo="true") public int f2;
 
 		static B create() {
 			var x = new B();
@@ -87,8 +87,8 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 	@BeanTypeApply(on="Dummy1",value=@BeanType(readOnlyProperties="f1", writeOnlyProperties="f2"))
 	@BeanTypeApply(on="Bc",value=@BeanType(readOnlyProperties="f1", writeOnlyProperties="f2"))
 	@BeanTypeApply(on="Dummy2",value=@BeanType(readOnlyProperties="f1", writeOnlyProperties="f2"))
-	@MarshalledPropApply(on="Bc.f1",value=@MarshalledProp(ro="true"))
-	@MarshalledPropApply(on="Bc.f2",value=@MarshalledProp(wo="true"))
+	@BeanPropApply(on="Bc.f1",value=@BeanProp(ro="true"))
+	@BeanPropApply(on="Bc.f2",value=@BeanProp(wo="true"))
 	private static class BcConfig {}
 
 	public static class Bc {

@@ -21,12 +21,13 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S1186" // Empty test method intentional for framework testing
 })
-class MarshalledPropAnnotation_Test extends TestBase {
+class BeanPropAnnotation_Test extends TestBase {
 
 	public static class X1 {}
 
@@ -34,22 +35,28 @@ class MarshalledPropAnnotation_Test extends TestBase {
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	MarshalledProp a1 = MarshalledPropAnnotation.create()
+	BeanProp a1 = BeanPropAnnotation.create()
 		.description("a")
-		.dictionary(X1.class)
-		.format("b")
-		.properties("e")
+		.name("c")
+		.params(X1.class)
+		.ro("f")
+		.type(X1.class)
+		.value("g")
+		.wo("h")
 		.build();
 
-	MarshalledProp a2 = MarshalledPropAnnotation.create()
+	BeanProp a2 = BeanPropAnnotation.create()
 		.description("a")
-		.dictionary(X1.class)
-		.format("b")
-		.properties("e")
+		.name("c")
+		.params(X1.class)
+		.ro("f")
+		.type(X1.class)
+		.value("g")
+		.wo("h")
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,dictionary,format,properties", "[a],[X1],b,e");
+		assertBean(a1, "description,name,params,ro,type,value,wo", "[a],c,[X1],f,X1,g,h");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -59,34 +66,24 @@ class MarshalledPropAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// PropertyStore equivalency.
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void b01_testEquivalencyInPropertyStores() {
-		var bc1 = MarshallingContext.create().annotations(a1).build();
-		var bc2 = MarshallingContext.create().annotations(a2).build();
-		assertSame(bc1, bc2);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class D1 {
-		@MarshalledProp(description={ "a" }, dictionary=X1.class, format="b", properties="e")
+		@BeanProp(description={ "a" }, name="c", params=X1.class, ro="f", type=X1.class, value="g", wo="h")
 		public int f;
 	}
 
 	public static class D2 {
-		@MarshalledProp(description={ "a" }, dictionary=X1.class, format="b", properties="e")
+		@BeanProp(description={ "a" }, name="c", params=X1.class, ro="f", type=X1.class, value="g", wo="h")
 		public int f;
 	}
 
-	MarshalledProp d1, d2;
+	BeanProp d1, d2;
 	{
 		try {
-			d1 = D1.class.getField("f").getAnnotationsByType(MarshalledProp.class)[0];
-			d2 = D2.class.getField("f").getAnnotationsByType(MarshalledProp.class)[0];
+			d1 = D1.class.getField("f").getAnnotationsByType(BeanProp.class)[0];
+			d2 = D2.class.getField("f").getAnnotationsByType(BeanProp.class)[0];
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

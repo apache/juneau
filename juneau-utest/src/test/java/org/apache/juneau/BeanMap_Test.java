@@ -595,10 +595,10 @@ class BeanMap_Test extends TestBase {
 
 		public List<G> l2 = new LinkedList<>();
 
-		@MarshalledProp(type=List.class,params={G.class})
+		@BeanProp(type=List.class, params={G.class})
 		public List<G> l3;
 
-		@MarshalledProp(type=LinkedList.class,params={G.class})
+		@BeanProp(type=LinkedList.class, params={G.class})
 		public List<G> l4;
 
 		private List<G> m1;
@@ -610,16 +610,16 @@ class BeanMap_Test extends TestBase {
 		public void setM2(List<G> v) { m2 = v; }
 
 		private List<G> m3;
-		@MarshalledProp(type=List.class,params={G.class})
+		@BeanProp(type=List.class, params={G.class})
 		public List<G> getM3() { return m3; }
 		public void setM3(List<G> v) { m3 = v; }
 
 		private List<G> m4;
-		@MarshalledProp(type=LinkedList.class,params={G.class})
+		@BeanProp(type=LinkedList.class, params={G.class})
 		public List<G> getM4() { return m4; }
 		public void setM4(List<G> v) { m4 = v; }
 
-		@MarshalledProp(type=LinkedList.class,params={G.class})
+		@BeanProp(type=LinkedList.class, params={G.class})
 		private List<G> m5;
 		public List<G> getM5() { return m5; }
 		public void setM5(List<G> v) { m5 = v; }
@@ -707,12 +707,12 @@ class BeanMap_Test extends TestBase {
 	}
 
 	public static class J {
-		@MarshalledProp(params={Float.class}) public List<String> p1;
-		@MarshalledProp(params={Float.class}) public List<Integer> getP2() { return null; }
-		@MarshalledProp(params={Float.class}) public List<? extends Integer> p3;
-		@MarshalledProp(params={Object.class, Float.class}) public Map<String,Integer> p4;
-		@MarshalledProp(params={Object.class, Float.class}) public Map<String,Integer> getP5() { return null; }
-		@MarshalledProp(params={String.class, Float.class}) public Map<String,? extends Integer> p6;
+		@BeanProp(params={Float.class}) public List<String> p1;
+		@BeanProp(params={Float.class}) public List<Integer> getP2() { return null; }
+		@BeanProp(params={Float.class}) public List<? extends Integer> p3;
+		@BeanProp(params={Object.class, Float.class}) public Map<String,Integer> p4;
+		@BeanProp(params={Object.class, Float.class}) public Map<String,Integer> getP5() { return null; }
+		@BeanProp(params={String.class, Float.class}) public Map<String,? extends Integer> p6;
 	}
 
 	//====================================================================================================
@@ -732,12 +732,12 @@ class BeanMap_Test extends TestBase {
 	}
 
 	public static class K {
-		@MarshalledProp(params=Float.class) public List<String> p1;
-		@MarshalledProp(params=Float.class) public List<Integer> getP2() { return null; }
-		@MarshalledProp(params=Float.class) public List<? extends Integer> p3;
-		@MarshalledProp(params={String.class,Float.class}) public Map<String,Integer> p4;
-		@MarshalledProp(params={String.class,Float.class}) public Map<String,Integer> getP5() { return null; }
-		@MarshalledProp(params={String.class,Float.class}) public Map<String,? extends Integer> p6;
+		@BeanProp(params=Float.class) public List<String> p1;
+		@BeanProp(params=Float.class) public List<Integer> getP2() { return null; }
+		@BeanProp(params=Float.class) public List<? extends Integer> p3;
+		@BeanProp(params={String.class,Float.class}) public Map<String,Integer> p4;
+		@BeanProp(params={String.class,Float.class}) public Map<String,Integer> getP5() { return null; }
+		@BeanProp(params={String.class,Float.class}) public Map<String,? extends Integer> p6;
 	}
 
 	//====================================================================================================
@@ -1806,7 +1806,7 @@ class BeanMap_Test extends TestBase {
 
 	/** Bean with a Map-backed dyna property for extra entries (see BasicBeans_Test.B). */
 	public static class DynaExtrasBean {
-		@MarshalledProp(name = "*")
+		@BeanProp(name="*")
 		public Map<String, Object> extras = new LinkedHashMap<>();
 	}
 

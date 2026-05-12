@@ -24,6 +24,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 
 /**
@@ -219,7 +220,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledProp("x-example")
+	@BeanProp("x-example")
 	public Object getExample() { return example; }
 
 	/**
@@ -247,7 +248,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledProp("$ref")
+	@BeanProp("$ref")
 	public String getRef() { return ref; }
 
 	/**
@@ -406,7 +407,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@MarshalledProp("x-example")
+	@BeanProp("x-example")
 	public HeaderInfo setExample(Object value) {
 		example = value;
 		return this;
@@ -454,7 +455,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@MarshalledProp("$ref")
+	@BeanProp("$ref")
 	public HeaderInfo setRef(String value) {
 		ref = value;
 		return this;

@@ -28,6 +28,7 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json5.*;
@@ -368,7 +369,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * <p>
 	 * Triggers bean creation if bean has read-only properties set through a constructor defined by the
-	 * {@link MarshalledCtor @MarshalledCtor} annotation.
+	 * {@link org.apache.juneau.commons.bean.BeanCtor @BeanCtor} annotation.
 	 *
 	 * @return The inner bean object.
 	 */
@@ -409,7 +410,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * <p>
 	 * If <c>create</c> is <jk>false</jk>, then this method may return <jk>null</jk> if the bean has read-only
-	 * properties set through a constructor defined by the {@link MarshalledCtor @MarshalledCtor} annotation.
+	 * properties set through a constructor defined by the {@link org.apache.juneau.commons.bean.BeanCtor @BeanCtor} annotation.
 	 *
 	 * <p>
 	 * This method does NOT always return the bean in it's final state.

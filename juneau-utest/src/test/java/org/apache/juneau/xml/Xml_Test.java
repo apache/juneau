@@ -461,8 +461,8 @@ class Xml_Test extends TestBase {
 
 	@BeanType(properties="url2,id2,name")
 	public static class O {
-		@MarshalledProp(name="url2") @Xml(format=ELEMENT) public URL url;
-		@MarshalledProp(name="id2") public int id;
+		@BeanProp(name="url2") @Xml(format=ELEMENT) public URL url;
+		@BeanProp(name="id2") public int id;
 		public String name;
 		public O() {}
 		public O(String url, int id, String name) {
@@ -493,8 +493,8 @@ class Xml_Test extends TestBase {
 
 	@BeanType(properties="url2,id2,name")
 	public static class P {
-		@MarshalledProp(name="url2") @Xml(format=ATTR) public URL url;
-		@MarshalledProp(name="id2") @Xml(format=ATTR) public int id;
+		@BeanProp(name="url2") @Xml(format=ATTR) public URL url;
+		@BeanProp(name="id2") @Xml(format=ATTR) public int id;
 		public String name;
 		public P() {}
 		public P(String url, int id, String name) {
@@ -994,7 +994,7 @@ class Xml_Test extends TestBase {
 		@Xml(format=ATTR)
 		public String f2;
 
-		@MarshalledProp(name="x3")
+		@BeanProp(name="x3")
 		@Xml(format=ATTR, prefix="nsf3", namespace="http://nsf3")
 		public String f3;
 

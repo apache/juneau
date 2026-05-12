@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
@@ -47,7 +48,7 @@ class AnnotationInheritance_Test extends TestBase {
 			return value;
 		}
 
-		@MarshalledProp("v")
+		@BeanProp("v")
 		public A1_Parent setValue(String value) {
 			this.value = value;
 			return this;
@@ -71,7 +72,7 @@ class AnnotationInheritance_Test extends TestBase {
 		var bm = bc.getBeanMeta(A1_Child.class);
 		var prop = bm.getPropertyMeta("v");
 
-		assertNotNull(prop, "Property 'v' should exist (inherited from @MarshalledProp in parent)");
+		assertNotNull(prop, "Property 'v' should exist (inherited from @BeanProp in parent)");
 	}
 
 	@Test
@@ -92,7 +93,7 @@ class AnnotationInheritance_Test extends TestBase {
 			return items;
 		}
 
-		@MarshalledProp("i")
+		@BeanProp("i")
 		@Xml(format=XmlFormat.COLLAPSED, childName="item")
 		public B1_Parent setItems(List<String> items) {
 			this.items = items;
@@ -115,7 +116,7 @@ class AnnotationInheritance_Test extends TestBase {
 		var bm = bc.getBeanMeta(B1_Child.class);
 		var prop = bm.getPropertyMeta("i");
 
-		assertNotNull(prop, "Property 'i' should exist (inherited from @MarshalledProp)");
+		assertNotNull(prop, "Property 'i' should exist (inherited from @BeanProp)");
 	}
 
 	//====================================================================================================
@@ -129,7 +130,7 @@ class AnnotationInheritance_Test extends TestBase {
 			return name;
 		}
 
-		@MarshalledProp(name="n", ro="false")
+		@BeanProp(name="n", ro="false")
 		public C1_Parent setName(String name) {
 			this.name = name;
 			return this;
@@ -164,7 +165,7 @@ class AnnotationInheritance_Test extends TestBase {
 			return count;
 		}
 
-		@MarshalledProp("c")
+		@BeanProp("c")
 		public D1_GrandParent setCount(int count) {
 			this.count = count;
 			return this;
@@ -194,7 +195,7 @@ class AnnotationInheritance_Test extends TestBase {
 	public static class E1_Parent {
 		private String data;
 
-		@MarshalledProp("d")
+		@BeanProp("d")
 		public String getData() {
 			return data;
 		}
@@ -218,7 +219,7 @@ class AnnotationInheritance_Test extends TestBase {
 		var bm = bc.getBeanMeta(E1_Child.class);
 		var prop = bm.getPropertyMeta("d");
 
-		assertNotNull(prop, "Property 'd' should exist (inherited from getter's @MarshalledProp)");
+		assertNotNull(prop, "Property 'd' should exist (inherited from getter's @BeanProp)");
 
 		var bean = new E1_Child();
 		bean.setData("test");
@@ -237,7 +238,7 @@ class AnnotationInheritance_Test extends TestBase {
 			return tags;
 		}
 
-		@MarshalledProp("t")
+		@BeanProp("t")
 		public F1_Parent setTags(List<String> tags) {
 			this.tags = tags;
 			return this;
@@ -265,12 +266,12 @@ class AnnotationInheritance_Test extends TestBase {
 		private List<Object> children;
 
 		@Xml(format=XmlFormat.ELEMENTS)
-		@MarshalledProp(name="c")
+		@BeanProp(name="c")
 		public List<Object> getChildren() {
 			return children;
 		}
 
-		@MarshalledProp("c")
+		@BeanProp("c")
 		public G1_Parent setChildren(List<Object> children) {
 			this.children = children;
 			return this;

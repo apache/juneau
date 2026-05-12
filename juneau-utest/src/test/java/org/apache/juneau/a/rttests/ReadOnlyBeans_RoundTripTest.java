@@ -19,6 +19,7 @@ package org.apache.juneau.a.rttests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -50,7 +51,7 @@ class ReadOnlyBeans_RoundTripTest extends RoundTripTest_Base {
 		private B f1;
 		private final B f2;
 
-		@MarshalledCtor(properties="f2")
+		@BeanCtor(properties="f2")
 		public A(B f2) {
 			this.f2 = f2;
 		}
@@ -70,7 +71,7 @@ class ReadOnlyBeans_RoundTripTest extends RoundTripTest_Base {
 		private int f1;
 		private final String f2;
 
-		@MarshalledCtor(properties="f2")
+		@BeanCtor(properties="f2")
 		public B(String sField) {
 			this.f2 = sField;
 		}

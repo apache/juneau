@@ -14,25 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.commons.bean;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
-
 /**
  * Maps constructor arguments to property names on beans with read-only properties.
+ *
+ * <p>
+ * The bean-modeling sibling to {@code @MarshalledProp}/{@code @BeanProp}: where those describe
+ * individual bean properties, this annotation describes how a constructor's parameters map to the
+ * bean's logical property set so the framework can instantiate read-only beans during parsing and
+ * deserialize property values through the constructor instead of via setters.
+ *
+ * <p>
+ * Lives in <c>juneau-commons</c> so the bean-modeling layer can describe constructor argument
+ * mappings without depending on the marshalling layer.
  *
  * <p>
  * Can be used in the following locations:
  * <ul>
  * 	<li>Bean constructors.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link MarshalledCtorApply @MarshalledCtorApply}.
  * </ul>
-
+ *
  * <p>
  * This annotation can be used in the case of beans with properties whose values can only be set by passing them in
  * through a constructor on the class.
@@ -46,29 +53,17 @@ import org.apache.juneau.*;
  * <p>
  * For Java records, the canonical constructor and its property mappings are automatically detected, so this
  * annotation is not required.  It can still be used to specify a non-canonical constructor if needed, for example
- * to provide default values for certain components.  When using a non-canonical constructor on a record, use
- * {@link Bean#properties() @Marshalled(properties)} to limit the visible properties to match the constructor parameters.
- *
- * <p>
- * When present, bean instantiation is delayed until the call to {@link BeanMap#getBean()}.
- * Until then, bean property values are stored in a local cache until <c>getBean()</c> is called.
- * Because of this additional caching step, parsing into read-only beans tends to be slower and use more memory than
- * parsing into beans with writable properties.
- *
- * <p>
- * Attempting to call {@link BeanMap#put(String,Object)} on a read-only property after calling {@link BeanMap#getBean()}
- * will result in a {@link org.apache.juneau.commons.reflect.BeanRuntimeException} being thrown.
- * Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
+ * to provide default values for certain components.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledCtorAnnotation">@MarshalledCtor Annotation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeancAnnotation">@BeanCtor Annotation</a>
  * </ul>
  */
 @Documented
 @Target({ CONSTRUCTOR })
 @Retention(RUNTIME)
 @Inherited
-public @interface MarshalledCtor {
+public @interface BeanCtor {
 
 	/**
 	 * Optional description for the exposed API.
@@ -82,8 +77,8 @@ public @interface MarshalledCtor {
 	 * The names of the properties of the constructor arguments.
 	 *
 	 * <p>
-	 * The {@link org.apache.juneau.annotation.MarshalledCtor @MarshalledCtor} annotation is used to map constructor arguments to property
-	 * names on bean with read-only properties.
+	 * The {@link BeanCtor @BeanCtor} annotation is used to map constructor arguments to property
+	 * names on beans with read-only properties.
 	 * <br>Since method parameter names are lost during compilation, this annotation essentially redefines them so that
 	 * they are available at runtime.
 	 *
@@ -95,7 +90,7 @@ public @interface MarshalledCtor {
 	 *			<jk>private final</jk> String <jf>name</jf>;
 	 *			<jk>private final int</jk> <jf>age</jf>;
 	 *
-	 *			<ja>@MarshalledCtor</ja>(properties=<js>"name,age"</js>)
+	 *			<ja>@BeanCtor</ja>(properties=<js>"name,age"</js>)
 	 *			<jk>public</jk> Person(String <jv>name</jv>, <jk>int</jk> <jv>age</jv>) {
 	 *				<jk>this</jk>.<jf>name</jf> = <jv>name</jv>;
 	 *				<jk>this</jk>.<jf>age</jf> = <jv>age</jv>;
@@ -113,16 +108,9 @@ public @interface MarshalledCtor {
 	 *			}
 	 *		}
 	 * </p>
-	 * <p class='bjava'>
-	 *		<jc>// Parsing into a read-only bean.</jc>
-	 *		String <jv>json</jv> = <js>"{name:'John Smith',age:45}"</js>;
-	 *		Person <jv>person</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>);
-	 *		String <jv>name</jv> = <jv>person</jv>.getName();  <jc>// "John Smith"</jc>
-	 *		<jk>int</jk> <jv>age</jv> = <jv>person</jv>.getAge();   <jc>// 45</jc>
-	 * </p>
 	 * <p>
-	 * 	Note that the {@link Name @Name} annotation can also be used to identify bean property names on constructor
-	 * 	arguments.  If neither this annotation or {@link Name @Name} is used, then we try to get the property names
+	 * 	Note that the {@link org.apache.juneau.annotation.Name @Name} annotation can also be used to identify bean property names on constructor
+	 * 	arguments.  If neither this annotation or {@link org.apache.juneau.annotation.Name @Name} is used, then we try to get the property names
 	 * 	from the parameter names if they are available in the bytecode.
 	 * </p>
 	 *

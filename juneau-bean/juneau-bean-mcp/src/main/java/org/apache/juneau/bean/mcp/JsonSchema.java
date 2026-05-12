@@ -19,6 +19,7 @@ package org.apache.juneau.bean.mcp;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * JSON Schema subset used by MCP tool {@code inputSchema} objects.
@@ -32,7 +33,7 @@ public class JsonSchema {
 	private Object additionalProperties;
 	private JsonSchema items;
 
-	@MarshalledProp(name = "$defs")
+	@BeanProp(name="$defs")
 	private Map<String, JsonSchema> defs;
 
 	/**

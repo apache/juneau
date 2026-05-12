@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.function;
 
+import org.apache.juneau.commons.bean.*;
 /**
  * A universal factory interface used with <ja>@Marshalled</ja><c>(factory=X.class)</c> for any bean type the
  * framework needs to instantiate.
@@ -75,7 +76,7 @@ public interface BeanFactory<T> {
 
 	/**
 	 * Sentinel class used as the default value for {@code @BeanType(factory=...)} and
-	 * {@code @MarshalledProp(factory=...)} when no factory is specified.
+	 * {@code @BeanProp(factory=...)} when no factory is specified.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw type required for use as annotation sentinel

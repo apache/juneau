@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -566,16 +567,16 @@ class UrlEncodingSerializer_Test extends TestBase {
 	@Marshalled
 	public static class A {
 
-		@MarshalledProp(name="foo")
+		@BeanProp(name="foo")
 		public String f1 = "foo";
 
-		@MarshalledProp(name="'foo'")
+		@BeanProp(name="'foo'")
 		public String f2 = "'foo'";
 
-		@MarshalledProp(name="(foo)")
+		@BeanProp(name="(foo)")
 		public String f3 = "(foo)";
 
-		@MarshalledProp(name="@(foo)")
+		@BeanProp(name="@(foo)")
 		public String f4 = "@(foo)";
 	}
 }

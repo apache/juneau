@@ -22,6 +22,7 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Round-trip testing for beans created via builder patterns.
@@ -370,7 +371,7 @@ class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			return x;
 		}
 
-		@MarshalledProp
+		@BeanProp
 		public HBuilder fooBar(int fooBar) {
 			this.fooBar = fooBar;
 			return this;

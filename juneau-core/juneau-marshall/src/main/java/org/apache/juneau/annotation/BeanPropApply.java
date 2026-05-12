@@ -21,17 +21,19 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.commons.bean.*;
+
 /**
- * Dynamically applies a {@link MarshalledCtor @MarshalledCtor} annotation to specified classes, methods, or fields.
+ * Dynamically applies a {@link BeanProp @BeanProp} annotation to specified classes, methods, or fields.
  *
  * <p>
  * This annotation separates the <b>targeting</b> concern ({@link #on()}/{@link #onClass()}) from the
- * <b>content</b> concern ({@link #value()}), enabling {@link MarshalledCtor @MarshalledCtor} to be a pure data annotation
+ * <b>content</b> concern ({@link #value()}), enabling {@link BeanProp @BeanProp} to be a pure data annotation
  * without marshall-specific application machinery.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@MarshalledCtorApply</ja>(on=<js>"Person(String,int)"</js>, value=<ja>@MarshalledCtor</ja>(properties=<js>"name,age"</js>))
+ * 	<ja>@BeanPropApply</ja>(on=<js>"com.example.Foo.bar"</js>, value=<ja>@BeanProp</ja>(ro=<js>"true"</js>))
  * 	<jk>public class</jk> MyConfig {}
  * </p>
  *
@@ -42,16 +44,16 @@ import java.lang.annotation.*;
 @Documented
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
-@Repeatable(MarshalledCtorApply.Array.class)
-@ContextApply(MarshalledCtorApplyAnnotation.Applier.class)
-public @interface MarshalledCtorApply {
+@Repeatable(BeanPropApply.Array.class)
+@ContextApply(BeanPropApplyAnnotation.Applier.class)
+public @interface BeanPropApply {
 
 	/**
-	 * The {@link MarshalledCtor @MarshalledCtor} annotation to apply.
+	 * The {@link BeanProp @BeanProp} annotation to apply.
 	 *
 	 * @return The annotation value.
 	 */
-	MarshalledCtor value();
+	BeanProp value();
 
 	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
@@ -79,7 +81,7 @@ public @interface MarshalledCtorApply {
 	Class<?>[] onClass() default {};
 
 	/**
-	 * A collection of {@link MarshalledCtorApply @MarshalledCtorApply annotations}.
+	 * A collection of {@link BeanPropApply @BeanPropApply annotations}.
 	 */
 	@Documented
 	@Target({ TYPE, METHOD })
@@ -91,6 +93,6 @@ public @interface MarshalledCtorApply {
 		 *
 		 * @return The annotation value.
 		 */
-		MarshalledCtorApply[] value();
+		BeanPropApply[] value();
 	}
 }

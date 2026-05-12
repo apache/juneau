@@ -24,6 +24,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -272,10 +273,10 @@ class CsvParser_Test extends TestBase {
 	}
 
 	public static class E {
-		@MarshalledProp(name = "full_name")
+		@BeanProp(name="full_name")
 		public String name;
 
-		@MarshalledProp(name = "years")
+		@BeanProp(name="years")
 		public int age;
 	}
 

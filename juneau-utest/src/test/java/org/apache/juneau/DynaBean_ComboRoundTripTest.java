@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swaps.*;
 
@@ -198,7 +199,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	@Marshalled
 	public static class BeanWithDynaField {
 		public int f1;
-		@MarshalledProp(name="*")
+		@BeanProp(name="*")
 		public Map<String,Object> f2 = map();
 		public int f3;
 
@@ -224,12 +225,12 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		public int getF3() { return f3; }
 		public void setF3(int v) { f3 = v; }
 
-		@MarshalledProp(name="*")
+		@BeanProp(name="*")
 		public Map<String, Object> xxx() {
 			return f2;
 		}
 
-		@MarshalledProp(name="*")
+		@BeanProp(name="*")
 		public void setYYY(String name, Object o) {
 			setterCalled = true;
 			this.f2.put(name, o);
@@ -257,18 +258,18 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		public int getF3() { return f3; }
 		public void setF3(int v) { f3 = v; }
 
-		@MarshalledProp(name="*")
+		@BeanProp(name="*")
 		public Object get(String name) {
 			return f2.get(name);
 		}
 
-		@MarshalledProp(name="*")
+		@BeanProp(name="*")
 		public void set(String name, Object o) {
 			setterCalled = true;
 			this.f2.put(name, o);
 		}
 
-		@MarshalledProp(name="*")
+		@BeanProp(name="*")
 		public Collection<String> getExtraKeys() {
 			return f2.keySet();
 		}
@@ -294,7 +295,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		public int getF3() { return f3; }
 		public void setF3(int v) { f3 = v; }
 
-		@MarshalledProp(name="*")
+		@BeanProp(name="*")
 		public Map<String, Object> xxx() {
 			return f2;
 		}
@@ -309,7 +310,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
 	@Marshalled
 	public static class BeanWithDynaFieldSwapped {
-		@MarshalledProp(name="*")
+		@BeanProp(name="*")
 		@Swap(TemporalCalendarSwap.IsoInstant.class)
 		public Map<String,Calendar> f1 = map();
 
@@ -321,7 +322,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
 	@Marshalled
 	public static class BeanWithDynaFieldStringList {
-		@MarshalledProp(name="*")
+		@BeanProp(name="*")
 		public Map<String,List<String>> f1 = map();
 
 		public BeanWithDynaFieldStringList init() {

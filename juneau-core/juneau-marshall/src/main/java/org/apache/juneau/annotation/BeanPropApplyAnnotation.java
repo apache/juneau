@@ -23,24 +23,31 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Utility classes and methods for the {@link MarshalledCtorApply @MarshalledCtorApply} annotation.
+ * Utility classes and methods for the {@link BeanPropApply @BeanPropApply} annotation.
  *
  */
-public class MarshalledCtorApplyAnnotation {
+public class BeanPropApplyAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private MarshalledCtorApplyAnnotation() {}
+	private BeanPropApplyAnnotation() {}
 
 	/**
-	 * Applies targeted {@link MarshalledCtorApply} annotations to a {@link org.apache.juneau.Context.Builder}.
+	 * Applies targeted {@link BeanPropApply} annotations to a {@link org.apache.juneau.Context.Builder}.
+	 *
+	 * <p>
+	 * Passes the {@link BeanPropApply @BeanPropApply} annotation through to the builder's annotation list.
+	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
+	 * method handles unwrapping the nested {@link BeanProp @BeanProp} from {@link BeanPropApply#value()} and registering it
+	 * under the targets specified by {@link BeanPropApply#on()} and {@link BeanPropApply#onClass()}.
 	 */
-	public static class Applier extends AnnotationApplier<MarshalledCtorApply,Context.Builder> {
+	public static class Applier extends AnnotationApplier<BeanPropApply,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -48,12 +55,12 @@ public class MarshalledCtorApplyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(MarshalledCtorApply.class, Context.Builder.class, vr);
+			super(BeanPropApply.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<MarshalledCtorApply> ai, Context.Builder b) {
-			MarshalledCtorApply a = ai.inner();
+		public void apply(AnnotationInfo<BeanPropApply> ai, Context.Builder b) {
+			BeanPropApply a = ai.inner();
 			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
 				return;
 			b.annotations(a);
@@ -69,22 +76,22 @@ public class MarshalledCtorApplyAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
-		MarshalledCtor value = MarshalledCtorAnnotation.DEFAULT;
+		BeanProp value = BeanPropAnnotation.DEFAULT;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(MarshalledCtorApply.class);
+			super(BeanPropApply.class);
 		}
 
 		/**
-		 * Sets the {@link MarshalledCtorApply#value()} property on this annotation.
+		 * Sets the {@link BeanPropApply#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder value(MarshalledCtor value) {
+		public Builder value(BeanProp value) {
 			this.value = value;
 			return this;
 		}
@@ -144,11 +151,11 @@ public class MarshalledCtorApplyAnnotation {
 		}
 
 		/**
-		 * Instantiates a new {@link MarshalledCtorApply @MarshalledCtorApply} object initialized with this builder.
+		 * Instantiates a new {@link BeanPropApply @BeanPropApply} object initialized with this builder.
 		 *
-		 * @return A new {@link MarshalledCtorApply} object.
+		 * @return A new {@link BeanPropApply} object.
 		 */
-		public MarshalledCtorApply build() {
+		public BeanPropApply build() {
 			return new Object(this);
 		}
 	}
@@ -156,33 +163,33 @@ public class MarshalledCtorApplyAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedOnClassAnnotationObject implements MarshalledCtorApply {
+	private static class Object extends AppliedOnClassAnnotationObject implements BeanPropApply {
 
-		private final MarshalledCtor value;
+		private final BeanProp value;
 
-		Object(MarshalledCtorApplyAnnotation.Builder b) {
+		Object(BeanPropApplyAnnotation.Builder b) {
 			super(b);
 			value = b.value;
 		}
 
-		@Override /* Overridden from MarshalledCtorApply */
-		public MarshalledCtor value() {
+		@Override /* Overridden from BeanPropApply */
+		public BeanProp value() {
 			return value;
 		}
 
-		@Override /* Overridden from MarshalledCtorApply */
+		@Override /* Overridden from BeanPropApply */
 		public String[] on() {
 			return super.on();
 		}
 
-		@Override /* Overridden from MarshalledCtorApply */
+		@Override /* Overridden from BeanPropApply */
 		public Class<?>[] onClass() {
 			return super.onClass();
 		}
 	}
 
 	/** Default value */
-	public static final MarshalledCtorApply DEFAULT = create().build();
+	public static final BeanPropApply DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -219,7 +226,7 @@ public class MarshalledCtorApplyAnnotation {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(MarshalledCtorApply a) {
+	public static boolean empty(BeanPropApply a) {
 		return a == null || DEFAULT.equals(a);
 	}
 }

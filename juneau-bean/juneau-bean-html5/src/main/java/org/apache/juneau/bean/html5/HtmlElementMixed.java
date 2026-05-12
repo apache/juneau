@@ -21,6 +21,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -164,7 +165,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @return The children of this element.
 	 */
 	@Xml(format = MIXED)
-	@MarshalledProp(dictionary = HtmlBeanDictionary.class, name = "c")
+	@BeanProp(name="c") @MarshalledProp(dictionary=HtmlBeanDictionary.class)
 	public List<Object> getChildren() { return children; }
 
 	@Override /* Overridden from HtmlElement */
@@ -491,7 +492,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @param children The new children of this element.
 	 * @return This object.
 	 */
-	@MarshalledProp("c")
+	@BeanProp("c")
 	public HtmlElement setChildren(List<Object> children) {
 		this.children = children;
 		return this;

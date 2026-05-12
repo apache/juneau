@@ -22,6 +22,7 @@ import java.beans.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
@@ -82,7 +83,7 @@ class BasicBeans_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class B {
-		@MarshalledProp(name="*")
+		@BeanProp(name="*")
 		public Map<String,Integer> f1 = new TreeMap<>();
 
 		public static B create() {

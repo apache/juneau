@@ -30,7 +30,6 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.commons.bean.*;
 
 /**
  * Filter for customizing how POJOs and beans are handled during serialization and parsing.
@@ -448,7 +447,7 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#readOnlyProperties()}
-		 * 	<li class='ja'>{@link MarshalledProp#ro()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanProp#ro()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesReadOnly(Class, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesReadOnly(String, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesReadOnly(Map)}
@@ -558,7 +557,7 @@ public class MarshalledFilter {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#writeOnlyProperties()}
-		 * 	<li class='ja'>{@link MarshalledProp#wo()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanProp#wo()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesWriteOnly(Class, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesWriteOnly(String, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesWriteOnly(Map)}

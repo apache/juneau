@@ -22,6 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -231,10 +232,10 @@ class MarkdownParser_Test {
 	}
 
 	public static class F {
-		@MarshalledProp(name = "full_name")
+		@BeanProp(name="full_name")
 		public String name;
 
-		@MarshalledProp(name = "years")
+		@BeanProp(name="years")
 		public int age;
 	}
 

@@ -206,8 +206,9 @@ public abstract class Context {
 		 * and passed into the builder class:
 		 * <ul class='javatreec'>
 		 * 	<li class='ja'>{@link MarshalledAnnotation}
-		 * 	<li class='ja'>{@link MarshalledCtorAnnotation}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanCtorAnnotation}
 		 * 	<li class='ja'>{@link MarshalledIgnoreAnnotation}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanPropAnnotation}
 		 * 	<li class='ja'>{@link MarshalledPropAnnotation}
 		 * 	<li class='ja'>{@link ExampleAnnotation}
 		 * 	<li class='ja'>{@link NamePropertyAnnotation}

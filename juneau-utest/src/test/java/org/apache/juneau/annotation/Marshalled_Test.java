@@ -87,27 +87,27 @@ class Marshalled_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @MarshalledCtor and @MarshalledProp annotations overrides visibility rules on constructors/properties.
+	// @BeanCtor and @BeanProp annotations overrides visibility rules on constructors/properties.
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class B1 {
 
-		@MarshalledProp
+		@BeanProp
 		private int f1;
 
 		private int f2;
 
-		@MarshalledProp
+		@BeanProp
 		private void setF2(int f2) {
 			this.f2 = f2;
 		}
 
-		@MarshalledProp
+		@BeanProp
 		private int getF2() {
 			return f2;
 		}
 
-		@MarshalledCtor
+		@BeanCtor
 		private B1() {}
 
 		public static B1 create() {
@@ -126,10 +126,10 @@ class Marshalled_Test extends TestBase {
 		assertEquals("{f1:1,f2:2}", json);
 	}
 
-	@MarshalledCtorApply(on="B2()",value=@MarshalledCtor())
-	@MarshalledPropApply(on="B2.f1",value=@MarshalledProp())
-	@MarshalledPropApply(on="B2.setF2",value=@MarshalledProp())
-	@MarshalledPropApply(on="B2.getF2",value=@MarshalledProp())
+	@BeanCtorApply(on="B2()",value=@BeanCtor())
+	@BeanPropApply(on="B2.f1",value=@BeanProp)
+	@BeanPropApply(on="B2.setF2",value=@BeanProp)
+	@BeanPropApply(on="B2.getF2",value=@BeanProp)
 	private static class B2Config {}
 
 	public static class B2 {

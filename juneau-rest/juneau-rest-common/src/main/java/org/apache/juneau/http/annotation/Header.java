@@ -150,7 +150,7 @@ public @interface Header {
 	 *
 	 * 		<jc>// Equivalent to @Header("Foo")</jc>
 	 * 		<ja>@Header</ja>
-	 * 		<ja>@MarshalledProp</ja>(<js>"Foo"</js>)
+	 * 		<ja>@BeanProp</ja>(<js>"Foo"</js>)
 	 * 		String getFoo();
 	 * 	}
 	 * 		</p>

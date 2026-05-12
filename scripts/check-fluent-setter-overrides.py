@@ -168,11 +168,11 @@ def extract_class_info(file_path):  # NOSONAR python:S3776 -- Cognitive complexi
                 method_name = method_match.group(1)
                 params = method_match.group(2).strip()
                 
-                # Check if method has @MarshalledProp annotation
+                # Check if method has @BeanProp annotation
                 # Look backwards from the method declaration to check for annotations
                 method_start_pos = method_match.start()
                 preceding_text = class_body[max(0, method_start_pos - 200):method_start_pos]
-                has_beanp = '@MarshalledProp' in preceding_text
+                has_beanp = '@BeanProp' in preceding_text
                 
                 # Check if this method returns 'this'
                 # Look ahead to see if there's a 'return this;' in the method body
@@ -275,7 +275,7 @@ def check_missing_overrides(classes, class_map):  # NOSONAR python:S3776 -- Cogn
                 normalized_params = normalize_params(params)
                 signature = f"{method_name}({normalized_params})"
                 
-                # Skip methods marked with @MarshalledProp in the parent
+                # Skip methods marked with @BeanProp in the parent
                 # These are automatically handled by annotation inheritance (since 9.2.0)
                 # and are less critical for type safety
                 if setter.get('has_beanp'):

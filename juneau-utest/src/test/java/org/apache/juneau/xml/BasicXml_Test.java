@@ -1343,11 +1343,11 @@ class BasicXml_Test extends TestBase {
 	}
 
 	public static class BeanWithMapProperties {
-		@MarshalledProp(type=MapWithStrings.class)
+		@BeanProp(type=MapWithStrings.class)
 		public Map<String,String> a;
-		@MarshalledProp(type=MapWithNumbers.class)
+		@BeanProp(type=MapWithNumbers.class)
 		public Map<String,Number> b;
-		@MarshalledProp(type=MapWithObjects.class)
+		@BeanProp(type=MapWithObjects.class)
 		public Map<String,Object> c;
 
 		BeanWithMapProperties init() {
@@ -1623,7 +1623,7 @@ class BasicXml_Test extends TestBase {
 	@Marshalled(typeName="  \b\f\n\t\r  ")
 	public static class BeanWithSpecialCharacters2 {
 
-		@MarshalledProp(name="  \b\f\n\t\r  ")
+		@BeanProp(name="  \b\f\n\t\r  ")
 		public String a;
 
 		BeanWithSpecialCharacters2 init() {

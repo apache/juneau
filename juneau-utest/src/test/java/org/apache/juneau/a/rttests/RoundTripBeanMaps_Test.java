@@ -972,7 +972,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		}
 
 		@MarshalledIgnore public KEnum getA() { return KEnum.FOO; }
-		@MarshalledProp(name="a") public String getA2() { return a.toString(); }
+		@BeanProp(name="a") public String getA2() { return a.toString(); }
 		public void setA(KEnum v) {
 			// This method should not be interpreted as the setter for this
 			// property because it doesn't match the getter return type above.

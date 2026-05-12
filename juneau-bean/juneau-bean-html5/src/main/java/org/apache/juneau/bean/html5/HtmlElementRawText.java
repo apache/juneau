@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.html5;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -73,7 +74,7 @@ public class HtmlElementRawText extends HtmlElement {
 	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
 	 */
 	@Xml(format = XmlFormat.TEXT_PWS)
-	@MarshalledProp("c")
+	@BeanProp("c")
 	public Object getText() { return text; }
 
 	@Override /* Overridden from HtmlElement */
@@ -400,7 +401,7 @@ public class HtmlElementRawText extends HtmlElement {
 	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
 	 * @return This object.
 	 */
-	@MarshalledProp("c")
+	@BeanProp("c")
 	public HtmlElement setText(Object text) {
 		this.text = text;
 		return this;

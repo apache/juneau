@@ -24,6 +24,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 
 /**
@@ -651,7 +652,7 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledProp("$ref")
+	@BeanProp("$ref")
 	public String getRef() { return ref; }
 
 	/**
@@ -1245,7 +1246,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@MarshalledProp("$ref")
+	@BeanProp("$ref")
 	public SchemaInfo setRef(Object value) {
 		ref = s(value);
 		return this;

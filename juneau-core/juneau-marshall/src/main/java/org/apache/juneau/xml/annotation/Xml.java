@@ -20,6 +20,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Annotation for specifying various XML options for the XML and RDF/XML serializers.
@@ -111,7 +112,7 @@ public @interface Xml {
 	 *
 	 * 		<jc>// Normally, bean URL properties would be rendered as XML attributes on the bean element.</jc>
 	 * 		<jc>// Override so that it's rendered as an &lt;href&gt;http://foo&lt;/href&gt; child element instead.</jc>
-	 * 		<ja>@MarshalledProp</ja>(uri=<jk>true</jk>)
+	 * 		<ja>@BeanProp</ja>(uri=<jk>true</jk>)
 	 * 		<ja>@Xml</ja>(format=XmlFormat.<jsf>ELEMENT</jsf>}
 	 * 		<jk>public</jk> URL <jf>href</jf> = <jk>new</jk> URL(<js>"http://foo"</js>);
 	 *

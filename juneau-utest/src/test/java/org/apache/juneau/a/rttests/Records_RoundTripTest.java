@@ -58,7 +58,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	@BeanType(properties="age,name")
 	public record AnnotatedOrder(String name, int age) {}
 
-	public record WithMarshalledProp(@MarshalledProp(name="fullName") String name, int age) {}
+	public record WithMarshalledProp(@BeanProp(name="fullName") String name, int age) {}
 
 	public record WithCompactConstructor(String name, int age) {
 		public WithCompactConstructor {
@@ -73,7 +73,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 
 	@BeanType(properties="name")
 	public record WithMarshalledCtor(String name, int age) {
-		@MarshalledCtor(properties="name")
+		@BeanCtor(properties="name")
 		public WithMarshalledCtor(String name) {
 			this(name, 0);
 		}

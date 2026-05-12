@@ -14,31 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.commons.bean;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-
-import java.lang.annotation.*;
 
 import org.apache.juneau.commons.annotation.*;
 
 /**
- * Utility classes and methods for the {@link MarshalledCtor @MarshalledCtor} annotation.
+ * Utility classes and methods for the {@link BeanCtor @BeanCtor} annotation.
  *
+ * <p>
+ * Provides a {@link Builder} that constructs a synthetic {@link BeanCtor @BeanCtor} annotation instance
+ * programmatically without requiring it to be declared on a program element at compile time.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='ja'>{@link BeanCtor}
+ * 	<li class='jc'>{@link AnnotationObject}
+ * </ul>
  */
-public class MarshalledCtorAnnotation {
+public class BeanCtorAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private MarshalledCtorAnnotation() {}
+	private BeanCtorAnnotation() {}
 
 	/**
 	 * Builder class.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#annotations(Annotation...)}
-	 * </ul>
 	 */
 	public static class Builder extends AnnotationObject.Builder {
 
@@ -49,15 +51,15 @@ public class MarshalledCtorAnnotation {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(MarshalledCtor.class);
+			super(BeanCtor.class);
 		}
 
 		/**
-		 * Instantiates a new {@link MarshalledCtor @MarshalledCtor} object initialized with this builder.
+		 * Instantiates a new {@link BeanCtor @BeanCtor} object initialized with this builder.
 		 *
-		 * @return A new {@link MarshalledCtor @MarshalledCtor} object.
+		 * @return A new {@link BeanCtor @BeanCtor} object.
 		 */
-		public MarshalledCtor build() {
+		public BeanCtor build() {
 			return new Object(this);
 		}
 
@@ -73,7 +75,7 @@ public class MarshalledCtorAnnotation {
 		}
 
 		/**
-		 * Sets the {@link MarshalledCtor#properties()}  property on this annotation.
+		 * Sets the {@link BeanCtor#properties()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -88,30 +90,30 @@ public class MarshalledCtorAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AnnotationObject implements MarshalledCtor {
+	private static class Object extends AnnotationObject implements BeanCtor {
 
 		private final String[] description;
 		private final String properties;
 
-		Object(MarshalledCtorAnnotation.Builder b) {
+		Object(BeanCtorAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
 			properties = b.properties;
 		}
 
-		@Override /* Overridden from MarshalledCtor */
+		@Override /* Overridden from BeanCtor */
 		public String[] description() {
 			return description;
 		}
 
-		@Override /* Overridden from MarshalledCtor */
+		@Override /* Overridden from BeanCtor */
 		public String properties() {
 			return properties;
 		}
 	}
 
 	/** Default value */
-	public static final MarshalledCtor DEFAULT = create().build();
+	public static final BeanCtor DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.

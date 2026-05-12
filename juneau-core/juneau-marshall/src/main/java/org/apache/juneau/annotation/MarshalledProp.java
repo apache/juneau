@@ -20,13 +20,17 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import java.util.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.commons.reflect.Visibility;
 
 /**
- * Used tailor how bean properties get interpreted by the framework.
+ * Used to tailor how bean properties get marshalled by the framework.
+ *
+ * <p>
+ * The marshalling-only sibling of {@link org.apache.juneau.commons.bean.BeanProp @BeanProp}.
+ * Where {@code @BeanProp} (in <c>juneau-commons</c>) carries the bean-modeling attributes
+ * (such as {@code name}, {@code ro}, {@code wo}, {@code type}, {@code params}, {@code elementType},
+ * and {@code factory}), this annotation carries the wire-format-specific attributes used by serializers
+ * and parsers: a per-property format string, a bean dictionary for polymorphic types, and a list of
+ * child properties to render.
  *
  * <p>
  * Can be used in the following locations:
@@ -34,12 +38,10 @@ import org.apache.juneau.commons.reflect.Visibility;
  * 	<li>Methods/Fields - Bean getters/setters and properties.
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link MarshalledPropApply @MarshalledPropApply}.
  * </ul>
- * <p>
- * This annotation is applied to public fields and public getter/setter methods of beans.
  *
  * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanProp}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledPropAnnotation">@MarshalledProp Annotation</a>
-
  * </ul>
  */
 @Documented
@@ -60,7 +62,8 @@ public @interface MarshalledProp {
 	 * Bean dictionary.
 	 *
 	 * <p>
-	 * The list of classes that make up the bean dictionary this bean property.
+	 * The list of classes that make up the bean dictionary for this bean property, used during
+	 * polymorphic marshalling.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#dictionary()}
@@ -77,82 +80,6 @@ public @interface MarshalledProp {
 	Class<?>[] dictionary() default {};
 
 	/**
-	 * Element type for streaming/consuming bean properties.
-	 *
-	 * <p>
-	 * Specifies the element type for properties of type {@link java.util.stream.Stream},
-	 * {@link org.apache.juneau.commons.function.BeanSupplier},
-	 * {@link org.apache.juneau.commons.function.BeanConsumer}, or
-	 * {@link org.apache.juneau.commons.function.BeanChannel} when type erasure prevents
-	 * the framework from inferring the generic type argument at runtime.
-	 *
-	 * <p>
-	 * This attribute also supports:
-	 * <ul>
-	 * 	<li><b>Narrowing</b> - Specify a more specific subtype than the declared type
-	 * 	<li><b>Concrete implementation</b> - Specify a concrete class for an abstract/interface element type
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public class</jk> OrderCollection {
-	 * 		<jc>// Stream property - element type cannot be inferred at runtime due to erasure</jc>
-	 * 		<ja>@MarshalledProp</ja>(elementType=Order.<jk>class</jk>)
-	 * 		<jk>public</jk> Stream&lt;Order&gt; getOrders() { ... }
-	 *
-	 * 		<jc>// BeanChannel with concrete impl specified instead of abstract element type</jc>
-	 * 		<ja>@MarshalledProp</ja>(elementType=ConcreteItem.<jk>class</jk>)
-	 * 		<jk>public</jk> BeanChannel&lt;AbstractItem&gt; getItems() { ... }
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanSupplier}
-	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanConsumer}
-	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanChannel}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?> elementType() default void.class;
-
-	/**
-	 * Bean factory class for this property's value.
-	 *
-	 * <p>
-	 * Specifies a {@link org.apache.juneau.commons.function.BeanFactory} class to use when instantiating
-	 * the value of this specific bean property, overriding the class-level {@link Bean#factory()} if present.
-	 *
-	 * <p>
-	 * When a factory class is specified, the framework resolves it in the following order:
-	 * <ol>
-	 * 	<li>Look up the factory class in the configured {@link org.apache.juneau.commons.inject.BeanStore}
-	 * 	<li>Attempt direct instantiation via no-arg constructor or {@code getInstance()} static method
-	 * 	<li>Throw {@link IllegalArgumentException} if both fail
-	 * </ol>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<ja>@MarshalledProp</ja>(factory=ItemChannelFactory.<jk>class</jk>, elementType=Item.<jk>class</jk>)
-	 * 		<jk>public</jk> BeanChannel&lt;Item&gt; getItems() { ... }
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanFactory}
-	 * 	<li class='ja'>{@link Bean#factory()}
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanStore(org.apache.juneau.commons.inject.BeanStore)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	@SuppressWarnings({
-		"rawtypes" // Raw BeanFactory type required for annotation attribute declaration
-	})
-	Class<? extends org.apache.juneau.commons.function.BeanFactory> factory() default org.apache.juneau.commons.function.BeanFactory.Void.class;
-
-	/**
 	 * Specifies a String format for converting the bean property value to a formatted string.
 	 *
 	 * <p>
@@ -160,7 +87,7 @@ public @interface MarshalledProp {
 	 *
 	 * <p>
 	 * During parsing, we will attempt to convert the value to the original form by using the
-	 * {@link MarshallingSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
+	 * {@link org.apache.juneau.MarshallingSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -187,160 +114,6 @@ public @interface MarshalledProp {
 	 * @return The annotation value.
 	 */
 	String format() default "";
-
-	/**
-	 * Identifies the name of the property.
-	 *
-	 * <p>
-	 * Normally, this is automatically inferred from the field name or getter method name of the property.
-	 * However, this property can be used to assign a different property name from the automatically inferred value.
-	 *
-	 * <p>
-	 * If the {@link org.apache.juneau.MarshallingContext.Builder#beanFieldVisibility(Visibility)} setting on the bean context excludes this field (e.g. the
-	 * visibility is set to PUBLIC, but the field is PROTECTED), this annotation can be used to force the field to be
-	 * identified as a property.
-	 *
-	 * <h5 class='topic'>Dynamic beans</h5>
-	 * <p>
-	 * On a <strong>field</strong> whose type is not a {@link Map}, <js>"*"</js> does not create a dynamic property:
-	 * the property name is the field name (same as omitting {@code name}/{@code value}), while other attributes on
-	 * this annotation (e.g. {@link #format()}, {@link Swap @Swap}) still apply.
-	 * </p>
-	 * <p>
-	 * The bean property named <js>"*"</js> is the designated "dynamic property" which allows for "extra" bean
-	 * properties not otherwise defined.
-	 * This is similar in concept to the Jackson <ja>@JsonGetterAll</ja> and <ja>@JsonSetterAll</ja> annotations.
-	 * The primary purpose is for backwards compatibility in parsing newer streams with addition information into older
-	 * beans.
-	 *
-	 * <p>
-	 * The following examples show how to define dynamic bean properties.
-	 * <p class='bjava'>
-	 * 	<jc>// Option #1 - A simple public Map field.
-	 * 	// The field name can be anything.</jc>
-	 * 	<jk>public class</jk> BeanWithDynaField {
-	 *
-	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>extraStuff</jf> = <jk>new</jk> LinkedHashMap&lt;&gt;();
-	 * 	}
-	 *
-	 * 	<jc>// Option #2 - Getters and setters.
-	 * 	// Method names can be anything.
-	 * 	// Getter must return a Map with String keys.
-	 * 	// Setter must take in two arguments.</jc>
-	 * 	<jk>public class</jk> BeanWithDynaMethods {
-	 *
-	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public</jk> Map&lt;String,Object&gt; getMyExtraStuff() {
-	 * 			...
-	 * 		}
-	 *
-	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public void</jk> setAnExtraField(String <jv>name</jv>, Object <jv>value</jv>) {
-	 * 			...
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #3 - Getter only.
-	 * 	// Properties will be added through the getter.</jc>
-	 * 	<jk>public class</jk> BeanWithDynaGetterOnly {
-	 *
-	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public</jk> Map&lt;String,Object&gt; getMyExtraStuff() {
-	 * 			...
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// Option #4 - Getter, setter, and extra-keys method .
-	 * 	// Define a method that returns a Collection&lt;String&gt; with currently-set property names.</jc>
-	 * 	<jk>public class</jk> BeanWithDynaExtraKeys {
-	 *
-	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public</jk> Object get(String <jv>name</jv>) {
-	 * 			...
-	 * 		}
-	 *
-	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public void</jk> set(String <jv>name</jv>, Object <jv>value</jv>) {
-	 * 			...
-	 * 		}
-	 *
-	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public</jk> Collection&lt;String&gt; extraKeys() {
-	 * 			...
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 *<p>
-	 * Similar rules apply for value types and swaps.
-	 * The property values optionally can be any serializable type or use swaps.
-	 * <p class='bjava'>
-	 * 	<jc>// A serializable type other than Object.</jc>
-	 * 	<jk>public class</jk> BeanWithDynaFieldWithListValues {
-	 *
-	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public</jk> Map&lt;String,List&lt;String&gt;&gt; getMyExtraStuff() {
-	 * 			...
-	 * 		}
-	 * 	}
-	 *
-	 * 	<jc>// A swapped value.</jc>
-	 * 	<jk>public class</jk> BeanWithDynaFieldWithSwappedValues {
-	 *
-	 * 		<ja>@MarshalledProp</ja>(name=<js>"*"</js>, swap=TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
-	 * 		<jk>public</jk> Map&lt;String,Calendar&gt; getMyExtraStuff() {
-	 * 			...
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <div class='info'>
-	 * 	Note that if you're not interested in these additional properties, you can also use the
-	 * 	{@link org.apache.juneau.MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting to ignore values that don't fit into existing
-	 * 	properties.
-	 * </div>
-	 * <div class='info'>
-	 * 		Note that the {@link Name @Name} annotation can also be used for identifying a property name.
-	 * </div>
-	 *
-	 * @return The annotation value.
-	 */
-	String name() default "";
-
-	/**
-	 * For bean properties of maps and collections, this annotation can be used to identify the class types of the
-	 * contents of the bean property object when the generic parameter types are interfaces or abstract classes.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<jc>// Identify concrete map type with String keys and Integer values.</jc>
-	 * 		<ja>@MarshalledProp</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
-	 * 		<jk>public</jk> Map <jf>p1</jf>;
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * This annotation can also be used on private fields of a property like so:
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<ja>@MarshalledProp</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
-	 * 		<jk>private</jk> Map <jf>p1</jf>;
-	 *
-	 * 		<jk>public</jk> Map getP1() {
-	 * 			<jk>return</jk> <jf>p1</jf>;
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?>[] params() default {};
 
 	/**
 	 * Used to limit which child properties are rendered by the serializers.
@@ -372,137 +145,7 @@ public @interface MarshalledProp {
 	 * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> MyClass());
 	 * </p>
 	 *
-	 * <p>
-	 * This annotation can also be used on private fields of a property like so:
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<ja>@MarshalledProp</ja>(properties=<js>"f1"</js>)
-	 * 		<jk>private</jk> MyChildClass <jf>x1</jf>;
-	 *
-	 * 		<jk>public</jk> MyChildClass getX1() {
-	 * 			<jk>return</jk> <jf>x1</jf>;
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
 	 * @return The annotation value.
 	 */
 	String properties() default "";
-
-	/**
-	 * Identifies a property as read-only.
-	 *
-	 * <p>
-	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<ja>@MarshalledProp</ja>(ro=<js>"true"</js>)
-	 * 		<jk>public float</jk> <jf>price</jf>;
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		<b>Java Records:</b> Marking record components as read-only is not supported during parsing.
-	 * 		Because records are immutable, all components must be provided to the canonical constructor.
-	 * 		Read-only components will be serialized as usual, but the parser will be unable to instantiate the
-	 * 		record if the read-only component values are missing from the input.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesReadOnly(Class, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesReadOnly(String, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesReadOnly(Map)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String ro() default "";
-
-	/**
-	 * Identifies a specialized class type for the property.
-	 *
-	 * <p>
-	 * Normally this can be inferred through reflection of the field type or getter return type.
-	 * However, you'll want to specify this value if you're parsing beans where the bean property class is an interface
-	 * or abstract class to identify the bean type to instantiate.
-	 * Otherwise, you may cause an {@link InstantiationException} when trying to set these fields.
-	 *
-	 * <p>
-	 * This property must denote a concrete bean class with a no-arg constructor.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<jc>// Identify concrete map type.</jc>
-	 * 		<ja>@MarshalledProp</ja>(type=HashMap.<jk>class</jk>)
-	 * 		<jk>public</jk> Map <jf>p1</jf>;
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * This annotation can also be used on private fields of a property like so:
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public class</jk> MyBean {
-	 *
-	 * 		<ja>@MarshalledProp</ja>(type=HashMap.<jk>class</jk>)
-	 * 		<jk>private</jk> Map <jf>p1</jf>;
-	 *
-	 * 		<jk>public</jk> Map getP1() {
-	 * 			<jk>return</jk> <jf>p1</jf>;
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<?> type() default void.class;
-
-	/**
-	 * A synonym for {@link #name()}.
-	 *
-	 * <p>
-	 * The following annotations are equivalent:
-	 *
-	 * <p class='bjava'>
-	 * 	<ja>@MarshalledProp</ja>(name=<js>"foo"</js>)
-	 *
-	 * 	<ja>@MarshalledProp</ja>(<js>"foo"</js>)
-	 * </p>
-	 *
-	 * @return The annotation value.
-	 */
-	String value() default "";
-
-	/**
-	 * Identifies a property as write-only.
-	 *
-	 * <p>
-	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<ja>@MarshalledProp</ja>(wo=<js>"true"</js>)
-	 * 		<jk>public float</jk> <jf>price</jf>;
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesWriteOnly(Class, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesWriteOnly(String, String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanPropertiesWriteOnly(Map)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String wo() default "";
 }

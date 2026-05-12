@@ -25,6 +25,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshaller.*;
 
@@ -344,7 +345,7 @@ public class Items extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledProp("$ref")
+	@BeanProp("$ref")
 	public String getRef() { return ref; }
 
 	/**
@@ -697,7 +698,7 @@ public class Items extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	@MarshalledProp("$ref")
+	@BeanProp("$ref")
 	public Items setRef(String value) {
 		ref = value;
 		return this;

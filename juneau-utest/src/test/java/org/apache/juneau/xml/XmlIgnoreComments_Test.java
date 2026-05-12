@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -807,11 +808,11 @@ class XmlIgnoreComments_Test extends TestBase {
 	}
 
 	public static class BeanWithMapProperties {
-		@MarshalledProp(type=MapWithStrings.class)
+		@BeanProp(type=MapWithStrings.class)
 		public Map<String,String> a;
-		@MarshalledProp(type=MapWithNumbers.class)
+		@BeanProp(type=MapWithNumbers.class)
 		public Map<String,Number> b;
-		@MarshalledProp(type=MapWithObjects.class)
+		@BeanProp(type=MapWithObjects.class)
 		public Map<String,Object> c;
 
 		BeanWithMapProperties init() {
@@ -1087,7 +1088,7 @@ class XmlIgnoreComments_Test extends TestBase {
 	@Marshalled(typeName="  \b\f\n\t\r  ")
 	public static class BeanWithSpecialCharacters2 {
 
-		@MarshalledProp(name="  \b\f\n\t\r  ")
+		@BeanProp(name="  \b\f\n\t\r  ")
 		public String a;
 
 		BeanWithSpecialCharacters2 init() {

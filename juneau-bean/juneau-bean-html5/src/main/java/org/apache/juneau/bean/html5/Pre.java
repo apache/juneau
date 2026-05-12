@@ -21,6 +21,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -166,7 +167,7 @@ public class Pre extends HtmlElementMixed {
 	}
 
 	@Xml(format = MIXED_PWS)
-	@MarshalledProp(dictionary = HtmlBeanDictionary.class, name = "c")
+	@BeanProp(name="c") @MarshalledProp(dictionary=HtmlBeanDictionary.class)
 	@Override
 	public List<Object> getChildren() { return super.getChildren(); }
 

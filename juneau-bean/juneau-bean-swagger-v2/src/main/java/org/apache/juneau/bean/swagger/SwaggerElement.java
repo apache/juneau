@@ -26,6 +26,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -75,7 +76,7 @@ public abstract class SwaggerElement {
 	 * 	All the non-standard keys on this element.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	@MarshalledProp("*")
+	@BeanProp("*")
 	public Set<String> extraKeys() {
 		return extra == null ? Collections.emptySet() : extra.keySet();
 	}
@@ -89,7 +90,7 @@ public abstract class SwaggerElement {
 	 * @param property The property name to retrieve.  Must not be <jk>null</jk>.
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
-	@MarshalledProp("*")
+	@BeanProp("*")
 	public Object get(String property) {
 		assertArgNotNull(ARG_property, property);
 		return opt(extra).map(x -> x.get(property)).orElse(null);
@@ -132,7 +133,7 @@ public abstract class SwaggerElement {
 	 * @param value The new value for the property.
 	 * @return This object.
 	 */
-	@MarshalledProp("*")
+	@BeanProp("*")
 	public SwaggerElement set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		if (strict)
