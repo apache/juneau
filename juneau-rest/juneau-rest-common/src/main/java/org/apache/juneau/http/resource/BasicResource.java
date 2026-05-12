@@ -23,8 +23,8 @@ import java.io.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 
@@ -47,7 +47,7 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@MarshalledIgnore /* Use toString() to serialize */
+@BeanIgnore /* Use toString() to serialize */
 @SuppressWarnings({
 	"resource", // Depends on entity (streams); value equality not practical
 	"java:S1206", // equals/hashCode not overridden; value equality not practical for this class

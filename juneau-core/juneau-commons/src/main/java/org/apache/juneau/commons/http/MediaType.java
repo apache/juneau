@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.annotation.MarshalledIgnore;
+import org.apache.juneau.commons.bean.BeanIgnore;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 
@@ -36,7 +36,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
-@MarshalledIgnore
+@BeanIgnore
 @SuppressWarnings({
 	"java:S1700", // Field 'mediaType' intentionally shares the class name; it holds the canonical string form of this MediaType instance
 	"java:S1845"  // Field name intentionally matches method name

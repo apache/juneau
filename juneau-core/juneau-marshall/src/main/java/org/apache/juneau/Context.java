@@ -208,6 +208,7 @@ public abstract class Context {
 		 * <ul class='javatreec'>
 		 * 	<li class='ja'>{@link MarshalledAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanCtorAnnotation}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanIgnoreAnnotation}
 		 * 	<li class='ja'>{@link MarshalledIgnoreAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanPropAnnotation}
 		 * 	<li class='ja'>{@link MarshalledPropAnnotation}

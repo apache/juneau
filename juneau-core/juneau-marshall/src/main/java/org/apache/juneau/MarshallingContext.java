@@ -436,7 +436,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a non-public bean class to override this setting.
-		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a public bean class to ignore it as a bean.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -485,7 +485,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanCtor @BeanCtor} annotation can also be used to expose a non-public constructor.
-		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a public bean constructor to ignore it.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean constructor to ignore it.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -681,7 +681,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can also be used to expose a non-public field.
-		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -831,7 +831,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can also be used to expose a non-public method.
-		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1592,7 +1592,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a bean class to override this setting.
-		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a class to ignore it as a bean.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1649,7 +1649,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a bean class to override this setting.
-		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on a class to ignore it as a bean.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1704,7 +1704,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can be used on the getter to override this setting.
-		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on getters to ignore them as bean properties.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1913,7 +1913,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on getters and fields to ignore them.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -2802,11 +2802,11 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link MarshalledIgnore @MarshalledIgnore} annotation can also be used on classes to prevent them from being recognized as beans.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on classes to prevent them from being recognized as beans.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledIgnore}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanIgnore}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#notBeanClasses()}
 		 * </ul>
 		 *

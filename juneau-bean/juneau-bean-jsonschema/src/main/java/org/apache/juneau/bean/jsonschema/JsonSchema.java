@@ -687,7 +687,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchemaArray}.
 	 */
-	@MarshalledIgnore
+	@BeanIgnore
 	public Boolean getAdditionalItemsAsBoolean() { return additionalItemsBoolean; }
 
 	/**
@@ -699,7 +699,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
-	@MarshalledIgnore
+	@BeanIgnore
 	public List<JsonSchema> getAdditionalItemsAsSchemaArray() { return additionalItemsSchemaArray; }
 
 	/**
@@ -726,7 +726,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchema}.
 	 */
-	@MarshalledIgnore
+	@BeanIgnore
 	public Boolean getAdditionalPropertiesAsBoolean() { return additionalPropertiesBoolean; }
 
 	/**
@@ -738,7 +738,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
-	@MarshalledIgnore
+	@BeanIgnore
 	public JsonSchema getAdditionalPropertiesAsSchema() { return additionalPropertiesSchema; }
 
 	/**
@@ -966,7 +966,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchemaArray}.
 	 */
-	@MarshalledIgnore
+	@BeanIgnore
 	public JsonSchema getItemsAsSchema() { return itemsSchema; }
 
 	/**
@@ -977,7 +977,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchema}.
 	 */
-	@MarshalledIgnore
+	@BeanIgnore
 	public JsonSchemaArray getItemsAsSchemaArray() { return itemsSchemaArray; }
 
 	/**
@@ -1053,7 +1053,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@MarshalledIgnore
+	@BeanIgnore
 	public String getName() { return name; }
 
 	/**
@@ -1215,7 +1215,7 @@ public class JsonSchema {
 	 * @return
 	 * 	The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonTypeArray}.
 	 */
-	@MarshalledIgnore
+	@BeanIgnore
 	public JsonType getTypeAsJsonType() { return typeJsonType; }
 
 	/**
@@ -1226,7 +1226,7 @@ public class JsonSchema {
 	 *
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonType}.
 	 */
-	@MarshalledIgnore
+	@BeanIgnore
 	public JsonTypeArray getTypeAsJsonTypeArray() { return typeJsonTypeArray; }
 
 	/**
@@ -1757,7 +1757,7 @@ public class JsonSchema {
 	 * @param value The new value for the <property>name</property> property on this bean.
 	 * @return This object.
 	 */
-	@MarshalledIgnore
+	@BeanIgnore
 	public JsonSchema setName(String value) {
 		this.name = value;
 		return this;
@@ -1900,7 +1900,7 @@ public class JsonSchema {
 	 * @param value The schema map to associate with this schema.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	@MarshalledIgnore
+	@BeanIgnore
 	public JsonSchema setSchemaMap(JsonSchemaMap value) {
 		this.schemaMap = value;
 		return this;

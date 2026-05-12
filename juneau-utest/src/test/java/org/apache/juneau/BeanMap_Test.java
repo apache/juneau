@@ -1598,13 +1598,13 @@ class BeanMap_Test extends TestBase {
 		public void setA(String v) { a = v; }
 
 		public String b;
-		@MarshalledIgnore public String getB() { return b; }
+		@BeanIgnore public String getB() { return b; }
 		public void setB(String v) { this.b = v+"(setter)"; }
 
-		@MarshalledIgnore public String c;
+		@BeanIgnore public String c;
 
-		@MarshalledIgnore public String getD() { return null; }
-		@MarshalledIgnore public void setD(String v) {}
+		@BeanIgnore public String getD() { return null; }
+		@BeanIgnore public void setD(String v) {}
 	}
 
 	@Test void a34_hiddenProperties_usingConfig() {
@@ -1626,9 +1626,9 @@ class BeanMap_Test extends TestBase {
 		assertEquals("b(setter)", t.b);
 	}
 
-	@MarshalledIgnoreApply(on="Dummy1",value=@MarshalledIgnore())
-	@MarshalledIgnoreApply(on="Uc.getB,Uc.c,Uc.getD,Uc.setD",value=@MarshalledIgnore())
-	@MarshalledIgnoreApply(on="Dummy2",value=@MarshalledIgnore())
+	@BeanIgnoreApply(on="Dummy1",value=@BeanIgnore())
+	@BeanIgnoreApply(on="Uc.getB,Uc.c,Uc.getD,Uc.setD",value=@BeanIgnore())
+	@BeanIgnoreApply(on="Dummy2",value=@BeanIgnore())
 	private static class UcConfig {}
 
 	public static class Uc {
@@ -1637,13 +1637,13 @@ class BeanMap_Test extends TestBase {
 		public void setA(String v) { a = v; }
 
 		public String b;
-		@MarshalledIgnore public String getB() { return b; }
+		@BeanIgnore public String getB() { return b; }
 		public void setB(String b) { this.b = b+"(setter)"; }
 
-		@MarshalledIgnore public String c;
+		@BeanIgnore public String c;
 
-		@MarshalledIgnore public String getD() { return null; }
-		@MarshalledIgnore public void setD(String v) {}
+		@BeanIgnore public String getD() { return null; }
+		@BeanIgnore public void setD(String v) {}
 	}
 
 	//====================================================================================================

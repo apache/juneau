@@ -21,40 +21,40 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.commons.reflect.Visibility;
+import org.apache.juneau.commons.bean.*;
 
 /**
- * Ignore classes, fields, methods, and constructors from being interpreted as bean components, or skip a type
- * entirely during serialization and parsing.
+ * Skip a type entirely during marshalling.
  *
  * <p>
- * Behavior depends on the target:
+ * Serializers output {@code null} for instances of the annotated type and parsers return {@code null}
+ * when asked to instantiate it. This is a marshalling-layer concern: the wire format renders the
+ * value as {@code null} regardless of what (if anything) the bean-modeling layer would do with the
+ * type.
+ *
+ * <p>
+ * Bean-modeling decisions are controlled by the sibling annotation
+ * {@link BeanIgnore @BeanIgnore} (in <c>juneau-commons</c>), which is responsible for excluding
+ * classes from bean detection ("this isn't a bean — fall through to swap/{@code @Marshalled(as=STRING)}/etc.")
+ * and for excluding fields, methods, and constructors from bean property/constructor detection.
+ *
+ * <p>
+ * The two annotations are independent and may be combined:
  * <ul>
- * 	<li><b>TYPE (class)</b> — Skip this type entirely: serializers output {@code null} and parsers return
- * 		{@code null}. Previously {@code @BeanIgnore} on a type meant "force non-bean, fall through to
- * 		{@code toString()}". The "use toString" case is now handled by
- * 		{@link Marshalled @Marshalled}{@code (as=STRING)}.
- * 	<li><b>FIELD</b> — Exclude the field from bean property discovery. Use {@link #ignoreAccessors()} to also
- * 		suppress matching JavaBean accessors.
- * 	<li><b>METHOD</b> — Force getters/setters to be ignored.
- * 	<li><b>CONSTRUCTOR</b> — Exclude the constructor from constructor detection.
- * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with
- * 		{@link MarshalledIgnoreApply @MarshalledIgnoreApply}.
+ * 	<li>{@code @MarshalledIgnore} alone — the class still participates in bean detection (it may be
+ * 		treated as a bean by the modeling layer) but the marshaller emits {@code null}.
+ * 	<li>{@code @BeanIgnore} alone — the class is not a bean for modeling purposes, but the marshaller
+ * 		still tries to render it (typically via {@code toString()} or an installed swap).
+ * 	<li>Both — the class is not a bean and the marshaller emits {@code null}.
  * </ul>
  *
- * <h5 class='section'>Java Records:</h5>
- * <p>
- * Ignoring individual record components is not supported during parsing.
- * Because records are immutable, all components must be provided to the canonical constructor.
- * Applying this annotation to a record component's accessor method or field will exclude it from serialization
- * output, but the parser will be unable to instantiate the record if the component value is missing from the input.
- *
  * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='ja'>{@link BeanIgnore}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledIgnoreAnnotation">@MarshalledIgnore Annotation</a>
  * </ul>
  */
 @Documented
-@Target({ FIELD, METHOD, TYPE, CONSTRUCTOR })
+@Target({ TYPE })
 @Retention(RUNTIME)
 @Inherited
 public @interface MarshalledIgnore {
@@ -66,18 +66,5 @@ public @interface MarshalledIgnore {
 	 * @since 9.2.0
 	 */
 	String[] description() default {};
-
-	/**
-	 * When <jk>true</jk> and this annotation is on a <jk>field</jk>, JavaBean accessors (<c>getX</c>/<c>setX</c>,
-	 * <c>isX</c>) for the same logical property are also excluded from bean metadata.
-	 *
-	 * <p>
-	 * Default is <jk>false</jk>: {@code @MarshalledIgnore} on a field only excludes the field from field-based discovery;
-	 * accessors can still expose the property (for example when {@link org.apache.juneau.MarshallingContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility} is {@link Visibility#NONE NONE}). Set to <jk>true</jk> to
-	 * omit the property from serialization and parsing while keeping accessors for other frameworks.
-	 *
-	 * @return The annotation value.
-	 */
-	boolean ignoreAccessors() default false;
 
 }

@@ -14,49 +14,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.commons.bean;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-
-import java.lang.annotation.*;
 
 import org.apache.juneau.commons.annotation.*;
 
 /**
- * Utility classes and methods for the {@link MarshalledIgnore @MarshalledIgnore} annotation.
+ * Utility classes and methods for the {@link BeanIgnore @BeanIgnore} annotation.
  *
+ * <p>
+ * Provides a {@link Builder} that constructs a synthetic {@link BeanIgnore @BeanIgnore} annotation instance
+ * programmatically without requiring it to be declared on a program element at compile time.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='ja'>{@link BeanIgnore}
+ * 	<li class='jc'>{@link AnnotationObject}
+ * </ul>
  */
-public class MarshalledIgnoreAnnotation {
+public class BeanIgnoreAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private MarshalledIgnoreAnnotation() {}
+	private BeanIgnoreAnnotation() {}
 
 	/**
 	 * Builder class.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#annotations(Annotation...)}
-	 * </ul>
 	 */
 	public static class Builder extends AnnotationObject.Builder {
 
 		private String[] description = {};
+		private boolean ignoreAccessors;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(MarshalledIgnore.class);
+			super(BeanIgnore.class);
 		}
 
 		/**
-		 * Instantiates a new {@link MarshalledIgnore @MarshalledIgnore} object initialized with this builder.
+		 * Instantiates a new {@link BeanIgnore @BeanIgnore} object initialized with this builder.
 		 *
-		 * @return A new {@link MarshalledIgnore @MarshalledIgnore} object.
+		 * @return A new {@link BeanIgnore @BeanIgnore} object.
 		 */
-		public MarshalledIgnore build() {
+		public BeanIgnore build() {
 			return new Object(this);
 		}
 
@@ -71,28 +74,46 @@ public class MarshalledIgnoreAnnotation {
 			return this;
 		}
 
+		/**
+		 * Sets {@link BeanIgnore#ignoreAccessors()}.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder ignoreAccessors(boolean value) {
+			ignoreAccessors = value;
+			return this;
+		}
+
 	}
 
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AnnotationObject implements MarshalledIgnore {
+	private static class Object extends AnnotationObject implements BeanIgnore {
 
 		private final String[] description;
+		private final boolean ignoreAccessors;
 
-		Object(MarshalledIgnoreAnnotation.Builder b) {
+		Object(BeanIgnoreAnnotation.Builder b) {
 			super(b);
-			this.description = copyOf(b.description);
+			description = copyOf(b.description);
+			ignoreAccessors = b.ignoreAccessors;
 		}
 
-		@Override /* Overridden from MarshalledIgnore */
+		@Override /* Overridden from BeanIgnore */
 		public String[] description() {
 			return description;
+		}
+
+		@Override /* Overridden from BeanIgnore */
+		public boolean ignoreAccessors() {
+			return ignoreAccessors;
 		}
 	}
 
 	/** Default value */
-	public static final MarshalledIgnore DEFAULT = create().build();
+	public static final BeanIgnore DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.

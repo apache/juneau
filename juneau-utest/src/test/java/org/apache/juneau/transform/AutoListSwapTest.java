@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -172,7 +173,7 @@ class AutoListSwapTest extends TestBase {
 	// Ignore class
 	//------------------------------------------------------------------------------------------------------------------
 
-	@MarshalledIgnore
+	@BeanIgnore
 	public static class D01 {
 		public List<String> toList() {
 			return STRINGLIST;
@@ -194,7 +195,7 @@ class AutoListSwapTest extends TestBase {
 		assertNull(find(D02.D02A.class));
 	}
 
-	@MarshalledIgnoreApply(on="D01c",value=@MarshalledIgnore())
+	@BeanIgnoreApply(on="D01c",value=@BeanIgnore())
 	private static class D01cConfig {}
 
 	public static class D01c {
@@ -222,11 +223,11 @@ class AutoListSwapTest extends TestBase {
 	// Ignore swap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@MarshalledIgnoreApply(on="E01c.toList",value=@MarshalledIgnore())
+	@BeanIgnoreApply(on="E01c.toList",value=@BeanIgnore())
 	private static class E01Config {}
 
 	public static class E01 {
-		@MarshalledIgnore
+		@BeanIgnore
 		public List<String> toList() {
 			return STRINGLIST;
 		}
@@ -286,14 +287,14 @@ class AutoListSwapTest extends TestBase {
 	// Ignore unswap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@MarshalledIgnoreApply(on="F01c.create",value=@MarshalledIgnore())
+	@BeanIgnoreApply(on="F01c.create",value=@BeanIgnore())
 	private static class F01Config {}
 
 	public static class F01 {
 		public List<String> toList() {
 			return STRINGLIST;
 		}
-		@MarshalledIgnore
+		@BeanIgnore
 		public static F01 create(List<String> o) {
 			return null;
 		}
@@ -387,11 +388,11 @@ class AutoListSwapTest extends TestBase {
 	// Ignore constructor
 	//------------------------------------------------------------------------------------------------------------------
 
-	@MarshalledIgnoreApply(on="G01c(List)",value=@MarshalledIgnore())
+	@BeanIgnoreApply(on="G01c(List)",value=@BeanIgnore())
 	private static class G01Config {}
 
 	public static class G01 {
-		@MarshalledIgnore
+		@BeanIgnore
 		public G01(List<String> o) {}
 		public List<String> toList() {
 			return STRINGLIST;

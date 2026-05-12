@@ -17,7 +17,6 @@
 package org.apache.juneau.annotation;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json5.*;
@@ -26,52 +25,7 @@ import org.junit.jupiter.api.*;
 class MarshalledIgnore_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Test @MarshalledIgnore on properties
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class A {
-		public String getA() {
-			return "a";
-		}
-
-		@MarshalledIgnore
-		public String getB() {
-			return "b";
-		}
-
-		public String c = "c";
-
-		@MarshalledIgnore public String d = "d";
-	}
-
-	@Test void a01_beanIgnoreOnProperties() {
-		assertJson("{a:'a',c:'c'}", new A());
-	}
-
-	@MarshalledIgnoreApply(on="Ac.getB",value=@MarshalledIgnore())
-	@MarshalledIgnoreApply(on="Ac.d",value=@MarshalledIgnore())
-	private static class AcConfig {}
-
-	public static class Ac {
-		public String getA() {
-			return "a";
-		}
-
-		public String getB() {
-			return "b";
-		}
-
-		public String c = "c";
-
-		public String d = "d";
-	}
-
-	@Test void a02_beanIgnoreOnProperties_usingConfig() {
-		assertSerialized(new Ac(), Json5Serializer.DEFAULT.copy().applyAnnotations(AcConfig.class).build(), "{a:'a',c:'c'}");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Test @MarshalledIgnore on classes
+	// @MarshalledIgnore on TYPE — skip entirely during marshalling: serializers output null, parsers return null.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@MarshalledIgnore
@@ -93,7 +47,7 @@ class MarshalledIgnore_Test extends TestBase {
 		}
 	}
 
-	@Test void a03_beanIgnoreOnBean() {
+	@Test void a01_marshalledIgnoreOnType() {
 		assertJson("{f2:2,f3:null,f4:null}", new B());
 	}
 
@@ -118,47 +72,7 @@ class MarshalledIgnore_Test extends TestBase {
 		}
 	}
 
-	@Test void a04_beanIgnoreOnBean_usingConfig() {
+	@Test void a02_marshalledIgnoreOnType_usingConfig() {
 		assertSerialized(new Bc(), Json5Serializer.DEFAULT.copy().applyAnnotations(B1cConfig.class).build(), "{f2:2,f3:null,f4:null}");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// @MarshalledIgnore on private field: suppress accessor pair from bean metadata (default + JavaBean introspector)
-	//------------------------------------------------------------------------------------------------------------------
-
-	public static class PrivateFieldIgnoredWithAccessors {
-		public String visible = "ok";
-
-		@MarshalledIgnore(ignoreAccessors = true)
-		private String foo = "secret";
-
-		public String getVisible() {
-			return visible;
-		}
-
-		public void setVisible(String value) {
-			visible = value;
-		}
-
-		public String getFoo() {
-			return foo;
-		}
-
-		public void setFoo(String value) {
-			foo = value;
-		}
-	}
-
-	@Test void a05_beanIgnoreOnPrivateFieldSuppressesGetterProperty() {
-		var bm = MarshallingContext.DEFAULT.getBeanMeta(PrivateFieldIgnoredWithAccessors.class);
-		assertFalse(bm.getProperties().containsKey("foo"), () -> "properties: " + bm.getProperties().keySet());
-		assertJson("{visible:'ok'}", new PrivateFieldIgnoredWithAccessors());
-	}
-
-	@Test void a06_beanIgnoreOnPrivateField_suppressedWithJavaBeanIntrospector() {
-		var bc = MarshallingContext.create().useJavaBeanIntrospector().build();
-		var s = Json5Serializer.DEFAULT.copy().marshallingContext(bc).build();
-		assertFalse(bc.getBeanMeta(PrivateFieldIgnoredWithAccessors.class).getProperties().containsKey("foo"));
-		assertEquals("{visible:'ok'}", s.serialize(new PrivateFieldIgnoredWithAccessors()));
 	}
 }

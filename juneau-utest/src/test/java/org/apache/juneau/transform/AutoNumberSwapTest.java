@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -564,10 +565,10 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore class
 	//------------------------------------------------------------------------------------------------------------------
 
-	@MarshalledIgnoreApply(on="D01c",value=@MarshalledIgnore())
+	@BeanIgnoreApply(on="D01c",value=@BeanIgnore())
 	private static class D01Config {}
 
-	@MarshalledIgnore
+	@BeanIgnore
 	public static class D01 {
 		public Integer toInteger() {
 			return 1;
@@ -612,11 +613,11 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore swap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@MarshalledIgnoreApply(on="E01c.toInteger",value=@MarshalledIgnore())
+	@BeanIgnoreApply(on="E01c.toInteger",value=@BeanIgnore())
 	private static class E01Config {}
 
 	public static class E01 {
-		@MarshalledIgnore
+		@BeanIgnore
 		public Integer toInteger() {
 			return 1;
 		}
@@ -676,14 +677,14 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore unswap method
 	//------------------------------------------------------------------------------------------------------------------
 
-	@MarshalledIgnoreApply(on="F01c.create(java.lang.Integer)",value=@MarshalledIgnore())
+	@BeanIgnoreApply(on="F01c.create(java.lang.Integer)",value=@BeanIgnore())
 	private static class F01Config {}
 
 	public static class F01 {
 		public Integer toInteger() {
 			return 1;
 		}
-		@MarshalledIgnore
+		@BeanIgnore
 		public static F01 create(Integer o) {
 			return null;
 		}
@@ -777,11 +778,11 @@ class AutoNumberSwapTest extends TestBase {
 	// Ignore constructor
 	//------------------------------------------------------------------------------------------------------------------
 
-	@MarshalledIgnoreApply(on="G01c(java.lang.Integer)",value=@MarshalledIgnore())
+	@BeanIgnoreApply(on="G01c(java.lang.Integer)",value=@BeanIgnore())
 	private static class G01Config {}
 
 	public static class G01 {
-		@MarshalledIgnore
+		@BeanIgnore
 		public G01(Integer o) {}
 		public Integer toInteger() {
 			return 1;

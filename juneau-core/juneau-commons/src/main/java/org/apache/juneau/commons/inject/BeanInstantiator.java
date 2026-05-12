@@ -174,7 +174,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li class='note'>All constructors and methods except {@link Optional} and {@link List} parameters
  * 		must have beans available in the store.
  * 	<li class='note'>If multiple constructors/methods are found, the one with the most matching parameters is used.
- * 	<li class='note'>Deprecated and <a class="doclink" href="https://juneau.apache.org/site/apidocs/org/apache/juneau/annotation/MarshalledIgnore.html">@MarshalledIgnore</a>-annotated methods/constructors are ignored.
+ * 	<li class='note'>Deprecated and <a class="doclink" href="https://juneau.apache.org/site/apidocs/org/apache/juneau/commons/bean/BeanIgnore.html">@BeanIgnore</a>-annotated methods/constructors are ignored.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -225,8 +225,8 @@ public class BeanMeta<T> {
 			if (bc.isBeansRequireSerializable() && ! cm.isAssignableTo(Serializable.class) && ! ap.has(Marshalled.class, cm) && ! ap.has(org.apache.juneau.commons.bean.BeanType.class, cm))
 				return notABean("Class is not serializable");
 
-			if (ap.has(MarshalledIgnore.class, cm) || ap.has(org.apache.juneau.commons.annotation.MarshalledIgnore.class, cm))
-				return notABean("Class is annotated with @MarshalledIgnore");
+			if (ap.has(BeanIgnore.class, cm))
+				return notABean("Class is annotated with @BeanIgnore");
 
 		if ((! bc.getBeanClassVisibility().isVisible(cm.getModifiers()) || cm.isAnonymousClass()) && ! ap.has(Marshalled.class, cm) && ! ap.has(org.apache.juneau.commons.bean.BeanType.class, cm))
 			return notABean("Class is not public");
@@ -1099,7 +1099,7 @@ public class BeanMeta<T> {
 	 * 	<li>Not static
 	 * 	<li>Not transient (unless transient fields are not ignored)
 	 * 	<li>Not annotated with {@link Transient @Transient} (unless transient fields are not ignored)
-	 * 	<li>Not annotated with {@link MarshalledIgnore @MarshalledIgnore}
+	 * 	<li>Not annotated with {@link BeanIgnore @BeanIgnore}
 	 * 	<li>Visible according to the specified visibility level, or annotated with {@link BeanProp @BeanProp}
 	 * </ul>
 	 *
@@ -1119,7 +1119,7 @@ public class BeanMeta<T> {
 			.filter(x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
-				&& ! ap.has(MarshalledIgnore.class, x)
+				&& ! ap.has(BeanIgnore.class, x)
 				&& (v.isVisible(x.inner()) || ap.has(BeanProp.class, x)
 					|| (isRecord && recordComponentNames.contains(x.getName()))))
 			.toList();
@@ -1156,7 +1156,7 @@ public class BeanMeta<T> {
 	 * <ul>
 	 * 	<li>Not static, not bridge methods
 	 * 	<li>Parameter count ≤ 2
-	 * 	<li>Not annotated with {@link MarshalledIgnore @MarshalledIgnore}
+	 * 	<li>Not annotated with {@link BeanIgnore @BeanIgnore}
 	 * 	<li>Not annotated with {@link Transient @Transient}
 	 * 	<li>Visible according to the specified visibility level, or annotated with {@link BeanProp @BeanProp} or {@link Name @Name}
 	 * </ul>
@@ -1179,7 +1179,7 @@ public class BeanMeta<T> {
 		var ci = classMeta;
 		var v = marshallingContext.getBeanMethodVisibility();
 		var pn = opt(beanFilter).map(x -> x.getPropertyNamer()).orElse(marshallingContext.getPropertyNamer());
-		var suppressedFromMarshalledIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(pn);
+		var suppressedFromBeanIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(pn);
 
 		classHierarchy.get().stream().forEach(c2 -> {
 			for (var m : c2.getDeclaredMethods()) {
@@ -1188,7 +1188,7 @@ public class BeanMeta<T> {
 				var names = ap.find(Name.class, m).stream().map(AnnotationInfo::inner).toList();
 				// Skip static, bridge, or methods with >2 params; skip if ignored, transient, or not visible
 				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2
-					|| mm.stream().anyMatch(m2 -> ap.has(MarshalledIgnore.class, m2, SELF))
+					|| mm.stream().anyMatch(m2 -> ap.has(BeanIgnore.class, m2, SELF))
 					|| mm.stream().anyMatch(m2 -> ap.find(Transient.class, m2, SELF).stream().map(x -> x.inner().value()).findFirst().orElse(false))
 					|| ! (m.isVisible(v) || ne(beanps) || ne(names)))
 					continue;
@@ -1271,7 +1271,7 @@ public class BeanMeta<T> {
 				if (methodType != UNKNOWN) {
 					if (nn(bpName) && ! bpName.isEmpty())
 						n = bpName;
-					if (nn(n) && ! suppressedFromMarshalledIgnoredFields.contains(n))
+					if (nn(n) && ! suppressedFromBeanIgnoredFields.contains(n))
 						l.add(new BeanMethod(n, methodType, m.inner()));
 				}
 			}
@@ -1446,18 +1446,18 @@ public class BeanMeta<T> {
 
 	/*
 	 * Merges standard JavaBeans {@link BeanInfo} property descriptors into {@code normalProps}, skipping the class
-	 * pseudo-property and logical names suppressed when {@link MarshalledIgnore#ignoreAccessors()} is <jk>true</jk> on a field.
+	 * pseudo-property and logical names suppressed when {@link BeanIgnore#ignoreAccessors()} is <jk>true</jk> on a field.
 	 */
 	@SuppressWarnings({
-		"java:S135" // Two continues: skip class pseudo-property and names suppressed via @MarshalledIgnore(ignoreAccessors)
+		"java:S135" // Two continues: skip class pseudo-property and names suppressed via @BeanIgnore(ignoreAccessors)
 	})
 	private void mergeJavaBeanPropertyDescriptorsIntoNormalProps(BeanInfo bi, Map<String,BeanPropertyMeta.Builder> normalProps,
 			PropertyNamer propertyNamer) {
-		var suppressedFromMarshalledIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(propertyNamer);
+		var suppressedFromBeanIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(propertyNamer);
 		for (var pd : bi.getPropertyDescriptors()) {
 			if (PROP_class.equals(pd.getName()))
 				continue;
-			if (suppressedFromMarshalledIgnoredFields.contains(pd.getName()))
+			if (suppressedFromBeanIgnoredFields.contains(pd.getName()))
 				continue;
 			var builder = normalProps.computeIfAbsent(pd.getName(), n -> BeanPropertyMeta.builder(this, n));
 			if (pd.getReadMethod() != null)
@@ -1469,24 +1469,24 @@ public class BeanMeta<T> {
 
 	/*
 	 * Property names suppressed from getter/setter discovery because a non-static field with that logical name is
-	 * annotated with {@link MarshalledIgnore @MarshalledIgnore} and {@link MarshalledIgnore#ignoreAccessors()} is <jk>true</jk>.
+	 * annotated with {@link BeanIgnore @BeanIgnore} and {@link BeanIgnore#ignoreAccessors()} is <jk>true</jk>.
 	 *
 	 * <p>
-	 * When {@link MarshalledIgnore#ignoreAccessors()} is <jk>false</jk> (the default), ignored fields do not suppress
-	 * JavaBean accessors so patterns such as {@code @MarshalledIgnore} on a private field with a public {@code getX()} still
+	 * When {@link BeanIgnore#ignoreAccessors()} is <jk>false</jk> (the default), ignored fields do not suppress
+	 * JavaBean accessors so patterns such as {@code @BeanIgnore} on a private field with a public {@code getX()} still
 	 * expose {@code x} when field visibility excludes the field.
 	 */
 	@SuppressWarnings({
-		"java:S135" // Two continues in inner loop: skip fields without @MarshalledIgnore or without ignoreAccessors
+		"java:S135" // Two continues in inner loop: skip fields without @BeanIgnore or without ignoreAccessors
 	})
 	private Set<String> findSuppressedPropertyNamesFromIgnoredFields(PropertyNamer propertyNamer) {
 		var s = new HashSet<String>();
 		var ap = marshallingContext.getAnnotationProvider();
 		for (var c2 : classHierarchy.get()) {
 			for (var x : c2.getDeclaredFields()) {
-				if (! x.isNotStatic() || ! ap.has(MarshalledIgnore.class, x))
+				if (! x.isNotStatic() || ! ap.has(BeanIgnore.class, x))
 					continue;
-				if (! fieldMarshalledIgnoreIgnoresAccessors(x))
+				if (! fieldBeanIgnoreIgnoresAccessors(x))
 					continue;
 				var name = ap.find(x).stream()
 					.filter(x2 -> x2.isType(BeanProp.class) || x2.isType(Name.class))
@@ -1502,8 +1502,8 @@ public class BeanMeta<T> {
 		return s;
 	}
 
-	private static boolean fieldMarshalledIgnoreIgnoresAccessors(FieldInfo x) {
-		for (var bi : x.inner().getAnnotationsByType(MarshalledIgnore.class))
+	private static boolean fieldBeanIgnoreIgnoresAccessors(FieldInfo x) {
+		for (var bi : x.inner().getAnnotationsByType(BeanIgnore.class))
 			if (bi.ignoreAccessors())
 				return true;
 		return false;
@@ -1524,7 +1524,7 @@ public class BeanMeta<T> {
 	 * 	<li>Is not static
 	 * 	<li>Is not transient (unless transient fields are not ignored)
 	 * 	<li>Is not annotated with {@link Transient @Transient} (unless transient fields are not ignored)
-	 * 	<li>Is not annotated with {@link MarshalledIgnore @MarshalledIgnore}
+	 * 	<li>Is not annotated with {@link BeanIgnore @BeanIgnore}
 	 * </ul>
 	 *
 	 * <p>
@@ -1546,7 +1546,7 @@ public class BeanMeta<T> {
 				x -> x.isNotStatic()
 					&& (x.isNotTransient() || noIgnoreTransients)
 					&& (! x.hasAnnotation(Transient.class) || noIgnoreTransients)
-					&& ! ap.has(MarshalledIgnore.class, x)
+					&& ! ap.has(BeanIgnore.class, x)
 					&& x.hasName(name)
 			).stream())
 			.findFirst();

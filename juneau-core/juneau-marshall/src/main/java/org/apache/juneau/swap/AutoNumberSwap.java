@@ -25,6 +25,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
@@ -88,14 +89,14 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Classes are ignored if any of the following are true:
  * <ul>
- * 	<li>Classes annotated with {@link MarshalledIgnore @MarshalledIgnore}.
+ * 	<li>Classes annotated with {@link BeanIgnore @BeanIgnore}.
  * 	<li>Non-static member classes.
  * </ul>
  *
  * <p>
  * Members/constructors are ignored if any of the following are true:
  * <ul>
- * 	<li>Members/constructors annotated with {@link MarshalledIgnore @MarshalledIgnore}.
+ * 	<li>Members/constructors annotated with {@link BeanIgnore @BeanIgnore}.
  * 	<li>Deprecated members/constructors.
  * </ul>
  *
@@ -159,7 +160,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			&& (rt.isAssignableTo(Number.class) || (rt.isPrimitive() && rt.isAny(int.class, short.class, long.class, float.class, double.class, byte.class)))
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(MarshallingSession.class)
-			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(MarshalledIgnore.class, m2));
+			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(BeanIgnore.class, m2));
 		// @formatter:on
 	}
 
@@ -169,7 +170,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			cs.isNotDeprecated()
 			&& cs.isVisible(bc.getBeanConstructorVisibility())
 			&& cs.hasParameterTypeParents(rt)
-			&& ! bc.getAnnotationProvider().has(MarshalledIgnore.class, cs);
+			&& ! bc.getAnnotationProvider().has(BeanIgnore.class, cs);
 		// @formatter:on
 	}
 
@@ -182,7 +183,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
 			&& mi.hasParameterTypesLenient(MarshallingSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(MarshalledIgnore.class, m2));
+			&& mi.getMatchingMethods().stream().noneMatch(m2 -> bc.getAnnotationProvider().has(BeanIgnore.class, m2));
 		// @formatter:on
 	}
 
@@ -192,7 +193,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			ci.isNonStaticMemberClass()
 			|| ci.isPrimitive()
 			|| ci.isAssignableTo(Number.class)
-			|| bc.getAnnotationProvider().has(MarshalledIgnore.class, ci);
+			|| bc.getAnnotationProvider().has(BeanIgnore.class, ci);
 		// @formatter:on
 	}
 

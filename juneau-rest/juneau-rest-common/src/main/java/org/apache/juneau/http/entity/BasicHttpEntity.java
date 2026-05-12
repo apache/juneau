@@ -25,8 +25,8 @@ import java.nio.charset.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.http.header.*;
 
 /**
@@ -48,7 +48,7 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@MarshalledIgnore
+@BeanIgnore
 
 @SuppressWarnings({
 	"resource", // Content may be streams; value equality not practical

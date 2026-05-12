@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -59,7 +60,7 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	public static List<SurrogateSwap<?,?>> findObjectSwaps(Class<?> c, MarshallingContext bc) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		var ci = info(c);
-		ci.getPublicConstructors().stream().filter(x -> ! bc.getAnnotationProvider().has(MarshalledIgnore.class, x) && x.hasNumParameters(1) && x.isPublic()).forEach(x -> {
+		ci.getPublicConstructors().stream().filter(x -> ! bc.getAnnotationProvider().has(BeanIgnore.class, x) && x.hasNumParameters(1) && x.isPublic()).forEach(x -> {
 			var pt = x.getParameter(0).getParameterType().inner();
 			if (! pt.equals(c.getDeclaringClass())) {
 				// Find the unswap method if there is one.

@@ -21,27 +21,30 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"java:S1186" // Empty test method intentional for framework testing
 })
-class MarshalledIgnoreAnnotation_Test extends TestBase {
+class BeanIgnoreAnnotation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	MarshalledIgnore a1 = MarshalledIgnoreAnnotation.create()
+	BeanIgnore a1 = BeanIgnoreAnnotation.create()
 		.description("a")
+		.ignoreAccessors(true)
 		.build();
 
-	MarshalledIgnore a2 = MarshalledIgnoreAnnotation.create()
+	BeanIgnore a2 = BeanIgnoreAnnotation.create()
 		.description("a")
+		.ignoreAccessors(true)
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description", "[a]");
+		assertBean(a1, "description,ignoreAccessors", "[a],true");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -65,17 +68,19 @@ class MarshalledIgnoreAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@MarshalledIgnore(
-		description={ "a" }
+	@BeanIgnore(
+		description={ "a" },
+		ignoreAccessors=true
 	)
 	public static class D1 {}
-	MarshalledIgnore d1 = D1.class.getAnnotationsByType(MarshalledIgnore.class)[0];
+	BeanIgnore d1 = D1.class.getAnnotationsByType(BeanIgnore.class)[0];
 
-	@MarshalledIgnore(
-		description={ "a" }
+	@BeanIgnore(
+		description={ "a" },
+		ignoreAccessors=true
 	)
 	public static class D2 {}
-	MarshalledIgnore d2 = D2.class.getAnnotationsByType(MarshalledIgnore.class)[0];
+	BeanIgnore d2 = D2.class.getAnnotationsByType(BeanIgnore.class)[0];
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);
