@@ -19,6 +19,7 @@ package org.apache.juneau;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -358,13 +359,14 @@ public class BeanMeta<T> {
 	}
 
 	private BeanConstructor beanConstructor;                                   // The constructor for this bean.
-	private final MarshallingContext marshallingContext;                                     // The bean context that created this metadata object.
+	private final MarshallingContext marshallingContext;                       // The bean context that created this metadata object.  Null when constructed via {@link #of(Class, BeanConfigContext)}.
+	private final BeanConfigContext config;                                    // Bean-modeling settings facade — always non-null.  Sources: marshallingContext.getBeanConfigContext() (marshalling-side) or the explicit BeanConfigContext (commons-side).
 	private final MarshalledFilter beanFilter;                                       // Optional bean filter associated with the target class.
 	private final NullableSupplier<InvocationHandler> beanProxyInvocationHandler;  // The invocation handler for this bean (if it's an interface).
 	private final Supplier<BeanRegistry> beanRegistry;                         // The bean registry for this bean.
 	private final Supplier<List<ClassInfo>> classHierarchy;                    // List of all classes traversed in the class hierarchy.
-	private final ClassMeta<T> classMeta;                                      // The target class type that this meta object describes.
-	private final ClassInfo classInfo;                                         // Pure-reflection view of the bean class (Step 2 of TODO-5 — decouples bean modeling from ClassMeta).
+	private final ClassMeta<T> classMeta;                                      // The target class type that this meta object describes.  Null when constructed via {@link #of(Class, BeanConfigContext)}.
+	private final ClassInfo classInfo;                                         // Pure-reflection view of the bean class (Step 2 of TODO-5 — decouples bean modeling from ClassMeta).  Always non-null.
 	private final Supplier<String> dictionaryName;                             // The @Marshalled(typeName) annotation defined on this bean class.
 	private final BeanPropertyMeta dynaProperty;                               // "extras" property.
 	@SuppressWarnings("rawtypes")
@@ -381,6 +383,43 @@ public class BeanMeta<T> {
 	private final BeanPropertyMeta typeProperty;                               // "_type" mock bean property.
 	private final String typePropertyName;                                     // "_type" property actual name.
 	private final Map<BeanPropertyMeta,BeanRegistry> propertyBeanRegistries;   // Per-property BeanRegistry side-map (Step 5 of TODO-5 — keeps BeanRegistry off BeanPropertyMeta itself).
+
+	/**
+	 * Creates a {@link BeanMeta} for the specified class using the supplied {@link BeanConfigContext}.
+	 *
+	 * <p>
+	 * This is the bean-modeling entry point — it constructs a {@link BeanMeta} purely from a {@link Class}
+	 * and a {@link BeanConfigContext}, without touching any marshalling-side type infrastructure
+	 * ({@link ClassMeta}, {@link MarshallingContext}, {@link BeanRegistry}, {@link org.apache.juneau.swap.ObjectSwap}).
+	 * The returned {@link BeanMeta} carries enough information to do raw getter/setter invocation and property
+	 * iteration; marshalling-aware reads ({@link #getClassMeta()}, type-resolution on each
+	 * {@link BeanPropertyMeta#getClassMeta()}, the per-property {@link BeanRegistry}) remain <jk>null</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	BeanMeta&lt;Person&gt; <jv>bm</jv> = BeanMeta.<jsm>of</jsm>(Person.<jk>class</jk>, BeanConfigContext.<jsf>DEFAULT</jsf>);
+	 * 	BeanPropertyMeta <jv>name</jv> = <jv>bm</jv>.getProperties().get(<js>"name"</js>);
+	 * </p>
+	 *
+	 * @param <T> The bean class type.
+	 * @param beanClass The class to build a {@link BeanMeta} for.  Must not be <jk>null</jk>.
+	 * @param config The bean-modeling configuration to apply.  Must not be <jk>null</jk>.
+	 * @return A new {@link BeanMeta} for the specified class.
+	 */
+	public static <T> BeanMeta<T> of(Class<T> beanClass, BeanConfigContext config) {
+		return new BeanMeta<>(beanClass, config);
+	}
+
+	/**
+	 * Same as {@link #of(Class, BeanConfigContext)} using {@link BeanConfigContext#DEFAULT}.
+	 *
+	 * @param <T> The bean class type.
+	 * @param beanClass The class to build a {@link BeanMeta} for.  Must not be <jk>null</jk>.
+	 * @return A new {@link BeanMeta} for the specified class.
+	 */
+	public static <T> BeanMeta<T> of(Class<T> beanClass) {
+		return of(beanClass, BeanConfigContext.DEFAULT);
+	}
 
 	/**
 	 * Constructor.
@@ -405,23 +444,45 @@ public class BeanMeta<T> {
 	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
 	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for bean metadata initialization
-	})
 	protected BeanMeta(ClassMeta<T> cm, MarshalledFilter bf, String[] pNames, ClassInfo implClass) {
+		this(cm, cm, cm.getMarshallingContext().getBeanConfigContext(), cm.getMarshallingContext(), bf, pNames, implClass);
+	}
+
+	/**
+	 * Bean-modeling constructor — builds a {@link BeanMeta} without a {@link MarshallingContext}.
+	 *
+	 * <p>
+	 * See {@link #of(Class, BeanConfigContext)} for the public entry point.  The {@link #getClassMeta()},
+	 * {@link #getMarshallingContext() marshallingContext}, and per-property {@link BeanRegistry} fields are
+	 * left <jk>null</jk>; the per-property {@link BeanPropertyMeta#getClassMeta() rawTypeMeta}/{@code typeMeta}
+	 * fields are also <jk>null</jk> (no type-resolution is performed in this path).
+	 *
+	 * @param beanClass The bean class.  Must not be <jk>null</jk>.
+	 * @param config The bean-modeling configuration.  Must not be <jk>null</jk>.
+	 */
+	protected BeanMeta(Class<T> beanClass, BeanConfigContext config) {
+		this(null, info(assertArgNotNull("beanClass", beanClass)), assertArgNotNull("config", config), null, null, null, null);
+	}
+
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for bean metadata initialization
+		"java:S107"   // 7 parameters needed to support both construction paths
+	})
+	private BeanMeta(ClassMeta<T> cm, ClassInfo ci0, BeanConfigContext config, MarshallingContext mc, MarshalledFilter bf, String[] pNames, ClassInfo implClass) {
 		classMeta = cm;
-		classInfo = cm;
-		marshallingContext = cm.getMarshallingContext();
+		classInfo = ci0;
+		this.config = config;
+		marshallingContext = mc;
 		beanFilter = bf;
 		implClassConstructor = opt(implClass).map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null);
-		fluentSetters = marshallingContext.isFindFluentSetters() || (nn(bf) && bf.isFluentSetters());
+		fluentSetters = config.isFindFluentSetters() || (nn(bf) && bf.isFluentSetters());
 		stopClass = opt(bf).map(x -> x.getStopClass()).orElse(info(Object.class));
 		beanRegistry = memoize(this::findBeanRegistry);
 		classHierarchy = memoize(this::findClassHierarchy);
 		beanConstructor = findBeanConstructor();
 
 		// Local variables for initialization
-		var ap = marshallingContext.getAnnotationProvider();
+		var ap = config.getAnnotationProvider();
 		var c = classInfo.inner();
 		var ci = classInfo;
 		String notABeanReasonTemp = null;
@@ -432,14 +493,14 @@ public class BeanMeta<T> {
 		var dynaPropertyValue = Value.<BeanPropertyMeta>empty();
 		var propertyBeanRegistriesTemp = CollectionUtils.<BeanPropertyMeta,BeanRegistry>map();  // Per-property BeanRegistry side-map (TODO-5 Step 5).
 		var unsortedPropertiesTemp = false;
-		var ba = ap.find(Marshalled.class, cm);
-		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, cm);
-		var propertyNamer = opt(bf).map(x -> x.getPropertyNamer()).orElse(marshallingContext.getPropertyNamer());
+		var ba = ap.find(Marshalled.class, classInfo);
+		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, classInfo);
+		var propertyNamer = opt(bf).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
 
-		this.typePropertyName = ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::ne).findFirst().orElseGet(marshallingContext::getBeanTypePropertyName);
+		this.typePropertyName = ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::ne).findFirst().orElseGet(config::getBeanTypePropertyName);
 
 		// Check if constructor is required but not found (records are exempt since they use canonical constructors)
-		if (! beanConstructor.constructor().isPresent() && bf == null && marshallingContext.isBeansRequireDefaultConstructor() && ! ci.isRecord())
+		if (! beanConstructor.constructor().isPresent() && bf == null && config.isBeansRequireDefaultConstructor() && ! ci.isRecord())
 			notABeanReasonTemp = "Class does not have the required no-arg constructor";
 
 		var bfo = opt(bf);
@@ -452,7 +513,7 @@ public class BeanMeta<T> {
 			// ensure that ordering first.
 			fixedBeanProps.forEach(x -> normalProps.put(x, BeanPropertyMeta.builder(this, x)));
 
-			if (marshallingContext.isUseJavaBeanIntrospector()) {
+			if (config.isUseJavaBeanIntrospector()) {
 				var c2 = bfo.map(x -> x.getInterfaceClass()).filter(Objects::nonNull).orElse(classInfo);
 				BeanInfo bi = null;
 				if (! c2.isInterface())
@@ -553,10 +614,10 @@ public class BeanMeta<T> {
 			}
 
 			// Make sure at least one property was found (records with no components are exempt).
-			if (bf == null && marshallingContext.isBeansRequireSomeProperties() && normalProps.isEmpty() && ! ci.isRecord())
+			if (bf == null && config.isBeansRequireSomeProperties() && normalProps.isEmpty() && ! ci.isRecord())
 				notABeanReasonTemp = "No properties detected on bean class";
 
-			unsortedPropertiesTemp = marshallingContext.isUnsortedProperties() || bfo.map(x -> x.isUnsortedProperties()).orElse(false) || !fixedBeanProps.isEmpty();
+			unsortedPropertiesTemp = config.isUnsortedProperties() || bfo.map(x -> x.isUnsortedProperties()).orElse(false) || !fixedBeanProps.isEmpty();
 
 			propertiesValue.set(unsortedPropertiesTemp ? map() : sortedMap());
 
@@ -567,8 +628,10 @@ public class BeanMeta<T> {
 				propertiesValue.get().put(k, pMeta);
 				// Build the property-level BeanRegistry side-map entry from the builder's accumulated
 				// dictionary classes.  Parents to the bean-level registry so @MarshalledProp(dictionary={})
-				// entries chain on top of bean and global dictionaries.
-				propertyBeanRegistriesTemp.put(pMeta, new BeanRegistry(marshallingContext, beanRegistry.get(), v.dictionaryClasses));
+				// entries chain on top of bean and global dictionaries.  Skipped on the commons-side path
+				// (no marshallingContext means no BeanRegistry construction).
+				if (nn(marshallingContext) && nn(v.dictionaryClasses))
+					propertyBeanRegistriesTemp.put(pMeta, new BeanRegistry(marshallingContext, beanRegistry.get(), v.dictionaryClasses));
 			});
 
 			// If a beanFilter is defined, look for inclusion and exclusion lists.
@@ -619,11 +682,12 @@ public class BeanMeta<T> {
 		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(String.class).build();
 		// Map the synthetic "_type" property to the bean-level BeanRegistry so consumers calling
 		// typeProperty.getBeanRegistry() (currently none in-tree, but a public API path) get the same
-		// registry the property previously carried as a field.
-		propertyBeanRegistriesTemp.put(typeProperty, beanRegistry.get());
+		// registry the property previously carried as a field.  Skipped on the commons-side path.
+		if (nn(marshallingContext))
+			propertyBeanRegistriesTemp.put(typeProperty, beanRegistry.get());
 		propertyBeanRegistries = u(propertyBeanRegistriesTemp);
 		dictionaryName = memoize(this::findDictionaryName);
-		beanProxyInvocationHandler = memoize(() -> marshallingContext.isUseInterfaceProxies() && classInfo.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
+		beanProxyInvocationHandler = memoize(() -> config.isUseInterfaceProxies() && classInfo.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
 		var factoryClassTemp = btList.stream().map(x -> x.inner().factory()).filter(x -> x != org.apache.juneau.commons.function.BeanFactory.Void.class).findFirst().orElse(null);
 		factoryClass = factoryClassTemp;
 	}
@@ -636,6 +700,8 @@ public class BeanMeta<T> {
 			if (p.field == null)
 				findInnerBeanField(p.name).ifPresent(p::setInnerField);
 
+			// When constructed via the commons-side path, marshallingContext is null and validate() runs in
+			// raw-reflection mode (no ClassMeta/ObjectSwap/BeanRegistry resolution).
 			if (p.validate(marshallingContext, typeVarImpls, readOnlyProps, writeOnlyProps)) {
 
 				installSwapAwareTransforms(p);
@@ -795,9 +861,38 @@ public class BeanMeta<T> {
 	/**
 	 * Returns the {@link ClassMeta} of this bean.
 	 *
-	 * @return The {@link ClassMeta} of this bean.
+	 * <p>
+	 * Returns <jk>null</jk> when this {@link BeanMeta} was constructed via the commons-side path
+	 * ({@link #of(Class, BeanConfigContext)}) — in that case {@link #getClassInfo()} carries the
+	 * pure-reflection view of the bean class.
+	 *
+	 * @return The {@link ClassMeta} of this bean, or <jk>null</jk> for bean-modeling-only construction.
 	 */
 	public ClassMeta<T> getClassMeta() { return classMeta; }
+
+	/**
+	 * Returns the {@link ClassInfo} of this bean.
+	 *
+	 * <p>
+	 * Pure-reflection view of the bean class.  Always non-null, regardless of construction path.  Use this in
+	 * preference to {@link #getClassMeta()} for any bean-modeling read that does not depend on marshalling-aware
+	 * type metadata; the commons-side construction path leaves {@link #getClassMeta()} <jk>null</jk>.
+	 *
+	 * @return The class info for this bean.  Never <jk>null</jk>.
+	 */
+	public ClassInfo getClassInfo() { return classInfo; }
+
+	/**
+	 * Returns the bean-modeling configuration snapshot used to build this {@link BeanMeta}.
+	 *
+	 * <p>
+	 * For marshalling-side construction, this is sourced from {@link MarshallingContext#getBeanConfigContext()}.
+	 * For commons-side construction (via {@link #of(Class, BeanConfigContext)}), this is the {@link BeanConfigContext}
+	 * passed to the factory.  Always non-null.
+	 *
+	 * @return The bean-modeling configuration.  Never <jk>null</jk>.
+	 */
+	public BeanConfigContext getConfig() { return config; }
 
 	/**
 	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Marshalled(typeName)} annotation.
@@ -922,7 +1017,12 @@ public class BeanMeta<T> {
 	/**
 	 * Returns the bean context that created this metadata object.
 	 *
-	 * @return The bean context.
+	 * <p>
+	 * Returns <jk>null</jk> when this {@link BeanMeta} was constructed via the commons-side path
+	 * ({@link #of(Class, BeanConfigContext)}).  Use {@link #getConfig()} for the always-non-null bean-modeling
+	 * configuration facade.
+	 *
+	 * @return The bean context, or <jk>null</jk> for bean-modeling-only construction.
 	 */
 	protected MarshallingContext getMarshallingContext() { return marshallingContext; }
 
@@ -1086,7 +1186,7 @@ public class BeanMeta<T> {
 		"unchecked" // Unchecked casts required for factory class and BeanStore result
 	})
 	private org.apache.juneau.commons.function.BeanFactory resolveFactory(Class<? extends org.apache.juneau.commons.function.BeanFactory> fc) {
-		var bs = marshallingContext.getBeanStore();
+		var bs = config.getBeanStore();
 		if (bs != null) {
 			var opt = bs.getBean(fc);
 			if (opt.isPresent())
@@ -1135,8 +1235,8 @@ public class BeanMeta<T> {
 		"java:S3776" // Cognitive complexity acceptable for constructor finding logic
 	})
 	private BeanConstructor findBeanConstructor() {
-		var ap = marshallingContext.getAnnotationProvider();
-		var vis = marshallingContext.getBeanConstructorVisibility();
+		var ap = config.getAnnotationProvider();
+		var vis = config.getBeanConstructorVisibility();
 		var ci = classInfo;
 
 		var l = ci.getPublicConstructors().stream().filter(x -> ap.has(BeanCtor.class, x)).toList();
@@ -1219,9 +1319,9 @@ public class BeanMeta<T> {
 	 * @return A collection of all bean fields found in the class hierarchy.
 	 */
 	private Collection<FieldInfo> findBeanFields() {
-		var v = marshallingContext.getBeanFieldVisibility();
-		var noIgnoreTransients = ! marshallingContext.isIgnoreTransientFields();
-		var ap = marshallingContext.getAnnotationProvider();
+		var v = config.getBeanFieldVisibility();
+		var noIgnoreTransients = ! config.isIgnoreTransientFields();
+		var ap = config.getAnnotationProvider();
 		var isRecord = classInfo.isRecord();
 		var recordComponentNames = isRecord
 			? classInfo.getRecordComponents().stream().map(java.lang.reflect.RecordComponent::getName).collect(java.util.stream.Collectors.toSet())
@@ -1288,10 +1388,10 @@ public class BeanMeta<T> {
 	})
 	private List<BeanMethod> findBeanMethods() {
 		var l = new LinkedList<BeanMethod>();
-		var ap = marshallingContext.getAnnotationProvider();
+		var ap = config.getAnnotationProvider();
 		var ci = classInfo;
-		var v = marshallingContext.getBeanMethodVisibility();
-		var pn = opt(beanFilter).map(x -> x.getPropertyNamer()).orElse(marshallingContext.getPropertyNamer());
+		var v = config.getBeanMethodVisibility();
+		var pn = opt(beanFilter).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
 		var suppressedFromBeanIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(pn);
 
 		classHierarchy.get().stream().forEach(c2 -> {
@@ -1422,11 +1522,17 @@ public class BeanMeta<T> {
 	 * 	no dictionary classes are found.
 	 */
 	private BeanRegistry findBeanRegistry() {
+		// BeanRegistry is a marshalling-side concern (polymorphic dispatch via @Marshalled(typeName)/dictionary).
+		// On the commons-side construction path there is no MarshallingContext to drive it — return null and let
+		// callers route through getPropertyBeanRegistry(...) (which is also empty on this path).
+		if (marshallingContext == null)
+			return null;
+
 		// Bean dictionary on bean filter.
 		var beanDictionaryClasses = opt(beanFilter).map(x -> new ArrayList<>(x.getBeanDictionary())).orElse(new ArrayList<>());
 
 		// Bean dictionary from @Marshalled(typeName) annotation.
-		var ba = marshallingContext.getAnnotationProvider().find(Marshalled.class, classInfo);
+		var ba = config.getAnnotationProvider().find(Marshalled.class, classInfo);
 		ba.stream().map(x -> x.inner().typeName()).filter(Utils::ne).findFirst().ifPresent(x -> beanDictionaryClasses.add(classInfo));
 
 		return new BeanRegistry(marshallingContext, null, beanDictionaryClasses);
@@ -1539,22 +1645,27 @@ public class BeanMeta<T> {
 				return s;
 		}
 
-		var n = classInfo
-			.getParentsAndInterfaces()
-			.stream()
-			.skip(1)
-			.map(marshallingContext::getClassMeta)
-			.map(ClassMeta::getBeanRegistry)
-			.filter(Objects::nonNull)
-			.map(x -> x.getTypeName(rawClass))
-			.filter(Objects::nonNull)
-			.findFirst()
-			.orElse(null);
+		// Parent-class BeanRegistry lookup is a marshalling-side concern: it walks parents and interfaces to
+		// see if any of THEIR ClassMeta-backed BeanRegistries declares a typeName for our raw class.  On the
+		// commons-side path (no marshallingContext) we skip this entirely.
+		if (nn(marshallingContext)) {
+			var n = classInfo
+				.getParentsAndInterfaces()
+				.stream()
+				.skip(1)
+				.map(marshallingContext::getClassMeta)
+				.map(ClassMeta::getBeanRegistry)
+				.filter(Objects::nonNull)
+				.map(x -> x.getTypeName(rawClass))
+				.filter(Objects::nonNull)
+				.findFirst()
+				.orElse(null);
 
-		if (n != null)
-			return n;
+			if (n != null)
+				return n;
+		}
 
-		return marshallingContext.getAnnotationProvider().find(Marshalled.class, classInfo)
+		return config.getAnnotationProvider().find(Marshalled.class, classInfo)
 			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> ! x.typeName().isEmpty())
@@ -1600,7 +1711,7 @@ public class BeanMeta<T> {
 	})
 	private Set<String> findSuppressedPropertyNamesFromIgnoredFields(PropertyNamer propertyNamer) {
 		var s = new HashSet<String>();
-		var ap = marshallingContext.getAnnotationProvider();
+		var ap = config.getAnnotationProvider();
 		for (var c2 : classHierarchy.get()) {
 			for (var x : c2.getDeclaredFields()) {
 				if (! x.isNotStatic() || ! ap.has(BeanIgnore.class, x))
@@ -1656,8 +1767,8 @@ public class BeanMeta<T> {
 	 * 	in the class hierarchy.
 	 */
 	private Optional<FieldInfo> findInnerBeanField(String name) {
-		var noIgnoreTransients = ! marshallingContext.isIgnoreTransientFields();
-		var ap = marshallingContext.getAnnotationProvider();
+		var noIgnoreTransients = ! config.isIgnoreTransientFields();
+		var ap = config.getAnnotationProvider();
 
 		// @formatter:off
 		return classHierarchy.get().stream()

@@ -85,14 +85,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 */
 	public static class Builder {
 		BeanMeta<?> beanMeta;  // Package-private for BeanMeta access
-		MarshallingContext bc;  // Package-private for BeanMeta access
+		MarshallingContext bc;  // Package-private for BeanMeta access.  Null when the owning BeanMeta was built via the commons-side path.
+		BeanConfigContext config;  // Package-private for BeanMeta access.  Always non-null — sourced from the owning BeanMeta.
 		String name;  // Package-private for BeanMeta access
 		FieldInfo field;  // Package-private for BeanMeta access
 		FieldInfo innerField;  // Package-private for BeanMeta access
 		MethodInfo getter;  // Package-private for BeanMeta access
 		MethodInfo setter;  // Package-private for BeanMeta access
 		MethodInfo extraKeys;  // Package-private for BeanMeta access
-		ClassMeta<?> rawTypeMeta;  // Package-private for BeanMeta access (used to install swap-aware transforms)
+		ClassMeta<?> rawTypeMeta;  // Package-private for BeanMeta access (used to install swap-aware transforms).  Null on commons-side path (no type resolution).
 		ObjectSwap swap;  // Package-private for BeanMeta access (used to install swap-aware transforms)
 		BiFunction<MarshallingSession,Object,Object> readTransform;  // Package-private; defaults to identity if null.
 		BiFunction<MarshallingSession,Object,Object> writeTransform; // Package-private; defaults to identity if null.
@@ -113,6 +114,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
 			this.bc = beanMeta.getMarshallingContext();
+			this.config = beanMeta.getConfig();
 			this.name = name;
 		}
 
@@ -205,11 +207,19 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * {@link MarshallingContext}, allowing callers from the bean-modeling layer to seed the type without
 		 * holding a {@link ClassMeta} reference.
 		 *
+		 * <p>
+		 * When the owning {@link BeanMeta} was built via the commons-side path
+		 * ({@link BeanMeta#of(Class, BeanConfigContext)}), no marshalling context is available, so
+		 * {@code rawTypeMeta}/{@code typeMeta} are left <jk>null</jk> and the property runs in raw-reflection mode.
+		 *
 		 * @param value The raw metadata type for this bean property.
 		 * @return This object.
 		 */
 		public Builder rawMetaType(Class<?> value) {
-			return rawMetaType(bc.getClassMeta(assertArgNotNull(ARG_value, value)));
+			assertArgNotNull(ARG_value, value);
+			if (bc == null)
+				return this;
+			return rawMetaType(bc.getClassMeta(value));
 		}
 
 		private static ObjectSwap marshalledPropSwap(AnnotationInfo<MarshalledProp> ai) {
@@ -342,8 +352,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * side-map keyed by the built {@link BeanPropertyMeta}.  The bean-modeling layer itself no longer carries a
 		 * {@link BeanRegistry} reference.
 		 *
-		 * @param bc The bean context.
-		 * @param typeVarImpls Type variable implementations.
+		 * <p>
+		 * When {@code bc} is <jk>null</jk> (commons-side path), this method runs in raw-reflection mode:
+		 * annotation reads are routed through {@link BeanConfigContext#getAnnotationProvider()} but no
+		 * {@link ClassMeta} resolution or {@link ObjectSwap} discovery is performed; the property's
+		 * {@code rawTypeMeta}/{@code typeMeta} stay <jk>null</jk> and the resulting {@link BeanPropertyMeta}
+		 * exposes raw getter/setter invocation only.
+		 *
+		 * @param bc The bean context.  May be <jk>null</jk> for the commons-side path.
+		 * @param typeVarImpls Type variable implementations.  Ignored when {@code bc} is <jk>null</jk>.
 		 * @param bpro Bean properties read-only set.
 		 * @param bpwo Bean properties write-only set.
 		 * @return <jk>true</jk> if this property is valid, <jk>false</jk> otherwise.
@@ -357,12 +374,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		public boolean validate(MarshallingContext bc, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			var bdClasses = list();
-			var ap = bc.getAnnotationProvider();
+			var ap = nn(bc) ? bc.getAnnotationProvider() : config.getAnnotationProvider();
 
 			if (field == null && getter == null && setter == null)
 				return false;
 
-			if (field == null && setter == null && bc.isBeansRequireSettersForGetters() && ! isConstructorArg)
+			// Settings reads route through BeanConfigContext so the commons-side path works without a MarshallingContext.
+			if (field == null && setter == null && config.isBeansRequireSettersForGetters() && ! isConstructorArg)
 				return false;
 
 			canRead |= (nn(field) || nn(getter));
@@ -375,7 +393,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(innerField)) {
 				var lbp = ap.find(BeanProp.class, ifi);
 				var lmp = ap.find(MarshalledProp.class, ifi);
-				if (nn(field) || ne(lbp)) {
+				if (nn(bc) && (nn(field) || ne(lbp))) {
 					// Only use field type if it's a bean property or has @BeanProp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
 					rawTypeMeta = bc.resolveClassMeta(opt(last(lbp)).orElse(null), innerField.getFieldType(), typeVarImpls);
@@ -403,9 +421,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(getter)) {
 				var lbp = ap.find(BeanProp.class, gi);
 				var lmp = ap.find(MarshalledProp.class, gi);
-				if (rawTypeMeta == null)
+				if (nn(bc) && rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(opt(last(lbp)).orElse(null), getter.getReturnType(), typeVarImpls);
-				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, gi));
+				if (nn(rawTypeMeta))
+					isUri |= rawTypeMeta.isUri();
+				isUri |= ap.has(Uri.class, gi);
 				lbp.forEach(x -> {
 					var beanp = x.inner();
 					if (ne(beanp.ro()))
@@ -427,9 +447,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(setter)) {
 				var lbp = ap.find(BeanProp.class, si);
 				var lmp = ap.find(MarshalledProp.class, si);
-				if (rawTypeMeta == null)
+				if (nn(bc) && rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(opt(last(lbp)).orElse(null), setter.getParameterTypes().get(0), typeVarImpls);
-				isUri |= (rawTypeMeta.isUri() || ap.has(Uri.class, si));
+				if (nn(rawTypeMeta))
+					isUri |= rawTypeMeta.isUri();
+				isUri |= ap.has(Uri.class, si);
 				lbp.forEach(x -> {
 					var beanp = x.inner();
 					if (ne(beanp.ro()))
@@ -448,72 +470,75 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				ap.find(Swap.class, si).stream().forEach(x -> swap = swapSwap(x));
 			}
 
-			if (rawTypeMeta == null)
+			// On the commons-side path (bc == null), rawTypeMeta stays null and validate() accepts the property
+			// in raw-reflection mode.  The marshalling-side path still requires a resolvable type.
+			if (nn(bc) && rawTypeMeta == null)
 				return false;
 
 			dictionaryClasses = bdClasses.stream().map(ReflectionUtils::info).toList();
 
 			isDyna = "*".equals(name);
 
-			// Do some annotation validation.
-			var ci = rawTypeMeta;
-			if (nn(getter)) {
-				var pt = getter.getParameterTypes();
-				if (isDyna) {
-					if (ci.isAssignableTo(Map.class) && e(pt)) {
-						isDynaGetterMap = true;
-					} else if (pt.size() == 1 && pt.get(0).is(String.class)) {
-						// OK.
+			// Do some annotation validation.  Type-aware validation requires rawTypeMeta — on the commons-side
+			// path we skip it entirely.
+			if (nn(rawTypeMeta)) {
+				var ci = rawTypeMeta;
+				if (nn(getter)) {
+					var pt = getter.getParameterTypes();
+					if (isDyna) {
+						if (ci.isAssignableTo(Map.class) && e(pt)) {
+							isDynaGetterMap = true;
+						} else if (pt.size() == 1 && pt.get(0).is(String.class)) {
+							// OK.
+						} else {
+							return false;
+						}
 					} else {
-						return false;
+						if (! ci.isAssignableTo(getter.getReturnType()))
+							return false;
 					}
-				} else {
-					if (! ci.isAssignableTo(getter.getReturnType()))
-						return false;
 				}
-			}
-			if (nn(setter)) {
-				var pt = setter.getParameterTypes();
-				if (isDyna) {
-					if (pt.size() == 2 && pt.get(0).is(String.class)) {
-						// OK.
+				if (nn(setter)) {
+					var pt = setter.getParameterTypes();
+					if (isDyna) {
+						if (pt.size() == 2 && pt.get(0).is(String.class)) {
+							// OK.
+						} else {
+							return false;
+						}
 					} else {
-						return false;
+						if (pt.size() != 1 || ! ci.isAssignableTo(pt.get(0).inner()))
+							return false;
 					}
-				} else {
-					if (pt.size() != 1 || ! ci.isAssignableTo(pt.get(0).inner()))
-						return false;
 				}
-			}
-			if (nn(field)) {
+				if (nn(field)) {
+					if (isDyna) {
+						if (! field.getFieldType().isAssignableTo(Map.class))
+							return false;
+					} else {
+						if (! ci.isAssignableTo(field.getFieldType()))
+							return false;
+					}
+				}
+
 				if (isDyna) {
-					if (! field.getFieldType().isAssignableTo(Map.class))
-						return false;
-				} else {
-					if (! ci.isAssignableTo(field.getFieldType()))
-						return false;
+					rawTypeMeta = rawTypeMeta.getValueType();
+					if (rawTypeMeta == null && nn(bc))
+						rawTypeMeta = bc.object();
 				}
-			}
 
-			if (isDyna) {
-				rawTypeMeta = rawTypeMeta.getValueType();
-				if (rawTypeMeta == null)
-					rawTypeMeta = bc.object();
-			}
-			if (rawTypeMeta == null)
-				return false;
-
-			if (typeMeta == null) {
-				if (nn(swap)) {
-					typeMeta = bc.getClassMeta(swap.getSwapClass());
-				} else if (rawTypeMeta == null) {
-					typeMeta = bc.object();
-				} else {
+				if (typeMeta == null) {
+					if (nn(swap) && nn(bc)) {
+						typeMeta = bc.getClassMeta(swap.getSwapClass());
+					} else if (rawTypeMeta == null && nn(bc)) {
+						typeMeta = bc.object();
+					} else {
+						typeMeta = rawTypeMeta;
+					}
+				}
+				if (typeMeta == null)
 					typeMeta = rawTypeMeta;
-				}
 			}
-			if (typeMeta == null)
-				typeMeta = rawTypeMeta;
 
 			if (bpro.contains(name) || bpro.contains("*"))
 				readOnly = true;
@@ -536,9 +561,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return new Builder(beanMeta, name);
 	}
 
-	private final AnnotationProvider ap;                             // Annotation provider for finding annotations on this property.
+	private final AnnotationProvider ap;                             // Annotation provider for finding annotations on this property.  Sourced from bc (marshalling-side) or beanMeta.getConfig() (commons-side).
 	private final Supplier<List<AnnotationInfo<?>>> annotations;     // Memoized list of all annotations on this property.
-	private final MarshallingContext bc;                                    // The context that created this meta.
+	private final MarshallingContext bc;                             // The context that created this meta.  Null when the owning BeanMeta was built via the commons-side path.
+	private final BeanConfigContext config;                          // Bean-modeling settings facade — always non-null.  Mirrors the BeanMeta's config.
 	private final BeanMeta<?> beanMeta;                              // The bean that this property belongs to.
 	private final boolean canRead;                                   // True if this property can be read.
 	private final boolean canWrite;                                  // True if this property can be written.
@@ -571,6 +597,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	protected BeanPropertyMeta(Builder b) {
 		annotations = memoize(this::findAnnotations);
 		bc = b.bc;
+		config = b.config;
 		beanMeta = b.beanMeta;
 		canRead = b.canRead;
 		canWrite = b.canWrite;
@@ -594,7 +621,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		readTransform = b.readTransform != null ? b.readTransform : (session, o) -> o;
 		writeTransform = b.writeTransform != null ? b.writeTransform : (session, o) -> o;
 
-		ap = bc.getAnnotationProvider();
+		ap = nn(bc) ? bc.getAnnotationProvider() : b.config.getAnnotationProvider();
 		hashCode = h(beanMeta, name);
 	}
 
@@ -1005,12 +1032,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return invokeGetter(bean, pName);
 
 	} catch (Exception e) {
-		if (bc.isIgnoreInvocationExceptionsOnGetters()) {
-			if (rawTypeMeta.isPrimitive())
+		if (nn(bc) && bc.isIgnoreInvocationExceptionsOnGetters()) {
+			if (nn(rawTypeMeta) && rawTypeMeta.isPrimitive())
 				return rawTypeMeta.getPrimitiveDefault();
 			return null;
 		}
-		throw bex(e, beanMeta.getClassMeta(), "Exception occurred while getting property ''{0}''", name);
+		throw bex(e, beanMeta.getClassInfo(), "Exception occurred while getting property ''{0}''", name);
 	}
 	}
 
@@ -1098,13 +1125,23 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				throw bex("Non-existent bean instance on bean.");
 			}
 
+			// Raw-reflection path: when the owning BeanMeta was built via the commons-side path, rawTypeMeta and
+			// bc are null and there is no marshalling-aware type conversion to perform.  Just invoke the setter
+			// (or write the field) directly.
+			if (rawTypeMeta == null) {
+				var bean = m.getBean(true);
+				var old = (nn(getter) || nn(field)) ? get(m, pName) : null;
+				invokeSetter(bean, pName, value1);
+				return old;
+			}
+
 			var isMap = rawTypeMeta.isMap();
 			var isCollection = rawTypeMeta.isCollection();
 
 			if ((! isDyna) && field == null && setter == null && ! (isMap || isCollection)) {
-				if ((value1 == null && bc.isIgnoreUnknownNullBeanProperties()) || bc.isIgnoreMissingSetters())
+				if ((value1 == null && nn(bc) && bc.isIgnoreUnknownNullBeanProperties()) || config.isIgnoreMissingSetters())
 					return null;
-				throw bex(beanMeta.getClassMeta(), "Setter or public field not defined on property ''{0}''", name);
+				throw bex(beanMeta.getClassInfo(), "Setter or public field not defined on property ''{0}''", name);
 			}
 
 			var bean = m.getBean(true);  // Don't use getBean() because it triggers array creation!
@@ -1344,12 +1381,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	return swapAndFilterProperty(session, o);
 
 	} catch (Exception e) {
-		if (bc.isIgnoreInvocationExceptionsOnGetters()) {
-			if (rawTypeMeta.isPrimitive())
+		if (nn(bc) && bc.isIgnoreInvocationExceptionsOnGetters()) {
+			if (nn(rawTypeMeta) && rawTypeMeta.isPrimitive())
 				return rawTypeMeta.getPrimitiveDefault();
 			return null;
 		}
-			throw bex(e, beanMeta.getClassMeta(), "Exception occurred while getting property ''{0}''", name);
+			throw bex(e, beanMeta.getClassInfo(), "Exception occurred while getting property ''{0}''", name);
 		}
 	}
 
@@ -1388,14 +1425,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			} else if (nn(field))
 				m = (Map)field.get(bean);
 			else
-				throw bex(beanMeta.getClassMeta(), MSG_getterOrFieldNotDefined, name);
+				throw bex(beanMeta.getClassInfo(), MSG_getterOrFieldNotDefined, name);
 			return (m == null ? null : m.get(pName));
 		}
 		if (nn(getter))
 			return getter.invoke(bean);
 		if (nn(field))
 			return field.get(bean);
-		throw bex(beanMeta.getClassMeta(), MSG_getterOrFieldNotDefined, name);
+		throw bex(beanMeta.getClassInfo(), MSG_getterOrFieldNotDefined, name);
 	}
 
 	private Object invokeSetter(Object bean, String pName, Object val) throws IllegalArgumentException {
@@ -1408,8 +1445,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			else if (nn(getter))
 				m = (Map<String,Object>)getter.invoke(bean);
 			else
-				throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null",
-					name, getClassMeta().getName(), cn(val));
+				throw bex(beanMeta.getClassInfo(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null",
+					name, classNameForError(), cn(val));
 			return (m == null ? null : m.put(pName, val));
 		}
 		if (nn(setter))
@@ -1418,8 +1455,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			field.set(bean, val);
 			return null;
 		}
-		throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name,
-			getClassMeta().getName(), cn(val));
+		throw bex(beanMeta.getClassInfo(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name,
+			classNameForError(), cn(val));
+	}
+
+	private String classNameForError() {
+		var cm = getClassMeta();
+		if (nn(cm))
+			return cm.getName();
+		return beanMeta.getClassInfo().getName();
 	}
 
 	/**

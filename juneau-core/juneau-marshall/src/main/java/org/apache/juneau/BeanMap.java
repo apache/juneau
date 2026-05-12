@@ -84,6 +84,23 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		return MarshallingContext.DEFAULT_SESSION.toBeanMap(bean);
 	}
 
+	/**
+	 * Convenience method for wrapping a bean inside a {@link BeanMap} using a pre-built {@link BeanMeta}.
+	 *
+	 * <p>
+	 * This is the bean-modeling entry point — it builds a {@link BeanMap} without going through a
+	 * {@link MarshallingSession}, paired with a {@link BeanMeta} typically produced by
+	 * {@link BeanMeta#of(Class, BeanConfigContext)}.  No marshalling session is attached.
+	 *
+	 * @param <T> The bean type.
+	 * @param bean The bean being wrapped.
+	 * @param meta The bean metadata.  Must not be <jk>null</jk>.
+	 * @return A new {@link BeanMap} instance wrapping the bean.
+	 */
+	public static <T> BeanMap<T> of(T bean, BeanMeta<T> meta) {
+		return new BeanMap<>(bean, meta);
+	}
+
 	/** The wrapped object. */
 	protected T bean;
 
@@ -147,9 +164,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public void add(String property, Object value) {
 		var p = getPropertyMeta(property);
 		if (p == null) {
-			if (meta.getMarshallingContext().isIgnoreUnknownBeanProperties())
+			if (meta.getConfig().isIgnoreUnknownBeanProperties())
 				return;
-			throw bex(meta.getClassMeta(), "Bean property ''{0}'' not found.", property);
+			throw bex(meta.getClassInfo(), "Bean property ''{0}'' not found.", property);
 		}
 		p.add(this, property, value);
 	}
@@ -672,12 +689,12 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public Object put(String property, Object value) {
 		var p = getPropertyMeta(property);
 		if (p == null) {
-			if (meta.getMarshallingContext().isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
+			if (meta.getConfig().isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
 				return meta.onWriteProperty(bean, property, null);
 
 			p = getPropertyMeta("*");
 			if (p == null)
-				throw bex(meta.getClassMeta(), "Bean property ''{0}'' not found.", property);
+				throw bex(meta.getClassInfo(), "Bean property ''{0}'' not found.", property);
 		}
 		return p.set(this, property, value);
 	}
