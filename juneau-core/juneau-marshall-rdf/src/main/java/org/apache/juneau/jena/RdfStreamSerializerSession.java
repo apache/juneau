@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
@@ -284,7 +285,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		if (nn(o)) {
 			if (aType.isDelegate()) {
 				wType = aType;
-				aType = ((Delegate)o).getClassMeta();
+				aType = (ClassMeta)((Delegate)o).getClassMeta();
 			}
 			sType = aType;
 			var swap = aType.getSwap(this);

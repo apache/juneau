@@ -32,6 +32,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
@@ -761,7 +762,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			} else if (aType.isBean()) {
 				bm = toBeanMap(o);
 			} else if (aType.isDelegate()) {
-				var innerType = ((Delegate<?>)o).getClassMeta();
+				var innerType = (ClassMeta<?>)((Delegate<?>)o).getClassMeta();
 				var ns = Value.of(getXmlClassMeta(innerType).getNamespace());
 				if (ns.isPresent()) {
 					if (nn(ns.get().uri))
@@ -934,7 +935,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 			if (aType.isDelegate()) {
 				wType = aType;
-				eType = aType = ((Delegate<?>)o).getClassMeta();
+				eType = aType = (ClassMeta<?>)((Delegate<?>)o).getClassMeta();
 			}
 
 			sType = aType;

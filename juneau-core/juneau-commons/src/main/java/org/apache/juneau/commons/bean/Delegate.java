@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons.bean;
 
 /**
  * An object that represents another object, often wrapping that object.
@@ -23,17 +23,21 @@ package org.apache.juneau;
  * <b>*** Internal Interface - Not intended for external use ***</b>
  *
  * <p>
- * For example, {@link BeanMap} is a map representation of a bean.
+ * For example, {@code BeanMap} is a map representation of a bean.
  *
+ * <p>
+ * The returned type info is a {@link BeanTypeInfo} so the bean-modeling layer does not depend
+ * on the marshalling-side {@code ClassMeta}.  Marshalling-side implementations narrow the return
+ * type via Java covariant returns (e.g. {@code ClassMeta<T> getClassMeta()}).
  *
  * @param <T> The represented class type.
  */
 public interface Delegate<T> {
 
 	/**
-	 * The {@link ClassMeta} of the class of the represented object.
+	 * The {@link BeanTypeInfo} of the class of the represented object.
 	 *
 	 * @return The class type of the represented object.
 	 */
-	ClassMeta<T> getClassMeta();
+	BeanTypeInfo<T> getClassMeta();
 }

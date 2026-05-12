@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
@@ -55,7 +56,7 @@ import org.apache.juneau.commons.utils.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - Class<?> for bean dictionary types
 })
-public class BeanRegistry {
+public class BeanRegistry implements BeanRegistryLookup {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_bc = "bc";

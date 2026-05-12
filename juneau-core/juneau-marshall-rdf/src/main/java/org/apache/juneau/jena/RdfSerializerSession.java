@@ -32,6 +32,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.jena.annotation.*;
@@ -340,7 +341,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 
 			if (aType.isDelegate()) {
 				wType = aType;
-				aType = ((Delegate)o).getClassMeta();
+				aType = (ClassMeta)((Delegate)o).getClassMeta();
 			}
 
 			sType = aType;

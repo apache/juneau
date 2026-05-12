@@ -82,7 +82,7 @@ import org.apache.juneau.swap.*;
 	"rawtypes",   // Raw types necessary for generic type handling
 	"java:S1452" // Wildcard required - ClassInfoTyped<?>, ClassMeta<?> for filter metadata
 })
-public class MarshalledFilter {
+public class MarshalledFilter implements BeanFilter {
 
 	/**
 	 * Builder class.

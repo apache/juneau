@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Wrapper around a map where the key names are overridden.

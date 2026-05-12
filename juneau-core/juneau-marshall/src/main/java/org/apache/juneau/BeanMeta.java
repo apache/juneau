@@ -361,7 +361,7 @@ public class BeanMeta<T> {
 	private BeanConstructor beanConstructor;                                   // The constructor for this bean.
 	private final MarshallingContext marshallingContext;                       // The bean context that created this metadata object.  Null when constructed via {@link #of(Class, BeanConfigContext)}.
 	private final BeanConfigContext config;                                    // Bean-modeling settings facade — always non-null.  Sources: marshallingContext.getBeanConfigContext() (marshalling-side) or the explicit BeanConfigContext (commons-side).
-	private final MarshalledFilter beanFilter;                                       // Optional bean filter associated with the target class.
+	private final BeanFilter beanFilter;                                       // Optional bean filter associated with the target class.  Typed as the bean-modeling-side SPI seam; marshalling-side callers cast back to {@link MarshalledFilter} via {@link #getMarshalledFilter()}.
 	private final NullableSupplier<InvocationHandler> beanProxyInvocationHandler;  // The invocation handler for this bean (if it's an interface).
 	private final Supplier<BeanRegistry> beanRegistry;                         // The bean registry for this bean.
 	private final Supplier<List<ClassInfo>> classHierarchy;                    // List of all classes traversed in the class hierarchy.
@@ -444,7 +444,7 @@ public class BeanMeta<T> {
 	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
 	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk>.
 	 */
-	protected BeanMeta(ClassMeta<T> cm, MarshalledFilter bf, String[] pNames, ClassInfo implClass) {
+	protected BeanMeta(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ClassInfo implClass) {
 		this(cm, cm, cm.getMarshallingContext().getBeanConfigContext(), cm.getMarshallingContext(), bf, pNames, implClass);
 	}
 
@@ -468,7 +468,7 @@ public class BeanMeta<T> {
 		"java:S3776", // Cognitive complexity acceptable for bean metadata initialization
 		"java:S107"   // 7 parameters needed to support both construction paths
 	})
-	private BeanMeta(ClassMeta<T> cm, ClassInfo ci0, BeanConfigContext config, MarshallingContext mc, MarshalledFilter bf, String[] pNames, ClassInfo implClass) {
+	private BeanMeta(ClassMeta<T> cm, ClassInfo ci0, BeanConfigContext config, MarshallingContext mc, BeanFilter bf, String[] pNames, ClassInfo implClass) {
 		classMeta = cm;
 		classInfo = ci0;
 		this.config = config;
@@ -809,7 +809,9 @@ public class BeanMeta<T> {
 	 * @see Bean
 	 */
 	public MarshalledFilter getMarshalledFilter() {
-		return beanFilter;
+		// The field is typed as the bean-modeling-side BeanFilter SPI but the only concrete
+		// implementation in-tree is MarshalledFilter, so the narrowing cast is safe.
+		return (MarshalledFilter) beanFilter;
 	}
 
 	/**

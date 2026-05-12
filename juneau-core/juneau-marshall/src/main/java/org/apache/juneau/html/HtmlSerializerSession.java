@@ -33,6 +33,7 @@ import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
@@ -981,7 +982,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			if (aType.isDelegate()) {
 				wType = aType;
-				aType = ((Delegate)o).getClassMeta();
+				aType = (ClassMeta)((Delegate)o).getClassMeta();
 			}
 
 			sType = aType;
@@ -1144,7 +1145,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (type == null)
 			type = object();
 		else if (type.isDelegate())
-			type = ((Delegate)o).getClassMeta();
+			type = (ClassMeta)((Delegate)o).getClassMeta();
 		ObjectSwap swap = type.getSwap(this);
 		if (nn(swap)) {
 			o = swap(swap, o);

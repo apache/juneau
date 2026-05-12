@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Represents a wrapped {@link Collection} where entries in the list can be removed or reordered without affecting the

@@ -1,0 +1,147 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.commons.bean;
+
+import java.lang.reflect.Type;
+
+import org.apache.juneau.commons.reflect.ClassInfoTyped;
+import org.apache.juneau.commons.reflect.ExecutableException;
+
+/**
+ * Bean-modeling SPI seam that exposes the type-classification surface the bean-runtime types
+ * ({@link BeanMeta}-equivalents, {@link BeanPropertyMeta}-equivalents, etc.) need without coupling
+ * the bean-modeling layer to the marshalling-side {@code ClassMeta}.
+ *
+ * <p>
+ * Marshalling-side {@code ClassMeta&lt;T&gt;} extends this class; bean-modeling-side code only sees
+ * {@link BeanTypeInfo}.  The bean-modeling-side never instantiates this class directly — it always
+ * gets instances handed in by the marshalling layer (e.g. via builder calls like
+ * {@code BeanPropertyMeta.Builder#rawMetaType(ClassMeta)}).
+ *
+ * <p>
+ * All extra abstract methods declared here mirror methods that {@code ClassMeta} already implements,
+ * so {@code ClassMeta} satisfies this contract by virtue of its existing implementation.
+ *
+ * @param <T> The raw class type this instance represents.
+ */
+public abstract class BeanTypeInfo<T> extends ClassInfoTyped<T> {
+
+	/**
+	 * Constructor.
+	 *
+	 * @param inner The class type.
+	 */
+	protected BeanTypeInfo(Class<T> inner) {
+		super(inner);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param inner The class type.
+	 * @param innerType The generic type (if parameterized type).
+	 */
+	protected BeanTypeInfo(Class<T> inner, Type innerType) {
+		super(inner, innerType);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a URI/URL or annotated with a URI marker.
+	 *
+	 * @return <jk>true</jk> if this class is a URI.
+	 */
+	public abstract boolean isUri();
+
+	/**
+	 * Returns <jk>true</jk> if this class is a {@link java.util.Optional}.
+	 *
+	 * @return <jk>true</jk> if this class is an Optional.
+	 */
+	public abstract boolean isOptional();
+
+	/**
+	 * Returns <jk>true</jk> if this class is classified as a bean.
+	 *
+	 * @return <jk>true</jk> if this class is a bean.
+	 */
+	public abstract boolean isBean();
+
+	/**
+	 * Returns <jk>true</jk> if this class is {@link Object}.
+	 *
+	 * @return <jk>true</jk> if this class is {@code Object}.
+	 */
+	public abstract boolean isObject();
+
+	/**
+	 * For array and {@code Collection} types, returns the type info of the element type, or <jk>null</jk>
+	 * if this is not an array/collection.
+	 *
+	 * @return The element type info, or <jk>null</jk>.
+	 */
+	public abstract BeanTypeInfo<?> getElementType();
+
+	/**
+	 * For {@code Map} types, returns the type info of the key type, or <jk>null</jk> if this is not a map.
+	 *
+	 * @return The key type info, or <jk>null</jk>.
+	 */
+	public abstract BeanTypeInfo<?> getKeyType();
+
+	/**
+	 * For {@code Map} types, returns the type info of the value type, or <jk>null</jk> if this is not a map.
+	 *
+	 * @return The value type info, or <jk>null</jk>.
+	 */
+	public abstract BeanTypeInfo<?> getValueType();
+
+	/**
+	 * Returns <jk>true</jk> if this class can be instantiated using a no-arg constructor.
+	 *
+	 * @return <jk>true</jk> if a new instance can be created.
+	 */
+	public abstract boolean canCreateNewInstance();
+
+	/**
+	 * Returns <jk>true</jk> if this class can be instantiated, optionally with the specified outer object
+	 * for non-static inner classes.
+	 *
+	 * @param outer The outer object instance, or <jk>null</jk> if not applicable.
+	 * @return <jk>true</jk> if a new instance can be created.
+	 */
+	public abstract boolean canCreateNewInstance(Object outer);
+
+	/**
+	 * Creates a new instance of this class.
+	 *
+	 * @return A new instance of the class.
+	 * @throws ExecutableException If the class could not be instantiated.
+	 */
+	public abstract T newInstance() throws ExecutableException;
+
+	/**
+	 * For {@link java.util.Optional} types, returns an empty optional default value, or <jk>null</jk>
+	 * if this isn't an Optional.
+	 *
+	 * <p>
+	 * Returns {@link Object} rather than {@code T} because the marshalling-side {@code ClassMeta} returns
+	 * a wildcard {@code Optional<?>} which is not assignable to {@code T} under Java's type system.
+	 *
+	 * @return The default empty Optional value, or <jk>null</jk>.
+	 */
+	public abstract Object getOptionalDefault();
+}

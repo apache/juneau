@@ -36,7 +36,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.bean.BeanType;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.function.*;
@@ -73,7 +73,7 @@ import org.apache.juneau.swap.*;
 	"java:S1452",  // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, etc. for element/component types
 	"java:S6539"   // Monster Class: ClassMeta is a focused reflection-metadata cache; splitting would increase coupling
 })
-public class ClassMeta<T> extends ClassInfoTyped<T> {
+public class ClassMeta<T> extends BeanTypeInfo<T> {
 
 	private static class Categories {
 		int bits;
