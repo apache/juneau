@@ -101,7 +101,7 @@ import jakarta.servlet.http.*;
  *
  * <p>
  * Configuration is supplied declaratively through the {@link Rest @Rest} annotation on the resource class
- * (and inherited from any parent classes), and programmatically through {@link org.apache.juneau.commons.inject.Bean @Bean}-annotated
+ * (and inherited from any parent classes), and programmatically through {@link Bean @Bean}-annotated
  * methods/fields that contribute named beans (e.g. <c>encoders</c>, <c>parsers</c>, <c>callLogger</c>) to the REST
  * resource's bean store. Where direct construction is needed (test rigs, mock clients, embedded usage),
  * the public constructor takes a {@link RestContext.Args} record carrying the bootstrap state.
@@ -374,10 +374,10 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Default suppliers sit at the bottom of the bean-store resolution order: they fire only when no
-	 * {@link org.apache.juneau.commons.inject.Bean @Bean} method, no programmatic {@code addBean(...)} call, and no Spring/overriding-parent
+	 * {@link Bean @Bean} method, no programmatic {@code addBean(...)} call, and no Spring/overriding-parent
 	 * binding has been registered for the type.  This is the mechanism that replaces the old
 	 * {@code DELAYED_INJECTION} list — by registering the framework's own factories as defaults
-	 * <i>before</i> the {@link org.apache.juneau.commons.inject.Bean @Bean} method walk runs, any {@link org.apache.juneau.commons.inject.Bean @Bean} method whose parameters
+	 * <i>before</i> the {@link Bean @Bean} method walk runs, any {@link Bean @Bean} method whose parameters
 	 * include framework types can now resolve those parameters lazily through the bean store without
 	 * requiring a hand-maintained skip list.
 	 */
@@ -1954,7 +1954,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * The default call logger is {@link BasicCallLogger}. Override via {@link Rest#callLogger() @Rest(callLogger)}
 	 * on the resource class, by registering a {@link CallLogger} bean in the bean store, or by declaring a
-	 * {@link org.apache.juneau.commons.inject.Bean @Bean}-annotated static method on the resource class:
+	 * {@link Bean @Bean}-annotated static method on the resource class:
 	 * <p class='bjava'>
 	 * 	<ja>@Bean</ja> <jk>public static</jk> CallLogger myCallLogger(<i>&lt;args&gt;</i>) {...}
 	 * </p>
@@ -2465,7 +2465,7 @@ public class RestContext extends Context {
 	 * The bootstrap resolver has the same {@link Var} catalog as {@link #getVarResolver()} but does not have
 	 * {@link Messages} or {@link Config} beans wired in — it is used to resolve annotation attribute values
 	 * (e.g. <c>@Rest(messages=...)</c>) before those beans are built. Override via
-	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="bootstrapVarResolver")} on a static method of the resource class.
+	 * {@link Bean @Bean(name="bootstrapVarResolver")} on a static method of the resource class.
 	 *
 	 * @return The bootstrap var resolver in use by this resource.
 	 */

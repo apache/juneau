@@ -21,6 +21,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.commons.inject.Bean;
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.rest.*;
 
 import jakarta.servlet.*;
@@ -36,9 +38,9 @@ import jakarta.servlet.*;
  *
  * <p>
  * Method parameters are resolved from the
- * {@link org.apache.juneau.commons.inject.BeanStore bean store} the same way as any other Juneau-injected
+ * {@link BeanStore bean store} the same way as any other Juneau-injected
  * method. {@link jakarta.servlet.ServletConfig}, {@link jakarta.servlet.ServletContext}, the resource instance
- * itself, and any bean registered via {@link org.apache.juneau.commons.inject.Bean @Bean} or the
+ * itself, and any bean registered via {@link Bean @Bean} or the
  * configured bean-store hooks are all resolvable. Zero-argument variants are also supported.
  *
  * <p>

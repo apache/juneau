@@ -27,9 +27,12 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.BeanCtorAnnotation;
 import org.apache.juneau.bson.annotation.BsonConfig;
 import org.apache.juneau.cbor.annotation.CborConfig;
 import org.apache.juneau.commons.bean.BeanConfig;
+import org.apache.juneau.commons.bean.BeanIgnoreAnnotation;
+import org.apache.juneau.commons.bean.BeanPropAnnotation;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
@@ -207,10 +210,10 @@ public abstract class Context {
 		 * and passed into the builder class:
 		 * <ul class='javatreec'>
 		 * 	<li class='ja'>{@link MarshalledAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanCtorAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanIgnoreAnnotation}
+		 * 	<li class='ja'>{@link BeanCtorAnnotation}
+		 * 	<li class='ja'>{@link BeanIgnoreAnnotation}
 		 * 	<li class='ja'>{@link MarshalledIgnoreAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanPropAnnotation}
+		 * 	<li class='ja'>{@link BeanPropAnnotation}
 		 * 	<li class='ja'>{@link MarshalledPropAnnotation}
 		 * 	<li class='ja'>{@link ExampleAnnotation}
 		 * 	<li class='ja'>{@link NamePropertyAnnotation}

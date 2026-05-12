@@ -21,6 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.remote.*;
@@ -427,7 +428,7 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * For programmatic equivalents, contribute a {@link org.apache.juneau.encoders.EncoderSet} bean via
-	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="encoders")} (use methodScope to scope to specific operation methods).
+	 * {@link Bean @Bean(name="encoders")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
@@ -586,7 +587,7 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * For programmatic equivalents, contribute a {@link org.apache.juneau.parser.ParserSet} bean via
-	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="parsers")} (use methodScope to scope to specific operation methods).
+	 * {@link Bean @Bean(name="parsers")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
@@ -854,7 +855,7 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * For programmatic equivalents, contribute a {@link org.apache.juneau.serializer.SerializerSet} bean via
-	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="serializers")} (use methodScope to scope to specific operation methods).
+	 * {@link Bean @Bean(name="serializers")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>

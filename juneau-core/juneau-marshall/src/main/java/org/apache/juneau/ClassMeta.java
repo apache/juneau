@@ -36,6 +36,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.BeanType;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.function.*;
@@ -66,7 +67,7 @@ import org.apache.juneau.swap.*;
  *
  * @param <T> The class type of the wrapped class.
  */
-@org.apache.juneau.commons.bean.BeanType(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
+@BeanType(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 @SuppressWarnings({
 	"java:S1200",  // Class has 23 dependencies, acceptable for this core reflection metadata class
 	"java:S1452",  // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, etc. for element/component types
@@ -1670,7 +1671,7 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private MarshalledFilter findMarshalledFilter() {
 		var ap = marshallingContext.getAnnotationProvider();
 		var l = ap.find(Marshalled.class, this);
-		var bt = ap.find(org.apache.juneau.commons.bean.BeanType.class, this);
+		var bt = ap.find(BeanType.class, this);
 		if (l.isEmpty() && bt.isEmpty())
 			return null;
 		return MarshalledFilter.create(inner())

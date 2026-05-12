@@ -20,12 +20,13 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import org.apache.juneau.commons.bean.BeanProp;
 
 /**
  * Used to tailor how bean properties get marshalled by the framework.
  *
  * <p>
- * The marshalling-only sibling of {@link org.apache.juneau.commons.bean.BeanProp @BeanProp}.
+ * The marshalling-only sibling of {@link BeanProp @BeanProp}.
  * Where {@code @BeanProp} (in <c>juneau-commons</c>) carries the bean-modeling attributes
  * (such as {@code name}, {@code ro}, {@code wo}, {@code type}, {@code params}, {@code elementType},
  * and {@code factory}), this annotation carries the wire-format-specific attributes used by serializers
@@ -40,7 +41,7 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanProp}
+ * 	<li class='ja'>{@link BeanProp}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledPropAnnotation">@MarshalledProp Annotation</a>
  * </ul>
  */

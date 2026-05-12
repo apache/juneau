@@ -216,7 +216,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanCtor @BeanCtor} annotation can also be used to expose a non-public constructor.
+		 * 	<li class='note'>The {@link BeanCtor @BeanCtor} annotation can also be used to expose a non-public constructor.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean constructor to ignore it.
 		 * </ul>
 		 *
@@ -426,7 +426,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can also be used to expose a non-public field.
+		 * 	<li class='note'>The {@link BeanProp @BeanProp} annotation can also be used to expose a non-public field.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
 		 * </ul>
 		 *
@@ -566,7 +566,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can also be used to expose a non-public method.
+		 * 	<li class='note'>The {@link BeanProp @BeanProp} annotation can also be used to expose a non-public method.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
 		 * </ul>
 		 *
@@ -1411,7 +1411,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can be used on the getter to override this setting.
+		 * 	<li class='note'>The {@link BeanProp @BeanProp} annotation can be used on the getter to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
 		 * </ul>
 		 *
@@ -1603,7 +1603,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can also be used on transient fields to keep them from being ignored.
+		 * 	<li class='note'>The {@link BeanProp @BeanProp} annotation can also be used on transient fields to keep them from being ignored.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -1809,7 +1809,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanProp @BeanProp} annotation can also be used on methods to individually identify them as fluent setters.
+		 * 	<li class='note'>The {@link BeanProp @BeanProp} annotation can also be used on methods to individually identify them as fluent setters.
 		 * 	<li class='note'>The {@link Bean#findFluentSetters() @Marshalled.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
 		 * </ul>
 		 *
