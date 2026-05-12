@@ -166,6 +166,21 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return this;
 		}
 
+		/**
+		 * Sets the raw metadata type for this bean property from a {@link Class}.
+		 *
+		 * <p>
+		 * Convenience overload that resolves the supplied class to a {@link ClassMeta} via the property's
+		 * {@link MarshallingContext}, allowing callers from the bean-modeling layer to seed the type without
+		 * holding a {@link ClassMeta} reference.
+		 *
+		 * @param value The raw metadata type for this bean property.
+		 * @return This object.
+		 */
+		public Builder rawMetaType(Class<?> value) {
+			return rawMetaType(bc.getClassMeta(assertArgNotNull(ARG_value, value)));
+		}
+
 		private static ObjectSwap marshalledPropSwap(AnnotationInfo<MarshalledProp> ai) {
 			var p = ai.inner();
 			if (! p.format().isEmpty())

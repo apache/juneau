@@ -361,6 +361,7 @@ public class BeanMeta<T> {
 	private final Supplier<BeanRegistry> beanRegistry;                         // The bean registry for this bean.
 	private final Supplier<List<ClassInfo>> classHierarchy;                    // List of all classes traversed in the class hierarchy.
 	private final ClassMeta<T> classMeta;                                      // The target class type that this meta object describes.
+	private final ClassInfo classInfo;                                         // Pure-reflection view of the bean class (Step 2 of TODO-5 — decouples bean modeling from ClassMeta).
 	private final Supplier<String> dictionaryName;                             // The @Marshalled(typeName) annotation defined on this bean class.
 	private final BeanPropertyMeta dynaProperty;                               // "extras" property.
 	@SuppressWarnings("rawtypes")
@@ -405,6 +406,7 @@ public class BeanMeta<T> {
 	})
 	protected BeanMeta(ClassMeta<T> cm, MarshalledFilter bf, String[] pNames, ClassInfo implClass) {
 		classMeta = cm;
+		classInfo = cm;
 		marshallingContext = cm.getMarshallingContext();
 		beanFilter = bf;
 		implClassConstructor = opt(implClass).map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null);
@@ -416,8 +418,8 @@ public class BeanMeta<T> {
 
 		// Local variables for initialization
 		var ap = marshallingContext.getAnnotationProvider();
-		var c = cm.inner();
-		var ci = cm;
+		var c = classInfo.inner();
+		var ci = classInfo;
 		String notABeanReasonTemp = null;
 		var propertiesValue = Value.<Map<String,BeanPropertyMeta>>empty();
 		var hiddenPropertiesMap = CollectionUtils.<String,BeanPropertyMeta>map();
@@ -446,7 +448,7 @@ public class BeanMeta<T> {
 			fixedBeanProps.forEach(x -> normalProps.put(x, BeanPropertyMeta.builder(this, x)));
 
 			if (marshallingContext.isUseJavaBeanIntrospector()) {
-				var c2 = bfo.map(x -> x.getInterfaceClass()).filter(Objects::nonNull).orElse(classMeta);
+				var c2 = bfo.map(x -> x.getInterfaceClass()).filter(Objects::nonNull).orElse(classInfo);
 				BeanInfo bi = null;
 				if (! c2.isInterface())
 					bi = Introspector.getBeanInfo(c2.inner(), stopClass.inner());
@@ -605,9 +607,9 @@ public class BeanMeta<T> {
 		setterProps = u(setterPropsMap);
 		dynaProperty = dynaPropertyValue.get();
 		unsortedProperties = unsortedPropertiesTemp;
-		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(marshallingContext.string()).beanRegistry(beanRegistry.get()).build();
+		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(String.class).beanRegistry(beanRegistry.get()).build();
 		dictionaryName = memoize(this::findDictionaryName);
-		beanProxyInvocationHandler = memoize(()->marshallingContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
+		beanProxyInvocationHandler = memoize(() -> marshallingContext.isUseInterfaceProxies() && classInfo.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
 		var factoryClassTemp = btList.stream().map(x -> x.inner().factory()).filter(x -> x != org.apache.juneau.commons.function.BeanFactory.Void.class).findFirst().orElse(null);
 		factoryClass = factoryClassTemp;
 	}
@@ -638,7 +640,7 @@ public class BeanMeta<T> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof BeanMeta<?> o2) && eq(this, o2, (x, y) -> eq(x.classMeta, y.classMeta));
+		return (o instanceof BeanMeta<?> o2) && eq(this, o2, (x, y) -> eq(x.classInfo, y.classInfo));
 	}
 
 	/**
@@ -760,7 +762,7 @@ public class BeanMeta<T> {
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return classMeta.hashCode();
+		return classInfo.hashCode();
 	}
 
 	/**
@@ -796,7 +798,7 @@ public class BeanMeta<T> {
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
-			.a(PROP_class, classMeta.getName())
+			.a(PROP_class, classInfo.getName())
 			.a(PROP_properties, properties);
 		// @formatter:on
 	}
@@ -953,16 +955,16 @@ public class BeanMeta<T> {
 				throw new ExecutableException(e);
 			}
 		}
-		if (classMeta.isMemberClass() && classMeta.isNotStatic()) {
+		if (classInfo.isMemberClass() && classInfo.isNotStatic()) {
 			if (hasConstructor())
 				return getConstructor().<T>newInstance(outer);
 		} else {
 			if (hasConstructor())
 				return getConstructor().<T>newInstance();
-			var h = classMeta.getProxyInvocationHandler();
+			var h = beanProxyInvocationHandler.get();
 			if (nn(h)) {
-				var cl = classMeta.getClassLoader();
-				return (T)Proxy.newProxyInstance(cl, a(classMeta.inner(), java.io.Serializable.class), h);
+				var inner = classInfo.inner();
+				return (T)Proxy.newProxyInstance(inner.getClassLoader(), a(inner, java.io.Serializable.class), h);
 			}
 		}
 		return null;
@@ -1024,7 +1026,7 @@ public class BeanMeta<T> {
 	private BeanConstructor findBeanConstructor() {
 		var ap = marshallingContext.getAnnotationProvider();
 		var vis = marshallingContext.getBeanConstructorVisibility();
-		var ci = classMeta;
+		var ci = classInfo;
 
 		var l = ci.getPublicConstructors().stream().filter(x -> ap.has(BeanCtor.class, x)).toList();
 		if (l.isEmpty())
@@ -1057,8 +1059,8 @@ public class BeanMeta<T> {
 		if (implClassConstructor != null)
 			return new BeanConstructor(opt(implClassConstructor.accessible()), liste());
 
-		var ba = ap.find(Marshalled.class, classMeta);
-		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, classMeta);
+		var ba = ap.find(Marshalled.class, classInfo);
+		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, classInfo);
 		var con = ci.getNoArgConstructor((! ba.isEmpty() || ! btList.isEmpty()) ? Visibility.PRIVATE : vis).orElse(null);
 		if (con != null)
 			return new BeanConstructor(opt(con.accessible()), liste());
@@ -1109,9 +1111,9 @@ public class BeanMeta<T> {
 		var v = marshallingContext.getBeanFieldVisibility();
 		var noIgnoreTransients = ! marshallingContext.isIgnoreTransientFields();
 		var ap = marshallingContext.getAnnotationProvider();
-		var isRecord = classMeta.isRecord();
+		var isRecord = classInfo.isRecord();
 		var recordComponentNames = isRecord
-			? classMeta.getRecordComponents().stream().map(java.lang.reflect.RecordComponent::getName).collect(java.util.stream.Collectors.toSet())
+			? classInfo.getRecordComponents().stream().map(java.lang.reflect.RecordComponent::getName).collect(java.util.stream.Collectors.toSet())
 			: Set.<String>of();
 		// @formatter:off
 		return classHierarchy.get().stream()
@@ -1176,7 +1178,7 @@ public class BeanMeta<T> {
 	private List<BeanMethod> findBeanMethods() {
 		var l = new LinkedList<BeanMethod>();
 		var ap = marshallingContext.getAnnotationProvider();
-		var ci = classMeta;
+		var ci = classInfo;
 		var v = marshallingContext.getBeanMethodVisibility();
 		var pn = opt(beanFilter).map(x -> x.getPropertyNamer()).orElse(marshallingContext.getPropertyNamer());
 		var suppressedFromBeanIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(pn);
@@ -1313,8 +1315,8 @@ public class BeanMeta<T> {
 		var beanDictionaryClasses = opt(beanFilter).map(x -> new ArrayList<>(x.getBeanDictionary())).orElse(new ArrayList<>());
 
 		// Bean dictionary from @Marshalled(typeName) annotation.
-		var ba = marshallingContext.getAnnotationProvider().find(Marshalled.class, classMeta);
-		ba.stream().map(x -> x.inner().typeName()).filter(Utils::ne).findFirst().ifPresent(x -> beanDictionaryClasses.add(classMeta));
+		var ba = marshallingContext.getAnnotationProvider().find(Marshalled.class, classInfo);
+		ba.stream().map(x -> x.inner().typeName()).filter(Utils::ne).findFirst().ifPresent(x -> beanDictionaryClasses.add(classInfo));
 
 		return new BeanRegistry(marshallingContext, null, beanDictionaryClasses);
 	}
@@ -1349,7 +1351,7 @@ public class BeanMeta<T> {
 		var result = new LinkedList<ClassInfo>();
 		// If @Marshalled.interfaceClass is specified on the parent class, then we want
 		// to use the properties defined on that class, not the subclass.
-		var c2 = (nn(beanFilter) && nn(beanFilter.getInterfaceClass()) ? beanFilter.getInterfaceClass() : classMeta);
+		var c2 = (nn(beanFilter) && nn(beanFilter.getInterfaceClass()) ? beanFilter.getInterfaceClass() : classInfo);
 		findClassHierarchy(c2, stopClass, result::add);
 		return u(result);
 	}
@@ -1420,7 +1422,7 @@ public class BeanMeta<T> {
 				return s;
 		}
 
-		var n = classMeta
+		var n = classInfo
 			.getParentsAndInterfaces()
 			.stream()
 			.skip(1)
@@ -1435,7 +1437,7 @@ public class BeanMeta<T> {
 		if (n != null)
 			return n;
 
-		return classMeta.getMarshallingContext().getAnnotationProvider().find(Marshalled.class, classMeta)
+		return marshallingContext.getAnnotationProvider().find(Marshalled.class, classInfo)
 			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> ! x.typeName().isEmpty())
