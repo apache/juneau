@@ -425,7 +425,7 @@
  *
  * 	<p>
  * 	With this wiring in place, any class annotated with
- * 	{@code @Marshalled(factory=EmployeeSupplier.Factory.class)} is automatically instantiated by
+ * 	{@code @BeanType(factory=EmployeeSupplier.Factory.class)} is automatically instantiated by
  * 	retrieving the factory from the Spring {@code ApplicationContext} and calling
  * 	{@link org.apache.juneau.commons.function.BeanFactory#create()}. No manual construction or
  * 	injection is needed in individual REST methods.
@@ -443,7 +443,7 @@
  * 			<th>Purpose</th>
  * 		</tr>
  * 		<tr>
- * 			<td>{@code @Marshalled(factory=X.class)}</td>
+ * 			<td>{@code @BeanType(factory=X.class)}</td>
  * 			<td>Class</td>
  * 			<td>Specifies the {@link org.apache.juneau.commons.function.BeanFactory} class used to instantiate this type during parsing. The factory is resolved from the {@code BeanStore}.</td>
  * 		</tr>

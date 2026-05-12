@@ -34,6 +34,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({
 	"rawtypes", // Raw types necessary for test bean handling
@@ -317,7 +318,7 @@ class MarshalledConfig_Test extends TestBase {
 		assertEquals(1, bc.convertToType(o2, ReadOnlyPerson[].class)[0].getAge());
 	}
 
-	@Marshalled(p="name,age")
+	@BeanType(p="name,age")
 	public static class ReadOnlyPerson {
 		private final int age;
 
@@ -367,9 +368,9 @@ class MarshalledConfig_Test extends TestBase {
 		}
 	}
 
-	@MarshalledApply(on="Dummy1",value=@Marshalled(p="dummy"))
-	@MarshalledApply(on="ReadOnlyPerson2",value=@Marshalled(p="name,age"))
-	@MarshalledApply(on="Dummy2",value=@Marshalled(p="dummy"))
+	@BeanTypeApply(on="Dummy1",value=@BeanType(p="dummy"))
+	@BeanTypeApply(on="ReadOnlyPerson2",value=@BeanType(p="name,age"))
+	@BeanTypeApply(on="Dummy2",value=@BeanType(p="dummy"))
 	@MarshalledCtorApply(on="Dummy1",value=@MarshalledCtor(properties="dummy"))
 	@MarshalledCtorApply(on="ReadOnlyPerson2(String,int)",value=@MarshalledCtor(properties="name,age"))
 	@MarshalledCtorApply(on="Dummy2",value=@MarshalledCtor(properties="dummy"))

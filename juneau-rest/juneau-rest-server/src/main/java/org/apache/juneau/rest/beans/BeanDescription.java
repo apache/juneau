@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Simple serializable bean description.
@@ -37,7 +38,7 @@ import org.apache.juneau.annotation.*;
 
  * </ul>
  */
-@Marshalled(properties = "type,properties")
+@BeanType(properties = "type,properties")
 @SuppressWarnings({
 	"java:S1104" // Public fields required for @Marshalled serialization
 })

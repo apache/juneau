@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Most of the heavy testing for HtmlSchemaSerializer is done in JsonSchemaGeneratorTest.
@@ -57,14 +58,14 @@ class HtmlSchemaSerializer_Test extends TestBase {
 	// Documentation examples
 	//====================================================================================================
 
-	@Marshalled(properties="name,birthDate,addresses")
+	@BeanType(properties="name,birthDate,addresses")
 	public static class Person {
 		public String name;
 		public Calendar birthDate;
 		public List<Address> addresses;
 	}
 
-	@Marshalled(properties="street,city,state,zip,isCurrent")
+	@BeanType(properties="street,city,state,zip,isCurrent")
 	public static class Address {
 		public String street, city;
 		public StateEnum state;

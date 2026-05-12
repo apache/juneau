@@ -25,13 +25,14 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.swaps.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Tests for {@link JsonlSerializer}.
  */
 class Jsonl_Test extends TestBase {
 
-	@Marshalled(properties = "name,age")
+	@BeanType(properties = "name,age")
 	public static class Person {
 		public String name;
 		public int age;

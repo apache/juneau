@@ -22,6 +22,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Sample resource that allows images to be uploaded and retrieved.
@@ -62,7 +63,7 @@ public class UtilityBeansResource extends BasicRestObject {
 	@SuppressWarnings({
 		"java:S1104" // All public fields intentional for direct bean serialization in REST example demonstrations
 	})
-	@Marshalled(p = "street,city,state,zip,isCurrent")
+	@BeanType(p = "street,city,state,zip,isCurrent")
 	public static class Address {
 
 		/** Street address. */

@@ -14,28 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons.bean;
 
 import static java.lang.Character.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 /**
- * Converts property names to underscore-lower-case format.
+ * Converts property names to dashed-upper-case-start format.
  *
  * <h5 class='section'>Example:</h5>
  * <ul>
- * 	<li><js>"fooBar"</js> -&gt; <js>"foo_bar"</js>
- * 	<li><js>"fooBarURL"</js> -&gt; <js>"foo_bar_url"</js>
- * 	<li><js>"FooBarURL"</js> -&gt; <js>"foo_bar_url"</js>
+ * 	<li><js>"fooBar"</js> -&gt; <js>"Foo-Bar"</js>
+ * 	<li><js>"fooBarURL"</js> -&gt; <js>"Foo-Bar-Url"</js>
+ * 	<li><js>"FooBarURL"</js> -&gt; <js>"Foo-Bar-Url"</js>
  * </ul>
  *
  */
-public class PropertyNamerULC implements PropertyNamer {
+public class PropertyNamerDUCS implements PropertyNamer {
 
 	/** Reusable instance. */
-	public static final PropertyNamer INSTANCE = new PropertyNamerULC();
+	public static final PropertyNamer INSTANCE = new PropertyNamerDUCS();
 
 	@Override /* Overridden from PropertyNamer */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for property name conversion logic
+	})
 	public String getPropertyName(String name) {
 		if (e(name))
 			return name;
@@ -54,18 +57,25 @@ public class PropertyNamerULC implements PropertyNamer {
 		}
 
 		var name2 = new char[name.length() + numUCs];
-		isPrevUC = isUpperCase(name.charAt(0));
+		isPrevUC = true;
 		var ni = 0;
 		for (var i = 0; i < name.length(); i++) {
 			var c = name.charAt(i);
-			if (isUpperCase(c)) {
-				if (! isPrevUC)
-					name2[ni++] = '_';
-				isPrevUC = true;
-				name2[ni++] = toLowerCase(c);
+			if (i == 0) {
+				name2[ni++] = toUpperCase(c);
 			} else {
-				isPrevUC = false;
-				name2[ni++] = c;
+				if (isUpperCase(c)) {
+					if (! isPrevUC) {
+						name2[ni++] = '-';
+						name2[ni++] = toUpperCase(c);
+					} else {
+						name2[ni++] = toLowerCase(c);
+					}
+					isPrevUC = true;
+				} else {
+					isPrevUC = false;
+					name2[ni++] = c;
+				}
 			}
 		}
 

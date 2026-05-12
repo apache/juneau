@@ -22,6 +22,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.swaps.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * A snapshot of execution statistics for REST resource classes.
@@ -30,7 +31,7 @@ import org.apache.juneau.swaps.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
  * </ul>
  */
-@Marshalled(properties = "startTime,upTime,methodStats")
+@BeanType(properties = "startTime,upTime,methodStats")
 public class RestContextStats {
 	private final Instant startTime;
 	private final List<MethodExecStats> methodStats;

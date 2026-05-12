@@ -30,6 +30,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Tests for {@link org.apache.juneau.jsonl.JsonlParser}.
@@ -39,7 +40,7 @@ import org.junit.jupiter.api.*;
 })
 class JsonlParser_Test extends TestBase {
 
-	@Marshalled(properties = "name,age")
+	@BeanType(properties = "name,age")
 	public static class Person {
 		public String name;
 		public int age;

@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons.bean;
 
 import static java.lang.Character.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 /**
- * Converts property names to dashed-lower-case format.
+ * Converts property names to underscore-lower-case format.
  *
  * <h5 class='section'>Example:</h5>
  * <ul>
- * 	<li><js>"fooBar"</js> -&gt; <js>"foo-bar"</js>
- * 	<li><js>"fooBarURL"</js> -&gt; <js>"foo-bar-url"</js>
- * 	<li><js>"FooBarURL"</js> -&gt; <js>"foo-bar-url"</js>
+ * 	<li><js>"fooBar"</js> -&gt; <js>"foo_bar"</js>
+ * 	<li><js>"fooBarURL"</js> -&gt; <js>"foo_bar_url"</js>
+ * 	<li><js>"FooBarURL"</js> -&gt; <js>"foo_bar_url"</js>
  * </ul>
  *
  */
-public class PropertyNamerDLC implements PropertyNamer {
+public class PropertyNamerULC implements PropertyNamer {
 
 	/** Reusable instance. */
-	public static final PropertyNamer INSTANCE = new PropertyNamerDLC();
+	public static final PropertyNamer INSTANCE = new PropertyNamerULC();
 
 	@Override /* Overridden from PropertyNamer */
 	public String getPropertyName(String name) {
@@ -60,7 +60,7 @@ public class PropertyNamerDLC implements PropertyNamer {
 			var c = name.charAt(i);
 			if (isUpperCase(c)) {
 				if (! isPrevUC)
-					name2[ni++] = '-';
+					name2[ni++] = '_';
 				isPrevUC = true;
 				name2[ni++] = toLowerCase(c);
 			} else {

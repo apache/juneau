@@ -46,6 +46,7 @@ import org.apache.juneau.yaml.*;
 import org.apache.juneau.hjson.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
@@ -582,7 +583,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		assertBean(d, "f3,f2", "f3,f2");
 	}
 
-	@Marshalled(p="f3,f2")
+	@BeanType(p="f3,f2")
 	public static class D1 {
 		public String f1, f2, f3;
 		public D1 init() {
@@ -646,7 +647,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		assertBean(e, "f1,f3", "f1,f3");
 	}
 
-	@Marshalled(excludeProperties="f2")
+	@BeanType(excludeProperties="f2")
 	public static class E1 {
 		public String f1, f2, f3;
 		public E1 init() {
@@ -688,7 +689,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Test @Marshalled(interfaceClass=xxx)
+	// Test @BeanType(interfaceClass=xxx)
 	//====================================================================================================
 
 	@ParameterizedTest
@@ -707,7 +708,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		assertBean(x, "f1", "f1");
 	}
 
-	@Marshalled(interfaceClass=FA1.class)
+	@BeanType(interfaceClass=FA1.class)
 	public static class FA1 {
 		public String f1;
 	}
@@ -722,7 +723,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Test @Marshalled(interfaceClass=xxx) using MarshalledFilter
+	// Test @BeanType(interfaceClass=xxx) using MarshalledFilter
 	//====================================================================================================
 
 	@ParameterizedTest

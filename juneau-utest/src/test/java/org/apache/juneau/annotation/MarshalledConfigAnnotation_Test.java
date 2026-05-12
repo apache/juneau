@@ -32,6 +32,7 @@ import org.apache.juneau.marshaller.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Tests the @MarshalledConfig annotation.

@@ -37,6 +37,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * REST resource that allows access to a file system directory.
@@ -133,7 +134,7 @@ public class DirectoryResource extends BasicRestServlet {
 	/** File or directory details for REST response. */
 	@Response
 	@Schema(description = "File or directory details")
-	@Marshalled(properties = "type,name,size,lastModified,actions,files")
+	@BeanType(properties = "type,name,size,lastModified,actions,files")
 	public class FileResource {
 		private final File f;
 		private final String path;

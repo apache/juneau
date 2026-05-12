@@ -20,6 +20,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({
 	"unused" // Test beans with intentionally unused private fields for visibility testing
@@ -43,7 +44,7 @@ class Annotations_Test extends TestBase {
 	}
 
 	/** Class with explicitly specified properties */
-	@Marshalled(properties="age,name")
+	@BeanType(properties="age,name")
 	public static class Person1 {
 		public int age;
 
@@ -66,7 +67,7 @@ class Annotations_Test extends TestBase {
 	}
 
 	/** Class with explicitly specified properties */
-	@Marshalled(p="age,name")
+	@BeanType(p="age,name")
 	public static class Person2 {
 		public int age;
 
@@ -89,7 +90,7 @@ class Annotations_Test extends TestBase {
 	}
 
 	/** Class with explicitly specified properties */
-	@Marshalled(properties="age",p="name")
+	@BeanType(properties="age", p="name")
 	public static class Person3 {
 		public int age;
 
@@ -120,7 +121,7 @@ class Annotations_Test extends TestBase {
 		public void setName(String v) { name = v; }
 	}
 
-	@MarshalledApply(on="Person4",value=@Marshalled(properties="age,name"))
+	@BeanTypeApply(on="Person4",value=@BeanType(properties="age,name"))
 	public static class PersonConfig {}
 
 	//====================================================================================================

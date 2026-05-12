@@ -28,6 +28,7 @@ import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Nested;
+import org.apache.juneau.commons.bean.*;
 
 class RdfParser_Test extends TestBase {
 

@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
@@ -57,7 +58,7 @@ class Generics_RoundTripTest extends RoundTripTest_Base {
 	}
 
 	// Class with unbound type variables.
-	@Marshalled(p="s,t")
+	@BeanType(p="s,t")
 	public static class Pair<S,T> {
 
 		public Pair() {}

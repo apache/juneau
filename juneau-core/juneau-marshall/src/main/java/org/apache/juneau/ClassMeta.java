@@ -66,7 +66,7 @@ import org.apache.juneau.swap.*;
  *
  * @param <T> The class type of the wrapped class.
  */
-@Marshalled(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
+@org.apache.juneau.commons.bean.BeanType(properties = "innerClass,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 @SuppressWarnings({
 	"java:S1200",  // Class has 23 dependencies, acceptable for this core reflection metadata class
 	"java:S1452",  // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, etc. for element/component types
@@ -1670,9 +1670,13 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 	private MarshalledFilter findMarshalledFilter() {
 		var ap = marshallingContext.getAnnotationProvider();
 		var l = ap.find(Marshalled.class, this);
-		if (l.isEmpty())
+		var bt = ap.find(org.apache.juneau.commons.bean.BeanType.class, this);
+		if (l.isEmpty() && bt.isEmpty())
 			return null;
-		return MarshalledFilter.create(inner()).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
+		return MarshalledFilter.create(inner())
+			.applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList()))
+			.applyBeanTypeAnnotations(reverse(bt.stream().map(AnnotationInfo::inner).toList()))
+			.build();
 	}
 
 	@SuppressWarnings({

@@ -46,6 +46,7 @@ import org.apache.juneau.marshaller.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Bean context.
@@ -907,7 +908,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder beanProperties(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(MarshalledApplyAnnotation.create(beanClass).value(MarshalledAnnotation.create().p(properties).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(beanClass).value(BeanTypeAnnotation.create().p(properties).build()).build());
 		}
 
 		/**
@@ -970,7 +971,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanProperties(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(MarshalledApplyAnnotation.create(k).value(MarshalledAnnotation.create().p(s(v)).build()).build()));
+			values.forEach((k, v) -> annotations(BeanTypeApplyAnnotation.create(k).value(BeanTypeAnnotation.create().p(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1035,7 +1036,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder beanProperties(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(MarshalledApplyAnnotation.create(beanClassName).value(MarshalledAnnotation.create().p(properties).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(beanClassName).value(BeanTypeAnnotation.create().p(properties).build()).build());
 		}
 
 		/**
@@ -1090,7 +1091,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(MarshalledApplyAnnotation.create(beanClass).value(MarshalledAnnotation.create().xp(properties).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(beanClass).value(BeanTypeAnnotation.create().xp(properties).build()).build());
 		}
 
 		/**
@@ -1145,7 +1146,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(MarshalledApplyAnnotation.create(k).value(MarshalledAnnotation.create().xp(s(v)).build()).build()));
+			values.forEach((k, v) -> annotations(BeanTypeApplyAnnotation.create(k).value(BeanTypeAnnotation.create().xp(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1203,7 +1204,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(MarshalledApplyAnnotation.create(beanClassName).value(MarshalledAnnotation.create().xp(properties).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(beanClassName).value(BeanTypeAnnotation.create().xp(properties).build()).build());
 		}
 
 		/**
@@ -1261,7 +1262,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(MarshalledApplyAnnotation.create(beanClass).value(MarshalledAnnotation.create().ro(properties).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(beanClass).value(BeanTypeAnnotation.create().ro(properties).build()).build());
 		}
 
 		/**
@@ -1319,7 +1320,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(MarshalledApplyAnnotation.create(k).value(MarshalledAnnotation.create().ro(s(v)).build()).build()));
+			values.forEach((k, v) -> annotations(BeanTypeApplyAnnotation.create(k).value(BeanTypeAnnotation.create().ro(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1378,7 +1379,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(MarshalledApplyAnnotation.create(beanClassName).value(MarshalledAnnotation.create().ro(properties).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(beanClassName).value(BeanTypeAnnotation.create().ro(properties).build()).build());
 		}
 
 		/**
@@ -1435,7 +1436,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
 			assertArgNotNull(ARG_beanClass, beanClass);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(MarshalledApplyAnnotation.create(beanClass).value(MarshalledAnnotation.create().wo(properties).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(beanClass).value(BeanTypeAnnotation.create().wo(properties).build()).build());
 		}
 
 		/**
@@ -1492,7 +1493,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
 			assertArgNotNull(ARG_values, values);
-			values.forEach((k, v) -> annotations(MarshalledApplyAnnotation.create(k).value(MarshalledAnnotation.create().wo(s(v)).build()).build()));
+			values.forEach((k, v) -> annotations(BeanTypeApplyAnnotation.create(k).value(BeanTypeAnnotation.create().wo(s(v)).build()).build()));
 			return this;
 		}
 
@@ -1550,7 +1551,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
 			assertArgNotNull(ARG_beanClassName, beanClassName);
 			assertArgNotNull(ARG_properties, properties);
-			return annotations(MarshalledApplyAnnotation.create(beanClassName).value(MarshalledAnnotation.create().wo(properties).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(beanClassName).value(BeanTypeAnnotation.create().wo(properties).build()).build());
 		}
 
 		/**
@@ -2192,11 +2193,11 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link MarshalledProp @MarshalledProp} annotation can also be used on methods to individually identify them as fluent setters.
-		 * 	<li class='note'>The {@link Bean#findFluentSetters() @Marshalled.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
+		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanType#findFluentSetters() @BeanType.findFluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#findFluentSetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#findFluentSetters()}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#findFluentSetters()}
 		 * </ul>
 		 *
@@ -2255,7 +2256,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 */
 		public Builder findFluentSetters(Class<?> on) {
 			assertArgNotNull(ARG_on, on);
-			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().findFluentSetters(true).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(on).value(BeanTypeAnnotation.create().findFluentSetters(true).build()).build());
 		}
 
 		@Override /* Overridden from Context.Builder */
@@ -2601,7 +2602,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder interfaceClass(Class<?> on, Class<?> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().interfaceClass(value).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(on).value(BeanTypeAnnotation.create().interfaceClass(value).build()).build());
 		}
 
 		/**
@@ -2648,7 +2649,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder interfaces(Class<?>...value) {
 			assertArgNoNulls(ARG_value, value);
 			for (var v : value)
-				annotations(MarshalledApplyAnnotation.create(v).value(MarshalledAnnotation.create().interfaceClass(v).build()).build());
+				annotations(BeanTypeApplyAnnotation.create(v).value(BeanTypeAnnotation.create().interfaceClass(v).build()).build());
 			return this;
 		}
 
@@ -2945,7 +2946,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().propertyNamer(value).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(on).value(BeanTypeAnnotation.create().propertyNamer(value).build()).build());
 		}
 
 		/**
@@ -3017,7 +3018,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean#unsorted() @Marshalled.unsorted()} annotation can also be used to opt out of sorting on a single class.
+		 * 	<li class='note'>The {@link org.apache.juneau.commons.bean.BeanType#unsorted() @BeanType.unsorted()} annotation can also be used to opt out of sorting on a single class.
 		 * </ul>
 		 *
 		 * @return This object.
@@ -3041,7 +3042,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		 * Opt specific bean classes out of alphabetical property sorting.
 		 *
 		 * <p>
-		 * Applies the {@link Bean#unsorted() @Marshalled(unsorted=true)} annotation to the specified classes,
+		 * Applies the {@link Bean#unsorted() @BeanType(unsorted=true)} annotation to the specified classes,
 		 * overriding the default sorted behavior for those specific beans.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
@@ -3055,7 +3056,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder unsortedProperties(Class<?>...on) {
 			assertArgNoNulls(ARG_on, on);
 			for (var c : on)
-				annotations(MarshalledApplyAnnotation.create(c).value(MarshalledAnnotation.create().unsorted(true).build()).build());
+				annotations(BeanTypeApplyAnnotation.create(c).value(BeanTypeAnnotation.create().unsorted(true).build()).build());
 			return this;
 		}
 
@@ -3104,7 +3105,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		public Builder stopClass(Class<?> on, Class<?> value) {
 			assertArgNotNull(ARG_on, on);
 			assertArgNotNull(ARG_value, value);
-			return annotations(MarshalledApplyAnnotation.create(on).value(MarshalledAnnotation.create().stopClass(value).build()).build());
+			return annotations(BeanTypeApplyAnnotation.create(on).value(BeanTypeAnnotation.create().stopClass(value).build()).build());
 		}
 
 		/**

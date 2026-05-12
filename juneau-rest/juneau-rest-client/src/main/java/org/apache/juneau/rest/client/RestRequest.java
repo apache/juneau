@@ -76,6 +76,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Represents a request to a remote REST resource.

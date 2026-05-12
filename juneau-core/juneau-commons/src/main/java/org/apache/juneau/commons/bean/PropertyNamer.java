@@ -14,29 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
-
-import java.beans.*;
+package org.apache.juneau.commons.bean;
 
 /**
- * Default property namer.
- *
- * <h5 class='section'>Example:</h5>
- * <ul>
- * 	<li><js>"fooBar"</js> -&gt; <js>"fooBar"</js>
- * 	<li><js>"fooBarURL"</js> -&gt; <js>"fooBarURL"</js>
- * 	<li><js>"FooBarURL"</js> -&gt; <js>"fooBarURL"</js>
- * 	<li><js>"URL"</js> -&gt; <js>"URL"</js>
- * </ul>
+ * Defines an API for converting conventional bean property names to some other form.
  *
  * <p>
- * See {@link Introspector#decapitalize(String)} for exact rules.
+ * For example, given the bean property <js>"fooBarURL"</js>, the {@link PropertyNamerDLC} property namer will convert
+ * this to <js>"foo-bar-url"</js>.
+ *
+ * <p>
+ * Property namers are associated with beans through the {@code @BeanType(propertyNamer)} annotation.
  *
  */
-public class BasicPropertyNamer implements PropertyNamer {
+public interface PropertyNamer {
 
-	@Override /* Overridden from PropertyNamer */
-	public String getPropertyName(String name) {
-		return Introspector.decapitalize(name);
-	}
+	/**
+	 * Represents a non-existent class.
+	 */
+	public interface Void extends PropertyNamer {}
+
+	/**
+	 * Convert the specified default property name to some other value.
+	 *
+	 * @param name The original bean property name.
+	 * @return The converted property name.
+	 */
+	String getPropertyName(String name);
 }

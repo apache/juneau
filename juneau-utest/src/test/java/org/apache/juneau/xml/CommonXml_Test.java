@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 class CommonXml_Test extends TestBase {
 
@@ -48,7 +49,7 @@ class CommonXml_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Marshalled(p="url,id,name")
+	@BeanType(p="url,id,name")
 	public static class A {
 		@Xml(format=XmlFormat.ATTR) public URL url;
 		@Xml(format=ATTR) public int id;

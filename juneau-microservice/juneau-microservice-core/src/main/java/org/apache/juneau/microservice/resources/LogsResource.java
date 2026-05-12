@@ -38,6 +38,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * REST resource for viewing and accessing log files.
@@ -100,7 +101,7 @@ public class LogsResource extends BasicRestServlet {
 
 	/** File or directory details for REST response. */
 	@Response(schema = @Schema(description = "File or directory details"))
-	@Marshalled(properties = "type,name,size,lastModified,actions,files")
+	@BeanType(properties = "type,name,size,lastModified,actions,files")
 	@SuppressWarnings({
 		"java:S1135" // TODO in getFiles() - will address later
 	})

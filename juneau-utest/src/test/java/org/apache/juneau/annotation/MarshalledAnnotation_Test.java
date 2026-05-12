@@ -21,6 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
@@ -37,33 +38,26 @@ class MarshalledAnnotation_Test extends TestBase {
 		.description("a")
 		.dictionary(X1.class)
 		.example("b")
-		.excludeProperties("c")
-		.findFluentSetters(true)
 		.implClass(X1.class)
 		.interceptor(X2.class)
-		.interfaceClass(X1.class)
-		.p("e")
-		.properties("f")
-		.propertyNamer(BasicPropertyNamer.class)
-		.readOnlyProperties("g")
-		.ro("h")
-		.unsorted(true)
-		.stopClass(X1.class)
 		.typeName("i")
 		.typePropertyName("j")
-		.wo("k")
-		.writeOnlyProperties("l")
-		.xp("m")
 		.build();
 
 	Marshalled a2 = MarshalledAnnotation.create()
 		.description("a")
 		.dictionary(X1.class)
 		.example("b")
-		.excludeProperties("c")
-		.findFluentSetters(true)
 		.implClass(X1.class)
 		.interceptor(X2.class)
+		.typeName("i")
+		.typePropertyName("j")
+		.build();
+
+	BeanType bt1 = BeanTypeAnnotation.create()
+		.description("a")
+		.excludeProperties("c")
+		.findFluentSetters(true)
 		.interfaceClass(X1.class)
 		.p("e")
 		.properties("f")
@@ -72,8 +66,23 @@ class MarshalledAnnotation_Test extends TestBase {
 		.ro("h")
 		.unsorted(true)
 		.stopClass(X1.class)
-		.typeName("i")
-		.typePropertyName("j")
+		.wo("k")
+		.writeOnlyProperties("l")
+		.xp("m")
+		.build();
+
+	BeanType bt2 = BeanTypeAnnotation.create()
+		.description("a")
+		.excludeProperties("c")
+		.findFluentSetters(true)
+		.interfaceClass(X1.class)
+		.p("e")
+		.properties("f")
+		.propertyNamer(BasicPropertyNamer.class)
+		.readOnlyProperties("g")
+		.ro("h")
+		.unsorted(true)
+		.stopClass(X1.class)
 		.wo("k")
 		.writeOnlyProperties("l")
 		.xp("m")
@@ -81,8 +90,11 @@ class MarshalledAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"description,dictionary,example,excludeProperties,findFluentSetters,implClass,interceptor,interfaceClass,p,properties,propertyNamer,readOnlyProperties,ro,stopClass,typeName,typePropertyName,unsorted,wo,writeOnlyProperties,xp",
-			"[a],[X1],b,c,true,X1,X2,X1,e,f,BasicPropertyNamer,g,h,X1,i,j,true,k,l,m");
+			"description,dictionary,example,implClass,interceptor,typeName,typePropertyName",
+			"[a],[X1],b,X1,X2,i,j");
+		assertBean(bt1,
+			"description,excludeProperties,findFluentSetters,interfaceClass,p,properties,propertyNamer,readOnlyProperties,ro,stopClass,unsorted,wo,writeOnlyProperties,xp",
+			"[a],c,true,X1,e,f,BasicPropertyNamer,g,h,X1,true,k,l,m");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -90,6 +102,11 @@ class MarshalledAnnotation_Test extends TestBase {
 		assertNotEquals(0, a1.hashCode());
 		assertNotEquals(-1, a1.hashCode());
 		assertEquals(a1.hashCode(), a2.hashCode());
+
+		assertEquals(bt2, bt1);
+		assertNotEquals(0, bt1.hashCode());
+		assertNotEquals(-1, bt1.hashCode());
+		assertEquals(bt1.hashCode(), bt2.hashCode());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -97,8 +114,8 @@ class MarshalledAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_testEquivalencyInPropertyStores() {
-		var b1 = MarshallingContext.create().annotations(a1).build();
-		var b2 = MarshallingContext.create().annotations(a2).build();
+		var b1 = MarshallingContext.create().annotations(a1, bt1).build();
+		var b2 = MarshallingContext.create().annotations(a2, bt2).build();
 		assertSame(b1, b2);
 	}
 
@@ -106,59 +123,25 @@ class MarshalledAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Marshalled(
-		description={ "a" },
-		dictionary=X1.class,
-		example="b",
-		excludeProperties="c",
-		findFluentSetters=true,
-		implClass=X1.class,
-		interceptor=X2.class,
-		interfaceClass=X1.class,
-		p="e",
-		properties="f",
-		propertyNamer=BasicPropertyNamer.class,
-		readOnlyProperties="g",
-		ro="h",
-		unsorted=true,
-		stopClass=X1.class,
-		typeName="i",
-		typePropertyName="j",
-		wo="k",
-		writeOnlyProperties="l",
-		xp="m"
-	)
+	@Marshalled(description={ "a" }, dictionary=X1.class, example="b", implClass=X1.class, interceptor=X2.class, typeName="i", typePropertyName="j")
+	@BeanType(description={ "a" }, excludeProperties="c", findFluentSetters=true, interfaceClass=X1.class, p="e", properties="f", propertyNamer=BasicPropertyNamer.class, readOnlyProperties="g", ro="h", unsorted=true, stopClass=X1.class, wo="k", writeOnlyProperties="l", xp="m")
 	public static class D1 {}
 	Marshalled d1 = D1.class.getAnnotationsByType(Marshalled.class)[0];
+	BeanType d1bt = D1.class.getAnnotationsByType(BeanType.class)[0];
 
-	@Marshalled(
-		description={ "a" },
-		dictionary=X1.class,
-		example="b",
-		excludeProperties="c",
-		findFluentSetters=true,
-		implClass=X1.class,
-		interceptor=X2.class,
-		interfaceClass=X1.class,
-		p="e",
-		properties="f",
-		propertyNamer=BasicPropertyNamer.class,
-		readOnlyProperties="g",
-		ro="h",
-		unsorted=true,
-		stopClass=X1.class,
-		typeName="i",
-		typePropertyName="j",
-		wo="k",
-		writeOnlyProperties="l",
-		xp="m"
-	)
+	@Marshalled(description={ "a" }, dictionary=X1.class, example="b", implClass=X1.class, interceptor=X2.class, typeName="i", typePropertyName="j")
+	@BeanType(description={ "a" }, excludeProperties="c", findFluentSetters=true, interfaceClass=X1.class, p="e", properties="f", propertyNamer=BasicPropertyNamer.class, readOnlyProperties="g", ro="h", unsorted=true, stopClass=X1.class, wo="k", writeOnlyProperties="l", xp="m")
 	public static class D2 {}
 	Marshalled d2 = D2.class.getAnnotationsByType(Marshalled.class)[0];
+	BeanType d2bt = D2.class.getAnnotationsByType(BeanType.class)[0];
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
+
+		assertEqualsAll(bt1, d1bt, d2bt);
+		assertNotEqualsAny(bt1.hashCode(), 0, -1);
+		assertEqualsAll(bt1.hashCode(), d1bt.hashCode(), d2bt.hashCode());
 	}
 }

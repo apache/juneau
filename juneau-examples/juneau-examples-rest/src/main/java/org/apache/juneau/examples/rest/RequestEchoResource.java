@@ -29,6 +29,7 @@ import org.apache.juneau.serializer.annotation.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Sample REST resource for echoing HttpServletRequests back to the browser.
@@ -69,9 +70,9 @@ import jakarta.servlet.http.*;
 	maxDepth="5",
 	detectRecursions="true"
 )
-@MarshalledApply(on="HttpServletRequest",value=@Marshalled(interfaceClass=HttpServletRequest.class))
-@MarshalledApply(on="HttpSession",value=@Marshalled(interfaceClass=HttpSession.class))
-@MarshalledApply(on="ServletContext",value=@Marshalled(interfaceClass=ServletContext.class))
+@BeanTypeApply(on="HttpServletRequest",value=@BeanType(interfaceClass=HttpServletRequest.class))
+@BeanTypeApply(on="HttpSession",value=@BeanType(interfaceClass=HttpSession.class))
+@BeanTypeApply(on="ServletContext",value=@BeanType(interfaceClass=ServletContext.class))
 public class RequestEchoResource extends BasicRestObject {
 
 	/**

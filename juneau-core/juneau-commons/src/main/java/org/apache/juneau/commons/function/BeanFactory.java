@@ -74,7 +74,7 @@ public interface BeanFactory<T> {
 	T create() throws Exception;
 
 	/**
-	 * Sentinel class used as the default value for {@code @Marshalled(factory=...)} and
+	 * Sentinel class used as the default value for {@code @BeanType(factory=...)} and
 	 * {@code @MarshalledProp(factory=...)} when no factory is specified.
 	 */
 	@SuppressWarnings({

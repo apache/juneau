@@ -33,6 +33,7 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Context class for classes that use {@link MarshallingContext} objects.

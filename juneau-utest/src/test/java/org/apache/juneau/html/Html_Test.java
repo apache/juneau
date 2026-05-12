@@ -28,6 +28,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({
 	"serial" // Serialization not relevant in test code
@@ -395,7 +396,7 @@ class Html_Test extends TestBase {
 	// @Marshalled(bpi) on collections of beans
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Marshalled(p="f3,f2,f1")
+	@BeanType(p="f3,f2,f1")
 	public static class E {
 		public Integer f1, f2, f3;
 

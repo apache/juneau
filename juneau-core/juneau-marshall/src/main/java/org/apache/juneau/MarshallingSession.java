@@ -37,6 +37,7 @@ import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link MarshallingContext}.

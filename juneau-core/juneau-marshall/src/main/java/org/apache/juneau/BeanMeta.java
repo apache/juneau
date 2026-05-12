@@ -38,6 +38,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
@@ -221,13 +222,13 @@ public class BeanMeta<T> {
 			if (bc.isNotABean(cm))
 				return notABean("Class matches exclude-class list");
 
-			if (bc.isBeansRequireSerializable() && ! cm.isAssignableTo(Serializable.class) && ! ap.has(Marshalled.class, cm))
+			if (bc.isBeansRequireSerializable() && ! cm.isAssignableTo(Serializable.class) && ! ap.has(Marshalled.class, cm) && ! ap.has(org.apache.juneau.commons.bean.BeanType.class, cm))
 				return notABean("Class is not serializable");
 
 			if (ap.has(MarshalledIgnore.class, cm) || ap.has(org.apache.juneau.commons.annotation.MarshalledIgnore.class, cm))
 				return notABean("Class is annotated with @MarshalledIgnore");
 
-		if ((! bc.getBeanClassVisibility().isVisible(cm.getModifiers()) || cm.isAnonymousClass()) && ! ap.has(Marshalled.class, cm))
+		if ((! bc.getBeanClassVisibility().isVisible(cm.getModifiers()) || cm.isAnonymousClass()) && ! ap.has(Marshalled.class, cm) && ! ap.has(org.apache.juneau.commons.bean.BeanType.class, cm))
 			return notABean("Class is not public");
 
 			var bm = new BeanMeta<>(cm, findMarshalledFilter(cm), null, implClass);
@@ -301,9 +302,13 @@ public class BeanMeta<T> {
 	private static <T> MarshalledFilter findMarshalledFilter(ClassMeta<T> cm) {
 		var ap = cm.getMarshallingContext().getAnnotationProvider();
 		var l = ap.find(Marshalled.class, cm);
-		if (l.isEmpty())
+		var bt = ap.find(org.apache.juneau.commons.bean.BeanType.class, cm);
+		if (l.isEmpty() && bt.isEmpty())
 			return null;
-		return MarshalledFilter.create(cm).applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList())).build();
+		return MarshalledFilter.create(cm)
+			.applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList()))
+			.applyBeanTypeAnnotations(reverse(bt.stream().map(AnnotationInfo::inner).toList()))
+			.build();
 	}
 
 	/*
@@ -359,7 +364,7 @@ public class BeanMeta<T> {
 	private final Supplier<String> dictionaryName;                             // The @Marshalled(typeName) annotation defined on this bean class.
 	private final BeanPropertyMeta dynaProperty;                               // "extras" property.
 	@SuppressWarnings("rawtypes")
-	private final Class<? extends org.apache.juneau.commons.function.BeanFactory> factoryClass;  // @Marshalled(factory=X.class) — null means no factory.
+	private final Class<? extends org.apache.juneau.commons.function.BeanFactory> factoryClass;  // @BeanType(factory=X.class) — null means no factory.
 	private final boolean fluentSetters;                                       // Whether fluent setters are enabled.
 	private final Map<Method,String> getterProps;                              // The getter properties on the target class.
 	private final Map<String,BeanPropertyMeta> hiddenProperties;               // The hidden properties on the target class.
@@ -421,6 +426,7 @@ public class BeanMeta<T> {
 		var dynaPropertyValue = Value.<BeanPropertyMeta>empty();
 		var unsortedPropertiesTemp = false;
 		var ba = ap.find(Marshalled.class, cm);
+		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, cm);
 		var propertyNamer = opt(bf).map(x -> x.getPropertyNamer()).orElse(marshallingContext.getPropertyNamer());
 
 		this.typePropertyName = ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::ne).findFirst().orElseGet(marshallingContext::getBeanTypePropertyName);
@@ -507,7 +513,7 @@ public class BeanMeta<T> {
 			}
 
 			// Check for missing properties.
-			fixedBeanProps.stream().filter(x -> ! normalProps.containsKey(x)).findFirst().ifPresent(x -> { throw bex(c, "The property ''{0}'' was defined on the @Marshalled(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x, ci.getNameSimple()); });
+			fixedBeanProps.stream().filter(x -> ! normalProps.containsKey(x)).findFirst().ifPresent(x -> { throw bex(c, "The property ''{0}'' was defined on the @BeanType(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x, ci.getNameSimple()); });
 
 			// For records with renamed properties, remap constructor args to use the actual property names.
 			if (ci.isRecord() && ne(beanConstructor.args())) {
@@ -602,7 +608,7 @@ public class BeanMeta<T> {
 		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(marshallingContext.string()).beanRegistry(beanRegistry.get()).build();
 		dictionaryName = memoize(this::findDictionaryName);
 		beanProxyInvocationHandler = memoize(()->marshallingContext.isUseInterfaceProxies() && c.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
-		var factoryClassTemp = ba.stream().map(x -> x.inner().factory()).filter(x -> x != org.apache.juneau.commons.function.BeanFactory.Void.class).findFirst().orElse(null);
+		var factoryClassTemp = btList.stream().map(x -> x.inner().factory()).filter(x -> x != org.apache.juneau.commons.function.BeanFactory.Void.class).findFirst().orElse(null);
 		factoryClass = factoryClassTemp;
 	}
 
@@ -1052,7 +1058,8 @@ public class BeanMeta<T> {
 			return new BeanConstructor(opt(implClassConstructor.accessible()), liste());
 
 		var ba = ap.find(Marshalled.class, classMeta);
-		var con = ci.getNoArgConstructor(! ba.isEmpty() ? Visibility.PRIVATE : vis).orElse(null);
+		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, classMeta);
+		var con = ci.getNoArgConstructor((! ba.isEmpty() || ! btList.isEmpty()) ? Visibility.PRIVATE : vis).orElse(null);
 		if (con != null)
 			return new BeanConstructor(opt(con.accessible()), liste());
 

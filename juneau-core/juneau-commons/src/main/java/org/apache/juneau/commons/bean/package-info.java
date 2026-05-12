@@ -14,33 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
-
-import org.apache.juneau.annotation.*;
 
 /**
- * Defines an API for converting conventional bean property names to some other form.
+ * Bean-modeling layer for Juneau.
  *
  * <p>
- * For example, given the bean property <js>"fooBarURL"</js>, the {@link PropertyNamerDLC} property namer will convert
- * this to <js>"foo-bar-url"</js>.
- *
- * <p>
- * Property namers are associated with beans through the {@link Bean#propertyNamer @Marshalled(propertyNamer)} annotation.
- *
+ * Contains bean-modeling annotations (such as {@link org.apache.juneau.commons.bean.BeanType @BeanType})
+ * and supporting types (such as {@link org.apache.juneau.commons.bean.PropertyNamer}) that describe how
+ * Java types map to bean property sets, independent of any marshalling concerns.
  */
-public interface PropertyNamer {
-
-	/**
-	 * Represents a non-existent class.
-	 */
-	public interface Void extends PropertyNamer {}
-
-	/**
-	 * Convert the specified default property name to some other value.
-	 *
-	 * @param name The original bean property name.
-	 * @return The converted property name.
-	 */
-	String getPropertyName(String name);
-}
+package org.apache.juneau.commons.bean;

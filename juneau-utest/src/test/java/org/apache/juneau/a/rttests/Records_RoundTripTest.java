@@ -26,6 +26,7 @@ import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.apache.juneau.commons.bean.*;
 
 class Records_RoundTripTest extends RoundTripTest_Base {
 
@@ -54,7 +55,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 
 	public record WithEnum(String name, Priority priority) {}
 
-	@Marshalled(properties="age,name")
+	@BeanType(properties="age,name")
 	public record AnnotatedOrder(String name, int age) {}
 
 	public record WithMarshalledProp(@MarshalledProp(name="fullName") String name, int age) {}
@@ -70,7 +71,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 
 	public record WithNullValues(String required, String optional) {}
 
-	@Marshalled(properties="name")
+	@BeanType(properties="name")
 	public record WithMarshalledCtor(String name, int age) {
 		@MarshalledCtor(properties="name")
 		public WithMarshalledCtor(String name) {

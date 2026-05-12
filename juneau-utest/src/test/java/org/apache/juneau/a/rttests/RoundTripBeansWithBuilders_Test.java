@@ -41,6 +41,7 @@ import org.apache.juneau.hjson.*;
 import org.apache.juneau.markdown.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
@@ -194,7 +195,7 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 			return new Builder();
 		}
 
-		@Marshalled(findFluentSetters=true)
+		@BeanType(findFluentSetters=true)
 		public static class Builder {
 
 			private int f1;
@@ -216,9 +217,9 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 		assertBean(x, "f1", "1");
 	}
 
-	@MarshalledApply(on="Dummy1",value=@Marshalled(findFluentSetters=true))
-	@MarshalledApply(on="Builder",value=@Marshalled(findFluentSetters=true))
-	@MarshalledApply(on="Dummy2",value=@Marshalled(findFluentSetters=true))
+	@BeanTypeApply(on="Dummy1",value=@BeanType(findFluentSetters=true))
+	@BeanTypeApply(on="Builder",value=@BeanType(findFluentSetters=true))
+	@BeanTypeApply(on="Dummy2",value=@BeanType(findFluentSetters=true))
 	private static class AcConfig {}
 
 	public static class Ac {
@@ -268,7 +269,7 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 			return new Builder();
 		}
 
-		@Marshalled(findFluentSetters=true)
+		@BeanType(findFluentSetters=true)
 		public static class Builder {
 
 			private A f1;
@@ -338,7 +339,7 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 			return new Builder();
 		}
 
-		@Marshalled(findFluentSetters=true)
+		@BeanType(findFluentSetters=true)
 		public static class Builder {
 
 			private A[] f1;

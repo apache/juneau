@@ -34,6 +34,7 @@ import org.apache.juneau.xml.xml1a.*;
 import org.apache.juneau.xml.xml1b.*;
 import org.apache.juneau.xml.xml1c.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({"serial"})
 class Xml_Test extends TestBase {
@@ -163,7 +164,8 @@ class Xml_Test extends TestBase {
 	}
 
 	/** Class with explicitly specified properties */
-	@Marshalled(typeName="Person1", properties="name,age")
+	@Marshalled(typeName="Person1")
+	@BeanType(properties="name,age")
 	public static class Person1 {
 		public int age;
 		protected Person1(String name, int age) {
@@ -425,7 +427,7 @@ class Xml_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Marshalled(properties="url,id,name")
+	@BeanType(properties="url,id,name")
 	public static class N {
 		@Xml(format=ELEMENT) public URL url;
 		public int id;
@@ -457,7 +459,7 @@ class Xml_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Marshalled(properties="url2,id2,name")
+	@BeanType(properties="url2,id2,name")
 	public static class O {
 		@MarshalledProp(name="url2") @Xml(format=ELEMENT) public URL url;
 		@MarshalledProp(name="id2") public int id;
@@ -489,7 +491,7 @@ class Xml_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Marshalled(properties="url2,id2,name")
+	@BeanType(properties="url2,id2,name")
 	public static class P {
 		@MarshalledProp(name="url2") @Xml(format=ATTR) public URL url;
 		@MarshalledProp(name="id2") @Xml(format=ATTR) public int id;

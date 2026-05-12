@@ -22,6 +22,7 @@ import java.util.Map.*;
 
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Tests various error conditions when defining beans.
@@ -44,7 +45,7 @@ class BeanMapErrors_Test extends TestBase {
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
-	@Marshalled(p="f1")
+	@BeanType(p="f1")
 	public static class A1 {
 		public int f1;
 
@@ -65,8 +66,8 @@ class BeanMapErrors_Test extends TestBase {
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
-	@MarshalledApply(on="Dummy",value=@Marshalled(p="dummy"))
-	@MarshalledApply(on="B1",value=@Marshalled(p="f1"))
+	@BeanTypeApply(on="Dummy",value=@BeanType(p="dummy"))
+	@BeanTypeApply(on="B1",value=@BeanType(p="f1"))
 	@MarshalledPropApply(on="Dummy",value=@MarshalledProp("dummy"))
 	@MarshalledPropApply(on="B1.f2",value=@MarshalledProp("f2"))
 	private static class B1Config {}
@@ -95,7 +96,7 @@ class BeanMapErrors_Test extends TestBase {
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
-	@Marshalled(p="f1")
+	@BeanType(p="f1")
 	public static class A2 {
 		public int f1;
 
@@ -115,8 +116,8 @@ class BeanMapErrors_Test extends TestBase {
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
 	}
 
-	@MarshalledApply(on="Dummy",value=@Marshalled(p="dummy"))
-	@MarshalledApply(on="B2",value=@Marshalled(p="f1"))
+	@BeanTypeApply(on="Dummy",value=@BeanType(p="dummy"))
+	@BeanTypeApply(on="B2",value=@BeanType(p="f1"))
 	@MarshalledPropApply(on="Dummy",value=@MarshalledProp("dummy"))
 	@MarshalledPropApply(on="B2.f2",value=@MarshalledProp("f2"))
 	private static class B2Config {}

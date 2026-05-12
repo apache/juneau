@@ -28,6 +28,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Annotation for specifying config properties defined in {@link MarshallingContext} and {@link MarshallingTraverseContext}.

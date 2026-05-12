@@ -26,6 +26,7 @@ import org.apache.juneau.json5.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({
 	"unused" // Private and package classes required for @Marshalled visibility testing
@@ -169,10 +170,10 @@ class Marshalled_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @Marshalled(on=X,properties=) should override @Marshalled(properties=)
+	// @Marshalled(on=X) @BeanType(properties=) should override @BeanType(properties=)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Marshalled(properties="a,b,c", excludeProperties="b")
+	@BeanType(properties="a,b,c", excludeProperties="b")
 	static class D1 {
 		public int a, b, c, d;
 
@@ -186,7 +187,7 @@ class Marshalled_Test extends TestBase {
 		}
 	}
 
-	@Marshalled(p="a,b,c", xp="b")
+	@BeanType(p="a,b,c", xp="b")
 	static class D2 {
 		public int a, b, c, d;
 
@@ -200,9 +201,9 @@ class Marshalled_Test extends TestBase {
 		}
 	}
 
-	@MarshalledApply(on="Dummy",value=@Marshalled(p="b,c,d",xp="c"))
-	@MarshalledApply(on="D1",value=@Marshalled(properties="b,c,d",excludeProperties="c"))
-	@MarshalledApply(on="D2",value=@Marshalled(p="b,c,d",xp="c"))
+	@BeanTypeApply(on="Dummy",value=@BeanType(p="b,c,d", xp="c"))
+	@BeanTypeApply(on="D1",value=@BeanType(properties="b,c,d", excludeProperties="c"))
+	@BeanTypeApply(on="D2",value=@BeanType(p="b,c,d", xp="c"))
 	static class DConfig {}
 
 	private static ClassInfo dConfig = ClassInfo.of(DConfig.class);
@@ -248,7 +249,7 @@ class Marshalled_Test extends TestBase {
 	}
 
 	@Test void d05_beanPropertiesExcludePropertiesCombined_beanContextBuilderOverride() throws Exception {
-		var ba = MarshalledApplyAnnotation.create("D1").value(MarshalledAnnotation.create().properties("b,c,d").excludeProperties("c").build()).build();
+		var ba = BeanTypeApplyAnnotation.create("D1").value(BeanTypeAnnotation.create().properties("b,c,d").excludeProperties("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
@@ -260,7 +261,7 @@ class Marshalled_Test extends TestBase {
 	}
 
 	@Test void d06_beanPXpCombined_beanContextBuilderOverride() throws Exception {
-		var ba = MarshalledApplyAnnotation.create("D2").value(MarshalledAnnotation.create().p("b,c,d").xp("c").build()).build();
+		var ba = BeanTypeApplyAnnotation.create("D2").value(BeanTypeAnnotation.create().p("b,c,d").xp("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
@@ -275,12 +276,12 @@ class Marshalled_Test extends TestBase {
 	// @MarshalledConfig(bpi/bpx) should override @Marshalled(bpi/bpx)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Marshalled(properties="a,b,c")
+	@BeanType(properties="a,b,c")
 	static class E1a {
 		public int a, b, c, d;
 	}
 
-	@Marshalled(excludeProperties="b")
+	@BeanType(excludeProperties="b")
 	static class E1 extends E1a {
 
 		public static E1 create() {
@@ -293,12 +294,12 @@ class Marshalled_Test extends TestBase {
 		}
 	}
 
-	@Marshalled(p="a,b,c")
+	@BeanType(p="a,b,c")
 	static class E2a {
 		public int a, b, c, d;
 	}
 
-	@Marshalled(xp="b")
+	@BeanType(xp="b")
 	static class E2 extends E2a {
 
 		public static E2 create() {
@@ -311,9 +312,9 @@ class Marshalled_Test extends TestBase {
 		}
 	}
 
-	@MarshalledApply(on="Dummy",value=@Marshalled(p="b,c,d",xp="c"))
-	@MarshalledApply(on="E1",value=@Marshalled(properties="b,c,d",excludeProperties="c"))
-	@MarshalledApply(on="E2",value=@Marshalled(p="b,c,d",xp="c"))
+	@BeanTypeApply(on="Dummy",value=@BeanType(p="b,c,d", xp="c"))
+	@BeanTypeApply(on="E1",value=@BeanType(properties="b,c,d", excludeProperties="c"))
+	@BeanTypeApply(on="E2",value=@BeanType(p="b,c,d", xp="c"))
 	static class EConfig {}
 
 	private static ClassInfo eConfig = ClassInfo.of(EConfig.class);
@@ -359,7 +360,7 @@ class Marshalled_Test extends TestBase {
 	}
 
 	@Test void e05_beanPropertiersExcludePropertiesCombined_multipleMarshalledAnnotations_beanContextBuilderOverride() throws Exception {
-		var ba = MarshalledApplyAnnotation.create("E1").value(MarshalledAnnotation.create().properties("b,c,d").excludeProperties("c").build()).build();
+		var ba = BeanTypeApplyAnnotation.create("E1").value(BeanTypeAnnotation.create().properties("b,c,d").excludeProperties("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 
@@ -371,7 +372,7 @@ class Marshalled_Test extends TestBase {
 	}
 
 	@Test void e06_beanBpiBpxCombined_multipleMarshalledAnnotations_beanContextBuilderOverride() throws Exception {
-		var ba = MarshalledApplyAnnotation.create("E2").value(MarshalledAnnotation.create().p("b,c,d").xp("c").build()).build();
+		var ba = BeanTypeApplyAnnotation.create("E2").value(BeanTypeAnnotation.create().p("b,c,d").xp("c").build()).build();
 		var js = Json5Serializer.create().annotations(ba).build();
 		var jp = Json5Parser.create().annotations(ba).build();
 

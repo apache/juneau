@@ -28,6 +28,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.swaps.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Round-trip tests for {@link JsonlSerializer} and {@link JsonlParser}.
@@ -37,7 +38,7 @@ import org.junit.jupiter.api.*;
 })
 class JsonlRoundTrip_Test extends TestBase {
 
-	@Marshalled(properties = "name,age")
+	@BeanType(properties = "name,age")
 	public static class Person {
 		public String name;
 		public int age;
@@ -49,7 +50,7 @@ class JsonlRoundTrip_Test extends TestBase {
 		}
 	}
 
-	@Marshalled(properties = "name,address,tags")
+	@BeanType(properties = "name,address,tags")
 	public static class ComplexPerson {
 		public String name;
 		public Address address;
@@ -63,7 +64,7 @@ class JsonlRoundTrip_Test extends TestBase {
 		}
 	}
 
-	@Marshalled(properties = "street,city")
+	@BeanType(properties = "street,city")
 	public static class Address {
 		public String street;
 		public String city;

@@ -34,6 +34,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({
 	"rawtypes",
@@ -526,7 +527,7 @@ class BeanMap_Test extends TestBase {
 		assertEquals("{s:['foo'],s2:[['foo']],i:[0,0,0],i2:[[0,0,0],[0,0,0]]}", Json5Serializer.DEFAULT.serialize(t));
 	}
 
-	@Marshalled(p="s,s2,i,i2")
+	@BeanType(p="s,s2,i,i2")
 	public static class E {
 		public String[] s;
 		public String[][] s2;
@@ -929,7 +930,7 @@ class BeanMap_Test extends TestBase {
 		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "4,5,6");
 	}
 
-	@Marshalled(propertyNamer=PropertyNamerDLC.class)
+	@BeanType(propertyNamer=PropertyNamerDLC.class)
 	public static class P1 {
 		public int foo, barBaz, bingBooURL;
 	}
@@ -944,9 +945,9 @@ class BeanMap_Test extends TestBase {
 		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "4,5,6");
 	}
 
-	@MarshalledApply(on="Dummy1",value=@Marshalled(propertyNamer=PropertyNamerDLC.class))
-	@MarshalledApply(on="P1c",value=@Marshalled(propertyNamer=PropertyNamerDLC.class))
-	@MarshalledApply(on="Dummy2",value=@Marshalled(propertyNamer=PropertyNamerDLC.class))
+	@BeanTypeApply(on="Dummy1",value=@BeanType(propertyNamer=PropertyNamerDLC.class))
+	@BeanTypeApply(on="P1c",value=@BeanType(propertyNamer=PropertyNamerDLC.class))
+	@BeanTypeApply(on="Dummy2",value=@BeanType(propertyNamer=PropertyNamerDLC.class))
 	private static class P1cConfig {}
 
 	public static class P1c {
@@ -966,7 +967,7 @@ class BeanMap_Test extends TestBase {
 		assertBean(m.getBean(), "fooBar,bazBING", "3,4");
 	}
 
-	@Marshalled(propertyNamer=PropertyNamerDLC.class)
+	@BeanType(propertyNamer=PropertyNamerDLC.class)
 	public static class P2 {
 		private int fooBar;
 		public int getFooBar() { return fooBar; }
@@ -1661,7 +1662,7 @@ class BeanMap_Test extends TestBase {
 		public String a3="3", a4="4";
 	}
 
-	@Marshalled(stopClass=V.class)
+	@BeanType(stopClass=V.class)
 	public static class V3 extends V2 {
 		public String a5="5", a6="6";
 	}
@@ -1672,9 +1673,9 @@ class BeanMap_Test extends TestBase {
 		assertEquals("{a3:'3',a4:'4',a5:'5',a6:'6'}", ws.toString(new V3c()));
 	}
 
-	@MarshalledApply(on="Dummy1",value=@Marshalled(stopClass=Vc.class))
-	@MarshalledApply(on="V3c",value=@Marshalled(stopClass=Vc.class))
-	@MarshalledApply(on="Dummy2",value=@Marshalled(stopClass=Vc.class))
+	@BeanTypeApply(on="Dummy1",value=@BeanType(stopClass=Vc.class))
+	@BeanTypeApply(on="V3c",value=@BeanType(stopClass=Vc.class))
+	@BeanTypeApply(on="Dummy2",value=@BeanType(stopClass=Vc.class))
 	private static class VcConfig {}
 
 	public static class Vc {
@@ -1707,7 +1708,7 @@ class BeanMap_Test extends TestBase {
 		public String getA4() {return "4";}
 	}
 
-	@Marshalled(stopClass=W.class)
+	@BeanType(stopClass=W.class)
 	public static class W3 extends W2 {
 		public String getA5() {return "5";}
 		public String getA6() {return "6";}

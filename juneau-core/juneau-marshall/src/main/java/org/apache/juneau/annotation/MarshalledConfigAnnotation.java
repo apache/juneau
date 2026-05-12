@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -88,7 +89,7 @@ public class MarshalledConfigAnnotation {
 			classes(a.notBeanClasses()).ifPresent(b::notBeanClasses);
 			classes(a.notBeanClasses_replace()).ifPresent(x -> { b.notBeanClasses().clear(); b.notBeanClasses(x);});
 			type(a.propertyNamer()).ifPresent(b::propertyNamer);
-			l(a.interfaces()).stream().map(x -> MarshalledApplyAnnotation.create(x).value(MarshalledAnnotation.create().interfaceClass(x).build()).build()).forEach(b::annotations);
+			l(a.interfaces()).stream().map(x -> BeanTypeApplyAnnotation.create(x).value(BeanTypeAnnotation.create().interfaceClass(x).build()).build()).forEach(b::annotations);
 			strings(a.notBeanPackages()).ifPresent(b::notBeanPackages);
 			strings(a.notBeanPackages_replace()).ifPresent(x -> {b.notBeanPackages().clear(); b.notBeanPackages(x);});
 			// @formatter:on

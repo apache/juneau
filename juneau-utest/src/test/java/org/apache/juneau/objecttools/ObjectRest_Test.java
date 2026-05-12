@@ -29,6 +29,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({"rawtypes","serial","java:S5961"})
 class ObjectRest_Test extends TestBase {
@@ -219,7 +220,7 @@ class ObjectRest_Test extends TestBase {
 		}
 	}
 
-	@Marshalled(p="street,city,state,zip,isCurrent")
+	@BeanType(p="street,city,state,zip,isCurrent")
 	public static class Address {
 		public String street;
 		public String city;
@@ -242,7 +243,8 @@ class ObjectRest_Test extends TestBase {
 		}
 	}
 
-	@Marshalled(typeName="Person",p="name,age,addresses")
+	@Marshalled(typeName="Person")
+	@BeanType(p="name,age,addresses")
 	public static class Person {
 		public String name;
 		public int age;

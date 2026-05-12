@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 class MarshalledFilter_Test extends TestBase {
 
@@ -107,7 +108,7 @@ class MarshalledFilter_Test extends TestBase {
 		public int getP2() { return 2; }
 	}
 
-	@Marshalled(stopClass=C2.class)
+	@BeanType(stopClass=C2.class)
 	public class C3 extends C2 {
 		public int f3 = 3;
 		public int getP3() { return 3; }
@@ -123,7 +124,7 @@ class MarshalledFilter_Test extends TestBase {
 		public int getP1() { return 1; }
 	}
 
-	@Marshalled(stopClass=D2.class)
+	@BeanType(stopClass=D2.class)
 	public class D2 extends D1 {
 		public int f2 = 2;
 		public int getP2() { return 2; }
@@ -144,13 +145,13 @@ class MarshalledFilter_Test extends TestBase {
 		public int getP1() { return 1; }
 	}
 
-	@Marshalled(stopClass=E2.class)
+	@BeanType(stopClass=E2.class)
 	public class E2 extends E1 {
 		public int f2 = 2;
 		public int getP2() { return 2; }
 	}
 
-	@Marshalled(xp="foo")
+	@BeanType(xp="foo")
 	public class E3 extends E2 {
 		public int f3 = 3;
 		public int getP3() { return 3; }
@@ -161,7 +162,7 @@ class MarshalledFilter_Test extends TestBase {
 		assertJson("{f3:3,p3:3}", e3);
 	}
 
-	@Marshalled(stopClass=F1.class)
+	@BeanType(stopClass=F1.class)
 	public class F1 {
 		public int f1 = 1;
 		public int getP1() { return 1; }
@@ -172,7 +173,7 @@ class MarshalledFilter_Test extends TestBase {
 		public int getP2() { return 2; }
 	}
 
-	@Marshalled(stopClass=F2.class)
+	@BeanType(stopClass=F2.class)
 	public class F3 extends F2 {
 		public int f3 = 3;
 		public int getP3() { return 3; }

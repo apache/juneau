@@ -27,6 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({
 	"serial", // Serialization not relevant
@@ -183,7 +184,7 @@ class XmlCollapsed_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Marshalled(properties="f1,f2,f3,f4")
+	@BeanType(properties="f1,f2,f3,f4")
 	public static class D {
 		private List<String> f1 = new LinkedList<>();
 		@Xml(format=COLLAPSED) public List<String> getF1() { return f1; }
@@ -222,7 +223,7 @@ class XmlCollapsed_Test extends TestBase {
 		validateXml(t, s);
 	}
 
-	@Marshalled(properties="f1,f2")
+	@BeanType(properties="f1,f2")
 	public static class E {
 		private ArrayList<String> f1;
 		@Xml(format=COLLAPSED) public ArrayList<String> getF1() { return f1; }

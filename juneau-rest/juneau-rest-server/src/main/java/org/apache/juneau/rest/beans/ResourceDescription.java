@@ -22,6 +22,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Shortcut label for child resources.
@@ -39,7 +40,7 @@ import org.apache.juneau.http.annotation.*;
 
  * </ul>
  */
-@Marshalled(properties = "name,description", findFluentSetters = true)
+@BeanType(properties = "name,description", findFluentSetters = true)
 @Response(schema = @Schema(ignore = true))
 public class ResourceDescription implements Comparable<ResourceDescription> {
 

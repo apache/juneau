@@ -30,6 +30,7 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({"serial","rawtypes"})
 class BasicHtml_Test extends TestBase {
@@ -2936,7 +2937,8 @@ class BasicHtml_Test extends TestBase {
 		public String[] b;
 	}
 
-	@Marshalled(dictionary={A.class},p="a,ia,aa,o")
+	@Marshalled(dictionary={A.class})
+	@BeanType(p="a,ia,aa,o")
 	public static class BeanWithAbstractFields {
 		public A a;
 		public IA ia;
@@ -2952,7 +2954,8 @@ class BasicHtml_Test extends TestBase {
 		}
 	}
 
-	@Marshalled(dictionary={A.class},p="a,ia1,ia2,aa1,aa2,o1,o2")
+	@Marshalled(dictionary={A.class})
+	@BeanType(p="a,ia1,ia2,aa1,aa2,o1,o2")
 	public static class BeanWithAbstractArrayFields {
 		public A[] a;
 		public IA[] ia1, ia2;

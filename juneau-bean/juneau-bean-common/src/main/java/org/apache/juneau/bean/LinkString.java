@@ -28,6 +28,7 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Simple bean that implements a hyperlink for the HTML serializer.
@@ -44,7 +45,7 @@ import org.apache.juneau.serializer.*;
  *
  */
 @HtmlLink
-@Marshalled(findFluentSetters = true)
+@BeanType(findFluentSetters = true)
 public class LinkString implements Comparable<LinkString> {
 	private String name;
 	private java.net.URI uri;

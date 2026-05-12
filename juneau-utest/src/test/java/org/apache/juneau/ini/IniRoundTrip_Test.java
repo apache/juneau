@@ -24,6 +24,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.Test;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Round-trip tests for {@link IniSerializer} and {@link IniParser}.
@@ -33,7 +34,7 @@ import org.junit.jupiter.api.Test;
 })
 class IniRoundTrip_Test extends TestBase {
 
-	@Marshalled(properties = "name,age")
+	@BeanType(properties = "name,age")
 	public static class Person {
 		public String name;
 		public int age;
@@ -45,7 +46,7 @@ class IniRoundTrip_Test extends TestBase {
 		}
 	}
 
-	@Marshalled(properties = "name,address,tags")
+	@BeanType(properties = "name,address,tags")
 	public static class ComplexPerson {
 		public String name;
 		public Address address;
@@ -59,7 +60,7 @@ class IniRoundTrip_Test extends TestBase {
 		}
 	}
 
-	@Marshalled(properties = "street,city")
+	@BeanType(properties = "street,city")
 	public static class Address {
 		public String street;
 		public String city;

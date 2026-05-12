@@ -35,6 +35,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.bean.*;
 
 class RestClient_Config_MarshallingContext_Test extends TestBase {
 

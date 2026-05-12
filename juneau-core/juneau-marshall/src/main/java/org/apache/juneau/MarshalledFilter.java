@@ -26,9 +26,11 @@ import java.beans.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Filter for customizing how POJOs and beans are handled during serialization and parsing.
@@ -130,10 +132,34 @@ public class MarshalledFilter {
 		 * @param annotations The annotations to apply.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for annotation application
-		})
 		public Builder applyAnnotations(List<Marshalled> annotations) {
+
+			annotations.forEach(x -> {
+				if (ne(x.typeName()))
+					typeName(x.typeName());
+				if (isNotVoid(x.interceptor()))
+					interceptor(x.interceptor());
+				if (isNotVoid(x.implClass()))
+					implClass(x.implClass());
+				if (isNotEmptyArray(x.dictionary()))
+					dictionary(x.dictionary());
+				if (ne(x.example()))
+					example(x.example());
+			});
+			return this;
+		}
+
+		/**
+		 * Applies the information in the specified list of {@link BeanType @BeanType} annotations to this filter.
+		 *
+		 * <p>
+		 * Carries the bean-modeling attributes (property lists, ordering, fluent setters, stop class, etc.)
+		 * that used to live on {@link Marshalled @Marshalled} before the bean-layer split.
+		 *
+		 * @param annotations The annotations to apply.
+		 * @return This object.
+		 */
+		public Builder applyBeanTypeAnnotations(List<BeanType> annotations) {
 
 			annotations.forEach(x -> {
 				if (isAnyNotEmpty(x.properties(), x.p()))
@@ -148,22 +174,12 @@ public class MarshalledFilter {
 					readOnlyProperties(x.readOnlyProperties(), x.ro());
 				if (isAnyNotEmpty(x.writeOnlyProperties(), x.wo()))
 					writeOnlyProperties(x.writeOnlyProperties(), x.wo());
-				if (ne(x.typeName()))
-					typeName(x.typeName());
 				if (isNotVoid(x.propertyNamer()))
 					propertyNamer(x.propertyNamer());
 				if (isNotVoid(x.interfaceClass()))
 					interfaceClass(x.interfaceClass());
 				if (isNotVoid(x.stopClass()))
 					stopClass(x.stopClass());
-				if (isNotVoid(x.interceptor()))
-					interceptor(x.interceptor());
-				if (isNotVoid(x.implClass()))
-					implClass(x.implClass());
-				if (isNotEmptyArray(x.dictionary()))
-					dictionary(x.dictionary());
-				if (ne(x.example()))
-					example(x.example());
 			});
 			return this;
 		}
@@ -233,7 +249,7 @@ public class MarshalledFilter {
 		 * Specifies properties to exclude from the bean class.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Marshalled#excludeProperties()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#excludeProperties()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesExcludes(Class, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesExcludes(String, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesExcludes(Map)}
@@ -258,7 +274,7 @@ public class MarshalledFilter {
 		 * When enabled, fluent setters are detected on beans.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Marshalled#findFluentSetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#findFluentSetters()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#findFluentSetters()}
 		 * </ul>
 		 *
@@ -338,7 +354,7 @@ public class MarshalledFilter {
 		 * When specified, only the list of properties defined on the interface class will be used during serialization.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Marshalled#interfaceClass()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#interfaceClass()}
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
@@ -370,7 +386,7 @@ public class MarshalledFilter {
 		 * Specifies the set and order of names of properties associated with the bean class.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Marshalled#properties()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#properties()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanProperties(Class, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanProperties(String, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanProperties(Map)}
@@ -395,7 +411,7 @@ public class MarshalledFilter {
 		 * The class to use for calculating bean property names.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Marshalled#propertyNamer()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#propertyNamer()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#propertyNamer(Class)}
 		 * 	<li class='jc'>{@link PropertyNamer}
 		 * </ul>
@@ -431,7 +447,7 @@ public class MarshalledFilter {
 		 * Specifies one or more properties on a bean that are read-only despite having valid getters.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Marshalled#readOnlyProperties()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#readOnlyProperties()}
 		 * 	<li class='ja'>{@link MarshalledProp#ro()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesReadOnly(Class, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesReadOnly(String, String)}
@@ -454,7 +470,7 @@ public class MarshalledFilter {
 		 * Opt out of alphabetical property sorting for this specific bean.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Marshalled#unsorted()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#unsorted()}
 		 * 	<li class='jf'>{@link MarshallingContext.Builder#unsortedProperties()}
 		 * </ul>
 		 *
@@ -469,7 +485,7 @@ public class MarshalledFilter {
 		 * Opt out of alphabetical property sorting for this specific bean.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Marshalled#unsorted()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#unsorted()}
 		 * 	<li class='jf'>{@link MarshallingContext.Builder#unsortedProperties()}
 		 * </ul>
 		 *
@@ -491,7 +507,7 @@ public class MarshalledFilter {
 		 * Identical in purpose to the stop class specified by {@link Introspector#getBeanInfo(Class, Class)}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Marshalled#stopClass()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#stopClass()}
 		 * </ul>
 		 *
 		 * @param value The new value for this setting.
@@ -541,7 +557,7 @@ public class MarshalledFilter {
 		 * Specifies one or more properties on a bean that are write-only despite having valid setters.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Marshalled#writeOnlyProperties()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#writeOnlyProperties()}
 		 * 	<li class='ja'>{@link MarshalledProp#wo()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesWriteOnly(Class, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesWriteOnly(String, String)}
