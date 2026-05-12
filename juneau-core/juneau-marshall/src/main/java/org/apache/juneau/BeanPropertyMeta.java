@@ -92,14 +92,16 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		MethodInfo getter;  // Package-private for BeanMeta access
 		MethodInfo setter;  // Package-private for BeanMeta access
 		MethodInfo extraKeys;  // Package-private for BeanMeta access
+		ClassMeta<?> rawTypeMeta;  // Package-private for BeanMeta access (used to install swap-aware transforms)
+		ObjectSwap swap;  // Package-private for BeanMeta access (used to install swap-aware transforms)
+		BiFunction<MarshallingSession,Object,Object> readTransform;  // Package-private; defaults to identity if null.
+		BiFunction<MarshallingSession,Object,Object> writeTransform; // Package-private; defaults to identity if null.
 		private boolean isConstructorArg;
 		private boolean isUri;
 		private boolean isDyna;
 		private boolean isDynaGetterMap;
-		private ClassMeta<?> rawTypeMeta;
 		private ClassMeta<?> typeMeta;
 		private List<String> properties;
-		private ObjectSwap swap;
 		private BeanRegistry beanRegistry;
 		private Object overrideValue;
 		private BeanPropertyMeta delegateFor;
@@ -140,6 +142,46 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 */
 		public Builder delegateFor(BeanPropertyMeta value) {
 			delegateFor = assertArgNotNull(ARG_value, value);
+			return this;
+		}
+
+		/**
+		 * Installs the read-side value transform for this property.
+		 *
+		 * <p>
+		 * Applied to the raw getter result by {@link BeanPropertyMeta#get(BeanMap,String)} before it is returned to the
+		 * caller.  Defaults to identity (raw value passes through unchanged).
+		 *
+		 * <p>
+		 * Used by the marshalling layer to install {@link ObjectSwap}-aware behavior at bean-meta construction time;
+		 * the bean-modeling layer itself only invokes the function and does not directly reference
+		 * {@link ObjectSwap}.
+		 *
+		 * @param value The transform function.  Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder readTransform(BiFunction<MarshallingSession,Object,Object> value) {
+			readTransform = assertArgNotNull(ARG_value, value);
+			return this;
+		}
+
+		/**
+		 * Installs the write-side value transform for this property.
+		 *
+		 * <p>
+		 * Applied to the incoming value by {@link BeanPropertyMeta#set(BeanMap,String,Object)} before the raw setter is
+		 * invoked.  Defaults to identity (raw value passes through unchanged).
+		 *
+		 * <p>
+		 * Used by the marshalling layer to install {@link ObjectSwap}-aware behavior at bean-meta construction time;
+		 * the bean-modeling layer itself only invokes the function and does not directly reference
+		 * {@link ObjectSwap}.
+		 *
+		 * @param value The transform function.  Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder writeTransform(BiFunction<MarshallingSession,Object,Object> value) {
+			writeTransform = assertArgNotNull(ARG_value, value);
 			return this;
 		}
 
@@ -520,10 +562,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final Object overrideValue;                              // The bean property value (if it's an overridden delegate).
 	private final List<String> properties;                           // The value of the @MarshalledProp(properties) annotation (unmodifiable).
 	private final ClassMeta<?> rawTypeMeta;                          // The real class type of the bean property.
+	private final BiFunction<MarshallingSession,Object,Object> readTransform;  // Applied to raw getter result; identity by default.
 	private final boolean readOnly;                                  // True if this property is read-only.
 	private final MethodInfo setter;                                 // The bean property setter.
 	private final ObjectSwap swap;                                   // ObjectSwap defined only via @MarshalledProp(format=...) annotation.
 	private final ClassMeta<?> typeMeta;                             // The transformed class type of the bean property.
+	private final BiFunction<MarshallingSession,Object,Object> writeTransform; // Applied to incoming value before raw setter; identity by default.
 	private final boolean writeOnly;                                 // True if this property is write-only.
 
 	/**
@@ -555,6 +599,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		swap = b.swap;
 		typeMeta = b.typeMeta;
 		writeOnly = b.writeOnly;
+		readTransform = b.readTransform != null ? b.readTransform : (session, o) -> o;
+		writeTransform = b.writeTransform != null ? b.writeTransform : (session, o) -> o;
 
 		ap = bc.getAnnotationProvider();
 		hashCode = h(beanMeta, name);
@@ -1042,8 +1088,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			var session = m.getMarshallingSession();
 
-			// Convert to raw form.
-			value1 = unswap(session, value1);
+			// Apply the install-time write transform (identity by default; swap-aware in the marshalling layer).
+			value1 = writeTransform.apply(session, value1);
 
 			if (m.bean == null) {
 
@@ -1206,7 +1252,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			} else {
 				if (nn(swap) && value1 != null && swap.getSwapClass().isAssignableFrom(value1.getClass())) {
-					value1 = swap.unswap(session, value1, rawTypeMeta);
+					// Defensive double-unswap path: value1 is still in swapped form (the outer writeTransform
+					// did not normalize it for some reason).  Route through the install-time write transform so
+					// BeanPropertyMeta itself does not invoke ObjectSwap directly.
+					value1 = writeTransform.apply(session, value1);
 				} else {
 					// Pass bean as outer for non-static inner class instantiation (e.g. J2 with string constructor)
 					value1 = session.convertToMemberType(bean, value1, rawTypeMeta);
@@ -1298,32 +1347,28 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	}
 
 	private Object swapAndFilterProperty(MarshallingSession session, Object o) {
-		try {
-			o = swap(session, o);
-			if (o == null)
-				return null;
-			if (nn(properties)) {
-				if (rawTypeMeta.isArray()) {
-					var a = (Object[])o;
-					var l1 = new DelegateList(rawTypeMeta);
-					var childType1 = rawTypeMeta.getElementType();
-					for (var c1 : a)
-						l1.add(applyChildPropertiesFilter(session, childType1, c1));
-					return l1;
-				} else if (rawTypeMeta.isCollection()) {
-					var c = (Collection)o;
-					var l = listOfSize(c.size());
-					var childType = rawTypeMeta.getElementType();
-					c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));
-					return l;
-				} else {
-					return applyChildPropertiesFilter(session, rawTypeMeta, o);
-				}
+		o = readTransform.apply(session, o);
+		if (o == null)
+			return null;
+		if (nn(properties)) {
+			if (rawTypeMeta.isArray()) {
+				var a = (Object[])o;
+				var l1 = new DelegateList(rawTypeMeta);
+				var childType1 = rawTypeMeta.getElementType();
+				for (var c1 : a)
+					l1.add(applyChildPropertiesFilter(session, childType1, c1));
+				return l1;
+			} else if (rawTypeMeta.isCollection()) {
+				var c = (Collection)o;
+				var l = listOfSize(c.size());
+				var childType = rawTypeMeta.getElementType();
+				c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));
+				return l;
+			} else {
+				return applyChildPropertiesFilter(session, rawTypeMeta, o);
 			}
-			return o;
-		} catch (SerializeException e) {
-			throw bex(e);
 		}
+		return o;
 	}
 
 	private Object invokeGetter(Object bean, String pName) throws IllegalArgumentException {
@@ -1368,46 +1413,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 		throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name,
 			getClassMeta().getName(), cn(val));
-	}
-
-	private Object swap(MarshallingSession session, Object o) throws SerializeException {
-		try {
-			// First use swap defined via @MarshalledProp.
-			if (nn(swap))
-				return swap.swap(session, o);
-			if (o == null)
-				return null;
-			// Otherwise, look it up via bean context.
-			if (rawTypeMeta.hasChildSwaps()) {
-				ObjectSwap f = rawTypeMeta.getChildObjectSwapForSwap(o.getClass());
-				if (nn(f))
-					return f.swap(session, o);
-			}
-			return o;
-		} catch (SerializeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new SerializeException(e);
-		}
-	}
-
-	private Object unswap(MarshallingSession session, Object o) throws ParseException {
-		try {
-			if (nn(swap))
-				return swap.unswap(session, o, rawTypeMeta);
-			if (o == null)
-				return null;
-			if (rawTypeMeta.hasChildSwaps()) {
-				ObjectSwap f = rawTypeMeta.getChildObjectSwapForUnswap(o.getClass());
-				if (nn(f))
-					return f.unswap(session, o, rawTypeMeta);
-			}
-			return o;
-		} catch (ParseException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ParseException(e);
-		}
 	}
 
 	/**
