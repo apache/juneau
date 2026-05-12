@@ -95,24 +95,43 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	/** The BeanMeta associated with the class of the object. */
 	protected BeanMeta<T> meta;
-	private final MarshallingSession session;
+	private MarshallingSession session;
 
 	private final String typePropertyName;
 
 	/**
-	 * Instance of this class are instantiated through the MarshallingContext class.
+	 * Constructor.
 	 *
-	 * @param session The bean session object that created this bean map.
+	 * <p>
+	 * Bean-modeling-only constructor. Does not carry a {@link MarshallingSession} reference.
+	 * The marshalling layer wires the session in via {@link #setMarshallingSession(MarshallingSession)}
+	 * immediately after construction.
+	 *
 	 * @param bean The bean to wrap inside this map.
 	 * @param meta The metadata associated with the bean class.
 	 */
-	protected BeanMap(MarshallingSession session, T bean, BeanMeta<T> meta) {
-		this.session = session;
+	protected BeanMap(T bean, BeanMeta<T> meta) {
 		this.bean = bean;
 		this.meta = meta;
 		if (ne(meta.getConstructorArgs()))
 			propertyCache = new TreeMap<>();
-		this.typePropertyName = session.getBeanTypePropertyName(meta.getClassMeta());
+		this.typePropertyName = meta.getTypePropertyName();
+	}
+
+	/**
+	 * Wires this bean map to a {@link MarshallingSession}.
+	 *
+	 * <p>
+	 * Transitional API used by the marshalling layer (e.g. {@link MarshallingSession#toBeanMap(Object)})
+	 * to wire a session into a {@link BeanMap} immediately after construction. Required for any
+	 * marshalling-side operation that depends on session-aware behavior (type conversion, child
+	 * collection construction, etc.). Will be removed when {@link BeanMap} is fully decoupled from
+	 * the marshalling layer (TODO-5 Step 5+).
+	 *
+	 * @param value The marshalling session that produced this bean map.
+	 */
+	protected void setMarshallingSession(MarshallingSession value) {
+		this.session = value;
 	}
 
 	/**

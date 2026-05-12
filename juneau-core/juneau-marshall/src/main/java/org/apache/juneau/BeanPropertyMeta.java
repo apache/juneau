@@ -1297,7 +1297,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (o == null)
 			return null;
 		if (cm.isBean())
-			return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
+			return newBeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
 		if (cm.isMap()) {
 			var propsArray = properties == null ? null : properties.toArray(new String[0]);
 			return new FilteredKeyMap(cm, (Map)o, propsArray);
@@ -1309,9 +1309,18 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			}
 			var bm = bc.getBeanMeta(o.getClass());
 			if (nn(bm))
-				return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
+				return newBeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
 		}
 		return o;
+	}
+
+	@SuppressWarnings({
+		"unchecked"  // Type erasure requires unchecked cast for filtered bean map construction
+	})
+	private static BeanMap newBeanMap(MarshallingSession session, Object o, BeanMetaFiltered meta) {
+		var bm = new BeanMap(o, meta);
+		bm.setMarshallingSession(session);
+		return bm;
 	}
 
 	@SuppressWarnings({

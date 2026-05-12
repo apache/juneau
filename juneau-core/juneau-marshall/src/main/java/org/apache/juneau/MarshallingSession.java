@@ -1029,7 +1029,9 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		T bean = null;
 		if (e(m.getConstructorArgs()))
 			bean = newBean(outer, c);
-		return new BeanMap<>(this, bean, m);
+		var bm = new BeanMap<>(bean, m);
+		bm.setMarshallingSession(this);
+		return bm;
 	}
 
 	/**
@@ -1126,7 +1128,9 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		BeanMeta m = cm.getBeanMeta();
 		if (m == null)
 			throw bex(c, "Class is not a bean.  Reason=''{0}''", cm.getNotABeanReason());
-		return new BeanMap<>(this, o, m);
+		var bm = new BeanMap<>(o, m);
+		bm.setMarshallingSession(this);
+		return bm;
 	}
 
 	/**
