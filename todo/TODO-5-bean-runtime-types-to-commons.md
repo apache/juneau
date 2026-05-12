@@ -4,6 +4,25 @@ This is the remaining work from **Phase 5 of the bean-layer split**. Phase 5a (t
 
 ---
 
+## Status (as of Phase 5b checkpoint)
+
+**Step 1 complete.** A `BeanConfigContext` POJO + builder now lives in `commons.bean`; `MarshallingContext.getBeanConfigContext()` returns a memoized snapshot view. The eight runtime types still live in `juneau-marshall` and still use `MarshallingContext` directly — Step 1 is purely additive infrastructure that future steps can lean on.
+
+- [x] **Step 1** — `BeanConfigContext` POJO + builder in `commons.bean`. Carries: visibility settings, all `beans*Require*` toggles, `findFluentSetters`, `unsortedProperties`, `useInterfaceProxies`, `useJavaBeanIntrospector`, `ignoreMissingSetters`, `ignoreTransientFields`, `ignoreUnknownBeanProperties`, `propertyNamer`, `beanTypePropertyName`, `notBeanPackageNames` / `notBeanPackagePrefixes` / `notBeanClasses`, `BeanStore`, `AnnotationProvider`, optional `Predicate<ClassInfo>` override for `isNotABean`. Includes `DEFAULT` singleton, `create()` builder factory, `copy()`. `MarshallingContext` exposes a memoized `getBeanConfigContext()` returning a snapshot. Unit tests at `juneau-utest/src/test/java/org/apache/juneau/commons/bean/BeanConfigContext_Test.java` cover 100% instructions / 97% branches.
+- [ ] **Step 2** — Replace `ClassMeta` with `ClassInfo` in `BeanMeta` / `BeanPropertyMeta`. Most `cm.*` calls (`isAnonymousClass`, `isMemberClass`, `isAssignableTo`, `getModifiers`, `getRecordComponents`, `inner`, …) are pure reflection that already exists on `ClassInfo`. Two outliers — `cm.getProxyInvocationHandler()` (replace with a `BeanConfigContext` hook or move proxy creation into `BeanMeta`) and `cm.getMarshallingContext().string()` (use a plain `Class<String>`/`ClassInfo`).
+- [ ] **Step 3** — Remove swap-aware `get/set` from `BeanPropertyMeta`. Add identity-default `BiFunction<Object,Object,Object>` callbacks (or a small `BeanPropertyTransform` SPI) so the marshalling layer installs swap-aware behavior at session construction.
+- [ ] **Step 4** — Remove `MarshallingSession` back-pointer from `BeanMap`. After Step 3, `BeanMap.get/put` are raw property reads/writes; `MarshallingSession.toBeanMap` wraps a `BeanMap` for serialization and applies swaps externally.
+- [ ] **Step 5** — Remove `BeanRegistry` field from `BeanPropertyMeta`. Lift dictionary metadata into a marshalling-side companion (`MarshalledPropertyMeta` or a side-map keyed by `BeanPropertyMeta`).
+- [ ] **Step 6** — `BeanMeta` becomes constructible by both `ClassMeta` and direct `commons.bean` callers via `BeanMeta.of(MyClass.class, BeanConfigContext.DEFAULT)`. `ClassMeta` becomes a *consumer* of `BeanMeta` rather than its creator.
+- [ ] **Step 7** — Re-check whether `ExtendedBeanMeta` and per-format extensions (`XmlBeanMeta`, `RdfBeanMeta`, `HtmlBeanMeta`) need to follow `BeanMeta` to `commons.bean`. Default expectation: they stay in `juneau-marshall`.
+- [ ] **Step 8** — `git mv` the eight runtime types into `juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/bean/`. Verify `juneau-commons` still compiles standalone (`cd juneau-core/juneau-commons && mvn clean compile`).
+- [ ] **Step 9** — Reference sweep: 80–120 unique files (mostly inside `juneau-marshall`). Update imports, Javadoc `{@link …}` references, package-info docs.
+- [ ] **Step 10** — Update `juneau-docs` release notes / migration guide (`docs/pages/release-notes/9.5.0.md`, `## Package Moves` section) with the bean-runtime relocations.
+
+The "incomplete-but-documented over broken-build" rule from Phase 5a still applies. When picking up the next slice of this work, Step 2 is the recommended next checkpoint — it removes one of the two big blockers (`ClassMeta` coupling) without yet attempting the swap/registry/session decoupling that requires reworking serializer/parser code paths.
+
+---
+
 ## Goal
 
 Move these eight `BeanXxx` runtime types out of `org.apache.juneau` (in `juneau-marshall`) into `org.apache.juneau.commons.bean` (in `juneau-commons`) so the **bean-modeling runtime** is independently usable without dragging in the full marshalling stack:

@@ -3640,6 +3640,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 	}
 
 	private final NullableSupplier<WriterSerializer> beanToStringSerializer;
+	private final NullableSupplier<BeanConfigContext> beanConfigContext;
 	private final BeanRegistry beanRegistry;
 	private final MarshallingSession defaultSession;
 	private final ConfigurableConverter converter;
@@ -3757,6 +3758,40 @@ public class MarshallingContext extends Context implements ConversionFinder {
 		beanRegistry = new BeanRegistry(this, null, list());
 		defaultSession = createSession().unmodifiable().build();
 		beanToStringSerializer = memoize(() -> Json5Serializer.create().marshallingContext(this).build());
+		beanConfigContext = memoize(this::buildBeanConfigContext);
+	}
+
+	/*
+	 * Builds the {@link BeanConfigContext} snapshot exposed by {@link #getBeanConfigContext()}.
+	 *
+	 * Lifts the bean-modeling subset of this context's settings into a portable POJO that the bean-modeling
+	 * runtime in {@code commons.bean} can consume without referencing any marshalling-aware types.
+	 */
+	private BeanConfigContext buildBeanConfigContext() {
+		return BeanConfigContext.create()
+			.beanClassVisibility(beanClassVisibility)
+			.beanConstructorVisibility(beanConstructorVisibility)
+			.beanFieldVisibility(beanFieldVisibility)
+			.beanMethodVisibility(beanMethodVisibility)
+			.beansRequireDefaultConstructor(beansRequireDefaultConstructor)
+			.beansRequireSerializable(beansRequireSerializable)
+			.beansRequireSettersForGetters(beansRequireSettersForGetters)
+			.beansRequireSomeProperties(beansRequireSomeProperties)
+			.findFluentSetters(findFluentSetters)
+			.ignoreMissingSetters(ignoreMissingSetters)
+			.ignoreTransientFields(ignoreTransientFields)
+			.ignoreUnknownBeanProperties(ignoreUnknownBeanProperties)
+			.unsortedProperties(unsortedProperties)
+			.useInterfaceProxies(useInterfaceProxies)
+			.useJavaBeanIntrospector(useJavaBeanIntrospector)
+			.propertyNamer(propertyNamerBean)
+			.beanTypePropertyName(typePropertyName)
+			.notBeanPackageNames(notBeanPackageNames)
+			.notBeanPackagePrefixes(notBeanPackagePrefixes)
+			.notBeanClasses(notBeanClasses.stream().map(ClassInfo::inner).toList())
+			.beanStore(beanStore)
+			.annotationProvider(getAnnotationProvider())
+			.build();
 	}
 
 	/**
@@ -3822,6 +3857,22 @@ public class MarshallingContext extends Context implements ConversionFinder {
 	 * 	<br>List is unmodifiable.
 	 */
 	public final List<ClassInfo> getBeanDictionary() { return beanDictionary; }
+
+	/**
+	 * Returns the {@link BeanConfigContext} snapshot for this marshalling context.
+	 *
+	 * <p>
+	 * The snapshot lifts the bean-modeling subset of this context's settings into a portable POJO that the
+	 * bean-modeling runtime in {@code commons.bean} can consume without referencing any marshalling-aware types.
+	 * It is computed lazily on first access and cached for the lifetime of this context.
+	 *
+	 * <p>
+	 * Mutating the returned snapshot's settings (via {@link BeanConfigContext#copy()} and a fresh build) does not
+	 * affect this marshalling context.
+	 *
+	 * @return The bean-modeling configuration snapshot.  Never <jk>null</jk>.
+	 */
+	public final BeanConfigContext getBeanConfigContext() { return beanConfigContext.get(); }
 
 	/**
 	 * Minimum bean field visibility.
