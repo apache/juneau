@@ -4184,7 +4184,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 			return (in, memberOf, session, args) -> {
 				try {
 					var bs = beanSessionOrDefault(session);
-					return bs.newBeanMap(toMeta.inner()).load(in.toString()).getBean();
+					return BeanMapLoader.load(bs.newBeanMap(toMeta.inner()), in.toString()).getBean();
 				} catch (Exception e) {
 					throw rex(e);
 				}
@@ -4312,7 +4312,7 @@ public class MarshallingContext extends Context implements ConversionFinder {
 			return (in, memberOf, session, args) -> {
 				try {
 					var bs = beanSessionOrDefault(session);
-					return bs.newBeanMap(toMeta.inner()).load(in.toString()).getBean();
+					return BeanMapLoader.load(bs.newBeanMap(toMeta.inner()), in.toString()).getBean();
 				} catch (Exception e) {
 					throw rex(e);
 				}

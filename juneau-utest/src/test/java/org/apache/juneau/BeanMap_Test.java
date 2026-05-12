@@ -639,7 +639,7 @@ class BeanMap_Test extends TestBase {
 		assertBean(t7, "enum1,enum2", "ONE,TWO");
 
 		// Use MarshallingContext to create bean instance.
-		m = MarshallingContext.DEFAULT.newBeanMap(H.class).load("{enum1:'TWO',enum2:'THREE'}");
+		m = BeanMapLoader.load(MarshallingContext.DEFAULT.newBeanMap(H.class), "{enum1:'TWO',enum2:'THREE'}");
 		assertEquals("{_type:'H',enum1:'TWO',enum2:'THREE'}", serializer.serialize(m.getBean()));
 		t7 = m.getBean();
 		assertBean(t7, "enum1,enum2", "TWO,THREE");
@@ -921,7 +921,7 @@ class BeanMap_Test extends TestBase {
 	// testPropertyNameFactoryDashedLC1
 	//====================================================================================================
 	@Test void a18_propertyNameFactoryDashedLC1() {
-		var m = bc.newBeanMap(P1.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
+		var m = BeanMapLoader.load(bc.newBeanMap(P1.class), "{'foo':1,'bar-baz':2,'bing-boo-url':3}");
 		assertBean(m, "foo,bar-baz,bing-boo-url", "1,2,3");
 		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "1,2,3");
 		m.put("foo", 4);
@@ -936,7 +936,7 @@ class BeanMap_Test extends TestBase {
 	}
 
 	@Test void a19_propertyNameFactoryDashedLC1_usingConfig() {
-		var m = bc.copy().applyAnnotations(P1cConfig.class).build().newBeanMap(P1c.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
+		var m = BeanMapLoader.load(bc.copy().applyAnnotations(P1cConfig.class).build().newBeanMap(P1c.class), "{'foo':1,'bar-baz':2,'bing-boo-url':3}");
 		assertBean(m, "foo,bar-baz,bing-boo-url", "1,2,3");
 		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "1,2,3");
 		m.put("foo", 4);
@@ -959,7 +959,7 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 	@Test void a20_propertyNameFactoryDashedLC2() {
 		var bc2 = MarshallingContext.DEFAULT;
-		var m = bc2.newBeanMap(P2.class).load("{'foo-bar':1,'baz-bing':2}");
+		var m = BeanMapLoader.load(bc2.newBeanMap(P2.class), "{'foo-bar':1,'baz-bing':2}");
 		assertBean(m, "foo-bar,baz-bing", "1,2");
 		assertBean(m.getBean(), "fooBar,bazBING", "1,2");
 		m.put("foo-bar", 3);

@@ -23,8 +23,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.json5.*;
-
 /**
  * Provides an {@link InvocationHandler} for creating dynamic proxy instances of bean interfaces.
  *
@@ -140,7 +138,7 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 			return Integer.valueOf(this.beanProps.hashCode());
 
 		if (mi.hasName("toString") && mi.getParameterCount() == 0)
-			return Json5Serializer.DEFAULT.toString(this.beanProps);
+			return Objects.toString(this.beanProps);
 
 		var prop = meta.getGetterProps().get(method);
 		if (nn(prop))

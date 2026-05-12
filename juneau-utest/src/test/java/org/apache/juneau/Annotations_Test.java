@@ -34,7 +34,7 @@ class Annotations_Test extends TestBase {
 		var bc = MarshallingContext.DEFAULT;
 
 		// Basic test
-		var bm = bc.newBeanMap(Person1.class).load("{age:21,name:'foobar'}");
+		var bm = BeanMapLoader.load(bc.newBeanMap(Person1.class), "{age:21,name:'foobar'}");
 		assertBean(bm.getBean(), "name,age", "foobar,21");
 
 		bm.put("age", 65);
@@ -57,7 +57,7 @@ class Annotations_Test extends TestBase {
 		var bc = MarshallingContext.DEFAULT;
 
 		// Basic test
-		var bm = bc.newBeanMap(Person2.class).load("{age:21,name:'foobar'}");
+		var bm = BeanMapLoader.load(bc.newBeanMap(Person2.class), "{age:21,name:'foobar'}");
 		assertBean(bm.getBean(), "name,age", "foobar,21");
 
 		bm.put("age", 65);
@@ -80,7 +80,7 @@ class Annotations_Test extends TestBase {
 		var bc = MarshallingContext.DEFAULT;
 
 		// Basic test
-		var bm = bc.newBeanMap(Person3.class).load("{age:21,name:'foobar'}");
+		var bm = BeanMapLoader.load(bc.newBeanMap(Person3.class), "{age:21,name:'foobar'}");
 		assertBean(bm.getBean(), "name,age", "foobar,21");
 
 		bm.put("age", 65);
@@ -103,7 +103,7 @@ class Annotations_Test extends TestBase {
 		var bc = MarshallingContext.DEFAULT.copy().applyAnnotations(PersonConfig.class).build();
 
 		// Basic test
-		var bm = bc.newBeanMap(Person4.class).load("{age:21,name:'foobar'}");
+		var bm = BeanMapLoader.load(bc.newBeanMap(Person4.class), "{age:21,name:'foobar'}");
 		assertBean(bm.getBean(), "name,age", "foobar,21");
 
 		bm.put("age", 65);
@@ -131,7 +131,7 @@ class Annotations_Test extends TestBase {
 		var bc = MarshallingContext.DEFAULT;
 
 		// Make sure only public fields are detected
-		var bm = bc.newBeanMap(A.class).load("{publicField:123}");
+		var bm = BeanMapLoader.load(bc.newBeanMap(A.class), "{publicField:123}");
 		assertBean(bm, "publicField", "123");
 	}
 

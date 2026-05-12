@@ -22,17 +22,13 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -494,7 +490,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				propertyCache = null;
 			} catch (IllegalArgumentException e) {
 				throw bex(e, meta.getClassMeta().inner(), "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getNameSimple(),
-					Json5Serializer.DEFAULT.toString(getClasses(args)));
+					Arrays.toString(getClasses(args)));
 			} catch (Exception e) {
 				throw bex(e);
 			}
@@ -619,37 +615,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	})
 	public BeanMap<T> load(Map entries) {
 		putAll(entries);
-		return this;
-	}
-
-	/**
-	 * Convenience method for setting multiple property values by passing in a reader.
-	 *
-	 * @param r The text that will get parsed into a map and then added to this map.
-	 * @param p The parser to use to parse the text.
-	 * @return This object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by <c>Reader</c>.
-	 */
-	public BeanMap<T> load(Reader r, ReaderParser p) throws ParseException, IOException {
-		putAll(JsonMap.ofText(r, p));
-		return this;
-	}
-
-	/**
-	 * Convenience method for setting multiple property values by passing in JSON text.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jv>beanMap</jv>.load(<js>"{name:'John Smith',age:21}"</js>)
-	 * </p>
-	 *
-	 * @param input The text that will get parsed into a map and then added to this map.
-	 * @return This object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public BeanMap<T> load(String input) throws ParseException {
-		putAll(JsonMap.ofJson(input));
 		return this;
 	}
 

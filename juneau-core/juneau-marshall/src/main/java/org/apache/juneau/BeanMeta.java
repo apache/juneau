@@ -363,9 +363,9 @@ public class BeanMeta<T> {
 	private final BeanConfigContext config;                                    // Bean-modeling settings facade — always non-null.  Sources: marshallingContext.getBeanConfigContext() (marshalling-side) or the explicit BeanConfigContext (commons-side).
 	private final BeanFilter beanFilter;                                       // Optional bean filter associated with the target class.  Typed as the bean-modeling-side SPI seam; marshalling-side callers cast back to {@link MarshalledFilter} via {@link #getMarshalledFilter()}.
 	private final NullableSupplier<InvocationHandler> beanProxyInvocationHandler;  // The invocation handler for this bean (if it's an interface).
-	private final Supplier<BeanRegistry> beanRegistry;                         // The bean registry for this bean.
+	private final Supplier<BeanRegistryLookup> beanRegistry;                   // The bean registry for this bean.  Typed against the commons.bean SPI seam; marshalling-side callers (and the {@link #getBeanRegistry()} getter) cast back to {@link BeanRegistry} — the only concrete in-tree implementation.
 	private final Supplier<List<ClassInfo>> classHierarchy;                    // List of all classes traversed in the class hierarchy.
-	private final ClassMeta<T> classMeta;                                      // The target class type that this meta object describes.  Null when constructed via {@link #of(Class, BeanConfigContext)}.
+	private final BeanTypeInfo<T> classMeta;                                   // The target class type that this meta object describes.  Null when constructed via {@link #of(Class, BeanConfigContext)}.  Concrete instances are always {@link ClassMeta}; typed against the bean-modeling SPI seam for the eventual move to commons.bean.
 	private final ClassInfo classInfo;                                         // Pure-reflection view of the bean class (Step 2 of TODO-5 — decouples bean modeling from ClassMeta).  Always non-null.
 	private final Supplier<String> dictionaryName;                             // The @Marshalled(typeName) annotation defined on this bean class.
 	private final BeanPropertyMeta dynaProperty;                               // "extras" property.
@@ -382,7 +382,7 @@ public class BeanMeta<T> {
 	private final ClassInfo stopClass;                                          // The stop class for hierarchy traversal.
 	private final BeanPropertyMeta typeProperty;                               // "_type" mock bean property.
 	private final String typePropertyName;                                     // "_type" property actual name.
-	private final Map<BeanPropertyMeta,BeanRegistry> propertyBeanRegistries;   // Per-property BeanRegistry side-map (Step 5 of TODO-5 — keeps BeanRegistry off BeanPropertyMeta itself).
+	private final Map<BeanPropertyMeta,BeanRegistryLookup> propertyBeanRegistries;   // Per-property BeanRegistry side-map (Step 5 of TODO-5 — keeps BeanRegistry off BeanPropertyMeta itself).  Typed against the commons.bean SPI seam; the {@link #getPropertyBeanRegistry(BeanPropertyMeta)} getter casts back to {@link BeanRegistry}.
 
 	/**
 	 * Creates a {@link BeanMeta} for the specified class using the supplied {@link BeanConfigContext}.
@@ -444,8 +444,8 @@ public class BeanMeta<T> {
 	 * @param pNames Explicit list of property names and order. If <jk>null</jk>, properties are determined automatically.
 	 * @param implClass Optional implementation class constructor to use if one cannot be found. Can be <jk>null</jk>.
 	 */
-	protected BeanMeta(ClassMeta<T> cm, BeanFilter bf, String[] pNames, ClassInfo implClass) {
-		this(cm, cm, cm.getMarshallingContext().getBeanConfigContext(), cm.getMarshallingContext(), bf, pNames, implClass);
+	protected BeanMeta(BeanTypeInfo<T> cm, BeanFilter bf, String[] pNames, ClassInfo implClass) {
+		this((ClassMeta<T>) cm, (ClassMeta<T>) cm, ((ClassMeta<T>) cm).getMarshallingContext().getBeanConfigContext(), ((ClassMeta<T>) cm).getMarshallingContext(), bf, pNames, implClass);
 	}
 
 	/**
@@ -491,7 +491,7 @@ public class BeanMeta<T> {
 		var getterPropsMap = CollectionUtils.<Method,String>map();  // Convert to MethodInfo keys
 		var setterPropsMap = CollectionUtils.<Method,String>map();
 		var dynaPropertyValue = Value.<BeanPropertyMeta>empty();
-		var propertyBeanRegistriesTemp = CollectionUtils.<BeanPropertyMeta,BeanRegistry>map();  // Per-property BeanRegistry side-map (TODO-5 Step 5).
+		var propertyBeanRegistriesTemp = CollectionUtils.<BeanPropertyMeta,BeanRegistryLookup>map();  // Per-property BeanRegistry side-map (TODO-5 Step 5).
 		var unsortedPropertiesTemp = false;
 		var ba = ap.find(Marshalled.class, classInfo);
 		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, classInfo);
@@ -631,7 +631,7 @@ public class BeanMeta<T> {
 				// entries chain on top of bean and global dictionaries.  Skipped on the commons-side path
 				// (no marshallingContext means no BeanRegistry construction).
 				if (nn(marshallingContext) && nn(v.dictionaryClasses))
-					propertyBeanRegistriesTemp.put(pMeta, new BeanRegistry(marshallingContext, beanRegistry.get(), v.dictionaryClasses));
+					propertyBeanRegistriesTemp.put(pMeta, new BeanRegistry(marshallingContext, (BeanRegistry) beanRegistry.get(), v.dictionaryClasses));
 			});
 
 			// If a beanFilter is defined, look for inclusion and exclusion lists.
@@ -704,6 +704,13 @@ public class BeanMeta<T> {
 			// raw-reflection mode (no ClassMeta/ObjectSwap/BeanRegistry resolution).
 			if (p.validate(marshallingContext, typeVarImpls, readOnlyProps, writeOnlyProps)) {
 
+				// Marshalling-side post-processor — applies @MarshalledProp / @Swap annotation effects
+				// (swap detection, properties override, dictionary classes) after validate() succeeds.
+				// Skipped on the commons-side path: those annotations require a MarshallingContext to
+				// resolve ObjectSwap/StringFormatSwap/Surrogate types and the swap class meta.
+				if (nn(marshallingContext))
+					MarshalledPropertyPostProcessor.process(marshallingContext, p);
+
 				installSwapAwareTransforms(p);
 
 				if (nn(p.getter))
@@ -743,8 +750,8 @@ public class BeanMeta<T> {
 		"unchecked"   // Wildcard ObjectSwap captured by raw alias to allow runtime polymorphic dispatch.
 	})
 	private static void installSwapAwareTransforms(BeanPropertyMeta.Builder p) {
-		ObjectSwap sw = p.swap;
-		ClassMeta<?> rtm = p.rawTypeMeta;
+		ObjectSwap sw = (ObjectSwap) p.swap;
+		ClassMeta<?> rtm = (ClassMeta<?>) p.rawTypeMeta;
 		if (sw == null && (rtm == null || ! rtm.hasChildSwaps()))
 			return;
 		if (p.readTransform == null) {
@@ -832,7 +839,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return The bean registry for this bean, or <jk>null</jk> if no bean registry is associated with it.
 	 */
-	public BeanRegistry getBeanRegistry() { return beanRegistry.get(); }
+	public BeanRegistry getBeanRegistry() { return (BeanRegistry) beanRegistry.get(); }
 
 	/**
 	 * Returns the per-property {@link BeanRegistry} associated with the given {@link BeanPropertyMeta}.
@@ -857,7 +864,7 @@ public class BeanMeta<T> {
 	 * 	belongs to a different bean meta).
 	 */
 	public BeanRegistry getPropertyBeanRegistry(BeanPropertyMeta p) {
-		return propertyBeanRegistries.get(p);
+		return (BeanRegistry) propertyBeanRegistries.get(p);
 	}
 
 	/**
@@ -870,7 +877,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return The {@link ClassMeta} of this bean, or <jk>null</jk> for bean-modeling-only construction.
 	 */
-	public ClassMeta<T> getClassMeta() { return classMeta; }
+	public ClassMeta<T> getClassMeta() { return (ClassMeta<T>) classMeta; }
 
 	/**
 	 * Returns the {@link ClassInfo} of this bean.
@@ -1523,7 +1530,7 @@ public class BeanMeta<T> {
 	 * @return A new {@link BeanRegistry} containing the dictionary classes for this bean, or an empty registry if
 	 * 	no dictionary classes are found.
 	 */
-	private BeanRegistry findBeanRegistry() {
+	private BeanRegistryLookup findBeanRegistry() {
 		// BeanRegistry is a marshalling-side concern (polymorphic dispatch via @Marshalled(typeName)/dictionary).
 		// On the commons-side construction path there is no MarshallingContext to drive it — return null and let
 		// callers route through getPropertyBeanRegistry(...) (which is also empty on this path).

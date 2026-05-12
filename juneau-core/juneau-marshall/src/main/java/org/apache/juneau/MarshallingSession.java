@@ -1290,11 +1290,13 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 */
 	@Override /* BeanSession */
 	public final Object convertToType(Object value, Object targetType) {
+		if (targetType == null)
+			return convertToType(value, (ClassMeta<?>) null);
 		if (targetType instanceof ClassMeta<?> cm)
 			return convertToType(value, cm);
 		if (targetType instanceof Class<?> c)
 			return convertToType(value, c);
-		throw illegalArg("Unsupported targetType for convertToType: {0}", targetType == null ? "null" : targetType.getClass().getName());
+		throw illegalArg("Unsupported targetType for convertToType: {0}", targetType.getClass().getName());
 	}
 
 	/**
@@ -1310,11 +1312,13 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 */
 	@Override /* BeanSession */
 	public final Object convertToMemberType(Object outer, Object value, Object targetType) {
+		if (targetType == null)
+			return convertToMemberType(outer, value, (ClassMeta<?>) null);
 		if (targetType instanceof ClassMeta<?> cm)
 			return convertToMemberType(outer, value, cm);
 		if (targetType instanceof Class<?> c)
 			return convertToMemberType(outer, value, c);
-		throw illegalArg("Unsupported targetType for convertToMemberType: {0}", targetType == null ? "null" : targetType.getClass().getName());
+		throw illegalArg("Unsupported targetType for convertToMemberType: {0}", targetType.getClass().getName());
 	}
 
 }
