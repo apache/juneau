@@ -92,14 +92,18 @@ public final class BeanConfigContext {
 	private final Visibility beanFieldVisibility;
 	private final Visibility beanMethodVisibility;
 
+	private final boolean beanMapPutReturnsOldValue;
 	private final boolean beansRequireDefaultConstructor;
 	private final boolean beansRequireSerializable;
 	private final boolean beansRequireSettersForGetters;
 	private final boolean beansRequireSomeProperties;
 	private final boolean findFluentSetters;
+	private final boolean ignoreInvocationExceptionsOnGetters;
+	private final boolean ignoreInvocationExceptionsOnSetters;
 	private final boolean ignoreMissingSetters;
 	private final boolean ignoreTransientFields;
 	private final boolean ignoreUnknownBeanProperties;
+	private final boolean ignoreUnknownNullBeanProperties;
 	private final boolean unsortedProperties;
 	private final boolean useInterfaceProxies;
 	private final boolean useJavaBeanIntrospector;
@@ -120,14 +124,18 @@ public final class BeanConfigContext {
 		beanConstructorVisibility = b.beanConstructorVisibility;
 		beanFieldVisibility = b.beanFieldVisibility;
 		beanMethodVisibility = b.beanMethodVisibility;
+		beanMapPutReturnsOldValue = b.beanMapPutReturnsOldValue;
 		beansRequireDefaultConstructor = b.beansRequireDefaultConstructor;
 		beansRequireSerializable = b.beansRequireSerializable;
 		beansRequireSettersForGetters = b.beansRequireSettersForGetters;
 		beansRequireSomeProperties = b.beansRequireSomeProperties;
 		findFluentSetters = b.findFluentSetters;
+		ignoreInvocationExceptionsOnGetters = b.ignoreInvocationExceptionsOnGetters;
+		ignoreInvocationExceptionsOnSetters = b.ignoreInvocationExceptionsOnSetters;
 		ignoreMissingSetters = b.ignoreMissingSetters;
 		ignoreTransientFields = b.ignoreTransientFields;
 		ignoreUnknownBeanProperties = b.ignoreUnknownBeanProperties;
+		ignoreUnknownNullBeanProperties = b.ignoreUnknownNullBeanProperties;
 		unsortedProperties = b.unsortedProperties;
 		useInterfaceProxies = b.useInterfaceProxies;
 		useJavaBeanIntrospector = b.useJavaBeanIntrospector;
@@ -182,6 +190,17 @@ public final class BeanConfigContext {
 	public Visibility getBeanMethodVisibility() { return beanMethodVisibility; }
 
 	/**
+	 * Returns whether {@code BeanMap.put(String,Object)} returns the previous property value.
+	 *
+	 * <p>
+	 * When <jk>false</jk> (the default), {@code BeanMap.put(...)} always returns <jk>null</jk> for performance reasons —
+	 * the underlying bean's getter is skipped before the setter is invoked.
+	 *
+	 * @return <jk>true</jk> if old values are returned.
+	 */
+	public boolean isBeanMapPutReturnsOldValue() { return beanMapPutReturnsOldValue; }
+
+	/**
 	 * Returns whether classes must have a no-arg constructor to be considered beans.
 	 *
 	 * @return <jk>true</jk> if a no-arg constructor is required.
@@ -217,6 +236,27 @@ public final class BeanConfigContext {
 	public boolean isFindFluentSetters() { return findFluentSetters; }
 
 	/**
+	 * Returns whether exceptions thrown from bean property getters should be silently swallowed.
+	 *
+	 * <p>
+	 * When <jk>true</jk>, an exception thrown by a getter is treated as a <jk>null</jk> property value rather than
+	 * propagated to the caller.
+	 *
+	 * @return <jk>true</jk> if getter invocation exceptions are ignored.
+	 */
+	public boolean isIgnoreInvocationExceptionsOnGetters() { return ignoreInvocationExceptionsOnGetters; }
+
+	/**
+	 * Returns whether exceptions thrown from bean property setters should be silently swallowed.
+	 *
+	 * <p>
+	 * When <jk>true</jk>, an exception thrown by a setter is suppressed rather than propagated to the caller.
+	 *
+	 * @return <jk>true</jk> if setter invocation exceptions are ignored.
+	 */
+	public boolean isIgnoreInvocationExceptionsOnSetters() { return ignoreInvocationExceptionsOnSetters; }
+
+	/**
 	 * Returns whether bean properties without setters should be silently ignored during deserialization.
 	 *
 	 * @return <jk>true</jk> if missing setters are ignored.
@@ -236,6 +276,17 @@ public final class BeanConfigContext {
 	 * @return <jk>true</jk> if unknown properties are ignored.
 	 */
 	public boolean isIgnoreUnknownBeanProperties() { return ignoreUnknownBeanProperties; }
+
+	/**
+	 * Returns whether attempts to set unknown bean properties to <jk>null</jk> should be silently ignored.
+	 *
+	 * <p>
+	 * When <jk>true</jk> (the default), trying to set an unknown property to <jk>null</jk> is a no-op rather than an
+	 * error.  When <jk>false</jk>, the property setter still rejects unknown property names.
+	 *
+	 * @return <jk>true</jk> if unknown null properties are silently ignored.
+	 */
+	public boolean isIgnoreUnknownNullBeanProperties() { return ignoreUnknownNullBeanProperties; }
 
 	/**
 	 * Returns whether properties should preserve their JVM-discovered (non-alphabetical) order.
@@ -350,14 +401,18 @@ public final class BeanConfigContext {
 		private Visibility beanFieldVisibility = Visibility.PUBLIC;
 		private Visibility beanMethodVisibility = Visibility.PUBLIC;
 
+		private boolean beanMapPutReturnsOldValue;
 		private boolean beansRequireDefaultConstructor;
 		private boolean beansRequireSerializable;
 		private boolean beansRequireSettersForGetters;
 		private boolean beansRequireSomeProperties = true;
 		private boolean findFluentSetters;
+		private boolean ignoreInvocationExceptionsOnGetters;
+		private boolean ignoreInvocationExceptionsOnSetters;
 		private boolean ignoreMissingSetters = true;
 		private boolean ignoreTransientFields = true;
 		private boolean ignoreUnknownBeanProperties;
+		private boolean ignoreUnknownNullBeanProperties = true;
 		private boolean unsortedProperties;
 		private boolean useInterfaceProxies = true;
 		private boolean useJavaBeanIntrospector;
@@ -380,14 +435,18 @@ public final class BeanConfigContext {
 			beanConstructorVisibility = src.beanConstructorVisibility;
 			beanFieldVisibility = src.beanFieldVisibility;
 			beanMethodVisibility = src.beanMethodVisibility;
+			beanMapPutReturnsOldValue = src.beanMapPutReturnsOldValue;
 			beansRequireDefaultConstructor = src.beansRequireDefaultConstructor;
 			beansRequireSerializable = src.beansRequireSerializable;
 			beansRequireSettersForGetters = src.beansRequireSettersForGetters;
 			beansRequireSomeProperties = src.beansRequireSomeProperties;
 			findFluentSetters = src.findFluentSetters;
+			ignoreInvocationExceptionsOnGetters = src.ignoreInvocationExceptionsOnGetters;
+			ignoreInvocationExceptionsOnSetters = src.ignoreInvocationExceptionsOnSetters;
 			ignoreMissingSetters = src.ignoreMissingSetters;
 			ignoreTransientFields = src.ignoreTransientFields;
 			ignoreUnknownBeanProperties = src.ignoreUnknownBeanProperties;
+			ignoreUnknownNullBeanProperties = src.ignoreUnknownNullBeanProperties;
 			unsortedProperties = src.unsortedProperties;
 			useInterfaceProxies = src.useInterfaceProxies;
 			useJavaBeanIntrospector = src.useJavaBeanIntrospector;
@@ -443,6 +502,14 @@ public final class BeanConfigContext {
 		public Builder beanMethodVisibility(Visibility value) { beanMethodVisibility = assertArgNotNull("value", value); return this; }
 
 		/**
+		 * Toggles whether {@code BeanMap.put(String,Object)} returns the previous value rather than <jk>null</jk>.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder beanMapPutReturnsOldValue(boolean value) { beanMapPutReturnsOldValue = value; return this; }
+
+		/**
 		 * Toggles the requirement that beans have a no-arg default constructor.
 		 *
 		 * @param value The new value.
@@ -483,6 +550,22 @@ public final class BeanConfigContext {
 		public Builder findFluentSetters(boolean value) { findFluentSetters = value; return this; }
 
 		/**
+		 * Toggles silent suppression of exceptions thrown by bean property getters.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder ignoreInvocationExceptionsOnGetters(boolean value) { ignoreInvocationExceptionsOnGetters = value; return this; }
+
+		/**
+		 * Toggles silent suppression of exceptions thrown by bean property setters.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder ignoreInvocationExceptionsOnSetters(boolean value) { ignoreInvocationExceptionsOnSetters = value; return this; }
+
+		/**
 		 * Toggles silent ignoring of properties without setters during deserialization.
 		 *
 		 * @param value The new value.
@@ -505,6 +588,14 @@ public final class BeanConfigContext {
 		 * @return This object.
 		 */
 		public Builder ignoreUnknownBeanProperties(boolean value) { ignoreUnknownBeanProperties = value; return this; }
+
+		/**
+		 * Toggles silent ignoring of attempts to set unknown bean properties to <jk>null</jk>.
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder ignoreUnknownNullBeanProperties(boolean value) { ignoreUnknownNullBeanProperties = value; return this; }
 
 		/**
 		 * Toggles whether properties remain in JVM-discovered (non-alphabetical) order.

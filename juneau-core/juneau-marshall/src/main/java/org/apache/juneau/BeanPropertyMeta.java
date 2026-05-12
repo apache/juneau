@@ -1060,7 +1060,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return invokeGetter(bean, pName);
 
 	} catch (Exception e) {
-		if (nn(bc) && bc.isIgnoreInvocationExceptionsOnGetters()) {
+		if (config.isIgnoreInvocationExceptionsOnGetters()) {
 			if (nn(rawTypeMeta) && rawTypeMeta.isPrimitive())
 				return rawTypeMeta.getPrimitiveDefault();
 			return null;
@@ -1167,7 +1167,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			var isCollection = rawTypeMeta.isCollection();
 
 			if ((! isDyna) && field == null && setter == null && ! (isMap || isCollection)) {
-				if ((value1 == null && nn(bc) && bc.isIgnoreUnknownNullBeanProperties()) || config.isIgnoreMissingSetters())
+				if ((value1 == null && config.isIgnoreUnknownNullBeanProperties()) || config.isIgnoreMissingSetters())
 					return null;
 				throw bex(beanMeta.getClassInfo(), "Setter or public field not defined on property ''{0}''", name);
 			}
@@ -1186,7 +1186,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	})
 	private Object setPropertyValue(BeanMap<?> m, String pName, Object value1, Object bean, boolean isMap, boolean isCollection, MarshallingSession session) throws ParseException {
 		try {
-			var r = (bc.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
+			var r = (config.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (nn(getter) || nn(field)) ? get(m, pName) : null;
 			var propertyClass = rawTypeMeta.inner();
 			var pcInfo = rawTypeMeta;
 
@@ -1331,7 +1331,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		} catch (BeanRuntimeException e) {
 			throw e;
 		} catch (Exception e1) {
-			if (bc.isIgnoreInvocationExceptionsOnSetters()) {
+			if (config.isIgnoreInvocationExceptionsOnSetters()) {
 				if (rawTypeMeta.isPrimitive())
 					return rawTypeMeta.getPrimitiveDefault();
 				return null;
@@ -1423,7 +1423,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	return swapAndFilterProperty(session, o);
 
 	} catch (Exception e) {
-		if (nn(bc) && bc.isIgnoreInvocationExceptionsOnGetters()) {
+		if (config.isIgnoreInvocationExceptionsOnGetters()) {
 			if (nn(rawTypeMeta) && rawTypeMeta.isPrimitive())
 				return rawTypeMeta.getPrimitiveDefault();
 			return null;

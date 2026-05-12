@@ -44,14 +44,18 @@ class BeanConfigContext_Test extends TestBase {
 	@Test
 	void a02_default_booleanToggles() {
 		var ctx = BeanConfigContext.DEFAULT;
+		assertFalse(ctx.isBeanMapPutReturnsOldValue());
 		assertFalse(ctx.isBeansRequireDefaultConstructor());
 		assertFalse(ctx.isBeansRequireSerializable());
 		assertFalse(ctx.isBeansRequireSettersForGetters());
 		assertTrue(ctx.isBeansRequireSomeProperties());
 		assertFalse(ctx.isFindFluentSetters());
+		assertFalse(ctx.isIgnoreInvocationExceptionsOnGetters());
+		assertFalse(ctx.isIgnoreInvocationExceptionsOnSetters());
 		assertTrue(ctx.isIgnoreMissingSetters());
 		assertTrue(ctx.isIgnoreTransientFields());
 		assertFalse(ctx.isIgnoreUnknownBeanProperties());
+		assertTrue(ctx.isIgnoreUnknownNullBeanProperties());
 		assertFalse(ctx.isUnsortedProperties());
 		assertTrue(ctx.isUseInterfaceProxies());
 		assertFalse(ctx.isUseJavaBeanIntrospector());
@@ -97,26 +101,34 @@ class BeanConfigContext_Test extends TestBase {
 	@Test
 	void b02_builder_booleanToggles() {
 		var ctx = BeanConfigContext.create()
+			.beanMapPutReturnsOldValue(true)
 			.beansRequireDefaultConstructor(true)
 			.beansRequireSerializable(true)
 			.beansRequireSettersForGetters(true)
 			.beansRequireSomeProperties(false)
 			.findFluentSetters(true)
+			.ignoreInvocationExceptionsOnGetters(true)
+			.ignoreInvocationExceptionsOnSetters(true)
 			.ignoreMissingSetters(false)
 			.ignoreTransientFields(false)
 			.ignoreUnknownBeanProperties(true)
+			.ignoreUnknownNullBeanProperties(false)
 			.unsortedProperties(true)
 			.useInterfaceProxies(false)
 			.useJavaBeanIntrospector(true)
 			.build();
+		assertTrue(ctx.isBeanMapPutReturnsOldValue());
 		assertTrue(ctx.isBeansRequireDefaultConstructor());
 		assertTrue(ctx.isBeansRequireSerializable());
 		assertTrue(ctx.isBeansRequireSettersForGetters());
 		assertFalse(ctx.isBeansRequireSomeProperties());
 		assertTrue(ctx.isFindFluentSetters());
+		assertTrue(ctx.isIgnoreInvocationExceptionsOnGetters());
+		assertTrue(ctx.isIgnoreInvocationExceptionsOnSetters());
 		assertFalse(ctx.isIgnoreMissingSetters());
 		assertFalse(ctx.isIgnoreTransientFields());
 		assertTrue(ctx.isIgnoreUnknownBeanProperties());
+		assertFalse(ctx.isIgnoreUnknownNullBeanProperties());
 		assertTrue(ctx.isUnsortedProperties());
 		assertFalse(ctx.isUseInterfaceProxies());
 		assertTrue(ctx.isUseJavaBeanIntrospector());
@@ -244,14 +256,18 @@ class BeanConfigContext_Test extends TestBase {
 			.beanConstructorVisibility(Visibility.PRIVATE)
 			.beanFieldVisibility(Visibility.DEFAULT)
 			.beanMethodVisibility(Visibility.PROTECTED)
+			.beanMapPutReturnsOldValue(true)
 			.beansRequireDefaultConstructor(true)
 			.beansRequireSerializable(true)
 			.beansRequireSettersForGetters(true)
 			.beansRequireSomeProperties(false)
 			.findFluentSetters(true)
+			.ignoreInvocationExceptionsOnGetters(true)
+			.ignoreInvocationExceptionsOnSetters(true)
 			.ignoreMissingSetters(false)
 			.ignoreTransientFields(false)
 			.ignoreUnknownBeanProperties(true)
+			.ignoreUnknownNullBeanProperties(false)
 			.unsortedProperties(true)
 			.useInterfaceProxies(false)
 			.useJavaBeanIntrospector(true)
@@ -271,14 +287,18 @@ class BeanConfigContext_Test extends TestBase {
 		assertEquals(src.getBeanConstructorVisibility(), copy.getBeanConstructorVisibility());
 		assertEquals(src.getBeanFieldVisibility(), copy.getBeanFieldVisibility());
 		assertEquals(src.getBeanMethodVisibility(), copy.getBeanMethodVisibility());
+		assertEquals(src.isBeanMapPutReturnsOldValue(), copy.isBeanMapPutReturnsOldValue());
 		assertEquals(src.isBeansRequireDefaultConstructor(), copy.isBeansRequireDefaultConstructor());
 		assertEquals(src.isBeansRequireSerializable(), copy.isBeansRequireSerializable());
 		assertEquals(src.isBeansRequireSettersForGetters(), copy.isBeansRequireSettersForGetters());
 		assertEquals(src.isBeansRequireSomeProperties(), copy.isBeansRequireSomeProperties());
 		assertEquals(src.isFindFluentSetters(), copy.isFindFluentSetters());
+		assertEquals(src.isIgnoreInvocationExceptionsOnGetters(), copy.isIgnoreInvocationExceptionsOnGetters());
+		assertEquals(src.isIgnoreInvocationExceptionsOnSetters(), copy.isIgnoreInvocationExceptionsOnSetters());
 		assertEquals(src.isIgnoreMissingSetters(), copy.isIgnoreMissingSetters());
 		assertEquals(src.isIgnoreTransientFields(), copy.isIgnoreTransientFields());
 		assertEquals(src.isIgnoreUnknownBeanProperties(), copy.isIgnoreUnknownBeanProperties());
+		assertEquals(src.isIgnoreUnknownNullBeanProperties(), copy.isIgnoreUnknownNullBeanProperties());
 		assertEquals(src.isUnsortedProperties(), copy.isUnsortedProperties());
 		assertEquals(src.isUseInterfaceProxies(), copy.isUseInterfaceProxies());
 		assertEquals(src.isUseJavaBeanIntrospector(), copy.isUseJavaBeanIntrospector());

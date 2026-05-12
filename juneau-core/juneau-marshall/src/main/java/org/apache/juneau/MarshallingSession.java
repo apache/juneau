@@ -54,7 +54,7 @@ import org.apache.juneau.commons.bean.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - ClassMeta<?>, ObjectSwap<?,?>, etc. for bean metadata
 })
-public class MarshallingSession extends ContextSession implements ConverterSession {
+public class MarshallingSession extends ContextSession implements ConverterSession, BeanSession {
 
 	// Property name constants
 	private static final String PROP_locale = "locale";
@@ -1268,6 +1268,53 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 			Array.set(array, i.getAndIncrement(), x2);
 		});
 		return array;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BeanSession bridge methods — SPI seam to commons.bean.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Bridge implementation of {@link BeanSession#convertToType(Object, Object)} that dispatches to the
+	 * {@link ClassMeta}-typed overload when the supplied {@code targetType} is a {@link ClassMeta}, or to the
+	 * {@link Class}-typed overload when it is a {@link Class}.
+	 *
+	 * <p>
+	 * The bean-modeling layer calls this method through the {@link BeanSession} interface so it can request type
+	 * conversion without referencing the marshalling-side {@link ClassMeta} concrete type.
+	 *
+	 * @param value The value to convert.  May be <jk>null</jk>.
+	 * @param targetType A {@link ClassMeta} or {@link Class} describing the target type.  Must not be <jk>null</jk>.
+	 * @return The converted value.
+	 * @throws IllegalArgumentException If {@code targetType} is neither a {@link ClassMeta} nor a {@link Class}.
+	 */
+	@Override /* BeanSession */
+	public final Object convertToType(Object value, Object targetType) {
+		if (targetType instanceof ClassMeta<?> cm)
+			return convertToType(value, cm);
+		if (targetType instanceof Class<?> c)
+			return convertToType(value, c);
+		throw illegalArg("Unsupported targetType for convertToType: {0}", targetType == null ? "null" : targetType.getClass().getName());
+	}
+
+	/**
+	 * Bridge implementation of {@link BeanSession#convertToMemberType(Object, Object, Object)} that dispatches to the
+	 * {@link ClassMeta}-typed overload when the supplied {@code targetType} is a {@link ClassMeta}, or to the
+	 * {@link Class}-typed overload when it is a {@link Class}.
+	 *
+	 * @param outer The outer-class instance for non-static inner classes.  May be <jk>null</jk>.
+	 * @param value The value to convert.  May be <jk>null</jk>.
+	 * @param targetType A {@link ClassMeta} or {@link Class} describing the target type.  Must not be <jk>null</jk>.
+	 * @return The converted value.
+	 * @throws IllegalArgumentException If {@code targetType} is neither a {@link ClassMeta} nor a {@link Class}.
+	 */
+	@Override /* BeanSession */
+	public final Object convertToMemberType(Object outer, Object value, Object targetType) {
+		if (targetType instanceof ClassMeta<?> cm)
+			return convertToMemberType(outer, value, cm);
+		if (targetType instanceof Class<?> c)
+			return convertToMemberType(outer, value, c);
+		throw illegalArg("Unsupported targetType for convertToMemberType: {0}", targetType == null ? "null" : targetType.getClass().getName());
 	}
 
 }
