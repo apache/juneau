@@ -96,13 +96,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		ObjectSwap swap;  // Package-private for BeanMeta access (used to install swap-aware transforms)
 		BiFunction<MarshallingSession,Object,Object> readTransform;  // Package-private; defaults to identity if null.
 		BiFunction<MarshallingSession,Object,Object> writeTransform; // Package-private; defaults to identity if null.
+		List<ClassInfo> dictionaryClasses;  // Package-private for BeanMeta access; @MarshalledProp(dictionary={}) classes scanned during validate().
 		private boolean isConstructorArg;
 		private boolean isUri;
 		private boolean isDyna;
 		private boolean isDynaGetterMap;
 		private ClassMeta<?> typeMeta;
 		private List<String> properties;
-		private BeanRegistry beanRegistry;
 		private Object overrideValue;
 		private BeanPropertyMeta delegateFor;
 		private boolean canRead;
@@ -114,17 +114,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			this.beanMeta = beanMeta;
 			this.bc = beanMeta.getMarshallingContext();
 			this.name = name;
-		}
-
-		/**
-		 * Sets the bean registry to use with this bean property.
-		 *
-		 * @param value The bean registry to use with this bean property.
-		 * @return This object.
-		 */
-		public Builder beanRegistry(BeanRegistry value) {
-			beanRegistry = assertArgNotNull(ARG_value, value);
-			return this;
 		}
 
 		/**
@@ -347,8 +336,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		/**
 		 * Validates this bean property configuration.
 		 *
+		 * <p>
+		 * After validation succeeds, marshalling-side callers (currently {@link BeanMeta}) read the
+		 * {@link #dictionaryClasses} field to construct the property-level {@link BeanRegistry} and store it in a
+		 * side-map keyed by the built {@link BeanPropertyMeta}.  The bean-modeling layer itself no longer carries a
+		 * {@link BeanRegistry} reference.
+		 *
 		 * @param bc The bean context.
-		 * @param parentBeanRegistry The parent bean registry.
 		 * @param typeVarImpls Type variable implementations.
 		 * @param bpro Bean properties read-only set.
 		 * @param bpwo Bean properties write-only set.
@@ -360,7 +354,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			"java:S112",  // Generic exception thrown; acceptable for framework/lifecycle methods
 			"java:S6541"  // Brain Method: validate() intentionally consolidates property metadata resolution
 		})
-		public boolean validate(MarshallingContext bc, BeanRegistry parentBeanRegistry, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
+		public boolean validate(MarshallingContext bc, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			var bdClasses = list();
 			var ap = bc.getAnnotationProvider();
@@ -457,7 +451,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (rawTypeMeta == null)
 				return false;
 
-			beanRegistry = new BeanRegistry(bc, parentBeanRegistry, bdClasses.stream().map(ReflectionUtils::info).toList());
+			dictionaryClasses = bdClasses.stream().map(ReflectionUtils::info).toList();
 
 			isDyna = "*".equals(name);
 
@@ -546,7 +540,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final Supplier<List<AnnotationInfo<?>>> annotations;     // Memoized list of all annotations on this property.
 	private final MarshallingContext bc;                                    // The context that created this meta.
 	private final BeanMeta<?> beanMeta;                              // The bean that this property belongs to.
-	private final BeanRegistry beanRegistry;                         // Bean registry for resolving bean types in this property.
 	private final boolean canRead;                                   // True if this property can be read.
 	private final boolean canWrite;                                  // True if this property can be written.
 	private final BeanPropertyMeta delegateFor;                      // The bean property that this meta is a delegate for.
@@ -579,7 +572,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		annotations = memoize(this::findAnnotations);
 		bc = b.bc;
 		beanMeta = b.beanMeta;
-		beanRegistry = b.beanRegistry;
 		canRead = b.canRead;
 		canWrite = b.canWrite;
 		delegateFor = b.delegateFor;
@@ -897,9 +889,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * 	<li>Dictionary defined via {@link MarshallingContext.Builder#beanDictionary(Class...)}.
 	 * </ol>
 	 *
+	 * <p>
+	 * The per-property {@link BeanRegistry} no longer lives on this object; it is stored in a marshalling-side
+	 * side-map on {@link BeanMeta} keyed by {@link BeanPropertyMeta}.  This method delegates to
+	 * {@link BeanMeta#getPropertyBeanRegistry(BeanPropertyMeta)} for backwards compatibility with existing call sites
+	 * in the marshalling layer (parser/serializer sessions, XML content-property handling, etc.).
+	 *
 	 * @return The bean dictionary in use for this bean property.  Never <jk>null</jk>.
 	 */
-	public BeanRegistry getBeanRegistry() { return beanRegistry; }
+	public BeanRegistry getBeanRegistry() { return beanMeta.getPropertyBeanRegistry(this); }
 
 	/**
 	 * Returns the {@link ClassMeta} of the class of this property.

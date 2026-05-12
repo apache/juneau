@@ -380,6 +380,7 @@ public class BeanMeta<T> {
 	private final ClassInfo stopClass;                                          // The stop class for hierarchy traversal.
 	private final BeanPropertyMeta typeProperty;                               // "_type" mock bean property.
 	private final String typePropertyName;                                     // "_type" property actual name.
+	private final Map<BeanPropertyMeta,BeanRegistry> propertyBeanRegistries;   // Per-property BeanRegistry side-map (Step 5 of TODO-5 — keeps BeanRegistry off BeanPropertyMeta itself).
 
 	/**
 	 * Constructor.
@@ -429,6 +430,7 @@ public class BeanMeta<T> {
 		var getterPropsMap = CollectionUtils.<Method,String>map();  // Convert to MethodInfo keys
 		var setterPropsMap = CollectionUtils.<Method,String>map();
 		var dynaPropertyValue = Value.<BeanPropertyMeta>empty();
+		var propertyBeanRegistriesTemp = CollectionUtils.<BeanPropertyMeta,BeanRegistry>map();  // Per-property BeanRegistry side-map (TODO-5 Step 5).
 		var unsortedPropertiesTemp = false;
 		var ba = ap.find(Marshalled.class, cm);
 		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, cm);
@@ -563,6 +565,10 @@ public class BeanMeta<T> {
 				if (pMeta.isDyna())
 					dynaPropertyValue.set(pMeta);
 				propertiesValue.get().put(k, pMeta);
+				// Build the property-level BeanRegistry side-map entry from the builder's accumulated
+				// dictionary classes.  Parents to the bean-level registry so @MarshalledProp(dictionary={})
+				// entries chain on top of bean and global dictionaries.
+				propertyBeanRegistriesTemp.put(pMeta, new BeanRegistry(marshallingContext, beanRegistry.get(), v.dictionaryClasses));
 			});
 
 			// If a beanFilter is defined, look for inclusion and exclusion lists.
@@ -610,7 +616,12 @@ public class BeanMeta<T> {
 		setterProps = u(setterPropsMap);
 		dynaProperty = dynaPropertyValue.get();
 		unsortedProperties = unsortedPropertiesTemp;
-		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(String.class).beanRegistry(beanRegistry.get()).build();
+		typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(String.class).build();
+		// Map the synthetic "_type" property to the bean-level BeanRegistry so consumers calling
+		// typeProperty.getBeanRegistry() (currently none in-tree, but a public API path) get the same
+		// registry the property previously carried as a field.
+		propertyBeanRegistriesTemp.put(typeProperty, beanRegistry.get());
+		propertyBeanRegistries = u(propertyBeanRegistriesTemp);
 		dictionaryName = memoize(this::findDictionaryName);
 		beanProxyInvocationHandler = memoize(() -> marshallingContext.isUseInterfaceProxies() && classInfo.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
 		var factoryClassTemp = btList.stream().map(x -> x.inner().factory()).filter(x -> x != org.apache.juneau.commons.function.BeanFactory.Void.class).findFirst().orElse(null);
@@ -625,7 +636,7 @@ public class BeanMeta<T> {
 			if (p.field == null)
 				findInnerBeanField(p.name).ifPresent(p::setInnerField);
 
-			if (p.validate(marshallingContext, beanRegistry.get(), typeVarImpls, readOnlyProps, writeOnlyProps)) {
+			if (p.validate(marshallingContext, typeVarImpls, readOnlyProps, writeOnlyProps)) {
 
 				installSwapAwareTransforms(p);
 
@@ -754,6 +765,32 @@ public class BeanMeta<T> {
 	 * @return The bean registry for this bean, or <jk>null</jk> if no bean registry is associated with it.
 	 */
 	public BeanRegistry getBeanRegistry() { return beanRegistry.get(); }
+
+	/**
+	 * Returns the per-property {@link BeanRegistry} associated with the given {@link BeanPropertyMeta}.
+	 *
+	 * <p>
+	 * As of TODO-5 Step 5, {@link BeanPropertyMeta} no longer carries a {@link BeanRegistry} field — the per-property
+	 * registry now lives in a side-map on this {@link BeanMeta} keyed by the property meta itself.  The serializer
+	 * and parser sides still need to look up the property-level registry for polymorphic dispatch (see
+	 * {@link org.apache.juneau.parser.ParserSession#getClassMeta(String,BeanPropertyMeta,ClassMeta)} and
+	 * {@link org.apache.juneau.serializer.SerializerSession} dictionary-name resolution); they now route through
+	 * this accessor (directly or via the deprecated-style {@link BeanPropertyMeta#getBeanRegistry()} delegate).
+	 *
+	 * <p>
+	 * The returned registry chains the property's
+	 * {@link org.apache.juneau.annotation.MarshalledProp#dictionary() @MarshalledProp(dictionary)} entries on top of
+	 * the bean-level registry, which in turn chains on top of the global
+	 * {@link MarshallingContext#getBeanDictionary() bean dictionary}.
+	 *
+	 * @param p The bean property meta to look up.  Can be a normal property, the synthetic <js>"_type"</js> property,
+	 * 	or any other property meta produced by this bean.
+	 * @return The bean registry for the specified property, or <jk>null</jk> if none was registered (e.g. the property
+	 * 	belongs to a different bean meta).
+	 */
+	public BeanRegistry getPropertyBeanRegistry(BeanPropertyMeta p) {
+		return propertyBeanRegistries.get(p);
+	}
 
 	/**
 	 * Returns the {@link ClassMeta} of this bean.
@@ -1489,9 +1526,15 @@ public class BeanMeta<T> {
 		if (nn(beanFilter) && nn(beanFilter.getTypeName()))
 			return beanFilter.getTypeName();
 
+		// Pure-reflection class identity for BeanRegistry.getTypeName(...) — Step 5 of TODO-5 lifted the two
+		// surviving `this.classMeta` references inside this method to `classInfo.inner()` so the dictionary
+		// lookup does not require a ClassMeta for the bean's own class.  BeanRegistry still lives in
+		// juneau-marshall; it just exposes a raw-Class overload for callers that have a ClassInfo.
+		var rawClass = classInfo.inner();
+
 		var br = getBeanRegistry();
 		if (nn(br)) {
-			String s = br.getTypeName(this.classMeta);
+			String s = br.getTypeName(rawClass);
 			if (nn(s))
 				return s;
 		}
@@ -1503,7 +1546,7 @@ public class BeanMeta<T> {
 			.map(marshallingContext::getClassMeta)
 			.map(ClassMeta::getBeanRegistry)
 			.filter(Objects::nonNull)
-			.map(x -> x.getTypeName(this.classMeta))
+			.map(x -> x.getTypeName(rawClass))
 			.filter(Objects::nonNull)
 			.findFirst()
 			.orElse(null);

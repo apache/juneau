@@ -117,6 +117,21 @@ public class BeanRegistry {
 	}
 
 	/**
+	 * Given the specified raw class, return the dictionary name for it.
+	 *
+	 * <p>
+	 * Variant of {@link #getTypeName(ClassMeta)} that takes the raw {@link Class} directly so callers in the
+	 * bean-modeling layer (which is being decoupled from {@link ClassMeta}) can perform a polymorphic-dispatch
+	 * lookup without holding a {@link ClassMeta} reference.
+	 *
+	 * @param c The class to lookup in this registry.
+	 * @return The dictionary name for the specified class in this registry, or <jk>null</jk> if not found.
+	 */
+	public String getTypeName(Class<?> c) {
+		return isEmpty || c == null ? null : reverseMap.get(c);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this dictionary has an entry for the specified type name.
 	 *
 	 * @param typeName The bean type name.
