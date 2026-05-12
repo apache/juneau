@@ -407,6 +407,13 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Triggers bean creation if bean has read-only properties set through a constructor defined by the
 	 * {@link BeanCtor @BeanCtor} annotation.
 	 *
+	 * <p>
+	 * The post-creation Optional&lt;X&gt; initialization step (which seeds null {@link Optional} properties with
+	 * {@link ClassMeta#getOptionalDefault()}) is skipped for properties built via the bean-modeling-only path
+	 * ({@link BeanMeta#of(Class, BeanConfigContext)}) because the per-property {@link ClassMeta} is unavailable;
+	 * those properties are left untouched and any {@link Optional}-typed field stays at its constructor-assigned
+	 * value.
+	 *
 	 * @return The inner bean object.
 	 */
 	public T getBean() {
@@ -424,17 +431,18 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			arrayPropertyCache = null;
 		}
 
-		// Initialize any null Optional<X> fields.
+		// Initialize any null Optional<X> fields.  Skip properties whose ClassMeta is unavailable
+		// (bean-modeling-only path — Optional handling is a marshalling concern that requires type metadata).
 		meta.getProperties().forEach((k,v) -> {
 			var cm = v.getClassMeta();
-			if (cm.isOptional() && v.get(this, k) == null)
+			if (nn(cm) && cm.isOptional() && v.get(this, k) == null)
 				v.set(this, k, cm.getOptionalDefault());
 		});
 
 		// Do the same for hidden fields.
 		meta.getHiddenProperties().forEach((k, v) -> {
 			var cm = v.getClassMeta();
-			if (cm.isOptional() && v.get(this, k) == null)
+			if (nn(cm) && cm.isOptional() && v.get(this, k) == null)
 				v.set(this, k, cm.getOptionalDefault());
 		});
 

@@ -18,6 +18,8 @@ package org.apache.juneau.commons.bean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -170,5 +172,74 @@ class BeanMeta_Test extends TestBase {
 		var cfg = BeanConfigContext.create().findFluentSetters(true).build();
 		var bm = BeanMeta.of(D_FluentPojo.class, cfg);
 		assertTrue(bm.getProperties().containsKey("name"));
+	}
+
+	//====================================================================================================
+	// Marshalling-only paths on a commons-built BeanPropertyMeta (Step 7 hardening)
+	//====================================================================================================
+
+	public static class E_CollectionPojo {
+		private List<String> tags = new ArrayList<>();
+		private Map<String,String> attrs = new LinkedHashMap<>();
+		public List<String> getTags() { return tags; }
+		public void setTags(List<String> value) { tags = value; }
+		public Map<String,String> getAttrs() { return attrs; }
+		public void setAttrs(Map<String,String> value) { attrs = value; }
+	}
+
+	@Test
+	void e01_add_collection_throwsOnCommonsBuiltProperty() {
+		var bm = BeanMeta.of(E_CollectionPojo.class);
+		var p = new E_CollectionPojo();
+		var map = BeanMap.of(p, bm);
+		var pTags = bm.getPropertyMeta("tags");
+		var ex = assertThrows(UnsupportedOperationException.class, () -> pTags.add(map, "tags", "x"));
+		assertTrue(ex.getMessage().contains("bean-modeling-only"), () -> "Got: " + ex.getMessage());
+		assertTrue(ex.getMessage().contains("tags"), () -> "Got: " + ex.getMessage());
+	}
+
+	@Test
+	void e02_add_map_throwsOnCommonsBuiltProperty() {
+		var bm = BeanMeta.of(E_CollectionPojo.class);
+		var p = new E_CollectionPojo();
+		var map = BeanMap.of(p, bm);
+		var pAttrs = bm.getPropertyMeta("attrs");
+		var ex = assertThrows(UnsupportedOperationException.class, () -> pAttrs.add(map, "attrs", "k", "v"));
+		assertTrue(ex.getMessage().contains("bean-modeling-only"), () -> "Got: " + ex.getMessage());
+		assertTrue(ex.getMessage().contains("attrs"), () -> "Got: " + ex.getMessage());
+	}
+
+	//====================================================================================================
+	// BeanMap.getBean() on a commons-built BeanMap (Step 7 hardening)
+	//====================================================================================================
+
+	public static class F_OptionalPojo {
+		private Optional<String> maybe;
+		public Optional<String> getMaybe() { return maybe; }
+		public void setMaybe(Optional<String> value) { maybe = value; }
+	}
+
+	@Test
+	void f01_getBean_skipsOptionalInitOnCommonsBuiltProperty() {
+		// Optional initialization (cm.isOptional() — seeds null Optional<X> properties with cm.getOptionalDefault())
+		// requires a per-property ClassMeta which is unavailable on the bean-modeling-only path.  getBean() must
+		// still return the wrapped bean rather than NPE.
+		var bm = BeanMeta.of(F_OptionalPojo.class);
+		var p = new F_OptionalPojo();
+		var map = BeanMap.of(p, bm);
+		assertSame(p, map.getBean());
+		// Optional field stays at its constructor-assigned value (null) because the marshalling-side
+		// Optional-default seeding is skipped for commons-built properties.
+		assertNull(p.getMaybe());
+	}
+
+	@Test
+	void f02_getBean_returnsBeanForSimplePojo() {
+		var bm = BeanMeta.of(A_Pojo.class);
+		var p = new A_Pojo();
+		p.setX("hi");
+		var map = BeanMap.of(p, bm);
+		assertSame(p, map.getBean());
+		assertEquals("hi", p.getX());
 	}
 }

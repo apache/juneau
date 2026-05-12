@@ -632,17 +632,31 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * Note that adding values to an array property is inefficient for large arrays since it must copy the array into a
 	 * larger array on each operation.
 	 *
+	 * <p>
+	 * <b>Marshalling-only path.</b>  Requires a property built via the marshalling-side construction path
+	 * (i.e. with a non-null {@link #getClassMeta() rawTypeMeta} and a non-null backing
+	 * {@link MarshallingSession} on the supplied {@link BeanMap}).  When the owning {@link BeanMeta} was built via
+	 * {@link BeanMeta#of(Class, BeanConfigContext)}, this method throws
+	 * {@link UnsupportedOperationException} because adding into a Collection/array property requires
+	 * type-aware element conversion (the marshalling session's {@code convertToType}) that is not available in the
+	 * bean-modeling-only path.
+	 *
 	 * @param m The bean of the field being set.
 	 * @param pName
 	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
 	 * 	<br>Otherwise can be <jk>null</jk>.
 	 * @param value The value to add to the field.
 	 * @throws BeanRuntimeException If field is not a collection or array.
+	 * @throws UnsupportedOperationException If this property was built via the bean-modeling-only path
+	 * 	({@link BeanMeta#of(Class, BeanConfigContext)}).
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for property add operation with various collection types
 	})
 	public void add(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
+
+		if (rawTypeMeta == null)
+			throw unsupportedOp("Property ''{0}'' was built via the bean-modeling-only path; Collection/array add operations require a marshalling context.", name);
 
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
@@ -720,6 +734,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * Adds a value to a {@link Map} or bean property.
 	 *
+	 * <p>
+	 * <b>Marshalling-only path.</b>  Requires a property built via the marshalling-side construction path
+	 * (i.e. with a non-null {@link #getClassMeta() rawTypeMeta} and a non-null backing
+	 * {@link MarshallingSession} on the supplied {@link BeanMap}).  When the owning {@link BeanMeta} was built via
+	 * {@link BeanMeta#of(Class, BeanConfigContext)}, this method throws
+	 * {@link UnsupportedOperationException} because adding into a Map/bean property requires type-aware
+	 * value conversion (the marshalling session's {@code convertToType} / {@code toBeanMap}) that is not available
+	 * in the bean-modeling-only path.
+	 *
 	 * @param m The bean of the field being set.
 	 * @param pName
 	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
@@ -727,11 +750,16 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param key The key to add to the field.
 	 * @param value The value to add to the field.
 	 * @throws BeanRuntimeException If field is not a map or array.
+	 * @throws UnsupportedOperationException If this property was built via the bean-modeling-only path
+	 * 	({@link BeanMeta#of(Class, BeanConfigContext)}).
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for property add operation with map key handling
 	})
 	public void add(BeanMap<?> m, String pName, String key, Object value) throws BeanRuntimeException {
+
+		if (rawTypeMeta == null)
+			throw unsupportedOp("Property ''{0}'' was built via the bean-modeling-only path; Map/bean add operations require a marshalling context.", name);
 
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
@@ -1328,7 +1356,21 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return r(properties());
 	}
 
+	/**
+	 * Applies the {@link MarshalledProp#properties() @MarshalledProp(properties)} child-property filter to a value.
+	 *
+	 * <p>
+	 * <b>Marshalling-only.</b>  The signature itself takes a {@link ClassMeta} and {@link MarshallingSession},
+	 * which are marshalling-side types; this helper is only reachable from {@link #swapAndFilterProperty},
+	 * which short-circuits when the owning {@link BeanMeta} was built via
+	 * {@link BeanMeta#of(Class, BeanConfigContext)} (no {@link MarshallingContext} on the property,
+	 * therefore no {@code rawTypeMeta}).
+	 *
+	 * @throws UnsupportedOperationException If invoked on a property built via the bean-modeling-only path.
+	 */
 	private Object applyChildPropertiesFilter(MarshallingSession session, ClassMeta cm, Object o) {
+		if (bc == null)
+			throw unsupportedOp("Property ''{0}'' was built via the bean-modeling-only path; child-properties filtering requires a marshalling context.", name);
 		if (o == null)
 			return null;
 		if (cm.isBean())
@@ -1394,7 +1436,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		o = readTransform.apply(session, o);
 		if (o == null)
 			return null;
-		if (nn(properties)) {
+		// rawTypeMeta is null on the bean-modeling-only path — child-properties filtering is a marshalling
+		// concern (it builds DelegateList / FilteredKeyMap / nested BeanMetaFiltered instances).  Skip it and
+		// return the raw value.
+		if (nn(properties) && nn(rawTypeMeta)) {
 			if (rawTypeMeta.isArray()) {
 				var a = (Object[])o;
 				var l1 = new DelegateList(rawTypeMeta);
@@ -1482,13 +1527,24 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * <p>
 	 * Works on both <c>Object</c> and primitive arrays.
 	 *
+	 * <p>
+	 * <b>Marshalling-only path.</b>  Requires a property built via the marshalling-side construction path
+	 * (i.e. with a non-null {@link #getClassMeta() rawTypeMeta}).  When the owning {@link BeanMeta} was built via
+	 * {@link BeanMeta#of(Class, BeanConfigContext)}, this method throws
+	 * {@link UnsupportedOperationException} because the array element type is only known via {@code rawTypeMeta},
+	 * which is not populated in the bean-modeling-only path.
+	 *
 	 * @param bean The bean of the field.
 	 * @param l The collection to use to set the array field.
 	 * @throws IllegalArgumentException Thrown by method invocation.
 	 * @throws IllegalAccessException Thrown by method invocation.
 	 * @throws InvocationTargetException Thrown by method invocation.
+	 * @throws UnsupportedOperationException If this property was built via the bean-modeling-only path
+	 * 	({@link BeanMeta#of(Class, BeanConfigContext)}).
 	 */
 	protected void setArray(Object bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		if (rawTypeMeta == null)
+			throw unsupportedOp("Property ''{0}'' was built via the bean-modeling-only path; setArray requires a marshalling context.", name);
 		var array = toArray(l, this.rawTypeMeta.getElementType().inner());
 		invokeSetter(bean, name, array);
 	}
