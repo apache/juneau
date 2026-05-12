@@ -17,12 +17,10 @@
 package org.apache.juneau.annotation;
 
 import org.apache.juneau.commons.http.MediaType;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -56,28 +54,7 @@ public class MarshalledConfigAnnotation {
 			MarshalledConfig a = ai.inner();
 
 			// @formatter:off
-			string(a.beanClassVisibility()).map(Visibility::valueOf).ifPresent(b::beanClassVisibility);
-			string(a.beanConstructorVisibility()).map(Visibility::valueOf).ifPresent(b::beanConstructorVisibility);
-			string(a.beanFieldVisibility()).map(Visibility::valueOf).ifPresent(b::beanFieldVisibility);
-			string(a.beanMethodVisibility()).map(Visibility::valueOf).ifPresent(b::beanMethodVisibility);
-			bool(a.beanMapPutReturnsOldValue()).ifPresent(b::beanMapPutReturnsOldValue);
-			bool(a.beansRequireDefaultConstructor()).ifPresent(b::beansRequireDefaultConstructor);
-			bool(a.beansRequireSerializable()).ifPresent(b::beansRequireSerializable);
-			bool(a.beansRequireSettersForGetters()).ifPresent(b::beansRequireSettersForGetters);
-			bool(a.disableBeansRequireSomeProperties()).ifPresent(b::disableBeansRequireSomeProperties);
 			bool(a.debug()).ifPresent(b::debug);
-			bool(a.findFluentSetters()).ifPresent(b::findFluentSetters);
-			bool(a.ignoreInvocationExceptionsOnGetters()).ifPresent(b::ignoreInvocationExceptionsOnGetters);
-			bool(a.ignoreInvocationExceptionsOnSetters()).ifPresent(b::ignoreInvocationExceptionsOnSetters);
-			bool(a.disableIgnoreMissingSetters()).ifPresent(b::disableIgnoreMissingSetters);
-			bool(a.disableIgnoreTransientFields()).ifPresent(b::disableIgnoreTransientFields);
-			bool(a.ignoreUnknownBeanProperties()).ifPresent(b::ignoreUnknownBeanProperties);
-			bool(a.ignoreUnknownEnumValues()).ifPresent(b::ignoreUnknownEnumValues);
-			bool(a.disableIgnoreUnknownNullBeanProperties()).ifPresent(b::disableIgnoreUnknownNullBeanProperties);
-			bool(a.unsortedProperties()).ifPresent(b::unsortedProperties);
-			bool(a.useEnumNames()).ifPresent(b::useEnumNames);
-			bool(a.disableInterfaceProxies()).ifPresent(b::disableInterfaceProxies);
-			bool(a.useJavaBeanIntrospector()).ifPresent(b::useJavaBeanIntrospector);
 			string(a.typePropertyName()).ifPresent(b::typePropertyName);
 			string(a.locale()).map(Locale::forLanguageTag).ifPresent(b::locale);
 			string(a.mediaType()).map(MediaType::of).ifPresent(b::mediaType);
@@ -86,12 +63,6 @@ public class MarshalledConfigAnnotation {
 			classes(a.dictionary_replace()).ifPresent(x -> { b.beanDictionary().clear(); b.beanDictionary(x);});
 			classes(a.swaps()).ifPresent(b::swaps);
 			classes(a.swaps_replace()).ifPresent(x -> { b.swaps().clear(); b.swaps(x);});
-			classes(a.notBeanClasses()).ifPresent(b::notBeanClasses);
-			classes(a.notBeanClasses_replace()).ifPresent(x -> { b.notBeanClasses().clear(); b.notBeanClasses(x);});
-			type(a.propertyNamer()).ifPresent(b::propertyNamer);
-			l(a.interfaces()).stream().map(x -> BeanTypeApplyAnnotation.create(x).value(BeanTypeAnnotation.create().interfaceClass(x).build()).build()).forEach(b::annotations);
-			strings(a.notBeanPackages()).ifPresent(b::notBeanPackages);
-			strings(a.notBeanPackages_replace()).ifPresent(x -> {b.notBeanPackages().clear(); b.notBeanPackages(x);});
 			// @formatter:on
 		}
 	}

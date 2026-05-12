@@ -29,6 +29,7 @@ import java.util.function.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bson.annotation.BsonConfig;
 import org.apache.juneau.cbor.annotation.CborConfig;
+import org.apache.juneau.commons.bean.BeanConfig;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
@@ -877,8 +878,14 @@ public abstract class Context {
 
 	/**
 	 * Predicate for annotations that themselves are annotated with {@link ContextApply}.
+	 *
+	 * <p>
+	 * Also matches {@link BeanConfig} from {@code juneau-commons}, which intentionally lacks a
+	 * {@link ContextApply @ContextApply} meta-annotation because {@code juneau-commons} cannot reference
+	 * marshall-layer types. {@link AnnotationWorkList} routes {@link BeanConfig} to its
+	 * {@link BeanConfigAnnotation.Applier} via an explicit special case.
 	 */
-	public static final Predicate<AnnotationInfo<?>> CONTEXT_APPLY_FILTER = x -> x.hasAnnotation(ContextApply.class);
+	public static final Predicate<AnnotationInfo<?>> CONTEXT_APPLY_FILTER = x -> x.hasAnnotation(ContextApply.class) || x.annotationType() == BeanConfig.class;
 
 	/**
 	 * Instantiates a builder of the specified context class.

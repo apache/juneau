@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.BeanConfig;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -131,6 +132,12 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	})
 	private void applyAnnotation(AnnotationInfo<?> ai) {
 		var a = ai.inner();
+		// Special-case @BeanConfig from juneau-commons. The annotation cannot reference @ContextApply
+		// (which lives in juneau-marshall), so we route it to its Applier directly.
+		if (a.annotationType() == BeanConfig.class) {
+			add(ai, (AnnotationApplier<Annotation,Object>)(AnnotationApplier<?,?>) new BeanConfigAnnotation.Applier(vrs));
+			return;
+		}
 		var cpa = assertNotNull(a.annotationType().getAnnotation(ContextApply.class), "Annotation found without @ContextApply: %s", cn(ai.annotationType()));
 		Arrays.stream(cpa.value())
 			.map(x -> safe(() -> (Constructor<? extends AnnotationApplier<?,?>>)x.getConstructor(VarResolverSession.class)))

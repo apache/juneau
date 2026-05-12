@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.config;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
@@ -126,7 +127,7 @@ import org.apache.juneau.serializer.annotation.*;
 	staticFiles=StaticFiles.Void.class,  // Defaults to BasicStaticFiles.
 	swaggerProvider=SwaggerProvider.Void.class  // Defaults to BasicSwaggerProvider.
 )
-@MarshalledConfig(
+@BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
 	ignoreUnknownBeanProperties="true",
 	ignoreUnknownEnumValues="true"

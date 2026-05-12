@@ -44,7 +44,7 @@ class BasicBeans_Test extends TestBase {
 		}
 	}
 
-	@MarshalledConfig(disableIgnoreTransientFields="true")
+	@BeanConfig(disableIgnoreTransientFields="true")
 	public static class A {}
 
 	@Test void a01_testTransientFieldsIgnored() {
