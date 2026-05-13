@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * Houses the {@link Applier} that pushes {@link BeanConfig @BeanConfig} attributes into a
- * {@link MarshallingContext.Builder}. The annotation itself lives in
+ * {@link org.apache.juneau.MarshallingContext.Builder}. The annotation itself lives in
  * {@code juneau-commons} (in {@link BeanConfig}), but
  * the application logic lives here in {@code juneau-marshall} because it depends on
  * marshall-layer types ({@link AnnotationApplier}, {@link MarshallingContext} builder APIs,
@@ -48,7 +48,7 @@ public class BeanConfigAnnotation {
 	private BeanConfigAnnotation() {}
 
 	/**
-	 * Applies {@link BeanConfig} annotations to a {@link MarshallingContext.Builder}.
+	 * Applies {@link BeanConfig} annotations to a {@link org.apache.juneau.MarshallingContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<BeanConfig,MarshallingContext.Builder> {
 

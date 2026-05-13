@@ -20,7 +20,6 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import org.apache.juneau.MarshallingContext;
 import org.apache.juneau.MarshallingSession;
 import org.apache.juneau.commons.bean.BeanProp;
 
@@ -71,7 +70,7 @@ public @interface MarshalledProp {
 	 * 	<li class='ja'>{@link Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * <p>

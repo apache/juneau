@@ -17,7 +17,6 @@
 package org.apache.juneau;
 
 import org.apache.juneau.commons.http.MediaType;
-import org.apache.juneau.jsonschema.JsonSchemaGenerator;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -267,7 +266,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * <p>
 		 * Used when sharing bean context builders across multiple context objects.
-		 * For example, {@link JsonSchemaGenerator.Builder} uses this to apply common bean settings with the JSON
+		 * For example, {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder} uses this to apply common bean settings with the JSON
 		 * serializer and parser.
 		 *
 		 * @param value The new value for this setting.

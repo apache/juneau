@@ -50,7 +50,7 @@ import org.apache.juneau.serializer.*;
  * <c>ObjectSwaps</c> are associated with serializers and parsers through the following:
  * <ul class='javatree'>
  * 	<li class='ja'>{@link Swap @Swap}
- * 	<li class='jm'>{@link MarshallingContext.Builder#swaps(Class...)}
+ * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...)}
  * </ul>
  *
  * <p>

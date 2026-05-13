@@ -334,7 +334,7 @@ public class ParserSession extends MarshallingSession {
 	 *
 	 * <p>
 	 * This always returns a value for input of type {@link CharSequence}.
-	 * <br>For other input types, use {@link Context.Builder#debug()} setting to enable caching to a string
+	 * <br>For other input types, use {@link org.apache.juneau.Context.Builder#debug()} setting to enable caching to a string
 	 * before parsing so that this method returns the input.
 	 *
 	 * @return The input as a string, or <jk>null</jk> if no pipe has been created or we're reading from an uncached reader or input stream source.
@@ -1212,7 +1212,7 @@ public class ParserSession extends MarshallingSession {
 	 * @param beanMap The bean that doesn't have the expected property.
 	 * @param value The parsed value.
 	 * @throws ParseException
-	 * 	Automatically thrown if {@link MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
+	 * 	Automatically thrown if {@link org.apache.juneau.MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
 	 * 	<jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */

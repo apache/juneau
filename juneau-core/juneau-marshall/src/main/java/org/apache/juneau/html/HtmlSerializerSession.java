@@ -926,7 +926,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @param eType The expected type of the object if this is a bean property.
 	 * @param name
 	 * 	The attribute name of this object if this object was a field in a JSON object (i.e. key of a
-	 * 	{@link Map.Entry} or property name of a bean).
+	 * 	{@link java.util.Map.Entry} or property name of a bean).
 	 * @param pMeta The bean property being serialized, or <jk>null</jk> if we're not serializing a bean property.
 	 * @param xIndent The current indentation value.
 	 * @param isRoot <jk>true</jk> if this is the root element of the document.

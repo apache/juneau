@@ -83,6 +83,7 @@ public abstract class BeanInfo<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return The element type info, or <jk>null</jk>.
 	 */
+	@SuppressWarnings("java:S1452") // Element type is heterogeneous; wildcard is fundamental to the SPI contract.
 	public abstract BeanInfo<?> getElementType();
 
 	/**
@@ -90,6 +91,7 @@ public abstract class BeanInfo<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return The key type info, or <jk>null</jk>.
 	 */
+	@SuppressWarnings("java:S1452") // Key type is heterogeneous; wildcard is fundamental to the SPI contract.
 	public abstract BeanInfo<?> getKeyType();
 
 	/**
@@ -97,6 +99,7 @@ public abstract class BeanInfo<T> extends ClassInfoTyped<T> {
 	 *
 	 * @return The value type info, or <jk>null</jk>.
 	 */
+	@SuppressWarnings("java:S1452") // Value type is heterogeneous; wildcard is fundamental to the SPI contract.
 	public abstract BeanInfo<?> getValueType();
 
 	/**
@@ -121,6 +124,7 @@ public abstract class BeanInfo<T> extends ClassInfoTyped<T> {
 	 * @return A new instance of the class.
 	 * @throws ExecutableException If the class could not be instantiated.
 	 */
+	@Override /* Overridden from ClassInfo to narrow return type to T. */
 	public abstract T newInstance() throws ExecutableException;
 
 	/**

@@ -146,6 +146,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * @param annotations The annotations to apply.
 		 * @return This object.
 		 */
+		@SuppressWarnings("java:S3776")
 		public Builder applyBeanTypeAnnotations(List<BeanType> annotations) {
 
 			annotations.forEach(x -> {

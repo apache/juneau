@@ -85,7 +85,7 @@ public @interface Marshalled {
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -183,7 +183,7 @@ public @interface Marshalled {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -208,7 +208,7 @@ public @interface Marshalled {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link MarshalledConfig#typePropertyName()}
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#typePropertyName(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#typePropertyName(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.

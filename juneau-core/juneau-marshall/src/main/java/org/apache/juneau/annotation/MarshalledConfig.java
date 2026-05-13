@@ -59,7 +59,7 @@ public @interface MarshalledConfig {
 	 * 		When bean getters throws exceptions, the exception includes the object stack information
 	 * 		in order to determine how that method was invoked.
 	 * 	<li>
-	 * 		Enables {@link MarshallingTraverseContext.Builder#detectRecursions()}.
+	 * 		Enables {@link org.apache.juneau.MarshallingTraverseContext.Builder#detectRecursions()}.
 	 * </ul>
 	 *
 	 * <p>
@@ -81,7 +81,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link Context.Builder#debug()}
+	 * 	<li class='jm'>{@link org.apache.juneau.Context.Builder#debug()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -108,7 +108,7 @@ public @interface MarshalledConfig {
 	 * 	<li class='ja'>{@link Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanDictionaryBasics">Bean Dictionary Basics</a>
 	 * </ul>
 	 *
@@ -126,7 +126,7 @@ public @interface MarshalledConfig {
 	 * 	<li class='ja'>{@link Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -145,8 +145,8 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link MarshallingSession.Builder#locale(Locale)}
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#locale(Locale)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingSession.Builder#locale(Locale)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#locale(Locale)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -165,8 +165,8 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link MarshallingSession.Builder#mediaType(MediaType)}
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#mediaType(MediaType)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingSession.Builder#mediaType(MediaType)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#mediaType(MediaType)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -199,7 +199,7 @@ public @interface MarshalledConfig {
 	 * {@link ObjectSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#swaps(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PerMediaTypeSwaps">Per-media-type Swaps</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OneWaySwaps">One-way Swaps</a>
@@ -219,7 +219,7 @@ public @interface MarshalledConfig {
 	 * Same as {@link #swaps()} but replaces any existing value.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#swaps(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -238,8 +238,8 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link MarshallingSession.Builder#timeZone(TimeZone)}
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#timeZone(TimeZone)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingSession.Builder#timeZone(TimeZone)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#timeZone(TimeZone)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -262,7 +262,7 @@ public @interface MarshalledConfig {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Marshalled#typePropertyName()}
-	 * 	<li class='jm'>{@link MarshallingContext.Builder#typePropertyName(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#typePropertyName(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.

@@ -1,6 +1,10 @@
-# TODO-5 — Move bean-modeling runtime types (`BeanMap`, `BeanMeta`, `BeanPropertyMeta`, …) into `commons.bean` (remainder of Phase 5)
+# FINISHED-5 — Move bean-modeling runtime types into `commons.bean` (Phase 5 of bean-layer split)
 
-This is the remaining work from **Phase 5 of the bean-layer split**. Phase 5a (the `MarshallingInterceptor` → `commons.bean.BeanInterceptor` move+rename) shipped in the same commit that created this plan. The big runtime types still live in `juneau-marshall` because they are deeply entangled with `ClassMeta` / `MarshallingContext` / `ObjectSwap` / `BeanRegistry`, and untangling them is the bulk of the work.
+> **Archived from `TODO-5-bean-runtime-types-to-commons.md`.** The move is complete: all 7 bean-runtime types (`BeanMap`, `BeanMapEntry`, `BeanMeta`, `BeanPropertyMeta`, `BeanPropertyValue`, `BeanPropertyConsumer`, `BeanProxyInvocationHandler`) now live in `org.apache.juneau.commons.bean`; `juneau-commons` compiles standalone with no `juneau-marshall` dependency; full test suite green; release-notes and migration-guide entries landed in `juneau-docs`. Kept as a record of the SPI extractions, blocker resolutions, and phased sequencing used to untangle `ClassMeta` / `MarshallingContext` / `ObjectSwap` / `BeanRegistry` from the bean-modeling layer.
+
+---
+
+Original plan content (Phase 5 of the bean-layer split). Phase 5a (the `MarshallingInterceptor` → `commons.bean.BeanInterceptor` move+rename) shipped in the same commit that created this plan. The big runtime types lived in `juneau-marshall` because they were deeply entangled with `ClassMeta` / `MarshallingContext` / `ObjectSwap` / `BeanRegistry`, and untangling them was the bulk of the work.
 
 ---
 

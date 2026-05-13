@@ -35,7 +35,7 @@ import org.apache.juneau.swaps.*;
 
 /**
  * Marshalling-side post-processor that applies {@link MarshalledProp @MarshalledProp} and {@link Swap @Swap}
- * annotation effects to a {@link BeanPropertyMeta.Builder} after {@link BeanPropertyMeta.Builder#validate validate()}
+ * annotation effects to a {@link org.apache.juneau.commons.bean.BeanPropertyMeta.Builder} after {@link org.apache.juneau.commons.bean.BeanPropertyMeta.Builder#validate validate()}
  * runs successfully.
  *
  * <p>
@@ -147,7 +147,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	}
 
 	/**
-	 * Installs swap-aware read/write transforms on a {@link BeanPropertyMeta.Builder} after validation.
+	 * Installs swap-aware read/write transforms on a {@link org.apache.juneau.commons.bean.BeanPropertyMeta.Builder} after validation.
 	 *
 	 * <p>
 	 * After {@link BeanPropertyMeta.Builder#validate validate()} succeeds, the builder's {@code swap} and
