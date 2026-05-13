@@ -18,9 +18,6 @@ package org.apache.juneau;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.swap.*;
-
 /**
  * Represents a single entry in a bean map.
  *
@@ -88,11 +85,11 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 * Returns the value of this property.
 	 *
 	 * <p>
-	 * If there is a {@link ObjectSwap} associated with this bean property or bean property type class, then this method
+	 * If there is a {@link org.apache.juneau.swap.ObjectSwap} associated with this bean property or bean property type class, then this method
 	 * will return the transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
 	 * {@link org.apache.juneau.swaps.TemporalDateSwap.IsoInstant} swap associated with it through the
-	 * {@link Swap#value() @Swap(value)} annotation, this method will return a String containing an
+	 * {@link org.apache.juneau.annotation.Swap#value() @Swap(value)} annotation, this method will return a String containing an
 	 * ISO8601 date-time string value.
 	 */
 	@Override /* Overridden from Map.Entry */
@@ -109,11 +106,11 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 * If the property is a bean type {@code X}, then the value can either be an {@code X} or a {@code Map}.
 	 *
 	 * <p>
-	 * If there is a {@link ObjectSwap} associated with this bean property or bean property type class, then you must pass
+	 * If there is a {@link org.apache.juneau.swap.ObjectSwap} associated with this bean property or bean property type class, then you must pass
 	 * in a transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
 	 * {@link org.apache.juneau.swaps.TemporalDateSwap.IsoInstant} swap associated with it through the
-	 * {@link Swap#value() @Swap(value)} annotation, the value being passed in must be a String
+	 * {@link org.apache.juneau.annotation.Swap#value() @Swap(value)} annotation, the value being passed in must be a String
 	 * containing an ISO8601 date-time string value.
 	 *
 	 * @return  The set value after it's been converted.

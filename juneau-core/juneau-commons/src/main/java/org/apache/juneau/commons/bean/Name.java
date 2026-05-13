@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.commons.bean;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -48,10 +48,10 @@ import org.apache.juneau.commons.inject.BeanStore;
  *
  * <h5 class='section'>Comparison with @Named:</h5>
  * <p>
- * Do not confuse this annotation with {@link Named @Named}, which serves a different purpose:
+ * Do not confuse this annotation with {@link org.apache.juneau.annotation.Named @Named}, which serves a different purpose:
  * <ul>
  * 	<li><b>{@link Name @Name}</b> - Specifies the parameter name for bean property mapping
- * 	<li><b>{@link Named @Named}</b> - Specifies which named bean to inject (bean qualifier)
+ * 	<li><b>{@link org.apache.juneau.annotation.Named @Named}</b> - Specifies which named bean to inject (bean qualifier)
  * </ul>
  *
  * <h5 class='section'>Example showing the difference:</h5>
@@ -68,7 +68,7 @@ import org.apache.juneau.commons.inject.BeanStore;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='ja'>{@link Named}
+ * 	<li class='ja'>{@link org.apache.juneau.annotation.Named}
  * 	<li class='jc'>{@link BeanStore}
  * </ul>
  */

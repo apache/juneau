@@ -29,7 +29,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.Name;
+import org.apache.juneau.commons.bean.Name;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -201,9 +201,9 @@ class ParameterInfo_Test extends TestBase {
 		dc_a1 = dc.getMethod(x -> x.hasName("a1")).get().getParameter(0);
 
 	static class E {
-		public void a1(int a, @org.apache.juneau.annotation.Name("b") int b) {}
+		public void a1(int a, @org.apache.juneau.commons.bean.Name("b") int b) {}
 		// Parameter with both @Name and another annotation to test line 622 both branches
-		public void test(@CA("test") @org.apache.juneau.annotation.Name("paramName") String param) {}
+		public void test(@CA("test") @org.apache.juneau.commons.bean.Name("paramName") String param) {}
 	}
 
 	// Test classes for getResolvedQualifier() - line 643
@@ -281,15 +281,15 @@ class ParameterInfo_Test extends TestBase {
 	// Test class for toString() comprehensive tests
 	public static class ToStringTestClass {
 		public void basicMethod(int a, String b) {}
-		public void namedMethod(@org.apache.juneau.annotation.Name("x") int x, @org.apache.juneau.annotation.Name("y") String y) {}
+		public void namedMethod(@org.apache.juneau.commons.bean.Name("x") int x, @org.apache.juneau.commons.bean.Name("y") String y) {}
 		public void finalMethod(final int value) {}
-		public void genericMethod(@org.apache.juneau.annotation.Name("list") java.util.List<String> list, @org.apache.juneau.annotation.Name("map") java.util.Map<String, Integer> map) {}
-		public void varargsMethod(@org.apache.juneau.annotation.Name("values") String... values) {}
-		public void finalVarargsMethod(final @org.apache.juneau.annotation.Name("args") String... args) {}
-		public void arrayMethod(@org.apache.juneau.annotation.Name("numbers") int[] numbers, @org.apache.juneau.annotation.Name("matrix") String[][] matrix) {}
-		public void genericArrayMethod(@org.apache.juneau.annotation.Name("lists") java.util.List<String>[] lists) {}
-		public void primitiveMethod(@org.apache.juneau.annotation.Name("flag") boolean flag, @org.apache.juneau.annotation.Name("value") double value, @org.apache.juneau.annotation.Name("count") long count) {}
-		public ToStringTestClass(@org.apache.juneau.annotation.Name("id") int id, @org.apache.juneau.annotation.Name("name") String name) {}
+		public void genericMethod(@org.apache.juneau.commons.bean.Name("list") java.util.List<String> list, @org.apache.juneau.commons.bean.Name("map") java.util.Map<String, Integer> map) {}
+		public void varargsMethod(@org.apache.juneau.commons.bean.Name("values") String... values) {}
+		public void finalVarargsMethod(final @org.apache.juneau.commons.bean.Name("args") String... args) {}
+		public void arrayMethod(@org.apache.juneau.commons.bean.Name("numbers") int[] numbers, @org.apache.juneau.commons.bean.Name("matrix") String[][] matrix) {}
+		public void genericArrayMethod(@org.apache.juneau.commons.bean.Name("lists") java.util.List<String>[] lists) {}
+		public void primitiveMethod(@org.apache.juneau.commons.bean.Name("flag") boolean flag, @org.apache.juneau.commons.bean.Name("value") double value, @org.apache.juneau.commons.bean.Name("count") long count) {}
+		public ToStringTestClass(@org.apache.juneau.commons.bean.Name("id") int id, @org.apache.juneau.commons.bean.Name("name") String name) {}
 		public void unnamedMethod(int param1, String param2) {}
 	}
 

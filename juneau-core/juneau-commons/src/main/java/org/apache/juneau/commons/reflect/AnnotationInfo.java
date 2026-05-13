@@ -640,7 +640,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>boolean</jk> <jv>isName</jv> = <jv>annotationInfo</jv>.hasName(<js>"org.apache.juneau.annotation.Name"</js>);
+	 * 	<jk>boolean</jk> <jv>isName</jv> = <jv>annotationInfo</jv>.hasName(<js>"org.apache.juneau.commons.bean.Name"</js>);
 	 * </p>
 	 *
 	 * @param value The fully-qualified name to check.

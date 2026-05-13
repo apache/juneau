@@ -31,7 +31,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.lang.*;
@@ -46,8 +45,9 @@ import org.apache.juneau.commons.bean.*;
  *
  * <h5 class='topic'>Description</h5>
  *
- * Uses introspection to find all the properties associated with this class.  If the {@link Marshalled @Marshalled} annotation
- * 	is present on the class, then that information is used to determine the properties on the class.
+ * Uses introspection to find all the properties associated with this class.  If the
+ * {@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation is present on the class, then that information is used to
+ * determine the properties on the class.
  * Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.
  *
  * <h5 class='topic'>Bean property ordering</h5>
@@ -55,10 +55,11 @@ import org.apache.juneau.commons.bean.*;
  * The order of the properties are as follows:
  * <ul class='spaced-list'>
  * 	<li>
- * 		If {@link Bean @Marshalled} annotation is specified on class, then the order is the same as the list of properties
- * 		in the annotation.
+ * 		If {@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation is specified on class, then the order is the same
+ * 		as the list of properties in the annotation.
  * 	<li>
- * 		If {@link Bean @Marshalled} annotation is not specified on the class, then the order is based on the following.
+ * 		If {@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation is not specified on the class, then the order is
+ * 		based on the following.
  * 		<ul>
  * 			<li>Public fields (same order as {@code Class.getFields()}).
  * 			<li>Properties returned by {@code BeanInfo.getPropertyDescriptors()}.
@@ -218,18 +219,19 @@ public class BeanMeta<T> {
 		try {
 			var bc = cm.getMarshallingContext();
 			var ap = bc.getAnnotationProvider();
+			var cfg = bc.getBeanConfigContext();
 
 			// Sanity checks first.
 			if (bc.isNotABean(cm))
 				return notABean("Class matches exclude-class list");
 
-			if (bc.isBeansRequireSerializable() && ! cm.isAssignableTo(Serializable.class) && ! ap.has(Marshalled.class, cm) && ! ap.has(BeanType.class, cm))
+			if (bc.isBeansRequireSerializable() && ! cm.isAssignableTo(Serializable.class) && ! MarshalledBeanMetaInitializer.hasBeanRegistrationAnnotation(cfg, cm))
 				return notABean("Class is not serializable");
 
 			if (ap.has(BeanIgnore.class, cm))
 				return notABean("Class is annotated with @BeanIgnore");
 
-		if ((! bc.getBeanClassVisibility().isVisible(cm.getModifiers()) || cm.isAnonymousClass()) && ! ap.has(Marshalled.class, cm) && ! ap.has(BeanType.class, cm))
+		if ((! bc.getBeanClassVisibility().isVisible(cm.getModifiers()) || cm.isAnonymousClass()) && ! MarshalledBeanMetaInitializer.hasBeanRegistrationAnnotation(cfg, cm))
 			return notABean("Class is not public");
 
 			var bm = new BeanMeta<>(cm, MarshalledBeanMetaInitializer.findMarshalledFilter(cm), null, implClass);
@@ -450,11 +452,10 @@ public class BeanMeta<T> {
 		var dynaPropertyValue = Value.<BeanPropertyMeta>empty();
 		var propertyBeanRegistriesTemp = CollectionUtils.<BeanPropertyMeta,BeanRegistryLookup>map();  // Per-property BeanRegistry side-map (TODO-5 Step 5).
 		var unsortedPropertiesTemp = false;
-		var ba = ap.find(Marshalled.class, classInfo);
 		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, classInfo);
 		var propertyNamer = opt(bf).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
 
-		this.typePropertyName = ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::ne).findFirst().orElseGet(config::getBeanTypePropertyName);
+		this.typePropertyName = MarshalledBeanMetaInitializer.resolveTypePropertyName(config, classInfo);
 
 		// Check if constructor is required but not found (records are exempt since they use canonical constructors)
 		if (! beanConstructor.constructor().isPresent() && bf == null && config.isBeansRequireDefaultConstructor() && ! ci.isRecord())
@@ -696,7 +697,7 @@ public class BeanMeta<T> {
 	 * property inclusion/exclusion, property ordering, and type name mapping.
 	 *
 	 * <p>
-	 * The bean filter is typically created from the {@link Bean @Marshalled} annotation on the class. If no {@link Bean @Marshalled}
+	 * The bean filter is typically created from the {@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation on the class. If no {@link org.apache.juneau.annotation.Marshalled @Marshalled}
 	 * annotation is present, this method returns <jk>null</jk>.
 	 *
 	 * @return The bean filter for this bean, or <jk>null</jk> if no bean filter is associated with this bean.
@@ -722,7 +723,7 @@ public class BeanMeta<T> {
 	 *
 	 * <p>
 	 * The bean registry is used to resolve dictionary names to class types. It's created when a bean class has a
-	 * {@link Bean#dictionary() @Marshalled(dictionary)} annotation that specifies a list of possible subclasses.
+	 * {@link org.apache.juneau.annotation.Marshalled#dictionary() @Marshalled(dictionary)} annotation that specifies a list of possible subclasses.
 	 *
 	 * <p>
 	 * Returns the bean-modeling-side SPI type ({@link BeanRegistryLookup}).  Marshalling-side callers that need
@@ -800,7 +801,7 @@ public class BeanMeta<T> {
 	public BeanConfigContext getConfig() { return config; }
 
 	/**
-	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Marshalled(typeName)} annotation.
+	 * Returns the dictionary name for this bean as defined through the {@link org.apache.juneau.annotation.Marshalled#typeName() @Marshalled(typeName)} annotation.
 	 *
 	 * @return The dictionary name for this bean, or <jk>null</jk> if it has no dictionary name defined.
 	 */
@@ -861,7 +862,7 @@ public class BeanMeta<T> {
 	 * <p>
 	 * The value is determined from:
 	 * <ul>
-	 * 	<li>The {@link Bean#typePropertyName() @Marshalled(typePropertyName)} annotation on the class, if present.
+	 * 	<li>The {@link org.apache.juneau.annotation.Marshalled#typePropertyName() @Marshalled(typePropertyName)} annotation on the class, if present.
 	 * 	<li>Otherwise, the default value from {@link MarshallingContext#getBeanTypePropertyName()}.
 	 * </ul>
 	 *
@@ -1116,9 +1117,9 @@ public class BeanMeta<T> {
 	 * 	<li><b>Implementation class constructor:</b> If an {@link #implClassConstructor} was provided during bean
 	 * 		metadata creation, it is used with an empty property list.
 	 * 	<li><b>No-arg constructor:</b> Searches for a no-argument constructor. The visibility required depends on
-	 * 		whether the class has a {@link Bean @Marshalled} annotation:
+	 * 		whether the class has a {@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation:
 	 * 		<ul>
-	 * 			<li>If {@link Bean @Marshalled} is present, private constructors are allowed
+	 * 			<li>If {@link org.apache.juneau.annotation.Marshalled @Marshalled} is present, private constructors are allowed
 	 * 			<li>Otherwise, the visibility is determined by {@link MarshallingContext#getBeanConstructorVisibility()}
 	 * 		</ul>
 	 * 	<li><b>No constructor:</b> Returns an empty {@link Optional} if no suitable constructor is found.
@@ -1175,9 +1176,7 @@ public class BeanMeta<T> {
 		if (implClassConstructor != null)
 			return new BeanConstructor(opt(implClassConstructor.accessible()), liste());
 
-		var ba = ap.find(Marshalled.class, classInfo);
-		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, classInfo);
-		var con = ci.getNoArgConstructor((! ba.isEmpty() || ! btList.isEmpty()) ? Visibility.PRIVATE : vis).orElse(null);
+		var con = ci.getNoArgConstructor(MarshalledBeanMetaInitializer.hasBeanRegistrationAnnotation(config, classInfo) ? Visibility.PRIVATE : vis).orElse(null);
 		if (con != null)
 			return new BeanConstructor(opt(con.accessible()), liste());
 
@@ -1416,8 +1415,8 @@ public class BeanMeta<T> {
 	 * <ul>
 	 * 	<li><b>Bean filter dictionary:</b> Classes specified in the {@link MarshalledFilter#getBeanDictionary() bean filter's dictionary}
 	 * 		(if a bean filter is present)
-	 * 	<li><b>{@link Marshalled @Marshalled} annotation:</b> If the class has a {@link Marshalled @Marshalled} annotation with a non-empty
-	 * 		{@link Marshalled#typeName() typeName()}, the class itself is added to the dictionary
+	 * 	<li><b>{@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation:</b> If the class has a {@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation with a non-empty
+	 * 		{@link org.apache.juneau.annotation.Marshalled#typeName() typeName()}, the class itself is added to the dictionary
 	 * </ul>
 	 *
 	 * <p>
@@ -1512,8 +1511,8 @@ public class BeanMeta<T> {
 	 * 	<li><b>Parent class registry lookup:</b> Searches through parent classes and interfaces (starting from the
 	 * 		second one, skipping the class itself) and checks if any of their bean registries contain a type name
 	 * 		for this class.
-	 * 	<li><b>{@link Marshalled @Marshalled} annotation:</b> If the class has a {@link Marshalled @Marshalled} annotation with a non-empty
-	 * 		{@link Bean#typeName() typeName()}, that value is used.
+	 * 	<li><b>{@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation:</b> If the class has a {@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation with a non-empty
+	 * 		{@link org.apache.juneau.annotation.Marshalled#typeName() typeName()}, that value is used.
 	 * 	<li><b>No dictionary name:</b> Returns <jk>null</jk> if no dictionary name is found.
 	 * </ol>
 	 *

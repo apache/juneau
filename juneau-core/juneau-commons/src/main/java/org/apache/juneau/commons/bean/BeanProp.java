@@ -186,7 +186,7 @@ public @interface BeanProp {
 	 * </p>
 	 *
 	 * <div class='info'>
-	 * 		Note that the {@link org.apache.juneau.annotation.Name @Name} annotation can also be used for identifying a property name.
+	 * 		Note that the {@link Name @Name} annotation can also be used for identifying a property name.
 	 * </div>
 	 *
 	 * @return The annotation value.

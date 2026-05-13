@@ -164,20 +164,23 @@ final class MarshalledBeanMetaInitializer {
 	}
 
 	/**
-	 * Looks up the {@link Marshalled#typePropertyName() @Marshalled(typePropertyName)} value for a bean class.
+	 * Resolves the {@link Marshalled#typePropertyName() @Marshalled(typePropertyName)} value for a bean class, falling
+	 * back to {@link BeanConfigContext#getBeanTypePropertyName()} when no annotation supplies one.
 	 *
 	 * <p>
-	 * Returns the configured value, or an empty string if no {@link Marshalled @Marshalled} annotation specifies one.
-	 * The caller (typically {@link BeanMeta}'s constructor) falls back to a config-supplied default when this method
-	 * returns an empty string.
+	 * Encapsulates the {@link Marshalled @Marshalled} annotation read previously performed inline by
+	 * {@link BeanMeta}'s constructor, so {@link BeanMeta} itself no longer references {@link Marshalled}.
 	 *
-	 * @param config The bean-modeling configuration (used to access the annotation provider).
+	 * @param config The bean-modeling configuration (used to access the annotation provider and the fallback default).
 	 * @param classInfo The bean's class info.
-	 * @return The configured type property name, or empty if not set.
+	 * @return The resolved type property name.  Never <jk>null</jk>.
 	 */
-	static String findTypePropertyName(BeanConfigContext config, ClassInfo classInfo) {
-		var ba = config.getAnnotationProvider().find(Marshalled.class, classInfo);
-		return ba.stream().map(x -> x.inner().typePropertyName()).filter(Utils::ne).findFirst().orElse("");
+	static String resolveTypePropertyName(BeanConfigContext config, ClassInfo classInfo) {
+		return config.getAnnotationProvider().find(Marshalled.class, classInfo).stream()
+			.map(x -> x.inner().typePropertyName())
+			.filter(Utils::ne)
+			.findFirst()
+			.orElseGet(config::getBeanTypePropertyName);
 	}
 
 	/**

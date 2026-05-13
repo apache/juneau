@@ -4,6 +4,69 @@ This is the remaining work from **Phase 5 of the bean-layer split**. Phase 5a (t
 
 ---
 
+## Status (Phase C Task 5 Step F — import cleanup landed, uncommitted)
+
+**Step F audit follow-up — Tasks 1–8 LANDED in the working tree (uncommitted).** Build + full test green (`scripts/test.py --full`). The 7 bean-runtime files now import only JDK packages + `org.apache.juneau.commons.*` (plus `org.apache.juneau.BeanMeta.MethodType.*` static self-import on `BeanMeta`).
+
+### Tasks completed in this checkpoint
+
+- [x] **Task 1 — `@Marshalled` annotation reads lifted from `BeanMeta` to `MarshalledBeanMetaInitializer`.** Four call sites in `BeanMeta` (lines 226, 232, 453, 1178) now call `MarshalledBeanMetaInitializer.hasBeanRegistrationAnnotation(...)` or `MarshalledBeanMetaInitializer.resolveTypePropertyName(...)` instead of inlining the `ap.has(Marshalled.class, cm)` / `ap.find(Marshalled.class, classInfo).stream()...` reads. Javadoc references to `@Marshalled` in `BeanMeta` are now fully-qualified (`{@link org.apache.juneau.annotation.Marshalled @Marshalled}`).
+
+- [x] **Task 2 — `@Name` annotation moved to `commons.bean`.** `git mv juneau-core/juneau-marshall/src/main/java/org/apache/juneau/annotation/Name.java juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/bean/Name.java`; package declaration updated; Javadoc references to `@Named` are now fully-qualified. The associated builder/processor (`NameAnnotation.java`) does not exist — `@Name` has no `*Annotation` companion. The lone direct import in `ParameterInfo_Test.java` was updated; fully-qualified `@org.apache.juneau.annotation.Name(...)` references in the same test file were rewritten to `@org.apache.juneau.commons.bean.Name(...)`. Javadoc references in `commons.bean.BeanCtor`, `commons.bean.BeanProp`, and `commons.reflect.AnnotationInfo` were updated to point at the new location.
+
+- [x] **Task 3 — `BeanPropertyMeta.setPropertyValue` parameter retyped to `BeanSession`.** Mechanical retype; `session.convertToType`, `session.convertToMemberType`, `session.parseToMap`, `session.parseToList` all exist on `BeanSession`. Caller in `set(...)` reads `m.getBeanSession()` (renamed in Task 5) and passes through.
+
+- [x] **Task 4 — Defensive `(ObjectSwap) swap` cast removed from `setPropertyValue`.** Picked **option (a)**: deleted the belt-and-braces double-unswap branch entirely. The `writeTransform` already runs the unswap path at the top of `set(...)` (line ~1074), so by the time control reaches the cast site `value1` is already in its unswapped form. The else-branch is now an unconditional `session.convertToMemberType(bean, value1, rawTypeMeta)` call followed by `invokeSetter`. No tests broke — full suite green.
+
+- [x] **Task 5 — `BeanMap.session` field retyped to `BeanSession`.** Field type changed from `MarshallingSession` to `BeanSession`. `setMarshallingSession(...)` parameter retyped to `BeanSession` (name preserved — `MarshallingSession implements BeanSession` so existing call sites `bm.setMarshallingSession(this)` in `MarshallingSession.java` and `DelegateBeanMap.java` are unchanged). Getter **renamed** to `getBeanSession()` returning `BeanSession`. The four call sites in `BeanPropertyMeta` (`session = m.getMarshallingSession()` → `session = m.getBeanSession()`) updated. The one external caller on `BeanMap` (`ParserSession.java` line 902) was left alone — turned out to be `JsonMap.getMarshallingSession()`, not `BeanMap.getMarshallingSession()`. Two narrow casts (`((Map) session.toBeanMap(b)).put(key, v)`) were added inside `BeanPropertyMeta.add(BeanMap, String, String, Object)` because `BeanSession.toBeanMap` returns `Object` (the `BeanMap` type itself lives in `juneau-marshall` until the physical move).
+
+- [x] **Task 6 — `FilteredKeyMap` usage in `BeanMap.getProperties(String...)` replaced with JDK construct.** Picked **option (b)**: the only production caller of `FilteredKeyMap` was `BeanMap.getProperties(String...)` passing `null` as the `classMeta` argument. Replaced with an inline `AbstractMap` over an `ArrayList<Map.Entry>` whose entries delegate `getValue()` / `setValue(...)` back to `this` (live view, identical semantics to `FilteredKeyMap`'s entry behavior). `FilteredKeyMap` itself remains in `org.apache.juneau.internal` (still exercised by `FilteredMapTest` in `juneau-utest`); it is now orphaned in production code but staying put for now since it would need its own `ClassMeta → BeanTypeInfo` retype to move to `commons.collections`.
+
+- [x] **Task 7 — `ParseException` / `SerializeException` catch in `BeanPropertyMeta.set(...)` retyped.** Picked **option (a)/(b) hybrid** — narrowed the catch from `ParseException` to `org.apache.juneau.commons.BasicRuntimeException`. Behavior preserved: `ParseException extends marshall.BasicRuntimeException extends commons.BasicRuntimeException`, so the previous wrapping behavior still fires for `ParseException` / `SerializeException` raised by `session.parseToMap` / `session.parseToList` / `writeTransform.apply`. `BeanRuntimeException` (which extends `RuntimeException`, NOT `BasicRuntimeException`) continues to propagate unwrapped exactly as before. `import org.apache.juneau.parser.*;` and `import org.apache.juneau.serializer.*;` removed from `BeanPropertyMeta`.
+
+- [x] **Task 8 — Wildcard imports cleaned up in the 7 target files.** Per-file:
+  - `BeanMap.java`: dropped `import org.apache.juneau.annotation.*;`, `import org.apache.juneau.internal.*;`, `import org.apache.juneau.swap.*;`. Javadoc refs to `MarshallingContext` / `Marshalled` / `ObjectSwap` / `Swap` fully-qualified.
+  - `BeanMapEntry.java`: dropped `import org.apache.juneau.annotation.*;`, `import org.apache.juneau.swap.*;`. Javadoc refs to `ObjectSwap` / `Swap` fully-qualified.
+  - `BeanMeta.java`: dropped `import org.apache.juneau.annotation.*;`. `BeanIgnore` and `BeanCtor` resolve through `import org.apache.juneau.commons.bean.*;`. Javadoc refs to `Marshalled` / `MarshalledProp` / `Bean#typeName()` etc. fully-qualified.
+  - `BeanPropertyMeta.java`: dropped `import org.apache.juneau.annotation.*;`, `import org.apache.juneau.parser.*;`, `import org.apache.juneau.serializer.*;`, `import org.apache.juneau.swap.*;`. Javadoc refs to `MarshallingSession` / `ObjectSwap` / `MarshalledProp` / `MarshallingContext` / `ClassMeta` / `BeanRegistry` / `MarshalledPropertyPostProcessor` fully-qualified. `Builder.rawMetaType(ClassMeta<?>)` overload retyped to accept `BeanTypeInfo<?>` (the `ClassMeta` overload was unused in production code; the `Class<?>` overload is the only one BeanMeta calls).
+  - `BeanPropertyValue.java`, `BeanPropertyConsumer.java`, `BeanProxyInvocationHandler.java`: already clean (no changes needed).
+
+### Per-file move-readiness summary
+
+After Tasks 1–8:
+
+- ✅ **`BeanMapEntry.java`** — fully move-ready. Imports only `java.util.*`. No code-level `juneau-marshall` references.
+- ✅ **`BeanPropertyConsumer.java`** — fully move-ready. Imports only `org.apache.juneau.commons.function.*`.
+- ✅ **`BeanProxyInvocationHandler.java`** — fully move-ready. Imports only JDK + `commons.*`.
+- ⚠️ **`BeanMap.java`** — imports clean, but a few code-level move-blockers remain:
+  - `getMarshallingSession()` was renamed to `getBeanSession()` (returns `BeanSession`); the old name is gone. Callers updated.
+  - `Map<String,BeanPropertyValue>` references (lines 292+) — `BeanPropertyValue` itself migrates with the cluster, so no issue.
+- ⚠️ **`BeanPropertyValue.java`** — imports clean, but `getClassMeta()` still returns `ClassMeta<?>` (line 78). External callers (`BsonSerializerSession`, `MsgPackSerializerSession`, `CborSerializerSession`, `BeanMap`) consume the return type as `ClassMeta<?>`. Retype to `BeanTypeInfo<?>` would require casts at each call site. **Move-blocker — needs a follow-up checkpoint.**
+- ⚠️ **`BeanPropertyMeta.java`** — imports clean, but code-level references remain:
+  - `public BeanRegistry getBeanRegistry()` (line 883) returns marshalling-side `BeanRegistry`. Many callers (parser/serializer sessions). **Move-blocker — needs either `BeanRegistry` move to commons or wide return type.**
+  - `Builder.rawMetaType(BeanTypeInfo<?>)` (was `ClassMeta<?>`) — now commons-friendly.
+- ⚠️ **`BeanMeta.java`** — imports clean, but several code-level move-blockers remain:
+  - `static <T> BeanMetaValue<T> create(ClassMeta<T> cm, ClassInfo implClass)` — `ClassMeta` parameter type.
+  - `getMarshallingContext()` — returns `MarshallingContext`.
+  - Many calls into `MarshalledBeanMetaInitializer.*` and `MarshalledPropertyPostProcessor.process(...)` — these helpers live in `org.apache.juneau` (marshalling-side). For the move, either: (a) move both helpers to commons (but they reference marshalling annotations/types internally), or (b) add SPI hooks on `BeanConfigContext` so the bean-side code can call into the marshalling helpers via the SPI seam.
+
+### Build / test status
+
+- `python3 scripts/test.py --build-only` — **GREEN**.
+- `python3 scripts/test.py --full` — **GREEN**.
+
+### Remaining work before the physical `git mv`
+
+1. **`BeanPropertyValue.getClassMeta()` → `BeanTypeInfo<?>`** — retype, sweep ~5 call sites in serializer sessions to cast.
+2. **`BeanPropertyMeta.getBeanRegistry()` → `Object` (or move `BeanRegistry` to commons)** — narrowing cast at call sites.
+3. **`BeanMeta.create(ClassMeta<T>, ClassInfo)`** — accept `BeanTypeInfo<T>` instead; cast at call sites; or keep marshalling-side and add a parallel `BeanMeta.of(BeanTypeInfo<T>, ...)` factory.
+4. **`BeanMeta.marshallingContext` field + `getMarshallingContext()` accessor** — field is already `Object`-typed; the accessor returns `MarshallingContext` via cast. For the move, expose only `Object` or a `BeanTypeResolver` accessor; marshalling-side callers cast.
+5. **`MarshalledBeanMetaInitializer` / `MarshalledPropertyPostProcessor` SPI seams** — the cleanest path is to add hook methods on `BeanConfigContext` (e.g. `hasBeanRegistrationAnnotation(ClassInfo)`, `resolveTypePropertyName(ClassInfo)`, `findMarshalledTypeName(ClassInfo)`, `process(BeanPropertyMeta.Builder)`) so `BeanMeta` can call through the SPI without referencing the marshalling-side helpers directly. The marshalling-side `MarshallingContext` implementation delegates each hook to the corresponding helper. This is the bulk of the remaining structural work.
+
+After items 1–5 land, the physical `git mv` should be a one-pass mechanical operation followed by a wide reference sweep.
+
+---
+
 ## Status (as of `@MarshalledProp(properties)` removal, uncommitted)
 
 **`@MarshalledProp(properties=...)` dropped per user direction (breaking change, v9.5).** With breaking changes authorized throughout TODO-5, the per-property child-property filter feature has been removed entirely. This shrinks the Phase C Task 5 surface meaningfully:

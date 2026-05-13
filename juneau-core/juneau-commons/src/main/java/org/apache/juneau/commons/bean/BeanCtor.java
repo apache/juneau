@@ -109,8 +109,8 @@ public @interface BeanCtor {
 	 *		}
 	 * </p>
 	 * <p>
-	 * 	Note that the {@link org.apache.juneau.annotation.Name @Name} annotation can also be used to identify bean property names on constructor
-	 * 	arguments.  If neither this annotation or {@link org.apache.juneau.annotation.Name @Name} is used, then we try to get the property names
+	 * 	Note that the {@link Name @Name} annotation can also be used to identify bean property names on constructor
+	 * 	arguments.  If neither this annotation or {@link Name @Name} is used, then we try to get the property names
 	 * 	from the parameter names if they are available in the bytecode.
 	 * </p>
 	 *
