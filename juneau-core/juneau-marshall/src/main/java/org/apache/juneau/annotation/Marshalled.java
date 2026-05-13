@@ -23,7 +23,6 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.swap.*;
 
 /**
  * Annotation that can be applied to classes to control how they are marshalled.

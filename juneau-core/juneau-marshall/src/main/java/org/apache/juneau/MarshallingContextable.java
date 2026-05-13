@@ -166,13 +166,13 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * <h5 class='section'>Notes:</h5>
 		 * <ul>
-		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a non-public bean class to override this setting.
+		 * 	<li class='note'>The {@link Marshalled @Marshalled} annotation can be used on a non-public bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5>
 		 * <ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#beanClassVisibility()}
+		 * 	<li class='ja'>{@link BeanConfig#beanClassVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -221,7 +221,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#beanConstructorVisibility()}
+		 * 	<li class='ja'>{@link BeanConfig#beanConstructorVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -302,7 +302,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * <p>
 		 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
-		 * through reflection.  The names are defined through the {@link Bean#typeName() @Marshalled(typeName)} annotation defined
+		 * through reflection.  The names are defined through the {@link Marshalled#typeName() @Marshalled(typeName)} annotation defined
 		 * on the bean class.  For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up
 		 * serialized as <js>"{_type:'myfoo',...}"</js> in JSON
 		 * or <js>"&lt;myfoo&gt;...&lt;/myfoo&gt;"</js> in XML.
@@ -313,7 +313,7 @@ public abstract class MarshallingContextable extends Context {
 		 * <p>
 		 * Values can consist of any of the following types:
 		 * <ul>
-		 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Marshalled(typeName)}.
+		 * 	<li>Any bean class that specifies a value for {@link Marshalled#typeName() @Marshalled(typeName)}.
 		 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
 		 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 		 * 	<li>Any array or collection of the objects above.
@@ -344,7 +344,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <p>
-		 * Another option is to use the {@link Bean#dictionary()} annotation on the POJO class itself:
+		 * Another option is to use the {@link Marshalled#dictionary()} annotation on the POJO class itself:
 		 *
 		 * <p class='bjava'>
 		 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
@@ -370,7 +370,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#dictionary()}
+		 * 	<li class='ja'>{@link Marshalled#dictionary()}
 		 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 		 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
 		 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
@@ -431,7 +431,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#beanFieldVisibility()}
+		 * 	<li class='ja'>{@link BeanConfig#beanFieldVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -487,7 +487,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jc'>{@link BeanInterceptor}
-		 * 	<li class='ja'>{@link Bean#interceptor() Bean(interceptor)}
+		 * 	<li class='ja'>{@link Marshalled#interceptor() @Marshalled(interceptor)}
 		 * </ul>
 		 *
 		 * @param on The bean that the filter applies to.
@@ -526,7 +526,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#beanMapPutReturnsOldValue()}
+		 * 	<li class='ja'>{@link BeanConfig#beanMapPutReturnsOldValue()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanMapPutReturnsOldValue()}
 		 * </ul>
 		 *
@@ -571,7 +571,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#beanMethodVisibility()}
+		 * 	<li class='ja'>{@link BeanConfig#beanMethodVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -633,7 +633,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link Bean#properties()}/{@link Bean#p()} - On an annotation on the bean class itself.
+		 * 	<li class='jm'>{@link BeanType#properties()}/{@link BeanType#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -694,7 +694,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#properties()} / {@link Bean#p()}- On an annotation on the bean class itself.
+		 * 	<li class='jma'>{@link BeanType#properties()} / {@link BeanType#p()}- On an annotation on the bean class itself.
 		 * </ul>
 		 *
 		 * @param values
@@ -757,7 +757,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#properties()} / {@link Bean#p()} - On an annotation on the bean class itself.
+		 * 	<li class='jma'>{@link BeanType#properties()} / {@link BeanType#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -813,7 +813,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
+		 * 	<li class='jma'>{@link BeanType#excludeProperties()} / {@link BeanType#xp()}
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -866,7 +866,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
+		 * 	<li class='jma'>{@link BeanType#excludeProperties()} / {@link BeanType#xp()}
 		 * </ul>
 		 *
 		 * @param values
@@ -921,7 +921,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
+		 * 	<li class='jma'>{@link BeanType#excludeProperties()} / {@link BeanType#xp()}
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -980,7 +980,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
+		 * 	<li class='jma'>{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -1036,7 +1036,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
+		 * 	<li class='jma'>{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}
 		 * </ul>
 		 *
 		 * @param values
@@ -1094,7 +1094,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
+		 * 	<li class='jma'>{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -1152,7 +1152,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
+		 * 	<li class='jma'>{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -1207,7 +1207,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
+		 * 	<li class='jma'>{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}
 		 * </ul>
 		 *
 		 * @param values
@@ -1264,7 +1264,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
+		 * 	<li class='jma'>{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -1317,12 +1317,12 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a bean class to override this setting.
+		 * 	<li class='note'>The {@link Marshalled @Marshalled} annotation can be used on a bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#beansRequireDefaultConstructor()}
+		 * 	<li class='ja'>{@link BeanConfig#beansRequireDefaultConstructor()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beansRequireDefaultConstructor()}
 		 * </ul>
 		 *
@@ -1365,12 +1365,12 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a bean class to override this setting.
+		 * 	<li class='note'>The {@link Marshalled @Marshalled} annotation can be used on a bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#beansRequireSerializable()}
+		 * 	<li class='ja'>{@link BeanConfig#beansRequireSerializable()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beansRequireSerializable()}
 		 * </ul>
 		 *
@@ -1416,7 +1416,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#beansRequireSettersForGetters()}
+		 * 	<li class='ja'>{@link BeanConfig#beansRequireSettersForGetters()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beansRequireSettersForGetters()}
 		 * </ul>
 		 *
@@ -1474,10 +1474,10 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <p>
-		 * This is functionally equivalent to the {@link Bean#dictionary()} annotation.
+		 * This is functionally equivalent to the {@link Marshalled#dictionary()} annotation.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#dictionary()}
+		 * 	<li class='ja'>{@link Marshalled#dictionary()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
 		 * </ul>
 		 *
@@ -1502,7 +1502,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 		 *
 		 * <p>
-		 * The {@link Bean @Marshalled} annotation can be used on a class to override this setting when <jk>true</jk>.
+		 * The {@link Marshalled @Marshalled} annotation can be used on a class to override this setting when <jk>true</jk>.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -1521,12 +1521,12 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on the class to force it to be recognized as a bean class
+		 * 	<li class='note'>The {@link Marshalled @Marshalled} annotation can be used on the class to force it to be recognized as a bean class
 		 * 		even if it has no properties.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#disableBeansRequireSomeProperties()}
+		 * 	<li class='ja'>{@link BeanConfig#disableBeansRequireSomeProperties()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#disableBeansRequireSomeProperties()}
 		 * </ul>
 		 *
@@ -1568,7 +1568,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#disableIgnoreMissingSetters()}
+		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreMissingSetters()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#disableIgnoreMissingSetters()}
 		 * </ul>
 		 *
@@ -1607,7 +1607,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#disableIgnoreTransientFields()}
+		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreTransientFields()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#disableIgnoreTransientFields()}
 		 * </ul>
 		 *
@@ -1643,7 +1643,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#disableIgnoreUnknownNullBeanProperties()}
+		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreUnknownNullBeanProperties()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#disableIgnoreUnknownNullBeanProperties()}
 		 * </ul>
 		 *
@@ -1663,7 +1663,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Otherwise, throws a {@link BeanRuntimeException}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#disableInterfaceProxies()}
+		 * 	<li class='ja'>{@link BeanConfig#disableInterfaceProxies()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#disableInterfaceProxies()}
 		 * </ul>
 		 *
@@ -1810,12 +1810,12 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>The {@link BeanProp @BeanProp} annotation can also be used on methods to individually identify them as fluent setters.
-		 * 	<li class='note'>The {@link Bean#findFluentSetters() @Marshalled.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
+		 * 	<li class='note'>The {@link BeanType#findFluentSetters() @BeanType(findFluentSetters=true)} annotation can also be used on classes to specify to look for fluent setters.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
-		 * 	<li class='ja'>{@link MarshalledConfig#findFluentSetters()}
+		 * 	<li class='ja'>{@link BeanType#findFluentSetters()}
+		 * 	<li class='ja'>{@link BeanConfig#findFluentSetters()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#findFluentSetters()}
 		 * </ul>
 		 *
@@ -1850,11 +1850,11 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This method is functionally equivalent to using the {@link Bean#findFluentSetters()} annotation.
+		 * 	<li class='note'>This method is functionally equivalent to using the {@link BeanType#findFluentSetters()} annotation.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
+		 * 	<li class='ja'>{@link BeanType#findFluentSetters()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#findFluentSetters()}
 		 * </ul>
 		 *
@@ -1905,7 +1905,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#ignoreInvocationExceptionsOnGetters()}
+		 * 	<li class='ja'>{@link BeanConfig#ignoreInvocationExceptionsOnGetters()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#ignoreInvocationExceptionsOnGetters()}
 		 * </ul>
 		 *
@@ -1943,7 +1943,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#ignoreInvocationExceptionsOnSetters()}
+		 * 	<li class='ja'>{@link BeanConfig#ignoreInvocationExceptionsOnSetters()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#ignoreInvocationExceptionsOnSetters()}
 		 * </ul>
 		 *
@@ -1979,7 +1979,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#ignoreUnknownBeanProperties()}
+		 * 	<li class='ja'>{@link BeanConfig#ignoreUnknownBeanProperties()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#ignoreUnknownBeanProperties()}
 		 * </ul>
 		 *
@@ -1997,7 +1997,7 @@ public abstract class MarshallingContextable extends Context {
 		 * When enabled, unknown enum values are set to <jk>null</jk> instead of throwing a parse exception.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link MarshalledConfig#ignoreUnknownEnumValues()}
+		 * 	<li class='ja'>{@link BeanConfig#ignoreUnknownEnumValues()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#ignoreUnknownEnumValues()}
 		 * </ul>
 		 *
@@ -2128,7 +2128,7 @@ public abstract class MarshallingContextable extends Context {
 		 * individually on the child classes.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean#interfaceClass() @Marshalled(interfaceClass)} annotation is the equivalent annotation-based solution.
+		 * 	<li class='note'>The {@link BeanType#interfaceClass() @BeanType(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
 		 * @param on The class that the interface class applies to.
@@ -2176,7 +2176,7 @@ public abstract class MarshallingContextable extends Context {
 		 * individually on the child classes.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean#interfaceClass() @Marshalled(interfaceClass)} annotation is the equivalent annotation-based solution.
+		 * 	<li class='note'>The {@link BeanType#interfaceClass() @BeanType(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
 		 * @param value
@@ -2319,7 +2319,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link BeanIgnore}
-		 * 	<li class='ja'>{@link MarshalledConfig#notBeanClasses()}
+		 * 	<li class='ja'>{@link BeanConfig#notBeanClasses()}
 		 * 	<li class='jf'>{@link MarshallingContext.Builder#notBeanClasses()}
 		 * </ul>
 		 *
@@ -2411,7 +2411,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
+		 * 	<li class='ja'>{@link BeanType#propertyNamer() @BeanType(propertyNamer)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#propertyNamer(Class)}
 		 * </ul>
 		 *
@@ -2496,7 +2496,7 @@ public abstract class MarshallingContextable extends Context {
 		 * Opt specific bean classes out of alphabetical property sorting.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#unsorted() Bean(unsorted)}
+		 * 	<li class='ja'>{@link BeanType#unsorted() @BeanType(unsorted)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#unsortedProperties(Class...)}
 		 * </ul>
 		 *
@@ -2800,11 +2800,11 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>Equivalent to the {@link Bean#typeName() Bean(typeName)} annotation.
+		 * 	<li class='note'>Equivalent to the {@link Marshalled#typeName() @Marshalled(typeName)} annotation.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jc'>{@link Bean#typeName() Bean(typeName)}
+		 * 	<li class='jc'>{@link Marshalled#typeName() @Marshalled(typeName)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
 		 * </ul>
 		 *
@@ -2851,7 +2851,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
+		 * 	<li class='ja'>{@link Marshalled#typePropertyName() @Marshalled(typePropertyName)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#typePropertyName(String)}
 		 * </ul>
 		 *
@@ -2909,7 +2909,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#typePropertyName()}
+		 * 	<li class='ja'>{@link Marshalled#typePropertyName()}
 		 * 	<li class='ja'>{@link MarshalledConfig#typePropertyName()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#typePropertyName(String)}
 		 * </ul>
@@ -2975,7 +2975,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * <p>
 		 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
-		 * <br>Most {@link Bean @Marshalled} annotations will be ignored.
+		 * <br>Most {@link Marshalled @Marshalled} annotations will be ignored.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>

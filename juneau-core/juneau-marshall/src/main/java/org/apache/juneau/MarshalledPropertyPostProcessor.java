@@ -39,8 +39,8 @@ import org.apache.juneau.swaps.*;
  * runs successfully.
  *
  * <p>
- * The reads here used to live inside {@link BeanPropertyMeta.Builder#validate}.  They were lifted out as part of
- * TODO-5 Step 8b-ii so the bean-modeling builder no longer references the marshalling-side
+ * The reads here used to live inside {@link BeanPropertyMeta.Builder#validate}.  They were lifted out during
+ * the Task-5 Step 8b-ii refactor so the bean-modeling builder no longer references marshalling-side
  * {@link ObjectSwap}/{@link StringFormatSwap}/{@link Surrogate} types or the {@link MarshalledProp} annotation.
  *
  * <p>
@@ -57,6 +57,9 @@ import org.apache.juneau.swaps.*;
  * (i.e. when {@link MarshallingContext} is non-null).  The bean-modeling-only path
  * ({@link BeanMeta#of(Class, BeanConfigContext)}) does not run this post-processor.
  */
+@SuppressWarnings({
+	"java:S6548" // Intentional stateless singleton SPI implementation wired through BeanConfigContext.
+})
 final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor {
 
 	/** Singleton instance wired into {@link MarshallingContext}-built {@link BeanConfigContext}s. */
@@ -68,7 +71,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 * SPI entry point — narrows the opaque marshalling context and builder, then dispatches to {@link #process(MarshallingContext, BeanPropertyMeta.Builder)}.
 	 *
 	 * @param marshallingContext The marshalling-side context.  Must not be <jk>null</jk> on the marshalling path.
-	 * @param builder The bean-property builder.  Must be a {@link BeanPropertyMeta.Builder}.
+	 * @param builder The bean-property builder.  Must be a {@link BeanPropertyMeta} builder instance.
 	 */
 	@Override
 	public void process(Object marshallingContext, Object builder) {
@@ -107,7 +110,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 					b.swap = marshalledPropSwap(x);
 				bdClasses.addAll(l(mp.dictionary()));
 			});
-			ap.find(Swap.class, b.getter).stream().forEach(x -> b.swap = swapSwap(x));
+			ap.find(Swap.class, b.getter).forEach(x -> b.swap = swapSwap(x));
 			b.isUri |= ap.has(Uri.class, b.getter);
 		}
 
@@ -118,7 +121,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 					b.swap = marshalledPropSwap(x);
 				bdClasses.addAll(l(mp.dictionary()));
 			});
-			ap.find(Swap.class, b.setter).stream().forEach(x -> b.swap = swapSwap(x));
+			ap.find(Swap.class, b.setter).forEach(x -> b.swap = swapSwap(x));
 			b.isUri |= ap.has(Uri.class, b.setter);
 		}
 
@@ -134,10 +137,10 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		// Cast to ObjectSwap because b.swap is Object-typed (BeanPropertyMeta.Builder lives in the bean-modeling
 		// layer and cannot reference ObjectSwap directly).
 		if (nn(b.swap) && nn(b.rawTypeMeta))
-			b.typeMeta = bc.getClassMeta(((ObjectSwap) b.swap).getSwapClass());
+			b.typeMeta = bc.getClassMeta(((ObjectSwap<?,?>) b.swap).getSwapClass());
 
 		// Install swap-aware read/write transforms on the builder.
-		// Previously lived as a private static helper on {@link BeanMeta}; moved here as part of TODO-5 Step 8b-ii
+		// Previously lived as a private static helper on {@link BeanMeta}; moved here during Task-5 Step 8b-ii
 		// Phase C Task 3 so {@link BeanMeta} no longer references {@link ObjectSwap}/{@link ParseException}/{@link SerializeException}.
 		installSwapAwareTransforms(b);
 	}
@@ -161,11 +164,11 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 * @param p The builder to attach swap-aware transforms to.
 	 */
 	@SuppressWarnings({
-		"rawtypes",   // ObjectSwap used raw to mirror BeanPropertyMeta's field declaration.
-		"unchecked"   // Wildcard ObjectSwap captured by raw alias to allow runtime polymorphic dispatch.
+		"java:S3776", // Centralized swap-transform wiring; branching mirrors swap/no-swap and child-swap read/write paths.
+		"unchecked"   // Wildcard ObjectSwap captured from Object-typed builder fields for runtime polymorphic dispatch.
 	})
 	static void installSwapAwareTransforms(BeanPropertyMeta.Builder p) {
-		ObjectSwap sw = (ObjectSwap) p.swap;
+		ObjectSwap<?,?> sw = (ObjectSwap<?,?>) p.swap;
 		ClassMeta<?> rtm = (ClassMeta<?>) p.rawTypeMeta;
 		if (sw == null && (rtm == null || ! rtm.hasChildSwaps()))
 			return;
@@ -177,13 +180,13 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 					// transform call sites, so the narrowing cast is safe.
 					var ms = (MarshallingSession) session;
 					if (nn(sw))
-						return sw.swap(ms, o);
+						return ((ObjectSwap<Object,Object>) sw).swap(ms, o);
 					if (o == null)
 						return null;
 					if (rtm.hasChildSwaps()) {
-						ObjectSwap f = rtm.getChildObjectSwapForSwap(o.getClass());
+						ObjectSwap<?,?> f = rtm.getChildObjectSwapForSwap(o.getClass());
 						if (nn(f))
-							return f.swap(ms, o);
+							return ((ObjectSwap<Object,Object>) f).swap(ms, o);
 					}
 					return o;
 				} catch (RuntimeException e) {
@@ -199,13 +202,13 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 					// See readTransform note: BeanSession → MarshallingSession is safe on the marshalling-side path.
 					var ms = (MarshallingSession) session;
 					if (nn(sw))
-						return sw.unswap(ms, o, rtm);
+						return ((ObjectSwap<Object,Object>) sw).unswap(ms, o, rtm);
 					if (o == null)
 						return null;
 					if (rtm.hasChildSwaps()) {
-						ObjectSwap f = rtm.getChildObjectSwapForUnswap(o.getClass());
+						ObjectSwap<?,?> f = rtm.getChildObjectSwapForUnswap(o.getClass());
 						if (nn(f))
-							return f.unswap(ms, o, rtm);
+							return ((ObjectSwap<Object,Object>) f).unswap(ms, o, rtm);
 					}
 					return o;
 				} catch (RuntimeException e) {
@@ -217,7 +220,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		}
 	}
 
-	private static ObjectSwap marshalledPropSwap(AnnotationInfo<MarshalledProp> ai) {
+	private static ObjectSwap<?,?> marshalledPropSwap(AnnotationInfo<MarshalledProp> ai) {
 		var p = ai.inner();
 		if (! p.format().isEmpty())
 			return BeanInstantiator.of(ObjectSwap.class).type(StringFormatSwap.class).addBean(String.class, p.format()).run();
@@ -227,7 +230,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	@SuppressWarnings({
 		"java:S112" // throws RuntimeException intentional - callback/lifecycle method for swap initialization
 	})
-	private static ObjectSwap swapSwap(AnnotationInfo<Swap> ai) {
+	private static ObjectSwap<?,?> swapSwap(AnnotationInfo<Swap> ai) {
 		var s = ai.inner();
 		var c = s.value();
 		if (isVoid(c))

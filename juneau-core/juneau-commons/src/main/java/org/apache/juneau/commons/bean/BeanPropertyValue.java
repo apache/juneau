@@ -19,7 +19,6 @@ package org.apache.juneau.commons.bean;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 
 /**
@@ -76,8 +75,8 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	 *
 	 * <p>
 	 * Returns the bean-modeling-side SPI type ({@link BeanTypeInfo}).  Marshalling-side callers that need the
-	 * {@link org.apache.juneau.ClassMeta} narrowing must cast — the concrete instance in-tree is always a
-	 * {@link org.apache.juneau.ClassMeta}.
+	 * {@code ClassMeta} narrowing must cast — the concrete instance in-tree is always a
+	 * {@code ClassMeta}.
 	 *
 	 * @return The bean property type info.
 	 */

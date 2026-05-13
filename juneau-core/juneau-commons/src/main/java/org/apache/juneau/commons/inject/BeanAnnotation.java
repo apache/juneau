@@ -58,7 +58,7 @@ public class BeanAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@code MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderM {
@@ -149,7 +149,8 @@ public class BeanAnnotation {
 	}
 
 	@SuppressWarnings({
-		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"annotationSuperInterface" // Eclipse JDT: intentional concrete implementation of annotation interface for runtime-built annotation instances
 	})
 	private static class Object extends AppliedAnnotationObject implements Bean {
 

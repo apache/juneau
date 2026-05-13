@@ -1086,6 +1086,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @param o The object to wrap in a map interface.  Must not be null.
 	 * @return The wrapped object.
 	 */
+	@Override
 	public final <T> BeanMap<T> toBeanMap(T o) {
 		if (o instanceof BeanMap o2)
 			return o2;

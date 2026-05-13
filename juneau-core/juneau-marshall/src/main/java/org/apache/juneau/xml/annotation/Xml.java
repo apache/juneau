@@ -20,7 +20,6 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import org.apache.juneau.commons.bean.*;
 
 /**
  * Annotation for specifying various XML options for the XML and RDF/XML serializers.

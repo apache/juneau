@@ -24,7 +24,6 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.bean.*;
 import org.apache.juneau.commons.time.*;

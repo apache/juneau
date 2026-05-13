@@ -29,7 +29,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.swap.*;
 
 /**
  * Filter for customizing how POJOs and beans are handled during serialization and parsing.
@@ -644,6 +643,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return The bean class that this filter applies to, or <jk>null</jk> if this is a non-bean filter.
 	 */
+	@Override
 	public ClassInfoTyped<?> getBeanClass() { return beanClass; }
 
 	/**
@@ -651,6 +651,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return An unmodifiable list of the bean dictionary defined on this bean, or an empty list if no bean dictionary is defined.
 	 */
+	@Override
 	public List<ClassInfo> getBeanDictionary() { return beanDictionary; }
 
 	/**
@@ -658,6 +659,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return The example associated with this class, or <jk>null</jk> if no example is associated.
 	 */
+	@Override
 	public String getExample() { return example; }
 
 	/**
@@ -665,6 +667,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return The names of the properties to ignore on a bean, or an empty set to not ignore any properties.
 	 */
+	@Override
 	public Set<String> getExcludeProperties() { return excludeProperties; }
 
 	/**
@@ -672,6 +675,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return The implementation class associated with this class, or <jk>null</jk> if no implementation class is associated.
 	 */
+	@Override
 	public ClassInfo getImplClass() { return implClass; }
 
 	/**
@@ -679,6 +683,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return The interface class associated with this class, or <jk>null</jk> if no interface class is associated.
 	 */
+	@Override
 	public ClassInfo getInterfaceClass() { return interfaceClass; }
 
 	/**
@@ -686,6 +691,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return The class that this filter applies to.
 	 */
+	@Override
 	public Class<?> getMarshalledClass() { return marshalledClass; }
 
 	/**
@@ -695,6 +701,7 @@ public class MarshalledFilter implements BeanFilter {
 	 * 	The names of the properties associated with a bean class, or and empty set if all bean properties should
 	 * 	be used.
 	 */
+	@Override
 	public Set<String> getProperties() { return properties; }
 
 	/**
@@ -702,6 +709,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return The property namer class, or <jk>null</jk> if no property namer is associated with this bean property.
 	 */
+	@Override
 	public PropertyNamer getPropertyNamer() { return propertyNamer; }
 
 	/**
@@ -709,6 +717,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return The names of the read-only properties on a bean, or an empty set to not have any read-only properties.
 	 */
+	@Override
 	public Set<String> getReadOnlyProperties() { return readOnlyProperties; }
 
 	/**
@@ -716,6 +725,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return The stop class associated with this class, or <jk>null</jk> if no stop class is associated.
 	 */
+	@Override
 	public ClassInfo getStopClass() { return stopClass; }
 
 	/**
@@ -723,6 +733,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return The dictionary name associated with this bean, or <jk>null</jk> if no name is defined.
 	 */
+	@Override
 	public String getTypeName() { return typeName; }
 
 	/**
@@ -730,6 +741,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return The names of the write-only properties on a bean, or an empty set to not have any write-only properties.
 	 */
+	@Override
 	public Set<String> getWriteOnlyProperties() { return writeOnlyProperties; }
 
 	/**
@@ -737,6 +749,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return <jk>true</jk> if fluent setters should be found.
 	 */
+	@Override
 	public boolean isFluentSetters() { return fluentSetters; }
 
 	/**
@@ -748,6 +761,7 @@ public class MarshalledFilter implements BeanFilter {
 	 *
 	 * @return <jk>true</jk> if this bean opts out of alphabetical property sorting.
 	 */
+	@Override
 	public boolean isUnsortedProperties() { return unsortedProperties; }
 
 	/**
@@ -761,6 +775,7 @@ public class MarshalledFilter implements BeanFilter {
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires unchecked casts
 	})
+	@Override
 	public Object readProperty(Object bean, String name, Object value) {
 		return interceptor.readProperty(bean, name, value);
 	}
@@ -776,6 +791,7 @@ public class MarshalledFilter implements BeanFilter {
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires unchecked casts
 	})
+	@Override
 	public Object writeProperty(Object bean, String name, Object value) {
 		return interceptor.writeProperty(bean, name, value);
 	}

@@ -174,7 +174,7 @@ public @interface Bean {
 	 * The bean name to use to distinguish beans of the same type for different purposes.
 	 *
 	 * <p>
-	 * For example, there are two {@link org.apache.juneau.http.header.HeaderList} beans:  <js>"defaultRequestHeaders"</js> and <js>"defaultResponseHeaders"</js>.  This annotation
+	 * For example, there are two {@code HeaderList} beans:  <js>"defaultRequestHeaders"</js> and <js>"defaultResponseHeaders"</js>.  This annotation
 	 * would be used to differentiate between them.
 	 *
 	 * @return The bean name to use to distinguish beans of the same type for different purposes, or blank if bean type is unique.

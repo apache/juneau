@@ -21,7 +21,6 @@ import static org.apache.juneau.assertions.Verify.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.bean.*;
 
 /**

@@ -88,7 +88,8 @@ public class BeanCtorAnnotation {
 	}
 
 	@SuppressWarnings({
-		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+		"annotationSuperInterface" // Eclipse JDT: intentional concrete implementation of annotation interface for runtime-built annotation instances
 	})
 	private static class Object extends AnnotationObject implements BeanCtor {
 

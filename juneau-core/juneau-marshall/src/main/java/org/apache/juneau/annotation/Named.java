@@ -38,10 +38,10 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>Comparison with @Name:</h5>
  * <p>
- * Do not confuse this annotation with {@link Name @Name}, which serves a different purpose:
+ * Do not confuse this annotation with {@link org.apache.juneau.commons.bean.Name @Name}, which serves a different purpose:
  * <ul>
  * 	<li><b>{@link Named @Named}</b> - Specifies which named bean to inject (bean qualifier)
- * 	<li><b>{@link Name @Name}</b> - Specifies the parameter name for bean property mapping when
+ * 	<li><b>{@link org.apache.juneau.commons.bean.Name @Name}</b> - Specifies the parameter name for bean property mapping when
  * 		bytecode parameter names are not available
  * </ul>
  *
@@ -60,7 +60,7 @@ import java.lang.annotation.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='ja'>{@link Name}
+ * 	<li class='ja'>{@link org.apache.juneau.commons.bean.Name}
  * 	<li class='jc'>{@link org.apache.juneau.commons.inject.BeanStore}
  * </ul>
  */

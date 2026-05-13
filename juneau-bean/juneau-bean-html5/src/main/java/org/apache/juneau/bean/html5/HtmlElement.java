@@ -25,7 +25,6 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.html.*;

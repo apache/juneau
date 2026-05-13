@@ -31,7 +31,7 @@ import org.apache.juneau.svl.*;
  * {@link org.apache.juneau.MarshallingContext.Builder}. The annotation itself lives in
  * {@code juneau-commons} (in {@link org.apache.juneau.commons.bean.BeanConfig}), but
  * the application logic lives here in {@code juneau-marshall} because it depends on
- * marshall-layer types ({@link AnnotationApplier}, {@link MarshallingContext.Builder},
+ * marshall-layer types ({@link AnnotationApplier}, {@link MarshallingContext} builder APIs,
  * {@link VarResolverSession}, etc.).
  *
  * <p>

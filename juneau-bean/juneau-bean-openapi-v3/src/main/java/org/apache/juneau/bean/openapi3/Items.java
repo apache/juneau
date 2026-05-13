@@ -25,7 +25,6 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;

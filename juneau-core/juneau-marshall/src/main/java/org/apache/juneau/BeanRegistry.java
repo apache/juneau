@@ -40,7 +40,7 @@ import org.apache.juneau.commons.utils.*;
  * In a nutshell, provides a simple mapping of bean class objects to identifying names.
  *
  * <p>
- * Class names are defined through the {@link Bean#typeName() @Marshalled(typeName)} annotation.
+ * Class names are defined through the {@link Marshalled#typeName() @Marshalled(typeName)} annotation.
  *
  * <p>
  * The dictionary is used by the framework in the following ways:
@@ -86,7 +86,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 	 * Gets the class metadata for the specified bean type name.
 	 *
 	 * @param typeName
-	 * 	The bean type name as defined by {@link Bean#typeName() @Marshalled(typeName)}.
+	 * 	The bean type name as defined by {@link Marshalled#typeName() @Marshalled(typeName)}.
 	 * 	Can include multi-dimensional array type names (e.g. <js>"X^^"</js>).
 	 * @return The class metadata for the bean.
 	 */
@@ -128,6 +128,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 	 * @param c The class to lookup in this registry.
 	 * @return The dictionary name for the specified class in this registry, or <jk>null</jk> if not found.
 	 */
+	@Override
 	public String getTypeName(Class<?> c) {
 		return isEmpty || c == null ? null : reverseMap.get(c);
 	}
@@ -138,6 +139,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 	 * @param typeName The bean type name.
 	 * @return <jk>true</jk> if this dictionary has an entry for the specified type name.
 	 */
+	@Override
 	public boolean hasName(String typeName) {
 		return nn(getClassMeta(typeName));
 	}

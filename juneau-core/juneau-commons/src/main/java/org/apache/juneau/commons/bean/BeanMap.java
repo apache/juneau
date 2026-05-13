@@ -25,7 +25,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 
 /**
@@ -37,7 +36,7 @@ import org.apache.juneau.commons.reflect.*;
  * object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.
  *
  * <p>
- * Use the {@link org.apache.juneau.MarshallingContext} class to create instances of this class.
+ * Create instances through the bean API (for example via {@link BeanMap#of(Object)} or a {@link BeanSession} entry point).
  *
  * <h5 class='topic'>Bean property order</h5>
  *
@@ -45,16 +44,16 @@ import org.apache.juneau.commons.reflect.*;
  * methods are as follows:
  * <ul class='spaced-list'>
  * 	<li>
- * 		If {@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation is specified on class, then the order is the same as the list of properties
+ * 		If {@code @Marshalled} annotation is specified on class, then the order is the same as the list of properties
  * 		in the annotation.
  * 	<li>
- * 		If {@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation is not specified on the class, then the order is the same as that returned
+ * 		If {@code @Marshalled} annotation is not specified on the class, then the order is the same as that returned
  * 		by the {@link java.beans.BeanInfo} class (i.e. ordered by definition in the class).
  * </ul>
  *
  * <h5 class='topic'>POJO swaps</h5>
  *
- * If {@link org.apache.juneau.swap.ObjectSwap ObjectSwaps} are defined on the class types of the properties of this bean or the bean properties
+ * If {@code ObjectSwap} transforms are defined on the class types of the properties of this bean or the bean properties
  * themselves, the {@link #get(Object)} and {@link #put(String, Object)} methods will automatically transform the
  * property value to and from the serialized form.
  *
@@ -83,7 +82,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * <p>
 	 * This is the bean-modeling entry point — it builds a {@link BeanMap} without going through a
-	 * {@link MarshallingSession}, paired with a {@link BeanMeta} typically produced by
+	 * marshalling session, paired with a {@link BeanMeta} typically produced by
 	 * {@link BeanMeta#of(Class, BeanConfigContext)}.  No marshalling session is attached.
 	 *
 	 * @param <T> The bean type.
@@ -133,13 +132,13 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Wires this bean map to a {@link BeanSession}.
 	 *
 	 * <p>
-	 * Transitional API used by the marshalling layer (e.g. {@link org.apache.juneau.MarshallingSession#toBeanMap(Object)})
+	 * Transitional API used by the marshalling layer (e.g. {@code MarshallingSession#toBeanMap(Object)})
 	 * to wire a session into a {@link BeanMap} immediately after construction. Required for any
 	 * marshalling-side operation that depends on session-aware behavior (type conversion, child
 	 * collection construction, etc.). Will be removed when {@link BeanMap} is fully decoupled from
 	 * the marshalling layer (TODO-5 Step 5+).
 	 *
-	 * @param value The bean session that produced this bean map.  Typically a {@link org.apache.juneau.MarshallingSession}.
+	 * @param value The bean session that produced this bean map.  Typically a marshalling-session implementation.
 	 */
 	public void setMarshallingSession(BeanSession value) {
 		this.session = value;
@@ -152,7 +151,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * As a general rule, adding to arrays is not recommended since the array must be recreate each time this method is
 	 * called.
 	 *
-	 * @param property Property name or child-element name (if {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml(childName)} is specified).
+	 * @param property Property name or child-element name (if {@code @Xml(childName)} is specified).
 	 * @param value The value to add to the collection or array.
 	 */
 	public void add(String property, Object value) {
@@ -327,11 +326,11 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Gets a property on the bean.
 	 *
 	 * <p>
-	 * If there is a {@link org.apache.juneau.swap.ObjectSwap} associated with this bean property or bean property type class, then this method
+	 * If an {@code ObjectSwap}-style transform is associated with this bean property or bean property type class, then this method
 	 * will return the transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * {@link org.apache.juneau.swaps.TemporalDateSwap.IsoInstant} swap associated with it through the
-	 * {@link org.apache.juneau.annotation.Swap#value() @Swap(value)} annotation, this method will return a String containing an
+	 * {@code TemporalDateSwap.IsoInstant} swap associated with it through the
+	 * {@code @Swap(value)} annotation, this method will return a String containing an
 	 * ISO8601 date-time string value.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -403,8 +402,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * <p>
 	 * The post-creation Optional&lt;X&gt; initialization step (which seeds null {@link Optional} properties with
-	 * {@link ClassMeta#getOptionalDefault()}) is skipped for properties built via the bean-modeling-only path
-	 * ({@link BeanMeta#of(Class, BeanConfigContext)}) because the per-property {@link ClassMeta} is unavailable;
+	 * {@link BeanTypeInfo#getOptionalDefault()}) is skipped for properties built via the bean-modeling-only path
+	 * ({@link BeanMeta#of(Class, BeanConfigContext)}) because per-property type metadata is unavailable;
 	 * those properties are left untouched and any {@link Optional}-typed field stays at its constructor-assigned
 	 * value.
 	 *
@@ -501,9 +500,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * <p>
 	 * The returned value is the bean-modeling SPI seam.  Marshalling-side callers needing the concrete
-	 * {@link org.apache.juneau.MarshallingSession} can cast — every session wired in via
+	 * marshalling-session implementation can cast — every session wired in via
 	 * {@link #setMarshallingSession(BeanSession)} on the marshalling-side path is a
-	 * {@link org.apache.juneau.MarshallingSession}.
+	 * {@code MarshallingSession}.
 	 *
 	 * @return The bean session that created this bean map.
 	 */
@@ -537,11 +536,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	A new map with fields as key-value pairs.
 	 * 	<br>Note that modifying the values in this map will also modify the underlying bean.
 	 */
-	@SuppressWarnings({
-		"unchecked"  // BeanMap<T> is unconditionally a Map<String,Object> via AbstractMap superclass.
-	})
 	public Map<String,Object> getProperties(String...fields) {
-		var thisMap = (Map<String,Object>) this;
+		Map<String,Object> thisMap = this;
 		var entries = new ArrayList<Map.Entry<String,Object>>(fields.length);
 		for (var k : fields) {
 			if (thisMap.containsKey(k)) {
@@ -652,11 +648,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Sets a property on the bean.
 	 *
 	 * <p>
-	 * If there is a {@link org.apache.juneau.swap.ObjectSwap} associated with this bean property or bean property type class, then you must pass
-	 * in a transformed value.
+	 * If there is a {@code ObjectSwap} associated with this bean property or bean property type class, then you must pass in a transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * {@link org.apache.juneau.swaps.TemporalDateSwap.IsoInstant} swap associated with it through the
-	 * {@link org.apache.juneau.annotation.Swap#value() @Swap(value)} annotation, the value being passed in must be
+	 * {@code TemporalDateSwap.IsoInstant} swap associated with it through the
+	 * {@code @Swap(value)} annotation, the value being passed in must be
 	 * a String containing an ISO8601 date-time string value.
 	 *
 	 * <h5 class='section'>Example:</h5>

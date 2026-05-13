@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -32,11 +31,9 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.reflect.ReflectionUtils;
 import org.apache.juneau.commons.inject.*;
 
 /**
@@ -86,16 +83,16 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		public MethodInfo getter;  // Package-private for BeanMeta access
 		public MethodInfo setter;  // Package-private for BeanMeta access
 		MethodInfo extraKeys;  // Package-private for BeanMeta access
-		public BeanTypeInfo<?> rawTypeMeta;  // Package-private for BeanMeta access (used to install swap-aware transforms).  Null on commons-side path (no type resolution).  Concrete instances are always {@link org.apache.juneau.ClassMeta} since it's the only in-tree implementation; the field is typed against the bean-modeling SPI seam so the field can live in commons.bean.
+		public BeanTypeInfo<?> rawTypeMeta;  // Package-private for BeanMeta access (used to install swap-aware transforms).  Null on commons-side path (no type resolution).  Concrete instances are always {@code ClassMeta} since it's the only in-tree implementation; the field is typed against the bean-modeling SPI seam so the field can live in commons.bean.
 		public Object swap;  // Object-typed so the field can live in commons.bean; cast to ObjectSwap by marshalling-side consumers.  Set only via MarshalledPropertyPostProcessor (marshalling-side post-processor).
-		public BiFunction<BeanSession,Object,Object> readTransform;  // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam; marshalling-side installers cast the session argument back to {@link org.apache.juneau.MarshallingSession} where needed (see {@link org.apache.juneau.MarshalledPropertyPostProcessor#installSwapAwareTransforms}).
+		public BiFunction<BeanSession,Object,Object> readTransform;  // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam; marshalling-side installers cast the session argument back to {@code MarshallingSession} where needed (see {@code MarshalledPropertyPostProcessor#installSwapAwareTransforms}).
 		public BiFunction<BeanSession,Object,Object> writeTransform; // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam (see readTransform note).
 		public List<ClassInfo> dictionaryClasses;  // Package-private for BeanMeta access; @MarshalledProp(dictionary={}) classes scanned during validate().
 		private boolean isConstructorArg;
 		public boolean isUri;  // Package-private so MarshalledPropertyPostProcessor can set @Uri-derived flag.  Mirrors rawTypeMeta.isUri() plus @Uri annotation reads on field/getter/setter.
 		private boolean isDyna;
 		private boolean isDynaGetterMap;
-		public BeanTypeInfo<?> typeMeta;  // Package-private so the marshalling-side post-processor can override after @Swap/@MarshalledProp detection.  Concrete instances are always {@link org.apache.juneau.ClassMeta}; typed against the bean-modeling SPI seam.
+		public BeanTypeInfo<?> typeMeta;  // Package-private so the marshalling-side post-processor can override after @Swap/@MarshalledProp detection.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam.
 		private Object overrideValue;
 		private BeanPropertyMeta delegateFor;
 		private boolean canRead;
@@ -136,9 +133,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * caller.  Defaults to identity (raw value passes through unchanged).
 		 *
 		 * <p>
-		 * Used by the marshalling layer to install {@link org.apache.juneau.swap.ObjectSwap}-aware behavior at bean-meta construction time;
+		 * Used by the marshalling layer to install {@code ObjectSwap}-aware behavior at bean-meta construction time;
 		 * the bean-modeling layer itself only invokes the function and does not directly reference
-		 * {@link org.apache.juneau.swap.ObjectSwap}.
+		 * {@code ObjectSwap}.
 		 *
 		 * @param value The transform function.  Must not be <jk>null</jk>.
 		 * @return This object.
@@ -156,9 +153,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * invoked.  Defaults to identity (raw value passes through unchanged).
 		 *
 		 * <p>
-		 * Used by the marshalling layer to install {@link org.apache.juneau.swap.ObjectSwap}-aware behavior at bean-meta construction time;
+		 * Used by the marshalling layer to install {@code ObjectSwap}-aware behavior at bean-meta construction time;
 		 * the bean-modeling layer itself only invokes the function and does not directly reference
-		 * {@link org.apache.juneau.swap.ObjectSwap}.
+		 * {@code ObjectSwap}.
 		 *
 		 * @param value The transform function.  Must not be <jk>null</jk>.
 		 * @return This object.
@@ -311,14 +308,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 *
 		 * <p>
 		 * After validation succeeds, marshalling-side callers (currently {@link BeanMeta}) read the
-		 * {@link #dictionaryClasses} field to construct the property-level {@link org.apache.juneau.BeanRegistry} and store it in a
+		 * {@link #dictionaryClasses} field to construct the property-level registry lookup and store it in a
 		 * side-map keyed by the built {@link BeanPropertyMeta}.  The bean-modeling layer itself no longer carries a
-		 * {@link org.apache.juneau.BeanRegistry} reference.
+		 * concrete registry reference.
 		 *
 		 * <p>
 		 * When {@code bc} is <jk>null</jk> (commons-side path), this method runs in raw-reflection mode:
 		 * annotation reads are routed through {@link BeanConfigContext#getAnnotationProvider()} but no
-		 * {@link org.apache.juneau.ClassMeta} resolution or {@link org.apache.juneau.swap.ObjectSwap} discovery is performed; the property's
+		 * {@code ClassMeta} resolution or {@code ObjectSwap} discovery is performed; the property's
 		 * {@code rawTypeMeta}/{@code typeMeta} stay <jk>null</jk> and the resulting {@link BeanPropertyMeta}
 		 * exposes raw getter/setter invocation only.
 		 *
@@ -509,12 +506,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final boolean isUri;                                     // True if this is a URL/URI or annotated with @URI.
 	private final String name;                                       // The name of the property.
 	private final Object overrideValue;                              // The bean property value (if it's an overridden delegate).
-	private final BeanTypeInfo<?> rawTypeMeta;                       // The real class type of the bean property.  Concrete instances are always {@link org.apache.juneau.ClassMeta}; typed against the bean-modeling SPI seam for the eventual move to commons.bean.
+	private final BeanTypeInfo<?> rawTypeMeta;                       // The real class type of the bean property.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam for the eventual move to commons.bean.
 	private final BiFunction<BeanSession,Object,Object> readTransform;  // Applied to raw getter result; identity by default.  Typed against the commons.bean SPI seam.
 	private final boolean readOnly;                                  // True if this property is read-only.
 	private final MethodInfo setter;                                 // The bean property setter.
-	private final Object swap;                                       // ObjectSwap, but Object-typed so the field can live in commons.bean; cast at marshalling-side use sites.  Defined only via @MarshalledProp(format=...) or @Swap.
-	private final BeanTypeInfo<?> typeMeta;                          // The transformed class type of the bean property.  Concrete instances are always {@link org.apache.juneau.ClassMeta}; typed against the bean-modeling SPI seam.
+	private final BeanTypeInfo<?> typeMeta;                          // The transformed class type of the bean property.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam.
 	private final BiFunction<BeanSession,Object,Object> writeTransform; // Applied to incoming value before raw setter; identity by default.  Typed against the commons.bean SPI seam.
 	private final boolean writeOnly;                                 // True if this property is write-only.
 
@@ -543,7 +539,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		rawTypeMeta = b.rawTypeMeta;
 		readOnly = b.readOnly;
 		setter = b.setter;
-		swap = b.swap;
 		typeMeta = b.typeMeta;
 		writeOnly = b.writeOnly;
 		readTransform = b.readTransform != null ? b.readTransform : (session, o) -> o;
@@ -563,7 +558,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * <p>
 	 * <b>Marshalling-only path.</b>  Requires a property built via the marshalling-side construction path
 	 * (i.e. with a non-null {@link #getClassMeta() rawTypeMeta} and a non-null backing
-	 * {@link org.apache.juneau.MarshallingSession} on the supplied {@link BeanMap}).  When the owning {@link BeanMeta} was built via
+	 * {@code MarshallingSession} on the supplied {@link BeanMap}).  When the owning {@link BeanMeta} was built via
 	 * {@link BeanMeta#of(Class, BeanConfigContext)}, this method throws
 	 * {@link UnsupportedOperationException} because adding into a Collection/array property requires
 	 * type-aware element conversion (the marshalling session's {@code convertToType}) that is not available in the
@@ -665,7 +660,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * <p>
 	 * <b>Marshalling-only path.</b>  Requires a property built via the marshalling-side construction path
 	 * (i.e. with a non-null {@link #getClassMeta() rawTypeMeta} and a non-null backing
-	 * {@link org.apache.juneau.MarshallingSession} on the supplied {@link BeanMap}).  When the owning {@link BeanMeta} was built via
+	 * {@code MarshallingSession} on the supplied {@link BeanMap}).  When the owning {@link BeanMeta} was built via
 	 * {@link BeanMeta#of(Class, BeanConfigContext)}, this method throws
 	 * {@link UnsupportedOperationException} because adding into a Map/bean property requires type-aware
 	 * value conversion (the marshalling session's {@code convertToType} / {@code toBeanMap}) that is not available
@@ -868,20 +863,19 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * <p>
 	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
-	 * 	<li>Dictionary defined via {@link org.apache.juneau.annotation.MarshalledProp#dictionary() @MarshalledProp(dictionary)}.
-	 * 	<li>Dictionary defined via {@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}.
+	 * 	<li>Dictionary defined via {@code @MarshalledProp(dictionary)}.
+	 * 	<li>Dictionary defined via {@code MarshallingContext.Builder#beanDictionary(Class...)}.
 	 * </ol>
 	 *
 	 * <p>
-	 * The per-property {@link org.apache.juneau.BeanRegistry} no longer lives on this object; it is stored in a marshalling-side
+	 * The per-property registry no longer lives on this object; it is stored in a marshalling-side
 	 * side-map on {@link BeanMeta} keyed by {@link BeanPropertyMeta}.  This method delegates to
 	 * {@link BeanMeta#getPropertyBeanRegistry(BeanPropertyMeta)} for backwards compatibility with existing call sites
 	 * in the marshalling layer (parser/serializer sessions, XML content-property handling, etc.).
 	 *
 	 * <p>
 	 * Returns the bean-modeling-side SPI type ({@link BeanRegistryLookup}).  Marshalling-side callers that need
-	 * the full {@link org.apache.juneau.BeanRegistry} surface (e.g. {@code getClassMeta(String)}) cast at the
-	 * call site — the concrete instance in-tree is always a {@link org.apache.juneau.BeanRegistry}.
+	 * implementation-specific behavior cast at the call site.
 	 *
 	 * @return The bean dictionary in use for this bean property, or <jk>null</jk> if no registry was registered.
 	 */
@@ -891,14 +885,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * Returns the {@link BeanTypeInfo} of the class of this property.
 	 *
 	 * <p>
-	 * If this property or the property type class has a {@link org.apache.juneau.swap.ObjectSwap} associated with it, this method returns the
+	 * If this property or the property type class has a {@code ObjectSwap} associated with it, this method returns the
 	 * transformed class meta.
 	 * This matches the class type that is used by the {@link #get(BeanMap,String)} and
 	 * {@link #set(BeanMap,String,Object)} methods.
 	 *
 	 * <p>
 	 * Returns the bean-modeling-side SPI type ({@link BeanTypeInfo}).  Marshalling-side callers that need the
-	 * {@link org.apache.juneau.ClassMeta} narrowing must cast — the concrete instance in-tree is always a {@link org.apache.juneau.ClassMeta}.
+	 * {@code ClassMeta} narrowing must cast — the concrete instance in-tree is always a {@code ClassMeta}.
 	 *
 	 * @return The {@link BeanTypeInfo} of the class of this property, or <jk>null</jk> if this property was built via
 	 * 	the bean-modeling-only path.
@@ -1035,8 +1029,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * A bean property can be considered a URI if any of the following are true:
 	 * <ul>
 	 * 	<li>Property class type is {@link URL} or {@link URI}.
-	 * 	<li>Property class type is annotated with {@link org.apache.juneau.annotation.Uri @Uri}.
-	 * 	<li>Property getter, setter, or field is annotated with {@link org.apache.juneau.annotation.Uri @Uri}.
+	 * 	<li>Property class type is annotated with {@code @Uri}.
+	 * 	<li>Property getter, setter, or field is annotated with {@code @Uri}.
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if this bean property is a URI.

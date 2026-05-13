@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.examples.core.pojo;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.bean.*;
 
 /**

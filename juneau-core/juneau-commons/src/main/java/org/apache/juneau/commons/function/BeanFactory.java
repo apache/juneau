@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 package org.apache.juneau.commons.function;
-
-import org.apache.juneau.commons.bean.*;
 /**
  * A universal factory interface used with <ja>@Marshalled</ja><c>(factory=X.class)</c> for any bean type the
  * framework needs to instantiate.

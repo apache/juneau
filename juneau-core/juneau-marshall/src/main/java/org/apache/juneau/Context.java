@@ -175,7 +175,7 @@ public abstract class Context {
 		 * As a rule, any Juneau annotation with an <l>on()</l> method can be used with this setting.
 		 *
 		 * <p>
-		 * The following example shows the equivalent methods for applying the {@link Bean @Marshalled} annotation:
+		 * The following example shows the equivalent methods for applying the {@link Marshalled @Marshalled} annotation:
 		 * <p class='bjava'>
 		 * 	<jc>// Class with explicit annotation.</jc>
 		 * 	<ja>@Marshalled</ja>(properties=<js>"street,city,state"</js>)
@@ -196,7 +196,7 @@ public abstract class Context {
 		 * directly into builder classes like so:
 		 * <p class='bjava'>
 		 * 	<jc>// Create a concrete @Marshalled annotation.</jc>
-		 * 	<ja>Bean</ja> <jv>annotation</jv> = MarshalledAnnotation.<jsm>create</jsm>(B.<jk>class</jk>).properties(<js>"street,city,state"</js>).build();
+		 * 	<ja>Marshalled</ja> <jv>annotation</jv> = MarshalledAnnotation.<jsm>create</jsm>(B.<jk>class</jk>).properties(<js>"street,city,state"</js>).build();
 		 *
 		 * 	<jc>// Apply it to a serializer.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().annotations(<jv>annotation</jv>).build();
@@ -886,8 +886,8 @@ public abstract class Context {
 	 * <p>
 	 * Also matches {@link BeanConfig} from {@code juneau-commons}, which intentionally lacks a
 	 * {@link ContextApply @ContextApply} meta-annotation because {@code juneau-commons} cannot reference
-	 * marshall-layer types. {@link AnnotationWorkList} routes {@link BeanConfig} to its
-	 * {@link BeanConfigAnnotation.Applier} via an explicit special case.
+	 * marshall-layer types. {@link AnnotationWorkList} routes {@link BeanConfig} to the
+	 * {@link BeanConfigAnnotation} applier via an explicit special case.
 	 */
 	public static final Predicate<AnnotationInfo<?>> CONTEXT_APPLY_FILTER = x -> x.hasAnnotation(ContextApply.class) || x.annotationType() == BeanConfig.class;
 

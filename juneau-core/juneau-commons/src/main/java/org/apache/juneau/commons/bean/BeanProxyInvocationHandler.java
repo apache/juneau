@@ -22,15 +22,13 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-import org.apache.juneau.commons.bean.BeanMap;
-import org.apache.juneau.commons.bean.BeanMeta;
 
 /**
  * Provides an {@link InvocationHandler} for creating dynamic proxy instances of bean interfaces.
  *
  * <p>
  * This class enables the creation of bean instances from interfaces without requiring concrete implementations.
- * When the {@code useInterfaceProxies} setting is enabled in {@link MarshallingContext}, this handler is used to create
+ * When the {@code useInterfaceProxies} setting is enabled in the marshalling context, this handler is used to create
  * proxy instances that implement bean interfaces.
  *
  * <p>
@@ -68,7 +66,7 @@ import org.apache.juneau.commons.bean.BeanMeta;
  * </p>
  *
  * @param <T> The interface class type
- * @see MarshallingContext#isUseInterfaceProxies()
+ * @see BeanConfigContext#isUseInterfaceProxies()
  * @see BeanMeta#getBeanProxyInvocationHandler()
  * @see Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)
  */

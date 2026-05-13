@@ -494,5 +494,3 @@
  * </div>
  */
 package org.apache.juneau.commons.function;
-
-import org.apache.juneau.commons.bean.*;

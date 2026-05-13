@@ -21,7 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.beans.*;
 import java.lang.annotation.*;
-import org.apache.juneau.commons.bean.*;
 
 /**
  * Annotation that can be applied to classes to control bean introspection and modeling.

@@ -30,7 +30,6 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.bean.BeanMap;
 
 @SuppressWarnings({
 	"serial", // Serialization not relevant for test beans

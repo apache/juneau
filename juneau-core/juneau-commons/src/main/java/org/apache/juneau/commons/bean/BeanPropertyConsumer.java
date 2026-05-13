@@ -17,7 +17,6 @@
 package org.apache.juneau.commons.bean;
 
 import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Represents a consumer of a single bean property value.

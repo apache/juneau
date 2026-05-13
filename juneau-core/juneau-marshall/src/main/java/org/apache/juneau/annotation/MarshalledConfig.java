@@ -96,7 +96,7 @@ public @interface MarshalledConfig {
 	 * <p>
 	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
 	 * through reflection.
-	 * <br>The names are defined through the {@link Bean#typeName() @Marshalled(typeName)} annotation defined on the bean class.
+	 * <br>The names are defined through the {@link Marshalled#typeName() @Marshalled(typeName)} annotation defined on the bean class.
 	 * <br>For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up serialized
 	 * as <js>"{_type:'myfoo',...}"</js>.
 	 *
@@ -104,7 +104,7 @@ public @interface MarshalledConfig {
 	 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link Bean#dictionary()}
+	 * 	<li class='ja'>{@link Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
 	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
@@ -122,7 +122,7 @@ public @interface MarshalledConfig {
 	 * Same as {@link #dictionary()} but replaces any existing value.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link Bean#dictionary()}
+	 * 	<li class='ja'>{@link Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
 	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
@@ -260,7 +260,7 @@ public @interface MarshalledConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link Bean#typePropertyName()}
+	 * 	<li class='ja'>{@link Marshalled#typePropertyName()}
 	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#typePropertyName(String)}
 	 * </ul>
 	 *

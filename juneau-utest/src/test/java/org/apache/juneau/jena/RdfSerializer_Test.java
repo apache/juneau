@@ -25,7 +25,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Nested;

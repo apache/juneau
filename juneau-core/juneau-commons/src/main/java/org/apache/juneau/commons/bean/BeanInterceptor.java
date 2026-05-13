@@ -46,7 +46,7 @@ package org.apache.juneau.commons.bean;
  * <p>
  * Bean interceptors are registered in the following way:
  * <ul class='javatree'>
- * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#interceptor() @Marshalled(interceptor)}
+ * 	<li class='ja'>{@code @Marshalled(interceptor)}
  * 	<li class='jm'>{@code MarshallingContext.Builder#beanInterceptor(Class,Class)}
  * </ul>
  *

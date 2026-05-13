@@ -162,7 +162,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	private final Cache<String,Optional<?>> properties;
 	private final NullableSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
 	private final Supplier<List<ObjectSwap<T,?>>> swaps;                       // The object POJO swaps associated with this bean (if it has any).
-	private final NullableSupplier<BeanMeta.BeanMetaValue<T>> beanMeta;
+	private final NullableSupplier<org.apache.juneau.commons.bean.BeanMeta.BeanMetaValue<T>> beanMeta;
 
 	private record KeyValueTypes(ClassMeta<?> keyType, ClassMeta<?> valueType) {
 		Optional<ClassMeta<?>> optKeyType() { return opt(keyType()); }
@@ -376,6 +376,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 *
 	 * @return <jk>true</jk> if a new instance of this class can be constructed.
 	 */
+	@Override
 	public boolean canCreateNewInstance() {
 		if (isMemberClass() && isNotStatic())
 			return false;
@@ -393,6 +394,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 * @return
 	 * 	<jk>true</jk> if a new instance of this class can be created within the context of the specified outer object.
 	 */
+	@Override
 	public boolean canCreateNewInstance(Object outer) {
 		if (isMemberClass() && isNotStatic())
 			return nn(outer) && noArgConstructor.map(x -> x.hasParameterTypes(outer.getClass())).orElse(false);
@@ -495,7 +497,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 * 	The {@link BeanMeta} associated with this class, or <jk>null</jk> if there is no bean meta associated with
 	 * 	this class.
 	 */
-	public BeanMeta<T> getBeanMeta() {
+	public org.apache.juneau.commons.bean.BeanMeta<T> getBeanMeta() {
 		return beanMeta.get().beanMeta();
 	}
 
@@ -503,7 +505,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 * Returns the bean registry for this class.
 	 *
 	 * <p>
-	 * This bean registry contains names specified in the {@link Bean#dictionary() @Marshalled(dictionary)} annotation
+	 * This bean registry contains names specified in the {@link Marshalled#dictionary() @Marshalled(dictionary)} annotation
 	 * defined on the class, regardless of whether the class is an actual bean.
 	 * This allows interfaces to define subclasses with type names.
 	 *
@@ -530,7 +532,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 * Returns the bean dictionary name associated with this class.
 	 *
 	 * <p>
-	 * The lexical name is defined by {@link Bean#typeName() @Marshalled(typeName)}.
+	 * The lexical name is defined by {@link Marshalled#typeName() @Marshalled(typeName)}.
 	 *
 	 * @return
 	 * 	The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this
@@ -546,6 +548,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 *
 	 * @return The element class type, or <jk>null</jk> if this class is not an array or Collection.
 	 */
+	@Override
 	public ClassMeta<?> getElementType() { return elementType.get(); }
 
 	/**
@@ -632,6 +635,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 *
 	 * @return The key class type, or <jk>null</jk> if this class is not a Map.
 	 */
+	@Override
 	public ClassMeta<?> getKeyType() {
 		return keyValueTypes.get().keyType();
 	}
@@ -665,6 +669,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	@SuppressWarnings({
 		"java:S2789" // null intentionally signals "not an Optional type"; callers check for null
 	})
+	@Override
 	public Optional<?> getOptionalDefault() {
 		if (isOptional())
 			return opt(getElementType().getOptionalDefault());
@@ -795,6 +800,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 *
 	 * @return The value class type, or <jk>null</jk> if this class is not a Map.
 	 */
+	@Override
 	public ClassMeta<?> getValueType() {
 		return keyValueTypes.get().valueType();
 	}
@@ -982,6 +988,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a bean.
 	 */
+	@Override
 	public boolean isBean() { return nn(getBeanMeta()); }
 
 	/**
@@ -1159,7 +1166,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 */
 	@Override
 	public boolean isMap() {
-		// TODO - Figure out how cat can be null.
+		// Defensive null-guard: category is expected to be set, but keep this check for safety.
 		return cat != null && cat.is(MAP);
 	}
 
@@ -1205,6 +1212,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 *
 	 * @return <jk>true</jk> if this class is {@link Object}.
 	 */
+	@Override
 	public boolean isObject() { return is(Object.class); }
 
 	/**
@@ -1212,6 +1220,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Optional}.
 	 */
+	@Override
 	public boolean isOptional() { return is(Optional.class); }
 
 	/**
@@ -1270,6 +1279,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a {@link URI} or {@link URL}.
 	 */
+	@Override
 	public boolean isUri() { return cat != null && cat.is(URI); }
 
 	/**
@@ -1469,10 +1479,10 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 			.orElse(null);
 	}
 
-	private BeanMeta.BeanMetaValue<T> findBeanMeta() {
+	private org.apache.juneau.commons.bean.BeanMeta.BeanMetaValue<T> findBeanMeta() {
 		if (! cat.isUnknown())
-			return new BeanMeta.BeanMetaValue<>(null, "Known non-bean type");
-		return BeanMeta.create(this, implClass.get());
+			return new org.apache.juneau.commons.bean.BeanMeta.BeanMetaValue<>((org.apache.juneau.commons.bean.BeanMeta<T>)null, "Known non-bean type");
+		return org.apache.juneau.commons.bean.BeanMeta.create(this, implClass.get());
 	}
 
 	private KeyValueTypes findKeyValueTypes() {

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.config;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.oapi.*;

@@ -22,7 +22,6 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.swap.*;
 
 /**
  * Utility classes and methods for the {@link Marshalled @Marshalled} annotation.

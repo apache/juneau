@@ -27,7 +27,6 @@ import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.bean.*;
 
 /**
  * Integration tests for large-dataset streaming via {@link BeanSupplier}, {@link BeanConsumer},

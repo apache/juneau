@@ -59,9 +59,9 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@code <S>} - The swapped representation of an object.
  * </ol>
  * <br>{@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to
- * {@link BeanMap#get(Object)}.
+ * {@link org.apache.juneau.commons.bean.BeanMap#get(Object)}.
  * <br>{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to
- * {@link BeanMap#put(String,Object)}.
+ * {@link org.apache.juneau.commons.bean.BeanMap#put(String,Object)}.
  *
  * <h5 class='topic'>Swap Class Type {@code <S>}</h5>
  *

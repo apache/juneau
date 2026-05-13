@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
 class MarshalledAnnotation_Test extends TestBase {

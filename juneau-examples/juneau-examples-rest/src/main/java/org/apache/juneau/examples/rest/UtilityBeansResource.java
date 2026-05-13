@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.examples.rest;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;

@@ -440,7 +440,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beanClassVisibility()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#beanClassVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -489,7 +489,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beanConstructorVisibility()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#beanConstructorVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -541,7 +541,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 *
 		 * <p>
 		 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
-		 * through reflection.  The names are defined through the {@link Bean#typeName() @Marshalled(typeName)} annotation defined
+		 * through reflection.  The names are defined through the {@link Marshalled#typeName() @Marshalled(typeName)} annotation defined
 		 * on the bean class.  For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up
 		 * serialized as <js>"{_type:'myfoo',...}"</js> in JSON
 		 * or <js>"&lt;myfoo&gt;...&lt;/myfoo&gt;"</js> in XML.
@@ -552,7 +552,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * <p>
 		 * Values can consist of any of the following types:
 		 * <ul>
-		 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Marshalled(typeName)}.
+		 * 	<li>Any bean class that specifies a value for {@link Marshalled#typeName() @Marshalled(typeName)}.
 		 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
 		 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 		 * 	<li>Any array or collection of the objects above.
@@ -583,7 +583,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <p>
-		 * Another option is to use the {@link Bean#dictionary()} annotation on the POJO class itself:
+		 * Another option is to use the {@link Marshalled#dictionary()} annotation on the POJO class itself:
 		 *
 		 * <p class='bjava'>
 		 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
@@ -685,7 +685,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beanFieldVisibility()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#beanFieldVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -741,7 +741,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='jc'>{@link BeanInterceptor}
-		 * 	<li class='ja'>{@link Bean#interceptor() Bean(interceptor)}
+		 * 	<li class='ja'>{@link Marshalled#interceptor() @Marshalled(interceptor)}
 		 * </ul>
 		 *
 		 * @param on The bean that the filter applies to.
@@ -781,7 +781,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beanMapPutReturnsOldValue()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#beanMapPutReturnsOldValue()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -835,7 +835,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beanMethodVisibility()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#beanMethodVisibility()}
 		 * </ul>
 		 *
 		 * @param value
@@ -896,7 +896,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#properties()}/{@link Bean#p()} - On an annotation on the bean class itself.
+		 * 	<li class='jma'>{@link BeanType#properties()}/{@link BeanType#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -959,7 +959,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#properties()} / {@link Bean#p()}- On an annotation on the bean class itself.
+		 * 	<li class='jma'>{@link BeanType#properties()} / {@link BeanType#p()}- On an annotation on the bean class itself.
 		 * </ul>
 		 *
 		 * @param values
@@ -1023,7 +1023,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#properties()} / {@link Bean#p()} - On an annotation on the bean class itself.
+		 * 	<li class='jma'>{@link BeanType#properties()} / {@link BeanType#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -1079,7 +1079,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
+		 * 	<li class='jma'>{@link BeanType#excludeProperties()} / {@link BeanType#xp()}
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -1134,7 +1134,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
+		 * 	<li class='jma'>{@link BeanType#excludeProperties()} / {@link BeanType#xp()}
 		 * </ul>
 		 *
 		 * @param values
@@ -1190,7 +1190,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
+		 * 	<li class='jma'>{@link BeanType#excludeProperties()} / {@link BeanType#xp()}
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -1250,7 +1250,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
+		 * 	<li class='jma'>{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -1308,7 +1308,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
+		 * 	<li class='jma'>{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}
 		 * </ul>
 		 *
 		 * @param values
@@ -1367,7 +1367,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
+		 * 	<li class='jma'>{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -1424,7 +1424,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
+		 * 	<li class='jma'>{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -1481,7 +1481,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
+		 * 	<li class='jma'>{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}
 		 * </ul>
 		 *
 		 * @param values
@@ -1539,7 +1539,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
+		 * 	<li class='jma'>{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -1596,7 +1596,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beansRequireDefaultConstructor()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#beansRequireDefaultConstructor()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1653,7 +1653,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#beansRequireSerializable()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#beansRequireSerializable()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1816,10 +1816,10 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <p>
-		 * This is functionally equivalent to the {@link Bean#dictionary()} annotation.
+		 * This is functionally equivalent to the {@link Marshalled#dictionary()} annotation.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jma'>{@link Bean#dictionary()}
+		 * 	<li class='jma'>{@link Marshalled#dictionary()}
 		 * 	<li class='jm'>{@link #beanDictionary(Class...)}
 		 * </ul>
 		 *
@@ -1866,7 +1866,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#disableBeansRequireSomeProperties()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#disableBeansRequireSomeProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1917,7 +1917,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#disableIgnoreMissingSetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#disableIgnoreMissingSetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1965,7 +1965,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#disableIgnoreTransientFields()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#disableIgnoreTransientFields()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2010,7 +2010,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#disableIgnoreUnknownNullBeanProperties()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#disableIgnoreUnknownNullBeanProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2039,7 +2039,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * Otherwise, throws a {@link BeanRuntimeException}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#disableInterfaceProxies()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#disableInterfaceProxies()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2198,7 +2198,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanType#findFluentSetters()}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#findFluentSetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#findFluentSetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2242,11 +2242,11 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This method is functionally equivalent to using the {@link Bean#findFluentSetters()} annotation.
+		 * 	<li class='note'>This method is functionally equivalent to using the {@link BeanType#findFluentSetters()} annotation.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
+		 * 	<li class='ja'>{@link BeanType#findFluentSetters()}
 		 * 	<li class='jm'>{@link #findFluentSetters()}
 		 * </ul>
 		 *
@@ -2328,7 +2328,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#ignoreInvocationExceptionsOnGetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#ignoreInvocationExceptionsOnGetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2375,7 +2375,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#ignoreInvocationExceptionsOnSetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#ignoreInvocationExceptionsOnSetters()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2420,7 +2420,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#ignoreUnknownBeanProperties()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#ignoreUnknownBeanProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2447,7 +2447,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * When enabled, unknown enum values will be set to <jk>null</jk> instead of throwing an exception.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#ignoreUnknownEnumValues()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#ignoreUnknownEnumValues()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2589,7 +2589,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * individually on the child classes.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean#interfaceClass() @Marshalled(interfaceClass)} annotation is the equivalent annotation-based solution.
+		 * 	<li class='note'>The {@link BeanType#interfaceClass() @BeanType(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
 		 * @param on The class that the interface class applies to.
@@ -2638,7 +2638,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * individually on the child classes.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean#interfaceClass() @Marshalled(interfaceClass)} annotation is the equivalent annotation-based solution.
+		 * 	<li class='note'>The {@link BeanType#interfaceClass() @BeanType(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
 		 * @param value
@@ -2807,7 +2807,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanIgnore}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#notBeanClasses()}
+		 * 	<li class='ja'>{@link org.apache.juneau.commons.bean.BeanConfig#notBeanClasses()}
 		 * </ul>
 		 *
 		 * @param values
@@ -2931,7 +2931,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
+		 * 	<li class='ja'>{@link BeanType#propertyNamer() @BeanType(propertyNamer)}
 		 * 	<li class='jm'>{@link #propertyNamer(Class)}
 		 * </ul>
 		 *
@@ -3042,11 +3042,11 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * Opt specific bean classes out of alphabetical property sorting.
 		 *
 		 * <p>
-		 * Applies the {@link Bean#unsorted() @BeanType(unsorted=true)} annotation to the specified classes,
+		 * Applies the {@link BeanType#unsorted() @BeanType(unsorted=true)} annotation to the specified classes,
 		 * overriding the default sorted behavior for those specific beans.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#unsorted() Bean(unsorted)}
+		 * 	<li class='ja'>{@link BeanType#unsorted() @BeanType(unsorted)}
 		 * </ul>
 		 *
 		 * @param on The bean classes to opt out of sorted properties.
@@ -3363,11 +3363,11 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>Equivalent to the {@link Bean#typeName() Bean(typeName)} annotation.
+		 * 	<li class='note'>Equivalent to the {@link Marshalled#typeName() @Marshalled(typeName)} annotation.
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jc'>{@link Bean#typeName() Bean(typeName)}
+		 * 	<li class='jc'>{@link Marshalled#typeName() @Marshalled(typeName)}
 		 * 	<li class='jm'>{@link #beanDictionary(Class...)}
 		 * </ul>
 		 *
@@ -3416,7 +3416,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
+		 * 	<li class='ja'>{@link Marshalled#typePropertyName() @Marshalled(typePropertyName)}
 		 * </ul>
 		 *
 		 * @param on The class the type property name applies to.

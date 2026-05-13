@@ -18,15 +18,12 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
-import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 
 class Common_Test extends TestBase {

@@ -19,7 +19,6 @@ package org.apache.juneau.parser;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**

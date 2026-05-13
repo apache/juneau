@@ -262,8 +262,8 @@ public class HjsonParserSession extends ReaderParserSession {
 				setName(cm, val, key);
 			if (cm.getParentProperty() != null)
 				setParent(cm, val, bean);
-			if (cm.isMap() && val instanceof Map<?,?> val2 && !cm.getValueType().isObject() && ((ClassMeta<?>) cm.getValueType()).getNameProperty() != null) {
-				var valueType = (ClassMeta<?>) cm.getValueType();
+			if (cm.isMap() && val instanceof Map<?,?> val2 && !cm.getValueType().isObject() && cm.getValueType().getNameProperty() != null) {
+				var valueType = cm.getValueType();
 				for (Map.Entry<?, ?> e : ((Map<?,?>)val2).entrySet())
 					setName(valueType, e.getValue(), e.getKey());
 			}

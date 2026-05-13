@@ -46,7 +46,7 @@ import org.apache.juneau.serializer.annotation.*;
  *	</li>
  * 	<li class='ja'>{@link MarshalledConfig}:
  * 		<ul>
- * 			<li class='jma'>{@link MarshalledConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}:  <js>"true"</js>
+ * 			<li class='jma'>{@link org.apache.juneau.commons.bean.BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}:  <js>"true"</js>
  * 		</ul>
  * 	</li>
  * 	<li class='ja'>{@link SerializerConfig}:

@@ -22,8 +22,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.bean.BeanMap;
-import org.apache.juneau.commons.bean.BeanMeta;
 
 /**
  * Tests the commons-side construction path of {@link BeanMeta} via

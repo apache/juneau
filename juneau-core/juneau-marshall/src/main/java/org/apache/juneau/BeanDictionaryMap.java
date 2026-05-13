@@ -23,14 +23,12 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
-
 /**
  * Represents a map of dictionary type names to bean classes that make up a bean dictionary.
  *
  * <p>
  * In general, this approach for defining dictionary names for classes is used when it's not possible to use the
- * {@link Bean#typeName() @Marshalled(typeName)} annotation.
+ * {@link org.apache.juneau.annotation.Marshalled#typeName() @Marshalled(typeName)} annotation.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
