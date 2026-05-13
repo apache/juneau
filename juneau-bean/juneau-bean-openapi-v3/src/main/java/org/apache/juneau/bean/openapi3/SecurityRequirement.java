@@ -23,6 +23,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 
 /**
@@ -155,6 +156,7 @@ public class SecurityRequirement extends OpenApiElement {
 	 * @param schemeName The security scheme name.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
+	@BeanIgnore
 	public SecurityRequirement setApiKeyAuth(String schemeName) {
 		return addRequirement(schemeName);
 	}

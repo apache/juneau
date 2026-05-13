@@ -125,6 +125,39 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 		return meta.set(this.beanMap, pName, value);
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the given object is a {@link Map.Entry} with equal key and value.
+	 *
+	 * <p>
+	 * This follows the {@link Map.Entry} equality contract: two entries are equal if both their
+	 * keys and values compare equal via {@link Objects#equals}.
+	 *
+	 * @param obj The object to compare against.
+	 * @return <jk>true</jk> if equal.
+	 */
+	@Override /* Overridden from Object */
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Map.Entry<?,?> other))
+			return false;
+		return Objects.equals(getKey(), other.getKey()) && Objects.equals(getValue(), other.getValue());
+	}
+
+	/**
+	 * Returns the hash code for this entry, consistent with the {@link Map.Entry} contract.
+	 *
+	 * <p>
+	 * The hash code is computed as {@code key.hashCode() ^ value.hashCode()}, matching the
+	 * contract that equal entries must have equal hash codes.
+	 *
+	 * @return The hash code.
+	 */
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return Objects.hashCode(getKey()) ^ Objects.hashCode(getValue());
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return this.getKey() + "=" + this.getValue();
