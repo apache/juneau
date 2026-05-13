@@ -82,7 +82,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 */
 	public static class Builder {
 		BeanMeta<?> beanMeta;  // Package-private for BeanMeta access
-		Object bc;  // Object-typed (was MarshallingContext) so the field can live in commons.bean; cast to MarshallingContext at marshalling-side use sites.  Null when the owning BeanMeta was built via the commons-side path.
+		BeanTypeResolver bc;  // The bean-modeling SPI seam to the marshalling-side type resolver.  Null when the owning BeanMeta was built via the commons-side path.
 		BeanConfigContext config;  // Package-private for BeanMeta access.  Always non-null — sourced from the owning BeanMeta.
 		String name;  // Package-private for BeanMeta access
 		FieldInfo field;  // Package-private for BeanMeta access
@@ -92,11 +92,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		MethodInfo extraKeys;  // Package-private for BeanMeta access
 		BeanTypeInfo<?> rawTypeMeta;  // Package-private for BeanMeta access (used to install swap-aware transforms).  Null on commons-side path (no type resolution).  Concrete instances are always {@link ClassMeta} since it's the only in-tree implementation; the field is typed against the bean-modeling SPI seam so the field can live in commons.bean.
 		Object swap;  // Object-typed so the field can live in commons.bean; cast to ObjectSwap by marshalling-side consumers.  Set only via MarshalledPropertyPostProcessor (marshalling-side post-processor).
-		BiFunction<MarshallingSession,Object,Object> readTransform;  // Package-private; defaults to identity if null.
-		BiFunction<MarshallingSession,Object,Object> writeTransform; // Package-private; defaults to identity if null.
+		BiFunction<BeanSession,Object,Object> readTransform;  // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam; marshalling-side installers cast the session argument back to {@link MarshallingSession} where needed (see {@link MarshalledPropertyPostProcessor#installSwapAwareTransforms}).
+		BiFunction<BeanSession,Object,Object> writeTransform; // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam (see readTransform note).
 		List<ClassInfo> dictionaryClasses;  // Package-private for BeanMeta access; @MarshalledProp(dictionary={}) classes scanned during validate().
 		private boolean isConstructorArg;
-		private boolean isUri;
+		boolean isUri;  // Package-private so MarshalledPropertyPostProcessor can set @Uri-derived flag.  Mirrors rawTypeMeta.isUri() plus @Uri annotation reads on field/getter/setter.
 		private boolean isDyna;
 		private boolean isDynaGetterMap;
 		BeanTypeInfo<?> typeMeta;  // Package-private so the marshalling-side post-processor can override after @Swap/@MarshalledProp detection.  Concrete instances are always {@link ClassMeta}; typed against the bean-modeling SPI seam.
@@ -109,7 +109,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
-			this.bc = beanMeta.getMarshallingContext();
+			this.bc = beanMeta.getMarshallingContext();  // MarshallingContext implements BeanTypeResolver; null on commons-side path.
 			this.config = beanMeta.getConfig();
 			this.name = name;
 		}
@@ -147,7 +147,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @param value The transform function.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder readTransform(BiFunction<MarshallingSession,Object,Object> value) {
+		public Builder readTransform(BiFunction<BeanSession,Object,Object> value) {
 			readTransform = assertArgNotNull(ARG_value, value);
 			return this;
 		}
@@ -167,7 +167,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @param value The transform function.  Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder writeTransform(BiFunction<MarshallingSession,Object,Object> value) {
+		public Builder writeTransform(BiFunction<BeanSession,Object,Object> value) {
 			writeTransform = assertArgNotNull(ARG_value, value);
 			return this;
 		}
@@ -199,13 +199,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * Sets the raw metadata type for this bean property from a {@link Class}.
 		 *
 		 * <p>
-		 * Convenience overload that resolves the supplied class to a {@link ClassMeta} via the property's
-		 * {@link MarshallingContext}, allowing callers from the bean-modeling layer to seed the type without
-		 * holding a {@link ClassMeta} reference.
+		 * Convenience overload that resolves the supplied class via the property's
+		 * {@link BeanTypeResolver}, allowing callers from the bean-modeling layer to seed the type without
+		 * holding a {@link BeanTypeInfo} reference.
 		 *
 		 * <p>
 		 * When the owning {@link BeanMeta} was built via the commons-side path
-		 * ({@link BeanMeta#of(Class, BeanConfigContext)}), no marshalling context is available, so
+		 * ({@link BeanMeta#of(Class, BeanConfigContext)}), no resolver is available, so
 		 * {@code rawTypeMeta}/{@code typeMeta} are left <jk>null</jk> and the property runs in raw-reflection mode.
 		 *
 		 * @param value The raw metadata type for this bean property.
@@ -215,7 +215,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			assertArgNotNull(ARG_value, value);
 			if (bc == null)
 				return this;
-			return rawMetaType(((MarshallingContext) bc).getClassMeta(value));
+			rawTypeMeta = bc.resolveType(null, info(value), null);
+			typeMeta = rawTypeMeta;
+			return this;
 		}
 
 		/**
@@ -375,7 +377,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (ne(beanp.wo()))
 						writeOnly = bool(beanp.wo());
 				});
-				isUri |= ap.has(Uri.class, ifi);
 			}
 
 			if (nn(getter)) {
@@ -384,7 +385,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					rawTypeMeta = bc.resolveType(opt(last(lbp)).orElse(null), getter.getReturnType(), typeVarImpls);
 				if (nn(rawTypeMeta))
 					isUri |= rawTypeMeta.isUri();
-				isUri |= ap.has(Uri.class, gi);
 				lbp.forEach(x -> {
 					var beanp = x.inner();
 					if (ne(beanp.ro()))
@@ -400,7 +400,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					rawTypeMeta = bc.resolveType(opt(last(lbp)).orElse(null), setter.getParameterTypes().get(0), typeVarImpls);
 				if (nn(rawTypeMeta))
 					isUri |= rawTypeMeta.isUri();
-				isUri |= ap.has(Uri.class, si);
 				lbp.forEach(x -> {
 					var beanp = x.inner();
 					if (ne(beanp.ro()))
@@ -498,7 +497,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	private final AnnotationProvider ap;                             // Annotation provider for finding annotations on this property.  Sourced from bc (marshalling-side) or beanMeta.getConfig() (commons-side).
 	private final Supplier<List<AnnotationInfo<?>>> annotations;     // Memoized list of all annotations on this property.
-	private final Object bc;                                         // MarshallingContext, but Object-typed so the field can live in commons.bean.  Cast at marshalling-side use sites.  Null when the owning BeanMeta was built via the commons-side path.
+	private final BeanTypeResolver bc;                               // The bean-modeling SPI seam to the marshalling-side type resolver.  Null when the owning BeanMeta was built via the commons-side path.
 	private final BeanConfigContext config;                          // Bean-modeling settings facade — always non-null.  Mirrors the BeanMeta's config.
 	private final BeanMeta<?> beanMeta;                              // The bean that this property belongs to.
 	private final boolean canRead;                                   // True if this property can be read.
@@ -515,12 +514,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final String name;                                       // The name of the property.
 	private final Object overrideValue;                              // The bean property value (if it's an overridden delegate).
 	private final BeanTypeInfo<?> rawTypeMeta;                       // The real class type of the bean property.  Concrete instances are always {@link ClassMeta}; typed against the bean-modeling SPI seam for the eventual move to commons.bean.
-	private final BiFunction<MarshallingSession,Object,Object> readTransform;  // Applied to raw getter result; identity by default.
+	private final BiFunction<BeanSession,Object,Object> readTransform;  // Applied to raw getter result; identity by default.  Typed against the commons.bean SPI seam.
 	private final boolean readOnly;                                  // True if this property is read-only.
 	private final MethodInfo setter;                                 // The bean property setter.
 	private final Object swap;                                       // ObjectSwap, but Object-typed so the field can live in commons.bean; cast at marshalling-side use sites.  Defined only via @MarshalledProp(format=...) or @Swap.
 	private final BeanTypeInfo<?> typeMeta;                          // The transformed class type of the bean property.  Concrete instances are always {@link ClassMeta}; typed against the bean-modeling SPI seam.
-	private final BiFunction<MarshallingSession,Object,Object> writeTransform; // Applied to incoming value before raw setter; identity by default.
+	private final BiFunction<BeanSession,Object,Object> writeTransform; // Applied to incoming value before raw setter; identity by default.  Typed against the commons.bean SPI seam.
 	private final boolean writeOnly;                                 // True if this property is write-only.
 
 	/**
@@ -554,7 +553,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		readTransform = b.readTransform != null ? b.readTransform : (session, o) -> o;
 		writeTransform = b.writeTransform != null ? b.writeTransform : (session, o) -> o;
 
-		ap = nn(bc) ? ((MarshallingContext) bc).getAnnotationProvider() : b.config.getAnnotationProvider();
+		ap = nn(bc) ? bc.getAnnotationProvider() : b.config.getAnnotationProvider();
 		hashCode = h(beanMeta, name);
 	}
 

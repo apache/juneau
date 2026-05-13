@@ -131,7 +131,9 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 					return beanProps.equals(ih2.beanProps);
 				}
 			}
-			return eq(beanProps, meta.getMarshallingContext().toBeanMap(arg));
+			@SuppressWarnings("unchecked")
+			var argMeta = (BeanMeta<Object>) BeanMeta.of(arg.getClass(), meta.getConfig());
+			return eq(beanProps, BeanMap.of(arg, argMeta));
 		}
 
 		if (mi.hasName("hashCode") && mi.getParameterCount() == 0)

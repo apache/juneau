@@ -38,6 +38,101 @@ Build + full test green (`scripts/test.py --full`).
 
 ---
 
+## Status (Phase C Task 5 — Steps A-E1 landed, uncommitted)
+
+**Phase C Task 5 Steps A-E1 LANDED in the working tree (uncommitted).** Build + targeted tests green. The bean-runtime cluster files are not yet moved (Steps G-J), but additional SPI decoupling is in place:
+
+### Steps completed in this checkpoint
+
+- **Step A — Two `((MarshallingContext) bc).X()` casts replaced with `BeanTypeResolver` SPI calls.**
+  - `BeanPropertyMeta.Builder.bc` and `BeanPropertyMeta.bc` instance fields retyped from `Object` to `BeanTypeResolver`. `MarshallingContext` implements `BeanTypeResolver`, so the marshalling-side construction path is unchanged.
+  - `Builder.rawMetaType(Class<?>)` now calls `bc.resolveType(null, info(value), null)` instead of `((MarshallingContext) bc).getClassMeta(value)`.
+  - `BeanPropertyMeta` constructor `ap` initialization now reads `bc.getAnnotationProvider()` directly without a `MarshallingContext` cast.
+
+- **Step B — `BiFunction<MarshallingSession,Object,Object>` retyped to `BiFunction<BeanSession,Object,Object>`.**
+  - `BeanPropertyMeta.Builder.readTransform` / `writeTransform` fields plus `BeanPropertyMeta.readTransform` / `writeTransform` instance fields and the corresponding Builder setter signatures all retyped to use the `BeanSession` SPI.
+  - Lambdas inside `MarshalledPropertyPostProcessor.installSwapAwareTransforms` now narrow `session` to `MarshallingSession` via a local `var ms = (MarshallingSession) session;` since `ObjectSwap.swap`/`ObjectSwap.unswap` require the marshalling-side session. Comment documents that the marshalling-side `BeanMap` always wires a `MarshallingSession`, so the narrowing cast is safe.
+
+- **Step C — `BeanProxyInvocationHandler.equals` routed off `meta.getMarshallingContext().toBeanMap(arg)`.**
+  - Replaced with `BeanMap.of(arg, (BeanMeta<Object>) BeanMeta.of(arg.getClass(), meta.getConfig()))` (the `BeanMap.of(T, BeanMeta<T>)` static factory shipped in Step 6).
+  - Equality semantics preserved: builds a fresh `BeanMeta` against the same `BeanConfigContext`, then compares property maps. No session is wired; equality only reads.
+
+- **Step D — `BeanMap.of(T)` static factory inlined.**
+  - Replaced `MarshallingContext.DEFAULT_SESSION.toBeanMap(bean)` with `new BeanMap<>(bean, BeanMeta.of((Class<T>) bean.getClass()))`.
+  - **Behavioral change:** The returned `BeanMap` no longer carries a `MarshallingSession`, so `ObjectSwap` transformations are not applied through `get`/`put`. The previous behavior was session-aware via `DEFAULT_SESSION`; the new behavior is bean-modeling-only. Verified by running `BeanMap_Test`, `BeanProxyInvocationHandler_Test`, `BeanMeta_Test` (all green) and the full `--build-only` check.
+
+- **Step E1 — `@Uri` annotation reads lifted from `BeanPropertyMeta.Builder.validate()` to `MarshalledPropertyPostProcessor.process()`.**
+  - The three `isUri |= ap.has(Uri.class, ifi/gi/si)` reads inside `validate()` are gone; the equivalent reads now live in the marshalling-side post-processor and update the same `b.isUri` flag (now package-private on the builder so the post-processor can write it).
+  - The `rawTypeMeta.isUri()` reads remain in `validate()` — they are bean-modeling concerns (`BeanTypeInfo.isUri()` is the commons SPI).
+
+### Build / test status
+
+- `python3 scripts/test.py --build-only` — **GREEN** after each step.
+- Targeted tests run (`BeanProxyInvocationHandler_Test`, `BeanMap_Test`, `BeanMeta_Test`, `transforms/BeanMap_Test`, `UriAnnotation_Test`) — all 86 tests green.
+- Full test suite not re-run (per "incomplete-but-documented over broken-build" rule below).
+
+### Step F audit — remaining juneau-marshall coupling in the 7 files
+
+A full audit reveals the cluster is **not yet move-ready**. The 7 files still reference these `juneau-marshall` types:
+
+**`BeanMap.java`** still depends on:
+- `MarshallingSession` — held as the `private MarshallingSession session` field, returned from `getMarshallingSession()`, accepted by `setMarshallingSession(MarshallingSession)`. Used in `getBean(boolean)` for `session.convertToType(rawVal, cm)` (constructor-args path).
+- `ClassMeta` — used as `var cm = pm.getClassMeta()` in `getBean(boolean)` and via `meta.getClassMeta()` in Javadoc/error formatting.
+- `org.apache.juneau.annotation.*` (wildcard) — only used for Javadoc cross-references (`@Marshalled`, `@Swap`, `@MarshalledProp` etc.).
+- `org.apache.juneau.internal.*` — used for `FilteredKeyMap` (instantiated in `keySet()`). FilteredKeyMap itself depends on `ClassMeta`.
+- `org.apache.juneau.swap.*` — Javadoc-only references to `ObjectSwap`.
+
+**`BeanMapEntry.java`** still depends on:
+- `org.apache.juneau.annotation.*` — wildcard import. Need to audit whether any non-Javadoc reference survives.
+- `org.apache.juneau.swap.*` — Javadoc-only references.
+
+**`BeanMeta.java`** still depends on:
+- `org.apache.juneau.annotation.*` — actively reads `@Marshalled` (lines 226, 232, 453, 1178) for bean detection, `typePropertyName`, and constructor-visibility relaxation. Reads `@Name` (~6 sites) for property-name resolution.
+- `Marshalled` annotation reads still need lifting into `MarshalledBeanMetaInitializer` (helper methods that take the `AnnotationProvider` + `ClassInfo` and return: (1) `isBean(...)`, (2) `typePropertyName(...)`, (3) `allowsPrivateConstructor(...)`).
+- `@Name` could either move to `commons.bean` (clean but ~26 files would need import updates) or stay in `juneau-marshall.annotation` and have its reads abstracted behind a marshalling-side helper.
+- `MarshalledBeanMetaInitializer.findMarshalledFilter(cm)` and `.classInfoOf(cm)`, etc. — already in place; bean-side path works without them.
+- `MarshalledPropertyPostProcessor.process((MarshallingContext) marshallingContext, p)` — called via cast; `marshallingContext` field is `Object`-typed already. The post-processor itself stays in juneau-marshall.
+- `MarshallingContext` — referenced only via the cast above plus three Javadoc cross-references.
+- `BeanRegistry` — narrowing cast inside `getBeanRegistry()` and `getPropertyBeanRegistry()`. Could stay marshalling-side-only since the bean-side type is the wider `BeanRegistryLookup`.
+- `MarshalledFilter` — narrowing cast inside `getMarshalledFilter()`. Same pattern.
+- `BeanProxyInvocationHandler` — instantiated in the `beanProxyInvocationHandler` supplier. Both types move together.
+
+**`BeanPropertyMeta.java`** still depends on:
+- `MarshallingSession` — parameter type on the private `setPropertyValue(BeanMap<?>, String, Object, Object, boolean, boolean, MarshallingSession)`. Method is invoked from `set(...)` with `session = m.getMarshallingSession()`. Retyping to `BeanSession` is mechanically straightforward (the `session.parseToMap` / `session.parseToList` / `session.convertToType` / `session.convertToMemberType` methods are already on `BeanSession`), but **the method body still casts `swap` to `ObjectSwap` at line 1249** for the defensive double-unswap branch and instantiates new collections via `BeanInstantiator.of(Map.class).type(rawTypeMeta)...`.
+- `ObjectSwap` — narrowing cast at line 1249 (`((ObjectSwap) swap).getSwapClass()`). Need to either: (a) extract this branch into a marshalling-side helper, (b) add a separate `Class<?> swapClass` field on the builder to avoid the cast, or (c) accept the cast lives at a narrow site that can stay `Object`-typed plus runtime reflection on a method reference.
+- `BeanInstantiator` — used in two sites inside `setPropertyValue` to build empty collections/maps. Lives in `commons.inject`, so it's already commons-side. **Re-checked: `BeanInstantiator` is in `org.apache.juneau.commons.inject`, NOT marshalling-side. No action needed.**
+- `ParseException` / `SerializeException` — caught/thrown inside `set`/`setPropertyValue`. Both live in `juneau-marshall.parser` / `juneau-marshall.serializer`. Move-blocker.
+- `BeanRegistry` — narrowing cast inside `getBeanRegistry()`. Stays marshalling-side.
+- `ClassMeta` — Javadoc cross-references only.
+- `Uri` — fully lifted (Step E1).
+- `Name` — Javadoc-only references after Step E1. Worth confirming with a grep before move.
+
+**`BeanPropertyValue.java`** — clean. Only `commons.*` imports.
+
+**`BeanPropertyConsumer.java`** — clean. Only `commons.*` imports.
+
+**`BeanProxyInvocationHandler.java`** — clean. Only commons static imports after Step C.
+
+### Why the move is not yet safe (summary)
+
+The two stubborn move-blockers are:
+
+1. **`BeanMap.session` typed as `MarshallingSession`** and the `getBean(boolean)` constructor-args path that calls `session.convertToType`. The field could be retyped to `BeanSession`, the public `getMarshallingSession()` removed/renamed to `getBeanSession()`, and the one external caller (`ParserSession` at line 902) adjusted to cast. That's still 20-30 lines of mechanical work but introduces a public-API breaking change to `BeanMap`.
+2. **`BeanPropertyMeta.setPropertyValue(..., MarshallingSession session)`** retains an `(ObjectSwap) swap` cast inside the function body. Cleanest fix: capture the swap class as a side-data on the builder when `installSwapAwareTransforms` runs, replacing the cast with a `Class<?>` comparison. Mechanical but adds one more SPI field.
+
+Plus the secondary work:
+
+3. **`BeanMeta` `@Marshalled` reads** — three call sites need lift-out to `MarshalledBeanMetaInitializer`. Mechanical.
+4. **`@Name` handling** — either move to `commons.bean` (clean but ~26 file import-fixups) or hide behind a marshalling-side helper (extra plumbing for property-name resolution).
+5. **`FilteredKeyMap` relocation** — move to `commons.collections`, retype its `classMeta` field to `BeanTypeInfo`.
+6. **`ParseException` / `SerializeException` references in `BeanPropertyMeta`** — replace with `RuntimeException` rethrows or a commons-side `BeanRuntimeException` wrapper.
+
+### Next step recommendation
+
+Pick up the remaining SPI cleanup as a fresh checkpoint focused on items 1-6 above. The cluster is much closer to move-ready than it was; the heavy lifts from Phase 5a/8a/8b are all in place. After the remaining items land, Steps G-J (the physical `git mv` + reference sweep + standalone compile verification) should be a couple of hours of mechanical work plus the import-fix wave.
+
+---
+
 ## Status (as of Phase C Tasks 1-2-3-4-4-deferred checkpoint, uncommitted)
 
 **Phase C Tasks 1, 2, 3, 4, 4-deferred LANDED (working tree, uncommitted).** Build + full test green. See "Phase C status" block under Step 8b-ii for full detail. Summary:

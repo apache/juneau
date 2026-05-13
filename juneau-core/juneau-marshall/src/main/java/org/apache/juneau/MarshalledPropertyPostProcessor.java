@@ -80,6 +80,7 @@ final class MarshalledPropertyPostProcessor {
 				bdClasses.addAll(l(mp.dictionary()));
 			});
 			ap.find(Swap.class, b.innerField).stream().findFirst().ifPresent(x -> b.swap = swapSwap(x));
+			b.isUri |= ap.has(Uri.class, b.innerField);
 		}
 
 		if (nn(b.getter)) {
@@ -90,6 +91,7 @@ final class MarshalledPropertyPostProcessor {
 				bdClasses.addAll(l(mp.dictionary()));
 			});
 			ap.find(Swap.class, b.getter).stream().forEach(x -> b.swap = swapSwap(x));
+			b.isUri |= ap.has(Uri.class, b.getter);
 		}
 
 		if (nn(b.setter)) {
@@ -100,6 +102,7 @@ final class MarshalledPropertyPostProcessor {
 				bdClasses.addAll(l(mp.dictionary()));
 			});
 			ap.find(Swap.class, b.setter).stream().forEach(x -> b.swap = swapSwap(x));
+			b.isUri |= ap.has(Uri.class, b.setter);
 		}
 
 		if (! bdClasses.isEmpty()) {
@@ -152,14 +155,18 @@ final class MarshalledPropertyPostProcessor {
 		if (p.readTransform == null) {
 			p.readTransform = (session, o) -> {
 				try {
+					// The transform is typed against BeanSession (commons.bean SPI) but ObjectSwap.swap requires a
+					// MarshallingSession.  The marshalling-side BeanMap always wires a MarshallingSession into its
+					// transform call sites, so the narrowing cast is safe.
+					var ms = (MarshallingSession) session;
 					if (nn(sw))
-						return sw.swap(session, o);
+						return sw.swap(ms, o);
 					if (o == null)
 						return null;
 					if (rtm.hasChildSwaps()) {
 						ObjectSwap f = rtm.getChildObjectSwapForSwap(o.getClass());
 						if (nn(f))
-							return f.swap(session, o);
+							return f.swap(ms, o);
 					}
 					return o;
 				} catch (RuntimeException e) {
@@ -172,14 +179,16 @@ final class MarshalledPropertyPostProcessor {
 		if (p.writeTransform == null) {
 			p.writeTransform = (session, o) -> {
 				try {
+					// See readTransform note: BeanSession → MarshallingSession is safe on the marshalling-side path.
+					var ms = (MarshallingSession) session;
 					if (nn(sw))
-						return sw.unswap(session, o, rtm);
+						return sw.unswap(ms, o, rtm);
 					if (o == null)
 						return null;
 					if (rtm.hasChildSwaps()) {
 						ObjectSwap f = rtm.getChildObjectSwapForUnswap(o.getClass());
 						if (nn(f))
-							return f.unswap(session, o, rtm);
+							return f.unswap(ms, o, rtm);
 					}
 					return o;
 				} catch (RuntimeException e) {

@@ -76,8 +76,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param bean The bean being wrapped.
 	 * @return A new {@link BeanMap} instance wrapping the bean.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> BeanMap<T> of(T bean) {
-		return MarshallingContext.DEFAULT_SESSION.toBeanMap(bean);
+		return new BeanMap<>(bean, BeanMeta.of((Class<T>) bean.getClass()));
 	}
 
 	/**
