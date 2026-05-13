@@ -1321,4 +1321,38 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		throw illegalArg("Unsupported targetType for convertToMemberType: {0}", targetType.getClass().getName());
 	}
 
+	/**
+	 * Bridge implementation of {@link BeanSession#parseToMap(CharSequence)} that delegates to
+	 * {@link org.apache.juneau.collections.JsonMap#ofJson(CharSequence)} paired with this session.
+	 *
+	 * <p>
+	 * Used by {@link BeanPropertyMeta#setPropertyValue} to parse a {@link CharSequence} into a {@link Map} when
+	 * the property is map-typed.  Lifted out of {@link BeanPropertyMeta} so the bean-modeling layer no longer
+	 * references the marshalling-side JSON parser.
+	 *
+	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
+	 * @return The parsed {@link org.apache.juneau.collections.JsonMap}.
+	 */
+	@Override /* BeanSession */
+	public final java.util.Map<?,?> parseToMap(CharSequence value) {
+		return org.apache.juneau.collections.JsonMap.ofJson(value).session(this);
+	}
+
+	/**
+	 * Bridge implementation of {@link BeanSession#parseToList(CharSequence)} that delegates to
+	 * {@link org.apache.juneau.collections.JsonList#JsonList(CharSequence)} paired with this session.
+	 *
+	 * <p>
+	 * Used by {@link BeanPropertyMeta#setPropertyValue} to parse a {@link CharSequence} into a {@link java.util.Collection}
+	 * when the property is collection-typed.  Lifted out of {@link BeanPropertyMeta} so the bean-modeling layer
+	 * no longer references the marshalling-side JSON parser.
+	 *
+	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
+	 * @return The parsed {@link org.apache.juneau.collections.JsonList}.
+	 */
+	@Override /* BeanSession */
+	public final java.util.Collection<?> parseToList(CharSequence value) {
+		return new org.apache.juneau.collections.JsonList(value).setBeanSession(this);
+	}
+
 }

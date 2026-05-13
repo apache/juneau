@@ -28,6 +28,8 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
 
@@ -121,6 +123,80 @@ final class MarshalledPropertyPostProcessor {
 		// layer and cannot reference ObjectSwap directly).
 		if (nn(b.swap) && nn(b.rawTypeMeta))
 			b.typeMeta = bc.getClassMeta(((ObjectSwap) b.swap).getSwapClass());
+
+		// Install swap-aware read/write transforms on the builder.
+		// Previously lived as a private static helper on {@link BeanMeta}; moved here as part of TODO-5 Step 8b-ii
+		// Phase C Task 3 so {@link BeanMeta} no longer references {@link ObjectSwap}/{@link ParseException}/{@link SerializeException}.
+		installSwapAwareTransforms(b);
+	}
+
+	/**
+	 * Installs swap-aware read/write transforms on a {@link BeanPropertyMeta.Builder} after validation.
+	 *
+	 * <p>
+	 * After {@link BeanPropertyMeta.Builder#validate validate()} succeeds, the builder's {@code swap} and
+	 * {@code rawTypeMeta} fields describe whether the property has a configured {@link ObjectSwap} (via
+	 * {@link org.apache.juneau.annotation.MarshalledProp @MarshalledProp(format=...)} or
+	 * {@link org.apache.juneau.annotation.Swap @Swap}) and whether the property's raw type has child swaps registered
+	 * on it.  This method packages those concerns into install-time closures so the marshalling-side swap behavior is
+	 * established as data on the {@link BeanPropertyMeta} rather than executed by the bean-modeling
+	 * {@link BeanPropertyMeta#get get}/{@link BeanPropertyMeta#set set} methods themselves.
+	 *
+	 * <p>
+	 * If neither a property-level swap nor a child swap on the raw type meta is present, no transforms are installed
+	 * and the property's {@code get}/{@code set} fall through to identity (raw access).
+	 *
+	 * @param p The builder to attach swap-aware transforms to.
+	 */
+	@SuppressWarnings({
+		"rawtypes",   // ObjectSwap used raw to mirror BeanPropertyMeta's field declaration.
+		"unchecked"   // Wildcard ObjectSwap captured by raw alias to allow runtime polymorphic dispatch.
+	})
+	static void installSwapAwareTransforms(BeanPropertyMeta.Builder p) {
+		ObjectSwap sw = (ObjectSwap) p.swap;
+		ClassMeta<?> rtm = (ClassMeta<?>) p.rawTypeMeta;
+		if (sw == null && (rtm == null || ! rtm.hasChildSwaps()))
+			return;
+		if (p.readTransform == null) {
+			p.readTransform = (session, o) -> {
+				try {
+					if (nn(sw))
+						return sw.swap(session, o);
+					if (o == null)
+						return null;
+					if (rtm.hasChildSwaps()) {
+						ObjectSwap f = rtm.getChildObjectSwapForSwap(o.getClass());
+						if (nn(f))
+							return f.swap(session, o);
+					}
+					return o;
+				} catch (RuntimeException e) {
+					throw e;
+				} catch (Exception e) {
+					throw new SerializeException(e);
+				}
+			};
+		}
+		if (p.writeTransform == null) {
+			p.writeTransform = (session, o) -> {
+				try {
+					if (nn(sw))
+						return sw.unswap(session, o, rtm);
+					if (o == null)
+						return null;
+					if (rtm.hasChildSwaps()) {
+						ObjectSwap f = rtm.getChildObjectSwapForUnswap(o.getClass());
+						if (nn(f))
+							return f.unswap(session, o, rtm);
+					}
+					return o;
+				} catch (RuntimeException e) {
+					throw e;
+				} catch (Exception e) {
+					throw new ParseException(e);
+				}
+			};
+		}
 	}
 
 	private static ObjectSwap marshalledPropSwap(AnnotationInfo<MarshalledProp> ai) {

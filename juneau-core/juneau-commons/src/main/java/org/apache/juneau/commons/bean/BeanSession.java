@@ -71,6 +71,38 @@ public interface BeanSession {
 	Object convertToMemberType(Object outer, Object value, Object targetType);
 
 	/**
+	 * Parses the specified JSON-formatted character sequence into a {@link java.util.Map}.
+	 *
+	 * <p>
+	 * Used by {@code BeanPropertyMeta.setPropertyValue} when a {@link CharSequence} value is supplied for a
+	 * {@code Map}-typed property — the bean-modeling layer cannot reference the marshalling-side JSON parser
+	 * directly, so the parse is delegated to the session via this SPI.
+	 *
+	 * <p>
+	 * Implementations typically route through {@code JsonMap.ofJson(value).session(this)}.
+	 *
+	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
+	 * @return The parsed map.
+	 */
+	java.util.Map<?,?> parseToMap(CharSequence value);
+
+	/**
+	 * Parses the specified JSON-formatted character sequence into a {@link java.util.Collection}.
+	 *
+	 * <p>
+	 * Used by {@code BeanPropertyMeta.setPropertyValue} when a {@link CharSequence} value is supplied for a
+	 * {@code Collection}-typed property — the bean-modeling layer cannot reference the marshalling-side JSON
+	 * parser directly, so the parse is delegated to the session via this SPI.
+	 *
+	 * <p>
+	 * Implementations typically route through {@code new JsonList(value).setBeanSession(this)}.
+	 *
+	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
+	 * @return The parsed collection.
+	 */
+	java.util.Collection<?> parseToList(CharSequence value);
+
+	/**
 	 * Wraps the specified bean in a {@code BeanMap}.
 	 *
 	 * <p>

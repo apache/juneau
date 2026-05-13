@@ -33,7 +33,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
@@ -1144,7 +1143,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 				if (! (value1 instanceof Map)) {
 					if (value1 instanceof CharSequence value21)
-						value1 = JsonMap.ofJson(value21).session(session);
+						value1 = session.parseToMap(value21);
 					else
 						throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), cn(value1));
 				}
@@ -1202,7 +1201,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 				if (! (value1 instanceof Collection)) {
 					if (value1 instanceof CharSequence value2)
-						value1 = new JsonList(value2).setBeanSession(session);
+						value1 = session.parseToList(value2);
 					else
 						throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), cn(value1));
 				}
