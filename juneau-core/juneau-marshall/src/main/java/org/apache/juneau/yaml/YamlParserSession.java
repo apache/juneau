@@ -523,7 +523,7 @@ public class YamlParserSession extends ReaderParserSession {
 		if (pm == null) {
 			onUnknownProperty(currAttr, m, parseAnything(object(), r, m.getBean(false), null));
 		} else {
-			var cm = pm.getClassMeta();
+			var cm = (ClassMeta<?>) pm.getClassMeta();
 			Object value = parseAnything(cm, r, m.getBean(false), pm);
 			setName(cm, value, currAttr);
 			try {
@@ -928,7 +928,7 @@ public class YamlParserSession extends ReaderParserSession {
 				} else if (state == S4) {
 					if (isWhitespace(c))
 						continue;
-					if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+					if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getClassMeta()))) {
 						var pm = m.getPropertyMeta(currAttr);
 						setCurrentProperty(pm);
 						if (pm == null) {
@@ -936,7 +936,7 @@ public class YamlParserSession extends ReaderParserSession {
 							unmark();
 						} else {
 							unmark();
-							var cm = pm.getClassMeta();
+							var cm = (ClassMeta<?>) pm.getClassMeta();
 							Object value = parseAnything(cm, r.unread(), m.getBean(false), pm);
 							setName(cm, value, currAttr);
 							try {
@@ -1017,7 +1017,7 @@ public class YamlParserSession extends ReaderParserSession {
 				if (c != ':')
 					throw new ParseException(this, "Expected ':' after attribute name in YAML block mapping, found ''{0}''", (char)c);
 
-				if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+				if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getClassMeta()))) {
 					var pm = m.getPropertyMeta(currAttr);
 					setCurrentProperty(pm);
 					if (pm == null) {
@@ -1029,7 +1029,7 @@ public class YamlParserSession extends ReaderParserSession {
 						unmark();
 					} else {
 						unmark();
-						var cm = pm.getClassMeta();
+						var cm = (ClassMeta<?>) pm.getClassMeta();
 						c = r.peek();
 						if (c == ' ')
 							r.read();

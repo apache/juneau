@@ -461,7 +461,7 @@ public class XmlParserSession extends ReaderParserSession {
 		var cp = xmlMeta.getContentProperty();
 		var cpf = xmlMeta.getContentFormat();
 		var trim = cp == null || ! cpf.isOneOf(MIXED_PWS, TEXT_PWS);
-		var cpcm = (cp == null ? object() : cp.getClassMeta());
+		ClassMeta<?> cpcm = (cp == null ? object() : (ClassMeta<?>) cp.getClassMeta());
 		StringBuilder sb = null;
 		var breg = cp == null ? null : cp.getBeanRegistry();
 		List<Object> l = null;
@@ -537,7 +537,7 @@ public class XmlParserSession extends ReaderParserSession {
 						setCurrentProperty(pMeta);
 						var xf = getXmlBeanPropertyMeta(pMeta).getXmlFormat();
 						if (xf == COLLAPSED) {
-							var et = pMeta.getClassMeta().getElementType();
+							var et = ((ClassMeta<?>) pMeta.getClassMeta()).getElementType();
 							var value = parseAnything(et, currAttr, r, m.getBean(false), false, pMeta);
 							setName(et, value, currAttr);
 							pMeta.add(m, currAttr, value);
@@ -545,7 +545,7 @@ public class XmlParserSession extends ReaderParserSession {
 							pMeta.set(m, currAttr, getAttributeValue(r, 0));
 							r.nextTag();
 						} else {
-							var cm = pMeta.getClassMeta();
+							var cm = (ClassMeta<?>) pMeta.getClassMeta();
 							var value = parseAnything(cm, currAttr, r, m.getBean(false), false, pMeta);
 							setName(cm, value, currAttr);
 							pMeta.set(m, currAttr, value);
@@ -923,7 +923,7 @@ public class XmlParserSession extends ReaderParserSession {
 				var fieldName = r.getLocalName();
 				var m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.inner());
 				var bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
-				var cm = m.getMeta().getClassMeta();
+				var cm = (ClassMeta<?>) m.getMeta().getClassMeta();
 				Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, null);
 				setName(cm, value, currAttr);
 				bpm.set(m, currAttr, value);

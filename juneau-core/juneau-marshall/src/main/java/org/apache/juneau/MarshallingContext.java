@@ -174,7 +174,7 @@ import org.apache.juneau.commons.bean.*;
 	"java:S1452", // Wildcard required - ClassMeta<?> for parameter resolution and type variables
 	"java:S1612"  // Lambdas used instead of method references for readability in complex chained expressions
 })
-public class MarshallingContext extends Context implements ConversionFinder {
+public class MarshallingContext extends Context implements ConversionFinder, org.apache.juneau.commons.bean.BeanTypeResolver {
 
 	// Property name constants
 	private static final String PROP_beanClassVisibility = "beanClassVisibility";
@@ -4866,6 +4866,21 @@ public class MarshallingContext extends Context implements ConversionFinder {
 	 * @return The {@link ClassMeta} object associated with the <c>Object</c> class.
 	 */
 	protected final ClassMeta<Object> object() {
+		return cmObject;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BeanTypeResolver implementation — bridges the marshalling-side ClassMeta resolution into the bean-modeling
+	// SPI seam that BeanPropertyMeta.Builder.validate() consumes.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Overridden from BeanTypeResolver */
+	public org.apache.juneau.commons.bean.BeanTypeInfo<?> resolveType(AnnotationInfo<org.apache.juneau.commons.bean.BeanProp> lastBeanProp, ClassInfo type, TypeVariables typeVarImpls) {
+		return resolveClassMeta(lastBeanProp, type, typeVarImpls);
+	}
+
+	@Override /* Overridden from BeanTypeResolver */
+	public org.apache.juneau.commons.bean.BeanTypeInfo<?> objectType() {
 		return cmObject;
 	}
 

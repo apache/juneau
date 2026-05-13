@@ -352,9 +352,10 @@ public class MarkdownParserSession extends ReaderParserSession {
 				var pm = m.getPropertyMeta(key);
 				if (pm != null) {
 					setCurrentProperty(pm);
-					var val = parseCellValue(rawVal, pm.getClassMeta(), m.getBean(false));
+					var pmcm = (ClassMeta<?>) pm.getClassMeta();
+					var val = parseCellValue(rawVal, pmcm, m.getBean(false));
 					try {
-						setName(pm.getClassMeta(), val, key);
+						setName(pmcm, val, key);
 					} catch (Exception e) {
 						throw new ParseException(this, e, "Could not set @NameProperty on ''{0}''.", key);
 					}
@@ -525,7 +526,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 				var pm = m.getPropertyMeta(header);
 				if (pm != null) {
 					setCurrentProperty(pm);
-					var val = parseCellValue(rawVal, pm.getClassMeta(), m.getBean(false));
+					var val = parseCellValue(rawVal, (ClassMeta<?>) pm.getClassMeta(), m.getBean(false));
 					pm.set(m, header, val);
 					setCurrentProperty(null);
 				} else {

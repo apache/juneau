@@ -119,9 +119,9 @@ public class IniSerializerSession extends WriterSerializerSession {
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
-			if (canIgnoreValue(pMeta.getClassMeta(), key, value))
+			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
+			if (canIgnoreValue(cMeta, key, value))
 				return;
-			var cMeta = pMeta.getClassMeta();
 			var aType = value == null ? cMeta : getClassMetaForObject(value, cMeta);
 			var iniMeta = ctx.getIniBeanPropertyMeta(pMeta);
 			// Collections/arrays are written as inline key-value (not sections), so they must appear in
@@ -151,7 +151,7 @@ public class IniSerializerSession extends WriterSerializerSession {
 			Object value = e.getValue();
 			var iniMeta = ctx.getIniBeanPropertyMeta(pMeta);
 			var key = ne(iniMeta.getSection()) ? iniMeta.getSection() : pMeta.getName();
-			var cMeta = pMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
 			var newPath = sectionPath.isEmpty() ? key : sectionPath + "/" + key;
 
 			if (nn(value)) {
@@ -235,7 +235,7 @@ public class IniSerializerSession extends WriterSerializerSession {
 	private void writeKeyValue(IniWriter w, String key, Object value, BeanPropertyMeta pMeta) throws SerializeException {
 		ClassMeta<?> cMeta;
 		if (pMeta != null)
-			cMeta = pMeta.getClassMeta();
+			cMeta = (ClassMeta<?>) pMeta.getClassMeta();
 		else if (value != null)
 			cMeta = getClassMetaForObject(value);
 		else

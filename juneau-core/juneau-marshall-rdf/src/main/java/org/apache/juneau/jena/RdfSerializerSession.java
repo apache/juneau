@@ -466,7 +466,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		Collections.reverse(l);
 		l.forEach(x -> {
 			var bpMeta = x.getMeta();
-			var cMeta = bpMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) bpMeta.getClassMeta();
 			var bpRdf = getRdfBeanPropertyMeta(bpMeta);
 			var bpXml = getXmlBeanPropertyMeta(bpMeta);
 

@@ -496,7 +496,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 * @return The bean registry for this class, or <jk>null</jk> if no bean registry is associated with it.
 	 */
 	public BeanRegistry getBeanRegistry() {
-		return beanMeta.get().optBeanMeta().map(x -> x.getBeanRegistry()).orElse(null);
+		return beanMeta.get().optBeanMeta().map(x -> (BeanRegistry) x.getBeanRegistry()).orElse(null);
 	}
 
 	/**

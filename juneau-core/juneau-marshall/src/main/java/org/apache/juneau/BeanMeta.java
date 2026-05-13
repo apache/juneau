@@ -837,9 +837,14 @@ public class BeanMeta<T> {
 	 * The bean registry is used to resolve dictionary names to class types. It's created when a bean class has a
 	 * {@link Bean#dictionary() @Marshalled(dictionary)} annotation that specifies a list of possible subclasses.
 	 *
+	 * <p>
+	 * Returns the bean-modeling-side SPI type ({@link BeanRegistryLookup}).  Marshalling-side callers that need
+	 * the full {@link BeanRegistry} surface (e.g. {@code getClassMeta(String)}) cast at the call site — the
+	 * concrete instance in-tree is always a {@link BeanRegistry}.
+	 *
 	 * @return The bean registry for this bean, or <jk>null</jk> if no bean registry is associated with it.
 	 */
-	public BeanRegistry getBeanRegistry() { return (BeanRegistry) beanRegistry.get(); }
+	public BeanRegistryLookup getBeanRegistry() { return beanRegistry.get(); }
 
 	/**
 	 * Returns the per-property {@link BeanRegistry} associated with the given {@link BeanPropertyMeta}.
@@ -863,21 +868,25 @@ public class BeanMeta<T> {
 	 * @return The bean registry for the specified property, or <jk>null</jk> if none was registered (e.g. the property
 	 * 	belongs to a different bean meta).
 	 */
-	public BeanRegistry getPropertyBeanRegistry(BeanPropertyMeta p) {
-		return (BeanRegistry) propertyBeanRegistries.get(p);
+	public BeanRegistryLookup getPropertyBeanRegistry(BeanPropertyMeta p) {
+		return propertyBeanRegistries.get(p);
 	}
 
 	/**
-	 * Returns the {@link ClassMeta} of this bean.
+	 * Returns the {@link BeanTypeInfo} of this bean.
 	 *
 	 * <p>
 	 * Returns <jk>null</jk> when this {@link BeanMeta} was constructed via the commons-side path
 	 * ({@link #of(Class, BeanConfigContext)}) — in that case {@link #getClassInfo()} carries the
 	 * pure-reflection view of the bean class.
 	 *
-	 * @return The {@link ClassMeta} of this bean, or <jk>null</jk> for bean-modeling-only construction.
+	 * <p>
+	 * Returns the bean-modeling-side SPI type ({@link BeanTypeInfo}).  Marshalling-side callers that need
+	 * the {@link ClassMeta} narrowing must cast — the concrete instance in-tree is always a {@link ClassMeta}.
+	 *
+	 * @return The {@link BeanTypeInfo} of this bean, or <jk>null</jk> for bean-modeling-only construction.
 	 */
-	public ClassMeta<T> getClassMeta() { return (ClassMeta<T>) classMeta; }
+	public BeanTypeInfo<T> getClassMeta() { return classMeta; }
 
 	/**
 	 * Returns the {@link ClassInfo} of this bean.

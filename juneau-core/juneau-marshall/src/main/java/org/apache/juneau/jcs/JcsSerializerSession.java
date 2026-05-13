@@ -280,7 +280,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			var cMeta = pMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 			if (canIgnoreValue(cMeta, key, value))
@@ -302,7 +302,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 		for (var entry : entries) {
 			addComma.ifSet(() -> out.append(',').smi(i)).set();
 			out.cr(i).attr(entry.getKey()).w(':').s(i);
-			serializeAnything(out, entry.getValue(), entry.pMeta.getClassMeta(), entry.getKey(), entry.pMeta);
+			serializeAnything(out, entry.getValue(), (ClassMeta<?>) entry.pMeta.getClassMeta(), entry.getKey(), entry.pMeta);
 		}
 
 		out.cre(i - 1).w('}');

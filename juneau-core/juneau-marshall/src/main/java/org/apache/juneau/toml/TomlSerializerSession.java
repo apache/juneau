@@ -156,9 +156,9 @@ public class TomlSerializerSession extends WriterSerializerSession {
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
-			if (canIgnoreValue(pMeta.getClassMeta(), key, value))
+			ClassMeta<?> cMeta = (ClassMeta<?>) pMeta.getClassMeta();
+			if (canIgnoreValue(cMeta, key, value))
 				return;
-			ClassMeta<?> cMeta = pMeta.getClassMeta();
 			ClassMeta<?> aType = value == null ? cMeta : getClassMetaForObject(value, cMeta);
 			if (isSimpleOrInlineTable(aType, value, pMeta)) {
 				simple.add(new AbstractMap.SimpleEntry<>(pMeta, value));
@@ -185,7 +185,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 			String key = e.getKey().getName();
 			Object value = e.getValue();
 			BeanPropertyMeta pMeta = e.getKey();
-			ClassMeta<?> cMeta = pMeta.getClassMeta();
+			ClassMeta<?> cMeta = (ClassMeta<?>) pMeta.getClassMeta();
 			String newPath = tablePath.isEmpty() ? key : tablePath + "." + key;
 
 			if (nn(value)) {
@@ -220,7 +220,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 	private void writeKeyValue(TomlWriter w, String key, Object value, BeanPropertyMeta pMeta) throws SerializeException {
 		ClassMeta<?> cMeta;
 		if (pMeta != null)
-			cMeta = pMeta.getClassMeta();
+			cMeta = (ClassMeta<?>) pMeta.getClassMeta();
 		else if (value != null)
 			cMeta = getClassMetaForObject(value);
 		else
@@ -292,7 +292,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 					first[0] = false;
 					writeKey(w, k);
 					w.w(" = ");
-				writeValue(w, v, pm.getClassMeta(), pm);
+				writeValue(w, v, (ClassMeta<?>) pm.getClassMeta(), pm);
 				});
 				w.inlineTableEnd();
 			} else {
@@ -371,7 +371,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 		int count = 0;
 		for (BeanPropertyMeta p : bm.getMeta().getProperties().values()) {
 			if (!p.isReadOnly()) {
-				ClassMeta<?> cm = p.getClassMeta();
+				ClassMeta<?> cm = (ClassMeta<?>) p.getClassMeta();
 				if (cm.isBean() || cm.isMap() || (cm.isCollectionOrArray() && cm.getElementType().isBean()))
 					return false;
 				count++;

@@ -327,7 +327,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			var cMeta = pMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
 			var sMeta = cMeta.getSerializedClassMeta(this);
 
 			if (nn(thrown))
@@ -430,8 +430,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
 	 */
 	private boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
-		var cm = pMeta.getClassMeta().getSerializedClassMeta(this);
-		return cm.isCollectionOrArray() && (isExpandedParams() || getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams());
+		var cm = ((ClassMeta<?>) pMeta.getClassMeta()).getSerializedClassMeta(this);
+		return cm.isCollectionOrArray() && (isExpandedParams() || getUrlEncodingClassMeta((ClassMeta<?>) pMeta.getBeanMeta().getClassMeta()).isExpandedParams());
 	}
 
 	/*

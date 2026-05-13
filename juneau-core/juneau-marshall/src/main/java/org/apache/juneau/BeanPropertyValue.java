@@ -75,7 +75,7 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	 *
 	 * @return The bean property metadata.
 	 */
-	public final ClassMeta<?> getClassMeta() { return pMeta.getClassMeta(); }
+	public final ClassMeta<?> getClassMeta() { return (ClassMeta<?>) pMeta.getClassMeta(); }
 
 	/**
 	 * Returns the bean property metadata.

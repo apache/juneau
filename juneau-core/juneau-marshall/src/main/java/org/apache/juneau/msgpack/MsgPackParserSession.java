@@ -271,7 +271,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 							else
 								onUnknownProperty(pName, m, parseAnything(string(), is, null, null));
 						} else {
-							var cm = bpm.getClassMeta();
+							var cm = (ClassMeta<?>) bpm.getClassMeta();
 							Object value = parseAnything(cm, is, m.getBean(false), bpm);
 							setName(cm, value, pName);
 							try {

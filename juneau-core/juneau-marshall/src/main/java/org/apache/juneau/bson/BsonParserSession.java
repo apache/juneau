@@ -178,8 +178,9 @@ public class BsonParserSession extends InputStreamParserSession {
 					if (nn(value))
 						beanMap = applyTypeProperty(beanMap, value.toString(), eType);
 				} else if (bpm != null) {
-					value = readTypedValue(is, et, bpm.getClassMeta(), beanMap.getBean(false), bpm);
-					setName(bpm.getClassMeta(), value, key);
+					var bcm = (ClassMeta<?>) bpm.getClassMeta();
+					value = readTypedValue(is, et, bcm, beanMap.getBean(false), bpm);
+					setName(bcm, value, key);
 					try {
 						bpm.set(beanMap, key, value);
 					} catch (BeanRuntimeException e) {

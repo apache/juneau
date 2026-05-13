@@ -379,7 +379,7 @@ public class CsvParserSession extends ReaderParserSession {
 			var pm = m.getPropertyMeta(header);
 			if (pm != null) {
 				setCurrentProperty(pm);
-				var converted = parseCellValue(val, pm.getClassMeta());
+				var converted = parseCellValue(val, (ClassMeta<?>) pm.getClassMeta());
 				pm.set(m, header, converted);
 				setCurrentProperty(null);
 			} else {

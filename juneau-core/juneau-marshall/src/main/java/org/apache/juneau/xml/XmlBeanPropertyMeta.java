@@ -55,10 +55,10 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		super(bpm);
 		this.xmlMetaProvider = mp;
 
-		bpm.getAnnotations(Xml.class).forEach(x -> findXmlInfo(x.inner(), bpm.getClassMeta().getMarshallingContext().getAnnotationProvider()));
+		bpm.getAnnotations(Xml.class).forEach(x -> findXmlInfo(x.inner(), ((ClassMeta<?>) bpm.getClassMeta()).getMarshallingContext().getAnnotationProvider()));
 
 		if (namespace == null)
-			namespace = mp.getXmlClassMeta(bpm.getBeanMeta().getClassMeta()).getNamespace();
+			namespace = mp.getXmlClassMeta((ClassMeta<?>) bpm.getBeanMeta().getClassMeta()).getNamespace();
 	}
 
 	private XmlBeanPropertyMeta() {
@@ -110,17 +110,17 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		if (xml == null)
 			return;
 		var bpm = getBeanPropertyMeta();
-		var cmProperty = bpm.getClassMeta();
-		var cmBean = bpm.getBeanMeta().getClassMeta();
+		var cmProperty = (ClassMeta<?>) bpm.getClassMeta();
+		var cmBean = (ClassMeta<?>) bpm.getBeanMeta().getClassMeta();
 		var name = bpm.getName();
 
-		var ap = bpm.getClassMeta().getMarshallingContext().getAnnotationProvider();
+		var ap = cmProperty.getMarshallingContext().getAnnotationProvider();
 		var xmls = new MultiList<>(
-			rstream(ap.find(Xml.class, bpm.getBeanMeta().getClassMeta())).map(AnnotationInfo::inner).toList(),
+			rstream(ap.find(Xml.class, cmBean)).map(AnnotationInfo::inner).toList(),
 			reverse(bpm.getAnnotations(Xml.class).map(AnnotationInfo::inner).toList())
 		);
 		var schemas = new MultiList<>(
-			rstream(ap.find(XmlSchema.class, bpm.getBeanMeta().getClassMeta())).map(AnnotationInfo::inner).toList(),
+			rstream(ap.find(XmlSchema.class, cmBean)).map(AnnotationInfo::inner).toList(),
 			reverse(bpm.getAnnotations(XmlSchema.class).map(AnnotationInfo::inner).toList())
 		);
 		namespace = XmlUtils.findNamespace(xmls, schemas);

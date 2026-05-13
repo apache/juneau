@@ -439,7 +439,7 @@ class BeanMap_Test extends TestBase {
 
 		var p = Json5Parser.create().beanDictionary(D2.class).build();
 		m.put("lb1", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
-		assertBean(t, "lb1{class{simpleName}},lb1{0{class{simpleName}}},lb1{0{s}}", "{{JsonList}},{{{D2}}},{{foobar}}");
+		assertBean(t, "lb1{class{simpleName}},lb1{0{class{simpleName}}},lb1{0{s}}", "{{ArrayList}},{{{D2}}},{{foobar}}");
 
 		m.put("lb2", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertBean(t, "lb2{class{simpleName}},lb2{0{class{simpleName}}},lb2{0{s}}", "{{ArrayList}},{{{D2}}},{{foobar}}");
@@ -482,7 +482,7 @@ class BeanMap_Test extends TestBase {
 
 		var p = Json5Parser.create().beanDictionary(D2c.class).applyAnnotations(D1cConfig.class).build();
 		m.put("lb1", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
-		assertBean(t, "lb1{class{simpleName}},lb1{0{class{simpleName}}},lb1{0{s}}", "{{JsonList}},{{{D2c}}},{{foobar}}");
+		assertBean(t, "lb1{class{simpleName}},lb1{0{class{simpleName}}},lb1{0{s}}", "{{ArrayList}},{{{D2c}}},{{foobar}}");
 
 		m.put("lb2", JsonList.ofText("[{_type:'D2',s:'foobar'}]", p));
 		assertBean(t, "lb2{class{simpleName}},lb2{0{class{simpleName}}},lb2{0{s}}", "{{ArrayList}},{{{D2c}}},{{foobar}}");
@@ -571,7 +571,7 @@ class BeanMap_Test extends TestBase {
 
 		assertMapped(m, (map,prop) -> map.get(prop).getClass().getSimpleName(),
 			"l2,l3,l4,m2,m3,m4",
-			"LinkedList,JsonList,LinkedList,LinkedList,JsonList,LinkedList");
+			"LinkedList,ArrayList,LinkedList,LinkedList,ArrayList,LinkedList");
 
 		assertMapped(m, (map,prop) -> ((List)map.get(prop)).get(0).getClass().getSimpleName(),
 			"l2,l3,l4,m2,m3,m4",

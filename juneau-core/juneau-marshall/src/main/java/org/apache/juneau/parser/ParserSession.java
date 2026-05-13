@@ -1215,12 +1215,13 @@ public class ParserSession extends MarshallingSession {
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
 	protected final <T> void onUnknownProperty(String propertyName, BeanMap<T> beanMap, Object value) throws ParseException {
-		if (propertyName.equals(getBeanTypePropertyName(beanMap.getClassMeta())))
+		var bmcm = (ClassMeta<T>) beanMap.getClassMeta();
+		if (propertyName.equals(getBeanTypePropertyName(bmcm)))
 			return;
 		if (! isIgnoreUnknownBeanProperties() && (nn(value) || ! isIgnoreUnknownNullBeanProperties()))
-			throw new ParseException(this, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());
+			throw new ParseException(this, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, bmcm);
 		if (nn(listener))
-			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().inner(), beanMap.getBean());
+			listener.onUnknownBeanProperty(this, propertyName, bmcm.inner(), beanMap.getBean());
 	}
 
 	@Override /* Overridden from MarshallingSession */

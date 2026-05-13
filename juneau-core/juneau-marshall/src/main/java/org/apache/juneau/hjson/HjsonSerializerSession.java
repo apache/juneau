@@ -128,7 +128,7 @@ public class HjsonSerializerSession extends WriterSerializerSession {
 		}
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			var cMeta = pMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 			if (canIgnoreValue(cMeta, key, value))

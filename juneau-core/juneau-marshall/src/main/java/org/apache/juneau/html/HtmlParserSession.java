@@ -511,7 +511,7 @@ public class HtmlParserSession extends XmlParserSession {
 				if (pMeta == null) {
 					onUnknownProperty(key, m, parseAnything(object(), r, null, false, null));
 				} else {
-					var cm = pMeta.getClassMeta();
+					var cm = (ClassMeta<?>) pMeta.getClassMeta();
 					Object value = parseAnything(cm, r, m.getBean(false), false, pMeta);
 					setName(cm, value, key);
 					try {
@@ -648,7 +648,7 @@ public class HtmlParserSession extends XmlParserSession {
 						parseAnything(object(), r, l, false, null);
 					} else {
 						BeanPropertyMeta bpm = e.getMeta();
-						var cm = bpm.getClassMeta();
+						var cm = (ClassMeta<?>) bpm.getClassMeta();
 						Object value = parseAnything(cm, r, m.getBean(false), false, bpm);
 						setName(cm, value, key);
 						bpm.set(m, key, value);

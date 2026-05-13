@@ -966,7 +966,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 			var suffix = ".list.element.";
 			var suffixStart = listProp.length() + suffix.length();
 			var pMeta = rowRelPath.length() > suffixStart ? bm.getPropertyMeta(listProp) : null;
-			var propClassMeta = pMeta != null ? pMeta.getClassMeta() : null;
+			var propClassMeta = pMeta != null ? (ClassMeta<?>) pMeta.getClassMeta() : null;
 			var elemType = propClassMeta != null && (propClassMeta.isCollection() || propClassMeta.isArray()) ? propClassMeta.getElementType() : null;
 			if (elemType != null && elemType.isBean()) {
 				var elementProp = rowRelPath.substring(suffixStart);
@@ -1087,7 +1087,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 		for (var pMeta : bm.getProperties().values()) {
 			var name = pMeta.getName();
 			var val = row.get(name);
-			var propType = pMeta.getClassMeta();
+			var propType = (ClassMeta<?>) pMeta.getClassMeta();
 			if (val == null)
 				continue;
 			if (propType.isOptional() && val instanceof Map<?,?> m) {

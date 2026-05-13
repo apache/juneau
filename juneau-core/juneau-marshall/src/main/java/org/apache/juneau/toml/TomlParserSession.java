@@ -378,7 +378,7 @@ public class TomlParserSession extends ReaderParserSession {
 				continue;
 			if (pMeta == null)
 				throw new ParseException(this, "Unknown property ''{0}''", key);
-			ClassMeta<?> targetType = pMeta.getClassMeta();
+			ClassMeta<?> targetType = (ClassMeta<?>) pMeta.getClassMeta();
 			Object converted = convertValue(val, targetType);
 			bm.put(key, converted);
 		}

@@ -424,17 +424,17 @@ public class JsonParserSession extends ReaderParserSession {
 					if (isCommentOrWhitespace(c)) {
 						skipCommentsAndSpace(r.unread());
 					} else {
-						if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
-							var pMeta = m.getPropertyMeta(currAttr);
-							setCurrentProperty(pMeta);
-							if (pMeta == null) {
-								onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), null));
-								unmark();
-							} else {
-								unmark();
-								var cm = pMeta.getClassMeta();
-								Object value = parseAnything(cm, r.unread(), m.getBean(false), pMeta);
-								setName(cm, value, currAttr);
+					if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getClassMeta()))) {
+						var pMeta = m.getPropertyMeta(currAttr);
+						setCurrentProperty(pMeta);
+						if (pMeta == null) {
+							onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), null));
+							unmark();
+						} else {
+							unmark();
+							var cm = (ClassMeta<?>) pMeta.getClassMeta();
+							Object value = parseAnything(cm, r.unread(), m.getBean(false), pMeta);
+							setName(cm, value, currAttr);
 								try {
 									pMeta.set(m, currAttr, value);
 								} catch (BeanRuntimeException e) {

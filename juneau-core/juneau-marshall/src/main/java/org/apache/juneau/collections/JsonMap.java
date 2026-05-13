@@ -1875,7 +1875,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof JsonMap v2)
-							v = v2.cast(bm.getProperty(k).getMeta().getClassMeta());
+							v = v2.cast((ClassMeta<?>) bm.getProperty(k).getMeta().getClassMeta());
 
 						bm.put(k, v);
 					}

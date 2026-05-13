@@ -487,7 +487,7 @@ public class RdfParserSession extends ReaderParserSession {
 			setCurrentProperty(pMeta);
 			if (nn(pMeta)) {
 				var o = st.getObject();
-				var cm = pMeta.getClassMeta();
+				var cm = (ClassMeta<?>) pMeta.getClassMeta();
 				if (cm.isCollectionOrArray() && isMultiValuedCollections(pMeta)) {
 					var et = cm.getElementType();
 					var value = parseAnything(et, o, m.getBean(false), pMeta);

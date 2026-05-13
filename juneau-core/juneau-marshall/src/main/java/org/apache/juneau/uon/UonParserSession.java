@@ -549,14 +549,14 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 						}
 					} else if (state == S3) {
 						if (c == -1 || c == ',' || c == ')' || c == AMP) {
-							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+							if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getClassMeta()))) {
 								var pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
 									onUnknownProperty(currAttr, m, null);
 									unmark();
 								} else {
 									unmark();
-									var value = convertToType("", pMeta.getClassMeta());
+									var value = convertToType("", (ClassMeta<?>) pMeta.getClassMeta());
 									try {
 										pMeta.set(m, currAttr, value);
 									} catch (BeanRuntimeException e) {
@@ -569,7 +569,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 								return m;
 							state = S1;
 						} else {
-							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+							if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getClassMeta()))) {
 								var pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
 									onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), false, null));
@@ -577,7 +577,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 								} else {
 									unmark();
 									setCurrentProperty(pMeta);
-									var cm = pMeta.getClassMeta();
+									var cm = (ClassMeta<?>) pMeta.getClassMeta();
 									var value = parseAnything(cm, r.unread(), m.getBean(false), false, pMeta);
 									setName(cm, value, currAttr);
 									try {

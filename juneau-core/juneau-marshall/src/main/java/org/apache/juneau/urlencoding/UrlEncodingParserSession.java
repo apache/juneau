@@ -236,8 +236,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 * @return <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
 	 */
 	public final boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
-		var cm = pMeta.getClassMeta().getSerializedClassMeta(this);
-		return cm.isCollectionOrArray() && (isExpandedParams() || getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams());
+		var cm = ((ClassMeta<?>) pMeta.getClassMeta()).getSerializedClassMeta(this);
+		return cm.isCollectionOrArray() && (isExpandedParams() || getUrlEncodingClassMeta((ClassMeta<?>) pMeta.getBeanMeta().getClassMeta()).isExpandedParams());
 	}
 
 	@SuppressWarnings({
@@ -373,7 +373,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 						}
 					} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 						if (c == -1 || c == '\u0001') {
-							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+							if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getClassMeta()))) {
 								var pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
 									onUnknownProperty(currAttr, m, null);
@@ -383,7 +383,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 									setCurrentProperty(pMeta);
 									// In cases of "&foo=", create an empty instance of the value if createable.
 									// Otherwise, leave it null.
-									var cm = pMeta.getClassMeta();
+									var cm = (ClassMeta<?>) pMeta.getClassMeta();
 									if (cm.canCreateNewInstance()) {
 										try {
 											pMeta.set(m, currAttr, cm.newInstance());
@@ -399,7 +399,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 								return m;
 							state = S1;
 						} else {
-							if (! currAttr.equals(getBeanTypePropertyName(m.getClassMeta()))) {
+							if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getClassMeta()))) {
 								var pMeta = m.getPropertyMeta(currAttr);
 								if (pMeta == null) {
 									onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), true, null));
@@ -408,7 +408,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 									unmark();
 									setCurrentProperty(pMeta);
 									if (shouldUseExpandedParams(pMeta)) {
-										var et = pMeta.getClassMeta().getElementType();
+										var et = ((ClassMeta<?>) pMeta.getClassMeta()).getElementType();
 										var value = parseAnything(et, r.unread(), m.getBean(false), true, pMeta);
 										setName(et, value, currAttr);
 										try {
@@ -418,7 +418,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 											throw e;
 										}
 									} else {
-										var cm = pMeta.getClassMeta();
+										var cm = (ClassMeta<?>) pMeta.getClassMeta();
 										var value = parseAnything(cm, r.unread(), m.getBean(false), true, pMeta);
 										setName(cm, value, currAttr);
 										try {

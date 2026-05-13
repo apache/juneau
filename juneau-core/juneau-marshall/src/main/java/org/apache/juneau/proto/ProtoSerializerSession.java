@@ -246,13 +246,13 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 				onBeanGetterException(pMeta, thrown);
 			if (value == null)
 				return;
-			if (canIgnoreValue(pMeta.getClassMeta(), key, value))
+			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
+			if (canIgnoreValue(cMeta, key, value))
 				return;
 			var protoPMeta = ctx.getProtoBeanPropertyMeta(pMeta);
 			if (nn(protoPMeta) && !protoPMeta.getComment().isEmpty())
 				out.comment(protoPMeta.getComment());
 			out.cr(indent);
-			var cMeta = pMeta.getClassMeta();
 			var aType = getClassMetaForObject(value, cMeta);
 			if (aType.isBean() || aType.isMap()) {
 				out.messageStart(key, ctx.useColonForMessages);

@@ -506,12 +506,12 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public final MarshallingSession getMarshallingSession() { return session; }
 
 	/**
-	 * Returns the {@link ClassMeta} of the wrapped bean.
+	 * Returns the {@link BeanTypeInfo} of the wrapped bean.
 	 *
 	 * @return The class type of the wrapped bean.
 	 */
 	@Override /* Overridden from Delegate */
-	public ClassMeta<T> getClassMeta() { return this.meta.getClassMeta(); }
+	public BeanTypeInfo<T> getClassMeta() { return this.meta.getClassMeta(); }
 
 	/**
 	 * Returns the metadata associated with this bean map.

@@ -339,7 +339,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			"java:S112",  // Generic exception thrown; acceptable for framework/lifecycle methods
 			"java:S6541"  // Brain Method: validate() intentionally consolidates property metadata resolution
 		})
-		public boolean validate(MarshallingContext bc, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
+		public boolean validate(BeanTypeResolver bc, TypeVariables typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
 			var ap = nn(bc) ? bc.getAnnotationProvider() : config.getAnnotationProvider();
 
@@ -368,7 +368,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (nn(bc) && (nn(field) || ne(lbp))) {
 					// Only use field type if it's a bean property or has @BeanProp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
-					rawTypeMeta = bc.resolveClassMeta(opt(last(lbp)).orElse(null), innerField.getFieldType(), typeVarImpls);
+					rawTypeMeta = bc.resolveType(opt(last(lbp)).orElse(null), innerField.getFieldType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
 				}
 				lbp.forEach(x -> {
@@ -384,7 +384,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(getter)) {
 				var lbp = ap.find(BeanProp.class, gi);
 				if (nn(bc) && rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(opt(last(lbp)).orElse(null), getter.getReturnType(), typeVarImpls);
+					rawTypeMeta = bc.resolveType(opt(last(lbp)).orElse(null), getter.getReturnType(), typeVarImpls);
 				if (nn(rawTypeMeta))
 					isUri |= rawTypeMeta.isUri();
 				isUri |= ap.has(Uri.class, gi);
@@ -400,7 +400,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(setter)) {
 				var lbp = ap.find(BeanProp.class, si);
 				if (nn(bc) && rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(opt(last(lbp)).orElse(null), setter.getParameterTypes().get(0), typeVarImpls);
+					rawTypeMeta = bc.resolveType(opt(last(lbp)).orElse(null), setter.getParameterTypes().get(0), typeVarImpls);
 				if (nn(rawTypeMeta))
 					isUri |= rawTypeMeta.isUri();
 				isUri |= ap.has(Uri.class, si);
@@ -465,12 +465,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (isDyna) {
 					rawTypeMeta = rawTypeMeta.getValueType();
 					if (rawTypeMeta == null && nn(bc))
-						rawTypeMeta = bc.object();
+						rawTypeMeta = bc.objectType();
 				}
 
 				if (typeMeta == null) {
 					if (rawTypeMeta == null && nn(bc))
-						typeMeta = bc.object();
+						typeMeta = bc.objectType();
 					else
 						typeMeta = rawTypeMeta;
 				}
@@ -890,10 +890,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 *
 	 * @return The bean dictionary in use for this bean property.  Never <jk>null</jk>.
 	 */
-	public BeanRegistry getBeanRegistry() { return beanMeta.getPropertyBeanRegistry(this); }
+	public BeanRegistry getBeanRegistry() { return (BeanRegistry) beanMeta.getPropertyBeanRegistry(this); }
 
 	/**
-	 * Returns the {@link ClassMeta} of the class of this property.
+	 * Returns the {@link BeanTypeInfo} of the class of this property.
 	 *
 	 * <p>
 	 * If this property or the property type class has a {@link ObjectSwap} associated with it, this method returns the
@@ -901,9 +901,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * This matches the class type that is used by the {@link #get(BeanMap,String)} and
 	 * {@link #set(BeanMap,String,Object)} methods.
 	 *
-	 * @return The {@link ClassMeta} of the class of this property.
+	 * <p>
+	 * Returns the bean-modeling-side SPI type ({@link BeanTypeInfo}).  Marshalling-side callers that need the
+	 * {@link ClassMeta} narrowing must cast — the concrete instance in-tree is always a {@link ClassMeta}.
+	 *
+	 * @return The {@link BeanTypeInfo} of the class of this property, or <jk>null</jk> if this property was built via
+	 * 	the bean-modeling-only path.
 	 */
-	public ClassMeta<?> getClassMeta() { return (ClassMeta<?>) typeMeta; }
+	public BeanTypeInfo<?> getClassMeta() { return typeMeta; }
 
 	/**
 	 * Returns the metadata on the property that this metadata is a delegate for.
@@ -1217,7 +1222,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 						if (propertyClass.isInstance(valueList) || (nn(setter) && setter.getParameterTypes().get(0).is(Collection.class))) {
 							if (! elementType.isObject()) {
-								var l = new JsonList(valueList);
+								var l = new ArrayList<>(valueList);
 								for (var i = l.listIterator(); i.hasNext();) {
 									var v = i.next();
 									var needsConversion = v == null ? elementType.isOptional() : ! elementType.isInstance(v);

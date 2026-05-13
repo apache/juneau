@@ -53,13 +53,15 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	public RdfBeanPropertyMeta(BeanPropertyMeta bpm, RdfMetaProvider mp) {
 		super(bpm);
 
-		var ap = bpm.getClassMeta().getMarshallingContext().getAnnotationProvider();
+		var bpmcm = (ClassMeta<?>) bpm.getClassMeta();
+		var bmcm = (ClassMeta<?>) bpm.getBeanMeta().getClassMeta();
+		var ap = bpmcm.getMarshallingContext().getAnnotationProvider();
 		var rdfs = new MultiList<>(
-			rstream(ap.find(Rdf.class, bpm.getBeanMeta().getClassMeta())).map(AnnotationInfo::inner).toList(),
+			rstream(ap.find(Rdf.class, bmcm)).map(AnnotationInfo::inner).toList(),
 			reverse(bpm.getAnnotations(Rdf.class).map(AnnotationInfo::inner).toList())
 		);
 		var schemas = new MultiList<>(
-			rstream(ap.find(RdfSchema.class, bpm.getBeanMeta().getClassMeta())).map(AnnotationInfo::inner).toList(),
+			rstream(ap.find(RdfSchema.class, bmcm)).map(AnnotationInfo::inner).toList(),
 			reverse(bpm.getAnnotations(RdfSchema.class).map(AnnotationInfo::inner).toList())
 		);
 

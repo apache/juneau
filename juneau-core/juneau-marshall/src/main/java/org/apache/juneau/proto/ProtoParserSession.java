@@ -266,7 +266,7 @@ public class ProtoParserSession extends ReaderParserSession {
 	}
 
 	private void populateBeanMap(BeanMap<?> bm, Map<String, Object> map) throws ParseException, ExecutableException {
-		var typePropName = getBeanTypePropertyName(bm.getClassMeta());
+		var typePropName = getBeanTypePropertyName((ClassMeta<?>) bm.getClassMeta());
 		for (Entry<String, Object> e : map.entrySet()) {
 			var key = e.getKey();
 			if (key.equals(typePropName))
@@ -277,7 +277,7 @@ public class ProtoParserSession extends ReaderParserSession {
 				continue;
 			if (pMeta == null)
 				throw new ParseException(this, "Unknown property ''{0}''", key);
-			var targetType = pMeta.getClassMeta();
+			var targetType = (ClassMeta<?>) pMeta.getClassMeta();
 			var converted = convertValue(val, targetType);
 			bm.put(key, converted);
 		}

@@ -523,7 +523,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	})
 	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws SerializeException {
 
-		HtmlClassMeta cHtml = getHtmlClassMeta(m.getClassMeta());
+		var mcm = (ClassMeta<?>) m.getClassMeta();
+		HtmlClassMeta cHtml = getHtmlClassMeta(mcm);
 		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
 
 		int i = indent;
@@ -531,8 +532,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.oTag(i, TAG_table);
 
 		String typeName = m.getMeta().getDictionaryName();
-		if (nn(typeName) && eType != m.getClassMeta())
-			out.attr(getBeanTypePropertyName(m.getClassMeta()), typeName);
+		if (nn(typeName) && eType != mcm)
+			out.attr(getBeanTypePropertyName(mcm), typeName);
 
 		out.w('>').nl(i);
 		if (isAddKeyValueTableHeaders() && ! (cHtml.isNoTableHeaders() || bpHtml.isNoTableHeaders())) {
@@ -545,7 +546,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			var cMeta = pMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
 
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
@@ -710,7 +711,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 							out.cTag();
 							if (nn(link))
 								out.oTag("a").attrUri("href", link).cTag();
-							ContentResult cr = serializeAnything(out, value, pMeta.getClassMeta(), p.getKey(), pMeta, 2, false, true);
+							ContentResult cr = serializeAnything(out, value, (ClassMeta<?>) pMeta.getClassMeta(), p.getKey(), pMeta, 2, false, true);
 							if (cr == CR_ELEMENTS)
 								out.i(i + 2);
 							if (nn(link))
