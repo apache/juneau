@@ -155,60 +155,6 @@ class Common_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// @MarshalledProp.bpi annotation.
-	//====================================================================================================
-	@Test void a05_beanPropertyProperties() throws Exception {
-		var s = XmlSerializer.DEFAULT_SQ;
-		var t = new E1();
-		var r = s.serialize(t);
-		assertEquals(
-			"<object>"
-				+"<x1 f2='2'><f1>1</f1></x1>"
-				+"<x2><f1>1</f1></x2>"
-				+"<x3><object f2='2'><f1>1</f1></object></x3>"
-				+"<x4><object f2='2'><f1>1</f1></object></x4>"
-				+"<x5><object><f1 _type='number'>1</f1></object></x5>"
-				+"<x6><object><f1 _type='number'>1</f1></object></x6>"
-			+"</object>",
-			r);
-		validateXml(t);
-	}
-
-	public static class E1 {
-		@MarshalledProp(properties="f1,f2") public E2 x1 = new E2();
-		@MarshalledProp(properties="f1,f2") public Map<String,Integer> x2 = m("f1",1,"f3",3);
-		@MarshalledProp(properties="f1,f2") public E2[] x3 = {new E2()};
-		@MarshalledProp(properties="f1,f2") public List<E2> x4 = l(new E2());
-		@MarshalledProp(properties="f1") public JsonMap[] x5 = {JsonMap.of("f1",1,"f3",3)};
-		@MarshalledProp(properties="f1") public List<JsonMap> x6 = l(JsonMap.of("f1",1,"f3",3));
-	}
-
-	public static class E2 {
-		public int f1 = 1;
-		@Xml(format=ATTR) public int f2 = 2;
-		public int f3 = 3;
-		@Xml(format=ATTR) public int f4 = 4;
-	}
-
-	//====================================================================================================
-	// @MarshalledProp.bpi annotation on list of beans.
-	//====================================================================================================
-	@Test void a06_beanPropertyPropertiesOnListOfBeans() throws Exception {
-		var s = XmlSerializer.DEFAULT_SQ;
-		var l = new LinkedList<>();
-		var t = new Test7b();
-		t.x1.add(new Test7b());
-		l.add(t);
-		var xml = s.serialize(l);
-		assertEquals("<array><object><x1><object><x2>2</x2></object></x1><x2>2</x2></object></array>", xml);
-	}
-
-	public static class Test7b {
-		@MarshalledProp(properties="x2") public List<Test7b> x1 = new LinkedList<>();
-		public int x2 = 2;
-	}
-
-	//====================================================================================================
 	// Recursion
 	//====================================================================================================
 	@Test void a07_recursion() throws Exception {

@@ -38,18 +38,16 @@ class MarshalledPropAnnotation_Test extends TestBase {
 		.description("a")
 		.dictionary(X1.class)
 		.format("b")
-		.properties("e")
 		.build();
 
 	MarshalledProp a2 = MarshalledPropAnnotation.create()
 		.description("a")
 		.dictionary(X1.class)
 		.format("b")
-		.properties("e")
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,dictionary,format,properties", "[a],[X1],b,e");
+		assertBean(a1, "description,dictionary,format", "[a],[X1],b");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -73,12 +71,12 @@ class MarshalledPropAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class D1 {
-		@MarshalledProp(description={ "a" }, dictionary=X1.class, format="b", properties="e")
+		@MarshalledProp(description={ "a" }, dictionary=X1.class, format="b")
 		public int f;
 	}
 
 	public static class D2 {
-		@MarshalledProp(description={ "a" }, dictionary=X1.class, format="b", properties="e")
+		@MarshalledProp(description={ "a" }, dictionary=X1.class, format="b")
 		public int f;
 	}
 

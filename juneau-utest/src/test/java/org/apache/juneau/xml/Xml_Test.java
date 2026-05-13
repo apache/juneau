@@ -281,27 +281,6 @@ class Xml_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Element name on beans of a collection.
-	//====================================================================================================
-	@Test void a10_elementNameOnBeansOfCollection() throws Exception {
-		var s = XmlSerializer.DEFAULT_SQ;
-		var o = new J1();
-		var r = s.serialize(o);
-		assertEquals("<foo><f1><bar><f2>2</f2></bar></f1></foo>", r);
-	}
-
-	@Marshalled(typeName="foo")
-	public static class J1 {
-		@MarshalledProp(properties="f2") public List<J2> f1 = l(new J2());
-	}
-
-	@Marshalled(typeName="bar")
-	public static class J2 {
-		public int f2 = 2;
-		public int f3 = 3;
-	}
-
-	//====================================================================================================
 	// @Xml.ns without matching nsUri.
 	//====================================================================================================
 	@Test void a11_xmlNsWithoutMatchingNsUri() {

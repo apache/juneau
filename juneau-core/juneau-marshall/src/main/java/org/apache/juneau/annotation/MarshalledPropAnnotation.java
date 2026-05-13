@@ -45,7 +45,6 @@ public class MarshalledPropAnnotation {
 		private String[] description = {};
 		private Class<?>[] dictionary = new Class[0];
 		private String format = "";
-		private String properties = "";
 
 		/**
 		 * Constructor.
@@ -96,17 +95,6 @@ public class MarshalledPropAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the {@link MarshalledProp#properties()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder properties(String value) {
-			properties = value;
-			return this;
-		}
-
 	}
 
 	@SuppressWarnings({
@@ -117,14 +105,12 @@ public class MarshalledPropAnnotation {
 		private final String[] description;
 		private final Class<?>[] dictionary;
 		private final String format;
-		private final String properties;
 
 		Object(MarshalledPropAnnotation.Builder b) {
 			super(b);
 			description = copyOf(b.description);
 			dictionary = copyOf(b.dictionary);
 			format = b.format;
-			properties = b.properties;
 		}
 
 		@Override /* Overridden from MarshalledProp */
@@ -135,11 +121,6 @@ public class MarshalledPropAnnotation {
 		@Override /* Overridden from MarshalledProp */
 		public String format() {
 			return format;
-		}
-
-		@Override /* Overridden from MarshalledProp */
-		public String properties() {
-			return properties;
 		}
 
 		@Override /* Overridden from annotation */

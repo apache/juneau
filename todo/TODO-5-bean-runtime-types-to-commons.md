@@ -4,6 +4,40 @@ This is the remaining work from **Phase 5 of the bean-layer split**. Phase 5a (t
 
 ---
 
+## Status (as of `@MarshalledProp(properties)` removal, uncommitted)
+
+**`@MarshalledProp(properties=...)` dropped per user direction (breaking change, v9.5).** With breaking changes authorized throughout TODO-5, the per-property child-property filter feature has been removed entirely. This shrinks the Phase C Task 5 surface meaningfully:
+
+- `BeanPropertyMeta.applyChildPropertiesFilter(MarshallingSession, ClassMeta, Object)` — **gone**. The `MarshallingSession` + `ClassMeta` parameters that blocked the physical move are no longer present.
+- `BeanPropertyMeta.swapAndFilterProperty(...)` — **inlined** into `getInner(...)` as a single `readTransform.apply(session, o)` call.
+- `BeanPropertyMeta.newBeanMap(MarshallingSession, Object, BeanMetaFiltered)` private static helper — **gone**.
+- `BeanPropertyMeta.properties` field + `getProperties()` accessor + `Builder.properties` field — **gone**.
+- `BeanMetaFiltered` class — **deleted** (file removed). Its sole consumer (`DelegateBeanMap.getMeta()`) had its override removed too; `super.getMeta()` (raw `BeanMeta`) is what `entrySet()`/`keySet()` were already filtering against.
+- `JsonSchemaGeneratorSession.getSchema(...)` — `pNames` parameter and the `BeanMetaFiltered` wrap-and-iterate path removed; the recursive nested-bean schema generation no longer carries an override-list.
+- `MarshalledPropertyPostProcessor` — `ne(mp.properties()) → b.properties = split(...)` reads stripped from all three `(innerField, getter, setter)` annotation walks.
+- `MarshalledProp.properties()` annotation attribute + `MarshalledPropAnnotation.Builder.properties(...)` setter + corresponding `Object#properties()` impl — **gone**.
+
+**Phase C Task 5 gap inventory now shrunk (compared to the previous checkpoint):**
+
+- One of the three `((MarshallingContext) bc).X()` casts in `BeanPropertyMeta` is gone (the `getBeanMeta(o.getClass())` cast inside `applyChildPropertiesFilter`). Two casts remain: `Builder.rawMetaType(Class<?>)` → `getClassMeta(value)`, and the constructor `ap` initialization → `getAnnotationProvider()`.
+- The `BiFunction<MarshallingSession,Object,Object>` field types still need retyping to `BiFunction<BeanSession,Object,Object>` (or `BiFunction<Object,Object,Object>`), but with `applyChildPropertiesFilter` gone the only remaining `MarshallingSession`-typed parameter is on `setPropertyValue` — and that's the only place inside `BeanPropertyMeta` that still needs a marshalling-side session. The `swapAndFilterProperty` indirection is gone.
+- `BeanMetaFiltered` is no longer one of the 8 target types; the cluster shrinks to **7**: `BeanMap`, `BeanMapEntry`, `BeanMeta`, `BeanPropertyMeta`, `BeanPropertyValue`, `BeanPropertyConsumer`, `BeanProxyInvocationHandler`.
+
+Test changes:
+- `MarshalledPropAnnotation_Test` — `.properties(...)` setter calls and `properties="e"` annotation attributes removed from `a1`/`a2`/`D1`/`D2`; `assertBean` field list trimmed from `description,dictionary,format,properties` to `description,dictionary,format`.
+- `juneau-utest/src/test/java/org/apache/juneau/{json,json5,xml,html,uon,urlencoding}/Common_*Test.java` — all `a05_beanPropertyProperies` / `a06_beanPropertyPropertiesOnListOfBeans` tests and their `E1`/`E2`/`F`/`Test7b` helper classes deleted. 7 test files, 12 test methods deleted.
+- `juneau-utest/src/test/java/org/apache/juneau/xml/Xml_Test.java` — `a10_elementNameOnBeansOfCollection` and its `J1`/`J2` helper classes deleted.
+
+Docs:
+- `juneau-docs/pages/topics/02.04.04.BeanpAnnotation.md` — `@MarshalledProp(properties)` paragraph + example removed.
+- `juneau-docs/pages/release-notes/9.5.0.md` — new "Removed `@MarshalledProp(properties)` Attribute (breaking)" section under the `juneau-marshall` heading.
+
+Build + full test green (`scripts/test.py --full`).
+
+**Recommended next checkpoint:** resume Phase C Task 5 (physical `git mv` + reference sweep) with the simplified surface. The remaining work is still substantial (~20 annotation-read lifts, two `((MarshallingContext) bc).X()` casts, `BiFunction` retypes, `BeanProxyInvocationHandler` SPI routing, Javadoc cleanup), but the most awkward seam — `applyChildPropertiesFilter` with its `MarshallingSession`+`ClassMeta` parameters and the `BeanMetaFiltered` wrapper class — is gone.
+
+---
+
 ## Status (as of Phase C Tasks 1-2-3-4-4-deferred checkpoint, uncommitted)
 
 **Phase C Tasks 1, 2, 3, 4, 4-deferred LANDED (working tree, uncommitted).** Build + full test green. See "Phase C status" block under Step 8b-ii for full detail. Summary:

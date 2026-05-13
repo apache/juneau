@@ -266,7 +266,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	 * @throws SerializeException Error occurred.
 	 */
 	public JsonMap getSchema(ClassMeta<?> cm) throws MarshallingRecursionException, SerializeException {
-		return getSchema(cm, "root", null, false, false, null);
+		return getSchema(cm, "root", false, false, null);
 	}
 
 	/**
@@ -280,7 +280,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	 * @throws SerializeException Error occurred.
 	 */
 	public JsonMap getSchema(Object o) throws MarshallingRecursionException, SerializeException {
-		return getSchema(toClassMeta(o), "root", null, false, false, null);
+		return getSchema(toClassMeta(o), "root", false, false, null);
 	}
 
 	/**
@@ -292,7 +292,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	 * @throws SerializeException Error occurred.
 	 */
 	public JsonMap getSchema(Type type) throws MarshallingRecursionException, SerializeException {
-		return getSchema(getClassMeta(type), "root", null, false, false, null);
+		return getSchema(getClassMeta(type), "root", false, false, null);
 	}
 
 	private Object getDescription(ClassMeta<?> sType, TypeCategory t, boolean descriptionAdded) {
@@ -334,7 +334,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 		"rawtypes", // Raw types necessary for generic type handling
 		"unchecked", // Type erasure requires unchecked casts
 	})
-	private JsonMap getSchema(ClassMeta<?> eType, String attrName, List<String> pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
+	private JsonMap getSchema(ClassMeta<?> eType, String attrName, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
 		throws MarshallingRecursionException, SerializeException {
 
 		if (ctx.isIgnoredType(eType))
@@ -358,7 +358,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 		Object example = null;
 		Object description = null;
 
-		boolean useDef = isUseBeanDefs() && sType.isBean() && pNames == null;
+		boolean useDef = isUseBeanDefs() && sType.isBean();
 
 		if (useDef) {
 			exampleAdded = false;
@@ -444,14 +444,10 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 			if (tc == BEAN) {
 				var properties = new JsonMap();
 				BeanMeta bm = getBeanMeta(sType.inner());
-				if (nn(pNames))
-					bm = new BeanMetaFiltered(bm, pNames);
 				for (Iterator<BeanPropertyMeta> i = bm.getProperties().values().iterator(); i.hasNext();) {
 					BeanPropertyMeta p = i.next();
-					if (p.canRead()) {
-						var pProps = p.getProperties();
-						properties.put(p.getName(), getSchema((ClassMeta<?>) p.getClassMeta(), p.getName(), pProps, exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));
-					}
+					if (p.canRead())
+						properties.put(p.getName(), getSchema((ClassMeta<?>) p.getClassMeta(), p.getName(), exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));
 				}
 				out.put(PROP_properties, properties);
 
@@ -459,19 +455,19 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 				ClassMeta et = sType.getElementType();
 				if (sType.isCollection() && sType.isAssignableTo(Set.class))
 					out.put(PROP_uniqueItems, true);
-				out.put(PROP_items, getSchema(et, PROP_items, pNames, exampleAdded, descriptionAdded, null));
+				out.put(PROP_items, getSchema(et, PROP_items, exampleAdded, descriptionAdded, null));
 
 			} else if (tc == ARRAY) {
 				ClassMeta et = sType.getElementType();
 				if (sType.isCollection() && sType.isAssignableTo(Set.class))
 					out.put(PROP_uniqueItems, true);
-				out.put(PROP_items, getSchema(et, PROP_items, pNames, exampleAdded, descriptionAdded, null));
+				out.put(PROP_items, getSchema(et, PROP_items, exampleAdded, descriptionAdded, null));
 
 			} else if (tc == ENUM) {
 				out.put(PROP_enum, getEnums(sType));
 
 			} else if (tc == MAP) {
-				var om = getSchema(sType.getValueType(), PROP_additionalProperties, null, exampleAdded, descriptionAdded, null);
+				var om = getSchema(sType.getValueType(), PROP_additionalProperties, exampleAdded, descriptionAdded, null);
 				if (! om.isEmpty())
 					out.put(PROP_additionalProperties, om);
 

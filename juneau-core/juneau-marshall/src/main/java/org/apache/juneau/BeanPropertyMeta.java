@@ -39,7 +39,6 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.ReflectionUtils;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
@@ -101,7 +100,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		private boolean isDyna;
 		private boolean isDynaGetterMap;
 		BeanTypeInfo<?> typeMeta;  // Package-private so the marshalling-side post-processor can override after @Swap/@MarshalledProp detection.  Concrete instances are always {@link ClassMeta}; typed against the bean-modeling SPI seam.
-		List<String> properties;  // Package-private so the marshalling-side post-processor can install @MarshalledProp(properties) override list.
 		private Object overrideValue;
 		private BeanPropertyMeta delegateFor;
 		private boolean canRead;
@@ -516,7 +514,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final boolean isUri;                                     // True if this is a URL/URI or annotated with @URI.
 	private final String name;                                       // The name of the property.
 	private final Object overrideValue;                              // The bean property value (if it's an overridden delegate).
-	private final List<String> properties;                           // The value of the @MarshalledProp(properties) annotation (unmodifiable).
 	private final BeanTypeInfo<?> rawTypeMeta;                       // The real class type of the bean property.  Concrete instances are always {@link ClassMeta}; typed against the bean-modeling SPI seam for the eventual move to commons.bean.
 	private final BiFunction<MarshallingSession,Object,Object> readTransform;  // Applied to raw getter result; identity by default.
 	private final boolean readOnly;                                  // True if this property is read-only.
@@ -548,7 +545,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		isUri = b.isUri;
 		name = b.name;
 		overrideValue = b.overrideValue;
-		properties = u(b.properties);
 		rawTypeMeta = b.rawTypeMeta;
 		readOnly = b.readOnly;
 		setter = b.setter;
@@ -976,14 +972,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public String getName() { return name; }
 
 	/**
-	 * Returns the override list of properties defined through a {@link MarshalledProp#properties() @MarshalledProp(properties)} annotation
-	 * on this property.
-	 *
-	 * @return An unmodifiable list of override properties, or <jk>null</jk> if annotation not specified.
-	 */
-	public List<String> getProperties() { return properties; }
-
-	/**
 	 * Equivalent to calling {@link BeanMap#getRaw(Object)}, but is faster since it avoids looking up the property meta.
 	 *
 	 * @param m The bean map to get the transformed value from.
@@ -1300,53 +1288,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return r(properties());
 	}
 
-	/**
-	 * Applies the {@link MarshalledProp#properties() @MarshalledProp(properties)} child-property filter to a value.
-	 *
-	 * <p>
-	 * <b>Marshalling-only.</b>  The signature itself takes a {@link ClassMeta} and {@link MarshallingSession},
-	 * which are marshalling-side types; this helper is only reachable from {@link #swapAndFilterProperty},
-	 * which short-circuits when the owning {@link BeanMeta} was built via
-	 * {@link BeanMeta#of(Class, BeanConfigContext)} (no {@link MarshallingContext} on the property,
-	 * therefore no {@code rawTypeMeta}).
-	 *
-	 * @throws UnsupportedOperationException If invoked on a property built via the bean-modeling-only path.
-	 */
-	private Object applyChildPropertiesFilter(MarshallingSession session, ClassMeta cm, Object o) {
-		if (bc == null)
-			throw unsupportedOp("Property ''{0}'' was built via the bean-modeling-only path; child-properties filtering requires a marshalling context.", name);
-		if (o == null)
-			return null;
-		if (cm.isBean())
-			return newBeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
-		if (cm.isMap()) {
-			var propsArray = properties == null ? null : properties.toArray(new String[0]);
-			return new FilteredKeyMap(cm, (Map)o, propsArray);
-		}
-		if (cm.isObject()) {
-			if (o instanceof Map o2) {
-				var propsArray = properties == null ? null : properties.toArray(new String[0]);
-				return new FilteredKeyMap(cm, o2, propsArray);
-			}
-			var bm = ((MarshallingContext) bc).getBeanMeta(o.getClass());
-			if (nn(bm))
-				return newBeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
-		}
-		return o;
-	}
-
-	@SuppressWarnings({
-		"unchecked"  // Type erasure requires unchecked cast for filtered bean map construction
-	})
-	private static BeanMap newBeanMap(MarshallingSession session, Object o, BeanMetaFiltered meta) {
-		var bm = new BeanMap(o, meta);
-		bm.setMarshallingSession(session);
-		return bm;
-	}
-
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for inner property getter with delegate/swap handling
-	})
 	private Object getInner(BeanMap<?> m, String pName) {
 		try {
 
@@ -1361,47 +1302,19 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (bean == null)
 				return m.propertyCache.get(name);
 
-	var session = m.getMarshallingSession();
-	var o = getRaw(m, pName);
+			var session = m.getMarshallingSession();
+			var o = getRaw(m, pName);
 
-	return swapAndFilterProperty(session, o);
+			return readTransform.apply(session, o);
 
-	} catch (Exception e) {
-		if (config.isIgnoreInvocationExceptionsOnGetters()) {
-			if (nn(rawTypeMeta) && rawTypeMeta.isPrimitive())
-				return rawTypeMeta.getPrimitiveDefault();
-			return null;
-		}
+		} catch (Exception e) {
+			if (config.isIgnoreInvocationExceptionsOnGetters()) {
+				if (nn(rawTypeMeta) && rawTypeMeta.isPrimitive())
+					return rawTypeMeta.getPrimitiveDefault();
+				return null;
+			}
 			throw bex(e, beanMeta.getClassInfo(), "Exception occurred while getting property ''{0}''", name);
 		}
-	}
-
-	private Object swapAndFilterProperty(MarshallingSession session, Object o) {
-		o = readTransform.apply(session, o);
-		if (o == null)
-			return null;
-		// rawTypeMeta is null on the bean-modeling-only path — child-properties filtering is a marshalling
-		// concern (it builds DelegateList / FilteredKeyMap / nested BeanMetaFiltered instances).  Skip it and
-		// return the raw value.
-		if (nn(properties) && nn(rawTypeMeta)) {
-			if (rawTypeMeta.isArray()) {
-				var a = (Object[])o;
-				var l1 = new DelegateList((ClassMeta<?>) rawTypeMeta);
-				var childType1 = (ClassMeta<?>) rawTypeMeta.getElementType();
-				for (var c1 : a)
-					l1.add(applyChildPropertiesFilter(session, childType1, c1));
-				return l1;
-			} else if (rawTypeMeta.isCollection()) {
-				var c = (Collection)o;
-				var l = listOfSize(c.size());
-				var childType = (ClassMeta<?>) rawTypeMeta.getElementType();
-				c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));
-				return l;
-			} else {
-				return applyChildPropertiesFilter(session, (ClassMeta<?>) rawTypeMeta, o);
-			}
-		}
-		return o;
 	}
 
 	private Object invokeGetter(Object bean, String pName) throws IllegalArgumentException {

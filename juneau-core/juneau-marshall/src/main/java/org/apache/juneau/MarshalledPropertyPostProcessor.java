@@ -19,7 +19,6 @@ package org.apache.juneau;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -48,7 +47,6 @@ import org.apache.juneau.swaps.*;
  * <ul>
  * 	<li>{@code swap} — set to a {@link StringFormatSwap} (from {@link MarshalledProp#format()}) or a custom
  * 		{@link ObjectSwap} (from {@link Swap}).
- * 	<li>{@code properties} — set to the property-override list from {@link MarshalledProp#properties()}.
  * 	<li>{@code dictionaryClasses} — appended with the {@link MarshalledProp#dictionary()} entries.
  * 	<li>{@code typeMeta} — refreshed to the swap class meta when a swap is installed.
  * </ul>
@@ -79,8 +77,6 @@ final class MarshalledPropertyPostProcessor {
 				var mp = x.inner();
 				if (b.swap == null)
 					b.swap = marshalledPropSwap(x);
-				if (ne(mp.properties()))
-					b.properties = split(mp.properties());
 				bdClasses.addAll(l(mp.dictionary()));
 			});
 			ap.find(Swap.class, b.innerField).stream().findFirst().ifPresent(x -> b.swap = swapSwap(x));
@@ -91,8 +87,6 @@ final class MarshalledPropertyPostProcessor {
 				var mp = x.inner();
 				if (b.swap == null)
 					b.swap = marshalledPropSwap(x);
-				if (nn(b.properties) && ne(mp.properties()))
-					b.properties = split(mp.properties());
 				bdClasses.addAll(l(mp.dictionary()));
 			});
 			ap.find(Swap.class, b.getter).stream().forEach(x -> b.swap = swapSwap(x));
@@ -103,8 +97,6 @@ final class MarshalledPropertyPostProcessor {
 				var mp = x.inner();
 				if (b.swap == null)
 					b.swap = marshalledPropSwap(x);
-				if (nn(b.properties) && ne(mp.properties()))
-					b.properties = split(mp.properties());
 				bdClasses.addAll(l(mp.dictionary()));
 			});
 			ap.find(Swap.class, b.setter).stream().forEach(x -> b.swap = swapSwap(x));

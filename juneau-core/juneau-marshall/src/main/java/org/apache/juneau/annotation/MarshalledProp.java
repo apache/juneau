@@ -30,8 +30,7 @@ import org.apache.juneau.commons.bean.BeanProp;
  * Where {@code @BeanProp} (in <c>juneau-commons</c>) carries the bean-modeling attributes
  * (such as {@code name}, {@code ro}, {@code wo}, {@code type}, {@code params}, {@code elementType},
  * and {@code factory}), this annotation carries the wire-format-specific attributes used by serializers
- * and parsers: a per-property format string, a bean dictionary for polymorphic types, and a list of
- * child properties to render.
+ * and parsers: a per-property format string and a bean dictionary for polymorphic types.
  *
  * <p>
  * Can be used in the following locations:
@@ -115,38 +114,4 @@ public @interface MarshalledProp {
 	 * @return The annotation value.
 	 */
 	String format() default "";
-
-	/**
-	 * Used to limit which child properties are rendered by the serializers.
-	 *
-	 * <p>
-	 * Can be used on any of the following bean property types:
-	 * <ul class='spaced-list'>
-	 * 	<li>Beans - Only render the specified properties of the bean.
-	 * 	<li>Maps - Only render the specified entries in the map.
-	 * 	<li>Bean/Map arrays - Same, but applied to each element in the array.
-	 * 	<li>Bean/Map collections - Same, but applied to each element in the collection.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public class</jk> MyClass {
-	 *
-	 * 		<jc>// Only render 'f1' when serializing this bean property.</jc>
-	 * 		<ja>@MarshalledProp</ja>(properties=<js>"f1"</js>)
-	 * 		<jk>public</jk> MyChildClass <jf>x1</jf> = <jk>new</jk> MyChildClass();
-	 * 	}
-	 *
-	 * 	<jk>public class</jk> MyChildClass {
-	 * 		<jk>public int</jk> <jf>f1</jf> = 1;
-	 * 		<jk>public int</jk> <jf>f2</jf> = 2;
-	 * 	}
-	 *
-	 * 	<jc>// Renders "{x1:{f1:1}}"</jc>
-	 * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> MyClass());
-	 * </p>
-	 *
-	 * @return The annotation value.
-	 */
-	String properties() default "";
 }

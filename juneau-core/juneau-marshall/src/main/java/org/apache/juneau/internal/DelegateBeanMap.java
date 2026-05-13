@@ -125,9 +125,6 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	}
 
 	@Override /* Overridden from BeanMap */
-	public BeanMeta<T> getMeta() { return new BeanMetaFiltered<>(super.getMeta(), keys); }
-
-	@Override /* Overridden from BeanMap */
 	public Collection<BeanPropertyMeta> getProperties() {
 		var l = new ArrayList<BeanPropertyMeta>(keys.size());
 		keys.forEach(k -> {

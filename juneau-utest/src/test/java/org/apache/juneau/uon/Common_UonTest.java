@@ -152,47 +152,6 @@ class Common_UonTest extends TestBase {
 	}
 
 	//====================================================================================================
-	// @MarshalledProp.bpi annotation.
-	//====================================================================================================
-	@Test void a05_beanPropertyProperies() throws Exception {
-		var s = UonSerializer.DEFAULT;
-		var ue = s.serialize(new E1());
-		assertEquals("(x1=(f1=1),x2=(f1=1),x3=@((f1=1)),x4=@((f1=1)),x5=@((f1=1)),x6=@((f1=1)))", ue);
-	}
-
-	public static class E1 {
-		@MarshalledProp(properties="f1") public E2 x1 = new E2();
-		@MarshalledProp(properties="f1") public Map<String,Integer> x2 = m("f1",1,"f2",2);
-		@MarshalledProp(properties="f1") public E2[] x3 = {new E2()};
-		@MarshalledProp(properties="f1") public List<E2> x4 = l(new E2());
-		@MarshalledProp(properties="f1") public JsonMap[] x5 = {JsonMap.of("f1",1,"f2",2)};
-		@MarshalledProp(properties="f1") public List<JsonMap> x6 = l(JsonMap.of("f1",1,"f2",2));
-	}
-
-	public static class E2 {
-		public int f1 = 1;
-		public int f2 = 2;
-	}
-
-	//====================================================================================================
-	// @MarshalledProp.bpi annotation on list of beans.
-	//====================================================================================================
-	@Test void a06_beanPropertyPropertiesOnListOfBeans() throws Exception {
-		var s = UonSerializer.DEFAULT;
-		var l = new LinkedList<>();
-		var t = new F();
-		t.x1.add(new F());
-		l.add(t);
-		var xml = s.serialize(l);
-		assertEquals("@((x1=@((x2=2)),x2=2))", xml);
-	}
-
-	public static class F {
-		@MarshalledProp(properties="x2") public List<F> x1 = new LinkedList<>();
-		public int x2 = 2;
-	}
-
-	//====================================================================================================
 	// Test URIAttr - Test that URLs and URIs are serialized and parsed correctly.
 	//====================================================================================================
 	@Test void a07_uRIAttr() throws Exception {
