@@ -118,6 +118,8 @@ public final class BeanConfigContext {
 	private final BeanStore beanStore;
 	private final AnnotationProvider annotationProvider;
 	private final Predicate<ClassInfo> notABeanPredicate;
+	private final BeanMetaInitializer beanMetaInitializer;
+	private final BeanPropertyPostProcessor beanPropertyPostProcessor;
 
 	private BeanConfigContext(Builder b) {
 		beanClassVisibility = b.beanClassVisibility;
@@ -147,6 +149,8 @@ public final class BeanConfigContext {
 		beanStore = b.beanStore;
 		annotationProvider = b.annotationProvider;
 		notABeanPredicate = b.notABeanPredicate;
+		beanMetaInitializer = b.beanMetaInitializer;
+		beanPropertyPostProcessor = b.beanPropertyPostProcessor;
 	}
 
 	/**
@@ -359,6 +363,30 @@ public final class BeanConfigContext {
 	public AnnotationProvider getAnnotationProvider() { return annotationProvider; }
 
 	/**
+	 * Returns the {@link BeanMetaInitializer} SPI hook used during {@link BeanMeta} construction.
+	 *
+	 * <p>
+	 * On the commons-side path this is {@link BeanMetaInitializer#NOOP} (no marshalling-side help); on the
+	 * marshalling-side path, {@code MarshallingContext} wires its own implementation that reads
+	 * {@code @Marshalled} / {@code @BeanType} annotations and builds {@code BeanRegistry} instances.
+	 *
+	 * @return The bean-meta initializer.  Never <jk>null</jk>.
+	 */
+	public BeanMetaInitializer getBeanMetaInitializer() { return beanMetaInitializer; }
+
+	/**
+	 * Returns the {@link BeanPropertyPostProcessor} SPI hook used during {@link BeanPropertyMeta} construction.
+	 *
+	 * <p>
+	 * On the commons-side path this is {@link BeanPropertyPostProcessor#NOOP} (no swap-aware transforms or
+	 * {@code @MarshalledProp} / {@code @Swap} / {@code @Uri} reads); on the marshalling-side path,
+	 * {@code MarshallingContext} wires its own implementation.
+	 *
+	 * @return The bean-property post-processor.  Never <jk>null</jk>.
+	 */
+	public BeanPropertyPostProcessor getBeanPropertyPostProcessor() { return beanPropertyPostProcessor; }
+
+	/**
 	 * Returns <jk>true</jk> if the specified class is excluded from bean detection.
 	 *
 	 * <p>
@@ -427,6 +455,8 @@ public final class BeanConfigContext {
 		private BeanStore beanStore;
 		private AnnotationProvider annotationProvider = AnnotationProvider.INSTANCE;
 		private Predicate<ClassInfo> notABeanPredicate;
+		private BeanMetaInitializer beanMetaInitializer = BeanMetaInitializer.NOOP;
+		private BeanPropertyPostProcessor beanPropertyPostProcessor = BeanPropertyPostProcessor.NOOP;
 
 		private Builder() {}
 
@@ -458,6 +488,8 @@ public final class BeanConfigContext {
 			beanStore = src.beanStore;
 			annotationProvider = src.annotationProvider;
 			notABeanPredicate = src.notABeanPredicate;
+			beanMetaInitializer = src.beanMetaInitializer;
+			beanPropertyPostProcessor = src.beanPropertyPostProcessor;
 		}
 
 		/**
@@ -733,5 +765,27 @@ public final class BeanConfigContext {
 		 * @return This object.
 		 */
 		public Builder notABeanPredicate(Predicate<ClassInfo> value) { notABeanPredicate = value; return this; }
+
+		/**
+		 * Sets the {@link BeanMetaInitializer} SPI hook for marshalling-side {@link BeanMeta} construction.
+		 *
+		 * <p>
+		 * Pass <jk>null</jk> to reset to {@link BeanMetaInitializer#NOOP} (commons-side default).
+		 *
+		 * @param value The initializer.  May be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder beanMetaInitializer(BeanMetaInitializer value) { beanMetaInitializer = value == null ? BeanMetaInitializer.NOOP : value; return this; }
+
+		/**
+		 * Sets the {@link BeanPropertyPostProcessor} SPI hook for marshalling-side bean-property post-processing.
+		 *
+		 * <p>
+		 * Pass <jk>null</jk> to reset to {@link BeanPropertyPostProcessor#NOOP} (commons-side default).
+		 *
+		 * @param value The post-processor.  May be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder beanPropertyPostProcessor(BeanPropertyPostProcessor value) { beanPropertyPostProcessor = value == null ? BeanPropertyPostProcessor.NOOP : value; return this; }
 	}
 }

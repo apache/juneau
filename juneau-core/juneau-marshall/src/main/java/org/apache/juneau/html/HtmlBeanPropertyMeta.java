@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on bean properties specific to the HTML serializers and parsers pulled from the {@link Html @Html}

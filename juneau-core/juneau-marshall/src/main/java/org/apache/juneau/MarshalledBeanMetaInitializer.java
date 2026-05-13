@@ -41,8 +41,16 @@ import org.apache.juneau.commons.utils.*;
  * Each helper takes the marshalling-side {@link MarshallingContext} as an {@link Object} so the
  * call sites inside {@link BeanMeta} do not need to import {@link MarshallingContext}.  The helper
  * casts back internally.
+ *
+ * <p>
+ * Implements the commons-side {@link BeanMetaInitializer} SPI; the singleton {@link #INSTANCE} is wired into the
+ * {@link BeanConfigContext} carried by every {@link MarshallingContext} (see
+ * {@code MarshallingContext.buildBeanConfigContext()}).
  */
-final class MarshalledBeanMetaInitializer {
+final class MarshalledBeanMetaInitializer implements BeanMetaInitializer {
+
+	/** Singleton instance wired into {@link MarshallingContext}-built {@link BeanConfigContext}s. */
+	static final MarshalledBeanMetaInitializer INSTANCE = new MarshalledBeanMetaInitializer();
 
 	private MarshalledBeanMetaInitializer() {}
 
@@ -59,7 +67,8 @@ final class MarshalledBeanMetaInitializer {
 	 * @param config The bean-modeling configuration.  Must not be <jk>null</jk>.
 	 * @return The bean-level {@link BeanRegistryLookup}, or <jk>null</jk> on the commons-side path.
 	 */
-	static BeanRegistryLookup buildBeanRegistry(Object marshallingContext, BeanFilter beanFilter, ClassInfo classInfo, BeanConfigContext config) {
+	@Override
+	public BeanRegistryLookup buildBeanRegistry(Object marshallingContext, BeanFilter beanFilter, ClassInfo classInfo, BeanConfigContext config) {
 		if (marshallingContext == null)
 			return null;
 		MarshallingContext mc = (MarshallingContext) marshallingContext;
@@ -86,7 +95,8 @@ final class MarshalledBeanMetaInitializer {
 	 * @param dictionaryClasses The per-property {@link MarshalledProp#dictionary() @MarshalledProp(dictionary)} classes.  Must not be <jk>null</jk>.
 	 * @return The per-property {@link BeanRegistryLookup}.
 	 */
-	static BeanRegistryLookup buildPropertyBeanRegistry(Object marshallingContext, BeanRegistryLookup parent, List<ClassInfo> dictionaryClasses) {
+	@Override
+	public BeanRegistryLookup buildPropertyBeanRegistry(Object marshallingContext, BeanRegistryLookup parent, List<ClassInfo> dictionaryClasses) {
 		return new BeanRegistry((MarshallingContext) marshallingContext, (BeanRegistry) parent, dictionaryClasses);
 	}
 
@@ -104,7 +114,8 @@ final class MarshalledBeanMetaInitializer {
 	 * @param rawClass The raw class to look up a type name for.
 	 * @return The dictionary name found in a parent's registry, or <jk>null</jk>.
 	 */
-	static String findTypeNameInParents(Object marshallingContext, ClassInfo classInfo, Class<?> rawClass) {
+	@Override
+	public String findTypeNameInParents(Object marshallingContext, ClassInfo classInfo, Class<?> rawClass) {
 		if (marshallingContext == null)
 			return null;
 		MarshallingContext mc = (MarshallingContext) marshallingContext;
@@ -122,65 +133,25 @@ final class MarshalledBeanMetaInitializer {
 	}
 
 	/**
-	 * Extracts the {@link BeanConfigContext} embedded in a marshalling-side {@link BeanTypeInfo} (which is always
-	 * a {@link ClassMeta}).
-	 *
-	 * <p>
-	 * Used by the protected {@code BeanMeta(BeanTypeInfo, BeanFilter, String[], ClassInfo)} bridging constructor —
-	 * lifts the {@code ((ClassMeta<T>) cm).getMarshallingContext().getBeanConfigContext()} cast chain out of the
-	 * commons-side {@link BeanMeta} body.
-	 *
-	 * @param cm The bean type info.  Must be a marshalling-side {@link ClassMeta} instance.
-	 * @return The bean-modeling configuration of the marshalling context.
-	 */
-	static BeanConfigContext configOf(BeanTypeInfo<?> cm) {
-		return ((ClassMeta<?>) cm).getMarshallingContext().getBeanConfigContext();
-	}
-
-	/**
-	 * Extracts the {@link MarshallingContext} embedded in a marshalling-side {@link BeanTypeInfo} (which is always
-	 * a {@link ClassMeta}) and returns it as an {@link Object} so the caller does not need to import
-	 * {@link MarshallingContext}.
-	 *
-	 * @param cm The bean type info.  Must be a marshalling-side {@link ClassMeta} instance.
-	 * @return The marshalling context, as an {@link Object}.
-	 */
-	static Object contextOf(BeanTypeInfo<?> cm) {
-		return ((ClassMeta<?>) cm).getMarshallingContext();
-	}
-
-	/**
-	 * Narrows a marshalling-side {@link BeanTypeInfo} (which is always a {@link ClassMeta}) to {@link ClassInfo}.
-	 *
-	 * <p>
-	 * Since {@link ClassMeta} extends {@link ClassInfo}, the cast is direct.  Provided as a helper so the commons-side
-	 * caller does not have to import {@link ClassMeta}.
-	 *
-	 * @param cm The bean type info.  Must be a marshalling-side {@link ClassMeta} instance.
-	 * @return The class info for the underlying bean class.
-	 */
-	static ClassInfo classInfoOf(BeanTypeInfo<?> cm) {
-		return (ClassMeta<?>) cm;
-	}
-
-	/**
-	 * Resolves the {@link Marshalled#typePropertyName() @Marshalled(typePropertyName)} value for a bean class, falling
-	 * back to {@link BeanConfigContext#getBeanTypePropertyName()} when no annotation supplies one.
+	 * Resolves the {@link Marshalled#typePropertyName() @Marshalled(typePropertyName)} value for a bean class.
 	 *
 	 * <p>
 	 * Encapsulates the {@link Marshalled @Marshalled} annotation read previously performed inline by
 	 * {@link BeanMeta}'s constructor, so {@link BeanMeta} itself no longer references {@link Marshalled}.
+	 * Returns <jk>null</jk> if no annotation supplies one — the caller falls back to
+	 * {@link BeanConfigContext#getBeanTypePropertyName()}.
 	 *
-	 * @param config The bean-modeling configuration (used to access the annotation provider and the fallback default).
+	 * @param config The bean-modeling configuration (used to access the annotation provider).
 	 * @param classInfo The bean's class info.
-	 * @return The resolved type property name.  Never <jk>null</jk>.
+	 * @return The resolved type property name, or <jk>null</jk> when no annotation supplies one.
 	 */
-	static String resolveTypePropertyName(BeanConfigContext config, ClassInfo classInfo) {
+	@Override
+	public String resolveTypePropertyName(BeanConfigContext config, ClassInfo classInfo) {
 		return config.getAnnotationProvider().find(Marshalled.class, classInfo).stream()
 			.map(x -> x.inner().typePropertyName())
 			.filter(Utils::ne)
 			.findFirst()
-			.orElseGet(config::getBeanTypePropertyName);
+			.orElse(null);
 	}
 
 	/**
@@ -193,7 +164,8 @@ final class MarshalledBeanMetaInitializer {
 	 * @param classInfo The bean's class info.
 	 * @return The configured type name, or <jk>null</jk> if not set.
 	 */
-	static String findMarshalledTypeName(BeanConfigContext config, ClassInfo classInfo) {
+	@Override
+	public String findMarshalledTypeName(BeanConfigContext config, ClassInfo classInfo) {
 		return config.getAnnotationProvider().find(Marshalled.class, classInfo)
 			.stream()
 			.map(AnnotationInfo::inner)
@@ -214,7 +186,8 @@ final class MarshalledBeanMetaInitializer {
 	 * @param classInfo The bean's class info.
 	 * @return <jk>true</jk> if the class has either annotation.
 	 */
-	static boolean hasBeanRegistrationAnnotation(BeanConfigContext config, ClassInfo classInfo) {
+	@Override
+	public boolean hasBeanRegistrationAnnotation(BeanConfigContext config, ClassInfo classInfo) {
 		var ap = config.getAnnotationProvider();
 		return ! ap.find(Marshalled.class, classInfo).isEmpty()
 			|| ! ap.find(BeanType.class, classInfo).isEmpty();
@@ -228,11 +201,12 @@ final class MarshalledBeanMetaInitializer {
 	 * a {@link MarshalledFilter} (the only concrete {@link BeanFilter} implementation in-tree) built from the
 	 * {@link Marshalled @Marshalled} and {@link BeanType @BeanType} annotations on the class.
 	 *
-	 * @param cm The class meta for the bean class.
+	 * @param cm The bean type info.  Must be a marshalling-side {@link ClassMeta}.
 	 * @return The bean filter, or <jk>null</jk> if no relevant annotations are present.
 	 */
-	static <T> MarshalledFilter findMarshalledFilter(ClassMeta<T> cm) {
-		var ap = cm.getMarshallingContext().getAnnotationProvider();
+	@Override
+	public BeanFilter buildBeanFilter(BeanTypeInfo<?> cm) {
+		var ap = ((ClassMeta<?>) cm).getMarshallingContext().getAnnotationProvider();
 		var l = ap.find(Marshalled.class, cm);
 		var bt = ap.find(BeanType.class, cm);
 		if (l.isEmpty() && bt.isEmpty())

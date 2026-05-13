@@ -3795,6 +3795,8 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 			.notBeanClasses(notBeanClasses.stream().map(ClassInfo::inner).toList())
 			.beanStore(beanStore)
 			.annotationProvider(getAnnotationProvider())
+			.beanMetaInitializer(MarshalledBeanMetaInitializer.INSTANCE)
+			.beanPropertyPostProcessor(MarshalledPropertyPostProcessor.INSTANCE)
 			.build();
 	}
 

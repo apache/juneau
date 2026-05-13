@@ -27,6 +27,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.utils.Iso8601Utils;
+import org.apache.juneau.commons.bean.BeanMap;
 
 /**
  * Session for parsing Protobuf Text Format into POJOs.

@@ -29,6 +29,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Serializes POJOs to HTTP responses as XML+SOAP.

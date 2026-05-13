@@ -25,6 +25,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses BSON (Binary JSON) into POJO models.

@@ -17,6 +17,7 @@
 package org.apache.juneau.bson;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Interface for providing access to {@link BsonClassMeta} and {@link BsonBeanPropertyMeta} objects.

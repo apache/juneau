@@ -30,6 +30,9 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.Iso8601Utils;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.BeanPropertyValue;
 
 /**
  * Session object that lives for the duration of a single use of {@link BsonSerializer}.
@@ -236,7 +239,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 		for (var x : values) {
 			var pMeta = x.getMeta();
 			if (pMeta.canRead())
-				writeElement(out, x.getName(), x.getValue(), x.getClassMeta(), pMeta);
+				writeElement(out, x.getName(), x.getValue(), (ClassMeta<?>) x.getClassMeta(), pMeta);
 		}
 	}
 
@@ -274,7 +277,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 	}
 
 	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
-		var aType = push2(v.getName(), v.getValue(), v.getClassMeta());
+		var aType = push2(v.getName(), v.getValue(), (ClassMeta<?>) v.getClassMeta());
 		if (nn(aType))
 			pop();
 		return aType == null;

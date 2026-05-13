@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.InputStreamParser;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses Apache Parquet binary data into bean collections.

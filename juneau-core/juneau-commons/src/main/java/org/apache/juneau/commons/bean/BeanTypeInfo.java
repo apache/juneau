@@ -144,4 +144,29 @@ public abstract class BeanTypeInfo<T> extends ClassInfoTyped<T> {
 	 * @return The default empty Optional value, or <jk>null</jk>.
 	 */
 	public abstract Object getOptionalDefault();
+
+	/**
+	 * Returns the {@link BeanConfigContext} associated with this type-info.
+	 *
+	 * <p>
+	 * On the marshalling-side this returns the bean-modeling subset of the {@code MarshallingContext} that
+	 * carried this type-info; on commons-side {@link BeanTypeInfo} construction paths (none exist in-tree as
+	 * of TODO-5 — {@link BeanTypeInfo} is currently always realized by marshalling-side {@code ClassMeta}),
+	 * this should return the {@code BeanConfigContext} the type-info was built against.
+	 *
+	 * @return The bean-modeling configuration carried alongside this type-info.  Never <jk>null</jk>.
+	 */
+	public abstract BeanConfigContext getBeanConfigContext();
+
+	/**
+	 * Returns the marshalling-side context associated with this type-info, as an opaque {@link Object}.
+	 *
+	 * <p>
+	 * On the marshalling-side this is the {@code MarshallingContext} that carried this type-info; the return
+	 * type is widened to {@link Object} so callers in {@code commons.bean} do not need to import
+	 * {@code MarshallingContext}.  Callers cast to the marshalling-side type at the use site.
+	 *
+	 * @return The marshalling context, or <jk>null</jk> if none is associated with this type-info.
+	 */
+	public abstract Object getMarshallingContext();
 }

@@ -30,6 +30,7 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json5.Json5Parser;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses Markdown fragment-mode output (tables and lists) back to POJOs.

@@ -31,6 +31,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session object for {@link MarkdownParser}.

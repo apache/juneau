@@ -39,6 +39,8 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.Iso8601Utils;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session object that lives for the duration of a single use of {@link UonParser}.

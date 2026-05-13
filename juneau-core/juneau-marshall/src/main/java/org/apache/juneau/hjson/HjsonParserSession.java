@@ -26,6 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.ExecutableException;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.commons.bean.BeanMap;
 
 /**
  * Session for parsing Hjson format into POJOs.

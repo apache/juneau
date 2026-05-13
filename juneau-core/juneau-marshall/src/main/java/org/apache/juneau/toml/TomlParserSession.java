@@ -27,6 +27,8 @@ import org.apache.juneau.collections.JsonMap;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.utils.Iso8601Utils;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session for parsing TOML into POJOs.

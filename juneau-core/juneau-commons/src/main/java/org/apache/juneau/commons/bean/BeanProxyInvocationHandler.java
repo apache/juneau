@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons.bean;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -22,6 +22,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanMeta;
 
 /**
  * Provides an {@link InvocationHandler} for creating dynamic proxy instances of bean interfaces.

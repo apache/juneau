@@ -32,6 +32,8 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session object that lives for the duration of a single use of {@link UrlEncodingSerializer}.

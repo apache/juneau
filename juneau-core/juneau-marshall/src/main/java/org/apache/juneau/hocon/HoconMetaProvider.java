@@ -17,6 +17,7 @@
 package org.apache.juneau.hocon;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Interface for providing access to {@link HoconClassMeta} and {@link HoconBeanPropertyMeta} objects.

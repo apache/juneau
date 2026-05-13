@@ -25,6 +25,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
@@ -56,9 +57,25 @@ import org.apache.juneau.swaps.*;
  * (i.e. when {@link MarshallingContext} is non-null).  The bean-modeling-only path
  * ({@link BeanMeta#of(Class, BeanConfigContext)}) does not run this post-processor.
  */
-final class MarshalledPropertyPostProcessor {
+final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor {
+
+	/** Singleton instance wired into {@link MarshallingContext}-built {@link BeanConfigContext}s. */
+	static final MarshalledPropertyPostProcessor INSTANCE = new MarshalledPropertyPostProcessor();
 
 	private MarshalledPropertyPostProcessor() {}
+
+	/**
+	 * SPI entry point — narrows the opaque marshalling context and builder, then dispatches to {@link #process(MarshallingContext, BeanPropertyMeta.Builder)}.
+	 *
+	 * @param marshallingContext The marshalling-side context.  Must not be <jk>null</jk> on the marshalling path.
+	 * @param builder The bean-property builder.  Must be a {@link BeanPropertyMeta.Builder}.
+	 */
+	@Override
+	public void process(Object marshallingContext, Object builder) {
+		if (marshallingContext == null)
+			return;
+		process((MarshallingContext) marshallingContext, (BeanPropertyMeta.Builder) builder);
+	}
 
 	/**
 	 * Applies {@code @MarshalledProp}/{@code @Swap} annotation effects to {@code b} using {@code bc} for

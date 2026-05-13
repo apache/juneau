@@ -22,6 +22,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.commons.bean.BeanMeta;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Stream-based RDF parser for binary formats (RDF/THRIFT, RDF/PROTO).

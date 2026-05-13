@@ -32,6 +32,7 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json5.Json5Parser;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses any valid RFC 8259 JSON text into a POJO model.

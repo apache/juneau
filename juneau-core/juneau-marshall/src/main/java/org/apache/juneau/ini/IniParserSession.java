@@ -30,6 +30,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.utils.Iso8601Utils;
+import org.apache.juneau.commons.bean.BeanMap;
 
 /**
  * Session for parsing INI format into POJOs.

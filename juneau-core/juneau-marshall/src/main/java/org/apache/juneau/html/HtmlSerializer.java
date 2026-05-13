@@ -33,6 +33,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Serializes POJO models to HTML.

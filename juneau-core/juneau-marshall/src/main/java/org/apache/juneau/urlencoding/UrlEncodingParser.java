@@ -29,6 +29,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses URL-encoded text into POJO models.

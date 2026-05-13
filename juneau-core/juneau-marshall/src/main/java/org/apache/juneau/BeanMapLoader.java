@@ -20,6 +20,7 @@ import java.io.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.commons.bean.BeanMap;
 
 /**
  * Marshalling-side helper for loading {@link BeanMap} contents from JSON text or a reader/parser pair.

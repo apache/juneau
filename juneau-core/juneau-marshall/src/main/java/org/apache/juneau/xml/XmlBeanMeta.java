@@ -27,6 +27,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.commons.bean.BeanMeta;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on beans specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the

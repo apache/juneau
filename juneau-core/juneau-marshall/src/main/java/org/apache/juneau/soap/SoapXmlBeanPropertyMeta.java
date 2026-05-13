@@ -18,6 +18,7 @@ package org.apache.juneau.soap;
 
 import org.apache.juneau.*;
 import org.apache.juneau.soap.annotation.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on bean properties specific to the SOAP/XML serializers and parsers pulled from the {@link SoapXml @SoapXml}

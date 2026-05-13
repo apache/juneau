@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons.bean;
 
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
@@ -82,20 +82,20 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		BeanConfigContext config;  // Package-private for BeanMeta access.  Always non-null — sourced from the owning BeanMeta.
 		String name;  // Package-private for BeanMeta access
 		FieldInfo field;  // Package-private for BeanMeta access
-		FieldInfo innerField;  // Package-private for BeanMeta access
-		MethodInfo getter;  // Package-private for BeanMeta access
-		MethodInfo setter;  // Package-private for BeanMeta access
+		public FieldInfo innerField;  // Package-private for BeanMeta access
+		public MethodInfo getter;  // Package-private for BeanMeta access
+		public MethodInfo setter;  // Package-private for BeanMeta access
 		MethodInfo extraKeys;  // Package-private for BeanMeta access
-		BeanTypeInfo<?> rawTypeMeta;  // Package-private for BeanMeta access (used to install swap-aware transforms).  Null on commons-side path (no type resolution).  Concrete instances are always {@link org.apache.juneau.ClassMeta} since it's the only in-tree implementation; the field is typed against the bean-modeling SPI seam so the field can live in commons.bean.
-		Object swap;  // Object-typed so the field can live in commons.bean; cast to ObjectSwap by marshalling-side consumers.  Set only via MarshalledPropertyPostProcessor (marshalling-side post-processor).
-		BiFunction<BeanSession,Object,Object> readTransform;  // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam; marshalling-side installers cast the session argument back to {@link org.apache.juneau.MarshallingSession} where needed (see {@link org.apache.juneau.MarshalledPropertyPostProcessor#installSwapAwareTransforms}).
-		BiFunction<BeanSession,Object,Object> writeTransform; // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam (see readTransform note).
-		List<ClassInfo> dictionaryClasses;  // Package-private for BeanMeta access; @MarshalledProp(dictionary={}) classes scanned during validate().
+		public BeanTypeInfo<?> rawTypeMeta;  // Package-private for BeanMeta access (used to install swap-aware transforms).  Null on commons-side path (no type resolution).  Concrete instances are always {@link org.apache.juneau.ClassMeta} since it's the only in-tree implementation; the field is typed against the bean-modeling SPI seam so the field can live in commons.bean.
+		public Object swap;  // Object-typed so the field can live in commons.bean; cast to ObjectSwap by marshalling-side consumers.  Set only via MarshalledPropertyPostProcessor (marshalling-side post-processor).
+		public BiFunction<BeanSession,Object,Object> readTransform;  // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam; marshalling-side installers cast the session argument back to {@link org.apache.juneau.MarshallingSession} where needed (see {@link org.apache.juneau.MarshalledPropertyPostProcessor#installSwapAwareTransforms}).
+		public BiFunction<BeanSession,Object,Object> writeTransform; // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam (see readTransform note).
+		public List<ClassInfo> dictionaryClasses;  // Package-private for BeanMeta access; @MarshalledProp(dictionary={}) classes scanned during validate().
 		private boolean isConstructorArg;
-		boolean isUri;  // Package-private so MarshalledPropertyPostProcessor can set @Uri-derived flag.  Mirrors rawTypeMeta.isUri() plus @Uri annotation reads on field/getter/setter.
+		public boolean isUri;  // Package-private so MarshalledPropertyPostProcessor can set @Uri-derived flag.  Mirrors rawTypeMeta.isUri() plus @Uri annotation reads on field/getter/setter.
 		private boolean isDyna;
 		private boolean isDynaGetterMap;
-		BeanTypeInfo<?> typeMeta;  // Package-private so the marshalling-side post-processor can override after @Swap/@MarshalledProp detection.  Concrete instances are always {@link org.apache.juneau.ClassMeta}; typed against the bean-modeling SPI seam.
+		public BeanTypeInfo<?> typeMeta;  // Package-private so the marshalling-side post-processor can override after @Swap/@MarshalledProp detection.  Concrete instances are always {@link org.apache.juneau.ClassMeta}; typed against the bean-modeling SPI seam.
 		private Object overrideValue;
 		private BeanPropertyMeta delegateFor;
 		private boolean canRead;
@@ -105,7 +105,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
-			this.bc = beanMeta.getMarshallingContext();  // MarshallingContext implements BeanTypeResolver; null on commons-side path.
+			this.bc = beanMeta.getBeanTypeResolver();  // Returns null on commons-side path.
 			this.config = beanMeta.getConfig();
 			this.name = name;
 		}
@@ -878,9 +878,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * {@link BeanMeta#getPropertyBeanRegistry(BeanPropertyMeta)} for backwards compatibility with existing call sites
 	 * in the marshalling layer (parser/serializer sessions, XML content-property handling, etc.).
 	 *
-	 * @return The bean dictionary in use for this bean property.  Never <jk>null</jk>.
+	 * <p>
+	 * Returns the bean-modeling-side SPI type ({@link BeanRegistryLookup}).  Marshalling-side callers that need
+	 * the full {@link org.apache.juneau.BeanRegistry} surface (e.g. {@code getClassMeta(String)}) cast at the
+	 * call site — the concrete instance in-tree is always a {@link org.apache.juneau.BeanRegistry}.
+	 *
+	 * @return The bean dictionary in use for this bean property, or <jk>null</jk> if no registry was registered.
 	 */
-	public BeanRegistry getBeanRegistry() { return (BeanRegistry) beanMeta.getPropertyBeanRegistry(this); }
+	public BeanRegistryLookup getBeanRegistry() { return beanMeta.getPropertyBeanRegistry(this); }
 
 	/**
 	 * Returns the {@link BeanTypeInfo} of the class of this property.

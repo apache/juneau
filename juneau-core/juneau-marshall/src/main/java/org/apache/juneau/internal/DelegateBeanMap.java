@@ -24,6 +24,9 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanMapEntry;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Represents a wrapped {@link BeanMap} where property values can be overridden, removed, or reordered without

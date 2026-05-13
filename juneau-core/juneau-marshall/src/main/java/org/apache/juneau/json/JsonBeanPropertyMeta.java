@@ -18,6 +18,7 @@ package org.apache.juneau.json;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.annotation.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on bean properties specific to the JSON serializers and parsers pulled from the {@link Json @Json}

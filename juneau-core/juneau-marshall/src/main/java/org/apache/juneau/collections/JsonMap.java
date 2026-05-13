@@ -37,6 +37,7 @@ import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.commons.bean.BeanMap;
 
 /**
  * Java implementation of a JSON object.

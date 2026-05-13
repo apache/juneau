@@ -40,12 +40,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.juneau.BeanMap;
 import org.apache.juneau.ClassMeta;
 import org.apache.juneau.serializer.OutputStreamSerializerSession;
 import org.apache.juneau.serializer.SerializeException;
 import org.apache.juneau.serializer.SerializerPipe;
 import org.apache.juneau.utils.Iso8601Utils;
+import org.apache.juneau.commons.bean.BeanMap;
 
 /**
  * Session for {@link ParquetSerializer}.

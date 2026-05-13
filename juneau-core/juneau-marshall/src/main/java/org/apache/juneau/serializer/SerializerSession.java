@@ -40,6 +40,10 @@ import org.apache.juneau.soap.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.Iso8601Utils;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanMeta;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.BeanPropertyValue;
 
 /**
  * Serializer session that lives for the duration of a single use of {@link Serializer}.
@@ -1077,7 +1081,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 		}
 
 		// Then look on the bean property.
-		br = pMeta == null ? null : pMeta.getBeanRegistry();
+		br = pMeta == null ? null : (BeanRegistry) pMeta.getBeanRegistry();
 		if (nn(br)) {
 			tn = br.getTypeName(aType);
 			if (nn(tn) && ! tn.equals(eTypeTn))

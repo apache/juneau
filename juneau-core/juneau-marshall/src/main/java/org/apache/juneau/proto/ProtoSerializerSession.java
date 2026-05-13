@@ -27,6 +27,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.Iso8601Utils;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session for serializing objects to Protobuf Text Format.

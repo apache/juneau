@@ -467,9 +467,26 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	/**
 	 * Returns the {@link MarshallingContext} that created this object.
 	 *
+	 * <p>
+	 * Covariantly overrides {@link BeanTypeInfo#getMarshallingContext()} to narrow the return type from
+	 * {@link Object} (commons SPI) back to {@link MarshallingContext} (marshalling-side concrete type).
+	 *
 	 * @return The bean context.
 	 */
+	@Override
 	public MarshallingContext getMarshallingContext() { return marshallingContext; }
+
+	/**
+	 * Returns the {@link BeanConfigContext} snapshot carried by the {@link MarshallingContext} that built this
+	 * {@link ClassMeta}.
+	 *
+	 * <p>
+	 * Satisfies the {@link BeanTypeInfo#getBeanConfigContext()} commons SPI contract.
+	 *
+	 * @return The bean-modeling configuration of the marshalling context.  Never <jk>null</jk>.
+	 */
+	@Override
+	public BeanConfigContext getBeanConfigContext() { return marshallingContext.getBeanConfigContext(); }
 
 	/**
 	 * Returns the {@link BeanMeta} associated with this class.
@@ -1576,7 +1593,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 
 	private String findExample() {
 
-		var ex = beanMeta.get().optBeanMeta().map(x -> x.getMarshalledFilter()).map(x -> x.getExample()).orElse(null);
+		var ex = beanMeta.get().optBeanMeta().map(x -> (MarshalledFilter) x.getBeanFilter()).map(x -> x.getExample()).orElse(null);
 
 		if (ex == null)
 			ex = marshalledFilter.map(x -> x.getExample()).orElse(null);

@@ -28,6 +28,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses a MessagePack stream into a POJO model.

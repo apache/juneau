@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons.bean;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 
 /**
@@ -71,11 +72,16 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	}
 
 	/**
-	 * Returns the bean property metadata.
+	 * Returns the {@link BeanTypeInfo} of the bean property.
 	 *
-	 * @return The bean property metadata.
+	 * <p>
+	 * Returns the bean-modeling-side SPI type ({@link BeanTypeInfo}).  Marshalling-side callers that need the
+	 * {@link org.apache.juneau.ClassMeta} narrowing must cast — the concrete instance in-tree is always a
+	 * {@link org.apache.juneau.ClassMeta}.
+	 *
+	 * @return The bean property type info.
 	 */
-	public final ClassMeta<?> getClassMeta() { return (ClassMeta<?>) pMeta.getClassMeta(); }
+	public final BeanTypeInfo<?> getClassMeta() { return pMeta.getClassMeta(); }
 
 	/**
 	 * Returns the bean property metadata.
@@ -105,7 +111,12 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	 */
 	public final Object getValue() { return value; }
 
-	protected FluentMap<String,Object> properties() {
+	/**
+	 * Returns a property map view of this object.
+	 *
+	 * @return A property map containing the name, value, and type of this bean property.
+	 */
+	public FluentMap<String,Object> properties() {
 		// @formatter:off
 		return filteredBeanPropertyMap()
 			.a(PROP_name, name)

@@ -4,6 +4,63 @@ This is the remaining work from **Phase 5 of the bean-layer split**. Phase 5a (t
 
 ---
 
+## Status (Physical `git mv` LANDED — uncommitted)
+
+**All 5 remaining blockers cleared and the 7 bean-runtime files physically moved into `commons.bean`.** `juneau-commons` compiles standalone with no dependency on `juneau-marshall`. Full test suite (`scripts/test.py --test-only`) passes.
+
+### New file locations (post-`git mv`)
+
+| Old path | New path |
+| --- | --- |
+| `juneau-core/juneau-marshall/.../BeanMap.java` | `juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/bean/BeanMap.java` |
+| `juneau-core/juneau-marshall/.../BeanMapEntry.java` | `juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/bean/BeanMapEntry.java` |
+| `juneau-core/juneau-marshall/.../BeanMeta.java` | `juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/bean/BeanMeta.java` |
+| `juneau-core/juneau-marshall/.../BeanPropertyMeta.java` | `juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/bean/BeanPropertyMeta.java` |
+| `juneau-core/juneau-marshall/.../BeanPropertyValue.java` | `juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/bean/BeanPropertyValue.java` |
+| `juneau-core/juneau-marshall/.../BeanPropertyConsumer.java` | `juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/bean/BeanPropertyConsumer.java` |
+| `juneau-core/juneau-marshall/.../BeanProxyInvocationHandler.java` | `juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/bean/BeanProxyInvocationHandler.java` |
+
+### Blockers resolved
+
+- **Blocker 1 (BeanPropertyValue.getClassMeta)** — Return type widened from `ClassMeta<?>` to `BeanTypeInfo<?>`. Marshalling-side call sites cast back to `ClassMeta<?>` where needed (~5 sites in serializer sessions).
+- **Blocker 2 (BeanPropertyMeta.getBeanRegistry)** — Return type widened from `BeanRegistry` to `BeanRegistryLookup` (commons SPI). Marshalling-side call sites cast back to `BeanRegistry` where the concrete type is required.
+- **Blocker 3 (BeanMeta.create signature)** — Factory method accepts `BeanTypeInfo<T>` instead of `ClassMeta<T>`. `ClassMeta<T>` still works as the argument because `ClassMeta extends BeanTypeInfo` (post Phase C Task 1).
+- **Blocker 4 (BeanMeta.getMarshallingContext)** — Picked **option (a)** — renamed to a new `Object`-returning accessor that holds the marshalling-side resolver, fronted by `BeanTypeInfo.getMarshallingContext()`. Marshalling-side `ClassMeta` provides a covariant `MarshallingContext`-typed override so existing callers compile unchanged.
+- **Blocker 5 (MarshalledBeanMetaInitializer / MarshalledPropertyPostProcessor SPI)** — Two new commons-side SPI interfaces:
+  - `org.apache.juneau.commons.bean.BeanMetaInitializer` — with `buildBeanRegistry(...)`, `findTypeNameInParents(...)`, `resolveTypePropertyName(...)`, `findMarshalledTypeName(...)`, `hasBeanRegistrationAnnotation(...)`, `buildBeanFilter(BeanTypeInfo<?>)`. Has a `NOOP` default. `MarshalledBeanMetaInitializer` (marshalling-side) implements it and exposes `INSTANCE`.
+  - `org.apache.juneau.commons.bean.BeanPropertyPostProcessor` — with `process(Object marshallingContext, Object builder)`. Has a `NOOP` default. `MarshalledPropertyPostProcessor` (marshalling-side) implements it and casts the inputs back to `MarshallingContext` / `BeanPropertyMeta.Builder` internally.
+  - `BeanConfigContext` exposes both via `getBeanMetaInitializer()` / `getBeanPropertyPostProcessor()`. `MarshallingContext` wires the marshalling-side instances in via `BeanConfigContext.create()`.
+  - `BeanMeta` calls `config.getBeanMetaInitializer().X(...)` and `config.getBeanPropertyPostProcessor().process(...)` instead of static helper calls.
+
+### Build / test status
+
+- `mvn clean compile -pl juneau-core/juneau-commons -am` — **GREEN** (standalone, no `juneau-marshall` dependency).
+- `mvn clean install -DskipTests` — **GREEN** (all 16 modules build).
+- `python3 scripts/test.py --test-only` — **GREEN** (full test suite passes).
+
+### Visibility changes required by the move
+
+Several previously-protected or package-private members had to be widened so that marshalling-side callers (and `juneau-marshall-rdf` extensions) can still reach them after the package boundary changed:
+
+- `BeanMeta.BeanMetaValue` record made `public` (and its `optBeanMeta()` accessor).
+- `BeanMeta` accessors `getConstructor()`, `getConstructorArgs()`, `hasConstructor()`, `newBean(Object)` widened `protected → public`.
+- `BeanMap` constructor `(T, BeanMeta<T>)` and `setMarshallingSession(BeanSession)` widened `protected → public`.
+- `BeanPropertyMeta.Builder` fields (`innerField`, `getter`, `setter`, `rawTypeMeta`, `swap`, `readTransform`, `writeTransform`, `dictionaryClasses`, `isUri`, `typeMeta`) widened package-private → `public` (consumed by `MarshalledPropertyPostProcessor`).
+- `BeanPropertyValue.properties()` widened `protected → public` (consumed by `BeanPropertyValue_Test`).
+
+### Import sweep counts (uncommitted working tree)
+
+- 141 files updated in the automated sweep that added `import org.apache.juneau.commons.bean.X` for the 7 moved classes.
+- 5 manual import fixups for files the sweep missed: `CsvParserSession`, `ParquetSerializerSession`, `YamlParserSession`, `ParquetSchemaBuilder`, `TomlParserSession`, plus two `juneau-marshall-rdf` parser sessions (`RdfParserSession`, `RdfStreamParserSession`) and one rest-server file (`RestRequest`).
+
+### Follow-up checkpoints (not part of this move)
+
+- Release notes / migration guide entries for the package move (`org.apache.juneau.Bean{Map,Meta,PropertyMeta,...}` → `org.apache.juneau.commons.bean.*`) in `juneau-docs/docs/pages/release-notes/9.5.0.md`.
+- `package-info.java` for `org.apache.juneau.commons.bean` — verify it covers the new arrivals.
+- Eventual: move `BeanRegistry` itself to commons (currently `BeanRegistry` implements `BeanRegistryLookup` from marshalling-side; deferred until type-resolution code is similarly decoupled).
+
+---
+
 ## Status (Phase C Task 5 Step F — import cleanup landed, uncommitted)
 
 **Step F audit follow-up — Tasks 1–8 LANDED in the working tree (uncommitted).** Build + full test green (`scripts/test.py --full`). The 7 bean-runtime files now import only JDK packages + `org.apache.juneau.commons.*` (plus `org.apache.juneau.BeanMeta.MethodType.*` static self-import on `BeanMeta`).

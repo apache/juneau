@@ -32,6 +32,8 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.commons.bean.BeanMeta;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Serializes POJO models to XML.

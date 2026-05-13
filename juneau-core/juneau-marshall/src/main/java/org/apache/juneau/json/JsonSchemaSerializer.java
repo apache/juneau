@@ -28,6 +28,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Serializes POJO metadata to HTTP responses as JSON-Schema.

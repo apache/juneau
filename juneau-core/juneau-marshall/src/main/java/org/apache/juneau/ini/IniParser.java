@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses INI-formatted text into POJO models.

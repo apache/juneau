@@ -41,6 +41,9 @@ import org.apache.juneau.xml.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
 import org.apache.jena.util.iterator.*;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanMeta;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfParser}.

@@ -42,6 +42,9 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanMapEntry;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * ContextSession object that lives for the duration of a single use of {@link HtmlParser}.

@@ -34,6 +34,8 @@ import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.commons.bean.BeanMeta;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Serializes POJOs to RDF.

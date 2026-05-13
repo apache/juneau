@@ -17,6 +17,7 @@
 package org.apache.juneau.bson;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on bean properties specific to the BSON serializers and parsers pulled from the {@link org.apache.juneau.bson.annotation.Bson @Bson}

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.commons.bean;
 
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -121,7 +121,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param bean The bean to wrap inside this map.
 	 * @param meta The metadata associated with the bean class.
 	 */
-	protected BeanMap(T bean, BeanMeta<T> meta) {
+	public BeanMap(T bean, BeanMeta<T> meta) {
 		this.bean = bean;
 		this.meta = meta;
 		if (ne(meta.getConstructorArgs()))
@@ -141,7 +141,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * @param value The bean session that produced this bean map.  Typically a {@link org.apache.juneau.MarshallingSession}.
 	 */
-	protected void setMarshallingSession(BeanSession value) {
+	public void setMarshallingSession(BeanSession value) {
 		this.session = value;
 	}
 

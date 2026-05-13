@@ -27,6 +27,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session object for {@link JcsSerializer} that produces RFC 8785 canonical JSON.

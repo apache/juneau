@@ -18,6 +18,7 @@ package org.apache.juneau.plaintext;
 
 import org.apache.juneau.*;
 import org.apache.juneau.plaintext.annotation.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on bean properties specific to the PlainText serializers and parsers pulled from the {@link PlainText @PlainText}

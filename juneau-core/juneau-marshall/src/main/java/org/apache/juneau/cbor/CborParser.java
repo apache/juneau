@@ -24,6 +24,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses CBOR streams (RFC 8949) into POJO models.

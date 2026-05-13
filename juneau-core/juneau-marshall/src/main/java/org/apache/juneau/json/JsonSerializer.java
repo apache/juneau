@@ -32,6 +32,7 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json5.Json5Serializer;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Serializes POJO models to RFC 8259 JSON.

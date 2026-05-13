@@ -24,6 +24,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.commons.bean.BeanMap;
 
 /**
  * Used for fluent assertion calls against lists of beans.

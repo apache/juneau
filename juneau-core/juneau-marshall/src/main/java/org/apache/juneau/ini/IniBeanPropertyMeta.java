@@ -19,6 +19,7 @@ package org.apache.juneau.ini;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.ini.annotation.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on bean properties specific to INI serializers and parsers, from {@link Ini @Ini}.

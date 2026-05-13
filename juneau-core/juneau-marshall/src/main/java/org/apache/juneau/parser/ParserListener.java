@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Class for listening for certain parse events during a document parse.

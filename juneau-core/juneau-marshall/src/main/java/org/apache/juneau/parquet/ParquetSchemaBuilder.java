@@ -32,10 +32,10 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.juneau.MarshallingContext;
-import org.apache.juneau.BeanPropertyMeta;
 import org.apache.juneau.ClassMeta;
 import org.apache.juneau.annotation.ParentProperty;
 import org.apache.juneau.commons.reflect.AnnotationProvider;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Builds Parquet schema (list of SchemaElement) from Juneau bean ClassMeta.

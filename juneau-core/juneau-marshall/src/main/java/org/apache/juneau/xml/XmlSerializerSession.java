@@ -513,7 +513,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {
 				var pMeta = p.getMeta();
 				if (pMeta.canRead()) {
-					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta, p.getClassMeta());
+					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta, (ClassMeta<?>) p.getClassMeta());
 					if (kv.isEmpty())
 						continue;
 					var key = kv.get().getKey();
@@ -549,12 +549,12 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		for (var p : lp) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			if (pMeta.canRead()) {
-				var cMeta = p.getClassMeta();
+				ClassMeta<?> cMeta = (ClassMeta<?>) p.getClassMeta();
 
 				var n = p.getName();
 				if (n.equals(contentProperty)) {
 					content = p.getValue();
-					contentType = p.getClassMeta();
+					contentType = (ClassMeta<?>) p.getClassMeta();
 					hasContent = true;
 					cf = xbm.getContentFormat();
 					if (cf.isOneOf(MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT))

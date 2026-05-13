@@ -32,6 +32,8 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.commons.bean.BeanMeta;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses RDF into POJOs.

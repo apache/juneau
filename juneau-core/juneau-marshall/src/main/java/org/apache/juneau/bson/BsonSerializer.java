@@ -25,6 +25,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Serializes POJO models to BSON (Binary JSON).

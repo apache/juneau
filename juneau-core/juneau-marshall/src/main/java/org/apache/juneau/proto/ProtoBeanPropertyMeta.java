@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.proto.annotation.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on bean properties specific to the Proto serializers and parsers pulled from the {@link Proto @Proto}

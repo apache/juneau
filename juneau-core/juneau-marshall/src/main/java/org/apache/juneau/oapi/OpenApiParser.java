@@ -29,6 +29,7 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.uon.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * OpenAPI part parser.

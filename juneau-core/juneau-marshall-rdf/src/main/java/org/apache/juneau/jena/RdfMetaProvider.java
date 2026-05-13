@@ -18,6 +18,8 @@ package org.apache.juneau.jena;
 
 import org.apache.juneau.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.commons.bean.BeanMeta;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Interface for providing access to {@link RdfClassMeta}, {@link RdfBeanMeta}, and {@link RdfBeanPropertyMeta} objects.

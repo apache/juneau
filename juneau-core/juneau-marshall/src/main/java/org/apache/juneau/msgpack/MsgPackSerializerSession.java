@@ -32,6 +32,9 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.BeanPropertyValue;
 
 /**
  * Session object that lives for the duration of a single use of {@link MsgPackSerializer}.
@@ -325,7 +328,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		values.forEach(x -> {
 			BeanPropertyMeta pMeta = x.getMeta();
 			if (pMeta.canRead()) {
-				var cMeta = x.getClassMeta();
+				ClassMeta<?> cMeta = (ClassMeta<?>) x.getClassMeta();
 				String key = x.getName();
 				Object value = x.getValue();
 				serializeAnything(out, key, null, null, null);
@@ -374,7 +377,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	}
 
 	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
-		var aType = push2(v.getName(), v.getValue(), v.getClassMeta());
+		var aType = push2(v.getName(), v.getValue(), (ClassMeta<?>) v.getClassMeta());
 		if (nn(aType))
 			pop();
 		return aType == null;

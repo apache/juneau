@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest;
 
+import org.apache.juneau.commons.bean.BeanMeta;
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.http.StringRanges;
 import static java.util.Optional.*;

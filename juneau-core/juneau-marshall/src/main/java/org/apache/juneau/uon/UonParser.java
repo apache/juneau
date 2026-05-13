@@ -33,6 +33,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.

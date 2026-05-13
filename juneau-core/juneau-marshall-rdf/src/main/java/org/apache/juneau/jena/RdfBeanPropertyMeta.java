@@ -23,6 +23,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on bean properties specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation

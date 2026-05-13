@@ -17,6 +17,7 @@
 package org.apache.juneau.hjson;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on bean properties specific to Hjson serializers and parsers.

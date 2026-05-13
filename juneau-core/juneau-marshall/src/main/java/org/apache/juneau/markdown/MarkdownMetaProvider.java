@@ -17,6 +17,7 @@
 package org.apache.juneau.markdown;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Interface for providing access to {@link MarkdownClassMeta} and {@link MarkdownBeanPropertyMeta} objects.

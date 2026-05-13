@@ -35,6 +35,8 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.commons.bean.BeanMeta;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSchemaSerializer}.
