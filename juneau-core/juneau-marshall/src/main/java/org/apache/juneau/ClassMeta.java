@@ -73,7 +73,7 @@ import org.apache.juneau.swap.*;
 	"java:S1452",  // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, etc. for element/component types
 	"java:S6539"   // Monster Class: ClassMeta is a focused reflection-metadata cache; splitting would increase coupling
 })
-public class ClassMeta<T> extends BeanTypeInfo<T> {
+public class ClassMeta<T> extends BeanInfo<T> {
 
 	private static class Categories {
 		int bits;
@@ -470,7 +470,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 * Returns the {@link MarshallingContext} that created this object.
 	 *
 	 * <p>
-	 * Covariantly overrides {@link BeanTypeInfo#getMarshallingContext()} to narrow the return type from
+	 * Covariantly overrides {@link BeanInfo#getMarshallingContext()} to narrow the return type from
 	 * {@link Object} (commons SPI) back to {@link MarshallingContext} (marshalling-side concrete type).
 	 *
 	 * @return The bean context.
@@ -483,7 +483,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	 * {@link ClassMeta}.
 	 *
 	 * <p>
-	 * Satisfies the {@link BeanTypeInfo#getBeanConfigContext()} commons SPI contract.
+	 * Satisfies the {@link BeanInfo#getBeanConfigContext()} commons SPI contract.
 	 *
 	 * @return The bean-modeling configuration of the marshalling context.  Never <jk>null</jk>.
 	 */
@@ -807,13 +807,13 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 
 	/**
 	 * Returns the type parameters for this class as a {@link Type} array suitable for passing to
-	 * {@link org.apache.juneau.commons.conversion.Converter#to(Object, Type, Type...)}.
+	 * {@link Converter#to(Object, Type, Type...)}.
 	 *
 	 * <p>
 	 * The returned array depends on the kind of type:
 	 * <ul>
-	 * 	<li>{@link java.util.Map} types: {@code [keyType, valueType]}
-	 * 	<li>{@link java.util.Collection} and {@link java.util.Optional} types: {@code [elementType, elementType.getParameters()...]}
+	 * 	<li>{@link Map} types: {@code [keyType, valueType]}
+	 * 	<li>{@link Collection} and {@link Optional} types: {@code [elementType, elementType.getParameters()...]}
 	 * 		— the element raw class followed by the element's own parameters, recursively flattened by one level.
 	 * 	<li>All other types: empty array.
 	 * </ul>
@@ -1208,22 +1208,6 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	public boolean isNumber() { return cat.is(NUMBER); }
 
 	/**
-	 * Returns <jk>true</jk> if this class is {@link Object}.
-	 *
-	 * @return <jk>true</jk> if this class is {@link Object}.
-	 */
-	@Override
-	public boolean isObject() { return is(Object.class); }
-
-	/**
-	 * Returns <jk>true</jk> if this class is a subclass of {@link Optional}.
-	 *
-	 * @return <jk>true</jk> if this class is a subclass of {@link Optional}.
-	 */
-	@Override
-	public boolean isOptional() { return is(Optional.class); }
-
-	/**
 	 * Returns <jk>true</jk> if this class is a {@link Reader}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Reader}.
@@ -1245,7 +1229,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	public boolean isShort() { return isAny(Short.class, short.class); }
 
 	/**
-	 * Returns <jk>true</jk> if this class is a subclass of {@link BaseStream} (includes {@link java.util.stream.Stream}).
+	 * Returns <jk>true</jk> if this class is a subclass of {@link BaseStream} (includes {@link Stream}).
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link BaseStream}.
 	 * @since 9.2.1
@@ -1268,9 +1252,9 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 	public boolean isTemporal() { return cat.is(TEMPORAL); }
 
 	/**
-	 * Returns <jk>true</jk> if this class is a {@link java.time.Duration}.
+	 * Returns <jk>true</jk> if this class is a {@link Duration}.
 	 *
-	 * @return <jk>true</jk> if this class is a {@link java.time.Duration}.
+	 * @return <jk>true</jk> if this class is a {@link Duration}.
 	 */
 	public boolean isDuration() { return cat.is(DURATION); }
 
@@ -1701,7 +1685,7 @@ public class ClassMeta<T> extends BeanTypeInfo<T> {
 		var bt = ap.find(BeanType.class, this);
 		if (l.isEmpty() && bt.isEmpty())
 			return null;
-		return MarshalledFilter.create(inner())
+		return MarshalledFilter.create(this)
 			.applyAnnotations(reverse(l.stream().map(AnnotationInfo::inner).toList()))
 			.applyBeanTypeAnnotations(reverse(bt.stream().map(AnnotationInfo::inner).toList()))
 			.build();

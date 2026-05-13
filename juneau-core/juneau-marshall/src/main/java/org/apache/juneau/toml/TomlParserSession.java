@@ -380,7 +380,7 @@ public class TomlParserSession extends ReaderParserSession {
 				continue;
 			if (pMeta == null)
 				throw new ParseException(this, "Unknown property ''{0}''", key);
-			ClassMeta<?> targetType = (ClassMeta<?>) pMeta.getClassMeta();
+			ClassMeta<?> targetType = (ClassMeta<?>) pMeta.getBeanInfo();
 			Object converted = convertValue(val, targetType);
 			bm.put(key, converted);
 		}

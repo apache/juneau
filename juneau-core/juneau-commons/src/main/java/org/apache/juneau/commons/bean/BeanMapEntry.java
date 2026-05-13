@@ -42,6 +42,11 @@ import java.util.*;
  * 	<jv>birthDate</jv>.setValue(<js>"'1901-03-03T04:05:06-5000'"</js>);
  * </p>
  *
+ * <h5 class='topic'>Thread safety</h5>
+ *
+ * This is a lightweight immutable view over a {@link BeanMap}.
+ * Its thread-safety characteristics are the same as the backing {@link BeanMap}.
+ *
  */
 @SuppressWarnings({
 	"java:S1452"  // Wildcard required - BeanMap<?> for generic bean map entries

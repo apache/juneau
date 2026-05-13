@@ -627,7 +627,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the request form-data parameter of the specified type.
 	 *
 	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.FormData} annotation
+	 * Type must have a name specified via the {@link FormData} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
 	 * @param <T> The bean type to create.
@@ -708,7 +708,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the request header of the specified type.
 	 *
 	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Header} annotation
+	 * Type must have a name specified via the {@link Header} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
 	 * <p>
@@ -906,7 +906,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object...)}
+	 * 	<li class='jm'>{@link RestRequest#getMessage(String,Object...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LocalizedMessages">Localized Messages</a>
 	 * </ul>
 	 *
@@ -967,7 +967,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the request path parameter of the specified type.
 	 *
 	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Path} annotation
+	 * Type must have a name specified via the {@link Path} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
 	 * @param <T> The bean type to create.
@@ -1040,7 +1040,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the request query parameter of the specified type.
 	 *
 	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Query} annotation
+	 * Type must have a name specified via the {@link Query} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
 	 * @param <T> The bean type to create.
@@ -1177,7 +1177,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	})
 	public <T> T getRequest(RequestBeanMeta rbm) {
 		try {
-			var c = (Class<T>)rbm.getClassMeta().inner();
+			var c = (Class<T>)rbm.getBeanInfo().inner();
 			final MarshallingSession bs = getMarshallingSession();
 			final BeanMeta<T> bm = bs.getBeanMeta(c);
 			return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
@@ -1382,7 +1382,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
+	 * 	<li class='jm'>{@link RestContext#getVarResolver()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * </ul>
 	 *

@@ -239,7 +239,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 		for (var x : values) {
 			var pMeta = x.getMeta();
 			if (pMeta.canRead())
-				writeElement(out, x.getName(), x.getValue(), (ClassMeta<?>) x.getClassMeta(), pMeta);
+				writeElement(out, x.getName(), x.getValue(), (ClassMeta<?>) x.getBeanInfo(), pMeta);
 		}
 	}
 
@@ -277,7 +277,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 	}
 
 	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
-		var aType = push2(v.getName(), v.getValue(), (ClassMeta<?>) v.getClassMeta());
+		var aType = push2(v.getName(), v.getValue(), (ClassMeta<?>) v.getBeanInfo());
 		if (nn(aType))
 			pop();
 		return aType == null;

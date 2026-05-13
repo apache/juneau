@@ -966,7 +966,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 			var suffix = ".list.element.";
 			var suffixStart = listProp.length() + suffix.length();
 			var pMeta = rowRelPath.length() > suffixStart ? bm.getPropertyMeta(listProp) : null;
-			var propClassMeta = pMeta != null ? (ClassMeta<?>) pMeta.getClassMeta() : null;
+			var propClassMeta = pMeta != null ? (ClassMeta<?>) pMeta.getBeanInfo() : null;
 			var elemType = propClassMeta != null && (propClassMeta.isCollection() || propClassMeta.isArray()) ? propClassMeta.getElementType() : null;
 			if (elemType != null && elemType.isBean()) {
 				var elementProp = rowRelPath.substring(suffixStart);
@@ -1081,13 +1081,13 @@ public class ParquetParserSession extends InputStreamParserSession {
 		var bm = elementType.getBeanMeta();
 		if (bm == null)
 			return;
-		boolean hasOptional = bm.getProperties().values().stream().anyMatch(p -> p.getClassMeta() != null && p.getClassMeta().isOptional());
+		boolean hasOptional = bm.getProperties().values().stream().anyMatch(p -> p.getBeanInfo() != null && p.getBeanInfo().isOptional());
 		if (!hasOptional)
 			return;
 		for (var pMeta : bm.getProperties().values()) {
 			var name = pMeta.getName();
 			var val = row.get(name);
-			var propType = (ClassMeta<?>) pMeta.getClassMeta();
+			var propType = (ClassMeta<?>) pMeta.getBeanInfo();
 			if (val == null)
 				continue;
 			if (propType.isOptional() && val instanceof Map<?,?> m) {

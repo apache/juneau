@@ -52,7 +52,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 			"java:S3776" // Cognitive complexity acceptable for XML bean metadata building
 		})
 		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
-			var bmcm = (ClassMeta<?>) beanMeta.getClassMeta();
+			var bmcm = (ClassMeta<?>) beanMeta.getBeanInfo();
 			var c = bmcm.inner();
 			var ci = bmcm;
 			var defaultFormat = Value.<XmlFormat>empty();
@@ -72,7 +72,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 
 			beanMeta.getProperties().values().forEach(p -> {
 				var xf = mp.getXmlBeanPropertyMeta(p).getXmlFormat();
-				var pcm = (ClassMeta<?>) p.getClassMeta();
+				var pcm = (ClassMeta<?>) p.getBeanInfo();
 				if (xf == ATTR) {
 					attrs.put(p.getName(), p);
 				} else if (xf == ELEMENT) {
@@ -133,7 +133,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	public XmlBeanMeta(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 		super(beanMeta);
 
-		var c = beanMeta.getClassMeta().inner();
+		var c = beanMeta.getBeanInfo().inner();
 		var b = new XmlBeanMetaBuilder(beanMeta, mp);
 
 		attrs = u(b.attrs);

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.bean;
 
+import java.util.Collection;
+import java.util.Map;
 /**
  * Minimum runtime surface that the bean-modeling layer needs from a marshalling session.
  *
@@ -36,6 +38,9 @@ package org.apache.juneau.commons.bean;
  * as {@code ClassMeta<?>} — a marshalling-side type that {@code commons.bean} cannot reference.  Callers in
  * the bean-modeling layer pass through whatever opaque type-metadata handle they received; the
  * {@code MarshallingSession} implementation interprets it as a {@code ClassMeta}.
+ *
+ * <h5 class='topic'>Thread safety</h5>
+ * Thread safety depends on implementation.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='ja'>{@link BeanConfigContext} — bean-modeling configuration counterpart.
@@ -71,7 +76,7 @@ public interface BeanSession {
 	Object convertToMemberType(Object outer, Object value, Object targetType);
 
 	/**
-	 * Parses the specified JSON-formatted character sequence into a {@link java.util.Map}.
+	 * Parses the specified JSON-formatted character sequence into a {@link Map}.
 	 *
 	 * <p>
 	 * Used by {@code BeanPropertyMeta.setPropertyValue} when a {@link CharSequence} value is supplied for a
@@ -87,7 +92,7 @@ public interface BeanSession {
 	java.util.Map<?,?> parseToMap(CharSequence value);
 
 	/**
-	 * Parses the specified JSON-formatted character sequence into a {@link java.util.Collection}.
+	 * Parses the specified JSON-formatted character sequence into a {@link Collection}.
 	 *
 	 * <p>
 	 * Used by {@code BeanPropertyMeta.setPropertyValue} when a {@link CharSequence} value is supplied for a

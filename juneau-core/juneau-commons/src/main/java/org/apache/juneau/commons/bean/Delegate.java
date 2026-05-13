@@ -26,18 +26,18 @@ package org.apache.juneau.commons.bean;
  * For example, {@code BeanMap} is a map representation of a bean.
  *
  * <p>
- * The returned type info is a {@link BeanTypeInfo} so the bean-modeling layer does not depend
+ * The returned type info is a {@link BeanInfo} so the bean-modeling layer does not depend
  * on the marshalling-side {@code ClassMeta}.  Marshalling-side implementations narrow the return
- * type via Java covariant returns (e.g. {@code ClassMeta<T> getClassMeta()}).
+ * type via Java covariant returns (e.g. {@code ClassMeta<T> getBeanInfo()}).
  *
  * @param <T> The represented class type.
  */
 public interface Delegate<T> {
 
 	/**
-	 * The {@link BeanTypeInfo} of the class of the represented object.
+	 * The {@link BeanInfo} of the class of the represented object.
 	 *
 	 * @return The class type of the represented object.
 	 */
-	BeanTypeInfo<T> getClassMeta();
+	BeanInfo<T> getBeanInfo();
 }

@@ -95,6 +95,6 @@ public class BeanDescription {
 		properties = new BeanPropertyDescription[bm.getProperties().size()];
 		int i = 0;
 		for (var pm : bm.getProperties().values())
-			properties[i++] = new BeanPropertyDescription(pm.getName(), (ClassMeta<?>) pm.getClassMeta());
+			properties[i++] = new BeanPropertyDescription(pm.getName(), (ClassMeta<?>) pm.getBeanInfo());
 	}
 }

@@ -44,6 +44,9 @@ import org.apache.juneau.commons.reflect.ClassInfo;
  * (no marshalling-side help available).  {@code @BeanType} reads remain functional via the configured
  * {@link BeanConfigContext#getAnnotationProvider()}.
  *
+ * <h5 class='topic'>Thread safety</h5>
+ * Thread safety depends on implementation.
+ *
  * @see BeanConfigContext.Builder#beanMetaInitializer(BeanMetaInitializer)
  */
 public interface BeanMetaInitializer {
@@ -88,7 +91,7 @@ public interface BeanMetaInitializer {
 		}
 
 		@Override
-		public BeanFilter buildBeanFilter(BeanTypeInfo<?> cm) {
+		public BeanFilter buildBeanFilter(BeanInfo<?> cm) {
 			return null;
 		}
 	};
@@ -164,5 +167,5 @@ public interface BeanMetaInitializer {
 	 * @param cm The bean type info.
 	 * @return The bean filter, or <jk>null</jk>.
 	 */
-	BeanFilter buildBeanFilter(BeanTypeInfo<?> cm);
+	BeanFilter buildBeanFilter(BeanInfo<?> cm);
 }

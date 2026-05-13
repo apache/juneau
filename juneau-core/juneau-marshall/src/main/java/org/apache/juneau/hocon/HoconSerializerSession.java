@@ -132,7 +132,7 @@ public class HoconSerializerSession extends WriterSerializerSession {
 		}
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 			if (canIgnoreValue(cMeta, key, value))

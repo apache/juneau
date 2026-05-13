@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.beans.Introspector;
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.*;
 
@@ -60,6 +62,11 @@ import org.apache.juneau.commons.reflect.*;
  * 		.unsortedProperties(<jk>true</jk>)
  * 		.build();
  * </p>
+ *
+ * <h5 class='topic'>Thread safety</h5>
+ *
+ * {@link BeanConfigContext} instances are immutable and thread-safe.
+ * {@link Builder} instances are mutable and not thread-safe.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='ja'>{@link BeanConfig @BeanConfig} — the annotation form.
@@ -212,7 +219,7 @@ public final class BeanConfigContext {
 	public boolean isBeansRequireDefaultConstructor() { return beansRequireDefaultConstructor; }
 
 	/**
-	 * Returns whether classes must implement {@link java.io.Serializable} to be considered beans.
+	 * Returns whether classes must implement {@link Serializable} to be considered beans.
 	 *
 	 * @return <jk>true</jk> if {@code Serializable} is required.
 	 */
@@ -307,7 +314,7 @@ public final class BeanConfigContext {
 	public boolean isUseInterfaceProxies() { return useInterfaceProxies; }
 
 	/**
-	 * Returns whether {@link java.beans.Introspector} should be used to discover bean properties.
+	 * Returns whether {@link Introspector} should be used to discover bean properties.
 	 *
 	 * @return <jk>true</jk> if the JavaBeans introspector is used.
 	 */
@@ -550,7 +557,7 @@ public final class BeanConfigContext {
 		public Builder beansRequireDefaultConstructor(boolean value) { beansRequireDefaultConstructor = value; return this; }
 
 		/**
-		 * Toggles the requirement that beans implement {@link java.io.Serializable}.
+		 * Toggles the requirement that beans implement {@link Serializable}.
 		 *
 		 * @param value The new value.
 		 * @return This object.
@@ -646,7 +653,7 @@ public final class BeanConfigContext {
 		public Builder useInterfaceProxies(boolean value) { useInterfaceProxies = value; return this; }
 
 		/**
-		 * Toggles use of {@link java.beans.Introspector} for property discovery.
+		 * Toggles use of {@link Introspector} for property discovery.
 		 *
 		 * @param value The new value.
 		 * @return This object.

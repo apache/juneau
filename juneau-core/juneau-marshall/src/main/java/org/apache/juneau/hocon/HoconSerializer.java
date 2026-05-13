@@ -18,10 +18,15 @@ package org.apache.juneau.hocon;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import java.net.URI;
+import org.apache.juneau.swap.ObjectSwap;
 
 /**
  * Serializes POJO models to HOCON (Human-Optimized Config Object Notation).
@@ -41,9 +46,9 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * The conversion is as follows:
  * <ul class='spaced-list'>
  * 	<li>
- * 		{@link java.util.HashMap HashMap} / bean → HOCON object with unquoted keys and <c>=</c> separator (<c>{ key = value }</c>).
+ * 		{@link HashMap HashMap} / bean → HOCON object with unquoted keys and <c>=</c> separator (<c>{ key = value }</c>).
  * 	<li>
- * 		{@link java.util.Collection Collection} / array → HOCON array (<c>[a, b, c]</c>).
+ * 		{@link Collection Collection} / array → HOCON array (<c>[a, b, c]</c>).
  * 	<li>
  * 		{@link String String} (simple, no special chars) → unquoted string (<c>name = myapp</c>).
  * 	<li>
@@ -57,7 +62,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * 	<li>
  * 		<c>null</c> → <c>null</c> keyword.
  * 	<li>
- * 		Non-primitive types (e.g. {@link java.util.Date Date}, {@link java.net.URI URI}) → converted via {@link org.apache.juneau.swap.ObjectSwap} before serialization.
+ * 		Non-primitive types (e.g. {@link Date Date}, {@link URI URI}) → converted via {@link ObjectSwap} before serialization.
  * </ul>
  *
  * <h5 class='topic'>Behavior-specific subclasses</h5>

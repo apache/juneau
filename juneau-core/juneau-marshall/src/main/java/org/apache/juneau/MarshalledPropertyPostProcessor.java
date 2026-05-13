@@ -68,16 +68,17 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	private MarshalledPropertyPostProcessor() {}
 
 	/**
-	 * SPI entry point — narrows the opaque marshalling context and builder, then dispatches to {@link #process(MarshallingContext, BeanPropertyMeta.Builder)}.
+	 * SPI entry point — narrows the opaque marshalling context, then dispatches to
+	 * {@link #process(MarshallingContext, BeanPropertyMeta.Builder)}.
 	 *
 	 * @param marshallingContext The marshalling-side context.  Must not be <jk>null</jk> on the marshalling path.
-	 * @param builder The bean-property builder.  Must be a {@link BeanPropertyMeta} builder instance.
+	 * @param builder The bean-property builder.  Must not be <jk>null</jk>.
 	 */
 	@Override
-	public void process(Object marshallingContext, Object builder) {
+	public void process(Object marshallingContext, BeanPropertyMeta.Builder builder) {
 		if (marshallingContext == null)
 			return;
-		process((MarshallingContext) marshallingContext, (BeanPropertyMeta.Builder) builder);
+		process((MarshallingContext) marshallingContext, builder);
 	}
 
 	/**
@@ -151,8 +152,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 * <p>
 	 * After {@link BeanPropertyMeta.Builder#validate validate()} succeeds, the builder's {@code swap} and
 	 * {@code rawTypeMeta} fields describe whether the property has a configured {@link ObjectSwap} (via
-	 * {@link org.apache.juneau.annotation.MarshalledProp @MarshalledProp(format=...)} or
-	 * {@link org.apache.juneau.annotation.Swap @Swap}) and whether the property's raw type has child swaps registered
+	 * {@link MarshalledProp @MarshalledProp(format=...)} or
+	 * {@link Swap @Swap}) and whether the property's raw type has child swaps registered
 	 * on it.  This method packages those concerns into install-time closures so the marshalling-side swap behavior is
 	 * established as data on the {@link BeanPropertyMeta} rather than executed by the bean-modeling
 	 * {@link BeanPropertyMeta#get get}/{@link BeanPropertyMeta#set set} methods themselves.

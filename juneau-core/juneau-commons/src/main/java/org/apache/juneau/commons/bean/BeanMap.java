@@ -36,19 +36,25 @@ import org.apache.juneau.commons.reflect.*;
  * object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.
  *
  * <p>
- * Create instances through the bean API (for example via {@link BeanMap#of(Object)} or a {@link BeanSession} entry point).
+ * Create instances through the bean API.  For the bean-modeling-only path use {@link BeanMap#of(Object)} or
+ * {@link BeanMap#of(Object, BeanMeta)}; the marshalling layer's {@code MarshallingSession#toBeanMap(Object)}
+ * additionally wires a {@link BeanSession} into the resulting map for session-aware behavior.
  *
  * <h5 class='topic'>Bean property order</h5>
  *
  * The order of the properties returned by the {@link Map#keySet() keySet()} and {@link Map#entrySet() entrySet()}
- * methods are as follows:
+ * methods is as follows:
  * <ul class='spaced-list'>
  * 	<li>
- * 		If {@code @Marshalled} annotation is specified on class, then the order is the same as the list of properties
- * 		in the annotation.
+ * 		If the {@link BeanType @BeanType} annotation specifies an explicit property list via
+ * 		{@link BeanType#properties() properties()} (or its synonym {@link BeanType#p() p()}),
+ * 		the order matches the annotation.
  * 	<li>
- * 		If {@code @Marshalled} annotation is not specified on the class, then the order is the same as that returned
- * 		by the {@link java.beans.BeanInfo} class (i.e. ordered by definition in the class).
+ * 		Otherwise, if {@link BeanType#unsorted() @BeanType(unsorted=true)} is set on the class, or
+ * 		{@link BeanConfigContext#isUnsortedProperties()} is enabled on the session, properties are returned
+ * 		in their natural reflection order.
+ * 	<li>
+ * 		Otherwise, properties are returned in alphabetical order.
  * </ul>
  *
  * <h5 class='topic'>POJO swaps</h5>
@@ -56,6 +62,12 @@ import org.apache.juneau.commons.reflect.*;
  * If {@code ObjectSwap} transforms are defined on the class types of the properties of this bean or the bean properties
  * themselves, the {@link #get(Object)} and {@link #put(String, Object)} methods will automatically transform the
  * property value to and from the serialized form.
+ *
+ * <h5 class='topic'>Thread safety</h5>
+ *
+ * Instances are not thread-safe.
+ * This type is mutable (wrapped bean reference, property caches, and optional session pointer) and does not perform
+ * internal synchronization.
  *
  *
  * @param <T> Specifies the type of object that this map encapsulates.
@@ -114,7 +126,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * <p>
 	 * Bean-modeling-only constructor. Does not carry a {@link BeanSession} reference.
-	 * The marshalling layer wires the session in via {@link #setMarshallingSession(BeanSession)}
+	 * The marshalling layer wires the session in via {@link #setBeanSession(BeanSession)}
 	 * immediately after construction.
 	 *
 	 * @param bean The bean to wrap inside this map.
@@ -132,16 +144,15 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Wires this bean map to a {@link BeanSession}.
 	 *
 	 * <p>
-	 * Transitional API used by the marshalling layer (e.g. {@code MarshallingSession#toBeanMap(Object)})
-	 * to wire a session into a {@link BeanMap} immediately after construction. Required for any
-	 * marshalling-side operation that depends on session-aware behavior (type conversion, child
-	 * collection construction, etc.). Will be removed when {@link BeanMap} is fully decoupled from
-	 * the marshalling layer (TODO-5 Step 5+).
+	 * Called by marshalling-side construction paths (for example,
+	 * {@code MarshallingSession#toBeanMap(Object)}) to wire in the session used by session-aware
+	 * operations (type conversion, child collection construction, and parser/serializer-backed
+	 * conversions) after bean-modeling construction.
 	 *
 	 * @param value The bean session that produced this bean map.  Typically a marshalling-session implementation.
 	 */
-	public void setMarshallingSession(BeanSession value) {
-		this.session = value;
+	public void setBeanSession(BeanSession value) {
+		session = value;
 	}
 
 	/**
@@ -268,10 +279,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param action The action to perform.
 	 * @return The list of all bean property values.
 	 */
-	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for bean property filtering with predicate
-		"java:S1135"  // TODO: dyna property iteration inefficiency - deferred optimization
-	})
+	@SuppressWarnings("java:S3776") // Cognitive complexity acceptable for bean property filtering with predicate
 	public BeanMap<T> forEachValue(Predicate<Object> valueFilter, BeanPropertyConsumer action) {
 
 		// Normal bean.
@@ -299,22 +307,27 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			});
 
 			forEachProperty(BeanPropertyMeta::isDyna, bpm -> {
+				Map<String,Object> dynaMap;
 				try {
-					// TODO - This is kind of inefficient.
-					Map<String,Object> dynaMap = bpm.getDynaMap(bean);
-					if (nn(dynaMap)) {
-						dynaMap.forEach((k, v) -> {
+					dynaMap = bpm.getDynaMap(bean);
+				} catch (Exception e) {
+					actions.put(bpm.getName(), new BeanPropertyValue(bpm, bpm.getName(), null, e));
+					return;
+				}
+				if (nn(dynaMap)) {
+					dynaMap.forEach((k, v) -> {
+						try {
 							var val = bpm.get(this, k);
 							actions.put(k, new BeanPropertyValue(bpm, k, val, null));
-						});
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+						} catch (Exception e) {
+							actions.put(k, new BeanPropertyValue(bpm, k, null, e));
+						}
+					});
 				}
 			});
 
 			actions.forEach((k, v) -> {
-				if (valueFilter.test(v.getValue()))
+				if (v.getThrown() != null || valueFilter.test(v.getValue()))
 					action.apply(v.getMeta(), v.getName(), v.getValue(), v.getThrown());
 			});
 		}
@@ -339,8 +352,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	Person <jv>person</jv> = <jk>new</jk> Person();
 	 * 	<jv>person</jv>.setBirthDate(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
 	 *
-	 * 	<jc>// Create a bean context and add the ISO8601 date-time swap</jc>
-	 * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsm>create</jsm>().swaps(DateSwap.ISO8601DT.<jk>class</jk>).build();
+	 * 	<jc>// Create a marshalling context and add the ISO8601 date-time swap</jc>
+	 * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsm>create</jsm>().swaps(TemporalDateSwap.IsoInstant.<jk>class</jk>).build();
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
 	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = <jv>marshallingContext</jv>.toBeanMap(<jv>person</jv>);
@@ -402,7 +415,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * <p>
 	 * The post-creation Optional&lt;X&gt; initialization step (which seeds null {@link Optional} properties with
-	 * {@link BeanTypeInfo#getOptionalDefault()}) is skipped for properties built via the bean-modeling-only path
+	 * {@link BeanInfo#getOptionalDefault()}) is skipped for properties built via the bean-modeling-only path
 	 * ({@link BeanMeta#of(Class, BeanConfigContext)}) because per-property type metadata is unavailable;
 	 * those properties are left untouched and any {@link Optional}-typed field stays at its constructor-assigned
 	 * value.
@@ -427,14 +440,14 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		// Initialize any null Optional<X> fields.  Skip properties whose ClassMeta is unavailable
 		// (bean-modeling-only path — Optional handling is a marshalling concern that requires type metadata).
 		meta.getProperties().forEach((k,v) -> {
-			var cm = v.getClassMeta();
+			var cm = v.getBeanInfo();
 			if (nn(cm) && cm.isOptional() && v.get(this, k) == null)
 				v.set(this, k, cm.getOptionalDefault());
 		});
 
 		// Do the same for hidden fields.
 		meta.getHiddenProperties().forEach((k, v) -> {
-			var cm = v.getClassMeta();
+			var cm = v.getBeanInfo();
 			if (nn(cm) && cm.isOptional() && v.get(this, k) == null)
 				v.set(this, k, cm.getOptionalDefault());
 		});
@@ -471,7 +484,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				if (rawVal != null) {
 					var pm = getPropertyMeta(propName);
 					if (pm != null) {
-						var cm = pm.getClassMeta();
+						var cm = pm.getBeanInfo();
 						var needsConversion = !cm.inner().isInstance(rawVal)
 							|| (cm.isCollection() && !cm.getElementType().isObject())
 							|| (cm.isMap() && !cm.getValueType().is(Object.class));
@@ -486,7 +499,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				propertyCache.forEach(this::put);
 				propertyCache = null;
 			} catch (IllegalArgumentException e) {
-				throw bex(e, meta.getClassMeta().inner(), "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getNameSimple(),
+				throw bex(e, meta.getBeanInfo().inner(), "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getNameSimple(),
 					Arrays.toString(getClasses(args)));
 			} catch (Exception e) {
 				throw bex(e);
@@ -501,7 +514,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * <p>
 	 * The returned value is the bean-modeling SPI seam.  Marshalling-side callers needing the concrete
 	 * marshalling-session implementation can cast — every session wired in via
-	 * {@link #setMarshallingSession(BeanSession)} on the marshalling-side path is a
+	 * {@link #setBeanSession(BeanSession)} on the marshalling-side path is currently a
 	 * {@code MarshallingSession}.
 	 *
 	 * @return The bean session that created this bean map.
@@ -509,12 +522,12 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public final BeanSession getBeanSession() { return session; }
 
 	/**
-	 * Returns the {@link BeanTypeInfo} of the wrapped bean.
+	 * Returns the {@link BeanInfo} of the wrapped bean.
 	 *
 	 * @return The class type of the wrapped bean.
 	 */
 	@Override /* Overridden from Delegate */
-	public BeanTypeInfo<T> getClassMeta() { return this.meta.getClassMeta(); }
+	public BeanInfo<T> getBeanInfo() { return this.meta.getBeanInfo(); }
 
 	/**
 	 * Returns the metadata associated with this bean map.
@@ -589,8 +602,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	}
 
 	/**
-	 * Same as {@link #get(Object)} except bypasses the POJO filter associated with the bean property or bean filter
-	 * associated with the bean class.
+	 * Same as {@link #get(Object)} except bypasses any {@code ObjectSwap} associated with the bean property or
+	 * {@link BeanFilter} associated with the bean class.
 	 *
 	 * @param property The name of the property to get.
 	 * @return The raw property value.
@@ -659,8 +672,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person <jv>person</jv> = <jk>new</jk> Person();
 	 *
-	 * 	<jc>// Create a bean context and add the ISO8601 date-time swap</jc>
-	 * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsm>create</jsm>().swaps(DateSwap.ISO8601DT.<jk>class</jk>).build();
+	 * 	<jc>// Create a marshalling context and add the ISO8601 date-time swap</jc>
+	 * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsm>create</jsm>().swaps(TemporalDateSwap.IsoInstant.<jk>class</jk>).build();
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
 	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = <jv>marshallingContext</jv>.toBeanMap(<jv>person</jv>);
@@ -672,8 +685,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param property The name of the property to set.
 	 * @param value The value to set the property to.
 	 * @return
-	 * 	If the bean context setting {@code beanMapPutReturnsOldValue} is <jk>true</jk>, then the old value of the
-	 * 	property is returned.
+	 * 	If the {@code beanMapPutReturnsOldValue} setting is <jk>true</jk> on the session's bean configuration,
+	 * 	then the old value of the property is returned.
 	 * 	Otherwise, this method always returns <jk>null</jk>.
 	 * @throws
 	 * 	RuntimeException if any of the following occur.
@@ -736,9 +749,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (!(o instanceof Map<?,?>))
-			return false;
-		return super.equals(o);
+		return o instanceof Map<?,?> o2 && eq(this, o2, (x, y) -> x.entrySet().equals(y.entrySet()));
 	}
 
 	/**

@@ -204,7 +204,7 @@ final class MarshalledBeanMetaInitializer implements BeanMetaInitializer {
 	 * @return The bean filter, or <jk>null</jk> if no relevant annotations are present.
 	 */
 	@Override
-	public BeanFilter buildBeanFilter(BeanTypeInfo<?> cm) {
+	public BeanFilter buildBeanFilter(BeanInfo<?> cm) {
 		var ap = ((ClassMeta<?>) cm).getMarshallingContext().getAnnotationProvider();
 		var l = ap.find(Marshalled.class, cm);
 		var bt = ap.find(BeanType.class, cm);

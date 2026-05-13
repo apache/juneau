@@ -299,7 +299,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 
 		var checkNull = (Predicate<Object>)(x -> isKeepNullProperties() || nn(x));
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);

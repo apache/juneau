@@ -44,7 +44,7 @@ public class ExtendedClassMeta extends ExtendedMeta {
 	 *
 	 * @return The class metadata that was passed into the constructor.
 	 */
-	protected ClassMeta<?> getClassMeta() { return cm; }
+	protected ClassMeta<?> getBeanInfo() { return cm; }
 
 	/**
 	 * Convenience method for calling {@link ClassMeta#inner()} on the metadata passed to the constructor.

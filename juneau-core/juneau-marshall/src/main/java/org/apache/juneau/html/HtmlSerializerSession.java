@@ -523,7 +523,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	})
 	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws SerializeException {
 
-		var mcm = (ClassMeta<?>) m.getClassMeta();
+		var mcm = (ClassMeta<?>) m.getBeanInfo();
 		HtmlClassMeta cHtml = getHtmlClassMeta(mcm);
 		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
 
@@ -546,7 +546,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
@@ -696,7 +696,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 							String link = null;
 							String anchorText = null;
-							if (! pMeta.getClassMeta().isCollectionOrArray()) {
+							if (! pMeta.getBeanInfo().isCollectionOrArray()) {
 								link = m2.resolveVars(getLink(pMeta));
 								anchorText = m2.resolveVars(getAnchorText(pMeta));
 							}
@@ -711,7 +711,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 							out.cTag();
 							if (nn(link))
 								out.oTag("a").attrUri("href", link).cTag();
-							ContentResult cr = serializeAnything(out, value, (ClassMeta<?>) pMeta.getClassMeta(), p.getKey(), pMeta, 2, false, true);
+							ContentResult cr = serializeAnything(out, value, (ClassMeta<?>) pMeta.getBeanInfo(), p.getKey(), pMeta, 2, false, true);
 							if (cr == CR_ELEMENTS)
 								out.i(i + 2);
 							if (nn(link))
@@ -773,7 +773,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		out.oTag(i, TAG_table);
 
-		if (nn(typeName) && nn(ppMeta) && ppMeta.getClassMeta() != aType)
+		if (nn(typeName) && nn(ppMeta) && ppMeta.getBeanInfo() != aType)
 			out.attr(getBeanTypePropertyName(sType), typeName);
 
 		out.append(">").nl(i + 1);
@@ -926,7 +926,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @param eType The expected type of the object if this is a bean property.
 	 * @param name
 	 * 	The attribute name of this object if this object was a field in a JSON object (i.e. key of a
-	 * 	{@link java.util.Map.Entry} or property name of a bean).
+	 * 	{@link Map.Entry} or property name of a bean).
 	 * @param pMeta The bean property being serialized, or <jk>null</jk> if we're not serializing a bean property.
 	 * @param xIndent The current indentation value.
 	 * @param isRoot <jk>true</jk> if this is the root element of the document.
@@ -983,7 +983,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			if (aType.isDelegate()) {
 				wType = aType;
-				aType = (ClassMeta)((Delegate)o).getClassMeta();
+				aType = (ClassMeta)((Delegate)o).getBeanInfo();
 			}
 
 			sType = aType;
@@ -1146,7 +1146,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (type == null)
 			type = object();
 		else if (type.isDelegate())
-			type = (ClassMeta)((Delegate)o).getClassMeta();
+			type = (ClassMeta)((Delegate)o).getBeanInfo();
 		ObjectSwap swap = type.getSwap(this);
 		if (nn(swap)) {
 			o = swap(swap, o);

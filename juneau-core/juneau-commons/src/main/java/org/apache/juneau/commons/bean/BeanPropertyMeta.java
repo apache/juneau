@@ -47,6 +47,10 @@ import org.apache.juneau.commons.inject.*;
  * Developers will typically not need access to this class.  The information provided by it is already exposed through
  * several methods on the {@link BeanMap} API.
  *
+ * <h5 class='topic'>Thread safety</h5>
+ *
+ * Instances are immutable after construction and are safe for concurrent read access.
+ *
  */
 @SuppressWarnings({
 	"rawtypes", // Raw types necessary for generic type handling
@@ -83,7 +87,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		public MethodInfo getter;  // Package-private for BeanMeta access
 		public MethodInfo setter;  // Package-private for BeanMeta access
 		MethodInfo extraKeys;  // Package-private for BeanMeta access
-		public BeanTypeInfo<?> rawTypeMeta;  // Package-private for BeanMeta access (used to install swap-aware transforms).  Null on commons-side path (no type resolution).  Concrete instances are always {@code ClassMeta} since it's the only in-tree implementation; the field is typed against the bean-modeling SPI seam so the field can live in commons.bean.
+		public BeanInfo<?> rawTypeMeta;  // Package-private for BeanMeta access (used to install swap-aware transforms).  Null on commons-side path (no type resolution).  Concrete instances are always {@code ClassMeta} since it's the only in-tree implementation; the field is typed against the bean-modeling SPI seam so the field can live in commons.bean.
 		public Object swap;  // Object-typed so the field can live in commons.bean; cast to ObjectSwap by marshalling-side consumers.  Set only via MarshalledPropertyPostProcessor (marshalling-side post-processor).
 		public BiFunction<BeanSession,Object,Object> readTransform;  // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam; marshalling-side installers cast the session argument back to {@code MarshallingSession} where needed (see {@code MarshalledPropertyPostProcessor#installSwapAwareTransforms}).
 		public BiFunction<BeanSession,Object,Object> writeTransform; // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam (see readTransform note).
@@ -92,7 +96,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		public boolean isUri;  // Package-private so MarshalledPropertyPostProcessor can set @Uri-derived flag.  Mirrors rawTypeMeta.isUri() plus @Uri annotation reads on field/getter/setter.
 		private boolean isDyna;
 		private boolean isDynaGetterMap;
-		public BeanTypeInfo<?> typeMeta;  // Package-private so the marshalling-side post-processor can override after @Swap/@MarshalledProp detection.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam.
+		public BeanInfo<?> typeMeta;  // Package-private so the marshalling-side post-processor can override after @Swap/@MarshalledProp detection.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam.
 		private Object overrideValue;
 		private BeanPropertyMeta delegateFor;
 		private boolean canRead;
@@ -182,7 +186,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * @param value The raw metadata type for this bean property.
 		 * @return This object.
 		 */
-		public Builder rawMetaType(BeanTypeInfo<?> value) {
+		public Builder rawMetaType(BeanInfo<?> value) {
 			rawTypeMeta = assertArgNotNull(ARG_value, value);
 			typeMeta = rawTypeMeta;
 			return this;
@@ -194,7 +198,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 * <p>
 		 * Convenience overload that resolves the supplied class via the property's
 		 * {@link BeanTypeResolver}, allowing callers from the bean-modeling layer to seed the type without
-		 * holding a {@link BeanTypeInfo} reference.
+		 * holding a {@link BeanInfo} reference.
 		 *
 		 * <p>
 		 * When the owning {@link BeanMeta} was built via the commons-side path
@@ -506,11 +510,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final boolean isUri;                                     // True if this is a URL/URI or annotated with @URI.
 	private final String name;                                       // The name of the property.
 	private final Object overrideValue;                              // The bean property value (if it's an overridden delegate).
-	private final BeanTypeInfo<?> rawTypeMeta;                       // The real class type of the bean property.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam for the eventual move to commons.bean.
+	private final BeanInfo<?> rawTypeMeta;                           // The real class type of the bean property.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam for the eventual move to commons.bean.
 	private final BiFunction<BeanSession,Object,Object> readTransform;  // Applied to raw getter result; identity by default.  Typed against the commons.bean SPI seam.
 	private final boolean readOnly;                                  // True if this property is read-only.
 	private final MethodInfo setter;                                 // The bean property setter.
-	private final BeanTypeInfo<?> typeMeta;                          // The transformed class type of the bean property.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam.
+	private final BeanInfo<?> typeMeta;                              // The transformed class type of the bean property.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam.
 	private final BiFunction<BeanSession,Object,Object> writeTransform; // Applied to incoming value before raw setter; identity by default.  Typed against the commons.bean SPI seam.
 	private final boolean writeOnly;                                 // True if this property is write-only.
 
@@ -557,7 +561,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 *
 	 * <p>
 	 * <b>Marshalling-only path.</b>  Requires a property built via the marshalling-side construction path
-	 * (i.e. with a non-null {@link #getClassMeta() rawTypeMeta} and a non-null backing
+	 * (i.e. with a non-null {@link #getBeanInfo() rawTypeMeta} and a non-null backing
 	 * {@code MarshallingSession} on the supplied {@link BeanMap}).  When the owning {@link BeanMeta} was built via
 	 * {@link BeanMeta#of(Class, BeanConfigContext)}, this method throws
 	 * {@link UnsupportedOperationException} because adding into a Collection/array property requires
@@ -595,7 +599,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		var isArray = rawTypeMeta.isArray();
 
 		if (! (isCollection || isArray))
-			throw bex(beanMeta.getClassMeta(), "Attempt to add element to property ''{0}'' which is not a collection or array", name);
+			throw bex(beanMeta.getBeanInfo(), "Attempt to add element to property ''{0}'' which is not a collection or array", name);
 
 		var bean = m.getBean(true);
 
@@ -659,7 +663,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 *
 	 * <p>
 	 * <b>Marshalling-only path.</b>  Requires a property built via the marshalling-side construction path
-	 * (i.e. with a non-null {@link #getClassMeta() rawTypeMeta} and a non-null backing
+	 * (i.e. with a non-null {@link #getBeanInfo() rawTypeMeta} and a non-null backing
 	 * {@code MarshallingSession} on the supplied {@link BeanMap}).  When the owning {@link BeanMeta} was built via
 	 * {@link BeanMeta#of(Class, BeanConfigContext)}, this method throws
 	 * {@link UnsupportedOperationException} because adding into a Map/bean property requires type-aware
@@ -698,7 +702,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		var isBean = rawTypeMeta.isBean();
 
 		if (! (isBean || isMap))
-			throw bex(beanMeta.getClassMeta(), "Attempt to add key/value to property ''{0}'' which is not a map or bean", name);
+			throw bex(beanMeta.getBeanInfo(), "Attempt to add key/value to property ''{0}'' which is not a map or bean", name);
 
 		var bean = m.getBean(true);
 
@@ -882,7 +886,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public BeanRegistryLookup getBeanRegistry() { return beanMeta.getPropertyBeanRegistry(this); }
 
 	/**
-	 * Returns the {@link BeanTypeInfo} of the class of this property.
+	 * Returns the {@link BeanInfo} of the class of this property.
 	 *
 	 * <p>
 	 * If this property or the property type class has a {@code ObjectSwap} associated with it, this method returns the
@@ -891,13 +895,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * {@link #set(BeanMap,String,Object)} methods.
 	 *
 	 * <p>
-	 * Returns the bean-modeling-side SPI type ({@link BeanTypeInfo}).  Marshalling-side callers that need the
+	 * Returns the bean-modeling-side SPI type ({@link BeanInfo}).  Marshalling-side callers that need the
 	 * {@code ClassMeta} narrowing must cast — the concrete instance in-tree is always a {@code ClassMeta}.
 	 *
-	 * @return The {@link BeanTypeInfo} of the class of this property, or <jk>null</jk> if this property was built via
+	 * @return The {@link BeanInfo} of the class of this property, or <jk>null</jk> if this property was built via
 	 * 	the bean-modeling-only path.
 	 */
-	public BeanTypeInfo<?> getClassMeta() { return typeMeta; }
+	public BeanInfo<?> getBeanInfo() { return typeMeta; }
 
 	/**
 	 * Returns the metadata on the property that this metadata is a delegate for.
@@ -932,7 +936,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return (Map)getter.invoke(bean);
 			if (nn(field))
 				return (Map)field.get(bean);
-			throw bex(beanMeta.getClassMeta(), MSG_getterOrFieldNotDefined, name);
+			throw bex(beanMeta.getBeanInfo(), MSG_getterOrFieldNotDefined, name);
 		}
 		return mape();
 	}
@@ -1131,7 +1135,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (value1 instanceof CharSequence value21)
 						value1 = session.parseToMap(value21);
 					else
-						throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), cn(value1));
+						throw bex(beanMeta.getBeanInfo(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), cn(value1));
 				}
 
 				var valueMap = (Map)value1;
@@ -1143,7 +1147,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (! rawTypeMeta.canCreateNewInstance()) {
 					if (propMap == null) {
 						if (setter == null && field == null)
-							throw bex(beanMeta.getClassMeta(),
+							throw bex(beanMeta.getBeanInfo(),
 								"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name,
 								propertyClass.getName(), cn(value1));
 
@@ -1161,7 +1165,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 							invokeSetter(bean, pName, valueMap);
 							return r;
 						}
-						throw bex(beanMeta.getClassMeta(),
+						throw bex(beanMeta.getBeanInfo(),
 							"Cannot set property ''{0}'' of type ''{2}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null",
 							name, propertyClass.getName(), cn(value1));
 					}
@@ -1189,7 +1193,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (value1 instanceof CharSequence value2)
 						value1 = session.parseToList(value2);
 					else
-						throw bex(beanMeta.getClassMeta(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), cn(value1));
+						throw bex(beanMeta.getBeanInfo(), "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), cn(value1));
 				}
 
 				var valueList = (Collection)value1;
@@ -1201,7 +1205,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (! rawTypeMeta.canCreateNewInstance()) {
 					if (propList == null) {
 						if (setter == null && field == null)
-							throw bex(beanMeta.getClassMeta(),
+							throw bex(beanMeta.getBeanInfo(),
 								"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name,
 								propertyClass.getName(), cn(value1));
 
@@ -1219,7 +1223,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 							invokeSetter(bean, pName, valueList);
 							return r;
 						}
-						throw bex(beanMeta.getClassMeta(),
+						throw bex(beanMeta.getBeanInfo(),
 							"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null",
 							name, propertyClass.getName(), cn(value1));
 					}
@@ -1256,7 +1260,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					return rawTypeMeta.getPrimitiveDefault();
 				return null;
 			}
-			throw bex(e1, beanMeta.getClassMeta(), "Error occurred trying to set property ''{0}''", name);
+			throw bex(e1, beanMeta.getBeanInfo(), "Error occurred trying to set property ''{0}''", name);
 		}
 	}
 
@@ -1350,7 +1354,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	}
 
 	private String classNameForError() {
-		var cm = getClassMeta();
+		var cm = getBeanInfo();
 		if (nn(cm))
 			return cm.getName();
 		return beanMeta.getClassInfo().getName();
@@ -1374,7 +1378,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 *
 	 * <p>
 	 * <b>Marshalling-only path.</b>  Requires a property built via the marshalling-side construction path
-	 * (i.e. with a non-null {@link #getClassMeta() rawTypeMeta}).  When the owning {@link BeanMeta} was built via
+	 * (i.e. with a non-null {@link #getBeanInfo() rawTypeMeta}).  When the owning {@link BeanMeta} was built via
 	 * {@link BeanMeta#of(Class, BeanConfigContext)}, this method throws
 	 * {@link UnsupportedOperationException} because the array element type is only known via {@code rawTypeMeta},
 	 * which is not populated in the bean-modeling-only path.

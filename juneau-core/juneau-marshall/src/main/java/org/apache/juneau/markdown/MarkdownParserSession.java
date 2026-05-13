@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.markdown;
 
+import org.apache.juneau.annotation.ParentProperty;
 import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.Utils.opt;
 
@@ -353,7 +354,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 				var pm = m.getPropertyMeta(key);
 				if (pm != null) {
 					setCurrentProperty(pm);
-					var pmcm = (ClassMeta<?>) pm.getClassMeta();
+					var pmcm = (ClassMeta<?>) pm.getBeanInfo();
 					var val = parseCellValue(rawVal, pmcm, m.getBean(false));
 					try {
 						setName(pmcm, val, key);
@@ -527,7 +528,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 				var pm = m.getPropertyMeta(header);
 				if (pm != null) {
 					setCurrentProperty(pm);
-					var val = parseCellValue(rawVal, (ClassMeta<?>) pm.getClassMeta(), m.getBean(false));
+					var val = parseCellValue(rawVal, (ClassMeta<?>) pm.getBeanInfo(), m.getBean(false));
 					pm.set(m, header, val);
 					setCurrentProperty(null);
 				} else {
@@ -679,8 +680,8 @@ public class MarkdownParserSession extends ReaderParserSession {
 	 * <p>
 	 * When this returns true, table rows and key-value tables should be converted to a JSON5 string
 	 * and parsed via {@link Json5Parser} (using
-	 * {@link org.apache.juneau.parser.Parser#parseWithOuter}) to correctly handle swaps,
-	 * {@link org.apache.juneau.annotation.ParentProperty @ParentProperty}, and non-standard constructors.
+	 * {@link Parser#parseWithOuter}) to correctly handle swaps,
+	 * {@link ParentProperty @ParentProperty}, and non-standard constructors.
 	 */
 	private boolean needsJson5Path(ClassMeta<?> type) {
 		if (type == null || type.isObject() || type.isMap() || type.isPrimitive() || type.isNumber() || type.isString())

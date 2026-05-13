@@ -21,6 +21,12 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 import java.util.*;
+import java.util.stream.Stream;
+import org.apache.juneau.commons.function.BeanChannel;
+import org.apache.juneau.commons.function.BeanConsumer;
+import org.apache.juneau.commons.function.BeanFactory;
+import org.apache.juneau.commons.function.BeanSupplier;
+import org.apache.juneau.commons.inject.BeanStore;
 
 /**
  * Annotation that can be applied to bean fields, getter/setter methods, and constructor parameters
@@ -68,10 +74,10 @@ public @interface BeanProp {
 	 * Element type for streaming/consuming bean properties.
 	 *
 	 * <p>
-	 * Specifies the element type for properties of type {@link java.util.stream.Stream},
-	 * {@link org.apache.juneau.commons.function.BeanSupplier},
-	 * {@link org.apache.juneau.commons.function.BeanConsumer}, or
-	 * {@link org.apache.juneau.commons.function.BeanChannel} when type erasure prevents
+	 * Specifies the element type for properties of type {@link Stream},
+	 * {@link BeanSupplier},
+	 * {@link BeanConsumer}, or
+	 * {@link BeanChannel} when type erasure prevents
 	 * the framework from inferring the generic type argument at runtime.
 	 *
 	 * <p>
@@ -95,9 +101,9 @@ public @interface BeanProp {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanSupplier}
-	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanConsumer}
-	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanChannel}
+	 * 	<li class='jc'>{@link BeanSupplier}
+	 * 	<li class='jc'>{@link BeanConsumer}
+	 * 	<li class='jc'>{@link BeanChannel}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -108,13 +114,13 @@ public @interface BeanProp {
 	 * Bean factory class for this property's value.
 	 *
 	 * <p>
-	 * Specifies a {@link org.apache.juneau.commons.function.BeanFactory} class to use when instantiating
+	 * Specifies a {@link BeanFactory} class to use when instantiating
 	 * the value of this specific bean property, overriding the class-level {@link BeanType#factory()} if present.
 	 *
 	 * <p>
 	 * When a factory class is specified, the framework resolves it in the following order:
 	 * <ol>
-	 * 	<li>Look up the factory class in the configured {@link org.apache.juneau.commons.inject.BeanStore}
+	 * 	<li>Look up the factory class in the configured {@link BeanStore}
 	 * 	<li>Attempt direct instantiation via no-arg constructor or {@code getInstance()} static method
 	 * 	<li>Throw {@link IllegalArgumentException} if both fail
 	 * </ol>
@@ -128,7 +134,7 @@ public @interface BeanProp {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanFactory}
+	 * 	<li class='jc'>{@link BeanFactory}
 	 * 	<li class='ja'>{@link BeanType#factory()}
 	 * </ul>
 	 *

@@ -23,6 +23,10 @@ import org.apache.juneau.commons.collections.*;
 
 /**
  * Represents a simple bean property value and the meta-data associated with it.
+ *
+ * <h5 class='topic'>Thread safety</h5>
+ *
+ * Instances are immutable and thread-safe.
  */
 @SuppressWarnings({
 	"java:S115",   // Constants use UPPER_snakeCase convention (e.g., PROP_name)
@@ -71,16 +75,16 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	}
 
 	/**
-	 * Returns the {@link BeanTypeInfo} of the bean property.
+	 * Returns the {@link BeanInfo} of the bean property.
 	 *
 	 * <p>
-	 * Returns the bean-modeling-side SPI type ({@link BeanTypeInfo}).  Marshalling-side callers that need the
+	 * Returns the bean-modeling-side SPI type ({@link BeanInfo}).  Marshalling-side callers that need the
 	 * {@code ClassMeta} narrowing must cast — the concrete instance in-tree is always a
 	 * {@code ClassMeta}.
 	 *
 	 * @return The bean property type info.
 	 */
-	public final BeanTypeInfo<?> getClassMeta() { return pMeta.getClassMeta(); }
+	public final BeanInfo<?> getBeanInfo() { return pMeta.getBeanInfo(); }
 
 	/**
 	 * Returns the bean property metadata.
@@ -120,7 +124,7 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 		return filteredBeanPropertyMap()
 			.a(PROP_name, name)
 			.a(PROP_value, value)
-			.a(PROP_type, cns(pMeta.getClassMeta()));
+			.a(PROP_type, cns(pMeta.getBeanInfo()));
 		// @formatter:on
 	}
 

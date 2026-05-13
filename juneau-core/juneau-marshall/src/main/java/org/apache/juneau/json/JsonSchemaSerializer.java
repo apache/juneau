@@ -138,7 +138,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * The description is the result of calling {@link ClassMeta#getName()}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
+		 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 		 * </ul>
 		 *
 		 * @param values
@@ -165,7 +165,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}
+		 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}
 		 * </ul>
 		 *
 		 * @param values
@@ -197,7 +197,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * Identifies whether nested descriptions are allowed in schema definitions.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions()}
+		 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#allowNestedDescriptions()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -214,7 +214,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * Identifies whether nested examples are allowed in schema definitions.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples()}
+		 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#allowNestedExamples()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -280,15 +280,15 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * <p>
 		 * Used primarily for defining common definition sections for beans in Swagger JSON.
 		 * <p>
-		 * This setting is ignored if {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
+		 * This setting is ignored if {@link JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class)}
+		 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#beanDefMapper(Class)}
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
+		 * 	<br>The default is {@link BasicBeanDefMapper}.
 		 * @return This object.
 		 */
 		public Builder beanDefMapper(Class<? extends MarshallingDefMapper> value) {

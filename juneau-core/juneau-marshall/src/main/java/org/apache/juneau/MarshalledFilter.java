@@ -89,7 +89,6 @@ public class MarshalledFilter implements BeanFilter {
 	public static class Builder {
 
 		private ClassInfoTyped<?> beanClass;
-		private Class<?> marshalledClass;
 		private String typeName;
 		private String example;
 		private Set<String> properties = set();
@@ -106,22 +105,12 @@ public class MarshalledFilter implements BeanFilter {
 		private BeanInstantiator.Builder<BeanInterceptor> interceptor = BeanInstantiator.of(BeanInterceptor.class);
 
 		/**
-		 * Constructor for non-bean POJO filters.
-		 *
-		 * @param marshalledClass The class that this filter applies to.
-		 */
-		protected Builder(Class<?> marshalledClass) {
-			this.marshalledClass = marshalledClass;
-		}
-
-		/**
 		 * Constructor for bean filters.
 		 *
 		 * @param beanClass The bean class that this filter applies to.
 		 */
 		protected Builder(ClassInfoTyped<?> beanClass) {
 			this.beanClass = beanClass;
-			this.marshalledClass = beanClass.inner();
 		}
 
 		/**
@@ -576,17 +565,6 @@ public class MarshalledFilter implements BeanFilter {
 	}
 
 	/**
-	 * Create a new builder for this object for use with non-bean POJO classes.
-	 *
-	 * @param <T> The POJO class being filtered.
-	 * @param marshalledClass The POJO class being filtered.
-	 * @return A new builder.
-	 */
-	public static <T> Builder create(Class<T> marshalledClass) {
-		return new Builder(marshalledClass);
-	}
-
-	/**
 	 * Create a new builder for this object for use with bean classes.
 	 *
 	 * @param <T> The bean class being filtered.
@@ -598,7 +576,6 @@ public class MarshalledFilter implements BeanFilter {
 	}
 
 	private final ClassInfoTyped<?> beanClass;
-	private final Class<?> marshalledClass;
 	private final List<ClassInfo> beanDictionary;
 	private final String example;
 	private final Set<String> excludeProperties;
@@ -621,7 +598,6 @@ public class MarshalledFilter implements BeanFilter {
 	 */
 	protected MarshalledFilter(Builder builder) {
 		this.beanClass = builder.beanClass;
-		this.marshalledClass = builder.marshalledClass;
 		this.typeName = builder.typeName;
 		this.properties = copyOf(builder.properties);
 		this.excludeProperties = copyOf(builder.excludeProperties);
@@ -685,14 +661,6 @@ public class MarshalledFilter implements BeanFilter {
 	 */
 	@Override
 	public ClassInfo getInterfaceClass() { return interfaceClass; }
-
-	/**
-	 * Returns the class that this filter applies to.
-	 *
-	 * @return The class that this filter applies to.
-	 */
-	@Override
-	public Class<?> getMarshalledClass() { return marshalledClass; }
 
 	/**
 	 * Returns the set and order of names of properties associated with a bean class.

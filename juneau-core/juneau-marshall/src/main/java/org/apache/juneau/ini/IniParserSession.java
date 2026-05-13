@@ -145,7 +145,7 @@ public class IniParserSession extends ReaderParserSession {
 					continue;
 				if (pMeta == null)
 					throw new ParseException(this, "Unknown property ''{0}''", key);
-				var value = parseValue(rawValue, (ClassMeta<?>) pMeta.getClassMeta());
+				var value = parseValue(rawValue, (ClassMeta<?>) pMeta.getBeanInfo());
 				bm.put(key, value);
 			}
 		}
@@ -166,7 +166,7 @@ public class IniParserSession extends ReaderParserSession {
 				continue;
 			if (pMeta == null)
 				continue;
-			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 			var childPath = sectionPath.isEmpty() ? childName : sectionPath + SECTION_PATH_DELIMITER + childName;
 			if (cMeta.isBean()) {
 				var child = toBeanMap(cMeta.newInstance(getOuter()));

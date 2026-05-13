@@ -285,7 +285,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		if (nn(o)) {
 			if (aType.isDelegate()) {
 				wType = aType;
-				aType = (ClassMeta)((Delegate)o).getClassMeta();
+				aType = (ClassMeta)((Delegate)o).getBeanInfo();
 			}
 			sType = aType;
 			var swap = aType.getSwap(this);
@@ -385,7 +385,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		Collections.reverse(l);
 		l.forEach(x -> {
 			var bpMeta = x.getMeta();
-			var cMeta = (ClassMeta<?>) bpMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) bpMeta.getBeanInfo();
 			var bpRdf = getRdfBeanPropertyMeta(bpMeta);
 			var bpXml = getXmlBeanPropertyMeta(bpMeta);
 			if (bpRdf.isBeanUri())

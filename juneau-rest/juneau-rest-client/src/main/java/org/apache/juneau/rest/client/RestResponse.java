@@ -918,7 +918,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		"unchecked" // Type erasure requires unchecked casts
 	})
 	<T> T as(ResponseBeanMeta rbm) {
-		var c = (Class<T>)rbm.getClassMeta().inner();
+		var c = (Class<T>)rbm.getBeanInfo().inner();
 		final RestClient rc = this.client;
 		return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
 			var pm = rbm.getProperty(method.getName());

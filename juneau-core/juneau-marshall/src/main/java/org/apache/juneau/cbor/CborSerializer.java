@@ -19,6 +19,10 @@ package org.apache.juneau.cbor;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -26,6 +30,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.swap.ObjectSwap;
 
 /**
  * Serializes POJO models to CBOR (RFC 8949).
@@ -45,8 +50,8 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * 	<li>{@link String} / {@link Enum} → CBOR text string (major type 3, UTF-8)
  * 	<li>{@link Boolean} → CBOR simple values 20/21 (<c>0xF4</c>/<c>0xF5</c>)
  * 	<li>{@link Number} (int, long, float, double) → CBOR compact integers (major types 0/1) or IEEE 754 floats (major type 7)
- * 	<li>{@link java.util.Date} / {@link java.util.Calendar} / {@link java.time.Instant} → ISO 8601 string
- * 	<li>{@link java.time.Duration} → ISO 8601 duration string
+ * 	<li>{@link Date} / {@link Calendar} / {@link Instant} → ISO 8601 string
+ * 	<li>{@link Duration} → ISO 8601 duration string
  * 	<li>{@code byte[]} → CBOR byte string (major type 2)
  * 	<li>{@code null} → CBOR simple value 22 (<c>0xF6</c>)
  * 	<li>All other types → fallback to {@code toString()} as string
@@ -70,7 +75,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  *
  * <h5 class='section'>Limitations:</h5>
  * <ul class='spaced-list'>
- * 	<li>{@link java.math.BigInteger} / {@link java.math.BigDecimal} — Cast to long/double; precision loss for values exceeding range. Use {@link org.apache.juneau.swap.ObjectSwap} to serialize as string if precision required.
+ * 	<li>{@link BigInteger} / {@link BigDecimal} — Cast to long/double; precision loss for values exceeding range. Use {@link ObjectSwap} to serialize as string if precision required.
  * 	<li>Indefinite-length encoding not supported in output.
  * 	<li>Half-precision float (0xF9) not produced; always uses float32 (0xFA) or float64 (0xFB).
  * 	<li>Semantic tags (major type 6) not emitted unless {@link Builder#useTags(boolean) useTags(true)}.

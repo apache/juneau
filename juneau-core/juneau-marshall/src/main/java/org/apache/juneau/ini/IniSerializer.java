@@ -18,10 +18,12 @@ package org.apache.juneau.ini;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.Reader;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import java.io.InputStream;
 
 /**
  * Serializes POJO models to INI format.
@@ -77,7 +79,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * <ul class='spaced-list'>
  * 	<li>Top-level collections, arrays, and scalar values are not supported. The root must be a bean or
  * 		<c>Map&lt;String,?&gt;</c>. Throws {@link SerializeException} for unsupported root types.
- * 	<li>{@link java.io.Reader} and {@link java.io.InputStream} passthrough is not supported.
+ * 	<li>{@link Reader} and {@link InputStream} passthrough is not supported.
  * </ul>
  *
  * <h5 class='section'>Notes:</h5><ul>

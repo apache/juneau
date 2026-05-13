@@ -21,6 +21,8 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -49,8 +51,8 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * 	<li>{@link String} / {@link Enum} → MessagePack string type
  * 	<li>{@link Boolean} → MessagePack boolean type
  * 	<li>{@link Number} (int, long, float, double, etc.) → MessagePack number type (variable-length int or float)
- * 	<li>{@link java.util.Date} / {@link java.util.Calendar} / {@link java.time.Instant} → ISO 8601 string
- * 	<li>{@link java.time.Duration} → ISO 8601 duration string
+ * 	<li>{@link Date} / {@link Calendar} / {@link Instant} → ISO 8601 string
+ * 	<li>{@link Duration} → ISO 8601 duration string
  * 	<li>{@code byte[]} → MessagePack binary type
  * 	<li>{@code null} → MessagePack nil type
  * 	<li>All other types → fallback to {@code toString()} as string
@@ -155,7 +157,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * through reflection.
 		 *
 		 * <p>
-		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
+		 * When present, this value overrides the {@link Serializer.Builder#addBeanTypes()} setting and is
 		 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 		 *
 		 * @return This object.

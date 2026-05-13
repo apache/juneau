@@ -45,9 +45,9 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * The conversion is as follows:
  * <ul class='spaced-list'>
  * 	<li>
- * 		Maps (e.g. {@link java.util.HashMap}, {@link java.util.TreeMap}) and beans are converted to protobuf message fields.
+ * 		Maps (e.g. {@link HashMap}, {@link TreeMap}) and beans are converted to protobuf message fields.
  * 	<li>
- * 		Collections (e.g. {@link java.util.HashSet}, {@link java.util.LinkedList}) and Java arrays of simple values are converted to
+ * 		Collections (e.g. {@link HashSet}, {@link LinkedList}) and Java arrays of simple values are converted to
  * 		protobuf list syntax {@code [v1, v2, ...]}.
  * 	<li>
  * 		Collections of beans are converted to repeated field names.

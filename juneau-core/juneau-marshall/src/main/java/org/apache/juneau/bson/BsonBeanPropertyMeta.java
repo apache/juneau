@@ -17,10 +17,11 @@
 package org.apache.juneau.bson;
 
 import org.apache.juneau.*;
+import org.apache.juneau.bson.annotation.Bson;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
- * Metadata on bean properties specific to the BSON serializers and parsers pulled from the {@link org.apache.juneau.bson.annotation.Bson @Bson}
+ * Metadata on bean properties specific to the BSON serializers and parsers pulled from the {@link Bson @Bson}
  * annotation on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>

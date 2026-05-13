@@ -47,7 +47,7 @@ import org.apache.juneau.commons.bean.BeanMap;
  *
  * <p>
  * Note that the use of this class is optional for generating JSON. The serializers will accept any objects that implement the
- * {@link java.util.Map} interface.  But this class provides some useful additional functionality when working with
+ * {@link Map} interface.  But this class provides some useful additional functionality when working with
  * JSON models constructed from Java Collections Framework objects.  For example, a constructor is provided for
  * converting a JSON object string directly into a {@link Map}.  It also contains accessor methods for to avoid common
  * typecasting when accessing elements in a list.
@@ -1876,7 +1876,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof JsonMap v2)
-							v = v2.cast((ClassMeta<?>) bm.getProperty(k).getMeta().getClassMeta());
+							v = v2.cast((ClassMeta<?>) bm.getProperty(k).getMeta().getBeanInfo());
 
 						bm.put(k, v);
 					}

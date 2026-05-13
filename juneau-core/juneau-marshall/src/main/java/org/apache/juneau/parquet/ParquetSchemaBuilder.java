@@ -212,7 +212,7 @@ public final class ParquetSchemaBuilder {
 				Object childSample = null;
 				if (sampleBean != null && sampleBean instanceof Map<?, ?> m)
 					childSample = m.get(p.getName());
-				ClassMeta<?> propCm = (ClassMeta<?>) p.getClassMeta();
+				ClassMeta<?> propCm = (ClassMeta<?>) p.getBeanInfo();
 				// When property type is Object, infer from sample so Map/Collection get proper schema (2.2)
 				if ((propCm == null || propCm.isObject()) && childSample != null)
 					propCm = marshallingContext.getClassMeta(childSample.getClass());

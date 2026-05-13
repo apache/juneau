@@ -320,7 +320,7 @@ public class CborSerializerSession extends OutputStreamSerializerSession {
 		values.forEach(x -> {
 			BeanPropertyMeta pMeta = x.getMeta();
 			if (pMeta.canRead()) {
-				ClassMeta<?> cMeta = (ClassMeta<?>) x.getClassMeta();
+				ClassMeta<?> cMeta = (ClassMeta<?>) x.getBeanInfo();
 				String key = x.getName();
 				Object value = x.getValue();
 				serializeAnything(out, key, null, null, null);
@@ -367,7 +367,7 @@ public class CborSerializerSession extends OutputStreamSerializerSession {
 	}
 
 	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
-		var aType = push2(v.getName(), v.getValue(), (ClassMeta<?>) v.getClassMeta());
+		var aType = push2(v.getName(), v.getValue(), (ClassMeta<?>) v.getBeanInfo());
 		if (nn(aType))
 			pop();
 		return aType == null;

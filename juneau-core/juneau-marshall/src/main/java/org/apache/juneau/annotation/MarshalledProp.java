@@ -20,6 +20,8 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import org.apache.juneau.MarshallingContext;
+import org.apache.juneau.MarshallingSession;
 import org.apache.juneau.commons.bean.BeanProp;
 
 /**
@@ -66,10 +68,10 @@ public @interface MarshalledProp {
 	 * polymorphic marshalling.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.Marshalled#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#dictionary()}
-	 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='ja'>{@link Marshalled#dictionary()}
+	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
+	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
+	 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * <p>
@@ -87,7 +89,7 @@ public @interface MarshalledProp {
 	 *
 	 * <p>
 	 * During parsing, we will attempt to convert the value to the original form by using the
-	 * {@link org.apache.juneau.MarshallingSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
+	 * {@link MarshallingSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

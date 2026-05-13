@@ -426,7 +426,7 @@ public class JsonParserSession extends ReaderParserSession {
 					if (isCommentOrWhitespace(c)) {
 						skipCommentsAndSpace(r.unread());
 					} else {
-					if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getClassMeta()))) {
+					if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getBeanInfo()))) {
 						var pMeta = m.getPropertyMeta(currAttr);
 						setCurrentProperty(pMeta);
 						if (pMeta == null) {
@@ -434,7 +434,7 @@ public class JsonParserSession extends ReaderParserSession {
 							unmark();
 						} else {
 							unmark();
-							var cm = (ClassMeta<?>) pMeta.getClassMeta();
+							var cm = (ClassMeta<?>) pMeta.getBeanInfo();
 							Object value = parseAnything(cm, r.unread(), m.getBean(false), pMeta);
 							setName(cm, value, currAttr);
 								try {

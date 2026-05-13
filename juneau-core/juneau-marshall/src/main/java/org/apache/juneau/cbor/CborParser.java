@@ -18,6 +18,8 @@ package org.apache.juneau.cbor;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -37,8 +39,8 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * <p>
  * CBOR-to-Java type mapping:
  * <ul class='spaced-list'>
- * 	<li>CBOR map (major type 5) → bean or {@link java.util.Map}
- * 	<li>CBOR array (major type 4) → {@link java.util.Collection} or Java array
+ * 	<li>CBOR map (major type 5) → bean or {@link Map}
+ * 	<li>CBOR array (major type 4) → {@link Collection} or Java array
  * 	<li>CBOR text string (major type 3) → {@link String}; coerced to types parseable from string
  * 	<li>CBOR unsigned/negative integer (major types 0/1) → {@link Integer} or {@link Long}
  * 	<li>CBOR float (major type 7, 0xFA/0xFB) → {@link Float} or {@link Double}
@@ -51,7 +53,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  *
  * <h5 class='section'>Limitations:</h5>
  * <ul class='spaced-list'>
- * 	<li>{@link java.math.BigInteger} / {@link java.math.BigDecimal} — Cast to long/double; precision loss.
+ * 	<li>{@link BigInteger} / {@link BigDecimal} — Cast to long/double; precision loss.
  * 	<li>Indefinite-length CBOR (break code 0xFF) not supported.
  * 	<li>Semantic tags are read and discarded; tag number does not affect parsed type.
  * </ul>

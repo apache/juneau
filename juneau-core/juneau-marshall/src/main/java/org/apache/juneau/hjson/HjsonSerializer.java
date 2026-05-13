@@ -18,10 +18,16 @@ package org.apache.juneau.hjson;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.TreeMap;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.hjson.annotation.Hjson;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import java.util.HashMap;
+import org.apache.juneau.swap.ObjectSwap;
 
 /**
  * Serializes POJO models to Hjson (Human JSON).
@@ -41,9 +47,9 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * The conversion is as follows:
  * <ul class='spaced-list'>
  * 	<li>
- * 		Maps (e.g. {@link java.util.HashMap HashMaps}, {@link java.util.TreeMap TreeMaps}) are converted to Hjson objects.
+ * 		Maps (e.g. {@link HashMap HashMaps}, {@link TreeMap TreeMaps}) are converted to Hjson objects.
  * 	<li>
- * 		Collections (e.g. {@link java.util.HashSet HashSets}, {@link java.util.LinkedList LinkedLists}) and Java arrays are converted to
+ * 		Collections (e.g. {@link HashSet HashSets}, {@link LinkedList LinkedLists}) and Java arrays are converted to
  * 		Hjson arrays.
  * 	<li>
  * 		{@link String Strings} are serialized as quoteless values when they contain only safe characters.
@@ -61,8 +67,8 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * <p>
  * The types above are considered "Hjson-primitive" object types.
  * Any non-Hjson-primitive object types are transformed into Hjson-primitive object types through
- * {@link org.apache.juneau.swap.ObjectSwap ObjectSwaps} associated through the
- * {@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...) MarshallingContext.Builder.swaps(Class...)} method.
+ * {@link ObjectSwap ObjectSwaps} associated through the
+ * {@link MarshallingContext.Builder#swaps(Class...) MarshallingContext.Builder.swaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc.
  *
  * <h5 class='section'>Example:</h5>
@@ -98,7 +104,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * 		Use {@link Builder#omitRootBraces(boolean)} to suppress them.
  * 	<li class='note'>In compact mode, strings containing newlines are serialized as double-quoted strings
  * 		with JSON escape sequences rather than multiline <c>'''</c> blocks.
- * 	<li class='note'>Format-specific field-level annotations ({@link org.apache.juneau.hjson.annotation.Hjson @Hjson}) are supported
+ * 	<li class='note'>Format-specific field-level annotations ({@link Hjson @Hjson}) are supported
  * 		but intentionally minimal in the initial implementation.
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>

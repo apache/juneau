@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.bean.*;
 
 /**
- * Tests for {@link org.apache.juneau.jsonl.JsonlParser}.
+ * Tests for {@link JsonlParser}.
  */
 @SuppressWarnings({
 	"unchecked" // Parser returns Object; cast to List<Person>/List<JsonMap>/List<String> in tests

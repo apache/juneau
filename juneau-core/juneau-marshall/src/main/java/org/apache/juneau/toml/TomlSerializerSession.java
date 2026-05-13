@@ -158,7 +158,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
-			ClassMeta<?> cMeta = (ClassMeta<?>) pMeta.getClassMeta();
+			ClassMeta<?> cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 			if (canIgnoreValue(cMeta, key, value))
 				return;
 			ClassMeta<?> aType = value == null ? cMeta : getClassMetaForObject(value, cMeta);
@@ -187,7 +187,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 			String key = e.getKey().getName();
 			Object value = e.getValue();
 			BeanPropertyMeta pMeta = e.getKey();
-			ClassMeta<?> cMeta = (ClassMeta<?>) pMeta.getClassMeta();
+			ClassMeta<?> cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 			String newPath = tablePath.isEmpty() ? key : tablePath + "." + key;
 
 			if (nn(value)) {
@@ -222,7 +222,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 	private void writeKeyValue(TomlWriter w, String key, Object value, BeanPropertyMeta pMeta) throws SerializeException {
 		ClassMeta<?> cMeta;
 		if (pMeta != null)
-			cMeta = (ClassMeta<?>) pMeta.getClassMeta();
+			cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 		else if (value != null)
 			cMeta = getClassMetaForObject(value);
 		else
@@ -294,7 +294,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 					first[0] = false;
 					writeKey(w, k);
 					w.w(" = ");
-				writeValue(w, v, (ClassMeta<?>) pm.getClassMeta(), pm);
+				writeValue(w, v, (ClassMeta<?>) pm.getBeanInfo(), pm);
 				});
 				w.inlineTableEnd();
 			} else {
@@ -373,7 +373,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 		int count = 0;
 		for (BeanPropertyMeta p : bm.getMeta().getProperties().values()) {
 			if (!p.isReadOnly()) {
-				ClassMeta<?> cm = (ClassMeta<?>) p.getClassMeta();
+				ClassMeta<?> cm = (ClassMeta<?>) p.getBeanInfo();
 				if (cm.isBean() || cm.isMap() || (cm.isCollectionOrArray() && cm.getElementType().isBean()))
 					return false;
 				count++;

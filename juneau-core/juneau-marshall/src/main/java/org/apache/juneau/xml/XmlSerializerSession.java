@@ -513,7 +513,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {
 				var pMeta = p.getMeta();
 				if (pMeta.canRead()) {
-					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta, (ClassMeta<?>) p.getClassMeta());
+					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta, (ClassMeta<?>) p.getBeanInfo());
 					if (kv.isEmpty())
 						continue;
 					var key = kv.get().getKey();
@@ -549,12 +549,12 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		for (var p : lp) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			if (pMeta.canRead()) {
-				ClassMeta<?> cMeta = (ClassMeta<?>) p.getClassMeta();
+				ClassMeta<?> cMeta = (ClassMeta<?>) p.getBeanInfo();
 
 				var n = p.getName();
 				if (n.equals(contentProperty)) {
 					content = p.getValue();
-					contentType = (ClassMeta<?>) p.getClassMeta();
+					contentType = (ClassMeta<?>) p.getBeanInfo();
 					hasContent = true;
 					cf = xbm.getContentFormat();
 					if (cf.isOneOf(MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT))
@@ -762,7 +762,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			} else if (aType.isBean()) {
 				bm = toBeanMap(o);
 			} else if (aType.isDelegate()) {
-				var innerType = (ClassMeta<?>)((Delegate<?>)o).getClassMeta();
+				var innerType = (ClassMeta<?>)((Delegate<?>)o).getBeanInfo();
 				var ns = Value.of(getXmlClassMeta(innerType).getNamespace());
 				if (ns.isPresent()) {
 					if (nn(ns.get().uri))
@@ -935,7 +935,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 			if (aType.isDelegate()) {
 				wType = aType;
-				eType = aType = (ClassMeta<?>)((Delegate<?>)o).getClassMeta();
+				eType = aType = (ClassMeta<?>)((Delegate<?>)o).getBeanInfo();
 			}
 
 			sType = aType;

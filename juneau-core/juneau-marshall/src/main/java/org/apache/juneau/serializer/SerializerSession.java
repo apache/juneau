@@ -25,6 +25,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.net.URI;
+import java.net.URL;
 import java.text.*;
 import java.util.*;
 import java.util.function.*;
@@ -765,8 +767,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	The input URI.
 	 * 	Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link java.net.URI}
-	 * 		<li>{@link java.net.URL}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
 	 * 		<li>{@link CharSequence}
 	 * 	</ul>
 	 * 	URI can be any of the following forms:
@@ -1256,9 +1258,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 		if (nn(listener))
 			listener.onBeanGetterException(this, t, p);
 		String prefix = (isDebug() ? getStack(false) + ": " : "");
-		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t));
+		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), lm(t));
 		if (! isIgnoreInvocationExceptionsOnGetters())
-			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t))
+			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), lm(t))
 				.initCause(t);
 	}
 
@@ -1313,8 +1315,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * <p>
 	 * Both parameters can be any of the following:
 	 * <ul>
-	 * 	<li>{@link java.net.URI}
-	 * 	<li>{@link java.net.URL}
+	 * 	<li>{@link URI}
+	 * 	<li>{@link URL}
 	 * 	<li>{@link CharSequence}
 	 * </ul>
 	 *

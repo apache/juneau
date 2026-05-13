@@ -670,15 +670,15 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 	@Test void a11_automaticDetectionOfGenericTypes() {
 		var bm = MarshallingContext.DEFAULT.newBeanMap(I.class);
-		assertEquals(String.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().inner());
-		assertEquals(Integer.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().inner());
-		assertEquals(Object.class, bm.getProperty("p3").getMeta().getClassMeta().getElementType().inner());
-		assertEquals(String.class, bm.getProperty("p4").getMeta().getClassMeta().getKeyType().inner());
-		assertEquals(Integer.class, bm.getProperty("p4").getMeta().getClassMeta().getValueType().inner());
-		assertEquals(String.class, bm.getProperty("p5").getMeta().getClassMeta().getKeyType().inner());
-		assertEquals(Integer.class, bm.getProperty("p5").getMeta().getClassMeta().getValueType().inner());
-		assertEquals(Object.class, bm.getProperty("p6").getMeta().getClassMeta().getKeyType().inner());
-		assertEquals(Object.class, bm.getProperty("p6").getMeta().getClassMeta().getValueType().inner());
+		assertEquals(String.class, bm.getProperty("p1").getMeta().getBeanInfo().getElementType().inner());
+		assertEquals(Integer.class, bm.getProperty("p2").getMeta().getBeanInfo().getElementType().inner());
+		assertEquals(Object.class, bm.getProperty("p3").getMeta().getBeanInfo().getElementType().inner());
+		assertEquals(String.class, bm.getProperty("p4").getMeta().getBeanInfo().getKeyType().inner());
+		assertEquals(Integer.class, bm.getProperty("p4").getMeta().getBeanInfo().getValueType().inner());
+		assertEquals(String.class, bm.getProperty("p5").getMeta().getBeanInfo().getKeyType().inner());
+		assertEquals(Integer.class, bm.getProperty("p5").getMeta().getBeanInfo().getValueType().inner());
+		assertEquals(Object.class, bm.getProperty("p6").getMeta().getBeanInfo().getKeyType().inner());
+		assertEquals(Object.class, bm.getProperty("p6").getMeta().getBeanInfo().getValueType().inner());
 	}
 
 	public static class I {
@@ -695,15 +695,15 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 	@Test void a12_overridingDetectionOfGenericTypes() {
 		var bm = MarshallingContext.DEFAULT.newBeanMap(J.class);
-		assertEquals(Float.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().inner());
-		assertEquals(Float.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().inner());
-		assertEquals(Float.class, bm.getProperty("p3").getMeta().getClassMeta().getElementType().inner());
-		assertEquals(Object.class, bm.getProperty("p4").getMeta().getClassMeta().getKeyType().inner());
-		assertEquals(Float.class, bm.getProperty("p4").getMeta().getClassMeta().getValueType().inner());
-		assertEquals(Object.class, bm.getProperty("p5").getMeta().getClassMeta().getKeyType().inner());
-		assertEquals(Float.class, bm.getProperty("p5").getMeta().getClassMeta().getValueType().inner());
-		assertEquals(String.class, bm.getProperty("p6").getMeta().getClassMeta().getKeyType().inner());
-		assertEquals(Float.class, bm.getProperty("p6").getMeta().getClassMeta().getValueType().inner());
+		assertEquals(Float.class, bm.getProperty("p1").getMeta().getBeanInfo().getElementType().inner());
+		assertEquals(Float.class, bm.getProperty("p2").getMeta().getBeanInfo().getElementType().inner());
+		assertEquals(Float.class, bm.getProperty("p3").getMeta().getBeanInfo().getElementType().inner());
+		assertEquals(Object.class, bm.getProperty("p4").getMeta().getBeanInfo().getKeyType().inner());
+		assertEquals(Float.class, bm.getProperty("p4").getMeta().getBeanInfo().getValueType().inner());
+		assertEquals(Object.class, bm.getProperty("p5").getMeta().getBeanInfo().getKeyType().inner());
+		assertEquals(Float.class, bm.getProperty("p5").getMeta().getBeanInfo().getValueType().inner());
+		assertEquals(String.class, bm.getProperty("p6").getMeta().getBeanInfo().getKeyType().inner());
+		assertEquals(Float.class, bm.getProperty("p6").getMeta().getBeanInfo().getValueType().inner());
 	}
 
 	public static class J {
@@ -720,15 +720,15 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 	@Test void a13_overridingDetectionOfGenericTypes2() {
 		var bm = bc.newBeanMap(K.class);
-		assertEquals(Float.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().inner());
-		assertEquals(Float.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().inner());
-		assertEquals(Float.class, bm.getProperty("p3").getMeta().getClassMeta().getElementType().inner());
-		assertEquals(String.class, bm.getProperty("p4").getMeta().getClassMeta().getKeyType().inner());
-		assertEquals(Float.class, bm.getProperty("p4").getMeta().getClassMeta().getValueType().inner());
-		assertEquals(String.class, bm.getProperty("p5").getMeta().getClassMeta().getKeyType().inner());
-		assertEquals(Float.class, bm.getProperty("p5").getMeta().getClassMeta().getValueType().inner());
-		assertEquals(String.class, bm.getProperty("p6").getMeta().getClassMeta().getKeyType().inner());
-		assertEquals(Float.class, bm.getProperty("p6").getMeta().getClassMeta().getValueType().inner());
+		assertEquals(Float.class, bm.getProperty("p1").getMeta().getBeanInfo().getElementType().inner());
+		assertEquals(Float.class, bm.getProperty("p2").getMeta().getBeanInfo().getElementType().inner());
+		assertEquals(Float.class, bm.getProperty("p3").getMeta().getBeanInfo().getElementType().inner());
+		assertEquals(String.class, bm.getProperty("p4").getMeta().getBeanInfo().getKeyType().inner());
+		assertEquals(Float.class, bm.getProperty("p4").getMeta().getBeanInfo().getValueType().inner());
+		assertEquals(String.class, bm.getProperty("p5").getMeta().getBeanInfo().getKeyType().inner());
+		assertEquals(Float.class, bm.getProperty("p5").getMeta().getBeanInfo().getValueType().inner());
+		assertEquals(String.class, bm.getProperty("p6").getMeta().getBeanInfo().getKeyType().inner());
+		assertEquals(Float.class, bm.getProperty("p6").getMeta().getBeanInfo().getValueType().inner());
 	}
 
 	public static class K {

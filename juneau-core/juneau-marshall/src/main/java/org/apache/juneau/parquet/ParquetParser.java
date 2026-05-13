@@ -19,6 +19,7 @@ package org.apache.juneau.parquet;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,7 +32,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * Parses Apache Parquet binary data into bean collections.
  *
  * <p>
- * Always returns a {@link java.util.List}&lt;T&gt;; each row in the file becomes one list element.
+ * Always returns a {@link List}&lt;T&gt;; each row in the file becomes one list element.
  *
  * <h5 class='section'>Media types:</h5>
  * <p>

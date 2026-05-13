@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import java.time.Duration;
 
 /**
  * Parses INI-formatted text into POJO models.
@@ -41,7 +42,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * 	<li>Single-quoted strings (<c>'...'</c>) → String (with <c>''</c> unescaped to single quote)
  * 	<li>Values starting with <c>[</c> or <c>{</c> → Delegated to JSON parser
  * 	<li>ISO 8601 strings → Date, Calendar, or <c>java.time.*</c> when target requires it
- * 	<li>ISO 8601 duration strings → {@link java.time.Duration}
+ * 	<li>ISO 8601 duration strings → {@link Duration}
  * 	<li>Other unquoted tokens → String
  * </ul>
  *

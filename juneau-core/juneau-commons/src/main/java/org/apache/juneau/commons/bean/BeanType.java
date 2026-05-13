@@ -21,6 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.beans.*;
 import java.lang.annotation.*;
+import org.apache.juneau.commons.function.BeanFactory;
 
 /**
  * Annotation that can be applied to classes to control bean introspection and modeling.
@@ -93,11 +94,11 @@ public @interface BeanType {
 	 * Bean factory class.
 	 *
 	 * <p>
-	 * Specifies a {@link org.apache.juneau.commons.function.BeanFactory} class to use for instantiating
+	 * Specifies a {@link BeanFactory} class to use for instantiating
 	 * this class instead of relying on a no-arg constructor or static {@code getInstance()} method.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link org.apache.juneau.commons.function.BeanFactory}
+	 * 	<li class='jc'>{@link BeanFactory}
 	 * </ul>
 	 *
 	 * @return The annotation value.

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.config;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.BeanConfig;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.hjson.*;
 import org.apache.juneau.hocon.*;
@@ -90,7 +91,7 @@ import org.apache.juneau.xml.*;
  *	</li>
  * 	<li class='ja'>{@link MarshalledConfig}:
  * 		<ul>
- * 			<li class='jma'>{@link org.apache.juneau.commons.bean.BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}:  <js>"true"</js>
+ * 			<li class='jma'>{@link BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}:  <js>"true"</js>
  * 		</ul>
  * 	</li>
  * 	<li class='ja'>{@link SerializerConfig}:

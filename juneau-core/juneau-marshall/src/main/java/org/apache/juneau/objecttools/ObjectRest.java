@@ -1025,8 +1025,8 @@ public class ObjectRest {
 			o2 = m.get(parentKey);
 			var pMeta = m.getPropertyMeta(parentKey);
 			if (pMeta == null)
-				throw new ObjectRestException(HTTP_BAD_REQUEST, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", parentKey, m.getClassMeta());
-			ct2 = (ClassMeta) pMeta.getClassMeta();
+				throw new ObjectRestException(HTTP_BAD_REQUEST, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", parentKey, m.getBeanInfo());
+			ct2 = (ClassMeta) pMeta.getBeanInfo();
 		}
 
 		if (childUrl == null)

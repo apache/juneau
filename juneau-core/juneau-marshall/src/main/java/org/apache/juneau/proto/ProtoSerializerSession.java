@@ -248,7 +248,7 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 				onBeanGetterException(pMeta, thrown);
 			if (value == null)
 				return;
-			var cMeta = (ClassMeta<?>) pMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 			if (canIgnoreValue(cMeta, key, value))
 				return;
 			var protoPMeta = ctx.getProtoBeanPropertyMeta(pMeta);

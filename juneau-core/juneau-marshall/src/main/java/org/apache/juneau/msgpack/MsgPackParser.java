@@ -41,8 +41,8 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * <p>
  * MessagePack-to-Java type mapping:
  * <ul class='spaced-list'>
- * 	<li>MessagePack map → bean or {@link java.util.Map}
- * 	<li>MessagePack array → {@link java.util.Collection} or Java array
+ * 	<li>MessagePack map → bean or {@link Map}
+ * 	<li>MessagePack array → {@link Collection} or Java array
  * 	<li>MessagePack string → {@link String}; coerced to types parseable from string
  * 	<li>MessagePack boolean → {@link Boolean}
  * 	<li>MessagePack int → {@link Integer}; coerced to {@link Long}, {@link Short}, {@link Byte} as needed

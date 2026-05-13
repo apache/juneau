@@ -302,7 +302,7 @@ public class MarkdownDocParserSession extends MarkdownParserSession {
 						var pm = m.getPropertyMeta(key);
 						if (pm != null) {
 							setCurrentProperty(pm);
-							var val = parseCellValue(rawVal, (ClassMeta<?>) pm.getClassMeta(), m.getBean(false));
+							var val = parseCellValue(rawVal, (ClassMeta<?>) pm.getBeanInfo(), m.getBean(false));
 							pm.set(m, key, val);
 							setCurrentProperty(null);
 						} else {
@@ -325,7 +325,7 @@ public class MarkdownDocParserSession extends MarkdownParserSession {
 				continue; // Skip root, unknown properties, or sections we ignore
 
 			setCurrentProperty(pm);
-			var propCm = (ClassMeta<?>) pm.getClassMeta();
+			var propCm = (ClassMeta<?>) pm.getBeanInfo();
 
 			// Find first content line to determine if it's a table or list
 			var contentLines = sectionLines.stream()

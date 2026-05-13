@@ -439,7 +439,7 @@ public class HoconParserSession extends ReaderParserSession {
 			var val = pm == null ? null : getBeanValueSafely(bm, key);
 			if (pm == null || val == null)
 				continue;
-			var cm = (ClassMeta<?>) pm.getClassMeta();
+			var cm = (ClassMeta<?>) pm.getBeanInfo();
 			if (cm.getNameProperty() != null)
 				setName(cm, val, key);
 			if (cm.getParentProperty() != null)

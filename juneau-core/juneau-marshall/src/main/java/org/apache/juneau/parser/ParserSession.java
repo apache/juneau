@@ -334,7 +334,7 @@ public class ParserSession extends MarshallingSession {
 	 *
 	 * <p>
 	 * This always returns a value for input of type {@link CharSequence}.
-	 * <br>For other input types, use {@link org.apache.juneau.Context.Builder#debug()} setting to enable caching to a string
+	 * <br>For other input types, use {@link Context.Builder#debug()} setting to enable caching to a string
 	 * before parsing so that this method returns the input.
 	 *
 	 * @return The input as a string, or <jk>null</jk> if no pipe has been created or we're reading from an uncached reader or input stream source.
@@ -1202,7 +1202,7 @@ public class ParserSession extends MarshallingSession {
 		if (nn(listener))
 			listener.onBeanSetterException(this, t, p);
 		var prefix = "";
-		addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t));
+		addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), lm(t));
 	}
 
 	/**
@@ -1212,12 +1212,12 @@ public class ParserSession extends MarshallingSession {
 	 * @param beanMap The bean that doesn't have the expected property.
 	 * @param value The parsed value.
 	 * @throws ParseException
-	 * 	Automatically thrown if {@link org.apache.juneau.MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
+	 * 	Automatically thrown if {@link MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
 	 * 	<jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
 	protected final <T> void onUnknownProperty(String propertyName, BeanMap<T> beanMap, Object value) throws ParseException {
-		var bmcm = (ClassMeta<T>) beanMap.getClassMeta();
+		var bmcm = (ClassMeta<T>) beanMap.getBeanInfo();
 		if (propertyName.equals(getBeanTypePropertyName(bmcm)))
 			return;
 		if (! isIgnoreUnknownBeanProperties() && (nn(value) || ! isIgnoreUnknownNullBeanProperties()))

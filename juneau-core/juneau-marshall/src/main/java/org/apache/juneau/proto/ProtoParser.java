@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.collections.JsonMap;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
@@ -67,7 +68,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * </ul>
  *
  * <p>
- * This parser converts protobuf messages to {@link org.apache.juneau.collections.JsonMap JsonMaps}.
+ * This parser converts protobuf messages to {@link JsonMap JsonMaps}.
  * If a <c>_type</c> field is present, an attempt is made to convert the message to the specified
  * Java bean class.
  *

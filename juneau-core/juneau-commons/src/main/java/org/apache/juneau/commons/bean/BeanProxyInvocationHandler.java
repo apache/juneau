@@ -65,6 +65,11 @@ import java.util.*;
  * 	<jk>var</jk> name = person.<jsm>getName</jsm>(); <jc>// Returns "John"</jc>
  * </p>
  *
+ * <h5 class='topic'>Thread safety</h5>
+ *
+ * Instances are not thread-safe.
+ * Property values are stored in a mutable {@link HashMap} with no synchronization.
+ *
  * @param <T> The interface class type
  * @see BeanConfigContext#isUseInterfaceProxies()
  * @see BeanMeta#getBeanProxyInvocationHandler()

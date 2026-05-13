@@ -35,9 +35,8 @@ import java.lang.annotation.*;
  * Behavior depends on the target:
  * <ul>
  * 	<li><b>TYPE (class)</b> — marks the class as <i>not a bean</i>. The marshaller falls through to
- * 		its other type-detection logic (object swaps, {@link org.apache.juneau.commons.bean.BeanType @BeanType}-style
- * 		hints, {@code @Marshalled(as=STRING)}, etc.) instead of treating the class as a bean. This is
- * 		the original pre-TODO-21 {@code @BeanIgnore} semantic.
+ * 		its other type-detection logic (object swaps, {@link BeanType @BeanType}-style
+ * 		hints, {@code @Marshalled(as=STRING)}, etc.) instead of treating the class as a bean.
  * 	<li><b>FIELD</b> — excludes the field from bean property discovery. Use {@link #ignoreAccessors()}
  * 		to also suppress matching JavaBean accessors.
  * 	<li><b>METHOD</b> — excludes the getter/setter from bean property discovery.

@@ -71,7 +71,7 @@ class BeanMeta_Test extends TestBase {
 	void a03_commonsConstructed_marshallingContextIsNull() {
 		var bm = BeanMeta.of(A_Pojo.class);
 		// The public protected accessor returns null on the commons-side path.
-		assertNull(bm.getClassMeta());
+		assertNull(bm.getBeanInfo());
 	}
 
 	//====================================================================================================
@@ -96,7 +96,7 @@ class BeanMeta_Test extends TestBase {
 		assertNotNull(px.getGetter());
 		assertNotNull(px.getSetter());
 		// rawTypeMeta is left null on the commons-side path — type resolution is a marshalling concern.
-		assertNull(px.getClassMeta());
+		assertNull(px.getBeanInfo());
 	}
 
 	//====================================================================================================

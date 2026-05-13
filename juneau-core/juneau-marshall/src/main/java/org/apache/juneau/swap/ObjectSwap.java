@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.swap;
 
+import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -49,7 +50,7 @@ import org.apache.juneau.serializer.*;
  * <c>ObjectSwaps</c> are associated with serializers and parsers through the following:
  * <ul class='javatree'>
  * 	<li class='ja'>{@link Swap @Swap}
- * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...)}
+ * 	<li class='jm'>{@link MarshallingContext.Builder#swaps(Class...)}
  * </ul>
  *
  * <p>
@@ -59,9 +60,9 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@code <S>} - The swapped representation of an object.
  * </ol>
  * <br>{@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to
- * {@link org.apache.juneau.commons.bean.BeanMap#get(Object)}.
+ * {@link BeanMap#get(Object)}.
  * <br>{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to
- * {@link org.apache.juneau.commons.bean.BeanMap#put(String,Object)}.
+ * {@link BeanMap#put(String,Object)}.
  *
  * <h5 class='topic'>Swap Class Type {@code <S>}</h5>
  *

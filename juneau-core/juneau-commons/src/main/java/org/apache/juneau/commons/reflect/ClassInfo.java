@@ -2245,6 +2245,20 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	public boolean isNumber() { return isAssignableTo(Number.class) || isAny(byte.class, short.class, int.class, long.class, float.class, double.class); }
 
 	/**
+	 * Returns <jk>true</jk> if this class is exactly {@link Object}.
+	 *
+	 * @return <jk>true</jk> if this class is {@link Object}.
+	 */
+	public boolean isObject() { return is(Object.class); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is {@link Optional}.
+	 *
+	 * @return <jk>true</jk> if this class is {@link Optional}.
+	 */
+	public boolean isOptional() { return is(Optional.class); }
+
+	/**
 	 * Returns <jk>true</jk> if this class is assignable to {@link java.time.temporal.Temporal}.
 	 *
 	 * @return <jk>true</jk> if this class is assignable to {@link java.time.temporal.Temporal}.

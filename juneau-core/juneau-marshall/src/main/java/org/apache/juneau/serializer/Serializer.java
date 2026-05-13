@@ -26,6 +26,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
+import java.net.URI;
+import java.net.URL;
 import java.util.*;
 import java.util.function.*;
 
@@ -1186,8 +1188,8 @@ public class Serializer extends MarshallingTraverseContext {
 		 * <p>
 		 * Defines what relative URIs are relative to when serializing any of the following:
 		 * <ul>
-		 * 	<li>{@link java.net.URI}
-		 * 	<li>{@link java.net.URL}
+		 * 	<li>{@link URI}
+		 * 	<li>{@link URL}
 		 * 	<li>Properties and classes annotated with {@link Uri @Uri}
 		 * </ul>
 		 *
@@ -1195,9 +1197,9 @@ public class Serializer extends MarshallingTraverseContext {
 		 * See {@link #uriContext(UriContext)} for examples.
 		 *
 		 * <ul class='values javatree'>
-		 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#RESOURCE}
+		 * 	<li class='jf'>{@link UriRelativity#RESOURCE}
 		 * 		- Relative URIs should be considered relative to the servlet URI.
-		 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#PATH_INFO}
+		 * 	<li class='jf'>{@link UriRelativity#PATH_INFO}
 		 * 		- Relative URIs should be considered relative to the request URI.
 		 * </ul>
 		 *
@@ -1222,8 +1224,8 @@ public class Serializer extends MarshallingTraverseContext {
 		 * <p>
 		 * Defines the resolution level for URIs when serializing any of the following:
 		 * <ul>
-		 * 	<li>{@link java.net.URI}
-		 * 	<li>{@link java.net.URL}
+		 * 	<li>{@link URI}
+		 * 	<li>{@link URL}
 		 * 	<li>Properties and classes annotated with {@link Uri @Uri}
 		 * </ul>
 		 *

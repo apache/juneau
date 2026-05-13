@@ -146,7 +146,7 @@ public class RequestBeanMeta {
 	@SuppressWarnings({
 		"java:S1452"  // Wildcard required - ClassMeta<?> for request metadata
 	})
-	public ClassMeta<?> getClassMeta() { return cm; }
+	public ClassMeta<?> getBeanInfo() { return cm; }
 
 	/**
 	 * Returns all the annotated methods on this bean.

@@ -19,6 +19,8 @@ package org.apache.juneau.bson;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -38,17 +40,17 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * <p>
  * BSON-to-Java type mapping:
  * <ul class='spaced-list'>
- * 	<li>BSON document (0x03) → bean or {@link java.util.Map}
- * 	<li>BSON array (0x04) → {@link java.util.Collection} or Java array (numeric string keys ignored)
+ * 	<li>BSON document (0x03) → bean or {@link Map}
+ * 	<li>BSON array (0x04) → {@link Collection} or Java array (numeric string keys ignored)
  * 	<li>BSON string (0x02) → {@link String}; coerced to types parseable from string
  * 	<li>BSON boolean (0x08) → {@link Boolean}
  * 	<li>BSON int32 (0x10) → {@code int}; coerced to {@code long}, {@code short}, {@code byte} as needed
  * 	<li>BSON int64 (0x12) → {@code long}; coerced to {@code int} if target is {@code int}
  * 	<li>BSON double (0x01) → {@code double}; coerced to {@code float}
- * 	<li>BSON datetime (0x09) → {@link java.util.Date}, {@link java.util.Calendar}, {@link java.time.Instant}, or
+ * 	<li>BSON datetime (0x09) → {@link Date}, {@link Calendar}, {@link Instant}, or
  * 		{@code long} (millis)
  * 	<li>BSON binary (0x05) → {@code byte[]}
- * 	<li>BSON decimal128 (0x13) → {@link java.math.BigDecimal}
+ * 	<li>BSON decimal128 (0x13) → {@link BigDecimal}
  * 	<li>BSON null (0x0A) → {@code null}
  * 	<li>BSON ObjectId (0x07) → 24-character hex {@link String}
  * 	<li>Deprecated/unsupported types → silently skipped

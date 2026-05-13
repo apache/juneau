@@ -324,7 +324,7 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
+		 * 	<br>The default is {@link BasicBeanDefMapper}.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */

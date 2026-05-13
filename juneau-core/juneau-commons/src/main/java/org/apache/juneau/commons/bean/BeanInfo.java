@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.bean;
 
 import java.lang.reflect.Type;
+import java.util.Optional;
 
 import org.apache.juneau.commons.reflect.ClassInfoTyped;
 import org.apache.juneau.commons.reflect.ExecutableException;
@@ -28,7 +29,7 @@ import org.apache.juneau.commons.reflect.ExecutableException;
  *
  * <p>
  * Marshalling-side {@code ClassMeta&lt;T&gt;} extends this class; bean-modeling-side code only sees
- * {@link BeanTypeInfo}.  The bean-modeling-side never instantiates this class directly — it always
+ * {@link BeanInfo}.  The bean-modeling-side never instantiates this class directly — it always
  * gets instances handed in by the marshalling layer (e.g. via builder calls like
  * {@code BeanPropertyMeta.Builder#rawMetaType(ClassMeta)}).
  *
@@ -36,16 +37,19 @@ import org.apache.juneau.commons.reflect.ExecutableException;
  * All extra abstract methods declared here mirror methods that {@code ClassMeta} already implements,
  * so {@code ClassMeta} satisfies this contract by virtue of its existing implementation.
  *
+ * <h5 class='topic'>Thread safety</h5>
+ * Thread safety depends on implementation.
+ *
  * @param <T> The raw class type this instance represents.
  */
-public abstract class BeanTypeInfo<T> extends ClassInfoTyped<T> {
+public abstract class BeanInfo<T> extends ClassInfoTyped<T> {
 
 	/**
 	 * Constructor.
 	 *
 	 * @param inner The class type.
 	 */
-	protected BeanTypeInfo(Class<T> inner) {
+	protected BeanInfo(Class<T> inner) {
 		super(inner);
 	}
 
@@ -55,7 +59,7 @@ public abstract class BeanTypeInfo<T> extends ClassInfoTyped<T> {
 	 * @param inner The class type.
 	 * @param innerType The generic type (if parameterized type).
 	 */
-	protected BeanTypeInfo(Class<T> inner, Type innerType) {
+	protected BeanInfo(Class<T> inner, Type innerType) {
 		super(inner, innerType);
 	}
 
@@ -67,13 +71,6 @@ public abstract class BeanTypeInfo<T> extends ClassInfoTyped<T> {
 	public abstract boolean isUri();
 
 	/**
-	 * Returns <jk>true</jk> if this class is a {@link java.util.Optional}.
-	 *
-	 * @return <jk>true</jk> if this class is an Optional.
-	 */
-	public abstract boolean isOptional();
-
-	/**
 	 * Returns <jk>true</jk> if this class is classified as a bean.
 	 *
 	 * @return <jk>true</jk> if this class is a bean.
@@ -81,33 +78,26 @@ public abstract class BeanTypeInfo<T> extends ClassInfoTyped<T> {
 	public abstract boolean isBean();
 
 	/**
-	 * Returns <jk>true</jk> if this class is {@link Object}.
-	 *
-	 * @return <jk>true</jk> if this class is {@code Object}.
-	 */
-	public abstract boolean isObject();
-
-	/**
 	 * For array and {@code Collection} types, returns the type info of the element type, or <jk>null</jk>
 	 * if this is not an array/collection.
 	 *
 	 * @return The element type info, or <jk>null</jk>.
 	 */
-	public abstract BeanTypeInfo<?> getElementType();
+	public abstract BeanInfo<?> getElementType();
 
 	/**
 	 * For {@code Map} types, returns the type info of the key type, or <jk>null</jk> if this is not a map.
 	 *
 	 * @return The key type info, or <jk>null</jk>.
 	 */
-	public abstract BeanTypeInfo<?> getKeyType();
+	public abstract BeanInfo<?> getKeyType();
 
 	/**
 	 * For {@code Map} types, returns the type info of the value type, or <jk>null</jk> if this is not a map.
 	 *
 	 * @return The value type info, or <jk>null</jk>.
 	 */
-	public abstract BeanTypeInfo<?> getValueType();
+	public abstract BeanInfo<?> getValueType();
 
 	/**
 	 * Returns <jk>true</jk> if this class can be instantiated using a no-arg constructor.
@@ -134,7 +124,7 @@ public abstract class BeanTypeInfo<T> extends ClassInfoTyped<T> {
 	public abstract T newInstance() throws ExecutableException;
 
 	/**
-	 * For {@link java.util.Optional} types, returns an empty optional default value, or <jk>null</jk>
+	 * For {@link Optional} types, returns an empty optional default value, or <jk>null</jk>
 	 * if this isn't an Optional.
 	 *
 	 * <p>
@@ -150,8 +140,8 @@ public abstract class BeanTypeInfo<T> extends ClassInfoTyped<T> {
 	 *
 	 * <p>
 	 * On the marshalling-side this returns the bean-modeling subset of the {@code MarshallingContext} that
-	 * carried this type-info; on commons-side {@link BeanTypeInfo} construction paths (none exist in-tree as
-	 * of TODO-5 — {@link BeanTypeInfo} is currently always realized by marshalling-side {@code ClassMeta}),
+	 * carried this type-info; on commons-side {@link BeanInfo} construction paths (none exist in-tree currently;
+	 * {@link BeanInfo} is currently always realized by marshalling-side {@code ClassMeta}),
 	 * this should return the {@code BeanConfigContext} the type-info was built against.
 	 *
 	 * @return The bean-modeling configuration carried alongside this type-info.  Never <jk>null</jk>.

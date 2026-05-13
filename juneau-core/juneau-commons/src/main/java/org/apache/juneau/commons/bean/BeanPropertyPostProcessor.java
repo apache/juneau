@@ -29,10 +29,11 @@ package org.apache.juneau.commons.bean;
  * The default {@link #NOOP} implementation does nothing and is wired on the commons-side path.
  *
  * <p>
- * The {@code builder} parameter is typed as {@link Object} during the in-flight TODO-5 move of
- * {@code BeanPropertyMeta} into {@code commons.bean}: until that physical move completes, the SPI must
- * not reference the marshalling-side {@code BeanPropertyMeta.Builder} from {@code commons.bean}.  After
- * the move, the parameter can be retyped.
+ * The {@code marshallingContext} parameter remains {@link Object} so this commons-side SPI does not depend
+ * on marshalling-side runtime types.
+ *
+ * <h5 class='topic'>Thread safety</h5>
+ * Thread safety depends on implementation.
  *
  * @see BeanConfigContext.Builder#beanPropertyPostProcessor(BeanPropertyPostProcessor)
  */
@@ -47,9 +48,7 @@ public interface BeanPropertyPostProcessor {
 	 *
 	 * @param marshallingContext The marshalling-side context (as an opaque {@link Object}).  May be <jk>null</jk>
 	 *	when invoked from the commons-side construction path.
-	 * @param builder The bean-property builder to mutate (a {@code BeanPropertyMeta.Builder}).  Must not be
-	 *	<jk>null</jk>.  Typed as {@link Object} until {@code BeanPropertyMeta} physically moves into
-	 *	{@code commons.bean}; the marshalling-side implementation casts internally.
+	 * @param builder The bean-property builder to mutate.  Must not be <jk>null</jk>.
 	 */
-	void process(Object marshallingContext, Object builder);
+	void process(Object marshallingContext, BeanPropertyMeta.Builder builder);
 }

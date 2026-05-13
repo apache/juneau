@@ -94,7 +94,7 @@ public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Ma
 	}
 
 	@Override /* Overridden from Delegate */
-	public ClassMeta<Map<K,V>> getClassMeta() { return classMeta; }
+	public ClassMeta<Map<K,V>> getBeanInfo() { return classMeta; }
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {

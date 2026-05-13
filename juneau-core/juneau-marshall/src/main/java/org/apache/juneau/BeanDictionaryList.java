@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import java.util.*;
+import org.apache.juneau.annotation.Marshalled;
 
 /**
  * Represents a collection of bean classes that make up a bean dictionary.
@@ -24,7 +25,7 @@ import java.util.*;
  * <p>
  * The classes in the list must be one of the following:
  * <ul>
- * 	<li>Beans that provide a dictionary name using the {@link org.apache.juneau.annotation.Marshalled#typeName() @Marshalled(typeName)} annotation.
+ * 	<li>Beans that provide a dictionary name using the {@link Marshalled#typeName() @Marshalled(typeName)} annotation.
  * 	<li>Other subclasses of {@link BeanDictionaryList}.
  * 	<li>Other subclasses of {@link BeanDictionaryMap}.
  * </ul>
@@ -61,7 +62,7 @@ public class BeanDictionaryList extends ArrayList<Class<?>> {
 	 *
 	 * @param c
 	 * 	The list of bean classes to add to this dictionary.
-	 * 	Classes must either specify a {@link org.apache.juneau.annotation.Marshalled#typeName() @Marshalled(typeName)} value or be another subclass of
+	 * 	Classes must either specify a {@link Marshalled#typeName() @Marshalled(typeName)} value or be another subclass of
 	 * 	<c>BeanDictionaryList</c>.
 	 */
 	protected BeanDictionaryList(Class<?>...c) {
@@ -73,7 +74,7 @@ public class BeanDictionaryList extends ArrayList<Class<?>> {
 	 *
 	 * @param c
 	 * 	The list of bean classes to add to this dictionary.
-	 * 	Classes must either specify a {@link org.apache.juneau.annotation.Marshalled#typeName() @Marshalled(typeName)} value or be another subclass of
+	 * 	Classes must either specify a {@link Marshalled#typeName() @Marshalled(typeName)} value or be another subclass of
 	 * 	<c>BeanDictionaryList</c>.
 	 * @return This object.
 	 */

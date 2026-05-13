@@ -18,6 +18,7 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -68,7 +69,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	})
 	public DelegateBeanMap(T bean, MarshallingSession session) {
 		super(bean, session.getBeanMeta((Class<T>)bean.getClass()));
-		setMarshallingSession(session);
+		setBeanSession(session);
 	}
 
 	/**
@@ -90,7 +91,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 			else
 				bme = this.getProperty(k);
 			if (bme == null)
-				throw bex(super.getClassMeta().inner(), "Property ''{0}'' not found on class.", k);
+				throw bex(super.getBeanInfo().inner(), "Property ''{0}'' not found on class.", k);
 			s.add(bme);
 		});
 		return s;
@@ -155,7 +156,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	@Override
 	public boolean equals(Object o) {
-		return this == o || (o instanceof Map<?,?> m && entrySet().equals(m.entrySet()));
+		return o instanceof Map<?,?> o2 && eq(this, o2, (x, y) -> x.entrySet().equals(y.entrySet()));
 	}
 
 	@Override

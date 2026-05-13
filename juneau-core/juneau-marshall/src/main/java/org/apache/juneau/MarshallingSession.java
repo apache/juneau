@@ -1030,7 +1030,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		if (e(m.getConstructorArgs()))
 			bean = newBean(outer, c);
 		var bm = new BeanMap<>(bean, m);
-		bm.setMarshallingSession(this);
+		bm.setBeanSession(this);
 		return bm;
 	}
 
@@ -1130,7 +1130,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		if (m == null)
 			throw bex(c, "Class is not a bean.  Reason=''{0}''", cm.getNotABeanReason());
 		var bm = new BeanMap<>(o, m);
-		bm.setMarshallingSession(this);
+		bm.setBeanSession(this);
 		return bm;
 	}
 
@@ -1324,7 +1324,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 
 	/**
 	 * Bridge implementation of {@link BeanSession#parseToMap(CharSequence)} that delegates to
-	 * {@link org.apache.juneau.collections.JsonMap#ofJson(CharSequence)} paired with this session.
+	 * {@link JsonMap#ofJson(CharSequence)} paired with this session.
 	 *
 	 * <p>
 	 * Used by {@link BeanPropertyMeta#setPropertyValue} to parse a {@link CharSequence} into a {@link Map} when
@@ -1332,7 +1332,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * references the marshalling-side JSON parser.
 	 *
 	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
-	 * @return The parsed {@link org.apache.juneau.collections.JsonMap}.
+	 * @return The parsed {@link JsonMap}.
 	 */
 	@Override /* BeanSession */
 	public final java.util.Map<?,?> parseToMap(CharSequence value) {
@@ -1341,15 +1341,15 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 
 	/**
 	 * Bridge implementation of {@link BeanSession#parseToList(CharSequence)} that delegates to
-	 * {@link org.apache.juneau.collections.JsonList#JsonList(CharSequence)} paired with this session.
+	 * {@link JsonList#JsonList(CharSequence)} paired with this session.
 	 *
 	 * <p>
-	 * Used by {@link BeanPropertyMeta#setPropertyValue} to parse a {@link CharSequence} into a {@link java.util.Collection}
+	 * Used by {@link BeanPropertyMeta#setPropertyValue} to parse a {@link CharSequence} into a {@link Collection}
 	 * when the property is collection-typed.  Lifted out of {@link BeanPropertyMeta} so the bean-modeling layer
 	 * no longer references the marshalling-side JSON parser.
 	 *
 	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
-	 * @return The parsed {@link org.apache.juneau.collections.JsonList}.
+	 * @return The parsed {@link JsonList}.
 	 */
 	@Override /* BeanSession */
 	public final java.util.Collection<?> parseToList(CharSequence value) {

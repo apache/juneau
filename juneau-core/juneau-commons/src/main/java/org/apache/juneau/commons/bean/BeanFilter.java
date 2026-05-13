@@ -31,6 +31,9 @@ import org.apache.juneau.commons.reflect.ClassInfoTyped;
  * Marshalling-side {@code MarshalledFilter} implements this interface; bean-modeling-side code only
  * sees {@link BeanFilter}.  This interface is restricted to commons-compatible return types
  * (collections, {@link ClassInfo}, {@link PropertyNamer}, plain values).
+ *
+ * <h5 class='topic'>Thread safety</h5>
+ * Thread safety depends on implementation.
  */
 public interface BeanFilter {
 
@@ -38,11 +41,6 @@ public interface BeanFilter {
 	 * @return The bean class that this filter applies to, or <jk>null</jk> if this is a non-bean filter.
 	 */
 	ClassInfoTyped<?> getBeanClass();
-
-	/**
-	 * @return The class that this filter applies to.
-	 */
-	Class<?> getMarshalledClass();
 
 	/**
 	 * @return The dictionary name associated with this bean, or <jk>null</jk> if no name is defined.

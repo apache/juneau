@@ -449,7 +449,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 				for (Iterator<BeanPropertyMeta> i = bm.getProperties().values().iterator(); i.hasNext();) {
 					BeanPropertyMeta p = i.next();
 					if (p.canRead())
-						properties.put(p.getName(), getSchema((ClassMeta<?>) p.getClassMeta(), p.getName(), exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));
+						properties.put(p.getName(), getSchema((ClassMeta<?>) p.getBeanInfo(), p.getName(), exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));
 				}
 				out.put(PROP_properties, properties);
 

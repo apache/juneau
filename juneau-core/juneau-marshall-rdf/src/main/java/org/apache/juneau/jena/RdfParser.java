@@ -588,10 +588,10 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3()}
-		 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#ntriple()}
-		 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#turtle()}
-		 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#xml()}
+		 * 	<li class='jm'>{@link RdfParser.Builder#n3()}
+		 * 	<li class='jm'>{@link RdfParser.Builder#ntriple()}
+		 * 	<li class='jm'>{@link RdfParser.Builder#turtle()}
+		 * 	<li class='jm'>{@link RdfParser.Builder#xml()}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.

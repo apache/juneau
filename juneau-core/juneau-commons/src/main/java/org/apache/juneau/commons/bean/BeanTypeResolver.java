@@ -35,7 +35,7 @@ import org.apache.juneau.commons.reflect.TypeVariables;
  * {@code validate(...)} narrows it to {@link BeanTypeResolver} just for the duration of the
  * resolve+validate pass.
  *
- * @see BeanTypeInfo
+ * @see BeanInfo
  */
 public interface BeanTypeResolver {
 
@@ -49,7 +49,7 @@ public interface BeanTypeResolver {
 	 * @param typeVarImpls Resolved type-variable substitutions for the enclosing class.
 	 * @return The resolved type-info, or {@code null} if no resolution was possible.
 	 */
-	BeanTypeInfo<?> resolveType(AnnotationInfo<BeanProp> lastBeanProp, ClassInfo type, TypeVariables typeVarImpls);
+	BeanInfo<?> resolveType(AnnotationInfo<BeanProp> lastBeanProp, ClassInfo type, TypeVariables typeVarImpls);
 
 	/**
 	 * Returns the type-info for {@code Object.class} (used as the fallback element/value type for
@@ -57,7 +57,7 @@ public interface BeanTypeResolver {
 	 *
 	 * @return Non-{@code null} type-info for {@code Object.class}.
 	 */
-	BeanTypeInfo<?> objectType();
+	BeanInfo<?> objectType();
 
 	/**
 	 * Returns the annotation provider used to read annotations during property validation.

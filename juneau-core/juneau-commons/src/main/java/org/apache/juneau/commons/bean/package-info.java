@@ -25,63 +25,83 @@
  *
  * <h5 class='topic'>Annotations</h5>
  * <ul>
- *   <li>{@link org.apache.juneau.commons.bean.BeanType @BeanType} — marks a class as a bean and configures
+ *   <li>{@link BeanType @BeanType} — marks a class as a bean and configures
  *       bean-level options (interface class, stop class, property order, etc.).
- *   <li>{@link org.apache.juneau.commons.bean.BeanProp @BeanProp} — configures a bean property
+ *   <li>{@link BeanProp @BeanProp} — configures a bean property
  *       (name, getter, setter, etc.).
- *   <li>{@link org.apache.juneau.commons.bean.BeanCtor @BeanCtor} — marks a constructor as the bean
+ *   <li>{@link BeanCtor @BeanCtor} — marks a constructor as the bean
  *       constructor and names its arguments.
- *   <li>{@link org.apache.juneau.commons.bean.BeanIgnore @BeanIgnore} — marks a class, method, field, or
+ *   <li>{@link BeanIgnore @BeanIgnore} — marks a class, method, field, or
  *       constructor as not a bean / not a bean property.
- *   <li>{@link org.apache.juneau.commons.bean.BeanConfig @BeanConfig} — applies bean-modeling settings
+ *   <li>{@link BeanConfig @BeanConfig} — applies bean-modeling settings
  *       declaratively at the config-annotation level.
- *   <li>{@link org.apache.juneau.commons.bean.Name @Name} — alternative property name on a parameter.
+ *   <li>{@link Name @Name} — alternative property name on a parameter.
  * </ul>
  *
  * <h5 class='topic'>Runtime types</h5>
  * <ul>
- *   <li>{@link org.apache.juneau.commons.bean.BeanMeta} — metadata describing a bean class
+ *   <li>{@link BeanMeta} — metadata describing a bean class
  *       (properties, constructor, type info).
- *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyMeta} — metadata describing a single
+ *   <li>{@link BeanPropertyMeta} — metadata describing a single
  *       bean property.
- *   <li>{@link org.apache.juneau.commons.bean.BeanMap} — {@link java.util.Map} view of a bean
- *       backed by its {@link org.apache.juneau.commons.bean.BeanMeta}.
- *   <li>{@link org.apache.juneau.commons.bean.BeanMapEntry} — {@link java.util.Map.Entry} view of a
+ *   <li>{@link BeanMap} — {@link Map} view of a bean
+ *       backed by its {@link BeanMeta}.
+ *   <li>{@link BeanMapEntry} — {@link Map.Entry} view of a
  *       single bean property.
- *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyValue} — read-side property holder used by
+ *   <li>{@link BeanPropertyValue} — read-side property holder used by
  *       consumers that iterate bean properties.
- *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyConsumer} — callback for iterating bean
- *       properties without materializing a {@link org.apache.juneau.commons.bean.BeanMap}.
- *   <li>{@link org.apache.juneau.commons.bean.BeanProxyInvocationHandler} — {@link java.lang.reflect.InvocationHandler}
+ *   <li>{@link BeanPropertyConsumer} — callback for iterating bean
+ *       properties without materializing a {@link BeanMap}.
+ *   <li>{@link BeanProxyInvocationHandler} — {@link InvocationHandler}
  *       that backs interface-only bean proxies.
- *   <li>{@link org.apache.juneau.commons.bean.BeanInterceptor} — pre/post hooks fired around bean
+ *   <li>{@link BeanInterceptor} — pre/post hooks fired around bean
  *       property reads / writes.
  * </ul>
  *
  * <h5 class='topic'>SPI seams</h5>
  * <ul>
- *   <li>{@link org.apache.juneau.commons.bean.BeanConfigContext} — immutable POJO carrying all
+ *   <li>{@link BeanConfigContext} — immutable POJO carrying all
  *       bean-modeling configuration knobs plus SPI hooks. {@code MarshallingContext} (in
  *       {@code juneau-marshall}) installs the marshalling-side resolver / initializer / post-processor.
- *   <li>{@link org.apache.juneau.commons.bean.BeanTypeInfo} — abstract type-classification surface;
+ *   <li>{@link BeanInfo} — abstract type-classification surface;
  *       {@code ClassMeta} extends it on the marshalling side.
- *   <li>{@link org.apache.juneau.commons.bean.BeanTypeResolver} — resolves {@link java.lang.reflect.Type}
- *       references to {@link org.apache.juneau.commons.bean.BeanTypeInfo} instances.
- *   <li>{@link org.apache.juneau.commons.bean.BeanSession} — per-operation session surface (type
+ *   <li>{@link BeanTypeResolver} — resolves {@link Type}
+ *       references to {@link BeanInfo} instances.
+ *   <li>{@link BeanSession} — per-operation session surface (type
  *       conversion, sub-bean construction, CharSequence parsing).
- *   <li>{@link org.apache.juneau.commons.bean.BeanFilter} — per-class filter surface;
+ *   <li>{@link BeanFilter} — per-class filter surface;
  *       {@code MarshalledFilter} implements it.
- *   <li>{@link org.apache.juneau.commons.bean.BeanRegistryLookup} — bean-dictionary lookup surface;
+ *   <li>{@link BeanRegistryLookup} — bean-dictionary lookup surface;
  *       {@code BeanRegistry} implements it.
- *   <li>{@link org.apache.juneau.commons.bean.BeanMetaInitializer} — hook that lets marshalling-side
- *       code augment {@link org.apache.juneau.commons.bean.BeanMeta} construction (filter discovery,
+ *   <li>{@link BeanMetaInitializer} — hook that lets marshalling-side
+ *       code augment {@link BeanMeta} construction (filter discovery,
  *       type-name resolution, bean-registry assembly).
- *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyPostProcessor} — hook that lets marshalling-side
- *       code augment {@link org.apache.juneau.commons.bean.BeanPropertyMeta} construction
+ *   <li>{@link BeanPropertyPostProcessor} — hook that lets marshalling-side
+ *       code augment {@link BeanPropertyMeta} construction
  *       (swap / surrogate / format annotation processing).
- *   <li>{@link org.apache.juneau.commons.bean.Delegate} — pluggable delegate-bean marker.
- *   <li>{@link org.apache.juneau.commons.bean.PropertyNamer} — pluggable Java-name to bean-property-name
+ *   <li>{@link Delegate} — pluggable delegate-bean marker.
+ *   <li>{@link PropertyNamer} — pluggable Java-name to bean-property-name
  *       transformer.
+ * </ul>
+ *
+ * <h5 class='topic'>Thread safety</h5>
+ * <p>
+ * Practical thread-safety semantics for primary runtime types and SPI seams in this package:
+ * </p>
+ * <ul>
+ *   <li><b>Not thread-safe (mutable, no internal synchronization):</b>
+ *       {@link BeanMap}, {@link BeanProxyInvocationHandler},
+ *       {@link BeanConfigContext.Builder}.
+ *   <li><b>Thread-safe after construction (immutable metadata/value holders):</b>
+ *       {@link BeanConfigContext}, {@link BeanMeta}, {@link BeanPropertyMeta},
+ *       {@link BeanPropertyValue}, {@link BeanMapEntry}.
+ *   <li><b>Thread safety depends on implementation/state:</b>
+ *       {@link BeanSession}, {@link BeanFilter}, {@link BeanRegistryLookup}, {@link BeanMetaInitializer},
+ *       {@link BeanPropertyPostProcessor}, {@link BeanPropertyConsumer}, {@link BeanInfo}.
  * </ul>
  */
 package org.apache.juneau.commons.bean;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Type;
+import java.util.Map;

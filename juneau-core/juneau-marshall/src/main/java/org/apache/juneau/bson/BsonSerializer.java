@@ -19,6 +19,10 @@ package org.apache.juneau.bson;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -47,11 +51,11 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * 	<li>{@code int} / {@code short} / {@code byte} → BSON int32 (type 0x10)
  * 	<li>{@code long} → BSON int64 (type 0x12)
  * 	<li>{@code float} / {@code double} → BSON double (type 0x01)
- * 	<li>{@link java.util.Date} / {@link java.util.Calendar} / {@link java.time.Instant} → BSON datetime (type 0x09) when
+ * 	<li>{@link Date} / {@link Calendar} / {@link Instant} → BSON datetime (type 0x09) when
  * 		{@code writeDatesAsDatetime=true}; otherwise ISO 8601 string
- * 	<li>{@link java.time.Duration} → ISO 8601 duration string
+ * 	<li>{@link Duration} → ISO 8601 duration string
  * 	<li>{@code byte[]} → BSON binary (type 0x05, subtype 0x00)
- * 	<li>{@link java.math.BigDecimal} / {@link java.math.BigInteger} → BSON decimal128 (type 0x13)
+ * 	<li>{@link BigDecimal} / {@link BigInteger} → BSON decimal128 (type 0x13)
  * 	<li>{@code null} → BSON null (type 0x0A)
  * 	<li>All other types → fallback to {@code toString()} as string
  * </ul>

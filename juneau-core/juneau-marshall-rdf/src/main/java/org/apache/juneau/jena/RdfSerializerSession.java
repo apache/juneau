@@ -341,7 +341,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 
 			if (aType.isDelegate()) {
 				wType = aType;
-				aType = (ClassMeta)((Delegate)o).getClassMeta();
+				aType = (ClassMeta)((Delegate)o).getBeanInfo();
 			}
 
 			sType = aType;
@@ -466,7 +466,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		Collections.reverse(l);
 		l.forEach(x -> {
 			var bpMeta = x.getMeta();
-			var cMeta = (ClassMeta<?>) bpMeta.getClassMeta();
+			var cMeta = (ClassMeta<?>) bpMeta.getBeanInfo();
 			var bpRdf = getRdfBeanPropertyMeta(bpMeta);
 			var bpXml = getXmlBeanPropertyMeta(bpMeta);
 
@@ -719,7 +719,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 *
 	 * @see RdfSerializer.Builder#disableUseXmlNamespaces()
 	 * @return
-	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml @Xml} will be inherited by the RDF serializers.
+	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
 	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 */
 	protected final boolean isUseXmlNamespaces() { return ctx.isUseXmlNamespaces(); }

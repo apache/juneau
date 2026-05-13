@@ -20,5 +20,8 @@ import org.apache.juneau.commons.function.*;
 
 /**
  * Represents a consumer of a single bean property value.
+ *
+ * <h5 class='topic'>Thread safety</h5>
+ * Thread safety depends on implementation.
  */
 public interface BeanPropertyConsumer extends Consumer4<BeanPropertyMeta,String,Object,Throwable> {}

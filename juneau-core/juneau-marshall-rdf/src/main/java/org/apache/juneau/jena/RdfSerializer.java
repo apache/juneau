@@ -201,7 +201,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * through reflection.
 		 *
 		 * <p>
-		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
+		 * When present, this value overrides the {@link Serializer.Builder#addBeanTypes()} setting and is
 		 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 		 *
 		 * @return This object.
@@ -609,7 +609,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * Disable reuse of XML namespaces when RDF namespaces not specified.
 		 *
 		 * <p>
-		 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will not be
+		 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml Xml} will not be
 		 * inherited by the RDF serializers.
 		 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 		 *
@@ -623,7 +623,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * Disable reuse of XML namespaces when RDF namespaces not specified.
 		 *
 		 * <p>
-		 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will not be
+		 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml Xml} will not be
 		 * inherited by the RDF serializers.
 		 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 		 *

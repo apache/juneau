@@ -663,8 +663,8 @@ public abstract class Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#debug()}
-		 * 	<li class='jm'>{@link org.apache.juneau.ContextSession.Builder#debug(Boolean)}
+		 * 	<li class='ja'>{@link MarshalledConfig#debug()}
+		 * 	<li class='jm'>{@link ContextSession.Builder#debug(Boolean)}
 		 * </ul>
 		 *
 		 * @return This object.

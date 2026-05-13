@@ -44,9 +44,9 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * Parses Markdown tables and bulleted lists produced by {@link MarkdownSerializer} back into Java objects.
  * The following mappings apply:
  * <ul class='spaced-list'>
- * 	<li>2-column key/value tables are parsed as beans or {@link java.util.Map}s.
- * 	<li>Multi-column tables are parsed as {@link java.util.List}s of beans or {@link java.util.Map}s.
- * 	<li>Bulleted lists are parsed as {@link java.util.List}s.
+ * 	<li>2-column key/value tables are parsed as beans or {@link Map}s.
+ * 	<li>Multi-column tables are parsed as {@link List}s of beans or {@link Map}s.
+ * 	<li>Bulleted lists are parsed as {@link List}s.
  * 	<li>Table cells containing backtick-wrapped JSON5 values are parsed via {@link Json5Parser}.
  * </ul>
  *

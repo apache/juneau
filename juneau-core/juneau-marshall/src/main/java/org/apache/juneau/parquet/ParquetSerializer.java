@@ -19,6 +19,7 @@ package org.apache.juneau.parquet;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -32,7 +33,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  *
  * <p>
  * Parquet is a columnar format; each bean is one row and each bean property is one column.
- * The serializer accepts a {@link java.util.Collection}, array, or single bean at the root.
+ * The serializer accepts a {@link Collection}, array, or single bean at the root.
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
@@ -163,7 +164,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		/**
 		 * Sets how to handle cyclic references during serialization.
 		 *
-		 * @param value THROW to fail with {@link org.apache.juneau.serializer.SerializeException};
+		 * @param value THROW to fail with {@link SerializeException};
 		 * 	NULL to serialize cycles as <jk>null</jk>.
 		 * @return This object.
 		 */
@@ -177,7 +178,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		 *
 		 * <p>
 			Parquet MAP keys are UTF8; <jk>null</jk> keys cannot be stored directly. When serializing a
-		 * {@link java.util.Map} with a <jk>null</jk> key, this string is used. When parsing, a key
+		 * {@link Map} with a <jk>null</jk> key, this string is used. When parsing, a key
 		 * equal to this string is restored as <jk>null</jk>.
 		 *
 		 * @param value The placeholder string for null keys. Default is <js>"&lt;NULL&gt;"</js>.
