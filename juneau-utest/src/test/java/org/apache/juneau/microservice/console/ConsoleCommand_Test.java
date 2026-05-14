@@ -22,7 +22,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.runtime.*;
 import org.junit.jupiter.api.*;
 
 /**

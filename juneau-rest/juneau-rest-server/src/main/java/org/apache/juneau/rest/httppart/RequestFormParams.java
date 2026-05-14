@@ -36,7 +36,7 @@ import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 import jakarta.servlet.http.*;
 

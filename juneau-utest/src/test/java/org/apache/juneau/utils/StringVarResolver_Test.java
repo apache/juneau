@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 
 class StringVarResolver_Test extends TestBase {

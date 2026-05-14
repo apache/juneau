@@ -29,7 +29,7 @@ import java.util.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Contains the meta-data about a REST proxy class.

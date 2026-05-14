@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Utility classes and methods for the {@link OpenApiConfig @OpenApiConfig} annotation.

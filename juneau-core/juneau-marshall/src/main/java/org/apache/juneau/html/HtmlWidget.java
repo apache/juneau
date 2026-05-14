@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.html;
 
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Defines an interface for resolvers of <js>"$W{...}"</js> string variables.

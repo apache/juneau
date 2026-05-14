@@ -34,7 +34,7 @@ import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.uon.*;
 import org.junit.jupiter.api.*;
 

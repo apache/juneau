@@ -30,7 +30,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.commons.bean.BeanMap;

@@ -27,7 +27,7 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Rest info variable resolver.

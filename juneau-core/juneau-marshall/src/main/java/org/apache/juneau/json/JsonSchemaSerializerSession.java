@@ -27,7 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**

@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.*;
 
@@ -42,12 +42,12 @@ public class HelpCommand extends ConsoleCommand {
 	})
 	public boolean execute(Scanner in, PrintWriter out, Args args) throws Exception {
 		var commands = Microservice.getInstance().getConsoleCommands();
-		if (args.size() == 1) {
+		if (args.argCount() + args.optionCount() == 1) {
 			out.println(mb.getString("ListOfAvailableCommands"));
 			commands.forEach((k, v) -> out.append("\t").append(v.getName()).append(" -- ").append(indent(v.getInfo())).println());
 			out.println();
 		} else {
-			var cc = commands.get(args.getArg(1));
+			var cc = commands.get(args.get(1).orElse(null));
 			if (cc == null) {
 				out.println(mb.getString("CommandNotFound"));
 			} else {

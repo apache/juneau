@@ -18,7 +18,7 @@ package org.apache.juneau.toml.annotation;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.toml.*;
 
 /**

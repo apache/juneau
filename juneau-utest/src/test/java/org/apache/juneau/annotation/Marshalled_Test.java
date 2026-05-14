@@ -24,7 +24,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.marshaller.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.bean.*;
 

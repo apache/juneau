@@ -25,7 +25,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Defines an interface for resolvers of <js>"$W{...}"</js> string variables.

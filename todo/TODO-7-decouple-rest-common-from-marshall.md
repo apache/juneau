@@ -46,9 +46,10 @@ Heaviest marshall usage (`httppart`, `oapi`, `serializer`, `urlencoding`). Optio
 
 **Difficulty:** Low–medium
 
-- **VarResolverSession** — `HeaderList` / `PartList` SVL resolution; optional interface/callback to make SVL optional
 - **BeanCreator** (`httppart.bean`) — `RequestBeanMeta` / `ResponseBeanMeta`; consider `ClassInfo.newInstance()` or moving `BeanCreator` to commons
 - **Assertions** — rest-common should depend on **`juneau-assertions`** directly, not only transitively through marshall
+
+> SVL (`VarResolverSession`) was moved to `juneau-commons` as part of TODO-14 — `HeaderList` / `PartList` no longer pull in marshall for variable resolution.
 
 ---
 
@@ -58,7 +59,7 @@ Heaviest marshall usage (`httppart`, `oapi`, `serializer`, `urlencoding`). Optio
 |----------|------|--------|
 | 3 | `HttpPartSchema` + remaining httppart surface | commons (blocked as above) |
 | 4 | `Serialized*` bridge | marshall or bridge module |
-| 5 | `VarResolverSession`, `BeanCreator`, assertions wiring | commons / optional / direct deps |
+| 5 | `BeanCreator`, assertions wiring | commons / optional / direct deps |
 
 ---
 

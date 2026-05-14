@@ -27,7 +27,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.serializer.annotation.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 
 /**

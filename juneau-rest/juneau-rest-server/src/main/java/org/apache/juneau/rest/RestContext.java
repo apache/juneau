@@ -89,7 +89,7 @@ import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 

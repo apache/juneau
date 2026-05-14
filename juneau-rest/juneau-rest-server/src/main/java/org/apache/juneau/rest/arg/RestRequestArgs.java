@@ -28,7 +28,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;

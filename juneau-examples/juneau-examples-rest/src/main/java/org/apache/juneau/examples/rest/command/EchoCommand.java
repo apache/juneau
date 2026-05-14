@@ -19,7 +19,7 @@ package org.apache.juneau.examples.rest.command;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.microservice.console.*;
 
 /**
@@ -30,12 +30,12 @@ public class EchoCommand extends ConsoleCommand {
 
 	@Override /* ConsoleCommand */
 	public boolean execute(Scanner in, PrintWriter out, Args args) {
-		out.println(args);
+		out.println("positional=" + args.positional() + ", options=" + args.asMap());
 		return false;
 	}
 
 	@Override /* ConsoleCommand */
-	public String getDescription() { return "Simple prints the args of the command as a serialized JsonMap."; }
+	public String getDescription() { return "Simply prints the positional arguments and named options of the command."; }
 
 	@Override /* ConsoleCommand */
 	public String getInfo() { return "Echo command"; }

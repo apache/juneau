@@ -28,7 +28,7 @@ import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 

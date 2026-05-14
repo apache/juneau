@@ -35,7 +35,7 @@ import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Represents the query parameters in an HTTP request.

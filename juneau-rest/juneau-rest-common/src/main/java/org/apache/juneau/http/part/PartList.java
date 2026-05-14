@@ -31,7 +31,7 @@ import org.apache.http.util.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * An simple list of HTTP parts (form-data, query-parameters, path-parameters).

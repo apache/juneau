@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.FileUtils.*;
 
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * File resource variable resolver

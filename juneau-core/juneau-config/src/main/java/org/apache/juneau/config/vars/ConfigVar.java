@@ -17,7 +17,7 @@
 package org.apache.juneau.config.vars;
 
 import org.apache.juneau.config.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Config file variable resolver.

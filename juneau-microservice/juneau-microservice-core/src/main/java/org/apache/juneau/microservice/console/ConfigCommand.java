@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.*;
 
@@ -54,12 +54,13 @@ public class ConfigCommand extends ConsoleCommand {
 	})
 	public boolean execute(Scanner in, PrintWriter out, Args args) {
 		var conf = Microservice.getInstance().getConfig();
-		if (args.size() > 2) {
-			var option = args.getArg(1);
-			var key = args.getArg(2);
+		var size = args.argCount() + args.optionCount();
+		if (size > 2) {
+			var option = args.get(1).orElse("");
+			var key = args.get(2).orElse("");
 			if (option.equals("get")) {
 				// config get <key>
-				if (args.size() == 3) {
+				if (size == 3) {
 					var val = conf.get(key).orElse(null);
 					if (nn(val))
 						out.println(val);
@@ -70,17 +71,17 @@ public class ConfigCommand extends ConsoleCommand {
 				}
 			} else if (option.equals("set")) {
 				// config set <key> <value>
-				if (args.size() == 4) {
-					conf.set(key, args.getArg(3));
+				if (size == 4) {
+					conf.set(key, args.get(3).orElse(null));
 					out.println(mb.getString(MKEY_configSet));
-				} else if (args.size() < 4) {
+				} else if (size < 4) {
 					out.println(mb.getString(MKEY_invalidArguments));
 				} else {
 					out.println(mb.getString(MKEY_tooManyArguments));
 				}
 			} else if (option.equals("remove")) {
 				// config remove <key>
-				if (args.size() == 3) {
+				if (size == 3) {
 					if (conf.get(key).isPresent()) {
 						conf.remove(key);
 						out.println(mb.getString(MKEY_configRemove, key));

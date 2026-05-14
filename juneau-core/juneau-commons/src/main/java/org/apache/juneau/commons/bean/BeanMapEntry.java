@@ -126,10 +126,10 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the given object is a {@link Map.Entry} with equal key and value.
+	 * Returns <jk>true</jk> if the given object is a {@link java.util.Map.Entry} with equal key and value.
 	 *
 	 * <p>
-	 * This follows the {@link Map.Entry} equality contract: two entries are equal if both their
+	 * This follows the {@link java.util.Map.Entry} equality contract: two entries are equal if both their
 	 * keys and values compare equal via {@link Objects#equals}.
 	 *
 	 * @param obj The object to compare against.
@@ -145,7 +145,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	}
 
 	/**
-	 * Returns the hash code for this entry, consistent with the {@link Map.Entry} contract.
+	 * Returns the hash code for this entry, consistent with the {@link java.util.Map.Entry} contract.
 	 *
 	 * <p>
 	 * The hash code is computed as {@code key.hashCode() ^ value.hashCode()}, matching the

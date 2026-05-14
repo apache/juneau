@@ -33,7 +33,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Represents the headers in an HTTP request.

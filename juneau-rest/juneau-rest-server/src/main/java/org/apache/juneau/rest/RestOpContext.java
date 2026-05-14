@@ -65,7 +65,7 @@ import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 

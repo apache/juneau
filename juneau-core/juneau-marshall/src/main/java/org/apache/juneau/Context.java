@@ -54,7 +54,7 @@ import org.apache.juneau.plaintext.annotation.*;
 import org.apache.juneau.proto.annotation.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.soap.annotation.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.toml.annotation.*;
 import org.apache.juneau.uon.annotation.*;
 import org.apache.juneau.urlencoding.annotation.*;

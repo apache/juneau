@@ -31,8 +31,9 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.runtime.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.cp.*;
@@ -41,7 +42,6 @@ import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.svl.*;
 import org.eclipse.jetty.ee11.servlet.*;
 import org.eclipse.jetty.server.*;
 
@@ -440,6 +440,16 @@ public class JettyMicroservice extends Microservice {
 		// @formatter:on
 	}
 
+	private static int[] parseIntArray(String csv) {
+		if (csv == null || csv.isEmpty())
+			return new int[0];
+		var parts = csv.split(",");
+		var out = new int[parts.length];
+		for (var i = 0; i < parts.length; i++)
+			out[i] = Integer.parseInt(parts[i].trim());
+		return out;
+	}
+
 	private static int findOpenPort(int[] ports) {
 		for (var port : ports) {
 			// If port is 0, try a random port between ports[0] and 32767.
@@ -553,14 +563,14 @@ public class JettyMicroservice extends Microservice {
 		var mf = getManifest();
 		var vr = getVarResolver();
 
-		var ports = firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(() -> mf.getWithDefault("Jetty-Port", ints(8000), int[].class)));
+		var ports = firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(() -> mf.get("Jetty-Port").map(JettyMicroservice::parseIntArray).orElseGet(() -> ints(8000))));
 		var availablePort = findOpenPort(ports);
 
 		if (System.getProperty("availablePort") == null)
 			System.setProperty("availablePort", String.valueOf(availablePort));
 
 		var jettyXml = builder.jettyXml;
-		var jettyConfig = cf.get("Jetty/config").orElse(mf.getString("Jetty-Config", "jetty.xml"));
+		var jettyConfig = cf.get("Jetty/config").orElseGet(() -> mf.get("Jetty-Config").orElse("jetty.xml"));
 		var resolveVars = firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
 		boolean resolveVars2 = isTrue(resolveVars);
 

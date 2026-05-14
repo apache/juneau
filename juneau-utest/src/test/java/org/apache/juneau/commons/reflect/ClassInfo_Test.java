@@ -37,7 +37,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

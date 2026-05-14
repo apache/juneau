@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parquet.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Utility classes for the {@link ParquetConfig @ParquetConfig} annotation.

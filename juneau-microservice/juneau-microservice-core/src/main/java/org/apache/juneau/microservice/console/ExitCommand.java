@@ -19,7 +19,7 @@ package org.apache.juneau.microservice.console;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.*;
 

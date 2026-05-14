@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Request attribute variable resolver.

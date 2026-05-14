@@ -18,7 +18,7 @@ package org.apache.juneau;
 
 import java.io.*;
 
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Dummy variable for resolving <code>$X{...}</code> variables.

@@ -23,7 +23,7 @@ import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 
 /**

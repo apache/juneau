@@ -27,7 +27,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Subclass of {@link SerializerSession} for stream-based serializers.

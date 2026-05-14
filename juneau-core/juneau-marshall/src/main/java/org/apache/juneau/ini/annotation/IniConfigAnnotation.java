@@ -19,7 +19,7 @@ package org.apache.juneau.ini.annotation;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.ini.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Utility classes and methods for the {@link IniConfig @IniConfig} annotation.

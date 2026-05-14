@@ -29,7 +29,7 @@ import java.util.stream.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Class used to add properties to a context builder (e.g. {@link MarshallingContext.Builder}) from an annotation (e.g. {@link MarshalledConfig}).

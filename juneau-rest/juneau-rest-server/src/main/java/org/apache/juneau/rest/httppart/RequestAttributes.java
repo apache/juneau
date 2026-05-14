@@ -25,7 +25,7 @@ import java.util.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 import jakarta.servlet.http.*;
 

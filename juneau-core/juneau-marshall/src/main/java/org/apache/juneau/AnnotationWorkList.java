@@ -27,7 +27,7 @@ import java.util.stream.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.bean.BeanConfig;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * A list of {@link AnnotationWork} objects.

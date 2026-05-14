@@ -29,7 +29,7 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Interface for retrieving Swagger on a REST resource.

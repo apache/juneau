@@ -23,7 +23,7 @@ import java.io.*;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.microservice.console.*;
 import org.junit.jupiter.api.*;
@@ -47,7 +47,7 @@ class Microservice_Builder_Test extends TestBase {
 	@Test void a03_builder_args_array() {
 		var b = Microservice.create().args("--port", "8080");
 		assertNotNull(b.args);
-		assertDoesNotThrow(() -> b.args.get("port"));
+		assertEquals("8080", b.args.get("port").orElse(null));
 	}
 
 	@Test void a04_builder_args_object() {

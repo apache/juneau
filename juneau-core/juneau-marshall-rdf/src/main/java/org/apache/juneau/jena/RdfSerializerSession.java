@@ -37,7 +37,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 

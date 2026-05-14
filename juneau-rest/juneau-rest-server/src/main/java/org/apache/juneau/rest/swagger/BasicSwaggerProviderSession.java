@@ -53,7 +53,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 import jakarta.servlet.*;
 

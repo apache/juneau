@@ -31,7 +31,7 @@ import org.apache.http.util.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.HttpHeaders;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * A simple list of HTTP headers with various convenience methods.

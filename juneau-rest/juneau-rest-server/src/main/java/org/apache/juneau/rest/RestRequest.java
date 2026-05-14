@@ -63,7 +63,7 @@ import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.ParseException;

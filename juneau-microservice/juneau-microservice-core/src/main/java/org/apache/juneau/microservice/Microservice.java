@@ -33,6 +33,9 @@ import java.util.logging.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.runtime.*;
+import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.commons.svl.vars.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
@@ -42,9 +45,6 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.svl.*;
-import org.apache.juneau.svl.vars.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Parent class for all microservices.
@@ -448,7 +448,7 @@ public class Microservice implements ConfigEventListener {
 		 * Adds a bean for vars defined in the var resolver.
 		 *
 		 * <p>
-		 * This calls {@link org.apache.juneau.svl.VarResolver.Builder#bean(Class,Object)} on the var resolver used to construct the configuration
+		 * This calls {@link org.apache.juneau.commons.svl.VarResolver.Builder#bean(Class,Object)} on the var resolver used to construct the configuration
 		 * object returned by {@link Microservice#getConfig()} and the var resolver returned by {@link Microservice#getVarResolver()}.
 		 *
 		 * @param c The bean type.
@@ -465,7 +465,7 @@ public class Microservice implements ConfigEventListener {
 		 * Augments the set of variables defined in the configuration and var resolver.
 		 *
 		 * <p>
-		 * This calls {@link org.apache.juneau.svl.VarResolver.Builder#vars(Class[])} on the var resolver used to construct the configuration
+		 * This calls {@link org.apache.juneau.commons.svl.VarResolver.Builder#vars(Class[])} on the var resolver used to construct the configuration
 		 * object returned by {@link Microservice#getConfig()} and the var resolver returned by {@link Microservice#getVarResolver()}.
 		 *
 		 * @param vars The set of variables to append to the var resolver builder.
@@ -728,7 +728,7 @@ public class Microservice implements ConfigEventListener {
 	 * @return <jk>true</jk> if the command returned <jk>true</jk> meaning the console thread should exit.
 	 */
 	public boolean executeCommand(Args args, Scanner in, PrintWriter out) {
-		var cc = consoleCommandMap.get(args.getArg(0));
+		var cc = consoleCommandMap.get(args.get(0).orElse(null));
 		if (cc == null) {
 			out.println(messages.getString("UnknownCommand"));
 		} else {
@@ -1151,12 +1151,13 @@ public class Microservice implements ConfigEventListener {
 			return Collections.singletonList(configName);
 
 		var args2 = getArgs();
-		if (getArgs().hasArg("configFile"))
-			return Collections.singletonList(args2.getArg("configFile"));
+		var configFile = args2.get("configFile");
+		if (configFile.isPresent())
+			return Collections.singletonList(configFile.get());
 
-		var manifest2 = getManifest();
-		if (manifest2.containsKey("Main-Config"))
-			return Collections.singletonList(manifest2.getString("Main-Config"));
+		var mainConfig = getManifest().get("Main-Config");
+		if (mainConfig.isPresent())
+			return Collections.singletonList(mainConfig.get());
 
 		return Config.getCandidateSystemDefaultConfigNames();
 	}

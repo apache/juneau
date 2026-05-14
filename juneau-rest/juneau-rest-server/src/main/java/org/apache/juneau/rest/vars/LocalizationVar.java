@@ -21,7 +21,7 @@ import java.util.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Localized string variable resolver.
