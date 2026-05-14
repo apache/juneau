@@ -69,6 +69,7 @@ public class SpringBeanStore extends BasicBeanStore {
 	}
 
 	@Override
+	@SuppressWarnings("resource") // super.clear() returns this; the discarded return is the store we already own
 	public SpringBeanStore clear() {
 		super.clear();
 		return this;

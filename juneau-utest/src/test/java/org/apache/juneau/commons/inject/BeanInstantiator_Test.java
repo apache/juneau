@@ -19,11 +19,9 @@ package org.apache.juneau.commons.inject;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static java.lang.annotation.RetentionPolicy.*;
-import static java.lang.annotation.ElementType.*;
 
-import java.lang.annotation.*;
 import java.util.*;
+import java.util.function.Supplier;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.Flag;
@@ -63,19 +61,6 @@ class BeanInstantiator_Test extends TestBase {
 	public static class UnresolvableType {
 		public UnresolvableType() {}
 	}
-
-	// Mock annotations for testing (matched by simple class name)
-	@Retention(RUNTIME)
-	@Target({FIELD, METHOD})
-	@interface Inject {}
-
-	@Retention(RUNTIME)
-	@Target({FIELD, METHOD})
-	@interface Autowired {}
-
-	@Retention(RUNTIME)
-	@Target({METHOD})
-	@interface PostConstruct {}
 
 	// Simple service class
 	static class TestService {
@@ -509,6 +494,80 @@ class BeanInstantiator_Test extends TestBase {
 			assertEquals(2, bean.getServices().size());
 			assertSame(service1, bean.getServices().get("")); // Unnamed bean uses empty string as key
 			assertSame(service2, bean.getServices().get("service2"));
+		}
+
+		/**
+		 * Tests creating a bean whose only constructor is package-private with no parameters.
+		 *
+		 * <p>BeanInstantiator falls back to package-private constructors after public/protected.
+		 * Useful for {@code @Configuration} classes and other framework types that intentionally
+		 * keep instantiation scoped to their declaring package. Private constructors remain excluded.
+		 */
+		@Test
+		void a10_createBeanWithPackagePrivateNoArgConstructor() {
+			var bean = bc(A10_BeanWithPackagePrivateCtor.class).run();
+			assertInstanceOf(A10_BeanWithPackagePrivateCtor.class, bean);
+			assertEquals("ctor-fired", bean.tag);
+		}
+
+		static class A10_BeanWithPackagePrivateCtor {
+			final String tag;
+			A10_BeanWithPackagePrivateCtor() { this.tag = "ctor-fired"; }
+		}
+
+		/**
+		 * Tests creating a bean whose only constructor is package-private and accepts dependencies.
+		 *
+		 * <p>Verifies that dependency resolution works the same on the package-private fallback path
+		 * as it does for the public/protected paths.
+		 */
+		@Test
+		void a11_createBeanWithPackagePrivateCtorAndDependencies() {
+			var testService = new TestService("svc");
+			beanStore.add(TestService.class, testService);
+
+			var bean = bc(A11_BeanWithPackagePrivateCtorAndDeps.class).run();
+
+			assertSame(testService, bean.service);
+		}
+
+		static class A11_BeanWithPackagePrivateCtorAndDeps {
+			final TestService service;
+			A11_BeanWithPackagePrivateCtorAndDeps(TestService service) { this.service = service; }
+		}
+
+		/**
+		 * Tests that BeanInstantiator prefers public over protected over package-private when multiple
+		 * visibility-distinct constructors exist on the same class. The public ctor must win.
+		 */
+		@Test
+		void a12_publicConstructorPreferredOverPackagePrivate() {
+			beanStore.add(TestService.class, new TestService("svc"));
+
+			var bean = bc(A12_BeanWithMultipleCtorVisibilities.class).run();
+
+			assertEquals("public", bean.tag);
+		}
+
+		public static class A12_BeanWithMultipleCtorVisibilities {
+			final String tag;
+			public A12_BeanWithMultipleCtorVisibilities(TestService service) { this.tag = "public"; }
+			A12_BeanWithMultipleCtorVisibilities() { this.tag = "package"; }
+		}
+
+		/**
+		 * Tests that a class whose only constructor is private is NOT instantiated by the
+		 * package-private fallback path. Private constructors are explicitly excluded — they signal
+		 * "do not instantiate".
+		 */
+		@Test
+		void a13_privateConstructorIsNotUsed() {
+			var builder = bc(A13_BeanWithPrivateCtor.class);
+			assertThrows(ExecutableException.class, builder::run);
+		}
+
+		public static class A13_BeanWithPrivateCtor {
+			private A13_BeanWithPrivateCtor() { /* must not be instantiated by BeanInstantiator */ }
 		}
 	}
 
@@ -1105,6 +1164,46 @@ class BeanInstantiator_Test extends TestBase {
 			var bean = bc(D08_BeanWithProtectedBuilderConstructor.class).run();
 
 			assertInstanceOf(D08_BeanWithProtectedBuilderConstructor.class, bean);
+		}
+
+		/**
+		 * Tests creating a bean using a builder whose only constructor is package-private.
+		 *
+		 * <p>Verifies the {@code BeanInstantiator.findBuilder()} Step 4 fallback: after public and
+		 * protected constructors fail, the builder's package-private constructors are considered. This
+		 * symmetric widening matches the bean-side ladder and lets builders co-located in their bean's
+		 * declaring package stay package-scoped.
+		 */
+		@Test
+		void d08b_createBeanWithPackagePrivateBuilderConstructor() {
+			var bean = bc(D08b_BeanWithPackagePrivateBuilderConstructor.class).run();
+
+			assertInstanceOf(D08b_BeanWithPackagePrivateBuilderConstructor.class, bean);
+			assertEquals("pkg-builder", bean.getValue());
+		}
+
+		// Bean with builder that has a package-private constructor (no public or protected ctor exposed).
+		@Builder(D08b_BeanWithPackagePrivateBuilderConstructor.PackageBuilder.class)
+		public static class D08b_BeanWithPackagePrivateBuilderConstructor {
+			private final String value;
+
+			private D08b_BeanWithPackagePrivateBuilderConstructor(PackageBuilder builder) {
+				this.value = builder.value;
+			}
+
+			public String getValue() { return value; }
+
+			public static class PackageBuilder {
+				private final String value = "pkg-builder";
+
+				PackageBuilder() {
+					/* package-private — exercised by BeanInstantiator.findBuilder() Step 4 */
+				}
+
+				public D08b_BeanWithPackagePrivateBuilderConstructor build() {
+					return new D08b_BeanWithPackagePrivateBuilderConstructor(this);
+				}
+			}
 		}
 
 		// Bean with builder that has a protected constructor
@@ -3904,9 +4003,8 @@ class BeanInstantiator_Test extends TestBase {
 		@Test
 		@DisplayName("R03 - validate() throws when predicate fails")
 		void r03_validateThrows() {
-			var ex = assertThrows(RuntimeException.class, () ->
-				bc(R_SimpleBean.class).validate(b -> b.value > 100, "value must be > 100").run()
-			);
+			var builder = bc(R_SimpleBean.class).validate(b -> b.value > 100, "value must be > 100");
+			var ex = assertThrows(RuntimeException.class, builder::run);
 			assertTrue(ex.getMessage().contains("value must be > 100"), "Message should mention validator failure");
 		}
 
@@ -4146,6 +4244,18 @@ class BeanInstantiator_Test extends TestBase {
 			assertEquals("created", bean.value);
 		}
 
+		public static class U_NoUsableConstructor {
+			private U_NoUsableConstructor() { /* private — BeanInstantiator cannot reach it */ }
+		}
+
+		@Test
+		@DisplayName("U02b - createOrNull(Class) returns null when instantiation fails (fallback supplier path)")
+		void u02b_createOrNull_uninstantiable_returnsNull() {
+			// Drives the `() -> null` fallback lambda inside createOrNull — only reachable when the
+			// type has no accessible constructor visible to BeanInstantiator.
+			assertNull(BeanInstantiator.createOrNull(U_NoUsableConstructor.class));
+		}
+
 		// --- optionalOf ---
 
 		@Test
@@ -4179,6 +4289,426 @@ class BeanInstantiator_Test extends TestBase {
 			var result = BeanInstantiator.createOrDefault(U_Bean.class, fallback);
 			assertNotNull(result);
 			assertNotSame(fallback, result, "Should create a new instance, not return the default");
+		}
+	}
+
+	//====================================================================================================
+	// V - Outer BeanInstantiator wrapper inspection methods.
+	//
+	// The outer BeanInstantiator (built via Builder.build()) thinly delegates to its inner Builder for
+	// inspection methods (getName, getBeanSubType, getBuilder, getDebugLog, reset, etc.).  These tests
+	// drive the delegation surface explicitly so JaCoCo registers each wrapper line as covered.
+	//====================================================================================================
+	@Nested
+	@DisplayName("V - Outer BeanInstantiator wrapper")
+	class V_outerWrapper {
+
+		public static class V_Bean {
+			public V_Bean() {}
+		}
+
+		@Builder(V_BeanWithBuilder.V_BeanBuilder.class)
+		public static class V_BeanWithBuilder {
+			final String value;
+			V_BeanWithBuilder(V_BeanBuilder b) { this.value = b.value; }
+			public static class V_BeanBuilder {
+				String value = "builder-value";
+				public V_BeanBuilder() {}
+				public V_BeanWithBuilder build() { return new V_BeanWithBuilder(this); }
+			}
+		}
+
+		@Test
+		@DisplayName("V01 - getName() returns the bean name set on the inner builder")
+		void v01_getName() {
+			var wrapper = BeanInstantiator.of(V_Bean.class, beanStore, "myBean", null).build();
+			assertEquals("myBean", wrapper.getName());
+		}
+
+		@Test
+		@DisplayName("V02 - getName() returns null when no name was set")
+		void v02_getNameNull() {
+			var wrapper = bc(V_Bean.class).build();
+			assertNull(wrapper.getName());
+		}
+
+		@Test
+		@DisplayName("V03 - getBeanSubType()/getBeanSubTypes() exposes the resolved subtype info")
+		void v03_getBeanSubType() {
+			var wrapper = bc(V_Bean.class).build();
+			assertNotNull(wrapper.getBeanSubType());
+			assertEquals(V_Bean.class.getName(), wrapper.getBeanSubType().getName());
+			var subTypes = wrapper.getBeanSubTypes();
+			assertNotNull(subTypes);
+			assertFalse(subTypes.isEmpty());
+		}
+
+		@Test
+		@DisplayName("V04 - getBuilder() returns Optional.empty() before run")
+		void v04_getBuilder_beforeRun_empty() {
+			var wrapper = bc(V_Bean.class).build();
+			assertFalse(wrapper.getBuilder().isPresent(),
+				"No builder has been created yet — Optional should be empty");
+		}
+
+		@Test
+		@DisplayName("V05 - getBuilder() returns the cached builder after run for a @Builder type")
+		void v05_getBuilder_afterRun_present() {
+			var wrapper = bc(V_BeanWithBuilder.class).build();
+			var bean = wrapper.run();
+			assertEquals("builder-value", bean.value);
+			assertTrue(wrapper.getBuilder().isPresent(),
+				"Builder must be reachable through the outer wrapper after a successful run()");
+		}
+
+		@Test
+		@DisplayName("V06 - getBuilderType()/getBuilderTypes() expose the builder class info")
+		void v06_getBuilderType() {
+			var wrapper = bc(V_BeanWithBuilder.class).build();
+			wrapper.run();
+			assertNotNull(wrapper.getBuilderType());
+			assertEquals(V_BeanWithBuilder.V_BeanBuilder.class.getName(), wrapper.getBuilderType().getName());
+			var types = wrapper.getBuilderTypes();
+			assertNotNull(types);
+			assertFalse(types.isEmpty());
+		}
+
+		@Test
+		@DisplayName("V07 - getDebugLog() returns the (possibly-empty) debug log on the outer wrapper")
+		void v07_getDebugLog() {
+			var wrapper = bc(V_Bean.class).debug().build();
+			wrapper.run();
+			var log = wrapper.getDebugLog();
+			assertNotNull(log);
+			assertFalse(log.isEmpty(), "debug() mode should record at least one log entry");
+		}
+
+		@Test
+		@DisplayName("V08 - reset() on the outer wrapper clears cached state and returns the wrapper itself")
+		void v08_reset() {
+			var wrapper = bc(V_Bean.class).cached().build();
+			var first = wrapper.run();
+			assertSame(first, wrapper.run(), "Second call should hit the cached instance");
+			assertSame(wrapper, wrapper.reset(), "reset() must return the wrapper itself");
+			assertNotSame(first, wrapper.run(), "After reset(), a fresh instance must be created");
+		}
+	}
+
+	//====================================================================================================
+	// W - Builder option setters and alternative-chain coverage.
+	//
+	// Targets pre-existing Builder.injectBuilder() setter, the alternatives() fallback loop in
+	// runImpl(), and the explicit-builder reset() branch.
+	//====================================================================================================
+	@Nested
+	@DisplayName("W - Builder option setters")
+	class W_builderSetters {
+
+		public static class W_Base {
+			public final String tag;
+			public W_Base() { this.tag = "default"; }
+			public W_Base(String tag) { this.tag = tag; }
+		}
+
+		public static class W_FailingChild extends W_Base {
+			public W_FailingChild() { throw new IllegalStateException("primary failed by design"); }
+		}
+
+		public static class W_OkChild extends W_Base {
+			public W_OkChild() { super("ok-child"); }
+		}
+
+		@Builder(W_BeanWithInjectableBuilder.W_Builder.class)
+		public static class W_BeanWithInjectableBuilder {
+			public final String name;
+			W_BeanWithInjectableBuilder(W_Builder b) { this.name = b.name; }
+			public static class W_Builder {
+				@Inject public AnotherService injectedService;
+				public String name = "wired";
+				public W_Builder() {}
+				public W_BeanWithInjectableBuilder build() { return new W_BeanWithInjectableBuilder(this); }
+			}
+		}
+
+		@Test
+		@DisplayName("W01 - injectBuilder() opts into builder-field injection via @Inject")
+		void w01_injectBuilder_injectsFields() {
+			beanStore.addBean(AnotherService.class, new AnotherService(99));
+			var builder = bc(W_BeanWithInjectableBuilder.class).injectBuilder();
+			builder.run();
+			var b = builder.getBuilder();
+			assertTrue(b.isPresent());
+			assertNotNull(((W_BeanWithInjectableBuilder.W_Builder)b.get()).injectedService,
+				"injectBuilder() should populate the @Inject field on the builder");
+		}
+
+		@Test
+		@DisplayName("W02 - or(...) alternative builder takes over when the primary type fails to instantiate")
+		void w02_alternativeChainFallback() {
+			// Primary subtype throws in its constructor → falls through to the alternative.
+			var bean = bc(W_Base.class)
+				.type(W_FailingChild.class)
+				.or(BeanInstantiator.of(W_Base.class, beanStore).type(W_OkChild.class))
+				.run();
+			assertInstanceOf(W_OkChild.class, bean,
+				"or(alt) must succeed when the primary throws during instantiation");
+			assertEquals("ok-child", bean.tag);
+		}
+
+		@Test
+		@DisplayName("W02b - or(...) when ALL alternatives fail rethrows the primary exception")
+		void w02b_allAlternativesFail() {
+			var builder = bc(W_Base.class)
+				.type(W_FailingChild.class)
+				.or(BeanInstantiator.of(W_Base.class, beanStore).type(W_FailingChild.class));
+			var ex = assertThrows(RuntimeException.class, builder::run);
+			assertTrue(ex.getMessage() == null || ex.getMessage().contains("primary failed")
+					|| (ex.getCause() != null && String.valueOf(ex.getCause().getMessage()).contains("primary failed")),
+				"Primary exception should propagate when all alternatives also fail; got: " + ex);
+		}
+
+		@Test
+		@DisplayName("W03 - reset() with an explicit builder preserves it, only re-builds bean impl")
+		void w03_reset_withExplicitBuilder() {
+			var explicitBuilder = new V_outerWrapper.V_BeanWithBuilder.V_BeanBuilder();
+			explicitBuilder.value = "explicit";
+			var builder = bc(V_outerWrapper.V_BeanWithBuilder.class)
+				.builder(explicitBuilder)
+				.cached();
+			var first = builder.run();
+			builder.reset();
+			var second = builder.run();
+			assertEquals("explicit", first.value);
+			assertEquals("explicit", second.value, "Explicit builder must survive reset()");
+			assertNotSame(first, second, "Bean cache must clear on reset()");
+		}
+
+		public static class W_BeanWithImpl {
+			public final String tag;
+			public W_BeanWithImpl(String tag) { this.tag = tag; }
+		}
+
+		@Test
+		@DisplayName("W04 - reset() with impl() preserves the explicit instance (not re-instantiated)")
+		void w04_reset_withImpl_preservesExplicitImplementation() {
+			var explicit = new W_BeanWithImpl("explicit");
+			var builder = bc(W_BeanWithImpl.class).impl(explicit);
+			assertSame(explicit, builder.run(), "First run uses the explicit instance");
+			builder.reset();
+			assertSame(explicit, builder.run(), "impl() instance must survive reset()");
+		}
+
+		public static class W_BeanWithMultipleCtors {
+			public final String origin;
+			public W_BeanWithMultipleCtors() { this.origin = "zero-arg"; }
+			@Inject public W_BeanWithMultipleCtors(AnotherService s) { this.origin = "injected:" + s.getValue(); }
+		}
+
+		@Test
+		@DisplayName("W05 - preferZeroArgConstructor() short-circuits to the no-arg constructor when available")
+		void w05_preferZeroArgConstructor() {
+			beanStore.addBean(AnotherService.class, new AnotherService(42));
+			// Without the flag, the @Inject ctor wins because it's the longest resolvable.
+			// With the flag set, the zero-arg ctor takes precedence.
+			var bean = bc(W_BeanWithMultipleCtors.class).preferZeroArgConstructor().run();
+			assertEquals("zero-arg", bean.origin);
+		}
+
+		@Test
+		@DisplayName("W06 - factoryAbstainOnNull() returns null directly when the factory method returns null")
+		void w06_factoryAbstainOnNull() {
+			// W_AbstainFactoryBean.create() always returns null; without abstain, BeanInstantiator
+			// would fall through to a constructor.  With abstain, run() returns null.
+			assertNull(bc(W_AbstainFactoryBean.class).factoryAbstainOnNull().fallback(() -> null).run());
+		}
+
+		public static class W_AbstainFactoryBean {
+			public W_AbstainFactoryBean() {}
+			public static W_AbstainFactoryBean getInstance() { return null; }
+		}
+
+		@Test
+		@DisplayName("W07 - noBuilder() short-circuits builder detection")
+		void w07_noBuilder_skipsBuilderDetection() {
+			// W_BeanWithBuilderShortCircuit has an inner Builder class.  noBuilder() must skip it and
+			// fall through to the standard constructor.  Also drives getBuilderType() through
+			// findBuilderType() to cover the noBuilder short-circuit at the top of that method.
+			var b = bc(W_BeanWithBuilderShortCircuit.class).noBuilder();
+			var bean = b.run();
+			assertEquals("constructor-path", bean.origin);
+			assertNull(b.getBuilderType(),
+				"noBuilder() must also short-circuit findBuilderType() (called via getBuilderType())");
+		}
+
+		public static class W_BeanWithBuilderShortCircuit {
+			public final String origin;
+			public W_BeanWithBuilderShortCircuit() { this.origin = "constructor-path"; }
+			public static class Builder {
+				public W_BeanWithBuilderShortCircuit build() {
+					return new W_BeanWithBuilderShortCircuit();
+				}
+			}
+		}
+
+		public static class W_ParentBean {}
+		@Builder(W_ChildBuilder.class)
+		public static class W_BuilderHolder extends W_ParentBean {}
+		public static class W_ChildBuilder {
+			public W_BuilderHolder build() { return new W_BuilderHolder(); }
+		}
+
+		public static class W_ChildOfBuilderHolder extends W_BuilderHolder {
+			public W_ChildOfBuilderHolder() {}
+		}
+
+		@Test
+		@DisplayName("W08 - @Builder on parent class is honored via inherited annotation lookup")
+		void w08_inheritedBuilderAnnotation() {
+			// W_ChildOfBuilderHolder doesn't declare its own @Builder; the resolver must fall back to
+			// the inherited @Builder(W_ChildBuilder.class) annotation on W_BuilderHolder.
+			var b = bc(W_ChildOfBuilderHolder.class);
+			b.run();
+			var builderType = b.getBuilderType();
+			assertNotNull(builderType, "Builder type must be discovered via inherited @Builder annotation");
+			assertEquals(W_ChildBuilder.class.getName(), builderType.getName());
+		}
+
+		public static class W_BeanWithParentInnerBuilder extends W_BeanWithInnerBuilder {
+			public W_BeanWithParentInnerBuilder() { super(); }
+		}
+
+		public static class W_BeanWithInnerBuilder {
+			public final String origin;
+			public W_BeanWithInnerBuilder() { this.origin = "parent-default"; }
+			W_BeanWithInnerBuilder(Builder b) { this.origin = b.tag; }
+			public static class Builder {
+				String tag = "parent-builder";
+				public W_BeanWithInnerBuilder build() { return new W_BeanWithInnerBuilder(this); }
+			}
+		}
+
+		@Test
+		@DisplayName("W09 - Builder inner class is discovered when declared on a parent class (Priority 3c)")
+		void w09_builderInParentClass() {
+			// W_BeanWithParentInnerBuilder has no declared @Builder, no static factory, and no inner
+			// class.  Priority 3c walks the parent chain and finds W_BeanWithInnerBuilder.Builder.
+			var b = bc(W_BeanWithParentInnerBuilder.class);
+			b.run();
+			var builderType = b.getBuilderType();
+			assertNotNull(builderType, "Builder type must be discovered via parent inner class");
+			assertTrue(builderType.getName().endsWith("$Builder"));
+		}
+
+		public static class W_BeanWithSupplierSetter {
+			public final String wired;
+			Supplier<AnotherService> svcSupplier;
+			public W_BeanWithSupplierSetter(Builder b) { this.wired = b.svcSupplier == null ? "no-supplier" : ("svc:" + b.svcSupplier.get().getValue()); }
+			public static class Builder {
+				Supplier<AnotherService> svcSupplier;
+				public Builder() {}
+				public void setSvcSupplier(Supplier<AnotherService> s) { this.svcSupplier = s; }
+				public W_BeanWithSupplierSetter build() { return new W_BeanWithSupplierSetter(this); }
+			}
+		}
+
+		@Test
+		@DisplayName("W10 - autoWireBuilder() wraps a registered bean as a Supplier (unwrapSuppliers is true by default)")
+		void w10_autoWireUnwrapSuppliers() {
+			beanStore.addBean(AnotherService.class, new AnotherService(123));
+			var bean = bc(W_BeanWithSupplierSetter.class)
+				.builder(W_BeanWithSupplierSetter.Builder.class)
+				.autoWireBuilder()
+				.run();
+			assertEquals("svc:123", bean.wired,
+				"Supplier-typed setter must receive a supplier wrapping the registered bean");
+		}
+
+		public static class W_BeanWithOnlyArgCtor {
+			public final String tag;
+			@Inject public W_BeanWithOnlyArgCtor(AnotherService s) { this.tag = "arg:" + s.getValue(); }
+		}
+
+		@Test
+		@DisplayName("W05b - preferZeroArgConstructor() falls back to longest-resolvable ctor when no zero-arg exists")
+		void w05b_preferZeroArgConstructor_noneAvailable() {
+			beanStore.addBean(AnotherService.class, new AnotherService(7));
+			// Bean has no zero-arg constructor — the zeroArgCtor.isPresent() check fails, control
+			// flows through to the standard ctor resolution path.
+			var bean = bc(W_BeanWithOnlyArgCtor.class).preferZeroArgConstructor().run();
+			assertEquals("arg:7", bean.tag, "Should still find a constructor when no zero-arg exists");
+		}
+
+		public static class W_FactoryReturnsNullBean {
+			public final String origin;
+			public W_FactoryReturnsNullBean() { this.origin = "fallback-ctor"; }
+			public static W_FactoryReturnsNullBean getInstance() { return null; }
+		}
+
+		@Test
+		@DisplayName("W06b - factory returning null without factoryAbstainOnNull() falls through to constructor")
+		void w06b_factoryReturnsNull_withoutAbstain_fallsThroughToCtor() {
+			// Same factory-returns-null fixture as W06 but without the abstain opt-in — drives the
+			// `factoryAbstainOnNull == false` branch of the line-1856 short-circuit guard.
+			var bean = bc(W_FactoryReturnsNullBean.class).run();
+			assertNotNull(bean);
+			assertEquals("fallback-ctor", bean.origin);
+		}
+
+		// Parent declares an inner Builder class that is NOT a valid builder (no build/create/get
+		// method returning the bean subtype) — drives the {@code !isValidBuilderType} branch in
+		// findBuilderType()'s Priority 3c.
+		public static class W_BeanWithInvalidParentBuilder extends W_BeanWithInvalidBuilderParent {
+			public W_BeanWithInvalidParentBuilder() {}
+		}
+
+		public static class W_BeanWithInvalidBuilderParent {
+			public W_BeanWithInvalidBuilderParent() {}
+			public static class Builder {
+				// No build()/create()/get() method — isValidBuilderType returns false.
+				public Builder() {}
+				public Object unrelated() { return null; }
+			}
+		}
+
+		@Test
+		@DisplayName("W09b - Invalid Builder discovered in parent class is returned for richer error context")
+		void w09b_invalidBuilderInParentClass() {
+			// findBuilderType() must still return the discovered (invalid) builder so the build-method
+			// resolution path can surface a more descriptive diagnostic.  We only check that the type
+			// itself was returned; running may legitimately fall through to the standard ctor path.
+			var b = bc(W_BeanWithInvalidParentBuilder.class);
+			var builderType = b.getBuilderType();
+			assertNotNull(builderType,
+				"Invalid parent inner Builder must still be returned so failure messages are informative");
+			assertEquals(W_BeanWithInvalidBuilderParent.Builder.class.getName(), builderType.getName());
+		}
+
+		@Test
+		@DisplayName("W11 - copy() of a debug()-enabled builder gives the copy its own fresh debug log")
+		void w11_copy_preservesDebugFlag() {
+			// Exercises the {@code debug.ifPresent(x -> c.debug.set(new ArrayList<>()))} lambda body
+			// inside Builder.copy() — only reached when the source builder has called .debug().
+			var original = bc(W_BeanWithImpl.class).impl(new W_BeanWithImpl("orig")).debug();
+			original.run(); // populates original's debug log
+			var copy = original.copy();
+			copy.run();
+			var originalLog = original.getDebugLog();
+			var copyLog = copy.getDebugLog();
+			assertNotNull(originalLog);
+			assertNotNull(copyLog);
+			assertNotSame(originalLog, copyLog,
+				"copy() must give the clone its own debug log instance");
+		}
+
+		@Test
+		@DisplayName("W12 - silent() suppresses both run-time and debug log output (covers log() guard)")
+		void w12_silent_suppressesLogging() {
+			// {@code log()} guards `silent && !debug.isPresent()` — silent with no debug active drives
+			// the early-return branch.  We can only verify the public outcome: no debug entries.
+			var b = bc(V_outerWrapper.V_Bean.class).silent();
+			b.run();
+			assertTrue(b.getDebugLog().isEmpty(),
+				"silent() without debug() must produce no captured log entries");
 		}
 	}
 

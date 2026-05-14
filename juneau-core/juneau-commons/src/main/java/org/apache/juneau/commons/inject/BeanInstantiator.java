@@ -121,6 +121,9 @@ import org.apache.juneau.commons.reflect.*;
  * 		<ol>
  * 			<li>Calls a static no-arg <c>getInstance()</c> method on the bean class.
  * 			<li>Calls a public constructor with parameters that can be resolved from the bean store.
+ * 			<li>Falls back to a protected constructor with parameters that can be resolved from the bean store.
+ * 			<li>Falls back to a package-private constructor with parameters that can be resolved from the bean store.
+ * 				Private constructors are deliberately excluded.
  * 		</ol>
  * </ol>
  *
@@ -187,9 +190,6 @@ import org.apache.juneau.commons.reflect.*;
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
 public class BeanInstantiator<T> {
-
-	private static final String CLASSNAME_Autowired = "Autowired";
-	private static final String CLASSNAME_Inject = "Inject";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_beanType = "beanType";
@@ -471,6 +471,7 @@ public class BeanInstantiator<T> {
 	public static class Builder<T> {
 
 	final BeanStore parentStore;
+	@SuppressWarnings("resource") // transient build-time scratch store; lifetime is bounded by the Builder itself, no foreign resources are captured
 	final BasicBeanStore store;
 	final ClassInfoTyped<T> beanType;
 	final NullableReference<List<String>> debug = NullableReference.empty();
@@ -733,13 +734,15 @@ public class BeanInstantiator<T> {
 	 * If the builder type is invalid (does not have a valid build method), this method throws an
 	 * {@link IllegalArgumentException}.
 	 *
-	 * <p>
-	 * The builder will be instantiated by looking for:
-	 * <ol>
-	 * 	<li>A static <c>create()</c> or <c>builder()</c> method that returns the builder type.
-	 * 	<li>A public constructor on the builder type with parameters that can be resolved from the bean store.
-	 * 	<li>A protected constructor on the builder type with parameters that can be resolved from the bean store.
-	 * </ol>
+ * <p>
+ * The builder will be instantiated by looking for:
+ * <ol>
+ * 	<li>A static <c>create()</c> or <c>builder()</c> method that returns the builder type.
+ * 	<li>A public constructor on the builder type with parameters that can be resolved from the bean store.
+ * 	<li>A protected constructor on the builder type with parameters that can be resolved from the bean store.
+ * 	<li>A package-private constructor on the builder type with parameters that can be resolved from the bean store.
+ * 		Private constructors are deliberately excluded.
+ * </ol>
 	 *
 	 * @param value The builder type. Cannot be <jk>null</jk>.
 	 * @return This object.
@@ -1706,7 +1709,7 @@ public class BeanInstantiator<T> {
 				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 				.filter(x -> buildMethodNames.contains(x.getNameSimple()))
 				.filter(x -> opt(x).map(x2 -> x2.getReturnType()).filter(x2 -> x2.is(beanSubType.inner()) || x2.isParentOf(beanSubType)).isPresent()) // Accept methods that return beanSubType or a parent type of beanSubType
-				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, CLASSNAME_Inject, CLASSNAME_Autowired)) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
+				.filter(x -> x.getAnnotations().stream().anyMatch(JsrSupport::isInjectAnnotation) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
 				.sorted(methodComparator)
 				.findFirst();
 
@@ -1720,7 +1723,7 @@ public class BeanInstantiator<T> {
 				log("Expected beanSubType: %s", beanSubType.getName());
 
 				// Check if method has @Inject annotation
-				boolean hasInject = method.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, CLASSNAME_Inject, CLASSNAME_Autowired));
+				boolean hasInject = method.getAnnotations().stream().anyMatch(JsrSupport::isInjectAnnotation);
 				if (hasInject) {
 					log("Method has @Inject annotation, resolving parameters from bean store");
 				} else {
@@ -1760,7 +1763,7 @@ public class BeanInstantiator<T> {
 				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 				.filter(x -> !buildMethodNames.contains(x.getNameSimple())) // Skip standard build methods we already checked
 				.filter(x -> x.getReturnType().is(beanSubType.inner())) // Must return exact beanSubType, not parent
-				.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, CLASSNAME_Inject, CLASSNAME_Autowired)) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
+				.filter(x -> x.getAnnotations().stream().anyMatch(JsrSupport::isInjectAnnotation) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
 				.sorted(methodComparator)
 				.findFirst();
 
@@ -1905,6 +1908,23 @@ public class BeanInstantiator<T> {
 					})
 					.orElse(null);
 			}
+			// Fallback: try package-private constructors.
+			// Useful for @Configuration classes and other framework types that intentionally restrict
+			// instantiation to their declaring package but still want to participate in the bean store.
+			// Private constructors are deliberately excluded — they signal "do not instantiate".
+			if (bean == null) {
+				bean = beanSubType.getDeclaredConstructors().stream()
+					.filter(x -> x.isAll(NOT_PUBLIC, NOT_PROTECTED, NOT_PRIVATE, NOT_DEPRECATED))
+					.filter(x -> x.isDeclaringClass(beanSubType))
+					.filter(x -> x.canResolveAllParameters(store2, enclosingInstance, constructorExtraBeans))
+					.sorted(constructorComparator)
+					.findFirst()
+					.map(x -> {
+						log("Found package-private constructor: %s", x.getNameFull());
+						return (T)beanType.cast(x.inject(store2, enclosingInstance, constructorExtraBeans));
+					})
+					.orElse(null);
+			}
 		}
 
 		if (bean != null) {
@@ -2044,6 +2064,18 @@ public class BeanInstantiator<T> {
 		// Step 3: Look for a protected constructor on the builder type
 		r = builderType2.getDeclaredConstructors().stream()
 			.filter(x -> x.isAll(ElementFlag.PROTECTED, NOT_DEPRECATED))
+			.filter(x -> x.canResolveAllParameters(bs, enclosingInstance))
+			.sorted(comparing(ConstructorInfo::getParameterCount).reversed())
+			.findFirst()
+			.map(x -> inject(x.inject(bs, enclosingInstance)));
+		if (r.isPresent())
+			return r.get();
+
+		// Step 4: Look for a package-private constructor on the builder type.
+		// Mirrors the package-private fallback in findBeanImpl() for symmetry: any builder co-located in
+		// the bean's declaring package can be discovered without forcing the constructor to be public/protected.
+		r = builderType2.getDeclaredConstructors().stream()
+			.filter(x -> x.isAll(NOT_PUBLIC, NOT_PROTECTED, NOT_PRIVATE, NOT_DEPRECATED))
 			.filter(x -> x.canResolveAllParameters(bs, enclosingInstance))
 			.sorted(comparing(ConstructorInfo::getParameterCount).reversed())
 			.findFirst()
@@ -2294,7 +2326,7 @@ public class BeanInstantiator<T> {
 				var returnType = x.getReturnType();
 				return returnType.is(beanSubType.inner()) || returnType.is(beanType.inner()) || returnType.isParentOf(beanSubType);
 			})
-			.anyMatch(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eqAny(n, CLASSNAME_Inject, CLASSNAME_Autowired)) || x.getParameterCount() == 0);
+			.anyMatch(x -> x.getAnnotations().stream().anyMatch(JsrSupport::isInjectAnnotation) || x.getParameterCount() == 0);
 
 		if (hasBuildMethod) {
 			log("Builder is valid: has build/create/get method returning bean type");

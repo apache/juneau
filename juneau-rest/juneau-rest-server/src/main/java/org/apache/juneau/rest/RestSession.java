@@ -44,7 +44,8 @@ import jakarta.servlet.http.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_context)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_context)
+	"resource"   // the per-call BasicBeanStore is owned by this RestSession (closed via finish/close paths); fluent add/addBean calls return the same store we already own.
 })
 public class RestSession extends ContextSession {
 

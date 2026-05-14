@@ -80,8 +80,9 @@ public class MapStore implements PropertyStore {
 		var m = map.get();
 		if (m == null)
 			return PropertyLookupResult.missing();
-		var value = m.get(key);
-		return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(value);
+		if (!m.containsKey(key))
+			return PropertyLookupResult.missing();
+		return PropertyLookupResult.present(m.get(key));
 	}
 
 	/**

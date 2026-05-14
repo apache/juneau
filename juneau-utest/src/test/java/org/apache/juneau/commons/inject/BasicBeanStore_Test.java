@@ -23,7 +23,6 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.Named;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -1281,6 +1280,8 @@ class BasicBeanStore_Test extends TestBase {
 		@Override public <T> Optional<T> getBean(Class<T> t) { return delegate.getBean(t); }
 		@Override public <T> Optional<T> getBean(Class<T> t, String n) { return delegate.getBean(t, n); }
 		@Override public <T> java.util.Map<String, T> getBeansOfType(Class<T> t) { return delegate.getBeansOfType(t); }
+		@Override public WritableBeanStore registerConfiguration(Class<?> c) { return delegate.registerConfiguration(c); }
+		@Override public void close() { delegate.close(); }
 	}
 
 	@Test
@@ -1522,6 +1523,112 @@ class BasicBeanStore_Test extends TestBase {
 		var ex = new BeanCreationException("wrapper", cause);
 		assertEquals("wrapper", ex.getMessage());
 		assertSame(cause, ex.getCause());
+	}
+
+	//------------------------------------------------------------------------------------------------
+	// Coverage gap fillers — targeted tests added during the TODO-24 coverage pass.
+	//------------------------------------------------------------------------------------------------
+
+	@Test
+	void z01_trackResolved_nullSupplierResult_isNotTracked() {
+		// A supplier that returns null exercises BasicBeanStore.trackResolved(null) — most easily
+		// reached via getBeansOfType(), which passes the supplier's raw return value (including null)
+		// straight into trackResolved.  The null must not be added to resolvedBeans, and close() must
+		// remain a no-op for it.
+		var store = new BasicBeanStore(null);
+		store.addSupplier(TestBean.class, () -> null, "nullSupplier");
+		store.addSupplier(TestBean.class, () -> new TestBean("ok"), "concrete");
+
+		var all = store.getBeansOfType(TestBean.class);
+		assertEquals(2, all.size(), "Both entries must appear, even when one resolves to null");
+		assertNull(all.get("nullSupplier"), "Null supplier result must be preserved in the map");
+		assertEquals(new TestBean("ok"), all.get("concrete"));
+
+		// close() must not blow up trying to introspect the null bean.
+		assertDoesNotThrow(store::close);
+	}
+
+	/**
+	 * Confirms that {@code @ConditionalOnMissingBean(name="X")} short-circuits when a named default
+	 * supplier exists under that name — this drives the defaults-side branch of the internal
+	 * {@code anyLocalBeanNamed} helper.
+	 */
+	@Configuration
+	public static class Z02_OnMissingNamedConfig {
+		public Z02_OnMissingNamedConfig() {}
+		@Bean(name = "secondary")
+		@ConditionalOnMissingBean(name = "primaryName")
+		public TestBean tb() { return new TestBean("conditional"); }
+	}
+
+	@Test
+	void z02_onMissingBeanByName_seesNamedDefaultSupplier() {
+		var store = new BasicBeanStore(null);
+		// addDefaultSupplier(beanType, supplier, name) populates defaults + defaultMetadata under
+		// "primaryName" — the defaults-side OR in anyLocalBeanNamed must find it.
+		store.addDefaultSupplier(AnotherBean.class, () -> new AnotherBean(0), "primaryName");
+
+		store.registerConfiguration(Z02_OnMissingNamedConfig.class);
+		assertFalse(store.getBean(TestBean.class, "secondary").isPresent(),
+			"Named @ConditionalOnMissingBean must skip when a named default supplier already exists");
+	}
+
+	/**
+	 * Configuration with a mix of {@code @Bean} and non-{@code @Bean} fields/methods.  Exercises the
+	 * {@code if (beanAnn == null) continue;} skip in {@code BasicBeanStore.registerConfiguration} for
+	 * both field iteration and method iteration paths.
+	 */
+	@Configuration
+	public static class Z03_MixedFieldConfig {
+		public Z03_MixedFieldConfig() {}
+		public String nonBeanField = "ignored";
+		@Bean public TestBean tb = new TestBean("z03");
+		@SuppressWarnings("unused") public String helperMethod() { return "not a bean"; }
+		@Bean public AnotherBean ab() { return new AnotherBean(7); }
+	}
+
+	@Test
+	void z03_nonBeanMembers_areSilentlySkipped() {
+		// Verifies that fields/methods without @Bean are skipped without affecting bean registration.
+		var store = new BasicBeanStore(null);
+		store.registerConfiguration(Z03_MixedFieldConfig.class);
+		assertTrue(store.getBean(TestBean.class).isPresent(), "@Bean field must register");
+		assertTrue(store.getBean(AnotherBean.class).isPresent(), "@Bean method must register");
+		assertFalse(store.getBean(String.class).isPresent(),
+			"Non-@Bean field/method must NOT contribute to the store");
+	}
+
+	/**
+	 * Two configurations that contribute the same {@code (type, name)} {@code @Bean} field.  Registering
+	 * the second triggers the duplicate-bean error inside {@code addBeanWithMeta}, which is caught and
+	 * re-wrapped by the {@code @Bean field} try/catch path in {@code registerConfiguration}.
+	 */
+	@Configuration
+	public static class Z04_FirstFieldConfig {
+		public Z04_FirstFieldConfig() {}
+		@Bean(name = "shared") public TestBean tb = new TestBean("first");
+	}
+
+	@Configuration
+	public static class Z04_DuplicateFieldConfig {
+		public Z04_DuplicateFieldConfig() {}
+		@Bean(name = "shared") public TestBean tb = new TestBean("second");
+	}
+
+	@Test
+	void z04_duplicateBeanField_wrapsAsBeanCreationException() {
+		// The second registration's @Bean field hits addBeanWithMeta's duplicate guard.  That throw
+		// is caught by registerConfiguration's @Bean field try/catch and re-wrapped with a
+		// "Failed to register @Bean field" message.
+		var store = new BasicBeanStore(null);
+		store.registerConfiguration(Z04_FirstFieldConfig.class);
+		var ex = assertThrows(BeanCreationException.class,
+			() -> store.registerConfiguration(Z04_DuplicateFieldConfig.class));
+		assertTrue(ex.getMessage().contains("Failed to register @Bean field"),
+			"Wrap message must mention @Bean field; got: " + ex.getMessage());
+		assertNotNull(ex.getCause(), "Original duplicate-bean exception must be the cause");
+		assertTrue(ex.getCause().getMessage().contains("Duplicate bean"),
+			"Cause must reference the duplicate-bean condition; got: " + ex.getCause().getMessage());
 	}
 }
 

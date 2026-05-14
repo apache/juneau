@@ -74,9 +74,6 @@ import org.apache.juneau.commons.lang.*;
 })
 public class ClassInfo extends ElementInfo implements Annotatable, Type, Comparable<ClassInfo> {
 
-	private static final String CLASSNAME_Autowired = "Autowired";
-	private static final String CLASSNAME_Inject = "Inject";
-
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_type = "type";
 	private static final String ARG_pt = "pt";
@@ -3099,13 +3096,12 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	public <T> T inject(T bean, BeanStore beanStore) {
 		// Inject into fields
 		getAllFields().stream()
-			.filter(x -> x.isNotFinal() && x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eq(n, CLASSNAME_Inject) || eq(n, CLASSNAME_Autowired)))
+			.filter(x -> x.isNotFinal() && x.getAnnotations().stream().anyMatch(JsrSupport::isInjectAnnotation))
 			.forEach(x -> x.inject(beanStore, bean));
 
 		// Inject into methods
 		getAllMethods().stream()
-		.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0) && x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eq(n, CLASSNAME_Inject) || eq(n, CLASSNAME_Autowired)))
-		.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0) && x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eq(n, CLASSNAME_Inject) || eq(n, CLASSNAME_Autowired)))
+		.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0) && x.getAnnotations().stream().anyMatch(JsrSupport::isInjectAnnotation))
 			.forEach(x -> x.inject(beanStore, bean));
 
 		// Call @PostConstruct methods after all injection is complete
@@ -3113,7 +3109,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		getAllMethodsTopDown().stream()
 			.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0))
 			.filter(x -> x.getReturnType().is(void.class) && eq(x.getParameterCount(), 0))
-			.filter(x -> x.getAnnotations().stream().map(AnnotationInfo::getNameSimple).anyMatch(n -> eq(n, "PostConstruct")))
+			.filter(x -> x.getAnnotations().stream().anyMatch(JsrSupport::isPostConstructAnnotation))
 			.forEach(x -> x.inject(beanStore, bean));
 
 		return bean;

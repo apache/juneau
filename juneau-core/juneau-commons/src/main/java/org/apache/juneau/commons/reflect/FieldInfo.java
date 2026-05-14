@@ -601,8 +601,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 
 		// Find qualifier from @Named or @Qualifier annotation (same logic as ParameterInfo.getResolvedQualifier)
 		var beanQualifier = getAnnotations().stream()
-			.filter(ai -> ai.hasNameSimple("Named") || ai.hasNameSimple("Qualifier"))
-			.map(ai -> ai.getValue().orElse(null))
+			.map(JsrSupport::qualifierValue)
 			.filter(Objects::nonNull)
 			.findFirst()
 			.orElse(null);

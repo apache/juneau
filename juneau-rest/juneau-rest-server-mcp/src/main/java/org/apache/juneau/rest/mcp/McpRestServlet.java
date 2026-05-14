@@ -94,6 +94,7 @@ public abstract class McpRestServlet extends BasicRestServlet {
 	 * @return The JSON-RPC response, or {@code null} for notifications (which the framework renders as an
 	 *         empty body).
 	 */
+	@SuppressWarnings("resource") // request-scoped scratch BasicBeanStore; lifetime is bounded by this handler invocation, no foreign resources are captured
 	@RestPost(path = "/")
 	public JsonRpcResponse handleMcp(@Content JsonRpcRequest req, RestRequest restReq) {
 		var bs = new BasicBeanStore(restReq.getContext().getBeanStore())

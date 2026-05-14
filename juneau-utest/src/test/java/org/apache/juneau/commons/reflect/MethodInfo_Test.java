@@ -925,7 +925,7 @@ class MethodInfo_Test extends TestBase {
 	// Test method classes
 	public static class TestMethodClass {
 		public void method1(TestService service) {}
-		public void method2(@org.apache.juneau.annotation.Named("service1") TestService service) {}
+		public void method2(@org.apache.juneau.commons.inject.Named("service1") TestService service) {}
 		public void method3(Optional<TestService> service) {}
 		public void method4(TestService[] services) {}
 		public void method5(List<TestService> services) {}

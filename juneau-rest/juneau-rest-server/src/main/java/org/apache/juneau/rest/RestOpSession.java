@@ -39,7 +39,8 @@ import org.apache.juneau.rest.logger.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_ctx, ARG_ctx)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_ctx, ARG_ctx)
+	"resource"   // delegate access — RestSession owns the bean store and closes it; fluent add() calls return the same store.
 })
 public class RestOpSession extends ContextSession {
 

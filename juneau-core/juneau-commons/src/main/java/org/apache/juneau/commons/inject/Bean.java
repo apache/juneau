@@ -187,4 +187,15 @@ public @interface Bean {
 	 * @return The bean name to use to distinguish beans of the same type for different purposes, or blank if bean type is unique.
 	 */
 	String value() default "";
+
+	/**
+	 * Optional ordering value used when exporting ordered bean collections.
+	 *
+	 * <p>
+	 * Lower values are higher precedence.  If both {@link Order} and this value are present on the same
+	 * contribution source, {@link Order} wins.
+	 *
+	 * @return The priority value.
+	 */
+	int priority() default Integer.MAX_VALUE / 2;
 }

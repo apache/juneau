@@ -30,7 +30,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.Named;
 import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
 
@@ -813,7 +812,7 @@ class ConstructorInfo_Test extends TestBase {
 	}
 
 	public static class TestClass2 {
-		public TestClass2(@Named("service1") TestService service) {
+		public TestClass2(@org.apache.juneau.commons.inject.Named("service1") TestService service) {
 			// Named bean parameter
 		}
 	}

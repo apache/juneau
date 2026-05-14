@@ -1309,6 +1309,11 @@ public class RestContext extends Context {
 				));
 			// @formatter:on
 
+			// Populate @Inject-annotated fields and methods on the resource, then fire @PostConstruct
+			// callbacks.  This covers the JSR-330 / Spring @Autowired / jakarta.inject.Inject FQNs as
+			// well as the Juneau-owned @Inject in commons.inject — recognition is FQN-based, see JsrSupport.
+			rci2.inject(resource.get(), beanStore);
+
 			builder.args.beanStoreConfigurer().accept(beanStore);
 
 			// --- end beanStore setup ---
@@ -1755,6 +1760,11 @@ public class RestContext extends Context {
 			} catch (Exception e) {
 				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
 			}
+		}
+		try {
+			beanStore.close();
+		} catch (Exception e) {
+			getLogger().log(Level.WARNING, unwrap(e), () -> "Error occurred closing bean store.");
 		}
 
 		getRestChildren().destroy();

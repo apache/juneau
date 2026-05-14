@@ -26,6 +26,9 @@ import org.apache.juneau.commons.function.*;
 /**
  * A writable {@link PropertyStore} implementation created from functional interfaces.
  */
+@SuppressWarnings({
+	"java:S115" // Constants use ARG_lowerCamel convention to match the corresponding constructor parameter name (e.g., ARG_reader → reader).
+})
 public class FunctionalPropertyStore implements PropertyStore {
 
 	private static final String ARG_reader = "reader";

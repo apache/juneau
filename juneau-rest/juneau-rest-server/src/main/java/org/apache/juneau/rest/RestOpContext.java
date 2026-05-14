@@ -83,7 +83,8 @@ import jakarta.servlet.http.*;
 @SuppressWarnings({
 	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_defaultRequestFormData)
 	"java:S1200", // High coupling is intentional in this central operation context aggregator.
-	"java:S6539"  // RestOpContext intentionally centralizes op wiring and annotation resolution.
+	"java:S6539", // RestOpContext intentionally centralizes op wiring and annotation resolution.
+	"resource"   // op-level BasicBeanStores are short-lived scratch stores; the long-lived opBeanStore field is owned and closed by the parent RestContext via its bean-store hierarchy.
 })
 public class RestOpContext extends Context implements Comparable<RestOpContext> {
 

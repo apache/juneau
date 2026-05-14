@@ -154,6 +154,8 @@ public class BeanAnnotation {
 	})
 	private static class Object extends AppliedAnnotationObject implements Bean {
 
+		private static final String[] EMPTY_STRINGS = new String[0];
+
 		private final String[] description;
 		private final String name;
 		private final String value;
@@ -161,10 +163,12 @@ public class BeanAnnotation {
 
 		Object(BeanAnnotation.Builder b) {
 			super(b);
-			description = copyOf(b.description);
-			name = b.name;
-			value = b.value;
-			methodScope = b.methodScope;
+			// Mirror the compile-time defaults declared on @Bean (empty strings / empty arrays) so
+			// callers iterating the runtime instance see annotation-equivalent values instead of nulls.
+			description = b.description != null ? copyOf(b.description) : EMPTY_STRINGS;
+			name = b.name != null ? b.name : "";
+			value = b.value != null ? b.value : "";
+			methodScope = b.methodScope != null ? copyOf(b.methodScope) : EMPTY_STRINGS;
 		}
 
 		@Override /* Overridden from Bean */
@@ -185,6 +189,11 @@ public class BeanAnnotation {
 		@Override /* Overridden from annotation */
 		public String[] description() {
 			return description;
+		}
+
+		@Override /* Overridden from Bean */
+		public int priority() {
+			return Integer.MAX_VALUE / 2;
 		}
 	}
 

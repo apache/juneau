@@ -49,7 +49,7 @@ import java.util.function.*;
  * 	<li class='jc'>{@link BeanStore} - Read-only bean lookup interface
  * </ul>
  */
-public interface WritableBeanStore extends BeanStore {
+public interface WritableBeanStore extends BeanStore, AutoCloseable {
 
 	/**
 	 * Same as {@link #addBean(Class,Object)} but returns the bean instead of this object for fluent calls.
@@ -59,6 +59,7 @@ public interface WritableBeanStore extends BeanStore {
 	 * @param bean The bean instance.  Can be <jk>null</jk>.
 	 * @return The bean.
 	 */
+	@SuppressWarnings("resource") // addBean returns this; the discarded return is the store the caller already holds
 	default <T> T add(Class<T> beanType, T bean) {
 		addBean(beanType, bean);
 		return bean;
@@ -73,6 +74,7 @@ public interface WritableBeanStore extends BeanStore {
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The bean.
 	 */
+	@SuppressWarnings("resource") // addBean returns this; the discarded return is the store the caller already holds
 	default <T> T add(Class<T> beanType, T bean, String name) {
 		addBean(beanType, bean, name);
 		return bean;
@@ -212,5 +214,35 @@ public interface WritableBeanStore extends BeanStore {
 	 * @return This object for method chaining.
 	 */
 	<T> WritableBeanStore addBeanType(Class<T> beanType, Class<? extends T> implType);
+
+	/**
+	 * Registers a configuration class and its {@link Bean}-annotated members.
+	 *
+	 * @param configType The configuration type.
+	 * @return This object.
+	 */
+	WritableBeanStore registerConfiguration(Class<?> configType);
+
+	/**
+	 * Registers multiple configuration classes.
+	 *
+	 * @param configTypes The configuration types.
+	 * @return This object.
+	 */
+	@SuppressWarnings("resource") // registerConfiguration returns this; the discarded return is the store the caller already holds
+	default WritableBeanStore registerConfigurations(Class<?>... configTypes) {
+		if (configTypes != null)
+			for (var c : configTypes)
+				registerConfiguration(c);
+		return this;
+	}
+
+	/**
+	 * Closes this bean store, invoking pre-destroy callbacks.
+	 *
+	 * @throws BeanCreationException on shutdown failures.
+	 */
+	@Override
+	void close() throws BeanCreationException;
 }
 

@@ -84,6 +84,13 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 	 * @param <V> The value type.
 	 */
 	public static class Builder<K1,K2,K3,K4,K5,V> {
+
+		// Resolved once per JVM.  Looking these up per builder is expensive because Settings iterates every
+		// registered PropertySource (including the manifest scanner), and Cache builders are created very frequently.
+		private static final CacheMode DEFAULT_CACHE_MODE = env("juneau.cache.mode", CacheMode.FULL);
+		private static final int DEFAULT_MAX_SIZE = env("juneau.cache.maxSize", 1000);
+		private static final boolean DEFAULT_LOG_ON_EXIT = env("juneau.cache.logOnExit", false);
+
 		CacheMode cacheMode;
 		int maxSize;
 		String id;
@@ -92,9 +99,9 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 		Function5<K1,K2,K3,K4,K5,V> supplier;
 
 		Builder() {
-			cacheMode = env("juneau.cache.mode", CacheMode.FULL);
-			maxSize = env("juneau.cache.maxSize", 1000);
-			logOnExit = env("juneau.cache.logOnExit", false);
+			cacheMode = DEFAULT_CACHE_MODE;
+			maxSize = DEFAULT_MAX_SIZE;
+			logOnExit = DEFAULT_LOG_ON_EXIT;
 			id = "Cache5";
 		}
 

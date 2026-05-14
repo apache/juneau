@@ -30,6 +30,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.Name;
+import org.apache.juneau.commons.inject.Named;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
 
@@ -95,16 +96,12 @@ class ParameterInfo_Test extends TestBase {
 		public String value();
 	}
 
-	// Test annotations for getResolvedQualifier() - line 643
+	// Custom qualifier annotation meta-annotated with @org.apache.juneau.commons.inject.Qualifier
+	// to exercise the qualifier-meta discovery path in ParameterInfo.findQualifierInternal().
 	@Target(PARAMETER)
 	@Retention(RUNTIME)
-	public static @interface Named {
-		String value();
-	}
-
-	@Target(PARAMETER)
-	@Retention(RUNTIME)
-	public static @interface Qualifier {
+	@org.apache.juneau.commons.inject.Qualifier
+	public @interface Qualifier {
 		String value();
 	}
 

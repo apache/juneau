@@ -39,6 +39,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings({
 	"java:S3008", // Static field naming follows test convention
@@ -3558,19 +3559,6 @@ public class ClassInfo_Test extends TestBase {
 		@Override public int hashCode() { return value; }
 	}
 
-	// Mock annotations for testing (matched by simple class name)
-	@java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-	@java.lang.annotation.Target({java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD})
-	@interface Inject {}
-
-	@java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-	@java.lang.annotation.Target({java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD})
-	@interface Autowired {}
-
-	@java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-	@java.lang.annotation.Target({java.lang.annotation.ElementType.METHOD})
-	@interface PostConstruct {}
-
 	// Test classes for field injection
 	static class TestFieldInjection {
 		@Inject
@@ -3588,7 +3576,7 @@ public class ClassInfo_Test extends TestBase {
 		@Inject
 		TestService[] serviceArray;
 		@Inject
-		@org.apache.juneau.annotation.Named("service1")
+		@org.apache.juneau.commons.inject.Named("service1")
 		TestService namedService;
 		@Inject
 		AnotherService anotherService;
@@ -3655,7 +3643,7 @@ public class ClassInfo_Test extends TestBase {
 		}
 
 		@Inject
-		void method8(@org.apache.juneau.annotation.Named("service1") TestService service) {
+		void method8(@org.apache.juneau.commons.inject.Named("service1") TestService service) {
 			method8Called = true;
 		}
 

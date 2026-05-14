@@ -23,9 +23,11 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
+import java.util.logging.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.settings.*;
 
 /**
  * Basic implementation of {@link WritableBeanStore}.
@@ -58,9 +60,13 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_bean)
+	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_bean)
+	"java:S135",  // @PreDestroy/@Bean discovery loops use per-element continue guards for clarity; refactoring obscures the per-annotation filter chain
+	"java:S3011", // setAccessible(true) is required to invoke private/package-private @Bean members and @PreDestroy methods via reflection
+	"java:S3776"  // matchesConditions and registerConfiguration intentionally centralize the @Conditional/@Bean discovery state machine; splitting hurts cohesion
 })
 public class BasicBeanStore implements WritableBeanStore {
+	private static final Logger LOGGER = Logger.getLogger(BasicBeanStore.class.getName());
 
 	/**
 	 * Static reusable empty instance.
@@ -76,6 +82,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * call any mutating methods on it &mdash; doing so would leak state between unrelated callers.
 	 * Code that legitimately needs to add beans should construct its own {@code new BasicBeanStore()}.
 	 */
+	@SuppressWarnings("resource") // intentional process-lifetime sentinel; never closed because it has no state to release
 	public static final BasicBeanStore INSTANCE = new BasicBeanStore();
 
 	// Property name constants
@@ -90,9 +97,15 @@ public class BasicBeanStore implements WritableBeanStore {
 
 	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, Supplier<?>>> entries;
 	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, Supplier<?>>> defaults;
+	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, BeanSourceMeta>> entryMetadata;
+	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, BeanSourceMeta>> defaultMetadata;
 	private final ConcurrentHashMap<Class<?>, Class<?>> typeBindings;
+	private final List<Object> resolvedBeans;
+	private final Set<Object> resolvedIdentities;
+	private final Set<Class<?>> registeredConfigurations;
 	private final BeanStore parent;
 	private final BeanStore overridingParent;
+	private volatile boolean closed;
 
 	/**
 	 * No-arg constructor.  Equivalent to {@code new BasicBeanStore(null)}.
@@ -135,12 +148,18 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @param parent The parent bean store, used as a fallback after local entries.  Can be <jk>null</jk>.
 	 * @param overridingParent The overriding parent bean store, consulted before local entries.  Can be <jk>null</jk>.
 	 */
+	@SuppressWarnings("resource") // self-registration via addSupplier returns this; no foreign resource is being captured
 	public BasicBeanStore(BeanStore parent, BeanStore overridingParent) {
 		this.parent = parent;
 		this.overridingParent = overridingParent;
 		entries = new ConcurrentHashMap<>();
 		defaults = new ConcurrentHashMap<>();
+		entryMetadata = new ConcurrentHashMap<>();
+		defaultMetadata = new ConcurrentHashMap<>();
 		typeBindings = new ConcurrentHashMap<>();
+		resolvedBeans = Collections.synchronizedList(new ArrayList<>());
+		resolvedIdentities = Collections.newSetFromMap(new IdentityHashMap<>());
+		registeredConfigurations = Collections.synchronizedSet(new HashSet<>());
 		addSupplier(BasicBeanStore.class, ()->this, null);
 		addSupplier(BeanStore.class, ()->this, null);
 		addSupplier(WritableBeanStore.class, ()->this, null);
@@ -154,6 +173,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @param bean The bean.  Can be <jk>null</jk>.
 	 * @return The bean.
 	 */
+	@Override
 	public <T> T add(Class<T> beanType, T bean) {
 		add(beanType, bean, null);
 		return bean;
@@ -168,6 +188,8 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
 	 * @return The bean.
 	 */
+	@Override
+	@SuppressWarnings("resource") // addBean returns this; the discarded return is the store we already own
 	public <T> T add(Class<T> beanType, T bean, String name) {
 		addBean(beanType, bean, name);
 		return bean;
@@ -182,6 +204,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
+	@SuppressWarnings("resource") // fluent self-return; receiver already owns the store, no new resource is handed out
 	public <T> BasicBeanStore addBean(Class<T> beanType, T bean) {
 		return addBean(beanType, bean, null);
 	}
@@ -196,6 +219,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
+	@SuppressWarnings("resource") // fluent self-return; receiver already owns the store, no new resource is handed out
 	public <T> BasicBeanStore addBean(Class<T> beanType, T bean, String name) {
 		return addSupplier(beanType, () -> bean, name);
 	}
@@ -212,6 +236,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
+	@SuppressWarnings("resource") // fluent self-return; receiver already owns the store, no new resource is handed out
 	public <T> BasicBeanStore addSupplier(Class<T> beanType, Supplier<T> bean) {
 		return addSupplier(beanType, bean, null);
 	}
@@ -230,9 +255,11 @@ public class BasicBeanStore implements WritableBeanStore {
 	 */
 	@Override
 	public <T> BasicBeanStore addSupplier(Class<T> beanType, Supplier<T> bean, String name) {
+		checkOpen();
 		var typeMap = entries.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
 		var key = emptyIfNull(name);
 		typeMap.put(key, bean);
+		entryMetadata.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).put(key, BeanSourceMeta.DEFAULT);
 		return this;
 	}
 
@@ -251,6 +278,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
+	@SuppressWarnings("resource") // fluent self-return; receiver already owns the store, no new resource is handed out
 	public <T> BasicBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> supplier) {
 		return addDefaultSupplier(beanType, supplier, null);
 	}
@@ -269,9 +297,11 @@ public class BasicBeanStore implements WritableBeanStore {
 	 */
 	@Override
 	public <T> BasicBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> supplier, String name) {
+		checkOpen();
 		var typeMap = defaults.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
 		var key = emptyIfNull(name);
 		typeMap.put(key, supplier);
+		defaultMetadata.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).put(key, BeanSourceMeta.DEFAULT);
 		return this;
 	}
 
@@ -285,8 +315,12 @@ public class BasicBeanStore implements WritableBeanStore {
 	 */
 	@Override
 	public BasicBeanStore clear() {
+		checkOpen();
 		entries.clear();
 		defaults.clear();
+		entryMetadata.clear();
+		defaultMetadata.clear();
+		registeredConfigurations.clear();
 		return this;
 	}
 
@@ -319,7 +353,14 @@ public class BasicBeanStore implements WritableBeanStore {
 	 */
 	@Override
 	public <T> Optional<T> getBean(Class<T> beanType, String name) {
-		return resolve(beanType, name).map(Supplier::get);
+		checkOpen();
+		if (name == null) {
+			var unnamed = resolve(beanType, null).map(Supplier::get);
+			if (unnamed.isPresent())
+				return unnamed.map(this::trackResolved);
+			return selectPrimary(beanType).map(this::trackResolved);
+		}
+		return resolve(beanType, name).map(Supplier::get).map(this::trackResolved);
 	}
 
 	/**
@@ -338,6 +379,7 @@ public class BasicBeanStore implements WritableBeanStore {
 		"unchecked" // Type erasure requires cast to Map<String,T>
 	})
 	public <T> Map<String,T> getBeansOfType(Class<T> beanType) {
+		checkOpen();
 		// Build the result respecting the priority order used by getBean / resolve:
 		//   defaults (lowest) < parent < entries (local) < overridingParent (highest)
 		// Higher-priority maps overwrite lower-priority ones with the same name.
@@ -352,7 +394,11 @@ public class BasicBeanStore implements WritableBeanStore {
 			typeMap.forEach((name, supplier) -> result.put(name, (T)supplier.get()));
 		if (nn(overridingParent))
 			overridingParent.getBeansOfType(beanType).forEach(result::put);
-		return result;
+		if (result.isEmpty())
+			return result;
+		return result.entrySet().stream()
+			.sorted(Comparator.comparingInt(e -> beanOrder(beanType, e.getKey())))
+			.collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), trackResolved(e.getValue())), Map::putAll);
 	}
 
 	/**
@@ -456,6 +502,7 @@ public class BasicBeanStore implements WritableBeanStore {
 
 	@Override
 	public <T> WritableBeanStore addBeanType(Class<T> beanType, Class<? extends T> implType) {
+		checkOpen();
 		typeBindings.put(beanType, implType);
 		return this;
 	}
@@ -545,7 +592,17 @@ public class BasicBeanStore implements WritableBeanStore {
 	 */
 	@Override
 	public <T> Optional<Supplier<T>> getBeanSupplier(Class<T> beanType, String name) {
+		checkOpen();
 		return resolve(beanType, name);
+	}
+
+	@Override
+	public WritableBeanStore registerConfiguration(Class<?> configType) {
+		checkOpen();
+		if (configType == null)
+			return this;
+		registerConfiguration(configType, registeredConfigurations);
+		return this;
 	}
 
 	/**
@@ -617,5 +674,214 @@ public class BasicBeanStore implements WritableBeanStore {
 			.a(PROP_identity, id(this))
 			.a(PROP_parent, parent instanceof BasicBeanStore parent2 ? parent2.properties() : s(parent));
 		// @formatter:on
+	}
+
+	@Override
+	public void close() throws BeanCreationException {
+		if (closed)
+			return;
+		closed = true;
+		var errors = new BeanCreationException("Errors while invoking @PreDestroy callbacks.");
+		boolean hasErrors = false;
+		var beans = new ArrayList<>(resolvedBeans);
+		Collections.reverse(beans);
+		for (var bean : beans) {
+			for (var method : ClassInfo.of(bean).getAllMethods()) {
+				if (!method.getReturnType().is(void.class) || method.getParameterCount() != 0 || method.isAbstract() || method.isStatic())
+					continue;
+				if (method.getAnnotations().stream().noneMatch(JsrSupport::isPreDestroyAnnotation))
+					continue;
+				try {
+					method.invoke(bean);
+				} catch (Exception e) {
+					hasErrors = true;
+					errors.addSuppressed(e);
+				}
+			}
+		}
+		if (hasErrors)
+			throw errors;
+	}
+
+	@SuppressWarnings("unchecked") // reflective @Bean discovery — element types resolve at runtime to the value's actual class
+	private void registerConfiguration(Class<?> configType, Set<Class<?>> visited) {
+		if (!visited.add(configType))
+			return;
+		var cfg = configType.getAnnotation(Configuration.class);
+		if (cfg == null)
+			throw new BeanCreationException("Type is not @Configuration: " + configType.getName());
+		if (!matchesConditions(configType))
+			return;
+		// Annotation arrays cannot contain null elements at runtime — Java rejects null defaults at
+		// declaration time and the compiler refuses null literals in annotation values.  No defensive
+		// null check is needed here.
+		for (var imported : cfg.imports())
+			registerConfiguration(imported, visited);
+
+		// Walk the type and its superclasses; collect @Bean members on each level.  This honours
+		// the plan's "superclass inheritance of @Bean members" requirement.  Order matters here:
+		// process the highest ancestor first so subclass @Bean methods can depend on superclass
+		// beans (analogous to Spring's @Configuration inheritance).
+		Object instance = null;
+		var hierarchy = new ArrayList<Class<?>>();
+		for (var c = configType; c != null && c != Object.class; c = c.getSuperclass())
+			hierarchy.add(c);
+		Collections.reverse(hierarchy);
+		for (var c : hierarchy) {
+			for (var field : c.getDeclaredFields()) {
+				var beanAnn = field.getAnnotation(Bean.class);
+				if (beanAnn == null)
+					continue;
+				if (!matchesConditions(field))
+					continue;
+				try {
+					if (!java.lang.reflect.Modifier.isStatic(field.getModifiers()) && instance == null)
+						instance = BeanInstantiator.of(configType, this).run();
+					field.setAccessible(true);
+					var value = field.get(java.lang.reflect.Modifier.isStatic(field.getModifiers()) ? null : instance);
+					addBeanWithMeta((Class<Object>)field.getType(), value, emptyIfNull(beanName(beanAnn)), BeanSourceMeta.from(field, beanAnn));
+				} catch (Exception e) {
+					throw new BeanCreationException("Failed to register @Bean field: " + field, e);
+				}
+			}
+			for (var method : c.getDeclaredMethods()) {
+				var beanAnn = method.getAnnotation(Bean.class);
+				if (beanAnn == null)
+					continue;
+				if (!matchesConditions(method))
+					continue;
+				try {
+					if (!java.lang.reflect.Modifier.isStatic(method.getModifiers()) && instance == null)
+						instance = BeanInstantiator.of(configType, this).run();
+					method.setAccessible(true);
+					var value = MethodInfo.of(method).inject(this, java.lang.reflect.Modifier.isStatic(method.getModifiers()) ? null : instance);
+					addBeanWithMeta((Class<Object>)method.getReturnType(), value, emptyIfNull(beanName(beanAnn)), BeanSourceMeta.from(method, beanAnn));
+				} catch (Exception e) {
+					throw new BeanCreationException("Failed to register @Bean method: " + method, e);
+				}
+			}
+		}
+	}
+
+	private boolean matchesConditions(java.lang.reflect.AnnotatedElement element) {
+		var classLoader = element instanceof Class<?> c ? c.getClassLoader() : element.getClass().getClassLoader();
+		var ctx = new ConditionContext(this, Settings.get(), classLoader, element);
+		for (var c : element.getAnnotationsByType(Conditional.class)) {
+			if (!BeanInstantiator.of(c.value(), this).run().matches(ctx)) {
+				LOGGER.fine(() -> "Skipping conditional element due to @Conditional: " + element);
+				return false;
+			}
+		}
+		for (var c : element.getAnnotationsByType(ConditionalOnClass.class)) {
+			try {
+				Class.forName(c.value(), false, classLoader);
+			} catch (@SuppressWarnings("unused") ClassNotFoundException e) {
+				LOGGER.fine(() -> "Skipping conditional element due to missing class " + c.value() + ": " + element);
+				return false;
+			}
+		}
+		for (var c : element.getAnnotationsByType(ConditionalOnMissingBean.class)) {
+			var type = c.value();
+			var name = c.name().isEmpty() ? null : c.name();
+			if (type == Object.class) {
+				if (name != null && anyLocalBeanNamed(name))
+					return false;
+			} else if (hasBean(type, name)) {
+				return false;
+			}
+		}
+		for (var c : element.getAnnotationsByType(ConditionalOnProperty.class)) {
+			var value = Settings.get().get(c.name()).orElse(null);
+			if (value == null && !c.matchIfMissing())
+				return false;
+			if (value != null && !c.havingValue().isEmpty() && !c.havingValue().equals(value))
+				return false;
+		}
+		return true;
+	}
+
+	private boolean anyLocalBeanNamed(String name) {
+		var key = emptyIfNull(name);
+		return entries.values().stream().anyMatch(m -> m.containsKey(key))
+			|| defaults.values().stream().anyMatch(m -> m.containsKey(key));
+	}
+
+	private String beanName(Bean bean) {
+		return bean.name().isEmpty() ? bean.value() : bean.name();
+	}
+
+	private <T> void addBeanWithMeta(Class<T> beanType, T bean, String name, BeanSourceMeta meta) {
+		var key = emptyIfNull(name);
+		if (hasBean(beanType, key))
+			throw new BeanCreationException("Duplicate bean: type=" + beanType.getName() + ", name=" + key);
+		var typeMap = entries.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
+		typeMap.put(key, () -> bean);
+		entryMetadata.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).put(key, meta);
+	}
+
+	private <T> T trackResolved(T bean) {
+		if (bean == null)
+			return null;
+		synchronized (resolvedIdentities) {
+			if (resolvedIdentities.add(bean))
+				resolvedBeans.add(bean);
+		}
+		return bean;
+	}
+
+	private <T> Optional<T> selectPrimary(Class<T> beanType) {
+		// @Primary is a local-entry-only signal.  Default suppliers added via addDefaultSupplier()
+		// always carry BeanSourceMeta.DEFAULT (primary = false), so iterating defaultMetadata never
+		// contributes a primary candidate — only entryMetadata is consulted here.  Parent and
+		// overridingParent stores (including Spring-backed delegates) are similarly excluded because
+		// @Primary metadata only exists on beans this store registered itself.
+		Set<String> primaryNames = new LinkedHashSet<>();
+		var em = entryMetadata.get(beanType);
+		if (nn(em))
+			em.forEach((name, meta) -> { if (meta.primary) primaryNames.add(name); });
+		if (primaryNames.isEmpty())
+			return opte();
+		if (primaryNames.size() > 1)
+			throw new BeanCreationException("Multiple @Primary candidates of type " + beanType.getName());
+		var primaryName = primaryNames.iterator().next();
+		return resolve(beanType, primaryName).map(Supplier::get);
+	}
+
+	private int beanOrder(Class<?> type, String name) {
+		// @Order / priority is sourced from registered entries only.  Default suppliers always carry
+		// BeanSourceMeta.DEFAULT (which already returns Integer.MAX_VALUE/2), so we fall through to
+		// the same constant rather than consulting defaultMetadata redundantly.
+		var key = emptyIfNull(name);
+		var m = entryMetadata.get(type);
+		if (m != null)
+			return m.getOrDefault(key, BeanSourceMeta.DEFAULT).orderValue();
+		return Integer.MAX_VALUE / 2;
+	}
+
+	private void checkOpen() {
+		if (closed)
+			throw new IllegalStateException("BeanStore has been closed.");
+	}
+
+	private static class BeanSourceMeta {
+		static final BeanSourceMeta DEFAULT = new BeanSourceMeta(false, null, Integer.MAX_VALUE / 2);
+		final boolean primary;
+		final Integer order;
+		final int priority;
+
+		BeanSourceMeta(boolean primary, Integer order, int priority) {
+			this.primary = primary;
+			this.order = order;
+			this.priority = priority;
+		}
+
+		int orderValue() {
+			return order == null ? priority : order.intValue();
+		}
+
+		static BeanSourceMeta from(java.lang.reflect.AnnotatedElement element, Bean bean) {
+			var order = element.getAnnotation(Order.class);
+			return new BeanSourceMeta(element.getAnnotation(Primary.class) != null, order == null ? null : order.value(), bean.priority());
+		}
 	}
 }

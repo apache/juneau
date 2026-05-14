@@ -753,12 +753,11 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	}
 
 	private String findQualifierInternal() {
-		// Search through matching parameters in hierarchy for @Named or javax.inject.Qualifier annotations
+		// Search through matching parameters in hierarchy for @Named or qualifier-meta annotations.
 		// @formatter:off
 		return getMatchingParameters().stream()
 			.flatMap(mp -> mp.getAnnotations().stream())
-			.filter(ai -> ai.hasNameSimple("Named") || ai.hasNameSimple("Qualifier"))
-			.map(ai -> ai.getValue().orElse(null))
+			.map(JsrSupport::qualifierValue)
 			.filter(Objects::nonNull)
 			.findFirst()
 			.orElse(null);
@@ -882,11 +881,36 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded context; synchronization unnecessary
+		"unchecked"   // reflective Provider<T> resolution — valueType is Class<?> at runtime; cast narrows it to Class<Object> for the supplier signature
 	})
 	public Object resolveValue(BeanStore beanStore, Object... otherBeans) {
 		var pt = getParameterType();
 		var bq = getResolvedQualifier();
 		var ptu = pt.unwrap(Optional.class);
+
+		if (JsrSupport.isProviderType(ptu.inner())) {
+			var valueType = ptu.innerType() instanceof ParameterizedType parameterizedType
+				&& parameterizedType.getActualTypeArguments().length == 1
+				&& parameterizedType.getActualTypeArguments()[0] instanceof Class<?> c
+					? c
+					: Object.class;
+			var supplier = (Supplier<Object>)() -> beanStore.getBean((Class<Object>)valueType, bq).orElse(null);
+			var providerType = ptu.inner();
+			if (eq(providerType.getName(), JsrSupport.JUNEAU_PROVIDER))
+				return (Provider<Object>)supplier::get;
+			var handler = (InvocationHandler)(proxy, method, args) -> {
+				if (eq(method.getName(), "get") && method.getParameterCount() == 0)
+					return supplier.get();
+				if (eq(method.getName(), "toString") && method.getParameterCount() == 0)
+					return providerType.getSimpleName() + "(" + valueType.getSimpleName() + ")";
+				if (eq(method.getName(), "hashCode") && method.getParameterCount() == 0)
+					return System.identityHashCode(proxy);
+				if (eq(method.getName(), "equals") && method.getParameterCount() == 1)
+					return proxy == args[0];
+				throw exex("Unsupported provider method: {0}", method.getName());
+			};
+			return Proxy.newProxyInstance(providerType.getClassLoader(), new Class<?>[] {providerType}, handler);
+		}
 
 		// Handle collections and arrays
 		Object collectionValue = null;

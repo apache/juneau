@@ -18,6 +18,7 @@ package org.apache.juneau.commons.settings;
 
 import java.util.function.*;
 
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.runtime.*;
 
 /**
@@ -30,10 +31,15 @@ public class ManifestFilePropertySource implements PropertySource {
 	/**
 	 * Constructor.
 	 *
+	 * <p>
+	 * The supplied {@code manifestSupplier} is wrapped in a {@link Memoizer} so the manifest is loaded at most once
+	 * per source instance.  Without this, every {@link #get(String)} call would re-scan the classpath, which is very
+	 * expensive and shows up as a 2x test-suite regression when this source is registered in {@link Settings}.
+	 *
 	 * @param manifestSupplier The supplier for manifest file.
 	 */
 	public ManifestFilePropertySource(Supplier<ManifestFile> manifestSupplier) {
-		this.manifestSupplier = manifestSupplier;
+		this.manifestSupplier = new Memoizer<>(manifestSupplier);
 	}
 
 	/**
