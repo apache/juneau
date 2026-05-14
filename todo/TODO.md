@@ -31,6 +31,8 @@
 
 - [TODO-20] Rethink how debugging works in RestServlet.  Can we come up with a simpler system?
 
+- [TODO-21] Bean / inject annotation rename and commons.inject surface cleanup. See `todo/TODO-21-bean-annotations-inject-package.md`.
+
 - [TODO-22] Add additional SVL vars for common external configuration sources (e.g. `EnvFileVar` / `DotenvVar` for `.env` files, possibly file-glob and JSON-pointer vars). Should land after TODO-14 places SVL in `juneau-commons`.
 
 - [TODO-23] New feature support in org.apache.juneau.commons.inject — roadmap for a simplified inject API (not a Spring replacement). See `todo/TODO-23-commons-inject-framework-roadmap.md`.
@@ -38,4 +40,6 @@
 - [TODO-24] JSR-330 alignment (no `jakarta.inject-api` dependency) + selective Spring-lite features for `commons.inject`. See `todo/TODO-24-jsr330-and-spring-lite-support.md`.
 
 - [TODO-27] Design a unified property-source hierarchy for `juneau-commons` that abstracts over `Args`, `ManifestFile`, environment variables, system properties, `.env` files, and `Config`. Goal: one `PropertySource` interface that vars and the bean store can compose, with stacking/precedence rules. Follow-up to TODO-14 and overlaps with TODO-13.
+
+- [TODO-30] Investigate moving `ClassMeta` and related non-marshalling type metadata from `juneau-marshall` into `juneau-commons` (analysis/feasibility pass). See `todo/TODO-30-classmeta-to-commons.md`.
 
