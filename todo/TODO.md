@@ -21,13 +21,9 @@
 
 - [TODO-12] Schema validation mode for parsers and serializers: wire `@Schema` validation into the bean property get/set lifecycle gated by a new `validateSchema` flag on `MarshallingContext`. See `todo/TODO-12-schema-validation.md`.
 
-- [TODO-13] Convert Juneau system properties to the `Settings` class in `juneau-commons`. See `todo/TODO-13-system-properties-to-settings-conversion.md`.
-
 - [TODO-17] Audit 9.2.x changes (juneau-docs release notes 9.2.0 / 9.5.0 + git history since 9.1.0) for breaking changes and populate the v9.5 Migration Guide at juneau-docs/pages/topics/23.01.V9.5-migration-guide.md with Old→New rows for each. Focus on removed APIs, renamed annotations/classes/methods, changed default behaviors, and any annotation-attribute semantics changes.
 
 - [TODO-18] Investigate possible useful features to add to juneau-rest-server.
-
-- [TODO-19] Deprecate the static `init(...)` / `AtomicReference` state on `ArgsVar` and `ManifestFileVar` in favor of the per-resolver `Supplier<Args>` / `Supplier<ManifestFile>` overloads added in TODO-14. Target a post-9.5 release. Follow-up to TODO-14.
 
 - [TODO-20] Rethink how debugging works in RestServlet.  Can we come up with a simpler system?
 
@@ -38,8 +34,6 @@
 - [TODO-23] New feature support in org.apache.juneau.commons.inject — roadmap for a simplified inject API (not a Spring replacement). See `todo/TODO-23-commons-inject-framework-roadmap.md`.
 
 - [TODO-24] JSR-330 alignment (no `jakarta.inject-api` dependency) + selective Spring-lite features for `commons.inject`. See `todo/TODO-24-jsr330-and-spring-lite-support.md`.
-
-- [TODO-27] Design a unified property-source hierarchy for `juneau-commons` that abstracts over `Args`, `ManifestFile`, environment variables, system properties, `.env` files, and `Config`. Goal: one `PropertySource` interface that vars and the bean store can compose, with stacking/precedence rules. Follow-up to TODO-14 and overlaps with TODO-13.
 
 - [TODO-30] Investigate moving `ClassMeta` and related non-marshalling type metadata from `juneau-marshall` into `juneau-commons` (analysis/feasibility pass). See `todo/TODO-30-classmeta-to-commons.md`.
 

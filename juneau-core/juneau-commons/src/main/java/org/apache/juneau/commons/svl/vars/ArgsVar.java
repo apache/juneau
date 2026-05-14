@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.svl.vars;
 
-import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.runtime.*;
@@ -37,7 +36,6 @@ import org.apache.juneau.commons.svl.*;
  * <ul class='spaced-list'>
  * 	<li><js>"sun.java.command"</js> system property.
  * 	<li><js>"juneau.args"</js> system property.
- * 	<li>{@link #init(Args)} has been called.
  * 	<li>The instance was created via {@link #create(Supplier)}.
  * </ul>
  *
@@ -46,10 +44,8 @@ import org.apache.juneau.commons.svl.*;
  * 	<jc>// Create an args object from the main(String[]) method.</jc>
  * 	Args <jv>args</jv> = <jk>new</jk> Args(<jv>argv</jv>);
  *
- * 	ArgsVar.<jsm>init</jsm>(<jv>args</jv>);
- *
  * 	<jc>// Create a variable resolver that resolves JVM arguments (e.g. "$A{1}")</jc>
- * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(ArgsVar.<jk>class</jk>).build();
+ * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(ArgsVar.<jsm>create</jsm>(() -&gt; <jv>args</jv>)).build();
  *
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"Arg #1 is set to $A{1}"</js>));
@@ -68,28 +64,12 @@ public class ArgsVar extends DefaultingVar {
 	/** The name of this variable. */
 	public static final String NAME = "A";
 
-	private static final AtomicReference<Supplier<Args>> STATIC_ARGS_SUPPLIER = new AtomicReference<>(ArgsPropertySource::createDefaultArgs);
-
-	/**
-	 * Initialize the args for this variable.
-	 *
-	 * <p>
-	 * This sets a process-wide reference that all newly-constructed {@link ArgsVar} instances will read from.  For
-	 * isolated, per-resolver state without mutating global state, use {@link #create(Supplier)} instead.
-	 *
-	 * @param args The parsed command-line arguments.
-	 */
-	public static void init(Args args) {
-		STATIC_ARGS_SUPPLIER.set(() -> args);
-	}
-
 	/**
 	 * Creates an {@link ArgsVar} bound to a per-instance {@link Supplier} of {@link Args}.
 	 *
 	 * <p>
-	 * Use this when wiring an {@link ArgsVar} into a single {@code VarResolver} without mutating the process-wide
-	 * state established by {@link #init(Args)}.  The supplier is invoked on every resolve, so callers can update the
-	 * underlying {@link Args} between resolves if needed.
+	 * The supplier is invoked on every resolve, so callers can update the underlying {@link Args} between resolves if
+	 * needed.
 	 *
 	 * @param supplier The supplier of {@link Args} for this var instance.  Must not be <jk>null</jk>.
 	 * @return A new {@link ArgsVar} instance backed by the supplier.
@@ -105,7 +85,7 @@ public class ArgsVar extends DefaultingVar {
 	 */
 	public ArgsVar() {
 		super(NAME);
-		this.source = new ArgsPropertySource(() -> STATIC_ARGS_SUPPLIER.get().get());
+		this.source = new ArgsPropertySource(ArgsPropertySource::createDefaultArgs);
 	}
 
 	private ArgsVar(Supplier<Args> supplier) {

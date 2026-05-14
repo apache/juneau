@@ -612,8 +612,10 @@ public class Microservice implements ConfigEventListener {
 			}
 			manifest2 = new ManifestFile(m);
 		}
-		ManifestFileVar.init(manifest2);
 		this.manifest = manifest2;
+		builder.varResolver
+			.vars(ArgsVar.create(() -> this.args))
+			.vars(ManifestFileVar.create(() -> this.manifest));
 
 		// --------------------------------------------------------------------------------
 		// Try to resolve the configuration if not specified.

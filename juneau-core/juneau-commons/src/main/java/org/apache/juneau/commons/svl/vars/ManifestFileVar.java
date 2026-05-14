@@ -31,7 +31,7 @@ import org.apache.juneau.commons.svl.*;
  * <p>
  * This variable resolver requires that a {@link ManifestFile} object be made available by either:
  * <ul class='spaced-list'>
- * 	<li>Calling {@link #init(ManifestFile)} (process-wide).
+ * 	<li>Classpath/default manifest discovery when using the no-arg constructor.
  * 	<li>Constructing the var via {@link #create(Supplier)} (per-instance).
  * </ul>
  *
@@ -40,10 +40,8 @@ import org.apache.juneau.commons.svl.*;
  * 	<jc>// Create a ManifestFile object that contains the manifest of the jar file containing this class.</jc>
  * 	ManifestFile <jv>manifestFile</jv> = <jk>new</jk> ManifestFile(<jk>this</jk>.getClass());
  *
- * 	ManifestFileVar.<jsm>init</jsm>(<jv>manifestFile</jv>);
- *
  * 	<jc>// Create a variable resolver that resolves manifest file entries (e.g. "$MF{Main-Class}")</jc>
- * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(ManifestFileVar.<jk>class</jk>).build();
+ * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(ManifestFileVar.<jsm>create</jsm>(() -&gt; <jv>manifestFile</jv>)).build();
  *
  * 	<jc>// Use it!</jc>
  * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"The main class is $MF{Main-Class}"</js>));
@@ -62,27 +60,11 @@ public class ManifestFileVar extends DefaultingVar {
 	/** The name of this variable. */
 	public static final String NAME = "MF";
 
-	private static volatile Supplier<ManifestFile> manifestSupplier = () -> null;
-
-	/**
-	 * Initialize the manifest file for this variable.
-	 *
-	 * <p>
-	 * This sets a process-wide reference that all newly-constructed {@link ManifestFileVar} instances will read from.
-	 * For isolated, per-resolver state without mutating global state, use {@link #create(Supplier)} instead.
-	 *
-	 * @param manifestFile The parsed manifest file.
-	 */
-	public static void init(ManifestFile manifestFile) {
-		ManifestFileVar.manifestSupplier = () -> manifestFile;
-	}
-
 	/**
 	 * Creates a {@link ManifestFileVar} bound to a per-instance {@link Supplier} of {@link ManifestFile}.
 	 *
 	 * <p>
-	 * Use this when wiring a {@link ManifestFileVar} into a single {@code VarResolver} without mutating the
-	 * process-wide state established by {@link #init(ManifestFile)}.  The supplier is invoked on every resolve.
+	 * The supplier is invoked on every resolve.
 	 *
 	 * @param supplier The supplier of {@link ManifestFile} for this var instance.  Must not be <jk>null</jk>.
 	 * @return A new {@link ManifestFileVar} instance backed by the supplier.
@@ -98,7 +80,7 @@ public class ManifestFileVar extends DefaultingVar {
 	 */
 	public ManifestFileVar() {
 		super(NAME);
-		this.source = new ManifestFilePropertySource(() -> manifestSupplier.get());
+		this.source = ManifestFilePropertySource.createDefault();
 	}
 
 	private ManifestFileVar(Supplier<ManifestFile> supplier) {
