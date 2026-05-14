@@ -7044,6 +7044,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @deprecated Use {@link HttpClientBuilder}.
 	 */
 	@Deprecated(since = "10.0", forRemoval = true)
+	@SuppressWarnings({
+		"java:S1133" // Deprecated override required by HttpClient interface
+	})
 	@Override /* Overridden from HttpClient */
 	public ClientConnectionManager getConnectionManager() { return httpClient.getConnectionManager(); }
 
@@ -7063,6 +7066,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * @deprecated Use {@link RequestConfig}.
 	 */
 	@Deprecated(since = "10.0", forRemoval = true)
+	@SuppressWarnings({
+		"java:S1133" // Deprecated override required by HttpClient interface
+	})
 	@Override /* Overridden from HttpClient */
 	public HttpParams getParams() { return httpClient.getParams(); }
 

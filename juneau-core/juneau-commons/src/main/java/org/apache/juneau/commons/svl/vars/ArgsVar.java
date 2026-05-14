@@ -16,12 +16,11 @@
  */
 package org.apache.juneau.commons.svl.vars;
 
-import static org.apache.juneau.commons.utils.Utils.*;
-
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.runtime.*;
+import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.commons.svl.*;
 
 /**
@@ -69,7 +68,7 @@ public class ArgsVar extends DefaultingVar {
 	/** The name of this variable. */
 	public static final String NAME = "A";
 
-	private static final AtomicReference<Args> staticArgs = new AtomicReference<>();
+	private static final AtomicReference<Supplier<Args>> STATIC_ARGS_SUPPLIER = new AtomicReference<>(ArgsPropertySource::createDefaultArgs);
 
 	/**
 	 * Initialize the args for this variable.
@@ -81,7 +80,7 @@ public class ArgsVar extends DefaultingVar {
 	 * @param args The parsed command-line arguments.
 	 */
 	public static void init(Args args) {
-		staticArgs.set(args);
+		STATIC_ARGS_SUPPLIER.set(() -> args);
 	}
 
 	/**
@@ -99,46 +98,24 @@ public class ArgsVar extends DefaultingVar {
 		return new ArgsVar(supplier);
 	}
 
-	private final Supplier<Args> argsSupplier;
+	private final ArgsPropertySource source;
 
 	/**
 	 * Constructor.
 	 */
 	public ArgsVar() {
 		super(NAME);
-		var captured = computeDefault();
-		this.argsSupplier = () -> captured;
+		this.source = new ArgsPropertySource(() -> STATIC_ARGS_SUPPLIER.get().get());
 	}
 
 	private ArgsVar(Supplier<Args> supplier) {
 		super(NAME);
-		this.argsSupplier = supplier;
-	}
-
-	private static Args computeDefault() {
-		var sa = staticArgs.get();
-		if (nn(sa))
-			return sa;
-		var s = System.getProperty("sun.java.command");
-		if (ne(s)) {
-			var i = s.indexOf(' ');
-			return new Args(i == -1 ? "" : s.substring(i + 1));
-		}
-		return new Args(System.getProperty("juneau.args", ""));
+		this.source = new ArgsPropertySource(supplier);
 	}
 
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
-		var args = argsSupplier.get();
-		if (args == null)
-			return null;
-		try {
-			var idx = Integer.parseInt(key);
-			return args.get(idx).orElse(null);
-		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			// not a positional index; fall through to named-option lookup
-		}
-		var values = args.getAll(key);
-		return values.isEmpty() ? null : String.join(",", values);
+		var result = source.get(key);
+		return result.isPresent() ? result.value().orElse(null) : null;
 	}
 }

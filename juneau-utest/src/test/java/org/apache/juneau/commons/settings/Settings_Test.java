@@ -667,12 +667,15 @@ class Settings_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// addSource(FunctionalSource) - Functional interface usage
+	// addSource(FunctionalPropertySource) - Functional interface usage
 	//====================================================================================================
 	@Test
 	void p01_addSource_functionalSource() {
-		// Test the addSource(FunctionalSource) overload
-		var source = (FunctionalSource) name -> opt(System.getProperty(name));
+		// Test the addSource(FunctionalPropertySource) overload
+		var source = (FunctionalPropertySource) name -> {
+			var value = System.getProperty(name);
+			return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(opt(value));
+		};
 		System.setProperty(TEST_PROP, "system-value");
 		var settings = Settings.create()
 			.addSource(source)
@@ -685,8 +688,8 @@ class Settings_Test extends TestBase {
 
 	@Test
 	void p02_addSource_functionalSource_factoryMethod() {
-		// Test addSource with FunctionalSource.of()
-		var source = FunctionalSource.of(System::getProperty);
+		// Test addSource with FunctionalPropertySource.of()
+		var source = FunctionalPropertySource.of(System::getProperty);
 		System.setProperty(TEST_PROP, "system-value");
 		var settings = Settings.create()
 			.addSource(source)
@@ -698,12 +701,12 @@ class Settings_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// FunctionalStore
+	// FunctionalPropertyStore
 	//====================================================================================================
 	@Test
-	void q01_writeableFunctionalSource_basic() {
+	void q01_writeableFunctionalPropertySource_basic() {
 		// Create a writable functional source using system properties
-		var source = FunctionalStore.of(
+		var source = FunctionalPropertyStore.of(
 			System::getProperty,
 			System::setProperty,
 			System::clearProperty,
@@ -715,21 +718,21 @@ class Settings_Test extends TestBase {
 		var result = source.get(TEST_PROP);
 		assertNotNull(result);
 		assertTrue(result.isPresent());
-		assertEquals("test-value", result.get());
+		assertEquals("test-value", result.value().orElse(null));
 
 		// Test unset
 		source.unset(TEST_PROP);
 		result = source.get(TEST_PROP);
-		assertNull(result); // Should return null when property doesn't exist
+		assertFalse(result.isPresent()); // Should report missing when property doesn't exist
 
 		// Clean up
 		System.clearProperty(TEST_PROP);
 	}
 
 	@Test
-	void q02_writeableFunctionalSource_withSettings() {
+	void q02_writeableFunctionalPropertySource_withSettings() {
 		// Create a writable functional source and add it to Settings
-		var source = FunctionalStore.of(
+		var source = FunctionalPropertyStore.of(
 			System::getProperty,
 			System::setProperty,
 			System::clearProperty,
@@ -756,10 +759,10 @@ class Settings_Test extends TestBase {
 	}
 
 	@Test
-	void q03_writeableFunctionalSource_clear() {
+	void q03_writeableFunctionalPropertySource_clear() {
 		// Test clear() functionality with a custom clearer
 		var map = new java.util.HashMap<String, String>();
-		var source = FunctionalStore.of(
+		var source = FunctionalPropertyStore.of(
 			map::get,
 			map::put,
 			map::remove,
@@ -773,22 +776,22 @@ class Settings_Test extends TestBase {
 		var result1 = source.get(TEST_PROP);
 		assertNotNull(result1);
 		assertTrue(result1.isPresent());
-		assertEquals("test-value", result1.get());
+		assertEquals("test-value", result1.value().orElse(null));
 
 		var result2 = source.get(TEST_PROP_2);
 		assertNotNull(result2);
 		assertTrue(result2.isPresent());
-		assertEquals("test-value-2", result2.get());
+		assertEquals("test-value-2", result2.value().orElse(null));
 
 		// Clear all values
 		source.clear();
 
 		// Verify values are cleared
 		result1 = source.get(TEST_PROP);
-		assertNull(result1);
+		assertFalse(result1.isPresent());
 
 		result2 = source.get(TEST_PROP_2);
-		assertNull(result2);
+		assertFalse(result2.isPresent());
 	}
 
 	//====================================================================================================
@@ -867,9 +870,9 @@ class Settings_Test extends TestBase {
 		store.unset(TEST_PROP);
 
 		// Verify the map is still null (not initialized)
-		// get() should return null since the map doesn't exist
+		// get() should report missing since the map doesn't exist
 		var result = store.get(TEST_PROP);
-		assertNull(result);
+		assertFalse(result.isPresent());
 	}
 
 	//====================================================================================================

@@ -31,6 +31,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.settings.Settings;
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -114,7 +115,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * The supplier can be reset for testing purposes using {@link #resetDisableParamNameDetection()}.
 	 */
-	static final Memoizer<Boolean> DISABLE_PARAM_NAME_DETECTION = memoizer(() -> Boolean.getBoolean("juneau.disableParamNameDetection"));
+	static final Memoizer<Boolean> DISABLE_PARAM_NAME_DETECTION = memoizer(() -> Settings.get().get("juneau.disableParamNameDetection").asBoolean().orElse(false));
 
 	/**
 	 * Creates a ParameterInfo wrapper for the specified parameter.

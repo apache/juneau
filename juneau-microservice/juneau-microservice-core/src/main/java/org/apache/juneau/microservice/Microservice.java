@@ -123,7 +123,7 @@ public class Microservice implements ConfigEventListener {
 		Scanner consoleReader;
 		PrintWriter consoleWriter;
 		MicroserviceListener listener;
-		File workingDir = System.getProperty("juneau.workingDir") == null ? null : new File(System.getProperty("juneau.workingDir"));
+		File workingDir = env("juneau.workingDir").map(File::new).orElse(null);
 
 		/**
 		 * Constructor.

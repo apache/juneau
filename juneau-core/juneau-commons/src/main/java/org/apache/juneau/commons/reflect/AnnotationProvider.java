@@ -450,7 +450,7 @@ public class AnnotationProvider {
 	 * 	<li><c>FULL</c> - Uses ConcurrentHashMap (best performance)
 	 * </ul>
 	 */
-	private static final CacheMode CACHING_MODE = CacheMode.parse(System.getProperty("juneau.annotationProvider.caching", "FULL"));
+	private static final CacheMode CACHING_MODE = env("juneau.annotationProvider.caching", CacheMode.FULL);
 
 	/**
 	 * Enable logging of cache statistics on JVM shutdown.
@@ -460,7 +460,7 @@ public class AnnotationProvider {
 	 * <br>Valid values: <c>TRUE</c>, <c>FALSE</c> (case-insensitive)
 	 * <br>Default: <c>FALSE</c>
 	 */
-	private static final boolean LOG_ON_EXIT = bool(System.getProperty("juneau.annotationProvider.caching.logOnExit"));
+	private static final boolean LOG_ON_EXIT = env("juneau.annotationProvider.caching.logOnExit", false);
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder

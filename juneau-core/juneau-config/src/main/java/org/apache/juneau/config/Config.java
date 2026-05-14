@@ -437,7 +437,7 @@ public class Config extends Context implements ConfigEventListener {
 	}
 
 	// Use set(T)/reset() for testing.
-	static final Memoizer<Boolean> DISABLE_AUTO_SYSTEM_PROPS = memoizer(() -> Boolean.getBoolean("juneau.disableAutoSystemProps"));
+	static final Memoizer<Boolean> DISABLE_AUTO_SYSTEM_PROPS = memoizer(() -> env("juneau.disableAutoSystemProps", false));
 
 	// Use set(T)/reset() for testing.
 	static final Memoizer<Config> SYSTEM_DEFAULT = memoizer(Config::findSystemDefault);
@@ -487,7 +487,7 @@ public class Config extends Context implements ConfigEventListener {
 	public static synchronized List<String> getCandidateSystemDefaultConfigNames() {
 		var l = listOf(String.class);
 
-		var s = System.getProperty("juneau.configFile");
+		var s = env("juneau.configFile").orElse(null);
 		if (nn(s)) {
 			l.add(s);
 			return l;

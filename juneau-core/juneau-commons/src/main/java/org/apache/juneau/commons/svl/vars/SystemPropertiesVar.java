@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.svl.vars;
 
 import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.commons.settings.*;
 
 /**
  * System property variable resolver.
@@ -41,7 +42,9 @@ import org.apache.juneau.commons.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
  * </ul>
  */
-public class SystemPropertiesVar extends MapVar {
+public class SystemPropertiesVar extends DefaultingVar {
+	private final SystemPropertyPropertySource source = new SystemPropertyPropertySource();
+
 
 	/** The name of this variable. */
 	public static final String NAME = "S";
@@ -50,6 +53,12 @@ public class SystemPropertiesVar extends MapVar {
 	 * Constructor.
 	 */
 	public SystemPropertiesVar() {
-		super(NAME, System.getProperties());
+		super(NAME);
+	}
+
+	@Override /* Overridden from Var */
+	public String resolve(VarResolverSession session, String key) {
+		var v = source.get(key);
+		return v.isPresent() ? v.value().orElse(null) : null;
 	}
 }

@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.svl.vars;
 
 import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.commons.settings.*;
 
 /**
  * Environment variable variable resolver.
@@ -42,6 +43,8 @@ import org.apache.juneau.commons.svl.*;
  * </ul>
  */
 public class EnvVariablesVar extends DefaultingVar {
+	private final SystemEnvPropertySource source = new SystemEnvPropertySource();
+
 
 	/** The name of this variable. */
 	public static final String NAME = "E";
@@ -55,7 +58,7 @@ public class EnvVariablesVar extends DefaultingVar {
 
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String varVal) {
-		// Note that lookup is case-insensitive on windows.
-		return System.getenv(varVal);
+		var v = source.get(varVal);
+		return v.isPresent() ? v.value().orElse(null) : null;
 	}
 }

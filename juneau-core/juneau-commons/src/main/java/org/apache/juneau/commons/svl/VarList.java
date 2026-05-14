@@ -85,6 +85,7 @@ public class VarList extends ArrayList<Object> {
 	 * <p>
 	 * The default variables are:
 	 * <ul>
+	 * 	<li>{@link PropertyVar}
 	 * 	<li>{@link SystemPropertiesVar}
 	 * 	<li>{@link EnvVariablesVar}
 	 * 	<li>{@link ArgsVar}
@@ -107,6 +108,7 @@ public class VarList extends ArrayList<Object> {
 	public VarList addDefault() {
 		// @formatter:off
 		return append(
+			PropertyVar.class,
 			SystemPropertiesVar.class,
 			EnvVariablesVar.class,
 			ManifestFileVar.class,

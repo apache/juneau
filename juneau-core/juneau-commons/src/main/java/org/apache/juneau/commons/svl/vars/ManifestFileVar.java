@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.commons.svl.vars;
 
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 
 import org.apache.juneau.commons.runtime.*;
+import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.commons.svl.*;
 
 /**
@@ -62,7 +62,7 @@ public class ManifestFileVar extends DefaultingVar {
 	/** The name of this variable. */
 	public static final String NAME = "MF";
 
-	private static final AtomicReference<ManifestFile> manifestFile = new AtomicReference<>();
+	private static volatile Supplier<ManifestFile> manifestSupplier = () -> null;
 
 	/**
 	 * Initialize the manifest file for this variable.
@@ -74,7 +74,7 @@ public class ManifestFileVar extends DefaultingVar {
 	 * @param manifestFile The parsed manifest file.
 	 */
 	public static void init(ManifestFile manifestFile) {
-		ManifestFileVar.manifestFile.set(manifestFile);
+		ManifestFileVar.manifestSupplier = () -> manifestFile;
 	}
 
 	/**
@@ -91,24 +91,24 @@ public class ManifestFileVar extends DefaultingVar {
 		return new ManifestFileVar(supplier);
 	}
 
-	private final Supplier<ManifestFile> manifestSupplier;
+	private final ManifestFilePropertySource source;
 
 	/**
 	 * Constructor.
 	 */
 	public ManifestFileVar() {
 		super(NAME);
-		this.manifestSupplier = manifestFile::get;
+		this.source = new ManifestFilePropertySource(() -> manifestSupplier.get());
 	}
 
 	private ManifestFileVar(Supplier<ManifestFile> supplier) {
 		super(NAME);
-		this.manifestSupplier = supplier;
+		this.source = new ManifestFilePropertySource(supplier);
 	}
 
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
-		var mf = manifestSupplier.get();
-		return mf == null ? "" : mf.get(key).orElse(null);
+		var v = source.get(key);
+		return v.isPresent() ? v.value().orElse(null) : "";
 	}
 }

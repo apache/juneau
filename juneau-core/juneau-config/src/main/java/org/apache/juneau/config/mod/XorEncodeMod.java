@@ -18,6 +18,7 @@ package org.apache.juneau.config.mod;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 /**
  * Simply XOR+Base64 encoder for obscuring passwords and other sensitive data in INI config files.
@@ -34,7 +35,7 @@ public class XorEncodeMod extends Mod {
 	/** Reusable XOR-ConfigEncoder instance. */
 	public static final XorEncodeMod INSTANCE = new XorEncodeMod();
 
-	private static final String KEY = System.getProperty("org.apache.juneau.config.XorEncoder.key", "nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
+	private static final String KEY = env("org.apache.juneau.config.XorEncoder.key", "nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
 
 	/**
 	 * Constructor.

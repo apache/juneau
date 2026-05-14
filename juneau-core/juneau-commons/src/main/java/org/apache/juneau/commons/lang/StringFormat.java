@@ -436,7 +436,7 @@ public final class StringFormat {
 		abstract void append(StringBuilder sb, Object[] args, Locale locale);
 	}
 
-	private static final CacheMode CACHE_MODE = CacheMode.parse(System.getProperty("juneau.StringFormat.caching", "FULL"));
+	private static final CacheMode CACHE_MODE = env("juneau.StringFormat.caching", CacheMode.FULL);
 
 	private static final Cache<String,StringFormat> CACHE = Cache.of(String.class, StringFormat.class).maxSize(1000).cacheMode(CACHE_MODE).build();
 	private static final Cache2<Locale,String,MessageFormat> MESSAGE_FORMAT_CACHE = Cache2.of(Locale.class, String.class, MessageFormat.class).maxSize(100).threadLocal().cacheMode(CACHE_MODE)

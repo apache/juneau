@@ -30,6 +30,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.Name;
+import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -46,11 +47,11 @@ class ParameterInfo_Test extends TestBase {
 
 	@BeforeAll
 	static void beforeAll() {
-		// Save original system property value
-		originalDisableParamNameDetection = System.getProperty("juneau.disableParamNameDetection");
+		// Save original effective value.
+		originalDisableParamNameDetection = Settings.get().get("juneau.disableParamNameDetection").orElse(null);
 
 		// Set to true to ensure consistent behavior regardless of JVM compiler settings
-		System.setProperty("juneau.disableParamNameDetection", "true");
+		Settings.get().setLocal("juneau.disableParamNameDetection", "true");
 		ParameterInfo.reset();
 	}
 
@@ -58,10 +59,11 @@ class ParameterInfo_Test extends TestBase {
 	static void afterAll() {
 		// Restore original system property value
 		if (originalDisableParamNameDetection == null)
-			System.clearProperty("juneau.disableParamNameDetection");
+			Settings.get().unsetLocal("juneau.disableParamNameDetection");
 		else
-			System.setProperty("juneau.disableParamNameDetection", originalDisableParamNameDetection);
+			Settings.get().setLocal("juneau.disableParamNameDetection", originalDisableParamNameDetection);
 		ParameterInfo.reset();
+		Settings.get().clearLocal();
 	}
 
 	@Documented
@@ -649,9 +651,9 @@ class ParameterInfo_Test extends TestBase {
 
 		// Test line 632: bytecode parameter name fallback
 		// Temporarily disable the flag to test the bytecode name fallback
-		String originalValue = System.getProperty("juneau.disableParamNameDetection");
+		String originalValue = Settings.get().get("juneau.disableParamNameDetection").orElse(null);
 		try {
-			System.setProperty("juneau.disableParamNameDetection", "false");
+			Settings.get().setLocal("juneau.disableParamNameDetection", "false");
 			ParameterInfo.reset();
 
 			// Get a fresh ParameterInfo instance after resetting (don't use cached static field)
@@ -680,9 +682,9 @@ class ParameterInfo_Test extends TestBase {
 		} finally {
 			// Restore original value
 			if (originalValue == null)
-				System.clearProperty("juneau.disableParamNameDetection");
+				Settings.get().unsetLocal("juneau.disableParamNameDetection");
 			else
-				System.setProperty("juneau.disableParamNameDetection", originalValue);
+				Settings.get().setLocal("juneau.disableParamNameDetection", originalValue);
 			ParameterInfo.reset();
 		}
 

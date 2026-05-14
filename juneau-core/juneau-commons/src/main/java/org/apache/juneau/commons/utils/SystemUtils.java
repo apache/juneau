@@ -21,6 +21,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.logging.Logger;
+import org.apache.juneau.commons.settings.*;
 
 /**
  * System utilities.
@@ -40,7 +41,7 @@ public class SystemUtils {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
-				if (! Boolean.getBoolean("juneau.shutdown.quiet")) // HTT - shutdown hook; true branch tested, false requires JVM shutdown with system property set
+				if (! Settings.get().get("juneau.shutdown.quiet").asBoolean().orElse(false)) // HTT - shutdown hook; true branch tested, false requires JVM shutdown with system property set
 					SHUTDOWN_MESSAGES.forEach(x -> LOG.info(x.get()));
 			}
 		});

@@ -566,7 +566,7 @@ public class JettyMicroservice extends Microservice {
 		var ports = firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(() -> mf.get("Jetty-Port").map(JettyMicroservice::parseIntArray).orElseGet(() -> ints(8000))));
 		var availablePort = findOpenPort(ports);
 
-		if (System.getProperty("availablePort") == null)
+		if (env("availablePort").isEmpty())
 			System.setProperty("availablePort", String.valueOf(availablePort));
 
 		var jettyXml = builder.jettyXml;
@@ -624,7 +624,7 @@ public class JettyMicroservice extends Microservice {
 
 		builder.servletAttributes.forEach(this::addServletAttribute);
 
-		if (System.getProperty("juneau.serverPort") == null)
+		if (env("juneau.serverPort").isEmpty())
 			System.setProperty("juneau.serverPort", String.valueOf(availablePort));
 
 		return server.get();
