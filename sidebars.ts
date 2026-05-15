@@ -965,6 +965,11 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/05.14.SystemDefaultConfig',
 							label: '5.14. System Default Config',
 						},
+						{
+							type: 'doc',
+							id: 'topics/05.15.YamlConfigFiles',
+							label: '5.15. YAML Config Files',
+						},
 					],
 				},
 					{
