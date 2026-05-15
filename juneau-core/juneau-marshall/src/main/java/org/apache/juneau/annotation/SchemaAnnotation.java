@@ -74,6 +74,7 @@ public class SchemaAnnotation {
 	private static final String PROP_readOnly = "readOnly";
 	private static final String PROP_ref = "$ref";
 	private static final String PROP_required = "required";
+	private static final String PROP_summary = "summary";
 	private static final String PROP_then = "then";
 	private static final String PROP_title = "title";
 	private static final String PROP_type = "type";
@@ -144,6 +145,8 @@ public class SchemaAnnotation {
 		private String multipleOf = "";
 		private String p = "";
 		private String pattern = "";
+		private String su = "";
+		private String summary = "";
 		private String t = "";
 		private String title = "";
 		private String type = "";
@@ -929,6 +932,30 @@ public class SchemaAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Schema#su} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder su(String value) {
+			su = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#summary} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder summary(String value) {
+			summary = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Schema#t} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -1066,6 +1093,8 @@ public class SchemaAnnotation {
 		private final String min;
 		private final String pattern;
 		private final String p;
+		private final String su;
+		private final String summary;
 		private final String type;
 		private final String t;
 		private final String collectionFormat;
@@ -1148,6 +1177,8 @@ public class SchemaAnnotation {
 			ro = b.ro;
 			sie = b.sie;
 			skipIfEmpty = b.skipIfEmpty;
+			su = b.su;
+			summary = b.summary;
 			t = b.t;
 			title = b.title;
 			type = b.type;
@@ -1494,6 +1525,16 @@ public class SchemaAnnotation {
 		}
 
 		@Override /* Overridden from Schema */
+		public String su() {
+			return su;
+		}
+
+		@Override /* Overridden from Schema */
+		public String summary() {
+			return summary;
+		}
+
+		@Override /* Overridden from Schema */
 		public String t() {
 			return t;
 		}
@@ -1610,6 +1651,7 @@ public class SchemaAnnotation {
 			.appendFirst(ne, PROP_pattern, a.pattern(), a.p())
 			.appendIf(nf, PROP_readOnly, a.readOnly() || a.ro())
 			.appendIf(nf, PROP_required, a.required() || a.r())
+			.appendFirst(ne, PROP_summary, a.summary(), a.su())
 			.appendIf(ne, PROP_title, a.title())
 			.appendFirst(ne, PROP_type, a.type(), a.t())
 			.appendIf(nf, PROP_uniqueItems, a.uniqueItems() || a.ui())

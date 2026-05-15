@@ -77,6 +77,16 @@ import java.util.*;
  * 		deprecatedProperty=<jk>true</jk>  <jc>// Draft 2020-12 property</jc>
  * 	)
  * </p>
+ * <p class='bjava'>
+ * 	<jc>// AI-friendly short summary paired with a longer description (since 9.5.0)</jc>
+ * 	<ja>@Schema</ja>(
+ * 		summary=<js>"A pet available for adoption"</js>,
+ * 		description={
+ * 			<js>"Represents a pet in the store's inventory."</js>,
+ * 			<js>"Includes details such as name, species, breed, age, and adoption status."</js>
+ * 		}
+ * 	)
+ * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
@@ -1498,6 +1508,58 @@ public @interface Schema {
 	 * @return The annotation value.
 	 */
 	boolean skipIfEmpty() default false;
+
+	/**
+	 * Synonym for {@link #summary()}.
+	 *
+	 * @return The annotation value.
+	 */
+	String su() default "";
+
+	/**
+	 * <mk>summary</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * A short, concise summary of the schema's purpose.
+	 * This is intended to be a brief, single-line description suitable for AI/LLM consumption,
+	 * compact documentation, or any context where brevity is important.
+	 *
+	 * <p>
+	 * Unlike {@link #description()}, which can be multi-line and detailed, this field should be
+	 * kept to a single sentence or phrase that captures the essential meaning.
+	 * The two fields are complementary: {@code summary} is consumed primarily by AI/LLM tools that
+	 * benefit from concise descriptions to minimize token usage and maximize signal-to-noise ratio,
+	 * while {@code description} remains the canonical home for longer human-readable documentation.
+	 *
+	 * <p>
+	 * This field is a Juneau extension and not part of the standard JSON Schema or OpenAPI vocabulary
+	 * at the Schema Object level. It is modeled after OpenAPI's {@code summary} keyword on Operation,
+	 * Info, and Tag objects.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Schema</ja>(
+	 * 		summary=<js>"A pet available for adoption"</js>,
+	 * 		description={
+	 * 			<js>"Represents a pet in the store's inventory."</js>,
+	 * 			<js>"Includes details such as name, species, breed, age, and adoption status."</js>,
+	 * 			<js>"Pets can be filtered by status using the /pets endpoint."</js>
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> Pet {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The format is plain text.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String summary() default "";
 
 	/**
 	 * Synonym for {@link #type()}.

@@ -99,6 +99,19 @@ public @interface Path {
 	String[] description() default {};
 
 	/**
+	 * Short, concise summary of the exposed API.
+	 *
+	 * <p>
+	 * Intended as a brief, single-line description suitable for AI/LLM consumption, compact documentation,
+	 * or any context where brevity matters. See {@link org.apache.juneau.commons.annotation.Schema#summary()}
+	 * for the canonical definition.
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String summary() default "";
+
+	/**
 	 * URL path variable name.
 	 *
 	 * <p>

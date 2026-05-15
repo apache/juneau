@@ -60,6 +60,7 @@ public class BeanPropAnnotation {
 		private Class<? extends BeanFactory> factory = BeanFactory.Void.class;
 		private String name = "";
 		private String ro = "";
+		private String summary = "";
 		private String value = "";
 		private String wo = "";
 
@@ -147,6 +148,18 @@ public class BeanPropAnnotation {
 		}
 
 		/**
+		 * Sets the {@link BeanProp#summary()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder summary(String value) {
+			summary = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link BeanProp#type()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -196,6 +209,7 @@ public class BeanPropAnnotation {
 		private final String name;
 		private final String value;
 		private final String ro;
+		private final String summary;
 		private final String wo;
 
 		Object(BeanPropAnnotation.Builder b) {
@@ -206,6 +220,7 @@ public class BeanPropAnnotation {
 			name = b.name;
 			params = copyOf(b.params);
 			ro = b.ro;
+			summary = b.summary;
 			type = b.type;
 			value = b.value;
 			wo = b.wo;
@@ -240,6 +255,11 @@ public class BeanPropAnnotation {
 		@Override /* Overridden from BeanProp */
 		public String ro() {
 			return ro;
+		}
+
+		@Override /* Overridden from BeanProp */
+		public String summary() {
+			return summary;
 		}
 
 		@Override /* Overridden from BeanProp */

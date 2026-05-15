@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.junit.jupiter.api.*;
@@ -151,6 +152,18 @@ class JsonSchemaBeanGenerator_Test extends TestBase {
 		assertThrows(RuntimeException.class, () -> JsonSchemaBeanGenerator.DEFAULT.generate((Type)null));
 		assertThrows(RuntimeException.class, () -> JsonSchemaBeanGenerator.DEFAULT.generate((Object)null));
 		assertThrows(RuntimeException.class, () -> JsonSchemaBeanGenerator.toBean(null));
+	}
+
+	@Test void b04_summary_flowsThroughBridge() {
+		var bean = JsonSchemaBeanGenerator.DEFAULT.generate(SummaryBean.class);
+		assertEquals("A short, AI-friendly description", bean.getSummary());
+		assertEquals("The user's display name", bean.getProperty("name").getSummary());
+	}
+
+	@Schema(summary="A short, AI-friendly description")
+	public static class SummaryBean {
+		@Schema(summary="The user's display name")
+		public String name;
 	}
 
 	public static class SimpleBean {

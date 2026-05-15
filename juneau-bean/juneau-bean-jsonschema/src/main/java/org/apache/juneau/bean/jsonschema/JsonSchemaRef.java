@@ -389,6 +389,12 @@ public class JsonSchemaRef extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
+	public JsonSchemaRef setSummary(String value) {
+		super.setSummary(value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
 	public JsonSchemaRef setTitle(String value) {
 		super.setTitle(value);
 		return this;

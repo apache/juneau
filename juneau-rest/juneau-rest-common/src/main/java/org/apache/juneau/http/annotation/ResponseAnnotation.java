@@ -46,6 +46,7 @@ public class ResponseAnnotation {
 		private String[] description = {};
 		private Header[] headers = {};
 		private Schema schema = SchemaAnnotation.DEFAULT;
+		private String summary = "";
 		private String[] examples = {};
 
 		/**
@@ -108,6 +109,18 @@ public class ResponseAnnotation {
 			return this;
 		}
 
+		/**
+		 * Sets the {@link Response#summary()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder summary(String value) {
+			summary = value;
+			return this;
+		}
+
 	}
 
 	@SuppressWarnings({
@@ -120,6 +133,7 @@ public class ResponseAnnotation {
 		private final String[] description;
 		private final Header[] headers;
 		private final Schema schema;
+		private final String summary;
 		private final String[] examples;
 
 		Instance(ResponseAnnotation.Builder b) {
@@ -128,6 +142,7 @@ public class ResponseAnnotation {
 			examples = copyOf(b.examples);
 			headers = copyOf(b.headers);
 			schema = b.schema;
+			summary = b.summary;
 		}
 
 		@Override /* Overridden from Response */
@@ -143,6 +158,11 @@ public class ResponseAnnotation {
 		@Override /* Overridden from Response */
 		public Schema schema() {
 			return schema;
+		}
+
+		@Override /* Overridden from Response */
+		public String summary() {
+			return summary;
 		}
 
 		@Override /* Overridden from annotation */

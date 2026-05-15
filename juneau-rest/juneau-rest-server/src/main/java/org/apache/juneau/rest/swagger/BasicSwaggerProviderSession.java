@@ -971,6 +971,7 @@ public class BasicSwaggerProviderSession {
 				.appendFirst(ne, SWAGGER_pattern, a.pattern(), a.p())
 				.appendIf(nf, SWAGGER_readOnly, a.readOnly() || a.ro())
 				.appendIf(nf, SWAGGER_required, a.required() || a.r())
+				.appendIf(ne, SWAGGER_summary, resolve(firstNonEmpty(a.summary(), a.su())))
 				.appendIf(ne, SWAGGER_title, a.title())
 				.appendFirst(ne, SWAGGER_type, a.type(), a.t())
 				.appendIf(nf, SWAGGER_uniqueItems, a.uniqueItems() || a.ui())

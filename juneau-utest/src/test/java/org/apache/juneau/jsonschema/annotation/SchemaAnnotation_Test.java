@@ -82,6 +82,8 @@ class SchemaAnnotation_Test extends TestBase {
 		.readOnly(true)
 		.required(true)
 		.ro(true)
+		.su("ee")
+		.summary("dd")
 		.t("z")
 		.title("aa")
 		.type("bb")
@@ -135,6 +137,8 @@ class SchemaAnnotation_Test extends TestBase {
 		.readOnly(true)
 		.required(true)
 		.ro(true)
+		.su("ee")
+		.summary("dd")
 		.t("z")
 		.title("aa")
 		.type("bb")
@@ -145,8 +149,8 @@ class SchemaAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"$ref,default_,enum_,aev,allOf,allowEmptyValue,cf,collectionFormat,d,description,df,discriminator,e,emax,emin,exclusiveMaximum,exclusiveMinimum,externalDocs{description,url},f,format,ignore,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxProperties,maxi,maximum,maxl,maxp,min,minItems,minLength,minProperties,mini,minimum,minl,minp,mo,multipleOf,p,pattern,r,readOnly,required,ro,sie,skipIfEmpty,t,title,type,ui,uniqueItems,xml",
-			"c,[a],[b],false,[e],false,f,g,[h],[i],[j],k,[l],true,true,true,true,{[],},m,n,true,{,[],[],,,[],[],[],false,false,false,false,,,{,[],[],,,[],[],[],false,false,false,false,,,,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},o,2,4,6,1,p,3,5,q,8,10,12,7,r,9,11,s,t,v,w,true,true,true,true,false,false,z,aa,bb,true,true,[cc]");
+			"$ref,default_,enum_,aev,allOf,allowEmptyValue,cf,collectionFormat,d,description,df,discriminator,e,emax,emin,exclusiveMaximum,exclusiveMinimum,externalDocs{description,url},f,format,ignore,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,default_,enum_,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxProperties,maxi,maximum,maxl,maxp,min,minItems,minLength,minProperties,mini,minimum,minl,minp,mo,multipleOf,p,pattern,r,readOnly,required,ro,sie,skipIfEmpty,su,summary,t,title,type,ui,uniqueItems,xml",
+			"c,[a],[b],false,[e],false,f,g,[h],[i],[j],k,[l],true,true,true,true,{[],},m,n,true,{,[],[],,,[],[],[],false,false,false,false,,,{,[],[],,,[],[],[],false,false,false,false,,,,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},o,2,4,6,1,p,3,5,q,8,10,12,7,r,9,11,s,t,v,w,true,true,true,true,false,false,ee,dd,z,aa,bb,true,true,[cc]");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -218,6 +222,8 @@ class SchemaAnnotation_Test extends TestBase {
 		readOnly=true,
 		required=true,
 		ro=true,
+		su="ee",
+		summary="dd",
 		t="z",
 		title="aa",
 		type="bb",
@@ -273,6 +279,8 @@ class SchemaAnnotation_Test extends TestBase {
 		readOnly=true,
 		required=true,
 		ro=true,
+		su="ee",
+		summary="dd",
 		t="z",
 		title="aa",
 		type="bb",
@@ -437,5 +445,33 @@ class SchemaAnnotation_Test extends TestBase {
 			.build();
 
 		assertBean(mixed, "exclusiveMaximum,exclusiveMinimum,exclusiveMaximumValue,exclusiveMinimumValue", "false,false,100,0");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// summary / su (TODO-6, since 9.5.0)
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_summary_asMap_emptyAnnotationOmitsKey() throws Exception {
+		assertFalse(SchemaAnnotation.asMap(SchemaAnnotation.DEFAULT).containsKey("summary"));
+	}
+
+	@Test void g02_summary_asMap_summaryWins() throws Exception {
+		var a = SchemaAnnotation.create().summary("the-real-summary").build();
+		assertEquals("the-real-summary", SchemaAnnotation.asMap(a).get("summary"));
+	}
+
+	@Test void g03_summary_asMap_suAliasUsedWhenSummaryEmpty() throws Exception {
+		var a = SchemaAnnotation.create().su("from-alias").build();
+		assertEquals("from-alias", SchemaAnnotation.asMap(a).get("summary"));
+	}
+
+	@Test void g04_summary_asMap_summaryTakesPrecedenceOverSu() throws Exception {
+		var a = SchemaAnnotation.create().summary("primary").su("alias").build();
+		assertEquals("primary", SchemaAnnotation.asMap(a).get("summary"));
+	}
+
+	@Test void g05_summary_emptyValueOmitsKey() throws Exception {
+		var a = SchemaAnnotation.create().summary("").su("").build();
+		assertFalse(SchemaAnnotation.asMap(a).containsKey("summary"));
 	}
 }

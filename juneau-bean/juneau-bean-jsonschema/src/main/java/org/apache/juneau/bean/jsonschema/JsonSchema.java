@@ -319,6 +319,7 @@ public class JsonSchema {
 	private URI id;                                        // Draft 04: id (deprecated but kept for compatibility)
 	private URI schemaVersion;
 	private String title;
+	private String summary;
 	private String description;
 	private JsonType typeJsonType;                         // JsonType representation of type
 	private JsonTypeArray typeJsonTypeArray;               // JsonTypeArray representation of type
@@ -1239,6 +1240,22 @@ public class JsonSchema {
 	public JsonSchema getThen() { return then_; }
 
 	/**
+	 * Bean property getter:  <property>summary</property>.
+	 *
+	 * <p>
+	 * A short, concise summary of the schema's purpose, intended for AI/LLM consumption, compact
+	 * documentation, or any context where brevity is important. Unlike {@link #getDescription()},
+	 * which can be multi-line and detailed, this value should be a single sentence or phrase.
+	 *
+	 * <p>
+	 * This is a Juneau extension. It serializes as the JSON Schema keyword <c>"summary"</c>.
+	 *
+	 * @return The value of the <property>summary</property> property, or <jk>null</jk> if it is not set.
+	 * @since 9.5.0
+	 */
+	public String getSummary() { return summary; }
+
+	/**
 	 * Bean property getter:  <property>title</property>.
 	 *
 	 * @return The value of the <property>title</property> property, or <jk>null</jk> if it is not set.
@@ -2031,6 +2048,18 @@ public class JsonSchema {
 	public JsonSchema setThen(JsonSchema value) {
 		this.then_ = value;
 		setMasterOn(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>summary</property>.
+	 *
+	 * @param value The new value for the <property>summary</property> property on this bean.
+	 * @return This object.
+	 * @since 9.5.0
+	 */
+	public JsonSchema setSummary(String value) {
+		this.summary = value;
 		return this;
 	}
 

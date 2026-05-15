@@ -388,6 +388,12 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setSummary(String value) {
+		super.setSummary(value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
 	public JsonSchemaProperty setTitle(String value) {
 		super.setTitle(value);
 		return this;

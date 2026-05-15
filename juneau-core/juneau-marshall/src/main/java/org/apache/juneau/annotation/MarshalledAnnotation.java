@@ -49,6 +49,7 @@ public class MarshalledAnnotation {
 		private Class<?> implClass = void.class;
 		private Class<? extends BeanInterceptor<?>> interceptor = BeanInterceptor.Void.class;
 		private String example = "";
+		private String summary = "";
 		private String typeName = "";
 		private String typePropertyName = "";
 
@@ -135,6 +136,18 @@ public class MarshalledAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Marshalled#summary()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder summary(String value) {
+			summary = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Marshalled#typeName()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -168,6 +181,7 @@ public class MarshalledAnnotation {
 		private final Class<?> implClass;
 		private final Class<?>[] dictionary;
 		private final String example;
+		private final String summary;
 		private final String typeName;
 		private final String typePropertyName;
 
@@ -179,6 +193,7 @@ public class MarshalledAnnotation {
 			example = b.example;
 			implClass = b.implClass;
 			interceptor = b.interceptor;
+			summary = b.summary;
 			typeName = b.typeName;
 			typePropertyName = b.typePropertyName;
 		}
@@ -206,6 +221,11 @@ public class MarshalledAnnotation {
 		@Override /* Overridden from Marshalled */
 		public Class<? extends BeanInterceptor<?>> interceptor() {
 			return interceptor;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public String summary() {
+			return summary;
 		}
 
 		@Override /* Overridden from Marshalled */

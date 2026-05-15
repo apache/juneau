@@ -589,4 +589,26 @@ public class JsonSchema_Test extends TestBase {
 		assertEquals("schema note", x2.getComment());
 		assertEquals(Boolean.TRUE, x2.getDeprecated());
 	}
+
+	@Test void b26_summary_roundTrip() throws Exception {
+		var s = Json5Serializer.create().ws().build();
+		var p = Json5Parser.DEFAULT;
+
+		var x = new JsonSchema()
+			.setType(JsonType.STRING)
+			.setSummary("AI-friendly short description");
+
+		var r = s.serialize(x);
+		assertTrue(r.contains("summary: 'AI-friendly short description'"));
+
+		var x2 = p.parse(r, JsonSchema.class);
+		assertEquals("AI-friendly short description", x2.getSummary());
+	}
+
+	@Test void b27_summary_fluentOverridesOnSubclasses() {
+		var prop = new JsonSchemaProperty("p", JsonType.STRING).setSummary("prop-summary");
+		var ref = new JsonSchemaRef("http://x").setSummary("ref-summary");
+		assertEquals("prop-summary", prop.getSummary());
+		assertEquals("ref-summary", ref.getSummary());
+	}
 }

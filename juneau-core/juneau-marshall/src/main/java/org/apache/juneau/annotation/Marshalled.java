@@ -76,6 +76,19 @@ public @interface Marshalled {
 	String[] description() default {};
 
 	/**
+	 * Short, concise summary of the exposed API.
+	 *
+	 * <p>
+	 * Intended as a brief, single-line description suitable for AI/LLM consumption, compact documentation,
+	 * or any context where brevity matters. See {@link org.apache.juneau.commons.annotation.Schema#summary()}
+	 * for the canonical definition; this field is the type-level counterpart.
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String summary() default "";
+
+	/**
 	 * Bean dictionary.
 	 *
 	 * <p>

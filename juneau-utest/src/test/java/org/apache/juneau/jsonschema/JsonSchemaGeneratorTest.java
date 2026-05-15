@@ -1521,4 +1521,48 @@ class JsonSchemaGeneratorTest extends TestBase {
 	public static class MixedStyleExclusiveBean {
 		public int value;
 	}
+
+	//====================================================================================================
+	// summary (TODO-6, since 9.5.0)
+	//====================================================================================================
+
+	@Test void summary_typeLevel() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		assertBean(s.getSchema(SummaryBean.class), "type,summary,description", "object,A pet,Long description");
+	}
+
+	@Test void summary_suAlias() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		assertBean(s.getSchema(SuAliasBean.class), "summary", "alias");
+	}
+
+	@Test void summary_summaryWinsOverSu() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		assertBean(s.getSchema(SummaryWinsBean.class), "summary", "primary");
+	}
+
+	@Test void summary_propertyLevel() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		assertBean(s.getSchema(SummaryPropertyBean.class), "properties{name{summary}}", "{{The user's display name}}");
+	}
+
+	@Schema(type="object", summary="A pet", description="Long description")
+	public static class SummaryBean {
+		public String name;
+	}
+
+	@Schema(su="alias")
+	public static class SuAliasBean {
+		public String name;
+	}
+
+	@Schema(summary="primary", su="alias")
+	public static class SummaryWinsBean {
+		public String name;
+	}
+
+	public static class SummaryPropertyBean {
+		@Schema(summary="The user's display name")
+		public String name;
+	}
 }

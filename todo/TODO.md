@@ -7,8 +7,6 @@
 
 - [TODO-4] Duration.ofDays(7) serialized in hours?
 
-- [TODO-6] Add an `ai` / `shortDescription` field to `@Schema` (and related annotations) for concise LLM/AI-consumption descriptions that stay under token budgets. See `todo/TODO-6-ai-short-description.md`.
-
 - [TODO-7] Decouple `juneau-rest-common` from `juneau-marshall` by breaking the compile dependency so REST annotations and beans can be used without pulling in the full serialization stack. See `todo/TODO-7-decouple-rest-common-from-marshall.md`.
 
 - [TODO-9] Fix remaining skipped Markdown round-trip test cases (tables, nested structures, edge cases). See `todo/TODO-9-markdown-remaining-issues.md`.
@@ -24,4 +22,6 @@
 - [TODO-20] Rethink how debugging works in RestServlet.  Can we come up with a simpler system?
 
 - [TODO-30] Investigate moving `ClassMeta` and related non-marshalling type metadata from `juneau-marshall` into `juneau-commons` (analysis/feasibility pass). See `todo/TODO-30-classmeta-to-commons.md`.
+
+- [TODO-34] Come up with a plan to generate information about Juneau in a format that's easy for AI agents to consume.
 
