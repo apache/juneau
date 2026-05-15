@@ -134,6 +134,8 @@ public class VarResolver {
 		 * <ul>
 		 * 	<li>{@link SystemPropertiesVar}
 		 * 	<li>{@link EnvVariablesVar}
+	 * 	<li>{@link EnvFileVar}
+	 * 	<li>{@link DotenvVar}
 		 * 	<li>{@link ArgsVar}
 		 * 	<li>{@link ManifestFileVar}
 		 * 	<li>{@link SwitchVar}
@@ -213,6 +215,8 @@ public class VarResolver {
 	 * <ul>
 	 * 	<li><c>$S{key[,default]}</c> - {@link SystemPropertiesVar}
 	 * 	<li><c>$E{key[,default]}</c> - {@link EnvVariablesVar}
+	 * 	<li><c>$EF{key[,default]}</c> - {@link EnvFileVar}
+	 * 	<li><c>$DE{key[,default]}</c> - {@link DotenvVar}
 	 * 	<li><c>$A{key[,default]}</c> - {@link ArgsVar}
 	 * 	<li><c>$MF{key[,default]}</c> - {@link ManifestFileVar}
 	 * 	<li><c>$SW{stringArg,pattern:thenValue[,pattern:thenValue...]}</c> - {@link SwitchVar}

@@ -18,6 +18,8 @@ package org.apache.juneau.commons.svl.vars;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
+import java.nio.file.*;
 import java.util.jar.*;
 
 import org.apache.juneau.*;
@@ -135,6 +137,55 @@ class PropertyVars_Test extends TestBase {
 			assertEquals("overrideVal", vr.resolve("$P{PropertyVars_Test.c03}"));
 		} finally {
 			Settings.get().unsetGlobal("PropertyVars_Test.c03");
+		}
+	}
+
+	//====================================================================================================
+	// DotenvVar / EnvFileVar
+	//====================================================================================================
+
+	@Test
+	void d01_dotenvVar_create_resolvesKeyAndDefault() throws IOException {
+		var tmp = Files.createTempFile("juneau-svl-dotenv-", ".env");
+		Files.writeString(tmp, "API_KEY=abc123\n");
+		try {
+			var vr = VarResolver.create().vars(DotenvVar.create(tmp)).build();
+			assertEquals("abc123", vr.resolve("$DE{API_KEY}"));
+			assertEquals("fallback", vr.resolve("$DE{MISSING,fallback}"));
+		} finally {
+			Files.deleteIfExists(tmp);
+		}
+	}
+
+	@Test
+	void d02_envFileVar_create_resolvesKeyAndDefault() throws IOException {
+		var tmp = Files.createTempFile("juneau-svl-envfile-", ".env");
+		Files.writeString(tmp, "REGION=us-east-1\n");
+		try {
+			var vr = VarResolver.create().vars(EnvFileVar.create(tmp)).build();
+			assertEquals("us-east-1", vr.resolve("$EF{REGION}"));
+			assertEquals("us-west-2", vr.resolve("$EF{MISSING,us-west-2}"));
+		} finally {
+			Files.deleteIfExists(tmp);
+		}
+	}
+
+	@Test
+	void d03_defaultVars_includeDotenvAndEnvFile() throws IOException {
+		var tmp = Files.createTempFile("juneau-svl-default-vars-", ".env");
+		Files.writeString(tmp, "D_KEY=dot\nE_KEY=env\n");
+		var oldPath = System.getProperty("juneau.dotenv.path");
+		System.setProperty("juneau.dotenv.path", tmp.toString());
+		try {
+			var vr = VarResolver.create().defaultVars().build();
+			assertEquals("dot", vr.resolve("$DE{D_KEY}"));
+			assertEquals("env", vr.resolve("$EF{E_KEY}"));
+		} finally {
+			if (oldPath == null)
+				System.clearProperty("juneau.dotenv.path");
+			else
+				System.setProperty("juneau.dotenv.path", oldPath);
+			Files.deleteIfExists(tmp);
 		}
 	}
 }

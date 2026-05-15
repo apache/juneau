@@ -88,6 +88,8 @@ public class VarList extends ArrayList<Object> {
 	 * 	<li>{@link PropertyVar}
 	 * 	<li>{@link SystemPropertiesVar}
 	 * 	<li>{@link EnvVariablesVar}
+	 * 	<li>{@link EnvFileVar}
+	 * 	<li>{@link DotenvVar}
 	 * 	<li>{@link ArgsVar}
 	 * 	<li>{@link ManifestFileVar}
 	 * 	<li>{@link SwitchVar}
@@ -111,6 +113,8 @@ public class VarList extends ArrayList<Object> {
 			PropertyVar.class,
 			SystemPropertiesVar.class,
 			EnvVariablesVar.class,
+			EnvFileVar.class,
+			DotenvVar.class,
 			ManifestFileVar.class,
 			ArgsVar.class,
 			SwitchVar.class,

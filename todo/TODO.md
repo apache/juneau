@@ -27,7 +27,5 @@
 
 - [TODO-20] Rethink how debugging works in RestServlet.  Can we come up with a simpler system?
 
-- [TODO-22] Add additional SVL vars for common external configuration sources (e.g. `EnvFileVar` / `DotenvVar` for `.env` files, possibly file-glob and JSON-pointer vars). Should land after TODO-14 places SVL in `juneau-commons`.
-
 - [TODO-30] Investigate moving `ClassMeta` and related non-marshalling type metadata from `juneau-marshall` into `juneau-commons` (analysis/feasibility pass). See `todo/TODO-30-classmeta-to-commons.md`.
 
