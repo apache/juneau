@@ -1674,6 +1674,11 @@ const sidebars: SidebarsConfig = {
 								},
 							],
 						},
+						{
+							type: 'doc',
+							id: 'topics/12.15.NextGenRestClient',
+							label: '12.15. Next-Generation REST Client (Beta)',
+						},
 					],
 				},
 				{
@@ -1737,6 +1742,11 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/14.08.Listeners',
 							label: '14.8. Listeners',
+						},
+						{
+							type: 'doc',
+							id: 'topics/14.09.InjectAwareMicroservice',
+							label: '14.9. Inject-Aware Microservice',
 						},
 					],
 				},
