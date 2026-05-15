@@ -21,6 +21,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;
 
+import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
 /**
@@ -39,6 +40,14 @@ import jakarta.servlet.http.*;
  * <p>
  * Children are attached to this resource using the {@link Rest#children() @Rest(children)} annotation.
  *
+ * <h5 class='section'>Dynamic children:</h5>
+ *
+ * <p>
+ * Additional child resources can be registered or unregistered at runtime via {@link #addChild(Class)} /
+ * {@link #removeChild(String)} (and overloads). This is particularly useful in test fixtures where a single
+ * group resource is mounted once and individual tests plug in their own {@code @Rest} resources without restarting
+ * the container.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
  * </ul>
@@ -49,5 +58,87 @@ public abstract class BasicRestObjectGroup extends BasicRestObject implements Ba
 	@Override /* Overridden from BasicGroupOperations */
 	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return ChildResourceDescriptions.of(req);
+	}
+
+	/**
+	 * Returns the {@link RestChildren} registry backing this group resource.
+	 *
+	 * <p>
+	 * Use this for full access to the dynamic add/remove API, including the {@code replace} overloads and the
+	 * unmodifiable {@link RestChildren#asMap() asMap()} snapshot.
+	 *
+	 * @return The {@link RestChildren} registry for this resource's {@link RestContext}.
+	 */
+	public RestChildren getChildResources() {
+		return getContext().getRestChildren();
+	}
+
+	/**
+	 * Dynamically registers a child REST resource by class.
+	 *
+	 * <p>
+	 * Convenience pass-through to {@link RestChildren#addChild(Class)} on {@link #getChildResources()}.
+	 *
+	 * @param resourceClass The {@code @Rest}-annotated resource class.
+	 * @return The newly-built child {@link RestContext}.
+	 * @throws ServletException If construction or lifecycle initialization of the child fails.
+	 */
+	public RestContext addChild(Class<?> resourceClass) throws ServletException {
+		return getChildResources().addChild(resourceClass);
+	}
+
+	/**
+	 * Dynamically registers a pre-instantiated child REST resource.
+	 *
+	 * <p>
+	 * Convenience pass-through to {@link RestChildren#addChild(Object)} on {@link #getChildResources()}.
+	 *
+	 * @param resource The {@code @Rest}-annotated resource instance.
+	 * @return The newly-built child {@link RestContext}.
+	 * @throws ServletException If construction or lifecycle initialization of the child fails.
+	 */
+	public RestContext addChild(Object resource) throws ServletException {
+		return getChildResources().addChild(resource);
+	}
+
+	/**
+	 * Dynamically registers a pre-instantiated child REST resource at an explicit path.
+	 *
+	 * <p>
+	 * Convenience pass-through to {@link RestChildren#addChild(String, Object)} on {@link #getChildResources()}.
+	 *
+	 * @param path The path segment under this group at which to mount the child.
+	 * @param resource The {@code @Rest}-annotated resource instance.
+	 * @return The newly-built child {@link RestContext}.
+	 * @throws ServletException If construction or lifecycle initialization of the child fails.
+	 */
+	public RestContext addChild(String path, Object resource) throws ServletException {
+		return getChildResources().addChild(path, resource);
+	}
+
+	/**
+	 * Removes the child registered at the given composed path.
+	 *
+	 * <p>
+	 * Convenience pass-through to {@link RestChildren#removeChild(String)} on {@link #getChildResources()}.
+	 *
+	 * @param path The composed path key (as returned by {@link RestContext#getPath()}).
+	 * @return The removed and destroyed {@link RestContext}, or {@code null} if no child was registered there.
+	 */
+	public RestContext removeChild(String path) {
+		return getChildResources().removeChild(path);
+	}
+
+	/**
+	 * Removes the first child whose resource class matches the given type.
+	 *
+	 * <p>
+	 * Convenience pass-through to {@link RestChildren#removeChild(Class)} on {@link #getChildResources()}.
+	 *
+	 * @param resourceClass The resource class to match.
+	 * @return The removed and destroyed {@link RestContext}, or {@code null} if no matching child was found.
+	 */
+	public RestContext removeChild(Class<?> resourceClass) {
+		return getChildResources().removeChild(resourceClass);
 	}
 }

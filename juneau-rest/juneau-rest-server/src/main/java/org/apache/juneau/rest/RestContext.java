@@ -1115,7 +1115,7 @@ public class RestContext extends Context {
 	private final Memoizer<RestChildren> restChildren = memoizer(() -> safe(() -> {
 		var bs = beanStore();
 		var servletConfig = bs.getBean(ServletConfig.class).orElse(null);
-		var b = RestChildren.create(bs);
+		var b = RestChildren.create(this, bs, servletConfig);
 
 		// Collect child classes from @Rest(children) on the annotation chain (parent-to-child order).
 		// Deduplicate so the same child class registered on both a parent and child annotation
@@ -1126,18 +1126,7 @@ public class RestContext extends Context {
 		for (var rc2 : seen) {
 			if (rc2 == resourceClass())
 				continue;  // Guard against self-reference infinite loop.
-			Supplier<?> so;
-			if (bs.getBean(rc2).isPresent()) {
-				so = () -> bs.getBean(rc2).get();
-			} else {
-				Object o2 = BeanInstantiator.of(rc2, bs).run();
-				so = () -> o2;
-			}
-			var cc = new RestContext(new Args(rc2, this, servletConfig, so, "", null));
-			var mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
-			if (nn(mi))
-				mi.accessible().invoke(so.get(), cc);
-			b.add(cc);
+			b.add(RestChildren.buildChildContext(this, bs, servletConfig, rc2, null, ""));
 		}
 
 		// @Bean override — allows replacing the entire RestChildren instance.
@@ -1318,14 +1307,21 @@ public class RestContext extends Context {
 
 			// --- end beanStore setup ---
 
-			// Path is read directly from the @Rest(path) annotation chain (most-derived class wins),
-			// replacing the prior Builder.path staging field eliminated in the May 2026 refactor.
-			path = getRestAnnotations().stream()
-				.map(ai -> ai.inner().path())
-				.filter(StringUtils::isNotEmpty)
-				.findFirst()
-				.map(s -> trimLeadingSlashes(s))
-				.orElse("");
+			// Path resolution: explicit Args.path (non-empty) wins so callers like
+			// RestChildren.addChild(String,Object) can mount the same class at a custom path; otherwise read
+			// from the @Rest(path) annotation chain (most-derived class wins). This restores override behavior
+			// removed in the May 2026 Builder.path elimination, without resurrecting the staging field.
+			var argsPath = builder.args.path();
+			if (argsPath != null && ! argsPath.isEmpty()) {
+				path = trimLeadingSlashes(argsPath);
+			} else {
+				path = getRestAnnotations().stream()
+					.map(ai -> ai.inner().path())
+					.filter(StringUtils::isNotEmpty)
+					.findFirst()
+					.map(s -> trimLeadingSlashes(s))
+					.orElse("");
+			}
 			fullPath = (parentContext == null ? "" : (parentContext.fullPath + '/')) + path;
 			var p = path;
 			if (! p.endsWith("/*"))
@@ -1754,6 +1750,11 @@ public class RestContext extends Context {
 	 * Called during servlet destruction to invoke all {@link RestDestroy} methods.
 	 */
 	public void destroy() {
+		// @RestDestroy hooks first, then children (recursive cleanup), then close this context's bean store.
+		// Destroying children before closing the bean store is required: getRestChildren() reads from the bean
+		// store and BasicBeanStore.getBean() rejects calls after close(), so the previous post-close lookup was
+		// a latent bug that only surfaced when destroy() was invoked outside the JVM-shutdown happy path
+		// (e.g. dynamic RestChildren.removeChild — see TODO-33).
 		for (var x : destroyInvokerPair.get().invokers) {
 			try {
 				x.invoke(beanStore, getResource());
@@ -1761,13 +1762,14 @@ public class RestContext extends Context {
 				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
 			}
 		}
+		var childrenRef = getRestChildren();
+		if (nn(childrenRef))
+			childrenRef.destroy();
 		try {
 			beanStore.close();
 		} catch (Exception e) {
 			getLogger().log(Level.WARNING, unwrap(e), () -> "Error occurred closing bean store.");
 		}
-
-		getRestChildren().destroy();
 	}
 
 	/**
@@ -2520,7 +2522,10 @@ public class RestContext extends Context {
 		if (initialized.get())
 			return this;
 		var resource2 = getResource();
-		var mi = ClassInfo.of(getResource()).getPublicMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
+		// Use getMethod (not getPublicMethod) to match the child-init memoizer at RestContext.restChildren — covers
+		// the protected `setContext` declared on `RestServlet` / `RestObject` so external callers (e.g. MockRestClient,
+		// the @RestInit / lifecycle wiring) can hand the resource its RestContext post-construction.
+		var mi = ClassInfo.of(getResource()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
 		if (nn(mi)) {
 			try {
 				mi.accessible().invoke(resource2, this);

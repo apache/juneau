@@ -72,7 +72,7 @@ public final class NgRestClient implements Closeable {
 	 * Call {@link Builder#bodyConverters(BodyConverter[])} to replace all defaults.
 	 */
 	public static final List<BodyConverter<?>> DEFAULT_BODY_CONVERTERS = List.of(
-		BodyConverter.of(HttpBody.class, body -> TransportBody.of(body)),
+		BodyConverter.of(HttpBody.class, TransportBody::of),
 		BodyConverter.of(InputStream.class, is -> TransportBody.of(StreamBody.of(is))),
 		BodyConverter.of(byte[].class, bytes -> TransportBody.of(ByteArrayBody.of(bytes))),
 		BodyConverter.of(java.io.File.class, file -> TransportBody.of(FileBody.of(file)))

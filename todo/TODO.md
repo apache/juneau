@@ -17,7 +17,7 @@
 
 - [TODO-10] Move `org.apache.juneau.http.annotation` from `juneau-marshall` into `juneau-rest-common` (already done for the annotation classes — plan tracks remaining follow-on cleanup). See `todo/TODO-10-move-http-annotation-to-rest-common.md`.
 
-- [TODO-11] Next-generation RestClient transport abstraction: decouple `RestClient` from Apache HttpClient 4.5 so any HTTP transport can be plugged in. See `todo/TODO-11-restclient2-transport-abstraction.md`.
+- [TODO-11] RestClient NG closeout: cross-transport remote-interface test suite (blocked on [TODO-31]) plus NG http package coverage (independent). Implementation has shipped (see `todo/FINISHED-11a-restclient-ng-design-plan.md`). Active checklist in `todo/TODO-11-restclient-ng-coverage-closeout.md`.
 
 - [TODO-12] Schema validation mode for parsers and serializers: wire `@Schema` validation into the bean property get/set lifecycle gated by a new `validateSchema` flag on `MarshallingContext`. See `todo/TODO-12-schema-validation.md`.
 
@@ -28,4 +28,6 @@
 - [TODO-20] Rethink how debugging works in RestServlet.  Can we come up with a simpler system?
 
 - [TODO-30] Investigate moving `ClassMeta` and related non-marshalling type metadata from `juneau-marshall` into `juneau-commons` (analysis/feasibility pass). See `todo/TODO-30-classmeta-to-commons.md`.
+
+- [TODO-32] YAML support in juneau-config: add a YAML-format alternative to the existing INI-style Config. New `ConfigStore` implementation reading/writing `.yml` / `.yaml` files with parity for sections, keys, defaults, comments, and SVL interpolation; round-trips edits without losing comments where possible.
 

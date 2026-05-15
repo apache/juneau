@@ -1,4 +1,8 @@
-# RestClient Next-Generation Transport Abstraction Plan
+# FINISHED-11a: RestClient Next-Generation Transport Abstraction — Design Plan
+
+> **Archived from `TODO-11-restclient2-transport-abstraction.md`.** This file preserves the original design plan that drove the next-generation REST client (`org.apache.juneau.ng.*`) implementation. The implementation itself — including all packages, modules, transport adapters, mock transport, and unit tests — has landed. The remaining cleanup (test-coverage closeout in `org.apache.juneau.ng.http`) is tracked in `todo/TODO-11-restclient-ng-coverage-closeout.md`. The text below is preserved verbatim for context only.
+
+---
 
 ## Problem Statement
 

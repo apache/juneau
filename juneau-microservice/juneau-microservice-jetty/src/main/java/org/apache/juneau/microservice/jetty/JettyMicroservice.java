@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.commons.svl.*;
@@ -390,6 +391,24 @@ public class JettyMicroservice extends Microservice {
 		}
 
 		@Override /* Overridden from MicroserviceBuilder */
+		public Builder configurations(Class<?>...configurations) {
+			super.configurations(configurations);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public Builder configurations(List<Class<?>> configurations) {
+			super.configurations(configurations);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public Builder beanStore(WritableBeanStore beanStore) {
+			super.beanStore(beanStore);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder workingDir(String path) {
 			super.workingDir(path);
 			return this;
@@ -483,12 +502,26 @@ public class JettyMicroservice extends Microservice {
 	 * @throws IOException Problem occurred reading file.
 	 * @throws ParseException Malformed content found in config file.
 	 */
+	@SuppressWarnings({
+		"resource" // getBeanStore() is microservice-owned and closed in Microservice.stop(); fluent addBean() should not be auto-closed here.
+	})
 	protected JettyMicroservice(Builder builder) throws ParseException, IOException {
 		super(builder);
 		setInstance(this);
 		this.builder = builder.copy();
-		this.listener = nn(builder.listener2) ? builder.listener2 : new BasicJettyMicroserviceListener();
-		this.factory = nn(builder.factory) ? builder.factory : new BasicJettyServerFactory();
+		var store = getBeanStore();
+		// Listener: explicit builder > @Bean (Jetty-specific first, then core) > default.
+		this.listener = nn(builder.listener2)
+			? builder.listener2
+			: store.getBean(JettyMicroserviceListener.class).orElseGet(BasicJettyMicroserviceListener::new);
+		store.addBean(JettyMicroserviceListener.class, this.listener);
+		// Factory: explicit builder > @Bean > default.
+		this.factory = nn(builder.factory)
+			? builder.factory
+			: store.getBean(JettyServerFactory.class).orElseGet(BasicJettyServerFactory::new);
+		store.addBean(JettyServerFactory.class, this.factory);
+		// Self-register so @Bean factory methods can take JettyMicroservice as a constructor/method param.
+		store.addBean(JettyMicroservice.class, this);
 	}
 
 	/**
@@ -554,7 +587,8 @@ public class JettyMicroservice extends Microservice {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for server creation logic
+		"java:S3776", // Cognitive complexity acceptable for server creation logic
+		"resource" // getBeanStore() is owned by the microservice lifecycle; do not close in createServer().
 	})
 	public Server createServer() throws ParseException, IOException, ExecutableException {
 		listener.onCreateServer(this);
@@ -562,6 +596,7 @@ public class JettyMicroservice extends Microservice {
 		var cf = getConfig();
 		var mf = getManifest();
 		var vr = getVarResolver();
+		var store = getBeanStore();
 
 		var ports = firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(() -> mf.get("Jetty-Port").map(JettyMicroservice::parseIntArray).orElseGet(() -> ints(8000))));
 		var availablePort = findOpenPort(ports);
@@ -569,33 +604,45 @@ public class JettyMicroservice extends Microservice {
 		if (env("availablePort").isEmpty())
 			System.setProperty("availablePort", String.valueOf(availablePort));
 
-		var jettyXml = builder.jettyXml;
-		var jettyConfig = cf.get("Jetty/config").orElseGet(() -> mf.get("Jetty-Config").orElse("jetty.xml"));
-		var resolveVars = firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
-		boolean resolveVars2 = isTrue(resolveVars);
+		// Prefer a @Bean-supplied Server if one was contributed via @Configuration.
+		// Otherwise build from jetty.xml via the configured factory.
+		var injectedServer = store.getBean(Server.class).orElse(null);
+		if (nn(injectedServer)) {
+			server.set(injectedServer);
+		} else {
+			var jettyXml = builder.jettyXml;
+			var jettyConfig = cf.get("Jetty/config").orElseGet(() -> mf.get("Jetty-Config").orElse("jetty.xml"));
+			var resolveVars = firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
+			boolean resolveVars2 = isTrue(resolveVars);
 
-		if (jettyXml == null)
-			jettyXml = loadSystemResourceAsString("jetty.xml", ".", "files");
-		if (jettyXml == null)
-			throw rex("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);
+			if (jettyXml == null)
+				jettyXml = loadSystemResourceAsString("jetty.xml", ".", "files");
+			if (jettyXml == null)
+				throw rex("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);
 
-		if (resolveVars2)
-			jettyXml = vr.resolve(jettyXml);
+			if (resolveVars2)
+				jettyXml = vr.resolve(jettyXml);
 
-		getLogger().info(jettyXml);
+			getLogger().info(jettyXml);
 
-		try {
-			server.set(factory.create(jettyXml));
-		} catch (Exception e2) {
-			throw new ExecutableException(e2);
+			try {
+				server.set(factory.create(jettyXml));
+			} catch (Exception e2) {
+				throw new ExecutableException(e2);
+			}
 		}
+		// Publish the Server back to the store so @Bean factory methods of other beans can depend on it.
+		store.addBean(Server.class, server.get());
+
+		// Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.
+		var mountedPaths = new LinkedHashMap<String,String>();
 
 		for (var s : cf.get("Jetty/servlets").asStringArray().orElse(new String[0])) {
 			try {
 				var c = info(Class.forName(s));
 				if (c.isAssignableTo(RestServlet.class)) {
 					var rs = (RestServlet)c.newInstance();
-					addServlet(rs, rs.getPath());
+					mountWithCollisionCheck(rs, rs.getPath(), "Jetty/servlets[" + s + "]", mountedPaths);
 				} else {
 					throw rex("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet: {0}", s);
 				}
@@ -609,7 +656,7 @@ public class JettyMicroservice extends Microservice {
 				var c = info(Class.forName(v.toString()));
 				if (c.isAssignableTo(Servlet.class)) {
 					var rs = (Servlet)c.newInstance();
-					addServlet(rs, k);
+					mountWithCollisionCheck(rs, k, "Jetty/servletMap[" + k + "]", mountedPaths);
 				} else {
 					throw rex("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet: {0}", cn(v));
 				}
@@ -620,14 +667,53 @@ public class JettyMicroservice extends Microservice {
 
 		cf.get("Jetty/servletAttributes").asMap().orElse(EMPTY_MAP).forEach(this::addServletAttribute);
 
-		builder.servlets.forEach((k, v) -> addServlet(v, k));
+		builder.servlets.forEach((k, v) -> mountWithCollisionCheck(v, k, "Builder.servlet(" + cn(v) + ")", mountedPaths));
 
 		builder.servletAttributes.forEach(this::addServletAttribute);
+
+		// Auto-discover @Rest servlets contributed via @Configuration/@Bean methods.
+		// Path source precedence: @Rest(path=...) on the resource class, else "/".
+		// Builder-supplied servlets already won (registered above), so duplicate mount paths fail hard.
+		for (var e : store.getBeansOfType(Servlet.class).entrySet()) {
+			var servlet = e.getValue();
+			var cls = servlet.getClass();
+			if (cls.getAnnotation(Rest.class) == null)
+				continue;
+			var pathSpec = restPathFor(cls);
+			mountWithCollisionCheck(servlet, pathSpec, "@Bean " + cls.getName() + (ne(e.getKey()) ? "[" + e.getKey() + "]" : ""), mountedPaths);
+		}
 
 		if (env("juneau.serverPort").isEmpty())
 			System.setProperty("juneau.serverPort", String.valueOf(availablePort));
 
 		return server.get();
+	}
+
+	private void mountWithCollisionCheck(Servlet servlet, String rawPath, String source, Map<String,String> mountedPaths) {
+		var pathSpec = normalizePathSpec(rawPath);
+		var prior = mountedPaths.get(pathSpec);
+		if (nn(prior))
+			throw rex("Servlet mount path collision: ''{0}'' is already mounted by {1}; refused by {2}.", pathSpec, prior, source);
+		mountedPaths.put(pathSpec, source);
+		addServlet(servlet, pathSpec);
+	}
+
+	private static String normalizePathSpec(String rawPath) {
+		var p = rawPath == null ? "" : rawPath;
+		if (p.isEmpty() || "/".equals(p))
+			return "/*";
+		if (! p.startsWith("/"))
+			p = "/" + p;
+		if (! p.endsWith("/*"))
+			p = trimTrailingSlashes(p) + "/*";
+		return p;
+	}
+
+	private static String restPathFor(Class<?> cls) {
+		var r = cls.getAnnotation(Rest.class);
+		if (r == null || r.path().isEmpty())
+			return "/";
+		return r.path();
 	}
 
 	/**

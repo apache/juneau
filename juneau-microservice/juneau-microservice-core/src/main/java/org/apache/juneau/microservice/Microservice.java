@@ -32,6 +32,7 @@ import java.util.jar.*;
 import java.util.logging.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.commons.svl.*;
@@ -124,6 +125,8 @@ public class Microservice implements ConfigEventListener {
 		PrintWriter consoleWriter;
 		MicroserviceListener listener;
 		File workingDir = env("juneau.workingDir").map(File::new).orElse(null);
+		WritableBeanStore beanStore;
+		List<Class<?>> configurations = list();
 
 		/**
 		 * Constructor.
@@ -147,6 +150,8 @@ public class Microservice implements ConfigEventListener {
 			this.consoleReader = copyFrom.consoleReader;
 			this.consoleWriter = copyFrom.consoleWriter;
 			this.workingDir = copyFrom.workingDir;
+			this.beanStore = copyFrom.beanStore;
+			this.configurations = new ArrayList<>(copyFrom.configurations);
 		}
 
 		/**
@@ -502,6 +507,67 @@ public class Microservice implements ConfigEventListener {
 		}
 
 		/**
+		 * Registers one or more <c>@Configuration</c>-annotated classes whose <c>@Bean</c> methods/fields
+		 * will be processed during microservice bootstrap.
+		 *
+		 * <p>
+		 * Beans contributed by <c>@Configuration</c> classes are stored in the microservice's internal
+		 * {@link WritableBeanStore} (accessible via {@link Microservice#getBeanStore()}).  They become
+		 * available to other <c>@Bean</c> factory methods via constructor injection.
+		 *
+		 * <p>
+		 * Explicit builder calls (e.g. {@link #config(Config)}, {@link #args(Args)}) take precedence over
+		 * <c>@Bean</c>-supplied values — the resolved field is registered into the bean store <i>after</i>
+		 * configurations are processed, overwriting any same-type <c>@Bean</c> contribution.
+		 *
+		 * @param configurations The configuration classes.  Can be <jk>null</jk> or empty.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder configurations(Class<?>... configurations) {
+			if (nn(configurations))
+				for (var c : configurations)
+					if (nn(c))
+						this.configurations.add(c);
+			return this;
+		}
+
+		/**
+		 * Registers one or more <c>@Configuration</c>-annotated classes.
+		 *
+		 * @param configurations The configuration classes.  Can be <jk>null</jk> or empty.
+		 * @return This object.
+		 * @see #configurations(Class...)
+		 * @since 9.5.0
+		 */
+		public Builder configurations(List<Class<?>> configurations) {
+			if (nn(configurations))
+				for (var c : configurations)
+					if (nn(c))
+						this.configurations.add(c);
+			return this;
+		}
+
+		/**
+		 * Specifies an external {@link WritableBeanStore} to use instead of constructing a fresh one.
+		 *
+		 * <p>
+		 * Useful for testing and for composing a microservice into a larger application that already owns
+		 * a bean store (e.g. a Spring-backed parent store).  When set, configurations supplied via
+		 * {@link #configurations(Class...)} are registered into this store, and the microservice's
+		 * resolved values (args, manifest, config, var resolver, listener, microservice itself) are also
+		 * registered into it.
+		 *
+		 * @param beanStore The external bean store.  Can be <jk>null</jk> to use a fresh internal store.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder beanStore(WritableBeanStore beanStore) {
+			this.beanStore = beanStore;
+			return this;
+		}
+
+		/**
 		 * Resolves the specified path.
 		 *
 		 * <p>
@@ -562,6 +628,7 @@ public class Microservice implements ConfigEventListener {
 	private final Thread consoleThread;
 	final File workingDir;
 	private final String configName;
+	private final WritableBeanStore beanStore;
 
 	private final AtomicReference<Logger> logger = new AtomicReference<>();
 
@@ -574,7 +641,8 @@ public class Microservice implements ConfigEventListener {
 	 */
 	@SuppressWarnings({
 		"resource", // Resources are managed by caller
-		"java:S3776" // Cognitive complexity acceptable for microservice initialization
+		"java:S3776", // Cognitive complexity acceptable for microservice initialization
+		"java:S106" // Console fallback intentionally writes to System.out when no Console is available.
 	})
 	protected Microservice(Builder builder) throws IOException, ParseException {
 		setInstance(this);
@@ -582,12 +650,27 @@ public class Microservice implements ConfigEventListener {
 		this.workingDir = builder.workingDir;
 		this.configName = builder.configName;
 
-		this.args = nn(builder.args) ? builder.args : new Args(new String[0]);
+		// --------------------------------------------------------------------------------
+		// Initialize the bean store and register any @Configuration classes.
+		// @Bean-supplied values become candidate inputs for field resolution below.
+		// Explicit builder calls always win and overwrite @Bean contributions afterward.
+		// --------------------------------------------------------------------------------
+		this.beanStore = nn(builder.beanStore) ? builder.beanStore : new BasicBeanStore();
+		if (! builder.configurations.isEmpty())
+			beanStore.registerConfigurations(builder.configurations.toArray(new Class<?>[0]));
+
+		// Resolve Args: builder > @Bean > empty.
+		this.args = nn(builder.args)
+			? builder.args
+			: beanStore.getBean(Args.class).orElseGet(() -> new Args(new String[0]));
+		beanStore.addBean(Args.class, this.args);
 
 		// --------------------------------------------------------------------------------
 		// Try to get the manifest file if it wasn't already set.
 		// --------------------------------------------------------------------------------
 		var manifest2 = builder.manifest;
+		if (manifest2 == null)
+			manifest2 = beanStore.getBean(ManifestFile.class).orElse(null);
 		if (manifest2 == null) {
 			var m = new Manifest();
 
@@ -613,6 +696,7 @@ public class Microservice implements ConfigEventListener {
 			manifest2 = new ManifestFile(m);
 		}
 		this.manifest = manifest2;
+		beanStore.addBean(ManifestFile.class, this.manifest);
 		builder.varResolver
 			.vars(ArgsVar.create(() -> this.args))
 			.vars(ManifestFileVar.create(() -> this.manifest));
@@ -620,7 +704,7 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		// Try to resolve the configuration if not specified.
 		// --------------------------------------------------------------------------------
-		var config2 = builder.config;
+		var config2 = nn(builder.config) ? builder.config : beanStore.getBean(Config.class).orElse(null);
 		var configBuilder = builder.configBuilder.varResolver(builder.varResolver.build()).store(MemoryStore.DEFAULT);
 		if (config2 == null) {
 			var store = builder.configStore;
@@ -649,7 +733,9 @@ public class Microservice implements ConfigEventListener {
 		this.config = config2;
 		Config.setSystemDefault(this.config);
 		this.config.addListener(this);
+		beanStore.addBean(Config.class, this.config);
 		this.varResolver = builder.varResolver.bean(Config.class, config2).build();
+		beanStore.addBean(VarResolver.class, this.varResolver);
 
 		// --------------------------------------------------------------------------------
 		// Initialize console commands.
@@ -660,6 +746,9 @@ public class Microservice implements ConfigEventListener {
 			this.consoleReader = firstNonNull(builder.consoleReader, new Scanner(c == null ? new InputStreamReader(System.in) : c.reader()));
 			this.consoleWriter = firstNonNull(builder.consoleWriter, c == null ? new PrintWriter(System.out, true) : c.writer());
 
+			// @Bean-supplied console commands (registered first, then overridable by builder/config below).
+			for (var cc : beanStore.getBeansOfType(ConsoleCommand.class).values())
+				consoleCommandMap.put(cc.getName(), cc);
 			for (var cc : builder.consoleCommands) {
 				consoleCommandMap.put(cc.getName(), cc);
 			}
@@ -697,7 +786,14 @@ public class Microservice implements ConfigEventListener {
 			this.consoleWriter = null;
 			this.consoleThread = null;
 		}
-		this.listener = nn(builder.listener) ? builder.listener : new BasicMicroserviceListener();
+		// Resolve listener: builder > @Bean > default.
+		this.listener = nn(builder.listener)
+			? builder.listener
+			: beanStore.getBean(MicroserviceListener.class).orElseGet(BasicMicroserviceListener::new);
+		beanStore.addBean(MicroserviceListener.class, this.listener);
+
+		// Self-register so @Bean factory methods can take Microservice as a constructor/method param.
+		beanStore.addBean(Microservice.class, this);
 
 		init();
 	}
@@ -906,6 +1002,29 @@ public class Microservice implements ConfigEventListener {
 	 * @return The logger for this microservice.
 	 */
 	public Logger getLogger() { return logger.get(); }
+
+	/**
+	 * Returns the internal {@link WritableBeanStore} that backs this microservice's inject-aware bootstrap.
+	 *
+	 * <p>
+	 * The store is populated with this microservice's resolved values (<c>Args</c>, <c>ManifestFile</c>,
+	 * <c>Config</c>, <c>VarResolver</c>, <c>MicroserviceListener</c>, and <c>Microservice</c> itself),
+	 * plus any beans contributed by <c>@Configuration</c> classes registered via
+	 * {@link Builder#configurations(Class...)}.
+	 *
+	 * <p>
+	 * Subclasses (e.g. <c>JettyMicroservice</c>) consult the store at start-up to discover additional
+	 * beans (servlets, listeners, factories) to register.  External callers can query the store directly
+	 * to look up beans contributed by user-supplied <c>@Configuration</c> classes.
+	 *
+	 * <p>
+	 * The store is closed during {@link #stop()}, which triggers <c>@PreDestroy</c> hooks on resolved
+	 * beans.
+	 *
+	 * @return The microservice's bean store.  Never <jk>null</jk>.
+	 * @since 9.5.0
+	 */
+	public WritableBeanStore getBeanStore() { return beanStore; }
 
 	/**
 	 * Returns the main jar manifest file contents as a simple {@link JsonMap}.
@@ -1130,6 +1249,14 @@ public class Microservice implements ConfigEventListener {
 	})
 	public Microservice stop() throws Exception {
 		listener.onStop(this);
+		try {
+			beanStore.close();
+		} catch (Exception e) {
+			// @PreDestroy errors should not prevent the rest of the shutdown sequence; surface via logger.
+			var lg = getLogger();
+			if (nn(lg))
+				lg.log(Level.WARNING, lm(e), e);
+		}
 		return this;
 	}
 
