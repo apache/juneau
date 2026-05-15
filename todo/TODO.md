@@ -11,8 +11,6 @@
 
 - [TODO-7] Decouple `juneau-rest-common` from `juneau-marshall` by breaking the compile dependency so REST annotations and beans can be used without pulling in the full serialization stack. See `todo/TODO-7-decouple-rest-common-from-marshall.md`.
 
-- [TODO-8] Add typed `JsonSchema` bean output to `JsonSchemaGenerator` (currently returns only `JsonMap`). Requires filling gaps in the `JsonSchema` bean and adding a bridge class in `juneau-bean-jsonschema`. See `todo/TODO-8-jsonschema-bean-generation.md`.
-
 - [TODO-9] Fix remaining skipped Markdown round-trip test cases (tables, nested structures, edge cases). See `todo/TODO-9-markdown-remaining-issues.md`.
 
 - [TODO-10] Move `org.apache.juneau.http.annotation` from `juneau-marshall` into `juneau-rest-common` (already done for the annotation classes — plan tracks remaining follow-on cleanup). See `todo/TODO-10-move-http-annotation-to-rest-common.md`.
@@ -26,6 +24,4 @@
 - [TODO-20] Rethink how debugging works in RestServlet.  Can we come up with a simpler system?
 
 - [TODO-30] Investigate moving `ClassMeta` and related non-marshalling type metadata from `juneau-marshall` into `juneau-commons` (analysis/feasibility pass). See `todo/TODO-30-classmeta-to-commons.md`.
-
-- [TODO-32] YAML support in juneau-config: add a YAML-format alternative to the existing INI-style Config. New `ConfigStore` implementation reading/writing `.yml` / `.yaml` files with parity for sections, keys, defaults, comments, and SVL interpolation; round-trips edits without losing comments where possible.
 

@@ -4,6 +4,14 @@
 
 Add the ability for `JsonSchemaGenerator` to produce typed `JsonSchema` beans instead of only `JsonMap` objects. This requires filling gaps in the `JsonSchema` bean, creating a bridge class in the `juneau-bean-jsonschema` module (which already depends on `juneau-marshall`), and comprehensive testing.
 
+## Execution Status
+
+- [x] Phase 1: Add Missing Properties to JsonSchema Bean
+- [x] Phase 2: Create JsonSchemaBeanGenerator
+- [x] Phase 3: Testing
+- [x] Phase 4: Documentation
+- [x] Phase 5: Verify and archive
+
 ## Problem
 
 `JsonSchemaGenerator` (in `juneau-marshall`) produces `JsonMap` objects. There is no way to obtain typed `JsonSchema` beans (in `juneau-bean-jsonschema`) from the generator. Users who want structured, type-safe schema objects must manually construct them or do ad-hoc conversion.

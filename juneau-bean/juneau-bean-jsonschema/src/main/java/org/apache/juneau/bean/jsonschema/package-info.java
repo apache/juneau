@@ -47,7 +47,17 @@
  * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaArray} - An array of <c>JsonSchema</c> objects.
  * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonType} - An enum of possible JSON data types.
  * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonTypeArray} - An array of <c>JsonType</c> objects.
+ * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaBeanGenerator} - Generates typed
+ * 		<c>JsonSchema</c> beans from Java types via {@link org.apache.juneau.jsonschema.JsonSchemaGenerator}.
  * </ul>
+
+ * <h5 class='topic'>Automatic Schema Generation</h5>
+ *
+ * <p>
+ * Use {@link org.apache.juneau.bean.jsonschema.JsonSchemaBeanGenerator} when you want typed DTO output from POJOs
+ * without manually building schema trees.  It bridges the map-based output of
+ * {@link org.apache.juneau.jsonschema.JsonSchemaGenerator} into <c>JsonSchema</c> beans.
+ * </p>
  *
  * <h5 class='topic'>Creating JSON Schema Documents</h5>
  *

@@ -120,7 +120,7 @@ Verify `Utils.env(name, CacheMode.FULL)` works (Settings supports Enum via value
 ### Phase 3: Special Cases
 
 8. **ParameterInfo.java** - Uses `ResettableSupplier` for testability. Options:
-   - Replace with `Settings.get().get("juneau.disableParamNameDetection").asBoolean()` 
+   - Replace with `Settings.get().get("juneau.disableParamNameDetection").asBoolean()`
    - Use `Setting.reset()` when test needs to re-read - check if Setting has reset
    - Keep ResettableSupplier but have it delegate to Settings
 

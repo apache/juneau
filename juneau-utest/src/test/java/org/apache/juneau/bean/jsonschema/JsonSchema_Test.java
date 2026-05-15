@@ -568,4 +568,25 @@ public class JsonSchema_Test extends TestBase {
 		// resolve = true path (no schemaMap, so resolve() returns self)
 		assertNotNull(x.getProperty("foo", true));
 	}
+
+	@Test void b25_formatCommentDeprecated_roundTrip() throws Exception {
+		var s = Json5Serializer.create().ws().build();
+		var p = Json5Parser.DEFAULT;
+
+		var x = new JsonSchema()
+			.setType(JsonType.STRING)
+			.setFormat("uri")
+			.setComment("schema note")
+			.setDeprecated(true);
+
+		var r = s.serialize(x);
+		assertTrue(r.contains("format: 'uri'"));
+		assertTrue(r.contains("'$comment': 'schema note'"));
+		assertTrue(r.contains("deprecated: true"));
+
+		var x2 = p.parse(r, JsonSchema.class);
+		assertEquals("uri", x2.getFormat());
+		assertEquals("schema note", x2.getComment());
+		assertEquals(Boolean.TRUE, x2.getDeprecated());
+	}
 }

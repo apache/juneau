@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
 
@@ -103,6 +104,7 @@ import org.apache.juneau.swap.*;
  * 	<li><b>Fluent API:</b> All setter methods return <c>this</c> for method chaining
  * 	<li><b>Type Safety:</b> Uses enums and typed collections for validation
  * 	<li><b>Serialization:</b> Can be serialized to any format supported by Juneau (JSON, XML, HTML, etc.)
+ * 	<li><b>Auto Generation:</b> Use {@link JsonSchemaBeanGenerator} to generate schemas from Java types
  * </ul>
  *
  * <h5 class='section'>Common Use Cases:</h5>
@@ -362,6 +364,9 @@ public class JsonSchema {
 	private JsonSchema else_;                              // Draft 07+
 	private Boolean readOnly;                              // Draft 07+
 	private Boolean writeOnly;                             // Draft 07+
+	private String format;                                 // Annotation-level keyword
+	private String comment;                                // Draft 07+, serialized as $comment
+	private Boolean deprecated;                            // Draft 2019-09+
 	private String contentMediaType;                       // Draft 07+
 
 	private String contentEncoding;                        // Draft 07+
@@ -377,6 +382,26 @@ public class JsonSchema {
 	 * Default constructor.
 	 */
 	public JsonSchema() { /* Empty constructor. */ }
+
+	/**
+	 * Generates a {@link JsonSchema} bean from the specified type using {@link JsonSchemaBeanGenerator#DEFAULT}.
+	 *
+	 * @param type The type to generate a schema for.
+	 * @return The generated schema bean.
+	 */
+	public static JsonSchema of(Type type) {
+		return JsonSchemaBeanGenerator.DEFAULT.generate(type);
+	}
+
+	/**
+	 * Generates a {@link JsonSchema} bean from the specified class using {@link JsonSchemaBeanGenerator#DEFAULT}.
+	 *
+	 * @param type The class to generate a schema for.
+	 * @return The generated schema bean.
+	 */
+	public static JsonSchema of(Class<?> type) {
+		return JsonSchemaBeanGenerator.DEFAULT.generate(type);
+	}
 
 	/**
 	 * Bean property appender:  <property>additionalItems</property>.
@@ -786,6 +811,27 @@ public class JsonSchema {
 	public String getContentMediaType() { return contentMediaType; }
 
 	/**
+	 * Bean property getter:  <property>deprecated</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2019-09.
+	 *
+	 * @return The value of the <property>deprecated</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getDeprecated() { return deprecated; }
+
+	/**
+	 * Bean property getter:  <property>$comment</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07.
+	 *
+	 * @return The value of the <property>$comment</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	@BeanProp("$comment")
+	public String getComment() { return comment; }
+
+	/**
 	 * Bean property getter:  <property>definitions</property>.
 	 *
 	 * <p>
@@ -820,6 +866,13 @@ public class JsonSchema {
 	 * 	The value of the <property>dependencies</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,JsonSchema> getDependencies() { return dependencies; }
+
+	/**
+	 * Bean property getter:  <property>format</property>.
+	 *
+	 * @return The value of the <property>format</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public String getFormat() { return format; }
 
 	/**
 	 * Bean property getter:  <property>dependentRequired</property>.
@@ -1403,6 +1456,35 @@ public class JsonSchema {
 	}
 
 	/**
+	 * Bean property setter:  <property>deprecated</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 2019-09.
+	 *
+	 * @param value The new value for the <property>deprecated</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setDeprecated(Boolean value) {
+		this.deprecated = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>$comment</property>.
+	 *
+	 * <p>
+	 * This property was added in Draft 07.
+	 *
+	 * @param value The new value for the <property>$comment</property> property on this bean.
+	 * @return This object.
+	 */
+	@BeanProp("$comment")
+	public JsonSchema setComment(String value) {
+		this.comment = value;
+		return this;
+	}
+
+	/**
 	 * Bean property setter:  <property>definitions</property>.
 	 *
 	 * @param value The new value for the <property>definitions</property> property on this bean.
@@ -1443,6 +1525,17 @@ public class JsonSchema {
 		this.dependencies = value;
 		if (nn(value))
 			setMasterOn(value.values());
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>format</property>.
+	 *
+	 * @param value The new value for the <property>format</property> property on this bean.
+	 * @return This object.
+	 */
+	public JsonSchema setFormat(String value) {
+		this.format = value;
 		return this;
 	}
 

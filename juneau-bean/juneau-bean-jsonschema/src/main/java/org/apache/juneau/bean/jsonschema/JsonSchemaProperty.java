@@ -193,6 +193,18 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setDeprecated(Boolean value) {
+		super.setDeprecated(value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setComment(String value) {
+		super.setComment(value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
 	public JsonSchemaProperty setDefinitions(Map<String,JsonSchema> value) {
 		super.setDefinitions(value);
 		return this;
@@ -219,6 +231,12 @@ public class JsonSchemaProperty extends JsonSchema {
 	@Override /* Overridden from JsonSchema */
 	public JsonSchemaProperty setDescription(String value) {
 		super.setDescription(value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonSchema */
+	public JsonSchemaProperty setFormat(String value) {
+		super.setFormat(value);
 		return this;
 	}
 
