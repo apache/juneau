@@ -17,8 +17,6 @@
 
 - [TODO-10] Move `org.apache.juneau.http.annotation` from `juneau-marshall` into `juneau-rest-common` (already done for the annotation classes — plan tracks remaining follow-on cleanup). See `todo/TODO-10-move-http-annotation-to-rest-common.md`.
 
-- [TODO-11] RestClient NG closeout: cross-transport remote-interface test suite (blocked on [TODO-31]) plus NG http package coverage (independent). Implementation has shipped (see `todo/FINISHED-11a-restclient-ng-design-plan.md`). Active checklist in `todo/TODO-11-restclient-ng-coverage-closeout.md`.
-
 - [TODO-12] Schema validation mode for parsers and serializers: wire `@Schema` validation into the bean property get/set lifecycle gated by a new `validateSchema` flag on `MarshallingContext`. See `todo/TODO-12-schema-validation.md`.
 
 - [TODO-17] Audit 9.2.x changes (juneau-docs release notes 9.2.0 / 9.5.0 + git history since 9.1.0) for breaking changes and populate the v9.5 Migration Guide at juneau-docs/pages/topics/23.01.V9.5-migration-guide.md with Old→New rows for each. Focus on removed APIs, renamed annotations/classes/methods, changed default behaviors, and any annotation-attribute semantics changes.
