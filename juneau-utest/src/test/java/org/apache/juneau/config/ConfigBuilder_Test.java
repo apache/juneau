@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.config.format.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
 
@@ -64,5 +65,30 @@ class ConfigBuilder_Test extends TestBase {
 		var nl = System.getProperty("line.separator");
 		cf = cf.load("[Test]"+nl+"A = b"+nl, true);
 		assertJson("{'':{},Test:{A:'b'}}", cf.toMap());
+	}
+
+	@Test void a02_autoDetectYamlByExtension() throws Exception {
+		var s = MemoryStore.create().build();
+		s.update("A.yaml",
+			"foo:",
+			"  bar:",
+			"    k1: v1"
+		);
+		var c = Config.create().store(s).name("A.yaml").build();
+		assertEquals("v1", c.getString("foo/bar/k1"));
+	}
+
+	@Test void a03_explicitYamlBuilderMethod() throws Exception {
+		var s = MemoryStore.create().build();
+		var c = Config.create().store(s).name("B.cfg").yaml().build();
+		c.set("foo/bar/k1", "v1").commit();
+		assertEquals("foo:\n  bar:\n    k1: v1\n", s.read("B.cfg"));
+	}
+
+	@Test void a04_explicitFormatOverride() throws Exception {
+		var s = MemoryStore.create().build();
+		s.update("C.yaml", "[S1]\nk1=v1\n");
+		var c = Config.create().store(s).name("C.yaml").format(IniConfigFormat.INSTANCE).build();
+		assertEquals("v1", c.getString("S1/k1"));
 	}
 }

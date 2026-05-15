@@ -19,7 +19,6 @@ package org.apache.juneau.ng.rest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.*;
-import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
@@ -37,7 +36,6 @@ import org.apache.juneau.ng.rest.client.jetty.*;
 import org.apache.juneau.ng.rest.client.okhttp.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
-import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -296,7 +294,7 @@ class NgRemoteInterfaceTransport_Test extends TestBase {
 	@MethodSource("transports")
 	void e01_voidReturn_succeeds(String name, TransportSupplier ts) throws Exception {
 		try (var c = buildClient(ts)) {
-			c.proxy().noContent(); // expects no exception
+			assertDoesNotThrow(() -> c.proxy().noContent());
 		}
 	}
 

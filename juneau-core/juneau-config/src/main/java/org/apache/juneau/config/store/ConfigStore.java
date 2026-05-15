@@ -27,6 +27,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.config.format.*;
 import org.apache.juneau.config.internal.*;
 
 /**
@@ -164,12 +165,26 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public synchronized ConfigMap getMap(String name) throws IOException {
+		return getMap(name, IniConfigFormat.INSTANCE);
+	}
+
+	/**
+	 * Returns a map file containing the parsed contents of a configuration.
+	 *
+	 * @param name The configuration name.
+	 * @param format The configuration format.
+	 * @return The parsed configuration.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public synchronized ConfigMap getMap(String name, ConfigFormat format) throws IOException {
 		name = resolveName(name);
-		var cm = configMaps.get(name);
+		var format2 = format == null ? IniConfigFormat.INSTANCE : format;
+		var key = format2.id() + ":" + name;
+		var cm = configMaps.get(key);
 		if (nn(cm))
 			return cm;
-		cm = new ConfigMap(this, name);
-		var cm2 = configMaps.putIfAbsent(name, cm);
+		cm = new ConfigMap(this, name, format2);
+		var cm2 = configMaps.putIfAbsent(key, cm);
 		if (nn(cm2))
 			return cm2;
 		register(name, cm);

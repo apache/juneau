@@ -260,7 +260,7 @@ class ConfigMap_Test extends TestBase {
 		var test = a(
 			"[]", "[  ]",
 			"[/]", "[[]", "[]]", "[\\]",
-			"[foo/bar]", "[foo[bar]", "[foo]bar]", "[foo\\bar]",
+			"[foo[bar]", "[foo]bar]", "[foo\\bar]",
 			"[]", "[ ]", "[\t]"
 		);
 
@@ -607,7 +607,7 @@ class ConfigMap_Test extends TestBase {
 
 		var test = a(
 			"/", "[", "]",
-			"foo/bar", "foo[bar", "foo]bar",
+			"foo[bar", "foo]bar",
 			" ",
 			null
 		);
@@ -824,7 +824,7 @@ class ConfigMap_Test extends TestBase {
 
 		var test = a(
 			"/", "[", "]",
-			"foo/bar", "foo[bar", "foo]bar",
+			"foo[bar", "foo]bar",
 			" ",
 			null
 		);
@@ -999,7 +999,7 @@ class ConfigMap_Test extends TestBase {
 
 		var test = a(
 			"/", "[", "]",
-			"foo/bar", "foo[bar", "foo]bar",
+			"foo[bar", "foo]bar",
 			" ",
 			null
 		);
@@ -1073,6 +1073,17 @@ class ConfigMap_Test extends TestBase {
 
 		// This is okay.
 		assertDoesNotThrow(()->cm.setEntry("S1", "k1", "v1", "", null, null));
+	}
+
+	@Test void a47_pathSectionName() throws Exception {
+		var s = initStore("A.cfg",
+			"[foo/bar/baz]",
+			"k1 = v1"
+		);
+		var cm = s.getMap("A.cfg");
+
+		assertEquals("[foo/bar/baz]|k1 = v1|", pipedLines(cm));
+		assertEquals("v1", cm.getEntry("foo/bar/baz", "k1").getValue());
 	}
 
 	private static ConfigStore initStore(String name, String...contents) {

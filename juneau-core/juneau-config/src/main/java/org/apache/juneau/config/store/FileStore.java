@@ -81,7 +81,7 @@ public class FileStore extends ConfigStore {
 			charset = env("ConfigFileStore.charset").map(Charset::forName).orElse(Charset.defaultCharset());
 			directory = env("ConfigFileStore.directory", ".");
 			enableWatcher = env("ConfigFileStore.enableWatcher", false);
-			extensions = env("ConfigFileStore.extensions", "cfg");
+			extensions = env("ConfigFileStore.extensions", "cfg,yml,yaml");
 			updateOnWrite = env("ConfigFileStore.updateOnWrite", false);
 			watcherSensitivity = env("ConfigFileStore.watcherSensitivity", WatcherSensitivity.MEDIUM);
 		}

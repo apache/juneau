@@ -641,8 +641,7 @@ public class Microservice implements ConfigEventListener {
 	 */
 	@SuppressWarnings({
 		"resource", // Resources are managed by caller
-		"java:S3776", // Cognitive complexity acceptable for microservice initialization
-		"java:S106" // Console fallback intentionally writes to System.out when no Console is available.
+		"java:S3776" // Cognitive complexity acceptable for microservice initialization
 	})
 	protected Microservice(Builder builder) throws IOException, ParseException {
 		setInstance(this);
@@ -744,7 +743,7 @@ public class Microservice implements ConfigEventListener {
 		if (consoleEnabled) {
 			var c = System.console();
 			this.consoleReader = firstNonNull(builder.consoleReader, new Scanner(c == null ? new InputStreamReader(System.in) : c.reader()));
-			this.consoleWriter = firstNonNull(builder.consoleWriter, c == null ? new PrintWriter(System.out, true) : c.writer());
+			this.consoleWriter = firstNonNull(builder.consoleWriter, c == null ? createLoggerConsoleWriter() : c.writer());
 
 			// @Bean-supplied console commands (registered first, then overridable by builder/config below).
 			for (var cc : beanStore.getBeansOfType(ConsoleCommand.class).values())
@@ -1310,6 +1309,38 @@ public class Microservice implements ConfigEventListener {
 	 * @return The console writer.  Never <jk>null</jk>.
 	 */
 	protected PrintWriter getConsoleWriter() { return consoleWriter; }
+
+	private PrintWriter createLoggerConsoleWriter() {
+		var fallbackLogger = firstNonNull(getLogger(), Logger.getLogger(getClass().getName()));
+		return new PrintWriter(new Writer() {
+			private final StringBuilder buffer = new StringBuilder();
+			@Override
+			public void write(char[] cbuf, int off, int len) throws IOException {
+				for (var i = off; i < off + len; i++) {
+					var ch = cbuf[i];
+					if (ch == '\n') {
+						flushBuffer();
+					} else if (ch != '\r') {
+						buffer.append(ch);
+					}
+				}
+			}
+			@Override
+			public void flush() throws IOException {
+				flushBuffer();
+			}
+			@Override
+			public void close() throws IOException {
+				flushBuffer();
+			}
+			private void flushBuffer() {
+				if (! buffer.isEmpty()) {
+					fallbackLogger.info(buffer.toString());
+					buffer.setLength(0);
+				}
+			}
+		}, true);
+	}
 
 	/**
 	 * Logs a message to the log file.

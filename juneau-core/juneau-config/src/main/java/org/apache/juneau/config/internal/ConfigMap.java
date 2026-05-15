@@ -33,6 +33,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.event.*;
+import org.apache.juneau.config.format.*;
 import org.apache.juneau.config.store.*;
 
 /**
@@ -241,15 +242,18 @@ public class ConfigMap implements ConfigStoreListener {
 		s = s.trim();
 		if (s.isEmpty())
 			return false;
+		if (s.startsWith("/") || s.endsWith("/") || s.contains("//"))
+			return false;
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
-			if (c == '/' || c == '\\' || c == '[' || c == ']')
+			if (c == '\\' || c == '[' || c == ']')
 				return false;
 		}
 		return true;
 	}
 
 	private final ConfigStore store;         // The store that created this object.
+	private final ConfigFormat format;       // Persistence format strategy.
 
 	private volatile String contents;        // The original contents of this object.
 
@@ -280,14 +284,24 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public ConfigMap(ConfigStore store, String name) throws IOException {
+		this(store, name, IniConfigFormat.INSTANCE);
+	}
+
+	public ConfigMap(ConfigStore store, String name, ConfigFormat format) throws IOException {
 		this.store = store;
 		this.name = name;
+		this.format = format == null ? IniConfigFormat.INSTANCE : format;
 		load(store.read(name));
 	}
 
 	ConfigMap(ConfigStore store, String name, String contents) throws IOException {
+		this(store, name, contents, IniConfigFormat.INSTANCE);
+	}
+
+	ConfigMap(ConfigStore store, String name, String contents, ConfigFormat format) throws IOException {
 		this.store = store;
 		this.name = name;
+		this.format = format == null ? IniConfigFormat.INSTANCE : format;
 		load(contents);
 	}
 
@@ -671,10 +685,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public Writer writeTo(Writer w) throws IOException {
-		try (var x = lock.read()) {
-			for (var cs : entries.values())
-				cs.writeTo(w);
-		}
+		w.append(toString());
 		return w;
 	}
 
@@ -721,7 +732,7 @@ public class ConfigMap implements ConfigStoreListener {
 	}
 
 	// This method should only be called from behind a lock.
-	private String asString() {
+	public String asIniString() {
 		try {
 			var sw = new StringWriter();
 			for (var cs : entries.values())
@@ -732,12 +743,21 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 	}
 
+	// This method should only be called from behind a lock.
+	private String asString() {
+		try {
+			return format.fromInternal(this);
+		} catch (IOException e) {
+			throw toRex(e); // HTT - in-memory format conversion failures are unexpected in normal operation
+		}
+	}
+
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for config diff detection
 	})
 	private ConfigEvents findDiffs(String updatedContents) throws IOException {
 		var changes2 = new ConfigEvents();
-		var newMap = new ConfigMap(store, name, updatedContents);
+		var newMap = new ConfigMap(store, name, updatedContents, format);
 
 		// Imports added.
 		for (var i : newMap.imports) { // HTT - requires active import listeners with actual ConfigMap imports registered
@@ -803,9 +823,18 @@ public class ConfigMap implements ConfigStoreListener {
 		"java:S6541", // Single-threaded context; synchronization unnecessary
 	})
 	private ConfigMap load(String contents) throws IOException {
+		var internalContents = format.toInternal(contents);
+		return loadIni(internalContents, contents);
+	}
+
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"java:S6541", // Single-threaded context; synchronization unnecessary
+	})
+	private ConfigMap loadIni(String contents, String originalContents) throws IOException {
 		if (contents == null)
 			contents = "";
-		this.contents = contents;
+		this.contents = originalContents == null ? "" : originalContents;
 
 		entries.clear();
 		oentries.clear();
@@ -837,7 +866,7 @@ public class ConfigMap implements ConfigStoreListener {
 						var importName = l2.trim();
 						try {
 							if (! imports2.containsKey(importName))
-								imports2.put(importName, store.getMap(importName));
+								imports2.put(importName, store.getMap(importName, format));
 						} catch (@SuppressWarnings("unused") StackOverflowError e) {
 							throw ioex("Import loop detected in configuration ''{0}''->''{1}''", name, importName);
 						}

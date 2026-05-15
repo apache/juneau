@@ -29,7 +29,6 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.ng.http.part.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

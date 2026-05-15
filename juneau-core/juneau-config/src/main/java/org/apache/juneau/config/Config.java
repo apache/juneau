@@ -34,6 +34,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.config.event.*;
+import org.apache.juneau.config.format.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
@@ -72,6 +73,7 @@ public class Config extends Context implements ConfigEventListener {
 	private static final String PROP_binaryLineLength = "binaryLineLength";
 	private static final String PROP_mods = "mods";
 	private static final String PROP_multiLineValuesOnSeparateLines = "multiLineValuesOnSeparateLines";
+	private static final String PROP_format = "format";
 	private static final String PROP_name = "name";
 	private static final String PROP_parser = "parser";
 	private static final String PROP_readOnly = "readOnly";
@@ -92,6 +94,7 @@ public class Config extends Context implements ConfigEventListener {
 		private Map<Character,Mod> mods;
 		private ReaderParser parser;
 		private String name;
+		private ConfigFormat format;
 		private VarResolver varResolver;
 		private WriterSerializer serializer;
 
@@ -109,6 +112,7 @@ public class Config extends Context implements ConfigEventListener {
 			readOnly = env("Config.readOnly", false);
 			serializer = Json5Serializer.DEFAULT;
 			store = FileStore.DEFAULT;
+			format = null;
 			varResolver = VarResolver.DEFAULT;
 		}
 
@@ -124,6 +128,7 @@ public class Config extends Context implements ConfigEventListener {
 			mods = copyOf(copyFrom.mods);
 			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
 			name = copyFrom.name;
+			format = copyFrom.format;
 			parser = copyFrom.parser;
 			readOnly = copyFrom.readOnly;
 			serializer = copyFrom.serializer;
@@ -143,6 +148,7 @@ public class Config extends Context implements ConfigEventListener {
 			mods = copyOf(copyFrom.mods);
 			multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
 			name = copyFrom.name;
+			format = copyFrom.format;
 			parser = copyFrom.parser;
 			readOnly = copyFrom.readOnly;
 			serializer = copyFrom.serializer;
@@ -337,6 +343,37 @@ public class Config extends Context implements ConfigEventListener {
 		 */
 		public Builder name(String value) {
 			name = assertArgNotNull(ARG_value, value);
+			return this;
+		}
+
+		/**
+		 * Configuration format.
+		 *
+		 * @param value The format. Can be <jk>null</jk> to auto-detect from the config name extension.
+		 * @return This object.
+		 */
+		public Builder format(ConfigFormat value) {
+			format = value;
+			return this;
+		}
+
+		/**
+		 * Sets YAML format.
+		 *
+		 * @return This object.
+		 */
+		public Builder yaml() {
+			format = YamlConfigFormat.INSTANCE;
+			return this;
+		}
+
+		/**
+		 * Sets INI format.
+		 *
+		 * @return This object.
+		 */
+		public Builder ini() {
+			format = IniConfigFormat.INSTANCE;
 			return this;
 		}
 
@@ -562,6 +599,12 @@ public class Config extends Context implements ConfigEventListener {
 		var c = (Class<?>)t;
 		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
 	}
+	private static ConfigFormat detectFormat(String name) {
+		var n = emptyIfNull(name).toLowerCase(Locale.ROOT);
+		if (n.endsWith(".yaml") || n.endsWith(".yml"))
+			return YamlConfigFormat.INSTANCE;
+		return IniConfigFormat.INSTANCE;
+	}
 	private static String section(String section) {
 		assertArgNotNull(ARG_section, section);
 		if (isEmpty(section))
@@ -569,14 +612,14 @@ public class Config extends Context implements ConfigEventListener {
 		return section;
 	}
 	private static String skey(String key) {
-		var i = key.indexOf('/');
+		var i = key.lastIndexOf('/');
 		if (i == -1)
 			return key;
 		return key.substring(i + 1);
 	}
 	private static String sname(String key) {
 		assertArgNotNull(ARG_key, key);
-		var i = key.indexOf('/');
+		var i = key.lastIndexOf('/');
 		if (i == -1)
 			return "";
 		return key.substring(0, i);
@@ -591,6 +634,7 @@ public class Config extends Context implements ConfigEventListener {
 	protected final Map<Character,Mod> mods;
 	protected final ReaderParser parser;
 	protected final String name;
+	protected final ConfigFormat format;
 	protected final VarResolver varResolver;
 	protected final VarResolverSession varSession;
 	protected final WriterSerializer serializer;
@@ -612,12 +656,13 @@ public class Config extends Context implements ConfigEventListener {
 		mods = u(copyOf(builder.mods));
 		multiLineValuesOnSeparateLines = builder.multiLineValuesOnSeparateLines;
 		name = builder.name;
+		format = builder.format == null ? detectFormat(name) : builder.format;
 		parser = builder.parser;
 		readOnly = builder.readOnly;
 		serializer = builder.serializer;
 		store = builder.store;
 		varResolver = builder.varResolver;
-		configMap = store.getMap(name);
+		configMap = store.getMap(name, format);
 		configMap.register(this);
 		marshallingSession = parser.getMarshallingContext().getSession();
 		varSession = varResolver.copy().vars(ConfigVar.class).bean(Config.class, this).build().createSession();
@@ -633,6 +678,7 @@ public class Config extends Context implements ConfigEventListener {
 		mods = copyFrom.mods;
 		multiLineValuesOnSeparateLines = copyFrom.multiLineValuesOnSeparateLines;
 		name = copyFrom.name;
+		format = copyFrom.format;
 		parser = copyFrom.parser;
 		readOnly = copyFrom.readOnly;
 		serializer = copyFrom.serializer;
@@ -1146,6 +1192,7 @@ public class Config extends Context implements ConfigEventListener {
 			.a(PROP_binaryLineLength, binaryLineLength)
 			.a(PROP_mods, mods)
 			.a(PROP_multiLineValuesOnSeparateLines, multiLineValuesOnSeparateLines)
+			.a(PROP_format, format == null ? null : format.id())
 			.a(PROP_name, name)
 			.a(PROP_parser, parser)
 			.a(PROP_readOnly, readOnly)
