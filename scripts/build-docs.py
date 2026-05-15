@@ -307,6 +307,16 @@ def check_topic_links(master_root, docs_dir):
     # It will scan master_root for links and docs_dir for topics
     run_command(['python3', str(checker_script)], cwd=docs_dir)
 
+def check_ai_artifacts(docs_dir):
+    """Run AI artifact drift checks."""
+    print("\n=== Checking AI artifacts ===")
+    script_dir = Path(__file__).parent
+    checker_script = script_dir / 'check-ai-artifacts.py'
+    if not checker_script.exists():
+        print(f"WARNING: AI artifact checker not found at {checker_script}")
+        return
+    run_command(['python3', str(checker_script)], cwd=docs_dir)
+
 def main():
     parser = argparse.ArgumentParser(description='Build Apache Juneau documentation')
     parser.add_argument('--skip-npm', action='store_true', help='Skip npm install and Docusaurus build')
@@ -382,6 +392,7 @@ def main():
         
         # Check topic links (runs once at the end)
         check_topic_links(master_root, docs_dir)
+        check_ai_artifacts(docs_dir)
         
         print("\n=== Documentation build complete ===")
         print(f"Documentation is available in: {docs_dir / 'build'}")

@@ -6,6 +6,8 @@
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
+    "build:ai-artifacts": "python3 scripts/generate-ai-artifacts.py",
+    "check:ai-artifacts": "python3 scripts/check-ai-artifacts.py",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

@@ -2061,6 +2061,11 @@ const sidebars: SidebarsConfig = {
 							id: 'developer-info/02.08.DevelopmentWishList',
 							label: '2.7. Development wish list',
 						},
+						{
+							type: 'doc',
+							id: 'developer-info/02.09.AiKnowledgeAuthoring',
+							label: '2.8. AI Knowledge Authoring Guide',
+						},
 					],
 				},
 				{
@@ -2184,6 +2189,11 @@ const sidebars: SidebarsConfig = {
 									type: 'doc',
 									id: 'developer-info/04.03.06.ScriptCheckTopicLinks',
 									label: '4.3.6. check-topic-links.py',
+								},
+								{
+									type: 'doc',
+									id: 'developer-info/04.03.07.ScriptAiArtifacts',
+									label: '4.3.7. AI artifact scripts',
 								},
 							],
 						},

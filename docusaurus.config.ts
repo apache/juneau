@@ -104,7 +104,7 @@ const baseThemeConfig: Preset.ThemeConfig = {
       {
         // Use pathname:// protocol to tell Docusaurus this is an external link
         // (even though it's on the same domain) to bypass link validation
-        href: 'pathname:///javadocs/index.html',
+        href: 'pathname:///site/apidocs/index.html',
         label: 'Javadocs',
         position: 'right',
       },
