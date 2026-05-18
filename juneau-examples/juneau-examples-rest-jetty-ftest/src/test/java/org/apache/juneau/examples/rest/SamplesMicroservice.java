@@ -19,17 +19,21 @@ package org.apache.juneau.examples.rest;
 import java.net.*;
 import java.util.*;
 
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.serializer.*;
+
+import jakarta.servlet.*;
 
 /**
  * Utility class for starting up the examples microservice.
  */
 @SuppressWarnings("resource")
 public class SamplesMicroservice {
-	static volatile JettyMicroservice microservice;
+	static volatile Microservice microservice;
 	static URI microserviceURI;
 
 	// Reusable HTTP clients that get created and shut down with the microservice.
@@ -46,8 +50,8 @@ public class SamplesMicroservice {
 			return false;
 		try {
 			Locale.setDefault(Locale.US);
-			microservice = JettyMicroservice.create().workingDir("../juneau-examples-rest-jetty").configName("juneau-examples-rest-jetty.cfg").servlet(RootResources.class).build();
-			microserviceURI = microservice.start().getURI();
+			microservice = Microservice.create().workingDir("../juneau-examples-rest-jetty").configName("juneau-examples-rest-jetty.cfg").configurations(JettyConfiguration.class, AppConfig.class).build();
+			microserviceURI = microservice.start().getBeanStore().getBean(JettyServerComponent.class).orElseThrow().getURI();
 			defaultClient = client().json5().build();
 			defaultClientPlaintext = client().plainText().build();
 			return true;
@@ -106,5 +110,23 @@ public class SamplesMicroservice {
 	 */
 	public static RestClient.Builder client(Class<? extends Serializer> s, Class<? extends Parser> p) {
 		return client().serializer(s).parser(p);
+	}
+
+	/**
+	 * Application configuration contributing the {@link RootResources} servlet.
+	 */
+	@Configuration
+	public static class AppConfig {
+
+		/**
+		 * Provides the top-level REST servlet, auto-mounted by {@link JettyServerComponent} at
+		 * {@link org.apache.juneau.rest.annotation.Rest#path()}.
+		 *
+		 * @return The root servlet.
+		 */
+		@Bean
+		public Servlet rootResources() {
+			return new RootResources();
+		}
 	}
 }

@@ -62,7 +62,7 @@ class Json_Test extends TestBase{
 		var r = "\\w[\\w\\-\\.]{3,}\\w";
 		m.put("x", r);
 		assertEquals("{\"x\":\"\\\\w[\\\\w\\\\-\\\\.]{3,}\\\\w\"}", s2.serialize(m));
-		assertEquals(r, JsonMap.ofJson(s2.serialize(m)).getString("x"));
+		assertEquals(r, JsonMap.ofText(s2.serialize(m)).getString("x"));
 
 		// String = [foo\bar]
 		m.clear();
@@ -138,7 +138,7 @@ class Json_Test extends TestBase{
 	// Indentation
 	//====================================================================================================
 	@Test void a04_indentation() throws Exception {
-		var m = Json5Map.ofJson5("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
+		var m = Json5Map.ofText("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
 		var e = """
 			{
 				J: {

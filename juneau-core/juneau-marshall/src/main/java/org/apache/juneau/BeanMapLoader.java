@@ -26,11 +26,6 @@ import org.apache.juneau.commons.bean.BeanMap;
 /**
  * Marshalling-side helper for loading {@link BeanMap} contents from JSON text or a reader/parser pair.
  *
- * <p>
- * These entry points used to live as {@code BeanMap.load(Reader, ReaderParser)} and {@code BeanMap.load(String)}.
- * They were lifted out as part of TODO-5 Step 8b-ii because they reach into the marshalling-side
- * {@link JsonMap} parser and {@link ReaderParser} types — neither belongs in the bean-modeling layer.
- *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Populate a bean map from a JSON string.</jc>
@@ -55,7 +50,7 @@ public final class BeanMapLoader {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> BeanMap<T> load(BeanMap<T> m, String input) throws ParseException {
-		m.putAll(Json5Map.ofJson5(input));
+		m.putAll(Json5Map.ofText(input));
 		return m;
 	}
 

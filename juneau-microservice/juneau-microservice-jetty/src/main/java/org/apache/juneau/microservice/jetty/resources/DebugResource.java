@@ -20,6 +20,7 @@ import java.io.*;
 
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -68,7 +69,7 @@ public class DebugResource extends BasicRestServlet {
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
 	public Ok createJettyDump(RestRequest req, RestResponse res) throws Exception {
-		var dump = JettyMicroservice.getInstance().getServer().dump();
+		var dump = jettyServerComponent().getServer().dump();
 		try (var fw = new FileWriter(req.getConfig().get("Logging/logDir").orElse("") + "/jetty-thread-dump.log")) {
 			fw.write(dump);
 		}
@@ -99,6 +100,14 @@ public class DebugResource extends BasicRestServlet {
 	@RestGet(path = "/jetty/dump", description = "Generates and retrieves the jetty thread dump.")
 	public Reader getJettyDump(RestRequest req, RestResponse res) {
 		res.setContentType("text/plain");
-		return new StringReader(JettyMicroservice.getInstance().getServer().dump());
+		return new StringReader(jettyServerComponent().getServer().dump());
+	}
+
+	@SuppressWarnings({
+		"resource" // BeanStore returned by Microservice.getBeanStore() is owned by the microservice lifecycle; do not close here.
+	})
+	private static JettyServerComponent jettyServerComponent() {
+		return Microservice.getInstance().getBeanStore().getBean(JettyServerComponent.class)
+			.orElseThrow(() -> new IllegalStateException("JettyServerComponent bean not found.  Did you forget to add JettyConfiguration.class to Microservice.Builder.configurations(...)?"));
 	}
 }

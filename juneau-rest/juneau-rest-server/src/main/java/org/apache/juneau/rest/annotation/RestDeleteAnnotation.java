@@ -326,7 +326,7 @@ public class RestDeleteAnnotation {
 
 	}
 
-	// Phase D-2 (TODO-16, 2026-04-19): RestOpContextApply removed entirely. All previously-applied
+	// Phase D-2 (work item 16, 2026-04-19): RestOpContextApply removed entirely. All previously-applied
 	// settings are now resolved via direct annotation walking on the corresponding {@code findXxx()}
 	// memoizers in {@link org.apache.juneau.rest.RestOpContext}; the {@code @ContextApply} reference
 	// on {@code @RestDelete} has been dropped.

@@ -14,51 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.microservice.jetty;
+package org.apache.juneau.microservice;
 
-import org.apache.juneau.microservice.*;
+import org.apache.juneau.config.event.*;
 
 /**
- * Listener class for Jetty microservice lifecycle events.
+ * Listener class for microservice lifecycle events.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceBasics">juneau-microservice Basics</a>
  * </ul>
  */
-public interface JettyMicroserviceListener extends MicroserviceListener {
+public interface MicroserviceListener {
 
 	/**
-	 * Called before the Jetty server is created.
+	 * Called if one or more changes occur in the config file.
+	 *
+	 * @param microservice Reference to microservice.
+	 * @param events The list of changes in the config file.
+	 */
+	void onConfigChange(Microservice microservice, ConfigEvents events);
+
+	/**
+	 * Called at the beginning of the {@link Microservice#start()} call.
 	 *
 	 * @param microservice Reference to microservice.
 	 */
-	void onCreateServer(JettyMicroservice microservice);
+	void onStart(Microservice microservice);
 
 	/**
-	 * Called after the Jetty server is started.
+	 * Called at the end of the {@link Microservice#stop()} call.
 	 *
 	 * @param microservice Reference to microservice.
 	 */
-	void onPostStartServer(JettyMicroservice microservice);
-
-	/**
-	 * Called after the Jetty server is stopped.
-	 *
-	 * @param microservice Reference to microservice.
-	 */
-	void onPostStopServer(JettyMicroservice microservice);
-
-	/**
-	 * Called before the Jetty server is started.
-	 *
-	 * @param microservice Reference to microservice.
-	 */
-	void onStartServer(JettyMicroservice microservice);
-
-	/**
-	 * Called before the Jetty server is stopped.
-	 *
-	 * @param microservice Reference to microservice.
-	 */
-	void onStopServer(JettyMicroservice microservice);
+	void onStop(Microservice microservice);
 }

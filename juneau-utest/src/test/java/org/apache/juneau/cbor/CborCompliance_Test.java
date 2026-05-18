@@ -90,7 +90,7 @@ class CborCompliance_Test extends TestBase {
 	void g17_simpleArray() throws Exception { enc(ints(1, 2, 3), "83 01 02 03"); }
 
 	@Test
-	void g18_emptyMap() throws Exception { enc(JsonMap.ofJson("{}"), "A0"); }
+	void g18_emptyMap() throws Exception { enc(JsonMap.ofText("{}"), "A0"); }
 
 	@Test
 	void g19_false() throws Exception { enc(false, "F4"); }

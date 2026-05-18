@@ -16,8 +16,12 @@
  */
 package org.apache.juneau.server.config;
 
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.server.config.rest.*;
+
+import jakarta.servlet.*;
 
 /**
  * Entry-point class.
@@ -32,16 +36,32 @@ public class App {
 	 */
 	public static void main(String[] args) throws Exception {
 		// @formatter:off
-		JettyMicroservice
-				.create()
-				.args(args)
-				.servlet(LoadConfigResource.class)
-				.build()
-				.start()
-				.startConsole()
-				.join();
+		Microservice
+			.create()
+			.args(args)
+			.configurations(JettyConfiguration.class, AppConfig.class)
+			.build()
+			.start()
+			.startConsole()
+			.join();
 		// @formatter:on
 	}
+
+	/**
+	 * Application-specific configuration class contributing the {@link LoadConfigResource} servlet.
+	 */
+	@Configuration
+	public static class AppConfig {
+
+		/**
+		 * Provides the {@link LoadConfigResource} REST servlet, auto-mounted by {@link JettyServerComponent} at
+		 * {@link org.apache.juneau.rest.annotation.Rest#path()}.
+		 *
+		 * @return The servlet.
+		 */
+		@Bean
+		public Servlet loadConfigResource() {
+			return new LoadConfigResource();
+		}
+	}
 }
-// ter o xml do jetty padrão na aplicação
-// posibilitar a remoção do bin.xml

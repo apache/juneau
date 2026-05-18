@@ -16,13 +16,17 @@
  */
 package org.apache.juneau.microservice.jetty.template;
 
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
+
+import jakarta.servlet.*;
 
 /**
  * Entry-point for your microservice.
  *
  * <p>
- * The {@link JettyMicroservice} class will locate the <code>my-microservice.cfg</code> file in the home directory and initialize
+ * The {@link Microservice} class will locate the <code>my-microservice.cfg</code> file in the home directory and initialize
  * the resources and commands defined in that file.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -39,14 +43,32 @@ public class App {
 	 */
 	public static void main(String[] args) throws Exception {
 		// @formatter:off
-		JettyMicroservice
+		Microservice
 			.create()
 			.args(args)
-			.servlet(RootResources.class)
+			.configurations(JettyConfiguration.class, AppConfig.class)
 			.build()
 			.start()
 			.startConsole()
 			.join();
 		// @formatter:on
+	}
+
+	/**
+	 * Application-specific configuration class contributing the top-level REST servlet.
+	 */
+	@Configuration
+	public static class AppConfig {
+
+		/**
+		 * Provides the top-level REST servlet, auto-mounted by {@link JettyServerComponent} at
+		 * {@link org.apache.juneau.rest.annotation.Rest#path()}.
+		 *
+		 * @return The root servlet.
+		 */
+		@Bean
+		public Servlet rootResources() {
+			return new RootResources();
+		}
 	}
 }

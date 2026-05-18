@@ -285,7 +285,7 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
 * **juneau-rest-client** - A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
 * **juneau-rest-server-springboot** - Spring boot integration for juneau-rest-servlet.
 * **juneau-rest-mock** - REST testing API.
-* **juneau-microservice-core** - Core microservice API.
+* **juneau-microservice** - Microservice API.
 * **juneau-microservice-jetty** - Jetty microservice API.
 * **juneau-examples-core** - Core code examples.
 * **juneau-examples-rest** - REST code examples.

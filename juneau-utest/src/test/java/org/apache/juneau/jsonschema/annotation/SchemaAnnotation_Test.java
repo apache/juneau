@@ -447,10 +447,6 @@ class SchemaAnnotation_Test extends TestBase {
 		assertBean(mixed, "exclusiveMaximum,exclusiveMinimum,exclusiveMaximumValue,exclusiveMinimumValue", "false,false,100,0");
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// summary / su (TODO-6, since 9.5.0)
-	//------------------------------------------------------------------------------------------------------------------
-
 	@Test void g01_summary_asMap_emptyAnnotationOmitsKey() throws Exception {
 		assertFalse(SchemaAnnotation.asMap(SchemaAnnotation.DEFAULT).containsKey("summary"));
 	}

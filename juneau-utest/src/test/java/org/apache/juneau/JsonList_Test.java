@@ -92,7 +92,7 @@ class JsonList_Test extends TestBase {
 		r = l.getAt("0/foo", String.class);
 		assertEquals("bing", r);
 
-		l.postAt("", Json5Map.ofJson5("{a:'b'}"));
+		l.postAt("", Json5Map.ofText("{a:'b'}"));
 		r = l.getAt("2/a", String.class);
 		assertEquals("b", r);
 

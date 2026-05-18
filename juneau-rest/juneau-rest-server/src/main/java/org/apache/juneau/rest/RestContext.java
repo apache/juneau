@@ -1750,11 +1750,6 @@ public class RestContext extends Context {
 	 * Called during servlet destruction to invoke all {@link RestDestroy} methods.
 	 */
 	public void destroy() {
-		// @RestDestroy hooks first, then children (recursive cleanup), then close this context's bean store.
-		// Destroying children before closing the bean store is required: getRestChildren() reads from the bean
-		// store and BasicBeanStore.getBean() rejects calls after close(), so the previous post-close lookup was
-		// a latent bug that only surfaced when destroy() was invoked outside the JVM-shutdown happy path
-		// (e.g. dynamic RestChildren.removeChild — see TODO-33).
 		for (var x : destroyInvokerPair.get().invokers) {
 			try {
 				x.invoke(beanStore, getResource());

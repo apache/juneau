@@ -64,24 +64,24 @@ import org.apache.juneau.serializer.*;
  * 	<jv>list</jv> = JsonList.<jsm>of</jsm>(<js>"foo"</js>, 123, <jk>true</jk>);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Construct a list of integers from JSON</jc>
- * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+ * 	<jv>list</jv> = JsonList.<jsm>ofText</jsm>(<js>"[1,2,3]"</js>);
  *
  * 	<jc>// Construct a list of generic JsonMap objects from JSON</jc>
- * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
+ * 	<jv>list</jv> = JsonList.<jsm>ofText</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
  *
  * 	<jc>// Construct JSON from JsonList</jc>
- * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
+ * 	<jv>list</jv> = JsonList.<jsm>ofText</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
  * 	String <jv>json</jv> = <jv>list</jv>.toString();  <jc>// Produces "[{foo:'bar'},{baz:'bing'}]"</jc>
  * 	<jv>json</jv> = <jv>list</jv>.toString(JsonSerializer.<jsf>DEFAULT</jsf>);  <jc>// Equivalent</jc>
  * 	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>list</jv>);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Get one of the entries in the list as an Integer</jc>
- * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+ * 	<jv>list</jv> = JsonList.<jsm>ofText</jsm>(<js>"[1,2,3]"</js>);
  * 	Integer <jv>integer</jv> = <jv>list</jv>.getInt(1);
  * 	<jv>integer</jv> = <jv>list</jv>.get(Integer.<jk>class</jk>, 1);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Iterate over a list of beans using the elements() method</jc>
- * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
+ * 	<jv>list</jv> = JsonList.<jsm>ofText</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
  * 	<jk>for</jk> (Person <jv>person</jv> : <jv>list</jv>.elements(Person.<jk>class</jk>) {
  * 		<jc>// Do something with p</jc>
  * 	}
@@ -236,7 +236,7 @@ public class JsonList extends MarshalledList {
 	 * @return A new list or <jk>null</jk> if the string was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static JsonList ofJson(CharSequence json) throws ParseException {
+	public static JsonList ofText(CharSequence json) throws ParseException {
 		return json == null ? null : new JsonList(json);
 	}
 
@@ -252,7 +252,7 @@ public class JsonList extends MarshalledList {
 	@SuppressWarnings({
 		"java:S1168"     // TODO: null input = null output by design. Consider empty JsonList.
 	})
-	public static JsonList ofJson(Reader json) throws ParseException {
+	public static JsonList ofText(Reader json) throws ParseException {
 		return json == null ? null : new JsonList(json);
 	}
 

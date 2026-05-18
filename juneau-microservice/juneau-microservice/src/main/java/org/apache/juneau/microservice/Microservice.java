@@ -92,8 +92,7 @@ import org.apache.juneau.parser.ParseException;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceCoreBasics">juneau-microservice-core Basics</a>
-
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceBasics">juneau-microservice Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -620,7 +619,6 @@ public class Microservice implements ConfigEventListener {
 	private final Config config;
 	private final ManifestFile manifest;
 	private final VarResolver varResolver;
-	private final MicroserviceListener listener;
 	private final Map<String,ConsoleCommand> consoleCommandMap = new ConcurrentHashMap<>();
 	private final boolean consoleEnabled;
 	private final Scanner consoleReader;
@@ -629,6 +627,7 @@ public class Microservice implements ConfigEventListener {
 	final File workingDir;
 	private final String configName;
 	private final WritableBeanStore beanStore;
+	private volatile boolean stopped;
 
 	private final AtomicReference<Logger> logger = new AtomicReference<>();
 
@@ -785,11 +784,15 @@ public class Microservice implements ConfigEventListener {
 			this.consoleWriter = null;
 			this.consoleThread = null;
 		}
-		// Resolve listener: builder > @Bean > default.
-		this.listener = nn(builder.listener)
-			? builder.listener
-			: beanStore.getBean(MicroserviceListener.class).orElseGet(BasicMicroserviceListener::new);
-		beanStore.addBean(MicroserviceListener.class, this.listener);
+		// Resolve listeners.
+		// If the builder supplies an explicit listener, register it under the unnamed key (overwriting any
+		// same-key @Bean MicroserviceListener); it joins the fan-out alongside any other @Bean-supplied listeners.
+		// If, after that, no MicroserviceListener exists in the store at all, register the default
+		// BasicMicroserviceListener so the fan-out has at least one no-op participant.
+		if (nn(builder.listener))
+			beanStore.addBean(MicroserviceListener.class, builder.listener);
+		if (beanStore.getBeansOfType(MicroserviceListener.class).isEmpty())
+			beanStore.addBean(MicroserviceListener.class, new BasicMicroserviceListener());
 
 		// Self-register so @Bean factory methods can take Microservice as a constructor/method param.
 		beanStore.addBean(Microservice.class, this);
@@ -1012,9 +1015,10 @@ public class Microservice implements ConfigEventListener {
 	 * {@link Builder#configurations(Class...)}.
 	 *
 	 * <p>
-	 * Subclasses (e.g. <c>JettyMicroservice</c>) consult the store at start-up to discover additional
-	 * beans (servlets, listeners, factories) to register.  External callers can query the store directly
-	 * to look up beans contributed by user-supplied <c>@Configuration</c> classes.
+	 * Lifecycle integration beans (e.g. <c>JettyServerComponent</c> contributed by <c>JettyConfiguration</c>)
+	 * implement {@link MicroserviceListener} and participate in the {@link #start()} / {@link #stop()}
+	 * fan-out.  External callers can query the store directly to look up beans contributed by user-supplied
+	 * <c>@Configuration</c> classes.
 	 *
 	 * <p>
 	 * The store is closed during {@link #stop()}, which triggers <c>@PreDestroy</c> hooks on resolved
@@ -1160,7 +1164,8 @@ public class Microservice implements ConfigEventListener {
 
 	@Override /* Overridden from ConfigChangeListener */
 	public void onConfigChange(ConfigEvents events) {
-		listener.onConfigChange(this, events);
+		for (var l : beanStore.getBeansOfType(MicroserviceListener.class).values())
+			l.onConfigChange(this, events);
 	}
 
 	/**
@@ -1187,7 +1192,8 @@ public class Microservice implements ConfigEventListener {
 	 * Start this application.
 	 *
 	 * <p>
-	 * Overridden methods MUST call this method FIRST so that the {@link MicroserviceListener#onStart(Microservice)} method is called.
+	 * Iterates over every {@link MicroserviceListener} bean in the {@linkplain #getBeanStore() bean store} (in
+	 * registration order) and calls {@link MicroserviceListener#onStart(Microservice)} on each.
 	 *
 	 * @return This object.
 	 * @throws Exception Error occurred.
@@ -1214,7 +1220,8 @@ public class Microservice implements ConfigEventListener {
 			}
 		});
 
-		listener.onStart(this);
+		for (var l : beanStore.getBeansOfType(MicroserviceListener.class).values())
+			l.onStart(this);
 
 		return this;
 	}
@@ -1238,7 +1245,9 @@ public class Microservice implements ConfigEventListener {
 	 * Stop this application.
 	 *
 	 * <p>
-	 * Overridden methods MUST call this method LAST so that the {@link MicroserviceListener#onStop(Microservice)} method is called.
+	 * Iterates over every {@link MicroserviceListener} bean in the {@linkplain #getBeanStore() bean store} in
+	 * <i>reverse</i> registration order and calls {@link MicroserviceListener#onStop(Microservice)} on each, then
+	 * closes the bean store (firing any {@code @PreDestroy} hooks).
 	 *
 	 * @return This object.
 	 * @throws Exception Error occurred
@@ -1246,8 +1255,14 @@ public class Microservice implements ConfigEventListener {
 	@SuppressWarnings({
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
-	public Microservice stop() throws Exception {
-		listener.onStop(this);
+	public synchronized Microservice stop() throws Exception {
+		if (stopped)
+			return this;
+		stopped = true;
+		var listeners = new ArrayList<>(beanStore.getBeansOfType(MicroserviceListener.class).values());
+		Collections.reverse(listeners);
+		for (var l : listeners)
+			l.onStop(this);
 		try {
 			beanStore.close();
 		} catch (Exception e) {

@@ -57,10 +57,6 @@ public class PlainTextPojoProcessor implements ResponseProcessor {
 		if (o == null) {
 			w.append("null");
 		} else if (o instanceof Map || o instanceof Collection || o.getClass().isArray()) {
-			// Historical contract: when no serializer matched and the response is a Map/Collection/array,
-			// render it as JSON5 so callers that asserted on JsonMap/JsonList.toString() output before the
-			// TODO-34 Phase C retargeting (which switched JsonMap/JsonList toString to strict JSON)
-			// continue to see the same plain-text body.
 			w.append(Json5.of(o));
 		} else {
 			w.append(req.getMarshallingSession().getClassMetaForObject(o).toString(o));

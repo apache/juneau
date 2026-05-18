@@ -150,7 +150,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice-core</artifactId>
+			<artifactId>juneau-microservice</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

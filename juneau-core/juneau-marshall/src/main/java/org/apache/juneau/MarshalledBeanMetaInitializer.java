@@ -30,13 +30,6 @@ import org.apache.juneau.commons.utils.*;
  * Marshalling-side bridge for {@link BeanMeta} construction.
  *
  * <p>
- * Encapsulates marshalling-aware operations that were lifted out of {@link BeanMeta} as part of TODO-5
- * Step 8b-ii Phase C Task 3, so that {@link BeanMeta} can physically move into the
- * {@code org.apache.juneau.commons.bean} package without directly referencing
- * {@link BeanRegistry}, {@link MarshallingContext}, or marshalling-side annotations like
- * {@link Marshalled @Marshalled} from inside its constructor body.
- *
- * <p>
  * Each helper takes the marshalling-side {@link MarshallingContext} as an {@link Object} so the
  * call sites inside {@link BeanMeta} do not need to import {@link MarshallingContext}.  The helper
  * casts back internally.

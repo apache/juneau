@@ -21,15 +21,15 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau-microservice</artifactId>
+		<artifactId>juneau-microservice-parent</artifactId>
 		<version>9.5.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-microservice-core</artifactId>
+	<artifactId>juneau-microservice</artifactId>
 	<packaging>bundle</packaging>
 
-	<name>Apache Juneau Microservice Core</name>
-	<description>Apache Juneau Microservice Core API</description>
+	<name>Apache Juneau Microservice</name>
+	<description>Apache Juneau Microservice API</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

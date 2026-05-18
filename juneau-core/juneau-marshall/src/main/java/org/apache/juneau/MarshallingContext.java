@@ -16,7 +16,10 @@
  */
 package org.apache.juneau;
 
+import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.httppart.SchemaValidationException;
+import org.apache.juneau.parser.ParseException;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.reflect.Visibility.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
@@ -174,7 +177,7 @@ import org.apache.juneau.commons.bean.*;
 	"java:S1452", // Wildcard required - ClassMeta<?> for parameter resolution and type variables
 	"java:S1612"  // Lambdas used instead of method references for readability in complex chained expressions
 })
-public class MarshallingContext extends Context implements ConversionFinder, org.apache.juneau.commons.bean.BeanTypeResolver {
+public class MarshallingContext extends Context implements ConversionFinder, BeanTypeResolver {
 
 	// Property name constants
 	private static final String PROP_beanClassVisibility = "beanClassVisibility";
@@ -1768,7 +1771,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+		public Builder cache(Cache<HashKey,? extends Context> value) {
 			super.cache(value);
 			return this;
 		}
@@ -2451,15 +2454,15 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 *
 		 * <p>
 		 * When enabled, bean property values are validated against the constraints declared by
-		 * {@link org.apache.juneau.commons.annotation.Schema @Schema} annotations on those properties.  Validation runs
+		 * {@link Schema @Schema} annotations on those properties.  Validation runs
 		 * during both <b>parsing</b> (value set on the bean) and <b>serialization</b> (value read from the bean).
 		 *
 		 * <p>
 		 * Backed by the typed {@code JsonSchema} bean in {@code juneau-bean-jsonschema} and JSON Schema Draft 2020-12
-		 * semantics.  Validation failures throw {@link org.apache.juneau.commons.httppart.SchemaValidationException}
+		 * semantics.  Validation failures throw {@link SchemaValidationException}
 		 * wrapped in {@code BeanRuntimeException}; the parser surfaces them as
-		 * {@link org.apache.juneau.parser.ParseException} and the serializer surfaces them as
-		 * {@link org.apache.juneau.serializer.SerializeException}.
+		 * {@link ParseException} and the serializer surfaces them as
+		 * {@link SerializeException}.
 		 *
 		 * <p>
 		 * If {@code juneau-bean-jsonschema} is not on the classpath, this flag becomes a silent no-op.
@@ -3391,7 +3394,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+		public Builder type(Class<? extends Context> value) {
 			assertArgNotNull(ARG_value, value);
 			super.type(value);
 			return this;
@@ -4115,7 +4118,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 					var str = in.toString();
 					Json5List list;
 					if (startsWith(str, '['))
-						list = Json5List.ofJson5(str).setBeanSession(bs);
+						list = Json5List.ofText(str).setBeanSession(bs);
 					else
 						list = new Json5List((Object[]) splita(str)).setBeanSession(bs);
 					return bs.convertToType(list, outType);
@@ -4130,7 +4133,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 			return (in, memberOf, session, args) -> {
 				try {
 					var bs = beanSessionOrDefault(session);
-					var m = Json5Map.ofJson5(in.toString());
+					var m = Json5Map.ofText(in.toString());
 					m.setBeanSession(bs);
 					return bs.convertToType(m, outType);
 				} catch (Exception e) {
@@ -4194,7 +4197,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 					if (!isProbablyJsonArray(str, false))
 						throw rex("Cannot convert string to {0}: {1}", outType.getName(), str);
 					var elemType = args.length > 0 ? args[0] : null;
-					var l2 = Json5List.ofJson5(str).setBeanSession(bs);
+					var l2 = Json5List.ofText(str).setBeanSession(bs);
 					var result = newCollection(outType);
 					l2.forEach(x -> result.add(elemType != null && x != null ? converter.to(x, elemType) : x));
 					return result;
@@ -4951,7 +4954,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Overridden from BeanTypeResolver */
-	public org.apache.juneau.commons.bean.BeanInfo<?> resolveType(AnnotationInfo<org.apache.juneau.commons.bean.BeanProp> lastBeanProp, ClassInfo type, TypeVariables typeVarImpls) {
+	public org.apache.juneau.commons.bean.BeanInfo<?> resolveType(AnnotationInfo<BeanProp> lastBeanProp, ClassInfo type, TypeVariables typeVarImpls) {
 		return resolveClassMeta(lastBeanProp, type, typeVarImpls);
 	}
 
@@ -5004,7 +5007,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for ClassMeta resolution with property annotations
 	})
-	protected final <T> ClassMeta<T> resolveClassMeta(AnnotationInfo<org.apache.juneau.commons.bean.BeanProp> p, ClassInfo ci, TypeVariables typeVarImpls) {
+	protected final <T> ClassMeta<T> resolveClassMeta(AnnotationInfo<BeanProp> p, ClassInfo ci, TypeVariables typeVarImpls) {
 		var cm = resolveClassMeta(ci, typeVarImpls);
 		var cm2 = cm;
 

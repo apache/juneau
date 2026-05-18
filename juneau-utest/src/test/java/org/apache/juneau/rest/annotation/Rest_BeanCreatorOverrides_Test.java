@@ -35,10 +35,6 @@ import org.junit.jupiter.api.*;
  * walks the `@Rest` hierarchy via `getRestAnnotationsForProperty(...)` and picks the first
  * non-{@code Void} class. This test exercises the "non-Void annotation wins" branch that was
  * previously uncovered by tests.
- *
- * <p>
- * See {@code todo/TODO-16-restcontext-memoized-fields.md} (Decision #21) for the coverage
- * mandate.
  */
 class Rest_BeanCreatorOverrides_Test extends TestBase {
 

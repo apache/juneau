@@ -6581,7 +6581,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		try {
 			var req = request(method, uri, ne(content));
 			if (nn(headers))
-				Json5Map.ofJson5(headers).forEach((k, v) -> req.header(stringHeader(k, s(v))));
+				Json5Map.ofText(headers).forEach((k, v) -> req.header(stringHeader(k, s(v))));
 			if (ne(content))
 				req.contentString(content);
 			return req;

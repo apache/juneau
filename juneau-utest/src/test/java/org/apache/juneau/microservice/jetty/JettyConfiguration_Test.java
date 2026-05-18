@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 import org.eclipse.jetty.ee11.servlet.*;
@@ -30,40 +31,47 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
 /**
- * Tests for the inject-aware {@link JettyMicroservice} bootstrap.
+ * Tests for the inject-aware Jetty microservice bootstrap via {@link JettyConfiguration}.
  *
  * <p>
- * Verifies that <c>@Configuration</c>-supplied <c>JettyServerFactory</c> /
- * <c>JettyMicroserviceListener</c> / <c>Server</c> / <c>Servlet</c> beans are picked up,
- * that explicit builder calls take precedence, that auto-discovered <c>@Rest</c> servlets
- * are mounted at <c>@Rest(path=...)</c>, and that duplicate mount paths fail fast.
+ * Verifies that <c>@Configuration</c>-supplied <c>JettyServerFactory</c> / <c>JettyServerComponent</c>
+ * / <c>Server</c> / <c>Servlet</c> beans are picked up via the {@link JettyConfiguration} bean wiring,
+ * that auto-discovered <c>@Rest</c> servlets are mounted at <c>@Rest(path=...)</c>, and that duplicate
+ * mount paths fail fast.
  */
-class JettyMicroservice_Inject_Test extends TestBase {
+class JettyConfiguration_Test extends TestBase {
+
+	private static Microservice create(Class<?>... configurations) throws Exception {
+		var classes = new Class<?>[configurations.length + 1];
+		System.arraycopy(configurations, 0, classes, 0, configurations.length);
+		classes[configurations.length] = JettyConfiguration.class;
+		return Microservice.create().configurations(classes).build();
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// A.  Bean store presence + self-registration of Jetty-specific beans.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_beanStore_containsJettyMicroservice() throws Exception {
-		var ms = JettyMicroservice.create().build();
+	@Test void a01_beanStore_containsMicroservice() throws Exception {
+		var ms = create();
 		try {
-			assertSame(ms, ms.getBeanStore().getBean(JettyMicroservice.class).orElse(null));
+			assertSame(ms, ms.getBeanStore().getBean(Microservice.class).orElse(null));
 		} finally {
 			ms.stop();
 		}
 	}
 
-	@Test void a02_beanStore_containsJettyListener() throws Exception {
-		var ms = JettyMicroservice.create().build();
+	@Test void a02_beanStore_containsJettyServerComponent() throws Exception {
+		var ms = create();
 		try {
-			assertNotNull(ms.getBeanStore().getBean(JettyMicroserviceListener.class).orElse(null));
+			assertNotNull(ms.getBeanStore().getBean(JettyServerComponent.class).orElse(null));
 		} finally {
 			ms.stop();
 		}
 	}
 
 	@Test void a03_beanStore_containsJettyServerFactory() throws Exception {
-		var ms = JettyMicroservice.create().build();
+		var ms = create();
 		try {
 			assertNotNull(ms.getBeanStore().getBean(JettyServerFactory.class).orElse(null));
 		} finally {
@@ -71,8 +79,17 @@ class JettyMicroservice_Inject_Test extends TestBase {
 		}
 	}
 
+	@Test void a04_beanStore_containsJettySettings() throws Exception {
+		var ms = create();
+		try {
+			assertNotNull(ms.getBeanStore().getBean(JettySettings.class).orElse(null));
+		} finally {
+			ms.stop();
+		}
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
-	// B.  Resolution priority: explicit builder > @Bean > default.
+	// B.  Resolution priority: user-supplied @Bean beats JettyConfiguration default.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	static class TestFactory extends BasicJettyServerFactory {
@@ -84,23 +101,8 @@ class JettyMicroservice_Inject_Test extends TestBase {
 		@Bean JettyServerFactory factory() { return new TestFactory(); }
 	}
 
-	@Test void b01_explicitFactory_beatsConfigurationFactory() throws Exception {
-		var explicit = new BasicJettyServerFactory();
-		var ms = JettyMicroservice.create()
-			.jettyServerFactory(explicit)
-			.configurations(B_FactoryConfig.class)
-			.build();
-		try {
-			assertSame(explicit, ms.getBeanStore().getBean(JettyServerFactory.class).orElse(null));
-		} finally {
-			ms.stop();
-		}
-	}
-
-	@Test void b02_configurationFactory_usedWhenNoBuilderFactory() throws Exception {
-		var ms = JettyMicroservice.create()
-			.configurations(B_FactoryConfig.class)
-			.build();
+	@Test void b01_userFactory_beatsConfigurationDefault() throws Exception {
+		var ms = create(B_FactoryConfig.class);
 		try {
 			assertInstanceOf(TestFactory.class, ms.getBeanStore().getBean(JettyServerFactory.class).orElse(null));
 		} finally {
@@ -109,19 +111,15 @@ class JettyMicroservice_Inject_Test extends TestBase {
 	}
 
 	@Configuration
-	static class B_ListenerConfig {
-		@Bean JettyMicroserviceListener listener() { return new BasicJettyMicroserviceListener() {}; }
+	static class B_SettingsConfig {
+		@Bean JettySettings jettySettings() { return JettySettings.create().ports(9999).build(); }
 	}
 
-	@Test void b03_configurationListener_usedWhenNoBuilderListener() throws Exception {
-		var ms = JettyMicroservice.create()
-			.configurations(B_ListenerConfig.class)
-			.build();
+	@Test void b02_userSettings_beatsConfigurationDefault() throws Exception {
+		var ms = create(B_SettingsConfig.class);
 		try {
-			// The contributed listener bean should be the resolved one.
-			var configured = ms.getBeanStore().getBeansOfType(JettyMicroserviceListener.class).values().iterator().next();
-			assertNotNull(configured);
-			assertNotSame(BasicJettyMicroserviceListener.class, configured.getClass()); // it's the anonymous subclass
+			var resolved = ms.getBeanStore().getBean(JettySettings.class).orElseThrow();
+			assertArrayEquals(new int[]{9999}, resolved.getPorts());
 		} finally {
 			ms.stop();
 		}
@@ -144,6 +142,9 @@ class JettyMicroservice_Inject_Test extends TestBase {
 	static class C_AutoMountConfig {
 		@Bean Server jettyServer() {
 			var server = new Server();
+			var connector = new ServerConnector(server);
+			connector.setPort(0);
+			server.addConnector(connector);
 			var ctx = new ServletContextHandler();
 			ctx.setContextPath("/");
 			server.setAttribute("ServletContextHandler", ctx);
@@ -156,12 +157,10 @@ class JettyMicroservice_Inject_Test extends TestBase {
 	}
 
 	@Test void c01_restServletAutoMounted_atRestPath() throws Exception {
-		var ms = JettyMicroservice.create()
-			.configurations(C_AutoMountConfig.class)
-			.build();
+		var ms = create(C_AutoMountConfig.class);
 		try {
-			ms.createServer();
-			var ctx = ms.getServletContextHandler();
+			ms.start();
+			var ctx = ms.getBeanStore().getBean(JettyServerComponent.class).orElseThrow().getServletContextHandler();
 			var mounted = false;
 			for (var h : ctx.getServletHandler().getServletMappings()) {
 				for (var p : h.getPathSpecs()) {
@@ -181,6 +180,9 @@ class JettyMicroservice_Inject_Test extends TestBase {
 	static class C_NoRestServletConfig {
 		@Bean Server jettyServer() {
 			var server = new Server();
+			var connector = new ServerConnector(server);
+			connector.setPort(0);
+			server.addConnector(connector);
 			var ctx = new ServletContextHandler();
 			ctx.setContextPath("/");
 			server.setAttribute("ServletContextHandler", ctx);
@@ -191,15 +193,16 @@ class JettyMicroservice_Inject_Test extends TestBase {
 	}
 
 	@Test void c02_servletWithoutRestAnnotation_isNotAutoMounted() throws Exception {
-		var ms = JettyMicroservice.create()
-			.configurations(C_NoRestServletConfig.class)
-			.build();
+		var ms = create(C_NoRestServletConfig.class);
 		try {
-			ms.createServer();
-			var ctx = ms.getServletContextHandler();
-			// PlainServlet has no @Rest, so it should NOT be auto-mounted.
-			assertEquals(0, ctx.getServletHandler().getServletMappings().length,
-				"plain Servlet without @Rest should not be auto-mounted");
+			ms.start();
+			var ctx = ms.getBeanStore().getBean(JettyServerComponent.class).orElseThrow().getServletContextHandler();
+			// PlainServlet has no @Rest, so its class name should not appear in any servlet mapping.
+			var plainName = PlainServlet.class.getName();
+			for (var holder : ctx.getServletHandler().getServlets()) {
+				assertNotEquals(plainName, holder.getClassName(),
+					"plain Servlet without @Rest should not be auto-mounted");
+			}
 		} finally {
 			ms.stop();
 		}
@@ -213,6 +216,9 @@ class JettyMicroservice_Inject_Test extends TestBase {
 	static class D_CollisionConfig {
 		@Bean Server jettyServer() {
 			var server = new Server();
+			var connector = new ServerConnector(server);
+			connector.setPort(0);
+			server.addConnector(connector);
 			var ctx = new ServletContextHandler();
 			ctx.setContextPath("/");
 			server.setAttribute("ServletContextHandler", ctx);
@@ -224,11 +230,9 @@ class JettyMicroservice_Inject_Test extends TestBase {
 	}
 
 	@Test void d01_pathCollision_failsHard() throws Exception {
-		var ms = JettyMicroservice.create()
-			.configurations(D_CollisionConfig.class)
-			.build();
+		var ms = create(D_CollisionConfig.class);
 		try {
-			var ex = assertThrows(Exception.class, ms::createServer);
+			var ex = assertThrows(Exception.class, ms::start);
 			var root = ThrowableUtils.getCause(ex);
 			assertTrue(root.getMessage().contains("Servlet mount path collision"),
 				"expected path-collision error, got: " + root.getMessage());

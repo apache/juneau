@@ -1522,10 +1522,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 		public int value;
 	}
 
-	//====================================================================================================
-	// summary (TODO-6, since 9.5.0)
-	//====================================================================================================
-
 	@Test void summary_typeLevel() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.getSession();
 		assertBean(s.getSchema(SummaryBean.class), "type,summary,description", "object,A pet,Long description");

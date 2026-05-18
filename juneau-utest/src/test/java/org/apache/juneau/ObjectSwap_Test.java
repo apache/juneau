@@ -39,7 +39,7 @@ class ObjectSwap_Test extends TestBase {
 		r = p.parse(r, String.class);
 		assertEquals("foobar", r);
 
-		var m = Json5Map.ofJson5("{foo:'bar'}");
+		var m = Json5Map.ofText("{foo:'bar'}");
 		r = s.serialize(m);
 		assertEquals("{xfoox:'xbarx'}", r);
 	}

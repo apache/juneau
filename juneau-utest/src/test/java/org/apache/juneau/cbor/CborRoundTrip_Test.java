@@ -130,7 +130,7 @@ class CborRoundTrip_Test extends TestBase {
 	void e13_emptyCollectionsRoundTrip() throws Exception {
 		var emptyList = CborParser.DEFAULT.parse(CborSerializer.DEFAULT.serialize(list()), JsonList.class);
 		assertTrue(emptyList.isEmpty());
-		var emptyMap = CborParser.DEFAULT.parse(CborSerializer.DEFAULT.serialize(JsonMap.ofJson("{}")), JsonMap.class);
+		var emptyMap = CborParser.DEFAULT.parse(CborSerializer.DEFAULT.serialize(JsonMap.ofText("{}")), JsonMap.class);
 		assertTrue(emptyMap.isEmpty());
 	}
 

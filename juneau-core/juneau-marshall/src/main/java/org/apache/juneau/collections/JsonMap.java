@@ -58,7 +58,7 @@ import org.apache.juneau.serializer.*;
  * 	JsonMap <jv>map</jv> = JsonMap.<jsm>of</jsm>();
  *
  * 	<jc>// Construct a Map from JSON</jc>
- * 	<jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{a:'A',b:{c:'C',d:123}}"</js>);
+ * 	<jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{a:'A',b:{c:'C',d:123}}"</js>);
  *
  * 	<jc>// Construct a Map using the append method</jc>
  * 	<jv>map</jv> = JsonMap.<jsm>of</jsm>().a(<js>"foo"</js>,<js>"x"</js>).a(<js>"bar"</js>,123).a(<js>"baz"</js>,<jk>true</jk>);
@@ -72,19 +72,19 @@ import org.apache.juneau.serializer.*;
  * 	<jv>map</jv> = JsonMap.<jsm>of</jsm>(<jv>urlParams</jv>, UrlEncodingParser.<jsf>DEFAULT</jsf>);
  *
  * 	<jc>// Construct JSON from JsonMap</jc>
- * 	<jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{foo:'bar'},{baz:[123,true]}"</js>);
+ * 	<jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{foo:'bar'},{baz:[123,true]}"</js>);
  * 	String <jv>json</jv> = <jv>map</jv>.toString();  <jc>// Produces "{foo:'bar'},{baz:[123,true]}"</jc>
  * 	<jv>json</jv> = <jv>map</jv>.toString(JsonSerializer.<jsf>DEFAULT</jsf>);  <jc>// Equivalent</jc>
  * 	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Get a map entry as an Integer</jc>
- * 	<jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{foo:123}"</js>);
+ * 	<jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{foo:123}"</js>);
  * 	Integer <jv>integer</jv> = <jv>map</jv>.getInt(<js>"foo"</js>);
  * 	<jv>integer</jv> = <jv>map</jv>.get(Integer.<jk>class</jk>, <js>"foo"</js>);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Add an inner map</jc>
- * 	JsonMap <jv>map1</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{a:1}"</js>);
- * 	JsonMap <jv>map2</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{b:2}"</js>).setInner(<jv>map1</jv>);
+ * 	JsonMap <jv>map1</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{a:1}"</js>);
+ * 	JsonMap <jv>map2</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{b:2}"</js>).setInner(<jv>map1</jv>);
  * 	<jk>int</jk> <jv>_int</jv> = <jv>map2</jv>.getInt(<js>"a"</js>);  <jc>// a == 1 </jc>
  * </p>
  *
@@ -233,7 +233,7 @@ public class JsonMap extends MarshalledMap {
 	 * @return A new map or <jk>null</jk> if the string was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static JsonMap ofJson(CharSequence json) throws ParseException {
+	public static JsonMap ofText(CharSequence json) throws ParseException {
 		return json == null ? null : new JsonMap(json);
 	}
 
@@ -246,7 +246,7 @@ public class JsonMap extends MarshalledMap {
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static JsonMap ofJson(Reader json) throws ParseException {
+	public static JsonMap ofText(Reader json) throws ParseException {
 		return json == null ? null : new JsonMap(json);
 	}
 

@@ -1025,7 +1025,7 @@ public class BasicSwaggerProviderSession {
 			s = resolve(s);
 			if (! isProbablyJsonArray(s, true))
 				s = "[" + s + "]";
-			return Json5List.ofJson5(s);
+			return Json5List.ofText(s);
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON array encountered in " + location + ".", locationArgs);
 		}
@@ -1058,7 +1058,7 @@ public class BasicSwaggerProviderSession {
 				return Json5Map.of(SWAGGER_ignore, true);
 			if (! isProbablyJsonObject(o2, true))
 				o2 = "{" + o2 + "}";
-			return Json5Map.ofJson5(o2);
+			return Json5Map.ofText(o2);
 		}
 		if (o instanceof Json5Map o2)
 			return o2;

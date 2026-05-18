@@ -42,7 +42,7 @@ import org.apache.juneau.commons.runtime.*;
  * For example, the {@link HelpCommand} is used to provide help on other commands.
  *
  * <p class='bconsole'>
- * 	Running class 'JettyMicroservice' using config file 'examples.cfg'.
+ * 	Running class 'Microservice' using config file 'examples.cfg'.
  * 	Server started on port 10000
  *
  * 	List of available commands:
@@ -97,7 +97,7 @@ import org.apache.juneau.commons.runtime.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceCoreBasics">juneau-microservice-core Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceBasics">juneau-microservice Basics</a>
  * </ul>
  */
 public abstract class ConsoleCommand {

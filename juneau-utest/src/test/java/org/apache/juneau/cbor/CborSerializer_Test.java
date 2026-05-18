@@ -55,7 +55,7 @@ class CborSerializer_Test extends TestBase {
 		test("a", "61 61");
 		test(ints(), "80");
 		test(ints(1, 2, 3), "83 01 02 03");
-		test(JsonMap.ofJson("{}"), "A0");
+		test(JsonMap.ofText("{}"), "A0");
 	}
 
 	public static class Person {
@@ -190,7 +190,7 @@ class CborSerializer_Test extends TestBase {
 
 	@Test
 	void c13_emptyBean() throws Exception {
-		var bytes = CborSerializer.DEFAULT.serialize(JsonMap.ofJson("{}"));
+		var bytes = CborSerializer.DEFAULT.serialize(JsonMap.ofText("{}"));
 		assertEquals("A0", toSpacedHex(bytes));
 		var parsed = CborParser.DEFAULT.parse(bytes, JsonMap.class);
 		assertTrue(parsed.isEmpty());
@@ -199,7 +199,7 @@ class CborSerializer_Test extends TestBase {
 	@Test
 	void c14_emptyCollections() throws Exception {
 		test(ints(), "80");
-		test(JsonMap.ofJson("{}"), "A0");
+		test(JsonMap.ofText("{}"), "A0");
 	}
 
 	@Test

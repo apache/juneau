@@ -49,7 +49,7 @@ import org.apache.juneau.serializer.*;
  * 	Json5Map <jv>map</jv> = Json5Map.<jsm>of</jsm>();
  *
  * 	<jc>// Construct a Map from JSON5</jc>
- * 	<jv>map</jv> = Json5Map.<jsm>ofJson5</jsm>(<js>"{a:'A',b:{c:'C',d:123}}"</js>);
+ * 	<jv>map</jv> = Json5Map.<jsm>ofText</jsm>(<js>"{a:'A',b:{c:'C',d:123}}"</js>);
  *
  * 	<jc>// JSON5 round-trip via toString()</jc>
  * 	String <jv>s</jv> = <jv>map</jv>.toString();  <jc>// "{a:'A',b:{c:'C',d:123}}"</jc>
@@ -65,7 +65,8 @@ import org.apache.juneau.serializer.*;
 public class Json5Map extends MarshalledMap {
 
 	@SuppressWarnings({
-		"java:S2160" // equals() / hashCode() inherited from Json5Map; map equality is element-based
+		"java:S2160", // equals() / hashCode() inherited from Json5Map; map equality is element-based
+		"java:S110"   // Inheritance depth inherited from MarshalledMap -> LinkedHashMap chain; intentional
 	})
 	private static class UnmodifiableJson5Map extends Json5Map {
 		private static final long serialVersionUID = 1L;
@@ -100,7 +101,8 @@ public class Json5Map extends MarshalledMap {
 	 * @serial exclude
 	 */
 	@SuppressWarnings({
-		"java:S2386" // Public static final field accessed externally, cannot be protected
+		"java:S2386", // Public static final field accessed externally, cannot be protected
+		"java:S110"   // Anonymous subclass of Json5Map inherits the MarshalledMap -> LinkedHashMap chain; intentional
 	})
 	public static final Json5Map EMPTY_MAP = new Json5Map() {
 
@@ -199,7 +201,7 @@ public class Json5Map extends MarshalledMap {
 	 * @return A new map or <jk>null</jk> if the string was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static Json5Map ofJson5(CharSequence json5) throws ParseException {
+	public static Json5Map ofText(CharSequence json5) throws ParseException {
 		return json5 == null ? null : new Json5Map(json5);
 	}
 
@@ -211,7 +213,7 @@ public class Json5Map extends MarshalledMap {
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static Json5Map ofJson5(Reader json5) throws ParseException {
+	public static Json5Map ofText(Reader json5) throws ParseException {
 		return json5 == null ? null : new Json5Map(json5);
 	}
 

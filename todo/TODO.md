@@ -23,8 +23,6 @@
 
 - [TODO-35] Add support for overriding injected beans for tests (test-time replacement/override of beans in the inject/DI container so tests can swap real beans for stubs/mocks).
 
-- [TODO-36] Rework `juneau-microservice-jetty` as a predefined `@Configuration` bean on top of a single `Microservice` class (rename `juneau-microservice-core` → `juneau-microservice`, delete `JettyMicroservice`, drive Jetty lifecycle through a fanned-out `MicroserviceListener`). See `todo/TODO-36-jetty-as-bean.md`.
-
 - [TODO-38] Rename `juneau-rest-client` → `juneau-rest-client-classic` and promote the `juneau-ng-rest-client-*` family + `org.apache.juneau.ng.*` packages to the canonical `juneau-rest-client` / `org.apache.juneau.*` names. See `todo/TODO-38-rename-rest-client-to-classic.md`.
 
 - [TODO-39] Add a `/sonarqube` Cursor command (and matching `scripts/sonarqube.py` helper) that runs SonarQube analysis against a given source file, package, or module — analogous to `/coverage` / `scripts/coverage.py`. Should auto-detect the Maven module from the path, invoke the SonarQube/SonarLint scanner, and print a concise per-file summary of issues (rule id, severity, line, message) so the user can quickly triage Sonar findings the same way they do JaCoCo coverage.

@@ -104,9 +104,9 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;Barney&lt;/td&gt;&lt;td&gt;Miller&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//    &lt;/table&gt; </jc>
  * 	<jv>html</jv> = JsonList.<jsm>of</jsm>(
- * 		JsonMap.<jsm>ofJson</jsm>(<js>"{firstName:'Bob',lastName:'Costas'}"</js>),
- * 		JsonMap.<jsm>ofJson</jsm>(<js>"{firstName:'Billy',lastName:'TheKid'}"</js>),
- * 		JsonMap.<jsm>ofJson</jsm>(<js>"{firstName:'Barney',lastName:'Miller'}"</js>)
+ * 		JsonMap.<jsm>ofText</jsm>(<js>"{firstName:'Bob',lastName:'Costas'}"</js>),
+ * 		JsonMap.<jsm>ofText</jsm>(<js>"{firstName:'Billy',lastName:'TheKid'}"</js>),
+ * 		JsonMap.<jsm>ofText</jsm>(<js>"{firstName:'Barney',lastName:'Miller'}"</js>)
  * 	);
  * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>list</jv>);
  *
@@ -116,7 +116,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;foo&lt;/td&gt;&lt;td&gt;bar&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;baz&lt;/td&gt;&lt;td&gt;123&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//    &lt;/table&gt; </jc>
- * 	Map <jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{foo:'bar',baz:123}"</js>);
+ * 	Map <jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{foo:'bar',baz:123}"</js>);
  * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
  *
  * 	<jc>// HTML elements can be nested arbitrarily deep</jc>
@@ -133,9 +133,9 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * 	<jc>//			&lt;/table&gt; </jc>
  * 	<jc>//		&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//	&lt;/table&gt; </jc>
- * 	Map <jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{foo:'bar',baz:123}"</js>);
+ * 	Map <jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{foo:'bar',baz:123}"</js>);
  * 	<jv>map</jv>.put(<js>"someNumbers"</js>, JsonList.<jsm>of</jsm>(1, 2, 3));
- * 	<jv>map</jv>.put(<js>"someSubMap"</js>, JsonMap.<jsm>ofJson</jsm>(<js>"{a:'b'}"</js>));
+ * 	<jv>map</jv>.put(<js>"someSubMap"</js>, JsonMap.<jsm>ofText</jsm>(<js>"{a:'b'}"</js>));
  * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
  * </p>
  *

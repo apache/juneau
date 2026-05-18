@@ -39,8 +39,8 @@ class Json5List_Test extends TestBase {
 		assertEquals("[1,'two',true]", l.toString());
 	}
 
-	@Test void a03_factoryOfJson5() throws Exception {
-		var l = Json5List.ofJson5("[1,'two',true]");
+	@Test void a03_factoryOfText() throws Exception {
+		var l = Json5List.ofText("[1,'two',true]");
 		assertNotNull(l);
 		assertEquals(3, l.size());
 		assertEquals(1, l.getInt(0));
@@ -48,8 +48,8 @@ class Json5List_Test extends TestBase {
 		assertTrue(l.getBoolean(2));
 	}
 
-	@Test void a04_factoryOfJson5NullInput() throws Exception {
-		assertNull(Json5List.ofJson5((CharSequence)null));
+	@Test void a04_factoryOfTextNullInput() throws Exception {
+		assertNull(Json5List.ofText((CharSequence)null));
 	}
 
 	@Test void a05_factoryCreateAndAppend() {
@@ -139,7 +139,7 @@ class Json5List_Test extends TestBase {
 	@Test void a17_roundTripJson5() throws Exception {
 		var original = Json5List.of(1, "two", true);
 		var serialized = original.toString();
-		var parsed = Json5List.ofJson5(serialized);
+		var parsed = Json5List.ofText(serialized);
 		assertEquals(1, parsed.getInt(0));
 		assertEquals("two", parsed.getString(1));
 		assertTrue(parsed.getBoolean(2));

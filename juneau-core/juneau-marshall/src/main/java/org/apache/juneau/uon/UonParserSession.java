@@ -495,7 +495,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	@SuppressWarnings({
-		"java:S1168",    // TODO: null for empty/EOF or parseAttrName('%00'). Parser state machine.
+		"java:S1168",    // Intentionally returns null for empty/EOF or parseAttrName('%00') in this parser state machine.
 		"java:S2589",    // Final if (state==S4) is always true given prior checks; exhaustive state error-reporting pattern
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
@@ -618,7 +618,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	@SuppressWarnings({
-		"java:S1168",    // TODO: null for EOF/AMP. Parser state machine.
+		"java:S1168",    // Intentionally returns null for EOF/AMP in this parser state machine.
 		"java:S1854",    // argIndex=0 is the valid starting arg index; Sonar FP on early-return paths that never read it
 		"java:S2583",    // State variables persist across loop iterations
 		"java:S2589",    // Final if (state==S3) is always true given prior check; exhaustive state error-reporting pattern
@@ -713,7 +713,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	@SuppressWarnings({
-		"java:S1168",    // TODO: null for EOF/AMP. Parser state machine.
+		"java:S1168",    // Intentionally returns null for EOF/AMP in this parser state machine.
 		"java:S2589",    // Final if (state==S4) is always true given prior checks; exhaustive state error-reporting pattern
 		"java:S6541",    // Brain method acceptable for parser state machine
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine

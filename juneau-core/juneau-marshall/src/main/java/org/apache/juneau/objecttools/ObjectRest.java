@@ -63,7 +63,7 @@ import org.apache.juneau.parser.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Construct an unstructured POJO model</jc>
- * 	JsonMap <jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>""</js>
+ * 	JsonMap <jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>""</js>
  * 		+ <js>"{"</js>
  * 		+ <js>"	name:'John Smith', "</js>
  * 		+ <js>"	address:{ "</js>
@@ -111,7 +111,7 @@ import org.apache.juneau.parser.*;
  * 	<jv>johnSmith</jv>.delete(<js>"fico score"</js>);
  *
  * 	<jc>// Add entirely new structures to the tree</jc>
- * 	JsonMap <jv>medicalInfo</jv> = JsonMap.<jsm>ofJson</jsm>(<js>""</js>
+ * 	JsonMap <jv>medicalInfo</jv> = JsonMap.<jsm>ofText</jsm>(<js>""</js>
  * 		+ <js>"{"</js>
  * 		+ <js>"	currentStatus: 'deceased',"</js>
  * 		+ <js>"	health: 'non-existent',"</js>

@@ -26,16 +26,6 @@ import jakarta.servlet.*;
 
 class RestInit_Test extends TestBase {
 
-	//------------------------------------------------------------------------------------------------------------------
-	// @RestInit
-	//
-	// Pre-9.5 this test also covered `@RestInit public void initX(RestContext.Builder b)` — the framework
-	// injected the in-flight RestContext.Builder so user code could imperatively configure the context.
-	// That protocol was deleted in TODO-16 Phase C-3 (Builder is no longer a user-visible bean), so the
-	// `init1c(RestContext.Builder)` cases were dropped along with it. The remaining cases still cover
-	// no-arg invocation, ServletConfig injection, and inheritance / override ordering.
-	//------------------------------------------------------------------------------------------------------------------
-
 	@Rest(children={A_Super.class,A_Sub.class})
 	public static class A {}
 

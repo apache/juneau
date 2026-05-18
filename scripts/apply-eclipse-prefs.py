@@ -51,7 +51,7 @@ SOURCE_PROJECTS = [
     "juneau-examples/juneau-examples-rest",
     "juneau-examples/juneau-examples-rest-jetty",
     "juneau-examples/juneau-examples-rest-springboot",
-    "juneau-microservice/juneau-microservice-core",
+    "juneau-microservice/juneau-microservice",
     "juneau-microservice/juneau-microservice-jetty",
     "juneau-microservice/juneau-my-jetty-microservice",
     "juneau-microservice/juneau-my-springboot-microservice",

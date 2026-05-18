@@ -26,7 +26,8 @@ import org.eclipse.jetty.server.*;
 import org.junit.jupiter.api.extension.*;
 
 /**
- * JUnit 5 extension that boots a {@link JettyMicroservice} on an ephemeral port for the duration of a test class.
+ * JUnit 5 extension that boots a {@link Microservice} backed by {@link JettyConfiguration} on an ephemeral port for
+ * the duration of a test class.
  *
  * <p>
  * Typical usage:
@@ -50,15 +51,14 @@ import org.junit.jupiter.api.extension.*;
  *
  * <h5 class='section'>How it works:</h5>
  * <ul>
- * 	<li>The fixture supplies its own {@link Server} {@link Bean} factory ({@link EphemeralJettyServerConfig}) that
- * 		binds to port {@code 0} (OS-assigned ephemeral port). User-supplied configurations should typically
- * 		contribute {@code @Bean Servlet} definitions (which the {@link JettyMicroservice} auto-mounts at
- * 		{@code @Rest(path=...)}); a user-supplied {@code @Bean Server} will conflict and is not supported here.
- * 	<li>{@link #beforeAll(ExtensionContext) beforeAll} builds the microservice, calls
- * 		{@link JettyMicroservice#createServer() createServer()}, and then
- * 		{@link JettyMicroservice#start() start()}.
- * 	<li>{@link #afterAll(ExtensionContext) afterAll} calls {@link JettyMicroservice#stop() stop()} so the bound
- * 		port is released and {@code @PreDestroy} hooks on bean-store beans fire.
+ * 	<li>The fixture installs {@link JettyConfiguration} plus a private {@link EphemeralJettyServerConfig}
+ * 		{@code @Configuration} that contributes a Jetty {@link Server} bound to port {@code 0} (OS-assigned
+ * 		ephemeral port). User-supplied configurations should typically contribute {@code @Bean Servlet} definitions
+ * 		which {@link JettyServerComponent} auto-mounts at {@code @Rest(path=...)}.
+ * 	<li>{@link #beforeAll(ExtensionContext) beforeAll} builds and {@link Microservice#start() starts} the service,
+ * 		then probes the bound port via the {@link Server}'s {@link ServerConnector}.
+ * 	<li>{@link #afterAll(ExtensionContext) afterAll} calls {@link Microservice#stop() stop()} so the bound port is
+ * 		released and {@code @PreDestroy} hooks on bean-store beans fire.
  * </ul>
  *
  * <p>
@@ -69,7 +69,7 @@ import org.junit.jupiter.api.extension.*;
 public final class MicroserviceTestFixture implements BeforeAllCallback, AfterAllCallback {
 
 	private final List<Class<?>> configurations = new ArrayList<>();
-	private JettyMicroservice microservice;
+	private Microservice microservice;
 	private URI rootUrl;
 
 	private MicroserviceTestFixture() {}
@@ -118,26 +118,38 @@ public final class MicroserviceTestFixture implements BeforeAllCallback, AfterAl
 	 *
 	 * @return The microservice.
 	 */
-	public JettyMicroservice getMicroservice() {
+	public Microservice getMicroservice() {
 		return microservice;
+	}
+
+	/**
+	 * Returns the {@link JettyServerComponent} bean for the running microservice.
+	 *
+	 * @return The Jetty server component.
+	 */
+	public JettyServerComponent getJettyServerComponent() {
+		return microservice.getBeanStore().getBean(JettyServerComponent.class).orElseThrow();
 	}
 
 	@Override
 	public void beforeAll(ExtensionContext ctx) throws Exception {
-		// The user's configurations come first (so @Bean Servlet methods are visible). Our default Server
-		// factory is registered last via configurations() — JettyMicroservice resolves Server from the bean
-		// store by type, and BeanStore.getBean(...) returns the first registered match.
+		// The user's configurations come first (so @Bean Servlet methods are visible); EphemeralJettyServerConfig
+		// supplies the Jetty Server bound to port 0; JettyConfiguration wires the lifecycle and remaining defaults.
+		// JettyServerComponent resolves Server from the bean store by type, and BeanStore.getBean(...) returns the
+		// first registered match (so a user-supplied @Bean Server would still win).
 		var classes = new ArrayList<>(configurations);
 		classes.add(EphemeralJettyServerConfig.class);
-		microservice = JettyMicroservice.create()
+		classes.add(JettyConfiguration.class);
+		microservice = Microservice.create()
 			.configurations(classes.toArray(new Class<?>[0]))
 			.build();
 		microservice.start();
-		// JettyMicroservice.getURI() uses InetAddress.getLocalHost().getHostName() (may resolve to a non-loopback
+		// JettyServerComponent.getURI() uses InetAddress.getLocalHost().getHostName() (may resolve to a non-loopback
 		// IP on some machines) and ServerConnector.getPort() (returns the configured port = 0, not the bound port).
 		// For test fixtures we want a deterministic loopback URL with the actual bound port.
+		var server = getJettyServerComponent().getServer();
 		var localPort = -1;
-		for (var c : microservice.getServer().getConnectors()) {
+		for (var c : server.getConnectors()) {
 			if (c instanceof ServerConnector sc) {
 				localPort = sc.getLocalPort();
 				break;
@@ -159,15 +171,15 @@ public final class MicroserviceTestFixture implements BeforeAllCallback, AfterAl
 	 *
 	 * <p>
 	 * The server has a single {@link ServerConnector} on port 0 (OS-assigned) and a single root
-	 * {@link ServletContextHandler} at context path {@code "/"}. {@code JettyMicroservice} discovers the handler
+	 * {@link ServletContextHandler} at context path {@code "/"}. {@link JettyServerComponent} discovers the handler
 	 * via the {@code "ServletContextHandler"} server attribute (the same convention used by {@code jetty.xml}).
 	 */
 	@Configuration
 	public static class EphemeralJettyServerConfig {
 
 		/**
-		 * Provides the bean-supplied Jetty {@link Server} that the microservice consumes during
-		 * {@link JettyMicroservice#createServer()}.
+		 * Provides the bean-supplied Jetty {@link Server} that {@link JettyServerComponent} consumes during
+		 * {@code onStart()}.
 		 *
 		 * @return A configured {@link Server} bound to port 0.
 		 */

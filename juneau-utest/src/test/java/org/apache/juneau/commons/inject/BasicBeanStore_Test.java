@@ -1525,10 +1525,6 @@ class BasicBeanStore_Test extends TestBase {
 		assertSame(cause, ex.getCause());
 	}
 
-	//------------------------------------------------------------------------------------------------
-	// Coverage gap fillers — targeted tests added during the TODO-24 coverage pass.
-	//------------------------------------------------------------------------------------------------
-
 	@Test
 	void z01_trackResolved_nullSupplierResult_isNotTracked() {
 		// A supplier that returns null exercises BasicBeanStore.trackResolved(null) — most easily

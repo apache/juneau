@@ -112,7 +112,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize a Map</jc>
- * 	Map <jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
+ * 	Map <jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
  *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
  * 	<jc>// Produces "(a=b,c=1,d=false,e=@(f,1,false),g=(h=i))"</jc>
