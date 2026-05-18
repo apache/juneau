@@ -278,10 +278,10 @@ public class CsvParserSession extends ReaderParserSession {
 				o = parseRowIntoMap(headers, row, sType, outer);
 
 		} else if (sType.isObject()) {
-			// For Object target type: return a JsonList of JsonMaps (or a single JsonMap if one row)
-			var results = new JsonList(this);
+			// For Object target type: return a list of maps (or a single map if one row)
+			var results = newGenericList();
 			for (var row = r.readRow(); row != null; row = r.readRow()) {
-				var m = new JsonMap(this);
+				var m = newGenericMap();
 				for (var i = 0; i < headers.size(); i++) {
 					var val = i < row.size() ? row.get(i) : null;
 					m.put(headers.get(i), parseCellValue(val, object()));
@@ -322,7 +322,7 @@ public class CsvParserSession extends ReaderParserSession {
 	 */
 	private Object parseRow(List<String> headers, List<String> row, ClassMeta<?> eType, Object outer) throws ParseException {
 		if (eType == null || eType.isObject()) {
-			var m = new JsonMap(this);
+			var m = newGenericMap();
 			for (var i = 0; i < headers.size(); i++) {
 				var val = i < row.size() ? row.get(i) : null;
 				m.put(headers.get(i), parseCellValue(val, object()));
@@ -332,7 +332,7 @@ public class CsvParserSession extends ReaderParserSession {
 		// Polymorphic (registry + _type column): parse to map then cast - matches JSON
 		var typeColName = getBeanTypePropertyName(eType);
 		if (eType.getBeanRegistry() != null && headers.contains(typeColName)) {
-			var m = new JsonMap(this);
+			var m = newGenericMap();
 			for (var i = 0; i < headers.size(); i++) {
 				var val = i < row.size() ? row.get(i) : null;
 				m.put(headers.get(i), parseCellValue(val, object()));
@@ -401,7 +401,7 @@ public class CsvParserSession extends ReaderParserSession {
 		if (eType.canCreateNewInstance(outer))
 			m = (Map) eType.newInstance(outer);
 		else
-			m = new JsonMap(this);
+			m = newGenericMap();
 		var keyType = eType.getKeyType() != null ? eType.getKeyType() : string();
 		var valueType = eType.getValueType() != null ? eType.getValueType() : object();
 		for (var i = 0; i < headers.size(); i++) {

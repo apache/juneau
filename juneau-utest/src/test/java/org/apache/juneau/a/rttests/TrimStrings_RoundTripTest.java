@@ -54,8 +54,8 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 		a = p2.parse(s.serialize(in), String.class);
 		assertEquals(json(a), json(e));
 
-		in = JsonMap.ofJson("{' foo ': ' bar '}");
-		e = JsonMap.ofJson("{foo:'bar'}");
+		in = JsonMap.ofJson("{\" foo \": \" bar \"}");
+		e = JsonMap.ofJson("{\"foo\":\"bar\"}");
 		a = p.parse(s2.serialize(in), JsonMap.class);
 		assertEquals(json(a), json(e));
 		a = p2.parse(s.serialize(in), JsonMap.class);
@@ -64,8 +64,8 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 		// Skip Parquet for mixed-type JsonList and bean with JsonList/JsonMap properties.
 		// Parquet's static schema cannot represent mixed-type collections (string + map in same list).
 		if (!(s instanceof ParquetSerializer)) {
-			in = new JsonList("[' foo ', {' foo ': ' bar '}]");
-			e = new JsonList("['foo',{foo:'bar'}]");
+			in = new JsonList("[\" foo \", {\" foo \": \" bar \"}]");
+			e = new JsonList("[\"foo\",{\"foo\":\"bar\"}]");
 			a = p.parse(s2.serialize(in), JsonList.class);
 			assertEquals(json(a), json(e));
 			a = p2.parse(s.serialize(in), JsonList.class);
@@ -89,16 +89,16 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 		public A init1() throws Exception {
 			f1 = " f1 ";
 			f2 = a(" f2a ", " f2b ");
-			f3 = JsonList.ofJson("[' f3a ',' f3b ']");
-			f4 = JsonMap.ofJson("{' foo ':' bar '}");
+			f3 = JsonList.ofJson("[\" f3a \",\" f3b \"]");
+			f4 = JsonMap.ofJson("{\" foo \":\" bar \"}");
 			return this;
 		}
 
 		public A init2() throws Exception {
 			f1 = "f1";
 			f2 = a("f2a", "f2b");
-			f3 = JsonList.ofJson("['f3a','f3b']");
-			f4 = JsonMap.ofJson("{'foo':'bar'}");
+			f3 = JsonList.ofJson("[\"f3a\",\"f3b\"]");
+			f4 = JsonMap.ofJson("{\"foo\":\"bar\"}");
 			return this;
 		}
 	}

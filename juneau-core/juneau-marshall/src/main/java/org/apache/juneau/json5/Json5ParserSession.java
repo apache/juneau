@@ -18,6 +18,7 @@ package org.apache.juneau.json5;
 
 import java.io.*;
 
+import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.json.*;
@@ -42,6 +43,7 @@ import org.apache.juneau.parser.*;
 	"java:S125",  // State-machine comments are documentation, not commented-out code
 	"java:S3776", // Cognitive complexity acceptable for parser state machine
 	"java:S135",  // Multiple break statements necessary for state machine error handling
+	"java:S110",  // Inheritance depth is intentional to reuse parser-session behavior layers
 	"resource" // ParserReader is managed by caller
 })
 public class Json5ParserSession extends JsonParserSession {
@@ -51,6 +53,9 @@ public class Json5ParserSession extends JsonParserSession {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S110" // Inheritance depth is intentional across parser session builders
+	})
 	public static class Builder extends JsonParserSession.Builder {
 
 		/**
@@ -218,5 +223,15 @@ public class Json5ParserSession extends JsonParserSession {
 	@Override
 	protected boolean canCoerceNonStringToString() {
 		return true;
+	}
+
+	@Override /* Overridden from JsonParserSession */
+	protected MarshalledMap newGenericMap() {
+		return new Json5Map(this);
+	}
+
+	@Override /* Overridden from JsonParserSession */
+	protected MarshalledList newGenericList() {
+		return new Json5List(this);
 	}
 }

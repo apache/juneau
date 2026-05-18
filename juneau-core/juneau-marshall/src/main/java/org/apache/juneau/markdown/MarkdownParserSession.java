@@ -27,7 +27,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
@@ -374,7 +373,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 			@SuppressWarnings({
 				"java:S3740" // Raw Map needed for generic map construction from ClassMeta
 			})
-			Map map = eType.canCreateNewInstance(outer) ? (Map) eType.newInstance(outer) : new JsonMap(this);
+			Map map = eType.canCreateNewInstance(outer) ? (Map) eType.newInstance(outer) : newGenericMap();
 			var keyType = eType.getKeyType() != null ? eType.getKeyType() : string();
 			var valueType = eType.getValueType() != null ? eType.getValueType() : object();
 			for (var line : dataLines) {
@@ -394,8 +393,8 @@ public class MarkdownParserSession extends ReaderParserSession {
 			return map;
 		}
 
-		// Object or unknown: return JsonMap, check for _type and cast if possible
-		var resultMap = new JsonMap(this);
+		// Object or unknown: return MarshalledMap, check for _type and cast if possible
+		var resultMap = newGenericMap();
 		for (var line : dataLines) {
 			var cells = splitTableRow(line);
 			if (cells.size() < 2)
@@ -506,7 +505,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 		}
 
 		if (actualType == null || actualType.isObject()) {
-			var m = new JsonMap(this);
+			var m = newGenericMap();
 			for (var i = 0; i < headers.size(); i++) {
 				var header = headers.get(i);
 				if (CONST_type.equals(header))
@@ -541,7 +540,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 			@SuppressWarnings({
 				"java:S3740" // Raw Map needed for generic map construction from ClassMeta
 			})
-			Map map = actualType.canCreateNewInstance(outer) ? (Map) actualType.newInstance(outer) : new JsonMap(this);
+			Map map = actualType.canCreateNewInstance(outer) ? (Map) actualType.newInstance(outer) : newGenericMap();
 			var keyType = actualType.getKeyType() != null ? actualType.getKeyType() : string();
 			var valueType = actualType.getValueType() != null ? actualType.getValueType() : object();
 			for (var i = 0; i < headers.size(); i++) {

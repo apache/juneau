@@ -29,10 +29,10 @@ import java.util.concurrent.atomic.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -74,7 +74,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Rest
 	public static class A {
 		@RestPost
-		public String a(@FormData("*") JsonMap m, @Header("Content-Type") String ct) {
+		public String a(@FormData("*") Json5Map m, @Header("Content-Type") String ct) {
 			assertEquals("application/x-www-form-urlencoded", ct);
 			return m.toString();
 		}
@@ -148,7 +148,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Rest
 	public static class B {
 		@RestOp
-		public String post(@FormData("*") JsonMap m) {
+		public String post(@FormData("*") Json5Map m) {
 			return m.toString();
 		}
 	}
@@ -180,7 +180,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Rest
 	public static class C {
 		@RestPost
-		public String a(@FormData("*") JsonMap m) {
+		public String a(@FormData("*") Json5Map m) {
 			return m.toString();
 		}
 		@RestPost
@@ -232,7 +232,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Rest
 	public static class D {
 		@RestOp
-		public String post(@FormData("*") JsonMap m) {
+		public String post(@FormData("*") Json5Map m) {
 			return m.toString();
 		}
 	}
@@ -481,7 +481,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Rest
 	public static class E {
 		@RestOp
-		public String post(@FormData("*") JsonMap m) {
+		public String post(@FormData("*") Json5Map m) {
 			return m.toString();
 		}
 	}
@@ -523,7 +523,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Rest
 	public static class F {
 		@RestOp
-		public String post(@FormData("*") JsonMap m) {
+		public String post(@FormData("*") Json5Map m) {
 			return m.toString();
 		}
 	}
@@ -571,7 +571,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Rest
 	public static class G {
 		@RestOp
-		public String post(@FormData("*") JsonMap m) {
+		public String post(@FormData("*") Json5Map m) {
 			return m.toString();
 		}
 	}
@@ -633,7 +633,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Rest
 	public static class H {
 		@RestOp
-		public String post(@FormData("*") JsonMap m) {
+		public String post(@FormData("*") Json5Map m) {
 			return m.toString();
 		}
 	}
@@ -660,7 +660,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Rest
 	public static class I {
 		@RestOp
-		public String post(@FormData("*") JsonMap m) {
+		public String post(@FormData("*") Json5Map m) {
 			return m.toString();
 		}
 	}
@@ -686,7 +686,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	@Rest
 	public static class J {
 		@RestOp
-		public String post(@FormData("*") JsonMap m) {
+		public String post(@FormData("*") Json5Map m) {
 			return m.toString();
 		}
 	}

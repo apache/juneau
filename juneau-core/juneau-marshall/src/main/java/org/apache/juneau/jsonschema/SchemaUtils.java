@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -77,11 +78,13 @@ public class SchemaUtils {
 				return JsonMap.of("ignore", true);
 			if (! isProbablyJsonObject(s, true))
 				s = "{" + s + "}";
-			return JsonMap.ofJson(s);
+			return new JsonMap(Json5Map.ofJson5(s));
 		}
 		if (o instanceof JsonMap o2)
 			return o2;
-		throw new ParseException("Unexpected data type ''{0}''.  Expected JsonMap or String.", cn(o));
+		if (o instanceof MarshalledMap o2)
+			return new JsonMap(o2);
+		throw new ParseException("Unexpected data type ''{0}''.  Expected Map or String.", cn(o));
 	}
 
 	/**
@@ -102,7 +105,7 @@ public class SchemaUtils {
 			return null;
 		if (! isProbablyJsonObject(s, true))
 			s = "{" + s + "}";
-		return JsonMap.ofJson(s);
+		return new JsonMap(Json5Map.ofJson5(s));
 	}
 
 	/**
@@ -122,7 +125,7 @@ public class SchemaUtils {
 		if (s.isEmpty())
 			return null;
 		Set<String> set = set();
-		JsonList.ofJsonOrCdl(s).forEach(x -> set.add(x.toString()));
+		Json5List.ofJson5OrCdl(s).forEach(x -> set.add(x.toString()));
 		return set;
 	}
 }

@@ -114,7 +114,7 @@ public class HjsonParserSession extends ReaderParserSession {
 	}
 
 	private Object parseRootBraceless(HjsonTokenizer t, ClassMeta<?> type, String firstKey) throws IOException, ParseException, ExecutableException {
-		var result = new JsonMap(this);
+		var result = newGenericMap();
 		if (t.read().type() != HjsonTokenizer.TokenType.COLON)
 			throw new ParseException(this, "Expected ':' after key at line {0}", t.getLine());
 		t.skipWhitespaceAndComments();
@@ -159,7 +159,7 @@ public class HjsonParserSession extends ReaderParserSession {
 	}
 
 	private Object parseObject(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
-		var result = new JsonMap(this);
+		var result = newGenericMap();
 		t.skipWhitespaceAndComments();
 		var next = t.peek();
 		if (next.type() == HjsonTokenizer.TokenType.RBRACE) {
@@ -227,7 +227,7 @@ public class HjsonParserSession extends ReaderParserSession {
 		return convertToCollection(result, type);
 	}
 
-	private Object convertToBean(JsonMap map, ClassMeta<?> type) throws ExecutableException, ParseException {
+	private Object convertToBean(MarshalledMap map, ClassMeta<?> type) throws ExecutableException, ParseException {
 		if (type == null)
 			type = object();
 		var casted = cast(map, null, type);
@@ -249,7 +249,7 @@ public class HjsonParserSession extends ReaderParserSession {
 		return map;
 	}
 
-	private void injectAnnotations(JsonMap map, Object bean) throws ExecutableException {
+	private void injectAnnotations(MarshalledMap map, Object bean) throws ExecutableException {
 		var bm = toBeanMap(bean);
 		for (var entry : map.entrySet()) {
 			var key = entry.getKey();
@@ -278,11 +278,11 @@ public class HjsonParserSession extends ReaderParserSession {
 		}
 	}
 
-	private Object convertToCollection(JsonList list, ClassMeta<?> type) throws ExecutableException {
+	private Object convertToCollection(MarshalledList list, ClassMeta<?> type) throws ExecutableException {
 		if (type == null)
 			type = object();
 		var eType = def(type.getElementType(), object());
-		var converted = new JsonList(this);
+		var converted = newGenericList();
 		for (var item : list)
 			converted.add(convertToMemberType(null, item, eType));
 		// For array types, convert to the appropriate array

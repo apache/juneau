@@ -881,7 +881,7 @@ public class ParserSession extends MarshallingSession {
 	}
 
 	/**
-	 * Converts the specified <c>JsonMap</c> into a bean identified by the <js>"_type"</js> property in the map.
+	 * Converts the specified {@link MarshalledMap} into a bean identified by the <js>"_type"</js> property in the map.
 	 *
 	 * @param m The map to convert to a bean.
 	 * @param pMeta The current bean property being parsed.
@@ -889,7 +889,7 @@ public class ParserSession extends MarshallingSession {
 	 * @return
 	 * 	The converted bean, or the same map if the <js>"_type"</js> entry wasn't found or didn't resolve to a bean.
 	 */
-	protected final Object cast(JsonMap m, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
+	protected final Object cast(MarshalledMap m, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 
 		var btpn = getBeanTypePropertyName(eType);
 
@@ -907,7 +907,7 @@ public class ParserSession extends MarshallingSession {
 			m.forEach((k, v) -> {
 				if (! k.equals(btpn)) {
 					// Attempt to recursively cast child maps.
-					if (v instanceof JsonMap v2)
+					if (v instanceof MarshalledMap v2)
 						v = cast(v2, pMeta, eType);
 					bm.put(k, v);
 				}

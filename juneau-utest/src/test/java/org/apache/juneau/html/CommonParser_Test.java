@@ -61,7 +61,7 @@ class CommonParser_Test extends TestBase {
 		assertEquals(false, m.get("c"));
 
 		in = "<table _type='array'><tr><th>attribute</th></tr><tr><td><string>value</string></td></tr><tr><td><string>value</string></td></tr></table>";
-		var jl = (JsonList)p.parse(in, Object.class);
+		var jl = (MarshalledList)p.parse(in, Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 

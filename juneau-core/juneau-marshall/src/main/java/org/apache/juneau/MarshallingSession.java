@@ -1227,15 +1227,68 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	}
 
 	/**
-	 * Creates either an {@link JsonMap} or {@link LinkedHashMap} depending on whether the key type is
-	 * String or something else.
+	 * Creates a generic {@link Map} for parser-driven map population, choosing the map type based on the key type.
+	 *
+	 * <p>
+	 * Returns the flavored {@link MarshalledMap} subclass when the key type is String (via {@link #newGenericMap()}),
+	 * otherwise returns a plain {@link LinkedHashMap} (since {@link MarshalledMap} is keyed by String).
+	 *
+	 * <p>
+	 * Per-marshaller parser sessions override {@link #newGenericMap()} (not this method) to return their flavored
+	 * {@code XMap} variant.
 	 *
 	 * @param mapMeta The metadata of the map to create.
 	 * @return A new map.
 	 */
 	protected Map newGenericMap(ClassMeta mapMeta) {
 		var k = mapMeta.getKeyType();
-		return (k == null || k.isString()) ? new JsonMap(this) : map();
+		return (k == null || k.isString()) ? newGenericMap() : map();
+	}
+
+	/**
+	 * Creates a string-keyed generic map for parser-driven map population.
+	 *
+	 * <p>
+	 * This is the main factory hook overridden by per-marshaller parser sessions to return their flavored
+	 * {@code XMap} variant (for example, {@link org.apache.juneau.json.JsonParserSession} returns
+	 * {@link JsonMap}; {@link org.apache.juneau.json5.Json5ParserSession} returns
+	 * {@link org.apache.juneau.json5.Json5Map}).
+	 *
+	 * <p>
+	 * As of Phase C of the TODO-34 refactor, the base implementation returns the neutral
+	 * {@link MarshalledMap}. Only {@link org.apache.juneau.json.JsonParserSession} and
+	 * {@link org.apache.juneau.json5.Json5ParserSession} actually override this hook today; every other
+	 * parser session (HTML, URL-encoding, XML, MessagePack, CSV, etc.) inherits the base and therefore
+	 * produces {@link MarshalledMap} instances during generic parsing. Phase D will fan out per-language
+	 * {@code XMap} / {@code XList} variants from those parsers as well.
+	 *
+	 * @return A new map.
+	 */
+	protected MarshalledMap newGenericMap() {
+		return new MarshalledMap(this);
+	}
+
+	/**
+	 * Creates a generic list for parser-driven list population.
+	 *
+	 * <p>
+	 * Per-marshaller parser sessions override this hook to return their flavored {@code XList} variant
+	 * (for example, {@link org.apache.juneau.json.JsonParserSession} returns {@link JsonList};
+	 * {@link org.apache.juneau.json5.Json5ParserSession} returns
+	 * {@link org.apache.juneau.json5.Json5List}).
+	 *
+	 * <p>
+	 * As of Phase C of the TODO-34 refactor, the base implementation returns the neutral
+	 * {@link MarshalledList}. Only {@link org.apache.juneau.json.JsonParserSession} and
+	 * {@link org.apache.juneau.json5.Json5ParserSession} actually override this hook today; every other
+	 * parser session inherits the base and therefore produces {@link MarshalledList} instances during
+	 * generic parsing. Phase D will fan out per-language {@code XList} variants from those parsers as
+	 * well.
+	 *
+	 * @return A new list.
+	 */
+	protected MarshalledList newGenericList() {
+		return new MarshalledList(this);
 	}
 
 	@Override /* Overridden from ContextSession */
@@ -1335,36 +1388,45 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 
 	/**
 	 * Bridge implementation of {@link BeanSession#parseToMap(CharSequence)} that delegates to
-	 * {@link JsonMap#ofJson(CharSequence)} paired with this session.
+	 * {@link org.apache.juneau.json5.Json5Map#ofJson5(CharSequence)} paired with this session.
 	 *
 	 * <p>
 	 * Used by {@link BeanPropertyMeta#setPropertyValue} to parse a {@link CharSequence} into a {@link Map} when
 	 * the property is map-typed.  Lifted out of {@link BeanPropertyMeta} so the bean-modeling layer no longer
 	 * references the marshalling-side JSON parser.
 	 *
+	 * <p>
+	 * Uses {@link org.apache.juneau.json5.Json5Map} so that historic JSON5-form inputs (e.g. annotation default
+	 * values written as <c>{a:'b'}</c>) continue to parse — the strict-JSON {@link JsonMap} retargeting in v9.5
+	 * would otherwise break those call sites.
+	 *
 	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
-	 * @return The parsed {@link JsonMap}.
+	 * @return The parsed {@link org.apache.juneau.json5.Json5Map}.
 	 */
 	@Override /* BeanSession */
 	public final java.util.Map<?,?> parseToMap(CharSequence value) {
-		return org.apache.juneau.collections.JsonMap.ofJson(value).session(this);
+		return org.apache.juneau.json5.Json5Map.ofJson5(value).session(this);
 	}
 
 	/**
 	 * Bridge implementation of {@link BeanSession#parseToList(CharSequence)} that delegates to
-	 * {@link JsonList#JsonList(CharSequence)} paired with this session.
+	 * {@link org.apache.juneau.json5.Json5List#Json5List(CharSequence)} paired with this session.
 	 *
 	 * <p>
 	 * Used by {@link BeanPropertyMeta#setPropertyValue} to parse a {@link CharSequence} into a {@link Collection}
 	 * when the property is collection-typed.  Lifted out of {@link BeanPropertyMeta} so the bean-modeling layer
 	 * no longer references the marshalling-side JSON parser.
 	 *
+	 * <p>
+	 * Uses {@link org.apache.juneau.json5.Json5List} for the same back-compat reasons as
+	 * {@link #parseToMap(CharSequence)}.
+	 *
 	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
-	 * @return The parsed {@link JsonList}.
+	 * @return The parsed {@link org.apache.juneau.json5.Json5List}.
 	 */
 	@Override /* BeanSession */
 	public final java.util.Collection<?> parseToList(CharSequence value) {
-		return new org.apache.juneau.collections.JsonList(value).setBeanSession(this);
+		return new org.apache.juneau.json5.Json5List(value).setBeanSession(this);
 	}
 
 }

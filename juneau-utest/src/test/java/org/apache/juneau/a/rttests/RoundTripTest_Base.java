@@ -175,9 +175,9 @@ public abstract class RoundTripTest_Base extends TestBase {
 			.serializer(ParquetSerializer.create().addBeanTypes())
 			.parser(ParquetParser.create())
 			// Parquet skip conditions for inherent format limitations:
-			// - JsonList/JsonMap: static schema vs mixed types
+			// - MarshalledList/MarshalledMap (and flavored subclasses): static schema vs mixed types
 			// - 2D arrays: Parquet has no nested array support
-			.skipIf(o -> o instanceof JsonList || o instanceof JsonMap
+			.skipIf(o -> o instanceof MarshalledList || o instanceof MarshalledMap
 				|| (o != null && isParquetIncompatibleBeanOrCollection(o))
 				|| (o != null && o.getClass().isArray() && o.getClass().getComponentType().isArray()))
 			.build(),

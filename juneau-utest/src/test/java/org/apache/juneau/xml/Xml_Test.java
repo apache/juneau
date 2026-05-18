@@ -82,11 +82,11 @@ class Xml_Test extends TestBase {
 			</object>
 			""";
 
-		var m = (JsonMap) XmlParser.DEFAULT.parse(xml1, Object.class);
+		MarshalledMap m = (MarshalledMap) XmlParser.DEFAULT.parse(xml1, Object.class);
 		var json2 = Json5Serializer.create().ws().keepNullProperties().build().serialize(m);
 		assertEquals(json1, json2);
 
-		m = (JsonMap) Json5Parser.DEFAULT.parse(json1, Object.class);
+		m = (MarshalledMap) Json5Parser.DEFAULT.parse(json1, Object.class);
 		var xml2 = XmlSerializer.create().sq().ws()
 			.keepNullProperties()
 			.build()
@@ -138,7 +138,7 @@ class Xml_Test extends TestBase {
 			</object>
 			""";
 
-		var m = (JsonMap) Json5Parser.DEFAULT.parse(json1, Object.class);
+		var m = (MarshalledMap) Json5Parser.DEFAULT.parse(json1, Object.class);
 		var r = XmlSerializer.create().ns().sq().ws()
 			.addNamespaceUrisToRoot()
 			.defaultNamespace(Namespace.of("http://www.apache.org"))

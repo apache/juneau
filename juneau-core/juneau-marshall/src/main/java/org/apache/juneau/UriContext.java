@@ -24,7 +24,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.function.Supplier;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
@@ -159,7 +159,7 @@ public class UriContext {
 	 * 	If input string is not a valid JSON object.
 	 */
 	public UriContext(String s) throws ParseException {
-		var m = JsonMap.ofJson(s);
+		var m = Json5Map.ofJson5(s);
 		this.authority = nullIfEmpty(trimSlashes(m.getString(PROP_authority)));
 		this.contextRoot = nullIfEmpty(trimSlashes(m.getString(PROP_contextRoot)));
 		this.servletPath = nullIfEmpty(trimSlashes(m.getString(PROP_servletPath)));

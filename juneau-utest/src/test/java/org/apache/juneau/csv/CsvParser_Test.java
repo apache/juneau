@@ -197,15 +197,15 @@ class CsvParser_Test extends TestBase {
 	@Test void g01_parseAsObject_multipleRows() throws Exception {
 		var csv = "a,b\n1,2\n3,4\n";
 		var r = CsvParser.DEFAULT.parse(csv, Object.class);
-		assertInstanceOf(JsonList.class, r);
-		assertEquals(2, ((JsonList) r).size());
+		assertInstanceOf(MarshalledList.class, r);
+		assertEquals(2, ((MarshalledList) r).size());
 	}
 
 	@Test void g02_parseAsObject_singleRow() throws Exception {
 		var csv = "a,b\n1,2\n";
 		var r = CsvParser.DEFAULT.parse(csv, Object.class);
-		assertInstanceOf(JsonMap.class, r);
-		var m = (JsonMap) r;
+		assertInstanceOf(MarshalledMap.class, r);
+		var m = (MarshalledMap) r;
 		assertEquals("1", m.get("a"));
 		assertEquals("2", m.get("b"));
 	}

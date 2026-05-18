@@ -50,7 +50,7 @@ class MarkdownParser_Test {
 	@Test
 	void a03_parseKeyValueTable_toObject() throws Exception {
 		var md = "| Key | Value |\n|---|---|\n| foo | bar |";
-		var r = (JsonMap) MarkdownParser.DEFAULT.parse(md, Object.class);
+		var r = (MarshalledMap) MarkdownParser.DEFAULT.parse(md, Object.class);
 		assertEquals("bar", r.get("foo"));
 	}
 
@@ -177,21 +177,21 @@ class MarkdownParser_Test {
 
 	@Test void f01_autoDetect_integer() throws Exception {
 		var md = "| Property | Value |\n|---|---|\n| count | 42 |";
-		var r = (JsonMap) MarkdownParser.DEFAULT.parse(md, Object.class);
+		var r = (MarshalledMap) MarkdownParser.DEFAULT.parse(md, Object.class);
 		assertInstanceOf(Integer.class, r.get("count"));
 		assertEquals(42, r.get("count"));
 	}
 
 	@Test void f02_autoDetect_boolean() throws Exception {
 		var md = "| Property | Value |\n|---|---|\n| flag | true |";
-		var r = (JsonMap) MarkdownParser.DEFAULT.parse(md, Object.class);
+		var r = (MarshalledMap) MarkdownParser.DEFAULT.parse(md, Object.class);
 		assertInstanceOf(Boolean.class, r.get("flag"));
 		assertEquals(Boolean.TRUE, r.get("flag"));
 	}
 
 	@Test void f03_autoDetect_string() throws Exception {
 		var md = "| Property | Value |\n|---|---|\n| name | Alice |";
-		var r = (JsonMap) MarkdownParser.DEFAULT.parse(md, Object.class);
+		var r = (MarshalledMap) MarkdownParser.DEFAULT.parse(md, Object.class);
 		assertInstanceOf(String.class, r.get("name"));
 		assertEquals("Alice", r.get("name"));
 	}

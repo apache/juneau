@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.ExecutableException;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -101,7 +100,7 @@ public class JsonlParserSession extends JsonParserSession {
 
 			if (type.isCollectionOrArray()) {
 				var elementType = type.getElementType();
-				var results = new JsonList(this);
+				var results = newGenericList();
 				var br = new BufferedReader(r);
 				String line;
 				while ((line = br.readLine()) != null) {

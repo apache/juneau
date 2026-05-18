@@ -161,7 +161,7 @@ public class BsonParserSession extends InputStreamParserSession {
 				map.put(key, value);
 			}
 			is.readDocumentTerminator();
-			var raw = map instanceof JsonMap jsonmap ? cast(jsonmap, pMeta, eType) : map;
+			var raw = map instanceof MarshalledMap mm ? cast(mm, pMeta, eType) : map;
 			// Convert JsonMap to target map type (TreeMap, LinkedHashMap, etc.) when needed
 			if (eType.isMap() && raw instanceof Map mr && !eType.inner().isInstance(raw))
 				result = convertToMemberType(null, mr, eType);
@@ -198,7 +198,7 @@ public class BsonParserSession extends InputStreamParserSession {
 		} else {
 			// Fallback: read document elements. Handles scalar, array, Optional roots (all wrapped as {"value":x}).
 			// Do NOT call parseArray here - at root the next bytes are type+name of first element, not array doc.
-			var map = new JsonMap(this);
+			var map = newGenericMap();
 			while (!is.isDocumentEnd()) {
 				var et = is.readElementType();
 				var name = is.readElementName();
@@ -266,10 +266,10 @@ public class BsonParserSession extends InputStreamParserSession {
 		// Only use sType.newInstance() for actual Collection types (List, Set, etc.).
 		Collection coll;
 		if (sType.isArray() || sType.isArgs() || sType.inner().isArray())
-			coll = new JsonList(this);
+			coll = newGenericList();
 		else {
 			var instance = sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : null;
-			coll = (instance instanceof Collection c) ? c : new JsonList(this);
+			coll = (instance instanceof Collection c) ? c : newGenericList();
 		}
 		var elementType = def(sType.getElementType(), object());
 

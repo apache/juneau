@@ -138,7 +138,7 @@ class Json_Test extends TestBase{
 	// Indentation
 	//====================================================================================================
 	@Test void a04_indentation() throws Exception {
-		var m = JsonMap.ofJson("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
+		var m = Json5Map.ofJson5("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
 		var e = """
 			{
 				J: {

@@ -238,10 +238,10 @@ class BeanMap_Test extends TestBase {
 		);
 
 		// Non-initialized map fields.
-		m.put("m1", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("hm1", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("jm1", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("tm1", JsonMap.ofJson("{foo:'bar'}"));
+		m.put("m1", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("hm1", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("jm1", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("tm1", JsonMap.ofJson("{\"foo\":\"bar\"}"));
 
 		// tm1 should be initialized with TreeMap, since it's not a superclass of JsonMap.
 		// The rest are proper superclasses of JsonMap
@@ -256,10 +256,10 @@ class BeanMap_Test extends TestBase {
 		m.put("al2", JsonList.ofJson("[1,2,3]"));
 		m.put("ll2", JsonList.ofJson("[1,2,3]"));
 		m.put("c2", JsonList.ofJson("[1,2,3]"));
-		m.put("m2", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("hm2", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("tm2", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("jm2", JsonMap.ofJson("{foo:'bar'}"));
+		m.put("m2", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("hm2", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("tm2", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("jm2", JsonMap.ofJson("{\"foo\":\"bar\"}"));
 		m.put("jl2", JsonList.ofJson("[1,2,3]"));
 
 		assertBean(
@@ -313,10 +313,10 @@ class BeanMap_Test extends TestBase {
 		);
 
 		// Non-initialized map fields.
-		m.put("m1", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("hm1", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("jm1", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("tm1", JsonMap.ofJson("{foo:'bar'}"));
+		m.put("m1", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("hm1", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("jm1", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("tm1", JsonMap.ofJson("{\"foo\":\"bar\"}"));
 
 		// tm1 should be initialized with TreeMap, since it's not a superclass of JsonMap.
 		// The rest are proper superclasses of JsonMap
@@ -331,10 +331,10 @@ class BeanMap_Test extends TestBase {
 		m.put("al2", JsonList.ofJson("[1,2,3]"));
 		m.put("ll2", JsonList.ofJson("[1,2,3]"));
 		m.put("c2", JsonList.ofJson("[1,2,3]"));
-		m.put("m2", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("hm2", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("tm2", JsonMap.ofJson("{foo:'bar'}"));
-		m.put("jm2", JsonMap.ofJson("{foo:'bar'}"));
+		m.put("m2", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("hm2", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("tm2", JsonMap.ofJson("{\"foo\":\"bar\"}"));
+		m.put("jm2", JsonMap.ofJson("{\"foo\":\"bar\"}"));
 		m.put("jl2", JsonList.ofJson("[1,2,3]"));
 
 		assertBean(
@@ -424,7 +424,7 @@ class BeanMap_Test extends TestBase {
 	@Test void a05_arrayProperties() {
 		var t = new D1();
 		var m = bc.toBeanMap(t);
-		m.put("b", JsonMap.ofJson("{s:'foo'}"));
+		m.put("b", JsonMap.ofJson("{\"s\":\"foo\"}"));
 		assertNotNull(t.b);
 		assertEquals("foo", t.b.s);
 
@@ -467,7 +467,7 @@ class BeanMap_Test extends TestBase {
 	@Test void a06_arrayProperties_usingConfig() {
 		var t = new D1c();
 		var m = bc.toBeanMap(t);
-		m.put("b", JsonMap.ofJson("{s:'foo'}"));
+		m.put("b", JsonMap.ofJson("{\"s\":\"foo\"}"));
 		assertNotNull(t.b);
 		assertBean(t.b, "s", "foo");
 
@@ -517,8 +517,8 @@ class BeanMap_Test extends TestBase {
 	@Test void a07_arrayPropertiesInJsonList() {
 		var t = new E();
 		var m = bc.toBeanMap(t);
-		m.put("s", JsonList.ofJson("['foo']"));
-		m.put("s2", JsonList.ofJson("[['foo']]"));
+		m.put("s", JsonList.ofJson("[\"foo\"]"));
+		m.put("s2", JsonList.ofJson("[[\"foo\"]]"));
 		m.put("i", JsonList.ofJson("[1,2,3]"));
 		m.put("i2", JsonList.ofJson("[[1,2,3],[4,5,6]]"));
 		assertEquals("{s:['foo'],s2:[['foo']],i:[1,2,3],i2:[[1,2,3],[4,5,6]]}", Json5Serializer.DEFAULT.serialize(t));
@@ -1356,7 +1356,7 @@ class BeanMap_Test extends TestBase {
 
 		l = (List)m.cast(bc.getClassMeta(List.class, Map.class));
 		assertTrue(l instanceof LinkedList);
-		assertTrue(l.get(0) instanceof JsonMap);
+		assertTrue(l.get(0) instanceof Json5Map);
 		assertEquals(1, ((Map)l.get(0)).get("f1"));
 	}
 

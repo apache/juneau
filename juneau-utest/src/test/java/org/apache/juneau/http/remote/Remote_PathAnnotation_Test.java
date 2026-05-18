@@ -29,9 +29,9 @@ import org.apache.http.*;
 import org.apache.http.client.config.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -160,7 +160,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 	@Rest
 	public static class C {
 		@RestOp(path="/a/{x}")
-		public String get(@Path("*") JsonMap m) {
+		public String get(@Path("*") Json5Map m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -391,7 +391,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 	@Rest
 	public static class D {
 		@RestOp(path="/{x}")
-		public String get(@Path("*") JsonMap m) {
+		public String get(@Path("*") Json5Map m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -434,7 +434,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 	@Rest
 	public static class E {
 		@RestOp(path="/{x}")
-		public String get(@Path("*") JsonMap m) {
+		public String get(@Path("*") Json5Map m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -480,7 +480,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 	@Rest
 	public static class F {
 		@RestOp(path="/{x}")
-		public String get(@Path("*") JsonMap m) {
+		public String get(@Path("*") Json5Map m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -561,7 +561,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 	@Rest
 	public static class H {
 		@RestOp(path="/{x}")
-		public String get(@Path("*") JsonMap m) {
+		public String get(@Path("*") Json5Map m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}

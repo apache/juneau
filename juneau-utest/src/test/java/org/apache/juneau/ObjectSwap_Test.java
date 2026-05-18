@@ -18,7 +18,6 @@ package org.apache.juneau;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -40,7 +39,7 @@ class ObjectSwap_Test extends TestBase {
 		r = p.parse(r, String.class);
 		assertEquals("foobar", r);
 
-		var m = JsonMap.ofJson("{foo:'bar'}");
+		var m = Json5Map.ofJson5("{foo:'bar'}");
 		r = s.serialize(m);
 		assertEquals("{xfoox:'xbarx'}", r);
 	}

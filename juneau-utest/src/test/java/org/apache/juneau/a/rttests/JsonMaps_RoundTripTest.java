@@ -42,7 +42,7 @@ class JsonMaps_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a01_basic(RoundTrip_Tester t) throws Exception {
-		var x1 = new A(JsonMap.ofJson("{f1:'a',f2:2}"));
+		var x1 = new A(JsonMap.ofJson("{\"f1\":\"a\",\"f2\":2}"));
 		x1 = t.roundTrip(x1, A.class);
 		assertBean(x1, "f1,f2", "a,2");
 
@@ -50,11 +50,11 @@ class JsonMaps_RoundTripTest extends RoundTripTest_Base {
 		x2 = t.roundTrip(x2, A[].class);
 		assertBean(x2, "length,#{f1,f2}", "1,[{a,2}]");
 
-		var x3 = l(new A(JsonMap.ofJson("{f1:'a',f2:2}")));
+		var x3 = l(new A(JsonMap.ofJson("{\"f1\":\"a\",\"f2\":2}")));
 		x3 = t.roundTrip(x3, List.class, A.class);
 		assertBean(x3, "size,0{f1,f2}", "1,{a,2}");
 
-		var x4 = m("a",new A(JsonMap.ofJson("{f1:'a',f2:2}")));
+		var x4 = m("a",new A(JsonMap.ofJson("{\"f1\":\"a\",\"f2\":2}")));
 		x4 = t.roundTrip(x4, Map.class, String.class, A.class);
 		assertBean(x4, "size,a{f1,f2}", "1,{a,2}");
 	}

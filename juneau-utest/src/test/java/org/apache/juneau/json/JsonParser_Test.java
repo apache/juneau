@@ -41,7 +41,7 @@ class JsonParser_Test extends TestBase {
 
 	@Test void a02_nonExistentAttribute() throws Exception {
 		var json = "{foo:,bar:}";
-		var m = Json5Parser.DEFAULT.parse(json, JsonMap.class);
+		var m = Json5Parser.DEFAULT.parse(json, Json5Map.class);
 		assertEquals("{foo:null,bar:null}", m.toString());
 	}
 

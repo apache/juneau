@@ -443,9 +443,9 @@ public class HtmlParserSession extends XmlParserSession {
 
 			} else if (typeName.equals(TAG_array)) {
 				if (sType.isObject())
-					o = parseTableIntoCollection(r, (Collection)new JsonList(this), sType, pMeta);
+					o = parseTableIntoCollection(r, (Collection)newGenericList(), sType, pMeta);
 				else if (sType.isCollection())
-					o = parseTableIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new JsonList(this)), sType, pMeta);
+					o = parseTableIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericList()), sType, pMeta);
 				else if (sType.isArray() || sType.isArgs()) {
 					var l = (ArrayList)parseTableIntoCollection(r, list(), sType, pMeta);
 					o = toArray(sType, l);
@@ -464,9 +464,9 @@ public class HtmlParserSession extends XmlParserSession {
 				sType = eType = cm;
 
 			if (sType.isObject())
-				o = parseIntoCollection(r, new JsonList(this), sType, pMeta);
+				o = parseIntoCollection(r, newGenericList(), sType, pMeta);
 			else if (sType.isCollection() || sType.isObject())
-				o = parseIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new JsonList(this)), sType, pMeta);
+				o = parseIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericList()), sType, pMeta);
 			else if (sType.isArray() || sType.isArgs())
 				o = toArray(sType, parseIntoCollection(r, list(), sType, pMeta));
 			else
@@ -685,11 +685,11 @@ public class HtmlParserSession extends XmlParserSession {
 					}
 				}
 				if (nn(m) && nn(c)) {
-					var m2 = (m instanceof JsonMap o3 ? o3 : new JsonMap(m).session(this));
+					var m2 = (m instanceof MarshalledMap mm ? mm : new JsonMap(m).session(this));
 					m2.put(getBeanTypePropertyName(type.getElementType()), c);
 					l.add((E)cast(m2, pMeta, elementType));
 				} else {
-					if (m instanceof JsonMap m2)
+					if (m instanceof MarshalledMap m2)
 						l.add((E)convertToType(m2, elementType));
 					else
 						l.add((E)m);

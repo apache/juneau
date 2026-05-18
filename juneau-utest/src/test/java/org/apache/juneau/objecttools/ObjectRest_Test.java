@@ -39,11 +39,11 @@ class ObjectRest_Test extends TestBase {
 	//====================================================================================================
 	@Test void a01_basic() {
 
-		var model = ObjectRest.create(new JsonMap()); // An empty model.
+		var model = ObjectRest.create(new Json5Map()); // An empty model.
 
 		// Do a PUT
-		model.put("A", new JsonMap());
-		model.put("A/B", new JsonMap());
+		model.put("A", new Json5Map());
+		model.put("A/B", new Json5Map());
 		model.put("A/B/C", "A new string");
 		assertEquals("{A:{B:{C:'A new string'}}}", model.toString());
 
@@ -65,7 +65,7 @@ class ObjectRest_Test extends TestBase {
 	// testBeans
 	//====================================================================================================
 	@Test void b01_beans() throws Exception {
-		var model = ObjectRest.create(new JsonMap());
+		var model = ObjectRest.create(new Json5Map());
 
 		// Java beans.
 		var p = new Person("some name", 123,
@@ -163,7 +163,7 @@ class ObjectRest_Test extends TestBase {
 
 		// Make sure we can get non-existent branches without throwing any exceptions.
 		// get() method should just return null.
-		model = ObjectRest.create(new JsonMap());
+		model = ObjectRest.create(new Json5Map());
 		var o = model.get("xxx");
 		assertEquals("null", (""+o));
 
@@ -174,17 +174,17 @@ class ObjectRest_Test extends TestBase {
 		assertEquals("{}", s);
 
 		// Make sure doing a PUT against "" or "/" replaces the root object.
-		var m2 = JsonMap.ofJson("{x:1}");
+		var m2 = Json5Map.ofJson5("{x:1}");
 		model.put("", m2);
 		s = model.get("").toString();
 		assertEquals("{x:1}", s);
-		m2 = JsonMap.ofJson("{x:2}");
+		m2 = Json5Map.ofJson5("{x:2}");
 		model.put("/", m2);
 		s = model.get("").toString();
 		assertEquals("{x:2}", s);
 
 		// Make sure doing a POST against "" or "/" adds to the root object.
-		model = ObjectRest.create(new JsonList());
+		model = ObjectRest.create(new Json5List());
 		model.post("", Integer.valueOf(1));
 		model.post("/", Integer.valueOf(2));
 		s = model.get("").toString();
@@ -325,8 +325,10 @@ class ObjectRest_Test extends TestBase {
 	//====================================================================================================
 	@Test void f01_getMethods() throws Exception {
 		var model = ObjectRest.create(new A());
-		var l = JsonList.ofJson("[{a:'b'}]");
-		var m = JsonMap.ofJson("{a:'b'}");
+		var l = Json5List.ofJson5("[{a:'b'}]");
+		var m = Json5Map.ofJson5("{a:'b'}");
+		var jm = new JsonMap(m);
+		var jl = new JsonList(l);
 
 		assertMapped(model, ObjectRest::get,
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
@@ -418,7 +420,7 @@ class ObjectRest_Test extends TestBase {
 
 		BiFunction<ObjectRest,String,Object> f4 = (r,p) -> {
 			try {
-				return r.getJsonMap(p, m);
+				return r.getJsonMap(p, jm);
 			} catch (Exception e) {
 				return e.getClass().getSimpleName();
 			}
@@ -464,17 +466,17 @@ class ObjectRest_Test extends TestBase {
 		assertNull(model.getJsonList("f7"));
 		assertNull(model.getJsonList("f8"));
 
-		assertEquals("[{a:'b'}]", model.getJsonList("f1", l).toString());
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f2", l));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f3", l));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f4", l));
-		assertEquals("[{a:'b'}]", model.getJsonList("f2a", l).toString());
-		assertEquals("[{a:'b'}]", model.getJsonList("f3a", l).toString());
-		assertEquals("[{a:'b'}]", model.getJsonList("f4a", l).toString());
-		assertEquals("[{a:'b'}]", model.getJsonList("f5", l).toString());
-		assertEquals("[{a:'b'}]", model.getJsonList("f6", l).toString());
-		assertEquals("[{a:'b'}]", model.getJsonList("f7", l).toString());
-		assertEquals("[{a:'b'}]", model.getJsonList("f8", l).toString());
+		assertEquals("[{\"a\":\"b\"}]", model.getJsonList("f1", jl).toString());
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f2", jl));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f3", jl));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f4", jl));
+		assertEquals("[{\"a\":\"b\"}]", model.getJsonList("f2a", jl).toString());
+		assertEquals("[{\"a\":\"b\"}]", model.getJsonList("f3a", jl).toString());
+		assertEquals("[{\"a\":\"b\"}]", model.getJsonList("f4a", jl).toString());
+		assertEquals("[{\"a\":\"b\"}]", model.getJsonList("f5", jl).toString());
+		assertEquals("[{\"a\":\"b\"}]", model.getJsonList("f6", jl).toString());
+		assertEquals("[{\"a\":\"b\"}]", model.getJsonList("f7", jl).toString());
+		assertEquals("[{\"a\":\"b\"}]", model.getJsonList("f8", jl).toString());
 
 		((A)model.getRootObject()).init();
 
@@ -629,22 +631,22 @@ class ObjectRest_Test extends TestBase {
 		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f2a"));
 		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f3a"));
 		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f4a"));
-		assertEquals("{f5a:'a'}", model.getJsonMap("f5").toString());
+		assertEquals("{\"f5a\":\"a\"}", model.getJsonMap("f5").toString());
 		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f6"));
-		assertEquals("{f5a:'a'}", model.getJsonMap("f7").toString());
+		assertEquals("{\"f5a\":\"a\"}", model.getJsonMap("f7").toString());
 		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f8"));
 
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f1", m));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f2", m));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f3", m));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f4", m));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f2a", m));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f3a", m));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f4a", m));
-		assertEquals("{f5a:'a'}", model.getJsonMap("f5", m).toString());
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f6", m));
-		assertEquals("{f5a:'a'}", model.getJsonMap("f7", m).toString());
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f8", m));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f1", jm));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f2", jm));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f3", jm));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f4", jm));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f2a", jm));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f3a", jm));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f4a", jm));
+		assertEquals("{\"f5a\":\"a\"}", model.getJsonMap("f5", jm).toString());
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f6", jm));
+		assertEquals("{\"f5a\":\"a\"}", model.getJsonMap("f7", jm).toString());
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonMap("f8", jm));
 
 		assertThrows(InvalidDataConversionException.class, ()->model.getList("f1"));
 		assertThrows(InvalidDataConversionException.class, ()->model.getList("f2"));
@@ -653,9 +655,9 @@ class ObjectRest_Test extends TestBase {
 		assertThrows(InvalidDataConversionException.class, ()->model.getList("f2a"));
 		assertThrows(InvalidDataConversionException.class, ()->model.getList("f3a"));
 		assertThrows(InvalidDataConversionException.class, ()->model.getList("f4a"));
-		assertEquals("[{f5a:'a'}]", model.getList("f5").toString());
+		assertEquals("[{\"f5a\":\"a\"}]", model.getList("f5").toString());
 		assertEquals("[{f6a:'a'}]", model.getList("f6").toString());
-		assertEquals("[{f5a:'a'}]", model.getList("f7").toString());
+		assertEquals("[{\"f5a\":\"a\"}]", model.getList("f7").toString());
 		assertEquals("[{f6a:'a'}]", model.getList("f8").toString());
 
 		assertThrows(InvalidDataConversionException.class, ()->model.getList("f1", l));
@@ -665,9 +667,9 @@ class ObjectRest_Test extends TestBase {
 		assertThrows(InvalidDataConversionException.class, ()->model.getList("f2a", l));
 		assertThrows(InvalidDataConversionException.class, ()->model.getList("f3a", l));
 		assertThrows(InvalidDataConversionException.class, ()->model.getList("f4a", l));
-		assertEquals("[{f5a:'a'}]", model.getList("f5", l).toString());
+		assertEquals("[{\"f5a\":\"a\"}]", model.getList("f5", l).toString());
 		assertEquals("[{f6a:'a'}]", model.getList("f6", l).toString());
-		assertEquals("[{f5a:'a'}]", model.getList("f7", l).toString());
+		assertEquals("[{\"f5a\":\"a\"}]", model.getList("f7", l).toString());
 		assertEquals("[{f6a:'a'}]", model.getList("f8", l).toString());
 
 		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f1"));
@@ -677,22 +679,22 @@ class ObjectRest_Test extends TestBase {
 		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f2a"));
 		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f3a"));
 		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f4a"));
-		assertEquals("[{f5a:'a'}]", model.getJsonList("f5").toString());
-		assertEquals("[{f6a:'a'}]", model.getJsonList("f6").toString());
-		assertEquals("[{f5a:'a'}]", model.getJsonList("f7").toString());
-		assertEquals("[{f6a:'a'}]", model.getJsonList("f8").toString());
+		assertEquals("[{\"f5a\":\"a\"}]", model.getJsonList("f5").toString());
+		assertEquals("[{\"f6a\":\"a\"}]", model.getJsonList("f6").toString());
+		assertEquals("[{\"f5a\":\"a\"}]", model.getJsonList("f7").toString());
+		assertEquals("[{\"f6a\":\"a\"}]", model.getJsonList("f8").toString());
 
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f1", l));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f2", l));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f3", l));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f4", l));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f2a", l));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f3a", l));
-		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f4a", l));
-		assertEquals("[{f5a:'a'}]", model.getJsonList("f5", l).toString());
-		assertEquals("[{f6a:'a'}]", model.getJsonList("f6", l).toString());
-		assertEquals("[{f5a:'a'}]", model.getJsonList("f7", l).toString());
-		assertEquals("[{f6a:'a'}]", model.getJsonList("f8", l).toString());
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f1", jl));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f2", jl));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f3", jl));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f4", jl));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f2a", jl));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f3a", jl));
+		assertThrows(InvalidDataConversionException.class, ()->model.getJsonList("f4a", jl));
+		assertEquals("[{\"f5a\":\"a\"}]", model.getJsonList("f5", jl).toString());
+		assertEquals("[{\"f6a\":\"a\"}]", model.getJsonList("f6", jl).toString());
+		assertEquals("[{\"f5a\":\"a\"}]", model.getJsonList("f7", jl).toString());
+		assertEquals("[{\"f6a\":\"a\"}]", model.getJsonList("f8", jl).toString());
 	}
 
 	public static class A {
@@ -705,8 +707,8 @@ class ObjectRest_Test extends TestBase {
 		public Boolean f4a;
 		public Map f5;
 		public List f6;
-		public JsonMap f7;
-		public JsonList f8;
+		public Json5Map f7;
+		public Json5List f8;
 
 		public A init() {
 			f1 = "1";
@@ -717,10 +719,10 @@ class ObjectRest_Test extends TestBase {
 			f3a = 3L;
 			f4a = true;
 			try {
-				f5 = JsonMap.ofJson("{f5a:'a'}");
-				f6 = JsonList.ofJson("[{f6a:'a'}]");
-				f7 = JsonMap.ofJson("{f5a:'a'}");
-				f8 = JsonList.ofJson("[{f6a:'a'}]");
+				f5 = Json5Map.ofJson5("{f5a:'a'}");
+				f6 = Json5List.ofJson5("[{f6a:'a'}]");
+				f7 = Json5Map.ofJson5("{f5a:'a'}");
+				f8 = Json5List.ofJson5("[{f6a:'a'}]");
 			} catch (ParseException e) {
 				throw new RuntimeException(e);
 			}

@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
@@ -38,7 +38,7 @@ class Remote_RequestAnnotation_Test extends TestBase {
 	public static class A {
 		@RestOp(path="/{x}")
 		public String post(@Content Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			return JsonMap.of(
+			return Json5Map.of(
 				"body",read(r),
 				"header",h,
 				"query",q,
@@ -86,7 +86,7 @@ class Remote_RequestAnnotation_Test extends TestBase {
 	public static class B {
 		@RestOp(path="/{x}")
 		public String post(@Content Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			return JsonMap.of(
+			return Json5Map.of(
 				"body",read(r),
 				"header",h,
 				"query",q,
@@ -141,7 +141,7 @@ class Remote_RequestAnnotation_Test extends TestBase {
 	public static class C {
 		@RestOp(path="/{x}")
 		public String post(@Content Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			return JsonMap.of(
+			return Json5Map.of(
 				"body",read(r),
 				"header",h,
 				"query",q,
@@ -196,7 +196,7 @@ class Remote_RequestAnnotation_Test extends TestBase {
 	public static class D {
 		@RestOp(path="/{x}")
 		public String post(@Content Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			return JsonMap.of(
+			return Json5Map.of(
 				"body",read(r),
 				"header",h,
 				"query",q,
@@ -243,7 +243,7 @@ class Remote_RequestAnnotation_Test extends TestBase {
 	public static class E {
 		@RestOp(path="/{x}")
 		public String post(@Content Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			return JsonMap.of(
+			return Json5Map.of(
 				"body",read(r),
 				"header",h,
 				"query",q,

@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.bean.*;
 
 /**
@@ -41,12 +42,13 @@ class Generics_RoundTripTest extends RoundTripTest_Base {
 			return;
 
 		// Unbound type variables should be interpreted as Object.
-		// During parsing, these become JsonMaps.
+		// During parsing, these become a MarshalledMap subclass — JsonMap, Json5Map, or another
+		// per-marshaller flavor — depending on which parser is in play.
 		var x = new Pair<Object,Object>(new Source().init(), new Target().init());
 		x = t.roundTrip(x);
 		assertBean(x, "s{s1},t{t1}", "{a1},{b1}");
-		assertEquals("JsonMap", x.getS().getClass().getSimpleName());
-		assertEquals("JsonMap", x.getT().getClass().getSimpleName());
+		assertTrue(x.getS() instanceof MarshalledMap, "Expected MarshalledMap subclass for s, got " + x.getS().getClass().getSimpleName());
+		assertTrue(x.getT() instanceof MarshalledMap, "Expected MarshalledMap subclass for t, got " + x.getT().getClass().getSimpleName());
 
 		// If you specify a concrete class, the type variables become bound and
 		// the property types correctly resolve.

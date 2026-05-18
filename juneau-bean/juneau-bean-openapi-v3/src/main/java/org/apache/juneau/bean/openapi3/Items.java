@@ -778,8 +778,8 @@ public class Items extends OpenApiElement {
 
 	/* Resolve references in extra attributes */
 	private Object resolveRefs(Object o, OpenApi openApi, Deque<String> refStack, int maxDepth) {
-		if (o instanceof JsonMap o2) {
-			var ref2 = o2.get("$ref");
+		if (o instanceof MarshalledMap mm) {
+			var ref2 = mm.get("$ref");
 			if (ref2 instanceof CharSequence) {
 				var sref = ref2.toString();
 				if (refStack.contains(sref) || refStack.size() >= maxDepth)
@@ -790,11 +790,11 @@ public class Items extends OpenApiElement {
 				refStack.removeLast();
 				return o3;
 			}
-			for (var e : o2.entrySet())
+			for (var e : mm.entrySet())
 				e.setValue(resolveRefs(e.getValue(), openApi, refStack, maxDepth));
 		}
-		if (o instanceof JsonList o2) // HTT - requires JsonList-typed extra property for resolveRefs
-			for (var li = o2.listIterator(); li.hasNext();)
+		if (o instanceof MarshalledList ml)
+			for (var li = ml.listIterator(); li.hasNext();)
 				li.set(resolveRefs(li.next(), openApi, refStack, maxDepth));
 		return o;
 	}

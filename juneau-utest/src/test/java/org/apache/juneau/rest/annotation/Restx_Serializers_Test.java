@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.annotation;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
@@ -151,19 +151,19 @@ class Restx_Serializers_Test extends TestBase {
 	@Rest
 	public static class B2 extends B1 {
 		@RestGet
-		public JsonList a(RestResponse res) {
+		public Json5List a(RestResponse res) {
 			// Should show ['text/s3','text/s4','text/s1','text/s2']
-			return JsonList.of(res.getOpContext().getSupportedAcceptTypes());
+			return Json5List.of(res.getOpContext().getSupportedAcceptTypes());
 		}
 		@RestGet(serializers=S5.class)
-		public JsonList b(RestResponse res) {
+		public Json5List b(RestResponse res) {
 			// Should show ['text/s5']
-			return JsonList.of(res.getOpContext().getSupportedAcceptTypes());
+			return Json5List.of(res.getOpContext().getSupportedAcceptTypes());
 		}
 		@RestGet(serializers={S5.class,SerializerSet.Inherit.class})
-		public JsonList c(RestResponse res) {
+		public Json5List c(RestResponse res) {
 			// Should show ['text/s5','text/s3','text/s4','text/s1','text/s2']
-			return JsonList.of(res.getOpContext().getSupportedAcceptTypes());
+			return Json5List.of(res.getOpContext().getSupportedAcceptTypes());
 		}
 	}
 

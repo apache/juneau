@@ -270,7 +270,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		Object o;
 
 		if (sType.isObject()) {
-			var m = new JsonMap(this);
+			var m = newGenericMap();
 			parseIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey(CONST_value))
 				o = m.get(CONST_value);
@@ -289,7 +289,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			o = m == null ? null : m.getBean();
 		} else if (sType.isCollection() || sType.isArray() || sType.isArgs()) {
 			// ?1=foo&2=bar...
-			var c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? new JsonList(this) : (Collection)sType.newInstance();
+			var c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? newGenericList() : (Collection)sType.newInstance();
 			var m = new TreeMap<Integer,Object>();
 			parseIntoMap2(r, m, sType, c2);
 			c2.addAll(m.values());
@@ -301,7 +301,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 				o = c2;
 		} else {
 			// It could be a non-bean with _type attribute.
-			var m = new JsonMap(this);
+			var m = newGenericMap();
 			parseIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast(m, null, eType);
@@ -532,11 +532,11 @@ public class UrlEncodingParserSession extends UonParserSession {
 						// If we already encountered this parameter, turn it into a list.
 						if (m.containsKey(currAttr) && valueType.isObject()) {
 							Object v2 = m.get(currAttr);
-							if (! (v2 instanceof JsonList)) {
+							if (! (v2 instanceof MarshalledList)) {
 								v2 = new JsonList(v2).setBeanSession(this);
 								m.put(currAttr, (V)v2);
 							}
-							((JsonList)v2).add(value);
+							((MarshalledList)v2).add(value);
 						} else {
 							m.put(currAttr, value);
 						}

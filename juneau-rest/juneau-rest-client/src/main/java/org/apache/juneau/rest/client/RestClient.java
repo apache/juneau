@@ -70,7 +70,6 @@ import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
@@ -90,13 +89,13 @@ import org.apache.juneau.json5.*;
 import org.apache.juneau.jcs.*;
 import org.apache.juneau.jsonl.*;
 import org.apache.juneau.markdown.*;
-import org.apache.juneau.marshaller.*;
 import org.apache.juneau.bson.*;
 import org.apache.juneau.cbor.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parquet.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.objecttools.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.plaintext.*;
@@ -6582,7 +6581,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		try {
 			var req = request(method, uri, ne(content));
 			if (nn(headers))
-				JsonMap.ofJson(headers).forEach((k, v) -> req.header(stringHeader(k, s(v))));
+				Json5Map.ofJson5(headers).forEach((k, v) -> req.header(stringHeader(k, s(v))));
 			if (ne(content))
 				req.contentString(content);
 			return req;

@@ -154,17 +154,17 @@ public class BasicSwaggerProviderSession {
 		return codes;
 	}
 
-	private static JsonMap newMap(JsonMap om) {
+	private static MarshalledMap newMap(MarshalledMap om) {
 		if (om == null)
-			return new JsonMap();
+			return new Json5Map();
 		return om.modifiable();
 	}
 
-	private static JsonList nullIfEmpty(JsonList l) {
+	private static MarshalledList nullIfEmpty(MarshalledList l) {
 		return (l == null || l.isEmpty() ? null : l);
 	}
 
-	private static JsonMap nullIfEmpty(JsonMap m) {
+	private static MarshalledMap nullIfEmpty(MarshalledMap m) {
 		return (m == null || m.isEmpty() ? null : m);
 	}
 
@@ -234,9 +234,9 @@ public class BasicSwaggerProviderSession {
 		Predicate<Map<?,?>> nem = Utils::ne;
 
 		// Load swagger JSON from classpath.
-		var omSwagger = Json5.DEFAULT.read(is, JsonMap.class);
+		var omSwagger = Json5.DEFAULT.read(is, Json5Map.class);
 		if (omSwagger == null)
-			omSwagger = new JsonMap();
+			omSwagger = new Json5Map();
 
 		// Combine it with @Rest(swagger)
 		var restAnnotations = rstream(ap.find(Rest.class, rci)).map(AnnotationInfo::inner).toList();
@@ -323,9 +323,9 @@ public class BasicSwaggerProviderSession {
 		if (produces.isEmpty())
 			produces.addAll(context.getProduces());
 
-		Map<String,JsonMap> tagMap = map();
+		Map<String,Json5Map> tagMap = map();
 		if (omSwagger.containsKey(SWAGGER_tags)) {
-			for (var om : omSwagger.getList(SWAGGER_tags).elements(JsonMap.class)) {
+			for (var om : omSwagger.getList(SWAGGER_tags).elements(Json5Map.class)) {
 				String name = om.getString(SWAGGER_name);
 				if (name == null)
 					throw new SwaggerException(null, "Tag definition found without name in swagger JSON.");
@@ -335,7 +335,7 @@ public class BasicSwaggerProviderSession {
 
 		var s = mb.findFirstString("tags");
 		if (nn(s)) {
-			for (var m : parseListOrCdl(s, "Messages/tags on class {0}", c).elements(JsonMap.class)) {
+			for (var m : parseListOrCdl(s, "Messages/tags on class {0}", c).elements(Json5Map.class)) {
 				var name = m.getString(SWAGGER_name);
 				if (name == null)
 					throw new SwaggerException(null, "Tag definition found without name in resource bundle on class {0}", c);
@@ -452,11 +452,11 @@ public class BasicSwaggerProviderSession {
 			if (op.containsKey(SWAGGER_tags))
 				for (var tag : op.getList(SWAGGER_tags).elements(String.class))
 					if (! tagMap.containsKey(tag))
-						tagMap.put(tag, JsonMap.of(SWAGGER_name, tag));
+						tagMap.put(tag, Json5Map.of(SWAGGER_name, tag));
 
-			var paramMap = new JsonMap();
+			var paramMap = new Json5Map();
 			if (op.containsKey(SWAGGER_parameters))
-				for (var param : op.getList(SWAGGER_parameters).elements(JsonMap.class))
+				for (var param : op.getList(SWAGGER_parameters).elements(Json5Map.class))
 					paramMap.put(param.getString(SWAGGER_in) + '.' + (SWAGGER_body.equals(param.getString(SWAGGER_in)) ? SWAGGER_body : param.getString(SWAGGER_name)), param);
 
 			// Finally, look for parameters defined on method.
@@ -688,7 +688,7 @@ public class BasicSwaggerProviderSession {
 		"java:S3776", // Cognitive complexity acceptable for example generation logic
 		"java:S112"   // throws Exception intentional - callback/lifecycle method
 	})
-	private void addBodyExamples(RestOpContext sm, JsonMap piri, boolean response, Type type, Locale locale) throws Exception {
+	private void addBodyExamples(RestOpContext sm, MarshalledMap piri, boolean response, Type type, Locale locale) throws Exception {
 
 		var sex = piri.getString(SWAGGER_example);
 
@@ -715,7 +715,7 @@ public class BasicSwaggerProviderSession {
 
 		var examples = piri.getMap(examplesKey);
 		if (examples == null)
-			examples = new JsonMap();
+			examples = new Json5Map();
 
 		var mediaTypes = response ? sm.getSerializers().getSupportedMediaTypes() : sm.getParsers().getSupportedMediaTypes();
 
@@ -749,7 +749,7 @@ public class BasicSwaggerProviderSession {
 		"java:S1172", // Parameter kept to match interface contract
 		"unused" // Eclipse: type parameter unused but kept for API consistency
 	})
-	private static void addParamExample(RestOpContext sm, JsonMap piri, RestPartType in, Type type) {
+	private static void addParamExample(RestOpContext sm, MarshalledMap piri, RestPartType in, Type type) {
 
 		var s = piri.getString(SWAGGER_example);
 
@@ -758,7 +758,7 @@ public class BasicSwaggerProviderSession {
 
 		var examples = piri.getMap(SWAGGER_examples);
 		if (examples == null)
-			examples = new JsonMap();
+			examples = new Json5Map();
 
 		var paramName = piri.getString(SWAGGER_name);
 
@@ -788,7 +788,7 @@ public class BasicSwaggerProviderSession {
 	/**
 	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes.
 	 */
-	private static JsonMap fixSwaggerExtensions(JsonMap om) {
+	private static MarshalledMap fixSwaggerExtensions(MarshalledMap om) {
 		Predicate<Object> nn = Utils::nn;
 		// @formatter:off
 		om
@@ -801,20 +801,20 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private static JsonMap getOperation(JsonMap om, String path, String httpMethod) {
-		om = (JsonMap) om.computeIfAbsent(SWAGGER_paths, k -> new JsonMap());
-		om = (JsonMap) om.computeIfAbsent(path, k -> new JsonMap());
-		om.computeIfAbsent(httpMethod, k -> new JsonMap());
-		return (JsonMap) om.get(httpMethod);
+	private static MarshalledMap getOperation(MarshalledMap om, String path, String httpMethod) {
+		om = (MarshalledMap) om.computeIfAbsent(SWAGGER_paths, k -> new Json5Map());
+		om = (MarshalledMap) om.computeIfAbsent(path, k -> new Json5Map());
+		om.computeIfAbsent(httpMethod, k -> new Json5Map());
+		return (MarshalledMap) om.get(httpMethod);
 	}
 
 	@SuppressWarnings({
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
-	private JsonMap getSchema(JsonMap schema, Type type, MarshallingSession bs) throws Exception {
+	private MarshalledMap getSchema(MarshalledMap schema, Type type, MarshallingSession bs) throws Exception {
 
 		if (type == Swagger.class)
-			return JsonMap.create();
+			return Json5Map.create();
 
 		schema = newMap(schema);
 
@@ -833,31 +833,31 @@ public class BasicSwaggerProviderSession {
 		return "*".equals(h.name()) || "*".equals(h.value());
 	}
 
-	private static JsonList merge(JsonList...lists) {
+	private static MarshalledList merge(MarshalledList...lists) {
 		var l = lists[0];
 		for (var i = 1; i < lists.length; i++) {
 			if (nn(lists[i])) {
 				if (l == null)
-					l = new JsonList();
+					l = new Json5List();
 				l.addAll(lists[i]);
 			}
 		}
 		return l;
 	}
 
-	private static JsonMap merge(JsonMap...maps) {
+	private static MarshalledMap merge(MarshalledMap...maps) {
 		var m = maps[0];
 		for (var i = 1; i < maps.length; i++) {
 			if (nn(maps[i])) {
 				if (m == null)
-					m = new JsonMap();
+					m = new Json5Map();
 				m.putAll(maps[i]);
 			}
 		}
 		return m;
 	}
 
-	private JsonMap merge(JsonMap om, ExternalDocs a) {
+	private MarshalledMap merge(MarshalledMap om, ExternalDocs a) {
 		if (ExternalDocsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
@@ -870,7 +870,7 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
-	private JsonMap merge(JsonMap om, Header[] a) {
+	private MarshalledMap merge(MarshalledMap om, Header[] a) {
 		if (a.length == 0)
 			return om;
 		om = newMap(om);
@@ -883,7 +883,7 @@ public class BasicSwaggerProviderSession {
 		return om;
 	}
 
-	private JsonMap merge(JsonMap om, Items a) throws ParseException {
+	private MarshalledMap merge(MarshalledMap om, Items a) throws ParseException {
 		if (ItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
@@ -916,7 +916,7 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
-	private JsonMap merge(JsonMap om, Response a) throws ParseException {
+	private MarshalledMap merge(MarshalledMap om, Response a) throws ParseException {
 		if (ResponseAnnotation.empty(a))
 			return om;
 		om = newMap(om);
@@ -935,7 +935,7 @@ public class BasicSwaggerProviderSession {
 	@SuppressWarnings({
 		"removal" // Uses deprecated exclusiveMaximum/exclusiveMinimum for backward compatibility
 	})
-	private JsonMap merge(JsonMap om, Schema a) {
+	private MarshalledMap merge(MarshalledMap om, Schema a) {
 		try {
 			if (SchemaAnnotation.empty(a))
 				return om;
@@ -984,7 +984,7 @@ public class BasicSwaggerProviderSession {
 		}
 	}
 
-	private JsonMap merge(JsonMap om, SubItems a) throws ParseException {
+	private MarshalledMap merge(MarshalledMap om, SubItems a) throws ParseException {
 		if (SubItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
@@ -1015,7 +1015,7 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
-	private JsonList parseList(Object o, String location, Object...locationArgs) throws ParseException {
+	private MarshalledList parseList(Object o, String location, Object...locationArgs) throws ParseException {
 		try {
 			if (o == null)
 				return null;
@@ -1025,13 +1025,13 @@ public class BasicSwaggerProviderSession {
 			s = resolve(s);
 			if (! isProbablyJsonArray(s, true))
 				s = "[" + s + "]";
-			return JsonList.ofJson(s);
+			return Json5List.ofJson5(s);
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON array encountered in " + location + ".", locationArgs);
 		}
 	}
 
-	private JsonList parseListOrCdl(Object o, String location, Object...locationArgs) throws ParseException {
+	private MarshalledList parseListOrCdl(Object o, String location, Object...locationArgs) throws ParseException {
 		try {
 			if (o == null)
 				return null;
@@ -1039,13 +1039,13 @@ public class BasicSwaggerProviderSession {
 			if (s.isEmpty())
 				return null;
 			s = resolve(s);
-			return JsonList.ofJsonOrCdl(s);
+			return Json5List.ofJson5OrCdl(s);
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON array encountered in " + location + ".", locationArgs);
 		}
 	}
 
-	private JsonMap parseMap(Object o) throws ParseException {
+	private MarshalledMap parseMap(Object o) throws ParseException {
 		if (o == null)
 			return null;
 		if (o instanceof String[] stringArray)
@@ -1055,17 +1055,19 @@ public class BasicSwaggerProviderSession {
 				return null;
 			o2 = resolve(o2);
 			if (CONST_IGNORE.equalsIgnoreCase(o2))
-				return JsonMap.of(SWAGGER_ignore, true);
+				return Json5Map.of(SWAGGER_ignore, true);
 			if (! isProbablyJsonObject(o2, true))
 				o2 = "{" + o2 + "}";
-			return JsonMap.ofJson(o2);
+			return Json5Map.ofJson5(o2);
 		}
-		if (o instanceof JsonMap o2)
+		if (o instanceof Json5Map o2)
 			return o2;
-		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected JsonMap or String.", cn(o));
+		if (o instanceof MarshalledMap o2)
+			return new Json5Map(o2);
+		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected Map or String.", cn(o));
 	}
 
-	private JsonMap parseMap(String o, String location, Object...args) throws ParseException {
+	private MarshalledMap parseMap(String o, String location, Object...args) throws ParseException {
 		try {
 			return parseMap(o);
 		} catch (ParseException e) {
@@ -1073,9 +1075,9 @@ public class BasicSwaggerProviderSession {
 		}
 	}
 
-	private JsonMap parseMap(String[] o, String location, Object...args) throws ParseException {
+	private MarshalledMap parseMap(String[] o, String location, Object...args) throws ParseException {
 		if (o.length == 0)
-			return JsonMap.EMPTY_MAP;
+			return Json5Map.EMPTY_MAP;
 		try {
 			return parseMap(o);
 		} catch (ParseException e) {
@@ -1083,7 +1085,7 @@ public class BasicSwaggerProviderSession {
 		}
 	}
 
-	private static JsonMap pushupSchemaFields(RestPartType type, JsonMap param, JsonMap schema) {
+	private static MarshalledMap pushupSchemaFields(RestPartType type, MarshalledMap param, MarshalledMap schema) {
 		// @formatter:off
 		Predicate<Object> ne = Utils::ne;
 		if (nn(schema) && ! schema.isEmpty()) {
@@ -1122,12 +1124,12 @@ public class BasicSwaggerProviderSession {
 		// @formatter:on
 	}
 
-	private JsonList resolve(JsonList om) throws ParseException {
-		var ol2 = new JsonList();
+	private MarshalledList resolve(MarshalledList om) throws ParseException {
+		var ol2 = new Json5List();
 		for (var val : om) {
-			if (val instanceof JsonMap val2) {
+			if (val instanceof MarshalledMap val2) {
 				val = resolve(val2);
-			} else if (val instanceof JsonList val2) {
+			} else if (val instanceof MarshalledList val2) {
 				val = resolve(val2);
 			} else if (val instanceof String val2) {
 				val = resolve(val2);
@@ -1137,19 +1139,19 @@ public class BasicSwaggerProviderSession {
 		return ol2;
 	}
 
-	private JsonMap resolve(JsonMap om) throws ParseException {
-		JsonMap om2 = null;
+	private MarshalledMap resolve(MarshalledMap om) throws ParseException {
+		MarshalledMap om2 = null;
 		if (om.containsKey(CONST_value)) {
 			om = om.modifiable();
 			om2 = parseMap(om.remove(CONST_value));
 		} else {
-			om2 = new JsonMap();
+			om2 = new Json5Map();
 		}
 		for (var e : om.entrySet()) {
 			var val = e.getValue();
-			if (val instanceof JsonMap val2) {
+			if (val instanceof MarshalledMap val2) {
 				val = resolve(val2);
-			} else if (val instanceof JsonList val2) {
+			} else if (val instanceof MarshalledList val2) {
 				val = resolve(val2);
 			} else if (val instanceof String val2) {
 				val = resolve(val2);
@@ -1173,7 +1175,7 @@ public class BasicSwaggerProviderSession {
 		return null;
 	}
 
-	private JsonMap resolveRef(JsonMap m) {
+	private MarshalledMap resolveRef(MarshalledMap m) {
 		if (m == null)
 			return null;
 		if (m.containsKey(SWAGGER_$ref) && nn(js.getBeanDefs())) {
@@ -1184,21 +1186,21 @@ public class BasicSwaggerProviderSession {
 		return m;
 	}
 
-	private JsonList toList(Tag[] aa) {
+	private MarshalledList toList(Tag[] aa) {
 		if (aa.length == 0)
 			return null;
-		var ol = new JsonList();
+		var ol = new Json5List();
 		for (var a : aa)
 			ol.add(toMap(a));
 		return nullIfEmpty(ol);
 	}
 
-	private JsonMap toMap(Contact a) {
+	private MarshalledMap toMap(Contact a) {
 		if (ContactAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::ne;
 		// @formatter:off
-		var om = JsonMap.create()
+		var om = Json5Map.create()
 			.appendIf(ne, SWAGGER_name, resolve(a.name()))
 			.appendIf(ne, SWAGGER_url, resolve(a.url()))
 			.appendIf(ne, SWAGGER_email, resolve(a.email()));
@@ -1206,32 +1208,32 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private JsonMap toMap(ExternalDocs a) {
+	private MarshalledMap toMap(ExternalDocs a) {
 		if (ExternalDocsAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::ne;
 		// @formatter:off
-		var om = JsonMap.create()
+		var om = Json5Map.create()
 			.appendIf(ne, SWAGGER_description, resolve(joinnl(a.description())))
 			.appendIf(ne, SWAGGER_url, resolve(a.url()));
 		// @formatter:on
 		return nullIfEmpty(om);
 	}
 
-	private JsonMap toMap(License a) {
+	private MarshalledMap toMap(License a) {
 		if (LicenseAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::ne;
 		// @formatter:off
-		var om = JsonMap.create()
+		var om = Json5Map.create()
 			.appendIf(ne, SWAGGER_name, resolve(a.name()))
 			.appendIf(ne, SWAGGER_url, resolve(a.url()));
 		// @formatter:on
 		return nullIfEmpty(om);
 	}
 
-	private JsonMap toMap(Tag a) {
-		var om = JsonMap.create();
+	private MarshalledMap toMap(Tag a) {
+		var om = Json5Map.create();
 		Predicate<String> ne = Utils::ne;
 		Predicate<Map<?,?>> nem = Utils::ne;
 		// @formatter:off

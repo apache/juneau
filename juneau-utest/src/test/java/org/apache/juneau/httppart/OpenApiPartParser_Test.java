@@ -916,7 +916,7 @@ class OpenApiPartParser_Test extends TestBase {
 		assertJson("[{f:1},{f:2}]", parse(s, "@((f=1),(f=2))", List.class, Object.class));
 		var o = parse(s, "@((f=1),(f=2))", Object.class);
 		assertBeans(o, "f", "1", "2");
-		assertInstanceOf(JsonList.class, o);
+		assertInstanceOf(MarshalledList.class, o);
 	}
 
 	@Test void h03_objectType_3d() throws Exception {
@@ -932,7 +932,7 @@ class OpenApiPartParser_Test extends TestBase {
 		assertJson("[[{f:1},{f:2}],[{f:3}]]", parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class));
 		var o = parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object.class);
 		assertBeans(o, "#{f}", "[{1},{2}]", "[{3}]");
-		assertInstanceOf(JsonList.class, o);
+		assertInstanceOf(MarshalledList.class, o);
 	}
 
 	public static class H2 {

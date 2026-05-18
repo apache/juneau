@@ -29,6 +29,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.httppart.SchemaValidationException;
 import org.apache.juneau.commons.time.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
@@ -798,8 +799,8 @@ class OpenApiPartSerializer_Test extends TestBase {
 		var ps = tObject().allowEmptyValue().build();
 		assertEquals("f1=1,f2=2,f3=true", serialize(ps, new H1("1",2,true)));
 		assertEquals("", serialize(ps, new H1(null,null,null)));
-		assertEquals("f1=1,f2=2,f3=true", serialize(ps, JsonMap.ofJson("{f1:'1',f2:2,f3:true}")));
-		assertEquals("f1=null,f2=null,f3=null", serialize(ps, JsonMap.ofJson("{f1:null,f2:null,f3:null}")));
+		assertEquals("f1=1,f2=2,f3=true", serialize(ps, Json5Map.ofJson5("{f1:'1',f2:2,f3:true}")));
+		assertEquals("f1=null,f2=null,f3=null", serialize(ps, Json5Map.ofJson5("{f1:null,f2:null,f3:null}")));
 		assertEquals("null", serialize(ps, null));
 	}
 
@@ -807,8 +808,8 @@ class OpenApiPartSerializer_Test extends TestBase {
 		var ps = T_OBJECT_UON;
 		assertEquals("(f1='1',f2=2,f3=true)", serialize(ps, new H1("1",2,true)));
 		assertEquals("()", serialize(ps, new H1(null,null,null)));
-		assertEquals("(f1='1',f2=2,f3=true)", serialize(ps, JsonMap.ofJson("{f1:'1',f2:2,f3:true}")));
-		assertEquals("(f1=null,f2=null,f3=null)", serialize(ps, JsonMap.ofJson("{f1:null,f2:null,f3:null}")));
+		assertEquals("(f1='1',f2=2,f3=true)", serialize(ps, Json5Map.ofJson5("{f1:'1',f2:2,f3:true}")));
+		assertEquals("(f1=null,f2=null,f3=null)", serialize(ps, Json5Map.ofJson5("{f1:null,f2:null,f3:null}")));
 		assertEquals("null", serialize(ps, null));
 	}
 
@@ -816,30 +817,30 @@ class OpenApiPartSerializer_Test extends TestBase {
 		var ps = tArray(tObject().allowEmptyValue()).build();
 		assertEquals("f1=1\\,f2=2\\,f3=true,,null", serialize(ps, a(new H1("1",2,true),new H1(null,null,null),null)));
 		assertEquals("f1=1\\,f2=2\\,f3=true,,null", serialize(ps, l(new H1("1",2,true),new H1(null,null,null),null)));
-		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, l(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
-		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, l(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
+		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, a(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, l(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, ao(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),null)));
+		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, l(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
 	@Test void h03_objectType_2d_pipes() throws Exception {
 		var ps = tArrayPipes(tObject().allowEmptyValue()).build();
 		assertEquals("f1=1,f2=2,f3=true||null", serialize(ps, a(new H1("1",2,true),new H1(null,null,null),null)));
 		assertEquals("f1=1,f2=2,f3=true||null", serialize(ps, l(new H1("1",2,true),new H1(null,null,null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, l(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, l(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, a(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, l(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, ao(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, l(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
 	@Test void h04_objectType_2d_uon() throws Exception {
 		var ps = tArrayUon(tObject()).build();
 		assertEquals("@((f1='1',f2=2,f3=true),(),null)", serialize(ps, a(new H1("1",2,true),new H1(null,null,null),null)));
 		assertEquals("@((f1='1',f2=2,f3=true),(),null)", serialize(ps, l(new H1("1",2,true),new H1(null,null,null),null)));
-		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, l(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
-		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, l(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, a(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, l(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, ao(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),null)));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, l(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
 	@Test void h03_objectType_3d() throws Exception {
@@ -847,12 +848,12 @@ class OpenApiPartSerializer_Test extends TestBase {
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, a(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, l(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, l(l(new H1("1",2,true),new H1("x",3,false)),l(new H1(null,null,null),null),null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, a(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, l(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, l(l(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),l(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, a2(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, l(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, l(l(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),l(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, a(a(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:'x',f2:4,f3:false}")),a(Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, l(a(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:'x',f2:4,f3:false}")),a(Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, l(l(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:'x',f2:4,f3:false}")),l(Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, a2(ao(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, l(ao(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, l(l(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}")),l(new H1(null,null,null),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
 	}
 
 	@Test void h03_objectType_3d_ssvAndPipes() throws Exception {
@@ -862,12 +863,12 @@ class OpenApiPartSerializer_Test extends TestBase {
 		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, a(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
 		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, l(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
 		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, l(l(new H1("1",2,true),new H1("x",3,false)),l(new H1(null,null,null),null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, a(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, l(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, l(l(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),l(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, a2(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, l(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, l(l(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),l(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, a(a(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:'x',f2:4,f3:false}")),a(Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, l(a(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:'x',f2:4,f3:false}")),a(Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, l(l(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:'x',f2:4,f3:false}")),l(Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, a2(ao(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, l(ao(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, l(l(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}")),l(new H1(null,null,null),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
 	}
 
 	@Test void h03_objectType_3d_uon() throws Exception {
@@ -875,12 +876,12 @@ class OpenApiPartSerializer_Test extends TestBase {
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, a(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, l(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, l(l(new H1("1",2,true),new H1("x",3,false)),l(new H1(null,null,null),null),null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, a(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, l(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, l(l(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),l(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, a2(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, l(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, l(l(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),l(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, a(a(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:'x',f2:4,f3:false}")),a(Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, l(a(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:'x',f2:4,f3:false}")),a(Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, l(l(Json5Map.ofJson5("{f1:'1',f2:2,f3:true}"),Json5Map.ofJson5("{f1:'x',f2:4,f3:false}")),l(Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, a2(ao(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, l(ao(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, l(l(new H1("1",2,true),Json5Map.ofJson5("{f1:'1',f2:2,f3:true}")),l(new H1(null,null,null),Json5Map.ofJson5("{f1:null,f2:null,f3:null}"),null),null)));
 	}
 
 	public static class H2 {

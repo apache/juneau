@@ -24,7 +24,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 
@@ -383,7 +382,7 @@ public class MarkdownDocParserSession extends MarkdownParserSession {
 	})
 	protected Object parseMapFromDoc(List<String> lines, ClassMeta<?> sType, Object outer, int level) throws IOException, ParseException {
 		// For maps, use the key/value table approach at the root level, then add sub-section maps
-		Map result = sType.canCreateNewInstance(outer) ? (Map) sType.newInstance(outer) : new JsonMap(this);
+		Map result = sType.canCreateNewInstance(outer) ? (Map) sType.newInstance(outer) : newGenericMap();
 		var keyType = sType.getKeyType() != null ? sType.getKeyType() : string();
 		var valueType = sType.getValueType() != null ? sType.getValueType() : object();
 

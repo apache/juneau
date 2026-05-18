@@ -27,6 +27,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.jsonschema.*;
 import org.junit.jupiter.api.*;
 
@@ -95,7 +96,7 @@ class JsonSchemaBeanGenerator_Test extends TestBase {
 	}
 
 	@Test void a08_toBeanConversion() {
-		var map = JsonMap.ofJson("{type:'integer',format:'int32','$comment':'c',deprecated:true}");
+		var map = new JsonMap(Json5Map.ofJson5("{type:'integer',format:'int32','$comment':'c',deprecated:true}"));
 		var bean = JsonSchemaBeanGenerator.toBean(map);
 		assertEquals("integer", bean.getTypeAsJsonType().toString().toLowerCase(Locale.ROOT));
 		assertEquals("int32", bean.getFormat());

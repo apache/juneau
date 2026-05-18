@@ -511,27 +511,27 @@ class UrlEncodingParser_Test extends TestBase {
 
 		s = "?a~b=a~b";
 		var m = p2.parse(s, JsonMap.class);
-		assertEquals("{'a~b':'a~b'}", m.toString());
+		assertEquals("{\"a~b\":\"a~b\"}", m.toString());
 
 		s = "?'a~b'='a~b'";
 		m = p2.parse(s, JsonMap.class);
-		assertEquals("{'a~b':'a~b'}", m.toString());
+		assertEquals("{\"a~b\":\"a~b\"}", m.toString());
 
 		s = "?~~=~~";
 		m = p2.parse(s, JsonMap.class);
-		assertEquals("{'~':'~'}", m.toString());
+		assertEquals("{\"~\":\"~\"}", m.toString());
 
 		s = "?'~~'='~~'";
 		m = p2.parse(s, JsonMap.class);
-		assertEquals("{'~':'~'}", m.toString());
+		assertEquals("{\"~\":\"~\"}", m.toString());
 
 		s = "?~~~~~~=~~~~~~";
 		m = p2.parse(s, JsonMap.class);
-		assertEquals("{'~~~':'~~~'}", m.toString());
+		assertEquals("{\"~~~\":\"~~~\"}", m.toString());
 
 		s = "?'~~~~~~'='~~~~~~'";
 		m = p2.parse(s, JsonMap.class);
-		assertEquals("{'~~~':'~~~'}", m.toString());
+		assertEquals("{\"~~~\":\"~~~\"}", m.toString());
 	}
 
 	public static class C1 {
@@ -545,7 +545,7 @@ class UrlEncodingParser_Test extends TestBase {
 		var p2 = UrlEncodingParser.DEFAULT;
 		var s = "?f1=foo\n\t&f2=bar\n\t";
 		var m = p2.parse(s, JsonMap.class);
-		assertEquals("{f1:'foo',f2:'bar'}", m.toString());
+		assertEquals("{\"f1\":\"foo\",\"f2\":\"bar\"}", m.toString());
 
 		s = "?f1='\n\t'&f2='\n\t'";
 		m = p2.parse(s, JsonMap.class);
@@ -556,29 +556,29 @@ class UrlEncodingParser_Test extends TestBase {
 		m = p2.parse(s, JsonMap.class);
 		assertEquals("\n\t", m.getString("f1"));
 		assertEquals("\n\t", m.getString("f2"));
-		assertEquals("{f1:'\\n\\t',f2:'\\n\\t'}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
+		assertEquals("{\"f1\":\"\\n\\t\",\"f2\":\"\\n\\t\"}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1='\n\t'\n\t&f2='\n\t'\n\t";
 		m = p2.parse(s, JsonMap.class);
 		assertEquals("\n\t", m.getString("f1"));
 		assertEquals("\n\t", m.getString("f2"));
-		assertEquals("{f1:'\\n\\t',f2:'\\n\\t'}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
+		assertEquals("{\"f1\":\"\\n\\t\",\"f2\":\"\\n\\t\"}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=(\n\tf1a=a,\n\tf1b=b\n\t)\n\t&f2=(\n\tf2a=a,\n\tf2b=b\n\t)\n\t";
 		m = p2.parse(s, JsonMap.class);
-		assertEquals("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
+		assertEquals("{\"f1\":{\"f1a\":\"a\",\"f1b\":\"b\"},\"f2\":{\"f2a\":\"a\",\"f2b\":\"b\"}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 		var d = p2.parse(s, D.class);
 		assertBean(d, "f1{f1a,f1b},f2{f2a,f2b}", "{a,b},{a,b}");
 
 		s = "?f1=(\n\tf1a='\n\t',\n\tf1b='\n\t'\n\t)\n\t&f2=(\n\tf2a='\n\t',\n\tf2b='\n\t'\n\t)\n\t";
 		m = p2.parse(s, JsonMap.class);
-		assertEquals("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
+		assertEquals("{\"f1\":{\"f1a\":\"\\n\\t\",\"f1b\":\"\\n\\t\"},\"f2\":{\"f2a\":\"\\n\\t\",\"f2b\":\"\\n\\t\"}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 		d = p2.parse(s, D.class);
 		assertBean(d, "f1{f1a,f1b},f2{f2a,f2b}", "{\n\t,\n\t},{\n\t,\n\t}");
 
 		s = "?f1=@(\n\tfoo,\n\tbar\n\t)\n\t&f2=@(\n\tfoo,\n\tbar\n\t)\n\t";
 		m = p2.parse(s, JsonMap.class);
-		assertEquals("{f1:['foo','bar'],f2:['foo','bar']}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
+		assertEquals("{\"f1\":[\"foo\",\"bar\"],\"f2\":[\"foo\",\"bar\"]}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "f1=a,\n\tb,\n\tc\n\t&f2=1,\n\t2,\n\t3\n\t&f3=true,\n\tfalse\n\t";
 		var e = p2.parse(s, E.class);

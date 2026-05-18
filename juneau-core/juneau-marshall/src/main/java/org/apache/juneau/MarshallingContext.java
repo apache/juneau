@@ -4113,11 +4113,11 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 				try {
 					var bs = beanSessionOrDefault(session);
 					var str = in.toString();
-					JsonList list;
+					Json5List list;
 					if (startsWith(str, '['))
-						list = JsonList.ofJson(str).setBeanSession(bs);
+						list = Json5List.ofJson5(str).setBeanSession(bs);
 					else
-						list = new JsonList((Object[]) splita(str)).setBeanSession(bs);
+						list = new Json5List((Object[]) splita(str)).setBeanSession(bs);
 					return bs.convertToType(list, outType);
 				} catch (Exception e) {
 					throw rex(e);
@@ -4130,7 +4130,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 			return (in, memberOf, session, args) -> {
 				try {
 					var bs = beanSessionOrDefault(session);
-					var m = JsonMap.ofJson(in.toString());
+					var m = Json5Map.ofJson5(in.toString());
 					m.setBeanSession(bs);
 					return bs.convertToType(m, outType);
 				} catch (Exception e) {
@@ -4194,7 +4194,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 					if (!isProbablyJsonArray(str, false))
 						throw rex("Cannot convert string to {0}: {1}", outType.getName(), str);
 					var elemType = args.length > 0 ? args[0] : null;
-					var l2 = JsonList.ofJson(str).setBeanSession(bs);
+					var l2 = Json5List.ofJson5(str).setBeanSession(bs);
 					var result = newCollection(outType);
 					l2.forEach(x -> result.add(elemType != null && x != null ? converter.to(x, elemType) : x));
 					return result;
@@ -4211,12 +4211,12 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 					var bs = beanSessionOrDefault(session);
 					var m2 = (Map<?,?>) in;
 					var builder = (BuilderSwap<Object,Object>) toMeta.getBuilderSwap(bs);
-					if (m2 instanceof JsonMap jm && builder == null) {
-						var typeName = jm.getString(bs.getBeanTypePropertyName(toMeta));
+					if (m2 instanceof MarshalledMap mm && builder == null) {
+						var typeName = mm.getString(bs.getBeanTypePropertyName(toMeta));
 						if (nn(typeName)) {
 							var cm = toMeta.getBeanRegistry().getClassMeta(typeName);
 							if (nn(cm) && toMeta.isAssignableFrom(cm.inner()))
-								return jm.cast(cm);
+								return mm.cast(cm);
 						}
 					}
 					if (nn(builder)) {

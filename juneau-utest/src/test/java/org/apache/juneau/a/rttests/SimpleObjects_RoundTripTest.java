@@ -450,7 +450,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	void a51_jsonMap(RoundTrip_Tester t) throws Exception {
 		if (isRdf(t))
 			return;
-		var x = JsonMap.ofJson("{a:'b',c:123,d:false,e:null,f:[123,'abc',true,false,null]}");
+		var x = JsonMap.ofJson("{\"a\":\"b\",\"c\":123,\"d\":false,\"e\":null,\"f\":[123,\"abc\",true,false,null]}");
 		x = t.roundTrip(x);
 		assertEquals("b", x.get("a"));
 		assertEquals(123, ((Number)x.get("c")).intValue());
@@ -469,7 +469,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	void a52_jsonList(RoundTrip_Tester t) throws Exception {
 		if (isRdf(t))
 			return;
-		var x = new JsonList("['abc',123,true,false,null,{a:'b'}]");
+		var x = new JsonList("[\"abc\",123,true,false,null,{\"a\":\"b\"}]");
 		x = t.roundTrip(x);
 		assertEquals("abc", x.get(0));
 		assertEquals(123, ((Number)x.get(1)).intValue());

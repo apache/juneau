@@ -390,7 +390,7 @@ public class HoconParserSession extends ReaderParserSession {
 			case NULL -> null;
 			case OBJECT -> {
 				var obj = (HoconValue.HoconObject) val;
-				var map = new JsonMap(this);
+				var map = newGenericMap();
 				for (var e : obj.getMembers().entrySet()) {
 					map.put(e.getKey(), hoconToMap(e.getValue()));
 				}
@@ -398,7 +398,7 @@ public class HoconParserSession extends ReaderParserSession {
 			}
 			case ARRAY -> {
 				var arr = (HoconValue.HoconArray) val;
-				var list = new JsonList(this);
+				var list = newGenericList();
 				for (var el : arr.getElements()) {
 					list.add(hoconToMap(el));
 				}
@@ -413,7 +413,7 @@ public class HoconParserSession extends ReaderParserSession {
 			return null;
 		if (type == null)
 			type = object();
-		var casted = cast((JsonMap) map, null, type);
+		var casted = cast((MarshalledMap) map, null, type);
 		if (casted != map)
 			return casted;
 		if (!type.isObject()) {
@@ -425,13 +425,13 @@ public class HoconParserSession extends ReaderParserSession {
 			}
 			var result = convertToMemberType(null, map, type);
 			if (type.isBean() && result != null)
-				injectAnnotations((JsonMap) map, result);
+				injectAnnotations((MarshalledMap) map, result);
 			return result;
 		}
 		return map;
 	}
 
-	private void injectAnnotations(JsonMap map, Object bean) throws ExecutableException {
+	private void injectAnnotations(MarshalledMap map, Object bean) throws ExecutableException {
 		var bm = toBeanMap(bean);
 		for (var entry : map.entrySet()) {
 			var key = entry.getKey();

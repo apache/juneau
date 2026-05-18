@@ -272,14 +272,14 @@ public class YamlParserSession extends ReaderParserSession {
 			// Let o be null.
 		} else if (c == '{') {
 			if (sType.isObject()) {
-				var m2 = new JsonMap(this);
+				var m2 = newGenericMap();
 				parseFlowMapping(r, m2, string(), object(), pMeta);
 				o = cast(m2, pMeta, eType);
 			} else if (sType.isMap()) {
 				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 				o = parseFlowMapping(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			} else if (sType.isCollection()) {
-				var m = new JsonMap(this);
+				var m = newGenericMap();
 				parseFlowMapping(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else if (nn(builder)) {
@@ -289,14 +289,14 @@ public class YamlParserSession extends ReaderParserSession {
 				var m = newBeanMap(outer, sType.inner());
 				o = parseIntoBeanMap(r, m).getBean();
 			} else if (sType.isArray() || sType.isArgs()) {
-				var m = new JsonMap(this);
+				var m = newGenericMap();
 				parseFlowMapping(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
-				Map m = new JsonMap(this);
+				Map m = newGenericMap();
 				parseFlowMapping(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 				if (m.containsKey(getBeanTypePropertyName(eType)))
-					o = cast((JsonMap)m, pMeta, eType);
+					o = cast((MarshalledMap)m, pMeta, eType);
 				else if (nn(sType.getProxyInvocationHandler()))
 					o = newBeanMap(outer, sType.inner()).load(m).getBean();
 				else
@@ -304,9 +304,9 @@ public class YamlParserSession extends ReaderParserSession {
 			}
 		} else if (c == '[') {
 			if (sType.isObject()) {
-				o = parseFlowSequence(r, new JsonList(this), object(), pMeta);
+				o = parseFlowSequence(r, newGenericList(), object(), pMeta);
 			} else if (sType.isCollection()) {
-				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
+				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : newGenericList());
 				o = parseFlowSequence(r, l, sType, pMeta);
 			} else if (sType.isArray() || sType.isArgs()) {
 				var l = (ArrayList)parseFlowSequence(r, list(), sType, pMeta);
@@ -324,9 +324,9 @@ public class YamlParserSession extends ReaderParserSession {
 			int c2 = peekSecondChar(r);
 			if (c2 == ' ' || c2 == '\n' || c2 == '\r') {
 				if (sType.isObject()) {
-					o = parseBlockSequence(r, new JsonList(this), object(), pMeta, 0);
+					o = parseBlockSequence(r, newGenericList(), object(), pMeta, 0);
 				} else if (sType.isCollection()) {
-					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
+					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : newGenericList());
 					o = parseBlockSequence(r, l, sType, pMeta, 0);
 				} else if (sType.isArray() || sType.isArgs()) {
 					var l = (ArrayList)parseBlockSequence(r, list(), sType, pMeta, 0);
@@ -371,7 +371,7 @@ public class YamlParserSession extends ReaderParserSession {
 				r.read();
 
 			if (sType.isObject()) {
-				var m2 = new JsonMap(this);
+				var m2 = newGenericMap();
 				Object value = parseAnything(object(), r, m2, pMeta);
 				String ts = trim(s);
 				setName(object(), value, ts);
@@ -397,7 +397,7 @@ public class YamlParserSession extends ReaderParserSession {
 				parseIntoBeanMapBlockRemainder(r, m, keyIndent);
 				return m.getBean();
 			} else {
-				var m2 = new JsonMap(this);
+				var m2 = newGenericMap();
 				Object value = parseAnything(object(), r, m2, pMeta);
 				m2.put(s, value);
 				parseBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
@@ -430,7 +430,7 @@ public class YamlParserSession extends ReaderParserSession {
 
 			String keyStr = isYamlNull(s) ? null : trim(s);
 			if (sType.isObject()) {
-				var m2 = new JsonMap(this);
+				var m2 = newGenericMap();
 				Object value = parseAnything(object(), r, m2, pMeta);
 				setName(object(), value, keyStr);
 				m2.put(keyStr, value);
@@ -455,7 +455,7 @@ public class YamlParserSession extends ReaderParserSession {
 				parseIntoBeanMapBlockRemainder(r, m, keyIndent);
 				return m.getBean();
 			} else {
-				var m2 = new JsonMap(this);
+				var m2 = newGenericMap();
 				Object value = parseAnything(object(), r, m2, pMeta);
 				m2.put(s, value);
 				parseBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);

@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.annotation;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
@@ -31,14 +31,14 @@ class Rest_AllowContentParam_Test extends TestBase {
 	@Rest(disableContentParam="false")
 	public static class A1 {
 		@RestOp
-		public JsonMap put(@Content JsonMap body) {
+		public Json5Map put(@Content Json5Map body) {
 			return body;
 		}
 	}
 	@Rest(disableContentParam="true")
 	public static class A2 {
 		@RestOp
-		public JsonMap put(@Content JsonMap body) {
+		public Json5Map put(@Content Json5Map body) {
 			return body;
 		}
 	}

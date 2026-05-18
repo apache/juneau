@@ -266,11 +266,11 @@ public class JsonParserSession extends ReaderParserSession {
 			parseKeyword("null", r);
 		} else if (sType.isObject()) {
 			if (c == '{') {
-				var m2 = new JsonMap(this);
+				var m2 = newGenericMap();
 				parseIntoMap2(r, m2, string(), object(), pMeta);
 				o = cast(m2, pMeta, eType);
 			} else if (c == '[') {
-				o = parseIntoCollection2(r, new JsonList(this), object(), pMeta);
+				o = parseIntoCollection2(r, newGenericList(), object(), pMeta);
 			} else if (c == '\'' || c == '"') {
 				o = parseString(r);
 				if (sType.isChar())
@@ -299,11 +299,11 @@ public class JsonParserSession extends ReaderParserSession {
 			o = parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '{') {
-				var m = new JsonMap(this);
+				var m = newGenericMap();
 				parseIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
-				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
+				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : newGenericList());
 				o = parseIntoCollection2(r, l, sType, pMeta);
 			}
 		} else if (nn(builder)) {
@@ -316,7 +316,7 @@ public class JsonParserSession extends ReaderParserSession {
 			o = sType.newInstanceFromString(outer, parseString(r));
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '{') {
-				var m = new JsonMap(this);
+				var m = newGenericMap();
 				parseIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
@@ -324,10 +324,10 @@ public class JsonParserSession extends ReaderParserSession {
 				o = toArray(sType, l);
 			}
 		} else if (c == '{') {
-			Map m = new JsonMap(this);
+			Map m = newGenericMap();
 			parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
-				o = cast((JsonMap)m, pMeta, eType);
+				o = cast((MarshalledMap)m, pMeta, eType);
 			else if (nn(sType.getProxyInvocationHandler()))
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			else
@@ -973,5 +973,15 @@ public class JsonParserSession extends ReaderParserSession {
 	 */
 	protected boolean canCoerceNonStringToString() {
 		return false;
+	}
+
+	@Override /* Overridden from MarshallingSession */
+	protected MarshalledMap newGenericMap() {
+		return new JsonMap(this);
+	}
+
+	@Override /* Overridden from MarshallingSession */
+	protected MarshalledList newGenericList() {
+		return new JsonList(this);
 	}
 }

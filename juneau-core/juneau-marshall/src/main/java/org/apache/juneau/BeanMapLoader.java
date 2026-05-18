@@ -19,6 +19,7 @@ package org.apache.juneau;
 import java.io.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.commons.bean.BeanMap;
 
@@ -54,7 +55,7 @@ public final class BeanMapLoader {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> BeanMap<T> load(BeanMap<T> m, String input) throws ParseException {
-		m.putAll(JsonMap.ofJson(input));
+		m.putAll(Json5Map.ofJson5(input));
 		return m;
 	}
 

@@ -26,14 +26,14 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 
-class ResolvingJsonMapTest extends TestBase {
+class ResolvingMarshalledMapTest extends TestBase {
 
 	//====================================================================================================
 	// test - Basic tests
 	//====================================================================================================
 	@Test void a01_basic() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		var m = new ResolvingJsonMap(vr.createSession());
+		var m = new ResolvingMarshalledMap(vr.createSession());
 
 		m.put("foo", "$X{a}");
 		assertEquals("1", m.get("foo"));
@@ -59,7 +59,7 @@ class ResolvingJsonMapTest extends TestBase {
 	//====================================================================================================
 	@Test void a02_nulls() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		var m = new ResolvingJsonMap(vr.createSession());
+		var m = new ResolvingMarshalledMap(vr.createSession());
 
 		m.put("foo", null);
 		assertNull(m.get("foo"));
@@ -79,7 +79,7 @@ class ResolvingJsonMapTest extends TestBase {
 	//====================================================================================================
 	@Test void a03_nonStrings() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		var m = new ResolvingJsonMap(vr.createSession());
+		var m = new ResolvingMarshalledMap(vr.createSession());
 
 		m.put("foo", FooEnum.ONE);
 		assertString("ONE", m.get("foo"));
@@ -102,7 +102,7 @@ class ResolvingJsonMapTest extends TestBase {
 	//====================================================================================================
 	@Test void a04_inner() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		var m = new ResolvingJsonMap(vr.createSession());
+		var m = new ResolvingMarshalledMap(vr.createSession());
 		var m2 = new JsonMap();
 		var m3 = new JsonMap();
 		m.inner(m2);
@@ -126,7 +126,7 @@ class ResolvingJsonMapTest extends TestBase {
 	//====================================================================================================
 	@Test void a05_fluentSetters() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		var m = new ResolvingJsonMap(vr.createSession());
+		var m = new ResolvingMarshalledMap(vr.createSession());
 
 		// Test inner() returns same instance for fluent chaining
 		var innerMap = new HashMap<String,Object>();
@@ -173,7 +173,7 @@ class ResolvingJsonMapTest extends TestBase {
 	@Test void a06_fluentChaining() {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		// Test multiple fluent calls can be chained
-		var m = new ResolvingJsonMap(vr.createSession())
+		var m = new ResolvingMarshalledMap(vr.createSession())
 			.append("key1", "$X{a}")
 			.append("key2", "$X{b}")
 			.appendIf(true, "key3", "$X{c}");

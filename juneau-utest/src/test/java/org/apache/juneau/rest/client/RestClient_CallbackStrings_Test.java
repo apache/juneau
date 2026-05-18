@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
@@ -37,12 +37,12 @@ class RestClient_CallbackStrings_Test extends TestBase {
 	@Rest
 	public static class A {
 		@RestGet(path="/*")
-		public JsonMap get(RestRequest req) throws Exception {
-			return JsonMap.of("method","GET","headers",getFooHeaders(req),"content",req.getContent().asString());
+		public Json5Map get(RestRequest req) throws Exception {
+			return Json5Map.of("method","GET","headers",getFooHeaders(req),"content",req.getContent().asString());
 		}
 		@RestPut(path="/*")
-		public JsonMap put(RestRequest req) throws Exception {
-			return JsonMap.of("method","PUT","headers",getFooHeaders(req),"content",req.getContent().asString());
+		public Json5Map put(RestRequest req) throws Exception {
+			return Json5Map.of("method","PUT","headers",getFooHeaders(req),"content",req.getContent().asString());
 		}
 		private static Map<String,Object> getFooHeaders(RestRequest req) {
 			var m = new TreeMap<String,Object>();

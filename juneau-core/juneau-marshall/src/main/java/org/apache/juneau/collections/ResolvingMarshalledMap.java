@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.svl.*;
 
 /**
- * Subclass of an {@link JsonMap} that automatically resolves any SVL variables in values.
+ * Subclass of a {@link MarshalledMap} that automatically resolves any SVL variables in values.
  *
  * <p>
  * Resolves variables in the following values:
@@ -44,7 +44,7 @@ import org.apache.juneau.commons.svl.*;
 @SuppressWarnings({
 	"serial" // SerialVersionUID not needed for runtime-only map
 })
-public class ResolvingJsonMap extends JsonMap {
+public class ResolvingMarshalledMap extends MarshalledMap {
 
 	private final transient VarResolverSession varResolver;
 
@@ -53,13 +53,13 @@ public class ResolvingJsonMap extends JsonMap {
 	 *
 	 * @param varResolver The var resolver session to use for resolving SVL variables.
 	 */
-	public ResolvingJsonMap(VarResolverSession varResolver) {
+	public ResolvingMarshalledMap(VarResolverSession varResolver) {
 		this.varResolver = varResolver;
 	}
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return this == o || (o instanceof ResolvingJsonMap && super.equals(o));
+		return this == o || (o instanceof ResolvingMarshalledMap && super.equals(o));
 	}
 
 	@Override /* Overridden from Object */
@@ -67,26 +67,26 @@ public class ResolvingJsonMap extends JsonMap {
 		return super.hashCode();
 	}
 
-	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap append(Map<String,Object> values) {
+	@Override /* Overridden from MarshalledMap */
+	public ResolvingMarshalledMap append(Map<String,Object> values) {
 		super.append(values);
 		return this;
 	}
 
-	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap append(String key, Object value) {
+	@Override /* Overridden from MarshalledMap */
+	public ResolvingMarshalledMap append(String key, Object value) {
 		super.append(key, value);
 		return this;
 	}
 
-	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap appendIf(boolean flag, String key, Object value) {
+	@Override /* Overridden from MarshalledMap */
+	public ResolvingMarshalledMap appendIf(boolean flag, String key, Object value) {
 		super.appendIf(flag, key, value);
 		return this;
 	}
 
-	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap filtered(Predicate<Object> value) {
+	@Override /* Overridden from MarshalledMap */
+	public ResolvingMarshalledMap filtered(Predicate<Object> value) {
 		super.filtered(value);
 		return this;
 	}
@@ -96,39 +96,39 @@ public class ResolvingJsonMap extends JsonMap {
 		return varResolver.resolve(super.get(key));
 	}
 
-	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap inner(Map<String,Object> inner) {
+	@Override /* Overridden from MarshalledMap */
+	public ResolvingMarshalledMap inner(Map<String,Object> inner) {
 		super.inner(inner);
 		return this;
 	}
 
-	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap keepAll(String...keys) {
+	@Override /* Overridden from MarshalledMap */
+	public ResolvingMarshalledMap keepAll(String...keys) {
 		super.keepAll(keys);
 		return this;
 	}
 
-	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap modifiable() {
+	@Override /* Overridden from MarshalledMap */
+	public ResolvingMarshalledMap modifiable() {
 		if (isUnmodifiable())
-			return new ResolvingJsonMap(varResolver).inner(this);
+			return new ResolvingMarshalledMap(varResolver).inner(this);
 		return this;
 	}
 
-	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap session(MarshallingSession session) {
+	@Override /* Overridden from MarshalledMap */
+	public ResolvingMarshalledMap session(MarshallingSession session) {
 		super.session(session);
 		return this;
 	}
 
-	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap setBeanSession(MarshallingSession value) {
+	@Override /* Overridden from MarshalledMap */
+	public ResolvingMarshalledMap setBeanSession(MarshallingSession value) {
 		super.setBeanSession(value);
 		return this;
 	}
 
-	@Override /* Overridden from JsonMap */
-	public ResolvingJsonMap unmodifiable() {
+	@Override /* Overridden from MarshalledMap */
+	public ResolvingMarshalledMap unmodifiable() {
 		return this;
 	}
 }

@@ -57,11 +57,11 @@ class CommonParser_UrlEncodingTest extends TestBase {
 		m = (Map)p.parse(in, Object.class);
 		assertBean(m, "a,b,c", "1,foo bar,false");
 
-		var jm = (JsonMap)p.parse("x=@((attribute=value),(attribute=~'value~'))", Object.class);
+		var jm = (MarshalledMap)p.parse("x=@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jm.getList("x").getMap(0).getString("attribute"));
 		assertEquals("'value'", jm.getList("x").getMap(1).getString("attribute"));
 
-		var jl = (JsonList)p.parse("_value=@((attribute=value),(attribute=~'value~'))", Object.class);
+		var jl = (MarshalledList)p.parse("_value=@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("'value'", jl.getMap(1).getString("attribute"));
 

@@ -27,7 +27,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
@@ -235,12 +234,12 @@ public class CborParserSession extends InputStreamParserSession {
 			else if (dt == BINARY)
 				o = is.readBinary();
 			else if (dt == ARRAY && sType.isObject()) {
-				var jl = new JsonList(this);
+				var jl = newGenericList();
 				for (var i = 0; i < len; i++)
 					jl.add(parseAnything(object(), is, outer, pMeta));
 				o = jl;
 			} else if (dt == MAP && sType.isObject()) {
-				var jm = new JsonMap(this);
+				var jm = newGenericMap();
 				for (var i = 0; i < len; i++)
 					jm.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, jm, pMeta));
 				o = cast(jm, pMeta, eType);
@@ -297,12 +296,12 @@ public class CborParserSession extends InputStreamParserSession {
 				o = sType.newInstanceFromString(outer, o == null ? "" : o.toString());
 			} else if (sType.isCollection()) {
 				if (dt == MAP) {
-					var m = new JsonMap(this);
+					var m = newGenericMap();
 					for (var i = 0; i < len; i++)
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
-					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
+					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : newGenericList());
 					for (var i = 0; i < len; i++)
 						l.add(parseAnything(sType.getElementType(), is, l, pMeta));
 					o = l;
@@ -311,12 +310,12 @@ public class CborParserSession extends InputStreamParserSession {
 				}
 			} else if (sType.isArray() || sType.isArgs()) {
 				if (dt == MAP) {
-					var m = new JsonMap(this);
+					var m = newGenericMap();
 					for (var i = 0; i < len; i++)
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
-					Collection l = (sType.isCollection() && sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
+					Collection l = (sType.isCollection() && sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : newGenericList());
 					for (var i = 0; i < len; i++)
 						l.add(parseAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
 					o = toArray(sType, l);
@@ -324,7 +323,7 @@ public class CborParserSession extends InputStreamParserSession {
 					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
 			} else if (dt == MAP) {
-				var m = new JsonMap(this);
+				var m = newGenericMap();
 				for (var i = 0; i < len; i++)
 					m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 				if (m.containsKey(getBeanTypePropertyName(eType)))

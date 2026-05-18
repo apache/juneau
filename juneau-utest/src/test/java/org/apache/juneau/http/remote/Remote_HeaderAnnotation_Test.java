@@ -27,9 +27,9 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -59,7 +59,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Rest
 	public static class A {
 		@RestGet
-		public String a(@Header("*") JsonMap m) {
+		public String a(@Header("*") Json5Map m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -121,7 +121,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Rest
 	public static class B {
 		@RestOp
-		public String get(@Header("*") JsonMap m) {
+		public String get(@Header("*") Json5Map m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -154,7 +154,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Rest
 	public static class C {
 		@RestGet
-		public String a(@Header("*") JsonMap m) {
+		public String a(@Header("*") Json5Map m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -189,7 +189,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Rest
 	public static class D {
 		@RestOp
-		public String get(@Header("*") JsonMap m) {
+		public String get(@Header("*") Json5Map m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -438,7 +438,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Rest
 	public static class E {
 		@RestOp
-		public String get(@Header("*") JsonMap m) {
+		public String get(@Header("*") Json5Map m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -481,7 +481,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Rest
 	public static class F {
 		@RestOp
-		public String get(@Header("*") JsonMap m) {
+		public String get(@Header("*") Json5Map m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -530,7 +530,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Rest
 	public static class G {
 		@RestOp
-		public String get(@Header("*") JsonMap m) {
+		public String get(@Header("*") Json5Map m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -593,7 +593,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Rest
 	public static class H {
 		@RestOp
-		public String get(@Header("*") JsonMap m) {
+		public String get(@Header("*") Json5Map m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -621,7 +621,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Rest
 	public static class I {
 		@RestOp
-		public String get(@Header("*") JsonMap m) {
+		public String get(@Header("*") Json5Map m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -648,7 +648,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	@Rest
 	public static class J {
 		@RestOp
-		public String get(@Header("*") JsonMap m) {
+		public String get(@Header("*") Json5Map m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}

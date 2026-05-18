@@ -356,11 +356,11 @@ public class XmlParserSession extends ReaderParserSession {
 		if (r.getEventType() != START_ELEMENT) {
 			throw new ParseException(this, "Parser must be on START_ELEMENT to read next text.");
 		}
-		JsonMap m = null;
+		MarshalledMap m = null;
 
-		// If this element has attributes, then it's always a JsonMap.
+		// If this element has attributes, then it's always a MarshalledMap.
 		if (r.getAttributeCount() > 0) {
-			m = new JsonMap(this);
+			m = newGenericMap();
 			for (var i = 0; i < r.getAttributeCount(); i++) {
 				var key = getAttributeName(r, i);
 				var val = r.getAttributeValue(i);
@@ -381,7 +381,7 @@ public class XmlParserSession extends ReaderParserSession {
 				// Oops...this has an element in it.
 				// Parse it as a map.
 				if (m == null)
-					m = new JsonMap(this);
+					m = newGenericMap();
 				int depth = 0;
 				do {
 					int event = (eventType == -1 ? r.nextTag() : eventType);
@@ -395,7 +395,7 @@ public class XmlParserSession extends ReaderParserSession {
 						var value = parseAnything(object(), currAttr, r, null, false, null);
 						if (m.containsKey(key)) {
 							var o = m.get(key);
-							if (o instanceof JsonList o2)
+							if (o instanceof MarshalledList o2)
 								o2.add(value);
 							else
 								m.put(key, new JsonList(o, value).setBeanSession(this));
@@ -886,13 +886,13 @@ public class XmlParserSession extends ReaderParserSession {
 
 		if (sType.isObject()) {
 			if (jsonType == OBJECT) {
-				var m = new JsonMap(this);
+				var m = newGenericMap();
 				parseIntoMap(r, m, string(), object(), pMeta);
 				if (nn(wrapperAttr))
-					m = new JsonMap(this).append(wrapperAttr, m);
+					m = newGenericMap().append(wrapperAttr, m);
 				o = cast(m, pMeta, eType);
 			} else if (jsonType == ARRAY)
-				o = parseIntoCollection(r, new JsonList(this), null, pMeta);
+				o = parseIntoCollection(r, newGenericList(), null, pMeta);
 			else if (jsonType == STRING) {
 				o = getElementText(r);
 				if (sType.isChar())
@@ -912,10 +912,13 @@ public class XmlParserSession extends ReaderParserSession {
 		} else if (sType.isMap()) {
 			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
-			if (nn(wrapperAttr))
-				o = new JsonMap(this).append(wrapperAttr, m);
+			if (nn(wrapperAttr)) {
+				var wrapper = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap());
+				wrapper.put(wrapperAttr, m);
+				o = wrapper;
+			}
 		} else if (sType.isCollection()) {
-			var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
+			var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());
 			o = parseIntoCollection(r, l, sType, pMeta);
 		} else if (sType.isNumber()) {
 			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.inner());
@@ -942,10 +945,10 @@ public class XmlParserSession extends ReaderParserSession {
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, getElementText(r));
 		} else if (nn(sType.getProxyInvocationHandler())) {
-			var m = new JsonMap(this);
+			var m = newGenericMap();
 			parseIntoMap(r, m, string(), object(), pMeta);
 			if (nn(wrapperAttr))
-				m = new JsonMap(this).append(wrapperAttr, m);
+				m = newGenericMap().append(wrapperAttr, m);
 			o = newBeanMap(outer, sType.inner()).load(m).getBean();
 		} else {
 			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''", cn(sType), sType.getNotABeanReason(),

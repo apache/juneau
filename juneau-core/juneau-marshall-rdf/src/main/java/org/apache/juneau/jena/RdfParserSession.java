@@ -459,7 +459,7 @@ public class RdfParserSession extends ReaderParserSession {
 			var m = newGenericMap(sType);
 			parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
-				o = cast((JsonMap)m, pMeta, eType);
+				o = cast((MarshalledMap)m, pMeta, eType);
 			else if (nn(sType.getProxyInvocationHandler()))
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			else

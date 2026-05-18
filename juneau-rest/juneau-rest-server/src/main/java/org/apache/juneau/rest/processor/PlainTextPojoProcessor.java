@@ -19,9 +19,11 @@ package org.apache.juneau.rest.processor;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
 
@@ -52,10 +54,17 @@ public class PlainTextPojoProcessor implements ResponseProcessor {
 			res.setHeader(ContentType.TEXT_PLAIN);
 
 		FinishablePrintWriter w = res.getNegotiatedWriter();
-		if (o == null)
+		if (o == null) {
 			w.append("null");
-		else
+		} else if (o instanceof Map || o instanceof Collection || o.getClass().isArray()) {
+			// Historical contract: when no serializer matched and the response is a Map/Collection/array,
+			// render it as JSON5 so callers that asserted on JsonMap/JsonList.toString() output before the
+			// TODO-34 Phase C retargeting (which switched JsonMap/JsonList toString to strict JSON)
+			// continue to see the same plain-text body.
+			w.append(Json5.of(o));
+		} else {
 			w.append(req.getMarshallingSession().getClassMetaForObject(o).toString(o));
+		}
 		w.flush();
 		w.finish();
 

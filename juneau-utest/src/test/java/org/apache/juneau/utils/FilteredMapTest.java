@@ -23,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 class FilteredMapTest extends TestBase {
@@ -35,7 +35,7 @@ class FilteredMapTest extends TestBase {
 	// testBasic
 	//====================================================================================================
 	@Test void a01_basic() throws Exception {
-		var m = JsonMap.ofJson("{a:'1',b:'2'}");
+		var m = Json5Map.ofJson5("{a:'1',b:'2'}");
 
 		ClassMeta<Map<String,Object>> cm = MarshallingContext.DEFAULT.getClassMeta(Map.class, String.class, Object.class);
 		ClassMeta<Map<String,String>> cm2 = MarshallingContext.DEFAULT.getClassMeta(Map.class, String.class, String.class);

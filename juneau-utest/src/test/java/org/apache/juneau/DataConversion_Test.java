@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -70,7 +71,7 @@ class DataConversion_Test extends TestBase {
 		assertEquals("{}", m.getString("x"));
 
 		// *** JsonMap ***
-		m.put("x", JsonMap.ofJson("{foo:123}"));
+		m.put("x", Json5Map.ofJson5("{foo:123}"));
 		assertEquals("{foo:123}", m.getString("x"));
 
 		// *** Collection ***

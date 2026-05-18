@@ -56,7 +56,7 @@ class CommonParser_Test extends TestBase {
 		assertNotNull(m);
 		assertBean(m, "x,city,state,street,zip", "org.apache.juneau.test.Address,city A,state A,street A,12345");
 
-		var jl = (JsonList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
+		MarshalledList jl = (MarshalledList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 
@@ -69,7 +69,7 @@ class CommonParser_Test extends TestBase {
 		assertNull(p.parse("   /*foo*/   ", Object.class));
 		assertNull(p.parse("   //foo   ", Object.class));
 
-		jl = (JsonList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
+		jl = (MarshalledList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 

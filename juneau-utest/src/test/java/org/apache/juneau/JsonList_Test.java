@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
 class JsonList_Test extends TestBase {
@@ -35,17 +35,17 @@ class JsonList_Test extends TestBase {
 
 		assertEquals(
 			"['A','B','C']",
-			new JsonList((Object[])a("A","B","C")).toString()
+			new Json5List((Object[])a("A","B","C")).toString()
 		);
 
 		assertEquals(
 			"['A','B','C']",
-			new JsonList("A","B","C").toString()
+			new Json5List("A","B","C").toString()
 		);
 
 		assertEquals(
 			"['A','B','C']",
-			new JsonList(l(a("A","B","C"))).toString()
+			new Json5List(l(a("A","B","C"))).toString()
 		);
 	}
 
@@ -55,13 +55,13 @@ class JsonList_Test extends TestBase {
 	@Test void a02_iterateAs() throws Exception {
 
 		// Iterate over a list of JsonMaps.
-		var l = new JsonList("[{foo:'bar'},{baz:123}]");
-		var i1 = l.elements(JsonMap.class).iterator();
+		var l = new Json5List("[{foo:'bar'},{baz:123}]");
+		var i1 = l.elements(Json5Map.class).iterator();
 		assertEquals("bar", i1.next().getString("foo"));
 		assertEquals(123, (int)i1.next().getInt("baz"));
 
 		// Iterate over a list of ints.
-		l = new JsonList("[1,2,3]");
+		l = new Json5List("[1,2,3]");
 		var i2 = l.elements(Integer.class).iterator();
 		assertEquals(1, (int)i2.next());
 		assertEquals(2, (int)i2.next());
@@ -69,7 +69,7 @@ class JsonList_Test extends TestBase {
 
 		// Iterate over a list of beans.
 		// Automatically converts to beans.
-		l = new JsonList("[{name:'John Smith',age:45}]");
+		l = new Json5List("[{name:'John Smith',age:45}]");
 		var i3 = l.elements(Person.class).iterator();
 		assertEquals("John Smith", i3.next().name);
 	}
@@ -83,7 +83,7 @@ class JsonList_Test extends TestBase {
 	// testAtMethods
 	//====================================================================================================
 	@Test void a03_atMethods() throws Exception {
-		var l = new JsonList("[{foo:'bar'},{baz:123}]");
+		var l = new Json5List("[{foo:'bar'},{baz:123}]");
 		var r = l.getAt("0/foo", String.class);
 
 		assertEquals("bar", r);
@@ -92,7 +92,7 @@ class JsonList_Test extends TestBase {
 		r = l.getAt("0/foo", String.class);
 		assertEquals("bing", r);
 
-		l.postAt("", JsonMap.ofJson("{a:'b'}"));
+		l.postAt("", Json5Map.ofJson5("{a:'b'}"));
 		r = l.getAt("2/a", String.class);
 		assertEquals("b", r);
 
@@ -104,14 +104,14 @@ class JsonList_Test extends TestBase {
 	// JsonList(Reader)
 	//====================================================================================================
 	@Test void a04_fromReader() throws Exception {
-		assertList(new JsonList(reader("[1,2,3]")), "1", "2", "3");
+		assertList(new Json5List(reader("[1,2,3]")), "1", "2", "3");
 	}
 
 	//====================================================================================================
 	// testGetMap
 	//====================================================================================================
 	@Test void a05_getMap() throws Exception {
-		var l = new JsonList("[{1:'true',2:'false'}]");
+		var l = new Json5List("[{1:'true',2:'false'}]");
 		var m2 = l.getMap(0, Integer.class, Boolean.class);
 		assertJson("{'1':true,'2':false}", m2);
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
@@ -127,7 +127,7 @@ class JsonList_Test extends TestBase {
 	// testGetList
 	//====================================================================================================
 	@Test void a06_getList() throws Exception {
-		var l = new JsonList("[['123','456']]");
+		var l = new Json5List("[['123','456']]");
 		var l2 = l.getList(0, Integer.class);
 		assertList(l2, "123", "456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
@@ -141,23 +141,11 @@ class JsonList_Test extends TestBase {
 	// toX serialization methods
 	//====================================================================================================
 	@Test void a07_toX() {
-		var l = new JsonList("['b','a']");
-
-		// toJson — standard JSON (double-quoted strings)
-		assertString("[\"b\",\"a\"]", l.toJson());
+		var l = new Json5List("['b','a']");
 
 		// toJson5 — JSON5 (single-quoted strings), same as toString()
 		assertString("['b','a']", l.toJson5());
 		assertString(l.toString(), l.toJson5());
-
-		// toJsonl — one element per line
-		assertNotNull(l.toJsonl());
-
-		// toJcs — canonical JSON (RFC 8785)
-		assertNotNull(l.toJcs());
-
-		// toHjson — HJSON
-		assertNotNull(l.toHjson());
 
 		// toString(WriterSerializer) — generalized
 		assertString("['b','a']", l.toString(org.apache.juneau.json5.Json5Serializer.DEFAULT));

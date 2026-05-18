@@ -29,7 +29,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
@@ -373,11 +372,11 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				throw new ParseException(this, "Expected ''null'' for void value, but was ''{0}''.", s);
 		} else if (sType.isObject()) {
 			if (c == '(') {
-				var m = new JsonMap(this);
+				var m = newGenericMap();
 				parseIntoMap(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else if (c == '@') {
-				Collection l = new JsonList(this);
+				Collection l = newGenericList();
 				o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);
 			} else {
 				var s = parseString(r, isUrlParamValue);
@@ -409,19 +408,19 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '(') {
-				var m = new JsonMap(this);
+				var m = newGenericMap();
 				parseIntoMap(r, m, string(), object(), pMeta);
 				// Handle case where it's a collection, but serialized as a map with a _type or _value key.
 				if (m.containsKey(getBeanTypePropertyName(sType)))
 					o = cast(m, pMeta, eType);
 				// Handle case where it's a collection, but only a single value was specified.
 				else {
-					var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
+					var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());
 					l.add(m.cast(sType.getElementType()));
 					o = l;
 				}
 			} else {
-				var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
+				var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());
 				o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);
 			}
 		} else if (nn(builder)) {
@@ -438,7 +437,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				o = sType.newInstanceFromString(outer, s);
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '(') {
-				var m = new JsonMap(this);
+				var m = newGenericMap();
 				parseIntoMap(r, m, string(), object(), pMeta);
 				// Handle case where it's an array, but serialized as a map with a _type or _value key.
 				if (m.containsKey(getBeanTypePropertyName(sType)))
@@ -455,7 +454,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			}
 		} else if (c == '(') {
 			// It could be a non-bean with _type attribute.
-			var m = new JsonMap(this);
+			var m = newGenericMap();
 			parseIntoMap(r, m, string(), object(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(sType)))
 				o = cast(m, pMeta, eType);
@@ -623,6 +622,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		"java:S1854",    // argIndex=0 is the valid starting arg index; Sonar FP on early-return paths that never read it
 		"java:S2583",    // State variables persist across loop iterations
 		"java:S2589",    // Final if (state==S3) is always true given prior check; exhaustive state error-reporting pattern
+		"java:S6541",    // Brain method acceptable for parser state machine
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
 	private <E> Collection<E> parseIntoCollection(UonReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta)
@@ -715,6 +715,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	@SuppressWarnings({
 		"java:S1168",    // TODO: null for EOF/AMP. Parser state machine.
 		"java:S2589",    // Final if (state==S4) is always true given prior checks; exhaustive state error-reporting pattern
+		"java:S6541",    // Brain method acceptable for parser state machine
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
 	private <K,V> Map<K,V> parseIntoMap(UonReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
