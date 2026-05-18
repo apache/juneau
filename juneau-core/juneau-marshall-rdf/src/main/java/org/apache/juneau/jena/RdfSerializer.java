@@ -467,6 +467,18 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override /* Overridden from Context.Builder */
 		public RdfSerializer build() {
 			return cache(CACHE).build(RdfSerializer.class);

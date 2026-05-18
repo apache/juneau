@@ -892,6 +892,17 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	public final boolean isIgnoreUnknownBeanProperties() { return ctx.isIgnoreUnknownBeanProperties(); }
 
 	/**
+	 * Schema validation mode.
+	 *
+	 * @see MarshallingContext.Builder#validateSchema()
+	 * @return
+	 * 	<jk>true</jk> if bean property values should be validated against their {@code @Schema}-declared constraints
+	 * 	during parsing and serialization.
+	 * @since 9.5.0
+	 */
+	public final boolean isValidateSchema() { return ctx.isValidateSchema(); }
+
+	/**
 	 * Ignore unknown properties with null values.
 	 *
 	 * @see MarshallingContext.Builder#disableIgnoreUnknownNullBeanProperties()

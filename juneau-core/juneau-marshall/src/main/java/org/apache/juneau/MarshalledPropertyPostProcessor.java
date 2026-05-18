@@ -25,7 +25,10 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
@@ -144,6 +147,10 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		// Previously lived as a private static helper on {@link BeanMeta}; moved here during Task-5 Step 8b-ii
 		// Phase C Task 3 so {@link BeanMeta} no longer references {@link ObjectSwap}/{@link ParseException}/{@link SerializeException}.
 		installSwapAwareTransforms(b);
+
+		// Install schema-validation transforms (wraps any existing readTransform/writeTransform) when a
+		// PropertyValidatorFactory is on the classpath and the property carries at least one @Schema annotation.
+		installSchemaValidationTransforms(bc, b);
 	}
 
 	/**
@@ -219,6 +226,122 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				}
 			};
 		}
+	}
+
+	/**
+	 * Installs {@code @Schema}-driven validation transforms on a {@link BeanPropertyMeta.Builder}.
+	 *
+	 * <p>
+	 * Discovery flow:
+	 * <ol>
+	 * 	<li>Resolve a {@link PropertyValidatorFactory} via {@link PropertyValidators#factory()} (ServiceLoader-backed).
+	 * 		If no factory is on the classpath, this is a silent no-op.
+	 * 	<li>Collect every {@link Schema @Schema} annotation reachable from {@code b.innerField} / {@code b.getter} /
+	 * 		{@code b.setter} via the {@link AnnotationProvider}.
+	 * 	<li>If at least one is found, merge them into a single {@link JsonMap} via {@link SchemaAnnotation#asMap(Schema)}
+	 * 		(later entries override earlier).
+	 * 	<li>Ask the factory for a {@link PropertyValidator} keyed off the merged map.  If the factory returns
+	 * 		{@code null} (e.g. the map carried only descriptive keywords), do nothing.
+	 * 	<li>Wrap {@code b.readTransform} and {@code b.writeTransform} so the validator runs whenever the
+	 * 		{@link MarshallingSession} has {@code isValidateSchema()} enabled.
+	 * </ol>
+	 *
+	 * <p>
+	 * Validation failures throw {@link SchemaValidationException}, which we wrap in {@link BeanRuntimeException} so
+	 * the parser's outer catch block lifts them into {@link ParseException} and the serializer surfaces them through
+	 * the existing exception flow.
+	 *
+	 * @param bc The marshalling context.  Must not be <jk>null</jk>.
+	 * @param b The bean-property builder.  Must not be <jk>null</jk>.
+	 */
+	@SuppressWarnings({
+		"java:S3776" // Discovery branches over innerField/getter/setter mirror the swap discovery loop above.
+	})
+	static void installSchemaValidationTransforms(MarshallingContext bc, BeanPropertyMeta.Builder b) {
+		// Skip when validation is not enabled on the context.  BeanMeta is cached per-context, so contexts with
+		// validateSchema=true get their own cache slot and we don't pay the discovery / factory cost on the
+		// default (validateSchema=false) path.  Also avoids a recursive BeanMeta build cycle: the factory parses
+		// JSON into {@link org.apache.juneau.bean.jsonschema.JsonSchema} via the default JSON parser, which would
+		// otherwise re-enter this method while the original BeanMeta is still under construction.
+		if (! bc.isValidateSchema())
+			return;
+		var factory = PropertyValidators.factory();
+		if (factory == null)
+			return;
+		var ap = bc.getAnnotationProvider();
+		JsonMap merged = null;
+		if (nn(b.innerField))
+			for (var ai : ap.find(Schema.class, b.innerField))
+				merged = applyToMap(merged, ai.inner());
+		if (nn(b.getter))
+			for (var ai : ap.find(Schema.class, b.getter))
+				merged = applyToMap(merged, ai.inner());
+		if (nn(b.setter))
+			for (var ai : ap.find(Schema.class, b.setter))
+				merged = applyToMap(merged, ai.inner());
+		if (merged == null || merged.isEmpty())
+			return;
+		var validator = factory.create(merged, propertyClass(b));
+		if (validator == null)
+			return;
+
+		final var propertyName = b.name;
+		var innerRead = b.readTransform;
+		b.readTransform = (session, o) -> {
+			Object v = nn(innerRead) ? innerRead.apply(session, o) : o;
+			if (session instanceof MarshallingSession ms && ms.isValidateSchema()) {
+				try {
+					validator.validate(v);
+				} catch (SchemaValidationException e) {
+					throw new BeanRuntimeException(e, null, "Schema validation failed on property ''{0}'': {1}", propertyName, e.getMessage());
+				}
+			}
+			return v;
+		};
+		var innerWrite = b.writeTransform;
+		b.writeTransform = (session, o) -> {
+			if (session instanceof MarshallingSession ms && ms.isValidateSchema()) {
+				try {
+					validator.validate(o);
+				} catch (SchemaValidationException e) {
+					throw new BeanRuntimeException(e, null, "Schema validation failed on property ''{0}'': {1}", propertyName, e.getMessage());
+				}
+			}
+			return nn(innerWrite) ? innerWrite.apply(session, o) : o;
+		};
+	}
+
+	@SuppressWarnings({
+		"java:S112" // Rewrap as RuntimeException - ParseException at this level is a programming error in the @Schema input.
+	})
+	private static JsonMap applyToMap(JsonMap acc, Schema schema) {
+		JsonMap m;
+		try {
+			m = SchemaAnnotation.asMap(schema);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+		if (m == null || m.isEmpty())
+			return acc;
+		if (acc == null)
+			return new JsonMap(m);
+		acc.putAll(m);
+		return acc;
+	}
+
+	private static Class<?> propertyClass(BeanPropertyMeta.Builder b) {
+		if (nn(b.rawTypeMeta))
+			return b.rawTypeMeta.inner();
+		if (nn(b.innerField))
+			return b.innerField.getFieldType().inner();
+		if (nn(b.getter))
+			return b.getter.getReturnType().inner();
+		if (nn(b.setter)) {
+			var params = b.setter.getParameterTypes();
+			if (! params.isEmpty())
+				return params.get(0).inner();
+		}
+		return Object.class;
 	}
 
 	private static ObjectSwap<?,?> marshalledPropSwap(AnnotationInfo<MarshalledProp> ai) {

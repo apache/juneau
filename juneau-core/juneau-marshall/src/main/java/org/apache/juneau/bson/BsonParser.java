@@ -166,6 +166,18 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override /* Context.Builder */
 		public BsonParser build() {
 			return cache(CACHE).build(BsonParser.class);

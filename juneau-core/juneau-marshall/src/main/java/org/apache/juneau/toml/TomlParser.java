@@ -133,6 +133,18 @@ public class TomlParser extends ReaderParser {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override
 		public TomlParser build() {
 			return cache(CACHE).build(TomlParser.class);

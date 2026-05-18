@@ -282,6 +282,18 @@ public class HoconSerializer extends WriterSerializer implements HoconMetaProvid
 			return useWhitespace();
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override
 		public HoconSerializer build() {
 			return cache(CACHE).build(HoconSerializer.class);

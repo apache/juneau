@@ -200,6 +200,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 	private static final String PROP_useEnumNames = "useEnumNames";
 	private static final String PROP_useInterfaceProxies = "useInterfaceProxies";
 	private static final String PROP_useJavaBeanIntrospector = "useJavaBeanIntrospector";
+	private static final String PROP_validateSchema = "validateSchema";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_bc = "bc";
@@ -254,6 +255,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		private boolean unsortedProperties;
 		private boolean useEnumNames;
 		private boolean useJavaBeanIntrospector;
+		private boolean validateSchema;
 		private String typePropertyName;
 		private MediaType mediaType;
 		private Locale locale;
@@ -301,6 +303,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 			typePropertyName = env("MarshallingContext.typePropertyName", "_type");
 			useEnumNames = env("MarshallingContext.useEnumNames", false);
 			useJavaBeanIntrospector = env("MarshallingContext.useJavaBeanIntrospector", false);
+			validateSchema = env("MarshallingContext.validateSchema", false);
 			beanStore = null;
 		}
 
@@ -341,6 +344,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 			typePropertyName = copyFrom.typePropertyName;
 			useEnumNames = copyFrom.useEnumNames;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
+			validateSchema = copyFrom.validateSchema;
 			beanStore = copyFrom.beanStore;
 		}
 
@@ -381,6 +385,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 			typePropertyName = copyFrom.typePropertyName;
 			useEnumNames = copyFrom.useEnumNames;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
+			validateSchema = copyFrom.validateSchema;
 			beanStore = copyFrom.beanStore;
 		}
 
@@ -2289,7 +2294,8 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 					ignoreUnknownEnumValues,
 					unsortedProperties,
 					useEnumNames,
-					useJavaBeanIntrospector
+					useJavaBeanIntrospector,
+					validateSchema
 				),
 				typePropertyName,
 				mediaType,
@@ -2437,6 +2443,61 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		 */
 		public Builder ignoreUnknownBeanProperties(boolean value) {
 			ignoreUnknownBeanProperties = value;
+			return this;
+		}
+
+		/**
+		 * Schema validation mode.
+		 *
+		 * <p>
+		 * When enabled, bean property values are validated against the constraints declared by
+		 * {@link org.apache.juneau.commons.annotation.Schema @Schema} annotations on those properties.  Validation runs
+		 * during both <b>parsing</b> (value set on the bean) and <b>serialization</b> (value read from the bean).
+		 *
+		 * <p>
+		 * Backed by the typed {@code JsonSchema} bean in {@code juneau-bean-jsonschema} and JSON Schema Draft 2020-12
+		 * semantics.  Validation failures throw {@link org.apache.juneau.commons.httppart.SchemaValidationException}
+		 * wrapped in {@code BeanRuntimeException}; the parser surfaces them as
+		 * {@link org.apache.juneau.parser.ParseException} and the serializer surfaces them as
+		 * {@link org.apache.juneau.serializer.SerializeException}.
+		 *
+		 * <p>
+		 * If {@code juneau-bean-jsonschema} is not on the classpath, this flag becomes a silent no-op.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean with a length-constrained property.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<ja>&#64;Schema</ja>(minLength=<js>"2"</js>, maxLength=<js>"10"</js>)
+		 * 		<jk>public</jk> String <jf>name</jf>;
+		 * 	}
+		 *
+		 * 	<jc>// Parser that validates inbound values.</jc>
+		 * 	ReaderParser <jv>p</jv> = JsonParser.<jsm>create</jsm>().validateSchema().build();
+		 *
+		 * 	<jv>p</jv>.parse(<js>"{name:'a'}"</js>, MyBean.<jk>class</jk>);  <jc>// throws ParseException - too short</jc>
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link BeanConfig#validateSchema()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder validateSchema() {
+			return validateSchema(true);
+		}
+
+		/**
+		 * Same as {@link #validateSchema()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder validateSchema(boolean value) {
+			validateSchema = value;
 			return this;
 		}
 
@@ -3661,6 +3722,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 	private final boolean useEnumNames;
 	private final boolean useInterfaceProxies;
 	private final boolean useJavaBeanIntrospector;
+	private final boolean validateSchema;
 	private final Class<? extends PropertyNamer> propertyNamer;
 	private final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
 	private final ClassMeta<String> cmString;  // Reusable ClassMeta that represents general Strings.
@@ -3722,6 +3784,7 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 		useEnumNames = builder.useEnumNames;
 		useInterfaceProxies = ! builder.disableInterfaceProxies;
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
+		validateSchema = builder.validateSchema;
 		beanStore = builder.beanStore;
 
 		var builderNotBeanClasses = new ArrayList<>(builder.notBeanClasses);
@@ -4652,6 +4715,17 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 	public final boolean isIgnoreUnknownBeanProperties() { return ignoreUnknownBeanProperties; }
 
 	/**
+	 * Schema validation mode.
+	 *
+	 * @see MarshallingContext.Builder#validateSchema()
+	 * @return
+	 * 	<jk>true</jk> if bean property values should be validated against their {@code @Schema}-declared constraints
+	 * 	during parsing and serialization.
+	 * @since 9.5.0
+	 */
+	public final boolean isValidateSchema() { return validateSchema; }
+
+	/**
 	 * Ignore unknown enum values.
 	 *
 	 * @see MarshallingContext.Builder#ignoreUnknownEnumValues()
@@ -4911,7 +4985,8 @@ public class MarshallingContext extends Context implements ConversionFinder, org
 			.a(PROP_swaps, swaps)
 			.a(PROP_useEnumNames, useEnumNames)
 			.a(PROP_useInterfaceProxies, useInterfaceProxies)
-			.a(PROP_useJavaBeanIntrospector, useJavaBeanIntrospector);
+			.a(PROP_useJavaBeanIntrospector, useJavaBeanIntrospector)
+			.a(PROP_validateSchema, validateSchema);
 	}
 
 	/**

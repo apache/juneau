@@ -209,6 +209,18 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 			return new Builder(this);
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override /* Overridden from Context.Builder */
 		public CborSerializer build() {
 			return cache(CACHE).build(CborSerializer.class);

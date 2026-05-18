@@ -81,7 +81,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		BeanMeta<?> beanMeta;  // Package-private for BeanMeta access
 		BeanTypeResolver bc;  // The bean-modeling SPI seam to the marshalling-side type resolver.  Null when the owning BeanMeta was built via the commons-side path.
 		BeanConfigContext config;  // Package-private for BeanMeta access.  Always non-null — sourced from the owning BeanMeta.
-		String name;  // Package-private for BeanMeta access
+		public String name;  // Public so marshalling-side post-processors can use it when constructing diagnostic messages (e.g. MarshalledPropertyPostProcessor's schema-validation transform).
 		FieldInfo field;  // Package-private for BeanMeta access
 		public FieldInfo innerField;  // Package-private for BeanMeta access
 		public MethodInfo getter;  // Package-private for BeanMeta access

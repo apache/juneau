@@ -257,6 +257,18 @@ public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvid
 			return useWhitespace();
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override
 		public HjsonSerializer build() {
 			return cache(CACHE).build(HjsonSerializer.class);

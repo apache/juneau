@@ -110,6 +110,18 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override
 		public RdfStreamSerializer build() {
 			return cache(CACHE).build(RdfStreamSerializer.class);

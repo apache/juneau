@@ -121,6 +121,18 @@ public class CborParser extends InputStreamParser implements CborMetaProvider {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override /* Overridden from Context.Builder */
 		public CborParser build() {
 			return cache(CACHE).build(CborParser.class);

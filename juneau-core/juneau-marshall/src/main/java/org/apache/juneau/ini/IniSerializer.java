@@ -195,6 +195,18 @@ public class IniSerializer extends WriterSerializer implements IniMetaProvider {
 			return useWhitespace();
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override
 		public IniSerializer build() {
 			return cache(CACHE).build(IniSerializer.class);

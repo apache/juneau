@@ -81,6 +81,7 @@ public class BeanConfigAnnotation {
 			bool(a.disableIgnoreMissingSetters()).ifPresent(b::disableIgnoreMissingSetters);
 			bool(a.disableIgnoreTransientFields()).ifPresent(b::disableIgnoreTransientFields);
 			bool(a.ignoreUnknownBeanProperties()).ifPresent(b::ignoreUnknownBeanProperties);
+			bool(a.validateSchema()).ifPresent(b::validateSchema);
 			bool(a.ignoreUnknownEnumValues()).ifPresent(b::ignoreUnknownEnumValues);
 			bool(a.disableIgnoreUnknownNullBeanProperties()).ifPresent(b::disableIgnoreUnknownNullBeanProperties);
 			bool(a.unsortedProperties()).ifPresent(b::unsortedProperties);

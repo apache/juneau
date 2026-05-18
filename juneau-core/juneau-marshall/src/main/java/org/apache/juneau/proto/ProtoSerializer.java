@@ -198,6 +198,18 @@ public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvid
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override
 		public ProtoSerializer build() {
 			return cache(CACHE).build(ProtoSerializer.class);

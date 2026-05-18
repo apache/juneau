@@ -98,6 +98,18 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 			return new Builder(this);
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override
 		public ParquetParser build() {
 			return cache(CACHE).build(ParquetParser.class);

@@ -118,6 +118,18 @@ public class ProtoParser extends ReaderParser implements ProtoMetaProvider {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override
 		public ProtoParser build() {
 			return cache(CACHE).build(ProtoParser.class);

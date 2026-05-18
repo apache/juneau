@@ -114,6 +114,18 @@ public class IniParser extends ReaderParser implements IniMetaProvider {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder validateSchema() {
+			super.validateSchema();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder validateSchema(boolean value) {
+			super.validateSchema(value);
+			return this;
+		}
+
 		@Override
 		public IniParser build() {
 			return cache(CACHE).build(IniParser.class);

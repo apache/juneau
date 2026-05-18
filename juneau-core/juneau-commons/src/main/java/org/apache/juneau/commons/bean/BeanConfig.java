@@ -448,6 +448,38 @@ public @interface BeanConfig {
 	String ignoreUnknownBeanProperties() default "";
 
 	/**
+	 * Schema validation mode.
+	 *
+	 * <p>
+	 * If <js>"true"</js>, bean property values are validated against the constraints declared by
+	 * {@link org.apache.juneau.commons.annotation.Schema @Schema} annotations on those properties.  Validation runs
+	 * during both <b>parsing</b> (value set on the bean) and <b>serialization</b> (value read from the bean).
+	 *
+	 * <p>
+	 * Backed by the typed {@code JsonSchema} bean in {@code juneau-bean-jsonschema} and JSON Schema Draft 2020-12
+	 * semantics.  Validation failures throw
+	 * {@link org.apache.juneau.commons.httppart.SchemaValidationException} wrapped in {@code BeanRuntimeException};
+	 * the parser surfaces them as parse exceptions and the serializer surfaces them as serialize exceptions.
+	 *
+	 * <p>
+	 * If {@code juneau-bean-jsonschema} is not on the classpath, this setting becomes a silent no-op.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String validateSchema() default "";
+
+	/**
 	 * Ignore unknown enum values.
 	 *
 	 * <p>
