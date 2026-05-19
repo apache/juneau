@@ -1705,18 +1705,18 @@ const sidebars: SidebarsConfig = {
 				},
 				{
 					type: 'category',
-					label: '14. juneau-microservice-core',
+					label: '14. juneau-microservice',
 					collapsed: true,
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/14.01.JuneauMicroserviceCoreBasics',
-							label: '14.1. juneau-microservice-core Basics',
+							id: 'topics/14.01.JuneauMicroserviceBasics',
+							label: '14.1. juneau-microservice Basics',
 						},
 						{
 							type: 'doc',
 							id: 'topics/14.02.MicroserviceCoreOverview',
-							label: '14.2. Microservice Core Overview',
+							label: '14.2. Microservice Overview',
 						},
 						{
 							type: 'doc',
@@ -1803,7 +1803,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/15.09.Extending',
-							label: '15.9. Extending',
+							label: '15.9. Customizing via @Bean',
 						},
 					],
 				},

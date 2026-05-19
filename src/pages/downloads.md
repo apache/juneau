@@ -91,7 +91,7 @@
 <artifactId>juneau-rest-server</artifactId>
 <artifactId>juneau-rest-server-springboot</artifactId>
 <!-- Microservice modules -->
-<artifactId>juneau-microservice-core</artifactId>
+<artifactId>juneau-microservice</artifactId>
 <artifactId>juneau-microservice-jetty</artifactId>
 <!-- Shaded modules -->
 <artifactId>juneau-shaded-core</artifactId>
