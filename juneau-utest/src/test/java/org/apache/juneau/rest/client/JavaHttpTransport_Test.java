@@ -24,7 +24,6 @@ import java.net.http.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.http.entity.*;
-import org.apache.juneau.rest.client.javahttpclient.*;
 import org.junit.jupiter.api.*;
 
 import com.sun.net.httpserver.*;

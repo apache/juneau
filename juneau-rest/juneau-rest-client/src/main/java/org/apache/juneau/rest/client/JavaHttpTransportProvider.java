@@ -14,22 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.client.javahttpclient;
-
-import org.apache.juneau.rest.client.*;
+package org.apache.juneau.rest.client;
 
 /**
  * {@link HttpTransportProvider} implementation that supplies a {@link JavaHttpTransport}.
  *
  * <p>
  * Registered via {@code META-INF/services/org.apache.juneau.rest.client.HttpTransportProvider} so that
- * {@code RestClient} can auto-discover the JDK HTTP client when no higher-priority transport is present.
- *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.ng.*}).
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
+ * {@code RestClient} auto-discovers the JDK HTTP client when no higher-priority transport is present.
+ * Since the JDK transport ships in the {@code juneau-rest-client} artifact itself, it is always available
+ * unless overridden by a sibling transport module with a lower priority value.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>

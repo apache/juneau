@@ -14,20 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.client.javahttpclient;
+package org.apache.juneau.rest.client;
 
 import java.io.*;
 import java.net.http.*;
 import java.net.http.HttpRequest.*;
 import java.net.http.HttpResponse.*;
 
-import org.apache.juneau.rest.client.*;
-
 /**
  * {@link HttpTransport} implementation backed by the JDK's built-in {@link java.net.http.HttpClient}.
  *
  * <p>
- * No external dependencies are required — this transport is always available on Java 11+.
+ * This is the <b>default</b> transport used by {@link RestClient}.  It is built into the
+ * {@code juneau-rest-client} artifact, requires no external dependencies, and is always available on Java 11+.
+ *
+ * <p>
  * It is auto-discovered via {@link java.util.ServiceLoader} and can also be instantiated explicitly:
  *
  * <p class='bjava'>
@@ -39,12 +40,6 @@ import org.apache.juneau.rest.client.*;
  * 		.transport(<jv>transport</jv>)
  * 		.build();
  * </p>
- *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.ng.*}).
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>

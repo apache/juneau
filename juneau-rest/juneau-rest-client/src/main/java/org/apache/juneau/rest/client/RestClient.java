@@ -35,7 +35,7 @@ import org.apache.juneau.rest.client.remote.*;
  * <p>
  * Create instances via {@link #create()} or {@link #builder()}:
  * <p class='bjava'>
- * 	<jc>// Minimal — auto-discovers a transport via ServiceLoader</jc>
+ * 	<jc>// Minimal — uses the built-in JDK HttpClient transport</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>();
  *
  * 	<jc>// Explicit transport (e.g. for tests)</jc>
@@ -46,12 +46,12 @@ import org.apache.juneau.rest.client.remote.*;
  * </p>
  *
  * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.ng.*}).
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
- * For production use cases that require long-term binary stability, continue using the existing
- * {@code juneau-rest-client} and {@code juneau-rest-common} APIs until the {@code ng} stack is declared stable.
+ * By default, {@code RestClient} uses {@link JavaHttpTransport} (backed by the JDK's
+ * {@link java.net.http.HttpClient}), which ships built into the {@code juneau-rest-client} artifact and
+ * requires no extra dependencies on Java 11+.  Pulling in one of the optional transport modules
+ * ({@code juneau-rest-client-apache-httpclient-45}, {@code -apache-httpclient-50}, {@code -okhttp},
+ * {@code -jetty}) registers a higher-priority provider via {@link java.util.ServiceLoader} that takes
+ * over automatically.  An explicit {@link Builder#transport(HttpTransport)} call always wins.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
@@ -102,8 +102,8 @@ public final class RestClient implements Closeable {
 		for (var p : ServiceLoader.load(HttpTransportProvider.class))
 			if (p.isAvailable())
 				providers.add(p);
-		if (providers.isEmpty()) // HTT: requires test classpath with no transport modules present
-			return null;
+		if (providers.isEmpty())
+			return JavaHttpTransport.create();  // defensive fallback if META-INF/services was stripped (e.g. uber-jar shading)
 		providers.sort(Comparator.comparingInt(HttpTransportProvider::getPriority));
 		return providers.get(0).create();
 	}
@@ -256,7 +256,9 @@ public final class RestClient implements Closeable {
 		 * Sets the HTTP transport to use.
 		 *
 		 * <p>
-		 * If not set, {@link RestClient} will discover a transport via {@link java.util.ServiceLoader}.
+		 * If not set, {@link RestClient} discovers a transport via {@link java.util.ServiceLoader}.  When no
+		 * sibling transport module is on the classpath, the built-in {@link JavaHttpTransport} (backed by the JDK's
+		 * {@link java.net.http.HttpClient}) is used as the default.
 		 *
 		 * @param value The transport. Must not be <jk>null</jk>.
 		 * @return This object.

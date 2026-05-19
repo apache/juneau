@@ -30,7 +30,6 @@ import org.apache.juneau.microservice.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.rest.client.apachehttpclient45.*;
 import org.apache.juneau.rest.client.apachehttpclient50.*;
-import org.apache.juneau.rest.client.javahttpclient.*;
 import org.apache.juneau.rest.client.jetty.*;
 import org.apache.juneau.rest.client.okhttp.*;
 import org.apache.juneau.rest.annotation.*;

@@ -42,7 +42,6 @@
 		<module>juneau-rest-mock</module>
 		<module>juneau-rest-client-apache-httpclient-45</module>
 		<module>juneau-rest-client-apache-httpclient-50</module>
-		<module>juneau-rest-client-java-httpclient</module>
 		<module>juneau-rest-client-okhttp</module>
 		<module>juneau-rest-client-jetty</module>
 	</modules>

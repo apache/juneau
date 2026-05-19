@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.client.javahttpclient;
+package org.apache.juneau.rest.client;
 
 import java.net.http.*;
 
@@ -23,12 +23,6 @@ import java.net.http.*;
  *
  * <p>
  * Obtain an instance via {@link JavaHttpTransport#builder()}.
- *
- * <p>
- * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.ng.*}).
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
