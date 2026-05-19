@@ -32,7 +32,7 @@ import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.client.classic.remote.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.httppart.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 

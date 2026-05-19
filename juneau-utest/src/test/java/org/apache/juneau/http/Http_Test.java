@@ -34,9 +34,9 @@ import org.apache.juneau.http.response.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Unit tests for all ng.http classes: headers, parts, bodies, response, and static factory helpers.
+ * Unit tests for all http classes: headers, parts, bodies, response, and static factory helpers.
  */
-public class NgHttp_Test {
+public class Http_Test {
 
 	// ------------------------------------------------------------------------------------------------------------------
 	// A — Named header classes

@@ -27,7 +27,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"serial"})

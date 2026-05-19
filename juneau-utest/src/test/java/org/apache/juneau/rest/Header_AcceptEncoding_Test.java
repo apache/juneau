@@ -24,7 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 class Header_AcceptEncoding_Test extends TestBase {

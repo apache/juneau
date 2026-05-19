@@ -29,7 +29,7 @@ import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.classic.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 class BasicIntegerHeader_Test extends TestBase {

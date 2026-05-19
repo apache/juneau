@@ -130,7 +130,7 @@ public class MockServletRequest implements HttpServletRequest {
 	})
 	public MockServletRequest applyOverrides(HttpRequest req) {
 
-		if (req instanceof MockRestRequest req2) {
+		if (req instanceof org.apache.juneau.rest.mock.classic.MockRestRequest req2) {
 			req2.getAttributeMap().forEach(this::attribute);
 			req2.getRequestDispatcherMap().forEach(this::requestDispatcher);
 			if (nn(req2.getCharacterEncoding()))
@@ -706,11 +706,11 @@ public class MockServletRequest implements HttpServletRequest {
 	 * Adds the specified parent path variables to this servlet request.
 	 *
 	 * <p>
-	 * See {@link MockRestClient.Builder#pathVars(Map)} for an example.
+	 * See {@link org.apache.juneau.rest.mock.classic.MockRestClient.Builder#pathVars(Map)} for an example.
 	 *
 	 * @param pathVars The
 	 * @return This object.
-	 * @see MockRestClient.Builder#pathVars(Map)
+	 * @see org.apache.juneau.rest.mock.classic.MockRestClient.Builder#pathVars(Map)
 	 */
 	public MockServletRequest pathVars(Map<String,String> pathVars) {
 		if (nn(pathVars))
@@ -983,7 +983,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @param value The enable flag value.
 	 * @return This object.
 	 */
-	protected MockServletRequest debug(boolean value) {
+	public MockServletRequest debug(boolean value) {
 		if (value)
 			header("Debug", "true");
 		return this;

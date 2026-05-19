@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.ng.rest;
+package org.apache.juneau.rest.client;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 /**
  * First end-to-end tests for the next-generation REST client using {@link MockHttpTransport}.
  */
-public class NgRestClient_Test {
+public class RestClient_Test {
 
 	// =================================================================================================================
 	// A — Basic GET / response reading

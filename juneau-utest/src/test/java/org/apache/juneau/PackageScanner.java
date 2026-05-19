@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.ng;
+package org.apache.juneau;
 
 import java.io.*;
 import java.net.*;
@@ -30,9 +30,9 @@ import java.util.jar.*;
  * {@code org.apache.juneau.http.response} / {@code .header} without having to hard-code
  * the (large and frequently-changing) list.
  */
-public final class NgPackageScanner {
+public final class PackageScanner {
 
-	private NgPackageScanner() {}
+	private PackageScanner() {}
 
 	/**
 	 * Returns every concrete class in {@code packageName}, located via {@code sentinel}'s defining JAR/dir.
@@ -82,7 +82,7 @@ public final class NgPackageScanner {
 
 	private static void maybeAdd(List<Class<?>> out, String fqn) {
 		try {
-			var c = Class.forName(fqn, false, NgPackageScanner.class.getClassLoader());
+			var c = Class.forName(fqn, false, PackageScanner.class.getClassLoader());
 			if (c.isInterface() || java.lang.reflect.Modifier.isAbstract(c.getModifiers()))
 				return;
 			out.add(c);

@@ -33,7 +33,7 @@ import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.classic.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.uon.*;
 import org.junit.jupiter.api.*;
 

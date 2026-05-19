@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.ng.rest;
+package org.apache.juneau.rest.client;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,7 +44,7 @@ import org.junit.jupiter.api.*;
  * Tests for the ng.* remote proxy support: @Remote, @RemoteGet/Post/etc., parameter annotations,
  * RrpcInterfaceMeta, RrpcInterfaceMethodMeta, and RemoteClient.
  */
-public class NgRemoteClient_Test {
+public class RemoteClient_Test {
 
 	// ------------------------------------------------------------------------------------------------------------------
 	// A — @Remote annotation and metadata

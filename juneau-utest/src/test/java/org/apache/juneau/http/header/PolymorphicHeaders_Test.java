@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * The bulk of {@code IfRange} / {@code RetryAfter} stays unexercised by
- * {@link NgNamedHeaders_Test} because that test only walks one factory per parameter combination.
+ * {@link NamedHeaders_Test} because that test only walks one factory per parameter combination.
  * Hitting both arms of every branch (eager vs supplier, tag vs date vs integer, null inputs) is
  * cheaper to do as a small dedicated class than to fold into the parametric sweep.
  */

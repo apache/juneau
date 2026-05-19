@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.ng.rest;
+package org.apache.juneau.rest.mock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,9 +28,9 @@ import org.apache.juneau.rest.annotation.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Integration tests for {@link NgMockRestClient}.
+ * Integration tests for {@link MockRestClient}.
  */
-public class NgMockRestClient_Test {
+public class MockRestClient_Test {
 
 	// =================================================================================================================
 	// Test REST resources
@@ -64,7 +64,7 @@ public class NgMockRestClient_Test {
 		}
 
 		@RestGet(path="/echo-header")
-		public String echoHeader(RestRequest req) {
+		public String echoHeader(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeader("X-Custom");
 		}
 
@@ -82,7 +82,7 @@ public class NgMockRestClient_Test {
 		}
 	}
 
-	// Used only with instances (not by class) to cover the isClass=false branch in NgMockRestClient.Builder.build()
+	// Used only with instances (not by class) to cover the isClass=false branch in MockRestClient.Builder.build()
 	@Rest
 	public static class InstanceOnlyResource {
 		@RestGet
@@ -95,7 +95,7 @@ public class NgMockRestClient_Test {
 	@Rest
 	public static class NoContentResource {
 		@RestDelete
-		public void delete(RestResponse res) {
+		public void delete(org.apache.juneau.rest.RestResponse res) {
 			res.setStatus(204);
 		}
 	}
@@ -106,7 +106,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void a01_get_basic() throws Exception {
-		try (var client = NgMockRestClient.create(EchoResource.class)) {
+		try (var client = MockRestClient.create(EchoResource.class)) {
 			try (var response = client.get("/").run()) {
 				assertEquals(200, response.getStatusCode());
 				assertNotNull(response.getBodyAsString());
@@ -116,7 +116,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void a02_post_withBody() throws Exception {
-		try (var client = NgMockRestClient.create(EchoResource.class)) {
+		try (var client = MockRestClient.create(EchoResource.class)) {
 			try (var response = client.post("/").body(StringBody.of("world", "text/plain")).run()) {
 				assertEquals(200, response.getStatusCode());
 				var body = response.getBodyAsString();
@@ -127,7 +127,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void a03_put_withBody() throws Exception {
-		try (var client = NgMockRestClient.create(EchoResource.class)) {
+		try (var client = MockRestClient.create(EchoResource.class)) {
 			try (var response = client.put("/").body(StringBody.of("data", "text/plain")).run()) {
 				assertEquals(200, response.getStatusCode());
 				var body = response.getBodyAsString();
@@ -138,7 +138,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void a04_delete() throws Exception {
-		try (var client = NgMockRestClient.create(EchoResource.class)) {
+		try (var client = MockRestClient.create(EchoResource.class)) {
 			try (var response = client.delete("/").run()) {
 				assertEquals(200, response.getStatusCode());
 				var body = response.getBodyAsString();
@@ -149,7 +149,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void a05_patch_withBody() throws Exception {
-		try (var client = NgMockRestClient.create(EchoResource.class)) {
+		try (var client = MockRestClient.create(EchoResource.class)) {
 			try (var response = client.patch("/").body(StringBody.of("fix", "text/plain")).run()) {
 				assertEquals(200, response.getStatusCode());
 				var body = response.getBodyAsString();
@@ -160,7 +160,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void a06_request_explicitMethod() throws Exception {
-		try (var client = NgMockRestClient.create(EchoResource.class)) {
+		try (var client = MockRestClient.create(EchoResource.class)) {
 			try (var response = client.request("GET", "/").run()) {
 				assertEquals(200, response.getStatusCode());
 			}
@@ -173,7 +173,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void b01_customRequestHeader() throws Exception {
-		try (var client = NgMockRestClient.create(EchoResource.class)) {
+		try (var client = MockRestClient.create(EchoResource.class)) {
 			try (var response = client.get("/echo-header").header("X-Custom", "my-value").run()) {
 				assertEquals(200, response.getStatusCode());
 				var body = response.getBodyAsString();
@@ -184,7 +184,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void b02_statusCode404_unknownPath() throws Exception {
-		try (var client = NgMockRestClient.create(EchoResource.class)) {
+		try (var client = MockRestClient.create(EchoResource.class)) {
 			try (var response = client.get("/does-not-exist-at-all").run()) {
 				assertEquals(404, response.getStatusCode());
 			}
@@ -198,7 +198,7 @@ public class NgMockRestClient_Test {
 	@Test
 	void c01_createWithInstance() throws Exception {
 		var instance = new RootResource();
-		try (var client = NgMockRestClient.create(instance)) {
+		try (var client = MockRestClient.create(instance)) {
 			try (var response = client.get("/").run()) {
 				assertEquals(200, response.getStatusCode());
 				var body = response.getBodyAsString();
@@ -209,7 +209,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void c02_createWithClass() throws Exception {
-		try (var client = NgMockRestClient.create(RootResource.class)) {
+		try (var client = MockRestClient.create(RootResource.class)) {
 			try (var response = client.get("/").run()) {
 				assertEquals(200, response.getStatusCode());
 			}
@@ -218,7 +218,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void c03_builder() throws Exception {
-		try (var client = NgMockRestClient.builder(RootResource.class).build()) {
+		try (var client = MockRestClient.builder(RootResource.class).build()) {
 			try (var response = client.get("/").run()) {
 				assertEquals(200, response.getStatusCode());
 			}
@@ -227,7 +227,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void c04_getClient_returnsNgRestClient() {
-		try (var client = NgMockRestClient.create(RootResource.class)) {
+		try (var client = MockRestClient.create(RootResource.class)) {
 			assertNotNull(client.getClient());
 		} catch (IOException e) {
 			fail("Unexpected exception: " + e.getMessage());
@@ -240,7 +240,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void d01_postWithByteArrayBody() throws Exception {
-		try (var client = NgMockRestClient.create(EchoResource.class)) {
+		try (var client = MockRestClient.create(EchoResource.class)) {
 			var bodyBytes = "hello".getBytes();
 			try (var response = client.post("/").body(ByteArrayBody.of(bodyBytes, "text/plain")).run()) {
 				assertEquals(200, response.getStatusCode());
@@ -250,7 +250,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void d02_postWithInputStreamBody() throws Exception {
-		try (var client = NgMockRestClient.create(EchoResource.class)) {
+		try (var client = MockRestClient.create(EchoResource.class)) {
 			var is = new ByteArrayInputStream("hello".getBytes());
 			try (var response = client.post("/").body(StreamBody.of(is, "text/plain")).run()) {
 				assertEquals(200, response.getStatusCode());
@@ -266,7 +266,7 @@ public class NgMockRestClient_Test {
 	void e01_head_method() throws Exception {
 		// HEAD is dispatched; the resource returns 405 because it only has @RestGet, not HEAD
 		// This validates that head() dispatches the request correctly (not 500)
-		try (var client = NgMockRestClient.create(RootResource.class)) {
+		try (var client = MockRestClient.create(RootResource.class)) {
 			try (var response = client.head("/").run()) {
 				assertTrue(response.getStatusCode() != 500, "Unexpected server error on HEAD");
 			}
@@ -275,7 +275,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void e02_contextPath_builder() throws Exception {
-		try (var client = NgMockRestClient.builder(RootResource.class).contextPath("").build()) {
+		try (var client = MockRestClient.builder(RootResource.class).contextPath("").build()) {
 			try (var response = client.get("/").run()) {
 				assertEquals(200, response.getStatusCode());
 			}
@@ -286,7 +286,7 @@ public class NgMockRestClient_Test {
 	void e03_createWithInstance_isClassFalse() throws Exception {
 		// Use InstanceOnlyResource (never passed as a Class) to exercise the isClass=false branch
 		var instance = new InstanceOnlyResource();
-		try (var client = NgMockRestClient.create(instance)) {
+		try (var client = MockRestClient.create(instance)) {
 			try (var response = client.get("/").run()) {
 				assertEquals(200, response.getStatusCode());
 				var body = response.getBodyAsString();
@@ -297,7 +297,7 @@ public class NgMockRestClient_Test {
 
 	@Test
 	void e04_emptyBodyResponse_noContent() throws Exception {
-		try (var client = NgMockRestClient.create(NoContentResource.class)) {
+		try (var client = MockRestClient.create(NoContentResource.class)) {
 			try (var response = client.delete("/").run()) {
 				assertEquals(204, response.getStatusCode());
 				// Body is null for 204 No Content

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.ng.rest;
+package org.apache.juneau.rest.client;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
  * Tests for RestCallInterceptor, RestLogger, RestLogEntry, RestLogLevelResolver,
  * BasicRestLogger, BodyConverter, and related RestClient features.
  */
-public class NgRestClientFeatures_Test {
+public class RestClientFeatures_Test {
 
 	// =================================================================================================================
 	// A — RestCallInterceptor

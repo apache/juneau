@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.ng.rest;
+package org.apache.juneau.rest.client;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,17 +22,19 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 
+import okhttp3.*;
+
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.client.apachehttpclient45.*;
+import org.apache.juneau.rest.client.okhttp.*;
 import org.junit.jupiter.api.*;
 
 import com.sun.net.httpserver.*;
 
 /**
- * Integration tests for {@link ApacheHc45Transport} against a real embedded HTTP server.
+ * Integration tests for {@link OkHttpTransport} against a real embedded HTTP server.
  */
-public class ApacheHc45Transport_Test {
+public class OkHttpTransport_Test {
 
 	private static HttpServer server;
 	private static int port;
@@ -99,7 +101,7 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void a01_get_basicResponse() throws Exception {
-		var transport = ApacheHc45Transport.create();
+		var transport = OkHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/hello").run()) {
 				assertEquals(200, response.getStatusCode());
@@ -110,7 +112,7 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void a02_get_statusCode404() throws Exception {
-		var transport = ApacheHc45Transport.create();
+		var transport = OkHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/not-found").run()) {
 				assertEquals(404, response.getStatusCode());
@@ -120,7 +122,7 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void a03_get_responseHeader() throws Exception {
-		var transport = ApacheHc45Transport.create();
+		var transport = OkHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/hello").run()) {
 				var ct = response.getFirstHeader("Content-Type");
@@ -136,7 +138,7 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void b01_post_echosMethod() throws Exception {
-		var transport = ApacheHc45Transport.create();
+		var transport = OkHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.post("/echo-method")
 					.body(StringBody.of("", "text/plain"))
@@ -149,7 +151,7 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void b02_put_echosMethod() throws Exception {
-		var transport = ApacheHc45Transport.create();
+		var transport = OkHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.put("/echo-method")
 					.body(StringBody.of("", "text/plain"))
@@ -162,7 +164,7 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void b03_delete_echosMethod() throws Exception {
-		var transport = ApacheHc45Transport.create();
+		var transport = OkHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.delete("/echo-method").run()) {
 				assertEquals(200, response.getStatusCode());
@@ -177,7 +179,7 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void c01_post_stringBody() throws Exception {
-		var transport = ApacheHc45Transport.create();
+		var transport = OkHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.post("/echo-body")
 					.body(StringBody.of("hello body", "text/plain"))
@@ -190,7 +192,7 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void c02_post_byteArrayBody() throws Exception {
-		var transport = ApacheHc45Transport.create();
+		var transport = OkHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			var bytes = "byte content".getBytes(StandardCharsets.UTF_8);
 			try (var response = client.post("/echo-body")
@@ -208,7 +210,7 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void d01_header_sentToServer() throws Exception {
-		var transport = ApacheHc45Transport.create();
+		var transport = OkHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/echo-header")
 					.header("X-Custom", "my-value")
@@ -221,7 +223,7 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void d02_missingHeader_returnsDefault() throws Exception {
-		var transport = ApacheHc45Transport.create();
+		var transport = OkHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/echo-header").run()) {
 				assertEquals(200, response.getStatusCode());
@@ -231,13 +233,13 @@ public class ApacheHc45Transport_Test {
 	}
 
 	// =================================================================================================================
-	// E — Builder: explicit httpClient
+	// E — Builder: explicit OkHttpClient
 	// =================================================================================================================
 
 	@Test
 	void e01_builder_withExplicitHttpClient() throws Exception {
-		var transport = ApacheHc45Transport.builder()
-			.httpClient(org.apache.http.impl.client.HttpClients.createDefault())
+		var transport = OkHttpTransport.builder()
+			.httpClient(new OkHttpClient())
 			.build();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/hello").run()) {
@@ -253,19 +255,19 @@ public class ApacheHc45Transport_Test {
 
 	@Test
 	void f01_provider_isAvailable() {
-		var provider = new ApacheHc45TransportProvider();
+		var provider = new OkHttpTransportProvider();
 		assertTrue(provider.isAvailable());
 	}
 
 	@Test
 	void f02_provider_priority() {
-		var provider = new ApacheHc45TransportProvider();
-		assertEquals(50, provider.getPriority());
+		var provider = new OkHttpTransportProvider();
+		assertEquals(70, provider.getPriority());
 	}
 
 	@Test
 	void f03_provider_create() throws Exception {
-		var provider = new ApacheHc45TransportProvider();
+		var provider = new OkHttpTransportProvider();
 		try (var transport = provider.create()) {
 			assertNotNull(transport);
 		}

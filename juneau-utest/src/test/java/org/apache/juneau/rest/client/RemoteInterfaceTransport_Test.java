@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.ng.rest;
+package org.apache.juneau.rest.client;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,7 +57,7 @@ import jakarta.servlet.*;
  * ({@code @Path} / {@code @Query} / {@code @Header} / {@code @Content}) and return types
  * ({@code String}, {@code int} via {@code RemoteReturn.STATUS}, {@code void}).
  */
-class NgRemoteInterfaceTransport_Test extends TestBase {
+class RemoteInterfaceTransport_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test REST resource — mounted at /api/* by MicroserviceTestFixture.

@@ -31,7 +31,7 @@ import java.lang.annotation.*;
  *
  * <p>
  * This annotation is used by the classic {@code RestClient} remote-proxy path.
- * The next-generation {@code NgRestClient} does not use this annotation.
+ * The next-generation {@link org.apache.juneau.rest.client.RestClient} does not use this annotation.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>

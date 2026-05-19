@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.mock;
+package org.apache.juneau.rest.mock.classic;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 

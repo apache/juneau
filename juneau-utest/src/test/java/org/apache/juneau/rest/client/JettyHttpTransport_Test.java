@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.ng.rest;
+package org.apache.juneau.rest.client;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.net.*;
-import java.net.http.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.client.javahttpclient.*;
+import org.apache.juneau.rest.client.jetty.*;
+import org.eclipse.jetty.client.*;
 import org.junit.jupiter.api.*;
 
 import com.sun.net.httpserver.*;
 
 /**
- * Integration tests for {@link JavaHttpTransport} against a real embedded HTTP server.
+ * Integration tests for {@link JettyHttpTransport} against a real embedded HTTP server.
  */
-public class JavaHttpTransport_Test {
+public class JettyHttpTransport_Test {
 
 	private static HttpServer server;
 	private static int port;
@@ -100,7 +100,7 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void a01_get_basicResponse() throws Exception {
-		var transport = JavaHttpTransport.create();
+		var transport = JettyHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/hello").run()) {
 				assertEquals(200, response.getStatusCode());
@@ -111,7 +111,7 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void a02_get_statusCode404() throws Exception {
-		var transport = JavaHttpTransport.create();
+		var transport = JettyHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/not-found").run()) {
 				assertEquals(404, response.getStatusCode());
@@ -121,7 +121,7 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void a03_get_responseHeader() throws Exception {
-		var transport = JavaHttpTransport.create();
+		var transport = JettyHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/hello").run()) {
 				var ct = response.getFirstHeader("Content-Type");
@@ -137,7 +137,7 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void b01_post_echosMethod() throws Exception {
-		var transport = JavaHttpTransport.create();
+		var transport = JettyHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.post("/echo-method")
 					.body(StringBody.of("", "text/plain"))
@@ -150,7 +150,7 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void b02_put_echosMethod() throws Exception {
-		var transport = JavaHttpTransport.create();
+		var transport = JettyHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.put("/echo-method")
 					.body(StringBody.of("", "text/plain"))
@@ -163,7 +163,7 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void b03_delete_echosMethod() throws Exception {
-		var transport = JavaHttpTransport.create();
+		var transport = JettyHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.delete("/echo-method").run()) {
 				assertEquals(200, response.getStatusCode());
@@ -178,7 +178,7 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void c01_post_stringBody() throws Exception {
-		var transport = JavaHttpTransport.create();
+		var transport = JettyHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.post("/echo-body")
 					.body(StringBody.of("hello body", "text/plain"))
@@ -191,7 +191,7 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void c02_post_byteArrayBody() throws Exception {
-		var transport = JavaHttpTransport.create();
+		var transport = JettyHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			var bytes = "byte content".getBytes(StandardCharsets.UTF_8);
 			try (var response = client.post("/echo-body")
@@ -209,7 +209,7 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void d01_header_sentToServer() throws Exception {
-		var transport = JavaHttpTransport.create();
+		var transport = JettyHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/echo-header")
 					.header("X-Custom", "my-value")
@@ -222,7 +222,7 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void d02_missingHeader_returnsDefault() throws Exception {
-		var transport = JavaHttpTransport.create();
+		var transport = JettyHttpTransport.create();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/echo-header").run()) {
 				assertEquals(200, response.getStatusCode());
@@ -237,8 +237,8 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void e01_builder_withExplicitHttpClient() throws Exception {
-		var transport = JavaHttpTransport.builder()
-			.httpClient(HttpClient.newHttpClient())
+		var transport = JettyHttpTransport.builder()
+			.httpClient(new HttpClient())
 			.build();
 		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/hello").run()) {
@@ -254,19 +254,19 @@ public class JavaHttpTransport_Test {
 
 	@Test
 	void f01_provider_isAvailable() {
-		var provider = new JavaHttpTransportProvider();
+		var provider = new JettyHttpTransportProvider();
 		assertTrue(provider.isAvailable());
 	}
 
 	@Test
 	void f02_provider_priority() {
-		var provider = new JavaHttpTransportProvider();
-		assertEquals(80, provider.getPriority());
+		var provider = new JettyHttpTransportProvider();
+		assertEquals(75, provider.getPriority());
 	}
 
 	@Test
 	void f03_provider_create() throws Exception {
-		var provider = new JavaHttpTransportProvider();
+		var provider = new JettyHttpTransportProvider();
 		try (var transport = provider.create()) {
 			assertNotNull(transport);
 		}

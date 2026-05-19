@@ -18,7 +18,7 @@ package org.apache.juneau.rest.annotation;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 class Restx_Path_Test extends TestBase {

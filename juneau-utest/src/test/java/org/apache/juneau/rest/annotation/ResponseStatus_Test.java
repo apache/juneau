@@ -19,7 +19,7 @@ package org.apache.juneau.rest.annotation;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 class ResponseStatus_Test extends TestBase {

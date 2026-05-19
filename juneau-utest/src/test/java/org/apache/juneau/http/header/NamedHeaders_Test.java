@@ -28,7 +28,6 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.ng.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -49,7 +48,7 @@ import org.junit.jupiter.params.provider.*;
  * <p>
  * Brings the header package from ~28% to ~90+% instruction coverage via a single sweep.
  */
-class NgNamedHeaders_Test extends TestBase {
+class NamedHeaders_Test extends TestBase {
 
 	private static final Set<String> EXCLUDED = Set.of(
 		"HttpHeaderBean",
@@ -69,7 +68,7 @@ class NgNamedHeaders_Test extends TestBase {
 	);
 
 	static Stream<Class<?>> headerClasses() throws Exception {
-		return NgPackageScanner.enumerateConcreteClasses("org.apache.juneau.http.header", HttpHeaderBean.class)
+		return PackageScanner.enumerateConcreteClasses("org.apache.juneau.http.header", HttpHeaderBean.class)
 			.stream()
 			.filter(c -> ! EXCLUDED.contains(c.getSimpleName()));
 	}

@@ -33,7 +33,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.httppart.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;

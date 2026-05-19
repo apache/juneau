@@ -38,7 +38,7 @@ import org.apache.juneau.rest.util.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_contextPath)
 })
-class MockPathResolver {
+public class MockPathResolver {
 
 	// Property name constants
 	private static final String PROP_contextPath = "contextPath";

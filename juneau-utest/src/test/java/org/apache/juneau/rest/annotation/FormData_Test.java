@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.httppart.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.jupiter.api.*;

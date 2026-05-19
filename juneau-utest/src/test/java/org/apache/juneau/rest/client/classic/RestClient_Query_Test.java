@@ -28,7 +28,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;

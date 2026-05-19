@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 class ResponseHeader_Test extends TestBase {

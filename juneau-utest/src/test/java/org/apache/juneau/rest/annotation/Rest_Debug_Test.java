@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.logger.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 

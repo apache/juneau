@@ -37,6 +37,7 @@
 		<module>juneau-rest-server-mcp</module>
 		<module>juneau-rest-server-springboot</module>
 		<module>juneau-rest-client</module>
+		<module>juneau-rest-client-classic</module>
 		<module>juneau-rest-mock</module>
 		<module>juneau-rest-client-apache-httpclient-45</module>
 		<module>juneau-rest-client-apache-httpclient-50</module>

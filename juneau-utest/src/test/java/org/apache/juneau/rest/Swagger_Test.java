@@ -34,6 +34,7 @@ import org.apache.juneau.http.annotation.Tag;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.MockRestClient;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;

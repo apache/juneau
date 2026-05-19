@@ -29,7 +29,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.pojos.*;

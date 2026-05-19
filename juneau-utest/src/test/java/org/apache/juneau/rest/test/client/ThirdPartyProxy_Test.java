@@ -38,7 +38,7 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;

@@ -19,7 +19,7 @@ package org.apache.juneau.http.classic.response;
 import static org.apache.juneau.http.classic.HttpResponses.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 class Continue_Test extends TestBase {

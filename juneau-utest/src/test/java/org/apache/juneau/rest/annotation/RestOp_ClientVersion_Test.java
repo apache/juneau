@@ -20,7 +20,7 @@ import static org.apache.juneau.http.HttpMethod.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 class RestOp_ClientVersion_Test extends TestBase {

@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.ng.*;
 import org.apache.juneau.http.entity.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -45,7 +44,7 @@ import org.junit.jupiter.params.provider.*;
  * This is a low-cost, high-coverage sweep: a single test method iterates 60+ classes, each requiring
  * trivial setup, and brings the response package from ~38% to ~95% instruction coverage.
  */
-class NgNamedResponses_Test extends TestBase {
+class NamedResponses_Test extends TestBase {
 
 	private static final Set<String> EXCLUDED = Set.of(
 		"BasicHttpResponse",
@@ -56,7 +55,7 @@ class NgNamedResponses_Test extends TestBase {
 	);
 
 	static Stream<Class<?>> responseClasses() throws Exception {
-		return NgPackageScanner.enumerateConcreteClasses("org.apache.juneau.http.response", BasicHttpResponse.class)
+		return PackageScanner.enumerateConcreteClasses("org.apache.juneau.http.response", BasicHttpResponse.class)
 			.stream()
 			.filter(c -> ! EXCLUDED.contains(c.getSimpleName()));
 	}

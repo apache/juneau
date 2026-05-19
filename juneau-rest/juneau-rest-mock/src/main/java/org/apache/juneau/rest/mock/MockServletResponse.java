@@ -281,5 +281,5 @@ public class MockServletResponse implements HttpServletResponse {
 		return baos.toByteArray();
 	}
 
-	Map<String,String[]> getHeaders() { return headerMap; }
+	public Map<String,String[]> getHeaders() { return headerMap; }
 }

@@ -26,7 +26,7 @@ import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 /**
