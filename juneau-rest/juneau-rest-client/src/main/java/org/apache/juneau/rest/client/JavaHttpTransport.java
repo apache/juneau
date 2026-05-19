@@ -69,18 +69,15 @@ public final class JavaHttpTransport implements HttpTransport {
 	 *
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
+	@SuppressWarnings("resource")
 	public static JavaHttpTransport create() {
 		return builder().build();
 	}
 
 	@Override /* HttpTransport */
+	@SuppressWarnings("resource")
 	public TransportResponse execute(TransportRequest request) throws TransportException {
-		HttpRequest jdkRequest;
-		try {
-			jdkRequest = buildJdkRequest(request);
-		} catch (IOException e) {
-			throw new TransportException("Failed to build HTTP request: " + e.getMessage(), e);
-		}
+		var jdkRequest = buildJdkRequest(request);
 		HttpResponse<InputStream> jdkResponse;
 		try {
 			jdkResponse = httpClient.send(jdkRequest, BodyHandlers.ofInputStream());
@@ -97,7 +94,7 @@ public final class JavaHttpTransport implements HttpTransport {
 	// Internal helpers
 	// -----------------------------------------------------------------------------------------------------------------
 
-	private static HttpRequest buildJdkRequest(TransportRequest request) throws IOException {
+	private static HttpRequest buildJdkRequest(TransportRequest request) {
 		var builder = HttpRequest.newBuilder().uri(request.getUri()).method(request.getMethod(), buildBodyPublisher(request.getBody()));
 		for (var h : request.getHeaders())
 			builder.header(h.name(), h.value());
@@ -107,7 +104,7 @@ public final class JavaHttpTransport implements HttpTransport {
 	@SuppressWarnings({
 		"java:S2095" // PipedInputStream closed by HttpClient when body publishing finishes; PipedOutputStream closed in writer thread try-with-resources
 	})
-	private static BodyPublisher buildBodyPublisher(TransportBody body) throws IOException {
+	private static BodyPublisher buildBodyPublisher(TransportBody body) {
 		if (body == null)
 			return BodyPublishers.noBody();
 		// Use a pipe so body.writeTo() streams directly to the JDK client without full in-memory buffering.
@@ -139,6 +136,7 @@ public final class JavaHttpTransport implements HttpTransport {
 		});
 	}
 
+	@SuppressWarnings("resource")
 	private static TransportResponse buildTransportResponse(HttpResponse<InputStream> jdkResponse) {
 		var builder = TransportResponse.builder()
 			.statusCode(jdkResponse.statusCode())

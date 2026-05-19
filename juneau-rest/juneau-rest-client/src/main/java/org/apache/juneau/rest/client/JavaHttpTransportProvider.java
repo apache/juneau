@@ -49,6 +49,7 @@ public final class JavaHttpTransportProvider implements HttpTransportProvider {
 	}
 
 	@Override /* HttpTransportProvider */
+	@SuppressWarnings("resource")
 	public HttpTransport create() {
 		return JavaHttpTransport.create();
 	}
