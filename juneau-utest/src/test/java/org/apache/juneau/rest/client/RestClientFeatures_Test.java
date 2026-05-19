@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.HttpBody;
 import org.apache.juneau.http.entity.*;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 

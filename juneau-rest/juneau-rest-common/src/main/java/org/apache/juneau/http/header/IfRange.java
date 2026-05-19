@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import org.apache.juneau.http.classic.header.EntityTag;
-
 import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.apache.juneau.commons.utils.ThrowableUtils.rex;

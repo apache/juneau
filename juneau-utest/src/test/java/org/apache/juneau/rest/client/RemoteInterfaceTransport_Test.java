@@ -28,7 +28,6 @@ import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.http.entity.*;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.apachehttpclient45.*;
 import org.apache.juneau.rest.client.apachehttpclient50.*;
 import org.apache.juneau.rest.client.javahttpclient.*;

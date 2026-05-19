@@ -120,7 +120,9 @@ public class MockServletRequest implements HttpServletRequest {
 	private Set<String> roles = set();
 
 	/**
-	 * If the specified request is a {@link MockRestRequest}, applies any of the override values to this servlet request.
+	 * If the specified request is a
+	 * {@link org.apache.juneau.rest.mock.classic.MockRestRequest}, applies any of the override values
+	 * to this servlet request.
 	 *
 	 * @param req The request to copy overrides from.
 	 * @return This object.

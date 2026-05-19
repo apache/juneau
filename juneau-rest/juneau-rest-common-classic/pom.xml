@@ -25,9 +25,9 @@
 		<version>9.5.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-rest-client-classic</artifactId>
-	<name>Apache Juneau REST Client (Classic)</name>
-	<description>Apache Juneau REST Client API - Classic (Apache HttpClient 4.5-based)</description>
+	<artifactId>juneau-rest-common-classic</artifactId>
+	<name>Apache Juneau REST Common (Classic)</name>
+	<description>Apache Juneau REST Common API - Apache HttpClient 4.5-compatible facades.</description>
 	<packaging>bundle</packaging>
 
 	<properties>
@@ -41,14 +41,9 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-common-classic</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.14</version>
+			<artifactId>httpcore</artifactId>
+			<version>4.4.16</version>
 		</dependency>
 	</dependencies>
 

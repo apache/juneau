@@ -23,8 +23,8 @@ import java.net.*;
 import java.time.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.classic.header.EntityTag;
-import org.apache.juneau.http.classic.header.EntityTags;
+import org.apache.juneau.http.header.EntityTag;
+import org.apache.juneau.http.header.EntityTags;
 import org.apache.juneau.http.header.*;
 
 /**

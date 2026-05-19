@@ -32,6 +32,7 @@
 
 	<modules>
 		<module>juneau-rest-common</module>
+		<module>juneau-rest-common-classic</module>
 		<module>juneau-rest-server</module>
 		<module>juneau-rest-server-rdf</module>
 		<module>juneau-rest-server-mcp</module>

@@ -408,6 +408,31 @@
 									<destFileName>org.apache.juneau.rest.common_${project.version}.jar</destFileName>
 								</artifactItem>
 
+								<!-- juneau-rest-common-classic -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-common-classic</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-common-classic-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-common-classic</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-common-classic-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-common-classic</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.common.classic_${project.version}.jar</destFileName>
+								</artifactItem>
+
 								<!-- juneau-rest-server -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>

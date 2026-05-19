@@ -16,9 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import org.apache.juneau.http.classic.header.EntityTag;
-
-
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;

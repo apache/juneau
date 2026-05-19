@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.http.classic;
+package org.apache.juneau.http.header;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.classic.header.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

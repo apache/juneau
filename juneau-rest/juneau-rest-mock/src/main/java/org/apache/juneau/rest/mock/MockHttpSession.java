@@ -28,7 +28,8 @@ import jakarta.servlet.http.*;
  *
  * <p>
  * Session-based tests can use this API to create customized instances of {@link HttpSession} objects
- * that can be passed to the {@link MockRestRequest#httpSession(HttpSession)} method.
+ * that can be passed to the
+ * {@link org.apache.juneau.rest.mock.classic.MockRestRequest#httpSession(HttpSession)} method.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>

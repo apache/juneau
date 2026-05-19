@@ -23,7 +23,6 @@ import java.net.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.http.entity.*;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.apachehttpclient45.*;
 import org.junit.jupiter.api.*;
 

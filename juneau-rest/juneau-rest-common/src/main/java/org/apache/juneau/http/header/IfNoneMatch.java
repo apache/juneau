@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.http.header;
 
-import org.apache.juneau.http.classic.header.EntityTags;
-
 /**
  * Represents an HTTP <c>If-None-Match</c> header.
  *

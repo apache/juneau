@@ -21,7 +21,6 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.mock.classic.MockRestClient;
-import org.apache.juneau.rest.mock.classic.MockRestRequest;
 import org.junit.jupiter.api.*;
 
 /**

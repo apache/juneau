@@ -21,8 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.http.classic.header.*;
-
 /**
  * Identifies a proxy against a REST interface.
  *
@@ -40,16 +38,20 @@ public @interface Remote {
 	 * Default request header list.
 	 *
 	 * <p>
-	 * Specifies a supplier of headers to set on all requests.
+	 * Specifies a supplier of headers to set on all requests. The value is interpreted by the active REST client:
+	 * the classic Apache-HttpClient transport accepts subclasses of
+	 * <c>org.apache.juneau.http.classic.header.HeaderList</c>; other transports may ignore the value.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Supplier class must provide a public no-arg constructor.
+	 * 	<li class='note'>
+	 * 		Default <c>Void.class</c> means no default header list is supplied.
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	Class<? extends HeaderList> headerList() default HeaderList.Void.class;
+	Class<?> headerList() default Void.class;
 
 	/**
 	 * Default request headers.

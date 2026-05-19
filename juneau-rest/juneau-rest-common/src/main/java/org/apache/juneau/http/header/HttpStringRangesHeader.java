@@ -59,10 +59,12 @@ public class HttpStringRangesHeader extends HttpHeaderBean {
 
 	protected HttpStringRangesHeader(String name, Supplier<?> supplier, int lazyMode) {
 		super(name, lazyMode == LAZY_WIRE_STRING
-			? () -> ((Supplier<String>) supplier).get()
+			? ((Supplier<String>) supplier)::get
 			: () -> {
 				var m = ((Supplier<StringRanges>) supplier).get();
-				return m == null ? null : m.toString();
+				if (m == null)
+					return null;
+				return m.toString();
 			});
 		this.cachedForStringOrDirect = null;
 		this.lazySupplier = supplier;

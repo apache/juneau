@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.classic.header.*;
 import org.junit.jupiter.api.*;
 
 /**

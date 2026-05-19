@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.classic.header;
 
+import org.apache.juneau.http.header.EntityTag;
+
 import static java.time.format.DateTimeFormatter.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;

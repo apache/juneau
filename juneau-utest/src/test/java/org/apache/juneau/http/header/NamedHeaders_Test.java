@@ -27,7 +27,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.http.*;
-import org.apache.juneau.http.classic.header.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -64,6 +63,9 @@ class NamedHeaders_Test extends TestBase {
 		"HttpEntityTagsHeader",
 		"HttpCsvHeader",
 		"HttpUriHeader",
+		// Value types (not HttpHeaderBean subclasses).
+		"EntityTag",
+		"EntityTags",
 		"package-info"
 	);
 

@@ -25,7 +25,6 @@ import java.nio.charset.*;
 import okhttp3.*;
 
 import org.apache.juneau.http.entity.*;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.okhttp.*;
 import org.junit.jupiter.api.*;
 

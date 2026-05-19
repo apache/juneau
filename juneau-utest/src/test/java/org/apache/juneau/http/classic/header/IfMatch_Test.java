@@ -16,6 +16,9 @@
  */
 package org.apache.juneau.http.classic.header;
 
+import org.apache.juneau.http.header.EntityTag;
+import org.apache.juneau.http.header.EntityTags;
+
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -73,6 +76,6 @@ class IfMatch_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(IfMatch.of((org.apache.juneau.http.classic.header.EntityTags)null));
+		assertNull(IfMatch.of((org.apache.juneau.http.header.EntityTags)null));
 	}
 }

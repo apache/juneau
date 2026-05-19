@@ -35,7 +35,6 @@ import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.http.HttpBody;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.remote.RrpcInterfaceMeta;
-import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;

@@ -19,6 +19,8 @@ package org.apache.juneau.http.classic;
 import org.apache.juneau.commons.http.MediaRanges;
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.http.StringRanges;
+import org.apache.juneau.http.header.EntityTag;
+import org.apache.juneau.http.header.EntityTags;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.classic.header;
 
+import org.apache.juneau.http.header.EntityTag;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
@@ -83,6 +84,6 @@ class ETag_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(ETag.of((org.apache.juneau.http.classic.header.EntityTag)null));
+		assertNull(ETag.of((org.apache.juneau.http.header.EntityTag)null));
 	}
 }
