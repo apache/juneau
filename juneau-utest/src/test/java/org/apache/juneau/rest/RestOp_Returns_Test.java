@@ -17,15 +17,15 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.http.HttpResources.*;
-import static org.apache.juneau.http.HttpResponses.*;
+import static org.apache.juneau.http.classic.HttpResources.*;
+import static org.apache.juneau.http.classic.HttpResponses.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.resource.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.resource.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;

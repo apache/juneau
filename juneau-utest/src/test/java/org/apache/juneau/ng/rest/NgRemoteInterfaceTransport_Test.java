@@ -27,13 +27,13 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.ng.http.entity.*;
-import org.apache.juneau.ng.rest.client.*;
-import org.apache.juneau.ng.rest.client.apachehttpclient45.*;
-import org.apache.juneau.ng.rest.client.apachehttpclient50.*;
-import org.apache.juneau.ng.rest.client.javahttpclient.*;
-import org.apache.juneau.ng.rest.client.jetty.*;
-import org.apache.juneau.ng.rest.client.okhttp.*;
+import org.apache.juneau.http.entity.*;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.apachehttpclient45.*;
+import org.apache.juneau.rest.client.apachehttpclient50.*;
+import org.apache.juneau.rest.client.javahttpclient.*;
+import org.apache.juneau.rest.client.jetty.*;
+import org.apache.juneau.rest.client.okhttp.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.extension.*;
@@ -52,8 +52,8 @@ import jakarta.servlet.*;
  *
  * <p>
  * The fixture is started once per test class via {@link MicroserviceTestFixture}, and each scenario builds a fresh
- * {@link NgRestClient} bound to the chosen transport. The classic {@code @Remote}/{@code @RemoteOp} annotations
- * are honored by {@link NgRestClient#remote(Class)}, with the supported subset of parameter annotations
+ * {@link RestClient} bound to the chosen transport. The classic {@code @Remote}/{@code @RemoteOp} annotations
+ * are honored by {@link RestClient#remote(Class)}, with the supported subset of parameter annotations
  * ({@code @Path} / {@code @Query} / {@code @Header} / {@code @Content}) and return types
  * ({@code String}, {@code int} via {@code RemoteReturn.STATUS}, {@code void}).
  */
@@ -99,7 +99,7 @@ class NgRemoteInterfaceTransport_Test extends TestBase {
 
 		@RestGet(path = "/missing")
 		public String missing() {
-			throw new org.apache.juneau.http.response.NotFound("not here");
+			throw new org.apache.juneau.http.classic.response.NotFound("not here");
 		}
 
 		@RestPost(path = "/large")
@@ -117,7 +117,7 @@ class NgRemoteInterfaceTransport_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Remote interface — the @Remote annotation is honored by NgRestClient.remote().
+	// Remote interface — the @Remote annotation is honored by RestClient.remote().
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Remote(path = "/api")
@@ -136,7 +136,7 @@ class NgRemoteInterfaceTransport_Test extends TestBase {
 		String content(@Content String body);
 
 		@RemotePost("/content")
-		String contentHttpBody(@Content org.apache.juneau.ng.http.HttpBody body);
+		String contentHttpBody(@Content org.apache.juneau.http.HttpBody body);
 
 		@RemoteGet("/header")
 		String header(@Header("X-Test") String h);
@@ -171,7 +171,7 @@ class NgRemoteInterfaceTransport_Test extends TestBase {
 	/** Functional interface for a transport supplier that may throw. */
 	@FunctionalInterface
 	interface TransportSupplier {
-		org.apache.juneau.ng.rest.client.HttpTransport get() throws Exception;
+		org.apache.juneau.rest.client.HttpTransport get() throws Exception;
 	}
 
 	static Stream<Arguments> transports() {
@@ -188,14 +188,14 @@ class NgRemoteInterfaceTransport_Test extends TestBase {
 	@SuppressWarnings("resource")
 	private static ClientHolder buildClient(TransportSupplier ts) throws Exception {
 		var transport = ts.get();
-		var client = NgRestClient.builder()
+		var client = RestClient.builder()
 			.transport(transport)
 			.rootUrl(FIXTURE.getRootUrl().toString())
 			.build();
 		return new ClientHolder(client);
 	}
 
-	private record ClientHolder(NgRestClient client) implements AutoCloseable {
+	private record ClientHolder(RestClient client) implements AutoCloseable {
 		TestApi proxy() { return client.remote(TestApi.class); }
 		@Override public void close() throws java.io.IOException { client.close(); }
 	}
@@ -277,7 +277,7 @@ class NgRemoteInterfaceTransport_Test extends TestBase {
 	@MethodSource("transports")
 	void d02_header_defaultOnClient(String name, TransportSupplier ts) throws Exception {
 		var transport = ts.get();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl(FIXTURE.getRootUrl().toString())
 				.header("X-Test", "default-value")

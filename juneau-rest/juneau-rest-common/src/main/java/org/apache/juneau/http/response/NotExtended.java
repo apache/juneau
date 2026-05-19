@@ -16,37 +16,26 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.http.response.NotExtended.*;
-
-import java.text.*;
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
-
 /**
- * Exception representing an HTTP 510 (Not Extended).
+ * Represents an <c>HTTP 510 Not Extended</c> error response.
  *
  * <p>
- * Further extensions to the request are required for the server to fulfill it.
+ * Further extensions to the request are required for the server to fulfil it.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
  *
- * @serial exclude
+ * @since 9.2.1
  */
-@Response
-@StatusCode(STATUS_CODE)
-@Schema(description = REASON_PHRASE)
-@SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for HTTP exception hierarchy
-})
 public class NotExtended extends BasicHttpException {
+
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
@@ -55,163 +44,47 @@ public class NotExtended extends BasicHttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Not Extended";
 
-	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
-
-	/** Reusable unmodifiable instance */
-	public static final NotExtended INSTANCE = new NotExtended().setUnmodifiable();
-
 	/**
-	 * Constructor.
+	 * Constructor with no message.
 	 */
 	public NotExtended() {
-		this((Throwable)null, REASON_PHRASE);
+		super(STATUS_CODE, REASON_PHRASE);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a detail message.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param message The detail message. May be <jk>null</jk>.
 	 */
-	public NotExtended(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public NotExtended(String message) {
+		super(STATUS_CODE, REASON_PHRASE, message);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a cause.
 	 *
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
-	 */
-	public NotExtended(String msg, Object...args) {
-		this((Throwable)null, msg, args);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param cause The cause. May be <jk>null</jk>.
 	 */
 	public NotExtended(Throwable cause) {
-		this(cause, cause == null ? REASON_PHRASE : cause.getMessage());
+		super(STATUS_CODE, REASON_PHRASE, cause != null ? cause.getMessage() : null, cause);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a detail message and cause.
 	 *
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args The message arguments.
+	 * @param message The detail message. May be <jk>null</jk>.
+	 * @param cause The cause. May be <jk>null</jk>.
 	 */
-	public NotExtended(Throwable cause, String msg, Object...args) {
-		super(STATUS_CODE, cause, msg, args);
-		setStatusLine(STATUS_LINE.copy());
+	public NotExtended(String message, Throwable cause) {
+		super(STATUS_CODE, REASON_PHRASE, message, cause);
 	}
 
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy.
+	 * @param copyFrom The instance to copy. Must not be <jk>null</jk>.
 	 */
-	protected NotExtended(NotExtended copyFrom) {
+	public NotExtended(NotExtended copyFrom) {
 		super(copyFrom);
-	}
-
-	/**
-	 * Creates a modifiable copy of this bean.
-	 *
-	 * @return A new modifiable bean.
-	 */
-	public NotExtended copy() {
-		return new NotExtended(this);
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setHeader2(String name, Object value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicRuntimeException */
-	public NotExtended setMessage(String message, Object...args) {
-		super.setMessage(message, args);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setStatusCode2(int code) throws IllegalStateException {
-		super.setStatusCode2(code);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotExtended setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicRuntimeException */
-	public NotExtended setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
 	}
 }

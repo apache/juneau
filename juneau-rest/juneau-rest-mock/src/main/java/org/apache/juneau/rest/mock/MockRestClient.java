@@ -55,7 +55,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.http.header.ContentType;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
@@ -63,9 +63,9 @@ import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.client.RestRequest;
-import org.apache.juneau.rest.client.RestResponse;
+import org.apache.juneau.rest.client.classic.*;
+import org.apache.juneau.rest.client.classic.RestRequest;
+import org.apache.juneau.rest.client.classic.RestResponse;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -563,7 +563,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder callHandler(Class<? extends org.apache.juneau.rest.client.RestCallHandler> value) {
+		public Builder callHandler(Class<? extends org.apache.juneau.rest.client.classic.RestCallHandler> value) {
 			super.callHandler(value);
 			return this;
 		}
@@ -1862,7 +1862,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	/**
-	 * Creates a new {@link org.apache.juneau.rest.client.RestClient.Builder} configured with the specified REST implementation bean or bean class.
+	 * Creates a new {@link org.apache.juneau.rest.client.classic.RestClient.Builder} configured with the specified REST implementation bean or bean class.
 	 *
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
@@ -1874,7 +1874,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	/**
-	 * Creates a new {@link org.apache.juneau.rest.client.RestClient.Builder} configured with the specified REST implementation bean or bean class.
+	 * Creates a new {@link org.apache.juneau.rest.client.classic.RestClient.Builder} configured with the specified REST implementation bean or bean class.
 	 *
 	 * <p>
 	 * Same as {@link #create(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.

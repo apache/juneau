@@ -16,113 +16,67 @@
  */
 package org.apache.juneau.http.header;
 
+
 import java.util.function.*;
 
-import org.apache.juneau.http.annotation.*;
-
 /**
- * Represents a parsed <l>Accept-Range</l> HTTP response header.
+ * Represents an HTTP <c>Accept-Ranges</c> header.
  *
  * <p>
  * What partial content range types this server supports via byte serving.
  *
- * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
- * 	Accept-Ranges: bytes
- * </p>
- *
- * <h5 class='topic'>RFC2616 Specification</h5>
- *
- * The Accept-Ranges response-header field allows the server to indicate its acceptance of range requests for a
- * resource:
- * <p class='bcode'>
- * 	Accept-Ranges     = "Accept-Ranges" ":" acceptable-ranges
- * 	acceptable-ranges = 1#range-unit | "none"
- * </p>
- *
  * <p>
- * Origin servers that accept byte-range requests MAY send...
- * <p class='bcode'>
- * 	Accept-Ranges: bytes
- * </p>
- * <p>
- * ...but are not required to do so.
- *
- * <p>
- * Clients MAY generate byte-range requests without having received this header for the resource involved.
- *
- * <p>
- * Range units are defined in section 3.12.
- *
- * <p>
- * Servers that do not accept any kind of range request for a resource MAY send...
- * <p class='bcode'>
- * 	Accept-Ranges: none
- * </p>
- * <p>
- * ...to advise the client not to attempt a range request.
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
- * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
  *
- * @serial exclude
+ * @since 9.2.1
  */
-@Header("Accept-Ranges")
-public class AcceptRanges extends BasicStringHeader {
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "Accept-Ranges";
+public class AcceptRanges extends HttpStringHeader {
+
+	/** The header name */
+	public static final String NAME = "Accept-Ranges";
 
 	/**
-	 * Static creator.
+	 * Constructor with an eager value.
 	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static AcceptRanges of(String value) {
-		return value == null ? null : new AcceptRanges(value);
-	}
-
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static AcceptRanges of(Supplier<String> value) {
-		return value == null ? null : new AcceptRanges(value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param value The header value. May be <jk>null</jk>.
 	 */
 	public AcceptRanges(String value) {
 		super(NAME, value);
 	}
 
 	/**
-	 * Constructor with delayed value.
+	 * Constructor with a lazy value supplier.
 	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param valueSupplier Supplier for the header value. Must not be <jk>null</jk>.
 	 */
-	public AcceptRanges(Supplier<String> value) {
-		super(NAME, value);
+	public AcceptRanges(Supplier<String> valueSupplier) {
+		super(NAME, valueSupplier);
+	}
+
+	/**
+	 * Static factory method with an eager value.
+	 *
+	 * @param value The header value. May be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public static AcceptRanges of(String value) {
+		return new AcceptRanges(value);
+	}
+
+	/**
+	 * Static factory method with a lazy value supplier.
+	 *
+	 * @param valueSupplier Supplier for the header value. Must not be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public static AcceptRanges of(Supplier<String> valueSupplier) {
+		return new AcceptRanges(valueSupplier);
 	}
 }

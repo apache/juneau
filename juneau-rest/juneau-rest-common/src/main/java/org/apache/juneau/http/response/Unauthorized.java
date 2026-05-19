@@ -16,40 +16,26 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.http.response.Unauthorized.*;
-
-import java.text.*;
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
-
 /**
- * Exception representing an HTTP 401 (Unauthorized).
+ * Represents an <c>HTTP 401 Unauthorized</c> error response.
  *
  * <p>
- * Similar to <c>403 Forbidden</c>, but specifically for use when authentication is required and has failed or has not yet been provided.
- * <br>The response must include a WWW-Authenticate header field containing a challenge applicable to the requested resource.
- * <br>401 semantically means "unauthenticated",i.e. the user does not have the necessary credentials.
- * <br>Note: Some sites issue HTTP 401 when an IP address is banned from the website (usually the website domain) and that specific address is refused permission to access a website.
+ * Authentication is required and has failed or has not yet been provided.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
  *
- * @serial exclude
+ * @since 9.2.1
  */
-@Response
-@StatusCode(STATUS_CODE)
-@Schema(description = REASON_PHRASE)
-@SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for HTTP exception hierarchy
-})
 public class Unauthorized extends BasicHttpException {
+
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
@@ -58,163 +44,47 @@ public class Unauthorized extends BasicHttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Unauthorized";
 
-	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
-
-	/** Reusable unmodifiable instance */
-	public static final Unauthorized INSTANCE = new Unauthorized().setUnmodifiable();
-
 	/**
-	 * Constructor.
+	 * Constructor with no message.
 	 */
 	public Unauthorized() {
-		this((Throwable)null, REASON_PHRASE);
+		super(STATUS_CODE, REASON_PHRASE);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a detail message.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param message The detail message. May be <jk>null</jk>.
 	 */
-	public Unauthorized(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public Unauthorized(String message) {
+		super(STATUS_CODE, REASON_PHRASE, message);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a cause.
 	 *
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
-	 */
-	public Unauthorized(String msg, Object...args) {
-		this((Throwable)null, msg, args);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param cause The cause. May be <jk>null</jk>.
 	 */
 	public Unauthorized(Throwable cause) {
-		this(cause, cause == null ? REASON_PHRASE : cause.getMessage());
+		super(STATUS_CODE, REASON_PHRASE, cause != null ? cause.getMessage() : null, cause);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a detail message and cause.
 	 *
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args The message arguments.
+	 * @param message The detail message. May be <jk>null</jk>.
+	 * @param cause The cause. May be <jk>null</jk>.
 	 */
-	public Unauthorized(Throwable cause, String msg, Object...args) {
-		super(STATUS_CODE, cause, msg, args);
-		setStatusLine(STATUS_LINE.copy());
+	public Unauthorized(String message, Throwable cause) {
+		super(STATUS_CODE, REASON_PHRASE, message, cause);
 	}
 
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy.
+	 * @param copyFrom The instance to copy. Must not be <jk>null</jk>.
 	 */
-	protected Unauthorized(Unauthorized copyFrom) {
+	public Unauthorized(Unauthorized copyFrom) {
 		super(copyFrom);
-	}
-
-	/**
-	 * Creates a modifiable copy of this bean.
-	 *
-	 * @return A new modifiable bean.
-	 */
-	public Unauthorized copy() {
-		return new Unauthorized(this);
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setHeader2(String name, Object value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicRuntimeException */
-	public Unauthorized setMessage(String message, Object...args) {
-		super.setMessage(message, args);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setStatusCode2(int code) throws IllegalStateException {
-		super.setStatusCode2(code);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public Unauthorized setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicRuntimeException */
-	public Unauthorized setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
 	}
 }

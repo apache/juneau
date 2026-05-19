@@ -17,74 +17,72 @@
 package org.apache.juneau.rest.client;
 
 /**
- * Used to intercept http connection responses to allow modification of that response before processing and for
- * listening for call lifecycle events.
+ * Lifecycle interceptor for REST calls made by {@link RestClient}.
  *
  * <p>
- * The {@link BasicRestCallInterceptor} is provided as an adapter class for implementing this interface.
+ * Registered on the client builder via {@link RestClient.Builder#interceptors(RestCallInterceptor...)}.
+ * All callbacks have default no-op implementations so implementations only need to override the hooks they care about.
  *
- * <p>
- * Note that the {@link RestClient} class itself implements this interface so you can achieve the same results by
- * overriding the methods on the client class as well.
- *
- * <h5 class='figure'>Example:</h5>
+ * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jc>// Specialized client that adds a header to every request.</jc>
- * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
- * 		<ja>@Override</ja>
- * 		<jk>public void</jk> onInit(RestRequest <jv>req</jv>) {
- * 			<jv>req</jv>.header(<js>"Foo"</js>, <js>"bar"</js>);
- * 		}
- * 	}
- *
- *	<jc>// Instantiate the client.</jc>
- *	MyRestClient <jv>client</jv> = RestClient
- *		.<jsm>create</jsm>()
- *		.json()
- *		.build(MyRestClient.<jk>class</jk>);
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>builder</jsm>()
+ * 		.transport(<jv>transport</jv>)
+ * 		.interceptors(new RestCallInterceptor() {
+ * 			&#64;Override
+ * 			<jk>public void</jk> onConnect(RestRequest req, RestResponse res) {
+ * 				System.<jf>out</jf>.println(<js>"Response: "</js> + res.getStatusCode());
+ * 			}
+ * 		})
+ * 		.build();
  * </p>
  *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
+ *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jm'>{@link RestClient.Builder#interceptors(Object...)}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
+ *
+ * @since 9.2.1
  */
-@SuppressWarnings({
-	"java:S112" // throws Exception intentional - callback/lifecycle method
-})
 public interface RestCallInterceptor {
 
 	/**
-	 * Called when the response body is consumed.
+	 * Called before the transport request is built and sent.
 	 *
-	 * @param req The request object.
-	 * @param res The response object.
-	 * @throws RestCallException Error occurred during call.
-	 * @throws Exception
-	 * 	Any exception can be thrown.
-	 * 	<br>If not a {@link RestCallException} or {@link RuntimeException}, will be wrapped in a {@link RestCallException}.
+	 * <p>
+	 * Use this hook to add headers, modify query parameters, or short-circuit the call.
+	 *
+	 * @param req The request being built. Never <jk>null</jk>.
+	 * @throws Exception If the call should be aborted.
 	 */
-	void onClose(RestRequest req, RestResponse res) throws Exception;
+	default void onInit(RestRequest req) throws Exception {}
 
 	/**
-	 * Called immediately after an HTTP response has been received.
+	 * Called after a response has been received from the transport.
 	 *
-	 * @param req The HTTP request object.
-	 * @param res The HTTP response object.
-	 * @throws Exception
-	 * 	Any exception can be thrown.
-	 * 	<br>If not a {@link RestCallException} or {@link RuntimeException}, will be wrapped in a {@link RestCallException}.
+	 * <p>
+	 * Use this hook to inspect status codes, validate headers, or modify how the response is interpreted.
+	 *
+	 * @param req The request that was sent. Never <jk>null</jk>.
+	 * @param res The response received. Never <jk>null</jk>.
+	 * @throws Exception If a post-connect error should be raised.
 	 */
-	void onConnect(RestRequest req, RestResponse res) throws Exception;
+	default void onConnect(RestRequest req, RestResponse res) throws Exception {}
 
 	/**
-	 * Called immediately after {@link RestRequest} object is created and all headers/query/form-data has been
-	 * copied from the client to the request object.
+	 * Called when the request is being closed (in the {@code finally} block of {@link RestRequest#run()}).
 	 *
-	 * @param req The HTTP request object.
-	 * @throws Exception
-	 * 	Any exception can be thrown.
-	 * 	<br>If not a {@link RestCallException} or {@link RuntimeException}, will be wrapped in a {@link RestCallException}.
+	 * <p>
+	 * This is called regardless of whether the call succeeded or failed, and is always invoked before
+	 * the logger receives its entry. Use it for cleanup, metrics recording, or span/trace finalization.
+	 *
+	 * @param req The request. Never <jk>null</jk>.
+	 * @param res The response, or <jk>null</jk> if the transport failed before a response was received.
+	 * @throws Exception If an error occurs during close handling.
 	 */
-	void onInit(RestRequest req) throws Exception;
+	default void onClose(RestRequest req, RestResponse res) throws Exception {}
 }

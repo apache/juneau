@@ -17,5 +17,12 @@
 
 /**
  * REST Server Mock API
+ *
+ * <p>
+ * Includes legacy mock server helpers and next-generation mock transport/client helpers.
+ *
+ * <ul>
+ * 	<li>{@link org.apache.juneau.rest.mock.MockHttpTransport} - Programmable in-process transport.
+ * </ul>
  */
 package org.apache.juneau.rest.mock;

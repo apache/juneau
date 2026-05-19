@@ -16,102 +16,67 @@
  */
 package org.apache.juneau.http.header;
 
+
 import java.util.function.*;
 
-import org.apache.juneau.http.annotation.*;
-
 /**
- * Represents a parsed <l>User-Agent</l> HTTP request header.
+ * Represents an HTTP <c>User-Agent</c> header.
  *
  * <p>
  * The user agent string of the user agent.
  *
- * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
- * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
- * </p>
- *
- * <h5 class='topic'>RFC2616 Specification</h5>
- *
- * The User-Agent request-header field contains information about the user agent originating the request.
- * This is for statistical purposes, the tracing of protocol violations, and automated recognition of user agents for
- * the sake of tailoring responses to avoid particular user agent limitations.
- * User agents SHOULD include this field with requests.
- * The field can contain multiple product tokens (section 3.8) and comments identifying the agent and any sub-products
- * which form a significant part of the user agent.
- * By convention, the product tokens are listed in order of their significance for identifying the application.
- *
- * <p class='bcode'>
- * 	User-Agent     = "User-Agent" ":" 1*( product | comment )
- * </p>
- *
  * <p>
- * Example:
- * <p class='bcode'>
- * 	User-Agent: CERN-LineMode/2.15 libwww/2.17b3
- * </p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
- * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
  *
- * @serial exclude
+ * @since 9.2.1
  */
-@Header("User-Agent")
-public class UserAgent extends BasicStringHeader {
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "User-Agent";
+public class UserAgent extends HttpStringHeader {
+
+	/** The header name */
+	public static final String NAME = "User-Agent";
 
 	/**
-	 * Static creator.
+	 * Constructor with an eager value.
 	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static UserAgent of(String value) {
-		return value == null ? null : new UserAgent(value);
-	}
-
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static UserAgent of(Supplier<String> value) {
-		return value == null ? null : new UserAgent(value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param value The header value. May be <jk>null</jk>.
 	 */
 	public UserAgent(String value) {
 		super(NAME, value);
 	}
 
 	/**
-	 * Constructor with delayed value.
+	 * Constructor with a lazy value supplier.
 	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param valueSupplier Supplier for the header value. Must not be <jk>null</jk>.
 	 */
-	public UserAgent(Supplier<String> value) {
-		super(NAME, value);
+	public UserAgent(Supplier<String> valueSupplier) {
+		super(NAME, valueSupplier);
+	}
+
+	/**
+	 * Static factory method with an eager value.
+	 *
+	 * @param value The header value. May be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public static UserAgent of(String value) {
+		return new UserAgent(value);
+	}
+
+	/**
+	 * Static factory method with a lazy value supplier.
+	 *
+	 * @param valueSupplier Supplier for the header value. Must not be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public static UserAgent of(Supplier<String> valueSupplier) {
+		return new UserAgent(valueSupplier);
 	}
 }

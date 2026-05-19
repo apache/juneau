@@ -21,7 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.classic.header.*;
 
 /**
  * Identifies a proxy against a REST interface.

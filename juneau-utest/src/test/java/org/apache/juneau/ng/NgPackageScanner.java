@@ -27,7 +27,7 @@ import java.util.jar.*;
  *
  * <p>
  * Used by the parametric {@code Ng*_Test} classes to walk every public class in
- * {@code org.apache.juneau.ng.http.response} / {@code .header} without having to hard-code
+ * {@code org.apache.juneau.http.response} / {@code .header} without having to hard-code
  * the (large and frequently-changing) list.
  */
 public final class NgPackageScanner {

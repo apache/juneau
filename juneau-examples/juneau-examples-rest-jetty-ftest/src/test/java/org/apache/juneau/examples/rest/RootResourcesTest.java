@@ -24,7 +24,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.classic.*;
 import org.junit.*;
 
 @SuppressWarnings({

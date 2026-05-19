@@ -16,98 +16,80 @@
  */
 package org.apache.juneau.http.remote;
 
-import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
-
 import java.lang.reflect.*;
 
-import org.apache.juneau.commons.reflect.*;
-
 /**
- * Contains the meta-data about a Java method on a remote class.
+ * Holds resolved metadata for a single method on an interface annotated with
+ * {@link org.apache.juneau.http.remote.Remote}.
  *
  * <p>
- * Captures the information in {@link Remote @Remote} annotations for caching and reuse.
+ * Extracted at interface-discovery time (see {@link RrpcInterfaceMeta}) and cached for
+ * efficient proxy invocation.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
+ *
+ * @since 9.2.1
  */
-public class RrpcInterfaceMethodMeta {
-
-	/**
-	 * Given a Java method, returns the arguments signature.
-	 *
-	 * @param m The Java method.
-	 * @param full Whether fully-qualified names should be used for arguments.
-	 * @return The arguments signature for the specified method.
-	 */
-	private static String getMethodArgsSignature(Method m) {
-		var sb = new StringBuilder(128);
-		Class<?>[] pt = m.getParameterTypes();
-		if (pt.length == 0)
-			return "";
-		sb.append('(');
-		for (var i = 0; i < pt.length; i++) {
-			var pti = ClassInfo.of(pt[i]);
-			if (i > 0)
-				sb.append(',');
-			pti.appendNameFormatted(sb, ClassNameFormat.FULL, true, '$', ClassArrayFormat.BRACKETS);
-		}
-		sb.append(')');
-		return sb.toString();
-	}
-
-	private final String url;
-	private final String path;
+public final class RrpcInterfaceMethodMeta {
 
 	private final Method method;
+	private final String httpMethod;
+	private final String path;
+	private final RemoteReturn returnType;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.
-	 * @param m The Java method.
-	 */
-	public RrpcInterfaceMethodMeta(String restUrl, Method m) {
-		this.method = m;
-		this.path = m.getName() + '/' + getMethodArgsSignature(m);
-		this.url = trimSlashes(restUrl) + '/' + urlEncode(path);
+	RrpcInterfaceMethodMeta(Method method, String httpMethod, String path, RemoteReturn returnType) {
+		this.method = method;
+		this.httpMethod = httpMethod;
+		this.path = path;
+		this.returnType = returnType;
 	}
 
 	/**
-	 * Returns the underlying Java method that this metadata is about.
+	 * Returns the Java method this metadata is for.
 	 *
-	 * @return
-	 * 	The underlying Java method that this metadata is about.
-	 * 	<br>Never <jk>null</jk>.
+	 * @return The method. Never <jk>null</jk>.
 	 */
-	public Method getJavaMethod() { return method; }
-
-	/**
-	 * Returns the HTTP path of this method.
-	 *
-	 * @return
-	 * 	The HTTP path of this method relative to the parent interface.
-	 * 	<br>Never <jk>null</jk>.
-	 * 	<br>Never has leading or trailing slashes.
-	 */
-	public String getPath() { return path; }
-
-	/**
-	 * Returns the absolute URL of the REST interface invoked by this Java method.
-	 *
-	 * @return The absolute URL of the REST interface, never <jk>null</jk>.
-	 */
-	public String getUri() { return url; }
-
-	@Override
-	public boolean equals(Object o) {
-		return o instanceof RrpcInterfaceMethodMeta other && eq(this, other, (x, y) -> x.method.equals(y.method));
+	public Method getMethod() {
+		return method;
 	}
 
-	@Override
-	public int hashCode() {
-		return method.hashCode();
+	/**
+	 * Returns the HTTP method (e.g. {@code "GET"}, {@code "POST"}).
+	 *
+	 * @return The HTTP method. Never <jk>null</jk>.
+	 */
+	public String getHttpMethod() {
+		return httpMethod;
+	}
+
+	/**
+	 * Returns the resolved path for this operation (relative to the interface base path).
+	 *
+	 * @return The path. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getPath() {
+		return path;
+	}
+
+	/**
+	 * Returns what the proxy method should return.
+	 *
+	 * @return The return type. Never <jk>null</jk>.
+	 */
+	public RemoteReturn getReturnType() {
+		return returnType;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return httpMethod + " " + path + " → " + method.getName() + "()";
 	}
 }

@@ -31,7 +31,7 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;

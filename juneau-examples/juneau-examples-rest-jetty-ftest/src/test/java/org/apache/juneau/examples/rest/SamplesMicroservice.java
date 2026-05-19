@@ -23,7 +23,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.serializer.*;
 
 import jakarta.servlet.*;

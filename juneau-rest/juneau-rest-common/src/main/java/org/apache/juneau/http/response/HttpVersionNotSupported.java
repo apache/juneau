@@ -16,202 +16,75 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.http.response.HttpVersionNotSupported.*;
-
-import java.text.*;
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
-
 /**
- * Exception representing an HTTP 505 ().
+ * Represents an <c>HTTP 505 HTTP Version Not Supported</c> error response.
  *
  * <p>
  * The server does not support the HTTP protocol version used in the request.
  *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
+ *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
  *
- * @serial exclude
+ * @since 9.2.1
  */
-@Response
-@StatusCode(STATUS_CODE)
-@Schema(description = REASON_PHRASE)
-@SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for HTTP exception hierarchy
-})
 public class HttpVersionNotSupported extends BasicHttpException {
+
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
 	public static final int STATUS_CODE = 505;
 
 	/** Reason phrase */
-	public static final String REASON_PHRASE = "Http Version Not Supported";
-
-	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
-
-	/** Reusable unmodifiable instance */
-	public static final HttpVersionNotSupported INSTANCE = new HttpVersionNotSupported().setUnmodifiable();
+	public static final String REASON_PHRASE = "HTTP Version Not Supported";
 
 	/**
-	 * Constructor.
+	 * Constructor with no message.
 	 */
 	public HttpVersionNotSupported() {
-		this((Throwable)null, REASON_PHRASE);
+		super(STATUS_CODE, REASON_PHRASE);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a detail message.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param message The detail message. May be <jk>null</jk>.
 	 */
-	public HttpVersionNotSupported(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public HttpVersionNotSupported(String message) {
+		super(STATUS_CODE, REASON_PHRASE, message);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a cause.
 	 *
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
-	 */
-	public HttpVersionNotSupported(String msg, Object...args) {
-		this((Throwable)null, msg, args);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param cause The cause. May be <jk>null</jk>.
 	 */
 	public HttpVersionNotSupported(Throwable cause) {
-		this(cause, cause == null ? REASON_PHRASE : cause.getMessage());
+		super(STATUS_CODE, REASON_PHRASE, cause != null ? cause.getMessage() : null, cause);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a detail message and cause.
 	 *
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args The message arguments.
+	 * @param message The detail message. May be <jk>null</jk>.
+	 * @param cause The cause. May be <jk>null</jk>.
 	 */
-	public HttpVersionNotSupported(Throwable cause, String msg, Object...args) {
-		super(STATUS_CODE, cause, msg, args);
-		setStatusLine(STATUS_LINE.copy());
+	public HttpVersionNotSupported(String message, Throwable cause) {
+		super(STATUS_CODE, REASON_PHRASE, message, cause);
 	}
 
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy.
+	 * @param copyFrom The instance to copy. Must not be <jk>null</jk>.
 	 */
-	protected HttpVersionNotSupported(HttpVersionNotSupported copyFrom) {
+	public HttpVersionNotSupported(HttpVersionNotSupported copyFrom) {
 		super(copyFrom);
-	}
-
-	/**
-	 * Creates a modifiable copy of this bean.
-	 *
-	 * @return A new modifiable bean.
-	 */
-	public HttpVersionNotSupported copy() {
-		return new HttpVersionNotSupported(this);
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setHeader2(String name, Object value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicRuntimeException */
-	public HttpVersionNotSupported setMessage(String message, Object...args) {
-		super.setMessage(message, args);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setStatusCode2(int code) throws IllegalStateException {
-		super.setStatusCode2(code);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public HttpVersionNotSupported setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicRuntimeException */
-	public HttpVersionNotSupported setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
 	}
 }

@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.*;
 
 /**

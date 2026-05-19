@@ -17,19 +17,19 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.HttpMethod;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.client.remote.*;
+import org.apache.juneau.rest.client.classic.*;
+import org.apache.juneau.rest.client.classic.remote.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;

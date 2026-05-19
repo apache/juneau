@@ -97,27 +97,27 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-ng-rest-client-apache-httpclient-45</artifactId>
+			<artifactId>juneau-rest-client-apache-httpclient-45</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-ng-rest-client-apache-httpclient-50</artifactId>
+			<artifactId>juneau-rest-client-apache-httpclient-50</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-ng-rest-client-java-httpclient</artifactId>
+			<artifactId>juneau-rest-client-java-httpclient</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-ng-rest-client-okhttp</artifactId>
+			<artifactId>juneau-rest-client-okhttp</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-ng-rest-client-jetty</artifactId>
+			<artifactId>juneau-rest-client-jetty</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Force commons-codec >= 1.13 to satisfy Jena's MurmurHash3 requirement;

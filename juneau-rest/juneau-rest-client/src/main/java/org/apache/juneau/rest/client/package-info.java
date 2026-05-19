@@ -16,6 +16,24 @@
  */
 
 /**
- * REST Client API
+ * Next-generation REST client — transport-agnostic HTTP client built on Juneau's serialization stack.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This entire package ({@code org.apache.juneau.rest.client}) is part of the
+ * next-generation REST client and HTTP stack.
+ * Binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release (and possibly earlier).
+ * For production use cases that require long-term binary stability, continue using the existing
+ * {@code juneau-rest-client} APIs until the {@code ng} stack is declared stable.
+ *
+ * <p>
+ * Key types:
+ * <ul>
+ * 	<li>{@link org.apache.juneau.rest.client.HttpTransport} — SPI for pluggable HTTP transports
+ * 	<li>{@link org.apache.juneau.rest.client.TransportRequest} — transport-layer request DTO
+ * 	<li>{@link org.apache.juneau.rest.client.TransportResponse} — transport-layer response DTO
+ * 	<li>{@link org.apache.juneau.rest.client.RestClient} — high-level REST client
+ * 	<li>{@link org.apache.juneau.rest.client.RestRequest} — fluent request builder
+ * 	<li>{@link org.apache.juneau.rest.client.RestResponse} — response wrapper with deserialization support
+ * </ul>
  */
 package org.apache.juneau.rest.client;

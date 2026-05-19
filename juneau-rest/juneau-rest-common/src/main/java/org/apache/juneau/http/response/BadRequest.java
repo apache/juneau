@@ -16,37 +16,26 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.http.response.BadRequest.*;
-
-import java.text.*;
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
-
 /**
- * Exception representing an HTTP 400 (Bad Request).
+ * Represents an <c>HTTP 400 Bad Request</c> error response.
  *
  * <p>
- * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
+ * The server cannot or will not process the request due to an apparent client error.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
  *
- * @serial exclude
+ * @since 9.2.1
  */
-@Response
-@StatusCode(STATUS_CODE)
-@Schema(description = REASON_PHRASE)
-@SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for HTTP exception hierarchy
-})
 public class BadRequest extends BasicHttpException {
+
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
@@ -55,163 +44,47 @@ public class BadRequest extends BasicHttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Bad Request";
 
-	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
-
-	/** Reusable unmodifiable instance */
-	public static final BadRequest INSTANCE = new BadRequest().setUnmodifiable();
-
 	/**
-	 * Constructor.
+	 * Constructor with no message.
 	 */
 	public BadRequest() {
-		this((Throwable)null, REASON_PHRASE);
+		super(STATUS_CODE, REASON_PHRASE);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a detail message.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param message The detail message. May be <jk>null</jk>.
 	 */
-	public BadRequest(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public BadRequest(String message) {
+		super(STATUS_CODE, REASON_PHRASE, message);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a cause.
 	 *
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
-	 */
-	public BadRequest(String msg, Object...args) {
-		this((Throwable)null, msg, args);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param cause The cause. May be <jk>null</jk>.
 	 */
 	public BadRequest(Throwable cause) {
-		this(cause, cause == null ? REASON_PHRASE : cause.getMessage());
+		super(STATUS_CODE, REASON_PHRASE, cause != null ? cause.getMessage() : null, cause);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a detail message and cause.
 	 *
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args The message arguments.
+	 * @param message The detail message. May be <jk>null</jk>.
+	 * @param cause The cause. May be <jk>null</jk>.
 	 */
-	public BadRequest(Throwable cause, String msg, Object...args) {
-		super(STATUS_CODE, cause, msg, args);
-		setStatusLine(STATUS_LINE.copy());
+	public BadRequest(String message, Throwable cause) {
+		super(STATUS_CODE, REASON_PHRASE, message, cause);
 	}
 
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy.
+	 * @param copyFrom The instance to copy. Must not be <jk>null</jk>.
 	 */
-	protected BadRequest(BadRequest copyFrom) {
+	public BadRequest(BadRequest copyFrom) {
 		super(copyFrom);
-	}
-
-	/**
-	 * Creates a modifiable copy of this bean.
-	 *
-	 * @return A new modifiable bean.
-	 */
-	public BadRequest copy() {
-		return new BadRequest(this);
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setHeader2(String name, Object value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicRuntimeException */
-	public BadRequest setMessage(String message, Object...args) {
-		super.setMessage(message, args);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setStatusCode2(int code) throws IllegalStateException {
-		super.setStatusCode2(code);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public BadRequest setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicRuntimeException */
-	public BadRequest setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
 	}
 }

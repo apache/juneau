@@ -16,32 +16,26 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.http.response.Accepted.*;
-
-import java.net.*;
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
 
 /**
  * Represents an <c>HTTP 202 Accepted</c> response.
  *
  * <p>
  * The request has been accepted for processing, but the processing has not been completed.
- * The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
+ *
+ * @since 9.2.1
  */
-@Response
-@StatusCode(STATUS_CODE)
-@Schema(description = REASON_PHRASE)
 public class Accepted extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -51,10 +45,10 @@ public class Accepted extends BasicHttpResponse {
 	public static final String REASON_PHRASE = "Accepted";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
+	private static final HttpStatusLine STATUS_LINE = HttpStatusLineBean.of(STATUS_CODE, REASON_PHRASE);
 
 	/** Default unmodifiable instance */
-	public static final Accepted INSTANCE = new Accepted().setUnmodifiable();
+	public static final Accepted INSTANCE = new Accepted();
 
 	/**
 	 * Constructor.
@@ -64,130 +58,29 @@ public class Accepted extends BasicHttpResponse {
 	}
 
 	/**
+	 * Constructor with a response body.
+	 *
+	 * @param body The response body. May be <jk>null</jk>.
+	 */
+	public Accepted(HttpBody body) {
+		super(STATUS_LINE, body);
+	}
+
+	/**
+	 * Constructor with a plain-text string body.
+	 *
+	 * @param body The response body as a plain-text string. May be <jk>null</jk>.
+	 */
+	public Accepted(String body) {
+		super(STATUS_LINE, body);
+	}
+
+	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy from.
+	 * @param copyFrom The bean to copy from. Must not be <jk>null</jk>.
 	 */
 	public Accepted(Accepted copyFrom) {
 		super(copyFrom);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
-	 */
-	public Accepted(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
-	}
-
-	/**
-	 * Creates a builder for this class initialized with the contents of this bean.
-	 *
-	 * @return A new builder bean.
-	 */
-	public Accepted copy() {
-		return new Accepted(this);
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setHeader2(Header value) {
-		super.setHeader2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setHeader2(String name, String value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setLocation(String value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setLocation(URI value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setStatusCode2(int value) {
-		super.setStatusCode2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
 	}
 }

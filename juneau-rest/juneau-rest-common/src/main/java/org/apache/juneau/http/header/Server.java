@@ -16,109 +16,67 @@
  */
 package org.apache.juneau.http.header;
 
+
 import java.util.function.*;
 
-import org.apache.juneau.http.annotation.*;
-
 /**
- * Represents a parsed <l>Server</l> HTTP response header.
+ * Represents an HTTP <c>Server</c> header.
  *
  * <p>
  * A name for the server.
  *
- * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
- * 	Server: Apache/2.4.1 (Unix)
- * </p>
- *
- * <h5 class='topic'>RFC2616 Specification</h5>
- *
- * The Server response-header field contains information about the software used by the origin server to handle the
- * request.
- * The field can contain multiple product tokens (section 3.8) and comments identifying the server and any significant
- * sub-products.
- * The product tokens are listed in order of their significance for identifying the application.
- *
- * <p class='bcode'>
- * 	Server         = "Server" ":" 1*( product | comment )
- * </p>
- *
  * <p>
- * Example:
- * <p class='bcode'>
- * 	Server: CERN/3.0 libwww/2.17
- * </p>
- *
- * <p>
- * If the response is being forwarded through a proxy, the proxy application MUST NOT modify the Server response-header.
- * Instead, it SHOULD include a Via field (as described in section 14.45).
- *
- * <p>
- * Note: Revealing the specific software version of the server might allow the server machine to become more vulnerable
- * to attacks against software that is known to contain security holes.
- * Server implementors are encouraged to make this field a configurable option.
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
- * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
  *
- * @serial exclude
+ * @since 9.2.1
  */
-@Header("Server")
-public class Server extends BasicStringHeader {
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "Server";
+public class Server extends HttpStringHeader {
+
+	/** The header name */
+	public static final String NAME = "Server";
 
 	/**
-	 * Static creator.
+	 * Constructor with an eager value.
 	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Server of(String value) {
-		return value == null ? null : new Server(value);
-	}
-
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Server of(Supplier<String> value) {
-		return value == null ? null : new Server(value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param value The header value. May be <jk>null</jk>.
 	 */
 	public Server(String value) {
 		super(NAME, value);
 	}
 
 	/**
-	 * Constructor with delayed value.
+	 * Constructor with a lazy value supplier.
 	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param valueSupplier Supplier for the header value. Must not be <jk>null</jk>.
 	 */
-	public Server(Supplier<String> value) {
-		super(NAME, value);
+	public Server(Supplier<String> valueSupplier) {
+		super(NAME, valueSupplier);
+	}
+
+	/**
+	 * Static factory method with an eager value.
+	 *
+	 * @param value The header value. May be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public static Server of(String value) {
+		return new Server(value);
+	}
+
+	/**
+	 * Static factory method with a lazy value supplier.
+	 *
+	 * @param valueSupplier Supplier for the header value. Must not be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public static Server of(Supplier<String> valueSupplier) {
+		return new Server(valueSupplier);
 	}
 }

@@ -2,9 +2,9 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * The ASF licenses this file to You under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,115 +16,58 @@
  */
 package org.apache.juneau.http.header;
 
-import java.util.function.*;
-
-import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents a parsed <l>Debug</l> HTTP request/response header.
+ * Represents an HTTP <c>Debug</c> header.
  *
  * <p>
- * Specifies to enable debug mode on the current request.
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
  *
- * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
- * 	Debug: true
- * </p>
- *
- * <p>
- * Not part of the RFC2616 specification, but provided to allow for debugging of HTTP requests.
- * <br>It's up to the server to decide whether to honor this header.
- *
- * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
- * </ul>
- *
- * @serial exclude
+ * @since 9.2.1
  */
-@Header("Debug")
-public class Debug extends BasicBooleanHeader {
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "Debug";
+import java.util.function.*;
 
-	/** Constant for <jk>true</jk> value. */
-	public static final Debug TRUE = of(true);
-	/** Constant for <jk>false</jk> value. */
-	public static final Debug FALSE = of(false);
+/**
+ * @since 9.2.1
+ */
+public class Debug extends HttpBooleanHeader {
 
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
-	 */
-	public static Debug of(Boolean value) {
-		return value == null ? null : new Debug(value);
-	}
+	public static final String NAME = "Debug";
 
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
-	 */
-	public static Debug of(String value) {
-		return value == null ? null : new Debug(value);
-	}
-
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
-	 */
-	public static Debug of(Supplier<Boolean> value) {
-		return value == null ? null : new Debug(value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public Debug(Boolean value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
 	public Debug(String value) {
 		super(NAME, value);
 	}
 
-	/**
-	 * Constructor with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public Debug(Supplier<Boolean> value) {
+	public Debug(boolean value) {
+		super(NAME, Boolean.valueOf(value));
+	}
+
+	public Debug(Boolean value) {
 		super(NAME, value);
+	}
+
+	private Debug(Supplier<?> supplier, int lazyMode) {
+		super(NAME, supplier, lazyMode);
+	}
+
+	public static Debug of(String value) {
+		return new Debug(value);
+	}
+
+	public static Debug of(boolean value) {
+		return new Debug(value);
+	}
+
+	public static Debug of(Boolean value) {
+		return new Debug(value);
+	}
+
+	public static Debug ofLazyWire(Supplier<String> supplier) {
+		return new Debug(supplier, LAZY_WIRE_STRING);
+	}
+
+	public static Debug ofLazyParsed(Supplier<Boolean> supplier) {
+		return new Debug(supplier, LAZY_BOOLEAN);
 	}
 }

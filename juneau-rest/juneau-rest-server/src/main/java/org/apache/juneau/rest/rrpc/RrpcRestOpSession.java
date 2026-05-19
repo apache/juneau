@@ -24,8 +24,8 @@ import java.io.*;
 import java.lang.reflect.*;
 
 import org.apache.http.*;
-import org.apache.juneau.http.remote.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.remote.RrpcInterfaceMethodMeta;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 

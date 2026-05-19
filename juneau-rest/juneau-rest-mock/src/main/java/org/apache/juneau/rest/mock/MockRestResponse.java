@@ -18,7 +18,7 @@ package org.apache.juneau.rest.mock;
 
 import org.apache.http.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.classic.*;
 
 /**
  * A subclass of {@link RestResponse} with additional features for mocked testing.
@@ -30,7 +30,7 @@ import org.apache.juneau.rest.client.*;
 @SuppressWarnings({
 	"resource" // MockRestResponse manages Closeable resources
 })
-public class MockRestResponse extends org.apache.juneau.rest.client.RestResponse {
+public class MockRestResponse extends org.apache.juneau.rest.client.classic.RestResponse {
 
 	/**
 	 * Constructor.

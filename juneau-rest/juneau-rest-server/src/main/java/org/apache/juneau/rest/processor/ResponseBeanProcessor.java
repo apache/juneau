@@ -25,8 +25,8 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.Header;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.*;
 
 /**

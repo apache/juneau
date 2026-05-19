@@ -16,37 +16,26 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.http.response.LoopDetected.*;
-
-import java.text.*;
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
-
 /**
- * Exception representing an HTTP 508 (Loop Detected).
+ * Represents an <c>HTTP 508 Loop Detected</c> error response.
  *
  * <p>
- * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
+ * The server detected an infinite loop while processing the request.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
  *
- * @serial exclude
+ * @since 9.2.1
  */
-@Response
-@StatusCode(STATUS_CODE)
-@Schema(description = REASON_PHRASE)
-@SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for HTTP exception hierarchy
-})
 public class LoopDetected extends BasicHttpException {
+
 	private static final long serialVersionUID = 1L;
 
 	/** HTTP status code */
@@ -55,163 +44,47 @@ public class LoopDetected extends BasicHttpException {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Loop Detected";
 
-	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
-
-	/** Reusable unmodifiable instance */
-	public static final LoopDetected INSTANCE = new LoopDetected().setUnmodifiable();
-
 	/**
-	 * Constructor.
+	 * Constructor with no message.
 	 */
 	public LoopDetected() {
-		this((Throwable)null, REASON_PHRASE);
+		super(STATUS_CODE, REASON_PHRASE);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a detail message.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param message The detail message. May be <jk>null</jk>.
 	 */
-	public LoopDetected(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public LoopDetected(String message) {
+		super(STATUS_CODE, REASON_PHRASE, message);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a cause.
 	 *
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args Optional {@link MessageFormat}-style arguments in the message.
-	 */
-	public LoopDetected(String msg, Object...args) {
-		this((Throwable)null, msg, args);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cause The cause.  Can be <jk>null</jk>.
+	 * @param cause The cause. May be <jk>null</jk>.
 	 */
 	public LoopDetected(Throwable cause) {
-		this(cause, cause == null ? REASON_PHRASE : cause.getMessage());
+		super(STATUS_CODE, REASON_PHRASE, cause != null ? cause.getMessage() : null, cause);
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a detail message and cause.
 	 *
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args The message arguments.
+	 * @param message The detail message. May be <jk>null</jk>.
+	 * @param cause The cause. May be <jk>null</jk>.
 	 */
-	public LoopDetected(Throwable cause, String msg, Object...args) {
-		super(STATUS_CODE, cause, msg, args);
-		setStatusLine(STATUS_LINE.copy());
+	public LoopDetected(String message, Throwable cause) {
+		super(STATUS_CODE, REASON_PHRASE, message, cause);
 	}
 
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy.
+	 * @param copyFrom The instance to copy. Must not be <jk>null</jk>.
 	 */
-	protected LoopDetected(LoopDetected copyFrom) {
+	public LoopDetected(LoopDetected copyFrom) {
 		super(copyFrom);
-	}
-
-	/**
-	 * Creates a modifiable copy of this bean.
-	 *
-	 * @return A new modifiable bean.
-	 */
-	public LoopDetected copy() {
-		return new LoopDetected(this);
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setHeader2(String name, Object value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicRuntimeException */
-	public LoopDetected setMessage(String message, Object...args) {
-		super.setMessage(message, args);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setStatusCode2(int code) throws IllegalStateException {
-		super.setStatusCode2(code);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public LoopDetected setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicRuntimeException */
-	public LoopDetected setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
 	}
 }

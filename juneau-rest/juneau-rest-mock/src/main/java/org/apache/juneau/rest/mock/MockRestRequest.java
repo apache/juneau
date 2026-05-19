@@ -29,7 +29,7 @@ import org.apache.http.concurrent.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.serializer.*;
 
 import jakarta.servlet.*;
@@ -52,7 +52,7 @@ import jakarta.servlet.http.*;
 @SuppressWarnings({
 	"resource" // MockRestRequest manages Closeable resources
 })
-public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
+public class MockRestRequest extends org.apache.juneau.rest.client.classic.RestRequest {
 	private Map<String,Object> attributeMap = map();
 	private Map<String,RequestDispatcher> requestDispatcherMap = map();
 	private String characterEncoding;

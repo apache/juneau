@@ -21,8 +21,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;

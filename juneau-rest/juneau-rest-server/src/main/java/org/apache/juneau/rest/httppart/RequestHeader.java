@@ -23,8 +23,8 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 

@@ -16,6 +16,22 @@
  */
 
 /**
- * HTTP Entity Beans
+ * Next-generation HTTP body (entity) implementations.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This package is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * Binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release (and possibly earlier).
+ *
+ * <p>
+ * Concrete body types:
+ * <ul>
+ * 	<li>{@link org.apache.juneau.http.entity.StringBody} — UTF-8 string content
+ * 	<li>{@link org.apache.juneau.http.entity.ByteArrayBody} — raw byte array content
+ * 	<li>{@link org.apache.juneau.http.entity.StreamBody} — wraps a one-shot {@link java.io.InputStream}
+ * 	<li>{@link org.apache.juneau.http.entity.FileBody} — streams a {@link java.io.File}
+ * 	<li>{@link org.apache.juneau.http.entity.MultipartBody} — {@code multipart/form-data} with file uploads
+ * 	<li>{@link org.apache.juneau.http.entity.HttpBodyBean} — wraps an existing body with an overridden content type
+ * </ul>
  */
 package org.apache.juneau.http.entity;

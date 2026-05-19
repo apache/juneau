@@ -16,74 +16,67 @@
  */
 package org.apache.juneau.http.header;
 
+
 import java.util.function.*;
 
-import org.apache.juneau.http.annotation.*;
-
 /**
- * Represents a parsed <l>Forwarded</l> HTTP request header.
+ * Represents an HTTP <c>Forwarded</c> header.
+ *
+ * <p>
+ * Disclose original information of a client connecting to a web server through an HTTP proxy.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
- * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
  *
- * @serial exclude
+ * @since 9.2.1
  */
-@Header("Forwarded")
-public class Forwarded extends BasicStringHeader {
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "Forwarded";
+public class Forwarded extends HttpStringHeader {
+
+	/** The header name */
+	public static final String NAME = "Forwarded";
 
 	/**
-	 * Static creator.
+	 * Constructor with an eager value.
 	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Forwarded of(String value) {
-		return value == null ? null : new Forwarded(value);
-	}
-
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Forwarded of(Supplier<String> value) {
-		return value == null ? null : new Forwarded(value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param value The header value. May be <jk>null</jk>.
 	 */
 	public Forwarded(String value) {
 		super(NAME, value);
 	}
 
 	/**
-	 * Constructor with delayed value.
+	 * Constructor with a lazy value supplier.
 	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param valueSupplier Supplier for the header value. Must not be <jk>null</jk>.
 	 */
-	public Forwarded(Supplier<String> value) {
-		super(NAME, value);
+	public Forwarded(Supplier<String> valueSupplier) {
+		super(NAME, valueSupplier);
+	}
+
+	/**
+	 * Static factory method with an eager value.
+	 *
+	 * @param value The header value. May be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public static Forwarded of(String value) {
+		return new Forwarded(value);
+	}
+
+	/**
+	 * Static factory method with a lazy value supplier.
+	 *
+	 * @param valueSupplier Supplier for the header value. Must not be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public static Forwarded of(Supplier<String> valueSupplier) {
+		return new Forwarded(valueSupplier);
 	}
 }

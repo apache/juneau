@@ -22,9 +22,9 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.ng.http.entity.*;
-import org.apache.juneau.ng.rest.client.*;
-import org.apache.juneau.ng.rest.client.apachehttpclient50.*;
+import org.apache.juneau.http.entity.*;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.apachehttpclient50.*;
 import org.junit.jupiter.api.*;
 
 import com.sun.net.httpserver.*;
@@ -100,7 +100,7 @@ public class ApacheHc5Transport_Test {
 	@Test
 	void a01_get_basicResponse() throws Exception {
 		var transport = ApacheHc5Transport.create();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/hello").run()) {
 				assertEquals(200, response.getStatusCode());
 				assertEquals("Hello, World!", response.getBodyAsString());
@@ -111,7 +111,7 @@ public class ApacheHc5Transport_Test {
 	@Test
 	void a02_get_statusCode404() throws Exception {
 		var transport = ApacheHc5Transport.create();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/not-found").run()) {
 				assertEquals(404, response.getStatusCode());
 			}
@@ -121,7 +121,7 @@ public class ApacheHc5Transport_Test {
 	@Test
 	void a03_get_responseHeader() throws Exception {
 		var transport = ApacheHc5Transport.create();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/hello").run()) {
 				var ct = response.getFirstHeader("Content-Type");
 				assertNotNull(ct);
@@ -137,7 +137,7 @@ public class ApacheHc5Transport_Test {
 	@Test
 	void b01_post_echosMethod() throws Exception {
 		var transport = ApacheHc5Transport.create();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.post("/echo-method")
 					.body(StringBody.of("", "text/plain"))
 					.run()) {
@@ -150,7 +150,7 @@ public class ApacheHc5Transport_Test {
 	@Test
 	void b02_put_echosMethod() throws Exception {
 		var transport = ApacheHc5Transport.create();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.put("/echo-method")
 					.body(StringBody.of("", "text/plain"))
 					.run()) {
@@ -163,7 +163,7 @@ public class ApacheHc5Transport_Test {
 	@Test
 	void b03_delete_echosMethod() throws Exception {
 		var transport = ApacheHc5Transport.create();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.delete("/echo-method").run()) {
 				assertEquals(200, response.getStatusCode());
 				assertEquals("DELETE", response.getBodyAsString());
@@ -178,7 +178,7 @@ public class ApacheHc5Transport_Test {
 	@Test
 	void c01_post_stringBody() throws Exception {
 		var transport = ApacheHc5Transport.create();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.post("/echo-body")
 					.body(StringBody.of("hello body", "text/plain"))
 					.run()) {
@@ -191,7 +191,7 @@ public class ApacheHc5Transport_Test {
 	@Test
 	void c02_post_byteArrayBody() throws Exception {
 		var transport = ApacheHc5Transport.create();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			var bytes = "byte content".getBytes(StandardCharsets.UTF_8);
 			try (var response = client.post("/echo-body")
 					.body(ByteArrayBody.of(bytes, "application/octet-stream"))
@@ -209,7 +209,7 @@ public class ApacheHc5Transport_Test {
 	@Test
 	void d01_header_sentToServer() throws Exception {
 		var transport = ApacheHc5Transport.create();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/echo-header")
 					.header("X-Custom", "my-value")
 					.run()) {
@@ -222,7 +222,7 @@ public class ApacheHc5Transport_Test {
 	@Test
 	void d02_missingHeader_returnsDefault() throws Exception {
 		var transport = ApacheHc5Transport.create();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/echo-header").run()) {
 				assertEquals(200, response.getStatusCode());
 				assertEquals("missing", response.getBodyAsString());
@@ -239,7 +239,7 @@ public class ApacheHc5Transport_Test {
 		var transport = ApacheHc5Transport.builder()
 			.httpClient(org.apache.hc.client5.http.impl.classic.HttpClients.createDefault())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
 			try (var response = client.get("/hello").run()) {
 				assertEquals(200, response.getStatusCode());
 				assertEquals("Hello, World!", response.getBodyAsString());

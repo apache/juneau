@@ -19,7 +19,7 @@ package org.apache.juneau.http.remote;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
-import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.http.classic.HttpParts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -30,7 +30,7 @@ import org.apache.http.entity.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
-import org.apache.juneau.http.part.*;
+import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.marshaller.*;

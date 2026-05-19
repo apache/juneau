@@ -32,17 +32,17 @@ import org.apache.juneau.http.remote.RemotePatch;
 import org.apache.juneau.http.remote.RemotePost;
 import org.apache.juneau.http.remote.RemotePut;
 import org.apache.juneau.http.remote.RemoteReturn;
-import org.apache.juneau.ng.http.HttpBody;
-import org.apache.juneau.ng.http.entity.*;
-import org.apache.juneau.ng.http.remote.RrpcInterfaceMeta;
-import org.apache.juneau.ng.rest.client.*;
-import org.apache.juneau.ng.rest.client.remote.*;
-import org.apache.juneau.ng.rest.mock.*;
+import org.apache.juneau.http.HttpBody;
+import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.remote.RrpcInterfaceMeta;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.remote.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Tests for the ng.* remote proxy support: @Remote, @RemoteGet/Post/etc., parameter annotations,
- * RrpcInterfaceMeta, RrpcInterfaceMethodMeta, and NgRemoteClient.
+ * RrpcInterfaceMeta, RrpcInterfaceMethodMeta, and RemoteClient.
  */
 public class NgRemoteClient_Test {
 
@@ -156,7 +156,7 @@ public class NgRemoteClient_Test {
 
 	@Test void b01_get_withPathParam() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(B01_ItemService.class);
 			var result = svc.getItem("42");
 			assertEquals("result", result);
@@ -168,7 +168,7 @@ public class NgRemoteClient_Test {
 
 	@Test void b02_get_withQueryParam() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(B01_ItemService.class);
 			svc.listItems("2");
 			var uri = captured.get(0).getUri().toString();
@@ -178,7 +178,7 @@ public class NgRemoteClient_Test {
 
 	@Test void b03_post_withBody() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(B01_ItemService.class);
 			svc.createItem("{\"name\":\"widget\"}");
 			assertEquals("POST", captured.get(0).getMethod());
@@ -187,7 +187,7 @@ public class NgRemoteClient_Test {
 
 	@Test void b04_get_returnsStatus_int() throws Exception {
 		var transport = MockHttpTransport.builder().fallback(req -> TransportResponse.builder().statusCode(200).build()).build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			var svc = client.remote(B01_ItemService.class);
 			assertEquals(200, svc.getStatus());
 		}
@@ -195,7 +195,7 @@ public class NgRemoteClient_Test {
 
 	@Test void b05_get_returnsStatus_boolean() throws Exception {
 		var transport = MockHttpTransport.builder().fallback(req -> TransportResponse.builder().statusCode(200).build()).build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			var svc = client.remote(B01_ItemService.class);
 			assertTrue(svc.isOk());
 		}
@@ -203,7 +203,7 @@ public class NgRemoteClient_Test {
 
 	@Test void b06_get_returnsStatus_boolean_false_when_error() throws Exception {
 		var transport = MockHttpTransport.builder().fallback(req -> TransportResponse.builder().statusCode(500).build()).build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			var svc = client.remote(B01_ItemService.class);
 			assertFalse(svc.isOk());
 		}
@@ -221,7 +221,7 @@ public class NgRemoteClient_Test {
 
 	@Test void c01_header_param() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(C01_SecureService.class);
 			svc.getData("Bearer mytoken");
 			var authHeader = captured.get(0).getFirstHeader("Authorization");
@@ -237,11 +237,11 @@ public class NgRemoteClient_Test {
 	@Remote(path = "/res")
 	interface D01_ResponseService {
 		@RemoteGet(returns = RemoteReturn.RESPONSE)
-		NgRestResponse getRaw();
+		RestResponse getRaw();
 	}
 
 	@Test void d01_returns_response() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "raw")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "raw")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(D01_ResponseService.class);
 			try (var resp = svc.getRaw()) {
 				assertEquals(200, resp.getStatusCode());
@@ -262,7 +262,7 @@ public class NgRemoteClient_Test {
 
 	@Test void e01_void_return() throws Exception {
 		var transport = MockHttpTransport.builder().fallback(req -> TransportResponse.builder().statusCode(204).build()).build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			var svc = client.remote(E01_VoidService.class);
 			assertDoesNotThrow(() -> svc.doSomething());
 		}
@@ -285,7 +285,7 @@ public class NgRemoteClient_Test {
 
 	@Test void f01_remote_method_path() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(F01_ProductService.class);
 			svc.list();
 			var path = captured.get(0).getUri().getPath();
@@ -305,7 +305,7 @@ public class NgRemoteClient_Test {
 
 	@Test void g01_body_httpBody() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(G01_UploadService.class);
 			svc.upload(StringBody.of("file content", "application/octet-stream"));
 			assertEquals("POST", captured.get(0).getMethod());
@@ -324,7 +324,7 @@ public class NgRemoteClient_Test {
 
 	@Test void h01_unannotated_single_param_as_body() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(H01_InferredBodyService.class);
 			svc.create("test body");
 			assertEquals("POST", captured.get(0).getMethod());
@@ -332,30 +332,30 @@ public class NgRemoteClient_Test {
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------
-	// I — NgRemoteClient factory
+	// I — RemoteClient factory
 	// ------------------------------------------------------------------------------------------------------------------
 
 	@Test void i01_ngRemoteClient_create() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
-			var remote = new NgRemoteClient(client);
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
+			var remote = new RemoteClient(client);
 			var svc = remote.create(B01_ItemService.class);
 			assertNotNull(svc);
 		}
 	}
 
 	@Test void i02_ngRemoteClient_null_client_throws() {
-		assertThrows(IllegalArgumentException.class, () -> new NgRemoteClient(null));
+		assertThrows(IllegalArgumentException.class, () -> new RemoteClient(null));
 	}
 
 	@Test void i03_ngRemoteClient_null_iface_throws() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
-			var remote = new NgRemoteClient(client);
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
+			var remote = new RemoteClient(client);
 			assertThrows(IllegalArgumentException.class, () -> remote.create(null));
 		}
 	}
 
 	@Test void i04_ngRestClient_remote_shortcut() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(B01_ItemService.class);
 			assertNotNull(svc);
 		}
@@ -374,7 +374,7 @@ public class NgRemoteClient_Test {
 	}
 
 	@Test void j01_unannotated_method_throws() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(J01_MixedService.class);
 			assertThrows(UnsupportedOperationException.class, () -> svc.notAnnotated());
 		}
@@ -435,7 +435,7 @@ public class NgRemoteClient_Test {
 
 	@Test void l01_null_param_skipped() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(L01_NullParamService.class);
 			svc.get(null);
 			var uri = captured.get(0).getUri().toString();
@@ -461,7 +461,7 @@ public class NgRemoteClient_Test {
 
 	@Test void m01_put_verb() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(M01_VerbService.class);
 			svc.put("5", "payload");
 			assertEquals("PUT", captured.get(0).getMethod());
@@ -470,7 +470,7 @@ public class NgRemoteClient_Test {
 
 	@Test void m02_patch_verb() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(M01_VerbService.class);
 			svc.patch("5");
 			assertEquals("PATCH", captured.get(0).getMethod());
@@ -479,7 +479,7 @@ public class NgRemoteClient_Test {
 
 	@Test void m03_delete_verb() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(M01_VerbService.class);
 			svc.delete("5");
 			assertEquals("DELETE", captured.get(0).getMethod());
@@ -501,7 +501,7 @@ public class NgRemoteClient_Test {
 
 	@Test void n01_empty_query_value_uses_param_name() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(N01_EmptyValueService.class);
 			svc.search("hello");
 			// param name is used as query param name (may be "arg0" without debug info, so just verify a param is present)
@@ -511,7 +511,7 @@ public class NgRemoteClient_Test {
 
 	@Test void n02_empty_header_value_uses_param_name() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(N01_EmptyValueService.class);
 			svc.get("text/plain");
 			assertNotNull(captured.get(0));
@@ -541,7 +541,7 @@ public class NgRemoteClient_Test {
 	}
 
 	@Test void o01_inputstream_return() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "stream-data")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "stream-data")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(O01_ReturnTypeService.class);
 			try (var stream = svc.getStream()) {
 				assertNotNull(stream);
@@ -550,7 +550,7 @@ public class NgRemoteClient_Test {
 	}
 
 	@Test void o02_bytes_return() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "byte-data")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "byte-data")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(O01_ReturnTypeService.class);
 			var bytes = svc.getBytes();
 			assertEquals("byte-data", new String(bytes));
@@ -559,21 +559,21 @@ public class NgRemoteClient_Test {
 
 	@Test void o03_void_return() throws Exception {
 		var transport = MockHttpTransport.builder().fallback(req -> TransportResponse.builder().statusCode(204).build()).build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			var svc = client.remote(O01_ReturnTypeService.class);
 			assertDoesNotThrow(() -> svc.doVoid());
 		}
 	}
 
 	@Test void o04_status_boxed_integer() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(O01_ReturnTypeService.class);
 			assertEquals(200, svc.getStatusBoxed());
 		}
 	}
 
 	@Test void o05_status_boxed_boolean() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(O01_ReturnTypeService.class);
 			assertTrue(svc.isOkBoxed());
 		}
@@ -600,7 +600,7 @@ public class NgRemoteClient_Test {
 
 	@Test void p01_empty_base_uses_method_path() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(P01_EmptyBasePath.class);
 			svc.get();
 			assertTrue(captured.get(0).getUri().getPath().endsWith("/p1"));
@@ -609,7 +609,7 @@ public class NgRemoteClient_Test {
 
 	@Test void p02_empty_base_empty_method() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(P01_EmptyBasePath.class);
 			svc.getNoMethod();
 			// just should not throw
@@ -619,7 +619,7 @@ public class NgRemoteClient_Test {
 
 	@Test void p03_trailing_slash_base_no_double_slash() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(P02_TrailingSlashBase.class);
 			svc.get();
 			var path = captured.get(0).getUri().getPath();
@@ -632,7 +632,7 @@ public class NgRemoteClient_Test {
 	// ------------------------------------------------------------------------------------------------------------------
 
 	@Test void q01_object_methods_on_proxy() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(B01_ItemService.class);
 			// These invoke Object.class methods directly on the handler — should not throw
 			assertDoesNotThrow(() -> svc.toString());
@@ -653,7 +653,7 @@ public class NgRemoteClient_Test {
 
 	@Test void r01_unannotated_httpbody_param() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(R01_HttpBodyInferredService.class);
 			svc.upload(StringBody.of("content", "text/plain"));
 			assertEquals("POST", captured.get(0).getMethod());
@@ -672,7 +672,7 @@ public class NgRemoteClient_Test {
 
 	@Test void s01_body_annotated_httpbody() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(S01_BodyAnnotatedHttpBodyService.class);
 			svc.upload(StringBody.of("hello", "text/plain"));
 			assertEquals("POST", captured.get(0).getMethod());
@@ -697,21 +697,21 @@ public class NgRemoteClient_Test {
 
 	@Test void t01_void_boxed_return() throws Exception {
 		var transport = MockHttpTransport.builder().fallback(req -> TransportResponse.builder().statusCode(200).build()).build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			var svc = client.remote(T01_VoidBoxedReturnService.class);
 			assertNull(svc.doVoidBoxed());
 		}
 	}
 
 	@Test void t02_object_return_falls_through_to_string() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "hello")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "hello")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(T01_VoidBoxedReturnService.class);
 			assertEquals("hello", svc.getObject());
 		}
 	}
 
 	@Test void t03_status_mode_non_numeric_return() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(T01_VoidBoxedReturnService.class);
 			// STATUS mode with non-int/non-boolean return falls through to yield sc (Integer)
 			// The proxy returns it; a ClassCastException occurs when the caller tries to use it as String
@@ -731,7 +731,7 @@ public class NgRemoteClient_Test {
 
 	@Test void u01_path_empty_value_uses_param_name() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(U01_EmptyPathValueService.class);
 			svc.get("99");
 			// Just verify it ran — param name depends on compiler flags
@@ -751,7 +751,7 @@ public class NgRemoteClient_Test {
 
 	@Test void v01_multiple_unannotated_params_not_body() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(V01_MultiUnannotatedParamService.class);
 			svc.create("x", "y");  // should not throw, just send empty body
 			assertEquals("POST", captured.get(0).getMethod());
@@ -776,7 +776,7 @@ public class NgRemoteClient_Test {
 
 	@Test void w01_method_path_no_leading_slash() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(W01_NoLeadingSlashMethodService.class);
 			svc.list();
 			var path = captured.get(0).getUri().getPath();
@@ -787,7 +787,7 @@ public class NgRemoteClient_Test {
 
 	@Test void w02_trailing_base_no_leading_method_no_double_slash() throws Exception {
 		var captured = new ArrayList<TransportRequest>();
-		try (var client = NgRestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build()) {
 			var svc = client.remote(W02_TrailingBaseNoSlashMethod.class);
 			svc.list();
 			var path = captured.get(0).getUri().getPath();

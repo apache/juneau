@@ -18,7 +18,7 @@ package org.apache.juneau.rest.processor;
 
 import java.io.*;
 
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.rest.*;
 
 /**

@@ -2,9 +2,9 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * The ASF licenses this file to You under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,169 +16,52 @@
  */
 package org.apache.juneau.http.header;
 
-import org.apache.juneau.commons.http.StringRanges;
-import static org.apache.juneau.commons.utils.StringUtils.isBlank;
-import static org.apache.juneau.commons.utils.ThrowableUtils.illegalArg;
 
+import org.apache.juneau.commons.http.StringRanges;
 import java.util.function.*;
 
-import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents a parsed <l>Content-Disposition</l> HTTP request header.
+ * Represents an HTTP <c>Content-Disposition</c> header.
  *
  * <p>
- * In a regular HTTP response, the Content-Disposition response header is a header indicating if the content is expected
- * to be displayed inline in the browser, that is, as a Web page or as part of a Web page, or as an attachment, that is
- * downloaded and saved locally.
+ * Content disposition (inline / attachment / filename).
  *
- * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
- * 	Content-Disposition: form-data; name="fieldName"; filename="filename.jpg"
- * </p>
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
- *
- * The Expect request-header field is used to indicate that particular server behaviors are required by the client.
- * <p class='bcode'>
- *	content-disposition = "Content-Disposition" ":"
- *  	disposition-type *( ";" disposition-parm )
- * 	disposition-type = "attachment" | disp-extension-token
- * 	disposition-parm = filename-parm | disp-extension-parm
- * 	filename-parm = "filename" "=" quoted-string
- *	disp-extension-token = token
- * 	disp-extension-parm = token "=" ( token | quoted-string )
- * </p>
- *
- * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
- * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
- * </ul>
- *
- * @serial exclude
+ * @since 9.2.1
  */
-@Header("Content-Disposition")
-public class ContentDisposition extends BasicStringRangesHeader {
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "Content-Disposition";
+public class ContentDisposition extends HttpStringRangesHeader {
 
-	private static final Cache<String,ContentDisposition> CACHE = Cache.of(String.class, ContentDisposition.class).build();
+	public static final String NAME = "Content-Disposition";
 
-	/**
-	 * Creates a <l>Content-Disposition</l> header for a response attachment (browser download / save-as).
-	 *
-	 * <p>
-	 * Produces <code>attachment; filename="..."</code> with the filename escaped for use inside an HTTP quoted-string
-	 * ({@code \} and {@code "} backslash-escaped). CR and LF are rejected to reduce response-splitting risk.
-	 * </p>
-	 *
-	 * <p>
-	 * For non-ASCII filenames, RFC 5987 {@code filename*} is not set; callers needing full Unicode support may build
-	 * a header value manually or extend this API later.
-	 * </p>
-	 *
-	 * @param filename Suggested download name. Must not be <jk>null</jk>, blank, or contain CR/LF.
-	 * @return A non-<jk>null</jk> header.
-	 * @throws IllegalArgumentException If {@code filename} is null, blank, or contains line breaks.
-	 */
-	public static ContentDisposition attachment(String filename) {
-		if (filename == null || isBlank(filename))
-			throw illegalArg("Attachment filename must not be null or blank.");
-		for (var i = 0; i < filename.length(); i++) {
-			var c = filename.charAt(i);
-			if (c == '\r' || c == '\n')
-				throw illegalArg("Attachment filename must not contain CR or LF characters.");
-		}
-		var escaped = escapeFilenameForQuotedString(filename);
-		return ContentDisposition.of("attachment; filename=\"" + escaped + "\"");
-	}
-
-	private static String escapeFilenameForQuotedString(String filename) {
-		var sb = new StringBuilder(filename.length() + 8);
-		for (var i = 0; i < filename.length(); i++) {
-			var c = filename.charAt(i);
-			if (c == '\\' || c == '"')
-				sb.append('\\');
-			sb.append(c);
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ContentDisposition of(String value) {
-		return value == null ? null : CACHE.get(value, () -> new ContentDisposition(value));
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ContentDisposition of(StringRanges value) {
-		return value == null ? null : new ContentDisposition(value);
-	}
-
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ContentDisposition of(Supplier<StringRanges> value) {
-		return value == null ? null : new ContentDisposition(value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
 	public ContentDisposition(String value) {
 		super(NAME, value);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
 	public ContentDisposition(StringRanges value) {
 		super(NAME, value);
 	}
 
-	/**
-	 * Constructor with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public ContentDisposition(Supplier<StringRanges> value) {
-		super(NAME, value);
+	private ContentDisposition(Supplier<?> supplier, int lazyMode) {
+		super(NAME, supplier, lazyMode);
+	}
+
+	public static ContentDisposition of(String value) {
+		return new ContentDisposition(value);
+	}
+
+	public static ContentDisposition of(StringRanges value) {
+		return new ContentDisposition(value);
+	}
+
+	public static ContentDisposition ofLazyWire(Supplier<String> supplier) {
+		return new ContentDisposition(supplier, LAZY_WIRE_STRING);
+	}
+
+	public static ContentDisposition ofLazyParsed(Supplier<StringRanges> supplier) {
+		return new ContentDisposition(supplier, LAZY_STRING_RANGES);
 	}
 }

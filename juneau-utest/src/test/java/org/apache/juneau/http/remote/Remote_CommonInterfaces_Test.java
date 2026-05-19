@@ -18,9 +18,9 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
-import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.http.HttpResources.*;
-import static org.apache.juneau.http.HttpResponses.*;
+import static org.apache.juneau.http.classic.HttpHeaders.*;
+import static org.apache.juneau.http.classic.HttpResources.*;
+import static org.apache.juneau.http.classic.HttpResponses.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,8 +28,8 @@ import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.resource.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.resource.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;

@@ -2,9 +2,9 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * The ASF licenses this file to You under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,136 +16,58 @@
  */
 package org.apache.juneau.http.header;
 
-import java.util.function.*;
 
-import org.apache.juneau.http.annotation.*;
+import java.util.function.Supplier;
 
 /**
- * Represents a parsed <l>Content-Length</l> HTTP request/response header.
+ * Represents an HTTP <c>Content-Length</c> header.
  *
  * <p>
- * The length of the response body in octets (8-bit bytes).
- *
- * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
- * 	Content-Length: 348
- * </p>
- *
- * <h5 class='topic'>RFC2616 Specification</h5>
- *
- * The Content-Length entity-header field indicates the size of the entity-body, in decimal number of OCTETs, sent to
- * the recipient or, in the case of the HEAD method, the size of the entity-body that would have been sent had the
- * request been a GET.
- * <p class='bcode'>
- * 	Content-Length    = "Content-Length" ":" 1*DIGIT
- * </p>
+ * The size of the entity-body in bytes.
  *
  * <p>
- * An example is...
- * <p class='bcode'>
- * 	Content-Length: 3495
- * </p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
  *
- * <p>
- * Applications SHOULD use this field to indicate the transfer-length of the message-body, unless this is prohibited by
- * the rules in section 4.4.
- *
- * <p>
- * Any Content-Length greater than or equal to zero is a valid value.
- * Section 4.4 describes how to determine the length of a message-body if a Content-Length is not given.
- *
- * <p>
- * Note that the meaning of this field is significantly different from the corresponding definition in MIME, where it is
- * an optional field used within the "message/external-body" content-type.
- * In HTTP, it SHOULD be sent whenever the message's length can be determined prior to being transferred, unless this is
- * prohibited by the rules in section 4.4.
- *
- * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
- * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
- * </ul>
- *
- * @serial exclude
+ * @since 9.2.1
  */
-@Header("Content-Length")
-public class ContentLength extends BasicLongHeader {
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "Content-Length";
+public class ContentLength extends HttpLongHeader {
 
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ContentLength of(Long value) {
-		return value == null ? null : new ContentLength(value);
-	}
+	public static final String NAME = "Content-Length";
 
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable using {@link Long#parseLong(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ContentLength of(String value) {
-		return value == null ? null : new ContentLength(value);
-	}
-
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ContentLength of(Supplier<Long> value) {
-		return value == null ? null : new ContentLength(value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public ContentLength(Long value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable using {@link Long#parseLong(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
 	public ContentLength(String value) {
 		super(NAME, value);
 	}
 
-	/**
-	 * Constructor with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public ContentLength(Supplier<Long> value) {
+	public ContentLength(long value) {
+		super(NAME, Long.valueOf(value));
+	}
+
+	public ContentLength(Long value) {
 		super(NAME, value);
+	}
+
+	private ContentLength(Supplier<?> supplier, int lazyMode) {
+		super(NAME, supplier, lazyMode);
+	}
+
+	public static ContentLength of(String value) {
+		return new ContentLength(value);
+	}
+
+	public static ContentLength of(long value) {
+		return new ContentLength(value);
+	}
+
+	public static ContentLength of(Long value) {
+		return new ContentLength(value);
+	}
+
+	public static ContentLength ofLazyWire(Supplier<String> supplier) {
+		return new ContentLength(supplier, LAZY_WIRE_STRING);
+	}
+
+	public static ContentLength ofLazyParsed(Supplier<Long> supplier) {
+		return new ContentLength(supplier, LAZY_LONG);
 	}
 }

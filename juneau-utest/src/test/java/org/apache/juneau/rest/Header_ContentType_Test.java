@@ -18,7 +18,7 @@ package org.apache.juneau.rest;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.utest.utils.*;

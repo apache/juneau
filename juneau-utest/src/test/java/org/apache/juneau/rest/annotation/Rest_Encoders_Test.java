@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 

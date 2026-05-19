@@ -16,117 +16,67 @@
  */
 package org.apache.juneau.http.header;
 
+
 import java.util.function.*;
 
-import org.apache.juneau.http.annotation.*;
-
 /**
- * Represents a parsed <l>From</l> HTTP request header.
+ * Represents an HTTP <c>From</c> header.
  *
  * <p>
  * The email address of the user making the request.
  *
- * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
- * 	From: user@example.com
- * </p>
- *
- * <h5 class='topic'>RFC2616 Specification</h5>
- *
- * The From request-header field, if given, SHOULD contain an Internet e-mail address for the human user who controls
- * the requesting user agent.
- * The address SHOULD be machine-usable, as defined by "mailbox" in RFC 822 [9] as updated by RFC 1123 [8]:
- *
- * <p class='bcode'>
- * 	From   = "From" ":" mailbox
- * </p>
- *
  * <p>
- * An example is:
- * <p class='bcode'>
- * 	From: webmaster@w3.org
- * </p>
- *
- * <p>
- * This header field MAY be used for logging purposes and as a means for identifying the source of invalid or unwanted
- * requests.
- * It SHOULD NOT be used as an insecure form of access protection.
- * The interpretation of this field is that the request is being performed on behalf of the person given, who accepts
- * responsibility for the method performed.
- * In particular, robot agents SHOULD include this header so that the person responsible for running the robot can be
- * contacted if problems occur on the receiving end.
- *
- * <p>
- * The Internet e-mail address in this field MAY be separate from the Internet host which issued the request.
- * For example, when a request is passed through a proxy the original issuer's address SHOULD be used.
- *
- * <p>
- * The client SHOULD NOT send the From header field without the user's approval, as it might conflict with the user's
- * privacy interests or their site's security policy.
- * It is strongly recommended that the user be able to disable, enable, and modify the value of this field at any time
- * prior to a request.
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
- * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
  *
- * @serial exclude
+ * @since 9.2.1
  */
-@Header("From")
-public class From extends BasicStringHeader {
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "From";
+public class From extends HttpStringHeader {
+
+	/** The header name */
+	public static final String NAME = "From";
 
 	/**
-	 * Static creator.
+	 * Constructor with an eager value.
 	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static From of(String value) {
-		return value == null ? null : new From(value);
-	}
-
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static From of(Supplier<String> value) {
-		return value == null ? null : new From(value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param value The header value. May be <jk>null</jk>.
 	 */
 	public From(String value) {
 		super(NAME, value);
 	}
 
 	/**
-	 * Constructor with delayed value.
+	 * Constructor with a lazy value supplier.
 	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param valueSupplier Supplier for the header value. Must not be <jk>null</jk>.
 	 */
-	public From(Supplier<String> value) {
-		super(NAME, value);
+	public From(Supplier<String> valueSupplier) {
+		super(NAME, valueSupplier);
+	}
+
+	/**
+	 * Static factory method with an eager value.
+	 *
+	 * @param value The header value. May be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public static From of(String value) {
+		return new From(value);
+	}
+
+	/**
+	 * Static factory method with a lazy value supplier.
+	 *
+	 * @param valueSupplier Supplier for the header value. Must not be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public static From of(Supplier<String> valueSupplier) {
+		return new From(valueSupplier);
 	}
 }

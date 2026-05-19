@@ -27,8 +27,8 @@ import java.util.logging.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.httppart.*;
@@ -68,7 +68,7 @@ import jakarta.servlet.http.*;
  * 			<li>{@link Connection}
  * 			<li>{@link ContentLength}
  * 			<li>{@link ContentType}
- * 			<li>{@link org.apache.juneau.http.header.Date}
+ * 			<li>{@link org.apache.juneau.http.classic.header.Date}
  * 			<li>{@link Expect}
  * 			<li>{@link From}
  * 			<li>{@link Host}

@@ -26,7 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
@@ -54,7 +54,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='jc'>{@link ContentEncoding}
  * 	<li class='jc'>{@link ContentLength}
  * 	<li class='jc'>{@link ContentType}
- * 	<li class='jc'>{@link org.apache.juneau.http.header.Date}
+ * 	<li class='jc'>{@link org.apache.juneau.http.classic.header.Date}
  * 	<li class='jc'>{@link Debug}
  * 	<li class='jc'>{@link Expect}
  * 	<li class='jc'>{@link Forwarded}

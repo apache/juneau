@@ -2,9 +2,9 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * The ASF licenses this file to You under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,132 +16,54 @@
  */
 package org.apache.juneau.http.header;
 
+
+/**
+ * Represents an HTTP <c>Location</c> header.
+ *
+ * <p>
+ * The URI for redirection or creation of a new resource.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ *
+ * @since 9.2.1
+ */
 import java.net.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.annotation.*;
-
 /**
- * Represents a parsed <l>Location</l> HTTP response header.
- *
- * <p>
- * Used in redirection, or when a new resource has been created.
- *
- * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
- * 	Location: http://www.w3.org/pub/WWW/People.html
- * </p>
- *
- * <h5 class='topic'>RFC2616 Specification</h5>
- *
- * The Location response-header field is used to redirect the recipient to a location other than the Request-URI for
- * completion of the request or identification of a new resource.
- * For 201 (Created) responses, the Location is that of the new resource which was created by the request.
- * For 3xx responses, the location SHOULD indicate the server's preferred URI for automatic redirection to the resource.
- * The field value consists of a single absolute URI.
- *
- * <p class='bcode'>
- * 	Location       = "Location" ":" absoluteURI
- * </p>
- *
- * <p>
- * An example is:
- * <p class='bcode'>
- * 	Location: http://www.w3.org/pub/WWW/People.html
- * </p>
- *
- * <p>
- * Note: The Content-Location header field (section 14.14) differs from Location in that the Content-Location identifies
- * the original location of the entity enclosed in the request.
- * It is therefore possible for a response to contain header fields for both Location and Content-Location.
- * Also see section 13.10 for cache requirements of some methods.
- *
- * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
- * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
- * </ul>
- *
- * @serial exclude
+ * @since 9.2.1
  */
-@Header("Location")
-public class Location extends BasicUriHeader {
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "Location";
+public class Location extends HttpUriHeader {
 
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link URI#create(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Location of(String value) {
-		return value == null ? null : new Location(value);
-	}
+	public static final String NAME = "Location";
 
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Location of(Supplier<URI> value) {
-		return value == null ? null : new Location(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Location of(URI value) {
-		return value == null ? null : new Location(value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link URI#create(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
 	public Location(String value) {
 		super(NAME, value);
 	}
 
-	/**
-	 * Constructor with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public Location(Supplier<URI> value) {
+	public Location(URI value) {
 		super(NAME, value);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public Location(URI value) {
-		super(NAME, value);
+	private Location(Supplier<?> supplier, int lazyMode) {
+		super(NAME, supplier, lazyMode);
+	}
+
+	public static Location of(String value) {
+		return new Location(value);
+	}
+
+	public static Location of(URI value) {
+		return new Location(value);
+	}
+
+	public static Location ofLazyWire(Supplier<String> supplier) {
+		return new Location(supplier, LAZY_WIRE_STRING);
+	}
+
+	public static Location ofLazyParsed(Supplier<URI> supplier) {
+		return new Location(supplier, LAZY_URI);
 	}
 }

@@ -16,120 +16,173 @@
  */
 package org.apache.juneau.http.remote;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.assertArgNotNull;
+import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
+import static org.apache.juneau.commons.utils.StringUtils.isOneOf;
+import static org.apache.juneau.commons.utils.StringUtils.trimSlashes;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.rest.common.utils.HttpUtils;
 
 /**
- * Contains the meta-data about a remote proxy REST interface.
+ * Holds resolved metadata for an interface annotated with {@link org.apache.juneau.http.remote.Remote @Remote}.
  *
  * <p>
- * Captures the information in {@link Remote @Remote} annotations for caching and reuse.
+ * Built once per interface class and cached for efficient proxy invocation.
+ * Use {@link #of(Class)} to obtain instances.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
+ *
+ * @since 9.2.1
  */
-public class RrpcInterfaceMeta {
+public final class RrpcInterfaceMeta {
 
-	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
+	private static final Map<Class<?>, RrpcInterfaceMeta> CACHE = new java.util.concurrent.ConcurrentHashMap<>();
 
-	private final Map<Method,RrpcInterfaceMethodMeta> methods;
-	private final Map<String,RrpcInterfaceMethodMeta> methodsByPath;
-	private final String path;
-	private final Class<?> c;
+	private final Class<?> iface;
+	private final String basePath;
+	private final Map<Method, RrpcInterfaceMethodMeta> methodMetas;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param c
-	 * 	The interface class annotated with a {@link Remote @Remote} annotation.
-	 * 	<br>Note that the annotations are optional.
-	 * @param uri
-	 * 	The absolute URL of the remote REST interface that implements this proxy interface.
-	 * 	<br>This is only used on the client side.
-	 */
-	public RrpcInterfaceMeta(Class<?> c, String uri) {
-		this.c = c;
-		Value<String> path2 = Value.of("");
-		var ci = ClassInfo.of(c);
+	private RrpcInterfaceMeta(Class<?> iface) {
+		if (!iface.isInterface())
+			throw illegalArg("Class {0} is not an interface", iface.getName());
+		var remote = iface.getAnnotation(Remote.class);
+		if (remote == null)
+			throw illegalArg("Interface {0} is not annotated with @Remote", iface.getName());
 
-		rstream(AP.find(Remote.class, ci)).map(x -> x.inner().path()).filter(Utils::ne).forEach(x -> path2.set(trimSlashes(x)));
+		this.iface = iface;
+		var path = remote.path().isEmpty() ? remote.value() : remote.path();
+		this.basePath = path;
 
-		Map<Method,RrpcInterfaceMethodMeta> methods2 = map();
-		ci.getPublicMethods().stream().forEach(x -> methods2.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner())));
-
-		Map<String,RrpcInterfaceMethodMeta> methodsByPath2 = map();
-		methods2.values().forEach(x -> methodsByPath2.put(x.getPath(), x));
-
-		this.methods = u(methods2);
-		this.methodsByPath = u(methodsByPath2);
-		this.path = path2.get();
+		var metas = new LinkedHashMap<Method, RrpcInterfaceMethodMeta>();
+		for (var m : iface.getMethods())
+			buildMethodMeta(m).ifPresent(meta -> metas.put(m, meta));
+		this.methodMetas = Collections.unmodifiableMap(metas);
 	}
 
 	/**
-	 * Returns the Java class of this interface.
+	 * Returns the {@link RrpcInterfaceMeta} for the given interface, creating and caching it if necessary.
 	 *
-	 * @return
-	 * 	The Java class of this interface.
-	 * 	<br>Never <jk>null</jk>.
+	 * @param iface The interface class. Must be annotated with {@link org.apache.juneau.http.remote.Remote}. Must not be <jk>null</jk>.
+	 * @return The metadata. Never <jk>null</jk>.
+	 * @throws IllegalArgumentException If the class is not an interface or not annotated with {@link org.apache.juneau.http.remote.Remote}.
 	 */
-	public Class<?> getJavaClass() { return c; }
-
-	/**
-	 * Returns the metadata about the specified method on this interface proxy.
-	 *
-	 * @param m The method to look up.
-	 * @return Metadata about the method or <jk>null</jk> if no metadata was found.
-	 */
-	public RrpcInterfaceMethodMeta getMethodMeta(Method m) {
-		return methods.get(m);
+	public static RrpcInterfaceMeta of(Class<?> iface) {
+		assertArgNotNull("iface", iface);
+		return CACHE.computeIfAbsent(iface, RrpcInterfaceMeta::new);
 	}
 
 	/**
-	 * Returns the metadata about the specified method on this interface proxy by the path defined on the method.
+	 * Returns the interface class.
 	 *
-	 * @param p The HTTP path to look for.
-	 * @return Metadata about the method or <jk>null</jk> if no metadata was found.
+	 * @return The interface. Never <jk>null</jk>.
 	 */
-	public RrpcInterfaceMethodMeta getMethodMetaByPath(String p) {
-		return methodsByPath.get(p);
+	public Class<?> getInterface() {
+		return iface;
 	}
 
 	/**
-	 * Returns a map of all methods on this interface proxy keyed by HTTP path.
+	 * Returns the base path from the {@link org.apache.juneau.http.remote.Remote#path() Remote} annotation.
 	 *
-	 * @return
-	 * 	A map of all methods on this remote interface keyed by HTTP path.
-	 * 	<br>The keys never have leading slashes.
-	 * 	<br>The map is never <jk>null</jk>.
+	 * @return The base path. Never <jk>null</jk>, but may be empty.
 	 */
-	public Map<String,RrpcInterfaceMethodMeta> getMethodsByPath() { return methodsByPath; }
-
-	/**
-	 * Returns the HTTP path of this interface.
-	 *
-	 * @return
-	 * 	The HTTP path of this interface.
-	 * 	<br>Never <jk>null</jk>.
-	 * 	<br>Never has leading or trailing slashes.
-	 */
-	public String getPath() { return path; }
-
-	@Override
-	public boolean equals(Object o) {
-		return o instanceof RrpcInterfaceMeta other && eq(this, other, (x, y) -> x.c == y.c);
+	public String getBasePath() {
+		return basePath;
 	}
 
-	@Override
-	public int hashCode() {
-		return System.identityHashCode(c);
+	/**
+	 * Returns the method metadata for all annotated methods.
+	 *
+	 * @return An unmodifiable map from {@link Method} to {@link RrpcInterfaceMethodMeta}. Never <jk>null</jk>.
+	 */
+	public Map<Method, RrpcInterfaceMethodMeta> getMethodMetas() {
+		return methodMetas;
+	}
+
+	/**
+	 * Returns the metadata for the given method, or {@code null} if the method has no remote annotation.
+	 *
+	 * @param method The method. Must not be <jk>null</jk>.
+	 * @return The metadata, or <jk>null</jk>.
+	 */
+	public RrpcInterfaceMethodMeta getMethodMeta(Method method) {
+		return methodMetas.get(method);
+	}
+
+	private static Optional<RrpcInterfaceMethodMeta> buildMethodMeta(Method m) {
+		String httpMethod = null;
+		String path = "";
+		var returnType = RemoteReturn.BODY;
+
+		if (m.isAnnotationPresent(RemoteGet.class)) {
+			var a = m.getAnnotation(RemoteGet.class);
+			httpMethod = "GET";
+			path = a.path().isEmpty() ? a.value() : a.path();
+			returnType = a.returns();
+		} else if (m.isAnnotationPresent(RemotePost.class)) {
+			var a = m.getAnnotation(RemotePost.class);
+			httpMethod = "POST";
+			path = a.path().isEmpty() ? a.value() : a.path();
+			returnType = a.returns();
+		} else if (m.isAnnotationPresent(RemotePut.class)) {
+			var a = m.getAnnotation(RemotePut.class);
+			httpMethod = "PUT";
+			path = a.path().isEmpty() ? a.value() : a.path();
+			returnType = a.returns();
+		} else if (m.isAnnotationPresent(RemotePatch.class)) {
+			var a = m.getAnnotation(RemotePatch.class);
+			httpMethod = "PATCH";
+			path = a.path().isEmpty() ? a.value() : a.path();
+			returnType = a.returns();
+		} else if (m.isAnnotationPresent(RemoteDelete.class)) {
+			var a = m.getAnnotation(RemoteDelete.class);
+			httpMethod = "DELETE";
+			path = a.path().isEmpty() ? a.value() : a.path();
+			returnType = a.returns();
+		} else if (m.isAnnotationPresent(RemoteOp.class)) {
+			var a = m.getAnnotation(RemoteOp.class);
+			String method = a.method().trim();
+			path = a.path().trim();
+			returnType = a.returns();
+			var v = a.value().trim();
+			if (!v.isEmpty()) {
+				var i = v.indexOf(' ');
+				if (i == -1) {
+					method = v.toUpperCase();
+				} else {
+					method = v.substring(0, i).trim().toUpperCase();
+					path = v.substring(i).trim();
+				}
+			}
+			if (path.isEmpty())
+				path = HttpUtils.detectHttpPath(m, isEmpty(method) ? null : method);
+			if (method.isEmpty())
+				method = HttpUtils.detectHttpMethod(m, true, "GET");
+			if (!isOneOf(method, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
+				throw illegalArg("Invalid @RemoteOp method ''{0}'' on {1}.{2}", method, m.getDeclaringClass().getName(), m.getName());
+			httpMethod = method;
+			path = trimSlashes(path);
+		}
+
+		if (httpMethod == null)
+			return Optional.empty();
+
+		return Optional.of(new RrpcInterfaceMethodMeta(m, httpMethod, path, returnType));
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return "@Remote " + iface.getSimpleName() + " (basePath=" + basePath + ", methods=" + methodMetas.size() + ")";
 	}
 }

@@ -23,7 +23,7 @@ import java.io.*;
 
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.commons.svl.*;
 

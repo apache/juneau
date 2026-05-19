@@ -21,7 +21,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.serializer.*;
 
 /**

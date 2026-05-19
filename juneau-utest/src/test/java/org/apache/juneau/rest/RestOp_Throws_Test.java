@@ -20,7 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;

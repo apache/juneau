@@ -16,32 +16,26 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.http.response.UseProxy.*;
-
-import java.net.*;
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
 
 /**
  * Represents an <c>HTTP 305 Use Proxy</c> response.
  *
  * <p>
- * The requested resource is available only through a proxy, the address for which is provided in the response.
- * Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code, primarily for security reasons.
+ * The requested resource is available only through a proxy.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
+ *
+ * @since 9.2.1
  */
-@Response
-@StatusCode(STATUS_CODE)
-@Schema(description = REASON_PHRASE)
 public class UseProxy extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -50,10 +44,11 @@ public class UseProxy extends BasicHttpResponse {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Use Proxy";
 
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
+	/** Default status line */
+	private static final HttpStatusLine STATUS_LINE = HttpStatusLineBean.of(STATUS_CODE, REASON_PHRASE);
 
 	/** Default unmodifiable instance */
-	public static final UseProxy INSTANCE = new UseProxy().setUnmodifiable();
+	public static final UseProxy INSTANCE = new UseProxy();
 
 	/**
 	 * Constructor.
@@ -63,130 +58,29 @@ public class UseProxy extends BasicHttpResponse {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a response body.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param body The response body. May be <jk>null</jk>.
 	 */
-	public UseProxy(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public UseProxy(HttpBody body) {
+		super(STATUS_LINE, body);
+	}
+
+	/**
+	 * Constructor with a plain-text string body.
+	 *
+	 * @param body The response body as a plain-text string. May be <jk>null</jk>.
+	 */
+	public UseProxy(String body) {
+		super(STATUS_LINE, body);
 	}
 
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy from.
+	 * @param copyFrom The bean to copy from. Must not be <jk>null</jk>.
 	 */
 	public UseProxy(UseProxy copyFrom) {
 		super(copyFrom);
-	}
-
-	/**
-	 * Creates a builder for this class initialized with the contents of this bean.
-	 *
-	 * @return A new builder bean.
-	 */
-	public UseProxy copy() {
-		return new UseProxy(this);
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setHeader2(Header value) {
-		super.setHeader2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setHeader2(String name, String value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setLocation(String value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setLocation(URI value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setStatusCode2(int value) {
-		super.setStatusCode2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
 	}
 }

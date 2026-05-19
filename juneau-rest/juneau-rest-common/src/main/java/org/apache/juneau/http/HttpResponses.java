@@ -19,833 +19,171 @@ package org.apache.juneau.http;
 import org.apache.juneau.http.response.*;
 
 /**
- * Standard predefined HTTP responses.
+ * Static factory methods for creating pre-defined HTTP response and exception objects.
+ *
+ * <p>
+ * Import statically for clean DSL-style usage in REST server code:
+ * <p class='bjava'>
+ * 	import static org.apache.juneau.http.HttpResponses.*;
+ *
+ * 	<ja>@RestGet</ja>(<js>"/users/{id}"</js>)
+ * 	<jk>public</jk> User getUser(<ja>@Path</ja> String id) {
+ * 		User <jv>user</jv> = userService.find(id);
+ * 		<jk>if</jk> (<jv>user</jv> == <jk>null</jk>) <jk>throw</jk> notFound(<js>"User not found: "</js> + id);
+ * 		<jk>return</jk> <jv>user</jv>;
+ * 	}
+ * </p>
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
+ *
+ * @since 9.2.1
  */
-public class HttpResponses {
+public final class HttpResponses {
 
-	/**
-	 * Prevents instantiation.
-	 */
 	private HttpResponses() {}
 
-	/**
-	 * A synonym for {@link Accepted#INSTANCE}.
-	 */
-	public static final Accepted ACCEPTED = Accepted.INSTANCE;
-
-	/**
-	 * A synonym for {@link AlreadyReported#INSTANCE}.
-	 */
-	public static final AlreadyReported ALREADY_REPORTED = AlreadyReported.INSTANCE;
-
-	/**
-	 * A synonym for {@link BadRequest#INSTANCE}.
-	 */
-	public static final BadRequest BAD_REQUEST = BadRequest.INSTANCE;
-
-	/**
-	 * A synonym for {@link Conflict#INSTANCE}.
-	 */
-	public static final Conflict CONFLICT = Conflict.INSTANCE;
-
-	/**
-	 * A synonym for {@link Continue#INSTANCE}.
-	 */
-	public static final Continue CONTINUE = Continue.INSTANCE;
-
-	/**
-	 * A synonym for {@link Created#INSTANCE}.
-	 */
-	public static final Created CREATED = Created.INSTANCE;
-
-	/**
-	 * A synonym for {@link EarlyHints#INSTANCE}.
-	 */
-	public static final EarlyHints EARLY_HINTS = EarlyHints.INSTANCE;
-
-	/**
-	 * A synonym for {@link ExpectationFailed#INSTANCE}.
-	 */
-	public static final ExpectationFailed EXPECTATION_FAILED = ExpectationFailed.INSTANCE;
-
-	/**
-	 * A synonym for {@link FailedDependency#INSTANCE}.
-	 */
-	public static final FailedDependency FAILED_DEPENDENCY = FailedDependency.INSTANCE;
-
-	/**
-	 * A synonym for {@link Forbidden#INSTANCE}.
-	 */
-	public static final Forbidden FORBIDDEN = Forbidden.INSTANCE;
-
-	/**
-	 * A synonym for {@link Found#INSTANCE}.
-	 */
-	public static final Found FOUND = Found.INSTANCE;
-
-	/**
-	 * A synonym for {@link Gone#INSTANCE}.
-	 */
-	public static final Gone GONE = Gone.INSTANCE;
-
-	/**
-	 * A synonym for {@link HttpVersionNotSupported#INSTANCE}.
-	 */
-	public static final HttpVersionNotSupported HTTP_VERSION_NOT_SUPPORTED = HttpVersionNotSupported.INSTANCE;
-
-	/**
-	 * A synonym for {@link IMUsed#INSTANCE}.
-	 */
-	public static final IMUsed IM_USED = IMUsed.INSTANCE;
-
-	/**
-	 * A synonym for {@link InsufficientStorage#INSTANCE}.
-	 */
-	public static final InsufficientStorage INSUFFICIENT_STORAGE = InsufficientStorage.INSTANCE;
-
-	/**
-	 * A synonym for {@link InternalServerError#INSTANCE}.
-	 */
-	public static final InternalServerError INTERNAL_SERVER_ERROR = InternalServerError.INSTANCE;
-
-	/**
-	 * A synonym for {@link LengthRequired#INSTANCE}.
-	 */
-	public static final LengthRequired LENGTH_REQUIRED = LengthRequired.INSTANCE;
-
-	/**
-	 * A synonym for {@link Locked#INSTANCE}.
-	 */
-	public static final Locked LOCKED = Locked.INSTANCE;
-
-	/**
-	 * A synonym for {@link LoopDetected#INSTANCE}.
-	 */
-	public static final LoopDetected LOOP_DETECTED = LoopDetected.INSTANCE;
-
-	/**
-	 * A synonym for {@link MethodNotAllowed#INSTANCE}.
-	 */
-	public static final MethodNotAllowed METHOD_NOT_ALLOWED = MethodNotAllowed.INSTANCE;
-
-	/**
-	 * A synonym for {@link MisdirectedRequest#INSTANCE}.
-	 */
-	public static final MisdirectedRequest MISDIRECTED_REQUEST = MisdirectedRequest.INSTANCE;
-
-	/**
-	 * A synonym for {@link MovedPermanently#INSTANCE}.
-	 */
-	public static final MovedPermanently MOVED_PERMANENTLY = MovedPermanently.INSTANCE;
-
-	/**
-	 * A synonym for {@link MultiStatus#INSTANCE}.
-	 */
-	public static final MultiStatus MULTI_STATUS = MultiStatus.INSTANCE;
-
-	/**
-	 * A synonym for {@link MultipleChoices#INSTANCE}.
-	 */
-	public static final MultipleChoices MULTIPLE_CHOICES = MultipleChoices.INSTANCE;
-
-	/**
-	 * A synonym for {@link NetworkAuthenticationRequired#INSTANCE}.
-	 */
-	public static final NetworkAuthenticationRequired NETWORK_AUTHENTICATION_REQUIRED = NetworkAuthenticationRequired.INSTANCE;
-
-	/**
-	 * A synonym for {@link NoContent#INSTANCE}.
-	 */
-	public static final NoContent NO_CONTENT = NoContent.INSTANCE;
-
-	/**
-	 * A synonym for {@link NonAuthoritiveInformation#INSTANCE}.
-	 */
-	public static final NonAuthoritiveInformation NON_AUTHORATIVE_INFORMATION = NonAuthoritiveInformation.INSTANCE;
-
-	/**
-	 * A synonym for {@link NotAcceptable#INSTANCE}.
-	 */
-	public static final NotAcceptable NOT_ACCEPTABLE = NotAcceptable.INSTANCE;
-
-	/**
-	 * A synonym for {@link NotExtended#INSTANCE}.
-	 */
-	public static final NotExtended NOT_EXTENDED = NotExtended.INSTANCE;
-
-	/**
-	 * A synonym for {@link NotFound#INSTANCE}.
-	 */
-	public static final NotFound NOT_FOUND = NotFound.INSTANCE;
-
-	/**
-	 * A synonym for {@link NotImplemented#INSTANCE}.
-	 */
-	public static final NotImplemented NOT_IMPLEMENTED = NotImplemented.INSTANCE;
-
-	/**
-	 * A synonym for {@link NotModified#INSTANCE}.
-	 */
-	public static final NotModified NOT_MODIFIED = NotModified.INSTANCE;
-
-	/**
-	 * A synonym for {@link Ok#INSTANCE}.
-	 */
-	public static final Ok OK = Ok.INSTANCE;
-
-	/**
-	 * A synonym for {@link PartialContent#INSTANCE}.
-	 */
-	public static final PartialContent PARTIAL_CONTENT = PartialContent.INSTANCE;
-
-	/**
-	 * A synonym for {@link PayloadTooLarge#INSTANCE}.
-	 */
-	public static final PayloadTooLarge PAYLOAD_TOO_LARGE = PayloadTooLarge.INSTANCE;
-
-	/**
-	 * A synonym for {@link PermanentRedirect#INSTANCE}.
-	 */
-	public static final PermanentRedirect PERMANENT_REDIRECT = PermanentRedirect.INSTANCE;
-
-	/**
-	 * A synonym for {@link PreconditionFailed#INSTANCE}.
-	 */
-	public static final PreconditionFailed PRECONDITION_FAILED = PreconditionFailed.INSTANCE;
-
-	/**
-	 * A synonym for {@link PreconditionRequired#INSTANCE}.
-	 */
-	public static final PreconditionRequired PRECONDITION_REQUIRED = PreconditionRequired.INSTANCE;
-
-	/**
-	 * A synonym for {@link Processing#INSTANCE}.
-	 */
-	public static final Processing PROCESSING = Processing.INSTANCE;
-
-	/**
-	 * A synonym for {@link RangeNotSatisfiable#INSTANCE}.
-	 */
-	public static final RangeNotSatisfiable RANGE_NOT_SATISFIABLE = RangeNotSatisfiable.INSTANCE;
-
-	/**
-	 * A synonym for {@link RequestHeaderFieldsTooLarge#INSTANCE}.
-	 */
-	public static final RequestHeaderFieldsTooLarge REQUEST_HEADER_FIELDS_TOO_LARGE = RequestHeaderFieldsTooLarge.INSTANCE;
-
-	/**
-	 * A synonym for {@link ResetContent#INSTANCE}.
-	 */
-	public static final ResetContent RESET_CONTENT = ResetContent.INSTANCE;
-
-	/**
-	 * A synonym for {@link SeeOther#INSTANCE}.
-	 */
-	public static final SeeOther SEE_OTHER = SeeOther.INSTANCE;
-
-	/**
-	 * A synonym for {@link ServiceUnavailable#INSTANCE}.
-	 */
-	public static final ServiceUnavailable SERVICE_UNAVAILABLE = ServiceUnavailable.INSTANCE;
-
-	/**
-	 * A synonym for {@link SwitchingProtocols#INSTANCE}.
-	 */
-	public static final SwitchingProtocols SWITCHING_PROTOCOLS = SwitchingProtocols.INSTANCE;
-
-	/**
-	 * A synonym for {@link TemporaryRedirect#INSTANCE}.
-	 */
-	public static final TemporaryRedirect TEMPORARY_REDIRECT = TemporaryRedirect.INSTANCE;
-
-	/**
-	 * A synonym for {@link TooManyRequests#INSTANCE}.
-	 */
-	public static final TooManyRequests TOO_MANY_REQUESTS = TooManyRequests.INSTANCE;
-
-	/**
-	 * A synonym for {@link Unauthorized#INSTANCE}.
-	 */
-	public static final Unauthorized UNAUTHORIZED = Unauthorized.INSTANCE;
-
-	/**
-	 * A synonym for {@link UnavailableForLegalReasons#INSTANCE}.
-	 */
-	public static final UnavailableForLegalReasons UNAVAILABLE_FOR_LEGAL_REASONS = UnavailableForLegalReasons.INSTANCE;
-
-	/**
-	 * A synonym for {@link UnprocessableEntity#INSTANCE}.
-	 */
-	public static final UnprocessableEntity UNPROCESSABLE_ENTITIY = UnprocessableEntity.INSTANCE;
-
-	/**
-	 * A synonym for {@link UnsupportedMediaType#INSTANCE}.
-	 */
-	public static final UnsupportedMediaType UNSUPPORTED_MEDIA_TYPE = UnsupportedMediaType.INSTANCE;
-
-	/**
-	 * A synonym for {@link UpgradeRequired#INSTANCE}.
-	 */
-	public static final UpgradeRequired UPGRADE_REQUIRED = UpgradeRequired.INSTANCE;
-
-	/**
-	 * A synonym for {@link UriTooLong#INSTANCE}.
-	 */
-	public static final UriTooLong URI_TOO_LONG = UriTooLong.INSTANCE;
-
-	/**
-	 * A synonym for {@link UseProxy#INSTANCE}.
-	 */
-	public static final UseProxy USE_PROXY = UseProxy.INSTANCE;
-
-	/**
-	 * A synonym for {@link VariantAlsoNegotiates#INSTANCE}.
-	 */
-	public static final VariantAlsoNegotiates VARIANT_ALSO_NEGOTIATES = VariantAlsoNegotiates.INSTANCE;
-
-	/**
-	 * A shortcut for calling {@link Continue#Continue()}.
-	 *
-	 * @return A new bean.
-	 */
-	@SuppressWarnings({
-		"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
-	})
-	public static final Continue continue_() {
-		return new Continue();
-	}
-
-	/**
-	 * A shortcut for calling {@link Accepted#Accepted()}.
-	 *
-	 * @return A new bean.
-	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field ACCEPTED
-	})
-	public static final Accepted accepted() {
-		return new Accepted();
-	}
-
-	/**
-	 * A shortcut for calling {@link AlreadyReported#AlreadyReported()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final AlreadyReported alreadyReported() {
-		return new AlreadyReported();
-	}
-
-	/**
-	 * A shortcut for calling {@link BadRequest#BadRequest()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final BadRequest badRequest() {
-		return new BadRequest();
-	}
-
-	/**
-	 * A shortcut for calling {@link Conflict#Conflict()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field CONFLICT
-	})
-	public static final Conflict conflict() {
-		return new Conflict();
-	}
-
-	/**
-	 * A shortcut for calling {@link Created#Created()}.
-	 *
-	 * @return A new bean.
-	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field CREATED
-	})
-	public static final Created created() {
-		return new Created();
-	}
-
-	/**
-	 * A shortcut for calling {@link EarlyHints#EarlyHints()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final EarlyHints earlyHints() {
-		return new EarlyHints();
-	}
-
-	/**
-	 * A shortcut for calling {@link ExpectationFailed#ExpectationFailed()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final ExpectationFailed expectationFailed() {
-		return new ExpectationFailed();
-	}
-
-	/**
-	 * A shortcut for calling {@link FailedDependency#FailedDependency()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final FailedDependency failedDependency() {
-		return new FailedDependency();
-	}
-
-	/**
-	 * A shortcut for calling {@link Forbidden#Forbidden()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field FORBIDDEN
-	})
-	public static final Forbidden forbidden() {
-		return new Forbidden();
-	}
-
-	/**
-	 * A shortcut for calling {@link Found#Found()}.
-	 *
-	 * @param location The value for the Location header.
-	 * @return A new bean.
-	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field FOUND
-	})
-	public static final Found found(String location) {
-		return new Found().setLocation(location);
-	}
-
-	/**
-	 * A shortcut for calling {@link Gone#Gone()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field GONE
-	})
-	public static final Gone gone() {
-		return new Gone();
-	}
-
-	/**
-	 * A shortcut for calling {@link BasicHttpException#BasicHttpException()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final BasicHttpException httpException() {
-		return new BasicHttpException();
-	}
-
-	/**
-	 * A shortcut for calling {@link HttpVersionNotSupported#HttpVersionNotSupported()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final HttpVersionNotSupported httpVersionNotSupported() {
-		return new HttpVersionNotSupported();
-	}
-
-	/**
-	 * A shortcut for calling {@link IMUsed#IMUsed()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final IMUsed imUsed() {
-		return new IMUsed();
-	}
-
-	/**
-	 * A shortcut for calling {@link InsufficientStorage#InsufficientStorage()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final InsufficientStorage insufficientStorage() {
-		return new InsufficientStorage();
-	}
-
-	/**
-	 * A shortcut for calling {@link InternalServerError#InternalServerError()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final InternalServerError internalServerError() {
-		return new InternalServerError();
-	}
-
-	/**
-	 * A shortcut for calling {@link LengthRequired#LengthRequired()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final LengthRequired lengthRequired() {
-		return new LengthRequired();
-	}
-
-	/**
-	 * A shortcut for calling {@link Locked#Locked()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field LOCKED
-	})
-	public static final Locked locked() {
-		return new Locked();
-	}
-
-	/**
-	 * A shortcut for calling {@link LoopDetected#LoopDetected()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final LoopDetected loopDetected() {
-		return new LoopDetected();
-	}
-
-	/**
-	 * A shortcut for calling {@link MethodNotAllowed#MethodNotAllowed()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final MethodNotAllowed methodNotAllowed() {
-		return new MethodNotAllowed();
-	}
-
-	/**
-	 * A shortcut for calling {@link MisdirectedRequest#MisdirectedRequest()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final MisdirectedRequest misdirectedRequest() {
-		return new MisdirectedRequest();
-	}
-
-	/**
-	 * A shortcut for calling {@link MovedPermanently#MovedPermanently()}.
-	 *
-	 * @param location The value for the Location header.
-	 * @return A new bean.
-	 */
-	public static final MovedPermanently movedPermanently(String location) {
-		return new MovedPermanently().setLocation(location);
-	}
-
-	/**
-	 * A shortcut for calling {@link MovedPermanently#MovedPermanently()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final MultipleChoices multipleChoices() {
-		return new MultipleChoices();
-	}
-
-	/**
-	 * A shortcut for calling {@link MultiStatus#MultiStatus()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final MultiStatus multiStatus() {
-		return new MultiStatus();
-	}
-
-	/**
-	 * A shortcut for calling {@link NetworkAuthenticationRequired#NetworkAuthenticationRequired()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final NetworkAuthenticationRequired networkAuthenticationRequired() {
-		return new NetworkAuthenticationRequired();
-	}
-
-	/**
-	 * A shortcut for calling {@link NoContent#NoContent()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final NoContent noContent() {
-		return new NoContent();
-	}
-
-	/**
-	 * A shortcut for calling {@link NonAuthoritiveInformation#NonAuthoritiveInformation()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final NonAuthoritiveInformation nonAuthoritiveInformation() {
-		return new NonAuthoritiveInformation();
-	}
-
-	/**
-	 * A shortcut for calling {@link NotAcceptable#NotAcceptable()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final NotAcceptable notAcceptable() {
-		return new NotAcceptable();
-	}
-
-	/**
-	 * A shortcut for calling {@link NotExtended#NotExtended()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final NotExtended notExtended() {
-		return new NotExtended();
-	}
-
-	/**
-	 * A shortcut for calling {@link NotFound#NotFound()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final NotFound notFound() {
-		return new NotFound();
-	}
-
-	/**
-	 * A shortcut for calling {@link NotImplemented#NotImplemented()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final NotImplemented notImplemented() {
-		return new NotImplemented();
-	}
-
-	/**
-	 * A shortcut for calling {@link NotModified#NotModified()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final NotModified notModified() {
-		return new NotModified();
-	}
-
-	/**
-	 * A shortcut for calling {@link Ok#Ok()}.
-	 *
-	 * @return A new bean.
-	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field OK
-	})
-	public static final Ok ok() {
-		return new Ok();
-	}
-
-	/**
-	 * A shortcut for calling {@link PartialContent#PartialContent()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final PartialContent partialContent() {
-		return new PartialContent();
-	}
-
-	/**
-	 * A shortcut for calling {@link PayloadTooLarge#PayloadTooLarge()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final PayloadTooLarge payloadTooLarge() {
-		return new PayloadTooLarge();
-	}
-
-	/**
-	 * A shortcut for calling {@link PermanentRedirect#PermanentRedirect()}.
-	 *
-	 * @param location The value for the Location header.
-	 * @return A new bean.
-	 */
-	public static final PermanentRedirect permanentRedirect(String location) {
-		return new PermanentRedirect().setLocation(location);
-	}
-
-	/**
-	 * A shortcut for calling {@link PreconditionFailed#PreconditionFailed()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final PreconditionFailed preconditionFailed() {
-		return new PreconditionFailed();
-	}
-
-	/**
-	 * A shortcut for calling {@link PreconditionRequired#PreconditionRequired()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final PreconditionRequired preconditionRequired() {
-		return new PreconditionRequired();
-	}
-
-	/**
-	 * A shortcut for calling {@link Processing#Processing()}.
-	 *
-	 * @return A new bean.
-	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field PROCESSING
-	})
-	public static final Processing processing() {
-		return new Processing();
-	}
-
-	/**
-	 * A shortcut for calling {@link RangeNotSatisfiable#RangeNotSatisfiable()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final RangeNotSatisfiable rangeNotSatisfiable() {
-		return new RangeNotSatisfiable();
-	}
-
-	/**
-	 * A shortcut for calling {@link RequestHeaderFieldsTooLarge#RequestHeaderFieldsTooLarge()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final RequestHeaderFieldsTooLarge requestHeaderFieldsTooLarge() {
-		return new RequestHeaderFieldsTooLarge();
-	}
-
-	/**
-	 * A shortcut for calling {@link ResetContent#ResetContent()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final ResetContent resetContent() {
-		return new ResetContent();
-	}
-
-	/**
-	 * A shortcut for calling {@link SeeOther#SeeOther()}.
-	 *
-	 * @param location The value for the Location header.
-	 * @return A new bean.
-	 */
-	public static final SeeOther seeOther(String location) {
-		return new SeeOther().setLocation(location);
-	}
-
-	/**
-	 * A shortcut for calling {@link ServiceUnavailable#ServiceUnavailable()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final ServiceUnavailable serviceUnavailable() {
-		return new ServiceUnavailable();
-	}
-
-	/**
-	 * A shortcut for calling {@link SwitchingProtocols#SwitchingProtocols()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final SwitchingProtocols switchingProtocols() {
-		return new SwitchingProtocols();
-	}
-
-	/**
-	 * A shortcut for calling {@link TemporaryRedirect#TemporaryRedirect()}.
-	 *
-	 * @param location The value for the Location header.
-	 * @return A new bean.
-	 */
-	public static final TemporaryRedirect temporaryRedirect(String location) {
-		return new TemporaryRedirect().setLocation(location);
-	}
-
-	/**
-	 * A shortcut for calling {@link TooManyRequests#TooManyRequests()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final TooManyRequests tooManyRequests() {
-		return new TooManyRequests();
-	}
-
-	/**
-	 * A shortcut for calling {@link Unauthorized#Unauthorized()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	@SuppressWarnings({
-		"java:S1845" // Method name intentionally differs only by case from static field UNAUTHORIZED
-	})
-	public static final Unauthorized unauthorized() {
-		return new Unauthorized();
-	}
-
-	/**
-	 * A shortcut for calling {@link UnavailableForLegalReasons#UnavailableForLegalReasons()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final UnavailableForLegalReasons unavailableForLegalReasons() {
-		return new UnavailableForLegalReasons();
-	}
-
-	/**
-	 * A shortcut for calling {@link UnprocessableEntity#UnprocessableEntity()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final UnprocessableEntity unprocessableEntity() {
-		return new UnprocessableEntity();
-	}
-
-	/**
-	 * A shortcut for calling {@link UnsupportedMediaType#UnsupportedMediaType()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final UnsupportedMediaType unsupportedMediaType() {
-		return new UnsupportedMediaType();
-	}
-
-	/**
-	 * A shortcut for calling {@link UpgradeRequired#UpgradeRequired()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final UpgradeRequired upgradeRequired() {
-		return new UpgradeRequired();
-	}
-
-	/**
-	 * A shortcut for calling {@link UriTooLong#UriTooLong()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final UriTooLong uriTooLong() {
-		return new UriTooLong();
-	}
-
-	/**
-	 * A shortcut for calling {@link UseProxy#UseProxy()}.
-	 *
-	 * @return A new bean.
-	 */
-	public static final UseProxy useProxy() {
-		return new UseProxy();
-	}
-
-	/**
-	 * A shortcut for calling {@link VariantAlsoNegotiates#VariantAlsoNegotiates()}.
-	 *
-	 * @return A new bean builder.
-	 */
-	public static final VariantAlsoNegotiates variantAlsoNegotiates() {
-		return new VariantAlsoNegotiates();
-	}
+	// ------------------------------------------------------------------------------------------------------------------
+	// 1xx Informational
+	// ------------------------------------------------------------------------------------------------------------------
+
+	/** @return A new {@code 100 Continue} response. */
+	public static Continue continueResponse() { return new Continue(); }
+
+	/** @return A new {@code 101 Switching Protocols} response. */
+	public static SwitchingProtocols switchingProtocols() { return new SwitchingProtocols(); }
+
+	// ------------------------------------------------------------------------------------------------------------------
+	// 2xx Success
+	// ------------------------------------------------------------------------------------------------------------------
+
+	/** @return A new {@code 200 OK} response. */
+	public static Ok ok() { return new Ok(); }
+
+	/** @param body The response body. @return A new {@code 200 OK} response. */
+	public static Ok ok(String body) { return new Ok(body); }
+
+	/** @return A new {@code 201 Created} response. */
+	public static Created created() { return new Created(); }
+
+	/** @param body The response body. @return A new {@code 201 Created} response. */
+	public static Created created(String body) { return new Created(body); }
+
+	/** @return A new {@code 202 Accepted} response. */
+	public static Accepted accepted() { return new Accepted(); }
+
+	/** @return A new {@code 204 No Content} response. */
+	public static NoContent noContent() { return new NoContent(); }
+
+	/** @return A new {@code 206 Partial Content} response. */
+	public static PartialContent partialContent() { return new PartialContent(); }
+
+	// ------------------------------------------------------------------------------------------------------------------
+	// 3xx Redirection
+	// ------------------------------------------------------------------------------------------------------------------
+
+	/** @param location The redirect location. @return A new {@code 301 Moved Permanently} response. */
+	public static BasicHttpResponse movedPermanently(String location) { return new MovedPermanently().withHeader("Location", location); }
+
+	/** @param location The redirect location. @return A new {@code 302 Found} response. */
+	public static BasicHttpResponse found(String location) { return new Found().withHeader("Location", location); }
+
+	/** @param location The redirect location. @return A new {@code 303 See Other} response. */
+	public static BasicHttpResponse seeOther(String location) { return new SeeOther().withHeader("Location", location); }
+
+	/** @return A new {@code 304 Not Modified} response. */
+	public static NotModified notModified() { return new NotModified(); }
+
+	/** @param location The redirect location. @return A new {@code 307 Temporary Redirect} response. */
+	public static BasicHttpResponse temporaryRedirect(String location) { return new TemporaryRedirect().withHeader("Location", location); }
+
+	/** @param location The redirect location. @return A new {@code 308 Permanent Redirect} response. */
+	public static BasicHttpResponse permanentRedirect(String location) { return new PermanentRedirect().withHeader("Location", location); }
+
+	// ------------------------------------------------------------------------------------------------------------------
+	// 4xx Client Errors
+	// ------------------------------------------------------------------------------------------------------------------
+
+	/** @return A new {@code 400 Bad Request} exception. */
+	public static BadRequest badRequest() { return new BadRequest(); }
+
+	/** @param message The error message. @return A new {@code 400 Bad Request} exception. */
+	public static BadRequest badRequest(String message) { return new BadRequest(message); }
+
+	/** @return A new {@code 401 Unauthorized} exception. */
+	public static Unauthorized unauthorized() { return new Unauthorized(); }
+
+	/** @param message The error message. @return A new {@code 401 Unauthorized} exception. */
+	public static Unauthorized unauthorized(String message) { return new Unauthorized(message); }
+
+	/** @return A new {@code 403 Forbidden} exception. */
+	public static Forbidden forbidden() { return new Forbidden(); }
+
+	/** @param message The error message. @return A new {@code 403 Forbidden} exception. */
+	public static Forbidden forbidden(String message) { return new Forbidden(message); }
+
+	/** @return A new {@code 404 Not Found} exception. */
+	public static NotFound notFound() { return new NotFound(); }
+
+	/** @param message The error message. @return A new {@code 404 Not Found} exception. */
+	public static NotFound notFound(String message) { return new NotFound(message); }
+
+	/** @return A new {@code 405 Method Not Allowed} exception. */
+	public static MethodNotAllowed methodNotAllowed() { return new MethodNotAllowed(); }
+
+	/** @return A new {@code 409 Conflict} exception. */
+	public static Conflict conflict() { return new Conflict(); }
+
+	/** @param message The error message. @return A new {@code 409 Conflict} exception. */
+	public static Conflict conflict(String message) { return new Conflict(message); }
+
+	/** @return A new {@code 410 Gone} exception. */
+	public static Gone gone() { return new Gone(); }
+
+	/** @return A new {@code 412 Precondition Failed} exception. */
+	public static PreconditionFailed preconditionFailed() { return new PreconditionFailed(); }
+
+	/** @return A new {@code 415 Unsupported Media Type} exception. */
+	public static UnsupportedMediaType unsupportedMediaType() { return new UnsupportedMediaType(); }
+
+	/** @param message The error message. @return A new {@code 415 Unsupported Media Type} exception. */
+	public static UnsupportedMediaType unsupportedMediaType(String message) { return new UnsupportedMediaType(message); }
+
+	/** @return A new {@code 422 Unprocessable Entity} exception. */
+	public static UnprocessableEntity unprocessableEntity() { return new UnprocessableEntity(); }
+
+	/** @param message The error message. @return A new {@code 422 Unprocessable Entity} exception. */
+	public static UnprocessableEntity unprocessableEntity(String message) { return new UnprocessableEntity(message); }
+
+	/** @return A new {@code 429 Too Many Requests} exception. */
+	public static TooManyRequests tooManyRequests() { return new TooManyRequests(); }
+
+	// ------------------------------------------------------------------------------------------------------------------
+	// 5xx Server Errors
+	// ------------------------------------------------------------------------------------------------------------------
+
+	/** @return A new {@code 500 Internal Server Error} exception. */
+	public static InternalServerError internalServerError() { return new InternalServerError(); }
+
+	/** @param message The error message. @return A new {@code 500 Internal Server Error} exception. */
+	public static InternalServerError internalServerError(String message) { return new InternalServerError(message); }
+
+	/** @param cause The cause. @return A new {@code 500 Internal Server Error} exception. */
+	public static InternalServerError internalServerError(Throwable cause) { return new InternalServerError(cause); }
+
+	/** @return A new {@code 501 Not Implemented} exception. */
+	public static NotImplemented notImplemented() { return new NotImplemented(); }
+
+	/** @return A new {@code 503 Service Unavailable} exception. */
+	public static ServiceUnavailable serviceUnavailable() { return new ServiceUnavailable(); }
+
+	/** @param message The error message. @return A new {@code 503 Service Unavailable} exception. */
+	public static ServiceUnavailable serviceUnavailable(String message) { return new ServiceUnavailable(message); }
 }

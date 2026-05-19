@@ -24,7 +24,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.logger.*;
 
 /**

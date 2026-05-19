@@ -19,7 +19,7 @@ package org.apache.juneau.rest.annotation;
 import static org.apache.juneau.TestUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.classic.header.*;
 import org.junit.jupiter.api.*;
 
 
@@ -73,7 +73,7 @@ class Swagger_RestOp_Parameters extends TestBase {
 			return contentType.getValue();
 		}
 		@RestOp
-		public String date(org.apache.juneau.http.header.Date date) {
+		public String date(org.apache.juneau.http.classic.header.Date date) {
 			return date.getValue();
 		}
 		@RestOp

@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.ng.http.entity.*;
-import org.apache.juneau.ng.rest.mock.*;
+import org.apache.juneau.http.entity.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.junit.jupiter.api.*;

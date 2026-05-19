@@ -19,9 +19,8 @@ package org.apache.juneau.rest.staticfile;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.http.HttpResources.*;
-
+import static org.apache.juneau.http.classic.HttpHeaders.*;
+import static org.apache.juneau.http.classic.HttpResources.*;
 import java.io.*;
 import java.util.*;
 
@@ -30,8 +29,8 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.resource.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.resource.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.*;
 
 /**

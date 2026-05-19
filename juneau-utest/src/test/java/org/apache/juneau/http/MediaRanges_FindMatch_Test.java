@@ -19,7 +19,7 @@ package org.apache.juneau.http;
 import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;

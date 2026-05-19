@@ -16,6 +16,15 @@
  */
 
 /**
- * HTTP Part Beans
+ * Next-generation HTTP part (query/form/path) implementations.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This package is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * Binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release (and possibly earlier).
+ *
+ * <p>
+ * {@link org.apache.juneau.http.part.HttpPartBean} is the root concrete class for typed query, form-field,
+ * and path-variable beans (e.g. {@code HttpStringPart}, {@code HttpDatePart}).
  */
 package org.apache.juneau.http.part;

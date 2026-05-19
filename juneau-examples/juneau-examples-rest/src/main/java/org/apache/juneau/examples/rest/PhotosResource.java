@@ -25,7 +25,7 @@ import org.apache.juneau.examples.parser.*;
 import org.apache.juneau.examples.serializer.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;

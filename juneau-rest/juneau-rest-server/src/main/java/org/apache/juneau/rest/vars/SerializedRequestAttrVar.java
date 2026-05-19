@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.svl.*;

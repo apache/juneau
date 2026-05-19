@@ -2,9 +2,9 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * The ASF licenses this file to You under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,146 +16,53 @@
  */
 package org.apache.juneau.http.header;
 
-import java.util.function.*;
-
-import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents a parsed <l>Content-Language</l> HTTP response header.
+ * Represents an HTTP <c>Content-Language</c> header.
  *
  * <p>
- * The natural language or languages of the intended audience for the enclosed content.
- *
- * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
- * 	Content-Language: da
- * </p>
- *
- * <h5 class='topic'>RFC2616 Specification</h5>
- *
- * The Content-Language entity-header field describes the natural language(s) of the intended audience for the
- * enclosed entity.
- * Note that this might not be equivalent to all the languages used within the entity-body.
- * <p class='bcode'>
- * 	Content-Language  = "Content-Language" ":" 1#language-tag
- * </p>
+ * Languages the content is intended for.
  *
  * <p>
- * Language tags are defined in section 3.10.
- * The primary purpose of Content-Language is to allow a user to identify and differentiate entities according to the
- * user's own preferred language.
- * Thus, if the body content is intended only for a Danish-literate audience, the appropriate field is...
- * <p class='bcode'>
- * 	Content-Language: da
- * </p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
  *
- * <p>
- * If no Content-Language is specified, the default is that the content is intended for all language audiences.
- * This might mean that the sender does not consider it to be specific to any natural language, or that the sender
- * does not know for which language it is intended.
- *
- * <p>
- * Multiple languages MAY be listed for content that is intended for multiple audiences.
- * For example, a rendition of the "Treaty of Waitangi," presented simultaneously in the original Maori and English
- * versions, would call for...
- * <p class='bcode'>
- * 	Content-Language: mi, en
- * </p>
- *
- * <p>
- * However, just because multiple languages are present within an entity does not mean that it is intended for
- * multiple linguistic audiences.
- * An example would be a beginner's language primer, such as "A First Lesson in Latin," which is clearly intended to
- * be used by an English-literate audience.
- * In this case, the Content-Language would properly only include "en".
- *
- * <p>
- * Content-Language MAY be applied to any media type -- it is not limited to textual documents.
- *
- * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
- * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
- * </ul>
- *
- * @serial exclude
+ * @since 9.2.1
  */
-@Header("Content-Language")
-public class ContentLanguage extends BasicCsvHeader {
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "Content-Language";
+import java.util.function.*;
 
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ContentLanguage of(String value) {
-		return value == null ? null : new ContentLanguage(value);
-	}
+/**
+ * @since 9.2.1
+ */
+public class ContentLanguage extends HttpCsvHeader {
 
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ContentLanguage of(String...value) {
-		return value == null ? null : new ContentLanguage(value);
-	}
+	public static final String NAME = "Content-Language";
 
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ContentLanguage of(Supplier<String[]> value) {
-		return value == null ? null : new ContentLanguage(value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
 	public ContentLanguage(String value) {
 		super(NAME, value);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public ContentLanguage(String...value) {
-		super(NAME, value);
+	public ContentLanguage(String... values) {
+		super(NAME, values);
 	}
 
-	/**
-	 * Constructor with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public ContentLanguage(Supplier<String[]> value) {
-		super(NAME, value);
+	private ContentLanguage(Supplier<?> supplier, int lazyMode) {
+		super(NAME, supplier, lazyMode);
+	}
+
+	public static ContentLanguage of(String value) {
+		return new ContentLanguage(value);
+	}
+
+	public static ContentLanguage of(String... values) {
+		return new ContentLanguage(values);
+	}
+
+	public static ContentLanguage ofLazyWire(Supplier<String> supplier) {
+		return new ContentLanguage(supplier, LAZY_WIRE_STRING);
+	}
+
+	public static ContentLanguage ofLazyTokens(Supplier<String[]> supplier) {
+		return new ContentLanguage(supplier, LAZY_TOKENS);
 	}
 }

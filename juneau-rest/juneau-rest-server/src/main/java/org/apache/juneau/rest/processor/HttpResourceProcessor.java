@@ -16,11 +16,10 @@
  */
 package org.apache.juneau.rest.processor;
 
-import static org.apache.juneau.http.HttpHeaders.*;
-
+import static org.apache.juneau.http.classic.HttpHeaders.*;
 import java.io.*;
 
-import org.apache.juneau.http.resource.*;
+import org.apache.juneau.http.classic.resource.*;
 import org.apache.juneau.rest.*;
 
 /**

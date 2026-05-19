@@ -25,7 +25,7 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.part.*;
+import org.apache.juneau.http.classic.part.*;
 
 /**
  * Implementation of a named object.

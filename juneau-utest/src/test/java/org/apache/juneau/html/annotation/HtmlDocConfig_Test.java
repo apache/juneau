@@ -19,7 +19,7 @@ package org.apache.juneau.html.annotation;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;

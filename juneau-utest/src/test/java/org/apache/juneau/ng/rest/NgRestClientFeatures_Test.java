@@ -23,15 +23,15 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.ng.http.HttpBody;
-import org.apache.juneau.ng.http.entity.*;
-import org.apache.juneau.ng.rest.client.*;
-import org.apache.juneau.ng.rest.mock.*;
+import org.apache.juneau.http.HttpBody;
+import org.apache.juneau.http.entity.*;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Tests for RestCallInterceptor, RestLogger, RestLogEntry, RestLogLevelResolver,
- * BasicRestLogger, BodyConverter, and related NgRestClient features.
+ * BasicRestLogger, BodyConverter, and related RestClient features.
  */
 public class NgRestClientFeatures_Test {
 
@@ -43,11 +43,11 @@ public class NgRestClientFeatures_Test {
 	void a01_interceptor_onInit_called() throws Exception {
 		var initCalled = new AtomicBoolean(false);
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.interceptors(new RestCallInterceptor() {
-					@Override public void onInit(NgRestRequest req) { initCalled.set(true); }
+					@Override public void onInit(RestRequest req) { initCalled.set(true); }
 				})
 				.build()) {
 			try (var r = client.get("/").run()) {
@@ -61,11 +61,11 @@ public class NgRestClientFeatures_Test {
 	void a02_interceptor_onConnect_called() throws Exception {
 		var connectStatus = new AtomicInteger(-1);
 		var transport = MockHttpTransport.of(201, "created");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.interceptors(new RestCallInterceptor() {
-					@Override public void onConnect(NgRestRequest req, NgRestResponse res) {
+					@Override public void onConnect(RestRequest req, RestResponse res) {
 						connectStatus.set(res.getStatusCode());
 					}
 				})
@@ -81,11 +81,11 @@ public class NgRestClientFeatures_Test {
 	void a03_interceptor_onClose_called_on_success() throws Exception {
 		var closeCalled = new AtomicBoolean(false);
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.interceptors(new RestCallInterceptor() {
-					@Override public void onClose(NgRestRequest req, NgRestResponse res) {
+					@Override public void onClose(RestRequest req, RestResponse res) {
 						closeCalled.set(true);
 						assertNotNull(res, "res should be non-null on success");
 					}
@@ -99,15 +99,15 @@ public class NgRestClientFeatures_Test {
 	@Test
 	void a04_interceptor_onClose_called_on_transport_error() throws Exception {
 		var closeCalled = new AtomicBoolean(false);
-		var responseOnClose = new AtomicReference<NgRestResponse>();
+		var responseOnClose = new AtomicReference<RestResponse>();
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> { throw new TransportException("simulated network failure"); })
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.interceptors(new RestCallInterceptor() {
-					@Override public void onClose(NgRestRequest req, NgRestResponse res) {
+					@Override public void onClose(RestRequest req, RestResponse res) {
 						closeCalled.set(true);
 						responseOnClose.set(res);
 					}
@@ -125,11 +125,11 @@ public class NgRestClientFeatures_Test {
 			.recordRequests()
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.interceptors(new RestCallInterceptor() {
-					@Override public void onInit(NgRestRequest req) {
+					@Override public void onInit(RestRequest req) {
 						req.header("X-Intercepted", "yes");
 					}
 				})
@@ -146,19 +146,19 @@ public class NgRestClientFeatures_Test {
 	void a06_multipleInterceptors_calledInOrder() throws Exception {
 		var order = new ArrayList<String>();
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.interceptors(
 					new RestCallInterceptor() {
-						@Override public void onInit(NgRestRequest req) { order.add("init-1"); }
-						@Override public void onConnect(NgRestRequest req, NgRestResponse res) { order.add("connect-1"); }
-						@Override public void onClose(NgRestRequest req, NgRestResponse res) { order.add("close-1"); }
+						@Override public void onInit(RestRequest req) { order.add("init-1"); }
+						@Override public void onConnect(RestRequest req, RestResponse res) { order.add("connect-1"); }
+						@Override public void onClose(RestRequest req, RestResponse res) { order.add("close-1"); }
 					},
 					new RestCallInterceptor() {
-						@Override public void onInit(NgRestRequest req) { order.add("init-2"); }
-						@Override public void onConnect(NgRestRequest req, NgRestResponse res) { order.add("connect-2"); }
-						@Override public void onClose(NgRestRequest req, NgRestResponse res) { order.add("close-2"); }
+						@Override public void onInit(RestRequest req) { order.add("init-2"); }
+						@Override public void onConnect(RestRequest req, RestResponse res) { order.add("connect-2"); }
+						@Override public void onClose(RestRequest req, RestResponse res) { order.add("close-2"); }
 					})
 				.build()) {
 			try (var r = client.get("/").run()) {}
@@ -170,11 +170,11 @@ public class NgRestClientFeatures_Test {
 	void a07_interceptor_onClose_throwsIsSwallowed() throws Exception {
 		// onClose exceptions should be swallowed, not propagated
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.interceptors(new RestCallInterceptor() {
-					@Override public void onClose(NgRestRequest req, NgRestResponse res) throws Exception {
+					@Override public void onClose(RestRequest req, RestResponse res) throws Exception {
 						throw new RuntimeException("close error should be swallowed");
 					}
 				})
@@ -194,7 +194,7 @@ public class NgRestClientFeatures_Test {
 	void b01_logger_called_on_success() throws Exception {
 		var entries = new ArrayList<RestLogEntry>();
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -219,7 +219,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> { throw new TransportException("simulated failure"); })
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -239,7 +239,7 @@ public class NgRestClientFeatures_Test {
 	void b03_logger_status400_is_warning() throws Exception {
 		var entries = new ArrayList<RestLogEntry>();
 		var transport = MockHttpTransport.of(404, "Not Found");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -255,7 +255,7 @@ public class NgRestClientFeatures_Test {
 	void b04_logger_status500_is_error() throws Exception {
 		var entries = new ArrayList<RestLogEntry>();
 		var transport = MockHttpTransport.of(500, "Internal Server Error");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -270,7 +270,7 @@ public class NgRestClientFeatures_Test {
 	void b05_debug_flag_set_on_entry() throws Exception {
 		var entries = new ArrayList<RestLogEntry>();
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -284,7 +284,7 @@ public class NgRestClientFeatures_Test {
 	void b06_logger_null_no_logging() throws Exception {
 		// Without logger, run() should complete normally
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.build()) {
@@ -304,7 +304,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).reasonPhrase("OK").build())
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -321,7 +321,7 @@ public class NgRestClientFeatures_Test {
 	void c02_format_with_template() throws Exception {
 		var entries = new ArrayList<RestLogEntry>();
 		var transport = MockHttpTransport.of(200, "OK");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://example.com")
 				.logger(entries::add)
@@ -342,7 +342,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> { throw new TransportException("connection refused"); })
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -362,7 +362,7 @@ public class NgRestClientFeatures_Test {
 				.header("X-Custom", "value")
 				.build())
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -380,7 +380,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> { throw new TransportException("fail"); })
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -394,7 +394,7 @@ public class NgRestClientFeatures_Test {
 	void c06_getUri_set_after_run() throws Exception {
 		var entries = new ArrayList<RestLogEntry>();
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -455,7 +455,7 @@ public class NgRestClientFeatures_Test {
 				.header("Thrown", "com.example.MyException;message")
 				.build())
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -482,7 +482,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).reasonPhrase("OK").build())
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(BasicRestLogger.of(jdkLogger))
@@ -510,7 +510,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> { throw new TransportException("network error"); })
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(BasicRestLogger.of(jdkLogger))
@@ -532,7 +532,7 @@ public class NgRestClientFeatures_Test {
 			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(format); }
 		};
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(BasicRestLogger.create()
@@ -555,7 +555,7 @@ public class NgRestClientFeatures_Test {
 			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(format); }
 		};
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(BasicRestLogger.create()
@@ -579,7 +579,7 @@ public class NgRestClientFeatures_Test {
 			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(level + ":" + format); }
 		};
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(BasicRestLogger.create()
@@ -603,7 +603,7 @@ public class NgRestClientFeatures_Test {
 			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(level + ":" + format); }
 		};
 		var transport = MockHttpTransport.of(404, "Not Found");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(BasicRestLogger.create()
@@ -630,7 +630,7 @@ public class NgRestClientFeatures_Test {
 		var alwaysError = RestLogLevelResolver.rules()
 			.defaultLevel(System.Logger.Level.ERROR)
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(BasicRestLogger.create()
@@ -654,7 +654,7 @@ public class NgRestClientFeatures_Test {
 			.recordRequests()
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var r = client.post("/").body(StringBody.of("hello", "text/plain")).run()) {
 				assertEquals(200, r.getStatusCode());
 			}
@@ -672,7 +672,7 @@ public class NgRestClientFeatures_Test {
 			.recordRequests()
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var r = client.post("/").body((Object)StringBody.of("via-object", "text/plain")).run()) {
 				assertEquals(200, r.getStatusCode());
 			}
@@ -689,7 +689,7 @@ public class NgRestClientFeatures_Test {
 			.recordRequests()
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var r = client.post("/")
 					.body(new ByteArrayInputStream("stream-content".getBytes(StandardCharsets.UTF_8)))
 					.run()) {
@@ -709,7 +709,7 @@ public class NgRestClientFeatures_Test {
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
 		var bytes = "byte-content".getBytes(StandardCharsets.UTF_8);
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var r = client.post("/").body(bytes).run()) {
 				assertEquals(200, r.getStatusCode());
 			}
@@ -730,7 +730,7 @@ public class NgRestClientFeatures_Test {
 		tempFile.deleteOnExit();
 		java.nio.file.Files.writeString(tempFile.toPath(), "file-content");
 
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var r = client.post("/").body(tempFile).run()) {
 				assertEquals(200, r.getStatusCode());
 			}
@@ -747,7 +747,7 @@ public class NgRestClientFeatures_Test {
 			.recordRequests()
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var r = client.post("/").body((Object)null).run()) {
 				assertEquals(200, r.getStatusCode());
 			}
@@ -758,7 +758,7 @@ public class NgRestClientFeatures_Test {
 	@Test
 	void f07_body_noConverter_throws() throws Exception {
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.bodyConverters() // empty converter list
@@ -776,7 +776,7 @@ public class NgRestClientFeatures_Test {
 		// Custom converter for Integer → "int:<value>"
 		var converter = BodyConverter.of(Integer.class,
 			i -> TransportBody.of(StringBody.of("int:" + i, "text/plain")));
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.bodyConverter(converter)
@@ -795,7 +795,7 @@ public class NgRestClientFeatures_Test {
 	void f09_bodyConverters_replacesDefaults() throws Exception {
 		var transport = MockHttpTransport.of(200, "ok");
 		// Replace all converters — InputStream no longer handled
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.bodyConverters() // no converters
@@ -815,7 +815,7 @@ public class NgRestClientFeatures_Test {
 			.recordRequests()
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var r = client.post("/").bodyString("raw text body").run()) {
 				assertEquals(200, r.getStatusCode());
 			}
@@ -833,7 +833,7 @@ public class NgRestClientFeatures_Test {
 			.recordRequests()
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var r = client.post("/").bodyString(null).run()) {
 				assertEquals(200, r.getStatusCode());
 			}
@@ -876,7 +876,7 @@ public class NgRestClientFeatures_Test {
 		// Default implementations should not throw
 		var interceptor = new RestCallInterceptor() {};
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.interceptors(interceptor)
@@ -888,36 +888,36 @@ public class NgRestClientFeatures_Test {
 	}
 
 	// =================================================================================================================
-	// J — NgRestClient DEFAULT_BODY_CONVERTERS
+	// J — RestClient DEFAULT_BODY_CONVERTERS
 	// =================================================================================================================
 
 	@Test
 	void j01_defaultBodyConverters_canConvert_httpBody() {
-		var converters = NgRestClient.DEFAULT_BODY_CONVERTERS;
+		var converters = RestClient.DEFAULT_BODY_CONVERTERS;
 		assertTrue(converters.stream().anyMatch(c -> c.canConvert(StringBody.of("x"))));
 	}
 
 	@Test
 	void j02_defaultBodyConverters_canConvert_inputStream() {
-		var converters = NgRestClient.DEFAULT_BODY_CONVERTERS;
+		var converters = RestClient.DEFAULT_BODY_CONVERTERS;
 		assertTrue(converters.stream().anyMatch(c -> c.canConvert(new ByteArrayInputStream(new byte[0]))));
 	}
 
 	@Test
 	void j03_defaultBodyConverters_canConvert_byteArray() {
-		var converters = NgRestClient.DEFAULT_BODY_CONVERTERS;
+		var converters = RestClient.DEFAULT_BODY_CONVERTERS;
 		assertTrue(converters.stream().anyMatch(c -> c.canConvert(new byte[0])));
 	}
 
 	@Test
 	void j04_defaultBodyConverters_canConvert_file() {
-		var converters = NgRestClient.DEFAULT_BODY_CONVERTERS;
+		var converters = RestClient.DEFAULT_BODY_CONVERTERS;
 		assertTrue(converters.stream().anyMatch(c -> c.canConvert(new java.io.File("x"))));
 	}
 
 	@Test
 	void j05_defaultBodyConverters_cannot_convert_string() {
-		var converters = NgRestClient.DEFAULT_BODY_CONVERTERS;
+		var converters = RestClient.DEFAULT_BODY_CONVERTERS;
 		assertFalse(converters.stream().anyMatch(c -> c.canConvert("hello")));
 	}
 
@@ -936,7 +936,7 @@ public class NgRestClientFeatures_Test {
 			@Override public void log(Level level, ResourceBundle bundle, String format, Object... params) { messages.add(format); }
 		};
 		var transport = MockHttpTransport.of(200, "ok");
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(BasicRestLogger.create()
@@ -957,7 +957,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> { throw new TransportException((String)null); })
 			.build();
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)
@@ -979,7 +979,7 @@ public class NgRestClientFeatures_Test {
 				.header("X-Baz", "qux")
 				.build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var r = client.get("/").run()) {
 				var headers = r.getHeaders();
 				assertTrue(headers.stream().anyMatch(h -> h.name().equals("X-Foo")));
@@ -991,7 +991,7 @@ public class NgRestClientFeatures_Test {
 	@Test
 	void k04_ngRestResponse_getBodyStream() throws Exception {
 		var transport = MockHttpTransport.of(200, "streamed-body");
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var r = client.get("/").run()) {
 				var stream = r.getBodyStream();
 				assertNotNull(stream);
@@ -1017,7 +1017,7 @@ public class NgRestClientFeatures_Test {
 			};
 			return TransportBody.of(body);
 		});
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.bodyConverter(nullContentTypeConverter)
@@ -1066,7 +1066,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void l01_responseBody_asString() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "hello world")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "hello world")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertEquals("hello world", resp.body().asString());
 			}
@@ -1075,7 +1075,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void l02_responseBody_asBytes() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "hi")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "hi")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				var bytes = resp.body().asBytes();
 				assertNotNull(bytes);
@@ -1086,7 +1086,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void l03_responseBody_asStream() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "stream")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "stream")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				var stream = resp.body().asStream();
 				assertNotNull(stream);
@@ -1100,7 +1100,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(204).build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertNull(resp.body().asString());
 				assertNull(resp.body().asBytes());
@@ -1112,7 +1112,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void l05_responseBody_asString_charset() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "hello")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "hello")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertEquals("hello", resp.body().asString(StandardCharsets.UTF_8));
 			}
@@ -1127,7 +1127,7 @@ public class NgRestClientFeatures_Test {
 				.header("X-My-Header", "my-value")
 				.build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				var h = resp.header("X-My-Header");
 				assertEquals("X-My-Header", h.getName());
@@ -1144,7 +1144,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				var h = resp.header("X-Missing");
 				assertFalse(h.isPresent());
@@ -1168,7 +1168,7 @@ public class NgRestClientFeatures_Test {
 				.header("Content-Length", "1024")
 				.build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertEquals(1024, resp.header("Content-Length").asInteger());
 			}
@@ -1183,7 +1183,7 @@ public class NgRestClientFeatures_Test {
 				.header("X-Value", "not-a-number")
 				.build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertEquals(-1, resp.header("X-Value").asInteger());
 				assertEquals(-1L, resp.header("X-Value").asLong());
@@ -1199,7 +1199,7 @@ public class NgRestClientFeatures_Test {
 				.header("Allow", "GET, POST, PUT")
 				.build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				var tokens = resp.header("Allow").asCsvList();
 				assertEquals(List.of("GET", "POST", "PUT"), tokens);
@@ -1215,7 +1215,7 @@ public class NgRestClientFeatures_Test {
 				.header("X-Value", "test")
 				.build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertEquals("X-Value: test", resp.header("X-Value").toString());
 			}
@@ -1230,7 +1230,7 @@ public class NgRestClientFeatures_Test {
 				.header("Content-Length", "999999999999")
 				.build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertEquals(999999999999L, resp.header("Content-Length").asLong());
 			}
@@ -1251,7 +1251,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m01_assertThat_statusCode() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().statusCode(200);
 			}
@@ -1260,7 +1260,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m02_assertThat_statusCode_fails() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(404, "not found")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(404, "not found")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertThrows(AssertionError.class, () -> resp.assertThat().statusCode(200));
 			}
@@ -1269,7 +1269,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m03_assertThat_isOk() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(201, "created")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(201, "created")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().isOk();
 			}
@@ -1278,7 +1278,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m04_assertThat_isOk_fails() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(404, "")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(404, "")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertThrows(AssertionError.class, () -> resp.assertThat().isOk());
 			}
@@ -1287,7 +1287,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m05_assertThat_isClientError() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(404, "")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(404, "")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().isClientError();
 			}
@@ -1296,7 +1296,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m06_assertThat_isServerError() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(503, "")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(503, "")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().isServerError();
 			}
@@ -1305,7 +1305,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m07_assertThat_isClientError_fails() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertThrows(AssertionError.class, () -> resp.assertThat().isClientError());
 			}
@@ -1314,7 +1314,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m08_assertThat_isServerError_fails() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertThrows(AssertionError.class, () -> resp.assertThat().isServerError());
 			}
@@ -1326,7 +1326,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).header("X-Foo", "bar").build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().header("X-Foo").isPresent();
 			}
@@ -1335,7 +1335,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m10_assertThat_header_isPresent_fails() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertThrows(AssertionError.class, () -> resp.assertThat().header("X-Missing").isPresent());
 			}
@@ -1344,7 +1344,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m11_assertThat_header_isAbsent() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().header("X-Missing").isAbsent();
 			}
@@ -1356,7 +1356,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).header("X-Foo", "bar").build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertThrows(AssertionError.class, () -> resp.assertThat().header("X-Foo").isAbsent());
 			}
@@ -1368,7 +1368,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).header("X-Val", "hello").build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().header("X-Val").equals("hello");
 			}
@@ -1380,7 +1380,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).header("X-Val", "hello").build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertThrows(AssertionError.class, () -> resp.assertThat().header("X-Val").equals("world"));
 			}
@@ -1392,7 +1392,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).header("Content-Type", "application/json; charset=UTF-8").build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().header("Content-Type").contains("application/json");
 			}
@@ -1404,7 +1404,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).header("Content-Type", "application/json").build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().header("Content-Type").startsWith("application");
 			}
@@ -1416,7 +1416,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).header("Content-Length", "42").build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().header("Content-Length").integerEquals(42);
 			}
@@ -1425,7 +1425,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m18_assertThat_body_equals() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "hello")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "hello")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().body().equals("hello");
 			}
@@ -1434,7 +1434,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m19_assertThat_body_contains() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "hello world")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "hello world")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().body().contains("world");
 			}
@@ -1446,7 +1446,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(204).build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().body().isEmpty();
 			}
@@ -1455,7 +1455,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m21_assertThat_body_isNotEmpty() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "content")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "content")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().body().isNotEmpty();
 			}
@@ -1464,7 +1464,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m22_assertThat_body_startsWith() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "{\"id\":1}")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "{\"id\":1}")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat().body().startsWith("{");
 			}
@@ -1473,7 +1473,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m23_assertThat_and_returnsResponse() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				var assertion = resp.assertThat();
 				assertSame(resp, assertion.and());
@@ -1486,7 +1486,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).header("X-Foo", "bar").build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				var responseAssertion = resp.assertThat();
 				var headerAssertion = responseAssertion.header("X-Foo");
@@ -1503,7 +1503,7 @@ public class NgRestClientFeatures_Test {
 				.header("Content-Type", "application/json")
 				.build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				resp.assertThat()
 					.statusCode(200)
@@ -1516,7 +1516,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m26_responseHeaderAssertion_integerEquals_missingHeader_throws() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertThrows(AssertionError.class, () -> resp.assertThat().header("X-Missing").integerEquals(42));
 			}
@@ -1528,7 +1528,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).header("X-Val", "abc").build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertThrows(AssertionError.class, () -> resp.assertThat().header("X-Val").integerEquals(42));
 			}
@@ -1537,7 +1537,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m28_responseBodyAssertion_contains_fails() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "hello")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "hello")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertThrows(AssertionError.class, () -> resp.assertThat().body().contains("world"));
 			}
@@ -1549,7 +1549,7 @@ public class NgRestClientFeatures_Test {
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(204).build())
 			.build();
-		try (var client = NgRestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				assertThrows(AssertionError.class, () -> resp.assertThat().body().isNotEmpty());
 			}
@@ -1558,7 +1558,7 @@ public class NgRestClientFeatures_Test {
 
 	@Test
 	void m30_responseBodyAssertion_and_returnsParent() throws Exception {
-		try (var client = NgRestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
 			try (var resp = client.get("/").run()) {
 				var responseAssertion = resp.assertThat();
 				var bodyAssertion = responseAssertion.body();
@@ -1584,7 +1584,7 @@ public class NgRestClientFeatures_Test {
 				.fallback(req -> TransportResponse.builder().statusCode(status).build())
 				.build();
 		}
-		try (var client = NgRestClient.builder()
+		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.logger(entries::add)

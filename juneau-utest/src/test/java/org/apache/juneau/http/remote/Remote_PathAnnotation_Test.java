@@ -18,7 +18,7 @@ package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.http.classic.HttpParts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
@@ -30,11 +30,11 @@ import org.apache.http.client.config.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.part.*;
+import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.uon.*;
 import org.junit.jupiter.api.*;

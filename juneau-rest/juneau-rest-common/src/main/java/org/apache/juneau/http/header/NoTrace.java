@@ -2,9 +2,9 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * The ASF licenses this file to You under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the
+ * License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -16,103 +16,58 @@
  */
 package org.apache.juneau.http.header;
 
-import java.util.function.*;
-
-import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents a parsed <l>No-Trace</l> HTTP request header.
+ * Represents an HTTP <c>No-Trace</c> header.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
- * </ul>
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
  *
- * @serial exclude
+ * @since 9.2.1
  */
-@Header("No-Trace")
-public class NoTrace extends BasicBooleanHeader {
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "No-Trace";
+import java.util.function.*;
 
-	/** Constant for <jk>true</jk> value. */
-	public static final NoTrace TRUE = of(true);
-	/** Constant for <jk>false</jk> value. */
-	public static final NoTrace FALSE = of(false);
+/**
+ * @since 9.2.1
+ */
+public class NoTrace extends HttpBooleanHeader {
 
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
-	 */
-	public static NoTrace of(Boolean value) {
-		return value == null ? null : new NoTrace(value);
-	}
+	public static final String NAME = "No-Trace";
 
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
-	 */
-	public static NoTrace of(String value) {
-		return value == null ? null : new NoTrace(value);
-	}
-
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
-	 */
-	public static NoTrace of(Supplier<Boolean> value) {
-		return value == null ? null : new NoTrace(value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public NoTrace(Boolean value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
 	public NoTrace(String value) {
 		super(NAME, value);
 	}
 
-	/**
-	 * Constructor with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public NoTrace(Supplier<Boolean> value) {
+	public NoTrace(boolean value) {
+		super(NAME, Boolean.valueOf(value));
+	}
+
+	public NoTrace(Boolean value) {
 		super(NAME, value);
+	}
+
+	private NoTrace(Supplier<?> supplier, int lazyMode) {
+		super(NAME, supplier, lazyMode);
+	}
+
+	public static NoTrace of(String value) {
+		return new NoTrace(value);
+	}
+
+	public static NoTrace of(boolean value) {
+		return new NoTrace(value);
+	}
+
+	public static NoTrace of(Boolean value) {
+		return new NoTrace(value);
+	}
+
+	public static NoTrace ofLazyWire(Supplier<String> supplier) {
+		return new NoTrace(supplier, LAZY_WIRE_STRING);
+	}
+
+	public static NoTrace ofLazyParsed(Supplier<Boolean> supplier) {
+		return new NoTrace(supplier, LAZY_BOOLEAN);
 	}
 }

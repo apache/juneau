@@ -28,7 +28,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
@@ -198,7 +198,7 @@ class RestOp_Params_Test extends TestBase {
 			return contentType.getValue();
 		}
 		@RestGet
-		public String date(org.apache.juneau.http.header.Date date) {
+		public String date(org.apache.juneau.http.classic.header.Date date) {
 			return date.getValue();
 		}
 		@RestGet

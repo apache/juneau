@@ -16,33 +16,26 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.http.response.TemporaryRedirect.*;
-
-import java.net.*;
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
 
 /**
  * Represents an <c>HTTP 307 Temporary Redirect</c> response.
  *
  * <p>
- * In this case, the request should be repeated with another URI; however, future requests should still use the original URI.
- * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when reissuing the original request.
- * For example, a POST request should be repeated using another POST request.
+ * The request should be repeated with another URI, but future requests should still use the original URI.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
+ *
+ * @since 9.2.1
  */
-@Response
-@StatusCode(STATUS_CODE)
-@Schema(description = REASON_PHRASE)
 public class TemporaryRedirect extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -52,10 +45,10 @@ public class TemporaryRedirect extends BasicHttpResponse {
 	public static final String REASON_PHRASE = "Temporary Redirect";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
+	private static final HttpStatusLine STATUS_LINE = HttpStatusLineBean.of(STATUS_CODE, REASON_PHRASE);
 
 	/** Default unmodifiable instance */
-	public static final TemporaryRedirect INSTANCE = new TemporaryRedirect().setUnmodifiable();
+	public static final TemporaryRedirect INSTANCE = new TemporaryRedirect();
 
 	/**
 	 * Constructor.
@@ -65,130 +58,29 @@ public class TemporaryRedirect extends BasicHttpResponse {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a response body.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param body The response body. May be <jk>null</jk>.
 	 */
-	public TemporaryRedirect(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public TemporaryRedirect(HttpBody body) {
+		super(STATUS_LINE, body);
+	}
+
+	/**
+	 * Constructor with a plain-text string body.
+	 *
+	 * @param body The response body as a plain-text string. May be <jk>null</jk>.
+	 */
+	public TemporaryRedirect(String body) {
+		super(STATUS_LINE, body);
 	}
 
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy from.
+	 * @param copyFrom The bean to copy from. Must not be <jk>null</jk>.
 	 */
 	public TemporaryRedirect(TemporaryRedirect copyFrom) {
 		super(copyFrom);
-	}
-
-	/**
-	 * Creates a builder for this class initialized with the contents of this bean.
-	 *
-	 * @return A new builder bean.
-	 */
-	public TemporaryRedirect copy() {
-		return new TemporaryRedirect(this);
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setHeader2(Header value) {
-		super.setHeader2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setHeader2(String name, String value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setLocation(String value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setLocation(URI value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setStatusCode2(int value) {
-		super.setStatusCode2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public TemporaryRedirect setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
 	}
 }

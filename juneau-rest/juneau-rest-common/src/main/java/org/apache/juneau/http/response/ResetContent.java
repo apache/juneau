@@ -16,32 +16,26 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.http.response.ResetContent.*;
-
-import java.net.*;
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.http.Header;
-import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.*;
 
 /**
  * Represents an <c>HTTP 205 Reset Content</c> response.
  *
  * <p>
- * The server successfully processed the request, but is not returning any content.
- * Unlike a 204 response, this response requires that the requester reset the document view.
+ * The server successfully processed the request, asks that the requester reset its document view, and is not returning any content.
+ *
+ * <p>
+ * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+ * ({@code org.apache.juneau.ng.*}).
+ * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+ * (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
+ *
+ * @since 9.2.1
  */
-@Response
-@StatusCode(STATUS_CODE)
-@Schema(description = REASON_PHRASE)
 public class ResetContent extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -51,10 +45,10 @@ public class ResetContent extends BasicHttpResponse {
 	public static final String REASON_PHRASE = "Reset Content";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
+	private static final HttpStatusLine STATUS_LINE = HttpStatusLineBean.of(STATUS_CODE, REASON_PHRASE);
 
 	/** Default unmodifiable instance */
-	public static final ResetContent INSTANCE = new ResetContent().setUnmodifiable();
+	public static final ResetContent INSTANCE = new ResetContent();
 
 	/**
 	 * Constructor.
@@ -64,130 +58,29 @@ public class ResetContent extends BasicHttpResponse {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructor with a response body.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param body The response body. May be <jk>null</jk>.
 	 */
-	public ResetContent(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public ResetContent(HttpBody body) {
+		super(STATUS_LINE, body);
+	}
+
+	/**
+	 * Constructor with a plain-text string body.
+	 *
+	 * @param body The response body as a plain-text string. May be <jk>null</jk>.
+	 */
+	public ResetContent(String body) {
+		super(STATUS_LINE, body);
 	}
 
 	/**
 	 * Copy constructor.
 	 *
-	 * @param copyFrom The bean to copy from.
+	 * @param copyFrom The bean to copy from. Must not be <jk>null</jk>.
 	 */
 	public ResetContent(ResetContent copyFrom) {
 		super(copyFrom);
-	}
-
-	/**
-	 * Creates a builder for this class initialized with the contents of this bean.
-	 *
-	 * @return A new builder bean.
-	 */
-	public ResetContent copy() {
-		return new ResetContent(this);
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setHeader2(Header value) {
-		super.setHeader2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setHeader2(String name, String value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setLocation(String value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setLocation(URI value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setStatusCode2(int value) {
-		super.setStatusCode2(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
 	}
 }
