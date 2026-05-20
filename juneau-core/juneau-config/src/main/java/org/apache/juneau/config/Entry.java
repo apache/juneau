@@ -351,7 +351,7 @@ public class Entry {
 			if (s1 != '[' && ! "null".equals(s))
 				s = '[' + s + ']';
 		}
-		return opt(JsonList.ofText(s, parser));
+		return opt(JsonList.ofString(s, parser));
 	}
 
 	/**
@@ -425,7 +425,7 @@ public class Entry {
 			if (s1 != '{' && ! "null".equals(s))
 				s = '{' + s + '}';
 		}
-		return opt(JsonMap.ofText(s, parser));
+		return opt(JsonMap.ofString(s, parser));
 	}
 
 	/**

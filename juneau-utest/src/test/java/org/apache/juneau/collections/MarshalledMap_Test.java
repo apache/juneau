@@ -62,15 +62,21 @@ class MarshalledMap_Test extends TestBase {
 		assertEquals(1, m.getInt("a"));
 	}
 
-	@Test void a05_parseViaOfText() throws Exception {
-		var m = MarshalledMap.ofText("{a:1,b:'two'}", Json5Parser.DEFAULT);
+	@Test void a05_parseViaOfString() throws Exception {
+		var m = MarshalledMap.ofString("{a:1,b:'two'}", Json5Parser.DEFAULT);
 		assertNotNull(m);
 		assertEquals(1, m.getInt("a"));
 		assertEquals("two", m.getString("b"));
 	}
 
-	@Test void a06_parseViaOfTextNullInput() throws Exception {
-		assertNull(MarshalledMap.ofText((CharSequence)null, Json5Parser.DEFAULT));
+	@Test void a06_parseViaOfStringNullInput() throws Exception {
+		assertNull(MarshalledMap.ofString((CharSequence)null, Json5Parser.DEFAULT));
+	}
+
+	@Test void a06b_ofTextAliasStillWorks() throws Exception {
+		var m = MarshalledMap.ofString("{a:1}", Json5Parser.DEFAULT);
+		assertNotNull(m);
+		assertEquals(1, m.getInt("a"));
 	}
 
 	@Test void a07_getMapReturnsNeutralType() {
@@ -92,7 +98,7 @@ class MarshalledMap_Test extends TestBase {
 	}
 
 	@Test void a08b_parseProducesJson5MapInternally() throws Exception {
-		var m = MarshalledMap.ofText("{nested:{x:1}}", Json5Parser.DEFAULT);
+		var m = MarshalledMap.ofString("{nested:{x:1}}", Json5Parser.DEFAULT);
 		var nested = m.getMap("nested");
 		assertTrue(nested instanceof Json5Map, "Json5Parser produces Json5Map for nested objects");
 		assertFalse(nested instanceof JsonMap, "Strict-JSON JsonMap is not used by Json5Parser");
@@ -158,7 +164,7 @@ class MarshalledMap_Test extends TestBase {
 	}
 
 	@Test void a17_castToMapInterfaceReturnsNeutralFallback() throws Exception {
-		var m = MarshalledMap.ofText("{a:1,b:2}", Json5Parser.DEFAULT);
+		var m = MarshalledMap.ofString("{a:1,b:2}", Json5Parser.DEFAULT);
 		// Casting from a MarshalledMap to the Map interface should fall back to MarshalledMap.
 		Map<?,?> casted = m.cast(Map.class);
 		assertNotNull(casted);

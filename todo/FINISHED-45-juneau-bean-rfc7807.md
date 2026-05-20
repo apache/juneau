@@ -1,4 +1,28 @@
-# TODO-45: `juneau-bean-rfc7807` — beans for `application/problem+json`
+# FINISHED-45: juneau-bean-rfc7807
+
+Archived from `TODO-45-juneau-bean-rfc7807.md` on 2026-05-20.
+
+## What shipped
+
+A new bean module `juneau-bean/juneau-bean-rfc7807` providing the `Problem.java` bean for RFC 7807 `application/problem+json` payloads. The v1 adapter surface is the primitives-only static factory `Problem.fromStatus(int, String, String)`, deliberately keeping the module dep-free of `juneau-rest-common`. The `type` field is nullable with a separate `getTypeOrDefault()` accessor that returns `URI.create("about:blank")` per RFC 7807 §3.1, preserving the absent-vs-explicit distinction on the wire. Extension members flow through the `@BeanProp("*")` triplet pattern (`extraKeys()` + `get(String)` + `set(String, Object)`).
+
+## Files delivered
+
+- `juneau-bean/juneau-bean-rfc7807/{pom.xml, src/main/java/org/apache/juneau/bean/rfc7807/Problem.java, package-info.java}`
+- `juneau-bean/pom.xml` (module entry added)
+- `juneau-utest/pom.xml` (test dep added)
+- `juneau-utest/src/test/java/org/apache/juneau/bean/rfc7807/Problem_RoundTrip_Test.java` (22 tests)
+- `juneau-docs/pages/release-notes/9.5.0.md` (juneau-bean-rfc7807 new-module section)
+- `juneau-docs/pages/topics/04.09.JuneauBeanRfc7807.md` (new doc page)
+- `juneau-docs/sidebars.ts` (sidebar entry)
+
+## Verification
+
+- 22 tests pass.
+- `Problem.java`: 100% branches, 100% instructions coverage.
+- Full `./scripts/test.py`: 51,198 tests, 0 failures (final verification run).
+
+## Original plan
 
 Source: filed 2026-05-19 (split out of TODO-40 follow-up discussion).
 

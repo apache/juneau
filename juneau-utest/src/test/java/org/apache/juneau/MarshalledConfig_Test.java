@@ -314,7 +314,7 @@ class MarshalledConfig_Test extends TestBase {
 		assertEquals("{name:'x',age:123}", bc.convertToType(o, String.class));
 
 		// List of Maps to array of beans.
-		var o2 = JsonList.of(JsonMap.ofText("{\"name\":\"x\",\"age\":1}"), JsonMap.ofText("{\"name\":\"y\",\"age\":2}"));
+		var o2 = JsonList.of(JsonMap.ofString("{\"name\":\"x\",\"age\":1}"), JsonMap.ofString("{\"name\":\"y\",\"age\":2}"));
 		assertEquals(1, bc.convertToType(o2, ReadOnlyPerson[].class)[0].getAge());
 	}
 
@@ -346,7 +346,7 @@ class MarshalledConfig_Test extends TestBase {
 		assertEquals("{name:'x',age:123}", bc.convertToType(o, String.class));
 
 		// List of Maps to array of beans.
-		var o2 = JsonList.of(JsonMap.ofText("{\"name\":\"x\",\"age\":1}"), JsonMap.ofText("{\"name\":\"y\",\"age\":2}"));
+		var o2 = JsonList.of(JsonMap.ofString("{\"name\":\"x\",\"age\":1}"), JsonMap.ofString("{\"name\":\"y\",\"age\":2}"));
 		assertEquals(1, bc.convertToType(o2, ReadOnlyPerson2[].class)[0].getAge());
 	}
 

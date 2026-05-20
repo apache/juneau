@@ -38,9 +38,14 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  *
  * <h5 class='section'>Media types:</h5>
  *
- * Handles <c>Accept</c> types:  <bc>octal/msgpack</bc>
+ * Handles <c>Accept</c> types:  <bc>application/msgpack, octal/msgpack</bc>
  * <p>
- * Produces <c>Content-Type</c> types: <bc>octal/msgpack</bc>
+ * Produces <c>Content-Type</c> types: <bc>application/msgpack</bc>
+ *
+ * <p>
+ * The legacy media type <bc>octal/msgpack</bc> is retained in the <c>Accept</c> list as a
+ * backward-compatibility alias. The <c>Content-Type</c> emitted by the serializer is always the
+ * RFC-standard <bc>application/msgpack</bc> value.
  *
  * <h5 class='topic'>Description</h5>
  * <p>
@@ -107,7 +112,8 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			produces("octal/msgpack");
+			produces("application/msgpack");
+			accept("application/msgpack,octal/msgpack");
 			addBeanTypesMsgPack = env("MsgPackSerializer.addBeanTypesMsgPack", false);
 		}
 

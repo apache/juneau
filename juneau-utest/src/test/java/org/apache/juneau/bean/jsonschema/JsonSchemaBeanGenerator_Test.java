@@ -96,7 +96,7 @@ class JsonSchemaBeanGenerator_Test extends TestBase {
 	}
 
 	@Test void a08_toBeanConversion() {
-		var map = new JsonMap(Json5Map.ofText("{type:'integer',format:'int32','$comment':'c',deprecated:true}"));
+		var map = new JsonMap(Json5Map.ofString("{type:'integer',format:'int32','$comment':'c',deprecated:true}"));
 		var bean = JsonSchemaBeanGenerator.toBean(map);
 		assertEquals("integer", bean.getTypeAsJsonType().toString().toLowerCase(Locale.ROOT));
 		assertEquals("int32", bean.getFormat());

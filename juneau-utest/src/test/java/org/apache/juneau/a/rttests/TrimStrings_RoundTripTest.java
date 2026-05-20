@@ -54,8 +54,8 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 		a = p2.parse(s.serialize(in), String.class);
 		assertEquals(json(a), json(e));
 
-		in = JsonMap.ofText("{\" foo \": \" bar \"}");
-		e = JsonMap.ofText("{\"foo\":\"bar\"}");
+		in = JsonMap.ofString("{\" foo \": \" bar \"}");
+		e = JsonMap.ofString("{\"foo\":\"bar\"}");
 		a = p.parse(s2.serialize(in), JsonMap.class);
 		assertEquals(json(a), json(e));
 		a = p2.parse(s.serialize(in), JsonMap.class);
@@ -89,16 +89,16 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 		public A init1() throws Exception {
 			f1 = " f1 ";
 			f2 = a(" f2a ", " f2b ");
-			f3 = JsonList.ofText("[\" f3a \",\" f3b \"]");
-			f4 = JsonMap.ofText("{\" foo \":\" bar \"}");
+			f3 = JsonList.ofString("[\" f3a \",\" f3b \"]");
+			f4 = JsonMap.ofString("{\" foo \":\" bar \"}");
 			return this;
 		}
 
 		public A init2() throws Exception {
 			f1 = "f1";
 			f2 = a("f2a", "f2b");
-			f3 = JsonList.ofText("[\"f3a\",\"f3b\"]");
-			f4 = JsonMap.ofText("{\"foo\":\"bar\"}");
+			f3 = JsonList.ofString("[\"f3a\",\"f3b\"]");
+			f4 = JsonMap.ofString("{\"foo\":\"bar\"}");
 			return this;
 		}
 	}

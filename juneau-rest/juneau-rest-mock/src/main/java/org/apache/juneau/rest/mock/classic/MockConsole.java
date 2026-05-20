@@ -87,7 +87,7 @@ import org.apache.juneau.assertions.*;
 })
 public class MockConsole extends PrintStream {
 
-	private static final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	private final ByteArrayOutputStream baos;
 
 	/**
 	 * Creator.
@@ -102,7 +102,12 @@ public class MockConsole extends PrintStream {
 	 * Constructor.
 	 */
 	public MockConsole() {
+		this(new ByteArrayOutputStream());
+	}
+
+	private MockConsole(ByteArrayOutputStream baos) {
 		super(baos);
+		this.baos = baos;
 	}
 
 	/**

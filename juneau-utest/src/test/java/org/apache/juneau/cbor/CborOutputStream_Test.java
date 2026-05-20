@@ -219,12 +219,12 @@ class CborOutputStream_Test extends TestBase {
 
 	@Test
 	void a29_emptyMap() throws Exception {
-		enc(JsonMap.ofText("{}"), "A0");
+		enc(JsonMap.ofString("{}"), "A0");
 	}
 
 	@Test
 	void a30_shortMap() throws Exception {
-		enc(JsonMap.ofText("{\"a\":1,\"b\":2}"), "A2 61 61 01 61 62 02");
+		enc(JsonMap.ofString("{\"a\":1,\"b\":2}"), "A2 61 61 01 61 62 02");
 	}
 
 	@Test

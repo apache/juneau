@@ -84,7 +84,7 @@ public interface BeanSession {
 	 * directly, so the parse is delegated to the session via this SPI.
 	 *
 	 * <p>
-	 * Implementations typically route through {@code JsonMap.ofText(value).session(this)}.
+	 * Implementations typically route through {@code JsonMap.ofString(value).session(this)}.
 	 *
 	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
 	 * @return The parsed map.

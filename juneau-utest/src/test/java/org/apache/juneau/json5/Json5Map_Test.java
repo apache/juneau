@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  * These confirm that:
  * <ul>
  * 	<li>{@link Json5Map#toString()} produces JSON5 form.
- * 	<li>JSON5 default-parser constructors and {@code ofText} factories work.
+ * 	<li>JSON5 default-parser constructors and {@code ofString} factories work.
  * 	<li>Covariant overrides on the get/fluent surface return {@code Json5Map} / {@code Json5List}, not the neutral base.
  * 	<li>{@code writeTo(Writer)} uses {@link Json5Serializer#DEFAULT}.
  * </ul>
@@ -49,15 +49,21 @@ class Json5Map_Test extends TestBase {
 		assertEquals("{a:1,b:'two'}", m.toString());
 	}
 
-	@Test void a03_factoryOfText() throws Exception {
-		var m = Json5Map.ofText("{a:1,b:'two'}");
+	@Test void a03_factoryOfString() throws Exception {
+		var m = Json5Map.ofString("{a:1,b:'two'}");
 		assertNotNull(m);
 		assertEquals(1, m.getInt("a"));
 		assertEquals("two", m.getString("b"));
 	}
 
-	@Test void a04_factoryOfTextNullInput() throws Exception {
-		assertNull(Json5Map.ofText((CharSequence)null));
+	@Test void a04_factoryOfStringNullInput() throws Exception {
+		assertNull(Json5Map.ofString((CharSequence)null));
+	}
+
+	@Test void a04b_ofTextAliasStillWorks() throws Exception {
+		var m = Json5Map.ofString("{a:1}");
+		assertNotNull(m);
+		assertEquals(1, m.getInt("a"));
 	}
 
 	@Test void a05_factoryOfCreateAppend() {
@@ -180,7 +186,7 @@ class Json5Map_Test extends TestBase {
 	@Test void a21_roundTripJson5() throws Exception {
 		var original = Json5Map.of("a", 1, "b", "two", "c", true);
 		var serialized = original.toString();
-		var parsed = Json5Map.ofText(serialized);
+		var parsed = Json5Map.ofString(serialized);
 		assertEquals(1, parsed.getInt("a"));
 		assertEquals("two", parsed.getString("b"));
 		assertTrue(parsed.getBoolean("c"));

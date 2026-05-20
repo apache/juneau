@@ -62,15 +62,21 @@ class MarshalledList_Test extends TestBase {
 		assertEquals("a", l.getString(0));
 	}
 
-	@Test void a05_parseViaOfText() throws Exception {
-		var l = MarshalledList.ofText("[1,2,3]", Json5Parser.DEFAULT);
+	@Test void a05_parseViaOfString() throws Exception {
+		var l = MarshalledList.ofString("[1,2,3]", Json5Parser.DEFAULT);
 		assertNotNull(l);
 		assertEquals(3, l.size());
 		assertEquals(2, l.getInt(1));
 	}
 
-	@Test void a06_parseViaOfTextNullInput() throws Exception {
-		assertNull(MarshalledList.ofText((CharSequence)null, Json5Parser.DEFAULT));
+	@Test void a06_parseViaOfStringNullInput() throws Exception {
+		assertNull(MarshalledList.ofString((CharSequence)null, Json5Parser.DEFAULT));
+	}
+
+	@Test void a06b_ofTextAliasStillWorks() throws Exception {
+		var l = MarshalledList.ofString("[1,2,3]", Json5Parser.DEFAULT);
+		assertNotNull(l);
+		assertEquals(3, l.size());
 	}
 
 	@Test void a07_getMapReturnsNeutralType() {

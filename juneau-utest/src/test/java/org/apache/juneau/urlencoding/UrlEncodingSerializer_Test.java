@@ -44,23 +44,23 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=a", s.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{a:'a'}");
+		t = Json5Map.ofString("{a:'a'}");
 		assertEquals("a=a", s.serialize(t));
 		assertEquals("a=a", sr.serialize(t));
 
 		// Simple map
 		// Top level
-		t = Json5Map.ofText("{a:'b',c:123,d:false,e:true,f:null}");
+		t = Json5Map.ofString("{a:'b',c:123,d:false,e:true,f:null}");
 		assertEquals("a=b&c=123&d=false&e=true&f=null", s.serialize(t));
 		assertEquals("a=b\n&c=123\n&d=false\n&e=true\n&f=null", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{a:{a:'b',c:123,d:false,e:true,f:null}}");
+		t = Json5Map.ofString("{a:{a:'b',c:123,d:false,e:true,f:null}}");
 		assertEquals("a=(a=b,c=123,d=false,e=true,f=null)", s.serialize(t));
 		assertEquals("a=(\n\ta=b,\n\tc=123,\n\td=false,\n\te=true,\n\tf=null\n)", sr.serialize(t));
 
 		// Simple map with primitives as literals
-		t = Json5Map.ofText("{a:'b',c:'123',d:'false',e:'true',f:'null'}");
+		t = Json5Map.ofString("{a:'b',c:'123',d:'false',e:'true',f:'null'}");
 		assertEquals("a=b&c='123'&d='false'&e='true'&f='null'", s.serialize(t));
 		assertEquals("a=b\n&c='123'\n&d='false'\n&e='true'\n&f='null'", sr.serialize(t));
 
@@ -72,12 +72,12 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=null", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{null:null}");
+		t = Json5Map.ofString("{null:null}");
 		assertEquals("null=null", s.serialize(t));
 		assertEquals("null=null", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{null:{null:null}}");
+		t = Json5Map.ofString("{null:{null:null}}");
 		assertEquals("null=(null=null)", s.serialize(t));
 		assertEquals("null=(\n\tnull=null\n)", sr.serialize(t));
 
@@ -88,7 +88,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("", sr.serialize(t));
 
 		// 2nd level in map
-		t = Json5Map.ofText("{x:[]}");
+		t = Json5Map.ofString("{x:[]}");
 		assertEquals("x=@()", s.serialize(t));
 		assertEquals("x=@()", sr.serialize(t));
 
@@ -104,7 +104,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("0=''", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{x:['']}");
+		t = Json5Map.ofString("{x:['']}");
 		assertEquals("x=@('')", s.serialize(t));
 		assertEquals("x=@(\n\t''\n)", sr.serialize(t));
 
@@ -120,7 +120,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=%00", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'\u0000':'\u0000'}");
+		t = Json5Map.ofString("{'\u0000':'\u0000'}");
 		assertEquals("%00=%00", s.serialize(t));
 		assertEquals("%00=%00", sr.serialize(t));
 
@@ -131,7 +131,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=false", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{x:false}");
+		t = Json5Map.ofString("{x:false}");
 		assertEquals("x=false", s.serialize(t));
 		assertEquals("x=false", sr.serialize(t));
 
@@ -142,7 +142,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=123", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{x:123}");
+		t = Json5Map.ofString("{x:123}");
 		assertEquals("x=123", s.serialize(t));
 		assertEquals("x=123", sr.serialize(t));
 
@@ -153,7 +153,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=x;/?:@-_.!*~'", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{x:'x;/?:@-_.!*\\''}");
+		t = Json5Map.ofString("{x:'x;/?:@-_.!*\\''}");
 		assertEquals("x=x;/?:@-_.!*~'", s.serialize(t));
 		assertEquals("x=x;/?:@-_.!*~'", sr.serialize(t));
 
@@ -164,7 +164,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'x{}|\\\\^[]`<>#%\"&+':'x{}|\\\\^[]`<>#%\"&+'}");
+		t = Json5Map.ofString("{'x{}|\\\\^[]`<>#%\"&+':'x{}|\\\\^[]`<>#%\"&+'}");
 		assertEquals("x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B", s.serialize(t));
 		assertEquals("x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B", sr.serialize(t));
 
@@ -175,12 +175,12 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value='x$,()~~'", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'x$,()~':'x$,()~'}");
+		t = Json5Map.ofString("{'x$,()~':'x$,()~'}");
 		assertEquals("'x$,()~~'='x$,()~~'", s.serialize(t));
 		assertEquals("'x$,()~~'='x$,()~~'", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'x$,()~':{'x$,()~':'x$,()~'}}");
+		t = Json5Map.ofString("{'x$,()~':{'x$,()~':'x$,()~'}}");
 		assertEquals("'x$,()~~'=('x$,()~~'='x$,()~~')", s.serialize(t));
 		assertEquals("'x$,()~~'=(\n\t'x$,()~~'='x$,()~~'\n)", sr.serialize(t));
 
@@ -192,12 +192,12 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value='x='", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'x=':'x='}");
+		t = Json5Map.ofString("{'x=':'x='}");
 		assertEquals("'x%3D'='x='", s.serialize(t));
 		assertEquals("'x%3D'='x='", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'x=':{'x=':'x='}}");
+		t = Json5Map.ofString("{'x=':{'x=':'x='}}");
 		assertEquals("'x%3D'=('x='='x=')", s.serialize(t));
 		assertEquals("'x%3D'=(\n\t'x='='x='\n)", sr.serialize(t));
 
@@ -208,7 +208,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value='()'", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'()':'()'}");
+		t = Json5Map.ofString("{'()':'()'}");
 		assertEquals("'()'='()'", s.serialize(t));
 		assertEquals("'()'='()'", sr.serialize(t));
 
@@ -219,7 +219,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=$a", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{$a:'$a'}");
+		t = Json5Map.ofString("{$a:'$a'}");
 		assertEquals("$a=$a", s.serialize(t));
 		assertEquals("$a=$a", sr.serialize(t));
 
@@ -230,12 +230,12 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=''", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'':''}");
+		t = Json5Map.ofString("{'':''}");
 		assertEquals("''=''", s.serialize(t));
 		assertEquals("''=''", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'':{'':''}}");
+		t = Json5Map.ofString("{'':{'':''}}");
 		assertEquals("''=(''='')", s.serialize(t));
 		assertEquals("''=(\n\t''=''\n)", sr.serialize(t));
 
@@ -246,12 +246,12 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value='%0A'", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'\n':'\n'}");
+		t = Json5Map.ofString("{'\n':'\n'}");
 		assertEquals("'%0A'='%0A'", s.serialize(t));
 		assertEquals("'%0A'='%0A'", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'\n':{'\n':'\n'}}");
+		t = Json5Map.ofString("{'\n':{'\n':'\n'}}");
 		assertEquals("'%0A'=('%0A'='%0A')", s.serialize(t));
 		assertEquals("'%0A'=(\n\t'%0A'='%0A'\n)", sr.serialize(t));
 	}
@@ -268,12 +268,12 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=%C2%A2", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'¢':'¢'}");
+		t = Json5Map.ofString("{'¢':'¢'}");
 		assertEquals("%C2%A2=%C2%A2", s.serialize(t));
 		assertEquals("%C2%A2=%C2%A2", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'¢':{'¢':'¢'}}");
+		t = Json5Map.ofString("{'¢':{'¢':'¢'}}");
 		assertEquals("%C2%A2=(%C2%A2=%C2%A2)", s.serialize(t));
 		assertEquals("%C2%A2=(\n\t%C2%A2=%C2%A2\n)", sr.serialize(t));
 
@@ -284,12 +284,12 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=%E2%82%AC", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'€':'€'}");
+		t = Json5Map.ofString("{'€':'€'}");
 		assertEquals("%E2%82%AC=%E2%82%AC", s.serialize(t));
 		assertEquals("%E2%82%AC=%E2%82%AC", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'€':{'€':'€'}}");
+		t = Json5Map.ofString("{'€':{'€':'€'}}");
 		assertEquals("%E2%82%AC=(%E2%82%AC=%E2%82%AC)", s.serialize(t));
 		assertEquals("%E2%82%AC=(\n\t%E2%82%AC=%E2%82%AC\n)", sr.serialize(t));
 
@@ -300,12 +300,12 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=%F0%A4%AD%A2", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'𤭢':'𤭢'}");
+		t = Json5Map.ofString("{'𤭢':'𤭢'}");
 		assertEquals("%F0%A4%AD%A2=%F0%A4%AD%A2", s.serialize(t));
 		assertEquals("%F0%A4%AD%A2=%F0%A4%AD%A2", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'𤭢':{'𤭢':'𤭢'}}");
+		t = Json5Map.ofString("{'𤭢':{'𤭢':'𤭢'}}");
 		assertEquals("%F0%A4%AD%A2=(%F0%A4%AD%A2=%F0%A4%AD%A2)", s.serialize(t));
 		assertEquals("%F0%A4%AD%A2=(\n\t%F0%A4%AD%A2=%F0%A4%AD%A2\n)", sr.serialize(t));
 	}

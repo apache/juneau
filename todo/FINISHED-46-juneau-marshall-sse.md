@@ -1,4 +1,28 @@
-# TODO-46: SSE marshalling — Server-Sent Events serializer/parser for `text/event-stream`
+# FINISHED-46: juneau-marshall-sse
+
+Archived from `TODO-46-juneau-marshall-sse.md` on 2026-05-20.
+
+## What shipped
+
+A new `org.apache.juneau.sse` package inside `juneau-marshall` plus an `org.apache.juneau.marshaller.Sse` helper. The public API is the `SseEvent` bean, the `SseSerializer` / `SseParser` pair (eager), `SseEventReader implements Iterator<SseEvent>, Closeable` for line-driven streaming, and the matching `SseSerializerSession` / `SseParserSession`. The `data` field is a pre-serialized `String` (settled in the plan — no composed sub-serializer). Per-event `Writer.flush()` was verified end-to-end against Jetty using `curl -N`.
+
+## Files delivered
+
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/sse/{SseEvent,SseEventReader,SseSerializer,SseSerializerSession,SseParser,SseParserSession,package-info}.java`
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/marshaller/Sse.java`
+- `juneau-utest/src/test/java/org/apache/juneau/sse/Sse_Test.java` (93 tests after the coverage uplift)
+- `juneau-examples/juneau-examples-rest/.../SseDemoResource.java` (new demo endpoint at `GET /sseDemo/stream`) + `RootResources.java` wiring
+- `juneau-docs/pages/release-notes/9.5.0.md` (Server-Sent Events Support subsection)
+- `juneau-docs/pages/topics/02.43.01.SseBasics.md` (new doc page) + `sidebars.ts`
+
+## Verification
+
+- 93 SSE unit tests pass.
+- Coverage on `org.apache.juneau.sse`: 98% branches / 100% instructions (after the coverage uplift).
+- Per-event flush verified end-to-end via `curl -N`: 10 events at ~500ms intervals, total 4.703s.
+- Full `./scripts/test.py`: 48,561 tests, 0 failures (final verification run after uplift).
+
+## Original plan
 
 Source: filed 2026-05-19 (split out of TODO-40 follow-up discussion).
 

@@ -132,8 +132,8 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 			.urlEnc("foo-application/x-www-form-urlencoded")
 			.urlEncT("foo-application/x-www-form-urlencoded")
 			.urlEncR("foo-application/x-www-form-urlencoded")
-			.msgPack("666F6F2D6F6374616C2F6D73677061636B")
-			.msgPackT("666F6F2D6F6374616C2F6D73677061636B")
+			.msgPack("666F6F2D6170706C69636174696F6E2F6D73677061636B")
+			.msgPackT("666F6F2D6170706C69636174696F6E2F6D73677061636B")
 			.build(),
 		tester(5, "BeanWithSwappedField", ()->new BeanWithSwappedField("x"))
 			.json("{\"f\":x-json}")

@@ -1445,10 +1445,10 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
-	 * 	<c>Accept</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
+	 * 	<c>Accept</c> request header will be set to <js>"application/msgpack"</js> unless overridden
 	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
-	 * 	<c>Content-Type</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
+	 * 	<c>Content-Type</c> request header will be set to <js>"application/msgpack"</js> unless overridden
 	 * 		by {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
 	 * <p>
 	 * 	Identical to calling <c>serializer(MsgPackSerializer.<jk>class</jk>).parser(MsgPackParser.<jk>class</jk>)</c>.

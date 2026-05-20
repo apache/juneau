@@ -401,36 +401,49 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		isClosed = true;
 
 		try {
-			EntityUtils.consumeQuietly(response.getEntity());
-
-			if (! request.isLoggingSuppressed() && (request.isDebug() || client.logRequestsPredicate.test(request, this))) {
-				if (client.logRequests == DetailLevel.SIMPLE) {
-					client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
-				} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {
-					var output = getContent().asString();
-					var sb = new StringBuilder();
-					sb.append("\n=== HTTP Call (outgoing) ======================================================");
-					sb.append("\n=== REQUEST ===\n");
-					sb.append(request.getMethod()).append(" ").append(request.getURI());
-					sb.append("\n---request headers---");
-					request.getHeaders().forEach(x -> sb.append("\n\t").append(x));
-					if (request.hasHttpEntity()) {
-						sb.append("\n---request entity---");
-						var e = request.getHttpEntity();
-						if (nn(e.getContentType()))
-							sb.append("\n\t").append(e.getContentType());
-						if (e.isRepeatable()) {
-							appendRequestContent(sb, e);
+			// Render FULL/SIMPLE request logging BEFORE consuming the underlying entity.
+			//
+			// FULL logging reads the response body via getContent().asString(), which reads
+			// from the same HttpEntity returned by response.getEntity().  If consumeQuietly()
+			// runs first it closes the underlying network input stream, leaving the entity in
+			// a state where any subsequent read throws "Stream closed".  Running logging first
+			// lets it cache the body bytes into ResponseContent.body so both this log render
+			// and any later caller (e.g. user-level getContent().asString()) succeed.
+			//
+			// EntityUtils.consumeQuietly() is invoked in the finally block so the entity is
+			// still drained on the non-logged and exceptional paths.
+			try {
+				if (! request.isLoggingSuppressed() && (request.isDebug() || client.logRequestsPredicate.test(request, this))) {
+					if (client.logRequests == DetailLevel.SIMPLE) {
+						client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
+					} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {
+						var output = getContent().asString();
+						var sb = new StringBuilder();
+						sb.append("\n=== HTTP Call (outgoing) ======================================================");
+						sb.append("\n=== REQUEST ===\n");
+						sb.append(request.getMethod()).append(" ").append(request.getURI());
+						sb.append("\n---request headers---");
+						request.getHeaders().forEach(x -> sb.append("\n\t").append(x));
+						if (request.hasHttpEntity()) {
+							sb.append("\n---request entity---");
+							var e = request.getHttpEntity();
+							if (nn(e.getContentType()))
+								sb.append("\n\t").append(e.getContentType());
+							if (e.isRepeatable()) {
+								appendRequestContent(sb, e);
+							}
 						}
+						sb.append("\n=== RESPONSE ===\n").append(getStatusLine());
+						sb.append("\n---response headers---");
+						for (var h : getAllHeaders())
+							sb.append("\n\t").append(h);
+						sb.append("\n---response content---\n").append(output);
+						sb.append("\n=== END =======================================================================");
+						client.log(client.logRequestsLevel, sb.toString());
 					}
-					sb.append("\n=== RESPONSE ===\n").append(getStatusLine());
-					sb.append("\n---response headers---");
-					for (var h : getAllHeaders())
-						sb.append("\n\t").append(h);
-					sb.append("\n---response content---\n").append(output);
-					sb.append("\n=== END =======================================================================");
-					client.log(client.logRequestsLevel, sb.toString());
 				}
+			} finally {
+				EntityUtils.consumeQuietly(response.getEntity());
 			}
 
 			for (var r : request.interceptors) {

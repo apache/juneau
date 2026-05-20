@@ -313,8 +313,11 @@ public class ThrowableUtils {
 	 * @param maxDepth The maximum number of stack trace elements to print. If <jk>null</jk> or negative, prints all elements.
 	 */
 	public static void printStackTrace(Throwable t, Integer maxDepth) {
-		LOG.warning(t, "Stack trace");
-		printStackTrace(t, new PrintWriter(System.err, true), maxDepth);
+		var sw = new StringWriter();
+		try (var pw = new PrintWriter(sw)) {
+			printStackTrace(t, pw, maxDepth);
+		}
+		LOG.warning(t, sw.toString());
 	}
 
 	/**

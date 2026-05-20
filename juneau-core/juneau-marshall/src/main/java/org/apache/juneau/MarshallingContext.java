@@ -4118,7 +4118,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 					var str = in.toString();
 					Json5List list;
 					if (startsWith(str, '['))
-						list = Json5List.ofText(str).setBeanSession(bs);
+						list = Json5List.ofString(str).setBeanSession(bs);
 					else
 						list = new Json5List((Object[]) splita(str)).setBeanSession(bs);
 					return bs.convertToType(list, outType);
@@ -4133,7 +4133,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			return (in, memberOf, session, args) -> {
 				try {
 					var bs = beanSessionOrDefault(session);
-					var m = Json5Map.ofText(in.toString());
+					var m = Json5Map.ofString(in.toString());
 					m.setBeanSession(bs);
 					return bs.convertToType(m, outType);
 				} catch (Exception e) {
@@ -4197,7 +4197,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 					if (!isProbablyJsonArray(str, false))
 						throw rex("Cannot convert string to {0}: {1}", outType.getName(), str);
 					var elemType = args.length > 0 ? args[0] : null;
-					var l2 = Json5List.ofText(str).setBeanSession(bs);
+					var l2 = Json5List.ofString(str).setBeanSession(bs);
 					var result = newCollection(outType);
 					l2.forEach(x -> result.add(elemType != null && x != null ? converter.to(x, elemType) : x));
 					return result;

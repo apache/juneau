@@ -71,7 +71,7 @@ class DataConversion_Test extends TestBase {
 		assertEquals("{}", m.getString("x"));
 
 		// *** JsonMap ***
-		m.put("x", Json5Map.ofText("{foo:123}"));
+		m.put("x", Json5Map.ofString("{foo:123}"));
 		assertEquals("{foo:123}", m.getString("x"));
 
 		// *** Collection ***
@@ -81,7 +81,7 @@ class DataConversion_Test extends TestBase {
 		assertEquals("[123]", m.getString("x"));
 
 		// *** JsonList ***
-		m.put("x", JsonList.ofText("[123]"));
+		m.put("x", JsonList.ofString("[123]"));
 		assertEquals("[123]", m.getString("x"));
 		assertSize(1, m.getList("x"));
 

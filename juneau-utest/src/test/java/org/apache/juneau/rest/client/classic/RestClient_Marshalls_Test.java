@@ -84,7 +84,7 @@ public class RestClient_Marshalls_Test extends TestBase {
 		x2.post("/a01",bean).header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertStatus(200).getContent().as(Bean.class).check();
 		x3.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertStatus(200).getContent().as(Bean.class).check();
 		x4.post("/a01",bean).header("X-Accept","text/plain").header("X-Content-Type","text/plain").run().assertStatus(200).getContent().as(Bean.class).check();
-		x5.post("/a01",bean).header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").run().assertStatus(200).getContent().as(Bean.class).check();
+		x5.post("/a01",bean).header("X-Accept","application/msgpack").header("X-Content-Type","application/msgpack").run().assertStatus(200).getContent().as(Bean.class).check();
 		x6.post("/a01",bean).header("X-Accept","text/uon").header("X-Content-Type","text/uon").run().assertStatus(200).getContent().as(Bean.class).check();
 		x7.post("/a01",bean).header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertStatus(200).getContent().as(Bean.class).check();
 		x8.post("/a01",bean).header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertStatus(200).getContent().as(Bean.class).check();
@@ -101,7 +101,7 @@ public class RestClient_Marshalls_Test extends TestBase {
 		x.post("/a01",bean).header("X-Accept","text/xml").header("X-Content-Type","text/xml").xml().run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").html().run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("X-Accept","text/plain").header("X-Content-Type","text/plain").plainText().run().assertStatus(200).getContent().as(Bean.class).check();
-		x.post("/a01",bean).header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").msgPack().run().assertStatus(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","application/msgpack").header("X-Content-Type","application/msgpack").msgPack().run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("X-Accept","text/uon").header("X-Content-Type","text/uon").uon().run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").urlEnc().run().assertStatus(200).getContent().as(Bean.class).check();
 		x.post("/a01",bean).header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").openApi().run().assertStatus(200).getContent().as(Bean.class).check();

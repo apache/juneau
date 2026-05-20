@@ -197,7 +197,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static MarshalledList ofText(CharSequence in, Parser p) throws ParseException {
+	public static MarshalledList ofString(CharSequence in, Parser p) throws ParseException {
 		return in == null ? null : new MarshalledList(in, p);
 	}
 
@@ -212,7 +212,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static MarshalledList ofText(java.io.Reader in, Parser p) throws ParseException {
+	public static MarshalledList ofString(java.io.Reader in, Parser p) throws ParseException {
 		return in == null ? null : new MarshalledList(in, p);
 	}
 
@@ -246,8 +246,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public MarshalledList(CharSequence in, Parser p) throws ParseException {
-		this(p == null ? MarshallingContext.DEFAULT_SESSION : p.getMarshallingContext().getSession());
-		assertArg(p != null, "Parser must not be null.");
+		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
 		if (nn(in))
 			p.parseIntoCollection(in, this, bs().object());
 	}
@@ -283,8 +282,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public MarshalledList(java.io.Reader in, Parser p) throws ParseException {
-		this(p == null ? MarshallingContext.DEFAULT_SESSION : p.getMarshallingContext().getSession());
-		assertArg(p != null, "Parser must not be null.");
+		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
 		p.parseIntoCollection(in, this, bs().object());
 	}
 

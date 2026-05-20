@@ -190,7 +190,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static MarshalledMap ofText(CharSequence in, Parser p) throws ParseException {
+	public static MarshalledMap ofString(CharSequence in, Parser p) throws ParseException {
 		return in == null ? null : new MarshalledMap(in, p);
 	}
 
@@ -205,7 +205,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static MarshalledMap ofText(java.io.Reader in, Parser p) throws ParseException {
+	public static MarshalledMap ofString(java.io.Reader in, Parser p) throws ParseException {
 		return in == null ? null : new MarshalledMap(in, p);
 	}
 
@@ -252,8 +252,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public MarshalledMap(CharSequence in, Parser p) throws ParseException {
-		this(p == null ? MarshallingContext.DEFAULT_SESSION : p.getMarshallingContext().getSession());
-		assertArg(p != null, "Parser must not be null.");
+		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
 		if (ne(in))
 			p.parseIntoMap(in, this, bs().string(), bs().object());
 	}
@@ -294,8 +293,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public MarshalledMap(java.io.Reader in, Parser p) throws ParseException {
-		this(p == null ? MarshallingContext.DEFAULT_SESSION : p.getMarshallingContext().getSession());
-		assertArg(p != null, "Parser must not be null.");
+		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
 		p.parseIntoMap(in, this, bs().string(), bs().object());
 	}
 

@@ -49,7 +49,7 @@ import org.apache.juneau.serializer.*;
  * 	Json5List <jv>list</jv> = Json5List.<jsm>of</jsm>();
  *
  * 	<jc>// Construct a list of generic Json5Map objects from JSON5</jc>
- * 	<jv>list</jv> = Json5List.<jsm>ofText</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
+	 * 	<jv>list</jv> = Json5List.<jsm>ofString</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
  *
  * 	<jc>// JSON5 round-trip via toString()</jc>
  * 	String <jv>s</jv> = <jv>list</jv>.toString();  <jc>// "[{foo:'bar'},{baz:'bing'}]"</jc>
@@ -200,7 +200,7 @@ public class Json5List extends MarshalledList {
 	 * @return A new list or <jk>null</jk> if the string was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static Json5List ofText(CharSequence json5) throws ParseException {
+	public static Json5List ofString(CharSequence json5) throws ParseException {
 		return json5 == null ? null : new Json5List(json5);
 	}
 
@@ -214,7 +214,7 @@ public class Json5List extends MarshalledList {
 	@SuppressWarnings({
 		"java:S1168"     // TODO: null input = null output by design. Consider empty Json5List.
 	})
-	public static Json5List ofText(Reader json5) throws ParseException {
+	public static Json5List ofString(Reader json5) throws ParseException {
 		return json5 == null ? null : new Json5List(json5);
 	}
 
@@ -247,7 +247,7 @@ public class Json5List extends MarshalledList {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static Json5List ofText(CharSequence in, Parser p) throws ParseException {
+	public static Json5List ofString(CharSequence in, Parser p) throws ParseException {
 		return in == null ? null : new Json5List(in, p);
 	}
 
@@ -262,7 +262,7 @@ public class Json5List extends MarshalledList {
 	@SuppressWarnings({
 		"java:S1172" // Parameter reserved for future parser context support
 	})
-	public static Json5List ofText(Reader in, Parser p) throws ParseException {
+	public static Json5List ofString(Reader in, Parser p) throws ParseException {
 		return in == null ? null : new Json5List(in);
 	}
 

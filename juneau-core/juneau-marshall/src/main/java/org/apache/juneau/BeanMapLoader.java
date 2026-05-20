@@ -50,7 +50,7 @@ public final class BeanMapLoader {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> BeanMap<T> load(BeanMap<T> m, String input) throws ParseException {
-		m.putAll(Json5Map.ofText(input));
+		m.putAll(Json5Map.ofString(input));
 		return m;
 	}
 
@@ -69,7 +69,7 @@ public final class BeanMapLoader {
 	 * @throws IOException Thrown by the reader.
 	 */
 	public static <T> BeanMap<T> load(BeanMap<T> m, Reader r, ReaderParser p) throws ParseException, IOException {
-		m.putAll(JsonMap.ofText(r, p));
+		m.putAll(JsonMap.ofString(r, p));
 		return m;
 	}
 }

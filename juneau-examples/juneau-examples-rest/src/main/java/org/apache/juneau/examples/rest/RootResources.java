@@ -38,6 +38,7 @@ import org.apache.juneau.serializer.annotation.*;
 		DtoExamples.class,
 		UtilityBeansResource.class,
 		HtmlBeansResource.class,
+		SseDemoResource.class,
 		ConfigResource.class,
 		LogsResource.class,
 		ShutdownResource.class

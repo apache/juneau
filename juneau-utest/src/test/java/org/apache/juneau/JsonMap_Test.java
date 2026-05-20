@@ -37,207 +37,207 @@ class JsonMap_Test extends TestBase {
 	@Test void a01_basic() throws Exception {
 		var in = "{A:'asdf'}";
 
-		checkStep(1, in, Json5Map.ofText(in).getString("A"), "asdf");
+		checkStep(1, in, Json5Map.ofString(in).getString("A"), "asdf");
 
 		in = "{A:{B:'asdf'}}";
-		checkStep(2, in, getDeepString(Json5Map.ofText(in), "A/B"), "asdf");
-		checkStep(3, in, Json5Map.ofText(in).getString("A"), "{B:'asdf'}");
+		checkStep(2, in, getDeepString(Json5Map.ofString(in), "A/B"), "asdf");
+		checkStep(3, in, Json5Map.ofString(in).getString("A"), "{B:'asdf'}");
 
 		in = "{A:{B:'asdf'+\"asdf\"}}";
-		checkStep(4, in, getDeepString(Json5Map.ofText(in), "A/B"), "asdfasdf");
-		checkStep(5, in, Json5Map.ofText(in).getString("A"), "{B:'asdfasdf'}");
+		checkStep(4, in, getDeepString(Json5Map.ofString(in), "A/B"), "asdfasdf");
+		checkStep(5, in, Json5Map.ofString(in).getString("A"), "{B:'asdfasdf'}");
 
 		in = "{A:{B:'asdf' + \n\t \"asdf\"}}";
-		checkStep(6, in, getDeepString(Json5Map.ofText(in), "A/B"), "asdfasdf");
-		checkStep(7, in, Json5Map.ofText(in).getString("A"), "{B:'asdfasdf'}");
+		checkStep(6, in, getDeepString(Json5Map.ofString(in), "A/B"), "asdfasdf");
+		checkStep(7, in, Json5Map.ofString(in).getString("A"), "{B:'asdfasdf'}");
 
 		in = "{A:{B:'asdf\"asdf', C:\"asdf'asdf\", D : \"asdf\\\"asdf\", E: 'asdf\\\'asdf', F:\"asdf\\\'asdf\", G:'asdf\\\"asdf'}}";
-		checkStep(8, in, getDeepString(Json5Map.ofText(in), "A/B"), "asdf\"asdf");
-		checkStep(9, in, getDeepString(Json5Map.ofText(in), "A/C"), "asdf'asdf");
-		checkStep(10, in, getDeepString(Json5Map.ofText(in), "A/D"), "asdf\"asdf");
-		checkStep(11, in, getDeepString(Json5Map.ofText(in), "A/E"), "asdf'asdf");
-		checkStep(12, in, getDeepString(Json5Map.ofText(in), "A/F"), "asdf'asdf");
-		checkStep(13, in, getDeepString(Json5Map.ofText(in), "A/G"), "asdf\"asdf");
+		checkStep(8, in, getDeepString(Json5Map.ofString(in), "A/B"), "asdf\"asdf");
+		checkStep(9, in, getDeepString(Json5Map.ofString(in), "A/C"), "asdf'asdf");
+		checkStep(10, in, getDeepString(Json5Map.ofString(in), "A/D"), "asdf\"asdf");
+		checkStep(11, in, getDeepString(Json5Map.ofString(in), "A/E"), "asdf'asdf");
+		checkStep(12, in, getDeepString(Json5Map.ofString(in), "A/F"), "asdf'asdf");
+		checkStep(13, in, getDeepString(Json5Map.ofString(in), "A/G"), "asdf\"asdf");
 
 		in = "{A:123, B: 123}";
-		checkStep(16, in, Json5Map.ofText(in).getInt("A").toString(), "123");
-		checkStep(17, in, Json5Map.ofText(in).getInt("B").toString(), "123");
+		checkStep(16, in, Json5Map.ofString(in).getInt("A").toString(), "123");
+		checkStep(17, in, Json5Map.ofString(in).getInt("B").toString(), "123");
 
 		in = "{A:true, B: true, C:false, D: false}";
-		checkStep(18, in, Json5Map.ofText(in).getBoolean("A").toString(), "true");
-		checkStep(19, in, Json5Map.ofText(in).getBoolean("B").toString(), "true");
-		checkStep(20, in, Json5Map.ofText(in).getBoolean("C").toString(), "false");
-		checkStep(21, in, Json5Map.ofText(in).getBoolean("D").toString(), "false");
+		checkStep(18, in, Json5Map.ofString(in).getBoolean("A").toString(), "true");
+		checkStep(19, in, Json5Map.ofString(in).getBoolean("B").toString(), "true");
+		checkStep(20, in, Json5Map.ofString(in).getBoolean("C").toString(), "false");
+		checkStep(21, in, Json5Map.ofString(in).getBoolean("D").toString(), "false");
 
 		in = "{'AAA':{\"BBB\":\"CCC\",'DDD':false}}";
-		checkStep(31, in, getDeepString(Json5Map.ofText(in), "AAA/BBB"), "CCC");
-		checkStep(32, in, getDeepBoolean(Json5Map.ofText(in), "AAA/DDD").toString(), "false");
+		checkStep(31, in, getDeepString(Json5Map.ofString(in), "AAA/BBB"), "CCC");
+		checkStep(32, in, getDeepBoolean(Json5Map.ofString(in), "AAA/DDD").toString(), "false");
 
 		in = " \n\n\t {  'AAA' : { \"BBB\" : \"CCC\" , 'DDD' : false } } \n\t";
-		checkStep(33, in, getDeepString(Json5Map.ofText(in), "AAA/BBB"), "CCC");
-		checkStep(34, in, getDeepBoolean(Json5Map.ofText(in), "AAA/DDD").toString(), "false");
+		checkStep(33, in, getDeepString(Json5Map.ofString(in), "AAA/BBB"), "CCC");
+		checkStep(34, in, getDeepBoolean(Json5Map.ofString(in), "AAA/DDD").toString(), "false");
 
 		in = "/*x*/{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(100, in, Json5Map.ofText(in).getString("A"), "B");
+		checkStep(100, in, Json5Map.ofString(in).getString("A"), "B");
 		in = "{/*x*/A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(101, in, Json5Map.ofText(in).getString("A"), "B");
+		checkStep(101, in, Json5Map.ofString(in).getString("A"), "B");
 		in = "{A/*x*/:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(102, in, Json5Map.ofText(in).getString("A"), "B");
+		checkStep(102, in, Json5Map.ofString(in).getString("A"), "B");
 		in = "{A:/*x*/'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(103, in, Json5Map.ofText(in).getString("A"), "B");
+		checkStep(103, in, Json5Map.ofString(in).getString("A"), "B");
 		in = "{A:'/*x*/B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(104, in, Json5Map.ofText(in).getString("A"), "/*x*/B");
+		checkStep(104, in, Json5Map.ofString(in).getString("A"), "/*x*/B");
 		in = "{A:'B/*x*/','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(105, in, Json5Map.ofText(in).getString("A"), "B/*x*/");
+		checkStep(105, in, Json5Map.ofString(in).getString("A"), "B/*x*/");
 		in = "{A:'B'/*x*/,'C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(106, in, Json5Map.ofText(in).getString("A"), "B");
+		checkStep(106, in, Json5Map.ofString(in).getString("A"), "B");
 		in = "{A:'B',/*x*/'C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(107, in, Json5Map.ofText(in).getString("C"), "1");
+		checkStep(107, in, Json5Map.ofString(in).getString("C"), "1");
 		in = "{A:'B','C':/*x*/1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(108, in, Json5Map.ofText(in).getString("C"), "1");
+		checkStep(108, in, Json5Map.ofString(in).getString("C"), "1");
 		in = "{A:'B','C':1/*x*/,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(109, in, Json5Map.ofText(in).getString("C"), "1");
+		checkStep(109, in, Json5Map.ofString(in).getString("C"), "1");
 		in = "{A:'B','C':1,/*x*/\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(110, in, Json5Map.ofText(in).getList("E").getString(0), "1");
+		checkStep(110, in, Json5Map.ofString(in).getList("E").getString(0), "1");
 		in = "{A:'B','C':1,\"/*x*/E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(111, in, Json5Map.ofText(in).getList("/*x*/E").getString(0), "1");
+		checkStep(111, in, Json5Map.ofString(in).getList("/*x*/E").getString(0), "1");
 		in = "{A:'B','C':1,\"E/*x*/\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(112, in, Json5Map.ofText(in).getList("E/*x*/").getString(0), "1");
+		checkStep(112, in, Json5Map.ofString(in).getList("E/*x*/").getString(0), "1");
 		in = "{A:'B','C':1,\"E\"/*x*/:[1,2,3],G:['g1','g2','g3']}";
-		checkStep(113, in, Json5Map.ofText(in).getList("E").getString(0), "1");
+		checkStep(113, in, Json5Map.ofString(in).getList("E").getString(0), "1");
 		in = "{A:'B','C':1,\"E\":/*x*/[1,2,3],G:['g1','g2','g3']}";
-		checkStep(114, in, Json5Map.ofText(in).getList("E").getString(0), "1");
+		checkStep(114, in, Json5Map.ofString(in).getList("E").getString(0), "1");
 		in = "{A:'B','C':1,\"E\":[/*x*/1,2,3],G:['g1','g2','g3']}";
-		checkStep(115, in, Json5Map.ofText(in).getList("E").getString(0), "1");
+		checkStep(115, in, Json5Map.ofString(in).getList("E").getString(0), "1");
 		in = "{A:'B','C':1,\"E\":[1/*x*/,2,3],G:['g1','g2','g3']}";
-		checkStep(116, in, Json5Map.ofText(in).getList("E").getString(0), "1");
+		checkStep(116, in, Json5Map.ofString(in).getList("E").getString(0), "1");
 		in = "{A:'B','C':1,\"E\":[1,/*x*/2,3],G:['g1','g2','g3']}";
-		checkStep(117, in, Json5Map.ofText(in).getList("E").getString(1), "2");
+		checkStep(117, in, Json5Map.ofString(in).getList("E").getString(1), "2");
 		in = "{A:'B','C':1,\"E\":[1,2/*x*/,3],G:['g1','g2','g3']}";
-		checkStep(118, in, Json5Map.ofText(in).getList("E").getString(1), "2");
+		checkStep(118, in, Json5Map.ofString(in).getList("E").getString(1), "2");
 		in = "{A:'B','C':1,\"E\":[1,2,/*x*/3],G:['g1','g2','g3']}";
-		checkStep(119, in, Json5Map.ofText(in).getList("E").getString(2), "3");
+		checkStep(119, in, Json5Map.ofString(in).getList("E").getString(2), "3");
 		in = "{A:'B','C':1,\"E\":[1,2,3]/*x*/,G:['g1','g2','g3']}";
-		checkStep(120, in, Json5Map.ofText(in).getList("E").getString(2), "3");
+		checkStep(120, in, Json5Map.ofString(in).getList("E").getString(2), "3");
 		in = "{A:'B','C':1,\"E\":[1,2,3],/*x*/G:['g1','g2','g3']}";
-		checkStep(121, in, Json5Map.ofText(in).getList("G").getString(0), "g1");
+		checkStep(121, in, Json5Map.ofString(in).getList("G").getString(0), "g1");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:[/*x*/'g1','g2','g3']}";
-		checkStep(122, in, Json5Map.ofText(in).getList("G").getString(0), "g1");
+		checkStep(122, in, Json5Map.ofString(in).getList("G").getString(0), "g1");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['/*x*/g1','g2','g3']}";
-		checkStep(123, in, Json5Map.ofText(in).getList("G").getString(0), "/*x*/g1");
+		checkStep(123, in, Json5Map.ofString(in).getList("G").getString(0), "/*x*/g1");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1'/*x*/,'g2','g3']}";
-		checkStep(124, in, Json5Map.ofText(in).getList("G").getString(0), "g1");
+		checkStep(124, in, Json5Map.ofString(in).getList("G").getString(0), "g1");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1',/*x*/'g2','g3']}";
-		checkStep(125, in, Json5Map.ofText(in).getList("G").getString(1), "g2");
+		checkStep(125, in, Json5Map.ofString(in).getList("G").getString(1), "g2");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2'/*x*/,'g3']}";
-		checkStep(126, in, Json5Map.ofText(in).getList("G").getString(1), "g2");
+		checkStep(126, in, Json5Map.ofString(in).getList("G").getString(1), "g2");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2',/*x*/'g3']}";
-		checkStep(127, in, Json5Map.ofText(in).getList("G").getString(2), "g3");
+		checkStep(127, in, Json5Map.ofString(in).getList("G").getString(2), "g3");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3'/*x*/]}";
-		checkStep(128, in, Json5Map.ofText(in).getList("G").getString(2), "g3");
+		checkStep(128, in, Json5Map.ofString(in).getList("G").getString(2), "g3");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']/*x*/}";
-		checkStep(129, in, Json5Map.ofText(in).getList("G").getString(2), "g3");
+		checkStep(129, in, Json5Map.ofString(in).getList("G").getString(2), "g3");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}/*x*/";
-		checkStep(130, in, Json5Map.ofText(in).getList("G").getString(2), "g3");
+		checkStep(130, in, Json5Map.ofString(in).getList("G").getString(2), "g3");
 
 		in = "/*\tx\t*///\tx\t\n\t/*\tx\t*/{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(201, in, Json5Map.ofText(in).getString("A"), "B");
+		checkStep(201, in, Json5Map.ofString(in).getString("A"), "B");
 		in = "{/*\tx\t*///\tx\t\n\t/*\tx\t*/A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(202, in, Json5Map.ofText(in).getString("A"), "B");
+		checkStep(202, in, Json5Map.ofString(in).getString("A"), "B");
 		in = "{A/*\tx\t*///\tx\t\n\t/*\tx\t*/:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(203, in, Json5Map.ofText(in).getString("A"), "B");
+		checkStep(203, in, Json5Map.ofString(in).getString("A"), "B");
 		in = "{A:/*\tx\t*///\tx\t\n\t/*\tx\t*/'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(204, in, Json5Map.ofText(in).getString("A"), "B");
+		checkStep(204, in, Json5Map.ofString(in).getString("A"), "B");
 		in = "{A:'/*\tx\t*///\tx\t\n\t/*\tx\t*/B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(205, in, Json5Map.ofText(in).getString("A"), "/*\tx\t*///\tx\t\n\t/*\tx\t*/B");
+		checkStep(205, in, Json5Map.ofString(in).getString("A"), "/*\tx\t*///\tx\t\n\t/*\tx\t*/B");
 		in = "{A:'B/*\tx\t*///\tx\t\n\t/*\tx\t*/','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(206, in, Json5Map.ofText(in).getString("A"), "B/*\tx\t*///\tx\t\n\t/*\tx\t*/");
+		checkStep(206, in, Json5Map.ofString(in).getString("A"), "B/*\tx\t*///\tx\t\n\t/*\tx\t*/");
 		in = "{A:'B'/*\tx\t*///\tx\t\n\t/*\tx\t*/,'C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(207, in, Json5Map.ofText(in).getString("A"), "B");
+		checkStep(207, in, Json5Map.ofString(in).getString("A"), "B");
 		in = "{A:'B',/*\tx\t*///\tx\t\n\t/*\tx\t*/'C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(208, in, Json5Map.ofText(in).getString("C"), "1");
+		checkStep(208, in, Json5Map.ofString(in).getString("C"), "1");
 		in = "{A:'B','C':/*\tx\t*///\tx\t\n\t/*\tx\t*/1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(209, in, Json5Map.ofText(in).getString("C"), "1");
+		checkStep(209, in, Json5Map.ofString(in).getString("C"), "1");
 		in = "{A:'B','C':1/*\tx\t*///\tx\t\n\t/*\tx\t*/,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(210, in, Json5Map.ofText(in).getString("C"), "1");
+		checkStep(210, in, Json5Map.ofString(in).getString("C"), "1");
 		in = "{A:'B','C':1,/*\tx\t*///\tx\t\n\t/*\tx\t*/\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(211, in, Json5Map.ofText(in).getList("E").getString(0), "1");
+		checkStep(211, in, Json5Map.ofString(in).getList("E").getString(0), "1");
 		in = "{A:'B','C':1,\"/*\tx\t*///\tx\t\n\t/*\tx\t*/E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(212, in, Json5Map.ofText(in).getList("/*\tx\t*///\tx\t\n\t/*\tx\t*/E").getString(0), "1");
+		checkStep(212, in, Json5Map.ofString(in).getList("/*\tx\t*///\tx\t\n\t/*\tx\t*/E").getString(0), "1");
 		in = "{A:'B','C':1,\"E/*\tx\t*///\tx\t\n\t/*\tx\t*/\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(213, in, Json5Map.ofText(in).getList("E/*\tx\t*///\tx\t\n\t/*\tx\t*/").getString(0), "1");
+		checkStep(213, in, Json5Map.ofString(in).getList("E/*\tx\t*///\tx\t\n\t/*\tx\t*/").getString(0), "1");
 		in = "{A:'B','C':1,\"E\"/*\tx\t*///\tx\t\n\t/*\tx\t*/:[1,2,3],G:['g1','g2','g3']}";
-		checkStep(214, in, Json5Map.ofText(in).getList("E").getString(0), "1");
+		checkStep(214, in, Json5Map.ofString(in).getList("E").getString(0), "1");
 		in = "{A:'B','C':1,\"E\":/*\tx\t*///\tx\t\n\t/*\tx\t*/[1,2,3],G:['g1','g2','g3']}";
-		checkStep(215, in, Json5Map.ofText(in).getList("E").getString(0), "1");
+		checkStep(215, in, Json5Map.ofString(in).getList("E").getString(0), "1");
 		in = "{A:'B','C':1,\"E\":[/*\tx\t*///\tx\t\n\t/*\tx\t*/1,2,3],G:['g1','g2','g3']}";
-		checkStep(216, in, Json5Map.ofText(in).getList("E").getString(0), "1");
+		checkStep(216, in, Json5Map.ofString(in).getList("E").getString(0), "1");
 		in = "{A:'B','C':1,\"E\":[1/*\tx\t*///\tx\t\n\t/*\tx\t*/,2,3],G:['g1','g2','g3']}";
-		checkStep(217, in, Json5Map.ofText(in).getList("E").getString(0), "1");
+		checkStep(217, in, Json5Map.ofString(in).getList("E").getString(0), "1");
 		in = "{A:'B','C':1,\"E\":[1,/*\tx\t*///\tx\t\n\t/*\tx\t*/2,3],G:['g1','g2','g3']}";
-		checkStep(218, in, Json5Map.ofText(in).getList("E").getString(1), "2");
+		checkStep(218, in, Json5Map.ofString(in).getList("E").getString(1), "2");
 		in = "{A:'B','C':1,\"E\":[1,2/*\tx\t*///\tx\t\n\t/*\tx\t*/,3],G:['g1','g2','g3']}";
-		checkStep(219, in, Json5Map.ofText(in).getList("E").getString(1), "2");
+		checkStep(219, in, Json5Map.ofString(in).getList("E").getString(1), "2");
 		in = "{A:'B','C':1,\"E\":[1,2,/*\tx\t*///\tx\t\n\t/*\tx\t*/3],G:['g1','g2','g3']}";
-		checkStep(220, in, Json5Map.ofText(in).getList("E").getString(2), "3");
+		checkStep(220, in, Json5Map.ofString(in).getList("E").getString(2), "3");
 		in = "{A:'B','C':1,\"E\":[1,2,3]/*\tx\t*///\tx\t\n\t/*\tx\t*/,G:['g1','g2','g3']}";
-		checkStep(221, in, Json5Map.ofText(in).getList("E").getString(2), "3");
+		checkStep(221, in, Json5Map.ofString(in).getList("E").getString(2), "3");
 		in = "{A:'B','C':1,\"E\":[1,2,3],/*\tx\t*///\tx\t\n\t/*\tx\t*/G:['g1','g2','g3']}";
-		checkStep(222, in, Json5Map.ofText(in).getList("G").getString(0), "g1");
+		checkStep(222, in, Json5Map.ofString(in).getList("G").getString(0), "g1");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:[/*\tx\t*///\tx\t\n\t/*\tx\t*/'g1','g2','g3']}";
-		checkStep(223, in, Json5Map.ofText(in).getList("G").getString(0), "g1");
+		checkStep(223, in, Json5Map.ofString(in).getList("G").getString(0), "g1");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['/*\tx\t*///\tx\t\n\t/*\tx\t*/g1','g2','g3']}";
-		checkStep(224, in, Json5Map.ofText(in).getList("G").getString(0), "/*\tx\t*///\tx\t\n\t/*\tx\t*/g1");
+		checkStep(224, in, Json5Map.ofString(in).getList("G").getString(0), "/*\tx\t*///\tx\t\n\t/*\tx\t*/g1");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1'/*\tx\t*///\tx\t\n\t/*\tx\t*/,'g2','g3']}";
-		checkStep(225, in, Json5Map.ofText(in).getList("G").getString(0), "g1");
+		checkStep(225, in, Json5Map.ofString(in).getList("G").getString(0), "g1");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1',/*\tx\t*///\tx\t\n\t/*\tx\t*/'g2','g3']}";
-		checkStep(226, in, Json5Map.ofText(in).getList("G").getString(1), "g2");
+		checkStep(226, in, Json5Map.ofString(in).getList("G").getString(1), "g2");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2'/*\tx\t*///\tx\t\n\t/*\tx\t*/,'g3']}";
-		checkStep(227, in, Json5Map.ofText(in).getList("G").getString(1), "g2");
+		checkStep(227, in, Json5Map.ofString(in).getList("G").getString(1), "g2");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2',/*\tx\t*///\tx\t\n\t/*\tx\t*/'g3']}";
-		checkStep(228, in, Json5Map.ofText(in).getList("G").getString(2), "g3");
+		checkStep(228, in, Json5Map.ofString(in).getList("G").getString(2), "g3");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3'/*\tx\t*///\tx\t\n\t/*\tx\t*/]}";
-		checkStep(229, in, Json5Map.ofText(in).getList("G").getString(2), "g3");
+		checkStep(229, in, Json5Map.ofString(in).getList("G").getString(2), "g3");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']/*\tx\t*///\tx\t\n\t/*\tx\t*/}";
-		checkStep(230, in, Json5Map.ofText(in).getList("G").getString(2), "g3");
+		checkStep(230, in, Json5Map.ofString(in).getList("G").getString(2), "g3");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}/*\tx\t*///\tx\t\n\t/*\tx\t*/";
-		checkStep(231, in, Json5Map.ofText(in).getList("G").getString(2), "g3");
+		checkStep(231, in, Json5Map.ofString(in).getList("G").getString(2), "g3");
 
 		in = "{  /*  x  */  //  x  \n  /*  x  */  A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(240, in, Json5Map.ofText(in).getString("A"), "B");
+		checkStep(240, in, Json5Map.ofString(in).getString("A"), "B");
 
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(301, in, Json5Map.ofText(in).getString("A", "default"), "B");
+		checkStep(301, in, Json5Map.ofString(in).getString("A", "default"), "B");
 		in = "{/*A:'B',*/'C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(302, in, Json5Map.ofText(in).getString("A", "default"), "default");
+		checkStep(302, in, Json5Map.ofString(in).getString("A", "default"), "default");
 		in = "{A:'B',/*'C':1,*/\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(303, in, Json5Map.ofText(in).getString("C", "default"), "default");
+		checkStep(303, in, Json5Map.ofString(in).getString("C", "default"), "default");
 		in = "{A:'B','C':1,/*\"E\":[1,2,3],*/G:['g1','g2','g3']}";
-		checkStep(304, in, Json5Map.ofText(in).getString("E", "default"), "default");
+		checkStep(304, in, Json5Map.ofString(in).getString("E", "default"), "default");
 		in = "{A:'B','C':1,\"E\":[/*1,*/2,3],G:['g1','g2','g3']}";
-		checkStep(305, in, Json5Map.ofText(in).getList("E").getString(0), "2");
+		checkStep(305, in, Json5Map.ofString(in).getList("E").getString(0), "2");
 		in = "{A:'B','C':1,\"E\":[1,/*2,*/3],G:['g1','g2','g3']}";
-		checkStep(306, in, Json5Map.ofText(in).getList("E").getString(1), "3");
+		checkStep(306, in, Json5Map.ofString(in).getList("E").getString(1), "3");
 		in = "{A:'B','C':1,\"E\":[1,2/*,3*/],G:['g1','g2','g3']}";
-		checkStep(307, in, Json5Map.ofText(in).getList("E").getString(1), "2");
+		checkStep(307, in, Json5Map.ofString(in).getList("E").getString(1), "2");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:[/*'g1',*/'g2','g3']}";
-		checkStep(308, in, Json5Map.ofText(in).getList("G").getString(0), "g2");
+		checkStep(308, in, Json5Map.ofString(in).getList("G").getString(0), "g2");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1'/*,'g2'*/,'g3']}";
-		checkStep(309, in, Json5Map.ofText(in).getList("G").getString(1), "g3");
+		checkStep(309, in, Json5Map.ofString(in).getList("G").getString(1), "g3");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2'/*,'g3'*/]}";
-		checkStep(310, in, Json5Map.ofText(in).getList("G").getString(1), "g2");
+		checkStep(310, in, Json5Map.ofString(in).getList("G").getString(1), "g2");
 		in = "{A:'B','C':1,\"E\":[1,2,3],G:['g1','g2','g3']}";
-		checkStep(310, in, Json5Map.ofText(in).getList("G").getString(1), "g2");
+		checkStep(310, in, Json5Map.ofString(in).getList("G").getString(1), "g2");
 
 		// Check keys that contain array indexes
 		in = "{A:{B:[{C:'c0'},{C:'c1'},{C:'c2'}]}}";
-		checkStep(401, in, getDeepString(Json5Map.ofText(in), "A/B/0/C"), "c0");
-		checkStep(402, in, getDeepString(Json5Map.ofText(in), "A/B/1/C"), "c1");
-		checkStep(403, in, getDeepString(Json5Map.ofText(in), "A/B/2/C"), "c2");
+		checkStep(401, in, getDeepString(Json5Map.ofString(in), "A/B/0/C"), "c0");
+		checkStep(402, in, getDeepString(Json5Map.ofString(in), "A/B/1/C"), "c1");
+		checkStep(403, in, getDeepString(Json5Map.ofString(in), "A/B/2/C"), "c2");
 
 		// Check extended unicode characters.
 		in = "{'𤭢𤭢':'𤭢𤭢'}";
-		checkStep(1, in, Json5Map.ofText(in).getString("𤭢𤭢"), "𤭢𤭢");
+		checkStep(1, in, Json5Map.ofString(in).getString("𤭢𤭢"), "𤭢𤭢");
 	}
 
 	private static String getDeepString(Json5Map m, String url) {
@@ -261,8 +261,8 @@ class JsonMap_Test extends TestBase {
 	// testComparison
 	//====================================================================================================
 	@Test void a02_comparison() throws Exception {
-		var m1 = Json5Map.ofText("{ firstName:'John', lastName:'Smith', age:123, isDeceased:false }");
-		var m2 = Json5Map.ofText("{ age:123, isDeceased:false, lastName:'Smith', firstName:'John' }");
+		var m1 = Json5Map.ofString("{ firstName:'John', lastName:'Smith', age:123, isDeceased:false }");
+		var m2 = Json5Map.ofString("{ age:123, isDeceased:false, lastName:'Smith', firstName:'John' }");
 
 		assertEquals(m1, m2);
 	}
@@ -271,8 +271,8 @@ class JsonMap_Test extends TestBase {
 	// testParent
 	//====================================================================================================
 	@Test void a03_parent() throws Exception {
-		var m1 = Json5Map.ofText("{a:1}");
-		var m2 = Json5Map.ofText("{b:2}").inner(m1);
+		var m1 = Json5Map.ofString("{a:1}");
+		var m2 = Json5Map.ofString("{b:2}").inner(m1);
 
 		assertEquals(Integer.valueOf(1), m2.getInt("a"));
 	}
@@ -281,13 +281,13 @@ class JsonMap_Test extends TestBase {
 	// testUpdatability
 	//====================================================================================================
 	@Test void a04_updatability() throws Exception {
-		var m = Json5Map.ofText("{a:[{b:'c'}]}");
+		var m = Json5Map.ofString("{a:[{b:'c'}]}");
 		var l = m.getList("a");
 		var m2 = l.getMap(0);
 		m2.put("b", "x");
 		assertBean(m, "a", "[{b=x}]");
 
-		m = Json5Map.ofText("{a:[{b:'c'}]}");
+		m = Json5Map.ofString("{a:[{b:'c'}]}");
 		for (var m3 : m.getList("a").elements(Json5Map.class))
 			m3.put("b", "y");
 
@@ -298,7 +298,7 @@ class JsonMap_Test extends TestBase {
 	// testAtMethods
 	//====================================================================================================
 	@Test void a05_atMethods() throws Exception {
-		var m = Json5Map.ofText("{a:[{b:'c'}]}");
+		var m = Json5Map.ofString("{a:[{b:'c'}]}");
 		var r = m.getAt("a/0/b", String.class);
 
 		assertEquals("c", r);
@@ -319,14 +319,14 @@ class JsonMap_Test extends TestBase {
 	// JsonMap(Reader)
 	//====================================================================================================
 	@Test void a06_fromReader() throws Exception {
-		assertBean(Json5Map.ofText(reader("{foo:'bar'}")), "foo", "bar");
+		assertBean(Json5Map.ofString(reader("{foo:'bar'}")), "foo", "bar");
 	}
 
 	//====================================================================================================
 	// testGetMap
 	//====================================================================================================
 	@Test void a07_getMap() throws Exception {
-		var m = Json5Map.ofText("{a:{1:'true',2:'false'}}");
+		var m = Json5Map.ofString("{a:{1:'true',2:'false'}}");
 		var m2 = m.getMap("a", Integer.class, Boolean.class, null);
 		assertJson("{'1':true,'2':false}", m2);
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
@@ -348,7 +348,7 @@ class JsonMap_Test extends TestBase {
 	// testGetList
 	//====================================================================================================
 	@Test void a08_getList() throws Exception {
-		var m = Json5Map.ofText("{a:['123','456']}");
+		var m = Json5Map.ofString("{a:['123','456']}");
 		var l2 = m.getList("a", Integer.class, null);
 		assertList(l2, "123", "456");
 		assertEquals(Integer.class, l2.iterator().next().getClass());
@@ -368,7 +368,7 @@ class JsonMap_Test extends TestBase {
 	// toX serialization methods
 	//====================================================================================================
 	@Test void a09_toX() {
-		var m = Json5Map.ofText("{b:'2',a:'1'}");
+		var m = Json5Map.ofString("{b:'2',a:'1'}");
 
 		// toJson5 — JSON5 (unquoted keys where possible), same as toString()
 		assertString("{b:'2',a:'1'}", m.toJson5());

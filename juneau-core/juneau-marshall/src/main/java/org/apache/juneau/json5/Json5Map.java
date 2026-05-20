@@ -49,7 +49,7 @@ import org.apache.juneau.serializer.*;
  * 	Json5Map <jv>map</jv> = Json5Map.<jsm>of</jsm>();
  *
  * 	<jc>// Construct a Map from JSON5</jc>
- * 	<jv>map</jv> = Json5Map.<jsm>ofText</jsm>(<js>"{a:'A',b:{c:'C',d:123}}"</js>);
+ * 	<jv>map</jv> = Json5Map.<jsm>ofString</jsm>(<js>"{a:'A',b:{c:'C',d:123}}"</js>);
  *
  * 	<jc>// JSON5 round-trip via toString()</jc>
  * 	String <jv>s</jv> = <jv>map</jv>.toString();  <jc>// "{a:'A',b:{c:'C',d:123}}"</jc>
@@ -201,7 +201,7 @@ public class Json5Map extends MarshalledMap {
 	 * @return A new map or <jk>null</jk> if the string was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static Json5Map ofText(CharSequence json5) throws ParseException {
+	public static Json5Map ofString(CharSequence json5) throws ParseException {
 		return json5 == null ? null : new Json5Map(json5);
 	}
 
@@ -213,7 +213,7 @@ public class Json5Map extends MarshalledMap {
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static Json5Map ofText(Reader json5) throws ParseException {
+	public static Json5Map ofString(Reader json5) throws ParseException {
 		return json5 == null ? null : new Json5Map(json5);
 	}
 
@@ -229,7 +229,7 @@ public class Json5Map extends MarshalledMap {
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static Json5Map ofText(CharSequence in, Parser p) throws ParseException {
+	public static Json5Map ofString(CharSequence in, Parser p) throws ParseException {
 		return in == null ? null : new Json5Map(in, p);
 	}
 
@@ -244,7 +244,7 @@ public class Json5Map extends MarshalledMap {
 	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static Json5Map ofText(Reader in, Parser p) throws ParseException {
+	public static Json5Map ofString(Reader in, Parser p) throws ParseException {
 		return in == null ? null : new Json5Map(in, p);
 	}
 

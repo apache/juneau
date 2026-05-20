@@ -1,4 +1,26 @@
-# TODO-47: Additional bean modules for JSON-dialect REST formats
+# FINISHED-47: Additional bean modules for JSON-dialect REST formats
+
+Archived from `TODO-47-additional-bean-modules.md` on 2026-05-20.
+
+## What shipped
+
+Three new bean modules under `juneau-bean/`: `juneau-bean-hal`, `juneau-bean-jsonapi`, and `juneau-bean-jsonpatch`. All three are pure JSON-dialect bean modules — no marshaller surface, the existing `JsonSerializer` / `JsonParser` handle the wire format. HAL uses field-level `@BeanProp("_links") @Swap(HalLinkOrArraySwap.class)` for the single-vs-array union. JSON:API uses `@BeanProp("links") @Swap(JsonApiLinkOrStringSwap.class)` for the link-or-URL-string union; `JsonApiResource.type` is plain `String`, not a discriminator. JSON Patch uses `@Marshalled(typePropertyName="op", dictionary={...})` polymorphic dispatch with `JsonPatch extends LinkedList<JsonPatchOperation>` as the top-level array.
+
+## Files delivered
+
+- HAL: `juneau-bean/juneau-bean-hal/{pom.xml, src/main/java/org/apache/juneau/bean/hal/{HalResource,HalLink,HalLinkArray,HalResourceArray,HalLinkOrArraySwap,HalResourceOrArraySwap,package-info}.java}`
+- JSON:API: `juneau-bean/juneau-bean-jsonapi/{pom.xml, src/main/java/org/apache/juneau/bean/jsonapi/{JsonApiDocument (with validate()),JsonApiResource,JsonApiResourceIdentifier,JsonApiRelationship,JsonApiError,JsonApiErrorSource,JsonApiLink,JsonApiVersion,JsonApiLinkOrStringSwap,package-info}.java}`
+- JSON Patch: `juneau-bean/juneau-bean-jsonpatch/{pom.xml, src/main/java/org/apache/juneau/bean/jsonpatch/{JsonPatchOperation (abstract),AddOp,RemoveOp,ReplaceOp,MoveOp,CopyOp,TestOp,JsonPatch (extends LinkedList),package-info}.java}`
+- Shared: `juneau-bean/pom.xml` (3 module entries), `juneau-utest/pom.xml` (3 test deps), `juneau-utest/src/test/java/org/apache/juneau/bean/{hal,jsonapi,jsonpatch}/*_RoundTrip_Test.java`
+- Docs: 3 release-notes sections in `juneau-docs/pages/release-notes/9.5.0.md`, plus 3 doc pages (`04.10.JuneauBeanHal.md`, `04.11.JuneauBeanJsonApi.md`, `04.12.JuneauBeanJsonPatch.md`) and 3 sidebar entries
+
+## Verification
+
+- All three modules: 100% branches, 100% instructions coverage.
+- 31 + 37 + 19 = 87 tests pass.
+- Full `./scripts/test.py`: 51,198 tests, 0 failures (final verification run).
+
+## Original plan
 
 Source: filed 2026-05-19 (split out of TODO-40 follow-up discussion).
 
@@ -73,11 +95,11 @@ Plus the resource's own arbitrary fields appear at the top level alongside `_lin
 
 - Package: `org.apache.juneau.bean.jsonapi`
 - `package-info.java` (overview).
-- `JsonApiDocument` — top-level container.
-- `JsonApiResource` — resource object (with `id`, `type`, `attributes`, `relationships`, `links`, `meta`).
-- `JsonApiResourceIdentifier` — slim form used inside relationship linkage.
-- `JsonApiRelationship`.
-- `JsonApiError` + `JsonApiErrorSource`.
+- `JsonApiDocument` — top-level container (with `data`, `errors`, `meta`, `jsonapi`, `links`, `included`).
+- `JsonApiResource` — resource object (with `type`, `id`, `attributes`, `relationships`, `links`, `meta`).
+- `JsonApiResourceIdentifier` — slim form used inside relationship linkage (`type`, `id`, `meta`).
+- `JsonApiRelationship` (with `data` linkage, `links`, `meta`).
+- `JsonApiError` (with `id`, `links`, `status`, `code`, `title`, `detail`, `source`, `meta`) + `JsonApiErrorSource` (with `pointer`, `parameter`, `header`).
 - `JsonApiLink` — link object with `href` (required URI), plus optional `rel`, `describedby` (URI), `title`, `type` (media-type hint), `hreflang`, and `meta` (`Map<String,Object>`).
 - `JsonApiLinkOrStringSwap` — custom `ObjectSwap` modeled on `JsonSchema.BooleanOrSchemaSwap` (same precedent as HAL's swaps). Applied at the field level on every `links` member, since JSON:API permits each value to be either a JSON string URL or a `JsonApiLink` object.
 - `JsonApiMeta` is **not** a class — `meta` is always `Map<String,Object>` per spec.

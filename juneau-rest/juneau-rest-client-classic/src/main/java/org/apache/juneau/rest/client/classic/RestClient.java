@@ -3703,10 +3703,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
-		 * 	<c>Accept</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
+		 * 	<c>Accept</c> request header will be set to <js>"application/msgpack"</js> unless overridden
 		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
-		 * 	<c>Content-Type</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
+		 * 	<c>Content-Type</c> request header will be set to <js>"application/msgpack"</js> unless overridden
 		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
@@ -6582,7 +6582,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		try {
 			var req = request(method, uri, ne(content));
 			if (nn(headers))
-				Json5Map.ofText(headers).forEach((k, v) -> req.header(stringHeader(k, s(v))));
+				Json5Map.ofString(headers).forEach((k, v) -> req.header(stringHeader(k, s(v))));
 			if (ne(content))
 				req.contentString(content);
 			return req;

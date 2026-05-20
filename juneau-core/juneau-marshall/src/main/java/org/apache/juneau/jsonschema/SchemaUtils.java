@@ -78,7 +78,7 @@ public class SchemaUtils {
 				return JsonMap.of("ignore", true);
 			if (! isProbablyJsonObject(s, true))
 				s = "{" + s + "}";
-			return new JsonMap(Json5Map.ofText(s));
+			return new JsonMap(Json5Map.ofString(s));
 		}
 		if (o instanceof JsonMap o2)
 			return o2;
@@ -105,7 +105,7 @@ public class SchemaUtils {
 			return null;
 		if (! isProbablyJsonObject(s, true))
 			s = "{" + s + "}";
-		return new JsonMap(Json5Map.ofText(s));
+		return new JsonMap(Json5Map.ofString(s));
 	}
 
 	/**

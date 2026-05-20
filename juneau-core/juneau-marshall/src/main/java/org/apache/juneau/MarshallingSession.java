@@ -1374,7 +1374,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 
 	/**
 	 * Bridge implementation of {@link BeanSession#parseToMap(CharSequence)} that delegates to
-	 * {@link Json5Map#ofText(CharSequence)} paired with this session.
+	 * {@link Json5Map#ofString(CharSequence)} paired with this session.
 	 *
 	 * <p>
 	 * Used by {@link BeanPropertyMeta#setPropertyValue} to parse a {@link CharSequence} into a {@link Map} when
@@ -1390,8 +1390,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @return The parsed {@link Json5Map}.
 	 */
 	@Override /* BeanSession */
-	public final java.util.Map<?,?> parseToMap(CharSequence value) {
-		return Json5Map.ofText(value).session(this);
+	public final Map<?,?> parseToMap(CharSequence value) {
+		return Json5Map.ofString(value).session(this);
 	}
 
 	/**
@@ -1411,7 +1411,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @return The parsed {@link Json5List}.
 	 */
 	@Override /* BeanSession */
-	public final java.util.Collection<?> parseToList(CharSequence value) {
+	public final Collection<?> parseToList(CharSequence value) {
 		return new Json5List(value).setBeanSession(this);
 	}
 

@@ -43,26 +43,26 @@ class UonSerializer_Test {
 		assertEquals("a", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{a:'a'}");
+		t = Json5Map.ofString("{a:'a'}");
 		assertEquals("(a=a)", s.serialize(t));
 		assertEquals("(a=a)", su.serialize(t));
 		assertEquals("(\n\ta=a\n)", sr.serialize(t));
 
 		// Simple map
 		// Top level
-		t = Json5Map.ofText("{a:'b',c:123,d:false,e:true,f:null}");
+		t = Json5Map.ofString("{a:'b',c:123,d:false,e:true,f:null}");
 		assertEquals("(a=b,c=123,d=false,e=true,f=null)", s.serialize(t));
 		assertEquals("(a=b,c=123,d=false,e=true,f=null)", su.serialize(t));
 		assertEquals("(\n\ta=b,\n\tc=123,\n\td=false,\n\te=true,\n\tf=null\n)", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{a:{a:'b',c:123,d:false,e:true,f:null}}");
+		t = Json5Map.ofString("{a:{a:'b',c:123,d:false,e:true,f:null}}");
 		assertEquals("(a=(a=b,c=123,d=false,e=true,f=null))", s.serialize(t));
 		assertEquals("(a=(a=b,c=123,d=false,e=true,f=null))", su.serialize(t));
 		assertEquals("(\n\ta=(\n\t\ta=b,\n\t\tc=123,\n\t\td=false,\n\t\te=true,\n\t\tf=null\n\t)\n)", sr.serialize(t));
 
 		// Simple map with primitives as literals
-		t = Json5Map.ofText("{a:'b',c:'123',d:'false',e:'true',f:'null'}");
+		t = Json5Map.ofString("{a:'b',c:'123',d:'false',e:'true',f:'null'}");
 		assertEquals("(a=b,c='123',d='false',e='true',f='null')", s.serialize(t));
 		assertEquals("(a=b,c='123',d='false',e='true',f='null')", su.serialize(t));
 		assertEquals("(\n\ta=b,\n\tc='123',\n\td='false',\n\te='true',\n\tf='null'\n)", sr.serialize(t));
@@ -76,13 +76,13 @@ class UonSerializer_Test {
 		assertEquals("null", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{null:null}");
+		t = Json5Map.ofString("{null:null}");
 		assertEquals("(null=null)", s.serialize(t));
 		assertEquals("(null=null)", su.serialize(t));
 		assertEquals("(\n\tnull=null\n)", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{null:{null:null}}");
+		t = Json5Map.ofString("{null:{null:null}}");
 		assertEquals("(null=(null=null))", s.serialize(t));
 		assertEquals("(null=(null=null))", su.serialize(t));
 		assertEquals("(\n\tnull=(\n\t\tnull=null\n\t)\n)", sr.serialize(t));
@@ -95,7 +95,7 @@ class UonSerializer_Test {
 		assertEquals("@()", sr.serialize(t));
 
 		// 2nd level in map
-		t = Json5Map.ofText("{x:[]}");
+		t = Json5Map.ofString("{x:[]}");
 		assertEquals("(x=@())", s.serialize(t));
 		assertEquals("(x=@())", su.serialize(t));
 		assertEquals("(\n\tx=@()\n)", sr.serialize(t));
@@ -114,7 +114,7 @@ class UonSerializer_Test {
 		assertEquals("@(\n\t''\n)", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{x:['']}");
+		t = Json5Map.ofString("{x:['']}");
 		assertEquals("(x=@(''))", s.serialize(t));
 		assertEquals("(x=@(''))", su.serialize(t));
 		assertEquals("(\n\tx=@(\n\t\t''\n\t)\n)", sr.serialize(t));
@@ -133,7 +133,7 @@ class UonSerializer_Test {
 		assertEquals("\u0000", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'\u0000':'\u0000'}");
+		t = Json5Map.ofString("{'\u0000':'\u0000'}");
 		assertEquals("(%00=%00)", s.serialize(t));
 		assertEquals("(\u0000=\u0000)", su.serialize(t));
 		assertEquals("(\n\t\u0000=\u0000\n)", sr.serialize(t));
@@ -146,7 +146,7 @@ class UonSerializer_Test {
 		assertEquals("false", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{x:false}");
+		t = Json5Map.ofString("{x:false}");
 		assertEquals("(x=false)", s.serialize(t));
 		assertEquals("(x=false)", su.serialize(t));
 		assertEquals("(\n\tx=false\n)", sr.serialize(t));
@@ -159,7 +159,7 @@ class UonSerializer_Test {
 		assertEquals("123", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{x:123}");
+		t = Json5Map.ofString("{x:123}");
 		assertEquals("(x=123)", s.serialize(t));
 		assertEquals("(x=123)", su.serialize(t));
 		assertEquals("(\n\tx=123\n)", sr.serialize(t));
@@ -172,7 +172,7 @@ class UonSerializer_Test {
 		assertEquals("x;/?:@-_.!*~'", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{x:'x;/?:@-_.!*\\''}");
+		t = Json5Map.ofString("{x:'x;/?:@-_.!*\\''}");
 		assertEquals("(x=x;/?:@-_.!*~')", s.serialize(t));
 		assertEquals("(x=x;/?:@-_.!*~')", su.serialize(t));
 		assertEquals("(\n\tx=x;/?:@-_.!*~'\n)", sr.serialize(t));
@@ -185,7 +185,7 @@ class UonSerializer_Test {
 		assertEquals("x{}|\\^[]`<>#%\"&+", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'x{}|\\\\^[]`<>#%\"&+':'x{}|\\\\^[]`<>#%\"&+'}");
+		t = Json5Map.ofString("{'x{}|\\\\^[]`<>#%\"&+':'x{}|\\\\^[]`<>#%\"&+'}");
 		assertEquals("(x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B)", s.serialize(t));
 		assertEquals("(x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+)", su.serialize(t));
 		assertEquals("(\n\tx{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+\n)", sr.serialize(t));
@@ -199,14 +199,14 @@ class UonSerializer_Test {
 
 		// 2nd level
 		// Note behavior on serializeParams() is different since 2nd-level is top level.
-		t = Json5Map.ofText("{'x$,()~':'x$,()~'}");
+		t = Json5Map.ofString("{'x$,()~':'x$,()~'}");
 		assertEquals("('x$,()~~'='x$,()~~')", s.serialize(t));
 		assertEquals("('x$,()~~'='x$,()~~')", su.serialize(t));
 		assertEquals("(\n\t'x$,()~~'='x$,()~~'\n)", sr.serialize(t));
 
 		// 3rd level
 		// Note behavior on serializeParams().
-		t = Json5Map.ofText("{'x$,()~':{'x$,()~':'x$,()~'}}");
+		t = Json5Map.ofString("{'x$,()~':{'x$,()~':'x$,()~'}}");
 		assertEquals("('x$,()~~'=('x$,()~~'='x$,()~~'))", s.serialize(t));
 		assertEquals("('x$,()~~'=('x$,()~~'='x$,()~~'))", su.serialize(t));
 		assertEquals("(\n\t'x$,()~~'=(\n\t\t'x$,()~~'='x$,()~~'\n\t)\n)", sr.serialize(t));
@@ -220,13 +220,13 @@ class UonSerializer_Test {
 		assertEquals("'x='", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'x=':'x='}");
+		t = Json5Map.ofString("{'x=':'x='}");
 		assertEquals("('x='='x=')", s.serialize(t));
 		assertEquals("('x='='x=')", su.serialize(t));
 		assertEquals("(\n\t'x='='x='\n)", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'x=':{'x=':'x='}}");
+		t = Json5Map.ofString("{'x=':{'x=':'x='}}");
 		assertEquals("('x='=('x='='x='))", s.serialize(t));
 		assertEquals("('x='=('x='='x='))", su.serialize(t));
 		assertEquals("(\n\t'x='=(\n\t\t'x='='x='\n\t)\n)", sr.serialize(t));
@@ -239,7 +239,7 @@ class UonSerializer_Test {
 		assertEquals("'()'", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'()':'()'}");
+		t = Json5Map.ofString("{'()':'()'}");
 		assertEquals("('()'='()')", s.serialize(t));
 		assertEquals("('()'='()')", su.serialize(t));
 		assertEquals("(\n\t'()'='()'\n)", sr.serialize(t));
@@ -252,7 +252,7 @@ class UonSerializer_Test {
 		assertEquals("$a", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{$a:'$a'}");
+		t = Json5Map.ofString("{$a:'$a'}");
 		assertEquals("($a=$a)", s.serialize(t));
 		assertEquals("($a=$a)", su.serialize(t));
 		assertEquals("(\n\t$a=$a\n)", sr.serialize(t));
@@ -265,13 +265,13 @@ class UonSerializer_Test {
 		assertEquals("''", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'':''}");
+		t = Json5Map.ofString("{'':''}");
 		assertEquals("(''='')", s.serialize(t));
 		assertEquals("(''='')", su.serialize(t));
 		assertEquals("(\n\t''=''\n)", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'':{'':''}}");
+		t = Json5Map.ofString("{'':{'':''}}");
 		assertEquals("(''=(''=''))", s.serialize(t));
 		assertEquals("(''=(''=''))", su.serialize(t));
 		assertEquals("(\n\t''=(\n\t\t''=''\n\t)\n)", sr.serialize(t));
@@ -284,13 +284,13 @@ class UonSerializer_Test {
 		assertEquals("'\n'", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'\n':'\n'}");
+		t = Json5Map.ofString("{'\n':'\n'}");
 		assertEquals("('%0A'='%0A')", s.serialize(t));
 		assertEquals("('\n'='\n')", su.serialize(t));
 		assertEquals("(\n\t'\n'='\n'\n)", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'\n':{'\n':'\n'}}");
+		t = Json5Map.ofString("{'\n':{'\n':'\n'}}");
 		assertEquals("('%0A'=('%0A'='%0A'))", s.serialize(t));
 		assertEquals("('\n'=('\n'='\n'))", su.serialize(t));
 		assertEquals("(\n\t'\n'=(\n\t\t'\n'='\n'\n\t)\n)", sr.serialize(t));
@@ -309,13 +309,13 @@ class UonSerializer_Test {
 		assertEquals("¢", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'¢':'¢'}");
+		t = Json5Map.ofString("{'¢':'¢'}");
 		assertEquals("(%C2%A2=%C2%A2)", s.serialize(t));
 		assertEquals("(¢=¢)", su.serialize(t));
 		assertEquals("(\n\t¢=¢\n)", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'¢':{'¢':'¢'}}");
+		t = Json5Map.ofString("{'¢':{'¢':'¢'}}");
 		assertEquals("(%C2%A2=(%C2%A2=%C2%A2))", s.serialize(t));
 		assertEquals("(¢=(¢=¢))", su.serialize(t));
 		assertEquals("(\n\t¢=(\n\t\t¢=¢\n\t)\n)", sr.serialize(t));
@@ -328,13 +328,13 @@ class UonSerializer_Test {
 		assertEquals("€", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'€':'€'}");
+		t = Json5Map.ofString("{'€':'€'}");
 		assertEquals("(%E2%82%AC=%E2%82%AC)", s.serialize(t));
 		assertEquals("(€=€)", su.serialize(t));
 		assertEquals("(\n\t€=€\n)", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'€':{'€':'€'}}");
+		t = Json5Map.ofString("{'€':{'€':'€'}}");
 		assertEquals("(%E2%82%AC=(%E2%82%AC=%E2%82%AC))", s.serialize(t));
 		assertEquals("(€=(€=€))", su.serialize(t));
 		assertEquals("(\n\t€=(\n\t\t€=€\n\t)\n)", sr.serialize(t));
@@ -347,13 +347,13 @@ class UonSerializer_Test {
 		assertEquals("𤭢", sr.serialize(t));
 
 		// 2nd level
-		t = Json5Map.ofText("{'𤭢':'𤭢'}");
+		t = Json5Map.ofString("{'𤭢':'𤭢'}");
 		assertEquals("(%F0%A4%AD%A2=%F0%A4%AD%A2)", s.serialize(t));
 		assertEquals("(𤭢=𤭢)", su.serialize(t));
 		assertEquals("(\n\t𤭢=𤭢\n)", sr.serialize(t));
 
 		// 3rd level
-		t = Json5Map.ofText("{'𤭢':{'𤭢':'𤭢'}}");
+		t = Json5Map.ofString("{'𤭢':{'𤭢':'𤭢'}}");
 		assertEquals("(%F0%A4%AD%A2=(%F0%A4%AD%A2=%F0%A4%AD%A2))", s.serialize(t));
 		assertEquals("(𤭢=(𤭢=𤭢))", su.serialize(t));
 		assertEquals("(\n\t𤭢=(\n\t\t𤭢=𤭢\n\t)\n)", sr.serialize(t));

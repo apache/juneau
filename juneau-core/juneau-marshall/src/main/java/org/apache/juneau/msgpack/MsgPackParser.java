@@ -35,7 +35,12 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  *
  * <h5 class='topic'>Media types</h5>
  *
- * Handles <c>Content-Type</c> types:  <bc>octal/msgpack</bc>
+ * Handles <c>Content-Type</c> types:  <bc>application/msgpack, octal/msgpack</bc>
+ *
+ * <p>
+ * The legacy media type <bc>octal/msgpack</bc> is retained as a backward-compatibility alias so
+ * that existing wire values still decode. New consumers should prefer the RFC-standard
+ * <bc>application/msgpack</bc> value.
  *
  * <h5 class='topic'>Description</h5>
  * <p>
@@ -93,7 +98,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			consumes("octal/msgpack");
+			consumes("application/msgpack,octal/msgpack");
 		}
 
 		/**

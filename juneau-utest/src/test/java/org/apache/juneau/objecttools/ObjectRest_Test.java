@@ -174,11 +174,11 @@ class ObjectRest_Test extends TestBase {
 		assertEquals("{}", s);
 
 		// Make sure doing a PUT against "" or "/" replaces the root object.
-		var m2 = Json5Map.ofText("{x:1}");
+		var m2 = Json5Map.ofString("{x:1}");
 		model.put("", m2);
 		s = model.get("").toString();
 		assertEquals("{x:1}", s);
-		m2 = Json5Map.ofText("{x:2}");
+		m2 = Json5Map.ofString("{x:2}");
 		model.put("/", m2);
 		s = model.get("").toString();
 		assertEquals("{x:2}", s);
@@ -325,8 +325,8 @@ class ObjectRest_Test extends TestBase {
 	//====================================================================================================
 	@Test void f01_getMethods() throws Exception {
 		var model = ObjectRest.create(new A());
-		var l = Json5List.ofText("[{a:'b'}]");
-		var m = Json5Map.ofText("{a:'b'}");
+		var l = Json5List.ofString("[{a:'b'}]");
+		var m = Json5Map.ofString("{a:'b'}");
 		var jm = new JsonMap(m);
 		var jl = new JsonList(l);
 
@@ -719,10 +719,10 @@ class ObjectRest_Test extends TestBase {
 			f3a = 3L;
 			f4a = true;
 			try {
-				f5 = Json5Map.ofText("{f5a:'a'}");
-				f6 = Json5List.ofText("[{f6a:'a'}]");
-				f7 = Json5Map.ofText("{f5a:'a'}");
-				f8 = Json5List.ofText("[{f6a:'a'}]");
+				f5 = Json5Map.ofString("{f5a:'a'}");
+				f6 = Json5List.ofString("[{f6a:'a'}]");
+				f7 = Json5Map.ofString("{f5a:'a'}");
+				f8 = Json5List.ofString("[{f6a:'a'}]");
 			} catch (ParseException e) {
 				throw new RuntimeException(e);
 			}

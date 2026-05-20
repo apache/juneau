@@ -47,6 +47,7 @@ import org.apache.juneau.http.header.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({"java:S3008", "java:S1948", "java:S1165"})
 public class BasicHttpException extends RuntimeException implements HttpResponseMessage {
 
 	private static final long serialVersionUID = 1L;

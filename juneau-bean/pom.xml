@@ -33,10 +33,14 @@
 	<modules>
 		<module>juneau-bean-atom</module>
 		<module>juneau-bean-common</module>
+		<module>juneau-bean-hal</module>
 		<module>juneau-bean-html5</module>
+		<module>juneau-bean-jsonapi</module>
+		<module>juneau-bean-jsonpatch</module>
 		<module>juneau-bean-jsonschema</module>
 		<module>juneau-bean-mcp</module>
 		<module>juneau-bean-openapi-v3</module>
+		<module>juneau-bean-rfc7807</module>
 		<module>juneau-bean-swagger-v2</module>
 	</modules>
 

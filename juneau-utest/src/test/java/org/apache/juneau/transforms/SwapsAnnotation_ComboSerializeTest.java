@@ -428,7 +428,7 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	@Swap(value=SwapHtml.class, mediaTypes={"text/html"})
 	@Swap(value=SwapUon.class, mediaTypes={"text/uon"})
 	@Swap(value=SwapUrlEncoding.class, mediaTypes={"application/x-www-form-urlencoded"})
-	@Swap(value=SwapMsgPack.class, mediaTypes={"octal/msgpack"})
+	@Swap(value=SwapMsgPack.class, mediaTypes={"application/msgpack"})
 	@Swap(value=SwapRdfXml.class, mediaTypes={"text/xml+rdf"})
 	public static class TestMediaTypeLiterals {}
 
