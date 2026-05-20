@@ -49,7 +49,57 @@ class Json5List_Test extends TestBase {
 	}
 
 	@Test void a04_factoryOfStringNullInput() throws Exception {
-		assertNull(Json5List.ofString((CharSequence)null));
+		var l = Json5List.ofString((CharSequence)null);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(Json5List.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
+	}
+
+	@Test void a04c_factoryOfStringNullReader() throws Exception {
+		var l = Json5List.ofString((Reader)null);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(Json5List.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
+	}
+
+	@Test void a04d_factoryOfStringNullCharSequenceWithParser() throws Exception {
+		var l = Json5List.ofString((CharSequence)null, Json5Parser.DEFAULT);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(Json5List.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
+	}
+
+	@Test void a04e_factoryOfStringNullReaderWithParser() throws Exception {
+		var l = Json5List.ofString((Reader)null, Json5Parser.DEFAULT);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(Json5List.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
+	}
+
+	@Test void a04f_factoryOfJson5OrCdlNullInput() throws Exception {
+		var l = Json5List.ofJson5OrCdl(null);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(Json5List.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
+	}
+
+	@Test void a04g_factoryOfJson5OrCdlEmptyInput() throws Exception {
+		var l = Json5List.ofJson5OrCdl("");
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(Json5List.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
 	}
 
 	@Test void a04b_ofTextAliasStillWorks() throws Exception {

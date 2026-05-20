@@ -188,32 +188,29 @@ public class MarshalledList extends LinkedList<Object> {
 	/**
 	 * Construct a list initialized by parsing the specified string with the specified parser.
 	 *
-	 * @param in
-	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param in The input being parsed.
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new list (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static MarshalledList ofString(CharSequence in, Parser p) throws ParseException {
-		return in == null ? null : new MarshalledList(in, p);
+		return in == null ? new MarshalledList() : new MarshalledList(in, p);
 	}
 
 	/**
 	 * Construct a list initialized by parsing the specified reader with the specified parser.
 	 *
-	 * @param in
-	 * 	The reader containing the input being parsed.
+	 * @param in The reader containing the input being parsed.
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new list (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static MarshalledList ofString(java.io.Reader in, Parser p) throws ParseException {
-		return in == null ? null : new MarshalledList(in, p);
+		return in == null ? new MarshalledList() : new MarshalledList(in, p);
 	}
 
 	transient MarshallingSession session = null;

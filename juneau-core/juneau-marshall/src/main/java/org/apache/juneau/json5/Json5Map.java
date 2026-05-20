@@ -198,11 +198,11 @@ public class Json5Map extends MarshalledMap {
 	 *
 	 * @param json5
 	 * 	The JSON5 text to parse.
-	 * @return A new map or <jk>null</jk> if the string was null.
+	 * @return A new map (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static Json5Map ofString(CharSequence json5) throws ParseException {
-		return json5 == null ? null : new Json5Map(json5);
+		return json5 == null ? new Json5Map() : new Json5Map(json5);
 	}
 
 	/**
@@ -210,27 +210,25 @@ public class Json5Map extends MarshalledMap {
 	 *
 	 * @param json5
 	 * 	The reader containing JSON5 text to parse.
-	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new map (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static Json5Map ofString(Reader json5) throws ParseException {
-		return json5 == null ? null : new Json5Map(json5);
+		return json5 == null ? new Json5Map() : new Json5Map(json5);
 	}
 
 	/**
 	 * Construct a map initialized with the specified string and parser.
 	 *
-	 * @param in
-	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param in The input being parsed.
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>If <jk>null</jk>, uses {@link Json5Parser}.
-	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new map (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static Json5Map ofString(CharSequence in, Parser p) throws ParseException {
-		return in == null ? null : new Json5Map(in, p);
+		return in == null ? new Json5Map() : new Json5Map(in, p);
 	}
 
 	/**
@@ -241,11 +239,11 @@ public class Json5Map extends MarshalledMap {
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>If <jk>null</jk>, uses {@link Json5Parser}.
-	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new map (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static Json5Map ofString(Reader in, Parser p) throws ParseException {
-		return in == null ? null : new Json5Map(in, p);
+		return in == null ? new Json5Map() : new Json5Map(in, p);
 	}
 
 	/**

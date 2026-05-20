@@ -1386,8 +1386,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * values written as <c>{a:'b'}</c>) continue to parse — the strict-JSON {@link JsonMap} retargeting in v9.5
 	 * would otherwise break those call sites.
 	 *
-	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
-	 * @return The parsed {@link Json5Map}.
+	 * @param value The JSON-formatted character sequence to parse.
+	 * @return The parsed {@link Json5Map} (empty if {@code value} is <jk>null</jk>), never <jk>null</jk>.
 	 */
 	@Override /* BeanSession */
 	public final Map<?,?> parseToMap(CharSequence value) {

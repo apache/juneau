@@ -70,7 +70,21 @@ class MarshalledMap_Test extends TestBase {
 	}
 
 	@Test void a06_parseViaOfStringNullInput() throws Exception {
-		assertNull(MarshalledMap.ofString((CharSequence)null, Json5Parser.DEFAULT));
+		var m = MarshalledMap.ofString((CharSequence)null, Json5Parser.DEFAULT);
+		assertNotNull(m);
+		assertTrue(m.isEmpty());
+		assertEquals(MarshalledMap.class, m.getClass());
+		m.put("x", 1);
+		assertEquals(1, m.size());
+	}
+
+	@Test void a06c_parseViaOfStringNullReader() throws Exception {
+		var m = MarshalledMap.ofString((java.io.Reader)null, Json5Parser.DEFAULT);
+		assertNotNull(m);
+		assertTrue(m.isEmpty());
+		assertEquals(MarshalledMap.class, m.getClass());
+		m.put("x", 1);
+		assertEquals(1, m.size());
 	}
 
 	@Test void a06b_ofTextAliasStillWorks() throws Exception {

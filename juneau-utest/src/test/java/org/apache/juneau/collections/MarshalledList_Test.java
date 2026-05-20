@@ -70,7 +70,21 @@ class MarshalledList_Test extends TestBase {
 	}
 
 	@Test void a06_parseViaOfStringNullInput() throws Exception {
-		assertNull(MarshalledList.ofString((CharSequence)null, Json5Parser.DEFAULT));
+		var l = MarshalledList.ofString((CharSequence)null, Json5Parser.DEFAULT);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(MarshalledList.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
+	}
+
+	@Test void a06c_parseViaOfStringNullReader() throws Exception {
+		var l = MarshalledList.ofString((java.io.Reader)null, Json5Parser.DEFAULT);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(MarshalledList.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
 	}
 
 	@Test void a06b_ofTextAliasStillWorks() throws Exception {

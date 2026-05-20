@@ -181,32 +181,29 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Construct a map initialized by parsing the specified string with the specified parser.
 	 *
-	 * @param in
-	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param in The input being parsed.
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new map (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static MarshalledMap ofString(CharSequence in, Parser p) throws ParseException {
-		return in == null ? null : new MarshalledMap(in, p);
+		return in == null ? new MarshalledMap() : new MarshalledMap(in, p);
 	}
 
 	/**
 	 * Construct a map initialized by parsing the specified reader with the specified parser.
 	 *
-	 * @param in
-	 * 	The reader containing the input being parsed.
+	 * @param in The reader containing the input being parsed.
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>Must not be <jk>null</jk>.
-	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new map (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static MarshalledMap ofString(java.io.Reader in, Parser p) throws ParseException {
-		return in == null ? null : new MarshalledMap(in, p);
+		return in == null ? new MarshalledMap() : new MarshalledMap(in, p);
 	}
 
 	/*

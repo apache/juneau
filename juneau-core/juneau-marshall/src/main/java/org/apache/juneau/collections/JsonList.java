@@ -233,11 +233,11 @@ public class JsonList extends MarshalledList {
 	 * @param json
 	 * 	The JSON text to parse.
 	 * 	<br>Can be normal or simplified JSON.
-	 * @return A new list or <jk>null</jk> if the string was null.
+	 * @return A new list (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static JsonList ofString(CharSequence json) throws ParseException {
-		return json == null ? null : new JsonList(json);
+		return json == null ? new JsonList() : new JsonList(json);
 	}
 
 	/**
@@ -246,14 +246,11 @@ public class JsonList extends MarshalledList {
 	 * @param json
 	 * 	The reader containing JSON text to parse.
 	 * 	<br>Can contain normal or simplified JSON.
-	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new list (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // TODO: null input = null output by design. Consider empty JsonList.
-	})
 	public static JsonList ofString(Reader json) throws ParseException {
-		return json == null ? null : new JsonList(json);
+		return json == null ? new JsonList() : new JsonList(json);
 	}
 
 	/**
@@ -263,15 +260,12 @@ public class JsonList extends MarshalledList {
 	 * The type of string is auto-detected.
 	 *
 	 * @param s The string to parse.
-	 * @return The parsed string.
+	 * @return A new list (empty if the input was <jk>null</jk> or empty), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // TODO: null for empty input. Consider empty JsonList.
-	})
 	public static JsonList ofJsonOrCdl(String s) throws ParseException {
 		if (Utils.e(s))  // NOAI
-			return null;
+			return new JsonList();
 		if (! isProbablyJsonArray(s, true))
 			return new JsonList((Object[])splita(s.trim(), ','));
 		return new JsonList(s);
@@ -280,17 +274,15 @@ public class JsonList extends MarshalledList {
 	/**
 	 * Construct a list initialized with the specified string.
 	 *
-	 * @param in
-	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param in The input being parsed.
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
-	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new list (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static JsonList ofString(CharSequence in, Parser p) throws ParseException {
-		return in == null ? null : new JsonList(in, p);
+		return in == null ? new JsonList() : new JsonList(in, p);
 	}
 
 	/**
@@ -302,14 +294,14 @@ public class JsonList extends MarshalledList {
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
-	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new list (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	@SuppressWarnings({
 		"java:S1172" // Parameter reserved for future parser context support
 	})
 	public static JsonList ofString(Reader in, Parser p) throws ParseException {
-		return in == null ? null : new JsonList(in);
+		return in == null ? new JsonList() : new JsonList(in);
 	}
 
 	/**

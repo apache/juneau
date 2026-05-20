@@ -59,21 +59,20 @@ public class SchemaUtils {
 	 * Parses a generic object as JSON and converts it to an {@link JsonMap}.
 	 *
 	 * @param o The object to convert.
-	 * @return The parsed contents.
+	 * @return
+	 * 	The parsed contents (a new empty {@link JsonMap} if {@code o} is <jk>null</jk> or an empty string),
+	 * 	never <jk>null</jk>.
 	 * @throws ParseException Invalid JSON encountered.
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // TODO: null = not configured. Consider empty JsonMap for config parsing.
-	})
 	public static JsonMap parseMap(Object o) throws ParseException {
 		if (o == null)
-			return null;
+			return new JsonMap();
 		if (o instanceof String[] o2)
 			o = joinnl(o2);
 		if (o instanceof String o2) {
 			var s = o2;
 			if (s.isEmpty())
-				return null;
+				return new JsonMap();
 			if ("IGNORE".equalsIgnoreCase(s))
 				return JsonMap.of("ignore", true);
 			if (! isProbablyJsonObject(s, true))
@@ -91,18 +90,17 @@ public class SchemaUtils {
 	 * Concatenates and parses a string array as a JSON object.
 	 *
 	 * @param ss The array to concatenate and parse.
-	 * @return The parsed contents.
+	 * @return
+	 * 	The parsed contents (a new empty {@link JsonMap} if the array is empty or joins to an empty string),
+	 * 	never <jk>null</jk>.
 	 * @throws ParseException Invalid JSON encountered.
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // TODO: null = not configured. Consider empty JsonMap.
-	})
 	public static JsonMap parseMap(String[] ss) throws ParseException {
 		if (ss.length == 0)
-			return null;
+			return new JsonMap();
 		String s = joinnl(ss);
 		if (s.isEmpty())
-			return null;
+			return new JsonMap();
 		if (! isProbablyJsonObject(s, true))
 			s = "{" + s + "}";
 		return new JsonMap(Json5Map.ofString(s));
@@ -112,19 +110,18 @@ public class SchemaUtils {
 	 * Concatenates and parses a string array as JSON array or comma-delimited list.
 	 *
 	 * @param ss The array to concatenate and parse.
-	 * @return The parsed contents.
+	 * @return
+	 * 	The parsed contents (a new empty mutable {@link Set} if the array is empty or joins to an empty string),
+	 * 	never <jk>null</jk>.
 	 * @throws ParseException Invalid JSON encountered.
 	 */
-	@SuppressWarnings({
-		"java:S1168"     // TODO: null = not configured. Consider empty set.
-	})
 	public static Set<String> parseSet(String[] ss) throws ParseException {
+		Set<String> set = set();
 		if (ss.length == 0)
-			return null;
+			return set;
 		String s = joinnl(ss);
 		if (s.isEmpty())
-			return null;
-		Set<String> set = set();
+			return set;
 		Json5List.ofJson5OrCdl(s).forEach(x -> set.add(x.toString()));
 		return set;
 	}

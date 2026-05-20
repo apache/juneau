@@ -57,7 +57,39 @@ class Json5Map_Test extends TestBase {
 	}
 
 	@Test void a04_factoryOfStringNullInput() throws Exception {
-		assertNull(Json5Map.ofString((CharSequence)null));
+		var m = Json5Map.ofString((CharSequence)null);
+		assertNotNull(m);
+		assertTrue(m.isEmpty());
+		assertEquals(Json5Map.class, m.getClass());
+		m.put("x", 1);
+		assertEquals(1, m.size());
+	}
+
+	@Test void a04c_factoryOfStringNullReader() throws Exception {
+		var m = Json5Map.ofString((Reader)null);
+		assertNotNull(m);
+		assertTrue(m.isEmpty());
+		assertEquals(Json5Map.class, m.getClass());
+		m.put("x", 1);
+		assertEquals(1, m.size());
+	}
+
+	@Test void a04d_factoryOfStringNullCharSequenceWithParser() throws Exception {
+		var m = Json5Map.ofString((CharSequence)null, Json5Parser.DEFAULT);
+		assertNotNull(m);
+		assertTrue(m.isEmpty());
+		assertEquals(Json5Map.class, m.getClass());
+		m.put("x", 1);
+		assertEquals(1, m.size());
+	}
+
+	@Test void a04e_factoryOfStringNullReaderWithParser() throws Exception {
+		var m = Json5Map.ofString((Reader)null, Json5Parser.DEFAULT);
+		assertNotNull(m);
+		assertTrue(m.isEmpty());
+		assertEquals(Json5Map.class, m.getClass());
+		m.put("x", 1);
+		assertEquals(1, m.size());
 	}
 
 	@Test void a04b_ofTextAliasStillWorks() throws Exception {

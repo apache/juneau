@@ -21,8 +21,11 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.junit.jupiter.api.*;
 
@@ -149,5 +152,62 @@ class JsonList_Test extends TestBase {
 
 		// toString(WriterSerializer) — generalized
 		assertString("['b','a']", l.toString(org.apache.juneau.json5.Json5Serializer.DEFAULT));
+	}
+
+	//====================================================================================================
+	// Empty-instead-of-null returns on null/empty input.
+	//====================================================================================================
+	@Test void a08_factoryOfStringNullCharSequence() throws Exception {
+		var l = JsonList.ofString((CharSequence)null);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(JsonList.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
+	}
+
+	@Test void a09_factoryOfStringNullReader() throws Exception {
+		var l = JsonList.ofString((Reader)null);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(JsonList.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
+	}
+
+	@Test void a10_factoryOfStringNullCharSequenceWithParser() throws Exception {
+		var l = JsonList.ofString((CharSequence)null, JsonParser.DEFAULT);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(JsonList.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
+	}
+
+	@Test void a11_factoryOfStringNullReaderWithParser() throws Exception {
+		var l = JsonList.ofString((Reader)null, JsonParser.DEFAULT);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(JsonList.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
+	}
+
+	@Test void a12_factoryOfJsonOrCdlNullInput() throws Exception {
+		var l = JsonList.ofJsonOrCdl(null);
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(JsonList.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
+	}
+
+	@Test void a13_factoryOfJsonOrCdlEmptyInput() throws Exception {
+		var l = JsonList.ofJsonOrCdl("");
+		assertNotNull(l);
+		assertTrue(l.isEmpty());
+		assertEquals(JsonList.class, l.getClass());
+		l.add("x");
+		assertEquals(1, l.size());
 	}
 }

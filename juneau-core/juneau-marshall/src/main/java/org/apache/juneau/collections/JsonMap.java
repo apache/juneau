@@ -232,11 +232,11 @@ public class JsonMap extends MarshalledMap {
 	 * @param json
 	 * 	The JSON text to parse.
 	 * 	<br>Can be normal or simplified JSON.
-	 * @return A new map or <jk>null</jk> if the string was null.
+	 * @return A new map (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static JsonMap ofString(CharSequence json) throws ParseException {
-		return json == null ? null : new JsonMap(json);
+		return json == null ? new JsonMap() : new JsonMap(json);
 	}
 
 	/**
@@ -245,27 +245,25 @@ public class JsonMap extends MarshalledMap {
 	 * @param json
 	 * 	The reader containing JSON text to parse.
 	 * 	<br>Can contain normal or simplified JSON.
-	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new map (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static JsonMap ofString(Reader json) throws ParseException {
-		return json == null ? null : new JsonMap(json);
+		return json == null ? new JsonMap() : new JsonMap(json);
 	}
 
 	/**
 	 * Construct a map initialized with the specified string.
 	 *
-	 * @param in
-	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
+	 * @param in The input being parsed.
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
-	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new map (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static JsonMap ofString(CharSequence in, Parser p) throws ParseException {
-		return in == null ? null : new JsonMap(in, p);
+		return in == null ? new JsonMap() : new JsonMap(in, p);
 	}
 
 	/**
@@ -277,11 +275,11 @@ public class JsonMap extends MarshalledMap {
 	 * @param p
 	 * 	The parser to use to parse the input.
 	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
-	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @return A new map (empty if the input was <jk>null</jk>), never <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static JsonMap ofString(Reader in, Parser p) throws ParseException {
-		return in == null ? null : new JsonMap(in, p);
+		return in == null ? new JsonMap() : new JsonMap(in, p);
 	}
 
 	/**

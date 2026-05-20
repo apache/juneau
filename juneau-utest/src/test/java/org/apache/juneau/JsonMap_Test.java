@@ -20,8 +20,11 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.objecttools.*;
 import org.junit.jupiter.api.*;
@@ -379,5 +382,44 @@ class JsonMap_Test extends TestBase {
 
 		// toString(WriterSerializer) — generalized
 		assertString("{b:'2',a:'1'}", m.toString(org.apache.juneau.json5.Json5Serializer.DEFAULT));
+	}
+
+	//====================================================================================================
+	// Empty-instead-of-null returns on null/empty input.
+	//====================================================================================================
+	@Test void a10_factoryOfStringNullCharSequence() throws Exception {
+		var m = JsonMap.ofString((CharSequence)null);
+		assertNotNull(m);
+		assertTrue(m.isEmpty());
+		assertEquals(JsonMap.class, m.getClass());
+		m.put("x", 1);
+		assertEquals(1, m.size());
+	}
+
+	@Test void a11_factoryOfStringNullReader() throws Exception {
+		var m = JsonMap.ofString((Reader)null);
+		assertNotNull(m);
+		assertTrue(m.isEmpty());
+		assertEquals(JsonMap.class, m.getClass());
+		m.put("x", 1);
+		assertEquals(1, m.size());
+	}
+
+	@Test void a12_factoryOfStringNullCharSequenceWithParser() throws Exception {
+		var m = JsonMap.ofString((CharSequence)null, JsonParser.DEFAULT);
+		assertNotNull(m);
+		assertTrue(m.isEmpty());
+		assertEquals(JsonMap.class, m.getClass());
+		m.put("x", 1);
+		assertEquals(1, m.size());
+	}
+
+	@Test void a13_factoryOfStringNullReaderWithParser() throws Exception {
+		var m = JsonMap.ofString((Reader)null, JsonParser.DEFAULT);
+		assertNotNull(m);
+		assertTrue(m.isEmpty());
+		assertEquals(JsonMap.class, m.getClass());
+		m.put("x", 1);
+		assertEquals(1, m.size());
 	}
 }
