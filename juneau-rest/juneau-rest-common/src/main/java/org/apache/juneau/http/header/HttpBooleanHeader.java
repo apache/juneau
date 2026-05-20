@@ -40,6 +40,28 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 	private final Supplier<?> lazySupplier;
 	private final int lazyMode;
 
+	/**
+	 * Creates an {@link HttpBooleanHeader} by parsing the given wire-format value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param wireValue Wire value (e.g. {@code "true"}). May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpBooleanHeader of(String name, String wireValue) {
+		return new HttpBooleanHeader(name, wireValue);
+	}
+
+	/**
+	 * Creates an {@link HttpBooleanHeader} with the given typed value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param typedValue The boolean value. May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpBooleanHeader of(String name, Boolean typedValue) {
+		return new HttpBooleanHeader(name, typedValue);
+	}
+
 	protected HttpBooleanHeader(String name, String wireValue) {
 		super(name, wireValue);
 		this.value = e(wireValue) ? null : Boolean.valueOf(bool(wireValue));

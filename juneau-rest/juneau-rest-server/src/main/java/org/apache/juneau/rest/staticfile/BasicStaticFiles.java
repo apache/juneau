@@ -19,18 +19,18 @@ package org.apache.juneau.rest.staticfile;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.http.classic.HttpHeaders.*;
-import static org.apache.juneau.http.classic.HttpResources.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.http.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.classic.resource.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.resource.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -63,7 +63,7 @@ public class BasicStaticFiles implements StaticFiles {
 		return new StaticFiles.Builder(beanStore);
 	}
 
-	private final Header[] headers;
+	private final HttpHeader[] headers;
 	private final MimeTypeDetector mimeTypes;
 	private final int hashCode;
 
@@ -84,7 +84,7 @@ public class BasicStaticFiles implements StaticFiles {
 			.cp(beanStore.getBean(ResourceSupplier.class).orElseThrow(() -> new IllegalStateException("ResourceSupplier not found")).getResourceClass(), "/htdocs", true)
 			.caching(1_000_000)
 			.exclude("(?i).*\\.(class|properties)")
-			.headers(cacheControl("max-age=86400, public"))
+			.headers(CacheControl.of("max-age=86400, public"))
 		);
 		// @formatter:on
 	}
@@ -95,7 +95,7 @@ public class BasicStaticFiles implements StaticFiles {
 	 * @param builder The builder object.
 	 */
 	public BasicStaticFiles(StaticFiles.Builder builder) {
-		this.headers = builder.headers.toArray(new Header[builder.headers.size()]);
+		this.headers = builder.headers.toArray(new HttpHeader[builder.headers.size()]);
 		this.mimeTypes = builder.mimeTypes;
 		this.hashCode = h(hashCode(), headers);
 		this.fileFinder = builder.fileFinder.build();
@@ -108,7 +108,7 @@ public class BasicStaticFiles implements StaticFiles {
 	 * Can be used when subclassing and overriding the {@link #resolve(String, Locale)} method.
 	 */
 	protected BasicStaticFiles() {
-		this.headers = new Header[0];
+		this.headers = new HttpHeader[0];
 		this.mimeTypes = null;
 		this.hashCode = h(hashCode(), headers);
 		this.fileFinder = null;
@@ -150,7 +150,14 @@ public class BasicStaticFiles implements StaticFiles {
 			Optional<InputStream> is = getStream(path, locale);
 			if (! is.isPresent())
 				return opte();
-			return opt(streamResource(is.get()).setHeaders(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path)))).addHeaders(headers));
+			var ct = mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path));
+			var hdrs = new ArrayList<HttpHeader>();
+			if (ct != null)
+				hdrs.add(ContentType.of(ct));
+			for (var h : headers)
+				if (h != null)
+					hdrs.add(h);
+			return opt(HttpResourceBean.of(StreamBody.of(is.get()), hdrs));
 		} catch (IOException e) {
 			throw new InternalServerError(e);
 		}

@@ -22,10 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.net.*;
 import java.util.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.classic.*;
-import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 
 class SeeOtherRoot_Test extends TestBase {
@@ -43,87 +42,39 @@ class SeeOtherRoot_Test extends TestBase {
 	@Test void a03_fluentSetters() throws URISyntaxException {
 		var x = new SeeOtherRoot();
 
-		// Test setContent(String) returns same instance
 		assertSame(x, x.setContent("test content"));
 
-		// Test setContent(HttpEntity) returns same instance
-		HttpEntity entity = x.getEntity();
-		assertSame(x, x.setContent(entity));
+		assertSame(x, x.setHeader(HttpStringHeader.of("X-Test", "test-value")));
+		assertSame(x, x.setHeader("X-Test2", "test-value2"));
 
-		// Test setHeader2(Header) returns same instance
-		assertSame(x, x.setHeader2(BasicHeader.of("X-Test", "test-value")));
-
-		// Test setHeader2(String, String) returns same instance
-		assertSame(x, x.setHeader2("X-Test2", "test-value2"));
-
-		// Test setHeaders(List<Header>) returns same instance
-		List<Header> headerList = l(BasicHeader.of("X-Header1", "value1"));
+		List<HttpHeader> headerList = l(HttpStringHeader.of("X-Header1", "value1"));
 		assertSame(x, x.setHeaders(headerList));
-		assertEquals("value1", x.getFirstHeader("X-Header1").getValue());
 
-		// Test setHeaders(HeaderList) returns same instance
-		var headers = HeaderList.of(BasicHeader.of("X-Header2", "value2"));
-		assertSame(x, x.setHeaders(headers));
+		assertSame(x, x.setHeaders(HttpStringHeader.of("X-Header3", "value3")));
 
-		// Test setHeaders2(Header...) returns same instance
-		assertSame(x, x.setHeaders2(BasicHeader.of("X-Header3", "value3")));
+		assertSame(x, x.setLocale(Locale.US));
 
-		// Test setLocale2 returns same instance
-		assertSame(x, x.setLocale2(Locale.US));
-
-		// Test setLocation(String) returns same instance
 		assertSame(x, x.setLocation("servlet:/newpath"));
-
-		// Test setLocation(URI) returns same instance
 		assertSame(x, x.setLocation(new URI("http://example.com")));
 
-		// Test setProtocolVersion returns same instance
-		assertSame(x, x.setProtocolVersion(new ProtocolVersion("HTTP", 1, 1)));
+		assertSame(x, x.setProtocolVersion(HttpProtocolVersion.of("HTTP", 1, 1)));
 
-		// Test setReasonPhrase2 returns same instance
-		assertSame(x, x.setReasonPhrase2("Custom Reason"));
+		assertSame(x, x.setReasonPhrase("Custom Reason"));
 
-		// Test setReasonPhraseCatalog returns same instance
-		assertSame(x, x.setReasonPhraseCatalog(null));
+		assertSame(x, x.setStatusCode(303));
 
-		// Test setStatusCode2 returns same instance
-		assertSame(x, x.setStatusCode2(303));
-
-		// Test setStatusLine returns same instance
-		assertSame(x, x.setStatusLine(BasicStatusLine.create(303, "See Other")));
-
-		// Test setUnmodifiable returns same instance (must be last - makes bean read-only)
 		assertSame(x, x.setUnmodifiable());
 	}
 
 	@Test void a04_fluentChaining() {
-		// Test multiple fluent calls can be chained
 		var x = new SeeOtherRoot()
-			.setHeaders(l(BasicHeader.of("X-Chain", "chained")))
+			.setHeaders(l(HttpStringHeader.of("X-Chain", "chained")))
 			.setContent("Redirect content");
 
-		assertEquals("chained", x.getFirstHeader("X-Chain").getValue());
+		assertEquals("chained", x.getHeaders().stream().filter(h -> "X-Chain".equalsIgnoreCase(h.getName())).findFirst().orElseThrow().getValue());
 	}
 
 	@Test void a05_reusableInstance() {
-		// Test that INSTANCE is available and usable
 		assertNotNull(SeeOtherRoot.INSTANCE);
-	}
-
-	@Test void a06_copy() {
-		// Test that copy() returns correct type
-		var x = new SeeOtherRoot();
-
-		SeeOtherRoot copy = x.copy();
-
-		// Verify it's a different instance
-		assertNotSame(x, copy);
-
-		// Verify it returns the correct type (not SeeOther)
-		assertInstanceOf(SeeOtherRoot.class, copy);
-
-		// Verify location is copied (default is servlet:/)
-		assertNotNull(copy.getFirstHeader("Location"));
-		assertTrue(copy.getFirstHeader("Location").getValue().contains("servlet:/"));
 	}
 }

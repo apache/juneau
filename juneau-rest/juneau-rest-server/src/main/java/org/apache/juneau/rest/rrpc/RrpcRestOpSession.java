@@ -23,9 +23,9 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.lang.reflect.*;
 
-import org.apache.http.*;
-import org.apache.juneau.http.classic.remote.RrpcInterfaceMethodMeta;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.remote.RrpcInterfaceMethodMeta;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 
@@ -162,7 +162,7 @@ public class RrpcRestOpSession extends RestOpSession {
 	}
 
 	@Override /* Overridden from RestOpSession */
-	public RrpcRestOpSession status(StatusLine value) {
+	public RrpcRestOpSession status(HttpStatusLine value) {
 		super.status(value);
 		return this;
 	}

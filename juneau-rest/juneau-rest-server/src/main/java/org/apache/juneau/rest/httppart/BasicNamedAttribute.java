@@ -22,10 +22,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.classic.part.*;
 
 /**
  * Implementation of a named object.
@@ -42,7 +40,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value.
-	 * @return A new {@link BasicPart} object.
+	 * @return A new {@link BasicNamedAttribute} object.
 	 */
 	public static BasicNamedAttribute of(String name, Object value) {
 		return new BasicNamedAttribute(name, value);
@@ -56,7 +54,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value supplier.
-	 * @return A new {@link BasicPart} object.
+	 * @return A new {@link BasicNamedAttribute} object.
 	 */
 	public static BasicNamedAttribute of(String name, Supplier<?> value) {
 		return new BasicNamedAttribute(name, value);
@@ -66,7 +64,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 * Creates a {@link BasicNamedAttribute} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
 	 *
 	 * @param pair The pair string.
-	 * @return A new {@link NameValuePair} object.
+	 * @return A new {@link BasicNamedAttribute} object.
 	 */
 	public static BasicNamedAttribute ofPair(String pair) {
 		if (pair == null)
@@ -136,10 +134,10 @@ public class BasicNamedAttribute implements NamedAttribute {
 		return o;
 	}
 
-	@Override /* Overridden from NameValuePair */
+	@Override /* Overridden from NamedAttribute */
 	public String getName() { return name; }
 
-	@Override /* Overridden from NameValuePair */
+	@Override /* Overridden from NamedAttribute */
 	public Object getValue() { return unwrap(value); }
 
 	/**

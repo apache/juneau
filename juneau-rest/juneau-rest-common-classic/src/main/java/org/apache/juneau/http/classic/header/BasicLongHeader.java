@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.classic.header;
 
+import static org.apache.juneau.commons.utils.StringUtils.parseLong;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -204,11 +205,9 @@ public class BasicLongHeader extends BasicHeader {
 	}
 
 	private static Long parse(String value) {
-		try {
-			return value == null ? null : Long.parseLong(value);
-		} catch (NumberFormatException e) {
-			throw rex(e, "Value ''{0}'' could not be parsed as a long.", value);
-		}
+		if (value == null)
+			return null;
+		return parseLong(value, () -> illegalArg("Value ''{0}'' could not be parsed as a long.", value));
 	}
 
 	private Long value() {

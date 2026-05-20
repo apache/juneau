@@ -26,7 +26,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
@@ -54,7 +54,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='jc'>{@link ContentEncoding}
  * 	<li class='jc'>{@link ContentLength}
  * 	<li class='jc'>{@link ContentType}
- * 	<li class='jc'>{@link org.apache.juneau.http.classic.header.Date}
+ * 	<li class='jc'>{@link org.apache.juneau.http.header.Date}
  * 	<li class='jc'>{@link Debug}
  * 	<li class='jc'>{@link Expect}
  * 	<li class='jc'>{@link Forwarded}
@@ -109,20 +109,41 @@ public class HeaderArg implements RestOpArg {
 	 * @return A new {@link HeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
 	public static HeaderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
-		if ((! paramInfo.getParameterType().is(Value.class)) && AP.has(Header.class, paramInfo))
+		if (paramInfo.getParameterType().is(Value.class))
+			return null;
+		if (AP.has(Header.class, paramInfo) || nameFromTypeNameField(paramInfo) != null)
 			return new HeaderArg(paramInfo, annotations);
 		return null;
 	}
 
 	private static Optional<String> findName(ParameterInfo pi) {
 		// @formatter:off
-		return AP.find(Header.class, pi)
+		var fromAnnotation = AP.find(Header.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
 			.filter(x -> isAnyNotBlank(x.value(), x.name()))
 			.findFirst()
 			.map(x -> firstNonBlank(x.name(), x.value()));
 		// @formatter:on
+		if (fromAnnotation.isPresent())
+			return fromAnnotation;
+		return Optional.ofNullable(nameFromTypeNameField(pi));
+	}
+
+	private static String nameFromTypeNameField(ParameterInfo pi) {
+		try {
+			var c = pi.getParameterType().inner();
+			if (c == null)
+				return null;
+			var f = c.getField("NAME");
+			if (java.lang.reflect.Modifier.isStatic(f.getModifiers()) && f.getType() == String.class) {
+				var v = f.get(null);
+				return v == null ? null : v.toString();
+			}
+		} catch (ReflectiveOperationException ignored) {
+			// Type has no NAME field; not a recognized typed-header bean.
+		}
+		return null;
 	}
 
 	private static Optional<String> findDef(ParameterInfo pi) {

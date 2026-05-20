@@ -18,8 +18,8 @@ package org.apache.juneau.rest.rrpc;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.http.classic.remote.RrpcInterfaceMeta;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.remote.RrpcInterfaceMeta;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 
 import jakarta.servlet.*;

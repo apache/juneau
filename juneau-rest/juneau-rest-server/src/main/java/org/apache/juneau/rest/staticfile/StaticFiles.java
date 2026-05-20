@@ -21,11 +21,10 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.nio.file.*;
 import java.util.*;
 
-import org.apache.http.*;
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.classic.resource.*;
+import org.apache.juneau.http.*;
 
 /**
  * API for retrieving localized static files from either the classpath or file system.
@@ -42,7 +41,7 @@ public interface StaticFiles extends FileFinder {
 	public static class Builder {
 
 		private final BeanStore beanStore;
-		List<Header> headers;
+		List<HttpHeader> headers;
 		MimeTypeDetector mimeTypes;
 		FileFinder.Builder fileFinder;
 
@@ -135,7 +134,7 @@ public interface StaticFiles extends FileFinder {
 		 * @param headers The headers to add.
 		 * @return This object.
 		 */
-		public Builder headers(Header...headers) {
+		public Builder headers(HttpHeader...headers) {
 			addAll(this.headers, headers);
 			return this;
 		}

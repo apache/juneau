@@ -16,16 +16,9 @@
  */
 package org.apache.juneau.rest.beans;
 
-import java.net.*;
-import java.util.*;
-
-import org.apache.http.*;
-import org.apache.http.Header;
 import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.http.classic.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.response.*;
 
 /**
  * Convenience subclass of {@link SeeOther} for redirecting a response to the servlet root.
@@ -67,108 +60,7 @@ public class SeeOtherRoot extends SeeOther {
 	 * @param content Message to send as the response.
 	 */
 	public SeeOtherRoot(String content) {
+		super(content);
 		setLocation("servlet:/");
-		setContent(content);
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot copy() {
-		return new SeeOtherRoot(this);
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setHeader2(Header value) {
-		super.setHeader2(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setHeader2(String name, String value) {
-		super.setHeader2(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setHeaders(HeaderList value) {
-		super.setHeaders(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setHeaders2(Header...values) {
-		super.setHeaders2(values);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setLocale2(Locale value) {
-		super.setLocale2(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setLocation(String value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setLocation(URI value) {
-		super.setLocation(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setProtocolVersion(ProtocolVersion value) {
-		super.setProtocolVersion(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setReasonPhrase2(String value) {
-		super.setReasonPhrase2(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		super.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setStatusCode2(int value) {
-		super.setStatusCode2(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setStatusLine(BasicStatusLine value) {
-		super.setStatusLine(value);
-		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
 	}
 }

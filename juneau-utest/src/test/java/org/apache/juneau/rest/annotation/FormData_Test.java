@@ -101,7 +101,7 @@ class FormData_Test extends TestBase {
 	@Rest
 	public static class C {
 		@RestPost(defaultRequestFormData={"f1:1","f2=2"," f3 : 3 "})
-		public JsonMap a(RequestFormParams formData) {
+		public JsonMap a(RequestFormParamList formData) {
 			return JsonMap.create()
 				.append("f1", formData.get("f1").asString())
 				.append("f2", formData.get("f2").asString())

@@ -54,7 +54,7 @@ import org.apache.juneau.serializer.annotation.*;
 		ThrowableProcessor.class,
 		HttpResponseProcessor.class,
 		HttpResourceProcessor.class,
-		HttpEntityProcessor.class,
+		HttpBodyProcessor.class,
 		ResponseBeanProcessor.class,
 		PlainTextPojoProcessor.class,
 		SerializedPojoProcessor.class

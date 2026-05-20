@@ -43,6 +43,28 @@ public class HttpStringRangesHeader extends HttpHeaderBean {
 	private final Supplier<?> lazySupplier;
 	private final int lazyMode;
 
+	/**
+	 * Creates an {@link HttpStringRangesHeader} by parsing the given wire-format value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param wireValue Wire value (e.g. {@code "gzip;q=0.5, identity"}). May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpStringRangesHeader of(String name, String wireValue) {
+		return new HttpStringRangesHeader(name, wireValue);
+	}
+
+	/**
+	 * Creates an {@link HttpStringRangesHeader} with the given typed value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param typedValue The string-ranges value. May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpStringRangesHeader of(String name, StringRanges typedValue) {
+		return new HttpStringRangesHeader(name, typedValue);
+	}
+
 	protected HttpStringRangesHeader(String name, String value) {
 		super(name, value);
 		this.cachedForStringOrDirect = value == null ? null : StringRanges.of(value);

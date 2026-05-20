@@ -38,9 +38,9 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.http.*;
-import org.apache.http.message.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.request.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.bean.swagger.Swagger;
@@ -49,9 +49,9 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
-import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.http.classic.header.Date;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.header.Date;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -206,16 +206,16 @@ public class RestRequest extends HttpServletRequestWrapper {
 	private final RestOpContext opContext;
 	private final RequestContent content;
 	private final MarshallingSession marshallingSession;
-	private final RequestQueryParams queryParams;
-	private final RequestPathParams pathParams;
-	private final RequestHeaders headers;
+	private final RequestQueryParamList queryParams;
+	private final RequestPathParamList pathParams;
+	private final RequestHeaderList headers;
 	private final RequestAttributes attrs;
 	private final HttpPartParserSession partParserSession;
 
 	private final RestSession session;
 	// Lazy initialized.
 	private VarResolverSession varSession;
-	private RequestFormParams formParams;
+	private RequestFormParamList formParams;
 	private UriContext uriContext;
 	private String authorityPath;
 	private Config config;
@@ -241,9 +241,9 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		attrs = new RequestAttributes(this);
 
-		queryParams = new RequestQueryParams(this, session.getQueryParams(), true);
+		queryParams = new RequestQueryParamList(this, session.getQueryParams(), true);
 
-		headers = new RequestHeaders(this, queryParams, false);
+		headers = new RequestHeaderList(this, queryParams, false);
 
 		content = new RequestContent(this);
 
@@ -255,7 +255,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 			}
 		}
 
-		pathParams = new RequestPathParams(session, this, true);
+		pathParams = new RequestPathParamList(session, this, true);
 
 		marshallingSession = opContext.getMarshallingContext().getSession();
 
@@ -652,7 +652,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Form-data.
 	 *
 	 * <p>
-	 * Returns a {@link RequestFormParams} object that encapsulates access to form post parameters.
+	 * Returns a {@link RequestFormParamList} object that encapsulates access to form post parameters.
 	 *
 	 * <p>
 	 * Similar to {@link HttpServletRequest#getParameterMap()}, but only looks for form data in the HTTP content.
@@ -663,7 +663,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to parsed form data parameters.</jc>
-	 * 		RequestFormParams <jv>formParams</jv> = <jv>req</jv>.getFormParams();
+	 * 		RequestFormParamList <jv>formParams</jv> = <jv>req</jv>.getFormParams();
 	 *
 	 * 		<jc>// Get form data parameters converted to various types.</jc>
 	 * 		<jk>int</jk> <jv>p1</jv> = <jv>formParams</jv>.get(<js>"p1"</js>).asInteger().orElse(0);
@@ -678,7 +678,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='note'>
 	 * 		Values are converted from strings using the registered part parser on the resource class.
 	 * 	<li class='note'>
-	 * 		The {@link RequestFormParams} object can also be passed as a parameter on the method.
+	 * 		The {@link RequestFormParamList} object can also be passed as a parameter on the method.
 	 * 	<li class='note'>
 	 * 		The {@link FormData @FormDAta} annotation can be used to access individual form data parameter values.
 	 * </ul>
@@ -693,10 +693,10 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @throws InternalServerError If query parameters could not be parsed.
 	 * @see org.apache.juneau.http.annotation.FormData
 	 */
-	public RequestFormParams getFormParams() throws InternalServerError {
+	public RequestFormParamList getFormParams() throws InternalServerError {
 		try {
 			if (formParams == null)
-				formParams = new RequestFormParams(this, true).parser(partParserSession);
+				formParams = new RequestFormParamList(this, true).parser(partParserSession);
 			formParams.addDefault(opContext.getDefaultRequestFormData().getAll());
 			return formParams;
 		} catch (Exception e) {
@@ -787,7 +787,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Request headers.
 	 *
 	 * <p>
-	 * Returns a {@link RequestHeaders} object that encapsulates access to HTTP headers on the request.
+	 * Returns a {@link RequestHeaderList} object that encapsulates access to HTTP headers on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -795,7 +795,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	<jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to headers.</jc>
-	 * 		RequestHeaders <jv>headers</jv> = <jv>req</jv>.getRequestHeaders();
+	 * 		RequestHeaderList <jv>headers</jv> = <jv>req</jv>.getRequestHeaders();
 	 *
 	 * 		<jc>// Add a default value.</jc>
 	 * 		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
@@ -814,7 +814,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='note'>
 	 * 		Values are converted from strings using the registered part parser on the resource class.
 	 * 	<li class='note'>
-	 * 		The {@link RequestHeaders} object can also be passed as a parameter on the method.
+	 * 		The {@link RequestHeaderList} object can also be passed as a parameter on the method.
 	 * 	<li class='note'>
 	 * 		The {@link Header @Header} annotation can be used to access individual header values.
 	 * </ul>
@@ -827,7 +827,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The headers on this request.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestHeaders getHeaders() { return headers; }
+	public RequestHeaderList getHeaders() { return headers; }
 
 	/**
 	 * Returns the wrapped servlet request.
@@ -992,7 +992,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Path parameters.
 	 *
 	 * <p>
-	 * Returns a {@link RequestPathParams} object that encapsulates access to URL path parameters.
+	 * Returns a {@link RequestPathParamList} object that encapsulates access to URL path parameters.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1000,7 +1000,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to path data.</jc>
-	 * 		RequestPathParams <jv>pathParams</jv> = <jv>req</jv>.getPathParams();
+	 * 		RequestPathParamList <jv>pathParams</jv> = <jv>req</jv>.getPathParams();
 	 *
 	 * 		<jc>// Example URL:  /123/qux/true/quux</jc>
 	 *
@@ -1020,7 +1020,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The path parameters.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestPathParams getPathParams() { return pathParams; }
+	public RequestPathParamList getPathParams() { return pathParams; }
 
 	/**
 	 * Shortcut for calling <c>getPathParams().getRemainder()</c>.
@@ -1034,7 +1034,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The protocol version from the request line of this request.
 	 */
-	public ProtocolVersion getProtocolVersion() { return getRequestLine().getProtocolVersion(); }
+	public HttpProtocolVersion getProtocolVersion() { return getRequestLine().getProtocolVersion(); }
 
 	/**
 	 * Returns the request query parameter of the specified type.
@@ -1065,7 +1065,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Query parameters.
 	 *
 	 * <p>
-	 * Returns a {@link RequestQueryParams} object that encapsulates access to URL GET parameters.
+	 * Returns a {@link RequestQueryParamList} object that encapsulates access to URL GET parameters.
 	 *
 	 * <p>
 	 * Similar to {@link HttpServletRequest#getParameterMap()} but only looks for query parameters in the URL and not form posts.
@@ -1076,7 +1076,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to query parameters on the URL.</jc>
-	 * 		RequestQueryParams <jv>query</jv> = <jv>req</jv>.getQuery();
+	 * 		RequestQueryParamList <jv>query</jv> = <jv>req</jv>.getQuery();
 	 *
 	 * 		<jc>// Get query parameters converted to various types.</jc>
 	 * 		<jk>int</jk> <jv>p1/</jv> = <jv>query</jv>.getInteger(<js>"p1"</js>).orElse(<jk>null</jk>);
@@ -1098,7 +1098,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The query parameters as a modifiable map.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestQueryParams getQueryParams() { return queryParams; }
+	public RequestQueryParamList getQueryParams() { return queryParams; }
 
 	/**
 	 * Returns the HTTP content content as a {@link Reader}.
@@ -1211,12 +1211,12 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The request line of this request.
 	 */
-	public RequestLine getRequestLine() {
+	public HttpRequestLine getRequestLine() {
 		var x = inner.getProtocol();
 		var i = x.indexOf('/');
 		var j = x.indexOf('.', i);
-		var pv = new ProtocolVersion(x.substring(0, i), StringUtils.parseInt(x.substring(i + 1, j)), StringUtils.parseInt(x.substring(j + 1)));
-		return new BasicRequestLine(inner.getMethod(), inner.getRequestURI(), pv);
+		var pv = HttpProtocolVersion.of(x.substring(0, i), StringUtils.parseInt(x.substring(i + 1, j)), StringUtils.parseInt(x.substring(j + 1)));
+		return HttpRequestLineBean.of(inner.getMethod(), inner.getRequestURI(), pv);
 	}
 
 	/**
@@ -1307,7 +1307,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var uri = inner.getRequestURI();
 		if (includeQuery || nn(addQueryParams)) {
 			var sb = new StringBuilder(uri);
-			RequestQueryParams rq = this.queryParams.copy();
+			var rq = queryParams.copy();
 			if (nn(addQueryParams))
 				for (var e : addQueryParams.entrySet())
 					rq.set(e.getKey(), e.getValue());

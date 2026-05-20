@@ -21,7 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.response.*;
 
 import jakarta.servlet.http.*;
 

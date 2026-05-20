@@ -52,12 +52,14 @@ public class VariantAlsoNegotiates extends BasicHttpException {
 	}
 
 	/**
-	 * Constructor with a detail message.
+	 * Constructor with a {@link java.text.MessageFormat}- or {@link String#format(String, Object...) String.format}-style message.
 	 *
-	 * @param message The detail message. May be <jk>null</jk>.
+	 * @param msg The detail message. May be <jk>null</jk>.
+	 *    Treated as a format pattern when {@code args} is non-empty. Supports both {@link java.text.MessageFormat} ({@code {0}}) and {@link String#format(String, Object...) String.format} ({@code %s}) placeholders.
+	 * @param args Optional message arguments.
 	 */
-	public VariantAlsoNegotiates(String message) {
-		super(STATUS_CODE, REASON_PHRASE, message);
+	public VariantAlsoNegotiates(String msg, Object...args) {
+		super(STATUS_CODE, REASON_PHRASE, msg, args);
 	}
 
 	/**
@@ -66,17 +68,19 @@ public class VariantAlsoNegotiates extends BasicHttpException {
 	 * @param cause The cause. May be <jk>null</jk>.
 	 */
 	public VariantAlsoNegotiates(Throwable cause) {
-		super(STATUS_CODE, REASON_PHRASE, cause != null ? cause.getMessage() : null, cause);
+		super(STATUS_CODE, REASON_PHRASE, cause, cause != null ? cause.getMessage() : null);
 	}
 
 	/**
-	 * Constructor with a detail message and cause.
+	 * Constructor with a cause and a {@link java.text.MessageFormat}- or {@link String#format(String, Object...) String.format}-style message.
 	 *
-	 * @param message The detail message. May be <jk>null</jk>.
 	 * @param cause The cause. May be <jk>null</jk>.
+	 * @param msg The detail message. May be <jk>null</jk>.
+	 *    Treated as a format pattern when {@code args} is non-empty. Supports both {@link java.text.MessageFormat} ({@code {0}}) and {@link String#format(String, Object...) String.format} ({@code %s}) placeholders.
+	 * @param args Optional message arguments.
 	 */
-	public VariantAlsoNegotiates(String message, Throwable cause) {
-		super(STATUS_CODE, REASON_PHRASE, message, cause);
+	public VariantAlsoNegotiates(Throwable cause, String msg, Object...args) {
+		super(STATUS_CODE, REASON_PHRASE, cause, msg, args);
 	}
 
 	/**

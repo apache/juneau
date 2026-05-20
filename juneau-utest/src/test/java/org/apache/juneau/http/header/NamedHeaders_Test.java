@@ -63,6 +63,9 @@ class NamedHeaders_Test extends TestBase {
 		"HttpEntityTagsHeader",
 		"HttpCsvHeader",
 		"HttpUriHeader",
+		// Header collection (not a single named header).
+		"HttpHeaderList",
+		"HttpHeaderList$Void",
 		// Value types (not HttpHeaderBean subclasses).
 		"EntityTag",
 		"EntityTags",

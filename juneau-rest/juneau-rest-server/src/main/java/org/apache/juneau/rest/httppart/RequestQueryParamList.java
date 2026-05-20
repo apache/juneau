@@ -26,88 +26,103 @@ import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.http.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.http.classic.*;
-import org.apache.juneau.http.classic.part.*;
+import org.apache.juneau.http.HttpPart;
+import org.apache.juneau.http.HttpParts;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.objecttools.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.util.*;
 import org.apache.juneau.commons.svl.*;
 
 /**
- * Represents the path parameters in an HTTP request.
+ * Represents the query parameters in an HTTP request.
  *
- *  <p>
- * 	The {@link RequestPathParams} object is the API for accessing the matched variables
- * 	and remainder on the URL path.
+ * <p>
+ * 	The {@link RequestQueryParamList} object is the API for accessing the GET query parameters of an HTTP request.
+ * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
- * 	<jk>public</jk> Object myMethod(RequestPathParams <jv>path</jv>) {...}
+ * 	<jk>public</jk> Object myMethod(RequestQueryParamList <jv>query</jv>) {...}
  * </p>
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@RestPost</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
- * 	<jk>public void</jk> doGet(RequestPathParams <jv>path</jv>) {
- * 		<jc>// Example URL:  /123/qux/true/quux</jc>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestQueryParamList <jv>query</jv>) {
  *
- * 		<jk>int</jk> <jv>foo</jv> = <jv>path</jv>.get(<js>"foo"</js>).asInteger().orElse(0);  <jc>// =123</jc>
- * 		String <jv>bar</jv> = <jv>path</jv>.get(<js>"bar"</js>).orElse(<jk>null</jk>);  <jc>// =qux</jc>
- * 		<jk>boolean</jk> <jv>baz</jv> = <jv>path</jv>.get(<js>"baz"</js>).asBoolean().orElse(<jk>false</jk>);  <jc>// =true</jc>
- * 		String <jv>remainder</jv> = <jv>path</jv>.getRemainder();  <jc>// =quux</jc>
- * 	}
+ * 		<jc>// Get query parameters converted to various types.</jc>
+ * 		<jk>int</jk> <jv>p1</jv> = <jv>query</jv>.get(<js>"p1"</js>).asInteger().orElse(0);
+ * 		String <jv>p2</jv> = <jv>query</jv>.get(<js>"p2"</js>).orElse(<jk>null</jk>);
+ * 		UUID <jv>p3</jv> = <jv>query</jv>.get(<js>"p3"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
+ * 	 }
+ * </p>
+ *
+ * <p>
+ * 	An important distinction between the behavior of this object and <l>HttpServletRequest.getParameter(String)</l> is
+ * 	that the former will NOT load the content of the request on FORM POSTS and will only look at parameters
+ * 	found in the query string.
+ * 	This can be useful in cases where you're mixing GET parameters and FORM POSTS and you don't want to
+ * 	inadvertently read the content of the request to get a query parameter.
  * </p>
  *
  * <p>
  * 	Some important methods on this class are:
  * </p>
  * <ul class='javatree'>
- * 	<li class='jc'>{@link RequestPathParams}
+ * 	<li class='jc'>{@link RequestQueryParamList}
  * 	<ul class='spaced-list'>
- * 		<li>Methods for retrieving path parameters:
+ * 		<li>Methods for retrieving query parameters:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestPathParams#contains(String) contains(String)}
- * 			<li class='jm'>{@link RequestPathParams#containsAny(String...) containsAny(String...)}
- * 			<li class='jm'>{@link RequestPathParams#get(Class) get(Class)}
- * 			<li class='jm'>{@link RequestPathParams#get(String) get(String)}
- * 			<li class='jm'>{@link RequestPathParams#getAll(String) getAll(String)}
- * 			<li class='jm'>{@link RequestPathParams#getFirst(String) getFirst(String)}
- * 			<li class='jm'>{@link RequestPathParams#getLast(String) getLast(String)}
- * 			<li class='jm'>{@link RequestPathParams#getRemainder() getRemainder()}
- * 			<li class='jm'>{@link RequestPathParams#getRemainderUndecoded() getRemainderUndecoded()}
+ * 			<li class='jm'>{@link RequestQueryParamList#contains(String) contains(String)}
+ * 			<li class='jm'>{@link RequestQueryParamList#containsAny(String...) containsAny(String...)}
+ * 			<li class='jm'>{@link RequestQueryParamList#get(Class) get(Class)}
+ * 			<li class='jm'>{@link RequestQueryParamList#get(String) get(String)}
+ * 			<li class='jm'>{@link RequestQueryParamList#getAll(String) getAll(String)}
+ * 			<li class='jm'>{@link RequestQueryParamList#getFirst(String) getFirst(String)}
+ * 			<li class='jm'>{@link RequestQueryParamList#getLast(String) getLast(String)}
+ * 			<li class='jm'>{@link RequestQueryParamList#getSearchArgs() getSearchArgs()}
+ * 			<li class='jm'>{@link RequestQueryParamList#getViewArgs() getViewArgs()}
+ * 			<li class='jm'>{@link RequestQueryParamList#getSortArgs() getSortArgs()}
+ * 			<li class='jm'>{@link RequestQueryParamList#getPageArgs() getPageArgs()}
  * 		</ul>
- * 		<li>Methods overridding path parameters:
+ * 		<li>Methods overridding query parameters:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestPathParams#add(NameValuePair...) add(NameValuePair...)}
- * 			<li class='jm'>{@link RequestPathParams#add(String,Object) add(String,Object)}
- * 			<li class='jm'>{@link RequestPathParams#addDefault(List) addDefault(List)}
- * 			<li class='jm'>{@link RequestPathParams#addDefault(NameValuePair...) addDefault(NameValuePair...)}
- * 			<li class='jm'>{@link RequestPathParams#remove(String) remove(String)}
- * 			<li class='jm'>{@link RequestPathParams#set(NameValuePair...) set(NameValuePair...)}
- * 			<li class='jm'>{@link RequestPathParams#set(String,Object) set(String,Object)}
+ * 			<li class='jm'>{@link RequestQueryParamList#add(HttpPart...) add(HttpPart...)}
+ * 			<li class='jm'>{@link RequestQueryParamList#add(String,Object) add(String,Object)}
+ * 			<li class='jm'>{@link RequestQueryParamList#addDefault(List) addDefault(List)}
+ * 			<li class='jm'>{@link RequestQueryParamList#addDefault(HttpPart...) addDefault(HttpPart...)}
+ * 			<li class='jm'>{@link RequestQueryParamList#addDefault(String,String) addDefault(String,String)}
+ * 			<li class='jm'>{@link RequestQueryParamList#remove(String) remove(String)}
+ * 			<li class='jm'>{@link RequestQueryParamList#set(HttpPart...) set(HttpPart...)}
+ * 			<li class='jm'>{@link RequestQueryParamList#set(String,Object) set(String,Object)}
  * 		</ul>
  * 		<li>Other methods:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestPathParams#copy() copy()}
- * 			<li class='jm'>{@link RequestPathParams#isEmpty() isEmpty()}
+ * 			<li class='jm'>{@link RequestQueryParamList#asQueryString() asQueryString()}
+ * 			<li class='jm'>{@link RequestQueryParamList#copy() copy()}
+ * 			<li class='jm'>{@link RequestQueryParamList#isEmpty() isEmpty()}
  * 		</ul>
  * 	</ul>
  * </ul>
  *
+ * <p>
+ * Entries are stored in a case-sensitive map unless overridden via the constructor.
+ *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link RequestPathParam}
- * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+ * 	<li class='jc'>{@link RequestQueryParam}
+ * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+ * 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
-*/
+ */
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class RequestPathParams extends ArrayList<RequestPathParam> {
+public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_parameters = "parameters";
@@ -119,45 +134,46 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 
 	private final transient RestRequest req;
 	private boolean caseSensitive;
-	private transient HttpPartParserSession parser;
 	private final transient VarResolverSession vs;
+	private transient HttpPartParserSession parser;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param session The current HTTP request session.
-	 * @param req The current HTTP request.
+	 * @param req The request creating this bean.
+	 * @param query The raw parsed query parameter values.
 	 * @param caseSensitive Whether case-sensitive name matching is enabled.
 	 */
-	public RequestPathParams(RestSession session, RestRequest req, boolean caseSensitive) {
+	public RequestQueryParamList(RestRequest req, Map<String,String[]> query, boolean caseSensitive) {
 		this.req = req;
 		this.caseSensitive = caseSensitive;
 		this.vs = req.getVarResolverSession();
 
-		// Add parameters from parent context if any.
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires unchecked cast
-		})
-		var parentVars = (Map<String,String>)req.getAttribute("juneau.pathVars").orElse(mape());
-		for (var e : parentVars.entrySet())
-			add(e.getKey(), e.getValue());
+		for (var e : query.entrySet()) {
+			var name = e.getKey();
 
-		UrlPathMatch pm = session.getUrlPathMatch();
-		if (nn(pm)) {
-			for (var e : pm.getVars().entrySet())
-				add(e.getKey(), e.getValue());
-			var r = pm.getRemainder();
-			if (nn(r)) {
-				add("/**", r);
-				add("/*", urlDecode(r));
-			}
+			var values = e.getValue();
+			if (values == null)
+				values = new String[0];
+
+			// Fix for behavior difference between Tomcat and WAS.
+			// getParameter("foo") on "&foo" in Tomcat returns "".
+			// getParameter("foo") on "&foo" in WAS returns null.
+			if (values.length == 1 && values[0] == null)
+				values[0] = "";
+
+			if (values.length == 0)
+				values = a((String)null);
+
+			for (var value : values)
+				add(new RequestQueryParam(req, name, value));
 		}
 	}
 
 	/**
 	 * Copy constructor.
 	 */
-	private RequestPathParams(RequestPathParams copyFrom) {
+	private RequestQueryParamList(RequestQueryParamList copyFrom) {
 		req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
@@ -168,7 +184,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	/**
 	 * Subset constructor.
 	 */
-	private RequestPathParams(RequestPathParams copyFrom, String...names) {
+	private RequestQueryParamList(RequestQueryParamList copyFrom, String...names) {
 		this.req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
@@ -187,7 +203,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @param parameters The parameter objects.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestPathParams add(NameValuePair...parameters) {
+	public RequestQueryParamList add(HttpPart...parameters) {
 		assertArgNotNull(ARG_parameters, parameters);
 		for (var p : parameters)
 			if (nn(p))
@@ -206,9 +222,9 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @param value The parameter value.
 	 * @return This object.
 	 */
-	public RequestPathParams add(String name, Object value) {
+	public RequestQueryParamList add(String name, Object value) {
 		assertArgNotNull(ARG_name, name);
-		add(new RequestPathParam(req, name, s(value)).parser(parser));
+		add(new RequestQueryParam(req, name, s(value)).parser(parser));
 		return this;
 	}
 
@@ -223,14 +239,14 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestPathParams addDefault(List<NameValuePair> pairs) {
+	public RequestQueryParamList addDefault(List<? extends HttpPart> pairs) {
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);
 			var hasAllBlanks = l.allMatch(x -> Utils.e(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
-				add(new RequestPathParam(req, name, vs.resolve(p.getValue())));
+				add(new RequestQueryParam(req, name, vs.resolve(p.getValue())));
 			}
 		}
 		return this;
@@ -247,7 +263,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestPathParams addDefault(NameValuePair...pairs) {
+	public RequestQueryParamList addDefault(HttpPart...pairs) {
 		return addDefault(l(pairs));
 	}
 
@@ -258,8 +274,26 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @param value The value.
 	 * @return This object.
 	 */
-	public RequestPathParams addDefault(String name, String value) {
-		return addDefault(BasicStringPart.of(name, value));
+	public RequestQueryParamList addDefault(String name, String value) {
+		return addDefault(HttpStringPart.of(name, value));
+	}
+
+	/**
+	 * Converts this object to a query string.
+	 *
+	 * <p>
+	 * Returned query string does not start with <js>'?'</js>.
+	 *
+	 * @return A new query string, or an empty string if this object is empty.
+	 */
+	public String asQueryString() {
+		var sb = new StringBuilder();
+		for (var e : this) {
+			if (!sb.isEmpty())
+				sb.append("&");
+			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
+		}
+		return sb.toString();
 	}
 
 	/**
@@ -268,7 +302,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RequestPathParams caseSensitive(boolean value) {
+	public RequestQueryParamList caseSensitive(boolean value) {
 		caseSensitive = value;
 		return this;
 	}
@@ -277,10 +311,9 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * Returns <jk>true</jk> if the parameters with the specified name is present.
 	 *
 	 * @param name The parameter name.  Must not be <jk>null</jk>.
-	 * @return <jk>true</jk> if the parameters with the specified name is present.
+	 * @return <jk>true</jk> if the parameters with the specified names are present.
 	 */
 	public boolean contains(String name) {
-		assertArgNotNull(ARG_name, name);
 		return stream(name).findAny().isPresent();
 	}
 
@@ -303,15 +336,15 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 *
 	 * @return A new parameters object.
 	 */
-	public RequestPathParams copy() {
-		return new RequestPathParams(this);
+	public RequestQueryParamList copy() {
+		return new RequestQueryParamList(this);
 	}
 
 	/**
-	 * Returns the path parameter as the specified bean type.
+	 * Returns the query parameter as the specified bean type.
 	 *
 	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Path} annotation
+	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Query} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
 	 * @param <T> The bean type to create.
@@ -320,23 +353,23 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		var cm = req.getMarshallingSession().getClassMeta(type);
-		var name = HttpParts.getName(PATH, cm).orElseThrow(() -> rex("@Path(name) not found on class {0}", cn(type)));
+		var name = HttpParts.getName(QUERY, cm).orElseThrow(() -> rex("@Query(name) not found on class {0}", cn(type)));
 		return get(name).as(type);
 	}
 
 	/**
-	 * Returns the last parameter with the specified name.
+	 * Returns the condensed header with the specified name.
 	 *
 	 * <p>
-	 * This is equivalent to {@link #getLast(String)}.
+	 * If multiple headers are present, they will be combined into a single comma-delimited list.
 	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
+	 * @param name The header name.
+	 * @return The header, never <jk>null</jk>.
 	 */
-	public RequestPathParam get(String name) {
-		List<RequestPathParam> l = getAll(name);
+	public RequestQueryParam get(String name) {
+		List<RequestQueryParam> l = getAll(name);
 		if (l.isEmpty())
-			return new RequestPathParam(req, name, null).parser(parser);
+			return new RequestQueryParam(req, name, null).parser(parser);
 		if (l.size() == 1)
 			return l.get(0);
 		var sb = new StringBuilder(128);
@@ -345,7 +378,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 				sb.append(", ");
 			sb.append(l.get(i).getValue());
 		}
-		return new RequestPathParam(req, name, sb.toString()).parser(parser);
+		return new RequestQueryParam(req, name, sb.toString()).parser(parser);
 	}
 
 	/**
@@ -355,8 +388,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @return The list of all parameters with the specified name, or an empty list if none are found.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<RequestPathParam> getAll(String name) {
-		assertArgNotNull(ARG_name, name);
+	public List<RequestQueryParam> getAll(String name) {
 		return stream(name).toList();
 	}
 
@@ -364,32 +396,32 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * Returns the first parameter with the specified name.
 	 *
 	 * <p>
-	 * Note that this method never returns <jk>null</jk> and that {@link RequestPathParam#isPresent()} can be used
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestQueryParam#isPresent()} can be used
 	 * to test for the existence of the parameter.
 	 *
 	 * @param name The parameter name.
 	 * @return The parameter.  Never <jk>null</jk>.
 	 */
-	public RequestPathParam getFirst(String name) {
+	public RequestQueryParam getFirst(String name) {
 		assertArgNotNull(ARG_name, name);
-		return stream(name).findFirst().orElseGet(() -> new RequestPathParam(req, name, null).parser(parser));
+		return stream(name).findFirst().orElseGet(() -> new RequestQueryParam(req, name, null).parser(parser));
 	}
 
 	/**
 	 * Returns the last parameter with the specified name.
 	 *
 	 * <p>
-	 * Note that this method never returns <jk>null</jk> and that {@link RequestPathParam#isPresent()} can be used
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestQueryParam#isPresent()} can be used
 	 * to test for the existence of the parameter.
 	 *
 	 * @param name The parameter name.
 	 * @return The parameter.  Never <jk>null</jk>.
 	 */
-	public RequestPathParam getLast(String name) {
+	public RequestQueryParam getLast(String name) {
 		assertArgNotNull(ARG_name, name);
-		var v = Value.<RequestPathParam>empty();
+		var v = Value.<RequestQueryParam>empty();
 		stream(name).forEach(v::set);
-		return v.orElseGet(() -> new RequestPathParam(req, name, null).parser(parser));
+		return v.orElseGet(() -> new RequestQueryParam(req, name, null).parser(parser));
 	}
 
 	/**
@@ -397,90 +429,53 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @return The list of all unique header names in this list.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<String> getNames() { return stream().map(RequestPathParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().toList(); }
+	public List<String> getNames() { return stream().map(RequestQueryParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().toList(); }
 
 	/**
-	 * Returns the decoded remainder of the URL following any path pattern matches.
+	 * Locates the position/limit query arguments ({@code &amp;p=}, {@code &amp;l=}) in the query string and returns them as a {@link PageArgs} object.
 	 *
-	 * <p>
-	 * The behavior of path remainder is shown below given the path pattern "/foo/*":
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<th>URL</th>
-	 * 		<th>Path Remainder</th>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><c>/foo</c></td>
-	 * 		<td><jk>null</jk></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><c>/foo/</c></td>
-	 * 		<td><js>""</js></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><c>/foo//</c></td>
-	 * 		<td><js>"/"</js></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><c>/foo///</c></td>
-	 * 		<td><js>"//"</js></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><c>/foo/a/b</c></td>
-	 * 		<td><js>"a/b"</js></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><c>/foo//a/b/</c></td>
-	 * 		<td><js>"/a/b/"</js></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><c>/foo/a%2Fb</c></td>
-	 * 		<td><js>"a/b"</js></td>
-	 * 	</tr>
-	 * </table>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// REST method</jc>
-	 * 	<ja>@RestGet</ja>(<js>"/foo/{bar}/*"</js>)
-	 * 	<jk>public</jk> String doGetById(RequestPathParams <jv>path</jv>, <jk>int</jk> <jv>bar</jv>) {
-	 * 		<jk>return</jk> <jv>path</jv>.remainder().orElse(<jk>null</jk>);
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * The remainder can also be retrieved by calling <code>get(<js>"/**"</js>)</code>.
-	 *
-	 * @return The path remainder string.
+	 * @return
+	 * 	A new {@link PageArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public RequestPathParam getRemainder() {
-		return get("/*");
-
-	}
+	public Optional<PageArgs> getPageArgs() { return opt(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null))); }
 
 	/**
-	 * Same as {@link #getRemainder()} but doesn't decode characters.
+	 * Locates the search query argument ({@code &amp;s=}) in the query string and returns them as a {@link SearchArgs} object.
 	 *
-	 * <p>
-	 * The undecoded remainder can also be retrieved by calling <code>get(<js>"/*"</js>)</code>.
-	 *
-	 * @return The un-decoded path remainder.
+	 * @return
+	 * 	A new {@link SearchArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public RequestPathParam getRemainderUndecoded() { return get("/**"); }
+	public Optional<SearchArgs> getSearchArgs() { return opt(SearchArgs.create(get("s").asString().orElse(null))); }
+
+	/**
+	 * Locates the sort query argument ({@code &amp;o=}) in the query string and returns them as a {@link SortArgs} object.
+	 *
+	 * @return
+	 * 	A new {@link SortArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
+	 */
+	public Optional<SortArgs> getSortArgs() { return opt(SortArgs.create(get("o").asString().orElse(null))); }
 
 	/**
 	 * Returns all headers in sorted order.
 	 *
 	 * @return The stream of all headers in sorted order.
 	 */
-	public Stream<RequestPathParam> getSorted() {
-		Comparator<RequestPathParam> x;
+	public Stream<RequestQueryParam> getSorted() {
+		Comparator<RequestQueryParam> x;
 		if (caseSensitive)
-			x = Comparator.comparing(RequestPathParam::getName);
+			x = Comparator.comparing(RequestQueryParam::getName);
 		else
 			x = (x1, x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
 		return stream().sorted(x);
 	}
+
+	/**
+	 * Locates the view query argument ({@code &amp;v=}) in the query string and returns them as a {@link ViewArgs} object.
+	 *
+	 * @return
+	 * 	A new {@link ViewArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
+	 */
+	public Optional<ViewArgs> getViewArgs() { return opt(ViewArgs.create(get("v").asString().orElse(null))); }
 
 	/**
 	 * Sets the parser to use for part values.
@@ -488,7 +483,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @param value The new value for this setting.
 	 * @return This object.
 	 */
-	public RequestPathParams parser(HttpPartParserSession value) {
+	public RequestQueryParamList parser(HttpPartParserSession value) {
 		parser = value;
 		forEach(x -> x.parser(parser));
 		return this;
@@ -497,10 +492,10 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	/**
 	 * Remove parameters.
 	 *
-	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @param name The parameter names.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestPathParams remove(String name) {
+	public RequestQueryParamList remove(String name) {
 		assertArgNotNull(ARG_name, name);
 		removeIf(x -> eq(x.getName(), name));
 		return this;
@@ -516,10 +511,10 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @param parameters The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestPathParams set(NameValuePair...parameters) {
+	public RequestQueryParamList set(HttpPart...parameters) {
 		assertArgNotNull(ARG_headers, parameters);
 		for (var p : parameters)
-			remove(p);
+			remove(p.getName());
 		for (var p : parameters)
 			add(p);
 		return this;
@@ -539,9 +534,9 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestPathParams set(String name, Object value) {
+	public RequestQueryParamList set(String name, Object value) {
 		assertArgNotNull(ARG_name, name);
-		set(new RequestPathParam(req, name, s(value)).parser(parser));
+		set(new RequestQueryParam(req, name, s(value)).parser(parser));
 		return this;
 	}
 
@@ -551,7 +546,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @param name The header name.
 	 * @return The stream of all headers with matching names.  Never <jk>null</jk>.
 	 */
-	public Stream<RequestPathParam> stream(String name) {
+	public Stream<RequestQueryParam> stream(String name) {
 		return stream().filter(x -> eq(x.getName(), name));
 	}
 
@@ -561,20 +556,22 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @param names The list to include in the copy.
 	 * @return A new list object.
 	 */
-	public RequestPathParams subset(String...names) {
-		return new RequestPathParams(this, names);
+	public RequestQueryParamList subset(String...names) {
+		return new RequestQueryParamList(this, names);
 	}
 
 	protected FluentMap<String,Object> properties() {
+		// @formatter:off
 		var m = filteredBeanPropertyMap();
 		for (var n : getNames())
 			m.a(n, get(n).asString().orElse(null));
 		return m;
+		// @formatter:on
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		return this == o || (o instanceof RequestPathParams other && super.equals(other));
+		return this == o || (o instanceof RequestQueryParamList other && super.equals(other));
 	}
 
 	@Override

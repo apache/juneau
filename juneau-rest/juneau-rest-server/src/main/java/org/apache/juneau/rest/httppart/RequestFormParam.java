@@ -26,9 +26,9 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.http.HttpPart;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 
@@ -36,7 +36,7 @@ import org.apache.juneau.rest.*;
  * Represents a single form-data parameter on an HTTP request.
  *
  * <p>
- * Typically accessed through the {@link RequestFormParams} class.
+ * Typically accessed through the {@link RequestFormParamList} class.
  *
  * <p>
  * 	Some important methods on this class are:
@@ -100,7 +100,7 @@ import org.apache.juneau.rest.*;
 	"resource",  // RequestFormParam manages Closeable resources
 	"java:S2160" // equals() inherited from parent context; form param identity based on name+value from parent
 })
-public class RequestFormParam extends RequestHttpPart implements NameValuePair {
+public class RequestFormParam extends RequestHttpPart implements HttpPart {
 
 	private final jakarta.servlet.http.Part part;
 

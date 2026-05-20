@@ -17,7 +17,8 @@
 package org.apache.juneau.http.header;
 
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.rex;
+import static org.apache.juneau.commons.utils.StringUtils.parseLong;
+import static org.apache.juneau.commons.utils.ThrowableUtils.illegalArg;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
@@ -41,9 +42,31 @@ public class HttpLongHeader extends HttpHeaderBean {
 	private final Supplier<?> lazySupplier;
 	private final int lazyMode;
 
+	/**
+	 * Creates an {@link HttpLongHeader} by parsing the given wire-format value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param wireValue Wire value. May be {@code null} or empty.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpLongHeader of(String name, String wireValue) {
+		return new HttpLongHeader(name, wireValue);
+	}
+
+	/**
+	 * Creates an {@link HttpLongHeader} with the given typed value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param typedValue The long value. May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpLongHeader of(String name, Long typedValue) {
+		return new HttpLongHeader(name, typedValue);
+	}
+
 	protected HttpLongHeader(String name, String wireValue) {
 		super(name, wireValue);
-		this.value = parseLong(wireValue);
+		this.value = toLong(wireValue);
 		this.lazySupplier = null;
 		this.lazyMode = -1;
 	}
@@ -74,8 +97,7 @@ public class HttpLongHeader extends HttpHeaderBean {
 	}
 
 	public Long orElse(Long other) {
-		var x = toLong();
-		return nn(x) ? x : other;
+		return asLong().orElse(other);
 	}
 
 	public Long toLong() {
@@ -83,15 +105,12 @@ public class HttpLongHeader extends HttpHeaderBean {
 			return ((Supplier<Long>) lazySupplier).get();
 		if (value != null)
 			return value;
-		var v = super.getValue();
-		return v == null ? null : parseLong(v);
+		return toLong(super.getValue());
 	}
 
-	private static Long parseLong(String value) {
-		try {
-			return value == null ? null : Long.parseLong(value);
-		} catch (NumberFormatException e) {
-			throw rex(e, "Value ''{0}'' could not be parsed as a long.", value);
-		}
+	private static Long toLong(String value) {
+		if (value == null)
+			return null;
+		return parseLong(value, () -> illegalArg("Value ''{0}'' could not be parsed as a long.", value));
 	}
 }

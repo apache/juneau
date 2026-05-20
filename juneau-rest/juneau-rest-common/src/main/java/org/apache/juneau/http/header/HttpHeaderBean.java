@@ -119,6 +119,16 @@ public class HttpHeaderBean implements HttpHeader {
 		return valueSupplier.get();
 	}
 
+	/**
+	 * Returns {@code true} if the header value is equal to the given value, ignoring case.
+	 *
+	 * @param other The value to compare against. May be <jk>null</jk>.
+	 * @return {@code true} if the value is equal, ignoring case.
+	 */
+	public boolean equalsIgnoreCase(String other) {
+		return eqic(getValue(), other);
+	}
+
 	@Override /* Object */
 	public String toString() {
 		return name + ": " + getValue();

@@ -20,19 +20,18 @@ import org.apache.juneau.commons.http.StringRanges;
 import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.HttpHeader;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -68,13 +67,13 @@ import jakarta.servlet.http.*;
  * 	<ul class='spaced-list'>
  * 		<li>Methods for setting response headers:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RestResponse#addHeader(Header) addHeader(Header)}
+ * 			<li class='jm'>{@link RestResponse#addHeader(HttpHeader) addHeader(HttpHeader)}
  * 			<li class='jm'>{@link RestResponse#addHeader(String,String) addHeader(String,String)}
  * 			<li class='jm'>{@link RestResponse#containsHeader(String) containsHeader(String)}
  * 			<li class='jm'>{@link RestResponse#getHeader(String) getHeader(String)}
  * 			<li class='jm'>{@link RestResponse#setCharacterEncoding(String) setCharacterEncoding(String)}
  * 			<li class='jm'>{@link RestResponse#setContentType(String) setContentType(String)}
- * 			<li class='jm'>{@link RestResponse#setHeader(Header) setHeader(Header)}
+ * 			<li class='jm'>{@link RestResponse#setHeader(HttpHeader) setHeader(HttpHeader)}
  * 			<li class='jm'>{@link RestResponse#setHeader(HttpPartSchema,String,Object) setHeader(HttpPartSchema,String,Object)}
  * 			<li class='jm'>{@link RestResponse#setHeader(String,Object) setHeader(String,Object)}
  * 			<li class='jm'>{@link RestResponse#setHeader(String,String) setHeader(String,String)}
@@ -201,10 +200,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * Value is added at the end of the headers.
 	 *
 	 * <p>
-	 * If the header is a {@link BasicUriHeader}, the URI will be resolved using the {@link RestRequest#getUriResolver()} object.
-	 *
-	 * <p>
-	 * If the header is a {@link SerializedHeader} and the serializer session is not set, it will be set to the one returned by {@link RestRequest#getPartSerializerSession()} before serialization.
+	 * If the header is a {@link HttpUriHeader}, the URI will be resolved using the {@link RestRequest#getUriResolver()} object.
 	 *
 	 * <p>
 	 * Note that per <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2'>RFC2616</a>,
@@ -213,14 +209,11 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @param header The header.
 	 * @return This object.
 	 */
-	public RestResponse addHeader(Header header) {
+	public RestResponse addHeader(HttpHeader header) {
 		if (header == null) {
 			// Do nothing.
-		} else if (header instanceof BasicUriHeader header2) {
+		} else if (header instanceof HttpUriHeader header2) {
 			addHeader(header2.getName(), resolveUris(header2.getValue()));
-		} else if (header instanceof SerializedHeader header2) {
-			var x = header2.copyWith(request.getPartSerializerSession(), null);
-			addHeader(x.getName(), resolveUris(x.getValue()));
 		} else {
 			addHeader(header.getName(), header.getValue());
 		}
@@ -700,19 +693,16 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @param header The header.
 	 * @return This object.
 	 */
-	public RestResponse setHeader(Header header) {
+	public RestResponse setHeader(HttpHeader header) {
 		if (header == null) {
 			// Do nothing.
-		} else if (header instanceof BasicUriHeader header2) {
+		} else if (header instanceof HttpUriHeader header2) {
 			setHeader(header2.getName(), resolveUris(header2.getValue()));
-		} else if (header instanceof SerializedHeader header2) {
-			var x = header2.copyWith(request.getPartSerializerSession(), null);
-			var v = x.getValue();
+		} else {
+			var v = header.getValue();
 			if (nn(v) && v.indexOf("://") != -1)
 				v = resolveUris(v);
-			setHeader(x.getName(), v);
-		} else {
-			setHeader(header.getName(), header.getValue());
+			setHeader(header.getName(), v);
 		}
 		return this;
 	}
@@ -722,7 +712,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * suggested file name (quoted {@code filename} parameter).
 	 *
 	 * <p>
-	 * Shorthand for {@link #setHeader(Header) setHeader}({@link ContentDisposition#attachment(String)
+	 * Shorthand for {@link #setHeader(HttpHeader) setHeader}({@link ContentDisposition#attachment(String)
 	 * ContentDisposition.attachment(filename)}).
 	 * </p>
 	 *
@@ -737,7 +727,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @see ContentDisposition#attachment(String)
 	 */
 	public RestResponse downloadAs(String filename) {
-		return setHeader(contentDispositionAttachment(filename));
+		return setHeader(ContentDisposition.attachment(filename));
 	}
 
 	/**
@@ -797,7 +787,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		// Tomcat/WAS does.
 		if (eqic(name, HEADER_ContentType)) {
 			inner.setContentType(value);
-			ContentType ct = contentType(value);
+			ContentType ct = ContentType.of(value);
 			if (nn(ct) && nn(ct.getParameter("charset")))
 				inner.setCharacterEncoding(ct.getParameter("charset"));
 		} else {

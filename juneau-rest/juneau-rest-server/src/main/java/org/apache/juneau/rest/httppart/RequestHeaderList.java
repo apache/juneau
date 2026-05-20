@@ -25,12 +25,12 @@ import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.http.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.http.classic.*;
-import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.HttpHeader;
+import org.apache.juneau.http.HttpParts;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.commons.svl.*;
@@ -39,18 +39,18 @@ import org.apache.juneau.commons.svl.*;
  * Represents the headers in an HTTP request.
  *
  * <p>
- * 	The {@link RequestHeaders} object is the API for accessing the headers of an HTTP request.
+ * 	The {@link RequestHeaderList} object is the API for accessing the headers of an HTTP request.
  * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
- * 	<jk>public</jk> Object myMethod(RequestHeaders <jv>headers</jv>) {...}
+ * 	<jk>public</jk> Object myMethod(RequestHeaderList <jv>headers</jv>) {...}
  * </p>
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
- * 	<jk>public</jk> Object myMethod(RequestHeaders <jv>headers</jv>) {
+ * 	<jk>public</jk> Object myMethod(RequestHeaderList <jv>headers</jv>) {
  *
  * 		<jc>// Add a default value.</jc>
  * 		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
@@ -67,34 +67,34 @@ import org.apache.juneau.commons.svl.*;
  * 	Some important methods on this class are:
  * </p>
  * <ul class='javatree'>
- * 	<li class='jc'>{@link RequestHeaders}
+ * 	<li class='jc'>{@link RequestHeaderList}
  * 	<ul class='spaced-list'>
  * 		<li>Methods for retrieving headers:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestHeaders#contains(String) contains(String)}
- * 			<li class='jm'>{@link RequestHeaders#containsAny(String...) containsAny(String...)}
- * 			<li class='jm'>{@link RequestHeaders#get(Class) get(Class)}
- * 			<li class='jm'>{@link RequestHeaders#get(String) get(String)}
- * 			<li class='jm'>{@link RequestHeaders#getAll(String) getAll(String)}
- * 			<li class='jm'>{@link RequestHeaders#getFirst(String) getFirst(String)}
- * 			<li class='jm'>{@link RequestHeaders#getLast(String) getLast(String)}
+ * 			<li class='jm'>{@link RequestHeaderList#contains(String) contains(String)}
+ * 			<li class='jm'>{@link RequestHeaderList#containsAny(String...) containsAny(String...)}
+ * 			<li class='jm'>{@link RequestHeaderList#get(Class) get(Class)}
+ * 			<li class='jm'>{@link RequestHeaderList#get(String) get(String)}
+ * 			<li class='jm'>{@link RequestHeaderList#getAll(String) getAll(String)}
+ * 			<li class='jm'>{@link RequestHeaderList#getFirst(String) getFirst(String)}
+ * 			<li class='jm'>{@link RequestHeaderList#getLast(String) getLast(String)}
  * 		</ul>
  * 		<li>Methods overridding headers:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestHeaders#add(Header...) add(Header...)}
- * 			<li class='jm'>{@link RequestHeaders#add(String, Object) add(String, Object)}
- * 			<li class='jm'>{@link RequestHeaders#addDefault(Header...) addDefault(Header...)}
- * 			<li class='jm'>{@link RequestHeaders#addDefault(List) addDefault(List)}
- * 			<li class='jm'>{@link RequestHeaders#addDefault(String,String) addDefault(String,String)}
- * 			<li class='jm'>{@link RequestHeaders#remove(String) remove(String)}
- * 			<li class='jm'>{@link RequestHeaders#set(Header...) set(Header...)}
- * 			<li class='jm'>{@link RequestHeaders#set(String,Object) set(String,Object)}
+ * 			<li class='jm'>{@link RequestHeaderList#add(HttpHeader...) add(HttpHeader...)}
+ * 			<li class='jm'>{@link RequestHeaderList#add(String, Object) add(String, Object)}
+ * 			<li class='jm'>{@link RequestHeaderList#addDefault(HttpHeader...) addDefault(HttpHeader...)}
+ * 			<li class='jm'>{@link RequestHeaderList#addDefault(List) addDefault(List)}
+ * 			<li class='jm'>{@link RequestHeaderList#addDefault(String,String) addDefault(String,String)}
+ * 			<li class='jm'>{@link RequestHeaderList#remove(String) remove(String)}
+ * 			<li class='jm'>{@link RequestHeaderList#set(HttpHeader...) set(HttpHeader...)}
+ * 			<li class='jm'>{@link RequestHeaderList#set(String,Object) set(String,Object)}
  * 		</ul>
  * 		<li>Other methods:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestHeaders#copy() copy()}
- * 			<li class='jm'>{@link RequestHeaders#isEmpty() isEmpty()}
- * 			<li class='jm'>{@link RequestHeaders#subset(String...) subset(String...)}
+ * 			<li class='jm'>{@link RequestHeaderList#copy() copy()}
+ * 			<li class='jm'>{@link RequestHeaderList#isEmpty() isEmpty()}
+ * 			<li class='jm'>{@link RequestHeaderList#subset(String...) subset(String...)}
  * 		</ul>
  * 	</ul>
  * </ul>
@@ -111,7 +111,7 @@ import org.apache.juneau.commons.svl.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class RequestHeaders extends ArrayList<RequestHeader> {
+public class RequestHeaderList extends ArrayList<RequestHeader> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_headers = "headers";
@@ -134,7 +134,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @param query The query parameters on the request (used for overloaded header values).
 	 * @param caseSensitive Whether case-sensitive name matching is enabled.
 	 */
-	public RequestHeaders(RestRequest req, RequestQueryParams query, boolean caseSensitive) {
+	public RequestHeaderList(RestRequest req, RequestQueryParamList query, boolean caseSensitive) {
 		this.req = req;
 		this.caseSensitive = caseSensitive;
 		this.vs = req.getVarResolverSession();
@@ -146,13 +146,13 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 			}
 		}
 
-		// Parameters defined on the request URL overwrite existing headers.
+		// Parameters defined on the request URL are appended to any existing header values.
 		var allowedHeaderParams = req.getContext().getAllowedHeaderParams();
 		query.forEach(p -> {
 			var name = p.getName();
 			var key = key(name);
 			if (allowedHeaderParams.contains(key) || allowedHeaderParams.contains("*")) {
-				set(name, p.getValue());
+				add(new RequestHeader(req, name, p.getValue()));
 			}
 		});
 	}
@@ -160,7 +160,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	/**
 	 * Copy constructor.
 	 */
-	private RequestHeaders(RequestHeaders copyFrom) {
+	private RequestHeaderList(RequestHeaderList copyFrom) {
 		req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
@@ -171,7 +171,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	/**
 	 * Subset constructor.
 	 */
-	private RequestHeaders(RequestHeaders copyFrom, String...names) {
+	private RequestHeaderList(RequestHeaderList copyFrom, String...names) {
 		this.req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
@@ -190,7 +190,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @param headers The header objects.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestHeaders add(Header...headers) {
+	public RequestHeaderList add(HttpHeader...headers) {
 		assertArgNotNull(ARG_headers, headers);
 		for (var h : headers)
 			if (nn(h))
@@ -209,7 +209,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @param value The header value.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestHeaders add(String name, Object value) {
+	public RequestHeaderList add(String name, Object value) {
 		assertArgNotNull(ARG_name, name);
 		add(new RequestHeader(req, name, s(value)).parser(parser));
 		return this;
@@ -224,7 +224,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @param pairs The default entries.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestHeaders addDefault(Header...pairs) {
+	public RequestHeaderList addDefault(HttpHeader...pairs) {
 		return addDefault(l(pairs));
 	}
 
@@ -237,7 +237,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @param pairs The default entries.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestHeaders addDefault(List<Header> pairs) {
+	public RequestHeaderList addDefault(List<HttpHeader> pairs) {
 		assertArgNotNull(ARG_pairs, pairs);
 		for (var p : pairs) {
 			var name = p.getName();
@@ -258,8 +258,8 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @param value The value.
 	 * @return This object.
 	 */
-	public RequestHeaders addDefault(String name, String value) {
-		return addDefault(BasicStringHeader.of(name, value));
+	public RequestHeaderList addDefault(String name, String value) {
+		return addDefault(HttpStringHeader.of(name, value));
 	}
 
 	/**
@@ -268,7 +268,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RequestHeaders caseSensitive(boolean value) {
+	public RequestHeaderList caseSensitive(boolean value) {
 		caseSensitive = value;
 		return this;
 	}
@@ -302,8 +302,8 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 *
 	 * @return A new parameters object.
 	 */
-	public RequestHeaders copy() {
-		return new RequestHeaders(this);
+	public RequestHeaderList copy() {
+		return new RequestHeaderList(this);
 	}
 
 	/**
@@ -417,7 +417,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @param value The new value for this setting.
 	 * @return This object.
 	 */
-	public RequestHeaders parser(HttpPartParserSession value) {
+	public RequestHeaderList parser(HttpPartParserSession value) {
 		parser = value;
 		forEach(x -> x.parser(parser));
 		return this;
@@ -429,7 +429,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @param name The header names.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestHeaders remove(String name) {
+	public RequestHeaderList remove(String name) {
 		assertArgNotNull(ARG_name, name);
 		removeIf(x -> eq(x.getName(), name));
 		return this;
@@ -445,10 +445,10 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @param headers The header to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestHeaders set(Header...headers) {
+	public RequestHeaderList set(HttpHeader...headers) {
 		assertArgNotNull(ARG_headers, headers);
 		for (var h : headers)
-			remove(h);
+			remove(h.getName());
 		for (var h : headers)
 			add(h);
 		return this;
@@ -468,7 +468,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestHeaders set(String name, Object value) {
+	public RequestHeaderList set(String name, Object value) {
 		assertArgNotNull(ARG_name, name);
 		set(new RequestHeader(req, name, s(value)).parser(parser));
 		return this;
@@ -490,8 +490,8 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @param names The list to include in the copy.
 	 * @return A new list object.
 	 */
-	public RequestHeaders subset(String...names) {
-		return new RequestHeaders(this, names);
+	public RequestHeaderList subset(String...names) {
+		return new RequestHeaderList(this, names);
 	}
 
 	protected FluentMap<String,Object> properties() {
@@ -505,7 +505,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 
 	@Override
 	public boolean equals(Object o) {
-		return this == o || (o instanceof RequestHeaders other && super.equals(other));
+		return this == o || (o instanceof RequestHeaderList other && super.equals(other));
 	}
 
 	@Override

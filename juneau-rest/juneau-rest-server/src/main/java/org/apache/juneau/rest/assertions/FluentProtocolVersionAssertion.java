@@ -19,13 +19,13 @@ package org.apache.juneau.rest.assertions;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Used for fluent assertion calls against {@link ProtocolVersion} objects.
+ * Used for fluent assertion calls against {@link HttpProtocolVersion} objects.
  *
  * <h5 class='topic'>Test Methods</h5>
  * <p>
@@ -90,7 +90,7 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
-public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<ProtocolVersion,R> {
+public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<HttpProtocolVersion,R> {
 
 	/**
 	 * Chained constructor.
@@ -109,7 +109,7 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
 	 * used on the same assertion.
 	 */
-	public FluentProtocolVersionAssertion(Assertion creator, ProtocolVersion value, R returns) {
+	public FluentProtocolVersionAssertion(Assertion creator, HttpProtocolVersion value, R returns) {
 		super(creator, value, returns);
 		setThrowable(BadRequest.class);
 	}
@@ -125,7 +125,7 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
 	 * used on the same assertion.
 	 */
-	public FluentProtocolVersionAssertion(ProtocolVersion value, R returns) {
+	public FluentProtocolVersionAssertion(HttpProtocolVersion value, R returns) {
 		this(null, value, returns);
 	}
 
@@ -135,7 +135,7 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 	 * @return A new assertion.
 	 */
 	public FluentIntegerAssertion<R> asMajor() {
-		return new FluentIntegerAssertion<>(value().getMajor(), returns());
+		return new FluentIntegerAssertion<>(value().major(), returns());
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 	 * @return A new assertion.
 	 */
 	public FluentIntegerAssertion<R> asMinor() {
-		return new FluentIntegerAssertion<>(value().getMinor(), returns());
+		return new FluentIntegerAssertion<>(value().minor(), returns());
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 	 * @return A new assertion.
 	 */
 	public FluentStringAssertion<R> asProtocol() {
-		return new FluentStringAssertion<>(value().getProtocol(), returns());
+		return new FluentStringAssertion<>(value().protocol(), returns());
 	}
 
 	@Override /* Overridden from Assertion */

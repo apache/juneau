@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import org.apache.juneau.commons.http.StringRanges;
 import java.util.function.*;
@@ -63,5 +65,31 @@ public class ContentDisposition extends HttpStringRangesHeader {
 
 	public static ContentDisposition ofLazyParsed(Supplier<StringRanges> supplier) {
 		return new ContentDisposition(supplier, LAZY_STRING_RANGES);
+	}
+
+	/**
+	 * Returns a {@code Content-Disposition} header value of the form {@code attachment; filename="<filename>"} with
+	 * the file name properly escaped (backslashes and double-quotes are backslash-escaped).
+	 *
+	 * @param filename The attachment filename. Must not be {@code null}, blank, or contain CR/LF characters.
+	 * @return A new {@code ContentDisposition} header.
+	 * @throws IllegalArgumentException If {@code filename} is invalid.
+	 */
+	public static ContentDisposition attachment(String filename) {
+		if (isBlank(filename))
+			throw illegalArg("Attachment filename must not be null or blank.");
+		for (var i = 0; i < filename.length(); i++) {
+			var c = filename.charAt(i);
+			if (c == '\r' || c == '\n')
+				throw illegalArg("Attachment filename must not contain CR or LF characters.");
+		}
+		var sb = new StringBuilder(filename.length() + 8);
+		for (var i = 0; i < filename.length(); i++) {
+			var c = filename.charAt(i);
+			if (c == '\\' || c == '"')
+				sb.append('\\');
+			sb.append(c);
+		}
+		return ContentDisposition.of("attachment; filename=\"" + sb + "\"");
 	}
 }

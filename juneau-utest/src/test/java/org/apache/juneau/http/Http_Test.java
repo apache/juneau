@@ -417,68 +417,68 @@ public class Http_Test {
 
 		@Test void e01_of_noHeaders() {
 			var body = StringBody.of("hello");
-			var resource = HttpResource.of(body);
+			var resource = HttpResourceBean.of(body);
 			assertSame(body, resource.getBody());
 			assertTrue(resource.getHeaders().isEmpty());
 			assertEquals("text/plain; charset=UTF-8", resource.getContentType());
 		}
 
 		@Test void e02_withHeader() {
-			var resource = HttpResource.of(StringBody.of("hello"))
+			var resource = HttpResourceBean.of(StringBody.of("hello"))
 				.withHeader("X-Custom", "value");
 			assertEquals("value", resource.getFirstHeader("X-Custom").getValue());
 		}
 
 		@Test void e03_withHeader_HttpHeader() {
-			var resource = HttpResource.of(StringBody.of("hello"))
+			var resource = HttpResourceBean.of(StringBody.of("hello"))
 				.withHeader(accept("application/json"));
 			assertEquals("application/json", resource.getFirstHeader("Accept").getValue());
 		}
 
 		@Test void e04_contentType_fromHeader_overridesBody() {
 			var body = StringBody.of("hello", "text/plain");
-			var resource = HttpResource.of(body, List.of(ContentType.of("application/json")));
+			var resource = HttpResourceBean.of(body, List.of(ContentType.of("application/json")));
 			assertEquals("application/json", resource.getContentType());
 		}
 
 		@Test void e05_contentLength_fromDelegate() {
-			var resource = HttpResource.of(StringBody.of("hello"));
+			var resource = HttpResourceBean.of(StringBody.of("hello"));
 			assertEquals(5, resource.getContentLength());
 		}
 
 		@Test void e06_isRepeatable() {
-			assertTrue(HttpResource.of(StringBody.of("hello")).isRepeatable());
+			assertTrue(HttpResourceBean.of(StringBody.of("hello")).isRepeatable());
 		}
 
 		@Test void e07_writeTo() throws IOException {
-			var resource = HttpResource.of(StringBody.of("world"));
+			var resource = HttpResourceBean.of(StringBody.of("world"));
 			var baos = new ByteArrayOutputStream();
 			resource.writeTo(baos);
 			assertEquals("world", baos.toString());
 		}
 
 		@Test void e08_toString() {
-			var resource = HttpResource.of(StringBody.of("hi"));
+			var resource = HttpResourceBean.of(StringBody.of("hi"));
 			assertEquals("hi", resource.toString());
 		}
 
 		@Test void e09_getFirstHeader_caseInsensitive() {
-			var resource = HttpResource.of(StringBody.of("")).withHeader("content-type", "application/json");
+			var resource = HttpResourceBean.of(StringBody.of("")).withHeader("content-type", "application/json");
 			assertNotNull(resource.getFirstHeader("Content-Type"));
 			assertNotNull(resource.getFirstHeader("CONTENT-TYPE"));
 		}
 
 		@Test void e10_getFirstHeader_absent() {
-			var resource = HttpResource.of(StringBody.of(""));
+			var resource = HttpResourceBean.of(StringBody.of(""));
 			assertNull(resource.getFirstHeader("X-Missing"));
 		}
 
 		@Test void e11_of_nullBodyThrows() {
-			assertThrows(IllegalArgumentException.class, () -> HttpResource.of(null));
+			assertThrows(IllegalArgumentException.class, () -> HttpResourceBean.of(null));
 		}
 
 		@Test void e12_withHeader_nullThrows() {
-			var resource = HttpResource.of(StringBody.of(""));
+			var resource = HttpResourceBean.of(StringBody.of(""));
 			assertThrows(IllegalArgumentException.class, () -> resource.withHeader((HttpHeader) null));
 		}
 	}
@@ -492,7 +492,8 @@ public class Http_Test {
 		@Test void f01_ok_noBody() {
 			var resp = ok();
 			assertEquals(200, resp.getStatusCode());
-			assertNull(resp.getBody());
+			assertNotNull(resp.getBody()); // no-arg constructor defaults body to reason phrase
+			assertEquals("OK", resp.getBody().toString());
 			assertEquals("HTTP/1.1 200 OK", resp.getStatusLine().toString());
 			assertEquals("HTTP/1.1 200 OK", resp.toString());
 		}
@@ -598,8 +599,8 @@ public class Http_Test {
 			var ex = notFound();
 			assertEquals(404, ex.getStatusCode());
 			assertEquals("Not Found", ex.getStatusLine().getReasonPhrase());
-			assertNull(ex.getMessage()); // no-arg constructor does not set a message
-			assertNull(ex.getBody());    // no body when no message
+			assertEquals("Not Found", ex.getMessage()); // defaults to reason phrase when no message
+			assertNull(ex.getBody()); // no body when no message
 		}
 
 		@Test void g02_notFound_withMessage() {
@@ -680,7 +681,7 @@ public class Http_Test {
 
 		@Test void g10_messageAndCause() {
 			var cause = new RuntimeException("cause");
-			var ex = new BadRequest("bad message", cause);
+			var ex = new BadRequest(cause, "bad message");
 			assertEquals("bad message", ex.getMessage());
 			assertSame(cause, ex.getCause());
 		}

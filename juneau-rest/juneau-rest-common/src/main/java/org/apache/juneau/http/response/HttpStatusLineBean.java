@@ -32,8 +32,11 @@ import org.apache.juneau.http.*;
  * 	<jc>// 200 OK  HTTP/1.1</jc>
  * 	HttpStatusLine <jv>sl</jv> = HttpStatusLineBean.<jsm>of</jsm>(200, <js>"OK"</js>);
  *
- * 	<jc>// Custom protocol version</jc>
+ * 	<jc>// Custom protocol version (parsed)</jc>
  * 	HttpStatusLine <jv>sl2</jv> = HttpStatusLineBean.<jsm>of</jsm>(<js>"HTTP/2"</js>, 200, <js>"OK"</js>);
+ *
+ * 	<jc>// Custom protocol version (typed)</jc>
+ * 	HttpStatusLine <jv>sl3</jv> = HttpStatusLineBean.<jsm>of</jsm>(HttpProtocolVersion.<jsf>HTTP_2_0</jsf>, 200, <js>"OK"</js>);
  * </p>
  *
  * <p>
@@ -52,14 +55,11 @@ import org.apache.juneau.http.*;
  */
 public final class HttpStatusLineBean implements HttpStatusLine {
 
-	/** Default HTTP/1.1 protocol version string. */
-	public static final String HTTP_1_1 = "HTTP/1.1";
-
-	private final String protocolVersion;
+	private final HttpProtocolVersion protocolVersion;
 	private final int statusCode;
 	private final String reasonPhrase;
 
-	private HttpStatusLineBean(String protocolVersion, int statusCode, String reasonPhrase) {
+	private HttpStatusLineBean(HttpProtocolVersion protocolVersion, int statusCode, String reasonPhrase) {
 		this.protocolVersion = assertArgNotNull("protocolVersion", protocolVersion);
 		this.statusCode = statusCode;
 		this.reasonPhrase = reasonPhrase;
@@ -73,11 +73,11 @@ public final class HttpStatusLineBean implements HttpStatusLine {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public static HttpStatusLineBean of(int statusCode, String reasonPhrase) {
-		return new HttpStatusLineBean(HTTP_1_1, statusCode, reasonPhrase);
+		return new HttpStatusLineBean(HttpProtocolVersion.HTTP_1_1, statusCode, reasonPhrase);
 	}
 
 	/**
-	 * Creates a status line with a custom protocol version, status code, and reason phrase.
+	 * Creates a status line with a parsed protocol version, status code, and reason phrase.
 	 *
 	 * @param protocolVersion The protocol version string (e.g. {@code "HTTP/2"}). Must not be <jk>null</jk>.
 	 * @param statusCode The HTTP status code.
@@ -85,6 +85,18 @@ public final class HttpStatusLineBean implements HttpStatusLine {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public static HttpStatusLineBean of(String protocolVersion, int statusCode, String reasonPhrase) {
+		return new HttpStatusLineBean(HttpProtocolVersion.parse(protocolVersion), statusCode, reasonPhrase);
+	}
+
+	/**
+	 * Creates a status line with the given typed protocol version, status code, and reason phrase.
+	 *
+	 * @param protocolVersion The protocol version. Must not be <jk>null</jk>.
+	 * @param statusCode The HTTP status code.
+	 * @param reasonPhrase The reason phrase. May be <jk>null</jk>.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public static HttpStatusLineBean of(HttpProtocolVersion protocolVersion, int statusCode, String reasonPhrase) {
 		return new HttpStatusLineBean(protocolVersion, statusCode, reasonPhrase);
 	}
 
@@ -99,13 +111,13 @@ public final class HttpStatusLineBean implements HttpStatusLine {
 	}
 
 	@Override /* HttpStatusLine */
-	public String getProtocolVersion() {
+	public HttpProtocolVersion getProtocolVersion() {
 		return protocolVersion;
 	}
 
 	@Override /* Object */
 	public String toString() {
-		var sb = new StringBuilder(protocolVersion).append(' ').append(statusCode);
+		var sb = new StringBuilder(protocolVersion.toString()).append(' ').append(statusCode);
 		if (reasonPhrase != null)
 			sb.append(' ').append(reasonPhrase);
 		return sb.toString();

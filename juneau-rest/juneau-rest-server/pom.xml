@@ -42,11 +42,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-common-classic</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-config</artifactId>
 			<version>${project.version}</version>
 		</dependency>

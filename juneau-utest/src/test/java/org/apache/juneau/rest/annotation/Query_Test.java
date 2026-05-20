@@ -184,7 +184,7 @@ class Query_Test extends TestBase {
 	@Rest
 	public static class D {
 		@RestGet(defaultRequestQueryData={"f1:1","f2=2"," f3 : 3 "})
-		public JsonMap a(RequestQueryParams query) {
+		public JsonMap a(RequestQueryParamList query) {
 			return JsonMap.create()
 				.append("f1", query.get("f1").asString())
 				.append("f2", query.get("f2").asString())

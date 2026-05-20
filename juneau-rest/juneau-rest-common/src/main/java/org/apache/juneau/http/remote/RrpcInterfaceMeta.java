@@ -53,22 +53,78 @@ public final class RrpcInterfaceMeta {
 	private final Class<?> iface;
 	private final String basePath;
 	private final Map<Method, RrpcInterfaceMethodMeta> methodMetas;
+	private final Map<String, RrpcInterfaceMethodMeta> methodMetasByPath;
 
 	private RrpcInterfaceMeta(Class<?> iface) {
+		this(iface, false);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Provides backwards compatibility with the classic {@code RrpcInterfaceMeta} signature; the {@code uri}
+	 * argument is accepted for API parity and is currently ignored by this implementation.
+	 *
+	 * <p>
+	 * Unlike {@link #of(Class)}, this constructor includes <i>all</i> public interface methods (matching the
+	 * classic behavior), not just those annotated with the {@code @Remote*} annotations.
+	 *
+	 * @param iface The interface class. Must not be <jk>null</jk>.
+	 * @param uri Reserved for compatibility with the classic constructor. May be <jk>null</jk>.
+	 */
+	public RrpcInterfaceMeta(Class<?> iface, String uri) {
+		this(iface, true);
+	}
+
+	private RrpcInterfaceMeta(Class<?> iface, boolean includeUnannotated) {
 		if (!iface.isInterface())
 			throw illegalArg("Class {0} is not an interface", iface.getName());
 		var remote = iface.getAnnotation(Remote.class);
-		if (remote == null)
-			throw illegalArg("Interface {0} is not annotated with @Remote", iface.getName());
 
 		this.iface = iface;
-		var path = remote.path().isEmpty() ? remote.value() : remote.path();
-		this.basePath = path;
+		this.basePath = remote == null ? "" : (remote.path().isEmpty() ? remote.value() : remote.path());
 
 		var metas = new LinkedHashMap<Method, RrpcInterfaceMethodMeta>();
-		for (var m : iface.getMethods())
-			buildMethodMeta(m).ifPresent(meta -> metas.put(m, meta));
+		for (var m : iface.getMethods()) {
+			var opt = buildMethodMeta(m);
+			if (opt.isPresent()) {
+				metas.put(m, opt.get());
+			} else if (includeUnannotated) {
+				metas.put(m, new RrpcInterfaceMethodMeta(m, "POST", buildSignaturePath(m), RemoteReturn.BODY));
+			}
+		}
 		this.methodMetas = Collections.unmodifiableMap(metas);
+
+		var byPath = new LinkedHashMap<String, RrpcInterfaceMethodMeta>();
+		for (var v : metas.values())
+			byPath.put(v.getPath(), v);
+		this.methodMetasByPath = Collections.unmodifiableMap(byPath);
+	}
+
+	private static String buildSignaturePath(Method m) {
+		var sb = new StringBuilder(128);
+		sb.append(m.getName()).append('/');
+		Class<?>[] pt = m.getParameterTypes();
+		if (pt.length == 0)
+			return sb.toString();
+		sb.append('(');
+		for (var i = 0; i < pt.length; i++) {
+			if (i > 0)
+				sb.append(',');
+			appendTypeName(sb, pt[i]);
+		}
+		sb.append(')');
+		return sb.toString();
+	}
+
+	private static void appendTypeName(StringBuilder sb, Class<?> c) {
+		if (c.isArray()) {
+			appendTypeName(sb, c.getComponentType());
+			sb.append("[]");
+		} else {
+			sb.append(c.getName());
+		}
 	}
 
 	/**
@@ -80,6 +136,10 @@ public final class RrpcInterfaceMeta {
 	 */
 	public static RrpcInterfaceMeta of(Class<?> iface) {
 		assertArgNotNull("iface", iface);
+		if (!iface.isInterface())
+			throw illegalArg("Class {0} is not an interface", iface.getName());
+		if (iface.getAnnotation(Remote.class) == null)
+			throw illegalArg("Class {0} is not annotated with @Remote", iface.getName());
 		return CACHE.computeIfAbsent(iface, RrpcInterfaceMeta::new);
 	}
 
@@ -90,6 +150,37 @@ public final class RrpcInterfaceMeta {
 	 */
 	public Class<?> getInterface() {
 		return iface;
+	}
+
+	/**
+	 * Returns the Java class of this interface.
+	 *
+	 * <p>
+	 * Alias for {@link #getInterface()} provided for backwards compatibility with the classic API.
+	 *
+	 * @return The Java class. Never <jk>null</jk>.
+	 */
+	public Class<?> getJavaClass() {
+		return iface;
+	}
+
+	/**
+	 * Returns the method metadata keyed by the resolved method path.
+	 *
+	 * @return An unmodifiable map from path to {@link RrpcInterfaceMethodMeta}. Never <jk>null</jk>.
+	 */
+	public Map<String, RrpcInterfaceMethodMeta> getMethodsByPath() {
+		return methodMetasByPath;
+	}
+
+	/**
+	 * Returns the method metadata for the given path.
+	 *
+	 * @param path The path. May be <jk>null</jk>.
+	 * @return The matching method metadata, or <jk>null</jk> if no match was found.
+	 */
+	public RrpcInterfaceMethodMeta getMethodMetaByPath(String path) {
+		return path == null ? null : methodMetasByPath.get(path);
 	}
 
 	/**

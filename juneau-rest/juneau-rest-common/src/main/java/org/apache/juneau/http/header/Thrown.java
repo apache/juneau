@@ -16,6 +16,10 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.util.function.*;
 
 /**
  * Represents an HTTP <c>Thrown</c> header.
@@ -27,11 +31,6 @@ package org.apache.juneau.http.header;
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
  * ({@code org.apache.juneau.ng.*}).
  *
- * @since 9.2.1
- */
-import java.util.function.*;
-
-/**
  * @since 9.2.1
  */
 public class Thrown extends HttpCsvHeader {
@@ -56,6 +55,34 @@ public class Thrown extends HttpCsvHeader {
 
 	public static Thrown of(String... values) {
 		return new Thrown(values);
+	}
+
+	/**
+	 * Creates a {@code Thrown} header value from one or more {@link Throwable} instances.
+	 *
+	 * <p>
+	 * Each throwable is encoded as {@code <urlEncode(className)>;<urlEncode(message)>} and the entries
+	 * are joined with {@code ", "}.
+	 *
+	 * @param values The throwables to encode. {@code null} entries are ignored.
+	 * @return A new header. Never {@code null}.
+	 */
+	public static Thrown of(Throwable... values) {
+		var sb = new StringBuilder();
+		if (values != null) {
+			var first = true;
+			for (var v : values) {
+				if (v == null)
+					continue;
+				if (!first)
+					sb.append(", ");
+				first = false;
+				sb.append(urlEncode(cn(v))).append(';');
+				if (v.getMessage() != null)
+					sb.append(urlEncode(v.getMessage()));
+			}
+		}
+		return new Thrown(sb.toString());
 	}
 
 	public static Thrown ofLazyWire(Supplier<String> supplier) {

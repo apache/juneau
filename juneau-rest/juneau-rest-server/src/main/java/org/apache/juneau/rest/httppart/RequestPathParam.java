@@ -21,8 +21,8 @@ import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import java.lang.reflect.*;
 import java.util.regex.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.HttpPart;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 
@@ -30,7 +30,7 @@ import org.apache.juneau.rest.*;
  * Represents a single path parameter on an HTTP request.
  *
  * <p>
- * Typically accessed through the {@link RequestPathParams} class.
+ * Typically accessed through the {@link RequestPathParamList} class.
  *
  * <p>
  * 	Some important methods on this class are:
@@ -90,7 +90,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
-public class RequestPathParam extends RequestHttpPart implements NameValuePair {
+public class RequestPathParam extends RequestHttpPart implements HttpPart {
 
 	/**
 	 * Constructor.

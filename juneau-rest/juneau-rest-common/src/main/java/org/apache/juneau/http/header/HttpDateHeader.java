@@ -43,6 +43,28 @@ public class HttpDateHeader extends HttpHeaderBean {
 	private final Supplier<?> lazySupplier;
 	private final int lazyMode;
 
+	/**
+	 * Creates an {@link HttpDateHeader} by parsing the given RFC-1123 wire-format value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param wireValue Wire value (e.g. {@code "Sun, 06 Nov 1994 08:49:37 GMT"}). May be {@code null} or empty.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpDateHeader of(String name, String wireValue) {
+		return new HttpDateHeader(name, wireValue);
+	}
+
+	/**
+	 * Creates an {@link HttpDateHeader} with the given typed value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param typedValue The date value. May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpDateHeader of(String name, ZonedDateTime typedValue) {
+		return new HttpDateHeader(name, typedValue);
+	}
+
 	protected HttpDateHeader(String name, String value) {
 		super(name, (String)null);
 		this.cachedZdt = e(value) ? null : parseHttpDate(value);

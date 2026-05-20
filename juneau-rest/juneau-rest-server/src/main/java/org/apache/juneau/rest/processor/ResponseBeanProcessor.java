@@ -22,11 +22,13 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.http.*;
-import org.apache.http.Header;
+import org.apache.juneau.commons.httppart.*;
+import org.apache.juneau.http.HttpHeader;
+import org.apache.juneau.http.HttpPart;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.response.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -78,30 +80,30 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 			try {
 				var o = hm.getGetter().invoke(output);
 				var ps = hm.getSchema();
+				var serializer = hm.getSerializer().orElse(defaultPartSerializer).getPartSession();
 				if ("*".equals(n)) {
 					for (var o2 : iterate(o)) {
-						Header h;
+						HttpHeader h;
 						if (o2 instanceof Map.Entry o22) {
-							var x = o22;
-							var k = s(x.getKey());
-							h = new SerializedHeader(k, x.getValue(), hm.getSerializer().orElse(defaultPartSerializer).getPartSession(), ps.getProperty(k), true);
-						} else if (o2 instanceof Header o22) {
+							var k = s(o22.getKey());
+							h = toHeader(k, o22.getValue(), serializer, ps != null ? ps.getProperty(k) : null);
+						} else if (o2 instanceof HttpHeader o22) {
 							h = o22;
-						} else if (o2 instanceof NameValuePair o23) {
-							h = BasicHeader.of(o23);
+						} else if (o2 instanceof HttpPart o23) {
+							h = HttpStringHeader.of(o23.getName(), o23.getValue());
 						} else {
 							throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", cn(o2), n);
 						}
 						res.addHeader(h);
 					}
 				} else {
-					Header h;
-					if (o instanceof Header o2)
+					HttpHeader h;
+					if (o instanceof HttpHeader o2)
 						h = o2;
-					else if (o instanceof NameValuePair o3)
-						h = BasicHeader.of(o3);
+					else if (o instanceof HttpPart o3)
+						h = HttpStringHeader.of(o3.getName(), o3.getValue());
 					else
-						h = new SerializedHeader(n, o, hm.getSerializer().orElse(defaultPartSerializer).getPartSession(), ps, true);
+						h = toHeader(n, o, serializer, ps);
 					res.addHeader(h);
 				}
 			} catch (Exception e) {
@@ -130,6 +132,22 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 		}
 
 		return NEXT;  // Let PojoProcessor serialize it.
+	}
+
+	/**
+	 * Serializes the given value to a String using the given part serializer/schema, then returns it as an
+	 * {@link HttpStringHeader}. Returns {@code null} only if the serialized value would be a blank string
+	 * and {@code skipIfEmpty} semantics apply.
+	 */
+	private static HttpHeader toHeader(String name, Object value, HttpPartSerializerSession session, HttpPartSchema schema) throws Exception {
+		String v;
+		if (session != null)
+			v = session.serialize(HttpPartType.HEADER, schema, value);
+		else
+			v = value == null ? null : value.toString();
+		if (v != null && v.isEmpty())
+			v = null;
+		return HttpStringHeader.of(name, v);
 	}
 
 	private static Iterable<?> iterate(Object o) {

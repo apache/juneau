@@ -1,14 +1,20 @@
-# TODO-38: Rename `juneau-rest-client` → `juneau-rest-client-classic` and `juneau-ng-rest-client-*` → `juneau-rest-client-*`
+# FINISHED-38: Renamed `juneau-rest-client` → `juneau-rest-client-classic` and `juneau-ng-rest-client-*` → `juneau-rest-client-*`
 
-Source: created on 2026-05-18. Updated 2026-05-19 (Option 1 landed; ng.http promoted to canonical). Updated 2026-05-19 (Steps 3–6 + 8–9 landed; docs underway).
+Created 2026-05-18. Landed 2026-05-19 across commits `05df0323e1` (rest-common `.classic` split + `ng.http` → canonical promotion), `27bd4960ed` (REST client + HTTP stack canonical promotion + `juneau-rest-client-classic` module), and `6a041405e5` (juneau-docs).
 
-## Status: NEAR-COMPLETE — Steps 1–6, 8, 9 done; Step 7 (docs) substantially done; awaiting final verification + commit
+## Outcome
 
-The new client family (`juneau-rest-client-*`), the classic split of the existing client, the `juneau-rest-common` common-module rename + `ng.http` → canonical promotion, the physical `juneau-rest-client-classic` Maven module, the mock-module split + `NgMockRestClient` → `MockRestClient` rename, the test renames, and the shaded/distrib updates are all landed.
+The next-generation REST client family was promoted from `org.apache.juneau.ng.*` / `juneau-ng-rest-client-*` to the canonical `org.apache.juneau.rest.client.*` / `juneau-rest-client-*` namespace.  The pre-existing HC-4.5-based client was moved into a new sibling `juneau-rest-client-classic` Maven module under `org.apache.juneau.rest.client.classic.*` so both stacks can coexist on the same classpath.
 
-`mvn -DskipTests install` (full project) is green. `mvn test-compile` (full project, including `juneau-utest`) is green.
+Verification baselines at completion:
 
-## What's done
+- `mvn -DskipTests install` — full project clean build green.
+- `mvn test-compile` — full project test-compile green, including `juneau-utest`.
+- `mvn -pl juneau-rest/juneau-rest-client dependency:tree | grep org.apache.httpcomponents` — empty (canonical client carries no HC dep).
+- `mvn -pl juneau-rest/juneau-rest-client-classic dependency:tree | grep org.apache.httpcomponents` — `httpclient:jar:4.5.14` (classic client still carries HC 4.5 by design).
+- `rg -l 'org\.apache\.juneau\.ng\.|NgRestClient|NgMockRestClient' juneau-* juneau-utest` — source-tree clean (only matches are in `todo/` history and one auto-generated AI artifact).
+
+## What landed
 
 ### Module renames (transport adapters)
 - All five transport adapter modules: `juneau-ng-rest-client-*` → `juneau-rest-client-*` (directory + artifactId).
@@ -25,7 +31,7 @@ The new client family (`juneau-rest-client-*`), the classic split of the existin
 - `org.apache.juneau.ng.rest.client.assertion` → `org.apache.juneau.rest.client.assertion`.
 - `org.apache.juneau.ng.rest.client.remote` → `org.apache.juneau.rest.client.remote`.
 
-### Classic split inside `juneau-rest-client` (Step 3 — completed 2026-05-19)
+### Classic split inside `juneau-rest-client` (Step 3)
 - Legacy `org.apache.juneau.rest.client.*` source moved to `org.apache.juneau.rest.client.classic.*`.
 - Legacy `assertion` and `remote` subpackages moved to `.classic.assertion` / `.classic.remote`.
 - New `juneau-rest-client-classic` Maven module created at `juneau-rest/juneau-rest-client-classic/`:
@@ -48,14 +54,14 @@ The new client family (`juneau-rest-client-*`), the classic split of the existin
 - `META-INF/services/org.apache.juneau.rest.client.HttpTransportProvider` SPI files added in each adapter module.
 - Obsolete `META-INF/services/org.apache.juneau.ng.rest.client.HttpTransportProvider` SPI files removed.
 
-### Mock module (Step 4 — completed 2026-05-19)
+### Mock module (Step 4)
 - `org.apache.juneau.ng.rest.mock` → `org.apache.juneau.rest.mock` package promotion.
 - `MockHttpTransport` lives at canonical `org.apache.juneau.rest.mock.MockHttpTransport`.
 - **`NgMockRestClient` renamed to `MockRestClient`** at canonical `org.apache.juneau.rest.mock.MockRestClient`.
 - Legacy `MockRestClient` / `MockRestRequest` / `MockRestResponse` / `MockHttpClientConnectionManager` / `MockConsole` / `MockLogger` moved to `org.apache.juneau.rest.mock.classic.*` (still in `juneau-rest-mock` module).
 - Shared types stay at `org.apache.juneau.rest.mock.*`: `MockServletRequest`, `MockServletResponse`, `MockHttpSession`, `MockPathResolver`. `MockServletRequest.debug(boolean)`, `MockServletResponse.getHeaders()`, and `MockPathResolver` were widened to public so the classic mock client can access them across the new package boundary.
 
-### Common-module rename (Step 1 — completed via Option 1)
+### Common-module rename (Step 1 — Option 1)
 
 The user picked **Option 1** ("rename legacy in place to `org.apache.juneau.http.classic.*` inside `juneau-rest-common`"). Implemented as follows (~171 files renamed):
 
@@ -80,7 +86,7 @@ The user picked **Option 1** ("rename legacy in place to `org.apache.juneau.http
 
 The follow-up to actually **remove** the HC 4.5 (`org.apache.http.*`) dependency from `juneau-rest-common` and `juneau-rest-server` is tracked separately in **TODO-40** (see `todo/TODO-40-remove-hc45-from-rest-common-and-server.md`).
 
-### Step 2 — `org.apache.juneau.ng.http.*` → canonical `org.apache.juneau.http.*` (completed)
+### Step 2 — `org.apache.juneau.ng.http.*` → canonical `org.apache.juneau.http.*`
 
 After Step 1 freed the canonical namespace, the ng.http promotion landed:
 
@@ -89,12 +95,12 @@ After Step 1 freed the canonical namespace, the ng.http promotion landed:
 - Top-level facades promoted: `HttpBodies`, `HttpBody`, `HttpHeader`, `HttpHeaders`, `HttpPart`, `HttpParts`, `HttpResponses`, `HttpStatusLine` → `org.apache.juneau.http.*`.
 - All ~74 source references updated to canonical.
 
-### Step 5 — Shaded / distrib renames (completed 2026-05-19)
+### Step 5 — Shaded / distrib renames
 - `juneau-shaded/juneau-shaded-rest-client/pom.xml` — adds `juneau-rest-client-classic` alongside `juneau-rest-client`; description updated.
 - `juneau-shaded/juneau-shaded-all/pom.xml` — adds `juneau-rest-client-classic` alongside `juneau-rest-client`.
 - `juneau-distrib/pom.xml` — emits sources + jar + OSGi bundle for the new `juneau-rest-client-classic` artifact (filename `apache-juneau-rest-client-classic-<version>*.jar`, OSGi bundle `org.apache.juneau.rest.client.classic_<version>.jar`).
 
-### Step 6 — Test renames (completed 2026-05-19)
+### Step 6 — Test renames
 - `juneau-utest/src/test/java/org/apache/juneau/ng/rest/Ng*_Test.java` → `juneau-utest/src/test/java/org/apache/juneau/rest/client/*_Test.java` (with the `Ng` prefix dropped).
 - `juneau-utest/src/test/java/org/apache/juneau/ng/rest/Ng?MockRestClient_Test.java` → `juneau-utest/src/test/java/org/apache/juneau/rest/mock/MockRestClient_Test.java`.
 - `juneau-utest/src/test/java/org/apache/juneau/ng/NgPackageScanner.java` → `juneau-utest/src/test/java/org/apache/juneau/PackageScanner.java` (test utility).
@@ -103,17 +109,17 @@ After Step 1 freed the canonical namespace, the ng.http promotion landed:
 - 216 consumer test files updated: `import org.apache.juneau.rest.mock.*;` → `import org.apache.juneau.rest.mock.classic.*;` (selectively — only where the file uses legacy types and not shared servlet-mock helpers). Two mixed-usage files (`Swagger_Test.java`, `mock2/MockServletRequest_Coverage_Test.java`) get explicit named imports for `MockRestClient`/`MockRestRequest` from `.classic`.
 - `juneau-utest/src/test/java/org/apache/juneau/rest/client/classic/` hosts the legacy classic `RestClient_*` test suite.
 
-### Step 8 — Examples + microservice templates (completed 2026-05-19)
+### Step 8 — Examples + microservice templates
 - `juneau-examples/juneau-examples-rest-jetty-ftest` source files (`ContentComboTestBase`, `RootResourcesTest`, `SamplesMicroservice`) repointed at `org.apache.juneau.rest.client.classic.RestClient` since they exercise the legacy fluent API (`json5()`, `plainText()`, `closeQuietly()`, `rootUrl(URI)`, `serializer(...)`).
 - `juneau-microservice/juneau-microservice/pom.xml` — adds dependency on `juneau-rest-client-classic` alongside `juneau-rest-client` so downstream consumers transitively get both flavors.
 - Microservice templates (`juneau-my-jetty-microservice`, `juneau-my-springboot-microservice`) inherit through `juneau-microservice` — no per-template change required.
 
-### Step 9 — IDE / build-tooling files (completed 2026-05-19)
+### Step 9 — IDE / build-tooling files
 - All `.project` / `.classpath` / `.settings/*.prefs` files are local IDE files (gitignored), so Eclipse will regenerate them on re-import; no manual edits required.
 - OSGi `Bundle-SymbolicName` / `Export-Package` entries are auto-generated by the `maven-bundle-plugin` for the new `juneau-rest-client-classic` module — verified that the produced manifest exports `org.apache.juneau.rest.client.classic`, `.classic.assertion`, and `.classic.remote`.
 - `scripts/*.py` / `.cursor/commands/*.md` reviewed — no hard-coded references to the old `juneau-ng-rest-client*` artifact IDs.
 
-### Step 7 — Docs (`juneau-docs`) — substantially complete 2026-05-19
+### Step 7 — Docs (`juneau-docs`)
 
 Sourced changes in `juneau-docs/`:
 - `pages/release-notes/9.5.0.md` — "Next-Generation REST Client and HTTP Stack" section rewritten to describe the canonical names (no `Ng*`, no `org.apache.juneau.ng.*`); added new "Classic Module Split" subsection; rewrote the migration-path bullets.
@@ -124,27 +130,18 @@ Sourced changes in `juneau-docs/`:
 - `pages/topics/20.03.JuneauShadedRestClient.md` — listing updated to include `juneau-rest-client-classic`; external-dependency text fixed (HC 4.5.x, not 5.2+).
 - `pages/topics/20.06.JuneauShadedAll.md` — module list now includes `juneau-rest-client-classic`; external-dependency text updated.
 
-Still TBD (low priority):
-- `static/ai/juneau-knowledge.jsonl` — auto-generated AI artifact; regenerate when the next batch of artifact-bound knowledge ships.
-- `pages/topics/12.01.JuneauRestClientBasics.md` (and similar end-to-end docs) — still describes the classic surface. Treating as "stays accurate for the classic client" — readers route to `NextGenRestClient.md` for the new stack.
-- Sidebar config (`sidebars.ts`) — left as-is; `NextGenRestClient` entry is still relevant as a "Beta" topic.
+Carried over as low-priority cleanup (not blocking TODO-38):
+- `static/ai/juneau-knowledge.jsonl` — auto-generated AI artifact; regenerates with the next artifact-bound knowledge batch.
+- `pages/topics/12.01.JuneauRestClientBasics.md` and similar end-to-end docs — accurate for the classic client; readers route to `NextGenRestClient.md` for the canonical stack.
+- Sidebar config (`sidebars.ts`) — `NextGenRestClient` stays in the "Beta" sidebar slot until the canonical stack is declared stable in a later release.
 
-## Verification
+## Follow-ups that spun out of TODO-38
 
-1. `mvn -DskipTests install` — full clean build green. ✓
-2. `mvn test-compile` — full project test-compile green. ✓
-3. `mvn -pl juneau-rest/juneau-rest-client dependency:tree | grep org.apache.httpcomponents` — empty. ✓ (no HC dep on the canonical client)
-4. `mvn -pl juneau-rest/juneau-rest-client-classic dependency:tree | grep org.apache.httpcomponents` — `httpclient:jar:4.5.14`. ✓
-5. `rg -l 'org\.apache\.juneau\.ng\.|NgRestClient|NgMockRestClient' juneau-* juneau-utest` — only matches in `todo/` plan files and `juneau-docs/static/ai/juneau-knowledge.jsonl`. ✓ (Source code is clean of `ng.*` references except in `FINISHED-*` archive markdowns, which are historical record.)
-6. Eclipse re-import — pending (user action).
-
-## Open follow-ups
-
-- **TODO-40** — Remove the residual Apache HC 4.5 (`org.apache.http.*`) dependency from `juneau-rest-common` and `juneau-rest-server`. Currently `juneau-rest-common` exports both the new (HC-free) `org.apache.juneau.http.*` packages **and** the classic `.classic.*` packages that still leak HC 4.5 onto every consumer's classpath.
-- **Sidebar / IA review** — consider promoting `NextGenRestClient.md` out of the "Beta" sidebar slot once the canonical stack is declared stable in a later release.
+- **TODO-40** — Remove the residual Apache HC 4.5 (`org.apache.http.*`) dependency from `juneau-rest-common` and `juneau-rest-server`. After TODO-38, `juneau-rest-common` exports both the new (HC-free) `org.apache.juneau.http.*` packages **and** the classic `.classic.*` packages, the latter still pulling HC 4.5 onto every consumer's classpath.
+- **TODO-41** (shipped) — Folded the unreleased `juneau-rest-client-java-httpclient` adapter back into `juneau-rest-client` and promoted the JDK `HttpClient` transport to the built-in default. See `FINISHED-41-merge-java-httpclient-default-transport.md`.
+- **TODO-42** (shipped) — Split `juneau-rest-common` into transport-neutral + classic Maven artifacts. See `FINISHED-42-split-rest-common-classic.md`.
 
 ## Notes
 
-- Compile-green checkpoint: `mvn -DskipTests install` (full project) passes as of 2026-05-19.
 - The promoted ng package contents now live at canonical names (no more `org.apache.juneau.ng.http.*` / `org.apache.juneau.ng.rest.client.*` / `org.apache.juneau.ng.rest.mock.*`).
-- FINISHED archive files (`FINISHED-11a-restclient-ng-design-plan.md`, `FINISHED-11b-restclient-ng-coverage-closeout.md`) are historical record of the `.ng.` scaffolding — do not edit.
+- FINISHED archive files (`FINISHED-11a-restclient-ng-design-plan.md`, `FINISHED-11b-restclient-ng-coverage-closeout.md`) hold the historical record of the `.ng.` scaffolding — do not edit.

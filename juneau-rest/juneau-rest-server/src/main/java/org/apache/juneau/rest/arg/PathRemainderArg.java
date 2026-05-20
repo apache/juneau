@@ -42,7 +42,7 @@ import org.apache.juneau.rest.httppart.*;
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getRequest() getRequest}()
  * 		.{@link RestRequest#getPathParams() getPathParams}()
- * 		.{@link RequestPathParams#get(String) get}(<js>"/*"</js>)
+ * 		.{@link RequestPathParamList#get(String) get}(<js>"/*"</js>)
  * 		.{@link RequestPathParam#as(Class) as}(<jv>type</jv>);
  * </p>
  *

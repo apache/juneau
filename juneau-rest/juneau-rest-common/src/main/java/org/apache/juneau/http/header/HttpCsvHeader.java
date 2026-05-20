@@ -42,6 +42,28 @@ public class HttpCsvHeader extends HttpHeaderBean {
 	private final Supplier<?> lazySupplier;
 	private final int lazyMode;
 
+	/**
+	 * Creates an {@link HttpCsvHeader} by parsing the given comma-delimited wire value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param wireValue Wire value. May be {@code null} or empty.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpCsvHeader of(String name, String wireValue) {
+		return new HttpCsvHeader(name, wireValue);
+	}
+
+	/**
+	 * Creates an {@link HttpCsvHeader} with the given typed values.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param typedValues The token values. May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpCsvHeader of(String name, String...typedValues) {
+		return new HttpCsvHeader(name, typedValues);
+	}
+
 	protected HttpCsvHeader(String name, String value) {
 		super(name, value);
 		this.eagerTokens = null;

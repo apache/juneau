@@ -28,7 +28,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
@@ -84,15 +84,15 @@ class RestOp_Params_Test extends TestBase {
 			t.write("OK");
 		}
 		@RestGet
-		public boolean i(RequestHeaders t) {
+		public boolean i(RequestHeaderList t) {
 			return t != null;
 		}
 		@RestGet
-		public boolean j(RequestQueryParams t) {
+		public boolean j(RequestQueryParamList t) {
 			return t != null;
 		}
 		@RestGet
-		public boolean k(RequestFormParams t) {
+		public boolean k(RequestFormParamList t) {
 			return t != null;
 		}
 		@RestGet
@@ -116,7 +116,7 @@ class RestOp_Params_Test extends TestBase {
 			return t != null;
 		}
 		@RestGet
-		public boolean r(RequestPathParams t) {
+		public boolean r(RequestPathParamList t) {
 			return t != null;
 		}
 		@RestGet
@@ -198,7 +198,7 @@ class RestOp_Params_Test extends TestBase {
 			return contentType.getValue();
 		}
 		@RestGet
-		public String date(org.apache.juneau.http.classic.header.Date date) {
+		public String date(org.apache.juneau.http.header.Date date) {
 			return date.getValue();
 		}
 		@RestGet

@@ -41,6 +41,28 @@ public class HttpUriHeader extends HttpHeaderBean {
 	private final Supplier<?> lazySupplier;
 	private final int lazyMode;
 
+	/**
+	 * Creates an {@link HttpUriHeader} by parsing the given wire-format value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param wireValue Wire value. May be {@code null} or empty.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpUriHeader of(String name, String wireValue) {
+		return new HttpUriHeader(name, wireValue);
+	}
+
+	/**
+	 * Creates an {@link HttpUriHeader} with the given typed value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param typedValue The URI value. May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpUriHeader of(String name, URI typedValue) {
+		return new HttpUriHeader(name, typedValue);
+	}
+
 	protected HttpUriHeader(String name, String value) {
 		super(name, value);
 		this.cachedUri = e(value) ? null : URI.create(value);

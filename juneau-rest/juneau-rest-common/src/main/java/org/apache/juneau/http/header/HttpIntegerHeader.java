@@ -17,7 +17,8 @@
 package org.apache.juneau.http.header;
 
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.rex;
+import static org.apache.juneau.commons.utils.StringUtils.parseInt;
+import static org.apache.juneau.commons.utils.ThrowableUtils.illegalArg;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
@@ -41,9 +42,31 @@ public class HttpIntegerHeader extends HttpHeaderBean {
 	private final Supplier<?> lazySupplier;
 	private final int lazyMode;
 
+	/**
+	 * Creates an {@link HttpIntegerHeader} by parsing the given wire-format value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param wireValue Wire value. May be {@code null} or empty.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpIntegerHeader of(String name, String wireValue) {
+		return new HttpIntegerHeader(name, wireValue);
+	}
+
+	/**
+	 * Creates an {@link HttpIntegerHeader} with the given typed value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param typedValue The integer value. May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpIntegerHeader of(String name, Integer typedValue) {
+		return new HttpIntegerHeader(name, typedValue);
+	}
+
 	protected HttpIntegerHeader(String name, String wireValue) {
 		super(name, wireValue);
-		this.value = parseInt(wireValue);
+		this.value = toInteger(wireValue);
 		this.lazySupplier = null;
 		this.lazyMode = -1;
 	}
@@ -74,8 +97,7 @@ public class HttpIntegerHeader extends HttpHeaderBean {
 	}
 
 	public Integer orElse(Integer other) {
-		var x = toInteger();
-		return nn(x) ? x : other;
+		return asInteger().orElse(other);
 	}
 
 	public Integer toInteger() {
@@ -83,15 +105,12 @@ public class HttpIntegerHeader extends HttpHeaderBean {
 			return ((Supplier<Integer>) lazySupplier).get();
 		if (value != null)
 			return value;
-		var v = super.getValue();
-		return v == null ? null : parseInt(v);
+		return toInteger(super.getValue());
 	}
 
-	private static Integer parseInt(String value) {
-		try {
-			return value == null ? null : Integer.parseInt(value);
-		} catch (NumberFormatException e) {
-			throw rex(e, "Value ''{0}'' could not be parsed as an integer.", value);
-		}
+	private static Integer toInteger(String value) {
+		if (value == null)
+			return null;
+		return parseInt(value, () -> illegalArg("Value ''{0}'' could not be parsed as an integer.", value));
 	}
 }

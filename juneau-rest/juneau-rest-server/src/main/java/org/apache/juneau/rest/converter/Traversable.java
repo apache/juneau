@@ -19,7 +19,7 @@ package org.apache.juneau.rest.converter;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
@@ -64,7 +64,7 @@ public class Traversable implements RestConverter {
 				var or = ObjectRest.create(o, rp);
 				o = or.get(pathRemainder);
 			} catch (ObjectRestException e) {
-				throw new BasicHttpException(e.getStatus(), e);
+				throw new BasicHttpException(e.getStatus(), null, e);
 			} catch (Exception t) {
 				throw new InternalServerError(t);
 			}

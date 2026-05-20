@@ -384,27 +384,27 @@ class Path_Test extends TestBase {
 	@Rest(path="/f/{a}/{b}")
 	public static class F  {
 		@RestGet(path="/")
-		public String a(RequestPathParams path) {
+		public String a(RequestPathParamList path) {
 			return Utils.f("a: {0}", path.toString());
 		}
 		@RestGet(path="/*")
-		public String b(RequestPathParams path) {
+		public String b(RequestPathParamList path) {
 			return Utils.f("b: {0}", path.toString());
 		}
 		@RestGet(path="/fc")
-		public String c(RequestPathParams path) {
+		public String c(RequestPathParamList path) {
 			return Utils.f("c: {0}", path.toString());
 		}
 		@RestGet(path="/fd/{c}/{d}")
-		public String d(RequestPathParams path) {
+		public String d(RequestPathParamList path) {
 			return Utils.f("d: {0}", path.toString());
 		}
 		@RestGet(path="/fe/{a}/{b}")
-		public String e(RequestPathParams path) {
+		public String e(RequestPathParamList path) {
 			return Utils.f("e: {0}", path.toString());
 		}
 		@RestGet(path="/ff/{c}/{d}/*")
-		public String f(RequestPathParams path) {
+		public String f(RequestPathParamList path) {
 			return Utils.f("f: {0}", path.toString());
 		}
 	}

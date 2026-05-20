@@ -24,7 +24,7 @@ import java.util.function.*;
 import java.util.logging.*;
 
 import org.apache.juneau.commons.logging.Logger;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 
 import jakarta.servlet.*;

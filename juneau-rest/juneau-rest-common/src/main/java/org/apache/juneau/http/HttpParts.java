@@ -16,8 +16,15 @@
  */
 package org.apache.juneau.http;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.commons.httppart.*;
+import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.part.*;
 
 /**
@@ -90,5 +97,109 @@ public final class HttpParts {
 	 */
 	public static PartList partListOfPairs(String... pairs) {
 		return PartList.ofPairs(pairs);
+	}
+
+	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION =
+		x -> x.getPublicConstructor(y -> y.hasParameterTypes(String.class))
+			.orElseGet(() -> x.getPublicConstructor(y -> y.hasParameterTypes(String.class, String.class)).orElse(null));
+
+	/**
+	 * Returns the {@code (String)} or {@code (String,String)} public constructor for the specified type.
+	 *
+	 * <p>
+	 * Used by part-parsing logic to instantiate typed parts from a wire string.
+	 *
+	 * @param type The type to find the constructor on. Must not be <jk>null</jk>.
+	 * @return The constructor wrapped in an {@link Optional}; empty if none is found.
+	 */
+	public static Optional<ConstructorInfo> getConstructor(ClassMeta<?> type) {
+		return type.getProperty("HttpPart.Constructor", CONSTRUCTOR_FUNCTION);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified type is a transport-neutral part type for the given
+	 * {@link HttpPartType}.
+	 *
+	 * <p>
+	 * The check is whether the type is assignable to {@link HttpHeader} (for {@code HEADER}) or
+	 * {@link HttpPart} (for {@code PATH}, {@code QUERY}, {@code FORMDATA}).
+	 *
+	 * @param partType The part type. Must not be <jk>null</jk>.
+	 * @param type The type to check. Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the type is a part type for the given category.
+	 */
+	public static boolean isHttpPart(HttpPartType partType, ClassMeta<?> type) {
+		return switch (partType) {
+			case PATH, QUERY, FORMDATA -> type.getProperty("HttpPart.isHttpPart", x -> x.isAssignableTo(HttpPart.class)).orElse(false);
+			case HEADER -> type.getProperty("HttpPart.isHttpHeader", x -> x.isAssignableTo(HttpHeader.class)).orElse(false);
+			default -> false;
+		};
+	}
+
+	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
+		var n = Value.<String>empty();
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> ne(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> ne(y.name()), y -> n.set(y.name()));
+		if (n.isEmpty())
+			n.set(readPublicStaticStringField(x.inner(), "NAME"));
+		return n.orElse(null);
+	};
+
+	private static final Function<ClassMeta<?>,String> QUERY_NAME_FUNCTION = x -> {
+		var n = Value.<String>empty();
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> ne(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> ne(y.name()), y -> n.set(y.name()));
+		if (n.isEmpty())
+			n.set(readPublicStaticStringField(x.inner(), "NAME"));
+		return n.orElse(null);
+	};
+
+	private static final Function<ClassMeta<?>,String> FORMDATA_NAME_FUNCTION = x -> {
+		var n = Value.<String>empty();
+		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> ne(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> ne(y.name()), y -> n.set(y.name()));
+		if (n.isEmpty())
+			n.set(readPublicStaticStringField(x.inner(), "NAME"));
+		return n.orElse(null);
+	};
+
+	private static final Function<ClassMeta<?>,String> PATH_NAME_FUNCTION = x -> {
+		var n = Value.<String>empty();
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> ne(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> ne(y.name()), y -> n.set(y.name()));
+		if (n.isEmpty())
+			n.set(readPublicStaticStringField(x.inner(), "NAME"));
+		return n.orElse(null);
+	};
+
+	private static String readPublicStaticStringField(Class<?> c, String fieldName) {
+		try {
+			var f = c.getField(fieldName);
+			if (java.lang.reflect.Modifier.isStatic(f.getModifiers()) && f.getType() == String.class) {
+				var v = f.get(null);
+				return v == null ? null : v.toString();
+			}
+		} catch (@SuppressWarnings("unused") ReflectiveOperationException ignored) {
+			// Field does not exist or is not accessible.
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the name of the specified part type by reading the {@code @Header}, {@code @Query},
+	 * {@code @FormData}, or {@code @Path} annotation on the class.
+	 *
+	 * @param partType The part type. Must not be <jk>null</jk>.
+	 * @param type The type to check. Must not be <jk>null</jk>.
+	 * @return The part name, wrapped in an {@link Optional}.
+	 */
+	public static Optional<String> getName(HttpPartType partType, ClassMeta<?> type) {
+		return switch (partType) {
+			case FORMDATA -> type.getProperty("HttpPart.formData.name", FORMDATA_NAME_FUNCTION);
+			case HEADER -> type.getProperty("HttpPart.header.name", HEADER_NAME_FUNCTION);
+			case PATH -> type.getProperty("HttpPart.path.name", PATH_NAME_FUNCTION);
+			case QUERY -> type.getProperty("HttpPart.query.name", QUERY_NAME_FUNCTION);
+			default -> opte();
+		};
 	}
 }

@@ -21,11 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.http.classic.*;
-import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 
 class ArgException_Test extends TestBase {
@@ -34,7 +33,6 @@ class ArgException_Test extends TestBase {
 
 	@BeforeAll
 	static void setup() throws Exception {
-		// Create a test ParameterInfo for a sample method parameter
 		var mi = MethodInfo.of(ArgException_Test.class.getMethod("sampleMethod", String.class));
 		testParameterInfo = mi.getParameter(0);
 	}
@@ -59,73 +57,30 @@ class ArgException_Test extends TestBase {
 	@Test void a03_fluentSetters() {
 		var x = new ArgException(testParameterInfo, "Test");
 
-		// Test setMessage returns same instance for fluent chaining
-		assertSame(x, x.setMessage("New message"));
-		assertTrue(x.getMessage().contains("New message"));
+		assertSame(x, x.setHeader("X-Test", "test-value"));
+		assertSame(x, x.setHeader(HttpStringHeader.of("X-Foo", "foo-value")));
 
-		// Test setHeader2 returns same instance
-		assertSame(x, x.setHeader2("X-Test", "test-value"));
+		assertSame(x, x.setHeaders(HttpStringHeader.of("X-Header2", "value2")));
 
-		// Test setHeaders(HeaderList) returns same instance
-		var headers = HeaderList.of(BasicHeader.of("X-Header1", "value1"));
-		assertSame(x, x.setHeaders(headers));
+		assertSame(x, x.setLocale(Locale.US));
 
-		// Test setHeaders2(Header...) returns same instance
-		assertSame(x, x.setHeaders2(BasicHeader.of("X-Header2", "value2")));
+		assertSame(x, x.setProtocolVersion(HttpProtocolVersion.of("HTTP", 1, 1)));
 
-		// Test setLocale2 returns same instance
-		assertSame(x, x.setLocale2(Locale.US));
+		assertSame(x, x.setReasonPhrase("Custom Reason"));
 
-		// Test setProtocolVersion returns same instance
-		assertSame(x, x.setProtocolVersion(new ProtocolVersion("HTTP", 1, 1)));
-
-		// Test setReasonPhrase2 returns same instance
-		assertSame(x, x.setReasonPhrase2("Custom Reason"));
-
-		// Test setReasonPhraseCatalog returns same instance
-		assertSame(x, x.setReasonPhraseCatalog(null));
-
-		// Test setStatusLine returns same instance
-		assertSame(x, x.setStatusLine(BasicStatusLine.create(500, "Test")));
-
-		// Test setHeaders(List<Header>) returns same instance
-		List<Header> headerList = l(BasicHeader.of("X-Header3", "value3"));
+		List<HttpHeader> headerList = l(HttpStringHeader.of("X-Header3", "value3"));
 		assertSame(x, x.setHeaders(headerList));
-		assertEquals("value3", x.getFirstHeader("X-Header3").getValue());
 
-		// Test setContent(String) returns same instance
 		assertSame(x, x.setContent("test content"));
 
-		// Test setContent(HttpEntity) returns same instance
-		HttpEntity entity = x.getEntity();
-		assertSame(x, x.setContent(entity));
-
-		// Test setUnmodifiable returns same instance (must be last - makes bean read-only)
 		assertSame(x, x.setUnmodifiable());
 	}
 
 	@Test void a04_fluentChaining() {
-		// Test multiple fluent calls can be chained
 		var x = new ArgException(testParameterInfo, "Initial")
-			.setHeaders(l(BasicHeader.of("X-Chain", "chained")))
+			.setHeaders(l(HttpStringHeader.of("X-Chain", "chained")))
 			.setContent("Chained content");
 
-		assertEquals("chained", x.getFirstHeader("X-Chain").getValue());
-	}
-
-	@Test void a05_copy() {
-		// Test that copy() returns correct type
-		var x = new ArgException(testParameterInfo, "Original message");
-
-		ArgException copy = x.copy();
-
-		// Verify it's a different instance
-		assertNotSame(x, copy);
-
-		// Verify it returns the correct type (not InternalServerError)
-		assertInstanceOf(ArgException.class, copy);
-
-		// Verify message is copied
-		assertTrue(copy.getMessage().contains("Original message"));
+		assertEquals("chained", x.getHeaders().stream().filter(h -> "X-Chain".equalsIgnoreCase(h.getName())).findFirst().orElseThrow().getValue());
 	}
 }

@@ -62,6 +62,18 @@ public final class RrpcInterfaceMethodMeta {
 	}
 
 	/**
+	 * Returns the Java method this metadata is for.
+	 *
+	 * <p>
+	 * Alias for {@link #getMethod()} provided for backwards compatibility with the classic API.
+	 *
+	 * @return The Java method. Never <jk>null</jk>.
+	 */
+	public Method getJavaMethod() {
+		return method;
+	}
+
+	/**
 	 * Returns the HTTP method (e.g. {@code "GET"}, {@code "POST"}).
 	 *
 	 * @return The HTTP method. Never <jk>null</jk>.

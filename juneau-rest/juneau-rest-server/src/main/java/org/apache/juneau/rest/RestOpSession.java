@@ -20,11 +20,11 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 
-import org.apache.http.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.logger.*;
 
 /**
@@ -229,7 +229,7 @@ public class RestOpSession extends ContextSession {
 	 * 	<br>Can be <jk>null</jk> (ignored).
 	 * @return This object.
 	 */
-	public RestOpSession status(StatusLine value) {
+	public RestOpSession status(HttpStatusLine value) {
 		session.status(value);
 		return this;
 	}

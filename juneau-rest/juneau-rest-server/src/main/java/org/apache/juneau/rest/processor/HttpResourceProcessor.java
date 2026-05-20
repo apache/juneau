@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.rest.processor;
 
-import static org.apache.juneau.http.classic.HttpHeaders.*;
 import java.io.*;
 
-import org.apache.juneau.http.classic.resource.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -40,11 +40,12 @@ public class HttpResourceProcessor implements ResponseProcessor {
 		if (r == null)
 			return NEXT;
 
-		res.setHeader(r.getContentType());
-		res.setHeader(r.getContentEncoding());
+		var contentType = r.getContentType();
+		if (contentType != null)
+			res.setHeader(ContentType.of(contentType));
 		var contentLength = r.getContentLength();
 		if (contentLength >= 0)
-			res.setHeader(contentLength(contentLength));
+			res.setHeader(ContentLength.of(contentLength));
 
 		r.getHeaders().forEach(res::addHeader);
 

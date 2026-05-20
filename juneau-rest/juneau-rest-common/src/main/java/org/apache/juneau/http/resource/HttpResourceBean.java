@@ -26,26 +26,26 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 
 /**
- * An HTTP body bundled with a set of associated headers (such as {@code Content-Type}, {@code Content-Disposition},
- * or {@code Content-Language}).
+ * Default immutable implementation of {@link HttpResource}: an {@link HttpBody} bundled with a set of
+ * associated headers (such as {@code Content-Type}, {@code Content-Disposition}, or {@code Content-Language}).
  *
  * <p>
- * Useful for multipart form parts and other scenarios where headers must travel with the body.
+ * Useful for static-file delivery, multipart form parts, and other scenarios where headers must travel
+ * with the body.
  *
  * <p>
  * Create instances via the static factory methods:
  * <p class='bjava'>
  * 	<jc>// Body with content type header</jc>
- * 	HttpResource <jv>resource</jv> = HttpResource.<jsm>of</jsm>(FileBody.<jsm>of</jsm>(myFile))
+ * 	HttpResource <jv>resource</jv> = HttpResourceBean.<jsm>of</jsm>(FileBody.<jsm>of</jsm>(myFile))
  * 		.withHeader(ContentType.<jsm>of</jsm>(<js>"application/pdf"</js>))
  * 		.withHeader(ContentDisposition.<jsm>of</jsm>(<js>"attachment; filename=\"report.pdf\""</js>));
  * </p>
  *
  * <p>
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.ng.*}).
- * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
- * (and possibly earlier).
+ * ({@code org.apache.juneau.ng.*}). It is not API-frozen: binary- and source-incompatible changes may appear in
+ * the <b>next major</b> Juneau release (and possibly earlier).
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
@@ -53,38 +53,38 @@ import org.apache.juneau.http.header.*;
  *
  * @since 9.2.1
  */
-public final class HttpResource implements HttpBody {
+public final class HttpResourceBean implements HttpResource {
 
 	private final HttpBody body;
 	private final List<HttpHeader> headers;
 
-	private HttpResource(HttpBody body, List<HttpHeader> headers) {
+	private HttpResourceBean(HttpBody body, List<HttpHeader> headers) {
 		this.body = body;
 		this.headers = List.copyOf(headers);
 	}
 
 	/**
-	 * Creates an {@link HttpResource} wrapping the given body with no additional headers.
+	 * Creates an {@link HttpResourceBean} wrapping the given body with no additional headers.
 	 *
 	 * @param body The body. Must not be <jk>null</jk>.
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
-	public static HttpResource of(HttpBody body) {
+	public static HttpResourceBean of(HttpBody body) {
 		assertArgNotNull("body", body);
-		return new HttpResource(body, List.of());
+		return new HttpResourceBean(body, List.of());
 	}
 
 	/**
-	 * Creates an {@link HttpResource} wrapping the given body and headers.
+	 * Creates an {@link HttpResourceBean} wrapping the given body and headers.
 	 *
 	 * @param body The body. Must not be <jk>null</jk>.
 	 * @param headers The associated headers. Must not be <jk>null</jk>.
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
-	public static HttpResource of(HttpBody body, List<HttpHeader> headers) {
+	public static HttpResourceBean of(HttpBody body, List<HttpHeader> headers) {
 		assertArgNotNull("body", body);
 		assertArgNotNull("headers", headers);
-		return new HttpResource(body, headers);
+		return new HttpResourceBean(body, headers);
 	}
 
 	/**
@@ -93,11 +93,11 @@ public final class HttpResource implements HttpBody {
 	 * @param header The header to add. Must not be <jk>null</jk>.
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
-	public HttpResource withHeader(HttpHeader header) {
+	public HttpResourceBean withHeader(HttpHeader header) {
 		assertArgNotNull("header", header);
 		var newHeaders = new ArrayList<>(headers);
 		newHeaders.add(header);
-		return new HttpResource(body, newHeaders);
+		return new HttpResourceBean(body, newHeaders);
 	}
 
 	/**
@@ -107,8 +107,40 @@ public final class HttpResource implements HttpBody {
 	 * @param value The header value. May be <jk>null</jk>.
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
-	public HttpResource withHeader(String name, String value) {
+	public HttpResourceBean withHeader(String name, String value) {
 		return withHeader(HttpHeaderBean.of(name, value));
+	}
+
+	/**
+	 * Returns a new instance with the given headers added.
+	 *
+	 * @param toAdd The headers to add. {@code null} entries are ignored.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public HttpResourceBean withHeaders(HttpHeader...toAdd) {
+		if (toAdd == null || toAdd.length == 0)
+			return this;
+		var newHeaders = new ArrayList<>(headers);
+		for (var h : toAdd)
+			if (h != null)
+				newHeaders.add(h);
+		return new HttpResourceBean(body, newHeaders);
+	}
+
+	/**
+	 * Returns a new instance with the given headers added.
+	 *
+	 * @param toAdd The headers to add. {@code null} entries are ignored.
+	 * @return A new instance. Never <jk>null</jk>.
+	 */
+	public HttpResourceBean withHeaders(List<HttpHeader> toAdd) {
+		if (toAdd == null || toAdd.isEmpty())
+			return this;
+		var newHeaders = new ArrayList<>(headers);
+		for (var h : toAdd)
+			if (h != null)
+				newHeaders.add(h);
+		return new HttpResourceBean(body, newHeaders);
 	}
 
 	/**
@@ -120,11 +152,7 @@ public final class HttpResource implements HttpBody {
 		return body;
 	}
 
-	/**
-	 * Returns the headers associated with this resource.
-	 *
-	 * @return An unmodifiable list of headers. Never <jk>null</jk>.
-	 */
+	@Override /* HttpResource */
 	public List<HttpHeader> getHeaders() {
 		return headers;
 	}

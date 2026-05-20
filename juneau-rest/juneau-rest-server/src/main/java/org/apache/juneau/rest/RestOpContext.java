@@ -24,8 +24,6 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.RestServerConstants.*;
-import static org.apache.juneau.http.classic.HttpHeaders.*;
-import static org.apache.juneau.http.classic.HttpParts.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
@@ -47,9 +45,9 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
-import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.http.classic.part.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.jsonschema.*;
@@ -310,22 +308,22 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code setDefault} = first wins). An {@code @Bean(name="defaultRequestFormData") PartList}
 	 * bean (matching this operation's method scope) REPLACES the entire result.
 	 */
-	private final Memoizer<PartList> defaultRequestFormData = memoizer(() -> {
-		var v = Value.of(PartList.create());
+	private final Memoizer<HttpPartList> defaultRequestFormData = memoizer(() -> {
+		var v = Value.of(HttpPartList.create());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestFormData).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestFormData).orElse(EMPTY_STRING_ARRAY))
-				v.get().setDefault(basicPart(s));
+				v.get().setDefault(HttpStringPart.ofPair(s));
 		});
 		processParameterDefaults((paramAnn, def) -> {
 			if (paramAnn instanceof FormData f) {
 				try {
-					v.get().setDefault(basicPart(firstNonEmpty(f.name(), f.value()), parseIfJson(def)));
+					v.get().setDefault(HttpStringPart.of(firstNonEmpty(f.name(), f.value()), toPartValue(parseIfJson(def))));
 				} catch (ParseException e) {
 					throw new ConfigException(e, "Malformed @FormData annotation");
 				}
 			}
 		});
-		beanStore().createBeanFromMethod(PartList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestFormData))
+		beanStore().createBeanFromMethod(HttpPartList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestFormData))
 			.ifPresent(v::set);
 		return v.get();
 	});
@@ -348,24 +346,24 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code @Bean(name="defaultRequestHeaders") HeaderList} bean (matching this operation's
 	 * method scope) REPLACES the entire result.
 	 */
-	private final Memoizer<HeaderList> defaultRequestHeaders = memoizer(() -> {
+	private final Memoizer<HttpHeaderList> defaultRequestHeaders = memoizer(() -> {
 		var v = Value.of(restContext().getDefaultRequestHeaders().copy());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestHeaders).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestHeaders).orElse(EMPTY_STRING_ARRAY))
-				v.get().setDefault(stringHeader(s));
-			ai.getString(PROPERTY_defaultAccept).filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(accept(s)));
-			ai.getString(PROPERTY_defaultContentType).filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(contentType(s)));
+				v.get().setDefault(HttpStringHeader.ofPair(s));
+			ai.getString(PROPERTY_defaultAccept).filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(Accept.of(s)));
+			ai.getString(PROPERTY_defaultContentType).filter(s -> !s.isEmpty()).ifPresent(s -> v.get().setDefault(ContentType.of(s)));
 		});
 		processParameterDefaults((paramAnn, def) -> {
 			if (paramAnn instanceof Header h) {
 				try {
-					v.get().set(basicHeader(firstNonEmpty(h.name(), h.value()), parseIfJson(def)));
+					v.get().set(HttpStringHeader.of(firstNonEmpty(h.name(), h.value()), toPartValue(parseIfJson(def))));
 				} catch (ParseException e) {
 					throw new ConfigException(e, "Malformed @Header annotation");
 				}
 			}
 		});
-		beanStore().createBeanFromMethod(HeaderList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestHeaders))
+		beanStore().createBeanFromMethod(HttpHeaderList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestHeaders))
 			.ifPresent(v::set);
 		return v.get();
 	});
@@ -381,22 +379,22 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code setDefault} = first wins). An {@code @Bean(name="defaultRequestQueryData") PartList}
 	 * bean (matching this operation's method scope) REPLACES the entire result.
 	 */
-	private final Memoizer<PartList> defaultRequestQueryData = memoizer(() -> {
-		var v = Value.of(PartList.create());
+	private final Memoizer<HttpPartList> defaultRequestQueryData = memoizer(() -> {
+		var v = Value.of(HttpPartList.create());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestQueryData).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestQueryData).orElse(EMPTY_STRING_ARRAY))
-				v.get().setDefault(basicPart(s));
+				v.get().setDefault(HttpStringPart.ofPair(s));
 		});
 		processParameterDefaults((paramAnn, def) -> {
 			if (paramAnn instanceof Query q) {
 				try {
-					v.get().setDefault(basicPart(firstNonEmpty(q.name(), q.value()), parseIfJson(def)));
+					v.get().setDefault(HttpStringPart.of(firstNonEmpty(q.name(), q.value()), toPartValue(parseIfJson(def))));
 				} catch (ParseException e) {
 					throw new ConfigException(e, "Malformed @Query annotation");
 				}
 			}
 		});
-		beanStore().createBeanFromMethod(PartList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestQueryData))
+		beanStore().createBeanFromMethod(HttpPartList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultRequestQueryData))
 			.ifPresent(v::set);
 		return v.get();
 	});
@@ -412,13 +410,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code @Bean(name="defaultResponseHeaders") HeaderList} bean (matching this operation's
 	 * method scope) REPLACES the entire result.
 	 */
-	private final Memoizer<HeaderList> defaultResponseHeaders = memoizer(() -> {
+	private final Memoizer<HttpHeaderList> defaultResponseHeaders = memoizer(() -> {
 		var v = Value.of(restContext().getDefaultResponseHeaders().copy());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultResponseHeaders).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultResponseHeaders).orElse(EMPTY_STRING_ARRAY))
-				v.get().setDefault(stringHeader(s));
+				v.get().setDefault(HttpStringHeader.ofPair(s));
 		});
-		beanStore().createBeanFromMethod(HeaderList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultResponseHeaders))
+		beanStore().createBeanFromMethod(HttpHeaderList.class, resource(), x -> matchesInjectScope(x, PROPERTY_defaultResponseHeaders))
 			.ifPresent(v::set);
 		return v.get();
 	});
@@ -1257,28 +1255,28 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The default form data parameters.  Never <jk>null</jk>.
 	 */
-	public PartList getDefaultRequestFormData() { return defaultRequestFormData.get(); }
+	public HttpPartList getDefaultRequestFormData() { return defaultRequestFormData.get(); }
 
 	/**
 	 * Returns the default request headers.
 	 *
 	 * @return The default request headers.  Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultRequestHeaders() { return defaultRequestHeaders.get(); }
+	public HttpHeaderList getDefaultRequestHeaders() { return defaultRequestHeaders.get(); }
 
 	/**
 	 * Returns the default request query parameters.
 	 *
 	 * @return The default request query parameters.  Never <jk>null</jk>.
 	 */
-	public PartList getDefaultRequestQueryData() { return defaultRequestQueryData.get(); }
+	public HttpPartList getDefaultRequestQueryData() { return defaultRequestQueryData.get(); }
 
 	/**
 	 * Returns the default response headers.
 	 *
 	 * @return The default response headers.  Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultResponseHeaders() { return defaultResponseHeaders.get(); }
+	public HttpHeaderList getDefaultResponseHeaders() { return defaultResponseHeaders.get(); }
 
 	/**
 	 * Returns the compression encoders to use for this method.
@@ -1456,6 +1454,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	@Override /* Overridden from Object */
 	public int hashCode() {
 		return method.hashCode();
+	}
+
+	private static String toPartValue(Object value) {
+		return value == null ? null : value.toString();
 	}
 
 	private UrlPathMatch matchPattern(RestSession call) {

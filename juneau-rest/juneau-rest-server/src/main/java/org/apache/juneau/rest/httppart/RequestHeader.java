@@ -21,10 +21,9 @@ import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import java.lang.reflect.*;
 import java.util.regex.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 
@@ -32,7 +31,7 @@ import org.apache.juneau.rest.*;
  * Represents a single header on an HTTP request.
  *
  * <p>
- * Typically accessed through the {@link RequestHeaders} class.
+ * Typically accessed through the {@link RequestHeaderList} class.
  *
  * <p>
  * 	Some important methods on this class are:
@@ -95,7 +94,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
-public class RequestHeader extends RequestHttpPart implements Header {
+public class RequestHeader extends RequestHttpPart implements HttpHeader {
 
 	/**
 	 * Constructor.
@@ -109,93 +108,93 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicBooleanHeader}.
+	 * Returns the value of this header as an {@link HttpBooleanHeader}.
 	 *
-	 * @return The value of this header as a {@link BasicBooleanHeader}, never <jk>null</jk>.
+	 * @return The value of this header as an {@link HttpBooleanHeader}, never <jk>null</jk>.
 	 */
-	public BasicBooleanHeader asBooleanHeader() {
-		return new BasicBooleanHeader(getName(), getValue());
+	public HttpBooleanHeader asBooleanHeader() {
+		return HttpBooleanHeader.of(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicCsvHeader}.
+	 * Returns the value of this header as an {@link HttpCsvHeader}.
 	 *
-	 * @return The value of this header as a  {@link BasicCsvHeader}, never <jk>null</jk>.
+	 * @return The value of this header as an {@link HttpCsvHeader}, never <jk>null</jk>.
 	 */
-	public BasicCsvHeader asCsvHeader() {
-		return new BasicCsvHeader(getName(), getValue());
+	public HttpCsvHeader asCsvHeader() {
+		return HttpCsvHeader.of(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicDateHeader}.
+	 * Returns the value of this header as an {@link HttpDateHeader}.
 	 *
-	 * @return The value of this header as a {@link BasicDateHeader}, never <jk>null</jk>.
+	 * @return The value of this header as an {@link HttpDateHeader}, never <jk>null</jk>.
 	 */
-	public BasicDateHeader asDateHeader() {
-		return new BasicDateHeader(getName(), getValue());
+	public HttpDateHeader asDateHeader() {
+		return HttpDateHeader.of(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicEntityTagHeader}.
+	 * Returns the value of this header as an {@link HttpEntityTagHeader}.
 	 *
-	 * @return The value of this header as a {@link BasicEntityTagHeader}, never <jk>null</jk>.
+	 * @return The value of this header as an {@link HttpEntityTagHeader}, never <jk>null</jk>.
 	 */
-	public BasicEntityTagHeader asEntityTagHeader() {
-		return new BasicEntityTagHeader(getName(), getValue());
+	public HttpEntityTagHeader asEntityTagHeader() {
+		return HttpEntityTagHeader.of(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicEntityTagsHeader}.
+	 * Returns the value of this header as an {@link HttpEntityTagsHeader}.
 	 *
-	 * @return The value of this header as a {@link BasicEntityTagsHeader}, never <jk>null</jk>.
+	 * @return The value of this header as an {@link HttpEntityTagsHeader}, never <jk>null</jk>.
 	 */
-	public BasicEntityTagsHeader asEntityTagsHeader() {
-		return new BasicEntityTagsHeader(getName(), getValue());
+	public HttpEntityTagsHeader asEntityTagsHeader() {
+		return HttpEntityTagsHeader.of(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicIntegerHeader}.
+	 * Returns the value of this header as an {@link HttpIntegerHeader}.
 	 *
-	 * @return The value of this header as a {@link BasicIntegerHeader}, never <jk>null</jk>.
+	 * @return The value of this header as an {@link HttpIntegerHeader}, never <jk>null</jk>.
 	 */
-	public BasicIntegerHeader asIntegerHeader() {
-		return new BasicIntegerHeader(getName(), getValue());
+	public HttpIntegerHeader asIntegerHeader() {
+		return HttpIntegerHeader.of(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicLongHeader}.
+	 * Returns the value of this header as an {@link HttpLongHeader}.
 	 *
-	 * @return The value of this header as a {@link BasicLongHeader}, never <jk>null</jk>.
+	 * @return The value of this header as an {@link HttpLongHeader}, never <jk>null</jk>.
 	 */
-	public BasicLongHeader asLongHeader() {
-		return new BasicLongHeader(getName(), getValue());
+	public HttpLongHeader asLongHeader() {
+		return HttpLongHeader.of(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicStringHeader}.
+	 * Returns the value of this header as an {@link HttpStringHeader}.
 	 *
-	 * @return The value of this header as a {@link BasicStringHeader}, never <jk>null</jk>.
+	 * @return The value of this header as an {@link HttpStringHeader}, never <jk>null</jk>.
 	 */
-	public BasicStringHeader asStringHeader() {
-		return new BasicStringHeader(getName(), getValue());
+	public HttpStringHeader asStringHeader() {
+		return HttpStringHeader.of(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicStringRangesHeader}.
+	 * Returns the value of this header as an {@link HttpStringRangesHeader}.
 	 *
-	 * @return The value of this header as a {@link BasicStringRangesHeader}, never <jk>null</jk>.
+	 * @return The value of this header as an {@link HttpStringRangesHeader}, never <jk>null</jk>.
 	 */
-	public BasicStringRangesHeader asStringRangesHeader() {
-		return new BasicStringRangesHeader(getName(), getValue());
+	public HttpStringRangesHeader asStringRangesHeader() {
+		return HttpStringRangesHeader.of(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicUriHeader}.
+	 * Returns the value of this header as an {@link HttpUriHeader}.
 	 *
-	 * @return The value of this header as a {@link BasicUriHeader}, never <jk>null</jk>.
+	 * @return The value of this header as an {@link HttpUriHeader}, never <jk>null</jk>.
 	 */
-	public BasicUriHeader asUriHeader() {
-		return new BasicUriHeader(getName(), getValue());
+	public HttpUriHeader asUriHeader() {
+		return HttpUriHeader.of(getName(), getValue());
 	}
 
 	@Override /* Overridden from RequestHttpPart */
@@ -203,15 +202,6 @@ public class RequestHeader extends RequestHttpPart implements Header {
 		super.def(def);
 		return this;
 	}
-
-	/**
-	 * Parses the value.
-	 *
-	 * @return An array of {@link HeaderElement} entries, may be empty, but is never <jk>null</jk>.
-	 * @throws BasicHttpException In case of a parsing error.
-	 */
-	@Override /* Overridden from Header */
-	public HeaderElement[] getElements() throws BasicHttpException { return new HeaderElement[0]; }
 
 	@Override /* Overridden from RequestHttpPart */
 	public RequestHeader parser(HttpPartParserSession value) {

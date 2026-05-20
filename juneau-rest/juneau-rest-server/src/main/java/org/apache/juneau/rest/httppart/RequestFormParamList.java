@@ -26,13 +26,13 @@ import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.http.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.http.classic.*;
-import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.http.classic.part.*;
+import org.apache.juneau.http.HttpPart;
+import org.apache.juneau.http.HttpParts;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
@@ -44,18 +44,18 @@ import jakarta.servlet.http.*;
  * Represents the parsed form-data parameters in an HTTP request.
  *
  * <p>
- * 	The {@link RequestFormParams} object is the API for accessing the HTTP request content as form data.
+ * 	The {@link RequestFormParamList} object is the API for accessing the HTTP request content as form data.
  * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
- * 	<jk>public</jk> Object myMethod(RequestFormParams <jv>formData</jv>) {...}
+ * 	<jk>public</jk> Object myMethod(RequestFormParamList <jv>formData</jv>) {...}
  * </p>
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
- * 	<jk>public</jk> Object myMethod(RequestFormParams <jv>formData</jv>) {
+ * 	<jk>public</jk> Object myMethod(RequestFormParamList <jv>formData</jv>) {
  *
  * 		<jc>// Get query parameters converted to various types.</jc>
  * 		<jk>int</jk> <jv>p1</jv> = <jv>formData</jv>.get(<js>"p1"</js>).asInteger().orElse(0);
@@ -72,35 +72,35 @@ import jakarta.servlet.http.*;
  * 	Some important methods on this class are:
  * </p>
  * <ul class='javatree'>
- * 	<li class='jc'>{@link RequestFormParams}
+ * 	<li class='jc'>{@link RequestFormParamList}
  * 	<ul class='spaced-list'>
  * 		<li>Methods for retrieving form data parameters:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestFormParams#contains(String) contains(String)}
- * 			<li class='jm'>{@link RequestFormParams#containsAny(String...) containsAny(String...)}
- * 			<li class='jm'>{@link RequestFormParams#get(Class) get(Class)}
- * 			<li class='jm'>{@link RequestFormParams#get(String) get(String)}
- * 			<li class='jm'>{@link RequestFormParams#getAll(String) getAll(String)}
- * 			<li class='jm'>{@link RequestFormParams#getFirst(String) getFirst(String)}
- * 			<li class='jm'>{@link RequestFormParams#getLast(String) getLast(String)}
+ * 			<li class='jm'>{@link RequestFormParamList#contains(String) contains(String)}
+ * 			<li class='jm'>{@link RequestFormParamList#containsAny(String...) containsAny(String...)}
+ * 			<li class='jm'>{@link RequestFormParamList#get(Class) get(Class)}
+ * 			<li class='jm'>{@link RequestFormParamList#get(String) get(String)}
+ * 			<li class='jm'>{@link RequestFormParamList#getAll(String) getAll(String)}
+ * 			<li class='jm'>{@link RequestFormParamList#getFirst(String) getFirst(String)}
+ * 			<li class='jm'>{@link RequestFormParamList#getLast(String) getLast(String)}
  * 		</ul>
  * 		<li>Methods overridding form data parameters:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestFormParams#add(NameValuePair...) add(NameValuePair...)}
- * 			<li class='jm'>{@link RequestFormParams#add(Part) add(Part)}
- * 			<li class='jm'>{@link RequestFormParams#add(String,Object) add(String,Object)}
- * 			<li class='jm'>{@link RequestFormParams#addDefault(List) addDefault(List)}
- * 			<li class='jm'>{@link RequestFormParams#addDefault(NameValuePair...) addDefault(NameValuePair...)}
- * 			<li class='jm'>{@link RequestFormParams#addDefault(String,String) addDefault(String,String)}
- * 			<li class='jm'>{@link RequestFormParams#remove(String) remove(String)}
- * 			<li class='jm'>{@link RequestFormParams#set(NameValuePair...) set(NameValuePair...)}
- * 			<li class='jm'>{@link RequestFormParams#set(String,Object) set(String,Object)}
+ * 			<li class='jm'>{@link RequestFormParamList#add(HttpPart...) add(HttpPart...)}
+ * 			<li class='jm'>{@link RequestFormParamList#add(Part) add(Part)}
+ * 			<li class='jm'>{@link RequestFormParamList#add(String,Object) add(String,Object)}
+ * 			<li class='jm'>{@link RequestFormParamList#addDefault(List) addDefault(List)}
+ * 			<li class='jm'>{@link RequestFormParamList#addDefault(HttpPart...) addDefault(HttpPart...)}
+ * 			<li class='jm'>{@link RequestFormParamList#addDefault(String,String) addDefault(String,String)}
+ * 			<li class='jm'>{@link RequestFormParamList#remove(String) remove(String)}
+ * 			<li class='jm'>{@link RequestFormParamList#set(HttpPart...) set(HttpPart...)}
+ * 			<li class='jm'>{@link RequestFormParamList#set(String,Object) set(String,Object)}
  * 		</ul>
  * 		<li>Other methods:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestFormParams#asQueryString() asQueryString()}
- * 			<li class='jm'>{@link RequestFormParams#copy() copy()}
- * 			<li class='jm'>{@link RequestFormParams#isEmpty() isEmpty()}
+ * 			<li class='jm'>{@link RequestFormParamList#asQueryString() asQueryString()}
+ * 			<li class='jm'>{@link RequestFormParamList#copy() copy()}
+ * 			<li class='jm'>{@link RequestFormParamList#isEmpty() isEmpty()}
  * 		</ul>
  * 	</ul>
  * </ul>
@@ -116,7 +116,7 @@ import jakarta.servlet.http.*;
 	"resource", // Resource management handled externally
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 })
-public class RequestFormParams extends ArrayList<RequestFormParam> {
+public class RequestFormParamList extends ArrayList<RequestFormParam> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_parameters = "parameters";
@@ -145,7 +145,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S112", // Generic exception thrown; acceptable for framework/lifecycle methods
 	})
-	public RequestFormParams(RestRequest req, boolean caseSensitive) throws Exception {
+	public RequestFormParamList(RestRequest req, boolean caseSensitive) throws Exception {
 		this.req = req;
 		this.caseSensitive = caseSensitive;
 		this.vs = req.getVarResolverSession();
@@ -197,7 +197,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	/**
 	 * Copy constructor.
 	 */
-	private RequestFormParams(RequestFormParams copyFrom) {
+	private RequestFormParamList(RequestFormParamList copyFrom) {
 		req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
@@ -208,7 +208,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	/**
 	 * Subset constructor.
 	 */
-	private RequestFormParams(RequestFormParams copyFrom, String...names) {
+	private RequestFormParamList(RequestFormParamList copyFrom, String...names) {
 		this.req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
@@ -227,7 +227,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param parameters The parameter objects.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestFormParams add(NameValuePair...parameters) {
+	public RequestFormParamList add(HttpPart...parameters) {
 		assertArgNotNull(ARG_parameters, parameters);
 		for (var p : parameters)
 			if (nn(p))
@@ -245,7 +245,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param part The parameter part.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestFormParams add(Part part) {
+	public RequestFormParamList add(Part part) {
 		assertArgNotNull(ARG_part, part);
 		add(new RequestFormParam(req, part).parser(parser));
 		return this;
@@ -262,7 +262,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param value The parameter value.
 	 * @return This object.
 	 */
-	public RequestFormParams add(String name, Object value) {
+	public RequestFormParamList add(String name, Object value) {
 		assertArgNotNull(ARG_name, name);
 		add(new RequestFormParam(req, name, s(value)).parser(parser));
 		return this;
@@ -279,7 +279,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestFormParams addDefault(List<? extends NameValuePair> pairs) {
+	public RequestFormParamList addDefault(List<? extends HttpPart> pairs) {
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);
@@ -303,7 +303,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestFormParams addDefault(NameValuePair...pairs) {
+	public RequestFormParamList addDefault(HttpPart...pairs) {
 		return addDefault(l(pairs));
 	}
 
@@ -314,8 +314,8 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param value The value.
 	 * @return This object.
 	 */
-	public RequestFormParams addDefault(String name, String value) {
-		return addDefault(BasicStringPart.of(name, value));
+	public RequestFormParamList addDefault(String name, String value) {
+		return addDefault(HttpStringPart.of(name, value));
 	}
 
 	/**
@@ -342,7 +342,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RequestFormParams caseSensitive(boolean value) {
+	public RequestFormParamList caseSensitive(boolean value) {
 		caseSensitive = value;
 		return this;
 	}
@@ -376,8 +376,8 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 *
 	 * @return A new parameters object.
 	 */
-	public RequestFormParams copy() {
-		return new RequestFormParams(this);
+	public RequestFormParamList copy() {
+		return new RequestFormParamList(this);
 	}
 
 	/**
@@ -489,7 +489,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param value The new value for this setting.
 	 * @return This object.
 	 */
-	public RequestFormParams parser(HttpPartParserSession value) {
+	public RequestFormParamList parser(HttpPartParserSession value) {
 		parser = value;
 		forEach(x -> x.parser(parser));
 		return this;
@@ -501,7 +501,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param name The parameter names.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestFormParams remove(String name) {
+	public RequestFormParamList remove(String name) {
 		assertArgNotNull(ARG_name, name);
 		removeIf(x -> eq(x.getName(), name));
 		return this;
@@ -517,10 +517,10 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param parameters The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestFormParams set(NameValuePair...parameters) {
+	public RequestFormParamList set(HttpPart...parameters) {
 		assertArgNotNull(ARG_headers, parameters);
 		for (var p : parameters)
-			remove(p);
+			remove(p.getName());
 		for (var p : parameters)
 			add(p);
 		return this;
@@ -540,7 +540,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestFormParams set(String name, Object value) {
+	public RequestFormParamList set(String name, Object value) {
 		assertArgNotNull(ARG_name, name);
 		set(new RequestFormParam(req, name, s(value)).parser(parser));
 		return this;
@@ -562,8 +562,8 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param names The list to include in the copy.
 	 * @return A new list object.
 	 */
-	public RequestFormParams subset(String...names) {
-		return new RequestFormParams(this, names);
+	public RequestFormParamList subset(String...names) {
+		return new RequestFormParamList(this, names);
 	}
 
 	protected FluentMap<String,Object> properties() {
@@ -577,7 +577,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 
 	@Override
 	public boolean equals(Object o) {
-		return this == o || (o instanceof RequestFormParams other && super.equals(other));
+		return this == o || (o instanceof RequestFormParamList other && super.equals(other));
 	}
 
 	@Override

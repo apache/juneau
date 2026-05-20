@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.rest.processor;
 
-import static org.apache.juneau.http.classic.HttpHeaders.*;
 import java.io.*;
 
-import org.apache.http.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 
 /**
- * Response handler for {@link HttpResponse} objects.
+ * Response handler for {@link HttpResponseMessage} objects (transport-neutral replacement for {@code HttpResponse}).
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
@@ -35,26 +35,35 @@ public class HttpResponseProcessor implements ResponseProcessor {
 	public int process(RestOpSession opSession) throws IOException {
 
 		var res = opSession.getResponse();
-		var r = res.getContent(HttpResponse.class);
+		var r = res.getContent(HttpResponseMessage.class);
 
-		if (r == null)
-			return NEXT;
+		if (r == null) {
+			var raw = res.getContent(Object.class);
+			if (LegacyHttpResponseAdapter.isLegacyResponse(raw))
+				r = LegacyHttpResponseAdapter.adapt(raw);
+			else
+				return NEXT;
+		}
 
 		opSession.status(r.getStatusLine());
 
-		var e = r.getEntity();
+		var body = r.getBody();
+		if (body != null) {
+			var ct = body.getContentType();
+			if (ct != null)
+				res.setHeader(ContentType.of(ct));
+			var contentLength = body.getContentLength();
+			if (contentLength >= 0)
+				res.setHeader(ContentLength.of(contentLength));
+		}
 
-		res.setHeader(e.getContentType());
-		res.setHeader(e.getContentEncoding());
-		var contentLength = e.getContentLength();
-		if (contentLength >= 0)
-			res.setHeader(contentLength(contentLength));
+		r.getHeaders().forEach(res::addHeader);
 
-		r.headerIterator().forEachRemaining(x -> res.addHeader((Header)x)); // No iterator involved.
-
-		try (var os = res.getNegotiatedOutputStream()) {
-			e.writeTo(os);
-			os.flush();
+		if (body != null) {
+			try (var os = res.getNegotiatedOutputStream()) {
+				body.writeTo(os);
+				os.flush();
+			}
 		}
 
 		return FINISHED;

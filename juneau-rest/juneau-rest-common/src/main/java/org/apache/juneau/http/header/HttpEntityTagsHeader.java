@@ -40,6 +40,28 @@ public class HttpEntityTagsHeader extends HttpHeaderBean {
 	private final Supplier<?> lazySupplier;
 	private final int lazyMode;
 
+	/**
+	 * Creates an {@link HttpEntityTagsHeader} by parsing the given wire-format value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param wireValue Wire value (e.g. {@code "\"a\", \"b\""}). May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpEntityTagsHeader of(String name, String wireValue) {
+		return new HttpEntityTagsHeader(name, wireValue);
+	}
+
+	/**
+	 * Creates an {@link HttpEntityTagsHeader} with the given typed value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param typedValue The entity-tags value. May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpEntityTagsHeader of(String name, EntityTags typedValue) {
+		return new HttpEntityTagsHeader(name, typedValue);
+	}
+
 	protected HttpEntityTagsHeader(String name, String wireValue) {
 		super(name, wireValue);
 		this.value = wireValue == null ? null : EntityTags.of(wireValue);

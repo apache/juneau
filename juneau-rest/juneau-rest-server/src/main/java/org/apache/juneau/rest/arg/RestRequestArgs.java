@@ -46,10 +46,10 @@ import jakarta.servlet.http.*;
  * 	<li class='jc'>{@link Reader}
  * 	<li class='jc'>{@link RequestAttributes}
  * 	<li class='jc'>{@link RequestContent}
- * 	<li class='jc'>{@link RequestFormParams}
- * 	<li class='jc'>{@link RequestHeaders}
- * 	<li class='jc'>{@link RequestPathParams}
- * 	<li class='jc'>{@link RequestQueryParams}
+ * 	<li class='jc'>{@link RequestFormParamList}
+ * 	<li class='jc'>{@link RequestHeaderList}
+ * 	<li class='jc'>{@link RequestPathParamList}
+ * 	<li class='jc'>{@link RequestQueryParamList}
  * 	<li class='jc'>{@link ResourceBundle}
  * 	<li class='jc'>{@link RestRequest}
  * 	<li class='jc'>{@link ServletInputStream}
@@ -92,13 +92,13 @@ public class RestRequestArgs extends SimpleRestOperationArg {
 			return new RestRequestArgs(RestRequest::getAttributes);
 		if (paramInfo.isType(RequestContent.class))
 			return new RestRequestArgs(RestRequest::getContent);
-		if (paramInfo.isType(RequestFormParams.class))
+		if (paramInfo.isType(RequestFormParamList.class) || paramInfo.isType(RequestFormParamList.class))
 			return new RestRequestArgs(RestRequest::getFormParams);
-		if (paramInfo.isType(RequestHeaders.class))
+		if (paramInfo.isType(RequestHeaderList.class) || paramInfo.isType(RequestHeaderList.class))
 			return new RestRequestArgs(RestRequest::getHeaders);
-		if (paramInfo.isType(RequestPathParams.class))
+		if (paramInfo.isType(RequestPathParamList.class) || paramInfo.isType(RequestPathParamList.class))
 			return new RestRequestArgs(RestRequest::getPathParams);
-		if (paramInfo.isType(RequestQueryParams.class))
+		if (paramInfo.isType(RequestQueryParamList.class) || paramInfo.isType(RequestQueryParamList.class))
 			return new RestRequestArgs(RestRequest::getQueryParams);
 		if (paramInfo.isType(ResourceBundle.class))
 			return new RestRequestArgs(RestRequest::getMessages);

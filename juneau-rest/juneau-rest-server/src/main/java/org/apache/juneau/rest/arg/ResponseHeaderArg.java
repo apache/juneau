@@ -24,7 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
@@ -119,7 +119,8 @@ public class ResponseHeaderArg implements RestOpArg {
 			if (rpm == null)
 				rpm = ResponseHeaderArg.this.meta;
 			var pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();
-			res.setHeader(new SerializedHeader(name, o, pss, rpm.getSchema(), false));
+			var s = pss.serialize(HttpPartType.HEADER, rpm.getSchema(), o);
+			res.setHeader(HttpStringHeader.of(name, s));
 		});
 		return v;
 	}

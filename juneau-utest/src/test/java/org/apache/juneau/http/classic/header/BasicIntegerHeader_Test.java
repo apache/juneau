@@ -72,6 +72,7 @@ class BasicIntegerHeader_Test extends TestBase {
 
 	@Test void a02_assertInteger() {
 		assertEquals(1, integerHeader(HEADER,1).asInteger().get());
+		integerHeader(HEADER,1).assertInteger().is(1);
 	}
 
 	@Test void a03_factoryNullReturns() {
@@ -88,6 +89,11 @@ class BasicIntegerHeader_Test extends TestBase {
 		var h2 = new BasicIntegerHeader("Foo", (Integer)null);
 		assertNull(h2.toInteger());
 		assertEquals(Integer.valueOf(99), h2.orElse(99));
+	}
+
+	@Test void a05_wireConstructor_nullValue() {
+		var h = new BasicIntegerHeader("Foo", (String)null);
+		assertNull(h.toInteger());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

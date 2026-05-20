@@ -20,6 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.illegalArg;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -4384,6 +4385,25 @@ class StringUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// parseInt(String, Supplier<T>)
+	//====================================================================================================
+	@Test
+	void a146a_parseInt_withErrorSupplier() {
+		// Valid input does not invoke the supplier.
+		assertEquals(123, parseInt("123", () -> new IllegalStateException("should not be thrown")));
+		assertEquals(1000000, parseInt("1_000_000", () -> new IllegalStateException("should not be thrown")));
+
+		// Invalid input invokes the supplier and the supplier's exception is thrown.
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> parseInt("invalid", () -> illegalArg("Bad int: {0}", "invalid")));
+		assertEquals("Bad int: invalid", ex.getMessage());
+
+		// Custom RuntimeException subtype is preserved by the generic signature.
+		assertThrows(IllegalStateException.class,
+			() -> parseInt("nope", () -> new IllegalStateException("custom")));
+	}
+
+	//====================================================================================================
 	// parseIntWithSuffix(String)
 	//====================================================================================================
 	@Test
@@ -4410,6 +4430,21 @@ class StringUtils_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> parseIntWithSuffix(null));
 	}
 
+	//====================================================================================================
+	// parseIntWithSuffix(String, Supplier<T>)
+	//====================================================================================================
+	@Test
+	void a147a_parseIntWithSuffix_withErrorSupplier() {
+		// Valid input does not invoke the supplier.
+		assertEquals(1024, parseIntWithSuffix("1K", () -> new IllegalStateException("should not be thrown")));
+		assertEquals(123, parseIntWithSuffix("123", () -> new IllegalStateException("should not be thrown")));
+
+		// Invalid input invokes the supplier and the supplier's exception is thrown.
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> parseIntWithSuffix("1X", () -> illegalArg("Bad size: {0}", "1X")));
+		assertEquals("Bad size: 1X", ex.getMessage());
+	}
+
 
 	//====================================================================================================
 	// parseLong(String)
@@ -4423,6 +4458,21 @@ class StringUtils_Test extends TestBase {
 		// Should throw for invalid input
 		assertThrows(NumberFormatException.class, () -> parseLong("invalid"));
 		assertThrows(IllegalArgumentException.class, () -> parseLong(null));
+	}
+
+	//====================================================================================================
+	// parseLong(String, Supplier<T>)
+	//====================================================================================================
+	@Test
+	void a150a_parseLong_withErrorSupplier() {
+		// Valid input does not invoke the supplier.
+		assertEquals(123L, parseLong("123", () -> new IllegalStateException("should not be thrown")));
+		assertEquals(1000000L, parseLong("1_000_000", () -> new IllegalStateException("should not be thrown")));
+
+		// Invalid input invokes the supplier and the supplier's exception is thrown.
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> parseLong("invalid", () -> illegalArg("Bad long: {0}", "invalid")));
+		assertEquals("Bad long: invalid", ex.getMessage());
 	}
 
 	//====================================================================================================

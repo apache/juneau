@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.serializer.*;
 

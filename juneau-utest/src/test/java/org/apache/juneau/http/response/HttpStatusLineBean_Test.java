@@ -19,6 +19,7 @@ package org.apache.juneau.http.response;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 import org.junit.jupiter.api.*;
 
 class HttpStatusLineBean_Test extends TestBase {
@@ -27,29 +28,36 @@ class HttpStatusLineBean_Test extends TestBase {
 		var s = HttpStatusLineBean.of(200, "OK");
 		assertEquals(200, s.getStatusCode());
 		assertEquals("OK", s.getReasonPhrase());
-		assertEquals("HTTP/1.1", s.getProtocolVersion());
+		assertEquals(HttpProtocolVersion.HTTP_1_1, s.getProtocolVersion());
 		assertEquals("HTTP/1.1 200 OK", s.toString());
 	}
 
-	@Test void a02_of_customProtocolVersion() {
+	@Test void a02_of_parsedProtocolVersion() {
 		var s = HttpStatusLineBean.of("HTTP/2", 418, "I'm a teapot");
 		assertEquals(418, s.getStatusCode());
 		assertEquals("I'm a teapot", s.getReasonPhrase());
-		assertEquals("HTTP/2", s.getProtocolVersion());
-		assertEquals("HTTP/2 418 I'm a teapot", s.toString());
+		assertEquals(HttpProtocolVersion.of("HTTP", 2, 0), s.getProtocolVersion());
+		assertEquals("HTTP/2.0 418 I'm a teapot", s.toString());
 	}
 
-	@Test void a03_toString_omitsNullReasonPhrase() {
+	@Test void a03_of_typedProtocolVersion() {
+		var s = HttpStatusLineBean.of(HttpProtocolVersion.HTTP_2_0, 200, "OK");
+		assertEquals(HttpProtocolVersion.HTTP_2_0, s.getProtocolVersion());
+		assertEquals("HTTP/2.0 200 OK", s.toString());
+	}
+
+	@Test void a04_toString_omitsNullReasonPhrase() {
 		var s = HttpStatusLineBean.of(204, null);
 		assertNull(s.getReasonPhrase());
 		assertEquals("HTTP/1.1 204", s.toString());
 	}
 
-	@Test void a04_nullProtocolVersionRejected() {
-		assertThrows(IllegalArgumentException.class, () -> HttpStatusLineBean.of(null, 200, "OK"));
+	@Test void a05_nullProtocolVersionRejected() {
+		assertThrows(IllegalArgumentException.class, () -> HttpStatusLineBean.of((HttpProtocolVersion)null, 200, "OK"));
+		assertThrows(IllegalArgumentException.class, () -> HttpStatusLineBean.of((String)null, 200, "OK"));
 	}
 
-	@Test void a05_equalsAndHashCode() {
+	@Test void a06_equalsAndHashCode() {
 		var a = HttpStatusLineBean.of(200, "OK");
 		var b = HttpStatusLineBean.of(200, "OK");
 		var c = HttpStatusLineBean.of(404, "OK");
@@ -66,7 +74,7 @@ class HttpStatusLineBean_Test extends TestBase {
 		assertNotEquals(a, null);
 	}
 
-	@Test void a06_nullReasonPhrase_equalsAndHash() {
+	@Test void a07_nullReasonPhrase_equalsAndHash() {
 		var a = HttpStatusLineBean.of(204, null);
 		var b = HttpStatusLineBean.of(204, null);
 		assertEquals(a, b);

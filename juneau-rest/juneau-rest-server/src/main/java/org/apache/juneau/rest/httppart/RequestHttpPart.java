@@ -25,12 +25,11 @@ import java.util.*;
 import java.util.Objects;
 import java.util.regex.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.classic.*;
-import org.apache.juneau.http.classic.part.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.part.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.oapi.*;
@@ -81,7 +80,7 @@ public class RequestHttpPart {
 	 * Converts this part to the specified POJO type using the request {@link HttpPartParser} and optional schema.
 	 *
 	 * <p>
-	 * If the specified type is an HTTP part type (extends from {@link org.apache.http.Header}/{@link NameValuePair}), then looks for
+	 * If the specified type is an HTTP part type (extends from {@link HttpHeader}/{@link org.apache.juneau.http.HttpPart}), then looks for
 	 * one of the following constructors:
 	 * <ul class='javatree'>
 	 * 	<li class='jm><c><jk>public</jk> T(String <jv>value</jv>);</c>
@@ -104,7 +103,7 @@ public class RequestHttpPart {
 	 * Converts this part to the specified POJO type using the request {@link HttpPartParser} and optional schema.
 	 *
 	 * <p>
-	 * If the specified type is an HTTP part type (extends from {@link org.apache.http.Header}/{@link NameValuePair}), then looks for
+	 * If the specified type is an HTTP part type (extends from {@link HttpHeader}/{@link org.apache.juneau.http.HttpPart}), then looks for
 	 * one of the following constructors:
 	 * <ul class='javatree'>
 	 * 	<li class='jm><c><jk>public</jk> T(String <jv>value</jv>);</c>
@@ -164,12 +163,12 @@ public class RequestHttpPart {
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicBooleanPart}.
+	 * Returns the value of this parameter as an {@link HttpBooleanPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicBooleanPart}, never <jk>null</jk>.
+	 * @return The value of this parameter as an {@link HttpBooleanPart}, never <jk>null</jk>.
 	 */
-	public BasicBooleanPart asBooleanPart() {
-		return new BasicBooleanPart(getName(), getValue());
+	public HttpBooleanPart asBooleanPart() {
+		return HttpBooleanPart.ofString(getName(), getValue());
 	}
 
 	/**
@@ -182,12 +181,12 @@ public class RequestHttpPart {
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicCsvArrayPart}.
+	 * Returns the value of this parameter as an {@link HttpCsvArrayPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicCsvArrayPart}, never <jk>null</jk>.
+	 * @return The value of this parameter as an {@link HttpCsvArrayPart}, never <jk>null</jk>.
 	 */
-	public BasicCsvArrayPart asCsvArrayPart() {
-		return new BasicCsvArrayPart(getName(), getValue());
+	public HttpCsvArrayPart asCsvArrayPart() {
+		return HttpCsvArrayPart.ofString(getName(), getValue());
 	}
 
 	/**
@@ -200,12 +199,12 @@ public class RequestHttpPart {
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicDatePart}.
+	 * Returns the value of this parameter as an {@link HttpDatePart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicDatePart}, never <jk>null</jk>.
+	 * @return The value of this parameter as an {@link HttpDatePart}, never <jk>null</jk>.
 	 */
-	public BasicDatePart asDatePart() {
-		return new BasicDatePart(getName(), getValue());
+	public HttpDatePart asDatePart() {
+		return HttpDatePart.ofString(getName(), getValue());
 	}
 
 	/**
@@ -218,12 +217,12 @@ public class RequestHttpPart {
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicIntegerPart}.
+	 * Returns the value of this parameter as an {@link HttpIntegerPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicIntegerPart}, never <jk>null</jk>.
+	 * @return The value of this parameter as an {@link HttpIntegerPart}, never <jk>null</jk>.
 	 */
-	public BasicIntegerPart asIntegerPart() {
-		return new BasicIntegerPart(getName(), getValue());
+	public HttpIntegerPart asIntegerPart() {
+		return HttpIntegerPart.ofString(getName(), getValue());
 	}
 
 	/**
@@ -236,12 +235,12 @@ public class RequestHttpPart {
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicLongPart}.
+	 * Returns the value of this parameter as an {@link HttpLongPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicLongPart}, never <jk>null</jk>.
+	 * @return The value of this parameter as an {@link HttpLongPart}, never <jk>null</jk>.
 	 */
-	public BasicLongPart asLongPart() {
-		return new BasicLongPart(getName(), getValue());
+	public HttpLongPart asLongPart() {
+		return HttpLongPart.ofString(getName(), getValue());
 	}
 
 	/**
@@ -410,21 +409,21 @@ public class RequestHttpPart {
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicStringPart}.
+	 * Returns the value of this parameter as an {@link HttpStringPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicStringPart}, never <jk>null</jk>.
+	 * @return The value of this parameter as an {@link HttpStringPart}, never <jk>null</jk>.
 	 */
-	public BasicStringPart asStringPart() {
-		return new BasicStringPart(getName(), getValue());
+	public HttpStringPart asStringPart() {
+		return HttpStringPart.of(getName(), getValue());
 	}
 
 	/**
-	 * Returns the value of this parameter as a {@link BasicUriPart}.
+	 * Returns the value of this parameter as an {@link HttpUriPart}.
 	 *
-	 * @return The value of this parameter as a {@link BasicUriPart}, never <jk>null</jk>.
+	 * @return The value of this parameter as an {@link HttpUriPart}, never <jk>null</jk>.
 	 */
-	public BasicUriPart asUriPart() {
-		return new BasicUriPart(getName(), getValue());
+	public HttpUriPart asUriPart() {
+		return HttpUriPart.ofString(getName(), getValue());
 	}
 
 	/**
@@ -521,7 +520,11 @@ public class RequestHttpPart {
 
 	@Override
 	public boolean equals(Object o) {
-		return o instanceof NameValuePair nvp && eq(this, nvp, (x, y) -> eq(x.getName(), y.getName()) && eq(x.getValue(), y.getValue()));
+		if (o instanceof org.apache.juneau.http.HttpPart hp)
+			return eq(getName(), hp.getName()) && eq(getValue(), hp.getValue());
+		if (o instanceof org.apache.juneau.http.HttpHeader hh)
+			return eq(getName(), hh.getName()) && eq(getValue(), hh.getValue());
+		return false;
 	}
 
 	@Override

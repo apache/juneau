@@ -36,6 +36,50 @@ import java.util.function.*;
 public class HttpStringHeader extends HttpHeaderBean {
 
 	/**
+	 * Creates an {@link HttpStringHeader} with the given name and value.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param value Wire value. May be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpStringHeader of(String name, String value) {
+		return new HttpStringHeader(name, value);
+	}
+
+	/**
+	 * Creates an {@link HttpStringHeader} with the given name and lazy value supplier.
+	 *
+	 * @param name Header name. Must not be {@code null}.
+	 * @param valueSupplier Lazy wire value supplier. Must not be {@code null}.
+	 * @return A new instance. Never {@code null}.
+	 */
+	public static HttpStringHeader of(String name, Supplier<String> valueSupplier) {
+		return new HttpStringHeader(name, valueSupplier);
+	}
+
+	/**
+	 * Parses a header line of the form {@code "Name: value"} (or {@code "Name=value"}) into an
+	 * {@link HttpStringHeader}.
+	 *
+	 * <p>
+	 * If the input does not contain {@code ':'} or {@code '='}, the entire string is treated as a header name
+	 * with an empty value.
+	 *
+	 * @param pair The header pair. May be {@code null}.
+	 * @return A new instance, or {@code null} if {@code pair} is {@code null}.
+	 */
+	public static HttpStringHeader ofPair(String pair) {
+		if (pair == null)
+			return null;
+		var i = pair.indexOf(':');
+		if (i == -1)
+			i = pair.indexOf('=');
+		if (i == -1)
+			return of(pair, "");
+		return of(pair.substring(0, i).trim(), pair.substring(i + 1).trim());
+	}
+
+	/**
 	 * @param name Header name. Must not be {@code null}.
 	 * @param value Wire value. May be {@code null}.
 	 */

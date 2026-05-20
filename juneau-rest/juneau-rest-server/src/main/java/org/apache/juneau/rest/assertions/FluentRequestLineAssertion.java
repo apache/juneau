@@ -19,13 +19,13 @@ package org.apache.juneau.rest.assertions;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Used for fluent assertion calls against {@link RequestLine} objects.
+ * Used for fluent assertion calls against {@link HttpRequestLine} objects.
  *
  * <h5 class='topic'>Test Methods</h5>
  * <p>
@@ -91,7 +91,7 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
-public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<RequestLine,R> {
+public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<HttpRequestLine,R> {
 
 	/**
 	 * Chained constructor.
@@ -110,7 +110,7 @@ public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<Request
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
 	 * used on the same assertion.
 	 */
-	public FluentRequestLineAssertion(Assertion creator, RequestLine value, R returns) {
+	public FluentRequestLineAssertion(Assertion creator, HttpRequestLine value, R returns) {
 		super(creator, value, returns);
 		setThrowable(BadRequest.class);
 	}
@@ -126,7 +126,7 @@ public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<Request
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
 	 * used on the same assertion.
 	 */
-	public FluentRequestLineAssertion(RequestLine value, R returns) {
+	public FluentRequestLineAssertion(HttpRequestLine value, R returns) {
 		this(null, value, returns);
 	}
 

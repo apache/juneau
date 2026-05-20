@@ -16,35 +16,44 @@
  */
 package org.apache.juneau.rest.processor;
 
-import static org.apache.juneau.http.classic.HttpHeaders.*;
 import java.io.*;
 
-import org.apache.http.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.*;
 
 /**
- * Response handler for {@link HttpEntity} objects.
+ * Response handler for {@link HttpBody} objects (transport-neutral replacement for the historical
+ * Apache HttpClient 4.5 {@code HttpEntity}-keyed processor).
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
-public class HttpEntityProcessor implements ResponseProcessor {
+public class HttpBodyProcessor implements ResponseProcessor {
 
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {
 
 		var res = opSession.getResponse();
-		var e = res.getContent(HttpEntity.class);
+		var e = res.getContent(HttpBody.class);
 
-		if (e == null)
-			return NEXT;
+		if (e == null) {
+			var raw = res.getContent(Object.class);
+			if (LegacyHttpResponseAdapter.isLegacyEntity(raw)) {
+				e = LegacyHttpResponseAdapter.adaptEntity(raw);
+				LegacyHttpResponseAdapter.copyResourceHeaders(raw, res::addHeader);
+			} else {
+				return NEXT;
+			}
+		}
 
-		res.setHeader(e.getContentType());
-		res.setHeader(e.getContentEncoding());
+		var ct = e.getContentType();
+		if (ct != null)
+			res.setHeader(ContentType.of(ct));
 		var contentLength = e.getContentLength();
 		if (contentLength >= 0)
-			res.setHeader(contentLength(contentLength));
+			res.setHeader(ContentLength.of(contentLength));
 
 		try (var os = res.getNegotiatedOutputStream()) {
 			e.writeTo(os);

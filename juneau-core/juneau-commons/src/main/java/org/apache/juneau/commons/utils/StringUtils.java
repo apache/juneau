@@ -5145,6 +5145,34 @@ public class StringUtils {
 	}
 
 	/**
+	 * Same as {@link #parseInt(String)} but converts a {@link NumberFormatException} into a caller-supplied exception.
+	 *
+	 * <p>
+	 * Lets callers wrap the parse failure with a domain-specific error (typically an {@link IllegalArgumentException})
+	 * without having to write a {@code try}/{@code catch} block at the call site.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>int</jk> <jv>port</jv> = StringUtils.<jsm>parseInt</jsm>(<jv>value</jv>,
+	 * 		()-&gt; <jsm>illegalArg</jsm>(<js>"Invalid port: {0}"</js>, <jv>value</jv>));
+	 * </p>
+	 *
+	 * @param <T> The exception type produced by the supplier.
+	 * @param value The string to parse.
+	 * @param errorSupplier Supplier of the exception to throw if the string cannot be parsed.
+	 * @return The parsed integer value.
+	 * @throws T If the string cannot be parsed.
+	 * @throws NullPointerException If the string is <jk>null</jk>.
+	 */
+	public static <T extends RuntimeException> int parseInt(String value, Supplier<T> errorSupplier) {
+		try {
+			return parseInt(value);
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
+			throw errorSupplier.get();
+		}
+	}
+
+	/**
 	 * Converts a string containing a possible multiplier suffix to an integer.
 	 *
 	 * <p>
@@ -5170,6 +5198,28 @@ public class StringUtils {
 	}
 
 	/**
+	 * Same as {@link #parseIntWithSuffix(String)} but converts a {@link NumberFormatException} into a caller-supplied exception.
+	 *
+	 * <p>
+	 * Lets callers wrap the parse failure with a domain-specific error (typically an {@link IllegalArgumentException})
+	 * without having to write a {@code try}/{@code catch} block at the call site.
+	 *
+	 * @param <T> The exception type produced by the supplier.
+	 * @param value The string to parse.
+	 * @param errorSupplier Supplier of the exception to throw if the string cannot be parsed.
+	 * @return The parsed integer value.
+	 * @throws T If the string cannot be parsed.
+	 * @throws IllegalArgumentException If the string is <jk>null</jk>.
+	 */
+	public static <T extends RuntimeException> int parseIntWithSuffix(String value, Supplier<T> errorSupplier) {
+		try {
+			return parseIntWithSuffix(value);
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
+			throw errorSupplier.get();
+		}
+	}
+
+	/**
 	 * Same as {@link Long#parseLong(String)} but removes any underscore characters first.
 	 *
 	 * <p>Allows for better readability of numeric literals (e.g., <js>"1_000_000"</js>).
@@ -5181,6 +5231,34 @@ public class StringUtils {
 	 */
 	public static long parseLong(String value) {
 		return Long.parseLong(StringUtils.removeUnderscores(value));
+	}
+
+	/**
+	 * Same as {@link #parseLong(String)} but converts a {@link NumberFormatException} into a caller-supplied exception.
+	 *
+	 * <p>
+	 * Lets callers wrap the parse failure with a domain-specific error (typically an {@link IllegalArgumentException})
+	 * without having to write a {@code try}/{@code catch} block at the call site.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>long</jk> <jv>size</jv> = StringUtils.<jsm>parseLong</jsm>(<jv>value</jv>,
+	 * 		()-&gt; <jsm>illegalArg</jsm>(<js>"Invalid size: {0}"</js>, <jv>value</jv>));
+	 * </p>
+	 *
+	 * @param <T> The exception type produced by the supplier.
+	 * @param value The string to parse.
+	 * @param errorSupplier Supplier of the exception to throw if the string cannot be parsed.
+	 * @return The parsed long value.
+	 * @throws T If the string cannot be parsed.
+	 * @throws NullPointerException If the string is <jk>null</jk>.
+	 */
+	public static <T extends RuntimeException> long parseLong(String value, Supplier<T> errorSupplier) {
+		try {
+			return parseLong(value);
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
+			throw errorSupplier.get();
+		}
 	}
 
 	/**
@@ -8043,7 +8121,8 @@ public class StringUtils {
 	 */
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for IPv6 validation
-		"java:S6541" // Thread-safe singleton pattern acceptable
+		"java:S6541", // Thread-safe singleton pattern acceptable
+		"java:S1313" // IPv6 validation intentionally compares against canonical literals like :: and ::ffff
 	})
 	public static boolean isValidIPv6Address(String ip) {
 		if (ip == null || ip.isEmpty())

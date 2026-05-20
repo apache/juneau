@@ -54,9 +54,9 @@ public interface HttpStatusLine {
 	String getReasonPhrase();
 
 	/**
-	 * Returns the HTTP protocol version string (e.g. {@code "HTTP/1.1"}).
+	 * Returns the HTTP protocol version (e.g. {@link HttpProtocolVersion#HTTP_1_1}).
 	 *
 	 * @return The protocol version. Never <jk>null</jk>.
 	 */
-	String getProtocolVersion();
+	HttpProtocolVersion getProtocolVersion();
 }

@@ -30,7 +30,7 @@ class Rest_AllowedHeaderParams_Test extends TestBase {
 
 	public static class A {
 		@RestOp
-		public String put(RequestHeaders h) {
+		public String put(RequestHeaderList h) {
 			var accept = h.get("Accept").as(Accept.class).orElse(Accept.NULL);
 			var contentType = h.get("Content-Type").as(ContentType.class).orElse(ContentType.NULL);
 			return "Accept="+(accept.isPresent() ? accept.get() : null)+"; Content-Type=" + (contentType.isPresent() ? contentType.get() : null) + "; Custom=" + h.get("Custom").orElse(null);

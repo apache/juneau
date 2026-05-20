@@ -59,7 +59,7 @@ import jakarta.servlet.http.*;
  * 	Some important methods on this class are:
  * </p>
  * <ul class='javatree'>
- * 	<li class='jc'>{@link RequestHeaders}
+ * 	<li class='jc'>{@link RequestHeaderList}
  * 	<ul class='spaced-list'>
  * 		<li>Methods for retrieving request attributes:
  * 		<ul class='javatreec'>

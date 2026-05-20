@@ -31,35 +31,35 @@ class RestOp_ReqHeaders_Test extends TestBase {
 	@Rest
 	public static class A {
 		@RestOp(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
-		public JsonMap a(RequestHeaders headers) {
+		public JsonMap a(RequestHeaderList headers) {
 			return JsonMap.create()
 				.append("h1", headers.get("H1").orElse(null))
 				.append("h2", headers.get("H2").orElse(null))
 				.append("h3", headers.get("H3").orElse(null));
 		}
 		@RestGet(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
-		public JsonMap b(RequestHeaders headers) {
+		public JsonMap b(RequestHeaderList headers) {
 			return JsonMap.create()
 				.append("h1", headers.get("H1").orElse(null))
 				.append("h2", headers.get("H2").orElse(null))
 				.append("h3", headers.get("H3").orElse(null));
 		}
 		@RestPut(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
-		public JsonMap c(RequestHeaders headers) {
+		public JsonMap c(RequestHeaderList headers) {
 			return JsonMap.create()
 				.append("h1", headers.get("H1").orElse(null))
 				.append("h2", headers.get("H2").orElse(null))
 				.append("h3", headers.get("H3").orElse(null));
 		}
 		@RestPost(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
-		public JsonMap d(RequestHeaders headers) {
+		public JsonMap d(RequestHeaderList headers) {
 			return JsonMap.create()
 				.append("h1", headers.get("H1").orElse(null))
 				.append("h2", headers.get("H2").orElse(null))
 				.append("h3", headers.get("H3").orElse(null));
 		}
 		@RestDelete(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
-		public JsonMap e(RequestHeaders headers) {
+		public JsonMap e(RequestHeaderList headers) {
 			return JsonMap.create()
 				.append("h1", headers.get("H1").orElse(null))
 				.append("h2", headers.get("H2").orElse(null))
@@ -98,7 +98,7 @@ class RestOp_ReqHeaders_Test extends TestBase {
 	@Rest
 	public static class B {
 		@RestGet(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
-		public JsonMap a(RequestHeaders headers) {
+		public JsonMap a(RequestHeaderList headers) {
 			return JsonMap.create()
 				.append("h1", headers.get("h1").orElse(null))
 				.append("h2", headers.get("h2").orElse(null))

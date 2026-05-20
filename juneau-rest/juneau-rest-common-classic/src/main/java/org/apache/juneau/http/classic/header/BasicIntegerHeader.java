@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.classic.header;
 
+import static org.apache.juneau.commons.utils.StringUtils.parseInt;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -203,11 +204,9 @@ public class BasicIntegerHeader extends BasicHeader {
 	}
 
 	private static Integer parse(String value) {
-		try {
-			return value == null ? null : Integer.parseInt(value);
-		} catch (NumberFormatException e) {
-			throw rex(e, "Value ''{0}'' could not be parsed as an integer.", value);
-		}
+		if (value == null)
+			return null;
+		return parseInt(value, () -> illegalArg("Value ''{0}'' could not be parsed as an integer.", value));
 	}
 
 	private Integer value() {

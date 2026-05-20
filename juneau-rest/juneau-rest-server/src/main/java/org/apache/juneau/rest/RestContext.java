@@ -34,7 +34,6 @@ import static org.apache.juneau.rest.RestServerConstants.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 import static org.apache.juneau.rest.processor.ResponseProcessor.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
@@ -67,8 +66,8 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.oapi.*;
@@ -408,8 +407,8 @@ public class RestContext extends Context {
 		bs.addDefaultSupplier(RestChildren.class, restChildren::get);
 		// Named framework beans (replaces DELAYED_INJECTION_NAMES).
 		bs.addDefaultSupplier(VarResolver.class, this::getBootstrapVarResolver, PROP_bootstrapVarResolver);
-		bs.addDefaultSupplier(HeaderList.class, defaultRequestHeaders::get, PROP_defaultRequestHeaders);
-		bs.addDefaultSupplier(HeaderList.class, defaultResponseHeaders::get, PROP_defaultResponseHeaders);
+		bs.addDefaultSupplier(HttpHeaderList.class, defaultRequestHeaders::get, PROP_defaultRequestHeaders);
+		bs.addDefaultSupplier(HttpHeaderList.class, defaultResponseHeaders::get, PROP_defaultResponseHeaders);
 		bs.addDefaultSupplier(NamedAttributeMap.class, defaultRequestAttributes::get, PROP_defaultRequestAttributes);
 		bs.addDefaultSupplier(MethodList.class, () -> destroyInvokerPair.get().methods, "destroyMethods");
 		bs.addDefaultSupplier(MethodList.class, () -> endCallInvokerPair.get().methods, "endCallMethods");
@@ -630,19 +629,19 @@ public class RestContext extends Context {
 	 * Walks {@code @Rest} annotations parent-to-child, resolving each header string. A named bean-store
 	 * override or {@code @Bean} factory method REPLACES the accumulated result.
 	 */
-	private final Memoizer<HeaderList> defaultRequestHeaders = memoizer(() -> {
-		var v = Value.of(HeaderList.create());
+	private final Memoizer<HttpHeaderList> defaultRequestHeaders = memoizer(() -> {
+		var v = Value.of(HttpHeaderList.create());
 		getRestAnnotationsTopDown().forEach(ai -> {
 			Rest a = ai.inner();
-			Arrays.stream(a.defaultRequestHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(s -> stringHeader(s)).forEach(v.get()::setDefault);
+			Arrays.stream(a.defaultRequestHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(HttpStringHeader::ofPair).forEach(v.get()::setDefault);
 			var defaultAccept = resolve(a.defaultAccept());
 			if (isNotBlank(defaultAccept))
-				v.get().setDefault(accept(defaultAccept));
+				v.get().setDefault(Accept.of(defaultAccept));
 			var defaultContentType = resolve(a.defaultContentType());
 			if (isNotBlank(defaultContentType))
-				v.get().setDefault(contentType(defaultContentType));
+				v.get().setDefault(ContentType.of(defaultContentType));
 		});
-		beanStore().createBeanFromMethod(HeaderList.class, resource().get(), x -> isBeanMethod(x, PROP_defaultRequestHeaders), v.get()).ifPresent(v::set);
+		beanStore().createBeanFromMethod(HttpHeaderList.class, resource().get(), x -> isBeanMethod(x, PROP_defaultRequestHeaders), v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -653,10 +652,10 @@ public class RestContext extends Context {
 	 * Walks {@code @Rest} annotations parent-to-child, resolving each header string. A named bean-store
 	 * override or {@code @Bean} factory method REPLACES the accumulated result.
 	 */
-	private final Memoizer<HeaderList> defaultResponseHeaders = memoizer(() -> {
-		var v = Value.of(HeaderList.create());
-		getRestAnnotationsTopDown().forEach(ai -> Arrays.stream(ai.inner().defaultResponseHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(s -> stringHeader(s)).forEach(v.get()::setDefault));
-		beanStore().createBeanFromMethod(HeaderList.class, resource().get(), x -> isBeanMethod(x, PROP_defaultResponseHeaders), v.get()).ifPresent(v::set);
+	private final Memoizer<HttpHeaderList> defaultResponseHeaders = memoizer(() -> {
+		var v = Value.of(HttpHeaderList.create());
+		getRestAnnotationsTopDown().forEach(ai -> Arrays.stream(ai.inner().defaultResponseHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(HttpStringHeader::ofPair).forEach(v.get()::setDefault));
+		beanStore().createBeanFromMethod(HttpHeaderList.class, resource().get(), x -> isBeanMethod(x, PROP_defaultResponseHeaders), v.get()).ifPresent(v::set);
 		return v.get();
 	});
 
@@ -2048,7 +2047,7 @@ public class RestContext extends Context {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultRequestHeaders() { return beanStore.getBean(HeaderList.class, PROP_defaultRequestHeaders).orElse(null); }
+	public HttpHeaderList getDefaultRequestHeaders() { return beanStore.getBean(HttpHeaderList.class, PROP_defaultRequestHeaders).orElse(null); }
 
 	/**
 	 * Returns the default response headers for this resource.
@@ -2061,7 +2060,7 @@ public class RestContext extends Context {
 	 * 	The default response headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultResponseHeaders() { return beanStore.getBean(HeaderList.class, PROP_defaultResponseHeaders).orElse(null); }
+	public HttpHeaderList getDefaultResponseHeaders() { return beanStore.getBean(HttpHeaderList.class, PROP_defaultResponseHeaders).orElse(null); }
 
 	/**
 	 * Returns the encoders associated with this context.
@@ -2807,14 +2806,14 @@ public class RestContext extends Context {
 		if (nn(r) && r.value().length > 0)
 			code = r.value()[0];
 
-		var e2 = (e instanceof BasicHttpException e22 ? e22 : new BasicHttpException(code, e));
+		var e2 = (e instanceof BasicHttpException e22 ? e22 : new BasicHttpException(code, null, e));
 
 		var req = session.getRequest();
 		var res = session.getResponse();
 
 		Throwable t = e2.getRootCause();
 		if (nn(t)) {
-			Thrown t2 = thrown(t);
+			Thrown t2 = Thrown.of(t);
 			res.setHeader(t2.getName(), t2.getValue());
 		}
 

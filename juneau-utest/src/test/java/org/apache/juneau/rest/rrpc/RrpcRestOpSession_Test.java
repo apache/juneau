@@ -18,8 +18,8 @@ package org.apache.juneau.rest.rrpc;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 import org.junit.jupiter.api.*;
 
 class RrpcRestOpSession_Test extends TestBase {
@@ -32,10 +32,10 @@ class RrpcRestOpSession_Test extends TestBase {
 
 		// Verify the method exists with correct return type via reflection
 		try {
-			var method = RrpcRestOpSession.class.getMethod("status", StatusLine.class);
+			var method = RrpcRestOpSession.class.getMethod("status", HttpStatusLine.class);
 			assertEquals(RrpcRestOpSession.class, method.getReturnType());
 		} catch (Exception e) {
-			fail("Method status(StatusLine) should exist and return RrpcRestOpSession");
+			fail("Method status(HttpStatusLine) should exist and return RrpcRestOpSession");
 		}
 	}
 

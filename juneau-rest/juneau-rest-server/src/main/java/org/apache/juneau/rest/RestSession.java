@@ -23,12 +23,12 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.util.*;
@@ -556,7 +556,7 @@ public class RestSession extends ContextSession {
 	 * 	<br>Can be <jk>null</jk> (ignored).
 	 * @return This object.
 	 */
-	public RestSession status(StatusLine value) {
+	public RestSession status(HttpStatusLine value) {
 		if (nn(value))
 			res.setStatus(value.getStatusCode());
 		return this;

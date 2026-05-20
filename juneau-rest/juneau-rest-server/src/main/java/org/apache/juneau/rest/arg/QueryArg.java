@@ -42,7 +42,7 @@ import org.apache.juneau.rest.httppart.*;
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getRequest() getRequest}()
  * 		.{@link RestRequest#getQueryParams() getQueryParams}()
- * 		.{@link RequestQueryParams#get(String) get}(<jv>name</jv>)
+ * 		.{@link RequestQueryParamList#get(String) get}(<jv>name</jv>)
  * 		.{@link RequestQueryParam#as(Class) as}(<jv>type</jv>);
  * </p>
  *
