@@ -710,6 +710,18 @@ const sidebars: SidebarsConfig = {
 							],
 						},
 						{
+							type: 'category',
+							label: '2.43. SSE Support',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/02.43.01.SseBasics',
+									label: '2.43.1. SSE Basics',
+								},
+							],
+						},
+						{
 							type: 'doc',
 							id: 'topics/02.34.BestPractices',
 							label: '2.34. Best Practices',
@@ -787,6 +799,26 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/04.08.JuneauBeanMcp',
 							label: '4.8. juneau-bean-mcp',
+						},
+						{
+							type: 'doc',
+							id: 'topics/04.09.JuneauBeanRfc7807',
+							label: '4.9. juneau-bean-rfc7807',
+						},
+						{
+							type: 'doc',
+							id: 'topics/04.10.JuneauBeanHal',
+							label: '4.10. juneau-bean-hal',
+						},
+						{
+							type: 'doc',
+							id: 'topics/04.11.JuneauBeanJsonApi',
+							label: '4.11. juneau-bean-jsonapi',
+						},
+						{
+							type: 'doc',
+							id: 'topics/04.12.JuneauBeanJsonPatch',
+							label: '4.12. juneau-bean-jsonpatch',
 						},
 					],
 				},
