@@ -9,5 +9,3 @@
 
 - [TODO-30] Investigate moving `ClassMeta` and related non-marshalling type metadata from `juneau-marshall` into `juneau-commons` (analysis/feasibility pass). See `todo/TODO-30-classmeta-to-commons.md`.
 
-- [TODO-58] Fix silent element-drop when `BeanMap.put` converts `List<String>` → `Set<EnumType>` against an `@Beanp(type=TreeSet.class, params=EnumType.class)`-annotated property. Surfaced downstream in `central-routing/irs` PR #1806, which had to add a per-bean `parse()` override to work around it. See `todo/TODO-58-beanmap-typed-set-element-coercion.md`.
-

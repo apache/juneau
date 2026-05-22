@@ -1833,6 +1833,181 @@ class BeanMap_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// Typed collection elements in BeanMap.put should coerce to the property element type.
+	//
+	// Sibling of a41/a42 (typed-map key coercion).  Exercises the analogous gap on the typed-collection
+	// branch of BeanPropertyMeta.setPropertyValue: feeding a List/Set of Strings into a Set/List of
+	// EnumType should coerce each element via session.convertToType(...) rather than dropping it (or
+	// silently storing the raw String against the typed property).
+	//====================================================================================================
+	@Test void a43_typedSetField_coercesStringElementsToEnum() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AD());
+		a.put("s", list("ONE","TWO"));
+
+		var b = a.getBean();
+		assertEquals(2, b.s.size());
+		assertTrue(b.s.stream().allMatch(x -> x instanceof HEnum));
+		assertTrue(b.s.contains(HEnum.ONE));
+		assertTrue(b.s.contains(HEnum.TWO));
+	}
+
+	public static class AD {
+		@BeanProp(type=TreeSet.class, params=HEnum.class)
+		public Set<HEnum> s;
+	}
+
+	@Test void a44_typedSetSetter_coercesStringElementsToEnum() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AE());
+		a.put("s", list("ONE","TWO"));
+
+		var b = a.getBean();
+		assertEquals(2, b.getS().size());
+		assertTrue(b.getS().stream().allMatch(x -> x instanceof HEnum));
+		assertTrue(b.getS().contains(HEnum.ONE));
+		assertTrue(b.getS().contains(HEnum.TWO));
+	}
+
+	public static class AE {
+		private final TreeSet<HEnum> s = new TreeSet<>();
+		public TreeSet<HEnum> getS() { return s; }
+		public void setS(TreeSet<HEnum> v) {
+			s.clear();
+			s.addAll(v);
+		}
+	}
+
+	@Test void a45_typedListField_coercesStringElementsToEnum() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AF());
+		a.put("l", list("ONE","TWO"));
+
+		var b = a.getBean();
+		assertList(b.l, "ONE", "TWO");
+		assertTrue(b.l.stream().allMatch(x -> x instanceof HEnum));
+	}
+
+	public static class AF {
+		public List<HEnum> l;
+	}
+
+	@Test void a46_typedSetFromSetSource_coercesStringElementsToEnum() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AD());
+		a.put("s", set("ONE","TWO"));
+
+		var b = a.getBean();
+		assertEquals(2, b.s.size());
+		assertTrue(b.s.stream().allMatch(x -> x instanceof HEnum));
+		assertTrue(b.s.contains(HEnum.ONE));
+		assertTrue(b.s.contains(HEnum.TWO));
+	}
+
+	@Test void a47_typedSetField_stringElementsKeepWorking() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AG());
+		a.put("s", list("x","y"));
+
+		var b = a.getBean();
+		assertTrue(b.s.contains("x"));
+		assertTrue(b.s.contains("y"));
+	}
+
+	public static class AG {
+		@BeanProp(type=TreeSet.class, params=String.class)
+		public Set<String> s;
+	}
+
+	@Test void a48_typedSetProtectedField_IRSStyle_coercesStringElementsToEnum() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AH());
+		a.put("s", List.of("ONE","TWO"));
+
+		var b = a.getBean();
+		assertEquals(2, b.s.size());
+		assertTrue(b.s.stream().allMatch(x -> x instanceof HEnum));
+		assertTrue(b.s.contains(HEnum.ONE));
+		assertTrue(b.s.contains(HEnum.TWO));
+	}
+
+	public static class AH {
+		@BeanProp(type=TreeSet.class, params=HEnum.class)
+		protected Set<HEnum> s;
+	}
+
+	@Test void a49_abstractSetField_noHint_usesLinkedHashSetAndCoercesElements() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AI());
+		a.put("s", List.of("ONE","TWO"));
+
+		var b = a.getBean();
+		assertTrue(b.s instanceof LinkedHashSet);
+		assertEquals(2, b.s.size());
+		assertTrue(b.s.stream().allMatch(x -> x instanceof HEnum));
+		assertEquals(list(HEnum.ONE, HEnum.TWO), new ArrayList<>(b.s));
+	}
+
+	public static class AI {
+		public Set<HEnum> s;
+	}
+
+	@Test void a50_abstractSortedSetField_noHint_usesTreeSetAndCoercesElements() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AJ());
+		a.put("s", List.of("TWO","ONE"));
+
+		var b = a.getBean();
+		assertTrue(b.s instanceof TreeSet);
+		assertEquals(2, b.s.size());
+		assertTrue(b.s.stream().allMatch(x -> x instanceof HEnum));
+		assertEquals(list(HEnum.ONE, HEnum.TWO), new ArrayList<>(b.s));
+	}
+
+	public static class AJ {
+		public SortedSet<HEnum> s;
+	}
+
+	@Test void a51_abstractQueueField_noHint_usesArrayDequeAndCoercesElements() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AK());
+		a.put("q", List.of("ONE","TWO"));
+
+		var b = a.getBean();
+		assertTrue(b.q instanceof ArrayDeque);
+		assertEquals(2, b.q.size());
+		assertTrue(b.q.stream().allMatch(x -> x instanceof HEnum));
+		assertEquals(list(HEnum.ONE, HEnum.TWO), new ArrayList<>(b.q));
+	}
+
+	public static class AK {
+		public Queue<HEnum> q;
+	}
+
+	@Test void a52_abstractDequeField_noHint_usesArrayDequeAndCoercesElements() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AL());
+		a.put("d", List.of("ONE","TWO"));
+
+		var b = a.getBean();
+		assertTrue(b.d instanceof ArrayDeque);
+		assertEquals(2, b.d.size());
+		assertTrue(b.d.stream().allMatch(x -> x instanceof HEnum));
+		assertEquals(list(HEnum.ONE, HEnum.TWO), new ArrayList<>(b.d));
+	}
+
+	public static class AL {
+		public Deque<HEnum> d;
+	}
+
+	@Test void a53_abstractSetSetter_noHint_usesLinkedHashSetAndCoercesElements() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AM());
+		a.put("s", List.of("ONE","TWO"));
+
+		var b = a.getBean();
+		assertTrue(b.getS() instanceof LinkedHashSet);
+		assertEquals(2, b.getS().size());
+		assertTrue(b.getS().stream().allMatch(x -> x instanceof HEnum));
+		assertEquals(list(HEnum.ONE, HEnum.TWO), new ArrayList<>(b.getS()));
+	}
+
+	public static class AM {
+		private Set<HEnum> s;
+		public Set<HEnum> getS() { return s; }
+		public void setS(Set<HEnum> v) { s = v; }
+	}
+
+	//====================================================================================================
 	// containsKey with plain beans vs @MarshalledProp(name="*") dyna/extras map
 	//====================================================================================================
 

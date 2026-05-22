@@ -1229,9 +1229,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 							invokeSetter(bean, pName, valueList);
 							return r;
 						}
-						throw bex(beanMeta.getBeanInfo(),
-							"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null",
-							name, propertyClass.getName(), cn(value1));
+
+						propList = createDefaultCollectionForAbstractType(propertyClass);
+						if (propList == null) {
+							throw bex(beanMeta.getBeanInfo(),
+								"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null",
+								name, propertyClass.getName(), cn(value1));
+						}
+						invokeSetter(bean, pName, propList);
 					}
 					propList.clear();
 				} else {
@@ -1244,12 +1249,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				}
 
 				// Set the values.
-				var propList2 = propList;
-				valueList.forEach(x -> {
+				for (var x : valueList) {
 					if (! elementType.isObject())
 						x = session.convertToType(x, elementType);
-					propList2.add(x);
-				});
+					propList.add(x);
+				}
 
 			} else {
 				value1 = session.convertToMemberType(bean, value1, rawTypeMeta);
@@ -1364,6 +1368,18 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (nn(cm))
 			return cm.getName();
 		return beanMeta.getClassInfo().getName();
+	}
+
+	private Collection<?> createDefaultCollectionForAbstractType(Class<?> propertyClass) {
+		if (propertyClass == SortedSet.class || propertyClass == NavigableSet.class)
+			return new TreeSet<>();
+		if (propertyClass == Set.class)
+			return new LinkedHashSet<>();
+		if (propertyClass == Deque.class || propertyClass == Queue.class)
+			return new ArrayDeque<>();
+		if (propertyClass == List.class || propertyClass == Collection.class)
+			return new ArrayList<>();
+		return null;
 	}
 
 	/**
