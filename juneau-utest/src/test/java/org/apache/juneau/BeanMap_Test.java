@@ -1795,6 +1795,44 @@ class BeanMap_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// Typed map keys in BeanMap.put should coerce to property key type.
+	//====================================================================================================
+	@Test void a41_typedMapField_coercesStringKeysToEnum() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AB());
+		a.put("m", map("ONE","v1","TWO","v2"));
+
+		var b = a.getBean();
+		assertEquals("v1", b.m.get(HEnum.ONE));
+		assertEquals("v2", b.m.get(HEnum.TWO));
+		assertFalse(((Map)b.m).containsKey("ONE"));
+		assertTrue(b.m.keySet().stream().allMatch(x -> x instanceof HEnum));
+	}
+
+	public static class AB {
+		public Map<HEnum,String> m;
+	}
+
+	@Test void a42_typedMapSetter_coercesStringKeysToEnum() {
+		var a = MarshallingContext.DEFAULT.toBeanMap(new AC());
+		a.put("m", map("ONE","v1","TWO","v2"));
+
+		var b = a.getBean();
+		assertEquals("v1", b.getM().get(HEnum.ONE));
+		assertEquals("v2", b.getM().get(HEnum.TWO));
+		assertFalse(((Map)b.getM()).containsKey("ONE"));
+		assertTrue(b.getM().keySet().stream().allMatch(x -> x instanceof HEnum));
+	}
+
+	public static class AC {
+		private final HashMap<HEnum,String> m = new HashMap<>();
+		public HashMap<HEnum,String> getM() { return m; }
+		public void setM(HashMap<HEnum,String> v) {
+			m.clear();
+			m.putAll(v);
+		}
+	}
+
+	//====================================================================================================
 	// containsKey with plain beans vs @MarshalledProp(name="*") dyna/extras map
 	//====================================================================================================
 

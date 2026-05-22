@@ -1140,6 +1140,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 				var valueMap = (Map)value1;
 				var propMap = (Map)r;
+				var keyType = rawTypeMeta.getKeyType();
 				var valueType = rawTypeMeta.getValueType();
 
 				// If the property type is abstract, then we either need to reuse the existing
@@ -1152,9 +1153,11 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 								propertyClass.getName(), cn(value1));
 
 						if (propertyClass.isInstance(valueMap)) {
-							if (! valueType.isObject()) {
+							if (! (keyType.isObject() && valueType.isObject())) {
 								var needsConversion = Flag.create();
 								valueMap.forEach((k, v2) -> {
+									if (nn(k) && ! keyType.isObject() && ! keyType.isInstance(k))
+										needsConversion.set();
 									if (nn(v2) && ! valueType.isInstance(v2)) {
 										needsConversion.set();
 									}
@@ -1178,12 +1181,15 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				}
 
 				// Set the values.
-				var propMap2 = propMap;
-				valueMap.forEach((k1, v1) -> {
+				for (var e : ((Set<Map.Entry>)valueMap.entrySet())) {
+					var k1 = e.getKey();
+					var v1 = e.getValue();
+					if (! keyType.isObject())
+						k1 = session.convertToType(k1, keyType);
 					if (! valueType.isObject())
 						v1 = session.convertToType(v1, valueType);
-					propMap2.put(k1, v1);
-				});
+					propMap.put(k1, v1);
+				}
 				if (nn(setter) || nn(field))
 					invokeSetter(bean, pName, propMap);
 
