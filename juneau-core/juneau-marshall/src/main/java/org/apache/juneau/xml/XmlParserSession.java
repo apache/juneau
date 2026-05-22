@@ -902,35 +902,6 @@ public class XmlParserSession extends ReaderParserSession {
 				o = Boolean.parseBoolean(getElementText(r));
 			else if (jsonType == UNKNOWN)
 				o = getUnknown(r);
-		} else if (sType.isBoolean()) {
-			o = Boolean.parseBoolean(getElementText(r));
-		} else if (sType.isCharSequence()) {
-			o = getElementText(r);
-		} else if (sType.isChar()) {
-			o = parseCharacter(getElementText(r));
-		} else if (sType.isMap()) {
-			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
-			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
-			if (nn(wrapperAttr)) {
-				var wrapper = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap());
-				wrapper.put(wrapperAttr, m);
-				o = wrapper;
-			}
-		} else if (sType.isCollection()) {
-			var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());
-			o = parseIntoCollection(r, l, sType, pMeta);
-		} else if (sType.isNumber()) {
-			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.inner());
-		} else if (sType.isDate()) {
-			o = parseDate(getElementText(r), sType);
-		} else if (sType.isCalendar()) {
-			o = parseCalendar(getElementText(r), sType);
-		} else if (sType.isTemporal()) {
-			o = parseTemporal(getElementText(r), sType);
-		} else if (sType.isDuration()) {
-			o = parseDuration(getElementText(r));
-		} else if (sType.isPeriod()) {
-			o = parsePeriod(getElementText(r));
 		} else if (nn(builder) || sType.canCreateNewBean(outer)) {
 			if (getXmlClassMeta(sType).getFormat() == COLLAPSED) {
 				var fieldName = r.getLocalName();
@@ -946,9 +917,38 @@ public class XmlParserSession extends ReaderParserSession {
 				m = parseIntoBean(r, m, isNil);
 				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			}
+		} else if (sType.isMap()) {
+			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
+			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
+			if (nn(wrapperAttr)) {
+				var wrapper = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap());
+				wrapper.put(wrapperAttr, m);
+				o = wrapper;
+			}
+		} else if (sType.isCollection()) {
+			var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());
+			o = parseIntoCollection(r, l, sType, pMeta);
 		} else if (sType.isArray() || sType.isArgs()) {
 			var l = (ArrayList)parseIntoCollection(r, list(), sType, pMeta);
 			o = toArray(sType, l);
+		} else if (sType.isCharSequence()) {
+			o = getElementText(r);
+		} else if (sType.isChar()) {
+			o = parseCharacter(getElementText(r));
+		} else if (sType.isNumber()) {
+			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.inner());
+		} else if (sType.isBoolean()) {
+			o = Boolean.parseBoolean(getElementText(r));
+		} else if (sType.isDate()) {
+			o = parseDate(getElementText(r), sType);
+		} else if (sType.isCalendar()) {
+			o = parseCalendar(getElementText(r), sType);
+		} else if (sType.isTemporal()) {
+			o = parseTemporal(getElementText(r), sType);
+		} else if (sType.isDuration()) {
+			o = parseDuration(getElementText(r));
+		} else if (sType.isPeriod()) {
+			o = parsePeriod(getElementText(r));
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, getElementText(r));
 		} else if (nn(sType.getProxyInvocationHandler())) {

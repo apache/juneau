@@ -449,6 +449,8 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 				out.integerValue(((Number) value).longValue());
 		} else if (type.isBoolean()) {
 			out.booleanValue((Boolean) value);
+		} else if (type.isEnum()) {
+			out.enumValue(((Enum<?>) value).name());
 		} else if (type.isDate()) {
 			out.stringValue(serializeDate((Date)value, type));
 		} else if (type.isCalendar()) {
@@ -459,8 +461,6 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 			out.stringValue(serializeDuration((Duration)value));
 		} else if (type.isPeriod()) {
 			out.stringValue(serializePeriod((Period)value));
-		} else if (type.isEnum()) {
-			out.enumValue(((Enum<?>) value).name());
 		} else if (value instanceof byte[] value2) {
 			out.bytesValue(value2);
 		} else {

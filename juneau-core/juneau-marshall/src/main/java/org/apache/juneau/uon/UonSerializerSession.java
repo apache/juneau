@@ -507,24 +507,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		// '\0' characters are considered null.
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
 			out.appendObject(null, false);
-		else if (sType.isBoolean())
-			out.appendBoolean(o);
-		else if (sType.isNumber())
-			out.appendNumber(o);
-		else if (sType.isDate())
-			out.appendObject(serializeDate((Date)o, sType), false);
-		else if (sType.isCalendar())
-			out.appendObject(serializeCalendar(o, sType), false);
-		else if (sType.isTemporal())
-			out.appendObject(serializeTemporal((TemporalAccessor)o, sType), false);
-		else if (sType.isDuration())
-			out.appendObject(serializeDuration((Duration)o), false);
-		else if (sType.isPeriod())
-			out.appendObject(serializePeriod((Period)o), false);
 		else if (sType.isBean())
 			serializeBeanMap(out, toBeanMap(o), typeName);
-		else if (sType.isUri() || (nn(pMeta) && pMeta.isUri()))
-			out.appendUri(o);
 		else if (sType.isMap()) {
 			if (o instanceof BeanMap o2)
 				serializeBeanMap(out, o2, typeName);
@@ -534,6 +518,22 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			serializeCollection(out, (Collection)o, eType);
 		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.inner(), o), eType);
+		} else if (sType.isBoolean()) {
+			out.appendBoolean(o);
+		} else if (sType.isNumber()) {
+			out.appendNumber(o);
+		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
+			out.appendUri(o);
+		} else if (sType.isDate()) {
+			out.appendObject(serializeDate((Date)o, sType), false);
+		} else if (sType.isCalendar()) {
+			out.appendObject(serializeCalendar(o, sType), false);
+		} else if (sType.isTemporal()) {
+			out.appendObject(serializeTemporal((TemporalAccessor)o, sType), false);
+		} else if (sType.isDuration()) {
+			out.appendObject(serializeDuration((Duration)o), false);
+		} else if (sType.isPeriod()) {
+			out.appendObject(serializePeriod((Period)o), false);
 		} else if (sType.isStreamable()) {
 			serializeStreamable(out, o, sType, eType);
 		} else if (sType.isReader()) {

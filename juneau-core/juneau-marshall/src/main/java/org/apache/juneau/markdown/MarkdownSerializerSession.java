@@ -546,6 +546,13 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 			cm = swap.getSwapClassMeta(this);
 		}
 
+		if (cm.isCharSequence() || cm.isEnum()) {
+			var s = toString(o);
+			if (isAmbiguousString(s, nullValue))
+				return "`'" + escapeJson5String(s) + "'`";
+			return MarkdownWriter.escapeCell(s);
+		}
+
 		if (cm.isNumber() || cm.isBoolean())
 			return o.toString();
 
@@ -563,13 +570,6 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 
 		if (cm.isPeriod())
 			return MarkdownWriter.escapeCell(serializePeriod((Period)o));
-
-		if (cm.isCharSequence() || cm.isEnum()) {
-			var s = toString(o);
-			if (isAmbiguousString(s, nullValue))
-				return "`'" + escapeJson5String(s) + "'`";
-			return MarkdownWriter.escapeCell(s);
-		}
 
 		// Complex value: serialize as JSON5 in backticks — use context-aware serializer for swaps
 		try {

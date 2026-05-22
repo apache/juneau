@@ -392,13 +392,14 @@ public class TomlParserSession extends ReaderParserSession {
 		String nv = ctx != null ? ctx.getNullValue() : null;
 		if (val instanceof String s && nv != null && s.equals(nv))
 			return null;
-		if (val instanceof Map map && JsonMap.class.isAssignableFrom(targetType.inner())) {
-			return toJsonMap(map);
-		}
-		if (val instanceof Map map && targetType.isBean()) {
-			BeanMap<?> child = toBeanMap(targetType.newInstance(getOuter()));
-			populateBeanMap(child, map);
-			return child.getBean();
+		if (val instanceof Map map) {
+			if (JsonMap.class.isAssignableFrom(targetType.inner()))
+				return toJsonMap(map);
+			if (targetType.isBean()) {
+				BeanMap<?> child = toBeanMap(targetType.newInstance(getOuter()));
+				populateBeanMap(child, map);
+				return child.getBean();
+			}
 		}
 		if (val instanceof List list && targetType.isCollectionOrArray()) {
 			ClassMeta<?> elType = targetType.getElementType();
@@ -408,8 +409,25 @@ public class TomlParserSession extends ReaderParserSession {
 			}
 			return targetType.isArray() ? toArray(targetType, result) : result;
 		}
-		if (val instanceof Number && targetType.isNumber())
-			return convertToMemberType(null, val, targetType);
+		// Bare numeric wire literals (e.g. "2024", "8100000000000") arrive here as Number values
+		// from the TOML tokenizer.  Route them through the format-aware parsers so the configured
+		// MarshallingContext.get<Format>() hint (NANOS, ISO_YEAR, MILLIS, …) reaches the coercion.
+		// Without this routing the generic Number → T coercion below would silently drop the hint
+		// (e.g. treating Long(2024) as epoch-millis → 1970-01-01T00:00:02.024Z instead of year 2024).
+		if (val instanceof Number num) {
+			if (targetType.isNumber())
+				return convertToMemberType(null, num, targetType);
+			if (targetType.isDuration())
+				return parseDuration(num.toString());
+			if (targetType.isPeriod())
+				return parsePeriod(num.toString());
+			if (targetType.isDate())
+				return parseDate(num.toString(), targetType);
+			if (targetType.isCalendar())
+				return parseCalendar(num.toString(), targetType);
+			if (targetType.isTemporal())
+				return parseTemporal(num.toString(), targetType);
+		}
 		if (val instanceof String string) {
 			if (targetType.isDate())
 				return parseDate(string, targetType);
@@ -421,23 +439,6 @@ public class TomlParserSession extends ReaderParserSession {
 				return parseDuration(string);
 			if (targetType.isPeriod())
 				return parsePeriod(string);
-		}
-		// Bare numeric wire literals (e.g. "2024", "8100000000000") arrive here as Number values
-		// from the TOML tokenizer.  Route them through the format-aware parsers so the configured
-		// MarshallingContext.get<Format>() hint (NANOS, ISO_YEAR, MILLIS, …) reaches the coercion.
-		// Without this routing the generic Number → T coercion below would silently drop the hint
-		// (e.g. treating Long(2024) as epoch-millis → 1970-01-01T00:00:02.024Z instead of year 2024).
-		if (val instanceof Number num) {
-			if (targetType.isDuration())
-				return parseDuration(num.toString());
-			if (targetType.isPeriod())
-				return parsePeriod(num.toString());
-			if (targetType.isDate())
-				return parseDate(num.toString(), targetType);
-			if (targetType.isCalendar())
-				return parseCalendar(num.toString(), targetType);
-			if (targetType.isTemporal())
-				return parseTemporal(num.toString(), targetType);
 		}
 		// Native TOML datetime literals (Z-zoned / offset / local) are returned by TomlTokenizer as
 		// java.time.OffsetDateTime / LocalDateTime / LocalDate / LocalTime objects.  Re-stringify

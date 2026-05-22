@@ -320,21 +320,21 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 				n = m.createResource(RDF_NIL);
 			}
 		} else if (sType.isUri() || isURI) {
+			// RDF URI gate must come before isBean/isMap/isCharSequence: @Uri-annotated values need Resource emission, not literal text.
 			var uri = getUri(o, null);
 			if (isAbsoluteUri(uri))
 				n = m.createResource(uri);
 			else
 				n = m.createLiteral(encodeTextInvalidChars(uri));
-		} else if (sType.isCharSequence() || sType.isChar()) {
-			n = m.createLiteral(encodeTextInvalidChars(o));
-		} else if (sType.isNumber() || sType.isBoolean()) {
-			if (!ctx.isAddLiteralTypes())
-				n = m.createLiteral(o.toString());
-			else
-				n = m.createTypedLiteral(o);
-		} else if (sType.isByteArray()) {
-			var b64 = Base64.getEncoder().encodeToString((byte[]) o);
-			n = m.createTypedLiteral(b64, XSDDatatype.XSDbase64Binary);
+		} else if (sType.isBean()) {
+			var bm = toBeanMap(o);
+			Object uri = null;
+			var rbm = ctx.getRdfBeanMeta(bm.getMeta());
+			if (rbm.hasBeanUri())
+				uri = rbm.getBeanUriProperty().get(bm, null);
+			var uri2 = getUri(uri, null);
+			n = m.createResource(uri2);
+			serializeBeanMap(bm, (Resource)n, typeName);
 		} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
 			if (o instanceof BeanMap o2) {
 				Object uri = null;
@@ -348,15 +348,10 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 				n = m.createResource();
 				serializeMap((Map)o, (Resource)n, sType);
 			}
-		} else if (sType.isBean()) {
-			var bm = toBeanMap(o);
-			Object uri = null;
-			var rbm = ctx.getRdfBeanMeta(bm.getMeta());
-			if (rbm.hasBeanUri())
-				uri = rbm.getBeanUriProperty().get(bm, null);
-			var uri2 = getUri(uri, null);
-			n = m.createResource(uri2);
-			serializeBeanMap(bm, (Resource)n, typeName);
+		} else if (sType.isByteArray()) {
+			// byte[] gate must come before isCollectionOrArray: byte[] satisfies isArray() but RDF emits it as a typed base64 literal, not as a Seq of bytes.
+			var b64 = Base64.getEncoder().encodeToString((byte[]) o);
+			n = m.createTypedLiteral(b64, XSDDatatype.XSDbase64Binary);
 		} else if (sType.isCollectionOrArray() || (nn(wType) && wType.isCollection())) {
 			var c = sort(sType.isCollection() ? (Collection)o : toList(sType.inner(), o));
 			var f = ctx.getCollectionFormat();
@@ -375,6 +370,13 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 					default -> serializeToContainer(c, eType, m.createSeq());
 				};
 			}
+		} else if (sType.isCharSequence() || sType.isChar()) {
+			n = m.createLiteral(encodeTextInvalidChars(o));
+		} else if (sType.isNumber() || sType.isBoolean()) {
+			if (!ctx.isAddLiteralTypes())
+				n = m.createLiteral(o.toString());
+			else
+				n = m.createTypedLiteral(o);
 		} else if (sType.isReader()) {
 			n = m.createLiteral(encodeTextInvalidChars(read((Reader)o, SerializerSession::handleThrown)));
 		} else if (sType.isInputStream()) {

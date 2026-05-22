@@ -262,24 +262,8 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		// '\0' characters are considered null.
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
 			out.appendNull();
-		else if (sType.isBoolean())
-			out.appendBoolean((Boolean)o);
-		else if (sType.isNumber())
-			out.appendNumber((Number)o);
-		else if (sType.isDate())
-			out.appendString(serializeDate((Date)o, sType));
-		else if (sType.isCalendar())
-			out.appendString(serializeCalendar(o, sType));
-		else if (sType.isTemporal())
-			out.appendString(serializeTemporal((TemporalAccessor)o, sType));
-		else if (sType.isDuration())
-			appendDuration(out, (Duration)o);
-		else if (sType.isPeriod())
-			out.appendString(serializePeriod((Period)o));
 		else if (sType.isBean())
 			serializeBeanMap(out, toBeanMap(o), typeName);
-		else if (sType.isUri() || (nn(pMeta) && pMeta.isUri()))
-			out.appendString(resolveUri(o.toString()));
 		else if (sType.isMap()) {
 			if (o instanceof BeanMap o2)
 				serializeBeanMap(out, o2, typeName);
@@ -291,6 +275,22 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 			out.appendBinary((byte[])o);
 		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.inner(), o), eType);
+		} else if (sType.isBoolean()) {
+			out.appendBoolean((Boolean)o);
+		} else if (sType.isNumber()) {
+			out.appendNumber((Number)o);
+		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
+			out.appendString(resolveUri(o.toString()));
+		} else if (sType.isDate()) {
+			out.appendString(serializeDate((Date)o, sType));
+		} else if (sType.isCalendar()) {
+			out.appendString(serializeCalendar(o, sType));
+		} else if (sType.isTemporal()) {
+			out.appendString(serializeTemporal((TemporalAccessor)o, sType));
+		} else if (sType.isDuration()) {
+			appendDuration(out, (Duration)o);
+		} else if (sType.isPeriod()) {
+			out.appendString(serializePeriod((Period)o));
 		} else if (sType.isStreamable()) {
 			// MsgPack protocol requires array size in header (startArray(size)), so materialization is unavoidable.
 			serializeCollection(out, toListFromStreamable(o, sType), eType);

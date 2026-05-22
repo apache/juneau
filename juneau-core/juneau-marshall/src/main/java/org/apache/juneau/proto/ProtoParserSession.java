@@ -311,28 +311,30 @@ public class ProtoParserSession extends ReaderParserSession {
 	private Object convertValue(Object val, ClassMeta<?> targetType) throws ParseException, ExecutableException {
 		if (val == null)
 			return null;
-		if (val instanceof Map val2 && JsonMap.class.isAssignableFrom(targetType.inner()))
-			return toJsonMap(val2);
-		if (val instanceof Map val2 && targetType.isBean()) {
-			var typeName = (String) val2.get(getBeanTypePropertyName(targetType));
-			var beanType = targetType;
-			if (typeName != null && !typeName.isEmpty()) {
-				var resolved = getClassMeta(typeName, null, targetType);
-				if (resolved != null)
-					beanType = resolved;
+		if (val instanceof Map val2) {
+			if (JsonMap.class.isAssignableFrom(targetType.inner()))
+				return toJsonMap(val2);
+			if (targetType.isBean()) {
+				var typeName = (String) val2.get(getBeanTypePropertyName(targetType));
+				var beanType = targetType;
+				if (typeName != null && !typeName.isEmpty()) {
+					var resolved = getClassMeta(typeName, null, targetType);
+					if (resolved != null)
+						beanType = resolved;
+				}
+				var child = toBeanMap(beanType.newInstance(getOuter()));
+				populateBeanMap(child, val2);
+				return child.getBean();
 			}
-			var child = toBeanMap(beanType.newInstance(getOuter()));
-			populateBeanMap(child, val2);
-			return child.getBean();
-		}
-		if (val instanceof Map val2 && targetType.isMap()) {
-			// When the bean property's declared key type is non-String (e.g. Map<TestEnum,String>),
-			// route through the converter's Map→Map path so keys are coerced to the declared type.
-			// toJsonMap unconditionally toString-keys the entries which loses the enum/typed key (Bug #7b).
-			var keyType = targetType.getKeyType();
-			if (keyType != null && !keyType.isObject() && !keyType.isString())
-				return convertToMemberType(null, val2, targetType);
-			return toJsonMap(val2);
+			if (targetType.isMap()) {
+				// When the bean property's declared key type is non-String (e.g. Map<TestEnum,String>),
+				// route through the converter's Map→Map path so keys are coerced to the declared type.
+				// toJsonMap unconditionally toString-keys the entries which loses the enum/typed key (Bug #7b).
+				var keyType = targetType.getKeyType();
+				if (keyType != null && !keyType.isObject() && !keyType.isString())
+					return convertToMemberType(null, val2, targetType);
+				return toJsonMap(val2);
+			}
 		}
 		if (val instanceof List val2 && targetType.isCollectionOrArray()) {
 			var elType = targetType.getElementType();
@@ -341,8 +343,12 @@ public class ProtoParserSession extends ReaderParserSession {
 				result.add(convertValue(item, elType));
 			return targetType.isArray() ? toArray(targetType, result) : result;
 		}
-		if (val instanceof Number val2 && targetType.isNumber())
-			return convertToMemberType(null, val2, targetType);
+		if (val instanceof Number val2) {
+			if (targetType.isNumber())
+				return convertToMemberType(null, val2, targetType);
+			if (targetType.isDateOrCalendarOrTemporal())
+				return Iso8601Utils.fromEpochMillis(val2.longValue(), targetType, getTimeZone());
+		}
 		if (val instanceof CharSequence val2) {
 			if (targetType.isDate())
 				return parseDate(val2.toString(), targetType);
@@ -375,8 +381,6 @@ public class ProtoParserSession extends ReaderParserSession {
 				bytes[i] = (byte) s.charAt(i);
 			return bytes;
 		}
-		if (val instanceof Number val2 && targetType.isDateOrCalendarOrTemporal())
-			return Iso8601Utils.fromEpochMillis(val2.longValue(), targetType, getTimeZone());
 		return convertToMemberType(null, val, targetType);
 	}
 }

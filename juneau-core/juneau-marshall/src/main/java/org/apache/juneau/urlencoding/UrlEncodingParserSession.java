@@ -276,9 +276,6 @@ public class UrlEncodingParserSession extends UonParserSession {
 				o = m.get(CONST_value);
 			else
 				o = cast(m, null, eType);
-		} else if (sType.isMap()) {
-			var m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : newGenericMap(sType));
-			o = parseIntoMap2(r, m, sType, m);
 		} else if (nn(builder)) {
 			var m = toBeanMap(builder.create(this, eType));
 			m = parseIntoBeanMap(r, m);
@@ -287,6 +284,9 @@ public class UrlEncodingParserSession extends UonParserSession {
 			var m = newBeanMap(outer, sType.inner());
 			m = parseIntoBeanMap(r, m);
 			o = m == null ? null : m.getBean();
+		} else if (sType.isMap()) {
+			var m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : newGenericMap(sType));
+			o = parseIntoMap2(r, m, sType, m);
 		} else if (sType.isCollection() || sType.isArray() || sType.isArgs()) {
 			// ?1=foo&2=bar...
 			var c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? newGenericList() : (Collection)sType.newInstance();

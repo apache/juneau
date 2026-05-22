@@ -284,13 +284,13 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 				sType = getClassMetaForObject(o);
 		}
 
-		if (sType.isMap()) {
+		if (sType.isBean()) {
+			serializeBeanMap(out, toBeanMap(o), typeName);
+		} else if (sType.isMap()) {
 			if (o instanceof BeanMap o2)
 				serializeBeanMap(out, o2, typeName);
 			else
 				serializeMap(out, (Map)o, sType);
-		} else if (sType.isBean()) {
-			serializeBeanMap(out, toBeanMap(o), typeName);
 		} else if (sType.isCollection() || sType.isArray()) {
 			var m = sType.isCollection() ? getCollectionMap((Collection)o) : getCollectionMap(o);
 			serializeCollectionMap(out, m, getClassMeta(Map.class, Integer.class, Object.class));

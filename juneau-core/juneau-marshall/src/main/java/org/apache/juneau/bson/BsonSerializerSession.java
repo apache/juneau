@@ -137,6 +137,38 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0)) {
 			out.writeElement(NULL.value, name);
+		} else if (sType.isBean()) {
+			out.writeElement(DOCUMENT.value, name);
+			var child = out.createChild();
+			child.startDocument();
+			serializeBeanMap(child, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta));
+			out.writeChildDocument(child);
+		} else if (sType.isMap()) {
+			if (o instanceof BeanMap o2) {
+				out.writeElement(DOCUMENT.value, name);
+				var child = out.createChild();
+				child.startDocument();
+				serializeBeanMap(child, o2, getBeanTypeName(this, eType, aType, pMeta));
+				out.writeChildDocument(child);
+			} else {
+				out.writeElement(DOCUMENT.value, name);
+				var child = out.createChild();
+				child.startDocument();
+				serializeMap(child, (Map)o, eType);
+				out.writeChildDocument(child);
+			}
+		} else if (sType.isByteArray()) {
+			out.writeElement(BINARY.value, name);
+			out.writeBinary((byte[])o);
+		} else if (sType.isCollection() || sType.isArray()) {
+			out.writeElement(ARRAY.value, name);
+			var child = out.createChild();
+			child.startDocument();
+			serializeArray(child, sType.isArray() ? toList(sType.inner(), o) : (Collection)o, eType);
+			out.writeChildDocument(child);
+		} else if (sType.isCharSequence() || sType.isChar() || sType.isEnum()) {
+			out.writeElement(STRING.value, name);
+			out.writeString(trim(o));
 		} else if (sType.isBoolean()) {
 			out.writeElement(BOOLEAN.value, name);
 			out.writeBoolean((Boolean)o);
@@ -158,6 +190,9 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 				out.writeElement(DOUBLE.value, name);
 				out.writeDouble(((Number)o).doubleValue());
 			}
+		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
+			out.writeElement(STRING.value, name);
+			out.writeString(resolveUri(o.toString()));
 		} else if (sType.isDate()) {
 			if (ctx.writeDatesAsDatetime) {
 				out.writeElement(DATETIME.value, name);
@@ -187,47 +222,12 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 		} else if (sType.isPeriod()) {
 			out.writeElement(STRING.value, name);
 			out.writeString(serializePeriod((Period)o));
-		} else if (sType.isBean()) {
-			out.writeElement(DOCUMENT.value, name);
-			var child = out.createChild();
-			child.startDocument();
-			serializeBeanMap(child, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta));
-			out.writeChildDocument(child);
-		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
-			out.writeElement(STRING.value, name);
-			out.writeString(resolveUri(o.toString()));
-		} else if (sType.isMap()) {
-			if (o instanceof BeanMap o2) {
-				out.writeElement(DOCUMENT.value, name);
-				var child = out.createChild();
-				child.startDocument();
-				serializeBeanMap(child, o2, getBeanTypeName(this, eType, aType, pMeta));
-				out.writeChildDocument(child);
-			} else {
-				out.writeElement(DOCUMENT.value, name);
-				var child = out.createChild();
-				child.startDocument();
-				serializeMap(child, (Map)o, eType);
-				out.writeChildDocument(child);
-			}
-		} else if (sType.isByteArray()) {
-			out.writeElement(BINARY.value, name);
-			out.writeBinary((byte[])o);
-		} else if (sType.isCollection() || sType.isArray()) {
-			out.writeElement(ARRAY.value, name);
-			var child = out.createChild();
-			child.startDocument();
-			serializeArray(child, sType.isArray() ? toList(sType.inner(), o) : (Collection)o, eType);
-			out.writeChildDocument(child);
 		} else if (sType.isStreamable()) {
 			out.writeElement(ARRAY.value, name);
 			var child = out.createChild();
 			child.startDocument();
 			serializeArray(child, toListFromStreamable(o, sType), eType);
 			out.writeChildDocument(child);
-		} else if (sType.isCharSequence() || sType.isChar() || sType.isEnum()) {
-			out.writeElement(STRING.value, name);
-			out.writeString(trim(o));
 		} else {
 			out.writeElement(STRING.value, name);
 			out.writeString(toString(o));

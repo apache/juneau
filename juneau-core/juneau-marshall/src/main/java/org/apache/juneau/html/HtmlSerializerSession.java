@@ -1049,6 +1049,40 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.tag("null");
 				cr = CR_MIXED;
 
+			} else if (sType.isBean()) {
+				BeanMap m = toBeanMap(o);
+				if (getAnnotationProvider().has(HtmlLink.class, aType)) {
+					var uriProperty = Value.<String>empty();
+					var nameProperty = Value.<String>empty();
+					aType.forEachAnnotation(HtmlLink.class, x -> ne(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
+					aType.forEachAnnotation(HtmlLink.class, x -> ne(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
+					Object urlProp = m.get(uriProperty.orElse(""));
+					Object nameProp = m.get(nameProperty.orElse(""));
+
+					out.oTag("a").attrUri("href", urlProp).w('>').text(nameProp).eTag("a");
+					cr = CR_MIXED;
+				} else {
+					out.nlIf(! isRoot, xIndent + 2);
+					serializeBeanMap(out, m, eType, pMeta);
+				}
+
+			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
+				out.nlIf(! isRoot, xIndent + 1);
+				if (o instanceof BeanMap o2)
+					serializeBeanMap(out, o2, eType, pMeta);
+				else
+					serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), typeName, pMeta);
+
+			} else if (sType.isCollection() || sType.isArray() || (nn(wType) && wType.isCollection())) {
+				out.nlIf(! isRoot, xIndent + 1);
+				serializeCollection(out, o, sType, eType, name, pMeta);
+
+			} else if (sType.isStreamable()) {
+				// HTML must inspect elements to decide table vs. list layout (getTableHeaders), so materialization is unavoidable.
+				out.nlIf(! isRoot, xIndent + 1);
+				var list = toListFromStreamable(o, sType);
+				serializeCollection(out, list, getClassMeta(List.class), eType, name, pMeta);
+
 			} else if (sType.isNumber()) {
 				if (eType.isNumber() && ! (isRoot && addJsonTags))
 					out.append(o);
@@ -1061,6 +1095,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.append(o);
 				else
 					out.sTag("boolean").append(o).eTag("boolean");
+				cr = CR_MIXED;
+
+			} else if (isUri(sType, pMeta, o)) {
+				String label = getAnchorText(pMeta, o);
+				out.oTag("a").attrUri("href", o).w('>');
+				out.text(label);
+				out.eTag("a");
 				cr = CR_MIXED;
 
 			} else if (sType.isDate()) {
@@ -1101,47 +1142,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.sTag(CONST_string).text(s).eTag(CONST_string);
 				else
 					out.text(s);
-				cr = CR_MIXED;
-
-			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
-				out.nlIf(! isRoot, xIndent + 1);
-				if (o instanceof BeanMap o2)
-					serializeBeanMap(out, o2, eType, pMeta);
-				else
-					serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), typeName, pMeta);
-
-			} else if (sType.isBean()) {
-				BeanMap m = toBeanMap(o);
-				if (getAnnotationProvider().has(HtmlLink.class, aType)) {
-					var uriProperty = Value.<String>empty();
-					var nameProperty = Value.<String>empty();
-					aType.forEachAnnotation(HtmlLink.class, x -> ne(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
-					aType.forEachAnnotation(HtmlLink.class, x -> ne(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
-					Object urlProp = m.get(uriProperty.orElse(""));
-					Object nameProp = m.get(nameProperty.orElse(""));
-
-					out.oTag("a").attrUri("href", urlProp).w('>').text(nameProp).eTag("a");
-					cr = CR_MIXED;
-				} else {
-					out.nlIf(! isRoot, xIndent + 2);
-					serializeBeanMap(out, m, eType, pMeta);
-				}
-
-			} else if (sType.isCollection() || sType.isArray() || (nn(wType) && wType.isCollection())) {
-				out.nlIf(! isRoot, xIndent + 1);
-				serializeCollection(out, o, sType, eType, name, pMeta);
-
-			} else if (sType.isStreamable()) {
-				// HTML must inspect elements to decide table vs. list layout (getTableHeaders), so materialization is unavoidable.
-				out.nlIf(! isRoot, xIndent + 1);
-				var list = toListFromStreamable(o, sType);
-				serializeCollection(out, list, getClassMeta(List.class), eType, name, pMeta);
-
-			} else if (isUri(sType, pMeta, o)) {
-				String label = getAnchorText(pMeta, o);
-				out.oTag("a").attrUri("href", o).w('>');
-				out.text(label);
-				out.eTag("a");
 				cr = CR_MIXED;
 
 			} else {

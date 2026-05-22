@@ -375,21 +375,22 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			}
 
 		} else if (sType.isUri() || isURI) {
-			// Note that RDF URIs must be absolute to be valid!
+			// RDF URI gate must come before isBean/isMap/isCharSequence: @Uri-annotated values (where sType could be String or a bean) need to route through the Resource emission path.  RDF URIs must be absolute to be valid.
 			var uri = getUri(o, null);
 			if (isAbsoluteUri(uri))
 				n = m.createResource(uri);
 			else
 				n = m.createLiteral(encodeTextInvalidChars(uri));
 
-		} else if (sType.isCharSequence() || sType.isChar()) {
-			n = m.createLiteral(encodeTextInvalidChars(o));
-
-		} else if (sType.isNumber() || sType.isBoolean()) {
-			if (! isAddLiteralTypes())
-				n = m.createLiteral(o.toString());
-			else
-				n = m.createTypedLiteral(o);
+		} else if (sType.isBean()) {
+			var bm = toBeanMap(o);
+			Object uri = null;
+			RdfBeanMeta rbm = getRdfBeanMeta(bm.getMeta());
+			if (rbm.hasBeanUri())
+				uri = rbm.getBeanUriProperty().get(bm, null);
+			String uri2 = getUri(uri, null);
+			n = m.createResource(uri2);
+			serializeBeanMap(bm, (Resource)n, typeName);
 
 		} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
 			if (o instanceof BeanMap o2) {
@@ -405,16 +406,6 @@ public class RdfSerializerSession extends WriterSerializerSession {
 				n = m.createResource();
 				serializeMap(m2, (Resource)n, sType);
 			}
-
-		} else if (sType.isBean()) {
-			var bm = toBeanMap(o);
-			Object uri = null;
-			RdfBeanMeta rbm = getRdfBeanMeta(bm.getMeta());
-			if (rbm.hasBeanUri())
-				uri = rbm.getBeanUriProperty().get(bm, null);
-			String uri2 = getUri(uri, null);
-			n = m.createResource(uri2);
-			serializeBeanMap(bm, (Resource)n, typeName);
 
 		} else if (sType.isCollectionOrArray() || (nn(wType) && wType.isCollection())) {
 
@@ -437,6 +428,15 @@ public class RdfSerializerSession extends WriterSerializerSession {
 					default -> serializeToContainer(c, eType, m.createSeq());
 				};
 			}
+
+		} else if (sType.isCharSequence() || sType.isChar()) {
+			n = m.createLiteral(encodeTextInvalidChars(o));
+
+		} else if (sType.isNumber() || sType.isBoolean()) {
+			if (! isAddLiteralTypes())
+				n = m.createLiteral(o.toString());
+			else
+				n = m.createTypedLiteral(o);
 
 		} else if (sType.isReader()) {
 			n = m.createLiteral(encodeTextInvalidChars(read((Reader)o, SerializerSession::handleThrown)));

@@ -4,6 +4,90 @@ Source: filed 2026-05-21 in response to the recent JIT/dispatch analysis on `Cla
 
 ---
 
+## Status (2026-05-22, final closeout)
+
+**Phase 1 parser-side, this pass — all in-scope `*ParserSession` chains reordered to canonical order, with wire-token-driven correctness gates preserved.**
+
+Files touched this pass (parser-side):
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/json/JsonParserSession.java` — `parseAnything` reordered; structural branches (builder → bean → map → collection → array → charSeq → char → number → boolean → temporal cluster) follow the canonical sequence after the `isObject` peek-char dispatch and the wire-token (`c == '{' / '[' / 'n'`) gates.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/uon/UonParserSession.java` — `parseAnything` reordered; `isVoid` and the URL-blank-param pre-check stay at top, `builder` / `canCreateNewBean` promoted above `isMap` / `isCollection` / `isArray`.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/urlencoding/UrlEncodingParserSession.java` — `parseAnything` reordered; `builder` and `canCreateNewBean` promoted before `isMap` / `isCollection`.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/xml/XmlParserSession.java` — `parseAnything` structural tail reordered; the `isObject` jsonType-driven branch stays at top.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/html/HtmlParserSession.java` — both the text-content cascade (`tag == null || tag.isOneOf(BR, BS, FF, SP)`) scalar order and the TABLE/object cascade structural tail reordered. Outer tag-first dispatch left alone (correctness-load-bearing per the inventory note).
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/yaml/YamlParserSession.java` — `parseAnything` (the `c == '{'` cascade), `handleQuotedScalar`, `handlePlainScalar`, and `convertToType` reordered.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/markdown/MarkdownParserSession.java` — `parseCellValue` temporal cluster reordered to canonical sequence (`isDate` → `isCalendar` → `isTemporal` → `isDuration` → `isPeriod`).
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/msgpack/MsgPackParserSession.java` — `parseAnything` structural tail reordered, keeping the merged-scalar tier and wire-type pre-dispatch in place.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/cbor/CborParserSession.java` — mirror of MsgPack reorder.
+- `juneau-core/juneau-marshall-rdf/src/main/java/org/apache/juneau/jena/RdfParserSession.java` — `parseAnything` structural tail reordered, after the RDF_NIL guard and `isObject` literal/resource/Seq pre-dispatch.
+- `juneau-core/juneau-marshall-rdf/src/main/java/org/apache/juneau/jena/RdfStreamParserSession.java` — `parseAnything` structural tail reordered. **Important:** `isByteArray` deliberately stays *adjacent to the scalar tier* (after `isCharSequence`) — and crucially *below* `isCollectionOrArray` — because the RDF byte-array node is a typed base64 literal that's read through the same scalar-path helper (`getValue(n, outer)`); moving `isByteArray` earlier (above `isCollectionOrArray`) caused a regression where typed base64 literals were routed through `asResource()` and threw `ResourceRequiredException`. A comment was added explaining the ordering constraint.
+
+Files reviewed but unchanged (already in canonical order, wire-token-shaped, or not a reorder candidate):
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/hjson/HjsonParserSession.java` — no top-level canonical chain; piecemeal sites already in order.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/hocon/HoconParserSession.java` — same as Hjson.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/ini/IniParserSession.java` — `parseValue` is wire-token-driven and the type branches are already structural-first; no reorder needed.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/toml/TomlParserSession.java` — `convertValue` already addressed in Phase 2.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/proto/ProtoParserSession.java` — `convertValue` already addressed in Phase 2; `parseAnything` delegates.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/bson/BsonParserSession.java` — no canonical chain (convertToType-driven).
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/csv/CsvParserSession.java` — highly specialized row-shape parser; `parseAnything` and `parseCellValue` are structural-first already, no reorder candidate.
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/parquet/ParquetParserSession.java` — out of scope per the Phase-1 carve-out (row-oriented, schema-driven).
+
+**Verification (final, this pass):**
+- `mvn -pl juneau-utest -am -Dtest='Proto*Test,Hjson*Test,Hocon*Test,Bson*Test,Toml*Test,Csv*Test,Markdown*Test,Yaml*Test,Ini*Test,Json5*Test,JsonParser*Test,XmlParser*Test,UrlEncodingParser*Test,UonParser*Test' …` — green.
+- `./scripts/test.py -v` (clean build + tests) — **126,680 tests pass, 0 failures, 0 errors, 20 skipped** (baseline restored after the `RdfStreamParserSession` byte[] ordering regression was fixed mid-pass).
+- `./scripts/test.py -b` (mvn clean install) — green.
+
+**Latent bugs surfaced this pass:** none net-net. One *self-inflicted* regression was caught and fixed during testing: an earlier attempt at reordering `RdfStreamParserSession.parseAnything` put `isByteArray` above `isCollectionOrArray` for symmetry with the canonical order, which broke base64-typed-literal parsing (`ResourceRequiredException` on `"AQ=="^^xsd:base64Binary`). The ordering constraint is now commented in the file.
+
+**Phase 4 / Phase 5 disposition:**
+- **Phase 4** (`Category primaryCategory()` switch pilot) — punted as **explicitly optional** per the plan's own "Roll-out decision" note. Not gating completion.
+- **Phase 5** (`MarshallDispatchBenchmark` JMH) — punted as **explicitly optional** per the plan's "sanity check, not a pre-commit blocker" framing. Not gating completion.
+
+Phase 1 (both sides), Phase 2, and Phase 3 are now complete; that satisfies the readability + behavior-preserving goal the plan was filed to deliver. Plan archived to `FINISHED-56-serializer-parser-dispatch-cleanup.md`.
+
+---
+
+## Status (2026-05-22 worker pass — prior serializer-side pass)
+
+**Done:**
+- **Phase 2** — both files hoisted:
+  - `ProtoParserSession.convertValue` — three `Map val2` and two `Number val2` checks collapsed into single outer pattern-match blocks; `CharSequence val2` left as-is (already hoisted).
+  - `TomlParserSession.convertValue` — two `Map map` checks hoisted into one outer block; two `Number num` checks (separated only by a `String` block that can never match a Number) merged into a single outer `Number` block with `isNumber` checked first.
+- **Phase 3** — `ClassMeta` polish:
+  - Marked `ClassMeta<T>` class `final` (no `extends ClassMeta` consumers found in `juneau-marshall`, `juneau-marshall-rdf`, `juneau-utest`, `juneau-rest-*`, `juneau-microservice-*`, `juneau-bean-*`, or `juneau-docs`).
+  - Dropped the defensive `cat != null &&` guards from `isCollection()`, `isMap()`, and `isUri()`; removed the obsolete "Defensive null-guard …" comment from `isMap()`.
+  - Did **not** add `final` to individual `isXxx` methods (class-level `final` already covers them per the plan).
+- **Phase 1 — serializer-side reorders applied** (canonical bean → map → collection → array → charSeq → number/boolean → uri → temporal cluster → streamable/reader/inputstream → tail, with pre-dispatch correctness gates preserved):
+  - `JsonSerializerSession.serializeAnything` — the canonical "winner" file; reorder applied.
+  - `UonSerializerSession.serializeAnything` — same shape as JSON, reordered.
+  - `UrlEncodingSerializerSession.serializeAnything` — minor swap of `isMap` ↔ `isBean` to align with canonical order.
+  - `HjsonSerializerSession.serializeAnything` — same shape as JSON, reordered.
+  - `HoconSerializerSession.serializeAnything` — same shape as JSON, reordered; `byte[]` Base64 gate preserved at top after the null gate.
+  - `YamlSerializerSession.serializeAnything` — reordered; YAML omits the temporal cluster (falls through to `toString`) per the inventory note.
+  - `MarkdownSerializerSession.serializeInlineValue` — scalar-tail polish: `isCharSequence || isEnum` lifted above the temporal cluster. Main `serializeAnything` was already structural-first and was left as-is.
+  - `HtmlSerializerSession.serializeAnything` (write pass) — reordered; `isReader || isInputStream` short-circuit and HTML-specific `isXml` / `isPlainText` gates preserved at the top.
+  - `XmlSerializerSession.serializeAnything` (write pass at 1093-1133) — reordered; classify pass at 988-1004 left alone (correctness-load-bearing). **Important:** `isUri || pMeta.isUri()` deliberately stays *before* `isCharSequence || isChar` because `@Uri`-annotated `String` properties (where `sType` is `String` but `pMeta.isUri()` is true) must route through the URI text-emission path; a comment was added at the branch.
+  - `IniSerializerSession.formatSimpleValue` — scalar-tail polish: `isCharSequence || isUri` lifted above number/temporal.
+  - `TomlSerializerSession.writeValue` — `isBean` promoted to the top of the leaf-value chain; rest left in place (the runtime `value.getClass().isArray()` gate stays *before* `isCollection() || isArray()` so erased-array values still hit the inline-array emission path).
+  - `MsgPackSerializerSession.serializeAnything` — reordered; the binary-format `isByteArray` branch stays adjacent to `isCollection` (between collection and generic array dispatch).
+  - `CborSerializerSession.serializeAnything` — mirror of MsgPack reorder.
+  - `BsonSerializerSession.writeElement` — reordered; `isCharSequence || isChar || isEnum` lifted from near the bottom to its canonical slot.
+  - `ProtoSerializerSession.serializeScalarValue` — chain was essentially already in canonical order at the scalar-leaf level; only `isEnum` ordering verified. Top-level `serializeAnything` (131-237) untouched (already structural-first per the inventory note).
+  - `RdfSerializerSession.serializeAnything` and `RdfStreamSerializerSession.serializeAnything` — `isBean` / `isMap` / `isCollectionOrArray` promoted above `isCharSequence` / `isNumber`. **Important:** `isUri || isURI` deliberately stays at the top (after the null gate) because RDF URIs must emit as `Resource`s, not literals; a comment was added. For `RdfStreamSerializerSession`, `isByteArray` was kept *before* `isCollectionOrArray` (byte[] satisfies `isArray()` but RDF emits it as a typed base64 literal); a comment was added.
+
+**Verification:**
+- Baseline `mvn -pl juneau-utest -am -Dtest='Proto*Test,Hjson*Test,Hocon*Test,Bson*Test,Toml*Test,Csv*Test,Markdown*Test,Yaml*Test,Ini*Test,Json5*Test,JsonParser*Test,XmlParser*Test,UrlEncodingParser*Test,UonParser*Test' …` — green (1315 tests).
+- Per-format target tests run incrementally during each file's edit — all green.
+- Final `./scripts/test.py -v` — **126,680 tests pass, 0 failures, 0 errors, 20 skipped** (the skipped count is the baseline; no regressions).
+- Final `./scripts/test.py -b` (mvn clean install) — green.
+
+**Deferred — picked up in the 2026-05-22 final closeout above:**
+- **Phase 1, parser-side chains** — done in the closeout pass. See the file list at the top of this status section.
+- **Phase 4** and **Phase 5** — both remain explicitly optional and are punted per the plan's own optional-marker language. Not gating completion.
+
+**Latent bugs surfaced:** none. All reorders were behavior-preserving; the comments added on `XmlSerializerSession`, `RdfSerializerSession`, `RdfStreamSerializerSession`, and `HoconSerializerSession` document the ordering constraints that prevent a future reorder from regressing them.
+
+---
+
 ## Background
 
 ### Why the dispatch chains came up

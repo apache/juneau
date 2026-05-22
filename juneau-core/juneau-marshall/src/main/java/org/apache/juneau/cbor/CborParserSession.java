@@ -246,32 +246,6 @@ public class CborParserSession extends InputStreamParserSession {
 
 			if (sType.isObject()) {
 				// Do nothing.
-			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber() || sType.isByteArray()) {
-				o = convertToType(o, sType);
-			} else if (sType.isDate()) {
-				o = parseDate(String.valueOf(o), sType);
-			} else if (sType.isCalendar()) {
-				o = parseCalendar(String.valueOf(o), sType);
-			} else if (sType.isTemporal()) {
-				o = parseTemporal(String.valueOf(o), sType);
-			} else if (sType.isDuration()) {
-				o = parseDuration(String.valueOf(o));
-			} else if (sType.isPeriod()) {
-				o = parsePeriod(String.valueOf(o));
-			} else if (sType.isMap()) {
-				if (dt == MAP) {
-					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
-					for (var i = 0; i < len; i++) {
-						Object key = parseAnything(sType.getKeyType(), is, outer, pMeta);
-						var vt = sType.getValueType();
-						Object value = parseAnything(vt, is, m, pMeta);
-						setName(vt, value, key);
-						m.put(key, value);
-					}
-					o = m;
-				} else {
-					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
-				}
 			} else if (nn(builder) || sType.canCreateNewBean(outer)) {
 				if (dt == MAP) {
 					BeanMap m = builder == null ? newBeanMap(outer, sType.inner()) : toBeanMap(builder.create(this, eType));
@@ -299,6 +273,34 @@ public class CborParserSession extends InputStreamParserSession {
 				} else {
 					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
+			} else if (sType.isMap()) {
+				if (dt == MAP) {
+					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
+					for (var i = 0; i < len; i++) {
+						Object key = parseAnything(sType.getKeyType(), is, outer, pMeta);
+						var vt = sType.getValueType();
+						Object value = parseAnything(vt, is, m, pMeta);
+						setName(vt, value, key);
+						m.put(key, value);
+					}
+					o = m;
+				} else {
+					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
+				}
+			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber() || sType.isByteArray()) {
+				// Merged scalar tier: one CBOR data type (BOOLEAN/UINT/NINT/FLOAT/STRING/BINARY) covers
+				// many scalar Java types — the read already happened above and convertToType narrows.
+				o = convertToType(o, sType);
+			} else if (sType.isDate()) {
+				o = parseDate(String.valueOf(o), sType);
+			} else if (sType.isCalendar()) {
+				o = parseCalendar(String.valueOf(o), sType);
+			} else if (sType.isTemporal()) {
+				o = parseTemporal(String.valueOf(o), sType);
+			} else if (sType.isDuration()) {
+				o = parseDuration(String.valueOf(o));
+			} else if (sType.isPeriod()) {
+				o = parsePeriod(String.valueOf(o));
 			} else if (sType.canCreateNewInstanceFromString(outer) && dt == STRING) {
 				o = sType.newInstanceFromString(outer, o == null ? "" : o.toString());
 			} else if (sType.isCollection()) {

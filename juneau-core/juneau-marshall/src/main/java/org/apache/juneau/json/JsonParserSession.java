@@ -283,24 +283,12 @@ public class JsonParserSession extends ReaderParserSession {
 				parseKeyword("false", r);
 				o = Boolean.FALSE;
 			}
-		} else if (sType.isBoolean()) {
-			o = parseBoolean(r);
-		} else if (sType.isCharSequence()) {
-			o = parseString(r);
-		} else if (sType.isChar()) {
-			o = parseCharacter(parseString(r));
-		} else if (sType.isNumber()) {
-			o = parseNumber(r, (Class<? extends Number>)sType.inner());
-		} else if (sType.isDate()) {
-			o = parseDate(parseString(r), sType);
-		} else if (sType.isCalendar()) {
-			o = parseCalendar(parseString(r), sType);
-		} else if (sType.isTemporal()) {
-			o = parseTemporal(parseString(r), sType);
-		} else if (sType.isDuration()) {
-			o = parseDuration(parseString(r));
-		} else if (sType.isPeriod()) {
-			o = parsePeriod(parseString(r));
+		} else if (nn(builder)) {
+			var m = toBeanMap(builder.create(this, eType));
+			o = builder.build(this, parseIntoBeanMap2(r, m).getBean(), eType);
+		} else if (sType.canCreateNewBean(outer)) {
+			var m = newBeanMap(outer, sType.inner());
+			o = parseIntoBeanMap2(r, m).getBean();
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
@@ -313,14 +301,6 @@ public class JsonParserSession extends ReaderParserSession {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : newGenericList());
 				o = parseIntoCollection2(r, l, sType, pMeta);
 			}
-		} else if (nn(builder)) {
-			var m = toBeanMap(builder.create(this, eType));
-			o = builder.build(this, parseIntoBeanMap2(r, m).getBean(), eType);
-		} else if (sType.canCreateNewBean(outer)) {
-			var m = newBeanMap(outer, sType.inner());
-			o = parseIntoBeanMap2(r, m).getBean();
-		} else if (sType.canCreateNewInstanceFromString(outer) && (c == '\'' || c == '"')) {
-			o = sType.newInstanceFromString(outer, parseString(r));
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '{') {
 				var m = newGenericMap();
@@ -330,6 +310,26 @@ public class JsonParserSession extends ReaderParserSession {
 				var l = (ArrayList)parseIntoCollection2(r, list(), sType, pMeta);
 				o = toArray(sType, l);
 			}
+		} else if (sType.isCharSequence()) {
+			o = parseString(r);
+		} else if (sType.isChar()) {
+			o = parseCharacter(parseString(r));
+		} else if (sType.isNumber()) {
+			o = parseNumber(r, (Class<? extends Number>)sType.inner());
+		} else if (sType.isBoolean()) {
+			o = parseBoolean(r);
+		} else if (sType.isDate()) {
+			o = parseDate(parseString(r), sType);
+		} else if (sType.isCalendar()) {
+			o = parseCalendar(parseString(r), sType);
+		} else if (sType.isTemporal()) {
+			o = parseTemporal(parseString(r), sType);
+		} else if (sType.isDuration()) {
+			o = parseDuration(parseString(r));
+		} else if (sType.isPeriod()) {
+			o = parsePeriod(parseString(r));
+		} else if (sType.canCreateNewInstanceFromString(outer) && (c == '\'' || c == '"')) {
+			o = sType.newInstanceFromString(outer, parseString(r));
 		} else if (c == '{') {
 			Map m = newGenericMap();
 			parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);

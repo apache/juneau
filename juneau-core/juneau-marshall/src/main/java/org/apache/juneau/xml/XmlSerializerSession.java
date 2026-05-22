@@ -1090,7 +1090,21 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		// Render the tag contents.
 		if (nn(o)) {
-			if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
+			if (sType.isBean()) {
+				rc = serializeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixedOrText);
+			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
+				if (o instanceof BeanMap o2)
+					rc = serializeBeanMap(out, o2, elementNamespace, isCollapsed, isMixedOrText);
+				else
+					rc = serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixedOrText);
+			} else if (sType.isCollection() || sType.isArray() || (nn(wType) && (wType.isCollection() || wType.isArray()))) {
+				if (isCollapsed)
+					indent--;
+				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);
+				if (isCollapsed)
+					indent++;
+			} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
+				// Must come before isCharSequence/isChar: @Uri-annotated String properties (where sType is String but pMeta.isUri() is true) need to route here for URI text emission.
 				out.textUri(o);
 			} else if (sType.isCharSequence() || sType.isChar()) {
 				if (isXmlText(format, sType))
@@ -1109,19 +1123,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				out.text(serializeDuration((Duration)o));
 			} else if (sType.isPeriod()) {
 				out.text(serializePeriod((Period)o));
-			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
-				if (o instanceof BeanMap o2)
-					rc = serializeBeanMap(out, o2, elementNamespace, isCollapsed, isMixedOrText);
-				else
-					rc = serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixedOrText);
-			} else if (sType.isBean()) {
-				rc = serializeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixedOrText);
-			} else if (sType.isCollection() || sType.isArray() || (nn(wType) && (wType.isCollection() || wType.isArray()))) {
-				if (isCollapsed)
-					indent--;
-				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);
-				if (isCollapsed)
-					indent++;
 			} else if (sType.isStreamable()) {
 				if (isCollapsed)
 					indent--;

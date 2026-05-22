@@ -73,7 +73,7 @@ import org.apache.juneau.swap.*;
 	"java:S1452",  // Wildcard required - ClassMeta<?>, ObjectSwap<T,?>, etc. for element/component types
 	"java:S6539"   // Monster Class: ClassMeta is a focused reflection-metadata cache; splitting would increase coupling
 })
-public class ClassMeta<T> extends BeanInfo<T> {
+public final class ClassMeta<T> extends BeanInfo<T> {
 
 	private static class Categories {
 		int bits;
@@ -1044,7 +1044,7 @@ public class ClassMeta<T> extends BeanInfo<T> {
 	 * @return <jk>true</jk> if this class is a subclass of {@link Collection}.
 	 */
 	@Override
-	public boolean isCollection() { return cat != null && cat.is(COLLECTION); }
+	public boolean isCollection() { return cat.is(COLLECTION); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Collection} or is an array or {@link Optional}.
@@ -1168,10 +1168,7 @@ public class ClassMeta<T> extends BeanInfo<T> {
 	 * @return <jk>true</jk> if this class is a subclass of {@link Map}.
 	 */
 	@Override
-	public boolean isMap() {
-		// Defensive null-guard: category is expected to be set, but keep this check for safety.
-		return cat != null && cat.is(MAP);
-	}
+	public boolean isMap() { return cat.is(MAP); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Map} or it's a bean.
@@ -1274,7 +1271,7 @@ public class ClassMeta<T> extends BeanInfo<T> {
 	 * @return <jk>true</jk> if this class is a {@link URI} or {@link URL}.
 	 */
 	@Override
-	public boolean isUri() { return cat != null && cat.is(URI); }
+	public boolean isUri() { return cat.is(URI); }
 
 	/**
 	 * Converts the specified object into an instance of this class.

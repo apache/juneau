@@ -446,8 +446,21 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		// '\0' characters are considered null.
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0)) {
 			out.append("null");
+		} else if (sType.isBean()) {
+			serializeBeanMap(out, toBeanMap(o), typeName);
+		} else if (sType.isMap()) {
+			if (o instanceof BeanMap o2)
+				serializeBeanMap(out, o2, typeName);
+			else
+				serializeMap(out, (Map)o, eType);
+		} else if (sType.isCollection()) {
+			serializeCollection(out, (Collection)o, eType);
+		} else if (sType.isArray()) {
+			serializeCollection(out, toList(sType.inner(), o), eType);
 		} else if (sType.isNumber() || sType.isBoolean()) {
 			out.append(o);
+		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
+			out.uriValue(o);
 		} else if (sType.isDate()) {
 			out.stringValue(serializeDate((Date)o, sType));
 		} else if (sType.isCalendar()) {
@@ -462,19 +475,6 @@ public class JsonSerializerSession extends WriterSerializerSession {
 				out.stringValue(value);
 		} else if (sType.isPeriod()) {
 			out.stringValue(serializePeriod((Period)o));
-		} else if (sType.isBean()) {
-			serializeBeanMap(out, toBeanMap(o), typeName);
-		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
-			out.uriValue(o);
-		} else if (sType.isMap()) {
-			if (o instanceof BeanMap o2)
-				serializeBeanMap(out, o2, typeName);
-			else
-				serializeMap(out, (Map)o, eType);
-		} else if (sType.isCollection()) {
-			serializeCollection(out, (Collection)o, eType);
-		} else if (sType.isArray()) {
-			serializeCollection(out, toList(sType.inner(), o), eType);
 		} else if (sType.isStreamable()) {
 			serializeStreamable(out, o, sType, eType);
 		} else if (sType.isReader()) {

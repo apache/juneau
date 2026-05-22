@@ -285,30 +285,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 			w.stringValue(ctx.getNullValue());
 			return;
 		}
-		if (aType.isNumber()) {
-			if (value instanceof Float || value instanceof Double)
-				w.floatValue(((Number)value).doubleValue());
-			else
-				w.integerValue(((Number)value).longValue());
-		} else if (aType.isBoolean()) {
-			w.booleanValue((Boolean)value);
-		} else if (aType.isDate()) {
-			w.w(serializeDate((Date)value, aType));
-		} else if (aType.isCalendar()) {
-			w.w(serializeCalendar(value, aType));
-		} else if (aType.isTemporal()) {
-			Class<?> inner = aType.inner();
-			if (inner == Year.class || inner == YearMonth.class)
-				w.stringValue(serializeTemporal((TemporalAccessor)value, aType));
-			else
-				w.w(serializeTemporal((TemporalAccessor)value, aType));
-		} else if (aType.isDuration()) {
-			w.stringValue(serializeDuration((Duration)value));
-		} else if (aType.isPeriod()) {
-			w.stringValue(serializePeriod((Period)value));
-		} else if (aType.isEnum()) {
-			w.stringValue(((Enum<?>)value).name());
-		} else if (aType.isBean()) {
+		if (aType.isBean()) {
 			BeanMap<?> bm = toBeanMap(value);
 			if (shouldUseInlineTable(bm)) {
 				w.inlineTableStart();
@@ -325,6 +302,29 @@ public class TomlSerializerSession extends WriterSerializerSession {
 			} else {
 				serializeBean(w, bm, "");
 			}
+		} else if (aType.isNumber()) {
+			if (value instanceof Float || value instanceof Double)
+				w.floatValue(((Number)value).doubleValue());
+			else
+				w.integerValue(((Number)value).longValue());
+		} else if (aType.isBoolean()) {
+			w.booleanValue((Boolean)value);
+		} else if (aType.isEnum()) {
+			w.stringValue(((Enum<?>)value).name());
+		} else if (aType.isDate()) {
+			w.w(serializeDate((Date)value, aType));
+		} else if (aType.isCalendar()) {
+			w.w(serializeCalendar(value, aType));
+		} else if (aType.isTemporal()) {
+			Class<?> inner = aType.inner();
+			if (inner == Year.class || inner == YearMonth.class)
+				w.stringValue(serializeTemporal((TemporalAccessor)value, aType));
+			else
+				w.w(serializeTemporal((TemporalAccessor)value, aType));
+		} else if (aType.isDuration()) {
+			w.stringValue(serializeDuration((Duration)value));
+		} else if (aType.isPeriod()) {
+			w.stringValue(serializePeriod((Period)value));
 		} else if (value.getClass().isArray()) {
 			// Bug #11/#12 a04 residual (generalized): when aType arrives erased — most commonly
 			// because the value is a typed List<T[]> bean-property element and the parent List's

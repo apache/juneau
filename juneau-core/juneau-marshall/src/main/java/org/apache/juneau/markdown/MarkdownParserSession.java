@@ -678,16 +678,16 @@ public class MarkdownParserSession extends ReaderParserSession {
 		// MarshallingContext.get<Format>() hint reaches the wire-form coercion.  Without this the
 		// fall-through to convertToType(val, eType) below would route a bare numeric cell through a
 		// generic Number → T coercion (e.g. Duration.ofMillis(long)) that drops the format hint.
-		if (eType.isDuration())
-			return (T) parseDuration(val);
-		if (eType.isPeriod())
-			return (T) parsePeriod(val);
 		if (eType.isDate())
 			return parseDate(val, eType);
 		if (eType.isCalendar())
 			return parseCalendar(val, eType);
 		if (eType.isTemporal())
 			return parseTemporal(val, eType);
+		if (eType.isDuration())
+			return (T) parseDuration(val);
+		if (eType.isPeriod())
+			return (T) parsePeriod(val);
 
 		try {
 			return convertToType(val, eType);

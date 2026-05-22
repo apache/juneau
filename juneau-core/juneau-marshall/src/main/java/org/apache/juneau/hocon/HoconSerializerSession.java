@@ -266,9 +266,23 @@ public class HoconSerializerSession extends WriterSerializerSession {
 		if (o == null || (sType.isChar() && ((Character) o).charValue() == 0)) {
 			hw.w("null");
 		} else if (o instanceof byte[] bytes) {
+			// byte[] gate: encode as Base64 before isArray would otherwise route it as a generic array.
 			serializeString(hw, Base64.getEncoder().encodeToString(bytes));
+		} else if (sType.isBean()) {
+			serializeBeanMap(hw, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta), false);
+		} else if (sType.isMap()) {
+			if (o instanceof BeanMap o2)
+				serializeBeanMap(hw, o2, getBeanTypeName(this, eType, aType, pMeta), false);
+			else
+				serializeMap(hw, (Map) o, eType, false);
+		} else if (sType.isCollection()) {
+			serializeCollection(hw, (Collection) o, eType);
+		} else if (sType.isArray()) {
+			serializeCollection(hw, toList(sType.inner(), o), eType);
 		} else if (sType.isNumber() || sType.isBoolean()) {
 			hw.append(o);
+		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
+			serializeString(hw, getUriResolver().resolve(o));
 		} else if (sType.isDate()) {
 			serializeString(hw, serializeDate((Date)o, sType));
 		} else if (sType.isCalendar()) {
@@ -283,19 +297,6 @@ public class HoconSerializerSession extends WriterSerializerSession {
 				serializeString(hw, value);
 		} else if (sType.isPeriod()) {
 			serializeString(hw, serializePeriod((Period)o));
-		} else if (sType.isBean()) {
-			serializeBeanMap(hw, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta), false);
-		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
-			serializeString(hw, getUriResolver().resolve(o));
-		} else if (sType.isMap()) {
-			if (o instanceof BeanMap o2)
-				serializeBeanMap(hw, o2, getBeanTypeName(this, eType, aType, pMeta), false);
-			else
-				serializeMap(hw, (Map) o, eType, false);
-		} else if (sType.isCollection()) {
-			serializeCollection(hw, (Collection) o, eType);
-		} else if (sType.isArray()) {
-			serializeCollection(hw, toList(sType.inner(), o), eType);
 		} else if (sType.isStreamable()) {
 			serializeStreamable(hw, o, sType, eType);
 		} else if (sType.isReader()) {

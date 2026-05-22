@@ -274,6 +274,12 @@ public class YamlParserSession extends ReaderParserSession {
 				var m2 = newGenericMap();
 				parseFlowMapping(r, m2, string(), object(), pMeta);
 				o = cast(m2, pMeta, eType);
+			} else if (nn(builder)) {
+				var m = toBeanMap(builder.create(this, eType));
+				o = builder.build(this, parseIntoBeanMap(r, m).getBean(), eType);
+			} else if (sType.canCreateNewBean(outer)) {
+				var m = newBeanMap(outer, sType.inner());
+				o = parseIntoBeanMap(r, m).getBean();
 			} else if (sType.isMap()) {
 				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 				o = parseFlowMapping(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
@@ -281,12 +287,6 @@ public class YamlParserSession extends ReaderParserSession {
 				var m = newGenericMap();
 				parseFlowMapping(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
-			} else if (nn(builder)) {
-				var m = toBeanMap(builder.create(this, eType));
-				o = builder.build(this, parseIntoBeanMap(r, m).getBean(), eType);
-			} else if (sType.canCreateNewBean(outer)) {
-				var m = newBeanMap(outer, sType.inner());
-				o = parseIntoBeanMap(r, m).getBean();
 			} else if (sType.isArray() || sType.isArgs()) {
 				var m = newGenericMap();
 				parseFlowMapping(r, m, string(), object(), pMeta);
@@ -377,14 +377,6 @@ public class YamlParserSession extends ReaderParserSession {
 				m2.put(ts, value);
 				parseBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
 				return cast(m2, pMeta, eType);
-			} else if (sType.isMap()) {
-				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
-				Object value = parseAnything(sType.getValueType(), r, m, pMeta);
-				Object key = convertAttrToType(m, trim(s), sType.getKeyType());
-				setName(sType.getValueType(), value, key);
-				m.put(key, value);
-				parseBlockMappingRemainder(r, m, sType.getKeyType(), sType.getValueType(), pMeta, keyIndent);
-				return m;
 			} else if (nn(builder)) {
 				var m = toBeanMap(builder.create(this, eType));
 				parseBeanProperty(r, m, s);
@@ -395,6 +387,14 @@ public class YamlParserSession extends ReaderParserSession {
 				parseBeanProperty(r, m, s);
 				parseIntoBeanMapBlockRemainder(r, m, keyIndent);
 				return m.getBean();
+			} else if (sType.isMap()) {
+				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
+				Object value = parseAnything(sType.getValueType(), r, m, pMeta);
+				Object key = convertAttrToType(m, trim(s), sType.getKeyType());
+				setName(sType.getValueType(), value, key);
+				m.put(key, value);
+				parseBlockMappingRemainder(r, m, sType.getKeyType(), sType.getValueType(), pMeta, keyIndent);
+				return m;
 			} else {
 				var m2 = newGenericMap();
 				Object value = parseAnything(object(), r, m2, pMeta);
@@ -435,14 +435,6 @@ public class YamlParserSession extends ReaderParserSession {
 				m2.put(keyStr, value);
 				parseBlockMappingRemainder(r, m2, string(), object(), pMeta, keyIndent);
 				return cast(m2, pMeta, eType);
-			} else if (sType.isMap()) {
-				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
-				Object value = parseAnything(sType.getValueType(), r, m, pMeta);
-				Object key = convertAttrToType(m, keyStr, sType.getKeyType());
-				setName(sType.getValueType(), value, key);
-				m.put(key, value);
-				parseBlockMappingRemainder(r, m, sType.getKeyType(), sType.getValueType(), pMeta, keyIndent);
-				return m;
 			} else if (nn(builder)) {
 				var m = toBeanMap(builder.create(this, eType));
 				parseBeanProperty(r, m, s);
@@ -453,6 +445,14 @@ public class YamlParserSession extends ReaderParserSession {
 				parseBeanProperty(r, m, s);
 				parseIntoBeanMapBlockRemainder(r, m, keyIndent);
 				return m.getBean();
+			} else if (sType.isMap()) {
+				Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
+				Object value = parseAnything(sType.getValueType(), r, m, pMeta);
+				Object key = convertAttrToType(m, keyStr, sType.getKeyType());
+				setName(sType.getValueType(), value, key);
+				m.put(key, value);
+				parseBlockMappingRemainder(r, m, sType.getKeyType(), sType.getValueType(), pMeta, keyIndent);
+				return m;
 			} else {
 				var m2 = newGenericMap();
 				Object value = parseAnything(object(), r, m2, pMeta);
@@ -485,14 +485,14 @@ public class YamlParserSession extends ReaderParserSession {
 	private Object convertToType(String s, ClassMeta<?> sType, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws ParseException {
 		if (sType.isObject()) {
 			return resolveScalarType(trim(s));
-		} else if (sType.isBoolean()) {
-			return bool(s);
 		} else if (sType.isCharSequence()) {
 			return trim(s);
 		} else if (sType.isChar()) {
 			return parseCharacter(s);
 		} else if (sType.isNumber()) {
 			return StringUtils.parseNumber(s, (Class<? extends Number>)sType.inner());
+		} else if (sType.isBoolean()) {
+			return bool(s);
 		} else if (sType.isDate()) {
 			return parseDate(s, sType);
 		} else if (sType.isCalendar()) {

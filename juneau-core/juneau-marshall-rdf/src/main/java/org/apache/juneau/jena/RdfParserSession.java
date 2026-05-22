@@ -402,24 +402,18 @@ public class RdfParserSession extends ReaderParserSession {
 			} else {
 				throw new ParseException(this, "Unrecognized node type ''{0}'' for object", n);
 			}
-		} else if (sType.isBoolean()) {
-			o = convertToType(getValue(n, outer), boolean.class);
-		} else if (sType.isCharSequence()) {
-			o = decodeString(getValue(n, outer));
-		} else if (sType.isChar()) {
-			o = parseCharacter(decodeString(getValue(n, outer)));
-		} else if (sType.isNumber()) {
-			o = parseNumber(getValue(n, outer).toString(), (Class<? extends Number>)sType.inner());
-		} else if (sType.isDate()) {
-			o = parseDate(getValue(n, outer).toString(), sType);
-		} else if (sType.isCalendar()) {
-			o = parseCalendar(getValue(n, outer).toString(), sType);
-		} else if (sType.isTemporal()) {
-			o = parseTemporal(getValue(n, outer).toString(), sType);
-		} else if (sType.isDuration()) {
-			o = parseDuration(getValue(n, outer).toString());
-		} else if (sType.isPeriod()) {
-			o = parsePeriod(getValue(n, outer).toString());
+		} else if (nn(builder)) {
+			var r = n.asResource();
+			if (! urisVisited.add(r))
+				return null;
+			var bm = toBeanMap(builder.create(this, eType));
+			o = builder.build(this, parseIntoBeanMap(r, bm).getBean(), eType);
+		} else if (sType.canCreateNewBean(outer)) {
+			var r = n.asResource();
+			if (! urisVisited.add(r))
+				return null;
+			var bm = newBeanMap(outer, sType.inner());
+			o = parseIntoBeanMap(r, bm).getBean();
 		} else if (sType.isMap()) {
 			var r = n.asResource();
 			if (! urisVisited.add(r))
@@ -445,20 +439,28 @@ public class RdfParserSession extends ReaderParserSession {
 			}
 			if (sType.isArray() || sType.isArgs())
 				o = toArray(sType, (Collection)o);
-		} else if (nn(builder)) {
-			var r = n.asResource();
-			if (! urisVisited.add(r))
-				return null;
-			var bm = toBeanMap(builder.create(this, eType));
-			o = builder.build(this, parseIntoBeanMap(r, bm).getBean(), eType);
-		} else if (sType.canCreateNewBean(outer)) {
-			var r = n.asResource();
-			if (! urisVisited.add(r))
-				return null;
-			var bm = newBeanMap(outer, sType.inner());
-			o = parseIntoBeanMap(r, bm).getBean();
+		} else if (sType.isCharSequence()) {
+			o = decodeString(getValue(n, outer));
+		} else if (sType.isChar()) {
+			o = parseCharacter(decodeString(getValue(n, outer)));
+		} else if (sType.isNumber()) {
+			o = parseNumber(getValue(n, outer).toString(), (Class<? extends Number>)sType.inner());
+		} else if (sType.isBoolean()) {
+			o = convertToType(getValue(n, outer), boolean.class);
 		} else if (sType.isUri() && n.isResource()) {
+			// RDF URIs must be reconstructed from the resource's URI string (not from a literal),
+			// so this branch is kept here to fire before the temporal/scalar coercion fallbacks.
 			o = sType.newInstanceFromString(outer, decodeString(n.asResource().getURI()));
+		} else if (sType.isDate()) {
+			o = parseDate(getValue(n, outer).toString(), sType);
+		} else if (sType.isCalendar()) {
+			o = parseCalendar(getValue(n, outer).toString(), sType);
+		} else if (sType.isTemporal()) {
+			o = parseTemporal(getValue(n, outer).toString(), sType);
+		} else if (sType.isDuration()) {
+			o = parseDuration(getValue(n, outer).toString());
+		} else if (sType.isPeriod()) {
+			o = parsePeriod(getValue(n, outer).toString());
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, decodeString(getValue(n, outer)));
 		} else if (n.isResource()) {

@@ -263,10 +263,16 @@ public class IniSerializerSession extends WriterSerializerSession {
 	}
 
 	private String formatSimpleValue(Object value, ClassMeta<?> aType) throws SerializeException {
+		if (aType.isCharSequence() || aType.isUri()) {
+			var s = toString(value);
+			return needsQuoting(s) ? "'" + s.replace("'", "''") + "'" : s;
+		}
 		if (aType.isNumber())
 			return value.toString();
 		if (aType.isBoolean())
 			return ((Boolean)value).toString();
+		if (aType.isEnum())
+			return ((Enum<?>)value).name();
 		if (aType.isDate())
 			return serializeDate((Date)value, aType);
 		if (aType.isCalendar())
@@ -277,12 +283,6 @@ public class IniSerializerSession extends WriterSerializerSession {
 			return serializeDuration((Duration)value);
 		if (aType.isPeriod())
 			return serializePeriod((Period)value);
-		if (aType.isEnum())
-			return ((Enum<?>)value).name();
-		if (aType.isCharSequence() || aType.isUri()) {
-			var s = toString(value);
-			return needsQuoting(s) ? "'" + s.replace("'", "''") + "'" : s;
-		}
 		return toString(value);
 	}
 

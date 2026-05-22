@@ -392,24 +392,14 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					o = s;
 				}
 			}
-		} else if (sType.isBoolean()) {
-			o = parseBoolean(r);
-		} else if (sType.isCharSequence()) {
-			o = parseString(r, isUrlParamValue);
-		} else if (sType.isChar()) {
-			o = parseCharacter(parseString(r, isUrlParamValue));
-		} else if (sType.isNumber()) {
-			o = parseNumber(r, (Class<? extends Number>)sType.inner());
-		} else if (sType.isDate()) {
-			o = parseDate(parseString(r, isUrlParamValue), sType);
-		} else if (sType.isCalendar()) {
-			o = parseCalendar(parseString(r, isUrlParamValue), sType);
-		} else if (sType.isTemporal()) {
-			o = parseTemporal(parseString(r, isUrlParamValue), sType);
-		} else if (sType.isDuration()) {
-			o = parseDuration(parseString(r, isUrlParamValue));
-		} else if (sType.isPeriod()) {
-			o = parsePeriod(parseString(r, isUrlParamValue));
+		} else if (nn(builder)) {
+			var m = toBeanMap(builder.create(this, eType));
+			m = parseIntoBeanMap(r, m);
+			o = m == null ? null : builder.build(this, m.getBean(), eType);
+		} else if (sType.canCreateNewBean(outer)) {
+			var m = newBeanMap(outer, sType.inner());
+			m = parseIntoBeanMap(r, m);
+			o = m == null ? null : m.getBean();
 		} else if (sType.isMap()) {
 			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
@@ -430,18 +420,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				var l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : newGenericList());
 				o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);
 			}
-		} else if (nn(builder)) {
-			var m = toBeanMap(builder.create(this, eType));
-			m = parseIntoBeanMap(r, m);
-			o = m == null ? null : builder.build(this, m.getBean(), eType);
-		} else if (sType.canCreateNewBean(outer)) {
-			var m = newBeanMap(outer, sType.inner());
-			m = parseIntoBeanMap(r, m);
-			o = m == null ? null : m.getBean();
-		} else if (sType.canCreateNewInstanceFromString(outer)) {
-			var s = parseString(r, isUrlParamValue);
-			if (nn(s))
-				o = sType.newInstanceFromString(outer, s);
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '(') {
 				var m = newGenericMap();
@@ -459,6 +437,28 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				var l = (ArrayList)parseIntoCollection(r, list(), sType, isUrlParamValue, pMeta);
 				o = toArray(sType, l);
 			}
+		} else if (sType.isCharSequence()) {
+			o = parseString(r, isUrlParamValue);
+		} else if (sType.isChar()) {
+			o = parseCharacter(parseString(r, isUrlParamValue));
+		} else if (sType.isNumber()) {
+			o = parseNumber(r, (Class<? extends Number>)sType.inner());
+		} else if (sType.isBoolean()) {
+			o = parseBoolean(r);
+		} else if (sType.isDate()) {
+			o = parseDate(parseString(r, isUrlParamValue), sType);
+		} else if (sType.isCalendar()) {
+			o = parseCalendar(parseString(r, isUrlParamValue), sType);
+		} else if (sType.isTemporal()) {
+			o = parseTemporal(parseString(r, isUrlParamValue), sType);
+		} else if (sType.isDuration()) {
+			o = parseDuration(parseString(r, isUrlParamValue));
+		} else if (sType.isPeriod()) {
+			o = parsePeriod(parseString(r, isUrlParamValue));
+		} else if (sType.canCreateNewInstanceFromString(outer)) {
+			var s = parseString(r, isUrlParamValue);
+			if (nn(s))
+				o = sType.newInstanceFromString(outer, s);
 		} else if (c == '(') {
 			// It could be a non-bean with _type attribute.
 			var m = newGenericMap();

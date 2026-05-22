@@ -351,10 +351,10 @@ public class HtmlParserSession extends XmlParserSession {
 				o = text;
 			else if (sType.isChar())
 				o = parseCharacter(text);
-			else if (sType.isBoolean())
-				o = Boolean.parseBoolean(text);
 			else if (sType.isNumber())
 				o = parseNumber(text, (Class<? extends Number>)eType.inner());
+			else if (sType.isBoolean())
+				o = Boolean.parseBoolean(text);
 			else if (sType.isDate())
 				o = parseDate(text, sType);
 			else if (sType.isCalendar())
@@ -440,14 +440,14 @@ public class HtmlParserSession extends XmlParserSession {
 			if (typeName.equals(TAG_object)) {
 				if (sType.isObject()) {
 					o = parseIntoMap(r, newGenericMap(sType), sType.getKeyType(), sType.getValueType(), pMeta);
-				} else if (sType.isMap()) {
-					o = parseIntoMap(r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericMap(sType)), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (nn(builder)) {
 					BeanMap m = toBeanMap(builder.create(this, eType));
 					o = builder.build(this, parseIntoBean(r, m).getBean(), eType);
 				} else if (sType.canCreateNewBean(outer)) {
 					BeanMap m = newBeanMap(outer, sType.inner());
 					o = parseIntoBean(r, m).getBean();
+				} else if (sType.isMap()) {
+					o = parseIntoMap(r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericMap(sType)), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (nn(sType.getProxyInvocationHandler())) {
 					BeanMap m = newBeanMap(outer, sType.inner());
 					o = parseIntoBean(r, m).getBean();

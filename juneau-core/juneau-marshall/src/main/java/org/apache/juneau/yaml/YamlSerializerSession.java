@@ -285,12 +285,8 @@ public class YamlSerializerSession extends WriterSerializerSession {
 
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0)) {
 			out.append("null");
-		} else if (sType.isNumber() || sType.isBoolean()) {
-			out.append(o);
 		} else if (sType.isBean()) {
 			serializeBeanMap(out, toBeanMap(o), typeName);
-		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
-			out.uriValue(o);
 		} else if (sType.isMap()) {
 			if (o instanceof BeanMap o2)
 				serializeBeanMap(out, o2, typeName);
@@ -300,6 +296,10 @@ public class YamlSerializerSession extends WriterSerializerSession {
 			serializeCollection(out, (Collection)o, eType, asField);
 		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.inner(), o), eType, asField);
+		} else if (sType.isNumber() || sType.isBoolean()) {
+			out.append(o);
+		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
+			out.uriValue(o);
 		} else if (sType.isReader()) {
 			pipe((Reader)o, out, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {
