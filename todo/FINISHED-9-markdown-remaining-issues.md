@@ -1,9 +1,45 @@
-# Markdown Round-Trip: Remaining Issues
+# Markdown Round-Trip: Remaining Issues (Finished)
 
-This document tracks the tests that are currently skipped for the Markdown tester (tester [22])
-and describes what would be required to fix each one.
+This document tracks the tests that *were* skipped for the Markdown tester (tester [23] in
+`RoundTripBeanMaps_Test`, tester [25] in `RoundTripAddClassAttrs_Test`) and the fixes that closed
+each one. **All six issues are now closed and all round-trip tests pass.**
 
-All other round-trip tests pass as of the current implementation.
+## Outcome summary
+
+| Test(s) | Original Issue | Resolution |
+|---------|----------------|------------|
+| `BeanMaps.a04` | `implClass` not copied to embedded `Json5Parser` | Already worked — `marshallingContext((MarshallingContext) getContext())` shares the parent context (and hence the impl-class registry) with the embedded `Json5Parser`. Only the skip guard needed removal. |
+| `BeanMaps.a05` | `@BeanIgnore` / getter-type mismatch | Already worked — the `needsJson5Path()` classification + shared bean context already routed `A` through the JSON5 path correctly. Only the skip guard needed removal. |
+| `BeanMaps.a16, a18, a19` | Non-static inner classes (G/G1/G2, I/I1/I2, J/J2) need outer propagation | Already worked — the `parseRow()` / `parseKeyValueTable()` bean branches were already passing `m.getBean(false)` as the outer when recursing into nested cells, which is sufficient for the G/I/J cases. Only the skip guards needed removal. |
+| `BeanMaps.a17` | Inner classes inside a `Map`-extending bean (H/H1/H2) need outer propagation through the map | **Production fix** — `parseKeyValueTable()`'s map branch and `parseRow()`'s map branch were passing `null` as the outer when parsing each value cell. They now pass the partially-built `map` instance, so a non-static inner class whose enclosing class **is** the map type (e.g. `H1` inside `H extends LinkedHashMap`) can resolve its synthetic `$outer` constructor argument correctly. |
+| `BeanMaps.a22, a24` | Config-annotation `@WrapperAttr` not seen by embedded serializer | Already worked — same root cause as A3: the `marshallingContext((MarshallingContext) getContext())` plumbing carries config-annotation registrations into the embedded `Json5Serializer`. Only the skip guards needed removal. |
+| `AddClassAttrs.a04–a07` | `_type` in multi-column tables not resolved for `Object` element type | Already worked — the existing `cast(m, null, eType)` call at the end of the Object branch in `parseRow()` already resolves `_type`-discriminated rows via the bean registry. Only the skip guards needed removal. |
+
+## Fixed in this pass
+
+### Production code
+
+- `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/markdown/MarkdownParserSession.java`
+  - `parseKeyValueTable()` (line ~392): pass the in-progress `map` as the outer when parsing each value cell, replacing the previous `null`.
+  - `parseRow()` map branch (line ~563): same change for the multi-column path, for consistency.
+
+### Test code (skip guards removed)
+
+- `juneau-utest/src/test/java/org/apache/juneau/a/rttests/RoundTripBeanMaps_Test.java`
+  - `a04_implMap`, `a05_implMap2`, `a16_memberClass`, `a17_memberClassWithMapClass`, `a18_memberClassWithListClass`, `a19_memberClassWithStringConstructor`, `a22_wrapperAttrAnnotationOnBean_usingConfig`, `a24_WrapperAttrAnnotationOnNonBean_usingConfig`: removed `if (isMarkdown(t)) return;` guards.
+- `juneau-utest/src/test/java/org/apache/juneau/a/rttests/RoundTripAddClassAttrs_Test.java`
+  - `a04_mapsWithTypeParams`: removed `if (isMarkdown(t)) return;` guard.
+  - `a05_mapsWithoutTypeParams`, `a06_beanWithListProps`, `a07_beanWithListOfArraysProps`: removed the `|| isMarkdown(t)` part of the skip-guard expression while keeping the `isRdfStream(t)` skip.
+
+## Verification
+
+- `mvn -pl juneau-utest -am test -Dtest='RoundTrip*' -Drat.skip=true -Dsurefire.failIfNoSpecifiedTests=false` — 2264 tests pass, 0 failures, 0 errors (18 skipped from unrelated `RoundTripBeanChannel_Test` / `RoundTripLargeObjects_Test` guards that pre-date this work).
+- `mvn -pl juneau-utest -am test -Dtest='*Markdown*' -Drat.skip=true -Dsurefire.failIfNoSpecifiedTests=false` — 116 Markdown-specific tests pass, 0 failures.
+- `./scripts/test.py` — full clean build + test pass.
+
+---
+
+## Original issue analysis (kept for historical context)
 
 ---
 

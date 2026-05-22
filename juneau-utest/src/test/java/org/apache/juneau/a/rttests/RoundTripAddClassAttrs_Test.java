@@ -179,10 +179,6 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 		return t.getParser() instanceof RdfStreamParser;
 	}
 
-	private static boolean isMarkdown(RoundTrip_Tester t) {
-		return t.getParser() instanceof MarkdownParser;
-	}
-
 	//====================================================================================================
 	// testBean
 	//====================================================================================================
@@ -284,8 +280,6 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a04_mapsWithTypeParams(RoundTrip_Tester t) throws Exception {
-		if (isMarkdown(t))
-			return;  // Nested Map parsing returns JsonMap
 		var x = new C("foo");
 		x = t.roundTrip(x, C.class);
 		assertBean(x, "f3a{foo{f1}},f3b{foo{f1}},f3c{foo{f1}},f3d{foo{f1}}", "{{foo}},{{foo}},{{foo}},{{foo}}");
@@ -318,7 +312,7 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a05_mapsWithoutTypeParams(RoundTrip_Tester t) throws Exception {
-		if (isRdfStream(t) || isMarkdown(t))
+		if (isRdfStream(t))
 			return;
 
 		var x = new D("foo");
@@ -353,7 +347,7 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a06_beanWithListProps(RoundTrip_Tester t) throws Exception {
-		if (isRdfStream(t) || isMarkdown(t))
+		if (isRdfStream(t))
 			return;
 
 		var x = new E("foo");
@@ -388,7 +382,7 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a07_beanWithListOfArraysProps(RoundTrip_Tester t) throws Exception {
-		if (isRdfStream(t) || isMarkdown(t))
+		if (isRdfStream(t))
 			return;
 
 		var x = new F("foo");

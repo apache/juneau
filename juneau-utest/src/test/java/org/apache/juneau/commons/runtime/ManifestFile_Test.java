@@ -72,7 +72,8 @@ class ManifestFile_Test extends TestBase {
 
 	@Test void a04_asMapUnmodifiable() {
 		var x = new ManifestFile(mainManifest());
-		assertThrows(UnsupportedOperationException.class, () -> x.asMap().put("k", "v"));
+		var map = x.asMap();
+		assertThrows(UnsupportedOperationException.class, () -> map.put("k", "v"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -111,7 +112,8 @@ class ManifestFile_Test extends TestBase {
 
 	@Test void b06_sectionMapUnmodifiable() {
 		var x = new ManifestFile(manifestWithSections());
-		assertThrows(UnsupportedOperationException.class, () -> x.asMap("my-section").put("k", "v"));
+		var map = x.asMap("my-section");
+		assertThrows(UnsupportedOperationException.class, () -> map.put("k", "v"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

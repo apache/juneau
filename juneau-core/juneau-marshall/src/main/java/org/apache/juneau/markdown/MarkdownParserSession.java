@@ -389,7 +389,10 @@ public class MarkdownParserSession extends ReaderParserSession {
 					continue;
 				var rawKey = cells.get(0);
 				var key = parseCellValue(rawKey, keyType, null);
-				var val = parseCellValue(cells.get(1), valueType, null);
+				// Pass the map being built as the outer when parsing values - non-static inner
+				// classes whose enclosing class is the map type (e.g. H1 inside H extends LinkedHashMap)
+				// need that map instance to satisfy their implicit outer-class constructor argument.
+				var val = parseCellValue(cells.get(1), valueType, map);
 				try {
 					setName(valueType, val, key);
 				} catch (Exception e) {
@@ -556,7 +559,10 @@ public class MarkdownParserSession extends ReaderParserSession {
 					continue;
 				var key = convertAttrToType(map, header, keyType);
 				var rawVal = i < cells.size() ? cells.get(i) : null;
-				var val = parseCellValue(rawVal, valueType, null);
+				// Pass the map being built as the outer when parsing values - mirrors the
+				// key-value-table branch so non-static inner classes whose enclosing class is the
+				// map type can be instantiated correctly.
+				var val = parseCellValue(rawVal, valueType, map);
 				map.put(key, val);
 			}
 			return map;
