@@ -68,6 +68,7 @@ public class RestPutAnnotation {
 		private String defaultCharset = "";
 		private String defaultContentType = "";
 		private String maxInput = "";
+		private String problemDetails = "";
 		private String rolesDeclared = "";
 		private String roleGuard = "";
 		private String summary = "";
@@ -314,6 +315,17 @@ public class RestPutAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestPut#problemDetails()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder problemDetails(String value) {
+			problemDetails = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestPut#produces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -450,6 +462,7 @@ public class RestPutAnnotation {
 		private final String defaultCharset;
 		private final String defaultContentType;
 		private final String maxInput;
+		private final String problemDetails;
 		private final String rolesDeclared;
 		private final String roleGuard;
 		private final String summary;
@@ -490,6 +503,7 @@ public class RestPutAnnotation {
 			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
 			noInherit = copyOf(b.noInherit);
 			path = copyOf(b.path);
+			problemDetails = b.problemDetails;
 			produces = copyOf(b.produces);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
@@ -602,6 +616,11 @@ public class RestPutAnnotation {
 		@Override /* Overridden from RestPut */
 		public String[] path() {
 			return path;
+		}
+
+		@Override /* Overridden from RestPut */
+		public String problemDetails() {
+			return problemDetails;
 		}
 
 		@Override /* Overridden from RestPut */

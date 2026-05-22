@@ -52,7 +52,9 @@ import java.util.logging.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.bean.rfc7807.adapter.ProblemAdapters;
 import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.json.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.Memoizer;
 import org.apache.juneau.commons.lang.*;
@@ -1548,6 +1550,13 @@ public class RestContext extends Context {
 		mergeReplacedBooleanAttribute(PROPERTY_renderResponseStackTraces, env("RestContext.renderResponseStackTraces", false)));
 
 	/**
+	 * Whether the resource emits RFC 7807 {@code application/problem+json} responses; resolved from
+	 * {@code @Rest(problemDetails)}.
+	 */
+	private final Memoizer<Boolean> problemDetails = memoizer(() ->
+		mergeReplacedBooleanAttribute(PROPERTY_problemDetails, env("RestContext.problemDetails", false)));
+
+	/**
 	 * Whether framework memoizers and operation/child contexts should be force-initialized during constructor execution;
 	 * resolved from {@code @Rest(eagerInit)}.
 	 */
@@ -2496,6 +2505,30 @@ public class RestContext extends Context {
 	public boolean isRenderResponseStackTraces() { return renderResponseStackTraces.get(); }
 
 	/**
+	 * Returns whether this resource is opted into
+	 * <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807">RFC 7807</a>
+	 * {@code application/problem+json} error responses.
+	 *
+	 * <p>
+	 * When {@code true}:
+	 * <ul class='spaced-list'>
+	 * 	<li>Thrown {@code BasicHttpException}s are serialized as {@code application/problem+json} via
+	 * 		{@code RestContext.handleError} &mdash; regardless of the client's {@code Accept} header.
+	 * 	<li>{@code @RestOp} methods that return a {@link org.apache.juneau.bean.rfc7807.Problem} (or throw a
+	 * 		{@link org.apache.juneau.bean.rfc7807.ProblemException}) are serialized by
+	 * 		{@link org.apache.juneau.rest.processor.ProblemDetailsProcessor}, but only when the client's
+	 * 		{@code Accept} header matches {@code application/problem+json} (or {@code *&#47;*}).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#problemDetails()}
+	 * </ul>
+	 *
+	 * @return <jk>true</jk> if RFC 7807 problem-details responses are enabled on this resource.
+	 */
+	public boolean isProblemDetails() { return problemDetails.get(); }
+
+	/**
 	 * Returns whether framework beans and operation/child contexts are eagerly initialized at construction time.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -2818,9 +2851,13 @@ public class RestContext extends Context {
 		}
 
 		try {
+			var statusCode = e2.getStatusLine().getStatusCode();
+
+			if (isProblemDetails() && writeProblemDetailsBody(res, e2, statusCode))
+				return;
+
 			res.setContentType("text/plain");
 			res.setHeader("Content-Encoding", "identity");
-			var statusCode = e2.getStatusLine().getStatusCode();
 			res.setStatus(statusCode);
 
 			PrintWriter w = getResponseWriter(res);
@@ -2837,6 +2874,32 @@ public class RestContext extends Context {
 
 		} catch (Exception e1) {
 			req.setAttribute("Exception", e1);
+		}
+	}
+
+	/**
+	 * Writes a {@code BasicHttpException} as an {@code application/problem+json} body. Q5(A): the {@code Accept}
+	 * header is intentionally ignored on the error path so opted-in resources always emit Problem JSON for thrown
+	 * exceptions.
+	 *
+	 * @return {@code true} if the body was written (response committed). {@code false} on serialization failure so
+	 * 	the caller can fall back to the legacy {@code text/plain} writer.
+	 */
+	@SuppressWarnings({
+		"resource"  // output stream owned by the servlet response; closed by the container
+	})
+	private static boolean writeProblemDetailsBody(HttpServletResponse res, BasicHttpException e, int statusCode) {
+		try {
+			var problem = ProblemAdapters.fromException(e);
+			res.setStatus(statusCode);
+			res.setContentType(ContentType.APPLICATION_PROBLEM_JSON.getValue());
+			res.setHeader("Content-Encoding", "identity");
+			var os = res.getOutputStream();
+			JsonSerializer.DEFAULT.serialize(problem, os);
+			os.flush();
+			return true;
+		} catch (Exception ex) {
+			return false;
 		}
 	}
 

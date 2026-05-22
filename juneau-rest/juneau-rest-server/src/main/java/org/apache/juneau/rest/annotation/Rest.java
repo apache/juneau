@@ -311,7 +311,8 @@ public @interface Rest {
 	 * <p>
 	 * Accepted values include {@code "allowedParserOptions"}, {@code "allowedSerializerOptions"},
 	 * {@code "allowedHeaderParams"}, {@code "allowedMethodHeaders"}, {@code "allowedMethodParams"},
-	 * {@code "disableContentParam"}, {@code "renderResponseStackTraces"}, {@code "eagerInit"}, {@code "clientVersionHeader"},
+	 * {@code "disableContentParam"}, {@code "renderResponseStackTraces"}, {@code "problemDetails"},
+	 * {@code "eagerInit"}, {@code "clientVersionHeader"},
 	 * {@code "uriAuthority"}, {@code "uriContext"}, {@code "uriRelativity"}, and {@code "uriResolution"}.
 	 * Each entry is SVL-resolved then comma-split. Prevents the named property from inheriting values from
 	 * parent {@code @Rest} annotations (router hierarchy). The {@code noInherit} attribute itself is never inherited.
@@ -709,6 +710,51 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	String disableContentParam() default "";
+
+	/**
+	 * Opt the resource into <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807">RFC 7807</a> /
+	 * <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc9457">RFC 9457</a>
+	 * {@code application/problem+json} error responses.
+	 *
+	 * <p>
+	 * When enabled, the resource:
+	 * <ul class='spaced-list'>
+	 * 	<li>Emits {@code application/problem+json} for thrown {@code BasicHttpException}s &mdash; regardless of the
+	 * 		client's {@code Accept} header. The body is a serialized
+	 * 		{@link org.apache.juneau.bean.rfc7807.Problem} populated from the exception's status code, reason phrase,
+	 * 		and message.
+	 * 	<li>Honors the client's {@code Accept} header on the success path. When a {@code @RestOp} method returns a
+	 * 		{@link org.apache.juneau.bean.rfc7807.Problem} (or throws a
+	 * 		{@link org.apache.juneau.bean.rfc7807.ProblemException}), the
+	 * 		{@link org.apache.juneau.rest.processor.ProblemDetailsProcessor} only serializes it as
+	 * 		{@code application/problem+json} when the {@code Accept} header matches that media type (or {@code *&#47;*}).
+	 * </ul>
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> &mdash; enable problem-details responses for this resource.
+	 * 	<li><js>"false"</js> &mdash; disable problem-details responses for this resource (overrides an inherited
+	 * 		{@code "true"} from a parent {@code @Rest}).
+	 * 	<li><js>""</js> (default) &mdash; inherit from the next-most-derived {@code @Rest} in the resource-class
+	 * 		hierarchy. Default behavior (no opt-in anywhere in the chain) is unchanged from prior releases.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Use {@link #noInherit()} to prevent inheriting an opt-in from a parent {@code @Rest}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link org.apache.juneau.bean.rfc7807.Problem}
+	 * 	<li class='jc'>{@link org.apache.juneau.bean.rfc7807.ProblemException}
+	 * 	<li class='jc'>{@link org.apache.juneau.rest.processor.ProblemDetailsProcessor}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String problemDetails() default "";
 
 	/**
 	 * Specifies the compression encoders for this resource.

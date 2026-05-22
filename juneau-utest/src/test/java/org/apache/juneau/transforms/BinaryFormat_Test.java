@@ -99,7 +99,7 @@ class BinaryFormat_Test {
 
 	@Test void a12_parse_nullAndBlank() {
 		for (var f : BinaryFormat.values()) {
-			assertNull(f.parse(null), "format=" + f);
+			assertArrayEquals(EMPTY, f.parse(null), "format=" + f);
 			assertArrayEquals(EMPTY, f.parse(""), "format=" + f);
 			assertArrayEquals(EMPTY, f.parse("   "), "format=" + f);
 		}

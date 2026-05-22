@@ -38,6 +38,7 @@ import org.apache.juneau.commons.bean.BeanMap;
 public class HoconParserSession extends ReaderParserSession {
 
 	private static final String ARG_ctx = "ctx";
+	private static final String[] EMPTY_PATH = new String[0];
 
 	/**
 	 * Builder for HOCON parser session.
@@ -170,7 +171,7 @@ public class HoconParserSession extends ReaderParserSession {
 			default -> throw new ParseException(this, "Expected key at line {0}", t.getLine());
 		};
 		if (first == null)
-			return null;
+			return EMPTY_PATH;
 		var path = new ArrayList<String>();
 		if (tok.type() == HoconTokenizer.TokenType.UNQUOTED_STRING && first.contains(".") && !first.startsWith("."))
 			path.addAll(Arrays.asList(first.split("\\.", -1)));

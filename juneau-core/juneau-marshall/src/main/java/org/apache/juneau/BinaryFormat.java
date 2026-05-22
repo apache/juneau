@@ -80,6 +80,8 @@ public enum BinaryFormat {
 	 */
 	BASE64_URL;
 
+	private static final byte[] EMPTY_BYTES = new byte[0];
+
 	/**
 	 * Formats the specified value using this format.
 	 *
@@ -106,14 +108,14 @@ public enum BinaryFormat {
 	 * enums in this package.  The configured format is consulted only as a hint for ambiguous input.
 	 *
 	 * @param value The wire value.  Can be <jk>null</jk> or blank.
-	 * @return The parsed bytes, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
+	 * @return The parsed bytes, or an empty array if {@code value} is <jk>null</jk> or blank.
 	 */
 	public byte[] parse(String value) {
 		if (value == null)
-			return null;
+			return EMPTY_BYTES;
 		var s = value.trim();
 		if (s.isEmpty())
-			return new byte[0];
+			return EMPTY_BYTES;
 		// Honor the configured format constant for BASE64_URL: the URL-safe encoder emits without padding,
 		// so a non-3-aligned payload that happens not to contain `-`/`_` (because the encoded chars all fall
 		// in the base64-alphabet intersection) would otherwise be misrouted to the standard decoder, which

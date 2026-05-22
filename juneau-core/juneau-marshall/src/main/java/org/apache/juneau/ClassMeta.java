@@ -524,7 +524,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	/**
 	 * Returns the builder swap associated with this class.
 	 *
-	 * @param session The current bean session.
+	 * @param session The current bean session (retained for API compatibility).
 	 * @return The builder swap associated with this class, or <jk>null</jk> if it doesn't exist.
 	 */
 	public BuilderSwap<T,?> getBuilderSwap(MarshallingSession session) {
@@ -1291,7 +1291,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @param c The target class.
 	 * @return The converted object, or <jk>null</jk> if no conversion is available.
 	 */
-	public <O> O mutateTo(Object o, Class<O> c) {
+	public static <O> O mutateTo(Object o, Class<O> c) {
 		return BasicConverter.INSTANCE.to(o, c);
 	}
 
@@ -1303,7 +1303,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @param c The target class meta.
 	 * @return The converted object, or <jk>null</jk> if no conversion is available.
 	 */
-	public <O> O mutateTo(Object o, ClassMeta<O> c) {
+	public static <O> O mutateTo(Object o, ClassMeta<O> c) {
 		return mutateTo(o, c.inner());
 	}
 

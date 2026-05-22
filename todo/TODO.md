@@ -6,8 +6,6 @@
 
 - [TODO-37] - Agent instruction consolidation.
 
-- [TODO-61] RFC 7807 / 9457 Problem-Details server-side wiring. See `todo/TODO-61-rfc7807-server-side-wiring.md`.
-
 - [TODO-62] Server-side SSE helpers (broadcaster, per-event flush, heartbeat). See `todo/TODO-62-sse-server-helpers.md`.
 
 - [TODO-63] OpenAPI 3.1 emission + bundled Swagger UI / Redoc auto-mount. See `todo/TODO-63-openapi-3.1-emission.md`.

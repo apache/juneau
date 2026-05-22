@@ -65,6 +65,7 @@ public class RestGetAnnotation {
 		private String debug = "";
 		private String defaultAccept = "";
 		private String defaultCharset = "";
+		private String problemDetails = "";
 		private String rolesDeclared = "";
 		private String roleGuard = "";
 		private String summary = "";
@@ -254,6 +255,17 @@ public class RestGetAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestGet#problemDetails()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder problemDetails(String value) {
+			problemDetails = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestGet#produces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -388,6 +400,7 @@ public class RestGetAnnotation {
 		private final String debug;
 		private final String defaultAccept;
 		private final String defaultCharset;
+		private final String problemDetails;
 		private final String rolesDeclared;
 		private final String roleGuard;
 		private final String summary;
@@ -421,6 +434,7 @@ public class RestGetAnnotation {
 			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
 			noInherit = copyOf(b.noInherit);
 			path = copyOf(b.path);
+			problemDetails = b.problemDetails;
 			produces = copyOf(b.produces);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
@@ -508,6 +522,11 @@ public class RestGetAnnotation {
 		@Override /* Overridden from RestGet */
 		public String[] path() {
 			return path;
+		}
+
+		@Override /* Overridden from RestGet */
+		public String problemDetails() {
+			return problemDetails;
 		}
 
 		@Override /* Overridden from RestGet */

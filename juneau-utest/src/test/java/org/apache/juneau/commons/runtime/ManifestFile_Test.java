@@ -19,6 +19,7 @@ package org.apache.juneau.commons.runtime;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.util.Map;
 import java.util.jar.*;
 import java.util.jar.Attributes.Name;
 
@@ -26,6 +27,10 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 class ManifestFile_Test extends TestBase {
+
+	private static void putKV(Map<String,String> map) {
+		map.put("k", "v");
+	}
 
 	private static Manifest mainManifest() {
 		var m = new Manifest();
@@ -73,7 +78,7 @@ class ManifestFile_Test extends TestBase {
 	@Test void a04_asMapUnmodifiable() {
 		var x = new ManifestFile(mainManifest());
 		var map = x.asMap();
-		assertThrows(UnsupportedOperationException.class, () -> map.put("k", "v"));
+		assertThrows(UnsupportedOperationException.class, () -> putKV(map));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -113,7 +118,7 @@ class ManifestFile_Test extends TestBase {
 	@Test void b06_sectionMapUnmodifiable() {
 		var x = new ManifestFile(manifestWithSections());
 		var map = x.asMap("my-section");
-		assertThrows(UnsupportedOperationException.class, () -> map.put("k", "v"));
+		assertThrows(UnsupportedOperationException.class, () -> putKV(map));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

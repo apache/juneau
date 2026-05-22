@@ -52,6 +52,7 @@ import org.apache.juneau.serializer.annotation.*;
 		ReaderProcessor.class,
 		InputStreamProcessor.class,
 		ThrowableProcessor.class,
+		ProblemDetailsProcessor.class,
 		HttpResponseProcessor.class,
 		HttpResourceProcessor.class,
 		HttpBodyProcessor.class,

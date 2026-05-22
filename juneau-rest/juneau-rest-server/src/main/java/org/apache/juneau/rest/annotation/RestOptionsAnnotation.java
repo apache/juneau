@@ -65,6 +65,7 @@ public class RestOptionsAnnotation {
 		private String debug = "";
 		private String defaultAccept = "";
 		private String defaultCharset = "";
+		private String problemDetails = "";
 		private String rolesDeclared = "";
 		private String roleGuard = "";
 		private String summary = "";
@@ -265,6 +266,17 @@ public class RestOptionsAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestOptions#problemDetails()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder problemDetails(String value) {
+			problemDetails = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestOptions#allowedSerializerOptions()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -387,6 +399,7 @@ public class RestOptionsAnnotation {
 		private final String debug;
 		private final String defaultAccept;
 		private final String defaultCharset;
+		private final String problemDetails;
 		private final String rolesDeclared;
 		private final String roleGuard;
 		private final String summary;
@@ -420,6 +433,7 @@ public class RestOptionsAnnotation {
 			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
 			noInherit = copyOf(b.noInherit);
 			path = copyOf(b.path);
+			problemDetails = b.problemDetails;
 			produces = copyOf(b.produces);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
@@ -507,6 +521,11 @@ public class RestOptionsAnnotation {
 		@Override /* Overridden from RestOptions */
 		public String[] path() {
 			return path;
+		}
+
+		@Override /* Overridden from RestOptions */
+		public String problemDetails() {
+			return problemDetails;
 		}
 
 		@Override /* Overridden from RestOptions */

@@ -71,6 +71,7 @@ public class RestOpAnnotation {
 		private String defaultContentType = "";
 		private String maxInput = "";
 		private String method = "";
+		private String problemDetails = "";
 		private String rolesDeclared = "";
 		private String roleGuard = "";
 		private String summary = "";
@@ -328,6 +329,17 @@ public class RestOpAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestOp#problemDetails()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder problemDetails(String value) {
+			problemDetails = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestOp#produces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -465,6 +477,7 @@ public class RestOpAnnotation {
 		private final String defaultContentType;
 		private final String maxInput;
 		private final String method;
+		private final String problemDetails;
 		private final String rolesDeclared;
 		private final String roleGuard;
 		private final String summary;
@@ -503,6 +516,7 @@ public class RestOpAnnotation {
 			method = b.method;
 			parsers = copyOf(b.parsers);
 			path = copyOf(b.path);
+			problemDetails = b.problemDetails;
 			produces = copyOf(b.produces);
 			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
 			allowedParserOptions = copyOf(b.allowedParserOptions);
@@ -608,6 +622,11 @@ public class RestOpAnnotation {
 		@Override /* Overridden from RestOp */
 		public String[] path() {
 			return path;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String problemDetails() {
+			return problemDetails;
 		}
 
 		@Override /* Overridden from RestOp */

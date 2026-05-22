@@ -604,6 +604,26 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return envDefaultRestMaxInput();
 	});
 
+	/**
+	 * Whether this operation emits RFC 7807 {@code application/problem+json} responses.
+	 *
+	 * <p>
+	 * Tri-state semantics on the {@code @RestOp}-group annotations:
+	 * <ul>
+	 * 	<li>{@code "true"} &mdash; opt this operation in.
+	 * 	<li>{@code "false"} &mdash; opt this operation out (overrides an opted-in resource).
+	 * 	<li>{@code ""} (default) &mdash; inherit from the resource-level {@code @Rest(problemDetails)}.
+	 * </ul>
+	 */
+	private final Memoizer<Boolean> problemDetails = memoizer(() -> {
+		var v = findOpString(PROPERTY_problemDetails);
+		if (v.isPresent())
+			return Boolean.parseBoolean(v.get());
+		if (isInherited(PROPERTY_problemDetails))
+			return restContext().isProblemDetails();
+		return false;
+	});
+
 	/** Aggregated {@code noInherit} keys from all RestOp-group annotations on this operation. */
 	private final Memoizer<SortedSet<String>> noInheritOp = memoizer(() -> {
 		var l = getRestOpAnnotations().stream()
@@ -1312,6 +1332,23 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The max number of bytes to process in the input content.
 	 */
 	public long getMaxInput() { return maxInput.get(); }
+
+	/**
+	 * Returns whether this operation emits RFC 7807 {@code application/problem+json} responses.
+	 *
+	 * <p>
+	 * Tri-state inheritance semantics: an explicit {@code "true"} or {@code "false"} on the operation annotation
+	 * wins; otherwise the value is inherited from {@link RestContext#isProblemDetails()} (resource-level
+	 * {@code @Rest(problemDetails)}).
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#problemDetails()}
+	 * 	<li class='ja'>{@link RestOp#problemDetails()}
+	 * </ul>
+	 *
+	 * @return <jk>true</jk> if RFC 7807 problem-details responses are enabled on this operation.
+	 */
+	public boolean isProblemDetails() { return problemDetails.get(); }
 
 	/**
 	 * Returns the parsers to use for this method.

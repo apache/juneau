@@ -664,6 +664,34 @@ public @interface RestOp {
 	String[] path() default {};
 
 	/**
+	 * Per-operation override for {@link Rest#problemDetails() @Rest(problemDetails)}.
+	 *
+	 * <p>
+	 * When set on a {@code @RestOp} method, this value takes precedence over the resource-level
+	 * {@code @Rest(problemDetails)} attribute for this operation. Tri-state semantics:
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> &mdash; enable problem-details responses for this operation.
+	 * 	<li><js>"false"</js> &mdash; disable problem-details responses for this operation (overrides an
+	 * 		opted-in resource).
+	 * 	<li><js>""</js> (default) &mdash; inherit from {@link Rest#problemDetails()}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#problemDetails()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String problemDetails() default "";
+
+	/**
 	 * Supported accept media types.
 	 *
 	 * <p>

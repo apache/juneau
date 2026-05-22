@@ -91,6 +91,7 @@ public class RestAnnotation {
 		private String maxInput = "";
 		private String messages = "";
 		private String path = "";
+		private String problemDetails = "";
 		private String renderResponseStackTraces = "";
 		private String roleGuard = "";
 		private String rolesDeclared = "";
@@ -507,6 +508,17 @@ public class RestAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Rest#problemDetails()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder problemDetails(String value) {
+			problemDetails = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Rest#renderResponseStackTraces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -713,6 +725,7 @@ public class RestAnnotation {
 		private final String maxInput;
 		private final String messages;
 		private final String path;
+		private final String problemDetails;
 		private final String renderResponseStackTraces;
 		private final String roleGuard;
 		private final String rolesDeclared;
@@ -770,6 +783,7 @@ public class RestAnnotation {
 			partParser = b.partParser;
 			partSerializer = b.partSerializer;
 			path = b.path;
+			problemDetails = b.problemDetails;
 			produces = copyOf(b.produces);
 			renderResponseStackTraces = b.renderResponseStackTraces;
 			responseProcessors = copyOf(b.responseProcessors);
@@ -975,6 +989,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public Query[] queryParams() {
 			return queryParams;
+		}
+
+		@Override /* Overridden from Rest */
+		public String problemDetails() {
+			return problemDetails;
 		}
 
 		@Override /* Overridden from Rest */

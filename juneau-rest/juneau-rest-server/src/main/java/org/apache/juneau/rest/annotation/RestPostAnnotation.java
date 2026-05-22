@@ -68,6 +68,7 @@ public class RestPostAnnotation {
 		private String defaultCharset = "";
 		private String defaultContentType = "";
 		private String maxInput = "";
+		private String problemDetails = "";
 		private String rolesDeclared = "";
 		private String roleGuard = "";
 		private String summary = "";
@@ -314,6 +315,17 @@ public class RestPostAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestPost#problemDetails()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder problemDetails(String value) {
+			problemDetails = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestPost#produces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -450,6 +462,7 @@ public class RestPostAnnotation {
 		private final String defaultCharset;
 		private final String defaultContentType;
 		private final String maxInput;
+		private final String problemDetails;
 		private final String rolesDeclared;
 		private final String roleGuard;
 		private final String summary;
@@ -490,6 +503,7 @@ public class RestPostAnnotation {
 			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
 			noInherit = copyOf(b.noInherit);
 			path = copyOf(b.path);
+			problemDetails = b.problemDetails;
 			produces = copyOf(b.produces);
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
@@ -602,6 +616,11 @@ public class RestPostAnnotation {
 		@Override /* Overridden from RestPost */
 		public String[] path() {
 			return path;
+		}
+
+		@Override /* Overridden from RestPost */
+		public String problemDetails() {
+			return problemDetails;
 		}
 
 		@Override /* Overridden from RestPost */

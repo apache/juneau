@@ -63,6 +63,9 @@ public final class RestServerConstants {
 	/** The {@code "renderResponseStackTraces"} annotation attribute name — used in {@code noInherit} matching. */
 	public static final String PROPERTY_renderResponseStackTraces = "renderResponseStackTraces";
 
+	/** The {@code "problemDetails"} annotation attribute name — used in {@code noInherit} matching to opt the resource (or one of its router parents) into RFC 7807 {@code application/problem+json} error responses. */
+	public static final String PROPERTY_problemDetails = "problemDetails";
+
 	/** The {@code "eagerInit"} annotation attribute name — used in {@code noInherit} matching. */
 	public static final String PROPERTY_eagerInit = "eagerInit";
 
