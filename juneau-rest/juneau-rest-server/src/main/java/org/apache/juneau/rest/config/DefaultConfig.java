@@ -87,6 +87,8 @@ import org.apache.juneau.serializer.annotation.*;
 		RestOpSessionArgs.class,
 		RestRequestArgs.class,
 		RestResponseArgs.class,
+		SseBroadcasterArg.class,
+		SseSubscriptionArg.class,
 		DefaultArg.class
 	},
 	serializers={},

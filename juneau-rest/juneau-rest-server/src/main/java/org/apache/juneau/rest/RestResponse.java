@@ -39,6 +39,7 @@ import org.apache.juneau.marshaller.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
+import org.apache.juneau.rest.sse.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 
@@ -533,6 +534,16 @@ public class RestResponse extends HttpServletResponseWrapper {
 		setContentType("text/plain");
 		getNegotiatedWriter().write(text);
 		return this;
+	}
+
+	/**
+	 * Creates a fluent Server-Sent Events helper for this response.
+	 *
+	 * @return The SSE response helper.
+	 * @throws IOException If the writer could not be created.
+	 */
+	public SseResponseSupport sse() throws IOException {
+		return new SseResponseSupport(this);
 	}
 
 	/**

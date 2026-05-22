@@ -16,11 +16,16 @@
  */
 package org.apache.juneau.examples.rest;
 
+import java.io.*;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.sse.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.sse.*;
 
@@ -88,5 +93,38 @@ public class SseDemoResource extends BasicRestObject {
 				return new SseEvent("tick-" + i, ts).setId(String.valueOf(i));
 			}
 		};
+	}
+
+	/**
+	 * Demonstrates server-side broadcaster fan-out with heartbeat comments.
+	 *
+	 * @param req The request.
+	 * @param res The response.
+	 * @param broadcaster The broadcaster bean.
+	 * @throws IOException If the response write fails.
+	 */
+	@RestGet(path = "/broadcast", serializers = SseSerializer.class)
+	@SuppressWarnings({
+		"resource" // Scheduler is explicitly shutdown in finally; subscription/SSE support are closed via try-with-resources.
+	})
+	public void broadcast(RestRequest req, RestResponse res, SseBroadcaster broadcaster) throws IOException {
+		var id = Optional.ofNullable(req.getHttpServletRequest().getRequestId()).orElse(UUID.randomUUID().toString());
+		var counter = new AtomicInteger();
+		var scheduler = Executors.newSingleThreadScheduledExecutor();
+		ScheduledFuture<?> task = null;
+		try (var subscription = broadcaster.subscribe(id); var sse = res.sse().heartbeat(Duration.ofSeconds(15))) {
+			task = scheduler.scheduleAtFixedRate(() -> {
+				var i = counter.incrementAndGet();
+				var ts = DateTimeFormatter.ISO_INSTANT.format(Instant.now());
+				broadcaster.publish(new SseEvent("tick-" + i, ts).setId(String.valueOf(i)));
+				if (i >= EVENT_COUNT)
+					subscription.close();
+			}, 0, SLEEP_MILLIS, TimeUnit.MILLISECONDS);
+			sse.sendFrom(subscription);
+		} finally {
+			if (task != null)
+				task.cancel(true);
+			scheduler.shutdownNow();
+		}
 	}
 }
