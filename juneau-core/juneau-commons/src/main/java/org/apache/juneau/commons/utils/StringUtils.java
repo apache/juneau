@@ -5410,11 +5410,7 @@ public class StringUtils {
 		}
 
 		if (type == Double.class || type == Double.TYPE) {
-			var d = Double.valueOf(s);
-			var f = Float.valueOf(s);
-			if (isAutoDetect && (! isDecimal) && d.toString().equals(f.toString()))
-				return f;
-			return d;
+			return Double.valueOf(s);
 		}
 		if (type == Float.class || type == Float.TYPE)
 			return Float.valueOf(s);

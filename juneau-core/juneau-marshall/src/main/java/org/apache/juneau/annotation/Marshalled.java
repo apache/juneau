@@ -20,8 +20,11 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import java.math.*;
+import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.bean.*;
 
 /**
@@ -80,7 +83,7 @@ public @interface Marshalled {
 	 *
 	 * <p>
 	 * Intended as a brief, single-line description suitable for AI/LLM consumption, compact documentation,
-	 * or any context where brevity matters. See {@link org.apache.juneau.commons.annotation.Schema#summary()}
+	 * or any context where brevity matters. See {@link Schema#summary()}
 	 * for the canonical definition; this field is the type-level counterpart.
 	 *
 	 * @return The annotation value.
@@ -104,6 +107,104 @@ public @interface Marshalled {
 	 * @return The annotation value.
 	 */
 	Class<?>[] dictionary() default {};
+
+	/**
+	 * Calendar wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	CalendarFormat calendarFormat() default CalendarFormat.NOT_SET;
+
+	/**
+	 * Date wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	DateFormat dateFormat() default DateFormat.NOT_SET;
+
+	/**
+	 * Duration wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	DurationFormat durationFormat() default DurationFormat.NOT_SET;
+
+	/**
+	 * Locale wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	LocaleFormat localeFormat() default LocaleFormat.NOT_SET;
+
+	/**
+	 * Temporal wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	TemporalFormat temporalFormat() default TemporalFormat.NOT_SET;
+
+	/**
+	 * Time-zone wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	TimeZoneFormat timeZoneFormat() default TimeZoneFormat.NOT_SET;
+
+	/**
+	 * Binary wire format override for <code><jk>byte</jk>[]</code> values.
+	 *
+	 * @return The annotation value.
+	 */
+	BinaryFormat binaryFormat() default BinaryFormat.NOT_SET;
+
+	/**
+	 * Enum wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	EnumFormat enumFormat() default EnumFormat.NOT_SET;
+
+	/**
+	 * UUID wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	UuidFormat uuidFormat() default UuidFormat.NOT_SET;
+
+	/**
+	 * Big-number wire format override for {@link BigInteger} / {@link BigDecimal} values.
+	 *
+	 * @return The annotation value.
+	 */
+	BigNumberFormat bigNumberFormat() default BigNumberFormat.NOT_SET;
+
+	/**
+	 * Boolean wire format override for {@link Boolean} / <code><jk>boolean</jk></code> values.
+	 *
+	 * @return The annotation value.
+	 */
+	BooleanFormat booleanFormat() default BooleanFormat.NOT_SET;
+
+	/**
+	 * Float / Double non-finite wire format override for {@link Float} / {@link Double} values.
+	 *
+	 * @return The annotation value.
+	 */
+	FloatFormat floatFormat() default FloatFormat.NOT_SET;
+
+	/**
+	 * Currency wire format override for {@link Currency} values.
+	 *
+	 * @return The annotation value.
+	 */
+	CurrencyFormat currencyFormat() default CurrencyFormat.NOT_SET;
+
+	/**
+	 * Class wire format override for {@link Class} values.
+	 *
+	 * @return The annotation value.
+	 */
+	ClassFormat classFormat() default ClassFormat.NOT_SET;
 
 	/**
 	 * POJO example.
@@ -144,6 +245,13 @@ public @interface Marshalled {
 	 * @return The annotation value.
 	 */
 	String example() default "";
+
+	/**
+	 * Period wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	PeriodFormat periodFormat() default PeriodFormat.NOT_SET;
 
 	/**
 	 * Implementation class.

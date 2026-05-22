@@ -24,6 +24,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.time.*;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.function.*;
 
@@ -31,7 +33,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 import org.apache.juneau.commons.bean.BeanPropertyValue;
@@ -258,10 +259,16 @@ public class CborSerializerSession extends OutputStreamSerializerSession {
 			out.appendBoolean((Boolean)o);
 		else if (sType.isNumber())
 			out.appendNumber((Number)o);
-		else if (sType.isDateOrCalendarOrTemporal())
-			out.appendString(Iso8601Utils.format(o, sType, getTimeZone()));
+		else if (sType.isDate())
+			out.appendString(serializeDate((Date)o, sType));
+		else if (sType.isCalendar())
+			out.appendString(serializeCalendar(o, sType));
+		else if (sType.isTemporal())
+			out.appendString(serializeTemporal((TemporalAccessor)o, sType));
 		else if (sType.isDuration())
-			out.appendString(o.toString());
+			appendDuration(out, (Duration)o);
+		else if (sType.isPeriod())
+			out.appendString(serializePeriod((Period)o));
 		else if (sType.isBean())
 			serializeBeanMap(out, toBeanMap(o), typeName);
 		else if (sType.isUri() || (nn(pMeta) && pMeta.isUri()))
@@ -376,6 +383,17 @@ public class CborSerializerSession extends OutputStreamSerializerSession {
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getCborOutputStream(out), o, getExpectedRootType(o), "root", null);
+	}
+
+	private void appendDuration(CborOutputStream out, Duration value) {
+		var f = getDurationFormat();
+		var s = serializeDuration(value);
+		if (f == DurationFormat.NANOS || f == DurationFormat.MILLIS)
+			out.appendNumber(Long.parseLong(s));
+		else if (f == DurationFormat.SECONDS)
+			out.appendNumber(Double.parseDouble(s));
+		else
+			out.appendString(s);
 	}
 
 }

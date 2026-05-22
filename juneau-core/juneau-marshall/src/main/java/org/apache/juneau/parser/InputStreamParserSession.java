@@ -189,7 +189,7 @@ public class InputStreamParserSession extends ParserSession {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.MarshallingContext.Builder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
@@ -199,7 +199,7 @@ public class InputStreamParserSession extends ParserSession {
 	})
 	@Override /* Overridden from ParserSession */
 	public final ParserPipe createPipe(Object input) {
-		return setPipe(new ParserPipe(input, isDebug(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), ctx.getBinaryFormat()));
+		return setPipe(new ParserPipe(input, isDebug(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), getBinaryFormat()));
 	}
 
 	@Override /* Overridden from ParserSession */
@@ -208,9 +208,33 @@ public class InputStreamParserSession extends ParserSession {
 	/**
 	 * Binary input format.
 	 *
-	 * @see InputStreamParser.Builder#binaryFormat(BinaryFormat)
+	 * @see MarshallingContext.Builder#binaryFormat(BinaryFormat)
 	 * @return
 	 * 	The format to use when converting strings to byte arrays.
 	 */
-	protected final BinaryFormat getBinaryFormat() { return ctx.getBinaryFormat(); }
+	protected final BinaryFormat getBinaryFormat() { return ctx.getMarshallingContext().getBinaryFormat(); }
+
+	/**
+	 * Returns whether this binary parser has a native byte-array wire type.
+	 *
+	 * <p>
+	 * Mirror of {@link org.apache.juneau.serializer.OutputStreamSerializerSession#hasNativeBytes()}
+	 * for the parse side.  When {@code true}, {@code byte[]} payloads are consumed natively from the
+	 * binary stream (e.g. MsgPack {@code bin} family, CBOR byte-string major type 2, BSON binary
+	 * subtype {@code 0x05}) and {@link org.apache.juneau.swaps.BinarySwap} skips so the raw bytes
+	 * reach the bean property directly.  When {@code false} the parser surfaces {@code byte[]}
+	 * payloads as a string (UTF-8 column for Parquet, plain literal for binary RDF) and
+	 * {@code BinarySwap} fires to apply the configured {@link BinaryFormat} reverse decoding back
+	 * to {@code byte[]}.
+	 *
+	 * <p>
+	 * Defaults to {@code true}.  Subclasses without a native byte-array wire type
+	 * (e.g. {@link org.apache.juneau.parquet.ParquetParserSession} and the binary RDF parser
+	 * sessions) override and return {@code false}.
+	 *
+	 * @return {@code true} if this parser has a native byte-array wire type.
+	 */
+	public boolean hasNativeBytes() {
+		return true;
+	}
 }

@@ -596,11 +596,6 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {

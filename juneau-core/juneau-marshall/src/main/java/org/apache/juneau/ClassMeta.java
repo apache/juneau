@@ -120,7 +120,8 @@ public class ClassMeta<T> extends BeanInfo<T> {
 		ITERATOR(21),
 		ITERABLE(22),
 		STREAM(23),
-		DURATION(24);
+		DURATION(24),
+		PERIOD(25);
 
 		private final int mask;
 
@@ -233,6 +234,8 @@ public class ClassMeta<T> extends BeanInfo<T> {
 			}
 		} else if (is(Duration.class)) {
 			cat.set(DURATION);
+		} else if (is(Period.class)) {
+			cat.set(PERIOD);
 		} else if (isAssignableTo(Temporal.class)) {
 			cat.set(TEMPORAL);
 		} else if (isAssignableTo(javax.xml.datatype.XMLGregorianCalendar.class)) {
@@ -1070,7 +1073,7 @@ public class ClassMeta<T> extends BeanInfo<T> {
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Date} or {@link Calendar} or {@link Temporal}.
 	 */
-	public boolean isDateOrCalendarOrTemporal() { return cat.is(DATE) || cat.is(CALENDAR) || cat.is(TEMPORAL); }
+	public boolean isDateOrCalendarOrTemporal() { return cat.is(DATE) || cat.is(CALENDAR) || cat.is(TEMPORAL) || cat.is(PERIOD); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Float} or {@link Double}.
@@ -1259,6 +1262,13 @@ public class ClassMeta<T> extends BeanInfo<T> {
 	public boolean isDuration() { return cat.is(DURATION); }
 
 	/**
+	 * Returns <jk>true</jk> if this class is a {@link Period}.
+	 *
+	 * @return <jk>true</jk> if this class is a {@link Period}.
+	 */
+	public boolean isPeriod() { return cat.is(PERIOD); }
+
+	/**
 	 * Returns <jk>true</jk> if this class is a {@link URI} or {@link URL}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link URI} or {@link URL}.
@@ -1359,10 +1369,13 @@ public class ClassMeta<T> extends BeanInfo<T> {
 	public T newInstanceFromString(Object outer, String arg) throws ExecutableException {
 
 		if (isEnum()) {
-			var t = (T)enumValues.get().getKey(arg);
-			if (t == null && ! marshallingContext.isIgnoreUnknownEnumValues())
+			try {
+				return (T) EnumFormat.parse(arg, asEnumClass(inner()));
+			} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
+				if (marshallingContext.isIgnoreUnknownEnumValues())
+					return null;
 				throw new ExecutableException("Could not resolve enum value ''{0}'' on class ''{1}''", arg, cn(inner()));
-			return t;
+			}
 		}
 
 		if (fromStringMethod.isPresent())
@@ -1413,8 +1426,8 @@ public class ClassMeta<T> extends BeanInfo<T> {
 	public String toString(Object t) {
 		if (t == null)
 			return null;
-		if (isEnum() && marshallingContext.isUseEnumNames())
-			return ((Enum<?>)t).name();
+		if (isEnum())
+			return marshallingContext.getEnumFormat().format((Enum<?>)t);
 		return t.toString();
 	}
 
@@ -1578,10 +1591,10 @@ public class ClassMeta<T> extends BeanInfo<T> {
 			return BidiMap.<Object,String>create().unmodifiable().build();
 
 		var bc = marshallingContext;
-		var useEnumNames = nn(bc) && bc.isUseEnumNames();
+		var fmt = nn(bc) ? bc.getEnumFormat() : EnumFormat.TO_STRING;
 
 		var m = BidiMap.<Object,String>create().unmodifiable();
-		stream(asEnumClass(inner()).getEnumConstants()).forEach(x -> m.add(x, useEnumNames ? x.name() : x.toString()));
+		stream(asEnumClass(inner()).getEnumConstants()).forEach(x -> m.add(x, fmt.format(x)));
 		return m.build();
 	}
 
@@ -1604,7 +1617,7 @@ public class ClassMeta<T> extends BeanInfo<T> {
 				ex = "foo";
 			} else if (cat.is(ENUM)) {
 				Optional<Enum<?>> e = first(EnumSet.allOf(asEnumClass(inner())));
-				ex = e.map(x -> marshallingContext.isUseEnumNames() ? x.name() : x.toString()).orElse(null);
+				ex = e.map(x -> marshallingContext.getEnumFormat().format(x)).orElse(null);
 			} else if (isAny(float.class, Float.class, double.class, Double.class)) {
 				ex = "1.0";
 			} else if (isAny(short.class, Short.class, int.class, Integer.class, long.class, Long.class)) {

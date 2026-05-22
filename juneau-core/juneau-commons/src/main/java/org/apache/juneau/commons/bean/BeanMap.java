@@ -342,7 +342,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * If an {@code ObjectSwap}-style transform is associated with this bean property or bean property type class, then this method
 	 * will return the transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * {@code TemporalDateSwap.IsoInstant} swap associated with it through the
+	 * {@code DateFormat.ISO_INSTANT} setting associated with it through the
 	 * {@code @Swap(value)} annotation, this method will return a String containing an
 	 * ISO8601 date-time string value.
 	 *
@@ -353,7 +353,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	<jv>person</jv>.setBirthDate(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
 	 *
 	 * 	<jc>// Create a marshalling context and add the ISO8601 date-time swap</jc>
-	 * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsm>create</jsm>().swaps(TemporalDateSwap.IsoInstant.<jk>class</jk>).build();
+	 * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsm>create</jsm>().dateFormat(DateFormat.<jsf>ISO_INSTANT</jsf>).build();
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
 	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = <jv>marshallingContext</jv>.toBeanMap(<jv>person</jv>);
@@ -663,7 +663,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * <p>
 	 * If there is a {@code ObjectSwap} associated with this bean property or bean property type class, then you must pass in a transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * {@code TemporalDateSwap.IsoInstant} swap associated with it through the
+	 * {@code DateFormat.ISO_INSTANT} setting associated with it through the
 	 * {@code @Swap(value)} annotation, the value being passed in must be
 	 * a String containing an ISO8601 date-time string value.
 	 *
@@ -673,7 +673,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	Person <jv>person</jv> = <jk>new</jk> Person();
 	 *
 	 * 	<jc>// Create a marshalling context and add the ISO8601 date-time swap</jc>
-	 * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsm>create</jsm>().swaps(TemporalDateSwap.IsoInstant.<jk>class</jk>).build();
+	 * 	MarshallingContext <jv>marshallingContext</jv> = MarshallingContext.<jsm>create</jsm>().dateFormat(DateFormat.<jsf>ISO_INSTANT</jsf>).build();
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
 	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = <jv>marshallingContext</jv>.toBeanMap(<jv>person</jv>);

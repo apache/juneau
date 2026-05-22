@@ -409,8 +409,16 @@ public class HoconTokenizer {
 		if (c >= 0)
 			unread(c);
 		var raw = sb.toString().trim();
-		if (raw.isEmpty())
-			return readToken();
+		// Guard against infinite recursion: if we haven't consumed any chars and the next char is
+		// a forbidden one that wasn't handled as a structural / operator token by readTokenImmediate
+		// (e.g. orphan `+`, `$`, or `=` not followed by their expected continuation), we'd loop
+		// forever calling back into readToken().  Surface this as a clean IOException instead so the
+		// parser converts it to a ParseException rather than a StackOverflowError.
+		if (raw.isEmpty()) {
+			if (c >= 0)
+				throw new IOException("Unexpected character '" + (char) c + "' at line " + line + ", column " + column);
+			return Token.of(TokenType.EOF);
+		}
 
 		if (raw.equals("true")) return Token.of(TokenType.TRUE);
 		if (raw.equals("false")) return Token.of(TokenType.FALSE);

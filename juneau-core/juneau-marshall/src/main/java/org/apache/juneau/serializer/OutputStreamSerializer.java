@@ -18,7 +18,6 @@ package org.apache.juneau.serializer;
 
 import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -40,16 +39,8 @@ import org.apache.juneau.commons.reflect.*;
 
  * </ul>
  */
-@SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
-})
 public class OutputStreamSerializer extends Serializer {
 
-	// Property name constants
-	private static final String PROP_binaryFormat = "binaryFormat";
-
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
 	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
@@ -57,14 +48,10 @@ public class OutputStreamSerializer extends Serializer {
 	 */
 	public static class Builder extends Serializer.Builder {
 
-		private BinaryFormat binaryFormat;
-
 		/**
 		 * Constructor, default settings.
 		 */
-		protected Builder() {
-			binaryFormat = env("OutputStreamSerializer.binaryFormat", BinaryFormat.HEX);
-		}
+		protected Builder() {}
 
 		/**
 		 * Copy constructor.
@@ -74,7 +61,6 @@ public class OutputStreamSerializer extends Serializer {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-			binaryFormat = copyFrom.binaryFormat;
 		}
 
 		/**
@@ -85,7 +71,6 @@ public class OutputStreamSerializer extends Serializer {
 		 */
 		protected Builder(OutputStreamSerializer copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-			binaryFormat = copyFrom.binaryFormat;
 		}
 
 		@Override /* Overridden from Builder */
@@ -286,39 +271,6 @@ public class OutputStreamSerializer extends Serializer {
 			return this;
 		}
 
-		/**
-		 * Binary output format.
-		 *
-		 * <p>
-		 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
-		 * when converting the resulting byte array to a string.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that serializes to BASE64.</jc>
-		 * 	OutputStreamSerializer <jv>serializer</jv> = MsgPackSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.binaryFormat(<jsf>BASE64</jsf>)
-		 * 		.build();
-		 *
-		 * 	<jc>// The bean we want to serialize.</jc>
-		 * 	<jk>public class</jk> MyBean {...}
-		 *
-		 * 	<jc>// MessagePack will generate BASE64-encoded string.</jc>
-		 * 	String <jv>msgPack</jv> = <jv>serializer</jv>.serializeToString(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default is {@link BinaryFormat#HEX}.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder binaryFormat(BinaryFormat value) {
-			binaryFormat = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
 		@Override /* Overridden from Context.Builder */
 		public OutputStreamSerializer build() {
 			return build(OutputStreamSerializer.class);
@@ -417,11 +369,6 @@ public class OutputStreamSerializer extends Serializer {
 		public Builder findFluentSetters(Class<?> on) {
 			super.findFluentSetters(on);
 			return this;
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), binaryFormat);
 		}
 
 		@Override /* Overridden from Builder */
@@ -724,11 +671,6 @@ public class OutputStreamSerializer extends Serializer {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {
@@ -746,8 +688,6 @@ public class OutputStreamSerializer extends Serializer {
 		return new Builder();
 	}
 
-	final BinaryFormat binaryFormat;
-
 	/**
 	 * Constructor.
 	 *
@@ -756,8 +696,6 @@ public class OutputStreamSerializer extends Serializer {
 	 */
 	protected OutputStreamSerializer(Builder builder) {
 		super(builder);
-
-		binaryFormat = builder.binaryFormat;
 	}
 
 	@Override /* Overridden from Context */
@@ -786,15 +724,10 @@ public class OutputStreamSerializer extends Serializer {
 	/**
 	 * Binary output format.
 	 *
-	 * @see Builder#binaryFormat(BinaryFormat)
-	 * @return
-	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
+	 * <p>
+	 * Resolves from the configured {@link MarshallingContext#getBinaryFormat()}.
+	 *
+	 * @return The binary wire format used by this serializer.
 	 */
-	protected final BinaryFormat getBinaryFormat() { return binaryFormat; }
-
-	@Override /* Overridden from Serializer */
-	protected FluentMap<String,Object> properties() {
-		return super.properties()
-			.a(PROP_binaryFormat, binaryFormat);
-	}
+	protected final BinaryFormat getBinaryFormat() { return getMarshallingContext().getBinaryFormat(); }
 }

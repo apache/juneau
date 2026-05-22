@@ -34,21 +34,39 @@ class MarshalledAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Marshalled a1 = MarshalledAnnotation.create()
+		.binaryFormat(BinaryFormat.HEX)
+		.calendarFormat(CalendarFormat.ISO_INSTANT)
+		.dateFormat(DateFormat.ISO_INSTANT)
 		.description("a")
 		.dictionary(X1.class)
+		.durationFormat(DurationFormat.SECONDS)
+		.enumFormat(EnumFormat.NAME)
 		.example("b")
 		.implClass(X1.class)
 		.interceptor(X2.class)
+		.localeFormat(LocaleFormat.UNDERSCORE)
+		.periodFormat(PeriodFormat.DAYS)
+		.temporalFormat(TemporalFormat.ISO_INSTANT)
+		.timeZoneFormat(TimeZoneFormat.OFFSET)
 		.typeName("i")
 		.typePropertyName("j")
 		.build();
 
 	Marshalled a2 = MarshalledAnnotation.create()
+		.binaryFormat(BinaryFormat.HEX)
+		.calendarFormat(CalendarFormat.ISO_INSTANT)
+		.dateFormat(DateFormat.ISO_INSTANT)
 		.description("a")
 		.dictionary(X1.class)
+		.durationFormat(DurationFormat.SECONDS)
+		.enumFormat(EnumFormat.NAME)
 		.example("b")
 		.implClass(X1.class)
 		.interceptor(X2.class)
+		.localeFormat(LocaleFormat.UNDERSCORE)
+		.periodFormat(PeriodFormat.DAYS)
+		.temporalFormat(TemporalFormat.ISO_INSTANT)
+		.timeZoneFormat(TimeZoneFormat.OFFSET)
 		.typeName("i")
 		.typePropertyName("j")
 		.build();
@@ -89,8 +107,8 @@ class MarshalledAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"description,dictionary,example,implClass,interceptor,typeName,typePropertyName",
-			"[a],[X1],b,X1,X2,i,j");
+			"binaryFormat,calendarFormat,dateFormat,description,dictionary,durationFormat,enumFormat,example,implClass,interceptor,localeFormat,periodFormat,temporalFormat,timeZoneFormat,typeName,typePropertyName",
+			"HEX,ISO_INSTANT,ISO_INSTANT,[a],[X1],SECONDS,NAME,b,X1,X2,UNDERSCORE,DAYS,ISO_INSTANT,OFFSET,i,j");
 		assertBean(bt1,
 			"description,excludeProperties,findFluentSetters,interfaceClass,p,properties,propertyNamer,readOnlyProperties,ro,stopClass,unsorted,wo,writeOnlyProperties,xp",
 			"[a],c,true,X1,e,f,BasicPropertyNamer,g,h,X1,true,k,l,m");
@@ -122,13 +140,13 @@ class MarshalledAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Marshalled(description={ "a" }, dictionary=X1.class, example="b", implClass=X1.class, interceptor=X2.class, typeName="i", typePropertyName="j")
+	@Marshalled(binaryFormat=BinaryFormat.HEX, calendarFormat=CalendarFormat.ISO_INSTANT, dateFormat=DateFormat.ISO_INSTANT, description={ "a" }, dictionary=X1.class, durationFormat=DurationFormat.SECONDS, enumFormat=EnumFormat.NAME, example="b", implClass=X1.class, interceptor=X2.class, localeFormat=LocaleFormat.UNDERSCORE, periodFormat=PeriodFormat.DAYS, temporalFormat=TemporalFormat.ISO_INSTANT, timeZoneFormat=TimeZoneFormat.OFFSET, typeName="i", typePropertyName="j")
 	@BeanType(description={ "a" }, excludeProperties="c", findFluentSetters=true, interfaceClass=X1.class, p="e", properties="f", propertyNamer=BasicPropertyNamer.class, readOnlyProperties="g", ro="h", unsorted=true, stopClass=X1.class, wo="k", writeOnlyProperties="l", xp="m")
 	public static class D1 {}
 	Marshalled d1 = D1.class.getAnnotationsByType(Marshalled.class)[0];
 	BeanType d1bt = D1.class.getAnnotationsByType(BeanType.class)[0];
 
-	@Marshalled(description={ "a" }, dictionary=X1.class, example="b", implClass=X1.class, interceptor=X2.class, typeName="i", typePropertyName="j")
+	@Marshalled(binaryFormat=BinaryFormat.HEX, calendarFormat=CalendarFormat.ISO_INSTANT, dateFormat=DateFormat.ISO_INSTANT, description={ "a" }, dictionary=X1.class, durationFormat=DurationFormat.SECONDS, enumFormat=EnumFormat.NAME, example="b", implClass=X1.class, interceptor=X2.class, localeFormat=LocaleFormat.UNDERSCORE, periodFormat=PeriodFormat.DAYS, temporalFormat=TemporalFormat.ISO_INSTANT, timeZoneFormat=TimeZoneFormat.OFFSET, typeName="i", typePropertyName="j")
 	@BeanType(description={ "a" }, excludeProperties="c", findFluentSetters=true, interfaceClass=X1.class, p="e", properties="f", propertyNamer=BasicPropertyNamer.class, readOnlyProperties="g", ro="h", unsorted=true, stopClass=X1.class, wo="k", writeOnlyProperties="l", xp="m")
 	public static class D2 {}
 	Marshalled d2 = D2.class.getAnnotationsByType(Marshalled.class)[0];

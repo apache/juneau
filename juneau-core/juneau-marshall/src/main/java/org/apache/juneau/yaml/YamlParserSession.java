@@ -35,7 +35,6 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -494,8 +493,16 @@ public class YamlParserSession extends ReaderParserSession {
 			return parseCharacter(s);
 		} else if (sType.isNumber()) {
 			return StringUtils.parseNumber(s, (Class<? extends Number>)sType.inner());
-		} else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration()) {
-			return Iso8601Utils.parse(s, sType, getTimeZone());
+		} else if (sType.isDate()) {
+			return parseDate(s, sType);
+		} else if (sType.isCalendar()) {
+			return parseCalendar(s, sType);
+		} else if (sType.isTemporal()) {
+			return parseTemporal(s, sType);
+		} else if (sType.isDuration()) {
+			return parseDuration(s);
+		} else if (sType.isPeriod()) {
+			return parsePeriod(s);
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			return sType.newInstanceFromString(outer, s);
 		} else {

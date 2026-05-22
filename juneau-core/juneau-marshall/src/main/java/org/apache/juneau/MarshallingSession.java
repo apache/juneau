@@ -509,6 +509,15 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	}
 
 	/**
+	 * Returns the {@link MarshallingContext} backing this session.
+	 *
+	 * @return The marshalling context.
+	 */
+	public final MarshallingContext getMarshallingContext() {
+		return ctx;
+	}
+
+	/**
 	 * Minimum bean class visibility.
 	 *
 	 * @see MarshallingContext.Builder#beanClassVisibility(Visibility)
@@ -921,15 +930,6 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * 	<jk>true</jk> if bean properties are serialized in natural JVM-dependent order instead of alphabetically.
 	 */
 	public final boolean isUnsortedProperties() { return ctx.isUnsortedProperties(); }
-
-	/**
-	 * Use enum names.
-	 *
-	 * @see MarshallingContext.Builder#useEnumNames()
-	 * @return
-	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
-	 */
-	public final boolean isUseEnumNames() { return ctx.isUseEnumNames(); }
 
 	/**
 	 * Use interface proxies.

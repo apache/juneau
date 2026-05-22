@@ -455,10 +455,24 @@ public class MsgPackInputStream extends ParserInputStream {
 	int readInt() throws IOException {
 		if (length == 0)
 			return lastByte;
-		if (length == 1)
-			return read();
-		if (length == 2)
-			return (read() << 8) | read();
+		if (length == -1)
+			// NEGFIXINT path: lastByte is the negfixint byte itself (0xE0..0xFF, representing -32..-1).
+			// Sign-extend through (byte) so the negative value survives the int widen; without this guard
+			// the fallthrough below would consume 4 extra bytes from the stream and corrupt subsequent reads.
+			return (byte) lastByte;
+		if (length == 1) {
+			// INT8 (0xD0) is signed; UINT8 (0xCC) is unsigned.  Sign-extend only for INT8 so that
+			// negative values round-trip correctly (the serializer routes negatives through INT8/INT16
+			// per the MsgPack int-format-family spec).
+			var v = read();
+			return (lastByte == INT8) ? (byte) v : v;
+		}
+		if (length == 2) {
+			// INT16 (0xD1) is signed; UINT16 (0xCD) is unsigned.  Without the sign-extension here, a
+			// negative int16 value such as 0xD1 0xFE 0x54 (= -428) was being read back as 65108.
+			var v = (read() << 8) | read();
+			return (lastByte == INT16) ? (short) v : v;
+		}
 		int i = read();
 		i <<= 8;
 		i |= read();

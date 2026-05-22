@@ -38,7 +38,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.xml.*;
 
@@ -109,7 +108,7 @@ import org.apache.juneau.xml.*;
  * bean context can also be passed in.
  *
  * <p>
- * For example, if the {@link TemporalCalendarSwap} transform is used to generalize {@code Calendar} objects to {@code String}
+ * For example, if a {@link CalendarFormat}-driven swap is used to generalize {@code Calendar} objects to {@code String}
  * objects.
  * When registered with this parser, you can construct {@code Calendar} objects from {@code Strings} using the
  * following syntax...
@@ -206,6 +205,96 @@ public class Parser extends MarshallingContextable {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder durationFormat(DurationFormat value) {
+			super.durationFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder periodFormat(PeriodFormat value) {
+			super.periodFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder calendarFormat(CalendarFormat value) {
+			super.calendarFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder dateFormat(DateFormat value) {
+			super.dateFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder temporalFormat(TemporalFormat value) {
+			super.temporalFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneFormat(TimeZoneFormat value) {
+			super.timeZoneFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder localeFormat(LocaleFormat value) {
+			super.localeFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder binaryFormat(BinaryFormat value) {
+			super.binaryFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder enumFormat(EnumFormat value) {
+			super.enumFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uuidFormat(UuidFormat value) {
+			super.uuidFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder bigNumberFormat(BigNumberFormat value) {
+			super.bigNumberFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder booleanFormat(BooleanFormat value) {
+			super.booleanFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder floatFormat(FloatFormat value) {
+			super.floatFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder currencyFormat(CurrencyFormat value) {
+			super.currencyFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder classFormat(ClassFormat value) {
+			super.classFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
 			return this;
@@ -292,7 +381,7 @@ public class Parser extends MarshallingContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanDictionary(java.lang.Class<?>...values) {
+		public Builder beanDictionary(Class<?>...values) {
 			super.beanDictionary(values);
 			return this;
 		}
@@ -486,7 +575,7 @@ public class Parser extends MarshallingContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
 			super.dictionaryOn(on, values);
 			return this;
 		}
@@ -628,7 +717,7 @@ public class Parser extends MarshallingContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
+		public Builder interfaces(Class<?>...value) {
 			super.interfaces(value);
 			return this;
 		}
@@ -698,7 +787,7 @@ public class Parser extends MarshallingContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder notBeanClasses(java.lang.Class<?>...values) {
+		public Builder notBeanClasses(Class<?>...values) {
 			super.notBeanClasses(values);
 			return this;
 		}
@@ -728,7 +817,7 @@ public class Parser extends MarshallingContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder unsortedProperties(java.lang.Class<?>...on) {
+		public Builder unsortedProperties(Class<?>...on) {
 			super.unsortedProperties(on);
 			return this;
 		}
@@ -894,11 +983,6 @@ public class Parser extends MarshallingContextable {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {

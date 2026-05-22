@@ -23,21 +23,20 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.swaps.*;
 
 /**
- * Round-trip testing for ByteArrayBase64Swap (byte[] serialized as Base64 strings).
+ * Round-trip testing for byte[] serialized as Base64 strings via {@link BinaryFormat#BASE64}.
  *
  * <p>RDF expected values (rdfXml, rdfThrift, rdfProto) are intentionally omitted. RDF output from
- * Jena can be non-deterministic, and byte arrays with Base64 swap produce RDF that is brittle to
- * assert. RDF round-trip is covered by other combo tests and dedicated RDF tests.
+ * Jena can be non-deterministic, and byte arrays produce RDF that is brittle to assert. RDF
+ * round-trip is covered by other combo tests and dedicated RDF tests.
  */
 class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
 	private static <T> ComboRoundTrip_Tester.Builder<T> tester(int index, String label, Type type, T bean) {
 		return ComboRoundTrip_Tester.create(index, label, type, ()->bean)
-			.serializerApply(s -> s.swaps(ByteArraySwap.Base64.class).keepNullProperties())
-			.parserApply(p -> p.swaps(ByteArraySwap.Base64.class));
+			.serializerApply(s -> s.binaryFormat(BinaryFormat.BASE64).keepNullProperties())
+			.parserApply(p -> p.binaryFormat(BinaryFormat.BASE64));
 	}
 
 	private static final ComboRoundTrip_Tester<?>[] TESTERS = {
@@ -61,8 +60,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEnc("_value=AQID")
 			.urlEncT("_value=AQID")
 			.urlEncR("_value=AQID")
-			.msgPack("A441514944")
-			.msgPackT("A441514944")
+			.msgPack("C403010203")
+			.msgPackT("C403010203")
 			.verify(x -> verify(x).isType(byte[].class))
 			.build(),
 		tester(2, "ByteArray2d", byte[][].class, new byte[][]{{1,2,3},{4,5,6},null})
@@ -85,8 +84,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEnc("0=AQID&1=BAUG&2=null")
 			.urlEncT("0=AQID&1=BAUG&2=null")
 			.urlEncR("0=AQID\n&1=BAUG\n&2=null")
-			.msgPack("93A441514944A442415547C0")
-			.msgPackT("93A441514944A442415547C0")
+			.msgPack("93C403010203C403040506C0")
+			.msgPackT("93C403010203C403040506C0")
 			.verify(x -> verify(x).isType(byte[][].class))
 			.build(),
 		tester(3, "ListOfByteArrays", getType(List.class,byte[].class), l(bytes(1,2,3),bytes(4,5,6),null))
@@ -109,8 +108,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEnc("0=AQID&1=BAUG&2=null")
 			.urlEncT("0=AQID&1=BAUG&2=null")
 			.urlEncR("0=AQID\n&1=BAUG\n&2=null")
-			.msgPack("93A441514944A442415547C0")
-			.msgPackT("93A441514944A442415547C0")
+			.msgPack("93C403010203C403040506C0")
+			.msgPackT("93C403010203C403040506C0")
 			.verify(x -> verify(x).isType(List.class))
 			.verify(x -> verify(x.get(0)).isType(byte[].class))
 			.build(),
@@ -134,8 +133,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEnc("foo=AQID&bar=null&null=BAUG&'null'=BwgJ")
 			.urlEncT("foo=AQID&bar=null&null=BAUG&'null'=BwgJ")
 			.urlEncR("foo=AQID\n&bar=null\n&null=BAUG\n&'null'=BwgJ")
-			.msgPack("84A3666F6FA441514944A3626172C0C0A442415547A46E756C6CA44277674A")
-			.msgPackT("84A3666F6FA441514944A3626172C0C0A442415547A46E756C6CA44277674A")
+			.msgPack("84A3666F6FC403010203A3626172C0C0C403040506A46E756C6CC403070809")
+			.msgPackT("84A3666F6FC403010203A3626172C0C0C403040506A46E756C6CC403070809")
 			.verify(x -> verify(x).isType(Map.class))
 			.verify(x -> verify(x.keySet().iterator().next()).isType(String.class))
 			.verify(x -> verify(x.values().iterator().next()).isType(byte[].class))
@@ -160,8 +159,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEnc("f=AQID")
 			.urlEncT("f=AQID")
 			.urlEncR("f=AQID")
-			.msgPack("81A166A441514944")
-			.msgPackT("81A166A441514944")
+			.msgPack("81A166C403010203")
+			.msgPackT("81A166C403010203")
 			.verify(x -> verify(x).isType(BeanWithByteArrayField.class))
 			.build(),
 		tester(6, "BeanWithByteArray2dField", BeanWithByteArray2dField.class, new BeanWithByteArray2dField().init())
@@ -184,8 +183,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEnc("f=@(AQID,BAUG,null)")
 			.urlEncT("f=@(AQID,BAUG,null)")
 			.urlEncR("f=@(\n\tAQID,\n\tBAUG,\n\tnull\n)")
-			.msgPack("81A16693A441514944A442415547C0")
-			.msgPackT("81A16693A441514944A442415547C0")
+			.msgPack("81A16693C403010203C403040506C0")
+			.msgPackT("81A16693C403010203C403040506C0")
 			.verify(x -> verify(x).isType(BeanWithByteArray2dField.class))
 			.build(),
 		tester(7, "BeanWithByteArrayNullField", BeanWithByteArrayNullField.class, new BeanWithByteArrayNullField().init())
@@ -232,8 +231,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEnc("f=@(AQID,BAUG,null)")
 			.urlEncT("f=@(AQID,BAUG,null)")
 			.urlEncR("f=@(\n\tAQID,\n\tBAUG,\n\tnull\n)")
-			.msgPack("81A16693A441514944A442415547C0")
-			.msgPackT("81A16693A441514944A442415547C0")
+			.msgPack("81A16693C403010203C403040506C0")
+			.msgPackT("81A16693C403010203C403040506C0")
 			.verify(x -> verify(x).isType(BeanWithByteArrayListField.class))
 			.build(),
 		tester(9, "BeanWithByteArrayMapField", BeanWithByteArrayMapField.class, new BeanWithByteArrayMapField().init())
@@ -256,8 +255,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEnc("f=(foo=AQID,bar=null,null=BAUG)")
 			.urlEncT("f=(foo=AQID,bar=null,null=BAUG)")
 			.urlEncR("f=(\n\tfoo=AQID,\n\tbar=null,\n\tnull=BAUG\n)")
-			.msgPack("81A16683A3666F6FA441514944A3626172C0C0A442415547")
-			.msgPackT("81A16683A3666F6FA441514944A3626172C0C0A442415547")
+			.msgPack("81A16683A3666F6FC403010203A3626172C0C0C403040506")
+			.msgPackT("81A16683A3666F6FC403010203A3626172C0C0C403040506")
 			.verify(x -> verify(x).isType(BeanWithByteArrayMapField.class))
 			.build(),
 		tester(10, "BeanWithByteArrayBeanListField", BeanWithByteArrayBeanListField.class, new BeanWithByteArrayBeanListField().init())
@@ -280,8 +279,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEnc("f=@((f1=AQID,f2=@(AQID,BAUG,null),f3=null,f4=@(AQID,BAUG,null),f5=(foo=AQID,bar=null,null=BAUG)),null)")
 			.urlEncT("f=@((f1=AQID,f2=@(AQID,BAUG,null),f3=null,f4=@(AQID,BAUG,null),f5=(foo=AQID,bar=null,null=BAUG)),null)")
 			.urlEncR("f=@(\n\t(\n\t\tf1=AQID,\n\t\tf2=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf3=null,\n\t\tf4=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf5=(\n\t\t\tfoo=AQID,\n\t\t\tbar=null,\n\t\t\tnull=BAUG\n\t\t)\n\t),\n\tnull\n)")
-			.msgPack("81A1669285A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547C0")
-			.msgPackT("81A1669285A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547C0")
+			.msgPack("81A1669285A26631C403010203A2663293C403010203C403040506C0A26633C0A2663493C403010203C403040506C0A2663583A3666F6FC403010203A3626172C0C0C403040506C0")
+			.msgPackT("81A1669285A26631C403010203A2663293C403010203C403040506C0A26633C0A2663493C403010203C403040506C0A2663583A3666F6FC403010203A3626172C0C0C403040506C0")
 			.verify(x -> verify(x).isType(BeanWithByteArrayBeanListField.class))
 			.build(),
 		tester(11, "BeanWithByteArrayBeanMapField", BeanWithByteArrayBeanMapField.class, new BeanWithByteArrayBeanMapField().init())
@@ -304,8 +303,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEnc("f=(foo=(f1=AQID,f2=@(AQID,BAUG,null),f3=null,f4=@(AQID,BAUG,null),f5=(foo=AQID,bar=null,null=BAUG)),bar=null,null=(f1=AQID,f2=@(AQID,BAUG,null),f3=null,f4=@(AQID,BAUG,null),f5=(foo=AQID,bar=null,null=BAUG)))")
 			.urlEncT("f=(foo=(f1=AQID,f2=@(AQID,BAUG,null),f3=null,f4=@(AQID,BAUG,null),f5=(foo=AQID,bar=null,null=BAUG)),bar=null,null=(f1=AQID,f2=@(AQID,BAUG,null),f3=null,f4=@(AQID,BAUG,null),f5=(foo=AQID,bar=null,null=BAUG)))")
 			.urlEncR("f=(\n\tfoo=(\n\t\tf1=AQID,\n\t\tf2=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf3=null,\n\t\tf4=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf5=(\n\t\t\tfoo=AQID,\n\t\t\tbar=null,\n\t\t\tnull=BAUG\n\t\t)\n\t),\n\tbar=null,\n\tnull=(\n\t\tf1=AQID,\n\t\tf2=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf3=null,\n\t\tf4=@(\n\t\t\tAQID,\n\t\t\tBAUG,\n\t\t\tnull\n\t\t),\n\t\tf5=(\n\t\t\tfoo=AQID,\n\t\t\tbar=null,\n\t\t\tnull=BAUG\n\t\t)\n\t)\n)")
-			.msgPack("81A16683A3666F6F85A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547A3626172C0C085A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547")
-			.msgPackT("81A16683A3666F6F85A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547A3626172C0C085A26631A441514944A2663293A441514944A442415547C0A26633C0A2663493A441514944A442415547C0A2663583A3666F6FA441514944A3626172C0C0A442415547")
+			.msgPack("81A16683A3666F6F85A26631C403010203A2663293C403010203C403040506C0A26633C0A2663493C403010203C403040506C0A2663583A3666F6FC403010203A3626172C0C0C403040506A3626172C0C085A26631C403010203A2663293C403010203C403040506C0A26633C0A2663493C403010203C403040506C0A2663583A3666F6FC403010203A3626172C0C0C403040506")
+			.msgPackT("81A16683A3666F6F85A26631C403010203A2663293C403010203C403040506C0A26633C0A2663493C403010203C403040506C0A2663583A3666F6FC403010203A3626172C0C0C403040506A3626172C0C085A26631C403010203A2663293C403010203C403040506C0A26633C0A2663493C403010203C403040506C0A2663583A3666F6FC403010203A3626172C0C0C403040506")
 			.verify(x -> verify(x).isType(BeanWithByteArrayBeanMapField.class))
 			.build()
 	};

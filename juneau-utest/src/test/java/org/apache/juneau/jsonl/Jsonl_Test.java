@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.marshaller.*;
-import org.apache.juneau.swaps.*;
 import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.bean.*;
 
@@ -160,7 +159,7 @@ class Jsonl_Test extends TestBase {
 
 	@Test
 	void a12_serializeWithSwaps() throws Exception {
-		var s = (JsonlSerializer) JsonlSerializer.create().swaps(ByteArraySwap.Base64.class).build();
+		var s = (JsonlSerializer) JsonlSerializer.create().binaryFormat(BinaryFormat.BASE64).build();
 		var list = list(JsonMap.of("data", new byte[]{1, 2, 3}));
 		var jsonl = s.serialize(list);
 		assertTrue(jsonl.contains("AQID"));

@@ -264,7 +264,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+		public Builder cache(Cache<HashKey,? extends Context> value) {
 			super.cache(value);
 			return this;
 		}
@@ -682,7 +682,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -705,11 +705,6 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {

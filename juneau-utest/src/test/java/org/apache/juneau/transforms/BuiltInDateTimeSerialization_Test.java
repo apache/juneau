@@ -190,7 +190,7 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 	@Test void l02_json_duration_hours() throws Exception {
 		var d = Duration.ofHours(48);
 		var json = JS.serialize(d);
-		assertEquals("'PT48H'", json);
+		assertEquals("'P2D'", json);
 		var d2 = JP.parse(json, Duration.class);
 		assertEquals(d, d2);
 	}
@@ -214,7 +214,7 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 	@Test void l05_json_duration_negative() throws Exception {
 		var d = Duration.ofHours(-6);
 		var json = JS.serialize(d);
-		assertEquals("'PT-6H'", json);
+		assertEquals("'-PT6H'", json);
 		var d2 = JP.parse(json, Duration.class);
 		assertEquals(d, d2);
 	}
@@ -230,9 +230,27 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 	@Test void l07_json_duration_complex() throws Exception {
 		var d = Duration.ofHours(26).plusMinutes(3);
 		var json = JS.serialize(d);
-		assertEquals("'PT26H3M'", json);
+		assertEquals("'P1DT2H3M'", json);
 		var d2 = JP.parse(json, Duration.class);
 		assertEquals(d, d2);
+	}
+
+	@Test void l08_json_duration_customFormatMillis() throws Exception {
+		var d = Duration.ofSeconds(45);
+		var s = Json5Serializer.create().durationFormat(org.apache.juneau.DurationFormat.MILLIS).build();
+		var p = Json5Parser.create().durationFormat(org.apache.juneau.DurationFormat.MILLIS).build();
+		var json = s.serialize(d);
+		assertEquals("45000", json);
+		var d2 = p.parse(json, Duration.class);
+		assertEquals(d, d2);
+	}
+
+	@Test void l09_json_period_basic() throws Exception {
+		var p = Period.of(1, 2, 3);
+		var json = JS.serialize(p);
+		assertEquals("'P1Y2M3D'", json);
+		var p2 = JP.parse(json, Period.class);
+		assertEquals(p, p2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

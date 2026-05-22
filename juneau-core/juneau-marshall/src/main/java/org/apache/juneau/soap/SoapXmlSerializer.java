@@ -826,11 +826,6 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {

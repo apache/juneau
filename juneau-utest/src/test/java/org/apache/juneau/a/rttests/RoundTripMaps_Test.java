@@ -32,7 +32,6 @@ import org.apache.juneau.json5.*;
 import org.apache.juneau.jcs.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
@@ -218,7 +217,7 @@ class RoundTripMaps_Test extends TestBase {
 	}
 
 	protected static RoundTrip_Tester.Builder tester(int index, String label) {
-		return RoundTrip_Tester.create(index, label).pojoSwaps(ByteArraySwap.Base64.class);
+		return RoundTrip_Tester.create(index, label);
 	}
 
 	//====================================================================================================
@@ -287,27 +286,27 @@ class RoundTripMaps_Test extends TestBase {
 		x.put(bytes(4,5,6), null);
 		x.put(null, "b");
 
-		var s = (Serializer)Json5Serializer.create().swaps(ByteArraySwap.Base64.class).keepNullProperties().build();
+		var s = (Serializer)Json5Serializer.create().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
 		e = "{AQID:'a',BAUG:null,null:'b'}";
 		r = s.serialize(x);
 		assertEquals(e, r);
 
-		s = XmlSerializer.create().ns().sq().swaps(ByteArraySwap.Base64.class).keepNullProperties().build();
+		s = XmlSerializer.create().ns().sq().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
 		e = "<object><AQID>a</AQID><BAUG _type='null'/><_x0000_>b</_x0000_></object>";
 		r = s.serialize(x);
 		assertEquals(e, r);
 
-		s = HtmlSerializer.create().sq().swaps(ByteArraySwap.Base64.class).keepNullProperties().addKeyValueTableHeaders().build();
+		s = HtmlSerializer.create().sq().keepNullProperties().addKeyValueTableHeaders().binaryFormat(BinaryFormat.BASE64).build();
 		e = "<table><tr><th>key</th><th>value</th></tr><tr><td>AQID</td><td>a</td></tr><tr><td>BAUG</td><td><null/></td></tr><tr><td><null/></td><td>b</td></tr></table>";
 		r = s.serialize(x);
 		assertEquals(e, r);
 
-		s = UonSerializer.create().encoding().swaps(ByteArraySwap.Base64.class).keepNullProperties().build();
+		s = UonSerializer.create().encoding().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
 		e = "(AQID=a,BAUG=null,null=b)";
 		r = s.serialize(x);
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.create().swaps(ByteArraySwap.Base64.class).keepNullProperties().build();
+		s = UrlEncodingSerializer.create().keepNullProperties().binaryFormat(BinaryFormat.BASE64).build();
 		e = "AQID=a&BAUG=null&null=b";
 		r = s.serialize(x);
 		assertEquals(e, r);

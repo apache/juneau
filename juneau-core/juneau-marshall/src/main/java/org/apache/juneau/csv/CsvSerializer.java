@@ -43,7 +43,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * <ul>
  *   <li><b>Type discriminator</b> — {@link CsvSerializer.Builder#addBeanTypes() addBeanTypes()}.{@link CsvSerializer.Builder#addRootType() addRootType()}
  *       adds a {@code _type} column for polymorphic parsing.
- *   <li><b>Byte arrays</b> — {@link CsvSerializer.Builder#byteArrayFormat(ByteArrayFormat) byteArrayFormat(BASE64)} (default) or
+ *   <li><b>Byte arrays</b> — {@link CsvSerializer.Builder#byteArrayFormat(CsvByteArrayCellFormat) byteArrayFormat(BASE64)} (default) or
  *       {@code SEMICOLON_DELIMITED} for {@code byte[]}; primitive arrays as {@code [1;2;3]}.
  *   <li><b>Nested structures</b> — {@link CsvSerializer.Builder#allowNestedStructures(boolean) allowNestedStructures(true)}
  *       enables inline {@code {key:val}} and {@code [val;val]} in cells.
@@ -94,7 +94,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 
 		private static final Cache<HashKey,CsvSerializer> CACHE = Cache.of(HashKey.class, CsvSerializer.class).build();
 
-		private ByteArrayFormat byteArrayFormat;
+		private CsvByteArrayCellFormat byteArrayFormat;
 		private boolean allowNestedStructures;
 		private String nullValue;
 
@@ -103,7 +103,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 		 */
 		protected Builder() {
 			produces("text/csv");
-			byteArrayFormat = ByteArrayFormat.BASE64;
+			byteArrayFormat = CsvByteArrayCellFormat.BASE64;
 			nullValue = "<NULL>";
 		}
 
@@ -192,12 +192,12 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 		 * Format for serializing {@code byte[]} arrays in CSV cells.
 		 *
 		 * <p>
-		 * Default is {@link ByteArrayFormat#BASE64} (matches JSON).
+		 * Default is {@link CsvByteArrayCellFormat#BASE64} (matches JSON).
 		 *
 		 * @param value The format to use.
 		 * @return This object.
 		 */
-		public Builder byteArrayFormat(ByteArrayFormat value) {
+		public Builder byteArrayFormat(CsvByteArrayCellFormat value) {
 			byteArrayFormat = value;
 			return this;
 		}
@@ -811,11 +811,6 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {
@@ -856,7 +851,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 
 	private final Map<ClassMeta<?>,CsvClassMeta> csvClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,CsvBeanPropertyMeta> csvBeanPropertyMetas = new ConcurrentHashMap<>();
-	private final ByteArrayFormat byteArrayFormat;
+	private final CsvByteArrayCellFormat byteArrayFormat;
 	private final boolean allowNestedStructures;
 	private final String nullValue;
 
@@ -867,7 +862,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 	 */
 	public CsvSerializer(Builder builder) {
 		super(builder);
-		byteArrayFormat = builder.byteArrayFormat != null ? builder.byteArrayFormat : ByteArrayFormat.BASE64;
+		byteArrayFormat = builder.byteArrayFormat != null ? builder.byteArrayFormat : CsvByteArrayCellFormat.BASE64;
 		allowNestedStructures = builder.allowNestedStructures;
 		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
 	}
@@ -877,7 +872,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 	 *
 	 * @return The byte array format.
 	 */
-	public ByteArrayFormat getByteArrayFormat() {
+	public CsvByteArrayCellFormat getByteArrayFormat() {
 		return byteArrayFormat;
 	}
 

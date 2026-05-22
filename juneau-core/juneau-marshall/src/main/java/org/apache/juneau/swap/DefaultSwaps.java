@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.swaps.*;
 
@@ -43,13 +44,43 @@ public class DefaultSwaps {
 
 	private static final Map<Class<?>,ObjectSwap<?,?>> SWAPS = new ConcurrentHashMap<>();
 	static {
-		SWAPS.put(Locale.class, new LocaleSwap());
-		SWAPS.put(Class.class, new ClassSwap());
+		SWAPS.put(Locale.class, new StringSwap<Locale>() {
+			@Override public String swap(MarshallingSession s, Locale o) {
+				return s.getMarshallingContext().getLocaleFormat().format(o);
+			}
+			@Override public Locale unswap(MarshallingSession s, String o, ClassMeta<?> hint) {
+				return s.getMarshallingContext().getLocaleFormat().parse(o);
+			}
+		});
 		SWAPS.put(StackTraceElement.class, new StackTraceElementSwap());
-		SWAPS.put(TimeZone.class, new TimeZoneSwap());
-		SWAPS.put(ZoneId.class, new ZoneIdSwap());
+		SWAPS.put(TimeZone.class, new StringSwap<TimeZone>() {
+			@Override public String swap(MarshallingSession s, TimeZone o) {
+				return s.getMarshallingContext().getTimeZoneFormat().format(o);
+			}
+			@Override public TimeZone unswap(MarshallingSession s, String o, ClassMeta<?> hint) {
+				return TimeZoneFormat.parseTimeZone(o);
+			}
+		});
+		SWAPS.put(ZoneId.class, new StringSwap<ZoneId>() {
+			@Override public String swap(MarshallingSession s, ZoneId o) {
+				return s.getMarshallingContext().getTimeZoneFormat().format(o);
+			}
+			@Override public ZoneId unswap(MarshallingSession s, String o, ClassMeta<?> hint) {
+				return TimeZoneFormat.parseZoneId(o);
+			}
+		});
+		SWAPS.put(Currency.class, new StringSwap<Currency>() {
+			@Override public String swap(MarshallingSession s, Currency o) {
+				return CurrencyFormat.format(o, s.getMarshallingContext().getCurrencyFormat(), s.getLocale());
+			}
+			@Override public Currency unswap(MarshallingSession s, String o, ClassMeta<?> hint) {
+				return CurrencyFormat.parse(o, s.getMarshallingContext().getCurrencyFormat(), s.getLocale());
+			}
+		});
 		SWAPS.put(MatchResult.class, new MatchResultSwap());
 		SWAPS.put(URL.class, new UrlSwap());
+		SWAPS.put(byte[].class, new BinarySwap());
+		SWAPS.put(Class.class, new ClassFormatSwap());
 	}
 
 	/**

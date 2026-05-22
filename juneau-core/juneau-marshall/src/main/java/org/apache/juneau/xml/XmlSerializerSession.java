@@ -28,6 +28,8 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
+import java.time.*;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.function.*;
 
@@ -37,7 +39,6 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -1098,10 +1099,16 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					out.text(o, preserveWhitespace);
 			} else if (sType.isNumber() || sType.isBoolean()) {
 				out.append(o);
-			} else if (sType.isDateOrCalendarOrTemporal()) {
-				out.text(Iso8601Utils.format(o, sType, getTimeZone()));
+			} else if (sType.isDate()) {
+				out.text(serializeDate((Date)o, sType));
+			} else if (sType.isCalendar()) {
+				out.text(serializeCalendar(o, sType));
+			} else if (sType.isTemporal()) {
+				out.text(serializeTemporal((TemporalAccessor)o, sType));
 			} else if (sType.isDuration()) {
-				out.text(o.toString());
+				out.text(serializeDuration((Duration)o));
+			} else if (sType.isPeriod()) {
+				out.text(serializePeriod((Period)o));
 			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
 				if (o instanceof BeanMap o2)
 					rc = serializeBeanMap(out, o2, elementNamespace, isCollapsed, isMixedOrText);

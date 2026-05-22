@@ -663,11 +663,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {

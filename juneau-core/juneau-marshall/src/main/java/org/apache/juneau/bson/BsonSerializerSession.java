@@ -24,12 +24,12 @@ import java.io.*;
 import java.math.*;
 import java.time.*;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 import org.apache.juneau.commons.bean.BeanPropertyValue;
@@ -158,15 +158,35 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 				out.writeElement(DOUBLE.value, name);
 				out.writeDouble(((Number)o).doubleValue());
 			}
-		} else if (sType.isDateOrCalendarOrTemporal() && ctx.writeDatesAsDatetime) {
-			out.writeElement(DATETIME.value, name);
-			out.writeDateTime(toEpochMillis(o));
-		} else if (sType.isDateOrCalendarOrTemporal() && !ctx.writeDatesAsDatetime) {
-			out.writeElement(STRING.value, name);
-			out.writeString(Iso8601Utils.format(o, sType, getTimeZone()));
+		} else if (sType.isDate()) {
+			if (ctx.writeDatesAsDatetime) {
+				out.writeElement(DATETIME.value, name);
+				out.writeDateTime(toEpochMillis(o));
+			} else {
+				out.writeElement(STRING.value, name);
+				out.writeString(serializeDate((Date)o, sType));
+			}
+		} else if (sType.isCalendar()) {
+			if (ctx.writeDatesAsDatetime) {
+				out.writeElement(DATETIME.value, name);
+				out.writeDateTime(toEpochMillis(o));
+			} else {
+				out.writeElement(STRING.value, name);
+				out.writeString(serializeCalendar(o, sType));
+			}
+		} else if (sType.isTemporal()) {
+			if (ctx.writeDatesAsDatetime) {
+				out.writeElement(DATETIME.value, name);
+				out.writeDateTime(toEpochMillis(o));
+			} else {
+				out.writeElement(STRING.value, name);
+				out.writeString(serializeTemporal((TemporalAccessor)o, sType));
+			}
 		} else if (sType.isDuration()) {
+			writeDuration(out, name, (Duration)o);
+		} else if (sType.isPeriod()) {
 			out.writeElement(STRING.value, name);
-			out.writeString(o.toString());
+			out.writeString(serializePeriod((Period)o));
 		} else if (sType.isBean()) {
 			out.writeElement(DOCUMENT.value, name);
 			var child = out.createChild();
@@ -311,6 +331,21 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 		}
 
 		bsonOut.writeDocumentTo(out.getOutputStream());
+	}
+
+	private void writeDuration(BsonOutputStream out, String name, Duration value) {
+		var f = getDurationFormat();
+		var s = serializeDuration(value);
+		if (f == DurationFormat.NANOS || f == DurationFormat.MILLIS) {
+			out.writeElement(INT64.value, name);
+			out.writeInt64(Long.parseLong(s));
+		} else if (f == DurationFormat.SECONDS) {
+			out.writeElement(DOUBLE.value, name);
+			out.writeDouble(Double.parseDouble(s));
+		} else {
+			out.writeElement(STRING.value, name);
+			out.writeString(s);
+		}
 	}
 
 }

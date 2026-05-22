@@ -31,7 +31,6 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -244,8 +243,16 @@ public class MsgPackParserSession extends InputStreamParserSession {
 				// Do nothing.
 			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber() || sType.isByteArray()) {
 				o = convertToType(o, sType);
-			} else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration()) {
-				o = Iso8601Utils.parse(String.valueOf(o), sType, getTimeZone());
+			} else if (sType.isDate()) {
+				o = parseDate(String.valueOf(o), sType);
+			} else if (sType.isCalendar()) {
+				o = parseCalendar(String.valueOf(o), sType);
+			} else if (sType.isTemporal()) {
+				o = parseTemporal(String.valueOf(o), sType);
+			} else if (sType.isDuration()) {
+				o = parseDuration(String.valueOf(o));
+			} else if (sType.isPeriod()) {
+				o = parsePeriod(String.valueOf(o));
 			} else if (sType.isMap()) {
 				if (dt == MAP) {
 					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));

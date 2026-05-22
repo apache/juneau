@@ -36,7 +36,6 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -292,8 +291,16 @@ public class JsonParserSession extends ReaderParserSession {
 			o = parseCharacter(parseString(r));
 		} else if (sType.isNumber()) {
 			o = parseNumber(r, (Class<? extends Number>)sType.inner());
-		} else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration()) {
-			o = Iso8601Utils.parse(parseString(r), sType, getTimeZone());
+		} else if (sType.isDate()) {
+			o = parseDate(parseString(r), sType);
+		} else if (sType.isCalendar()) {
+			o = parseCalendar(parseString(r), sType);
+		} else if (sType.isTemporal()) {
+			o = parseTemporal(parseString(r), sType);
+		} else if (sType.isDuration()) {
+			o = parseDuration(parseString(r));
+		} else if (sType.isPeriod()) {
+			o = parsePeriod(parseString(r));
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);

@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.bean.*;
 
@@ -52,6 +53,21 @@ public class MarshalledAnnotation {
 		private String summary = "";
 		private String typeName = "";
 		private String typePropertyName = "";
+		private DurationFormat durationFormat = DurationFormat.NOT_SET;
+		private PeriodFormat periodFormat = PeriodFormat.NOT_SET;
+		private CalendarFormat calendarFormat = CalendarFormat.NOT_SET;
+		private DateFormat dateFormat = DateFormat.NOT_SET;
+		private TemporalFormat temporalFormat = TemporalFormat.NOT_SET;
+		private TimeZoneFormat timeZoneFormat = TimeZoneFormat.NOT_SET;
+		private LocaleFormat localeFormat = LocaleFormat.NOT_SET;
+		private BinaryFormat binaryFormat = BinaryFormat.NOT_SET;
+		private EnumFormat enumFormat = EnumFormat.NOT_SET;
+		private UuidFormat uuidFormat = UuidFormat.NOT_SET;
+		private BigNumberFormat bigNumberFormat = BigNumberFormat.NOT_SET;
+		private BooleanFormat booleanFormat = BooleanFormat.NOT_SET;
+		private FloatFormat floatFormat = FloatFormat.NOT_SET;
+		private CurrencyFormat currencyFormat = CurrencyFormat.NOT_SET;
+		private ClassFormat classFormat = ClassFormat.NOT_SET;
 
 		/**
 		 * Constructor.
@@ -103,6 +119,17 @@ public class MarshalledAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Marshalled#durationFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder durationFormat(DurationFormat value) {
+			durationFormat = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Marshalled#example()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -110,6 +137,160 @@ public class MarshalledAnnotation {
 		 */
 		public Builder example(String value) {
 			example = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#periodFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder periodFormat(PeriodFormat value) {
+			periodFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#calendarFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder calendarFormat(CalendarFormat value) {
+			calendarFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#dateFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder dateFormat(DateFormat value) {
+			dateFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#temporalFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder temporalFormat(TemporalFormat value) {
+			temporalFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#timeZoneFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder timeZoneFormat(TimeZoneFormat value) {
+			timeZoneFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#localeFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder localeFormat(LocaleFormat value) {
+			localeFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#binaryFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder binaryFormat(BinaryFormat value) {
+			binaryFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#enumFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder enumFormat(EnumFormat value) {
+			enumFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#uuidFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder uuidFormat(UuidFormat value) {
+			uuidFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#bigNumberFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder bigNumberFormat(BigNumberFormat value) {
+			bigNumberFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#booleanFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder booleanFormat(BooleanFormat value) {
+			booleanFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#floatFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder floatFormat(FloatFormat value) {
+			floatFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#currencyFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder currencyFormat(CurrencyFormat value) {
+			currencyFormat = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Marshalled#classFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder classFormat(ClassFormat value) {
+			classFormat = value;
 			return this;
 		}
 
@@ -184,6 +365,21 @@ public class MarshalledAnnotation {
 		private final String summary;
 		private final String typeName;
 		private final String typePropertyName;
+		private final DurationFormat durationFormat;
+		private final PeriodFormat periodFormat;
+		private final CalendarFormat calendarFormat;
+		private final DateFormat dateFormat;
+		private final TemporalFormat temporalFormat;
+		private final TimeZoneFormat timeZoneFormat;
+		private final LocaleFormat localeFormat;
+		private final BinaryFormat binaryFormat;
+		private final EnumFormat enumFormat;
+		private final UuidFormat uuidFormat;
+		private final BigNumberFormat bigNumberFormat;
+		private final BooleanFormat booleanFormat;
+		private final FloatFormat floatFormat;
+		private final CurrencyFormat currencyFormat;
+		private final ClassFormat classFormat;
 
 		Object(MarshalledAnnotation.Builder b) {
 			super(b);
@@ -196,6 +392,21 @@ public class MarshalledAnnotation {
 			summary = b.summary;
 			typeName = b.typeName;
 			typePropertyName = b.typePropertyName;
+			durationFormat = b.durationFormat;
+			periodFormat = b.periodFormat;
+			calendarFormat = b.calendarFormat;
+			dateFormat = b.dateFormat;
+			temporalFormat = b.temporalFormat;
+			timeZoneFormat = b.timeZoneFormat;
+			localeFormat = b.localeFormat;
+			binaryFormat = b.binaryFormat;
+			enumFormat = b.enumFormat;
+			uuidFormat = b.uuidFormat;
+			bigNumberFormat = b.bigNumberFormat;
+			booleanFormat = b.booleanFormat;
+			floatFormat = b.floatFormat;
+			currencyFormat = b.currencyFormat;
+			classFormat = b.classFormat;
 		}
 
 		@Override /* Overridden from Marshalled */
@@ -209,8 +420,83 @@ public class MarshalledAnnotation {
 		}
 
 		@Override /* Overridden from Marshalled */
+		public DurationFormat durationFormat() {
+			return durationFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
 		public String example() {
 			return example;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public PeriodFormat periodFormat() {
+			return periodFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public CalendarFormat calendarFormat() {
+			return calendarFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public DateFormat dateFormat() {
+			return dateFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public TemporalFormat temporalFormat() {
+			return temporalFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public TimeZoneFormat timeZoneFormat() {
+			return timeZoneFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public LocaleFormat localeFormat() {
+			return localeFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public BinaryFormat binaryFormat() {
+			return binaryFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public EnumFormat enumFormat() {
+			return enumFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public UuidFormat uuidFormat() {
+			return uuidFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public BigNumberFormat bigNumberFormat() {
+			return bigNumberFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public BooleanFormat booleanFormat() {
+			return booleanFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public FloatFormat floatFormat() {
+			return floatFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public CurrencyFormat currencyFormat() {
+			return currencyFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public ClassFormat classFormat() {
+			return classFormat;
 		}
 
 		@Override /* Overridden from Marshalled */

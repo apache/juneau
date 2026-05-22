@@ -1437,11 +1437,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {

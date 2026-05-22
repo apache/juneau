@@ -343,12 +343,7 @@ public class ParserPipe implements Closeable {
 	public void setPositionable(Positionable positionable) { this.positionable = positionable; }
 
 	private byte[] convertFromString(String in) {
-		return switch (binaryFormat) {
-			case BASE64 -> base64Decode(in);
-			case HEX -> fromHex(in);
-			case SPACED_HEX -> fromSpacedHex(in);
-			default -> new byte[0];
-		};
+		return binaryFormat == null ? new byte[0] : binaryFormat.parse(in);
 	}
 
 	Position getPosition() {

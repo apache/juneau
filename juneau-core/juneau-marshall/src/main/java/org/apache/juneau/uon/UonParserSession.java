@@ -37,7 +37,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -401,8 +400,16 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			o = parseCharacter(parseString(r, isUrlParamValue));
 		} else if (sType.isNumber()) {
 			o = parseNumber(r, (Class<? extends Number>)sType.inner());
-		} else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration()) {
-			o = Iso8601Utils.parse(parseString(r, isUrlParamValue), sType, getTimeZone());
+		} else if (sType.isDate()) {
+			o = parseDate(parseString(r, isUrlParamValue), sType);
+		} else if (sType.isCalendar()) {
+			o = parseCalendar(parseString(r, isUrlParamValue), sType);
+		} else if (sType.isTemporal()) {
+			o = parseTemporal(parseString(r, isUrlParamValue), sType);
+		} else if (sType.isDuration()) {
+			o = parseDuration(parseString(r, isUrlParamValue));
+		} else if (sType.isPeriod()) {
+			o = parsePeriod(parseString(r, isUrlParamValue));
 		} else if (sType.isMap()) {
 			var m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);

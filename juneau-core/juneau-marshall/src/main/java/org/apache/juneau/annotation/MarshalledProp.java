@@ -20,7 +20,10 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import org.apache.juneau.MarshallingSession;
+import java.math.*;
+import java.util.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.BeanProp;
 
 /**
@@ -81,6 +84,27 @@ public @interface MarshalledProp {
 	Class<?>[] dictionary() default {};
 
 	/**
+	 * Calendar wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	CalendarFormat calendarFormat() default CalendarFormat.NOT_SET;
+
+	/**
+	 * Date wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	DateFormat dateFormat() default DateFormat.NOT_SET;
+
+	/**
+	 * Duration wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	DurationFormat durationFormat() default DurationFormat.NOT_SET;
+
+	/**
 	 * Specifies a String format for converting the bean property value to a formatted string.
 	 *
 	 * <p>
@@ -115,4 +139,88 @@ public @interface MarshalledProp {
 	 * @return The annotation value.
 	 */
 	String format() default "";
+
+	/**
+	 * Locale wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	LocaleFormat localeFormat() default LocaleFormat.NOT_SET;
+
+	/**
+	 * Period wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	PeriodFormat periodFormat() default PeriodFormat.NOT_SET;
+
+	/**
+	 * Temporal wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	TemporalFormat temporalFormat() default TemporalFormat.NOT_SET;
+
+	/**
+	 * Time-zone wire format override.
+	 *
+	 * @return The annotation value.
+	 */
+	TimeZoneFormat timeZoneFormat() default TimeZoneFormat.NOT_SET;
+
+	/**
+	 * Binary wire format override for <code><jk>byte</jk>[]</code> property values.
+	 *
+	 * @return The annotation value.
+	 */
+	BinaryFormat binaryFormat() default BinaryFormat.NOT_SET;
+
+	/**
+	 * Enum wire format override for {@link Enum} property values.
+	 *
+	 * @return The annotation value.
+	 */
+	EnumFormat enumFormat() default EnumFormat.NOT_SET;
+
+	/**
+	 * UUID wire format override for {@link UUID} property values.
+	 *
+	 * @return The annotation value.
+	 */
+	UuidFormat uuidFormat() default UuidFormat.NOT_SET;
+
+	/**
+	 * Big-number wire format override for {@link BigInteger} / {@link BigDecimal} property values.
+	 *
+	 * @return The annotation value.
+	 */
+	BigNumberFormat bigNumberFormat() default BigNumberFormat.NOT_SET;
+
+	/**
+	 * Boolean wire format override for {@link Boolean} / <code><jk>boolean</jk></code> property values.
+	 *
+	 * @return The annotation value.
+	 */
+	BooleanFormat booleanFormat() default BooleanFormat.NOT_SET;
+
+	/**
+	 * Float / Double non-finite wire format override for {@link Float} / {@link Double} property values.
+	 *
+	 * @return The annotation value.
+	 */
+	FloatFormat floatFormat() default FloatFormat.NOT_SET;
+
+	/**
+	 * Currency wire format override for {@link Currency} property values.
+	 *
+	 * @return The annotation value.
+	 */
+	CurrencyFormat currencyFormat() default CurrencyFormat.NOT_SET;
+
+	/**
+	 * Class wire format override for {@link Class} property values.
+	 *
+	 * @return The annotation value.
+	 */
+	ClassFormat classFormat() default ClassFormat.NOT_SET;
 }

@@ -20,13 +20,14 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.time.*;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -266,6 +267,24 @@ public class TomlSerializerSession extends WriterSerializerSession {
 			w.stringValue(ctx.getNullValue());
 			return;
 		}
+		// Resolve to the runtime type and apply any registered swap.  Required for collection/array
+		// elements that arrive here without having gone through writeKeyValue's swap step (e.g.
+		// List<Locale> elements where the bean-property swap is on the List, not on Locale).
+		// Bug #8: without this, Locale list-elements wire as Locale.toString() ("en_US") regardless of
+		// the configured LocaleFormat, breaking BCP_47 round-trips on the parser side.
+		var rType = getClassMetaForObject(value, aType);
+		var swap = rType.getSwap(this);
+		if (nn(swap)) {
+			value = swap(swap, value);
+			rType = swap.getSwapClassMeta(this);
+			if (rType.isObject())
+				rType = getClassMetaForObject(value);
+			aType = rType;
+		}
+		if (value == null) {
+			w.stringValue(ctx.getNullValue());
+			return;
+		}
 		if (aType.isNumber()) {
 			if (value instanceof Float || value instanceof Double)
 				w.floatValue(((Number)value).doubleValue());
@@ -273,14 +292,20 @@ public class TomlSerializerSession extends WriterSerializerSession {
 				w.integerValue(((Number)value).longValue());
 		} else if (aType.isBoolean()) {
 			w.booleanValue((Boolean)value);
-		} else if (aType.isDateOrCalendarOrTemporal()) {
+		} else if (aType.isDate()) {
+			w.w(serializeDate((Date)value, aType));
+		} else if (aType.isCalendar()) {
+			w.w(serializeCalendar(value, aType));
+		} else if (aType.isTemporal()) {
 			Class<?> inner = aType.inner();
 			if (inner == Year.class || inner == YearMonth.class)
-				w.stringValue(Iso8601Utils.format(value, aType, getTimeZone()));
+				w.stringValue(serializeTemporal((TemporalAccessor)value, aType));
 			else
-				w.w(Iso8601Utils.format(value, aType, getTimeZone()));
+				w.w(serializeTemporal((TemporalAccessor)value, aType));
 		} else if (aType.isDuration()) {
-			w.stringValue(value.toString());
+			w.stringValue(serializeDuration((Duration)value));
+		} else if (aType.isPeriod()) {
+			w.stringValue(serializePeriod((Period)value));
 		} else if (aType.isEnum()) {
 			w.stringValue(((Enum<?>)value).name());
 		} else if (aType.isBean()) {
@@ -300,6 +325,34 @@ public class TomlSerializerSession extends WriterSerializerSession {
 			} else {
 				serializeBean(w, bm, "");
 			}
+		} else if (value.getClass().isArray()) {
+			// Bug #11/#12 a04 residual (generalized): when aType arrives erased — most commonly
+			// because the value is a typed List<T[]> bean-property element and the parent List's
+			// elementType resolved to Object (getClassMetaForObject(value, cMeta) ignores the
+			// cMeta hint when value != null and returns the raw runtime ArrayList ClassMeta) —
+			// the isCollection/isArray dispatch below doesn't fire and the value would otherwise
+			// stringify via Object.toString() ("[B@<hash>", "[I@<hash>", …).  Detect the array
+			// shape from the runtime class and emit a TOML inline-array, recursing on each
+			// (boxed) element through writeValue so the per-element wire form (integer / float
+			// / bool / string) follows the standard dispatch.  Subsumes the byte[]-only fix that
+			// originally landed for the BinaryFormat.NOT_SET round-trip and extends it to
+			// int[]/long[]/short[]/float[]/double[]/boolean[]/char[]/String[]/Object[] (and any
+			// nested array shape via the recursive writeValue step).  At configured (non-NOT_SET)
+			// binary formats the per-property BinarySwap has already fired in writeKeyValue's
+			// swap step, so byte[] values reach this branch only at NOT_SET — a no-op for the
+			// configured-format paths.  java.lang.reflect.Array.get auto-boxes primitive
+			// elements, so a single runtime-typed loop covers every primitive component type.
+			int len = Array.getLength(value);
+			w.arrayStart();
+			for (int i = 0; i < len; i++) {
+				if (i > 0) w.w(", ");
+				Object el = Array.get(value, i);
+				if (el == null)
+					w.stringValue(ctx.getNullValue());
+				else
+					writeValue(w, el, getClassMetaForObject(el), null);
+			}
+			w.arrayEnd();
 		} else if (aType.isCollection() || aType.isArray()) {
 			Collection<?> c = aType.isArray() ? toList(aType.inner(), value) : (Collection<?>)value;
 			ClassMeta<?> elType = aType.getElementType();

@@ -115,7 +115,7 @@ class ParserConfigAnnotationTest extends TestBase {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
-		check("HEX", x.getBinaryFormat());
+		check("NOT_SET", x.getBinaryFormat());
 		check("5", x.getDebugOutputLines());
 		check(null, x.getListener());
 		check("false", x.isTrimStrings());
@@ -145,7 +145,7 @@ class ParserConfigAnnotationTest extends TestBase {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var x = MsgPackParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
-		check("HEX", x.getBinaryFormat());
+		check("NOT_SET", x.getBinaryFormat());
 		check("5", x.getDebugOutputLines());
 		check(null, x.getListener());
 		check("false", x.isTrimStrings());

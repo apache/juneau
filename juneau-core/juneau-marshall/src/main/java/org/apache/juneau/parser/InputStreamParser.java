@@ -18,7 +18,6 @@ package org.apache.juneau.parser;
 
 import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -48,31 +47,19 @@ import org.apache.juneau.commons.reflect.*;
 
  * </ul>
  */
-@SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
-})
 public class InputStreamParser extends Parser {
 
-	// Argument name constants for assertArgNotNull
-	private static final String ARG_value = "value";
 	private static final String ARG_copyFrom = "copyFrom";
-
-	// Property name constants
-	private static final String PROP_binaryFormat = "binaryFormat";
 
 	/**
 	 * Builder class.
 	 */
 	public static class Builder extends Parser.Builder {
 
-		private BinaryFormat binaryFormat;
-
 		/**
 		 * Constructor, default settings.
 		 */
-		protected Builder() {
-			binaryFormat = env("InputStreamParser.binaryFormat", BinaryFormat.HEX);
-		}
+		protected Builder() {}
 
 		/**
 		 * Copy constructor.
@@ -82,7 +69,6 @@ public class InputStreamParser extends Parser {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-			binaryFormat = copyFrom.binaryFormat;
 		}
 
 		/**
@@ -93,7 +79,6 @@ public class InputStreamParser extends Parser {
 		 */
 		protected Builder(InputStreamParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-			binaryFormat = copyFrom.binaryFormat;
 		}
 
 		@Override /* Overridden from Builder */
@@ -276,37 +261,6 @@ public class InputStreamParser extends Parser {
 			return this;
 		}
 
-		/**
-		 * <i><l>InputStreamParser</l> configuration property:&emsp;</i>  Binary input format.
-		 *
-		 * <p>
-		 * When using the {@link InputStreamParser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
-		 * when converting the string into a byte array.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a parser that parses from BASE64.</jc>
-		 * 	InputStreamParser <jv>parser</jv> = MsgPackParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.binaryFormat(<jsf>BASE64</jsf>)
-		 * 		.build();
-		 *
-		 * 	String <jv>input</jv> = <js>"base64-encoded-string"</js>;
-		 *
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>input</jv> , MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default value is {@link BinaryFormat#HEX}.
-		 * 	<br>Cannot be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder binaryFormat(BinaryFormat value) {
-			binaryFormat = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
 		@Override /* Overridden from Context.Builder */
 		public InputStreamParser build() {
 			return build(InputStreamParser.class);
@@ -405,11 +359,6 @@ public class InputStreamParser extends Parser {
 		public Builder findFluentSetters(Class<?> on) {
 			super.findFluentSetters(on);
 			return this;
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), binaryFormat);
 		}
 
 		@Override /* Overridden from Builder */
@@ -616,11 +565,6 @@ public class InputStreamParser extends Parser {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {
@@ -638,8 +582,6 @@ public class InputStreamParser extends Parser {
 		return new Builder();
 	}
 
-	protected final BinaryFormat binaryFormat;
-
 	/**
 	 * Constructor.
 	 *
@@ -647,7 +589,6 @@ public class InputStreamParser extends Parser {
 	 */
 	protected InputStreamParser(Builder builder) {
 		super(builder);
-		binaryFormat = builder.binaryFormat;
 	}
 
 	@Override /* Overridden from Context */
@@ -664,15 +605,10 @@ public class InputStreamParser extends Parser {
 	/**
 	 * Binary input format.
 	 *
-	 * @see Builder#binaryFormat(BinaryFormat)
-	 * @return
-	 * 	The format to use when converting strings to byte arrays.
+	 * <p>
+	 * Resolves from the configured {@link MarshallingContext#getBinaryFormat()}.
+	 *
+	 * @return The binary wire format used by this parser.
 	 */
-	protected final BinaryFormat getBinaryFormat() { return binaryFormat; }
-
-	@Override /* Overridden from Parser */
-	protected FluentMap<String,Object> properties() {
-		return super.properties()
-			.a(PROP_binaryFormat, binaryFormat);
-	}
+	protected final BinaryFormat getBinaryFormat() { return getMarshallingContext().getBinaryFormat(); }
 }

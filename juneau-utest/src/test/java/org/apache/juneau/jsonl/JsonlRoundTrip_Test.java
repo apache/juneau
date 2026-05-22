@@ -25,7 +25,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.marshaller.*;
-import org.apache.juneau.swaps.*;
 import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.bean.*;
 
@@ -125,8 +124,8 @@ class JsonlRoundTrip_Test extends TestBase {
 
 	@Test
 	void a06_roundTripWithSwaps() throws Exception {
-		var s = (JsonlSerializer) JsonlSerializer.create().swaps(ByteArraySwap.Base64.class).build();
-		var p = (JsonlParser) JsonlParser.create().swaps(ByteArraySwap.Base64.class).build();
+		var s = (JsonlSerializer) JsonlSerializer.create().binaryFormat(BinaryFormat.BASE64).build();
+		var p = (JsonlParser) JsonlParser.create().binaryFormat(BinaryFormat.BASE64).build();
 		var m = new Jsonl(s, p);
 		var a = list(
 			JsonMap.of("name", "Alice", "data", new byte[]{1, 2, 3}),

@@ -199,7 +199,7 @@ class DefaultSwaps_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(Locale.class, new LocaleSwap())
+	//	POJO_SWAPS.put(Locale.class, ...) - inline anonymous StringSwap<Locale> in DefaultSwaps
 	//------------------------------------------------------------------------------------------------------------------
 	private static final Locale C = Locale.JAPAN;
 
@@ -589,7 +589,7 @@ class DefaultSwaps_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(TimeZone.class, new TimeZoneSwap())
+	//	POJO_SWAPS.put(TimeZone.class, ...) - inline anonymous StringSwap<TimeZone> in DefaultSwaps
 	//------------------------------------------------------------------------------------------------------------------
 	private static final TimeZone G = TimeZone.getTimeZone("Z");
 
@@ -649,7 +649,7 @@ class DefaultSwaps_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	//	POJO_SWAPS.put(ZoneId.class, new ZoneIdSwap())
+	//	POJO_SWAPS.put(ZoneId.class, ...) - inline anonymous StringSwap<ZoneId> in DefaultSwaps
 	//------------------------------------------------------------------------------------------------------------------
 	private static final ZoneId I = ZoneId.of("Z");
 
@@ -706,5 +706,27 @@ class DefaultSwaps_Test extends TestBase {
 
 	@Test void j03_Duration_overrideAnnotation() throws Exception {
 		test1("{f1:'PT1H30M',f2:'FOO'}", new JBean());
+	}
+
+	public static class J2Bean {
+		@MarshalledProp(durationFormat=org.apache.juneau.DurationFormat.MILLIS)
+		public java.time.Duration f1 = java.time.Duration.ofSeconds(5);
+		@MarshalledProp(durationFormat=org.apache.juneau.DurationFormat.SECONDS)
+		public java.time.Duration f2 = java.time.Duration.ofSeconds(5);
+	}
+
+	@Test void j04_Duration_propertyFormatOverride() throws Exception {
+		test1("{f1:5000,f2:5.0}", new J2Bean());
+	}
+
+	public static class J3Bean {
+		@MarshalledProp(periodFormat=org.apache.juneau.PeriodFormat.DAYS)
+		public java.time.Period f1 = java.time.Period.ofDays(9);
+		@MarshalledProp(periodFormat=org.apache.juneau.PeriodFormat.DAYS)
+		public java.time.Period f2 = java.time.Period.ofDays(2);
+	}
+
+	@Test void j05_Period_propertyFormatOverride() throws Exception {
+		test1("{f1:9,f2:2}", new J3Bean());
 	}
 }

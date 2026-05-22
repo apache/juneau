@@ -142,8 +142,8 @@ class RdfParser_Test extends TestBase {
 			assertNotNull(x2);
 		}
 
-		@Test void a20_useEnumNames() {
-			var x = RdfParser.create().useEnumNames().build();
+		@Test void a20_enumFormatName() {
+			var x = RdfParser.create().enumFormat(EnumFormat.NAME).build();
 			assertNotNull(x);
 		}
 

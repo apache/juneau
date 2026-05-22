@@ -39,7 +39,6 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanMeta;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
@@ -922,8 +921,16 @@ public class XmlParserSession extends ReaderParserSession {
 			o = parseIntoCollection(r, l, sType, pMeta);
 		} else if (sType.isNumber()) {
 			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.inner());
-		} else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration()) {
-			o = Iso8601Utils.parse(getElementText(r), sType, getTimeZone());
+		} else if (sType.isDate()) {
+			o = parseDate(getElementText(r), sType);
+		} else if (sType.isCalendar()) {
+			o = parseCalendar(getElementText(r), sType);
+		} else if (sType.isTemporal()) {
+			o = parseTemporal(getElementText(r), sType);
+		} else if (sType.isDuration()) {
+			o = parseDuration(getElementText(r));
+		} else if (sType.isPeriod()) {
+			o = parsePeriod(getElementText(r));
 		} else if (nn(builder) || sType.canCreateNewBean(outer)) {
 			if (getXmlClassMeta(sType).getFormat() == COLLAPSED) {
 				var fieldName = r.getLocalName();

@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.swaps.*;
 import org.junit.jupiter.api.*;
 
 class BeanMap_Test extends TestBase {
@@ -30,7 +29,7 @@ class BeanMap_Test extends TestBase {
 	// testFilteredEntry
 	//====================================================================================================
 	@Test void a01_filteredEntry() {
-		var session = MarshallingContext.create().swaps(ByteArraySwap.Base64.class).build().getSession();
+		var session = MarshallingContext.create().binaryFormat(BinaryFormat.BASE64).build().getSession();
 		var m = session.toBeanMap(new A());
 
 		assertEquals("AQID", m.get("f1"));

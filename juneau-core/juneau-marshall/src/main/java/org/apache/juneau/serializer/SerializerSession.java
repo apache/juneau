@@ -27,10 +27,16 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.net.URI;
 import java.net.URL;
-import java.text.*;
+import java.text.MessageFormat;
+import java.time.*;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
+
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.apache.juneau.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.collections.FluentMap;
@@ -937,12 +943,86 @@ public class SerializerSession extends MarshallingTraverseSession {
 		if (o.getClass().isEnum())
 			return getClassMetaForObject(o).toString(o);
 		var cm = getClassMetaForObject(o);
-		if (cm.isDateOrCalendarOrTemporal() || cm.isDuration())
-			return Iso8601Utils.format(o, cm, getTimeZone());
+		if (cm.isDate())
+			return serializeDate((Date)o, cm);
+		if (cm.isCalendar())
+			return serializeCalendar(o, cm);
+		if (cm.isTemporal())
+			return serializeTemporal((TemporalAccessor)o, cm);
+		if (cm.isDuration())
+			return serializeDuration((Duration)o);
+		if (cm.isPeriod())
+			return serializePeriod((Period)o);
 		var s = o.toString();
 		if (isTrimStrings())
 			s = s.trim();
 		return s;
+	}
+
+	/**
+	 * Formats a {@link Duration} value using this session's configured
+	 * {@linkplain #getDurationFormat() duration format}.
+	 *
+	 * @param d The value to format. <jk>null</jk> returns <jk>null</jk>.
+	 * @return The formatted value, or <jk>null</jk> if {@code d} is <jk>null</jk>.
+	 */
+	protected final String serializeDuration(Duration d) {
+		return Iso8601Utils.formatDuration(d, getDurationFormat());
+	}
+
+	/**
+	 * Formats a {@link Period} value using this session's configured
+	 * {@linkplain #getPeriodFormat() period format}.
+	 *
+	 * @param p The value to format. <jk>null</jk> returns <jk>null</jk>.
+	 * @return The formatted value, or <jk>null</jk> if {@code p} is <jk>null</jk>.
+	 */
+	protected final String serializePeriod(Period p) {
+		return Iso8601Utils.formatPeriod(p, getPeriodFormat());
+	}
+
+	/**
+	 * Formats a {@link Date} value using this session's configured
+	 * {@linkplain #getDateFormat() date format} and {@linkplain #getTimeZone() time zone}.
+	 *
+	 * @param d The value to format. <jk>null</jk> returns <jk>null</jk>.
+	 * @param cm The class metadata for the value (kept for symmetry with {@link Iso8601Utils#formatDate}).
+	 * @return The formatted value, or <jk>null</jk> if {@code d} is <jk>null</jk>.
+	 */
+	protected final String serializeDate(Date d, ClassMeta<?> cm) {
+		return Iso8601Utils.formatDate(d, cm, getDateFormat(), getTimeZone());
+	}
+
+	/**
+	 * Formats a {@link Calendar} or {@link XMLGregorianCalendar} value using this
+	 * session's configured {@linkplain #getCalendarFormat() calendar format} and
+	 * {@linkplain #getTimeZone() time zone}.
+	 *
+	 * <p>
+	 * {@link XMLGregorianCalendar} values always emit their
+	 * {@link XMLGregorianCalendar#toXMLFormat()} form regardless of the configured
+	 * format, mirroring the parse-side rule.
+	 *
+	 * @param c The value to format. Must be a {@link Calendar} or {@link XMLGregorianCalendar}.
+	 * 	<jk>null</jk> returns <jk>null</jk>.
+	 * @param cm The class metadata for the value (kept for symmetry with {@link Iso8601Utils#formatCalendar}).
+	 * @return The formatted value, or <jk>null</jk> if {@code c} is <jk>null</jk>.
+	 */
+	protected final String serializeCalendar(Object c, ClassMeta<?> cm) {
+		return Iso8601Utils.formatCalendar(c, cm, getCalendarFormat(), getTimeZone());
+	}
+
+	/**
+	 * Formats a {@link TemporalAccessor} value using this session's configured
+	 * {@linkplain #getTemporalFormat() temporal format} and {@linkplain #getTimeZone() time zone}.
+	 *
+	 * @param t The value to format. Must be a {@link Temporal} subtype.
+	 * 	<jk>null</jk> returns <jk>null</jk>.
+	 * @param cm The class metadata for the value (kept for symmetry with {@link Iso8601Utils#formatTemporal}).
+	 * @return The formatted value, or <jk>null</jk> if {@code t} is <jk>null</jk>.
+	 */
+	protected final String serializeTemporal(TemporalAccessor t, ClassMeta<?> cm) {
+		return Iso8601Utils.formatTemporal(t, cm, getTemporalFormat(), getTimeZone());
 	}
 
 	/**
@@ -1161,6 +1241,55 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	Defines the resolution level for URIs when serializing URIs.
 	 */
 	protected final UriResolution getUriResolution() { return ctx.getUriResolution(); }
+
+	/**
+	 * Returns the configured default duration wire format.
+	 *
+	 * @return The configured default duration wire format.
+	 */
+	protected final DurationFormat getDurationFormat() { return ctx.getMarshallingContext().getDurationFormat(); }
+
+	/**
+	 * Returns the configured default period wire format.
+	 *
+	 * @return The configured default period wire format.
+	 */
+	protected final PeriodFormat getPeriodFormat() { return ctx.getMarshallingContext().getPeriodFormat(); }
+
+	/**
+	 * Returns the configured default calendar wire format.
+	 *
+	 * @return The configured default calendar wire format.
+	 */
+	protected final CalendarFormat getCalendarFormat() { return ctx.getMarshallingContext().getCalendarFormat(); }
+
+	/**
+	 * Returns the configured default date wire format.
+	 *
+	 * @return The configured default date wire format.
+	 */
+	protected final DateFormat getDateFormat() { return ctx.getMarshallingContext().getDateFormat(); }
+
+	/**
+	 * Returns the configured default temporal wire format.
+	 *
+	 * @return The configured default temporal wire format.
+	 */
+	protected final TemporalFormat getTemporalFormat() { return ctx.getMarshallingContext().getTemporalFormat(); }
+
+	/**
+	 * Returns the configured default time-zone wire format.
+	 *
+	 * @return The configured default time-zone wire format.
+	 */
+	protected final TimeZoneFormat getTimeZoneFormat() { return ctx.getMarshallingContext().getTimeZoneFormat(); }
+
+	/**
+	 * Returns the configured default locale wire format.
+	 *
+	 * @return The configured default locale wire format.
+	 */
+	protected final LocaleFormat getLocaleFormat() { return ctx.getMarshallingContext().getLocaleFormat(); }
 
 	/**
 	 * Returns the URI resolver.

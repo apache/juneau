@@ -58,13 +58,13 @@ public class ProtoWriter extends SerializerWriter {
 	}
 
 	/**
-	 * Writes a field name (bare identifier or quoted key).
+	 * Writes a field name (bare identifier, bare integer field-tag, or quoted key).
 	 *
 	 * @param name The field name.
 	 * @return This object.
 	 */
 	public ProtoWriter fieldName(String name) {
-		if (isBareIdentifier(name))
+		if (isBareIdentifier(name) || isBareIntegerTag(name))
 			w(name);
 		else
 			w('"').w(escapeString(name)).w('"');
@@ -253,6 +253,31 @@ public class ProtoWriter extends SerializerWriter {
 		for (int i = 1; i < name.length(); i++) {
 			c = name.charAt(i);
 			if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_'))
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Returns whether the name is a non-negative integer literal that can be emitted as a bare
+	 * proto field tag (e.g. {@code 0}, {@code 42}).  Used by {@link #fieldName} to disambiguate
+	 * numeric-string map keys from arbitrary string keys so the parser doesn't concatenate the
+	 * key's quoted form with the previous value's string per the proto adjacent-string rule.
+	 *
+	 * <p>
+	 * Negative integers are deliberately excluded — proto's field-tag grammar is unsigned, so a
+	 * {@code Map<Integer,V>} key like {@code -1} stays quoted as {@code "-1"} to keep the wire form
+	 * unambiguous.
+	 *
+	 * @param name The name to check.
+	 * @return <jk>true</jk> if it can be written as a bare integer field tag.
+	 */
+	public boolean isBareIntegerTag(String name) {
+		if (name == null || name.isEmpty())
+			return false;
+		for (int i = 0; i < name.length(); i++) {
+			char c = name.charAt(i);
+			if (c < '0' || c > '9')
 				return false;
 		}
 		return true;

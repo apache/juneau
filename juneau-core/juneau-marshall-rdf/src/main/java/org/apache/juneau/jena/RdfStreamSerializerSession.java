@@ -36,6 +36,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.xml.*;
 
+import org.apache.jena.datatypes.xsd.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
 
@@ -208,6 +209,15 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 			throw new IllegalStateException("Unknown RDF language: " + langName);
 	}
 
+	@Override /* OutputStreamSerializerSession */
+	public boolean hasNativeBytes() {
+		// The RDF graph layer has no native byte-array literal type — byte[] is surfaced either as an
+		// xsd:base64Binary typed literal or as a plain string literal
+		// carrying the configured BinaryFormat's text wire form (at any other BinaryFormat, after the
+		// BinarySwap fires).
+		return false;
+	}
+
 	private static Lang toLang(String langName) {
 		var l = org.apache.jena.riot.RDFLanguages.nameToLang(langName);
 		if (l != null)
@@ -322,6 +332,9 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 				n = m.createLiteral(o.toString());
 			else
 				n = m.createTypedLiteral(o);
+		} else if (sType.isByteArray()) {
+			var b64 = Base64.getEncoder().encodeToString((byte[]) o);
+			n = m.createTypedLiteral(b64, XSDDatatype.XSDbase64Binary);
 		} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
 			if (o instanceof BeanMap o2) {
 				Object uri = null;

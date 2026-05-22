@@ -2689,18 +2689,18 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isNumeric("-#123"));
 		assertEquals(-0x123, parseNumber("-#123", null));
 
-		// Decimal
+		// Decimal — Bug #5 fix: auto-detect returns Double, not Float.
 		assertTrue(isNumeric("0.123"));
-		assertEquals(0.123f, parseNumber("0.123", null));
+		assertEquals(0.123d, parseNumber("0.123", null));
 
 		assertTrue(isNumeric("-0.123"));
-		assertEquals(-0.123f, parseNumber("-0.123", null));
+		assertEquals(-0.123d, parseNumber("-0.123", null));
 
 		assertTrue(isNumeric(".123"));
-		assertEquals(.123f, parseNumber(".123", null));
+		assertEquals(.123d, parseNumber(".123", null));
 
 		assertTrue(isNumeric("-.123"));
-		assertEquals(-.123f, parseNumber("-.123", null));
+		assertEquals(-.123d, parseNumber("-.123", null));
 
 		assertTrue(isNumeric("0.84370821629078d"));
 		assertEquals(0.84370821629078d, parseNumber("0.84370821629078d", null));
@@ -2711,45 +2711,46 @@ class StringUtils_Test extends TestBase {
 		assertTrue(isNumeric("0.16666666666666666d"));
 		assertEquals(0.16666666666666666d, parseNumber("0.16666666666666666d", null));
 
+		// Bug #5 fix: auto-detect always returns Double for max precision.
 		assertTrue(isNumeric("0.16666666f"));
-		assertEquals(0.16666666f, parseNumber("0.16666666f", null));
+		assertEquals(Double.valueOf("0.16666666f"), parseNumber("0.16666666f", null));
 
 		assertTrue(isNumeric("0.16666666d"));
-		assertEquals(0.16666666f, parseNumber("0.16666666d", null));
+		assertEquals(Double.valueOf("0.16666666d"), parseNumber("0.16666666d", null));
 
 		assertTrue(isNumeric("3.140000000000000124344978758017532527446746826171875d"));
-		assertEquals(3.14f, parseNumber("3.140000000000000124344978758017532527446746826171875d", null));
+		assertEquals(Double.valueOf("3.140000000000000124344978758017532527446746826171875d"), parseNumber("3.140000000000000124344978758017532527446746826171875d", null));
 
 		assertTrue(isNumeric("12345.678f"));
-		assertEquals(1.2345678e4f, parseNumber("12345.678f", null));
+		assertEquals(Double.valueOf("12345.678f"), parseNumber("12345.678f", null));
 
 		// Scientific notation
 		assertTrue(isNumeric("1e1"));
-		assertEquals(1e1f, parseNumber("1e1", null));
+		assertEquals(1e1d, parseNumber("1e1", null));
 
 		assertTrue(isNumeric("1e+1"));
-		assertEquals(1e+1f, parseNumber("1e+1", null));
+		assertEquals(1e+1d, parseNumber("1e+1", null));
 
 		assertTrue(isNumeric("1e-1"));
-		assertEquals(1e-1f, parseNumber("1e-1", null));
+		assertEquals(1e-1d, parseNumber("1e-1", null));
 
 		assertTrue(isNumeric("1.1e1"));
-		assertEquals(1.1e1f, parseNumber("1.1e1", null));
+		assertEquals(1.1e1d, parseNumber("1.1e1", null));
 
 		assertTrue(isNumeric("1.1e+1"));
-		assertEquals(1.1e+1f, parseNumber("1.1e+1", null));
+		assertEquals(1.1e+1d, parseNumber("1.1e+1", null));
 
 		assertTrue(isNumeric("1.1e-1"));
-		assertEquals(1.1e-1f, parseNumber("1.1e-1", null));
+		assertEquals(1.1e-1d, parseNumber("1.1e-1", null));
 
 		assertTrue(isNumeric(".1e1"));
-		assertEquals(.1e1f, parseNumber(".1e1", null));
+		assertEquals(.1e1d, parseNumber(".1e1", null));
 
 		assertTrue(isNumeric(".1e+1"));
-		assertEquals(.1e+1f, parseNumber(".1e+1", null));
+		assertEquals(.1e+1d, parseNumber(".1e+1", null));
 
 		assertTrue(isNumeric(".1e-1"));
-		assertEquals(.1e-1f, parseNumber(".1e-1", null));
+		assertEquals(.1e-1d, parseNumber(".1e-1", null));
 
 		// Hexadecimal + scientific
 		assertTrue(isNumeric("0x123e1"));
@@ -2813,16 +2814,18 @@ class StringUtils_Test extends TestBase {
 		assertEquals(9223372036854775807L, parseNumber(s, null).longValue());
 		assertEquals(1.2345678901234568E20, parseNumber(s, null));
 
-		// Autodetected floating point numbers
+		// Autodetected floating point numbers.
+		// Bug #5 fix: auto-detect always returns Double now (highest-precision Java tier).
+		// Float is only returned when the caller explicitly requests Float.class / Float.TYPE.
 		s = String.valueOf(Float.MAX_VALUE / 2);
 		assertTrue(isNumeric(s));
-		assertTrue(parseNumber(s, null) instanceof Float);
-		assertEquals(1.7014117E38f, parseNumber(s, null));
+		assertTrue(parseNumber(s, null) instanceof Double);
+		assertEquals(Double.valueOf(s), parseNumber(s, null));
 
 		s = String.valueOf((-Float.MAX_VALUE) / 2);
 		assertTrue(isNumeric(s));
-		assertTrue(parseNumber(s, null) instanceof Float);
-		assertEquals(-1.7014117E38f, parseNumber(s, null));
+		assertTrue(parseNumber(s, null) instanceof Double);
+		assertEquals(Double.valueOf(s), parseNumber(s, null));
 
 		s = String.valueOf((double)Float.MAX_VALUE * 2);
 		assertTrue(isNumeric(s));
@@ -2913,7 +2916,8 @@ class StringUtils_Test extends TestBase {
 
 		assertEquals(1000000, parseNumber("1_000_000", null));
 		assertEquals(1000000000, parseNumber("1_000_000_000", null));
-		assertEquals(1000.5f, parseNumber("1_000.5", null));
+		// Bug #5 fix: auto-detect returns Double, not Float.
+		assertEquals(1000.5d, parseNumber("1_000.5", null));
 
 		// Error cases
 		assertThrows(NumberFormatException.class, () -> parseNumber("x", Number.class));
@@ -4584,9 +4588,9 @@ class StringUtils_Test extends TestBase {
 		assertEquals(0x123, parseNumber("0x123", null));
 		assertEquals(-0x123, parseNumber("-0x123", null));
 
-		// Decimal
-		assertEquals(0.123f, parseNumber("0.123", null));
-		assertEquals(-0.123f, parseNumber("-0.123", null));
+		// Decimal — Bug #5 fix: auto-detect returns Double, not Float.
+		assertEquals(0.123d, parseNumber("0.123", null));
+		assertEquals(-0.123d, parseNumber("-0.123", null));
 
 		// With underscores
 		assertEquals(1000000, parseNumber("1_000_000", null));

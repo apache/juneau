@@ -43,7 +43,6 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
@@ -223,7 +222,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 	}
 
 	protected static RoundTrip_Tester.Builder tester(int index, String label) {
-		return RoundTrip_Tester.create(index, label).annotatedClasses(BcConfig.class, E1cConfig.class, F1cConfig.class, F2acConfig.class).pojoSwaps(D2.class, ByteArraySwap.Base64.class);
+		return RoundTrip_Tester.create(index, label).annotatedClasses(BcConfig.class, E1cConfig.class, F1cConfig.class, F2acConfig.class).pojoSwaps(D2.class);
 	}
 
 	//====================================================================================================
@@ -640,7 +639,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 	public static class F1 {
 
-		@Swap(TemporalCalendarSwap.IsoInstant.class)
+		@MarshalledProp(calendarFormat = CalendarFormat.ISO_INSTANT)
 		private Calendar c;
 		public Calendar getC() { return c; }
 		public void setC(Calendar v) { c = v; }
@@ -669,9 +668,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 		t.roundTrip(x, F1.class);
 	}
 
-	@SwapApply(on="Dummy1.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
-	@SwapApply(on="F1c.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
-	@SwapApply(on="Dummy2.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
+	@MarshalledConfig(calendarFormat = CalendarFormat.ISO_INSTANT)
 	private static class F1cConfig {}
 
 	public static class F1c {
@@ -705,7 +702,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 	}
 
 	public static class F2a {
-		@Swap(TemporalCalendarSwap.IsoInstant.class)
+		@MarshalledProp(calendarFormat = CalendarFormat.ISO_INSTANT)
 		protected Calendar c;
 	}
 
@@ -738,9 +735,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 		t.roundTrip(x, F2.class);
 	}
 
-	@SwapApply(on="Dummy1.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
-	@SwapApply(on="F2ac.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
-	@SwapApply(on="Dummy2.c", value=@Swap(TemporalCalendarSwap.IsoInstant.class))
+	@MarshalledConfig(calendarFormat = CalendarFormat.ISO_INSTANT)
 	private static class F2acConfig {}
 
 	public static class F2ac {

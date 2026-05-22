@@ -66,7 +66,7 @@ import org.apache.juneau.*;
  * 	<jc>// Construct a new serializer group</jc>
  * 	SerializerSet <jv>serializers</jv> = SerializerSet.<jsm>create</jsm>();
  * 		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>) <jc>// Add some serializers to it</jc>
- * 		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>))
+ * 		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.calendarFormat(<jsf>ISO_LOCAL_DATE_TIME</jsf>))
  * 		.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.ws())
  * 		.build();
  *

@@ -478,7 +478,7 @@ class ContextSession_Test extends TestBase {
 
 		@Test void e36_csv_byteArrayFormat_shortForm() throws Exception {
 			var session = CsvSerializer.DEFAULT.createSession()
-				.property("byteArrayFormat", ByteArrayFormat.SEMICOLON_DELIMITED)
+				.property("byteArrayFormat", CsvByteArrayCellFormat.SEMICOLON_DELIMITED)
 				.build();
 			var result = session.serialize(new byte[]{1, 2, 3});
 			assertTrue(result.contains("1;2;3"));

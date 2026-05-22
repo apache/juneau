@@ -40,7 +40,13 @@ import org.apache.juneau.serializer.*;
 public class HoconWriter extends SerializerWriter {
 
 	private static final AsciiSet QUOTE_KEY_CHARS = AsciiSet.of(" \t\n\r{},:[]=\"'#/");
-	private static final AsciiSet QUOTE_VALUE_CHARS = AsciiSet.of(" \t\n\r{},:\"'#");
+	// HOCON parser-meaningful chars that must be quoted in a value to avoid mis-tokenization:
+	//   `=` — alternate key-value assignment operator (also BASE64 padding).
+	//   `+` — first half of PLUS_EQUALS, and forbidden in unquoted strings (also Calendar
+	//         BASIC_ISO_DATE timezone offset, e.g. `20240615+0900`).
+	//   `$` — first half of `${...}` substitution, and forbidden in unquoted strings (also
+	//         ClassFormat.BINARY_NAME inner-class delimiter, e.g. `java.util.Map$Entry`).
+	private static final AsciiSet QUOTE_VALUE_CHARS = AsciiSet.of(" \t\n\r{},:=+$\"'#");
 	private static final AsciiSet ENCODED_CHARS = AsciiSet.of("\n\t\b\f\r\"\\");
 
 	/** Use newlines instead of commas between members. */

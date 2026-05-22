@@ -33,6 +33,11 @@ import java.beans.*;
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.math.*;
+import java.net.*;
+import java.nio.charset.*;
+import java.time.*;
+import java.time.temporal.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -200,7 +205,21 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	private static final String PROP_notBeanPackagePrefixes = "notBeanPackagePrefixes";
 	private static final String PROP_unsortedProperties = "unsortedProperties";
 	private static final String PROP_swaps = "swaps";
-	private static final String PROP_useEnumNames = "useEnumNames";
+	private static final String PROP_durationFormat = "durationFormat";
+	private static final String PROP_periodFormat = "periodFormat";
+	private static final String PROP_calendarFormat = "calendarFormat";
+	private static final String PROP_dateFormat = "dateFormat";
+	private static final String PROP_temporalFormat = "temporalFormat";
+	private static final String PROP_timeZoneFormat = "timeZoneFormat";
+	private static final String PROP_localeFormat = "localeFormat";
+	private static final String PROP_binaryFormat = "binaryFormat";
+	private static final String PROP_enumFormat = "enumFormat";
+	private static final String PROP_uuidFormat = "uuidFormat";
+	private static final String PROP_bigNumberFormat = "bigNumberFormat";
+	private static final String PROP_booleanFormat = "booleanFormat";
+	private static final String PROP_floatFormat = "floatFormat";
+	private static final String PROP_currencyFormat = "currencyFormat";
+	private static final String PROP_classFormat = "classFormat";
 	private static final String PROP_useInterfaceProxies = "useInterfaceProxies";
 	private static final String PROP_useJavaBeanIntrospector = "useJavaBeanIntrospector";
 	private static final String PROP_validateSchema = "validateSchema";
@@ -256,13 +275,27 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		private boolean ignoreUnknownBeanProperties;
 		private boolean ignoreUnknownEnumValues;
 		private boolean unsortedProperties;
-		private boolean useEnumNames;
 		private boolean useJavaBeanIntrospector;
 		private boolean validateSchema;
 		private String typePropertyName;
 		private MediaType mediaType;
 		private Locale locale;
 		private TimeZone timeZone;
+		private DurationFormat durationFormat;
+		private PeriodFormat periodFormat;
+		private CalendarFormat calendarFormat;
+		private DateFormat dateFormat;
+		private TemporalFormat temporalFormat;
+		private TimeZoneFormat timeZoneFormat;
+		private LocaleFormat localeFormat;
+		private BinaryFormat binaryFormat;
+		private EnumFormat enumFormat;
+		private UuidFormat uuidFormat;
+		private BigNumberFormat bigNumberFormat;
+		private BooleanFormat booleanFormat;
+		private FloatFormat floatFormat;
+		private CurrencyFormat currencyFormat;
+		private ClassFormat classFormat;
 		private Class<? extends PropertyNamer> propertyNamer;
 		private List<ClassInfo> beanDictionary;
 		private List<Object> swaps;
@@ -303,8 +336,22 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			unsortedProperties = env("MarshallingContext.unsortedProperties", false);
 			swaps = list();
 			timeZone = env("MarshallingContext.timeZone").map(TimeZone::getTimeZone).orElse(null);
+			durationFormat = env("MarshallingContext.durationFormat", DurationFormat.ISO_8601_WITH_DAYS);
+			periodFormat = env("MarshallingContext.periodFormat", PeriodFormat.ISO_8601);
+			calendarFormat = env("MarshallingContext.calendarFormat", CalendarFormat.ISO_OFFSET_DATE_TIME);
+			dateFormat = env("MarshallingContext.dateFormat", DateFormat.ISO_LOCAL_DATE_TIME);
+			temporalFormat = env("MarshallingContext.temporalFormat", TemporalFormat.DEFAULT);
+			timeZoneFormat = env("MarshallingContext.timeZoneFormat", TimeZoneFormat.ID);
+			localeFormat = env("MarshallingContext.localeFormat", LocaleFormat.BCP_47);
+			binaryFormat = env("MarshallingContext.binaryFormat", BinaryFormat.NOT_SET);
+			enumFormat = env("MarshallingContext.enumFormat", EnumFormat.TO_STRING);
+			uuidFormat = env("MarshallingContext.uuidFormat", UuidFormat.STANDARD);
+			bigNumberFormat = env("MarshallingContext.bigNumberFormat", BigNumberFormat.NUMBER);
+			booleanFormat = env("MarshallingContext.booleanFormat", BooleanFormat.TRUE_FALSE);
+			floatFormat = env("MarshallingContext.floatFormat", FloatFormat.NaN_AS_NULL);
+			currencyFormat = env("MarshallingContext.currencyFormat", CurrencyFormat.ISO_CODE);
+			classFormat = env("MarshallingContext.classFormat", ClassFormat.FQCN);
 			typePropertyName = env("MarshallingContext.typePropertyName", "_type");
-			useEnumNames = env("MarshallingContext.useEnumNames", false);
 			useJavaBeanIntrospector = env("MarshallingContext.useJavaBeanIntrospector", false);
 			validateSchema = env("MarshallingContext.validateSchema", false);
 			beanStore = null;
@@ -344,8 +391,22 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			unsortedProperties = copyFrom.unsortedProperties;
 			swaps = copyOf(copyFrom.swaps);
 			timeZone = copyFrom.timeZone;
+			durationFormat = copyFrom.durationFormat;
+			periodFormat = copyFrom.periodFormat;
+			calendarFormat = copyFrom.calendarFormat;
+			dateFormat = copyFrom.dateFormat;
+			temporalFormat = copyFrom.temporalFormat;
+			timeZoneFormat = copyFrom.timeZoneFormat;
+			localeFormat = copyFrom.localeFormat;
+			binaryFormat = copyFrom.binaryFormat;
+			enumFormat = copyFrom.enumFormat;
+			uuidFormat = copyFrom.uuidFormat;
+			bigNumberFormat = copyFrom.bigNumberFormat;
+			booleanFormat = copyFrom.booleanFormat;
+			floatFormat = copyFrom.floatFormat;
+			currencyFormat = copyFrom.currencyFormat;
+			classFormat = copyFrom.classFormat;
 			typePropertyName = copyFrom.typePropertyName;
-			useEnumNames = copyFrom.useEnumNames;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
 			validateSchema = copyFrom.validateSchema;
 			beanStore = copyFrom.beanStore;
@@ -385,8 +446,22 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			unsortedProperties = copyFrom.unsortedProperties;
 			swaps = copyOf(copyFrom.swaps);
 			timeZone = copyFrom.timeZone;
+			durationFormat = copyFrom.durationFormat;
+			periodFormat = copyFrom.periodFormat;
+			calendarFormat = copyFrom.calendarFormat;
+			dateFormat = copyFrom.dateFormat;
+			temporalFormat = copyFrom.temporalFormat;
+			timeZoneFormat = copyFrom.timeZoneFormat;
+			localeFormat = copyFrom.localeFormat;
+			binaryFormat = copyFrom.binaryFormat;
+			enumFormat = copyFrom.enumFormat;
+			uuidFormat = copyFrom.uuidFormat;
+			bigNumberFormat = copyFrom.bigNumberFormat;
+			booleanFormat = copyFrom.booleanFormat;
+			floatFormat = copyFrom.floatFormat;
+			currencyFormat = copyFrom.currencyFormat;
+			classFormat = copyFrom.classFormat;
 			typePropertyName = copyFrom.typePropertyName;
-			useEnumNames = copyFrom.useEnumNames;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
 			validateSchema = copyFrom.validateSchema;
 			beanStore = copyFrom.beanStore;
@@ -2296,13 +2371,27 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 					ignoreUnknownBeanProperties,
 					ignoreUnknownEnumValues,
 					unsortedProperties,
-					useEnumNames,
 					useJavaBeanIntrospector,
 					validateSchema
 				),
 				typePropertyName,
 				mediaType,
 				timeZone,
+				durationFormat,
+				periodFormat,
+				calendarFormat,
+				dateFormat,
+				temporalFormat,
+				timeZoneFormat,
+				localeFormat,
+				binaryFormat,
+				enumFormat,
+				uuidFormat,
+				bigNumberFormat,
+				booleanFormat,
+				floatFormat,
+				currencyFormat,
+				classFormat,
 				locale,
 				propertyNamer,
 				System.identityHashCode(beanStore)
@@ -3393,6 +3482,207 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			return this;
 		}
 
+		/**
+		 * Duration wire format.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder durationFormat(DurationFormat value) {
+			durationFormat = value == null ? DurationFormat.ISO_8601_WITH_DAYS : value;
+			return this;
+		}
+
+		/**
+		 * Period wire format.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder periodFormat(PeriodFormat value) {
+			periodFormat = value == null ? PeriodFormat.ISO_8601 : value;
+			return this;
+		}
+
+		/**
+		 * Calendar wire format.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder calendarFormat(CalendarFormat value) {
+			calendarFormat = value == null ? CalendarFormat.ISO_OFFSET_DATE_TIME : value;
+			return this;
+		}
+
+		/**
+		 * Date wire format.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder dateFormat(DateFormat value) {
+			dateFormat = value == null ? DateFormat.ISO_LOCAL_DATE_TIME : value;
+			return this;
+		}
+
+		/**
+		 * Temporal wire format.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder temporalFormat(TemporalFormat value) {
+			temporalFormat = value == null ? TemporalFormat.DEFAULT : value;
+			return this;
+		}
+
+		/**
+		 * Time-zone wire format.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder timeZoneFormat(TimeZoneFormat value) {
+			timeZoneFormat = value == null ? TimeZoneFormat.ID : value;
+			return this;
+		}
+
+		/**
+		 * Locale wire format.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder localeFormat(LocaleFormat value) {
+			localeFormat = value == null ? LocaleFormat.BCP_47 : value;
+			return this;
+		}
+
+		/**
+		 * Binary wire format.
+		 *
+		 * <p>
+		 * Controls how <code><jk>byte</jk>[]</code> values are written to and read from text-based
+		 * serializer / parser wire formats, and the encoding used by stream-based serializers when
+		 * converting their byte output to a string.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder binaryFormat(BinaryFormat value) {
+			binaryFormat = value == null ? BinaryFormat.NOT_SET : value;
+			return this;
+		}
+
+		/**
+		 * Enum wire format.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder enumFormat(EnumFormat value) {
+			enumFormat = value == null ? EnumFormat.TO_STRING : value;
+			return this;
+		}
+
+		/**
+		 * UUID wire format.
+		 *
+		 * <p>
+		 * Controls how {@link UUID} values are written to text-based wire formats. Binary
+		 * serializers (BSON / CBOR / MsgPack / Proto) emit native 16-byte binary regardless of this setting.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder uuidFormat(UuidFormat value) {
+			uuidFormat = value == null ? UuidFormat.STANDARD : value;
+			return this;
+		}
+
+		/**
+		 * Big-number wire format.
+		 *
+		 * <p>
+		 * Controls how {@link BigInteger} and {@link BigDecimal} values are written to
+		 * text-based wire formats. Useful for safe JS interop where values outside
+		 * {@code ±(2^53 − 1)} would silently lose precision.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder bigNumberFormat(BigNumberFormat value) {
+			bigNumberFormat = value == null ? BigNumberFormat.NUMBER : value;
+			return this;
+		}
+
+		/**
+		 * Boolean wire format.
+		 *
+		 * <p>
+		 * Controls how {@link Boolean} / <code><jk>boolean</jk></code> values are written to text-based
+		 * wire formats. Binary serializers (BSON / CBOR / MsgPack / Proto / Parquet) emit a native
+		 * boolean wire type regardless of this setting.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder booleanFormat(BooleanFormat value) {
+			booleanFormat = value == null ? BooleanFormat.TRUE_FALSE : value;
+			return this;
+		}
+
+		/**
+		 * Float / Double non-finite wire format.
+		 *
+		 * <p>
+		 * Controls how non-finite {@link Float} / {@link Double} values ({@code NaN} / {@code ±Infinity})
+		 * are written to text-based wire formats. The default {@link FloatFormat#NaN_AS_NULL} is
+		 * JSON-spec-compliant. Binary serializers emit native IEEE-754 floats regardless of this setting.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder floatFormat(FloatFormat value) {
+			floatFormat = value == null ? FloatFormat.NaN_AS_NULL : value;
+			return this;
+		}
+
+		/**
+		 * Currency wire format.
+		 *
+		 * <p>
+		 * Controls how {@link Currency} values are written to text-based wire formats. The
+		 * default {@link CurrencyFormat#ISO_CODE} is the only setting safe for machine-to-machine wires;
+		 * {@link CurrencyFormat#SYMBOL} and {@link CurrencyFormat#DISPLAY_NAME} are locale-sensitive and
+		 * best-effort on the parse side.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder currencyFormat(CurrencyFormat value) {
+			currencyFormat = value == null ? CurrencyFormat.ISO_CODE : value;
+			return this;
+		}
+
+		/**
+		 * Class wire format.
+		 *
+		 * <p>
+		 * Controls how {@link Class} values are written to text-based wire formats. The default
+		 * {@link ClassFormat#FQCN} matches the historical {@code ClassSwap} behavior.
+		 * {@link ClassFormat#SIMPLE_NAME} is serialize-only — the parser path throws
+		 * {@link UnsupportedOperationException}.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder classFormat(ClassFormat value) {
+			classFormat = value == null ? ClassFormat.FQCN : value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends Context> value) {
 			assertArgNotNull(ARG_value, value);
@@ -3555,57 +3845,6 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		}
 
 		/**
-		 * Use enum names.
-		 *
-		 * <p>
-		 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer with debug enabled.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.useEnumNames()
-		 * 		.build();
-		 *
-		 * 	<jc>// Enum with overridden toString().</jc>
-		 * 	<jc>// Will be serialized as ONE/TWO/THREE even though there's a toString() method.</jc>
-		 * 	<jk>public enum</jk> Option {
-		 * 		<jsf>ONE</jsf>(1),
-		 * 		<jsf>TWO</jsf>(2),
-		 * 		<jsf>THREE</jsf>(3);
-		 *
-		 * 		<jk>private int</jk> <jf>value</jf>;
-		 *
-		 * 		Option(<jk>int</jk> <jv>value</jv>) {
-		 * 			<jk>this</jk>.<jf>value</jf> = <jv>value</jv>;
-		 * 		}
-		 *
-		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String toString() {
-		 * 			<jk>return</jk> String.<jsm>valueOf</jsm>(<jf>value</jf>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder useEnumNames() {
-			return useEnumNames(true);
-		}
-
-		/**
-		 * Same as {@link #useEnumNames()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder useEnumNames(boolean value) {
-			useEnumNames = value;
-			return this;
-		}
-
-		/**
 		 * Use Java Introspector.
 		 *
 		 * <p>
@@ -3722,7 +3961,6 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	private final boolean ignoreUnknownEnumValues;
 	private final boolean ignoreUnknownNullBeanProperties;
 	private final boolean unsortedProperties;
-	private final boolean useEnumNames;
 	private final boolean useInterfaceProxies;
 	private final boolean useJavaBeanIntrospector;
 	private final boolean validateSchema;
@@ -3743,6 +3981,21 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	private final Set<String> notBeanPackageNames;
 	private final List<String> notBeanPackagePrefixes;
 	private final TimeZone timeZone;
+	private final DurationFormat durationFormat;
+	private final PeriodFormat periodFormat;
+	private final CalendarFormat calendarFormat;
+	private final DateFormat dateFormat;
+	private final TemporalFormat temporalFormat;
+	private final TimeZoneFormat timeZoneFormat;
+	private final LocaleFormat localeFormat;
+	private final BinaryFormat binaryFormat;
+	private final EnumFormat enumFormat;
+	private final UuidFormat uuidFormat;
+	private final BigNumberFormat bigNumberFormat;
+	private final BooleanFormat booleanFormat;
+	private final FloatFormat floatFormat;
+	private final CurrencyFormat currencyFormat;
+	private final ClassFormat classFormat;
 	private final Visibility beanClassVisibility;
 	private final Visibility beanConstructorVisibility;
 	private final Visibility beanFieldVisibility;
@@ -3783,8 +4036,22 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		unsortedProperties = builder.unsortedProperties;
 		swaps = u(copyOf(builder.swaps));
 		timeZone = builder.timeZone;
+		durationFormat = builder.durationFormat;
+		periodFormat = builder.periodFormat;
+		calendarFormat = builder.calendarFormat;
+		dateFormat = builder.dateFormat;
+		temporalFormat = builder.temporalFormat;
+		timeZoneFormat = builder.timeZoneFormat;
+		localeFormat = builder.localeFormat;
+		binaryFormat = builder.binaryFormat;
+		enumFormat = builder.enumFormat;
+		uuidFormat = builder.uuidFormat;
+		bigNumberFormat = builder.bigNumberFormat;
+		booleanFormat = builder.booleanFormat;
+		floatFormat = builder.floatFormat;
+		currencyFormat = builder.currencyFormat;
+		classFormat = builder.classFormat;
 		typePropertyName = opt(builder.typePropertyName).orElse("_type");
-		useEnumNames = builder.useEnumNames;
 		useInterfaceProxies = ! builder.disableInterfaceProxies;
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
 		validateSchema = builder.validateSchema;
@@ -4094,7 +4361,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		if (outType == String.class) {
 			// byte[] → String must come before isCollectionOrArrayOrOptional since byte[] is an array type
 			if (byte[].class == inType)
-				return (in, memberOf, session, args) -> new String((byte[]) in, java.nio.charset.StandardCharsets.UTF_8);
+				return (in, memberOf, session, args) -> new String((byte[]) in, StandardCharsets.UTF_8);
 			if (fromMeta.isMapOrBean() || fromMeta.isCollectionOrArrayOrOptional()) {
 				return (in, memberOf, session, args) -> {
 					try {
@@ -4238,10 +4505,10 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		}
 
 		// --- CharSequence → URL (URL(String) is deprecated in Java 20+, use URI.create().toURL() instead) ---
-		if (CharSequence.class.isAssignableFrom(inType) && outType == java.net.URL.class)
+		if (CharSequence.class.isAssignableFrom(inType) && outType == URL.class)
 			return (in, memberOf, session, args) -> {
 				try {
-					return new java.net.URI(in.toString()).toURL();
+					return new URI(in.toString()).toURL();
 				} catch (Exception e) {
 					throw rex(e);
 				}
@@ -4274,37 +4541,37 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 					c2.setTime((Date) in);
 					return c2;
 				};
-			if (java.time.temporal.Temporal.class.isAssignableFrom(inType))
+			if (Temporal.class.isAssignableFrom(inType))
 				return (in, memberOf, session, args) -> {
-					var temporal = (java.time.temporal.Temporal) in;
-					java.time.Instant instant;
+					var temporal = (Temporal) in;
+					Instant instant;
 					try {
-					instant = java.time.Instant.from(temporal);
-					} catch (@SuppressWarnings("unused") java.time.DateTimeException e) {
+					instant = Instant.from(temporal);
+					} catch (@SuppressWarnings("unused") DateTimeException e) {
 					// LocalDateTime lacks offset info - interpret using session/system timezone
 					var tz = sessionTimeZone(session);
-					var zoneId = tz != null ? tz.toZoneId() : java.time.ZoneId.systemDefault();
-					instant = java.time.LocalDateTime.from(temporal).atZone(zoneId).toInstant();
+					var zoneId = tz != null ? tz.toZoneId() : ZoneId.systemDefault();
+					instant = LocalDateTime.from(temporal).atZone(zoneId).toInstant();
 				}
 				return Iso8601Utils.fromEpochMillis(instant.toEpochMilli(), toMeta, sessionTimeZone(session));
 				};
 		}
-		if (toMeta.isDate() && outType == java.util.Date.class) {
+		if (toMeta.isDate() && outType == Date.class) {
 			if (Calendar.class.isAssignableFrom(inType))
 				return (in, memberOf, session, args) -> ((Calendar) in).getTime();
-			if (java.time.temporal.Temporal.class.isAssignableFrom(inType))
+			if (Temporal.class.isAssignableFrom(inType))
 				return (in, memberOf, session, args) -> {
-					var temporal = (java.time.temporal.Temporal) in;
-					java.time.Instant instant;
+					var temporal = (Temporal) in;
+					Instant instant;
 					try {
-					instant = java.time.Instant.from(temporal);
-					} catch (@SuppressWarnings("unused") java.time.DateTimeException e) {
+					instant = Instant.from(temporal);
+					} catch (@SuppressWarnings("unused") DateTimeException e) {
 					// LocalDateTime lacks offset info - interpret using session/system timezone
 					var tz = sessionTimeZone(session);
-					var zoneId = tz != null ? tz.toZoneId() : java.time.ZoneId.systemDefault();
-					instant = java.time.LocalDateTime.from(temporal).atZone(zoneId).toInstant();
+					var zoneId = tz != null ? tz.toZoneId() : ZoneId.systemDefault();
+					instant = LocalDateTime.from(temporal).atZone(zoneId).toInstant();
 				}
-				return java.util.Date.from(instant);
+				return Date.from(instant);
 				};
 		}
 
@@ -4756,15 +5023,6 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	public final boolean isUnsortedProperties() { return unsortedProperties; }
 
 	/**
-	 * Use enum names.
-	 *
-	 * @see MarshallingContext.Builder#useEnumNames()
-	 * @return
-	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
-	 */
-	public final boolean isUseEnumNames() { return useEnumNames; }
-
-	/**
 	 * Use interface proxies.
 	 *
 	 * @see MarshallingContext.Builder#disableInterfaceProxies()
@@ -4895,6 +5153,111 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	protected final TimeZone getTimeZone() { return timeZone; }
 
 	/**
+	 * Duration wire format.
+	 *
+	 * @return The duration wire format.
+	 */
+	public final DurationFormat getDurationFormat() { return durationFormat; }
+
+	/**
+	 * Period wire format.
+	 *
+	 * @return The period wire format.
+	 */
+	public final PeriodFormat getPeriodFormat() { return periodFormat; }
+
+	/**
+	 * Calendar wire format.
+	 *
+	 * @return The calendar wire format.
+	 */
+	public final CalendarFormat getCalendarFormat() { return calendarFormat; }
+
+	/**
+	 * Date wire format.
+	 *
+	 * @return The date wire format.
+	 */
+	public final DateFormat getDateFormat() { return dateFormat; }
+
+	/**
+	 * Temporal wire format.
+	 *
+	 * @return The temporal wire format.
+	 */
+	public final TemporalFormat getTemporalFormat() { return temporalFormat; }
+
+	/**
+	 * Time-zone wire format.
+	 *
+	 * @return The time-zone wire format.
+	 */
+	public final TimeZoneFormat getTimeZoneFormat() { return timeZoneFormat; }
+
+	/**
+	 * Locale wire format.
+	 *
+	 * @return The locale wire format.
+	 */
+	public final LocaleFormat getLocaleFormat() { return localeFormat; }
+
+	/**
+	 * Binary wire format.
+	 *
+	 * @return The binary wire format.
+	 */
+	public final BinaryFormat getBinaryFormat() { return binaryFormat; }
+
+	/**
+	 * Enum wire format.
+	 *
+	 * @return The enum wire format.
+	 */
+	public final EnumFormat getEnumFormat() { return enumFormat; }
+
+	/**
+	 * UUID wire format.
+	 *
+	 * @return The UUID wire format.
+	 */
+	public final UuidFormat getUuidFormat() { return uuidFormat; }
+
+	/**
+	 * Big-number wire format.
+	 *
+	 * @return The big-number wire format.
+	 */
+	public final BigNumberFormat getBigNumberFormat() { return bigNumberFormat; }
+
+	/**
+	 * Boolean wire format.
+	 *
+	 * @return The boolean wire format.
+	 */
+	public final BooleanFormat getBooleanFormat() { return booleanFormat; }
+
+	/**
+	 * Float / Double non-finite wire format.
+	 *
+	 * @return The float wire format.
+	 */
+	public final FloatFormat getFloatFormat() { return floatFormat; }
+
+	/**
+	 * Currency wire format.
+	 *
+	 * @return The currency wire format.
+	 */
+	public final CurrencyFormat getCurrencyFormat() { return currencyFormat; }
+
+	/**
+	 * Class wire format.
+	 *
+	 * @return The class wire format.
+	 */
+	public final ClassFormat getClassFormat() { return classFormat; }
+
+	/**
 	 * Ignore transient fields.
 	 *
 	 * @see MarshallingContext.Builder#disableIgnoreTransientFields()
@@ -4986,7 +5349,21 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			.a(PROP_notBeanPackagePrefixes, notBeanPackagePrefixes)
 			.a(PROP_unsortedProperties, unsortedProperties)
 			.a(PROP_swaps, swaps)
-			.a(PROP_useEnumNames, useEnumNames)
+			.a(PROP_durationFormat, durationFormat)
+			.a(PROP_periodFormat, periodFormat)
+			.a(PROP_calendarFormat, calendarFormat)
+			.a(PROP_dateFormat, dateFormat)
+			.a(PROP_temporalFormat, temporalFormat)
+			.a(PROP_timeZoneFormat, timeZoneFormat)
+			.a(PROP_localeFormat, localeFormat)
+			.a(PROP_binaryFormat, binaryFormat)
+			.a(PROP_enumFormat, enumFormat)
+			.a(PROP_uuidFormat, uuidFormat)
+			.a(PROP_bigNumberFormat, bigNumberFormat)
+			.a(PROP_booleanFormat, booleanFormat)
+			.a(PROP_floatFormat, floatFormat)
+			.a(PROP_currencyFormat, currencyFormat)
+			.a(PROP_classFormat, classFormat)
 			.a(PROP_useInterfaceProxies, useInterfaceProxies)
 			.a(PROP_useJavaBeanIntrospector, useJavaBeanIntrospector)
 			.a(PROP_validateSchema, validateSchema);

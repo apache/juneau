@@ -35,19 +35,39 @@ class MarshalledPropAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	MarshalledProp a1 = MarshalledPropAnnotation.create()
+		.binaryFormat(BinaryFormat.HEX)
+		.calendarFormat(CalendarFormat.ISO_INSTANT)
+		.dateFormat(DateFormat.ISO_INSTANT)
 		.description("a")
 		.dictionary(X1.class)
+		.durationFormat(DurationFormat.SECONDS)
+		.enumFormat(EnumFormat.NAME)
 		.format("b")
+		.localeFormat(LocaleFormat.UNDERSCORE)
+		.periodFormat(PeriodFormat.DAYS)
+		.temporalFormat(TemporalFormat.ISO_INSTANT)
+		.timeZoneFormat(TimeZoneFormat.OFFSET)
 		.build();
 
 	MarshalledProp a2 = MarshalledPropAnnotation.create()
+		.binaryFormat(BinaryFormat.HEX)
+		.calendarFormat(CalendarFormat.ISO_INSTANT)
+		.dateFormat(DateFormat.ISO_INSTANT)
 		.description("a")
 		.dictionary(X1.class)
+		.durationFormat(DurationFormat.SECONDS)
+		.enumFormat(EnumFormat.NAME)
 		.format("b")
+		.localeFormat(LocaleFormat.UNDERSCORE)
+		.periodFormat(PeriodFormat.DAYS)
+		.temporalFormat(TemporalFormat.ISO_INSTANT)
+		.timeZoneFormat(TimeZoneFormat.OFFSET)
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "description,dictionary,format", "[a],[X1],b");
+		assertBean(a1,
+			"binaryFormat,calendarFormat,dateFormat,description,dictionary,durationFormat,enumFormat,format,localeFormat,periodFormat,temporalFormat,timeZoneFormat",
+			"HEX,ISO_INSTANT,ISO_INSTANT,[a],[X1],SECONDS,NAME,b,UNDERSCORE,DAYS,ISO_INSTANT,OFFSET");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -71,12 +91,12 @@ class MarshalledPropAnnotation_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class D1 {
-		@MarshalledProp(description={ "a" }, dictionary=X1.class, format="b")
+		@MarshalledProp(binaryFormat=BinaryFormat.HEX, calendarFormat=CalendarFormat.ISO_INSTANT, dateFormat=DateFormat.ISO_INSTANT, description={ "a" }, dictionary=X1.class, durationFormat=DurationFormat.SECONDS, enumFormat=EnumFormat.NAME, format="b", localeFormat=LocaleFormat.UNDERSCORE, periodFormat=PeriodFormat.DAYS, temporalFormat=TemporalFormat.ISO_INSTANT, timeZoneFormat=TimeZoneFormat.OFFSET)
 		public int f;
 	}
 
 	public static class D2 {
-		@MarshalledProp(description={ "a" }, dictionary=X1.class, format="b")
+		@MarshalledProp(binaryFormat=BinaryFormat.HEX, calendarFormat=CalendarFormat.ISO_INSTANT, dateFormat=DateFormat.ISO_INSTANT, description={ "a" }, dictionary=X1.class, durationFormat=DurationFormat.SECONDS, enumFormat=EnumFormat.NAME, format="b", localeFormat=LocaleFormat.UNDERSCORE, periodFormat=PeriodFormat.DAYS, temporalFormat=TemporalFormat.ISO_INSTANT, timeZoneFormat=TimeZoneFormat.OFFSET)
 		public int f;
 	}
 

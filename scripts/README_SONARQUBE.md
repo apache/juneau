@@ -1,5 +1,7 @@
 # SonarQube Issues Management Tools
 
+> **For ad-hoc terminal triage, use `python3 scripts/sonarqube.py <path>` (or the `/sonarqube` Cursor command). For live-local IDE triage and quick-fix application, use the `eclipse-warnings` Cursor skill. The TSV-export workflow below is preserved for batch categorization but is no longer the primary path.**
+
 This directory contains tools for categorizing and managing SonarQube issues in the Apache Juneau project.
 
 ## Overview

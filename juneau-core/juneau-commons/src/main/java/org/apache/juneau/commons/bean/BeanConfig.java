@@ -655,26 +655,6 @@ public @interface BeanConfig {
 	String unsortedProperties() default "";
 
 	/**
-	 * Use enum names.
-	 *
-	 * <p>
-	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String useEnumNames() default "";
-
-	/**
 	 * Use Java Introspector.
 	 *
 	 * <p>

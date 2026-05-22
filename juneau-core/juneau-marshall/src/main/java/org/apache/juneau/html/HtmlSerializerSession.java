@@ -28,6 +28,8 @@ import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
+import java.time.*;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
@@ -40,7 +42,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -1062,8 +1063,24 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.sTag("boolean").append(o).eTag("boolean");
 				cr = CR_MIXED;
 
-			} else if (sType.isDateOrCalendarOrTemporal()) {
-				String s = Iso8601Utils.format(o, sType, getTimeZone());
+			} else if (sType.isDate()) {
+				String s = serializeDate((Date)o, sType);
+				if (isRoot && addJsonTags)
+					out.sTag(CONST_string).text(s).eTag(CONST_string);
+				else
+					out.text(s);
+				cr = CR_MIXED;
+
+			} else if (sType.isCalendar()) {
+				String s = serializeCalendar(o, sType);
+				if (isRoot && addJsonTags)
+					out.sTag(CONST_string).text(s).eTag(CONST_string);
+				else
+					out.text(s);
+				cr = CR_MIXED;
+
+			} else if (sType.isTemporal()) {
+				String s = serializeTemporal((TemporalAccessor)o, sType);
 				if (isRoot && addJsonTags)
 					out.sTag(CONST_string).text(s).eTag(CONST_string);
 				else
@@ -1071,7 +1088,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				cr = CR_MIXED;
 
 			} else if (sType.isDuration()) {
-				String s = o.toString();
+				String s = serializeDuration((Duration)o);
+				if (isRoot && addJsonTags)
+					out.sTag(CONST_string).text(s).eTag(CONST_string);
+				else
+					out.text(s);
+				cr = CR_MIXED;
+
+			} else if (sType.isPeriod()) {
+				String s = serializePeriod((Period)o);
 				if (isRoot && addJsonTags)
 					out.sTag(CONST_string).text(s).eTag(CONST_string);
 				else

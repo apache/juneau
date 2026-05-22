@@ -93,7 +93,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 * If there is a {@code ObjectSwap} associated with this bean property or bean property type class, then this method
 	 * will return the transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * {@code TemporalDateSwap.IsoInstant} swap associated with it through the
+	 * {@code DateFormat.ISO_INSTANT} setting associated with it through the
 	 * {@code @Swap(value)} annotation, this method will return a String containing an
 	 * ISO8601 date-time string value.
 	 */
@@ -114,7 +114,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 * If there is a {@code ObjectSwap} associated with this bean property or bean property type class, then you must pass
 	 * in a transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * {@code TemporalDateSwap.IsoInstant} swap associated with it through the
+	 * {@code DateFormat.ISO_INSTANT} setting associated with it through the
 	 * {@code @Swap(value)} annotation, the value being passed in must be a String
 	 * containing an ISO8601 date-time string value.
 	 *

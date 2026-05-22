@@ -35,7 +35,6 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.xml.*;
 
 import org.apache.jena.rdf.model.*;
@@ -411,8 +410,16 @@ public class RdfParserSession extends ReaderParserSession {
 			o = parseCharacter(decodeString(getValue(n, outer)));
 		} else if (sType.isNumber()) {
 			o = parseNumber(getValue(n, outer).toString(), (Class<? extends Number>)sType.inner());
-		} else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration()) {
-			o = Iso8601Utils.parse(getValue(n, outer).toString(), sType, getTimeZone());
+		} else if (sType.isDate()) {
+			o = parseDate(getValue(n, outer).toString(), sType);
+		} else if (sType.isCalendar()) {
+			o = parseCalendar(getValue(n, outer).toString(), sType);
+		} else if (sType.isTemporal()) {
+			o = parseTemporal(getValue(n, outer).toString(), sType);
+		} else if (sType.isDuration()) {
+			o = parseDuration(getValue(n, outer).toString());
+		} else if (sType.isPeriod()) {
+			o = parsePeriod(getValue(n, outer).toString());
 		} else if (sType.isMap()) {
 			var r = n.asResource();
 			if (! urisVisited.add(r))

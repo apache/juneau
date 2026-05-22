@@ -44,7 +44,6 @@ import org.apache.juneau.ClassMeta;
 import org.apache.juneau.serializer.OutputStreamSerializerSession;
 import org.apache.juneau.serializer.SerializeException;
 import org.apache.juneau.serializer.SerializerPipe;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 
 /**
@@ -96,6 +95,14 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 	protected ParquetSerializerSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
+	}
+
+	@Override /* OutputStreamSerializerSession */
+	public boolean hasNativeBytes() {
+		// Parquet's column writer has no native byte-array primitive type — it stores byte[] as a raw
+		// BYTE_ARRAY column (at BinaryFormat.NOT_SET; Bug #11 schema branch) or as a UTF-8 string column
+		// (at any other BinaryFormat, after the BinarySwap fires and emits the configured text wire form).
+		return false;
 	}
 
 	@Override
@@ -271,6 +278,36 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 		return value;
 	}
 
+	/**
+	 * Applies any class-level swap registered via {@link org.apache.juneau.swap.DefaultSwaps}
+	 * (or context-registered swaps) to a leaf value just before it is written to a Parquet column.
+	 *
+	 * <p>
+	 * Necessary because bean-property values pass through {@link BeanMap#get(Object)}, which only
+	 * applies the per-property {@code readTransform} installed by
+	 * {@code MarshalledPropertyPostProcessor}.  At {@code NOT_SET} / unconfigured formats no
+	 * per-property swap is installed for {@code Class<?>} (and other types whose default swap lives
+	 * in {@code DefaultSwaps}); without this hook the raw value would fall through to
+	 * {@link String#valueOf(Object)} and produce wires like {@code "class java.lang.String"}.
+	 *
+	 * <p>
+	 * Mirrors the {@code aType.getSwap(session)} layer applied by every other serializer
+	 * ({@link org.apache.juneau.json.JsonSerializerSession},
+	 * {@link org.apache.juneau.msgpack.MsgPackSerializerSession}, etc.) in their {@code
+	 * serializeAnything} dispatcher.  No-op for values whose runtime type has no registered swap.
+	 */
+	private Object applyDefaultSwap(Object value) throws SerializeException {
+		if (value == null)
+			return value;
+		var cm = getClassMetaForObject(value);
+		if (cm == null)
+			return value;
+		var swap = cm.getSwap(this);
+		if (nn(swap))
+			return swap(swap, value);
+		return value;
+	}
+
 	private ColumnChunkMeta writeColumnChunk(OutputStream out, List<?> rows, ParquetSchemaElement col, long chunkStart) throws IOException, SerializeException {
 		var path = rowRelativePath(col.path);
 		if (path != null && path.contains(".list.element"))
@@ -437,13 +474,20 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 	private Object mapKeyToStoredString(Object key) throws SerializeException {
 		if (key == null)
 			return ctx.nullKeyString;
-		if (key instanceof Date || key instanceof Calendar
-			|| key instanceof TemporalAccessor) {
+		if (key instanceof Date d) {
+			var cm = getClassMetaForObject(d);
+			return serializeDate(d, cm);
+		}
+		if (key instanceof Calendar) {
 			var cm = getClassMetaForObject(key);
-			return Iso8601Utils.format(key, cm, getTimeZone());
+			return serializeCalendar(key, cm);
+		}
+		if (key instanceof TemporalAccessor t) {
+			var cm = getClassMetaForObject(t);
+			return serializeTemporal(t, cm);
 		}
 		if (key instanceof Enum<?> e)
-			return ctx.getMarshallingContext().isUseEnumNames() ? e.name() : e.toString();
+			return ctx.getMarshallingContext().getEnumFormat().format(e);
 		return trim(String.valueOf(generalize(key, getClassMetaForObject(key))));
 	}
 
@@ -659,6 +703,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 	private void writeValue(ParquetColumnWriter w, ParquetSchemaElement col, Object v) throws IOException, SerializeException {
 		// Unwrap handled by callers (writeColumnChunk, writeListColumnChunk) for correct def levels
 		v = unwrapOptional(v);
+		v = applyDefaultSwap(v);
 		Integer type = col.type;
 		if (type == null)
 			return;
@@ -737,7 +782,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 		if (v instanceof String s)
 			return trim(s).getBytes(StandardCharsets.UTF_8);
 		if (v instanceof Enum<?> e)
-			return (ctx.getMarshallingContext().isUseEnumNames() ? e.name() : e.toString()).getBytes(StandardCharsets.UTF_8);
+			return ctx.getMarshallingContext().getEnumFormat().format(e).getBytes(StandardCharsets.UTF_8);
 		if (v instanceof Duration d)
 			return d.toString().getBytes(StandardCharsets.UTF_8);
 	// BigDecimal is stored as a UTF-8 string (same as JSON/CBOR) so fall through to String.valueOf below.

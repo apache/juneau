@@ -35,7 +35,6 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.xml.*;
 
 import org.apache.jena.rdf.model.*;
@@ -219,6 +218,15 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 			throw new IllegalStateException("Unknown RDF language: " + langName);
 	}
 
+	@Override /* InputStreamParserSession */
+	public boolean hasNativeBytes() {
+		// The RDF graph layer has no native byte-array literal type — byte[] is surfaced either as an
+		// xsd:base64Binary typed literal (at BinaryFormat.NOT_SET; Bug #11 fix) or as a plain string literal
+		// carrying the configured BinaryFormat's text wire form (at any other BinaryFormat; BinarySwap fires
+		// to reverse the wire form back to byte[]).
+		return false;
+	}
+
 	private static Lang toLang(String langName) {
 		var lang = RDFLanguages.nameToLang(langName);
 		if (lang != null)
@@ -397,14 +405,29 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 			}
 		} else if (sType.isBoolean()) {
 			o = convertToType(getValue(n, outer), boolean.class);
+		} else if (sType.isByteArray()) {
+			var v = getValue(n, outer);
+			if (v instanceof byte[] b) {
+				o = b;
+			} else if (v != null) {
+				o = java.util.Base64.getDecoder().decode(v.toString());
+			}
 		} else if (sType.isCharSequence()) {
 			o = decodeString(getValue(n, outer));
 		} else if (sType.isChar()) {
 			o = parseCharacter(decodeString(getValue(n, outer)));
 		} else if (sType.isNumber()) {
 			o = parseNumber(getValue(n, outer).toString(), (Class<? extends Number>)sType.inner());
-		} else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration()) {
-			o = Iso8601Utils.parse(getValue(n, outer).toString(), sType, getTimeZone());
+		} else if (sType.isDate()) {
+			o = parseDate(getValue(n, outer).toString(), sType);
+		} else if (sType.isCalendar()) {
+			o = parseCalendar(getValue(n, outer).toString(), sType);
+		} else if (sType.isTemporal()) {
+			o = parseTemporal(getValue(n, outer).toString(), sType);
+		} else if (sType.isDuration()) {
+			o = parseDuration(getValue(n, outer).toString());
+		} else if (sType.isPeriod()) {
+			o = parsePeriod(getValue(n, outer).toString());
 		} else if (sType.isMap()) {
 			var r = n.asResource();
 			if (! urisVisited.add(r))

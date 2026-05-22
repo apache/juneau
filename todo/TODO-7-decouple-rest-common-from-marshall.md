@@ -9,16 +9,22 @@ juneau-commons -> juneau-rest-common -> juneau-marshall -> juneau-rest-client
 
 `juneau-rest-common/pom.xml` still declares a compile dep on `juneau-marshall`. The remaining gap below is the work needed to drop it.
 
+> Plan refreshed 2026-05-20 after the TODO-38 / TODO-40 / TODO-42 landings. The previous revision is preserved by `git log` on this file.
+
 ---
 
 ## Already landed (no further action)
 
-- **Phase 1a — commons HTTP types** — `MediaRange` / `MediaRanges` / `MediaType` / `StringRange` / `StringRanges` live in `org.apache.juneau.commons.http`.
-- **Phase 1b — commons annotations** — `@Schema` family lives in `org.apache.juneau.commons.annotation`.
-- **Phase 2 (initial) — httppart enums + exception in commons** — `HttpPartType`, `HttpPartFormat`, `HttpPartDataType`, `HttpPartCollectionFormat`, `SchemaValidationException` live in `org.apache.juneau.commons.httppart`.
+- **Phase 1a — commons HTTP types** — `MediaRange` / `MediaRanges` / `MediaType` / `StringRange` / `StringRanges` in `org.apache.juneau.commons.http`.
+- **Phase 1b — commons annotations** — `@Schema` / `@Items` / `@SubItems` / `@ExternalDocs` annotation types in `org.apache.juneau.commons.annotation`. The runtime `AnnotationObject` / `AppliedAnnotationObject` / `AppliedOnClassAnnotationObject` / `AnnotationGroup` proxy infrastructure also lives in commons.
+- **Phase 2 (initial) — httppart enums + exception in commons** — `HttpPartType`, `HttpPartFormat`, `HttpPartDataType`, `HttpPartCollectionFormat`, `SchemaValidationException` in `org.apache.juneau.commons.httppart`.
 - **SVL in commons (TODO-14)** — `VarResolverSession` and friends in `org.apache.juneau.commons.svl`; `HeaderList` / `PartList` no longer pull marshall for variable resolution.
-- **BeanCreator → BeanInstantiator (TODO-15)** — rest-common's `RequestBeanMeta` / `RequestBeanPropertyMeta` / `ResponseBeanPropertyMeta` now use `org.apache.juneau.commons.inject.BeanInstantiator` (commons). The "move `BeanCreator` or use `ClassInfo.newInstance()`" Phase 4 row is done.
-- **`juneau-assertions` direct dep** — `juneau-rest-common/pom.xml` already declares `juneau-assertions` directly (no longer transitive only through marshall).
+- **BeanCreator → BeanInstantiator (TODO-15)** — `RequestBeanMeta` / `RequestBeanPropertyMeta` / `ResponseBeanPropertyMeta` use `org.apache.juneau.commons.inject.BeanInstantiator`.
+- **`juneau-assertions` direct dep** — `juneau-rest-common/pom.xml` declares `juneau-assertions` directly.
+- **`Serialized*` bridges moved (TODO-42)** — `SerializedHeader`, `SerializedPart`, `SerializedEntity` and their factory overloads relocated to the new `juneau-rest-common-classic` module under `org.apache.juneau.http.classic.{header,part,entity}`. Rest-common no longer ships these types, so the original "Phase 3" step is satisfied by module split rather than by moving them to marshall.
+- **`BasicMediaTypeHeader` javadoc imports** — file moved into `juneau-rest-common-classic` as part of TODO-42, so its `org.apache.juneau.json.*` / `org.apache.juneau.json5.Json5Serializer` imports are no longer a rest-common concern.
+- **`AnnotationProvider` / `AnnotationInfo` already in commons** — `RequestBeanPropertyMeta` and `ResponseBeanMeta` resolve these from commons; only the `org.apache.juneau.*` wildcard imports in the four `httppart/bean/*` classes still pull marshall symbols.
+- **TODO-40 fallout** — large set of transport-neutral types added to rest-common (`HttpHeaderList`, `HttpProtocolVersion`, `HttpRequestLine`, `HttpRequestLineBean`, `HttpResourceBean`, the typed `Http*Header` / `Http*Part` family, the fluent setters on the response classes). None of this widened the marshall surface — every new file imports only commons / java SE.
 
 > The plan from here lists **only** what is still required to drop the `juneau-marshall` dep from rest-common.
 
@@ -26,7 +32,7 @@ juneau-commons -> juneau-rest-common -> juneau-marshall -> juneau-rest-client
 
 ## Current marshall surface still imported by rest-common
 
-Verified by `rg ^import org\.apache\.juneau\.(serializer|parser|oapi|urlencoding|json|jsonschema|annotation\.[A-Z]|httppart\.[A-Z])` under `juneau-rest-common/src/main/java`.
+Verified 2026-05-20 by reading every file under `juneau-rest-common/src/main/java` that imports from a marshall-only package.
 
 ### A. Httppart marshalling surface (the big one)
 
@@ -35,126 +41,142 @@ Symbols still in `org.apache.juneau.httppart` (marshall):
 - `HttpPartSchema` (+ `Builder`, `DEFAULT`)
 - `HttpPartSerializer` / `HttpPartSerializerSession`
 - `HttpPartParser` / `HttpPartParserSession`
-- `HttpPart` interface
-- `HttpPartMarshalling`
 
 Rest-common consumers:
 
-- `httppart/bean/RequestBeanMeta`, `ResponseBeanMeta`, `RequestBeanPropertyMeta`, `ResponseBeanPropertyMeta`
-- `http/header/HeaderBeanMeta`, `http/header/SerializedHeader`
-- `http/part/PartBeanMeta`, `http/part/SerializedPart`
-- `http/entity/SerializedEntity`
-- `http/HttpHeaders` (`serializedHeader(...)` factories)
-- `http/HttpEntities` (`serializedEntity(...)` factory)
-- `http/HttpParts` (uses `HttpPartType` + `ClassMeta<?>`)
+- `httppart/bean/RequestBeanMeta`
+- `httppart/bean/RequestBeanPropertyMeta`
+- `httppart/bean/ResponseBeanMeta`
+- `httppart/bean/ResponseBeanPropertyMeta`
 
-### B. Serializer surface (Phase 3 — `Serialized*` bridges)
+(The `HttpPart` interface / `HttpPartMarshalling` facade originally listed here are not actually imported by any rest-common source today — only the four bean-meta classes still hold this surface.)
 
-- `org.apache.juneau.serializer.{Serializer, SerializerSession, SerializeException, SchemaValidationException}`
-- `org.apache.juneau.oapi.OpenApiSerializer`
-- `org.apache.juneau.urlencoding.UrlEncodingSerializer`
+### B. `InvalidAnnotationException`
 
-Rest-common consumers: `SerializedHeader`, `SerializedPart`, `SerializedEntity`, `HttpHeaders`, `HttpEntities`.
+- Lives in `org.apache.juneau.annotation` (marshall). Extends `org.apache.juneau.BasicRuntimeException`, which is a shim over the commons version.
+- Used by `httppart/bean/MethodInfoUtils` (4 throw sites) and `httppart/bean/ResponseBeanMeta` (static-imports `assertNoInvalidAnnotations`).
 
-### C. `InvalidAnnotationException`
+### C. `*Annotation` companion helpers
 
-- Lives in `org.apache.juneau.annotation` (marshall).
-- Used by `httppart/bean/MethodInfoUtils` and `httppart/bean/ResponseBeanMeta` (static import).
-- Only base class tying it to marshall is the legacy `org.apache.juneau.BasicRuntimeException` shim, which itself just extends `org.apache.juneau.commons.BasicRuntimeException`.
+The annotation **types** are already in commons (Phase 1b), but their static `*.DEFAULT` / `empty()` helpers still live in marshall:
 
-### D. Javadoc-only marshall imports
+- `SchemaAnnotation` (`org.apache.juneau.annotation`) — used by `http/annotation/ResponseAnnotation.java`.
+- `ExternalDocsAnnotation` (`org.apache.juneau.annotation`) — used by `http/annotation/TagAnnotation.java`.
+- `ItemsAnnotation` / `SubItemsAnnotation` — siblings; not yet imported from rest-common but moving the group together avoids leaving stragglers behind.
 
-Real imports, but only used inside `{@link ...}` comments:
+### D. `@Marshalled(as=MarshalledAs.STRING)`
 
-- `Content.java` — `import org.apache.juneau.json.JsonSchemaSerializer;`
-- `BasicMediaTypeHeader.java` — `import org.apache.juneau.json.*;` (`JsonSerializer`) and `import org.apache.juneau.json5.Json5Serializer;`
+- `EntityTags.java` declares `@Marshalled(as=MarshalledAs.STRING)`. The annotation lives in `org.apache.juneau.annotation` (marshall).
+- This is a marshall-runtime hint for parser/serializer routing. It can be dropped from rest-common (no functional change to rest-common itself) or the annotation can move to commons.
 
-### E. `ClassMeta` (cross-cutting)
+### E. `ClassMeta` + `MarshallingContext` + `AnnotationWorkList`
 
-`ClassMeta<?>` (in `org.apache.juneau`, marshall) is referenced by:
+Top-level marshall types reached via `import org.apache.juneau.*` in:
 
-- `http/HttpParts` (`HEADER_NAME_FUNCTION`, `QUERY_NAME_FUNCTION`, `getName`, `isHttpPart`, …)
-- `httppart/bean/RequestBeanMeta.getBeanInfo()` / `cm` field
-- `httppart/bean/ResponseBeanMeta.getBeanInfo()` / `cm` field
+- `http/HttpParts.java` — `ClassMeta<?>` used in 8 method signatures / function fields (`HEADER_NAME_FUNCTION`, `QUERY_NAME_FUNCTION`, `getName`, `isHttpPart`, …).
+- `httppart/bean/RequestBeanMeta.java` — `ClassMeta`, `MarshallingContext.DEFAULT`, `AnnotationWorkList`.
+- `httppart/bean/ResponseBeanMeta.java` — same triple, plus the `Value` reference (which is already in commons but reached via the wildcard).
 
-Removing this dependency depends on **TODO-30** (moving `ClassMeta` and related non-marshalling type metadata into `juneau-commons`). Rest-common cannot fully drop marshall until either `ClassMeta` moves (preferred) or these APIs are reworked to use `ClassInfo` + helpers that already exist in commons.
+Removing this dependency depends on **TODO-30** (moving `ClassMeta` and related non-marshalling type metadata into `juneau-commons`). Rest-common cannot fully drop marshall until either `ClassMeta` moves (preferred) or these APIs are reworked to use `ClassInfo` (already in commons) plus annotation-driven helpers.
+
+### F. Javadoc-only marshall imports
+
+Real `import` statements, but only used inside `{@link ...}` comments:
+
+- `http/annotation/Content.java` — `import org.apache.juneau.json.JsonSchemaSerializer;` (used once in javadoc).
+- `http/annotation/ContactAnnotation.java`, `LicenseAnnotation.java`, `ResponseAnnotation.java`, `TagAnnotation.java`, `http/header/ContentType.java` — fully-qualified `{@link org.apache.juneau.MarshallingContext.Builder#annotations(Annotation...)}` / `Json5Serializer` references in comments. No import statement; cosmetic only.
 
 ---
 
 ## Plan
 
-### Step 1 — Quick wins (no semantic moves)
+### Step 1 — Quick win
 
-**Difficulty:** Trivial. **Removes 0 marshall types but removes some javadoc-coupled imports.**
+**Difficulty:** Trivial. **Removes 1 marshall import.**
 
-1. In `Content.java`, replace `import org.apache.juneau.json.JsonSchemaSerializer;` + `{@link JsonSchemaSerializer}` with fully-qualified `{@link org.apache.juneau.json.JsonSchemaSerializer}`.
-2. In `BasicMediaTypeHeader.java`, replace `import org.apache.juneau.json.*;` and `import org.apache.juneau.json5.Json5Serializer;` with fully-qualified Javadoc `{@link ...}` references.
-
-Net effect: eliminates the only two marshall imports that exist solely for Javadoc.
+- In `Content.java`, replace `import org.apache.juneau.json.JsonSchemaSerializer;` + `{@link JsonSchemaSerializer}` with fully-qualified `{@link org.apache.juneau.json.JsonSchemaSerializer}`.
 
 ### Step 2 — Move `InvalidAnnotationException` to commons
 
 **Difficulty:** Low.
 
-1. Add `org.apache.juneau.commons.annotation.InvalidAnnotationException` extending `org.apache.juneau.commons.BasicRuntimeException` (parent of the marshall shim).
-2. Make the existing `org.apache.juneau.annotation.InvalidAnnotationException` a deprecated subclass of the commons version for backwards compatibility (mirrors the existing pattern used for `BasicRuntimeException`).
+1. Add `org.apache.juneau.commons.annotation.InvalidAnnotationException` extending `org.apache.juneau.commons.BasicRuntimeException`. Carry `assertNoInvalidAnnotations(MethodInfo, Class<? extends Annotation>...)` with it.
+2. Make the existing marshall `org.apache.juneau.annotation.InvalidAnnotationException` a deprecated subclass of the commons version for back-compat (mirrors the `BasicRuntimeException` shim pattern).
 3. Repoint `httppart/bean/MethodInfoUtils` and `httppart/bean/ResponseBeanMeta` at the commons class.
 
-After this, rest-common no longer imports `org.apache.juneau.annotation.InvalidAnnotationException`.
+After this, rest-common stops importing `org.apache.juneau.annotation.InvalidAnnotationException`.
 
-### Step 3 — Phase 2 follow-through: move `HttpPartSchema` (+ part marshalling surface) to commons
+### Step 3 — Move `*Annotation` companion helpers to commons
 
-**Difficulty:** Medium. Single largest item.
+**Difficulty:** Low–Medium. Mechanical move; the helpers are pure data wrappers around already-commons annotation types.
 
-Goal: move the **interfaces and the schema data type**, keep the **default serializer/parser implementations** in marshall.
+Move from `org.apache.juneau.annotation` (marshall) → `org.apache.juneau.commons.annotation` (commons):
+
+- `SchemaAnnotation` (+ `Builder`, `DEFAULT`, `empty(Schema)`).
+- `ExternalDocsAnnotation`.
+- `ItemsAnnotation`.
+- `SubItemsAnnotation`.
+
+Risks / hand-offs:
+
+- `SchemaAnnotation` static-imports `org.apache.juneau.jsonschema.SchemaUtils.*`. `SchemaUtils` itself stays in marshall (it pulls `JsonList` / `JsonMap`). Either inline the small set of helpers it uses or factor out a commons-side `SchemaUtilsLite` that exposes just the methods `SchemaAnnotation` needs. The methods at play are mostly value-coercion helpers; the body is short.
+- `SchemaAnnotation` imports `org.apache.juneau.parser.ParseException` in its `joinnl` / array-parse paths. Replace with `SchemaValidationException` (already in commons) or with `IllegalArgumentException`.
+- Leave deprecated shims at the old FQCNs for one release.
+
+After this, `ResponseAnnotation.schema = SchemaAnnotation.DEFAULT` and `TagAnnotation.externalDocs = ExternalDocsAnnotation.DEFAULT` resolve to commons classes.
+
+### Step 4 — Drop or relocate `@Marshalled(as=MarshalledAs.STRING)` on `EntityTags`
+
+**Difficulty:** Trivial-to-Low.
+
+Two options:
+
+- **(A) Drop the annotation.** `EntityTags` is a value wrapper around `EntityTag[]`. The `@Marshalled` hint tells marshall to treat it as a string (using `toString()`). Verify with the existing `EntityTags_Test` suite that round-trip JSON/XML behavior matches without the annotation; if it does, simply remove it.
+- **(B) Move `@Marshalled` + `MarshalledAs` to commons.** They are interface-only types; nothing prevents the move other than the cascade of consumers in marshall.
+
+Recommendation: **(A)** unless a test regression appears. Lowest churn.
+
+### Step 5 — Move httppart marshalling interfaces to commons
+
+**Difficulty:** Medium. Single largest remaining item.
 
 Move into `org.apache.juneau.commons.httppart`:
 
-- `HttpPartSchema` (+ `Builder`)
-- `HttpPart` interface
-- `HttpPartSerializer` / `HttpPartSerializerSession` interfaces (Creator inner-classes optional — they can stay in marshall as long as the interface is in commons)
-- `HttpPartParser` / `HttpPartParserSession` interfaces
-- `HttpPartMarshalling` (annotation + facade)
+- `HttpPartSchema` (+ `Builder`).
+- `HttpPartSerializer` / `HttpPartSerializerSession` interfaces (`Creator` inner-classes optional — they can stay in marshall as long as the interface is in commons).
+- `HttpPartParser` / `HttpPartParserSession` interfaces.
 
-Known blockers / hand-offs (still applicable from the previous plan revision):
+Concrete implementations (`SimplePartSerializer/Parser`, `BaseHttpPartSerializer/Parser`, OpenAPI- / URL-encoded-backed serializers, `HttpPartMarshalling` annotation handling) stay in marshall and `implement` the commons-side interfaces.
 
-- `apply(HttpPartMarshalling)` on the builder ties to marshall's `HttpPartMarshalling` annotation handling → move the annotation type to commons or split apply logic.
-- References to `*Annotation.empty()` (`ItemsAnnotation.DEFAULT`, `SubItemsAnnotation.DEFAULT`) → already covered by Phase 1b annotation moves; verify no marshall-only annotations remain.
-- `ParseException` import from marshall in schema-validation paths → either move a minimal exception to commons or replace with `SchemaValidationException` (already in commons).
+Known hand-offs / blockers:
 
-> The concrete implementations (`SimplePartSerializer/Parser`, `BaseHttpPartSerializer/Parser`, OpenAPI- / URL-encoded-backed serializers, etc.) stay in marshall and `implement` the commons-side interfaces.
+- `HttpPartSchema.Builder.apply(HttpPartMarshalling)` ties to marshall's annotation handling. Either move the `@HttpPartMarshalling` annotation type to commons, or split the apply logic so the annotation-driven branch stays in marshall and the commons-side schema exposes a pluggable hook.
+- References to `*Annotation.empty()` (`ItemsAnnotation.DEFAULT`, `SubItemsAnnotation.DEFAULT`) inside `HttpPartSchema` resolve once Step 3 lands.
+- `HttpPartSchema` references `ParseException` from marshall in schema-validation paths — switch to commons `SchemaValidationException` or a small commons exception.
+- Leave deprecated shims at the old FQCNs for one release.
 
-### Step 4 — Phase 3: handle `Serialized*` bridge types
+After Steps 2–5 land, the only remaining marshall coupling is the `ClassMeta` / `MarshallingContext` / `AnnotationWorkList` surface in Step 6.
 
-**Difficulty:** Medium. **Impact:** `SerializedHeader`, `SerializedPart`, `SerializedEntity` + factories on `HttpHeaders` / `HttpParts` / `HttpEntities`.
-
-These types intrinsically need access to `Serializer` / `SerializerSession` / `OpenApiSerializer` / `UrlEncodingSerializer`, so they cannot live in rest-common once it stops depending on marshall. Options (pick one):
-
-1. **Move bridges to marshall** — `Serialized*` types move out of `org.apache.juneau.http.{header,part,entity}` (rest-common) into a marshall package. `Basic*` types (without serializers) stay in rest-common. Factories on `HttpHeaders` / `HttpEntities` / `HttpParts` either move with them or get split (rest-common keeps the no-serializer overloads; serializer-aware overloads move to marshall).
-2. **New `juneau-rest-bridge` module** between commons and marshall hosting `Serialized*` types.
-3. **Keep in rest-common with optional/reflective loading.** Not recommended — defeats the goal.
-
-**Recommendation:** Option 1 — move `Serialized*` (and the serializer-aware factory overloads) into marshall under `org.apache.juneau.httppart.bridge` (or similar), keep the non-serializer Basic surface in rest-common.
-
-### Step 5 — Resolve `ClassMeta` references
+### Step 6 — Resolve `ClassMeta` / `MarshallingContext` / `AnnotationWorkList` references
 
 **Blocked on TODO-30** (`ClassMeta` → commons feasibility pass).
 
 Two paths once TODO-30 lands:
 
-- **(A) `ClassMeta` moves to commons** — rest-common keeps `getBeanInfo()` / `ClassMeta<?>` surface unchanged.
-- **(B) `ClassMeta` stays in marshall** — rewrite `HttpParts` helpers, `RequestBeanMeta.getBeanInfo()`, `ResponseBeanMeta.getBeanInfo()` to expose `ClassInfo` (already in commons) plus an annotation-driven helper, removing the `ClassMeta` surface from rest-common.
+- **(A) `ClassMeta` + friends move to commons** — rest-common keeps `getBeanInfo()` / `ClassMeta<?>` surface unchanged.
+- **(B) `ClassMeta` stays in marshall** — rewrite `HttpParts` helpers, `RequestBeanMeta.getBeanInfo()`, `ResponseBeanMeta.getBeanInfo()`, the `RequestBeanMeta.Builder.apply(Class<?>)` / `ResponseBeanMeta.Builder.apply(Type)` paths to expose `ClassInfo` (already in commons) plus an annotation-driven helper, removing the `ClassMeta` surface from rest-common. `AnnotationWorkList` is a thin wrapper over `AnnotationInfo` (commons) that would need a commons-side equivalent or to be inlined into the caller.
 
 This is the **final blocker** before rest-common can drop marshall from its pom.
 
-### Step 6 — Pom + Eclipse `.classpath` flip
+### Step 7 — Pom flip
 
-Once steps 1-5 are merged:
+Once Steps 1-6 are merged:
 
-- Remove `juneau-marshall` from `juneau-rest-common/pom.xml`.
-- Drop the corresponding `<classpathentry>` from `juneau-rest-common/.classpath`.
-- Re-run `mvn -pl juneau-rest-common -am clean install` to confirm rest-common compiles against commons + assertions + httpcore only.
-- Re-run reactor tests; rest-client / rest-server / rest-mock keep marshall.
+- Remove the `juneau-marshall` `<dependency>` from `juneau-rest-common/pom.xml`.
+- Re-run `mvn -pl juneau-rest/juneau-rest-common -am clean install` to confirm rest-common compiles against commons + assertions only.
+- Re-run the reactor; rest-client / rest-server / rest-mock keep marshall.
+
+`.classpath` requires no edit — `juneau-rest-common/.classpath` uses the `MAVEN2_CLASSPATH_CONTAINER`, so the marshall entry is implicit via the pom.
 
 ---
 
@@ -162,19 +184,20 @@ Once steps 1-5 are merged:
 
 | Priority | Area | Target |
 |----------|------|--------|
-| 1 | Javadoc-only `json.*` imports in `Content.java` / `BasicMediaTypeHeader.java` | inline fully-qualified `{@link}` |
+| 1 | `Content.java` javadoc-only `JsonSchemaSerializer` import | inline fully-qualified `{@link}` |
 | 2 | `InvalidAnnotationException` | commons (`org.apache.juneau.commons.annotation`) |
-| 3 | `HttpPartSchema` + httppart marshalling **interfaces** | commons (`org.apache.juneau.commons.httppart`) |
-| 4 | `Serialized*` bridges (+ factory overloads) | marshall (or new `juneau-rest-bridge` module) |
-| 5 | `ClassMeta<?>` surface in `HttpParts` / `*BeanMeta` | depends on TODO-30 outcome |
-| 6 | Drop `juneau-marshall` dep from rest-common pom + `.classpath` | rest-common build |
+| 3 | `SchemaAnnotation` / `ExternalDocsAnnotation` / `ItemsAnnotation` / `SubItemsAnnotation` | commons (`org.apache.juneau.commons.annotation`) |
+| 4 | `@Marshalled(as=...)` on `EntityTags` | drop, or move `@Marshalled`/`MarshalledAs` to commons |
+| 5 | `HttpPartSchema` + `HttpPartSerializer/Parser` interfaces | commons (`org.apache.juneau.commons.httppart`) |
+| 6 | `ClassMeta` / `MarshallingContext` / `AnnotationWorkList` in `HttpParts` / `*BeanMeta` | depends on TODO-30 outcome |
+| 7 | Drop `juneau-marshall` dep from rest-common pom | rest-common build |
 
 ---
 
 ## Risk notes
 
-- **Split-package risk** — `org.apache.juneau.httppart` exists in both marshall (concrete impls) and commons (enums + interfaces). OSGi consumers will see split packages; this is already the case for `org.apache.juneau.commons.httppart` vs `org.apache.juneau.httppart`. Keep using the **`org.apache.juneau.commons.httppart`** namespace for moved interfaces to avoid worsening the split.
-- **Binary compatibility** — Steps 2 and 3 must leave deprecated shims in `org.apache.juneau.annotation.InvalidAnnotationException` and `org.apache.juneau.httppart.HttpPartSchema` (etc.) extending / type-aliasing the commons versions for at least one release.
-- **`@Schema` ↔ serializer integration** — the schema-aware OpenAPI / URL-encoding serializer paths in marshall must continue to wire through the commons-side `HttpPartSchema` after the move; verify via existing schema-validation tests.
-- **`@XApply` split** (`on` / `onClass`) is a separate, release-sized effort — out of scope here.
-- **Keep phases independently buildable** — each Step above should be its own commit / PR; the reactor must build green between steps.
+- **Split-package risk** — `org.apache.juneau.httppart` exists in both marshall (concrete impls) and commons (enums + interfaces). Keep new moves under `org.apache.juneau.commons.httppart` to avoid worsening the split. OSGi consumers already see this split for the enums.
+- **Binary compatibility** — Steps 2, 3, and 5 must leave deprecated shims at the old marshall FQCNs (`InvalidAnnotationException`, `SchemaAnnotation`, `HttpPartSchema`, etc.) extending / type-aliasing the commons versions for at least one release.
+- **`@Schema` ↔ serializer integration** — the schema-aware OpenAPI / URL-encoding serializer paths in marshall must continue to wire through the commons-side `HttpPartSchema` after the move. Existing schema-validation tests in `juneau-utest` cover this.
+- **Step 5 ↔ Step 3 ordering** — `HttpPartSchema` references `*Annotation.empty()` and `*Annotation.DEFAULT`. Step 3 must land before (or as part of) Step 5, otherwise the commons-side `HttpPartSchema` would have to import from marshall.
+- **Keep phases independently buildable** — each step should be its own commit / PR; the reactor must build green between steps.

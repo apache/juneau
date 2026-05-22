@@ -20,13 +20,14 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
+import java.time.*;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -425,6 +426,22 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 	private void serializeScalarValue(ProtoWriter out, Object value, ClassMeta<?> type) throws SerializeException {
 		if (value == null)
 			return;
+		// Resolve to the runtime type and apply any registered swap.  Required for collection/array
+		// elements that arrive here without having gone through serializeAnything's swap step (e.g.
+		// List<Locale> elements where the bean-property swap is on the List, not on Locale).
+		// Bug #8: without this, Locale list-elements wire as Locale.toString() ("en_US") regardless
+		// of the configured LocaleFormat, breaking BCP_47 round-trips on the parser side.
+		var rType = getClassMetaForObject(value, type);
+		var swap = rType.getSwap(this);
+		if (nn(swap)) {
+			value = swap(swap, value);
+			rType = swap.getSwapClassMeta(this);
+			if (rType.isObject())
+				rType = getClassMetaForObject(value);
+			type = rType;
+		}
+		if (value == null)
+			return;
 		if (type.isNumber()) {
 			if (value instanceof Float || value instanceof Double)
 				out.floatValue(((Number) value).doubleValue());
@@ -432,10 +449,16 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 				out.integerValue(((Number) value).longValue());
 		} else if (type.isBoolean()) {
 			out.booleanValue((Boolean) value);
-		} else if (type.isDateOrCalendarOrTemporal()) {
-			out.stringValue(Iso8601Utils.format(value, type, getTimeZone()));
+		} else if (type.isDate()) {
+			out.stringValue(serializeDate((Date)value, type));
+		} else if (type.isCalendar()) {
+			out.stringValue(serializeCalendar(value, type));
+		} else if (type.isTemporal()) {
+			out.stringValue(serializeTemporal((TemporalAccessor)value, type));
 		} else if (type.isDuration()) {
-			out.stringValue(value.toString());
+			out.stringValue(serializeDuration((Duration)value));
+		} else if (type.isPeriod()) {
+			out.stringValue(serializePeriod((Period)value));
 		} else if (type.isEnum()) {
 			out.enumValue(((Enum<?>) value).name());
 		} else if (value instanceof byte[] value2) {

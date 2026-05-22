@@ -19,9 +19,9 @@ package org.apache.juneau.rest.stats;
 import java.time.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.swaps.*;
 import org.apache.juneau.commons.bean.*;
 
 /**
@@ -59,7 +59,7 @@ public class RestContextStats {
 	 *
 	 * @return The time this REST resource class was started.
 	 */
-	@Swap(TemporalSwap.IsoInstant.class)
+	@MarshalledProp(temporalFormat = TemporalFormat.ISO_INSTANT)
 	public Instant getStartTime() { return startTime; }
 
 	/**

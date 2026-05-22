@@ -82,8 +82,19 @@ public class ProtoParserSession extends ReaderParserSession {
 			Map<String, Object> root = parseMessage(t, false);
 			if (root == null || root.isEmpty())
 				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
-			if (root.size() == 1 && root.containsKey("_value"))
-				return (T) convertValue(root.get("_value"), type);
+			if (root.size() == 1 && root.containsKey("_value")) {
+				var raw = root.get("_value");
+				// Bug #12 (top-level only): when the root payload is a String-shaped byte[], consult
+				// the configured BinaryFormat's variant BinarySwap before falling through to convertValue's
+				// default String → byte[] UTF-8 coercion.  Collection-element route is intentionally not
+				// touched here — that surface is Bug #11 (Proto's repeated bytes field).
+				if (raw instanceof String s && type != null && type.inner() == byte[].class) {
+					var swap = type.getSwap(this);
+					if (swap != null)
+						return (T) unswap(swap, s, type);
+				}
+				return (T) convertValue(raw, type);
+			}
 			return convertMapToType(root, type);
 		}
 	}
@@ -164,6 +175,15 @@ public class ProtoParserSession extends ReaderParserSession {
 			return t.read().stringValue();
 		if (tok.type() == ProtoToken.TokenType.STRING)
 			return t.read().stringValue();
+		// Bare integer / hex / octal field tags (e.g. {@code 0: "first"}).  Required for the
+		// Bug #7b residual fix on the serialize side, which emits numeric Map<K,V> keys as bare
+		// integer tags rather than quoted strings.  The string-form of the numeric value is the
+		// field-name; downstream key-type coercion in convertMapToType / convertValue handles the
+		// conversion back to the bean property's declared key type.
+		if (tok.type() == ProtoToken.TokenType.DEC_INT
+			|| tok.type() == ProtoToken.TokenType.HEX_INT
+			|| tok.type() == ProtoToken.TokenType.OCT_INT)
+			return Long.toString(t.read().numberValue().longValue());
 		return null;
 	}
 
@@ -248,6 +268,10 @@ public class ProtoParserSession extends ReaderParserSession {
 					return (T) jm;
 				return (T) toJsonMap(map);
 			}
+			// Coerce keys when the declared key type isn't String/Object (Bug #7b).
+			var keyType = type.getKeyType();
+			if (keyType != null && !keyType.isObject() && !keyType.isString())
+				return convertToMemberType(null, map, type);
 			return (T) map;
 		}
 		var bm = toBeanMap(type.newInstance(getOuter()));
@@ -301,8 +325,15 @@ public class ProtoParserSession extends ReaderParserSession {
 			populateBeanMap(child, val2);
 			return child.getBean();
 		}
-		if (val instanceof Map val2 && targetType.isMap())
+		if (val instanceof Map val2 && targetType.isMap()) {
+			// When the bean property's declared key type is non-String (e.g. Map<TestEnum,String>),
+			// route through the converter's Map→Map path so keys are coerced to the declared type.
+			// toJsonMap unconditionally toString-keys the entries which loses the enum/typed key (Bug #7b).
+			var keyType = targetType.getKeyType();
+			if (keyType != null && !keyType.isObject() && !keyType.isString())
+				return convertToMemberType(null, val2, targetType);
 			return toJsonMap(val2);
+		}
 		if (val instanceof List val2 && targetType.isCollectionOrArray()) {
 			var elType = targetType.getElementType();
 			var result = new ArrayList<>();
@@ -312,8 +343,38 @@ public class ProtoParserSession extends ReaderParserSession {
 		}
 		if (val instanceof Number val2 && targetType.isNumber())
 			return convertToMemberType(null, val2, targetType);
-		if (val instanceof CharSequence val2 && (targetType.isDateOrCalendarOrTemporal() || targetType.isDuration()))
-			return Iso8601Utils.parse(val2.toString(), targetType, getTimeZone());
+		if (val instanceof CharSequence val2) {
+			if (targetType.isDate())
+				return parseDate(val2.toString(), targetType);
+			if (targetType.isCalendar())
+				return parseCalendar(val2.toString(), targetType);
+			if (targetType.isTemporal())
+				return parseTemporal(val2.toString(), targetType);
+			if (targetType.isDuration())
+				return parseDuration(val2.toString());
+			if (targetType.isPeriod())
+				return parsePeriod(val2.toString());
+		}
+		// String → byte[] dispatch at the collection-element / map-value / top-level call site.
+		// Mirrors the Bug #12 top-level fix in doParse but for the collection-element path that
+		// was intentionally carved out of that turn (see Bug #11/#12 a04-residual note in
+		// todo/TODO-57-format-round-trip-tests.md).  Two routes:
+		//   (1) non-NOT_SET: consult the variant BinarySwap installed on byte[].class via
+		//       targetType.getSwap(this); the wire is a hex / base64 string emitted by the
+		//       swap's swap() on the serializer side.
+		//   (2) NOT_SET: BinarySwap.match returns 0 so no swap fires.  The Proto serializer's
+		//       bytesValue path emits each byte as a hex-escaped char ("\xFF" etc.); the proto
+		//       tokenizer decodes those escapes back into a Java String where each char's code
+		//       point equals the byte's unsigned value.  Reconstruct byte[] by iterating chars.
+		if (val instanceof String s && targetType != null && targetType.inner() == byte[].class) {
+			var swap = targetType.getSwap(this);
+			if (swap != null)
+				return unswap(swap, s, targetType);
+			var bytes = new byte[s.length()];
+			for (var i = 0; i < s.length(); i++)
+				bytes[i] = (byte) s.charAt(i);
+			return bytes;
+		}
 		if (val instanceof Number val2 && targetType.isDateOrCalendarOrTemporal())
 			return Iso8601Utils.fromEpochMillis(val2.longValue(), targetType, getTimeZone());
 		return convertToMemberType(null, val, targetType);

@@ -64,7 +64,7 @@ import org.apache.juneau.swap.*;
 })
 public class CsvParserSession extends ReaderParserSession {
 
-	private final ByteArrayFormat byteArrayFormat;
+	private final CsvByteArrayCellFormat byteArrayFormat;
 	private final boolean allowNestedStructures;
 	private final String nullValue;
 
@@ -73,7 +73,7 @@ public class CsvParserSession extends ReaderParserSession {
 	 */
 	public static class Builder extends ReaderParserSession.Builder {
 
-		private ByteArrayFormat byteArrayFormat;
+		private CsvByteArrayCellFormat byteArrayFormat;
 		private boolean allowNestedStructures;
 		private String nullValue;
 
@@ -457,7 +457,7 @@ public class CsvParserSession extends ReaderParserSession {
 		if (val == null || val.isEmpty())
 			return null;
 		if (eType.isByteArray()) {
-			if (byteArrayFormat == ByteArrayFormat.SEMICOLON_DELIMITED) {
+			if (byteArrayFormat == CsvByteArrayCellFormat.SEMICOLON_DELIMITED) {
 				var parts = val.split(";");
 				var b = new byte[parts.length];
 				for (var i = 0; i < parts.length; i++) {

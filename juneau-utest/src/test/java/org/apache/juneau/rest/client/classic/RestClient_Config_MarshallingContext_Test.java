@@ -943,8 +943,10 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 		}
 	}
 
-	@Test void a38_useEnumNames() throws Exception {
-		var x = client().useEnumNames().build().post("/echoBody",A38b.get()).run().cacheContent().assertContent("{foo:'ONE'}").getContent().as(A38b.class);
+	@Test void a38_enumFormatName() throws Exception {
+		var b = client();
+		b.enumFormat(EnumFormat.NAME);
+		var x = b.build().post("/echoBody",A38b.get()).run().cacheContent().assertContent("{foo:'ONE'}").getContent().as(A38b.class);
 		assertEquals(A38a.ONE,x.foo);
 	}
 

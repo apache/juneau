@@ -892,18 +892,24 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertJson("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three'],example:'one'}}}", s.getSchema(TestEnumToString[][].class));
 	}
 
-	@Test void addExample_ENUM_useEnumNames() throws Exception {
-		var s = JsonSchemaGenerator.DEFAULT.copy().useEnumNames().addExamplesTo(ENUM).build().getSession();
+	@Test void addExample_ENUM_enumFormatName() throws Exception {
+		var b = JsonSchemaGenerator.DEFAULT.copy();
+		b.enumFormat(EnumFormat.NAME);
+		var s = b.addExamplesTo(ENUM).build().getSession();
 		assertJson("{type:'string','enum':['ONE','TWO','THREE'],example:'ONE'}", s.getSchema(TestEnumToString.class));
 	}
 
-	@Test void addExample_ENUM_wDefault_useEnumNames() throws Exception {
-		var s = JsonSchemaGenerator.DEFAULT.copy().useEnumNames().addExamplesTo(ENUM).example(TestEnumToString.class, "'TWO'").build().getSession();
+	@Test void addExample_ENUM_wDefault_enumFormatName() throws Exception {
+		var b = JsonSchemaGenerator.DEFAULT.copy();
+		b.enumFormat(EnumFormat.NAME);
+		var s = b.addExamplesTo(ENUM).example(TestEnumToString.class, "'TWO'").build().getSession();
 		assertJson("{type:'string','enum':['ONE','TWO','THREE'],example:'TWO'}", s.getSchema(TestEnumToString.class));
 	}
 
-	@Test void addExample_ENUM_2darray_useEnumNames() throws Exception {
-		var s = JsonSchemaGenerator.DEFAULT.copy().useEnumNames().addExamplesTo(ENUM).build().getSession();
+	@Test void addExample_ENUM_2darray_enumFormatName() throws Exception {
+		var b = JsonSchemaGenerator.DEFAULT.copy();
+		b.enumFormat(EnumFormat.NAME);
+		var s = b.addExamplesTo(ENUM).build().getSession();
 		assertJson("{type:'array',items:{type:'array',items:{type:'string','enum':['ONE','TWO','THREE'],example:'ONE'}}}", s.getSchema(TestEnumToString[][].class));
 	}
 

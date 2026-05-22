@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.juneau.collections.JsonMap;
 
@@ -122,6 +123,14 @@ public class ParquetParserSession extends InputStreamParserSession {
 		ctx = builder.ctx;
 	}
 
+	@Override /* InputStreamParserSession */
+	public boolean hasNativeBytes() {
+		// Parquet's column reader has no native byte-array primitive type — it surfaces byte[] as a raw
+		// BYTE_ARRAY column (at BinaryFormat.NOT_SET; Bug #11 raw-bytes path) or as a UTF-8 string column
+		// (at any other BinaryFormat, after the BinarySwap reverses the configured text wire form).
+		return false;
+	}
+
 	@Override
 	@SuppressWarnings({
 		"unchecked" // Generic (T) casts required due to type erasure in doParse
@@ -153,7 +162,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 				|| inner == Character.class || Number.class.isAssignableFrom(inner)))
 				elementType = ctx.getMarshallingContext().getClassMeta(Map.class);
 		}
-		var rows = readAllRows(bytes, meta, elementType, meta.schemaRepetition());
+		var rows = readAllRows(bytes, meta, elementType, meta.schemaRepetition(), meta.rawByteArrayPaths());
 		// Unwrap ValueHolder {value: X} when single row has "value" key and target expects scalar (not Map/List<Map>)
 		boolean targetWantsScalar = !type.isMap()
 			&& !(type.isCollection() && type.getElementType() != null && type.getElementType().isMap())
@@ -272,9 +281,20 @@ public class ParquetParserSession extends InputStreamParserSession {
 	private static final long MAX_NUM_ROWS = 10_000_000;
 	private static final long MAX_NUM_VALUES = 10_000_000;
 
-	private record FileMeta(long numRows, List<RowGroupMeta> rowGroups, Map<String, Integer> schemaRepetition) {}
+	private record FileMeta(long numRows, List<RowGroupMeta> rowGroups, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths) {}
 	private record RowGroupMeta(List<ColumnChunkMeta> columns) {}
 	private record ColumnChunkMeta(int type, List<String> pathInSchema, int codec, long numValues, long dataPageOffset, long totalCompressedSize) {}
+
+	/**
+	 * Result of {@link #readSchema(ThriftCompactDecoder)}: the per-leaf repetition map plus the set of
+	 * leaf paths whose physical type is {@code TYPE_BYTE_ARRAY} with no {@code convertedType} —
+	 * i.e. raw {@code byte[]} columns emitted by {@code ParquetSchemaBuilder.addLeafSchema}'s
+	 * {@code cm.isByteArray()} branch (Bug #11).  The Parquet file footer drops the
+	 * {@code logicalType} discriminant ({@code ParquetSchemaElement.writeTo} omits field 7), so the
+	 * parser uses "{@code TYPE_BYTE_ARRAY} with no {@code convertedType}" as the unique signal that a
+	 * column should be reassembled back into {@code byte[]} instead of decoded as UTF-8 text.
+	 */
+	private record SchemaReadResult(Map<String, Integer> repetitions, Set<String> rawByteArrayPaths) {}
 
 	private static FileMeta parseFileMetaData(byte[] footer) throws ParseException {
 		try {
@@ -283,18 +303,23 @@ public class ParquetParserSession extends InputStreamParserSession {
 			long numRows = 0;
 			List<RowGroupMeta> rowGroups = null;
 			Map<String, Integer> schemaRepetition = Map.of();
+			Set<String> rawByteArrayPaths = Set.of();
 			ThriftCompactDecoder.FieldHeader fh;
 			while (!(fh = dec.readFieldHeader()).isStop) {
 				switch (fh.fieldId) {
 					case 1 -> dec.readI32(); // version - consumed but not used
-					case 2 -> schemaRepetition = readSchema(dec);
+					case 2 -> {
+						var sr = readSchema(dec);
+						schemaRepetition = sr.repetitions();
+						rawByteArrayPaths = sr.rawByteArrayPaths();
+					}
 					case 3 -> numRows = dec.readI64();
 					case 4 -> rowGroups = readRowGroups(dec);
 					default -> dec.skipField(fh.type);
 				}
 			}
 			dec.readStructEnd();
-			return new FileMeta(numRows, rowGroups != null ? rowGroups : List.of(), schemaRepetition);
+			return new FileMeta(numRows, rowGroups != null ? rowGroups : List.of(), schemaRepetition, rawByteArrayPaths);
 		} catch (IOException e) {
 			throw new ParseException(e);
 		}
@@ -302,16 +327,18 @@ public class ParquetParserSession extends InputStreamParserSession {
 
 	private record SchemaStackFrame(String name, int remaining) {}
 
-	private static Map<String, Integer> readSchema(ThriftCompactDecoder dec) throws IOException {
+	private static SchemaReadResult readSchema(ThriftCompactDecoder dec) throws IOException {
 		var lh = dec.readListHeader();
 		var pathStack = new ArrayList<SchemaStackFrame>();
 		var result = new LinkedHashMap<String, Integer>();
+		var rawByteArrayPaths = new java.util.LinkedHashSet<String>();
 		for (int i = 0; i < lh.size; i++) {
 			dec.readStructBegin();
 			Integer type = null;
 			Integer repetitionType = null;
 			String name = null;
 			Integer numChildren = null;
+			Integer convertedType = null;
 			ThriftCompactDecoder.FieldHeader fh;
 			while (!(fh = dec.readFieldHeader()).isStop) {
 				switch (fh.fieldId) {
@@ -320,6 +347,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 					case 3 -> repetitionType = dec.readI32();
 					case 4 -> name = dec.readString();
 					case 5 -> numChildren = dec.readI32();
+					case 6 -> convertedType = dec.readI32();
 					default -> dec.skipField(fh.type);
 				}
 			}
@@ -337,8 +365,17 @@ public class ParquetParserSession extends InputStreamParserSession {
 				// Leaf element: record it and decrement parent's child count
 				int rep = repetitionType != null ? repetitionType : OPTIONAL;
 				result.put(path, rep);
+				// Bug #11 fix: a TYPE_BYTE_ARRAY column with no convertedType uniquely identifies a
+				// raw byte[] column emitted by ParquetSchemaBuilder.addLeafSchema's cm.isByteArray()
+				// branch.  Every other writer site that emits TYPE_BYTE_ARRAY sets a discriminator
+				// (CONVERTED_UTF8 for strings/dates/durations/decimals, CONVERTED_ENUM for enums, or
+				// CONVERTED_TIMESTAMP_MILLIS).  Mirrors the Bug #7a UUID parse-back assumption
+				// (TYPE_FIXED_LEN_BYTE_ARRAY uniquely identifies UUIDs) at a different physical type.
+				if (type == TYPE_BYTE_ARRAY && convertedType == null)
+					rawByteArrayPaths.add(path);
 				if (parquetDebug())
-					parquetDebugLog("readSchema leaf: path=" + path + " name=" + name + " rep=" + rep + " pathStack=" + pathStack);
+					parquetDebugLog("readSchema leaf: path=" + path + " name=" + name + " rep=" + rep
+						+ " convertedType=" + convertedType + " pathStack=" + pathStack);
 				while (!pathStack.isEmpty()) {
 					var top = pathStack.get(pathStack.size() - 1);
 					var newRemaining = top.remaining - 1;
@@ -352,8 +389,8 @@ public class ParquetParserSession extends InputStreamParserSession {
 			}
 		}
 		if (parquetDebug())
-			parquetDebugLog("readSchema result: " + result);
-		return result;
+			parquetDebugLog("readSchema result: " + result + " rawByteArrayPaths=" + rawByteArrayPaths);
+		return new SchemaReadResult(result, rawByteArrayPaths);
 	}
 
 	private static void skipList(ThriftCompactDecoder dec) throws IOException {
@@ -437,7 +474,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 		return list;
 	}
 
-	private List<?> readAllRows(byte[] fileBytes, FileMeta meta, ClassMeta<?> elementType, Map<String, Integer> schemaRepetition) throws ParseException {
+	private List<?> readAllRows(byte[] fileBytes, FileMeta meta, ClassMeta<?> elementType, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths) throws ParseException {
 		if (meta.numRows() == 0)
 			return List.of();
 		var firstGroup = meta.rowGroups().isEmpty() ? null : meta.rowGroups().get(0);
@@ -454,7 +491,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 			else if (isMapKeyValueColumnPath(path))
 				values = readMapKeyValueColumnChunk(fileBytes, cc, numRows, trim);
 			else
-				values = readColumnChunk(fileBytes, cc, numRows, schemaRepetition, trim);
+				values = readColumnChunk(fileBytes, cc, numRows, schemaRepetition, rawByteArrayPaths, trim);
 			columnData.put(path, values);
 		}
 		if (parquetDebug()) {
@@ -830,7 +867,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 		return result;
 	}
 
-	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String, Integer> schemaRepetition, boolean trimStrings) throws ParseException {
+	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, boolean trimStrings) throws ParseException {
 		try {
 			int off = (int)cc.dataPageOffset();
 			var bais = new ByteArrayInputStream(fileBytes, off, fileBytes.length - off);
@@ -872,14 +909,16 @@ public class ParquetParserSession extends InputStreamParserSession {
 			boolean isUnderListRoot = path != null && path.startsWith("root.list.element.");
 			boolean isPrimitiveType = cc.type() == TYPE_INT32 || cc.type() == TYPE_INT64 || cc.type() == TYPE_FLOAT || cc.type() == TYPE_DOUBLE || cc.type() == TYPE_BOOLEAN;
 			int maxDefLevel = (rep == REQUIRED || (isUnderListRoot && isPrimitiveType)) ? 0 : 1;
+			boolean isRawByteArrayColumn = rawByteArrayPaths.contains(path);
 			if (parquetDebug())
 				parquetDebugLog("readColumnChunk: path=" + path + " pathInSchema=" + cc.pathInSchema()
-				+ " rep=" + rep + " (REQ=" + REQUIRED + ") maxDefLevel=" + maxDefLevel + " type=" + cc.type() + " isPrimitive=" + isPrimitiveType);
+				+ " rep=" + rep + " (REQ=" + REQUIRED + ") maxDefLevel=" + maxDefLevel + " type=" + cc.type()
+				+ " isPrimitive=" + isPrimitiveType + " isRawByteArrayColumn=" + isRawByteArrayColumn);
 			int valuesToRead = (int)Math.min(cc.numValues(), numRows);
 			var reader = new ParquetColumnReader(decompressed, valuesToRead, maxDefLevel);
 			var values = new ArrayList<>();
 			while (reader.hasNext()) {
-				values.add(readValue(reader, cc.type(), trimStrings));
+				values.add(readValue(reader, cc.type(), trimStrings, isRawByteArrayColumn));
 			}
 			if (parquetDebug())
 				parquetDebugLog("readColumnChunk values: path=" + path + " values=" + values);
@@ -890,6 +929,10 @@ public class ParquetParserSession extends InputStreamParserSession {
 	}
 
 	private static Object readValue(ParquetColumnReader reader, int type, boolean trimStrings) throws IOException {
+		return readValue(reader, type, trimStrings, false);
+	}
+
+	private static Object readValue(ParquetColumnReader reader, int type, boolean trimStrings, boolean isRawByteArrayColumn) throws IOException {
 		reader.advance();
 		if (reader.isNull())
 			return null;
@@ -900,15 +943,54 @@ public class ParquetParserSession extends InputStreamParserSession {
 			case TYPE_FLOAT -> reader.readFloat();
 			case TYPE_DOUBLE -> reader.readDouble();
 			case TYPE_BYTE_ARRAY -> {
+				// Bug #11 fix: when the schema marks this column as a raw byte[] column
+				// (TYPE_BYTE_ARRAY with no convertedType — see SchemaReadResult), surface the bytes
+				// as a byte[] so the framework can hand them straight to the bean-property setter.
+				// Otherwise read the bytes as UTF-8 for string / enum / date / duration / decimal
+				// columns (which carry CONVERTED_UTF8 / CONVERTED_ENUM / CONVERTED_TIMESTAMP_MILLIS).
+				if (isRawByteArrayColumn) {
+					yield reader.readByteArray();
+				}
 				var s = reader.readByteArrayAsString();
 				yield trimStrings && s != null ? s.trim() : s;
 			}
-			case TYPE_FIXED_LEN_BYTE_ARRAY -> reader.readFixedLenByteArray(16);
+			// TYPE_FIXED_LEN_BYTE_ARRAY is only emitted by ParquetSchemaBuilder for UUID columns
+			// (TYPE_FIXED_LEN_BYTE_ARRAY(16) / LOGICAL_TYPE_UUID).  The Parquet file footer does
+			// not carry the logical-type discriminant (ParquetSchemaElement.writeTo deliberately
+			// omits it), so we use the physical type itself as the UUID signal — safe because no
+			// other writer path produces this physical type.  Without this conversion the parser
+			// would surface a raw byte[16] into the row JsonMap and the framework's generic
+			// String/byte[]→UUID coercion path can't reassemble it back to a UUID.
+			case TYPE_FIXED_LEN_BYTE_ARRAY -> {
+				var bytes = reader.readFixedLenByteArray(16);
+				yield bytes == null ? null : uuidFromFixedLenBytes(bytes);
+			}
 			default -> {
 				var s = reader.readByteArrayAsString();
 				yield trimStrings && s != null ? s.trim() : s;
 			}
 		};
+	}
+
+	/**
+	 * Reassembles a {@link UUID} from the 16-byte big-endian wire form written by
+	 * {@code ParquetSerializerSession#toFixedLenByteArray(UUID)}.
+	 *
+	 * <p>
+	 * Mirrors the serializer's write loop (most-significant 8 bytes then least-significant 8 bytes,
+	 * both big-endian) so the round-trip is bit-exact.  Falls back to {@code new UUID(0L, 0L)} when
+	 * the buffer is the wrong length — defensive guard for fuzzed input.
+	 */
+	private static UUID uuidFromFixedLenBytes(byte[] b) {
+		if (b == null || b.length != 16)
+			return new UUID(0L, 0L);
+		long msb = 0L;
+		long lsb = 0L;
+		for (int i = 0; i < 8; i++)
+			msb = (msb << 8) | (b[i] & 0xFFL);
+		for (int i = 0; i < 8; i++)
+			lsb = (lsb << 8) | (b[8 + i] & 0xFFL);
+		return new UUID(msb, lsb);
 	}
 
 	private List<Object> reassembleRows(Map<String, List<Object>> columnData, int numRows, ClassMeta<?> elementType) throws ParseException {

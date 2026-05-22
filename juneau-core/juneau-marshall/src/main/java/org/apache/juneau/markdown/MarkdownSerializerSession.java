@@ -22,6 +22,8 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
+import java.time.*;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.function.*;
 
@@ -32,7 +34,6 @@ import org.apache.juneau.json5.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanMapEntry;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
@@ -277,11 +278,16 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 			serializeCollection(w, l, eType, cm);
 		} else if (cm.isStreamable()) {
 			serializeCollection(w, toListFromStreamable(o, cm), eType, cm);
-		} else if (cm.isDateOrCalendarOrTemporal() || cm.isDuration()) {
-			var formatted = cm.isDateOrCalendarOrTemporal()
-				? Iso8601Utils.format(o, cm, getTimeZone())
-				: o.toString();
-			w.text(formatted);
+		} else if (cm.isDate()) {
+			w.text(serializeDate((Date)o, cm));
+		} else if (cm.isCalendar()) {
+			w.text(serializeCalendar(o, cm));
+		} else if (cm.isTemporal()) {
+			w.text(serializeTemporal((TemporalAccessor)o, cm));
+		} else if (cm.isDuration()) {
+			w.text(serializeDuration((Duration)o));
+		} else if (cm.isPeriod()) {
+			w.text(serializePeriod((Period)o));
 		} else {
 			var s = toString(o);
 			// Only use JSON5 wrapping for actual string/enum types where auto-detection could misinterpret
@@ -543,11 +549,20 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 		if (cm.isNumber() || cm.isBoolean())
 			return o.toString();
 
-		if (cm.isDateOrCalendarOrTemporal())
-			return MarkdownWriter.escapeCell(Iso8601Utils.format(o, cm, getTimeZone()));
+		if (cm.isDate())
+			return MarkdownWriter.escapeCell(serializeDate((Date)o, cm));
+
+		if (cm.isCalendar())
+			return MarkdownWriter.escapeCell(serializeCalendar(o, cm));
+
+		if (cm.isTemporal())
+			return MarkdownWriter.escapeCell(serializeTemporal((TemporalAccessor)o, cm));
 
 		if (cm.isDuration())
-			return MarkdownWriter.escapeCell(o.toString());
+			return MarkdownWriter.escapeCell(serializeDuration((Duration)o));
+
+		if (cm.isPeriod())
+			return MarkdownWriter.escapeCell(serializePeriod((Period)o));
 
 		if (cm.isCharSequence() || cm.isEnum()) {
 			var s = toString(o);

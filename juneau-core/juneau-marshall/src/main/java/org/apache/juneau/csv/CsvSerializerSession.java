@@ -29,6 +29,8 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import java.time.*;
 import java.time.temporal.*;
 import java.util.Calendar;
@@ -38,8 +40,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.swap.*;
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -70,7 +72,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
 
-	private final ByteArrayFormat byteArrayFormat;
+	private final CsvByteArrayCellFormat byteArrayFormat;
 	private final boolean allowNestedStructures;
 	private final String nullValue;
 
@@ -82,7 +84,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	})
 	public static class Builder extends WriterSerializerSession.Builder {
 
-		private ByteArrayFormat byteArrayFormat;
+		private CsvByteArrayCellFormat byteArrayFormat;
 		private boolean allowNestedStructures;
 		private String nullValue;
 
@@ -127,7 +129,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder byteArrayFormat(ByteArrayFormat value) {
+		public Builder byteArrayFormat(CsvByteArrayCellFormat value) {
 			if (nn(value))
 				byteArrayFormat = value;
 			return this;
@@ -194,7 +196,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			}
 			switch (key) {
 				case PROP_byteArrayFormat, PROP_CsvSerializerSession_byteArrayFormat:
-					return byteArrayFormat(cvt(value, ByteArrayFormat.class));
+					return byteArrayFormat(cvt(value, CsvByteArrayCellFormat.class));
 				case PROP_allowNestedStructures, PROP_CsvSerializerSession_allowNestedStructures:
 					return allowNestedStructures(cvt(value, Boolean.class));
 				case PROP_nullValue, PROP_CsvSerializerSession_nullValue:
@@ -302,14 +304,20 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			if (value == null || type == null)
 				return value;
 
-			org.apache.juneau.swap.ObjectSwap swap = type.getSwap(this);
+			ObjectSwap swap = type.getSwap(this);
 			if (nn(swap)) {
 				return swap(swap, value);
 			}
-			if (type.isDateOrCalendarOrTemporal())
-				return Iso8601Utils.format(value, type, getTimeZone());
+			if (type.isDate())
+				return serializeDate((Date)value, type);
+			if (type.isCalendar())
+				return serializeCalendar(value, type);
+			if (type.isTemporal())
+				return serializeTemporal((TemporalAccessor)value, type);
 			if (type.isDuration())
-				return value.toString();
+				return serializeDuration((Duration)value);
+			if (type.isPeriod())
+				return serializePeriod((Period)value);
 			return value;
 		} catch (SerializeException e) {
 			throw rex(e);
@@ -502,9 +510,13 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	private Object formatIfDateOrDuration(Object value) {
 		if (value == null)
 			return null;
-		if (value instanceof Calendar || value instanceof Date || value instanceof Temporal
-				|| value instanceof javax.xml.datatype.XMLGregorianCalendar)
-			return Iso8601Utils.format(value, getClassMetaForObject(value), getTimeZone());
+		var cm = getClassMetaForObject(value);
+		if (value instanceof Date d)
+			return serializeDate(d, cm);
+		if (value instanceof Calendar || value instanceof javax.xml.datatype.XMLGregorianCalendar)
+			return serializeCalendar(value, cm);
+		if (value instanceof TemporalAccessor t)
+			return serializeTemporal(t, cm);
 		if (value instanceof Duration)
 			return value.toString();
 		return value;
@@ -523,7 +535,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 				return new CsvCellSerializer(byteArrayFormat, nullValue).serialize(value, this);
 		}
 		if (value instanceof byte[] b) {
-			return byteArrayFormat == ByteArrayFormat.SEMICOLON_DELIMITED
+			return byteArrayFormat == CsvByteArrayCellFormat.SEMICOLON_DELIMITED
 				? formatByteArraySemicolon(b)
 				: base64Encode(b);
 		}
@@ -620,9 +632,12 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		var type = getClassMetaForObject(swapped);
 		if (type.isBean() && !(swapped instanceof Map))
 			return toBeanMap(swapped);
-		if (swapped instanceof Calendar || swapped instanceof Date || swapped instanceof Temporal
-				|| swapped instanceof javax.xml.datatype.XMLGregorianCalendar)
-			return Iso8601Utils.format(swapped, type, getTimeZone());
+		if (swapped instanceof Date d)
+			return serializeDate(d, type);
+		if (swapped instanceof Calendar || swapped instanceof XMLGregorianCalendar)
+			return serializeCalendar(swapped, type);
+		if (swapped instanceof TemporalAccessor t)
+			return serializeTemporal(t, type);
 		if (swapped instanceof java.time.Duration)
 			return swapped.toString();
 		return swapped;

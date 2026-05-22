@@ -18,7 +18,6 @@ package org.apache.juneau.serializer;
 
 import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -217,13 +216,12 @@ public class OutputStreamSerializerSession extends SerializerSession {
 
 	@Override /* Overridden from SerializerSession */
 	public final String serializeToString(Object o) throws SerializeException {
-		var b = serialize(o);
-		return switch (getBinaryFormat()) {
-			case SPACED_HEX -> toSpacedHex(b);
-			case HEX -> toHex(b);
-			case BASE64 -> base64Encode(b);
-			default -> null;
-		};
+		// Stream-to-string is a debug / display convenience for binary serializer output (BSON / MsgPack /
+		// CBOR / Proto / Parquet).  It always emits HEX irrespective of the configured BinaryFormat so that
+		// downstream tooling (test fixtures, log lines, REPL output) gets a stable, copy-pasteable
+		// representation of the binary frame regardless of how the surrounding context configures byte[]
+		// cell encoding.
+		return BinaryFormat.HEX.format(serialize(o));
 	}
 
 	@Override /* Overridden from SerializerSession */
@@ -234,9 +232,34 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	/**
 	 * Binary output format.
 	 *
-	 * @see OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)
+	 * @see MarshallingContext.Builder#binaryFormat(BinaryFormat)
 	 * @return
 	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
 	 */
-	protected final BinaryFormat getBinaryFormat() { return ctx.getBinaryFormat(); }
+	protected final BinaryFormat getBinaryFormat() { return ctx.getMarshallingContext().getBinaryFormat(); }
+
+	/**
+	 * Returns whether this binary serializer has a native byte-array wire type.
+	 *
+	 * <p>
+	 * When {@code true}, {@code byte[]} payloads bypass the configured
+	 * {@link BinaryFormat} dispatch in {@link org.apache.juneau.swaps.BinarySwap} and the variant
+	 * binary swap installed by {@code MarshalledPropertyPostProcessor}, and are written as raw
+	 * bytes through the serializer's native binary opcode (e.g. MsgPack {@code bin} family, CBOR
+	 * byte-string major type 2, BSON binary subtype {@code 0x05}).  When {@code false}, the
+	 * configured {@link BinaryFormat} fires for non-{@code NOT_SET} formats and produces a text
+	 * wire form (HEX / BASE64 / etc.) that the serializer emits as a string in its native string
+	 * column / literal type — used by serializers whose wire format has no native byte-array
+	 * primitive (Parquet column writer, binary RDF formats).
+	 *
+	 * <p>
+	 * Defaults to {@code true}.  Subclasses without a native byte-array wire type
+	 * (e.g. {@link org.apache.juneau.parquet.ParquetSerializerSession} and the binary RDF
+	 * sessions) override and return {@code false}.
+	 *
+	 * @return {@code true} if this serializer has a native byte-array wire type.
+	 */
+	public boolean hasNativeBytes() {
+		return true;
+	}
 }

@@ -40,7 +40,6 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanMapEntry;
@@ -356,8 +355,16 @@ public class HtmlParserSession extends XmlParserSession {
 				o = Boolean.parseBoolean(text);
 			else if (sType.isNumber())
 				o = parseNumber(text, (Class<? extends Number>)eType.inner());
-			else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration())
-				o = Iso8601Utils.parse(text, sType, getTimeZone());
+			else if (sType.isDate())
+				o = parseDate(text, sType);
+			else if (sType.isCalendar())
+				o = parseCalendar(text, sType);
+			else if (sType.isTemporal())
+				o = parseTemporal(text, sType);
+			else if (sType.isDuration())
+				o = parseDuration(text);
+			else if (sType.isPeriod())
+				o = parsePeriod(text);
 			else if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, text);
 			else
@@ -369,8 +376,16 @@ public class HtmlParserSession extends XmlParserSession {
 				o = text;
 			else if (sType.isChar())
 				o = parseCharacter(text);
-			else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration())
-				o = Iso8601Utils.parse(text, sType, getTimeZone());
+			else if (sType.isDate())
+				o = parseDate(text, sType);
+			else if (sType.isCalendar())
+				o = parseCalendar(text, sType);
+			else if (sType.isTemporal())
+				o = parseTemporal(text, sType);
+			else if (sType.isDuration())
+				o = parseDuration(text);
+			else if (sType.isPeriod())
+				o = parsePeriod(text);
 			else if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, text);
 			else

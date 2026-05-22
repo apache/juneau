@@ -25,7 +25,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.swaps.*;
 
 /**
  * Exhaustive serialization tests DynaBean support.
@@ -117,6 +116,8 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.verify(x -> verify(x).isType(BeanWithDynaGetterOnly.class))
 			.build(),
 		tester(4, "BeanWithDynaFieldSwapped", BeanWithDynaFieldSwapped.class, new BeanWithDynaFieldSwapped().init())
+			.serializerApply(b -> b.calendarFormat(CalendarFormat.ISO_INSTANT))
+			.parserApply(b -> b.calendarFormat(CalendarFormat.ISO_INSTANT))
 			.json5("{f1a:'1901-03-03T18:11:12Z'}")
 			.json5T("{f1a:'1901-03-03T18:11:12Z'}")
 			.json5R("{\n\tf1a: '1901-03-03T18:11:12Z'\n}")
@@ -311,7 +312,6 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	@Marshalled
 	public static class BeanWithDynaFieldSwapped {
 		@BeanProp(name="*")
-		@Swap(TemporalCalendarSwap.IsoInstant.class)
 		public Map<String,Calendar> f1 = map();
 
 		public BeanWithDynaFieldSwapped init() {

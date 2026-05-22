@@ -17,6 +17,7 @@
 package org.apache.juneau.ini;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.memoizer;
 
 import java.io.*;
 import java.util.*;
@@ -25,12 +26,12 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.function.Memoizer;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.utils.Iso8601Utils;
-import org.apache.juneau.commons.bean.BeanMap;
 
 /**
  * Session for parsing INI format into POJOs.
@@ -49,6 +50,10 @@ public class IniParserSession extends ReaderParserSession {
 
 	/** Delimiter for nested section names (e.g. {@code address/street}). */
 	private static final String SECTION_PATH_DELIMITER = "/";
+
+	private final Memoizer<JsonParser> json5Parser = memoizer(
+		() -> Json5Parser.create().marshallingContext((MarshallingContext) getContext()).build()
+	);
 
 	/**
 	 * Builder for INI parser session.
@@ -233,7 +238,7 @@ public class IniParserSession extends ReaderParserSession {
 			return convertToMemberType(null, inner, targetType);
 		}
 		if (trimmed.startsWith("[") || trimmed.startsWith("{"))
-			return getJsonParser().parse(trimmed, targetType);
+			return getJson5Parser().parse(trimmed, targetType);
 		if (targetType.isNumber()) {
 			try {
 				if (trimmed.contains(".") || trimmed.toLowerCase().contains("e"))
@@ -243,13 +248,41 @@ public class IniParserSession extends ReaderParserSession {
 				return convertToMemberType(null, trimmed, targetType);
 			}
 		}
-		if (targetType.isDateOrCalendarOrTemporal() || targetType.isDuration())
-			return Iso8601Utils.parse(trimmed, targetType, getTimeZone());
+		if (targetType.isDate())
+			return parseDate(trimmed, targetType);
+		if (targetType.isCalendar())
+			return parseCalendar(trimmed, targetType);
+		if (targetType.isTemporal())
+			return parseTemporal(trimmed, targetType);
+		if (targetType.isDuration())
+			return parseDuration(trimmed);
+		if (targetType.isPeriod())
+			return parsePeriod(trimmed);
 		return convertToMemberType(null, trimmed, targetType);
 	}
 
-	private static JsonParser getJsonParser() {
-		return Json5Parser.DEFAULT;
+	/**
+	 * Returns a Json5 parser configured with this session's {@link MarshallingContext}.
+	 *
+	 * <p>
+	 * Required so that format hints carried on the parent {@code IniParser} context (e.g.
+	 * {@link org.apache.juneau.LocaleFormat}, {@link org.apache.juneau.TimeZoneFormat}) are honored
+	 * when nested JSON5-encoded collection/map values are deserialized.  Using {@code Json5Parser.DEFAULT}
+	 * here would silently drop those hints and fall back to the format-default behavior.
+	 *
+	 * <p>
+	 * Memoized via {@link Memoizer} — first call constructs the parser; subsequent calls return
+	 * the cached instance.  {@link #parseValue} calls this once per JSON5-encoded value, so a single
+	 * builder-construction + parser-instantiation is amortized across the whole INI document rather
+	 * than repeated for every {@code […]} / {@code {…}} value.
+	 *
+	 * <p>
+	 * Bug #8: list-of-{@link Locale} values written under {@link org.apache.juneau.LocaleFormat#UNDERSCORE}
+	 * (wire form {@code "en_US"}) were being parsed via {@code Locale.forLanguageTag("en_US")} (BCP_47 default)
+	 * which returns {@link Locale#ROOT}, dropping the locale content.
+	 */
+	private JsonParser getJson5Parser() {
+		return json5Parser.get();
 	}
 
 	private static Object convertMapToTarget(Map<String, Object> map, ClassMeta<?> type) throws ParseException, ExecutableException {

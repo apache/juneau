@@ -160,9 +160,54 @@ class ProtoTokenizer {
 			readChar(); // consume sign to look ahead
 			int next = peekChar();
 			unread(c); // restore sign for lexNumber
-			return Character.isDigit(next) || next == '.' || next == 'i' || next == 'n';
+			return Character.isDigit(next) || next == '.' || next == 'i' || next == 'I' || next == 'n' || next == 'N';
 		}
+		// Bug #4c: 'n'/'i' might start nan / inf / infinity at value position, but it might also
+		// start a regular identifier-shaped field name (nano_seconds, inf, index, ...).  Multi-char
+		// lookahead disambiguates: peek past the leading letter to see if the assembled token is
+		// nan / inf / infinity (case-insensitive) AND is followed by a value-terminator (whitespace,
+		// comma, semicolon, ], }, or EOF).  ':' is deliberately NOT a terminator — a field whose
+		// name happens to be {@code inf} (or {@code nan}) is legal proto and shows up as
+		// {@code inf: value}, so the colon-immediately-after case must stay on the IDENT path.
+		if (c == 'i' || c == 'I' || c == 'n' || c == 'N')
+			return startsSpecialFloatLiteral();
 		return false;
+	}
+
+	/**
+	 * Multi-char lookahead helper for {@link #mightStartNumber}.  Reads identifier-shaped chars
+	 * ({@link #isIdentChar}) up to 8 deep starting at the current position, peeks the next char as
+	 * the candidate terminator, then unreads everything and restores the line/column counters so
+	 * the lexer can reparse the same chars freshly.  Returns <jk>true</jk> only when the assembled
+	 * token (case-folded) is one of {@code nan} / {@code inf} / {@code infinity} AND the next char
+	 * is a value-terminator (whitespace / {@code ,} / {@code ;} / {@code ]} / {@code }} / EOF).
+	 */
+	private boolean startsSpecialFloatLiteral() throws IOException {
+		var savedLine = line;
+		var savedCol = column;
+		var buf = new StringBuilder();
+		while (buf.length() <= 8) {
+			int next = peekChar();
+			if (next < 0 || !isIdentChar(next))
+				break;
+			buf.append((char) readChar());
+		}
+		int term = peekChar();
+		var isTerminator = term < 0
+			|| term == ' ' || term == '\t' || term == '\n' || term == '\r' || term == 0x0B || term == 0x0C
+			|| term == ',' || term == ';' || term == ']' || term == '}';
+		var tok = buf.toString().toLowerCase();
+		var isSpecial = isTerminator && (tok.equals("nan") || tok.equals("inf") || tok.equals("infinity"));
+		// Restore consumed chars in reverse order (pushback is a LIFO stack — to make the next read
+		// return buf[0], buf[0] must be on top, so we push buf[N-1] ... buf[0]).
+		for (var i = buf.length() - 1; i >= 0; i--)
+			unread(buf.charAt(i));
+		// readChar() advances line/column unconditionally, while unread() does NOT decrement, so we
+		// must explicitly restore the pre-lookahead position counters.  Without this every multi-char
+		// peek would inflate column by buf.length() before the actual lex consumed the same chars.
+		line = savedLine;
+		column = savedCol;
+		return isSpecial;
 	}
 
 	private ProtoToken lexNumber() throws IOException, ParseException {
@@ -188,16 +233,18 @@ class ProtoTokenizer {
 				long val = readOctalInteger();
 				return new ProtoToken(ProtoToken.TokenType.OCT_INT, neg ? -val : val);
 			}
+			if (next == '.' || next == 'e' || next == 'E' || next == 'f' || next == 'F') {
+				double val = readFloatLiteral(neg, "0");
+				return new ProtoToken(ProtoToken.TokenType.FLOAT, val);
+			}
 			return new ProtoToken(ProtoToken.TokenType.DEC_INT, 0L);
 		}
 		if (c == '.') {
-			double val = readFloatLiteral(neg);
+			double val = readFloatLiteral(neg, "");
 			return new ProtoToken(ProtoToken.TokenType.FLOAT, val);
 		}
-		if (c == 'i' || c == 'n') {
-			double val = readSpecialFloat(neg);
-			return new ProtoToken(ProtoToken.TokenType.FLOAT, val);
-		}
+		if (c == 'i' || c == 'I' || c == 'n' || c == 'N')
+			return readSpecialFloatOrIdent(neg);
 		var result = readDecimalOrFloat(neg);
 		if (result instanceof Double result2)
 			return new ProtoToken(ProtoToken.TokenType.FLOAT, result2);
@@ -259,7 +306,8 @@ class ProtoTokenizer {
 				sb.append((char) readChar());
 			var s = sb.toString();
 			try {
-				return Double.parseDouble(s);
+				double val = Double.parseDouble(s);
+				return neg ? -val : val;
 			} catch (@SuppressWarnings("unused") NumberFormatException e) {
 				throw parseException(CONST_invalidFloat + s);
 			}
@@ -268,7 +316,8 @@ class ProtoTokenizer {
 			readChar();
 			var s = sb.toString();
 			try {
-				return Double.parseDouble(s);
+				double val = Double.parseDouble(s);
+				return neg ? -val : val;
 			} catch (@SuppressWarnings("unused") NumberFormatException e) {
 				throw parseException(CONST_invalidFloat + s);
 			}
@@ -283,26 +332,49 @@ class ProtoTokenizer {
 		}
 	}
 
-	private double readSpecialFloat(boolean neg) throws IOException, ParseException {
+	/**
+	 * Reads an identifier-shaped token starting with 'n'/'N'/'i'/'I' and dispatches to a FLOAT
+	 * token when the lowercased form is one of the proto special-float literals (nan / inf /
+	 * infinity), or to an IDENT token otherwise.
+	 */
+	private ProtoToken readSpecialFloatOrIdent(boolean neg) throws IOException, ParseException {
 		var sb = new StringBuilder();
 		while (isLetterOrUnderscore(peekChar()) || Character.isDigit(peekChar()))
 			sb.append((char) readChar());
-		var s = sb.toString().toLowerCase();
-		if (s.equals("inf") || s.equals("infinity"))
-			return neg ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
-		if (s.equals("nan"))
-			return Double.NaN;
-		throw parseException("Invalid float literal: " + (neg ? "-" : "") + s);
+		var s = sb.toString();
+		var lower = s.toLowerCase();
+		if (lower.equals("inf") || lower.equals("infinity"))
+			return new ProtoToken(ProtoToken.TokenType.FLOAT, neg ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
+		if (lower.equals("nan"))
+			return new ProtoToken(ProtoToken.TokenType.FLOAT, Double.NaN);
+		if (neg)
+			throw parseException("Invalid float literal: -" + s);
+		return new ProtoToken(ProtoToken.TokenType.IDENT, s);
 	}
 
-	private double readFloatLiteral(boolean neg) throws IOException, ParseException {
+	/**
+	 * Reads the tail of a float literal.  The integer part (if any) is pre-supplied as
+	 * {@code prefix} (e.g. {@code "0"} for the leading-zero float branch, {@code ""} for a bare
+	 * {@code .5}-style literal).  The reader optionally consumes {@code .digits}, an exponent
+	 * ({@code eDigits} / {@code Edigits} with optional sign), and a trailing {@code f}/{@code F}
+	 * suffix.
+	 *
+	 * @param neg <jk>true</jk> if a leading minus sign was consumed by the caller.
+	 * @param prefix The integer part already consumed by the caller (without sign).
+	 * @return The parsed double value.
+	 * @throws IOException If the reader cannot be read.
+	 * @throws ParseException If the assembled literal is not a valid float.
+	 */
+	private double readFloatLiteral(boolean neg, String prefix) throws IOException, ParseException {
 		var sb = new StringBuilder(neg ? "-" : "");
-		readChar(); // consume '.'
-		sb.append('.');
-		while (Character.isDigit(peekChar()) || peekChar() == '_') {
-			int ch = readChar();
-			if (ch != '_')
-				sb.append((char) ch);
+		sb.append(prefix);
+		if (peekChar() == '.') {
+			sb.append((char) readChar());
+			while (Character.isDigit(peekChar()) || peekChar() == '_') {
+				int ch = readChar();
+				if (ch != '_')
+					sb.append((char) ch);
+			}
 		}
 		if (peekChar() == 'e' || peekChar() == 'E') {
 			sb.append((char) readChar());

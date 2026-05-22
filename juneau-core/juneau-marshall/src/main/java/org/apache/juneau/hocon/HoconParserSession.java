@@ -95,7 +95,7 @@ public class HoconParserSession extends ReaderParserSession {
 			var resolver = new HoconResolver(root);
 			resolver.resolve();
 		}
-		var map = hoconToMap(root);
+		var map = hoconToMap(root, type);
 		return (T) convertToBean(map, type);
 	}
 
@@ -351,6 +351,11 @@ public class HoconParserSession extends ReaderParserSession {
 			} else {
 				throw new ParseException(this, "Expected =, : or brace at line {0}", t.getLine());
 			}
+			// Mirror the parseArray guard: peek-before-skip so that a `}` cached as `peeked` by
+			// parseValueOrConcat's concat loop doesn't cause skipWhitespaceAndComments below to
+			// chew through a newline that lives OUTSIDE this object's scope.
+			if (t.peek().type() == HoconTokenizer.TokenType.RBRACE || t.peek().type() == HoconTokenizer.TokenType.EOF)
+				break;
 			t.skipWhitespaceAndComments();
 			if (t.peek().type() == HoconTokenizer.TokenType.COMMA || t.peek().type() == HoconTokenizer.TokenType.NEWLINE)
 				t.read();
@@ -365,11 +370,23 @@ public class HoconParserSession extends ReaderParserSession {
 		var arr = new HoconValue.HoconArray();
 		t.skipWhitespaceAndComments();
 		while (t.peek().type() != HoconTokenizer.TokenType.RBRACKET && t.peek().type() != HoconTokenizer.TokenType.EOF) {
-			var elem = parseValueOrConcat(t);
-			if (elem instanceof HoconValue.HoconArray arr2)
-				arr.concat(arr2);
-			else
-				arr.getElements().add(elem);
+			// Elements inside [ ... ] are separated by COMMA or NEWLINE (handled below), so each
+			// parseValueOrConcat call returns a single element.  HOCON array-concatenation
+			// (`[a,b] [c,d]` ≡ `[a,b,c,d]`) is performed inside parseValueOrConcat when adjacent
+			// arrays appear without a separator; the result is already a flattened HoconArray at
+			// that point.  Here we must add the element as-is so nested arrays like
+			// `[[1,2,3], [4,5,6]]` (with separators) stay nested rather than flattening.
+			arr.getElements().add(parseValueOrConcat(t));
+			// Check for closing ] / EOF BEFORE calling skipWhitespaceAndComments.  parseValueOrConcat's
+			// internal concat loop calls peekNoSkip(), which eagerly consumes the closing-bracket char
+			// from the underlying reader and stashes it as peeked=RBRACKET.  If we then called
+			// skipWhitespaceAndComments here, it would read PAST the cached `]` and eat any newline
+			// that follows — but that newline is the in-array separator for the NEXT element (when
+			// we're nested inside an outer parseArray), or a meaningful boundary for outer scopes.
+			// Eating it would cause adjacent newline-separated inner arrays like `[[1,2]\n[3,4]]` to
+			// be silently re-merged via HOCON array-concatenation in parseValueOrConcat above us.
+			if (t.peek().type() == HoconTokenizer.TokenType.RBRACKET || t.peek().type() == HoconTokenizer.TokenType.EOF)
+				break;
 			t.skipWhitespaceAndComments();
 			if (t.peek().type() == HoconTokenizer.TokenType.COMMA || t.peek().type() == HoconTokenizer.TokenType.NEWLINE)
 				t.read();
@@ -380,10 +397,34 @@ public class HoconParserSession extends ReaderParserSession {
 		return arr;
 	}
 
-	private Object hoconToMap(HoconValue val) {
+	private Object hoconToMap(HoconValue val, ClassMeta<?> type) throws ParseException {
 		if (val == null)
 			return null;
-		return switch (val.getType()) {
+		// Bug #12: STRING values targeting byte[] consult the configured BinaryFormat's variant
+		// BinarySwap before falling back to the default String → byte[] UTF-8 coercion that the bean
+		// binder would otherwise apply at the collection-element / top-level dispatch site.  The
+		// bean-property path is unaffected because the per-property MPP install hides the type-level
+		// default swap behind the per-property swap on the BeanPropertyMeta.
+		//
+		// Bug #11/#12 a04 residual: at BinaryFormat.NOT_SET BinarySwap.match returns 0 and no swap
+		// fires, but HoconSerializerSession emits byte[] at NOT_SET as a base64 string (to sidestep
+		// HOCON's array-concatenation flattening for nested int-array wire forms).  Decode that
+		// here as the symmetric fallback so List<byte[]> and top-level byte[] round-trip at NOT_SET.
+		if (val.getType() == HoconValue.Type.STRING && type != null && type.inner() == byte[].class) {
+			var s = ((HoconValue.HoconString) val).getValue();
+			var swap = type.getSwap(this);
+			if (swap != null)
+				return unswap(swap, s, type);
+			return Base64.getDecoder().decode(s);
+		}
+		// Look up bean property metas so nested typed-map properties (Map<K,V> with non-String K) can have
+		// their keys coerced via the converter's Map→Map path before the bean binds them (Bug #7b).
+		// Extended in Bug #12 to also surface Collection/Array property types so the ARRAY branch can
+		// thread the parent's element type into recursion and the byte[] swap dispatch above can fire
+		// at the right depth.  Other property shapes (Optional, primitive, bean) still pass through as
+		// object() so the lazy-typed conversion path stays in place.
+		var beanMeta = (type != null && type.isBean()) ? type.getBeanMeta() : null;
+		var result = switch (val.getType()) {
 			case STRING -> ((HoconValue.HoconString) val).getValue();
 			case NUMBER -> ((HoconValue.HoconNumber) val).getValue();
 			case BOOLEAN -> ((HoconValue.HoconBoolean) val).getValue();
@@ -392,20 +433,37 @@ public class HoconParserSession extends ReaderParserSession {
 				var obj = (HoconValue.HoconObject) val;
 				var map = newGenericMap();
 				for (var e : obj.getMembers().entrySet()) {
-					map.put(e.getKey(), hoconToMap(e.getValue()));
+					var key = e.getKey();
+					ClassMeta<?> childType = object();
+					if (beanMeta != null && key != null && !key.equals(getBeanTypePropertyName(type))) {
+						var pMeta = beanMeta.getPropertyMeta(key);
+						if (pMeta != null) {
+							var cm = (ClassMeta<?>) pMeta.getBeanInfo();
+							if (cm != null && (cm.isMap() || cm.isCollectionOrArray()))
+								childType = cm;
+						}
+					}
+					map.put(key, hoconToMap(e.getValue(), childType));
 				}
 				yield map;
 			}
 			case ARRAY -> {
 				var arr = (HoconValue.HoconArray) val;
 				var list = newGenericList();
+				var elType = (type != null && type.isCollectionOrArray()) ? def(type.getElementType(), object()) : object();
 				for (var el : arr.getElements()) {
-					list.add(hoconToMap(el));
+					list.add(hoconToMap(el, elType));
 				}
 				yield list;
 			}
 			default -> null;
 		};
+		// If the enclosing target is a typed Map (e.g. Map<TestEnum,String>), coerce keys / values
+		// via the converter's findMapConversion so the bean property binder gets a properly-keyed map.
+		if (result instanceof Map<?,?> m && type != null && type.isMap()
+				&& type.getKeyType() != null && !type.getKeyType().isObject())
+			return convertToMemberType(null, m, type);
+		return result;
 	}
 
 	private Object convertToBean(Object map, ClassMeta<?> type) throws ExecutableException, ParseException {

@@ -25,7 +25,6 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.swap.*;
 
 /**
  * Represents a HAL Resource Object as defined by
@@ -63,7 +62,8 @@ import org.apache.juneau.swap.*;
  */
 @Marshalled
 @SuppressWarnings({
-	"java:S116" // Field names mirror HAL spec.
+	"java:S116", // Field names mirror HAL spec.
+	"java:S115" // Constant names intentionally mirror argument identifiers.
 })
 public class HalResource {
 
@@ -77,7 +77,9 @@ public class HalResource {
 	/**
 	 * Default constructor.
 	 */
-	public HalResource() {}
+	public HalResource() {
+		// Intentionally empty: required public no-arg constructor for bean creation/decoding.
+	}
 
 	/**
 	 * Bean property getter:  <property>_links</property>.

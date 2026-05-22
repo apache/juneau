@@ -159,7 +159,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
-		check("HEX", x.getBinaryFormat());
+		check("NOT_SET", x.getBinaryFormat());
 		check(null, x.getListener());
 		check("false", x.isSortCollections());
 		check("false", x.isSortMaps());
@@ -204,7 +204,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
-		check("HEX", x.getBinaryFormat());
+		check("NOT_SET", x.getBinaryFormat());
 		check(null, x.getListener());
 		check("false", x.isSortCollections());
 		check("false", x.isSortMaps());

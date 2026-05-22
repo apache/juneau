@@ -27,6 +27,7 @@ import org.apache.juneau.commons.reflect.ExecutableException;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.BeanMeta;
 
 /**
  * Session for parsing Hjson format into POJOs.
@@ -102,23 +103,25 @@ public class HjsonParserSession extends ReaderParserSession {
 			var nextType = tokenizer.peek().type();
 			// Target is String/number/boolean/etc - always lone value (not key:value map)
 			if (!type.isMap() && !type.isBean())
-				return (T) convertToMemberType(null, firstVal, type);
+				return (T) coerceMemberValue(firstVal, type);
 			// Target is Map/Bean: COLON means key:value (braceless root)
 			if (nextType == HjsonTokenizer.TokenType.COLON)
 				return (T) parseRootBraceless(tokenizer, type, firstVal);
 			// No COLON - lone value (e.g. "1.0" or "true" tokenized as QUOTELESS)
-			return (T) convertToMemberType(null, firstVal, type);
+			return (T) coerceMemberValue(firstVal, type);
 		}
 		// NUMBER, TRUE, FALSE, NULL, etc - lone value; use (T) not type.cast (cast fails for boxed->primitive)
-		return (T) convertToMemberType(null, parseValue(tokenizer, type), type);
+		return (T) coerceMemberValue(parseValue(tokenizer, type), type);
 	}
 
 	private Object parseRootBraceless(HjsonTokenizer t, ClassMeta<?> type, String firstKey) throws IOException, ParseException, ExecutableException {
 		var result = newGenericMap();
+		// Same per-property type threading as parseObject so braceless-root beans get typed-map keys (Bug #7b).
+		var beanMeta = (type != null && type.isBean()) ? type.getBeanMeta() : null;
 		if (t.read().type() != HjsonTokenizer.TokenType.COLON)
 			throw new ParseException(this, "Expected ':' after key at line {0}", t.getLine());
 		t.skipWhitespaceAndComments();
-		var value = parseValue(t, object());
+		var value = parseValue(t, propertyType(beanMeta, firstKey, type));
 		result.put(firstKey, value);
 		t.skipWhitespaceAndComments();
 		if (t.peek().type() == HjsonTokenizer.TokenType.NEWLINE)
@@ -129,7 +132,7 @@ public class HjsonParserSession extends ReaderParserSession {
 			if (t.read().type() != HjsonTokenizer.TokenType.COLON)
 				throw new ParseException(this, "Expected ':' after key at line {0}", t.getLine());
 			t.skipWhitespaceAndComments();
-			value = parseValue(t, object());
+			value = parseValue(t, propertyType(beanMeta, key, type));
 			result.put(key, value);
 			t.skipWhitespaceAndComments();
 			if (t.peek().type() == HjsonTokenizer.TokenType.NEWLINE)
@@ -155,11 +158,15 @@ public class HjsonParserSession extends ReaderParserSession {
 			return null;
 		if (tok.type() == HjsonTokenizer.TokenType.LBRACE || tok.type() == HjsonTokenizer.TokenType.LBRACKET)
 			return raw;
-		return convertToMemberType(null, raw, type);
+		return coerceMemberValue(raw, type);
 	}
 
 	private Object parseObject(HjsonTokenizer t, ClassMeta<?> type) throws IOException, ParseException, ExecutableException {
 		var result = newGenericMap();
+		// When parsing a typed Bean, look up per-property ClassMetas so that nested Map<K,V> properties
+		// see their declared key/value types and the key coercion in the inner parseObject can fire
+		// (matches JsonParserSession.parseIntoBeanMap2 / parseIntoMap2 pattern).
+		var beanMeta = (type != null && type.isBean()) ? type.getBeanMeta() : null;
 		t.skipWhitespaceAndComments();
 		var next = t.peek();
 		if (next.type() == HjsonTokenizer.TokenType.RBRACE) {
@@ -172,7 +179,8 @@ public class HjsonParserSession extends ReaderParserSession {
 			if (t.read().type() != HjsonTokenizer.TokenType.COLON)
 				throw new ParseException(this, "Expected ':' after key at line {0}", t.getLine());
 			t.skipWhitespaceAndComments();
-			var value = parseValue(t, object());
+			var valueType = propertyType(beanMeta, key, type);
+			var value = parseValue(t, valueType);
 			result.put(key, value);
 			t.skipWhitespaceAndComments();
 			next = t.peek();
@@ -186,6 +194,52 @@ public class HjsonParserSession extends ReaderParserSession {
 			}
 		}
 		return convertToBean(result, type);
+	}
+
+	/**
+	 * Coerces a parsed scalar value to the expected type, honoring session-aware default swaps for
+	 * {@code byte[]} targets at the collection-element / top-level dispatch sites (Bug #12).
+	 *
+	 * <p>For all other targets this is a transparent wrapper over {@link #convertToMemberType} so the
+	 * existing dispatch behavior is preserved.  The narrow {@code byte[]} hook lets the configured
+	 * {@link BinaryFormat}'s variant {@link org.apache.juneau.swaps.BinarySwap} unswap the wire-form
+	 * string back into raw bytes — these dispatch sites don't go through
+	 * {@code MarshalledPropertyPostProcessor}'s per-property swap install, so without this they fall
+	 * through to {@code BasicConverter}'s default {@code String → byte[]} UTF-8 coercion.
+	 */
+	private Object coerceMemberValue(Object raw, ClassMeta<?> type) throws ParseException {
+		if (raw instanceof String s && type != null && type.inner() == byte[].class) {
+			var swap = type.getSwap(this);
+			if (swap != null)
+				return unswap(swap, s, type);
+		}
+		return convertToMemberType(null, raw, type);
+	}
+
+	/**
+	 * Resolves the {@link ClassMeta} to parse a bean-property value against, falling back to {@code object()}
+	 * when the enclosing type isn't a bean or the key isn't a known property.  Threading the property type
+	 * lets typed-map properties (e.g. {@code Map<TestEnum,String>}) coerce their keys via the converter's
+	 * {@code Map → Map} path (Bug #7b).
+	 *
+	 * <p>
+	 * Extended in Bug #12 to also surface {@link ClassMeta#isCollectionOrArray()} property types so the
+	 * collection-element dispatch in {@link #parseArray} threads the parent's element type into recursion —
+	 * that's where {@link #coerceMemberValue} reads the {@code byte[]} target and invokes the configured
+	 * {@link org.apache.juneau.swaps.BinarySwap}'s unswap on the wire-form string.  Other property shapes
+	 * (Optional, primitive, bean) still pass through as {@code object()} so this parser's lazy-typed
+	 * conversion path keeps working unchanged.
+	 */
+	private ClassMeta<?> propertyType(BeanMeta<?> beanMeta, String key, ClassMeta<?> enclosingType) {
+		if (beanMeta != null && key != null && !key.equals(getBeanTypePropertyName(enclosingType))) {
+			var pMeta = beanMeta.getPropertyMeta(key);
+			if (pMeta != null) {
+				var cm = (ClassMeta<?>) pMeta.getBeanInfo();
+				if (cm != null && (cm.isMap() || cm.isCollectionOrArray()))
+					return cm;
+			}
+		}
+		return object();
 	}
 
 	private String readKey(HjsonTokenizer t) throws IOException {

@@ -38,7 +38,7 @@ public class RoundTrip_Tester {
 		return new Builder().index(index).label(label);
 	}
 
-	static class Builder {
+	public static class Builder {
 
 		private int index;
 		public Builder index(int value) { index = value; return this; }

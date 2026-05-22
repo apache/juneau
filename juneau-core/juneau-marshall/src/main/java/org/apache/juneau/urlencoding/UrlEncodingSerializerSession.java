@@ -342,16 +342,34 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 				// Transformed object array bean properties may be transformed resulting in ArrayLists,
 				// so we need to check type if we think it's an array.
 				if (sMeta.isCollection() || value instanceof Collection) {
-					((Collection<?>)value).forEach(x -> {
+					var c = (Collection<?>) value;
+					if (c.isEmpty()) {
+						// Empty expanded-params collection: emit a single "key=" segment so the
+						// parser can distinguish "non-null empty collection" from "null property"
+						// (both would otherwise produce no wire output, defeating round-trip).
 						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 						out.appendObject(key, true).append('=');
-						super.serializeAnything(out, x, cMeta.getElementType(), key, pMeta);
-					});
+					} else {
+						c.forEach(x -> {
+							addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+							out.appendObject(key, true).append('=');
+							super.serializeAnything(out, x, cMeta.getElementType(), key, pMeta);
+						});
+					}
 				} else /* array */ {
-					for (var i = 0; i < Array.getLength(value); i++) {
+					var len = Array.getLength(value);
+					if (len == 0) {
+						// Empty expanded-params array: emit a single "key=" segment so the parser
+						// can distinguish "non-null empty array" from "null property" (both would
+						// otherwise produce no wire output, defeating round-trip).
 						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 						out.appendObject(key, true).append('=');
-						super.serializeAnything(out, Array.get(value, i), cMeta.getElementType(), key, pMeta);
+					} else {
+						for (var i = 0; i < len; i++) {
+							addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+							out.appendObject(key, true).append('=');
+							super.serializeAnything(out, Array.get(value, i), cMeta.getElementType(), key, pMeta);
+						}
 					}
 				}
 			} else {

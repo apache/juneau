@@ -637,11 +637,6 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {

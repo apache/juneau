@@ -24,6 +24,7 @@ import java.time.*;
 import java.time.format.*;
 import java.time.temporal.*;
 import java.util.*;
+import java.util.regex.*;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -31,13 +32,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.swaps.*;
+import org.apache.juneau.swaps.DefaultingTemporalAccessor;
 
 /**
  * Centralized ISO 8601 formatting and parsing utility for date/time and Duration types.
  *
  * <p>
- * Provides the built-in serialization format for {@link java.time.temporal.Temporal}, {@link Calendar},
+ * Provides the built-in serialization format for {@link Temporal}, {@link Calendar},
  * {@link Date}, {@link XMLGregorianCalendar}, and {@link Duration} objects.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -81,66 +82,128 @@ public final class Iso8601Utils {
 	/**
 	 * Formats a date/time or Duration value to its ISO 8601 string representation.
 	 *
+	 * <p>
+	 * Convenience dispatcher that uses default per-type wire formats; callers that need format-aware
+	 * output should use the per-type helpers directly:
+	 * {@link #formatDate}, {@link #formatCalendar}, {@link #formatTemporal},
+	 * {@link #formatDuration}, {@link #formatPeriod}.
+	 *
 	 * @param value The value to format.
 	 * @param type The class metadata for the value (used for selecting the appropriate formatter for Temporal types).
 	 * @param timeZone The session time zone (used when the value lacks zone info).
 	 * @return The ISO 8601 string representation.
 	 */
 	@SuppressWarnings({
-		"java:S1172" // type kept for API compatibility; callers pass ClassMeta context for potential future use
+		"java:S1172" // type kept for API compatibility; future callers may use it for per-type dispatch hints
 	})
 	public static String format(Object value, ClassMeta<?> type, TimeZone timeZone) {
 		if (value instanceof Duration d)
-			return d.toString();
-		if (value instanceof Calendar c)
-			return formatCalendar(c);
+			return formatDuration(d, DurationFormat.ISO_8601_WITH_DAYS);
+		if (value instanceof Period p)
+			return formatPeriod(p, PeriodFormat.ISO_8601);
+		if (value instanceof Calendar || value instanceof XMLGregorianCalendar)
+			return formatCalendar(value, type, CalendarFormat.ISO_OFFSET_DATE_TIME, timeZone);
 		if (value instanceof Date d)
-			return formatDate(d, timeZone);
-		if (value instanceof XMLGregorianCalendar x)
-			return x.toXMLFormat();
-		if (value instanceof Temporal t)
-			return formatTemporal(t, timeZone);
+			return formatDate(d, type, DateFormat.ISO_LOCAL_DATE_TIME, timeZone);
+		if (value instanceof TemporalAccessor t)
+			return formatTemporal(t, type, TemporalFormat.DEFAULT, timeZone);
 		return value.toString();
 	}
 
 	/**
-	 * Formats a Calendar to ISO 8601 using ISO_OFFSET_DATE_TIME.
+	 * Formats a {@link Duration} value using the supplied wire format.
+	 *
+	 * @param value The value to format. <jk>null</jk> returns <jk>null</jk>.
+	 * @param format The duration wire format. May be <jk>null</jk> (defaults to {@link DurationFormat#ISO_8601_WITH_DAYS}).
+	 * @return The formatted value, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
-	private static String formatCalendar(Calendar c) {
-		ZonedDateTime zdt;
-		if (c instanceof GregorianCalendar gc)
-			zdt = gc.toZonedDateTime();
-		else
-			zdt = c.toInstant().atZone(c.getTimeZone().toZoneId());
-		return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(zdt);
+	public static String formatDuration(Duration value, DurationFormat format) {
+		if (value == null)
+			return null;
+		return (format == null ? DurationFormat.ISO_8601_WITH_DAYS : format).format(value);
 	}
 
 	/**
-	 * Formats a Date to ISO 8601 using ISO_LOCAL_DATE_TIME.
+	 * Formats a {@link Period} value using the supplied wire format.
+	 *
+	 * @param value The value to format. <jk>null</jk> returns <jk>null</jk>.
+	 * @param format The period wire format. May be <jk>null</jk> (defaults to {@link PeriodFormat#ISO_8601}).
+	 * @return The formatted value, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
-	private static String formatDate(Date d, TimeZone tz) {
-		ZoneId zoneId = tz != null ? tz.toZoneId() : ZoneId.systemDefault();
-		return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(d.toInstant().atZone(zoneId));
+	public static String formatPeriod(Period value, PeriodFormat format) {
+		if (value == null)
+			return null;
+		return (format == null ? PeriodFormat.ISO_8601 : format).format(value);
 	}
 
 	/**
-	 * Formats a Temporal to ISO 8601 using the appropriate default formatter for the concrete type.
+	 * Formats a {@link Date} value using the supplied wire format.
+	 *
+	 * <p>
+	 * {@code java.sql.Date}, {@code java.sql.Time}, and {@code java.sql.Timestamp} subclasses all dispatch
+	 * through {@link DateFormat#format(Date, ZoneId)} just like {@code java.util.Date}.
+	 *
+	 * @param value The value to format. <jk>null</jk> returns <jk>null</jk>.
+	 * @param sourceType The class metadata for the value (currently unused, kept for symmetry with the parse helper).
+	 * @param format The date wire format. May be <jk>null</jk> (defaults to {@link DateFormat#ISO_LOCAL_DATE_TIME}).
+	 * @param timeZone The session time zone (used as the default zone).
+	 * @return The formatted value, or <jk>null</jk> if {@code value} is <jk>null</jk>.
 	 */
-	private static String formatTemporal(Temporal t, TimeZone tz) {
-		ZoneId zoneId = tz != null ? tz.toZoneId() : ZoneId.systemDefault();
-		Class<?> tc = t.getClass();
+	@SuppressWarnings({
+		"java:S1172" // sourceType kept for API symmetry with parseDate; callers pass ClassMeta context for potential future use
+	})
+	public static String formatDate(Date value, ClassMeta<?> sourceType, DateFormat format, TimeZone timeZone) {
+		if (value == null)
+			return null;
+		ZoneId zone = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
+		return (format == null ? DateFormat.ISO_LOCAL_DATE_TIME : format).format(value, zone);
+	}
 
-		if (tc == Instant.class)
-			return DateTimeFormatter.ISO_INSTANT.format(ZonedDateTime.from(new DefaultingTemporalAccessor(t, Z)));
+	/**
+	 * Formats a {@link Calendar} or {@link XMLGregorianCalendar} value using the supplied wire format.
+	 *
+	 * <p>
+	 * {@link XMLGregorianCalendar} values always emit {@link XMLGregorianCalendar#toXMLFormat()} regardless
+	 * of the configured {@code format} — mirroring the parse-side rule and the historical wire output.
+	 * {@link Calendar} (including {@link GregorianCalendar}) values are formatted using the supplied
+	 * {@link CalendarFormat}.
+	 *
+	 * @param value The value to format. Must be a {@link Calendar} or {@link XMLGregorianCalendar}.
+	 * 	<jk>null</jk> returns <jk>null</jk>.
+	 * @param sourceType The class metadata for the value (currently unused, kept for symmetry with the parse helper).
+	 * @param format The calendar wire format. May be <jk>null</jk> (defaults to {@link CalendarFormat#ISO_OFFSET_DATE_TIME}).
+	 * @param timeZone The session time zone (used as the default zone when the value lacks zone info).
+	 * @return The formatted value, or <jk>null</jk> if {@code value} is <jk>null</jk>.
+	 */
+	@SuppressWarnings({
+		"java:S1172" // sourceType kept for API symmetry with parseCalendar; callers pass ClassMeta context for potential future use
+	})
+	public static String formatCalendar(Object value, ClassMeta<?> sourceType, CalendarFormat format, TimeZone timeZone) {
+		if (value == null)
+			return null;
+		if (value instanceof XMLGregorianCalendar x)
+			return x.toXMLFormat();
+		ZoneId zone = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
+		return (format == null ? CalendarFormat.ISO_OFFSET_DATE_TIME : format).format((Calendar)value, zone);
+	}
 
-		if (tc == ZonedDateTime.class || tc == OffsetDateTime.class || tc == OffsetTime.class)
-			return DEFAULT_FORMATTERS.getOrDefault(tc, DateTimeFormatter.ISO_OFFSET_DATE_TIME).format(t);
-
-		if (tc == LocalDate.class || tc == LocalDateTime.class || tc == LocalTime.class
-				|| tc == Year.class || tc == YearMonth.class)
-			return DEFAULT_FORMATTERS.getOrDefault(tc, DateTimeFormatter.ISO_LOCAL_DATE_TIME).format(t);
-
-		return DateTimeFormatter.ISO_INSTANT.format(ZonedDateTime.from(new DefaultingTemporalAccessor(t, zoneId)));
+	/**
+	 * Formats a {@link TemporalAccessor} value using the supplied wire format.
+	 *
+	 * @param value The value to format. Must be a {@link Temporal} subtype. <jk>null</jk> returns <jk>null</jk>.
+	 * @param sourceType The class metadata for the value (currently unused, kept for symmetry with the parse helper).
+	 * @param format The temporal wire format. May be <jk>null</jk> (defaults to {@link TemporalFormat#DEFAULT}).
+	 * @param timeZone The session time zone (used as the default zone when the value lacks zone info).
+	 * @return The formatted value, or <jk>null</jk> if {@code value} is <jk>null</jk>.
+	 */
+	@SuppressWarnings({
+		"java:S1172" // sourceType kept for API symmetry with parseTemporal; callers pass ClassMeta context for potential future use
+	})
+	public static String formatTemporal(TemporalAccessor value, ClassMeta<?> sourceType, TemporalFormat format, TimeZone timeZone) {
+		if (value == null)
+			return null;
+		ZoneId zone = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
+		return (format == null ? TemporalFormat.DEFAULT : format).format(value, zone);
 	}
 
 	/**
@@ -200,42 +263,56 @@ public final class Iso8601Utils {
 	/**
 	 * Parses an ISO 8601 string into the specified date/time target type.
 	 *
+	 * <p>
+	 * Dispatches to the appropriate per-type parser based on the target's {@link ClassMeta} category:
+	 * {@link #parseDate parseDate}, {@link #parseCalendar parseCalendar}, {@link #parseTemporal parseTemporal},
+	 * {@link #parseDuration parseDuration}, or {@link #parsePeriod parsePeriod} — each using its default
+	 * wire format.
+	 *
 	 * @param <T> The target type.
-	 * @param iso8601 The ISO 8601 string to parse.
+	 * @param iso8601 The ISO 8601 string to parse. <jk>null</jk> returns <jk>null</jk>.
 	 * @param targetType The target class metadata.
 	 * @param timeZone The session time zone (used for types that need a default zone).
-	 * @return The parsed object.
+	 * @return The parsed object, or <jk>null</jk> if {@code iso8601} is <jk>null</jk> or the target type is
+	 * 	not a recognized date/time/duration/period type.
 	 */
 	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast for date/time type conversion
+		"unchecked" // Type erasure requires cast for date/time type dispatch
 	})
 	public static <T> T parse(String iso8601, ClassMeta<T> targetType, TimeZone timeZone) {
 		if (iso8601 == null)
 			return null;
-
-		Class<T> tc = targetType.inner();
-		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
-
-		if (tc == Duration.class)
-			return (T) parseDuration(iso8601);
-
-		if (Calendar.class.isAssignableFrom(tc))
-			return (T) parseCalendar(iso8601, zoneId);
-
-		if (tc == Date.class)
-			return (T) parseDate(iso8601, zoneId);
-
-		if (XMLGregorianCalendar.class.isAssignableFrom(tc))
-			return (T) datatypeFactory.newXMLGregorianCalendar(iso8601);
-
-		if (Temporal.class.isAssignableFrom(tc))
-			return (T) parseTemporal(iso8601, (Class<? extends Temporal>) tc, zoneId);
-
+		if (targetType.isDate())
+			return parseDate(iso8601, targetType, DateFormat.ISO_LOCAL_DATE_TIME, timeZone);
+		if (targetType.isCalendar())
+			return parseCalendar(iso8601, targetType, CalendarFormat.ISO_OFFSET_DATE_TIME, timeZone);
+		if (targetType.isTemporal())
+			return (T) parseTemporal(iso8601, (ClassMeta<? extends Temporal>)(ClassMeta<?>)targetType, TemporalFormat.DEFAULT, timeZone);
+		if (targetType.isDuration())
+			return (T) parseDuration(iso8601, DurationFormat.MILLIS);
+		if (targetType.isPeriod())
+			return (T) parsePeriod(iso8601, PeriodFormat.ISO_8601);
 		return null;
 	}
 
-	/** Normalizes PT-Nx to -PTNx and parses ISO-8601 duration, with fallback for edge cases. */
-	private static Duration parseDuration(String iso8601) {
+	/**
+	 * Parses an ISO 8601 / numeric wire value into a {@link Duration}.
+	 *
+	 * <p>
+	 * Handles ISO 8601 forms ({@code "PT1H"}, {@code "-PT30M"}, {@code "PT-6H"}, {@code "PT1.5S"}, …) as well
+	 * as the bare-number wire forms produced by {@link DurationFormat#MILLIS}, {@link DurationFormat#SECONDS},
+	 * {@link DurationFormat#NANOS}, and {@link DurationFormat#HOCON} (e.g. {@code "500ms"}, {@code "1.5s"}).
+	 *
+	 * <p>
+	 * The {@code formatHint} disambiguates bare integer strings that could be milliseconds, nanos, or seconds —
+	 * for all other numeric or ISO forms the input is self-describing and the hint is ignored.
+	 *
+	 * @param iso8601 The wire value to parse. <jk>null</jk> or empty returns <jk>null</jk>.
+	 * @param formatHint The duration wire format used to disambiguate bare integer inputs. May be <jk>null</jk>
+	 * 	(defaults to {@link DurationFormat#MILLIS}).
+	 * @return The parsed {@link Duration}, or <jk>null</jk> if {@code iso8601} is <jk>null</jk> or empty.
+	 */
+	public static Duration parseDuration(String iso8601, DurationFormat formatHint) {
 		if (iso8601 == null || iso8601.isEmpty())
 			return null;
 		String s = iso8601.trim();
@@ -244,6 +321,13 @@ public final class Iso8601Utils {
 			s = s.substring(1, s.length() - 1).trim();
 		if (s.startsWith("PT-"))
 			s = "-PT" + s.substring(3);
+		// Number sniffing and explicit format hints.
+		if (s.matches("^[+-]?\\d+$"))
+			return (formatHint == null ? DurationFormat.MILLIS : formatHint).parse(s);
+		if (s.matches("^[+-]?\\d+\\.\\d+$"))
+			return DurationFormat.SECONDS.parse(s);
+		if (s.matches("^[+-]?\\d+(?:\\.\\d+)?(?:ns|us|ms|s|m|h|d)$"))
+			return DurationFormat.HOCON.parse(s);
 		// Use manual parser for full control (handles PTnH, PTnM, PTn.nS, -PTnH, PT-6H, etc.)
 		Duration d = parseDurationManual(s);
 		if (d != null)
@@ -256,19 +340,143 @@ public final class Iso8601Utils {
 		}
 	}
 
+	/**
+	 * Parses an ISO 8601 / numeric wire value into a {@link Period}.
+	 *
+	 * <p>
+	 * Handles standard ISO 8601 period strings ({@code "P1Y2M3D"}, …) as well as the bare-integer wire form
+	 * produced by {@link PeriodFormat#DAYS}.
+	 *
+	 * @param value The wire value to parse. <jk>null</jk> or empty returns <jk>null</jk>.
+	 * @param formatHint The period wire format used to interpret bare integers. May be <jk>null</jk>
+	 * 	(defaults to {@link PeriodFormat#DAYS}).
+	 * @return The parsed {@link Period}, or <jk>null</jk> if {@code value} is <jk>null</jk> or empty.
+	 */
+	public static Period parsePeriod(String value, PeriodFormat formatHint) {
+		if (value == null || value.isEmpty())
+			return null;
+		String s = value.trim();
+		if (s.matches("^[+-]?\\d+$"))
+			return (formatHint == null ? PeriodFormat.DAYS : formatHint).parse(s);
+		return Period.parse(s);
+	}
+
+	/**
+	 * Parses an ISO 8601 wire value into a {@link Calendar} or {@link XMLGregorianCalendar}.
+	 *
+	 * <p>
+	 * Dispatches by target type:
+	 * <ul>
+	 * 	<li>{@link XMLGregorianCalendar} targets always use {@link DatatypeFactory#newXMLGregorianCalendar(String)}
+	 * 		and ignore {@code formatHint}.
+	 * 	<li>{@link Calendar} / {@link GregorianCalendar} targets honor {@code formatHint} when set to anything
+	 * 		other than {@link CalendarFormat#NOT_SET} or {@link CalendarFormat#ISO_OFFSET_DATE_TIME}; the default
+	 * 		path uses content-based formatter autodetection.
+	 * </ul>
+	 *
+	 * @param <T> The target type.
+	 * @param iso8601 The wire value to parse. <jk>null</jk> returns <jk>null</jk>.
+	 * @param targetType The target class metadata. Must represent a {@link Calendar} or {@link XMLGregorianCalendar}.
+	 * @param formatHint The calendar wire format. May be <jk>null</jk> (treated as {@link CalendarFormat#NOT_SET}).
+	 * @param timeZone The session time zone (used as the default zone when the wire value lacks zone info).
+	 * @return The parsed value, or <jk>null</jk> if {@code iso8601} is <jk>null</jk> or the target is not a
+	 * 	recognized calendar type.
+	 */
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for Calendar/XMLGregorianCalendar dispatch
+	})
+	public static <T> T parseCalendar(String iso8601, ClassMeta<T> targetType, CalendarFormat formatHint, TimeZone timeZone) {
+		if (iso8601 == null)
+			return null;
+		Class<T> tc = targetType.inner();
+		if (XMLGregorianCalendar.class.isAssignableFrom(tc))
+			return (T) datatypeFactory.newXMLGregorianCalendar(iso8601);
+		if (! Calendar.class.isAssignableFrom(tc))
+			return null;
+		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
+		if (formatHint != null && formatHint != CalendarFormat.NOT_SET && formatHint != CalendarFormat.ISO_OFFSET_DATE_TIME)
+			return (T) formatHint.parse(iso8601, zoneId);
+		return (T) parseCalendarDefault(iso8601, zoneId);
+	}
+
+	/**
+	 * Parses an ISO 8601 wire value into a {@link Date}.
+	 *
+	 * <p>
+	 * Honors {@code formatHint} when set to anything other than {@link DateFormat#NOT_SET} or
+	 * {@link DateFormat#ISO_LOCAL_DATE_TIME}; the default path uses content-based formatter autodetection.
+	 *
+	 * <p>
+	 * Only direct {@link Date} targets are produced — {@code java.sql.*} subclasses fall through to
+	 * <jk>null</jk>, matching the original dispatch.
+	 *
+	 * @param <T> The target type.
+	 * @param iso8601 The wire value to parse. <jk>null</jk> returns <jk>null</jk>.
+	 * @param targetType The target class metadata. Must represent {@link Date}.
+	 * @param formatHint The date wire format. May be <jk>null</jk> (treated as {@link DateFormat#NOT_SET}).
+	 * @param timeZone The session time zone (used as the default zone when the wire value lacks zone info).
+	 * @return The parsed {@link Date}, or <jk>null</jk> if {@code iso8601} is <jk>null</jk> or the target is
+	 * 	not exactly {@code java.util.Date}.
+	 */
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for Date dispatch
+	})
+	public static <T> T parseDate(String iso8601, ClassMeta<T> targetType, DateFormat formatHint, TimeZone timeZone) {
+		if (iso8601 == null)
+			return null;
+		if (targetType.inner() != Date.class)
+			return null;
+		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
+		if (formatHint != null && formatHint != DateFormat.NOT_SET && formatHint != DateFormat.ISO_LOCAL_DATE_TIME)
+			return (T) formatHint.parse(iso8601, zoneId);
+		return (T) parseDateDefault(iso8601, zoneId);
+	}
+
+	/**
+	 * Parses an ISO 8601 wire value into the specified {@link Temporal} subtype.
+	 *
+	 * <p>
+	 * Honors {@code formatHint} when set to anything other than {@link TemporalFormat#NOT_SET} or
+	 * {@link TemporalFormat#DEFAULT}; the default path uses the per-subtype default formatter
+	 * (e.g. {@link DateTimeFormatter#ISO_INSTANT} for {@link Instant}, {@link DateTimeFormatter#ISO_LOCAL_DATE}
+	 * for {@link LocalDate}, …).
+	 *
+	 * @param <T> The target temporal subtype.
+	 * @param iso8601 The wire value to parse. <jk>null</jk> returns <jk>null</jk>.
+	 * @param targetType The target class metadata. Must represent a {@link Temporal} subtype.
+	 * @param formatHint The temporal wire format. May be <jk>null</jk> (treated as {@link TemporalFormat#NOT_SET}).
+	 * @param timeZone The session time zone (used as the default zone when the wire value lacks zone info).
+	 * @return The parsed value, or <jk>null</jk> if {@code iso8601} is <jk>null</jk> or the target is not a
+	 * 	{@link Temporal} subtype.
+	 */
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for per-subtype Temporal.from() dispatch
+	})
+	public static <T> T parseTemporal(String iso8601, ClassMeta<T> targetType, TemporalFormat formatHint, TimeZone timeZone) {
+		if (iso8601 == null)
+			return null;
+		Class<T> tc = targetType.inner();
+		if (! Temporal.class.isAssignableFrom(tc))
+			return null;
+		ZoneId zoneId = timeZone != null ? timeZone.toZoneId() : ZoneId.systemDefault();
+		Class<? extends Temporal> ttc = (Class<? extends Temporal>) tc;
+		if (formatHint != null && formatHint != TemporalFormat.NOT_SET && formatHint != TemporalFormat.DEFAULT)
+			return (T) formatHint.parse(iso8601, ttc, zoneId);
+		return (T) parseTemporalDefault(iso8601, ttc, zoneId);
+	}
+
 	private static Duration parseDurationManual(String s) {
 		if (s == null || s.length() < 3)
 			return null;
 		boolean neg = s.startsWith("-");
-		if (neg)
-			s = s.substring(1);
-		if (!s.startsWith("PT") && !s.startsWith("pt"))
+		String s2 = neg ? s.substring(1) : s;
+		if (!s2.startsWith("PT") && !s2.startsWith("pt"))
 			return null;
-		s = s.substring(2);
+		s2 = s2.substring(2);
 		long totalNanos = 0;
 		boolean found = false;
-		var p = java.util.regex.Pattern.compile("(\\d+(?:\\.\\d+)?)\\s*([HhMmSs])");
-		var m = p.matcher(s);
+		var p = Pattern.compile("(\\d+(?:\\.\\d+)?)\\s*([HhMmSs])");
+		var m = p.matcher(s2);
 		while (m.find()) {
 			found = true;
 			double v = Double.parseDouble(m.group(1));
@@ -287,13 +495,13 @@ public final class Iso8601Utils {
 		return neg ? d.negated() : d;
 	}
 
-	private static Calendar parseCalendar(String iso8601, ZoneId zoneId) {
+	private static Calendar parseCalendarDefault(String iso8601, ZoneId zoneId) {
 		var formatter = selectParserFormatter(iso8601);
 		var ta = new DefaultingTemporalAccessor(formatter.parse(iso8601), zoneId);
 		return GregorianCalendar.from(ZonedDateTime.from(ta));
 	}
 
-	private static Date parseDate(String iso8601, ZoneId zoneId) {
+	private static Date parseDateDefault(String iso8601, ZoneId zoneId) {
 		var formatter = selectParserFormatter(iso8601);
 		var ta = new DefaultingTemporalAccessor(formatter.parse(iso8601), zoneId);
 		return Date.from(ZonedDateTime.from(ta).toInstant());
@@ -302,7 +510,7 @@ public final class Iso8601Utils {
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast for Temporal.from() reflection
 	})
-	private static <T extends Temporal> T parseTemporal(String iso8601, Class<T> tc, ZoneId zoneId) {
+	private static <T extends Temporal> T parseTemporalDefault(String iso8601, Class<T> tc, ZoneId zoneId) {
 		ZoneId offset = (tc == Instant.class) ? Z : zoneId;
 		var formatter = getFormatterForType(tc);
 		var ta = new DefaultingTemporalAccessor(formatter.parse(iso8601), offset);

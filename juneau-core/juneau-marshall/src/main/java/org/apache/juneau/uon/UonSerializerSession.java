@@ -25,6 +25,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
+import java.time.*;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.function.*;
 
@@ -35,7 +37,6 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.conversion.BasicConverter;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -510,10 +511,16 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			out.appendBoolean(o);
 		else if (sType.isNumber())
 			out.appendNumber(o);
-		else if (sType.isDateOrCalendarOrTemporal())
-			out.appendObject(Iso8601Utils.format(o, sType, getTimeZone()), false);
+		else if (sType.isDate())
+			out.appendObject(serializeDate((Date)o, sType), false);
+		else if (sType.isCalendar())
+			out.appendObject(serializeCalendar(o, sType), false);
+		else if (sType.isTemporal())
+			out.appendObject(serializeTemporal((TemporalAccessor)o, sType), false);
 		else if (sType.isDuration())
-			out.appendObject(o.toString(), false);
+			out.appendObject(serializeDuration((Duration)o), false);
+		else if (sType.isPeriod())
+			out.appendObject(serializePeriod((Period)o), false);
 		else if (sType.isBean())
 			serializeBeanMap(out, toBeanMap(o), typeName);
 		else if (sType.isUri() || (nn(pMeta) && pMeta.isUri()))

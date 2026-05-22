@@ -149,6 +149,8 @@ public final class ParquetSchemaBuilder {
 			addOptionalSchema(elements, cm, name, parentPath, isRoot, sampleBean, typesInProgress);
 		} else if (cm.isBean()) {
 			addBeanSchema(elements, cm, name, parentPath, isRoot, sampleBean, typesInProgress);
+		} else if (cm.isByteArray()) {
+			addLeafSchema(elements, cm, name, parentPath, isRoot);
 		} else if (cm.isCollection() || cm.isArray()) {
 			addListSchema(elements, cm, name, parentPath, isRoot, sampleBean, typesInProgress);
 		} else if (cm.isMap()) {
@@ -291,6 +293,8 @@ public final class ParquetSchemaBuilder {
 			else if (cm.is(int.class) || cm.is(Integer.class))
 				ct = CONVERTED_INT_32;
 			elements.add(new ParquetSchemaElement(name, TYPE_INT32, null, repetition, null, ct, null, null, null, path));
+		} else if (cm.is(Number.class)) {
+			elements.add(new ParquetSchemaElement(name, TYPE_INT32, null, repetition, null, CONVERTED_INT_32, null, null, null, path));
 		} else if (cm.is(long.class) || cm.is(Long.class)) {
 			elements.add(new ParquetSchemaElement(name, TYPE_INT64, null, repetition, null, CONVERTED_INT_64, null, null, null, path));
 		} else if (cm.is(float.class) || cm.is(Float.class)) {

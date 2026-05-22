@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -120,14 +121,23 @@ class MarshalledConfigAnnotation_Test extends TestBase {
 	}
 
 	@MarshalledConfig(
+		binaryFormat=BinaryFormat.HEX,
+		calendarFormat=CalendarFormat.ISO_INSTANT,
+		dateFormat=DateFormat.ISO_INSTANT,
 		dictionary={A1.class,A2.class},
 		dictionary_replace={A1.class,A2.class,A3.class},
+		durationFormat=DurationFormat.MILLIS,
+		enumFormat=EnumFormat.NAME,
 		typePropertyName="$X{foo}",
 		debug="$X{true}",
+		localeFormat=LocaleFormat.UNDERSCORE,
 		locale="$X{en-US}",
 		mediaType="$X{text/foo}",
+		periodFormat=PeriodFormat.DAYS,
 		swaps={AB1.class,AB2.class},
 		swaps_replace={AB1.class,AB2.class,AB3.class},
+		temporalFormat=TemporalFormat.ISO_INSTANT,
+		timeZoneFormat=TimeZoneFormat.OFFSET,
 		timeZone="$X{z}"
 	)
 	static class A {}
@@ -135,7 +145,9 @@ class MarshalledConfigAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
-		var bs = JsonSerializer.create().apply(al).build().getSession();
+		var js = JsonSerializer.create().apply(al).build();
+		var bs = js.getSession();
+		var bc = js.getMarshallingContext();
 
 		check("A1,A2,A3", bs.getBeanDictionary());
 		check("foo", bs.getBeanTypePropertyName());
@@ -144,6 +156,15 @@ class MarshalledConfigAnnotation_Test extends TestBase {
 		check("text/foo", bs.getMediaType());
 		check("AB1<String,Integer>,AB2<String,Integer>,AB3<String,Integer>", bs.getSwaps());
 		check("GMT", bs.getTimeZone());
+		check("5000", bs.serialize(Duration.ofSeconds(5)));
+		check("\"3\"", bs.serialize(Period.ofDays(3)));
+		check("HEX", bc.getBinaryFormat());
+		check("ISO_INSTANT", bc.getCalendarFormat());
+		check("ISO_INSTANT", bc.getDateFormat());
+		check("NAME", bc.getEnumFormat());
+		check("ISO_INSTANT", bc.getTemporalFormat());
+		check("OFFSET", bc.getTimeZoneFormat());
+		check("UNDERSCORE", bc.getLocaleFormat());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

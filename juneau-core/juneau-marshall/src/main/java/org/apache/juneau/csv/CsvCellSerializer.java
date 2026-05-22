@@ -29,7 +29,7 @@ import java.util.*;
  */
 public final class CsvCellSerializer {
 
-	private final ByteArrayFormat byteArrayFormat;
+	private final CsvByteArrayCellFormat byteArrayFormat;
 	private final String nullMarker;
 
 	/**
@@ -38,8 +38,8 @@ public final class CsvCellSerializer {
 	 * @param byteArrayFormat Format for byte[] values.
 	 * @param nullMarker String to use for null values.
 	 */
-	public CsvCellSerializer(ByteArrayFormat byteArrayFormat, String nullMarker) {
-		this.byteArrayFormat = byteArrayFormat != null ? byteArrayFormat : ByteArrayFormat.BASE64;
+	public CsvCellSerializer(CsvByteArrayCellFormat byteArrayFormat, String nullMarker) {
+		this.byteArrayFormat = byteArrayFormat != null ? byteArrayFormat : CsvByteArrayCellFormat.BASE64;
 		this.nullMarker = nullMarker != null ? nullMarker : "null";
 	}
 
@@ -67,7 +67,7 @@ public final class CsvCellSerializer {
 		if (value instanceof Object[] a)
 			return serializeObjectArray(a, session);
 		if (value instanceof byte[] b)
-			return byteArrayFormat == ByteArrayFormat.SEMICOLON_DELIMITED ? formatByteArraySemicolon(b) : base64Encode(b);
+			return byteArrayFormat == CsvByteArrayCellFormat.SEMICOLON_DELIMITED ? formatByteArraySemicolon(b) : base64Encode(b);
 		if (value instanceof int[] a) return formatIntArray(a);
 		if (value instanceof long[] a) return formatLongArray(a);
 		if (value instanceof double[] a) return formatDoubleArray(a);

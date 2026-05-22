@@ -306,7 +306,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast(m, null, eType);
 			else if (m.containsKey(CONST_value))
-				o = convertToType(m.get(CONST_value), sType);
+				o = unwrapValueAs(m.get(CONST_value), sType);
 			else if (nn(sType.getProxyInvocationHandler())) {
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			} else {
@@ -384,9 +384,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 									unmark();
 									setCurrentProperty(pMeta);
 									// In cases of "&foo=", create an empty instance of the value if createable.
-									// Otherwise, leave it null.
+									// Otherwise, leave it null.  Arrays (especially primitive arrays
+									// such as byte[]) report canCreateNewInstance()=false because their
+									// element type has no no-arg constructor, but ClassMeta.newInstance()
+									// already handles arrays via Array.newInstance(...,0); fall through
+									// to that path so empty expanded-params arrays round-trip from the
+									// "key=" sentinel emitted by the serializer.
 									var cm = (ClassMeta<?>) pMeta.getBeanInfo();
-									if (cm.canCreateNewInstance()) {
+									if (cm.canCreateNewInstance() || cm.isArray()) {
 										try {
 											pMeta.set(m, currAttr, cm.newInstance());
 										} catch (BeanRuntimeException e) {
@@ -591,6 +596,34 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 */
 	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
 		return ctx.getUrlEncodingClassMeta(cm);
+	}
+
+	/*
+	 * Routes the {@code _value=...} top-level unwrap through the format-aware
+	 * Duration/Period/Date/Calendar/Temporal parsers when the target type is one of those
+	 * date/time/duration cluster types.  Otherwise falls through to the generic
+	 * {@link #convertToType(Object, ClassMeta)} path.
+	 *
+	 * <p>
+	 * Without this routing the inner value (typically a {@link Number} parsed from a bare wire
+	 * literal) is converted via the generic {@code Number → T} coercion which does not consult
+	 * {@link MarshallingContext#getDurationFormat()} / {@code getTemporalFormat()} etc., so the
+	 * configured wire format hint (NANOS, ISO_YEAR, MILLIS, …) is silently dropped.
+	 */
+	private <T> Object unwrapValueAs(Object rawValue, ClassMeta<T> sType) {
+		if (rawValue != null) {
+			if (sType.isDuration())
+				return parseDuration(rawValue.toString());
+			if (sType.isPeriod())
+				return parsePeriod(rawValue.toString());
+			if (sType.isDate())
+				return parseDate(rawValue.toString(), sType);
+			if (sType.isCalendar())
+				return parseCalendar(rawValue.toString(), sType);
+			if (sType.isTemporal())
+				return parseTemporal(rawValue.toString(), sType);
+		}
+		return convertToType(rawValue, sType);
 	}
 
 	/**

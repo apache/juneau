@@ -28,7 +28,6 @@ import org.apache.juneau.commons.time.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.swaps.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -38,7 +37,7 @@ public class ObjectSearcher_Test extends TestBase {
 
 	private static MarshallingSession bs = MarshallingContext.DEFAULT_SESSION;
 	private static ObjectSearcher os = ObjectSearcher.DEFAULT;
-	private static WriterSerializer ws = Json5Serializer.create().swaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
+	private static WriterSerializer ws = (WriterSerializer)Json5Serializer.create().calendarFormat(CalendarFormat.ISO_LOCAL_DATE_TIME).build();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility

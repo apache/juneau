@@ -21,13 +21,14 @@ import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
+import java.time.*;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -264,12 +265,24 @@ public class HoconSerializerSession extends WriterSerializerSession {
 
 		if (o == null || (sType.isChar() && ((Character) o).charValue() == 0)) {
 			hw.w("null");
+		} else if (o instanceof byte[] bytes) {
+			serializeString(hw, Base64.getEncoder().encodeToString(bytes));
 		} else if (sType.isNumber() || sType.isBoolean()) {
 			hw.append(o);
-		} else if (sType.isDateOrCalendarOrTemporal()) {
-			serializeString(hw, Iso8601Utils.format(o, sType, getTimeZone()));
+		} else if (sType.isDate()) {
+			serializeString(hw, serializeDate((Date)o, sType));
+		} else if (sType.isCalendar()) {
+			serializeString(hw, serializeCalendar(o, sType));
+		} else if (sType.isTemporal()) {
+			serializeString(hw, serializeTemporal((TemporalAccessor)o, sType));
 		} else if (sType.isDuration()) {
-			serializeString(hw, o.toString());
+			var value = serializeDuration((Duration)o);
+			if (getDurationFormat().isNumeric())
+				hw.append(value);
+			else
+				serializeString(hw, value);
+		} else if (sType.isPeriod()) {
+			serializeString(hw, serializePeriod((Period)o));
 		} else if (sType.isBean()) {
 			serializeBeanMap(hw, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta), false);
 		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {

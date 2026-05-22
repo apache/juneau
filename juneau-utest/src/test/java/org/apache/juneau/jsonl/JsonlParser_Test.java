@@ -25,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.swaps.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
@@ -116,7 +115,7 @@ class JsonlParser_Test extends TestBase {
 
 	@Test
 	void a10_parseWithSwaps() throws Exception {
-		var p = (JsonlParser) JsonlParser.create().swaps(ByteArraySwap.Base64.class).build();
+		var p = (JsonlParser) JsonlParser.create().binaryFormat(BinaryFormat.BASE64).build();
 		var jsonl = "{\"data\":\"AQID\"}\n{\"data\":\"BAUG\"}";
 		var list = (List<JsonMap>) p.parse(jsonl, List.class, JsonMap.class);
 		assertBean(list, "0{data},1{data}", "{AQID},{BAUG}");

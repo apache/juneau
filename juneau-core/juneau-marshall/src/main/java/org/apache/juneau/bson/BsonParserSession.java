@@ -152,13 +152,18 @@ public class BsonParserSession extends InputStreamParserSession {
 		// Skip map path for Optional - we need fallback to unwrap {"value":x}
 		if (!eType.isOptional() && sType.isMap()) {
 			var map = sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType);
+			// Coerce string keys to the declared key type when non-String (e.g. Map<TestEnum,String>)
+			// so map.get(EnumConstant) works (Bug #7b).  Matches the JSON-family parseIntoMap2 pattern.
+			var keyType = sType.getKeyType();
+			var coerceKeys = nn(keyType) && !keyType.isObject() && !keyType.isString();
 			while (!is.isDocumentEnd()) {
 				var et = is.readElementType();
 				var name = is.readElementName();
 				var key = name.equals(nullKeyString) ? null : trimKey(name);
 				var value = readTypedValue(is, et, sType.getValueType(), map, pMeta);
 				setName(sType.getValueType(), value, key);
-				map.put(key, value);
+				var resolvedKey = coerceKeys ? convertAttrToType(map, key, keyType) : key;
+				map.put(resolvedKey, value);
 			}
 			is.readDocumentTerminator();
 			var raw = map instanceof MarshalledMap mm ? cast(mm, pMeta, eType) : map;

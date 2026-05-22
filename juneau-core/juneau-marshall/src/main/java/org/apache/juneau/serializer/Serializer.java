@@ -185,6 +185,96 @@ public class Serializer extends MarshallingTraverseContext {
 			listener = copyFrom.listener;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder durationFormat(DurationFormat value) {
+			super.durationFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder periodFormat(PeriodFormat value) {
+			super.periodFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder calendarFormat(CalendarFormat value) {
+			super.calendarFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder dateFormat(DateFormat value) {
+			super.dateFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder temporalFormat(TemporalFormat value) {
+			super.temporalFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneFormat(TimeZoneFormat value) {
+			super.timeZoneFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder localeFormat(LocaleFormat value) {
+			super.localeFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder binaryFormat(BinaryFormat value) {
+			super.binaryFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder enumFormat(EnumFormat value) {
+			super.enumFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uuidFormat(UuidFormat value) {
+			super.uuidFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder bigNumberFormat(BigNumberFormat value) {
+			super.bigNumberFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder booleanFormat(BooleanFormat value) {
+			super.booleanFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder floatFormat(FloatFormat value) {
+			super.floatFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder currencyFormat(CurrencyFormat value) {
+			super.currencyFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder classFormat(ClassFormat value) {
+			super.classFormat(value);
+			return this;
+		}
+
 		/**
 		 * 	Specifies the accept media types that the serializer can handle.
 		 *
@@ -371,7 +461,7 @@ public class Serializer extends MarshallingTraverseContext {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanDictionary(java.lang.Class<?>...values) {
+		public Builder beanDictionary(Class<?>...values) {
 			super.beanDictionary(values);
 			return this;
 		}
@@ -531,7 +621,7 @@ public class Serializer extends MarshallingTraverseContext {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+		public Builder dictionaryOn(Class<?> on, Class<?>...values) {
 			super.dictionaryOn(on, values);
 			return this;
 		}
@@ -706,7 +796,7 @@ public class Serializer extends MarshallingTraverseContext {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
+		public Builder interfaces(Class<?>...value) {
 			super.interfaces(value);
 			return this;
 		}
@@ -826,7 +916,7 @@ public class Serializer extends MarshallingTraverseContext {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder notBeanClasses(java.lang.Class<?>...values) {
+		public Builder notBeanClasses(Class<?>...values) {
 			super.notBeanClasses(values);
 			return this;
 		}
@@ -950,7 +1040,7 @@ public class Serializer extends MarshallingTraverseContext {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder unsortedProperties(java.lang.Class<?>...on) {
+		public Builder unsortedProperties(Class<?>...on) {
 			super.unsortedProperties(on);
 			return this;
 		}
@@ -1268,11 +1358,6 @@ public class Serializer extends MarshallingTraverseContext {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {

@@ -500,7 +500,7 @@ class RdfSerializer_Test extends TestBase {
 			assertNotNull(RdfSerializer.create().uriContext(UriContext.of("http://localhost", "", "", "")).build());
 			assertNotNull(RdfSerializer.create().uriRelativity(UriRelativity.RESOURCE).build());
 			assertNotNull(RdfSerializer.create().uriResolution(UriResolution.ABSOLUTE).build());
-			assertNotNull(RdfSerializer.create().useEnumNames().build());
+			assertNotNull(RdfSerializer.create().enumFormat(EnumFormat.NAME).build());
 			assertNotNull(RdfSerializer.create().useJavaBeanIntrospector().build());
 			assertNotNull(RdfSerializer.create().useWhitespace().build());
 			assertNotNull(RdfSerializer.create().useWhitespace(false).build());

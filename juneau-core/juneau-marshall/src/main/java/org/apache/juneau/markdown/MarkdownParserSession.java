@@ -18,6 +18,7 @@ package org.apache.juneau.markdown;
 
 import org.apache.juneau.annotation.ParentProperty;
 import org.apache.juneau.commons.http.MediaType;
+import static org.apache.juneau.commons.utils.Utils.memoizer;
 import static org.apache.juneau.commons.utils.Utils.opt;
 
 import java.io.*;
@@ -27,11 +28,12 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.function.Memoizer;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session object for {@link MarkdownParser}.
@@ -57,7 +59,12 @@ public class MarkdownParserSession extends ReaderParserSession {
 	private static final String CONST_type = "_type";
 
 	final String nullValue;
-	private JsonParser json5Parser;
+	private final Memoizer<JsonParser> json5Parser = memoizer(() -> {
+		var b = Json5Parser.create().marshallingContext((MarshallingContext) getContext());
+		if (isTrimStrings())
+			b = b.trimStrings();
+		return b.build();
+	});
 
 	/**
 	 * Builder class.
@@ -602,15 +609,12 @@ public class MarkdownParserSession extends ReaderParserSession {
 
 	/**
 	 * Returns a Json5Parser that shares this session's bean context (swaps, implClasses, dictionary).
+	 *
+	 * <p>
+	 * Memoized via {@link Memoizer} — first call constructs the parser; subsequent calls return the cached instance.
 	 */
 	private JsonParser getJson5Parser() {
-		if (json5Parser == null) {
-			var b = Json5Parser.create().marshallingContext((MarshallingContext) getContext());
-			if (isTrimStrings())
-				b = b.trimStrings();
-			json5Parser = b.build();
-		}
-		return json5Parser;
+		return json5Parser.get();
 	}
 
 	/**
@@ -663,6 +667,21 @@ public class MarkdownParserSession extends ReaderParserSession {
 			try { return (T) Double.valueOf(val); } catch (@SuppressWarnings("unused") NumberFormatException ignored) { /* not double, treat as string */ }
 			return (T) val;
 		}
+
+		// Date / time / duration cluster: route through the format-aware parsers so the configured
+		// MarshallingContext.get<Format>() hint reaches the wire-form coercion.  Without this the
+		// fall-through to convertToType(val, eType) below would route a bare numeric cell through a
+		// generic Number → T coercion (e.g. Duration.ofMillis(long)) that drops the format hint.
+		if (eType.isDuration())
+			return (T) parseDuration(val);
+		if (eType.isPeriod())
+			return (T) parsePeriod(val);
+		if (eType.isDate())
+			return parseDate(val, eType);
+		if (eType.isCalendar())
+			return parseCalendar(val, eType);
+		if (eType.isTemporal())
+			return parseTemporal(val, eType);
 
 		try {
 			return convertToType(val, eType);

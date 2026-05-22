@@ -28,10 +28,14 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.commons.bean.*;
 
@@ -47,7 +51,8 @@ import org.apache.juneau.commons.bean.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_beanContext, ARG_value)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_beanContext, ARG_value)
+	"java:S6539" // Central coordination class intentionally aggregates many dependencies.
 })
 public abstract class MarshallingContextable extends Context {
 
@@ -1428,7 +1433,7 @@ public abstract class MarshallingContextable extends Context {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+		public Builder cache(Cache<HashKey,? extends Context> value) {
 			super.cache(value);
 			return this;
 		}
@@ -1995,15 +2000,15 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * <p>
 		 * When enabled, bean property values are validated against the constraints declared by
-		 * {@link org.apache.juneau.commons.annotation.Schema @Schema} annotations on those properties.  Validation
+		 * {@link Schema @Schema} annotations on those properties.  Validation
 		 * runs during both <b>parsing</b> (value set on the bean) and <b>serialization</b> (value read from the bean).
 		 *
 		 * <p>
 		 * Validation is backed by the typed {@code JsonSchema} bean in {@code juneau-bean-jsonschema} and follows
 		 * JSON Schema Draft 2020-12 semantics.  Validation failures throw
-		 * {@link org.apache.juneau.commons.httppart.SchemaValidationException} wrapped in
-		 * {@code BeanRuntimeException}; the parser surfaces them as {@link org.apache.juneau.parser.ParseException}
-		 * and the serializer surfaces them as {@link org.apache.juneau.serializer.SerializeException}.
+		 * {@link SchemaValidationException} wrapped in
+		 * {@code BeanRuntimeException}; the parser surfaces them as {@link ParseException}
+		 * and the serializer surfaces them as {@link SerializeException}.
 		 *
 		 * <p>
 		 * If {@code juneau-bean-jsonschema} is not on the classpath, this flag becomes a silent no-op.
@@ -2824,8 +2829,173 @@ public abstract class MarshallingContextable extends Context {
 			return this;
 		}
 
+		/**
+		 * Duration wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder durationFormat(DurationFormat value) {
+			bcBuilder.durationFormat(value);
+			return this;
+		}
+
+		/**
+		 * Period wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder periodFormat(PeriodFormat value) {
+			bcBuilder.periodFormat(value);
+			return this;
+		}
+
+		/**
+		 * Calendar wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder calendarFormat(CalendarFormat value) {
+			bcBuilder.calendarFormat(value);
+			return this;
+		}
+
+		/**
+		 * Date wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder dateFormat(DateFormat value) {
+			bcBuilder.dateFormat(value);
+			return this;
+		}
+
+		/**
+		 * Temporal wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder temporalFormat(TemporalFormat value) {
+			bcBuilder.temporalFormat(value);
+			return this;
+		}
+
+		/**
+		 * Time-zone wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder timeZoneFormat(TimeZoneFormat value) {
+			bcBuilder.timeZoneFormat(value);
+			return this;
+		}
+
+		/**
+		 * Locale wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder localeFormat(LocaleFormat value) {
+			bcBuilder.localeFormat(value);
+			return this;
+		}
+
+		/**
+		 * Binary wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder binaryFormat(BinaryFormat value) {
+			bcBuilder.binaryFormat(value);
+			return this;
+		}
+
+		/**
+		 * Enum wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder enumFormat(EnumFormat value) {
+			bcBuilder.enumFormat(value);
+			return this;
+		}
+
+		/**
+		 * UUID wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder uuidFormat(UuidFormat value) {
+			bcBuilder.uuidFormat(value);
+			return this;
+		}
+
+		/**
+		 * Big-number wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder bigNumberFormat(BigNumberFormat value) {
+			bcBuilder.bigNumberFormat(value);
+			return this;
+		}
+
+		/**
+		 * Boolean wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder booleanFormat(BooleanFormat value) {
+			bcBuilder.booleanFormat(value);
+			return this;
+		}
+
+		/**
+		 * Float / Double non-finite wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder floatFormat(FloatFormat value) {
+			bcBuilder.floatFormat(value);
+			return this;
+		}
+
+		/**
+		 * Currency wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder currencyFormat(CurrencyFormat value) {
+			bcBuilder.currencyFormat(value);
+			return this;
+		}
+
+		/**
+		 * Class wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder classFormat(ClassFormat value) {
+			bcBuilder.classFormat(value);
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -2983,51 +3153,6 @@ public abstract class MarshallingContextable extends Context {
 		}
 
 		/**
-		 * Use enum names.
-		 *
-		 * <p>
-		 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer with debug enabled.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.useEnumNames()
-		 * 		.build();
-		 *
-		 * 	<jc>// Enum with overridden toString().</jc>
-		 * 	<jc>// Will be serialized as ONE/TWO/THREE even though there's a toString() method.</jc>
-		 * 	<jk>public enum</jk> Option {
-		 * 		<jsf>ONE</jsf>(1),
-		 * 		<jsf>TWO</jsf>(2),
-		 * 		<jsf>THREE</jsf>(3);
-		 *
-		 * 		<jk>private int</jk> <jf>value</jf>;
-		 *
-		 * 		Option(<jk>int</jk> <jv>value</jv>) {
-		 * 			<jk>this</jk>.<jf>value</jf> = <jv>value</jv>;
-		 * 		}
-		 *
-		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String toString() {
-		 * 			<jk>return</jk> String.<jsm>valueOf</jsm>(<jf>value</jf>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link MarshallingContext.Builder#useEnumNames()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder useEnumNames() {
-			bcBuilder.useEnumNames();
-			return this;
-		}
-
-		/**
 		 * Use Java Introspector.
 		 *
 		 * <p>
@@ -3073,6 +3198,20 @@ public abstract class MarshallingContextable extends Context {
 	 * @return The bean context for this object.
 	 */
 	public MarshallingContext getMarshallingContext() { return marshallingContext; }
+
+	/**
+	 * Duration wire format.
+	 *
+	 * @return The configured duration wire format.
+	 */
+	protected final DurationFormat getDurationFormat() { return marshallingContext.getDurationFormat(); }
+
+	/**
+	 * Period wire format.
+	 *
+	 * @return The configured period wire format.
+	 */
+	protected final PeriodFormat getPeriodFormat() { return marshallingContext.getPeriodFormat(); }
 
 	@Override /* Overridden from Context */
 	protected FluentMap<String,Object> properties() {

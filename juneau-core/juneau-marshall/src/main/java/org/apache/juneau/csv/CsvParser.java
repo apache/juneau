@@ -42,7 +42,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * <ul>
  *   <li><b>Type discriminator</b> — Parse {@code _type} column when present; use {@link CsvParser.Builder#beanDictionary(Class[])
  *       beanDictionary()} for polymorphic types.
- *   <li><b>Byte arrays</b> — {@link CsvParser.Builder#byteArrayFormat(ByteArrayFormat) byteArrayFormat(BASE64)} or
+ *   <li><b>Byte arrays</b> — {@link CsvParser.Builder#byteArrayFormat(CsvByteArrayCellFormat) byteArrayFormat(BASE64)} or
  *       {@code SEMICOLON_DELIMITED}; primitive arrays from {@code [1;2;3]}.
  *   <li><b>Nested structures</b> — {@link CsvParser.Builder#allowNestedStructures(boolean) allowNestedStructures(true)}
  *       parses inline {@code {key:val}} and {@code [val;val]} in cells.
@@ -93,7 +93,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 
 		private static final Cache<HashKey,CsvParser> CACHE = Cache.of(HashKey.class, CsvParser.class).build();
 
-		private ByteArrayFormat byteArrayFormat;
+		private CsvByteArrayCellFormat byteArrayFormat;
 		private boolean allowNestedStructures;
 		private String nullValue;
 
@@ -102,7 +102,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		 */
 		protected Builder() {
 			consumes("text/csv");
-			byteArrayFormat = ByteArrayFormat.BASE64;
+			byteArrayFormat = CsvByteArrayCellFormat.BASE64;
 			nullValue = "<NULL>";
 		}
 
@@ -194,12 +194,12 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		 * Format for parsing {@code byte[]} arrays from CSV cells.
 		 *
 		 * <p>
-		 * Must match the format used by the serializer. Default is {@link ByteArrayFormat#BASE64}.
+		 * Must match the format used by the serializer. Default is {@link CsvByteArrayCellFormat#BASE64}.
 		 *
 		 * @param value The format to use.
 		 * @return This object.
 		 */
-		public Builder byteArrayFormat(ByteArrayFormat value) {
+		public Builder byteArrayFormat(CsvByteArrayCellFormat value) {
 			byteArrayFormat = value;
 			return this;
 		}
@@ -669,11 +669,6 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useJavaBeanIntrospector() {
@@ -696,7 +691,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 
 	private final Map<ClassMeta<?>,CsvClassMeta> csvClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,CsvBeanPropertyMeta> csvBeanPropertyMetas = new ConcurrentHashMap<>();
-	private final ByteArrayFormat byteArrayFormat;
+	private final CsvByteArrayCellFormat byteArrayFormat;
 	private final boolean allowNestedStructures;
 	private final String nullValue;
 
@@ -707,7 +702,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 	 */
 	public CsvParser(Builder builder) {
 		super(builder);
-		byteArrayFormat = builder.byteArrayFormat != null ? builder.byteArrayFormat : ByteArrayFormat.BASE64;
+		byteArrayFormat = builder.byteArrayFormat != null ? builder.byteArrayFormat : CsvByteArrayCellFormat.BASE64;
 		allowNestedStructures = builder.allowNestedStructures;
 		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
 	}
@@ -717,7 +712,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 	 *
 	 * @return The byte array format.
 	 */
-	public ByteArrayFormat getByteArrayFormat() {
+	public CsvByteArrayCellFormat getByteArrayFormat() {
 		return byteArrayFormat;
 	}
 

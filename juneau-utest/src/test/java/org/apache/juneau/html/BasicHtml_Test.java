@@ -320,7 +320,7 @@ class BasicHtml_Test extends TestBase {
 				</tr>
 			</table>
 			""".replaceAll("(?m)^\\s+|\\R", ""),
-			x -> { assertInstanceOf(String.class, x.get("k1")); assertInstanceOf(Integer.class, x.get("k2")); assertInstanceOf(Float.class, x.get("k3")); assertInstanceOf(Boolean.class, x.get("k4")); }
+			x -> { assertInstanceOf(String.class, x.get("k1")); assertInstanceOf(Integer.class, x.get("k2")); assertInstanceOf(Double.class, x.get("k3")); assertInstanceOf(Boolean.class, x.get("k4")); }
 		),
 		input(
 			"ListWithStrings",
@@ -338,7 +338,7 @@ class BasicHtml_Test extends TestBase {
 			"<ul><li><number>123</number></li><li><number>1.23</number></li><li><null/></li></ul>",
 			"<ul>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><null/></li>\n</ul>\n",
 			"<ul><li>123</li><li>1.23</li><li><null/></li></ul>",
-			x -> { assertInstanceOf(Integer.class, x.get(0)); assertInstanceOf(Float.class, x.get(1)); }
+			x -> { assertInstanceOf(Integer.class, x.get(0)); assertInstanceOf(Double.class, x.get(1)); }
 		),
 		input(
 			"ListWithObjects",
@@ -347,7 +347,7 @@ class BasicHtml_Test extends TestBase {
 			"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>",
 			"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><boolean>true</boolean></li>\n\t<li><null/></li>\n</ul>\n",
 			"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>",
-			x -> { assertInstanceOf(String.class, x.get(0)); assertInstanceOf(Integer.class, x.get(1)); assertInstanceOf(Float.class, x.get(2)); assertInstanceOf(Boolean.class, x.get(3)); }
+			x -> { assertInstanceOf(String.class, x.get(0)); assertInstanceOf(Integer.class, x.get(1)); assertInstanceOf(Double.class, x.get(2)); assertInstanceOf(Boolean.class, x.get(3)); }
 		),
 		input(
 			"BeanWithNormalProperties",

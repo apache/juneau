@@ -21,6 +21,8 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
+import java.time.*;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.function.*;
 
@@ -28,7 +30,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -266,10 +267,16 @@ public class IniSerializerSession extends WriterSerializerSession {
 			return value.toString();
 		if (aType.isBoolean())
 			return ((Boolean)value).toString();
-		if (aType.isDateOrCalendarOrTemporal())
-			return Iso8601Utils.format(value, aType, getTimeZone());
+		if (aType.isDate())
+			return serializeDate((Date)value, aType);
+		if (aType.isCalendar())
+			return serializeCalendar(value, aType);
+		if (aType.isTemporal())
+			return serializeTemporal((TemporalAccessor)value, aType);
 		if (aType.isDuration())
-			return value.toString();
+			return serializeDuration((Duration)value);
+		if (aType.isPeriod())
+			return serializePeriod((Period)value);
 		if (aType.isEnum())
 			return ((Enum<?>)value).name();
 		if (aType.isCharSequence() || aType.isUri()) {

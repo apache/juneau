@@ -19,6 +19,7 @@ package org.apache.juneau.toml;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
+import java.time.temporal.*;
 import java.util.*;
 import java.util.Map.*;
 
@@ -26,7 +27,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.JsonMap;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.utils.Iso8601Utils;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -410,8 +410,68 @@ public class TomlParserSession extends ReaderParserSession {
 		}
 		if (val instanceof Number && targetType.isNumber())
 			return convertToMemberType(null, val, targetType);
-		if (val instanceof String string && (targetType.isDateOrCalendarOrTemporal() || targetType.isDuration()))
-			return Iso8601Utils.parse(string, targetType, getTimeZone());
+		if (val instanceof String string) {
+			if (targetType.isDate())
+				return parseDate(string, targetType);
+			if (targetType.isCalendar())
+				return parseCalendar(string, targetType);
+			if (targetType.isTemporal())
+				return parseTemporal(string, targetType);
+			if (targetType.isDuration())
+				return parseDuration(string);
+			if (targetType.isPeriod())
+				return parsePeriod(string);
+		}
+		// Bare numeric wire literals (e.g. "2024", "8100000000000") arrive here as Number values
+		// from the TOML tokenizer.  Route them through the format-aware parsers so the configured
+		// MarshallingContext.get<Format>() hint (NANOS, ISO_YEAR, MILLIS, …) reaches the coercion.
+		// Without this routing the generic Number → T coercion below would silently drop the hint
+		// (e.g. treating Long(2024) as epoch-millis → 1970-01-01T00:00:02.024Z instead of year 2024).
+		if (val instanceof Number num) {
+			if (targetType.isDuration())
+				return parseDuration(num.toString());
+			if (targetType.isPeriod())
+				return parsePeriod(num.toString());
+			if (targetType.isDate())
+				return parseDate(num.toString(), targetType);
+			if (targetType.isCalendar())
+				return parseCalendar(num.toString(), targetType);
+			if (targetType.isTemporal())
+				return parseTemporal(num.toString(), targetType);
+		}
+		// Native TOML datetime literals (Z-zoned / offset / local) are returned by TomlTokenizer as
+		// java.time.OffsetDateTime / LocalDateTime / LocalDate / LocalTime objects.  Re-stringify
+		// through the temporal's own ISO toString() and route through parseTemporal so the
+		// configured TemporalFormat hint (e.g. ISO_INSTANT) is honored — otherwise the generic
+		// Temporal → T coercion below applies the local zone and we lose the wire's UTC anchor.
+		if (val instanceof TemporalAccessor ta && targetType.isTemporal())
+			return parseTemporal(ta.toString(), targetType);
+		// Bug #12: route String-shaped byte[] values (collection-element + top-level dispatch sites)
+		// through the configured BinaryFormat's variant binarySwap before falling through to the
+		// default String → byte[] coercion.  The bean-property path is unaffected because the
+		// per-property MPP install hides the type-level default swap behind the per-property swap.
+		var binBytes = tryUnswapByteArray(val, targetType);
+		if (binBytes != null)
+			return binBytes;
 		return convertToMemberType(null, val, targetType);
+	}
+
+	/**
+	 * Routes a {@link String}-shaped {@code byte[]} value through the session-aware
+	 * {@link org.apache.juneau.swaps.BinarySwap} when one is matched.
+	 *
+	 * <p>Collection-element and top-level dispatch sites don't go through
+	 * {@code MarshalledPropertyPostProcessor}'s per-property swap install, so they fall back to the
+	 * {@link org.apache.juneau.swap.DefaultSwaps} registry.  Returns {@code null} when the target isn't
+	 * {@code byte[]}, the value isn't a {@link String}, or no swap is matched on the current session
+	 * (e.g. {@link BinaryFormat#NOT_SET} is configured).
+	 */
+	private byte[] tryUnswapByteArray(Object val, ClassMeta<?> targetType) throws ParseException {
+		if (!(val instanceof String s) || targetType == null || targetType.inner() != byte[].class)
+			return null;
+		var swap = targetType.getSwap(this);
+		if (swap == null)
+			return null;
+		return (byte[]) unswap(swap, s, targetType);
 	}
 }

@@ -429,8 +429,8 @@ class Csv_Test extends TestBase {
 		l.add(new I("row1", bytes));
 		l.add(new I("row2", new byte[]{1, 2, 3}));
 
-		var s = CsvSerializer.create().byteArrayFormat(ByteArrayFormat.BASE64).build();
-		var p = CsvParser.create().byteArrayFormat(ByteArrayFormat.BASE64).build();
+		var s = CsvSerializer.create().byteArrayFormat(CsvByteArrayCellFormat.BASE64).build();
+		var p = CsvParser.create().byteArrayFormat(CsvByteArrayCellFormat.BASE64).build();
 
 		var csv = s.serialize(l);
 		assertTrue(csv.contains("SGVsbG8gV29ybGQ=") || csv.contains("data"), "Should have base64: " + csv);
@@ -450,8 +450,8 @@ class Csv_Test extends TestBase {
 		var l = new LinkedList<>();
 		l.add(new I("row1", bytes));
 
-		var s = CsvSerializer.create().byteArrayFormat(ByteArrayFormat.SEMICOLON_DELIMITED).build();
-		var p = CsvParser.create().byteArrayFormat(ByteArrayFormat.SEMICOLON_DELIMITED).build();
+		var s = CsvSerializer.create().byteArrayFormat(CsvByteArrayCellFormat.SEMICOLON_DELIMITED).build();
+		var p = CsvParser.create().byteArrayFormat(CsvByteArrayCellFormat.SEMICOLON_DELIMITED).build();
 
 		var csv = s.serialize(l);
 		assertTrue(csv.contains("72;101;108;108;111"), "Should have semicolon format: " + csv);

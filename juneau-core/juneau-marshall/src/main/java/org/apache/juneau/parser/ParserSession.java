@@ -25,10 +25,13 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
+import java.time.temporal.*;
 import java.util.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.function.*;
+
+import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -41,6 +44,8 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.Iso8601Utils;
+import java.time.Duration;
+import java.time.Period;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -950,8 +955,16 @@ public class ParserSession extends MarshallingSession {
 			o = parseNumber(s, (Class<? extends Number>)sType.inner());
 		else if (sType.isBoolean())
 			o = Boolean.parseBoolean(s);
-		else if (sType.isDateOrCalendarOrTemporal() || sType.isDuration())
-			o = Iso8601Utils.parse(s, sType, getTimeZone());
+		else if (sType.isDate())
+			o = parseDate(s, sType);
+		else if (sType.isCalendar())
+			o = parseCalendar(s, sType);
+		else if (sType.isTemporal())
+			o = parseTemporal(s, sType);
+		else if (sType.isDuration())
+			o = parseDuration(s);
+		else if (sType.isPeriod())
+			o = parsePeriod(s);
 		else if (! (sType.isCharSequence() || sType.isObject())) {
 			if (sType.canCreateNewInstanceFromString(outer))
 				o = sType.newInstanceFromString(outer, s);
@@ -1179,6 +1192,122 @@ public class ParserSession extends MarshallingSession {
 	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
 	 */
 	protected final boolean isUnbuffered() { return ctx.isUnbuffered(); }
+
+	/**
+	 * Duration parse hint format.
+	 *
+	 * @return The configured duration parse hint format.
+	 */
+	protected final DurationFormat getDurationFormat() { return ctx.getMarshallingContext().getDurationFormat(); }
+
+	/**
+	 * Period parse hint format.
+	 *
+	 * @return The configured period parse hint format.
+	 */
+	protected final PeriodFormat getPeriodFormat() { return ctx.getMarshallingContext().getPeriodFormat(); }
+
+	/**
+	 * Calendar parse hint format.
+	 *
+	 * @return The configured calendar parse hint format.
+	 */
+	protected final CalendarFormat getCalendarFormat() { return ctx.getMarshallingContext().getCalendarFormat(); }
+
+	/**
+	 * Date parse hint format.
+	 *
+	 * @return The configured date parse hint format.
+	 */
+	protected final DateFormat getDateFormat() { return ctx.getMarshallingContext().getDateFormat(); }
+
+	/**
+	 * Temporal parse hint format.
+	 *
+	 * @return The configured temporal parse hint format.
+	 */
+	protected final TemporalFormat getTemporalFormat() { return ctx.getMarshallingContext().getTemporalFormat(); }
+
+	/**
+	 * Time-zone parse hint format.
+	 *
+	 * @return The configured time-zone parse hint format.
+	 */
+	protected final TimeZoneFormat getTimeZoneFormat() { return ctx.getMarshallingContext().getTimeZoneFormat(); }
+
+	/**
+	 * Locale parse hint format.
+	 *
+	 * @return The configured locale parse hint format.
+	 */
+	protected final LocaleFormat getLocaleFormat() { return ctx.getMarshallingContext().getLocaleFormat(); }
+
+	/**
+	 * Parses an ISO 8601 / numeric wire value into a {@link Duration} using this session's configured
+	 * {@linkplain #getDurationFormat() duration format} as the disambiguation hint.
+	 *
+	 * @param s The wire value to parse. <jk>null</jk> or empty returns <jk>null</jk>.
+	 * @return The parsed {@link Duration}, or <jk>null</jk> if {@code s} is <jk>null</jk> or empty.
+	 */
+	protected final Duration parseDuration(String s) {
+		return Iso8601Utils.parseDuration(s, getDurationFormat());
+	}
+
+	/**
+	 * Parses an ISO 8601 / numeric wire value into a {@link Period} using this session's configured
+	 * {@linkplain #getPeriodFormat() period format} as the disambiguation hint.
+	 *
+	 * @param s The wire value to parse. <jk>null</jk> or empty returns <jk>null</jk>.
+	 * @return The parsed {@link Period}, or <jk>null</jk> if {@code s} is <jk>null</jk> or empty.
+	 */
+	protected final Period parsePeriod(String s) {
+		return Iso8601Utils.parsePeriod(s, getPeriodFormat());
+	}
+
+	/**
+	 * Parses an ISO 8601 wire value into a {@link Date} target using this session's configured
+	 * {@linkplain #getDateFormat() date format} and {@linkplain #getTimeZone() time zone}.
+	 *
+	 * @param <T> The target type (unbounded to match {@link Iso8601Utils#parseDate}).
+	 * @param s The wire value to parse. <jk>null</jk> returns <jk>null</jk>.
+	 * @param cm The target class metadata.
+	 * @return The parsed value, or <jk>null</jk> if {@code s} is <jk>null</jk> or the target is not a
+	 * 	recognized {@link Date} type.
+	 */
+	protected final <T> T parseDate(String s, ClassMeta<T> cm) {
+		return Iso8601Utils.parseDate(s, cm, getDateFormat(), getTimeZone());
+	}
+
+	/**
+	 * Parses an ISO 8601 wire value into a {@link Calendar} or {@link XMLGregorianCalendar}
+	 * target using this session's configured {@linkplain #getCalendarFormat() calendar format} and
+	 * {@linkplain #getTimeZone() time zone}.
+	 *
+	 * @param <T> The target type (unbounded because {@link XMLGregorianCalendar} is not a
+	 * 	{@link Calendar} subclass).
+	 * @param s The wire value to parse. <jk>null</jk> returns <jk>null</jk>.
+	 * @param cm The target class metadata.
+	 * @return The parsed value, or <jk>null</jk> if {@code s} is <jk>null</jk> or the target is not a
+	 * 	recognized calendar type.
+	 */
+	protected final <T> T parseCalendar(String s, ClassMeta<T> cm) {
+		return Iso8601Utils.parseCalendar(s, cm, getCalendarFormat(), getTimeZone());
+	}
+
+	/**
+	 * Parses an ISO 8601 wire value into the specified {@link Temporal} subtype using
+	 * this session's configured {@linkplain #getTemporalFormat() temporal format} and
+	 * {@linkplain #getTimeZone() time zone}.
+	 *
+	 * @param <T> The target type (unbounded to match {@link Iso8601Utils#parseTemporal}).
+	 * @param s The wire value to parse. <jk>null</jk> returns <jk>null</jk>.
+	 * @param cm The target class metadata.
+	 * @return The parsed value, or <jk>null</jk> if {@code s} is <jk>null</jk> or the target is not a
+	 * 	{@link Temporal} subtype.
+	 */
+	protected final <T> T parseTemporal(String s, ClassMeta<T> cm) {
+		return Iso8601Utils.parseTemporal(s, cm, getTemporalFormat(), getTimeZone());
+	}
 
 	/**
 	 * Marks the current position.

@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.swaps.ByteArraySwap;
+import org.apache.juneau.BinaryFormat;
 
 import org.apache.juneau.collections.JsonMap;
 import org.apache.juneau.marshaller.Proto;
@@ -154,7 +154,7 @@ class ProtoRoundTrip_Test {
 
 	@Test
 	void a11_objectSwapRoundTrip() throws Exception {
-		var ser = (ProtoSerializer) ProtoSerializer.create().swaps(ByteArraySwap.Base64.class).build();
+		var ser = (ProtoSerializer) ProtoSerializer.create().binaryFormat(BinaryFormat.BASE64).build();
 		var a = JsonMap.of("data", new byte[] { 0x0a, 0x05, (byte) 0xff });
 		var proto = ser.serialize(a);
 		assertTrue(proto.contains("data"));

@@ -136,7 +136,6 @@ class BeanConfigAnnotation_Test extends TestBase {
 		notBeanPackages_replace={"$X{foo1}","$X{foo2}","$X{foo3}"},
 		propertyNamer=PropertyNamerULC.class,
 		unsortedProperties="$X{false}",
-		useEnumNames="$X{true}",
 		useJavaBeanIntrospector="$X{true}"
 	)
 	static class A {}
@@ -165,7 +164,6 @@ class BeanConfigAnnotation_Test extends TestBase {
 		check("foo1,foo2,foo3,java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bs.getNotBeanPackagesNames());
 		check("PropertyNamerULC", bs.getPropertyNamer());
 		check("false", bs.isUnsortedProperties());
-		check("true", bs.isUseEnumNames());
 		check("false", bs.isUseInterfaceProxies());
 		check("true", bs.isUseJavaBeanIntrospector());
 	}
@@ -200,7 +198,6 @@ class BeanConfigAnnotation_Test extends TestBase {
 		check("java.lang,java.lang.annotation,java.lang.ref,java.lang.reflect,java.io,java.net", bc.getNotBeanPackagesNames());
 		check("BasicPropertyNamer", bc.getPropertyNamer());
 		check("false", bc.isUnsortedProperties());
-		check("false", bc.isUseEnumNames());
 		check("true", bc.isUseInterfaceProxies());
 		check("false", bc.isUseJavaBeanIntrospector());
 	}
