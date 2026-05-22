@@ -1,5 +1,34 @@
 # Decouple `juneau-rest-common` from `juneau-marshall`
 
+## Outcome (rescope, 2026-05-22)
+
+Original goal - fully break the `juneau-rest-common -> juneau-marshall` compile
+dependency - abandoned. The decisive blocker is Step 6 (`ClassMeta` /
+`MarshallingContext` / `AnnotationWorkList` references in `HttpParts` and the
+`*BeanMeta` classes), which depended on TODO-30 landing. TODO-30 was also
+abandoned (see `FINISHED-30-classmeta-to-commons.md`). Without `ClassMeta` in
+commons, `rest-common` cannot drop the marshall dependency.
+
+The four low-effort moves that don't depend on `ClassMeta` are useful on their
+own merits and have been carried forward into TODO-60 (`TODO-60-low-effort-
+marshall-to-commons-moves.md`):
+
+- Step 1: `Content.java` javadoc (`{@link JsonSchemaSerializer}` go fully-qualified).
+- Step 2: `InvalidAnnotationException` -> commons.
+- Step 3: `SchemaAnnotation` / `ExternalDocsAnnotation` / `ItemsAnnotation`
+  / `SubItemsAnnotation` -> commons.
+- Step 4: drop or relocate `@Marshalled(as=MarshalledAs.STRING)` on `EntityTags`.
+
+Steps 5-7 are intentionally dropped:
+
+- Step 5 (`HttpPartSchema` + `HttpPartSerializer/Parser` interfaces -> commons)
+  paid off mostly when paired with the dep-break goal.
+- Steps 6-7 (`ClassMeta` resolution + pom flip) are ClassMeta-blocked.
+
+The original analysis below is preserved verbatim for historical context.
+
+---
+
 Target module chain:
 
 ```

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.commons.annotation;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
 
 /**

@@ -22,13 +22,11 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
 
 /**
  * A list of {@link EntityTag} beans.
  */
-@Marshalled(as=MarshalledAs.STRING)
 public class EntityTags {
 
 	/** Represents an empty entity tags object. */

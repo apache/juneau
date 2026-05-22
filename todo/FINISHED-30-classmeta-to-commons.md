@@ -1,5 +1,27 @@
 # TODO-30 — Investigate moving `ClassMeta` (and related non-marshalling types) from `juneau-marshall` into `juneau-commons`
 
+## Outcome (rescope, 2026-05-22)
+
+Investigation phase abandoned without execution. After consideration, the
+move was judged infeasible at acceptable cost: `ClassMeta` is one of the
+most-imported types in the codebase (hundreds of references across
+`juneau-marshall`, `juneau-rest-*`, `juneau-bean-*`, `juneau-utest`), the
+per-format `*ClassMeta` extension cache and the `MarshallingContext`
+side-channel hooks make it not standalone-portable, and the cascading
+follow-on moves (`ObjectSwap`, `BeanRegistry`, object tools) all currently
+depend transitively on `ClassMeta`. Even Phase 0 (a read-only inventory
+deliverable) was deemed not worth running given that the eventual move would
+not be executed.
+
+No carry-forward TODO is opened from TODO-30 specifically. The companion
+TODO-7 has been similarly rescoped - see `FINISHED-7-decouple-rest-common-
+from-marshall.md`. The four low-effort moves that don't depend on `ClassMeta`
+landed as TODO-60 (`TODO-60-low-effort-marshall-to-commons-moves.md`).
+
+The original analysis below is preserved verbatim for historical context.
+
+---
+
 Source: promoted from `TODO.md` on 2026-05-13. Companion follow-on to **TODO-5** (which already moved the bean-runtime types — `BeanMap`, `BeanMeta`, `BeanPropertyMeta`, `BeanPropertyValue`, `BeanPropertyConsumer`, `BeanProxyInvocationHandler`, `BeanMapEntry`, `BeanInterceptor` — into `org.apache.juneau.commons.bean`).
 
 ---

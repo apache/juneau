@@ -19,7 +19,7 @@ package org.apache.juneau.httppart.bean;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.reflect.*;
 
 /**

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.httppart.bean;
 
-import static org.apache.juneau.annotation.InvalidAnnotationException.*;
+import static org.apache.juneau.commons.annotation.InvalidAnnotationException.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;

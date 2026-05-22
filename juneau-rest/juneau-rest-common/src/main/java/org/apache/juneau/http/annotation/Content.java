@@ -23,8 +23,6 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.commons.annotation.Schema;
 
-import org.apache.juneau.json.JsonSchemaSerializer;
-
 /**
  * REST request body annotation.
  *
@@ -148,7 +146,7 @@ public @interface Content {
 	 *
 	 * <p>
 	 * This is a required attribute per the swagger definition.
-	 * However, if not explicitly specified, the value will be auto-generated using {@link JsonSchemaSerializer}.
+	 * However, if not explicitly specified, the value will be auto-generated using {@link org.apache.juneau.json.JsonSchemaSerializer}.
 	 *
 	 * <p>
 	 * The {@link Schema @Schema} annotation can also be used standalone on the parameter or type.
