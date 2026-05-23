@@ -1329,6 +1329,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.07a.RestServerComposition',
+							label: '10.7a. Mixins and Multi-Mount Paths',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.08.RestServerSse',
 							label: '10.8. Server-Sent Events',
 						},
@@ -1480,6 +1485,11 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/10.20a.RestServerProblemDetails',
 							label: '10.20a. RFC 7807 / 9457 Problem Details',
+						},
+						{
+							type: 'doc',
+							id: 'topics/10.20b.RestServerConditionalGet',
+							label: '10.20b. Conditional-GET / ETag Helpers',
 						},
 						{
 							type: 'doc',
@@ -1846,6 +1856,11 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/15.09.Extending',
 							label: '15.9. Customizing via @Bean',
+						},
+						{
+							type: 'doc',
+							id: 'topics/15.10.HealthProbes',
+							label: '15.10. Health / Readiness / Liveness Probes',
 						},
 					],
 				},
