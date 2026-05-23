@@ -53,6 +53,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.rfc7807.adapter.ProblemAdapters;
+import org.apache.juneau.bean.openapi3.OpenApi;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.json.*;
 import org.apache.juneau.commons.collections.FluentMap;
@@ -86,6 +87,7 @@ import org.apache.juneau.rest.rrpc.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.stats.*;
+import org.apache.juneau.rest.openapi.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
@@ -161,6 +163,7 @@ public class RestContext extends Context {
 	private static final String PROP_bootstrapVarResolver = "bootstrapVarResolver";
 	private static final String PROP_staticFiles = "staticFiles";
 	private static final String PROP_swaggerProvider = "swaggerProvider";
+	private static final String PROP_openApiProvider = "openApiProvider";
 
 	/**
 	 * Bootstrap arguments for {@link RestContext}.
@@ -322,6 +325,7 @@ public class RestContext extends Context {
 	protected final Builder builder;
 	protected final Class<?> resourceClass;
 	protected final ConcurrentHashMap<Locale,Swagger> swaggerCache = new ConcurrentHashMap<>();
+	protected final ConcurrentHashMap<Locale,OpenApi> openApiCache = new ConcurrentHashMap<>();
 	protected final Instant startTime;
 	protected final RestContext parentContext;
 	protected final String fullPath;
@@ -405,6 +409,7 @@ public class RestContext extends Context {
 		bs.addDefaultSupplier(FileFinder.class, staticFiles::get);
 		bs.addDefaultSupplier(DebugEnablement.class, debugEnablement::get);
 		bs.addDefaultSupplier(SwaggerProvider.class, swaggerProvider::get);
+		bs.addDefaultSupplier(OpenApiProvider.class, openApiProvider::get);
 		bs.addDefaultSupplier(RestOperations.class, restOperations::get);
 		bs.addDefaultSupplier(RestChildren.class, restChildren::get);
 		// Named framework beans (replaces DELAYED_INJECTION_NAMES).
@@ -499,7 +504,7 @@ public class RestContext extends Context {
 					RequestAttributeVar.class, RequestFormDataVar.class, RequestHeaderVar.class,
 					RequestPathVar.class, RequestQueryVar.class, RequestVar.class,
 					RequestSwaggerVar.class, SerializedRequestAttrVar.class, ServletInitParamVar.class,
-					SwaggerVar.class, UrlVar.class, UrlEncodeVar.class, HtmlWidgetVar.class
+					SwaggerVar.class, OpenApiVar.class, UrlVar.class, UrlEncodeVar.class, HtmlWidgetVar.class
 				).addDefault())
 				.bean(FileFinder.class, FileFinder.create(bs).cp(resourceClass(), null, true).build())
 				.build()
@@ -1025,6 +1030,61 @@ public class RestContext extends Context {
 		bs.createBeanFromMethod(SwaggerProvider.class, resource().get(), RestContext::isBeanMethod).ifPresent(creator::impl);
 		return creator.asOptional().orElse(null);
 	});
+
+	/**
+	 * The {@link OpenApiProvider} for this resource.
+	 *
+	 * <p>
+	 * Defaults to {@link BasicOpenApiProvider}. {@code @Rest(openApiProvider=X)} most-derived
+	 * non-{@code Void} class wins. A bean-store override or {@code @Bean} factory method REPLACES the result.
+	 */
+	private final Memoizer<OpenApiProvider> openApiProvider = memoizer(() -> {
+		var bs = beanStore();
+		bs.addBean(OpenApiResource.class, OpenApiResource.of(resourceClass()));
+		var creator = BeanInstantiator.of(OpenApiProvider.class, bs).type(BasicOpenApiProvider.class).noBuilder();
+		bs.getBeanType(OpenApiProvider.class).ifPresent(creator::type);
+		// @Rest(openApiProvider=X) — most-derived non-Void wins.
+		getRestAnnotationsForProperty(PROPERTY_openApiProvider)
+			.map(ai -> ai.inner().openApiProvider())
+			.filter(c -> c != OpenApiProvider.Void.class)
+			.reduce((first, second) -> second)
+			.ifPresent(creator::type);
+		bs.createBeanFromMethod(OpenApiProvider.class, resource().get(), RestContext::isBeanMethod).ifPresent(creator::impl);
+		return creator.asOptional().orElse(null);
+	});
+
+	/**
+	 * The resolved API documentation format for this resource.
+	 *
+	 * <p>
+	 * Resolution precedence (most-specific wins):
+	 * <ol>
+	 * 	<li>{@code @Rest(apiFormat=…)} — most-derived non-empty class-hierarchy value
+	 * 	<li>System property {@code juneau.rest.apiFormat}
+	 * 	<li>Default: {@code "swagger"}
+	 * </ol>
+	 */
+	private final Memoizer<String> apiFormat = memoizer(() -> {
+		var fromAnnotation = getRestAnnotationsForProperty(PROPERTY_apiFormat)
+			.map(ai -> ai.inner().apiFormat())
+			.filter(v -> v != null && ! v.isEmpty())
+			.reduce((first, second) -> second)
+			.orElse(null);
+		if (nn(fromAnnotation))
+			return normalizeApiFormat(fromAnnotation);
+		var fromSystem = System.getProperty(SYSPROP_apiFormat);
+		if (nn(fromSystem) && ! fromSystem.isEmpty())
+			return normalizeApiFormat(fromSystem);
+		return API_FORMAT_SWAGGER;
+	});
+
+	private static String normalizeApiFormat(String value) {
+		var v = value.trim().toLowerCase(Locale.ROOT);
+		return switch (v) {
+			case API_FORMAT_SWAGGER, API_FORMAT_OPENAPI, API_FORMAT_BOTH -> v;
+			default -> API_FORMAT_SWAGGER;
+		};
+	}
 
 	/**
 	 * The {@link ThrownStore} for this resource, used to track exception statistics.
@@ -2356,6 +2416,56 @@ public class RestContext extends Context {
 	public SwaggerProvider getSwaggerProvider() { return beanStore.getBean(SwaggerProvider.class).orElse(null); }
 
 	/**
+	 * Returns the OpenAPI 3.1 document for the REST resource.
+	 *
+	 * @param locale The locale of the document to return.
+	 * @return The OpenAPI document as an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<OpenApi> getOpenApi(Locale locale) {
+		OpenApi o = openApiCache.get(locale);
+		if (o == null) {
+			try {
+				var provider = getOpenApiProvider();
+				if (provider == null)
+					return Optional.empty();
+				o = provider.getOpenApi(this, locale);
+				if (nn(o))
+					openApiCache.put(locale, o);
+			} catch (Exception e) {
+				throw new InternalServerError(e);
+			}
+		}
+		return opt(o);
+	}
+
+	/**
+	 * Returns the OpenAPI 3.1 provider used by this resource.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#openApiProvider()}
+	 * </ul>
+	 *
+	 * @return
+	 * 	The OpenAPI 3.1 provider for this resource.
+	 * 	<br>May be <jk>null</jk>.
+	 */
+	public OpenApiProvider getOpenApiProvider() { return beanStore.getBean(OpenApiProvider.class).orElse(null); }
+
+	/**
+	 * Returns the resolved API documentation format for this resource.
+	 *
+	 * <p>
+	 * Resolution precedence: {@code @Rest(apiFormat=…)} → system property
+	 * {@code juneau.rest.apiFormat} → default {@code "swagger"}.
+	 *
+	 * <p>Recognized values are {@link RestServerConstants#API_FORMAT_SWAGGER},
+	 * {@link RestServerConstants#API_FORMAT_OPENAPI}, and {@link RestServerConstants#API_FORMAT_BOTH}.
+	 *
+	 * @return The resolved API format. Never {@code null}.
+	 */
+	public String getApiFormat() { return apiFormat.get(); }
+
+	/**
 	 * Returns the stack trace database associated with this context.
 	 *
 	 * @return
@@ -2622,6 +2732,7 @@ public class RestContext extends Context {
 		getDefaultRequestAttributes();
 		getDebugEnablement();
 		getSwaggerProvider();
+		getOpenApiProvider();
 	}
 
 	private static Set<String> newCaseInsensitiveSet(String value) {
@@ -3030,6 +3141,7 @@ public class RestContext extends Context {
 			.a(PROP_restOpArgs, getRestOpArgs())
 			.a(PROP_staticFiles, getStaticFiles())
 			.a(PROP_swaggerProvider, getSwaggerProvider())
+			.a(PROP_openApiProvider, getOpenApiProvider())
 			.a(PROPERTY_uriAuthority, getUriAuthority())
 			.a(PROPERTY_uriContext, getUriContext())
 			.a(PROPERTY_uriRelativity, getUriRelativity())

@@ -18,7 +18,6 @@ package org.apache.juneau.rest.servlet;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;
 
 import jakarta.servlet.*;
@@ -54,11 +53,6 @@ import jakarta.servlet.http.*;
  */
 @Rest
 public abstract class BasicRestObjectGroup extends BasicRestObject implements BasicGroupOperations {
-
-	@Override /* Overridden from BasicGroupOperations */
-	public ChildResourceDescriptions getChildren(RestRequest req) {
-		return ChildResourceDescriptions.of(req);
-	}
 
 	/**
 	 * Returns the {@link RestChildren} registry backing this group resource.

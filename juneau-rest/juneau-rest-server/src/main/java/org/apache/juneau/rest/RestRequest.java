@@ -43,6 +43,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.request.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.bean.openapi3.OpenApi;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.*;
@@ -1275,6 +1276,21 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Optional<Swagger> getSwagger() { return context.getSwagger(getLocale()); }
+
+	/**
+	 * Returns the localized OpenAPI 3.1 document associated with the resource.
+	 *
+	 * <p>
+	 * Sibling of {@link #getSwagger()} for the OpenAPI 3.1 emission path.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#openApiProvider()}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerOpenApi">OpenAPI 3.1 Server Emission</a>
+	 * </ul>
+	 *
+	 * @return The OpenAPI 3.1 document associated with the resource. Never <jk>null</jk>.
+	 */
+	public Optional<OpenApi> getOpenApi() { return context.getOpenApi(getLocale()); }
 
 	/**
 	 * Returns the <c>Time-Zone</c> header value on the request if there is one.

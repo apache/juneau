@@ -111,6 +111,24 @@ public final class RestServerConstants {
 	/** The {@code "swaggerProvider"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving the swagger provider bean. */
 	public static final String PROPERTY_swaggerProvider = "swaggerProvider";
 
+	/** The {@code "openApiProvider"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving the OpenAPI 3.1 provider bean. */
+	public static final String PROPERTY_openApiProvider = "openApiProvider";
+
+	/** The {@code "apiFormat"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving the API documentation format. */
+	public static final String PROPERTY_apiFormat = "apiFormat";
+
+	/** System property override for the {@code apiFormat} setting. Allowed values: {@code "swagger"}, {@code "openapi"}, {@code "both"}. */
+	public static final String SYSPROP_apiFormat = "juneau.rest.apiFormat";
+
+	/** Constant for the {@code apiFormat} value selecting Swagger v2 emission on {@code /api/*}. */
+	public static final String API_FORMAT_SWAGGER = "swagger";
+
+	/** Constant for the {@code apiFormat} value selecting OpenAPI 3.1 emission on {@code /openapi/*}; {@code /api/*} returns 404. */
+	public static final String API_FORMAT_OPENAPI = "openapi";
+
+	/** Constant for the {@code apiFormat} value selecting both Swagger v2 on {@code /api/*} and OpenAPI 3.1 on {@code /openapi/*}. */
+	public static final String API_FORMAT_BOTH = "both";
+
 	/** The {@code "debug"} annotation attribute name — used in {@code noInherit} matching on {@code @RestOp} / verb annotations. */
 	public static final String PROPERTY_debug = "debug";
 

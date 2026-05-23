@@ -17,15 +17,19 @@
 package org.apache.juneau.rest.servlet;
 
 import static org.apache.juneau.http.HttpMethod.*;
+import static org.apache.juneau.rest.RestServerConstants.*;
 
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.bean.openapi3.OpenApi;
+import org.apache.juneau.bean.openapi3.ui.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.bean.swagger.ui.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -183,5 +187,50 @@ public interface BasicRestOperations {
 			SwaggerUI.class
 		}
 	)
-	Swagger getSwagger(RestRequest req);
+	default Swagger getSwagger(RestRequest req) {
+		// apiFormat="openapi" — /api/* is not the canonical endpoint in this mode; clients use /openapi/*.
+		if (API_FORMAT_OPENAPI.equals(req.getContext().getApiFormat()))
+			throw new NotFound();
+		return req.getSwagger().orElseThrow(NotFound::new);
+	}
+
+	/**
+	 * [GET /openapi] - Show OpenAPI 3.1 documentation.
+	 *
+	 * <p>
+	 * Sibling of {@link #getSwagger(RestRequest)}; emits an OpenAPI 3.1 document for the resource. The
+	 * {@link RedocUI} swap renders an HTML view of the document for {@code text/html} requests.
+	 *
+	 * <p>
+	 * Active when {@link Rest#apiFormat()} is {@code "openapi"} or {@code "both"} (and via the
+	 * {@code juneau.rest.apiFormat} system property override). Returns 404 when {@code apiFormat} is
+	 * {@code "swagger"} (the default) so legacy resources keep their pre-9.5.0 surface unchanged.
+	 *
+	 * @param req The HTTP request.
+	 * @return A bean representing the OpenAPI document.
+	 */
+	@RestGet(
+		path="/openapi/*",
+		summary="OpenAPI 3.1 documentation",
+		description="OpenAPI 3.1 documentation for this resource."
+	)
+	@HtmlDocConfig(
+		rank=10,
+		navlinks={
+			"back: servlet:/",
+			"json: servlet:/openapi?Accept=text/json&plainText=true"
+		},
+		aside="NONE"
+	)
+	@MarshalledConfig(
+		swaps={
+			RedocUI.class
+		}
+	)
+	default OpenApi getOpenApi(RestRequest req) {
+		// apiFormat="swagger" (default) — /openapi/* not mounted in this mode.
+		if (API_FORMAT_SWAGGER.equals(req.getContext().getApiFormat()))
+			throw new NotFound();
+		return req.getOpenApi().orElseThrow(NotFound::new);
+	}
 }

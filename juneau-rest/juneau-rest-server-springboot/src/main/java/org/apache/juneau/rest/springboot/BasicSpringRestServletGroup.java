@@ -16,9 +16,7 @@
  */
 package org.apache.juneau.rest.springboot;
 
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
 
@@ -51,9 +49,4 @@ import org.apache.juneau.rest.servlet.*;
 })
 public abstract class BasicSpringRestServletGroup extends BasicSpringRestServlet implements BasicGroupOperations {
 	private static final long serialVersionUID = 1L;
-
-	@Override /* Overridden from BasicGroupOperations */
-	public ChildResourceDescriptions getChildren(RestRequest req) {
-		return ChildResourceDescriptions.of(req);
-	}
 }

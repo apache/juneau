@@ -23,6 +23,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.logger.*;
+import org.apache.juneau.rest.openapi.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
@@ -127,7 +128,12 @@ import org.apache.juneau.serializer.annotation.*;
 	callLogger=CallLogger.Void.class,  // Defaults to BasicCallLogger.
 	debugEnablement=DebugEnablement.Void.class,  // Defaults to BasicDefaultEnablement.
 	staticFiles=StaticFiles.Void.class,  // Defaults to BasicStaticFiles.
-	swaggerProvider=SwaggerProvider.Void.class  // Defaults to BasicSwaggerProvider.
+	swaggerProvider=SwaggerProvider.Void.class,  // Defaults to BasicSwaggerProvider.
+	openApiProvider=OpenApiProvider.Void.class,  // Defaults to BasicOpenApiProvider.
+
+	// API format selector for /api and /openapi endpoints. Empty string defers to system property
+	// juneau.rest.apiFormat and ultimately falls back to "swagger" for back-compat.
+	apiFormat=""
 )
 @BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.

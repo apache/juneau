@@ -6,8 +6,6 @@
 
 - [TODO-37] - Agent instruction consolidation.
 
-- [TODO-63] OpenAPI 3.1 emission + bundled Swagger UI / Redoc auto-mount. See `todo/TODO-63-openapi-3.1-emission.md`.
-
 - [TODO-64] Conditional-GET / ETag / `If-Modified-Since` helpers on `RestResponse`. See `todo/TODO-64-etag-conditional-get-helpers.md`.
 
 - [TODO-65] Health / readiness / liveness probe endpoints + `HealthIndicator` SPI. See `todo/TODO-65-health-readiness-liveness-probes.md`.

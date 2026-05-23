@@ -18,7 +18,6 @@ package org.apache.juneau.rest.servlet;
 
 import java.util.*;
 
-import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
@@ -65,10 +64,5 @@ public abstract class BasicRestObject extends RestObject implements BasicRestOpe
 	@Override /* Overridden from BasicRestOperations */
 	public RestContextStats getStats(RestRequest req) {
 		return req.getContext().getStats();
-	}
-
-	@Override /* Overridden from BasicRestOperations */
-	public Swagger getSwagger(RestRequest req) {
-		return req.getSwagger().orElseThrow(NotFound::new);
 	}
 }

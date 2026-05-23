@@ -28,6 +28,7 @@ import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.logger.*;
+import org.apache.juneau.rest.openapi.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
@@ -69,6 +70,8 @@ public class RestAnnotation {
 		private Class<? extends RestConverter>[] converters = new Class[0];
 		private Class<? extends RestGuard>[] guards = new Class[0];
 		private Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Void.class;
+		private Class<? extends OpenApiProvider> openApiProvider = OpenApiProvider.Void.class;
+		private String apiFormat = "";
 		private Class<? extends RestOpArg>[] restOpArgs = new Class[0];
 		private Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
 		private Class<? extends Serializer>[] serializers = new Class[0];
@@ -632,6 +635,28 @@ public class RestAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Rest#openApiProvider()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder openApiProvider(Class<? extends OpenApiProvider> value) {
+			openApiProvider = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#apiFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder apiFormat(String value) {
+			apiFormat = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Rest#title()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -703,6 +728,8 @@ public class RestAnnotation {
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends SwaggerProvider> swaggerProvider;
+		private final Class<? extends OpenApiProvider> openApiProvider;
+		private final String apiFormat;
 		private final Class<? extends RestOpArg>[] restOpArgs;
 		private final Class<? extends DebugEnablement> debugEnablement;
 		private final Class<? extends Serializer>[] serializers;
@@ -795,6 +822,8 @@ public class RestAnnotation {
 			staticFiles = b.staticFiles;
 			swagger = b.swagger;
 			swaggerProvider = b.swaggerProvider;
+			openApiProvider = b.openApiProvider;
+			apiFormat = b.apiFormat;
 			title = copyOf(b.title);
 			uriAuthority = b.uriAuthority;
 			uriContext = b.uriContext;
@@ -1044,6 +1073,16 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public Class<? extends SwaggerProvider> swaggerProvider() {
 			return swaggerProvider;
+		}
+
+		@Override /* Overridden from Rest */
+		public Class<? extends OpenApiProvider> openApiProvider() {
+			return openApiProvider;
+		}
+
+		@Override /* Overridden from Rest */
+		public String apiFormat() {
+			return apiFormat;
 		}
 
 		@Override /* Overridden from Rest */
