@@ -1329,6 +1329,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.08.RestServerSse',
+							label: '10.8. Server-Sent Events',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.08.Guards',
 							label: '10.8. Guards',
 						},
@@ -1470,6 +1475,11 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/10.20.HttpStatusCodes',
 							label: '10.20. HTTP Status Codes',
+						},
+						{
+							type: 'doc',
+							id: 'topics/10.20a.RestServerProblemDetails',
+							label: '10.20a. RFC 7807 / 9457 Problem Details',
 						},
 						{
 							type: 'doc',
