@@ -1493,6 +1493,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.20c.RestServerRateLimitAndRequestId',
+							label: '10.20c. Rate-Limiting and Request-Id Propagation',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.21.BuiltInParameters',
 							label: '10.21. Built-In Parameters',
 						},
