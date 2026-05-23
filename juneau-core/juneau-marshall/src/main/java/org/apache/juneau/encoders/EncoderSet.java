@@ -80,7 +80,7 @@ public class EncoderSet {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder {
+	public static class Builder implements BeanStoreOverridable<Builder> {
 		private static String toString(Object o) {
 			if (o == null)
 				return "null";
@@ -89,7 +89,7 @@ public class EncoderSet {
 			return "object:" + cns(o);
 		}
 
-		private final BeanStore beanStore;
+		private BeanStore beanStore;
 		private EncoderSet impl;
 
 		List<Object> entries;
@@ -124,6 +124,25 @@ public class EncoderSet {
 		 */
 		public BeanStore beanStore() {
 			return beanStore;
+		}
+
+		/**
+		 * Installs the supplied {@link BeanStore} as the {@code overridingParent} of this builder's bean store.
+		 *
+		 * <p>
+		 * Wraps the current {@link #beanStore()} in a fresh {@link BasicBeanStore} whose {@code overridingParent}
+		 * is the supplied store, so test-time overrides win over the builder's regular bean lookups during
+		 * construction-time reflective injection.  Passing {@code null} is a no-op.
+		 *
+		 * @param store The override layer.  Can be <jk>null</jk>.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		@Override
+		public Builder overridingBeanStore(BeanStore store) {
+			if (store != null)
+				this.beanStore = new BasicBeanStore(this.beanStore, store);
+			return this;
 		}
 
 		/**

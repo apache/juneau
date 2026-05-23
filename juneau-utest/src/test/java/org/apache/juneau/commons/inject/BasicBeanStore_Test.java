@@ -1281,6 +1281,8 @@ class BasicBeanStore_Test extends TestBase {
 		@Override public <T> Optional<T> getBean(Class<T> t, String n) { return delegate.getBean(t, n); }
 		@Override public <T> java.util.Map<String, T> getBeansOfType(Class<T> t) { return delegate.getBeansOfType(t); }
 		@Override public WritableBeanStore registerConfiguration(Class<?> c) { return delegate.registerConfiguration(c); }
+		@Override public Snapshot pushOverlay(BeanStore overlay) { return delegate.pushOverlay(overlay); }
+		@Override public void popOverlay(Snapshot snapshot) { delegate.popOverlay(snapshot); }
 		@Override public void close() { delegate.close(); }
 	}
 

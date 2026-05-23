@@ -91,6 +91,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	private static final String PROP_entries = "entries";
 	private static final String PROP_identity = "identity";
 	private static final String PROP_name = "name";
+	private static final String PROP_overlayStack = "overlayStack";
 	private static final String PROP_overridingParent = "overridingParent";
 	private static final String PROP_parent = "parent";
 	private static final String PROP_type = "type";
@@ -105,6 +106,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	private final Set<Class<?>> registeredConfigurations;
 	private final BeanStore parent;
 	private final BeanStore overridingParent;
+	private volatile StackOverlay overlayStack;
 	private volatile boolean closed;
 
 	/**
@@ -305,6 +307,41 @@ public class BasicBeanStore implements WritableBeanStore {
 		return this;
 	}
 
+	@Override
+	public Snapshot pushOverlay(BeanStore overlay) {
+		Objects.requireNonNull(overlay, "overlay must not be null");
+		checkOpen();
+		var stack = overlayStack;
+		if (stack == null) {
+			synchronized (this) {
+				stack = overlayStack;
+				if (stack == null) {
+					stack = new StackOverlay();
+					overlayStack = stack;
+				}
+			}
+		}
+		stack.push(overlay);
+		return new Snapshot(this, overlay);
+	}
+
+	@Override
+	public void popOverlay(Snapshot snapshot) {
+		Objects.requireNonNull(snapshot, "snapshot must not be null");
+		checkOpen();
+		if (snapshot.owner() != this)
+			throw new IllegalStateException("Snapshot does not belong to this BeanStore (foreign-snapshot pop).");
+		var stack = overlayStack;
+		if (stack == null || stack.depth() == 0)
+			throw new IllegalStateException("popOverlay invoked on an empty overlay stack.");
+		// LIFO discipline — the snapshot must identify the current top-of-stack frame.
+		var top = stack.peek();
+		if (top != snapshot.frame())
+			throw new IllegalStateException(
+				"Out-of-order popOverlay: supplied snapshot does not identify the top-of-stack overlay frame.");
+		stack.pop();
+	}
+
 	/**
 	 * Removes all beans from this store.
 	 *
@@ -381,7 +418,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	public <T> Map<String,T> getBeansOfType(Class<T> beanType) {
 		checkOpen();
 		// Build the result respecting the priority order used by getBean / resolve:
-		//   defaults (lowest) < parent < entries (local) < overridingParent (highest)
+		//   defaults (lowest) < parent < entries (local) < overridingParent < overlayStack (highest)
 		// Higher-priority maps overwrite lower-priority ones with the same name.
 		Map<String,T> result = map();
 		var defaultMap = defaults.get(beanType);
@@ -394,6 +431,9 @@ public class BasicBeanStore implements WritableBeanStore {
 			typeMap.forEach((name, supplier) -> result.put(name, (T)supplier.get()));
 		if (nn(overridingParent))
 			overridingParent.getBeansOfType(beanType).forEach(result::put);
+		var stack = overlayStack;
+		if (nn(stack) && stack.depth() > 0)
+			stack.getBeansOfType(beanType).forEach(result::put);
 		if (result.isEmpty())
 			return result;
 		return result.entrySet().stream()
@@ -548,6 +588,14 @@ public class BasicBeanStore implements WritableBeanStore {
 		"unchecked" // Type erasure requires cast for supplier resolution
 	})
 	protected <T> Optional<Supplier<T>> resolve(Class<T> beanType, String name) {
+		// (0) Push/pop overlay stack — wins over the construction-time overridingParent slot because pushed
+		// frames are "more recent".  Lazily initialized; null until the first pushOverlay() call.
+		var stack = overlayStack;
+		if (nn(stack) && stack.depth() > 0) {
+			var fromStack = stack.getBeanSupplier(beanType, name);
+			if (fromStack.isPresent())
+				return fromStack;
+		}
 		// (1) Overriding parent (e.g. Spring) — wins over local entries.
 		if (nn(overridingParent)) {
 			var fromOverriding = overridingParent.getBeanSupplier(beanType, name);
@@ -667,9 +715,12 @@ public class BasicBeanStore implements WritableBeanStore {
 			else
 				overridingParentValue = s(overridingParent);
 		}
+		var stack = overlayStack;
+		Object overlayStackValue = (nn(stack) && stack.depth() > 0) ? s(stack) : null;
 		return filteredBeanPropertyMap()
 			.a(PROP_entries, entryList)
 			.a(PROP_defaults, defaultList.isEmpty() ? null : defaultList)
+			.a(PROP_overlayStack, overlayStackValue)
 			.a(PROP_overridingParent, overridingParentValue)
 			.a(PROP_identity, id(this))
 			.a(PROP_parent, parent instanceof BasicBeanStore parent2 ? parent2.properties() : s(parent));
@@ -812,9 +863,15 @@ public class BasicBeanStore implements WritableBeanStore {
 
 	private <T> void addBeanWithMeta(Class<T> beanType, T bean, String name, BeanSourceMeta meta) {
 		var key = emptyIfNull(name);
-		if (hasBean(beanType, key))
-			throw new BeanCreationException("Duplicate bean: type=" + beanType.getName() + ", name=" + key);
+		// Duplicate-check against LOCAL entries only.  Beans present via the overridingParent or parent
+		// chain are allowed to coexist with a local registration here — the resolution order
+		// (overridingParent > local > parent > defaults) ensures the right entry wins at lookup time.
+		// This is what lets a test-time overlay installed in the overridingParent slot coexist with a
+		// local @Bean factory of the same (type, name) declared on a @Configuration class without
+		// triggering a spurious duplicate-bean error.
 		var typeMap = entries.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
+		if (typeMap.containsKey(key))
+			throw new BeanCreationException("Duplicate bean: type=" + beanType.getName() + ", name=" + key);
 		typeMap.put(key, () -> bean);
 		entryMetadata.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).put(key, meta);
 	}

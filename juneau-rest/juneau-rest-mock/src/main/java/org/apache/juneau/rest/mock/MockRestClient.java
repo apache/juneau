@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.RestContext;
@@ -185,10 +186,11 @@ public final class MockRestClient implements Closeable {
 	 *
 	 * @since 9.2.1
 	 */
-	public static final class Builder {
+	public static final class Builder implements BeanStoreOverridable<Builder> {
 
 		private final Object impl;
 		private String contextPath;
+		private BeanStore overridingBeanStore;
 
 		private Builder(Object impl) {
 			this.impl = impl;
@@ -206,6 +208,36 @@ public final class MockRestClient implements Closeable {
 		}
 
 		/**
+		 * Installs a {@link BeanStore} as the {@code overridingParent} of the {@link RestContext}'s
+		 * bean store, so test-time overrides (e.g. {@code TestBeanStore}) resolve at tier 1 of the
+		 * lookup chain &mdash; above the resource's local {@code @Bean} factory entries.
+		 *
+		 * <p>
+		 * Setting this disables the per-resource {@link RestContext} cache for the duration of this
+		 * build, so the overlay is not silently shared with a previously-cached instance.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jk>var</jk> <jv>overlay</jv> = <jk>new</jk> TestBeanStore().override(MyService.<jk>class</jk>, mockSvc);
+		 * 	<jk>try</jk> (<jv>client</jv> = MockRestClient.<jsm>builder</jsm>(MyResource.<jk>class</jk>)
+		 * 			.overridingBeanStore(<jv>overlay</jv>)
+		 * 			.build()) {
+		 * 		<jv>client</jv>.get(<js>"/widgets/1"</js>).run().assertStatus().is(200);
+		 * 	}
+		 * </p>
+		 *
+		 * @param value The override layer. Can be <jk>null</jk> to clear a previously-set value.
+		 * @return This object.
+		 *
+		 * @since 9.5.0
+		 */
+		@Override
+		public Builder overridingBeanStore(BeanStore value) {
+			overridingBeanStore = value;
+			return this;
+		}
+
+		/**
 		 * Builds and returns the {@link MockRestClient}.
 		 *
 		 * @return A new instance. Never <jk>null</jk>.
@@ -213,18 +245,21 @@ public final class MockRestClient implements Closeable {
 		public MockRestClient build() {
 			try {
 				var c = impl instanceof Class<?> c2 ? c2 : impl.getClass();
-
-				if (!restContextCache.containsKey(c)) {
+				var overlay = overridingBeanStore;
+				RestContext restContext;
+				if (overlay == null && restContextCache.containsKey(c)) {
+					restContext = restContextCache.get(c);
+				} else {
 					var isClass = impl instanceof Class<?>;
 					var o = isClass ? ((Class<?>)impl).getDeclaredConstructor().newInstance() : impl;
-					RestContext rc = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
+					restContext = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
 						bs.addBean(Enablement.class, CONDITIONAL);
 						bs.addBeanType(CallLogger.class, BasicTestCallLogger.class);
-					})).postInit().postInitChildFirst();
-					restContextCache.put(c, rc);
+					}, overlay)).postInit().postInitChildFirst();
+					if (overlay == null)
+						restContextCache.put(c, restContext);
 				}
 
-				var restContext = restContextCache.get(c);
 				var servletPath = toValidContextPath(restContext.getFullPath());
 				var fullContextPath = emptyIfNull(contextPath) + emptyIfNull(servletPath);
 

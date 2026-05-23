@@ -16,9 +16,9 @@ The v1 scope, finalized from user review, includes:
 
 - A new **`juneau-junit5`** module hosting the overlay primitive, the
   `@TestBean` annotation, and the JUnit 5 `Extension` that wires it.
-- **Two supported wiring patterns**: **Mode A** (fresh-instance with
+- **Two supported wiring patterns**: **Mode INJECT** (fresh-instance with
   overrides — overlay is installed into the SUT's bean-store chain before
-  the SUT is built) and **Mode B** (existing-instance push/pop — overlay is
+  the SUT is built) and **Mode OVERLAY** (existing-instance push/pop — overlay is
   pushed onto a running SUT's bean store at `@BeforeEach` and popped at
   `@AfterEach`).
 - A **`@TestBean(name = "...")`** qualifier so named beans can be targeted
@@ -77,8 +77,8 @@ a JUnit 5 extension and a `@TestBean` annotation.
 - **`RestContext.getBeanStore()` is exposed** as a `WritableBeanStore`, so
   test code can address the bean store of a running resource. However the
   current `overridingParent` slot is fixed at `BasicBeanStore` construction
-  time, so the canonical Mode-A wiring installs the overlay **before**
-  `RestContext` / `Microservice` / `SerializerSet` is built. Mode B uses
+  time, so the canonical Mode-INJECT wiring installs the overlay **before**
+  `RestContext` / `Microservice` / `SerializerSet` is built. Mode OVERLAY uses
   the new stack overlay API (see Phase 6 below) to push/pop onto a
   running instance.
 
@@ -115,13 +115,13 @@ sources in priority order:
 4. Local `defaults` — memoizer-backed framework defaults registered via
    `addDefaultSupplier` (line 99 holds the map; line 282 the API).
 
-The overlay design plugs into tier 1 (Mode A) or sits on a stack above tier 1
-(Mode B + class scope). It never mutates tier 2 (local `entries`) and never
+The overlay design plugs into tier 1 (Mode INJECT) or sits on a stack above tier 1
+(Mode OVERLAY + class scope). It never mutates tier 2 (local `entries`) and never
 touches tier 4 (the memoizer).
 
 ### Snapshot/restore primitives
 
-For the Mode B fallback path (when an overlay-stack hook can't be installed
+For the Mode OVERLAY fallback path (when an overlay-stack hook can't be installed
 at SUT-construction time):
 
 - `getBeanSupplier(Class)` — returns the raw `Supplier` resolved through the
@@ -135,7 +135,7 @@ at SUT-construction time):
   supported; replacing supplier `A` with supplier `B` then re-replacing
   with supplier `A` restores the original behavior fully.
 
-These three primitives are what makes Mode B's snapshot-and-restore semantics
+These three primitives are what makes Mode OVERLAY's snapshot-and-restore semantics
 implementable even without the new stack-overlay API. The stack-overlay API
 (Phase 6) is preferred; these primitives are the fallback when the stack
 can't be installed pre-construction.
@@ -166,18 +166,18 @@ v1 vs. nice-to-have.
    internal `StackOverlay` class wraps a `Deque<BeanStore>` and is itself a
    `BeanStore`. **Recommendation: ship.** Replaces the set-once
    `overridingParent` constraint that today blocks class-scope and
-   Mode B from being clean. Touches `BasicBeanStore.java`,
+   Mode OVERLAY from being clean. Touches `BasicBeanStore.java`,
    `WritableBeanStore.java`, and adds a new
    `org.apache.juneau.commons.inject.StackOverlay` class (package-private
    if possible; public if the JUnit extension needs to construct one
    directly).
 
 2. **`Snapshot` value type + `snapshot()` / `restore(Snapshot)` on `WritableBeanStore`.**
-   First-class API for Mode B push/pop. A `Snapshot` is an opaque record
+   First-class API for Mode OVERLAY push/pop. A `Snapshot` is an opaque record
    capturing the supplier state for some `(beanType, name)` set at a moment
    in time; `restore(Snapshot)` puts those suppliers back. **Recommendation:
    ship, but only if the overlay-stack API alone proves insufficient.** In
-   the recommended design Mode B is implemented via the overlay stack, so a
+   the recommended design Mode OVERLAY is implemented via the overlay stack, so a
    `Snapshot` type is mostly defensive — useful when the test can't install
    the stack pre-construction. Treat as a Phase 6 stretch goal.
 
@@ -299,17 +299,17 @@ v1 vs. nice-to-have.
   honors `overridingParent`. The gaps are (a) an ergonomic builder for the
   overlay, (b) a way to bind it into a `RestContext` / `Microservice` /
   serializer set from a test, (c) a JUnit 5 extension to manage lifecycle,
-  and (d) — for Mode B — the small new stack-overlay API described in the
+  and (d) — for Mode OVERLAY — the small new stack-overlay API described in the
   Framework extensions section.
 
 ## Recommended design
 
 **Combine Options C (overlay BeanStore) + D (JUnit 5 extension)** from the
 original design brief, plus a new stack overlay primitive to support class
-scope and Mode B. Reject Option A (`Supplier<T>`-only registrations in
+scope and Mode OVERLAY. Reject Option A (`Supplier<T>`-only registrations in
 production) as already solved — every bean is supplier-backed today (see
 BeanStore primitives subsection). Reject "in-place mutate-the-production-store"
-as the canonical Mode B path; the overlay stack is cleaner. The in-place
+as the canonical Mode OVERLAY path; the overlay stack is cleaner. The in-place
 `getBeanSupplier`/`addSupplier` choreography is documented as a fallback
 when the overlay stack cannot be installed pre-construction.
 
@@ -530,9 +530,9 @@ interface (one line per builder) so the JUnit extension can wire to any
 builder via a single `instanceof` check, rather than four
 `instanceof` branches.
 
-### Phase 5 — Mode A: fresh-instance with overrides
+### Phase 5 — Mode INJECT: fresh-instance with overrides
 
-Mode A is the **default** wiring pattern. The test builds a fresh SUT in
+Mode INJECT is the **default** wiring pattern. The test builds a fresh SUT in
 `@BeforeEach` (or `@BeforeAll` for class-scope sharing) and passes the
 overlay into the SUT's builder. The overlay is installed into the bean
 store's tier-1 `overridingParent` slot at construction time.
@@ -543,28 +543,28 @@ store's tier-1 `overridingParent` slot at construction time.
   the overlay first. Because the overlay is installed before any memoizer
   fires, even framework-managed beans (`CallLogger`, `SerializerSet`,
   `ParserSet`, `EncoderSet`, etc.) see the overlay value when first
-  resolved — i.e. Mode A is universal across all bean types.
+  resolved — i.e. Mode INJECT is universal across all bean types.
 - **Lifecycle:** the overlay's lifetime is bounded by the SUT's lifetime.
   When the SUT is GC'd (per-test fresh SUT) or shut down (per-class
   shared SUT with explicit teardown), the overlay goes with it. No
   explicit pop needed.
 - **Tests:**
-  - `MockRestClient_Mode_A_Test` — overlay shadows a resource's `@Bean`
+  - `MockRestClient_Mode_INJECT_Test` — overlay shadows a resource's `@Bean`
     factory for a framework type (`CallLogger`).
-  - `Microservice_Mode_A_Test` — fresh microservice with mocked
+  - `Microservice_Mode_INJECT_Test` — fresh microservice with mocked
     `Config` and a mock `MicroserviceListener`.
-  - `SerializerSet_Mode_A_Test` — fresh `SerializerSet.Builder` with an
+  - `SerializerSet_Mode_INJECT_Test` — fresh `SerializerSet.Builder` with an
     overlaid bean that one of the registered `Serializer` types
     resolves at instantiation.
 
-### Phase 6 — Mode B: existing-instance with push/pop
+### Phase 6 — Mode OVERLAY: existing-instance with push/pop
 
-Mode B is opt-in. The test wires an overlay onto a **running** SUT for the
+Mode OVERLAY is opt-in. The test wires an overlay onto a **running** SUT for the
 duration of the test and then drops it. The mechanism uses the
 overlay-stack API from the Framework extensions section.
 
 - **Builder flag (opt-in path)** — when the test constructs the SUT in
-  `@BeforeAll` (Mode A) and wants per-test overlays via Mode B, the
+  `@BeforeAll` (Mode INJECT) and wants per-test overlays via Mode OVERLAY, the
   `JuneauBeanStoreExtension` is configured with
   `.mode(Mode.EXISTING_INSTANCE)` or the annotation declares
   `@TestBean(mode = LIVE)`. Either form tells the extension to skip
@@ -591,16 +591,16 @@ overlay-stack API from the Framework extensions section.
      to restore the original supplier. If no supplier existed previously,
      the extension cannot fully remove the entry (BasicBeanStore has no
      remove API) — document this as a known limitation and recommend
-     Mode A for that case.
+     Mode INJECT for that case.
 
-#### Mode-B-safe vs Mode-A-only — bean type inventory
+#### Mode-OVERLAY-safe vs Mode-INJECT-only — bean type inventory
 
-The audit below enumerates which bean types are eligible for Mode B vs
-which require Mode A. The audit follows the rule **"resolved per-call from
-the bean store" = Mode-B-safe; "resolved at boot and pinned to a final
-field or memoizer" = Mode-A-only.**
+The audit below enumerates which bean types are eligible for Mode OVERLAY vs
+which require Mode INJECT. The audit follows the rule **"resolved per-call from
+the bean store" = Mode-OVERLAY-safe; "resolved at boot and pinned to a final
+field or memoizer" = Mode-INJECT-only.**
 
-##### Mode-B-safe (per-call resolution from the bean store)
+##### Mode-OVERLAY-safe (per-call resolution from the bean store)
 
 - **User-defined beans** registered via `@Bean` factory methods or
   programmatic `addBean(...)` on the resource — stored in `entries`,
@@ -620,23 +620,23 @@ field or memoizer" = Mode-A-only.**
   `beanStore.getBean(...)` per call (`RestContext.java` lines 2037–2622).
   **Caveat:** while the accessor itself re-resolves, the framework's
   *internal* use of these beans typically goes through `RestOpContext`
-  memoizers that pin the value. So Mode B influences user-code accessor
+  memoizers that pin the value. So Mode OVERLAY influences user-code accessor
   calls but not the framework's already-pinned references.
 - **`MicroserviceListener` beans** — iterated from the bean store on each
   call to `Microservice.start()` and `stop()` (`Microservice.java` lines
   1223, 1262) and on broadcast events (lines 1167, 1262). If the test
   installs the overlay before driving a `start()` / `stop()` /
   broadcast, the swapped listener fires.
-- **`ConsoleCommand` beans** — only Mode-B-safe **before** the
+- **`ConsoleCommand` beans** — only Mode-OVERLAY-safe **before** the
   `Microservice` constructor runs (line 748 pins them into
-  `consoleCommandMap`). Effectively Mode-A-only in practice.
+  `consoleCommandMap`). Effectively Mode-INJECT-only in practice.
 - **`RestConverterList`, `RestGuardList`, `RestMatcherList`** —
   per-op-context `@Bean` override hooks (`RestOpContext.java` lines 259,
   512, 593). These are consulted once during op-context construction; a
   swap during op-context build sees the new value, but after that the
   list is pinned in a memoizer.
 
-##### Mode-A-only (boot-time or memoizer-pinned)
+##### Mode-INJECT-only (boot-time or memoizer-pinned)
 
 `RestContext` framework defaults (all memoizer-backed via
 `registerFrameworkDefaults`, `RestContext.java` lines 389–428):
@@ -648,10 +648,10 @@ field or memoizer" = Mode-A-only.**
   `JsonSchemaGenerator`, `StaticFiles`, `FileFinder`, `DebugEnablement`,
   `SwaggerProvider`, `OpenApiProvider`, `RestOperations`, `RestChildren`.
 
-  These types **are** Mode-B-safe at the `getBean(...)` boundary (per the
+  These types **are** Mode-OVERLAY-safe at the `getBean(...)` boundary (per the
   list above), but the framework's own consumers go through the memoizer
   which fires once and pins. To swap one of these in a way that *all*
-  framework code sees the new value, use Mode A.
+  framework code sees the new value, use Mode INJECT.
 
 `RestOpContext` per-op memoizers (`RestOpContext.java` lines 168–700):
 
@@ -675,13 +675,13 @@ field or memoizer" = Mode-A-only.**
 `SerializerSet`, `ParserSet`, `EncoderSet` per-set fields:
 
 - `entries` — populated at `build()` time from the supplied `BeanStore`;
-  the set is immutable after construction. Mode-A-only.
+  the set is immutable after construction. Mode-INJECT-only.
 
-**Bottom line for documentation:** Mode B is useful when the test's
+**Bottom line for documentation:** Mode OVERLAY is useful when the test's
 assertions go through `restContext.getXxx()` / `restContext.getBeanStore().getBean(...)` /
-per-request user code. Mode B does **not** influence beans that the
+per-request user code. Mode OVERLAY does **not** influence beans that the
 framework has already pinned via a memoizer or constructor-final field.
-When the test needs to swap one of those, use Mode A (build a fresh SUT
+When the test needs to swap one of those, use Mode INJECT (build a fresh SUT
 with the overlay installed via the builder hook).
 
 #### Push/pop API shape (preferred)
@@ -707,7 +707,7 @@ around the pushed `BeanStore` so pop-order violations are easy to detect.
 
 ## Annotation surface — worked examples
 
-### Example 1: `MockRestClient` + Mode A (default) + named bean
+### Example 1: `MockRestClient` + Mode INJECT (default) + named bean
 
 ```java
 @ExtendWith(JuneauBeanStoreExtension.class)
@@ -736,9 +736,9 @@ class MyResourceTest {
 
 The two `MyService` beans are distinguished by name; the resource's code
 uses `@Bean(name = "primary")` / `@Bean(name = "secondary")` constructor
-parameters, and Mode A overlay shadows both.
+parameters, and Mode INJECT overlay shadows both.
 
-### Example 2: `Microservice` + Mode B (existing instance, push/pop)
+### Example 2: `Microservice` + Mode OVERLAY (existing instance, push/pop)
 
 ```java
 @ExtendWith(JuneauBeanStoreExtension.class)
@@ -759,7 +759,7 @@ class MyMicroserviceTest {
 
     @Test
     void aTest(TestBeanStore store) {
-        // Mode B: the extension pushed `store` onto microservice's overlay stack
+        // Mode OVERLAY: the extension pushed `store` onto microservice's overlay stack
         // in @BeforeEach. mockApi is visible to anyone calling
         // microservice.getBeanStore().getBean(MyExternalApi.class).
         var listener = microservice.getBeanStore().getBean(MyMicroserviceListener.class).orElseThrow();
@@ -772,15 +772,15 @@ class MyMicroserviceTest {
 
 The extension recognizes that the `microservice` SUT was built with a
 `TestBeanStore` (a stack-overlay-capable BeanStore) in its
-`overridingParent` slot, and switches to Mode B push/pop behavior
+`overridingParent` slot, and switches to Mode OVERLAY push/pop behavior
 automatically. If the SUT had no stack-overlay-capable overlay installed,
 the extension would fall back to snapshot-and-restore on the `entries` map
 of `microservice.getBeanStore()` directly.
 
-To switch a Mode B test to Mode A semantics (build fresh per test), simply
+To switch a Mode OVERLAY test to Mode INJECT semantics (build fresh per test), simply
 drop the `@BeforeAll` and let the per-test `@BeforeEach` build the SUT.
 
-### Example 3: `SerializerSet` + Mode A + class scope
+### Example 3: `SerializerSet` + Mode INJECT + class scope
 
 ```java
 @ExtendWith(JuneauBeanStoreExtension.class)
@@ -885,22 +885,22 @@ id-based discrimination on top without breaking compatibility.
 The original future-direction recommendation called for both modes; the
 finalized plan promotes both to v1.
 
-- **Mode A — fresh-instance with overrides.** Phase 5. Default mode.
-- **Mode B — existing-instance with temporary overrides.** Phase 6. Opt-in
+- **Mode INJECT — fresh-instance with overrides.** Phase 5. Default mode.
+- **Mode OVERLAY — existing-instance with temporary overrides.** Phase 6. Opt-in
   via the extension's `mode(Mode.EXISTING_INSTANCE)` builder flag or via
-  `@TestBean(mode = LIVE)`. Mode B is implemented via the stack-overlay
+  `@TestBean(mode = LIVE)`. Mode OVERLAY is implemented via the stack-overlay
   API; the fallback is snapshot-and-restore on `entries`.
 
-The Mode-B-safe vs Mode-A-only inventory in Phase 6 documents which beans
+The Mode-OVERLAY-safe vs Mode-INJECT-only inventory in Phase 6 documents which beans
 each mode can influence. The user-visible rule of thumb:
 
 - Need to swap a framework-managed bean (`CallLogger`, `SerializerSet`,
-  etc.) in a way *all* framework code sees? → **Mode A.**
+  etc.) in a way *all* framework code sees? → **Mode INJECT.**
 - Need to swap a user-defined service that's resolved per-request from
-  the bean store? → **either mode**, but Mode B saves the SUT rebuild
+  the bean store? → **either mode**, but Mode OVERLAY saves the SUT rebuild
   cost.
 - Need to swap a `MicroserviceListener` that fires on
-  `start()` / `stop()`? → either mode, Mode B is more natural.
+  `start()` / `stop()`? → either mode, Mode OVERLAY is more natural.
 
 ## Decisions
 
@@ -923,27 +923,27 @@ each mode can influence. The user-visible rule of thumb:
 
    **Decision:** `enum Scope { METHOD, CLASS }` as drafted.
 
-3. **Expressing Mode-B-only restriction at compile/runtime.** Some bean
-   types are Mode-A-only (`CallLogger` and friends — see inventory). A
+3. **Expressing Mode-OVERLAY-only restriction at compile/runtime.** Some bean
+   types are Mode-INJECT-only (`CallLogger` and friends — see inventory). A
    test that declares `@TestBean(mode = LIVE) CallLogger callLogger = ...`
    will compile fine but silently fail to take effect at runtime — the
    real `CallLogger` was already pinned by the per-op memoizer. Options:
-   - **(a)** Maintain a static `Set<Class<?>>` of Mode-A-only types in the
-     extension and throw if a Mode-B `@TestBean` targets one. Brittle —
+   - **(a)** Maintain a static `Set<Class<?>>` of Mode-INJECT-only types in the
+     extension and throw if a Mode-OVERLAY `@TestBean` targets one. Brittle —
      the inventory drifts.
    - **(b)** Document the limitation and let it fail loudly via the test's
      own assertion. Less brittle, more user-error-prone.
-   - **(c)** Add a `@ModeAOnly` marker annotation on the framework's
+   - **(c)** Add a `@ModeInjectOnly` marker annotation on the framework's
      memoized bean types and have the extension scan for it. Heavy.
 
    **Decision:** option **(b)** for v1. The inventory in Phase 6 is the
-   documentation; the test failure when a Mode-B swap of `CallLogger`
+   documentation; the test failure when a Mode-OVERLAY swap of `CallLogger`
    doesn't take effect is the diagnostic. Revisit if real users
    misconfigure repeatedly.
 
 4. **Overlay-stack vs single-slot for `overridingParent`.** Today
    `overridingParent` is set-once at `BasicBeanStore` construction. Class
-   scope and Mode B both want stack semantics. Options:
+   scope and Mode OVERLAY both want stack semantics. Options:
    - **(a)** Replace the slot with a stack — breaking change for the
      Spring bridge consumer.
    - **(b)** Keep the slot and add a sibling stack — two parallel
@@ -966,9 +966,9 @@ each mode can influence. The user-visible rule of thumb:
    framework's contract about what `Microservice.getInstance()` means in
    a multi-microservice JVM.
 
-   **Decision:** ship the registry **only** if Phase 5 (Mode A)
+   **Decision:** ship the registry **only** if Phase 5 (Mode INJECT)
    implementation surfaces a real test-time use case for
-   class-discrimination. If Mode A only ever needs the singleton during
+   class-discrimination. If Mode INJECT only ever needs the singleton during
    Phase 5, defer the registry — and at that point, **create a new TODO**
    to track the registry feature as its own work item rather than letting
    it disappear into a future-direction note. The new TODO should
@@ -1024,7 +1024,7 @@ before committing the framework changes. Two days, no dependent work.
 
 ### Phase 1 — `TestBeanStore` + REST `Args.overridingParent`
 
-Lands the Mode A core capability. No JUnit dependency.
+Lands the Mode INJECT core capability. No JUnit dependency.
 
 1. Create module `juneau-junit5` (`juneau-core/juneau-junit5/`). `pom.xml`
    depends on `juneau-commons` (for `BasicBeanStore`, `StackOverlay`) and
@@ -1098,21 +1098,21 @@ Lands the Mode A core capability. No JUnit dependency.
    - `Microservice_OverridingBeanStore_Test` — overlay shadows
      `MicroserviceListener` resolution at boot.
 
-### Phase 5 — Mode A integration
+### Phase 5 — Mode INJECT integration
 
 1. Update `JuneauBeanStoreExtension` to default `Mode.FRESH_INSTANCE`
-   (Mode A) — no behavior change beyond labeling, since Phases 1–4
-   already implement the Mode A path.
+   (Mode INJECT) — no behavior change beyond labeling, since Phases 1–4
+   already implement the Mode INJECT path.
 2. Add the `Mode` enum and `.mode(Mode)` builder method on the extension.
 3. Tests in `juneau-utest`:
-   - `Mode_A_MockRestClient_Test` — end-to-end Mode A through
+   - `Mode_INJECT_MockRestClient_Test` — end-to-end Mode INJECT through
      `MockRestClient`.
-   - `Mode_A_Microservice_Test` — end-to-end Mode A through
+   - `Mode_INJECT_Microservice_Test` — end-to-end Mode INJECT through
      `Microservice.create().overridingBeanStore(...)`.
-   - `Mode_A_SerializerSet_Test` — end-to-end Mode A through
+   - `Mode_INJECT_SerializerSet_Test` — end-to-end Mode INJECT through
      `SerializerSet.create().overridingBeanStore(...)`.
 
-### Phase 6 — Mode B push/pop + framework `pushOverlay`/`popOverlay`
+### Phase 6 — Mode OVERLAY push/pop + framework `pushOverlay`/`popOverlay`
 
 1. Add `WritableBeanStore.pushOverlay(BeanStore)` / `popOverlay(OverlayToken)`
    on the interface; implement on `BasicBeanStore` via the `StackOverlay`
@@ -1133,15 +1133,15 @@ Lands the Mode A core capability. No JUnit dependency.
    does `addSupplier(...)` to install the override, and on `afterEach`
    reinstalls the snapshotted suppliers via `addSupplier(...)`.
 5. Tests in `juneau-utest`:
-   - `Mode_B_MockRestClient_Test` — Mode B against a per-class
+   - `Mode_OVERLAY_MockRestClient_Test` — Mode OVERLAY against a per-class
      `MockRestClient` SUT.
-   - `Mode_B_Microservice_Test` — Mode B against a per-class running
+   - `Mode_OVERLAY_Microservice_Test` — Mode OVERLAY against a per-class running
      microservice.
-   - `Mode_B_Fallback_Test` — Mode B against a `BasicBeanStore` that
+   - `Mode_OVERLAY_Fallback_Test` — Mode OVERLAY against a `BasicBeanStore` that
      doesn't honor `pushOverlay` (built with a custom overlay that lacks
      the stack); verify the snapshot-and-restore fallback works.
-   - `Mode_B_Inventory_Test` — sanity-check that swapping a known
-     Mode-A-only type (`CallLogger`) via Mode B does **not** affect the
+   - `Mode_OVERLAY_Inventory_Test` — sanity-check that swapping a known
+     Mode-INJECT-only type (`CallLogger`) via Mode OVERLAY does **not** affect the
      framework's pinned reference. This is the loud-failure test for the
      inventory documented above.
 6. Release-notes entry under

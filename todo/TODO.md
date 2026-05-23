@@ -2,8 +2,6 @@
 
 - [TODO-20] - Rest debug rethink.
 
-- [TODO-35] - Beanstore test injection.
-
 - [TODO-37] - Agent instruction consolidation.
 
 - [TODO-67] Observability hooks — Micrometer + OpenTelemetry seams via `MethodExecStats`. See `todo/TODO-67-observability-micrometer-otel.md`.

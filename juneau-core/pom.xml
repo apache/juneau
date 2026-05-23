@@ -37,6 +37,7 @@
 		<module>juneau-config</module>
 		<module>juneau-assertions</module>
 		<module>juneau-bct</module>
+		<module>juneau-junit5</module>
 	</modules>
 
 	<build>

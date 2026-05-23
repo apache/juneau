@@ -107,7 +107,7 @@ public class Microservice implements ConfigEventListener {
 	@SuppressWarnings({
 		"resource" // configStore, consoleReader, consoleWriter are passed in by the caller or assigned to system streams; lifecycle managed externally
 	})
-	public static class Builder {
+	public static class Builder implements BeanStoreOverridable<Builder> {
 
 		Args args;
 		ManifestFile manifest;
@@ -125,6 +125,7 @@ public class Microservice implements ConfigEventListener {
 		MicroserviceListener listener;
 		File workingDir = env("juneau.workingDir").map(File::new).orElse(null);
 		WritableBeanStore beanStore;
+		BeanStore overridingBeanStore;
 		List<Class<?>> configurations = list();
 
 		/**
@@ -150,6 +151,7 @@ public class Microservice implements ConfigEventListener {
 			this.consoleWriter = copyFrom.consoleWriter;
 			this.workingDir = copyFrom.workingDir;
 			this.beanStore = copyFrom.beanStore;
+			this.overridingBeanStore = copyFrom.overridingBeanStore;
 			this.configurations = new ArrayList<>(copyFrom.configurations);
 		}
 
@@ -567,6 +569,35 @@ public class Microservice implements ConfigEventListener {
 		}
 
 		/**
+		 * Installs the supplied {@link BeanStore} as the {@code overridingParent} of this microservice's
+		 * bean store.
+		 *
+		 * <p>
+		 * The overlay is consulted <i>before</i> any locally-registered beans during construction-time
+		 * reflective injection (see {@link BasicBeanStore#BasicBeanStore(BeanStore, BeanStore)}), so
+		 * test-time overrides win over the microservice's own {@code @Bean} factory contributions.  This
+		 * is the <b>Mode INJECT</b> wiring pattern for {@code Microservice}-based tests &mdash; the overlay is
+		 * installed before the microservice is constructed and lives for the microservice's full lifetime.
+		 * For per-test push/pop overlays against an already-started microservice, see
+		 * {@link Microservice#getBeanStore()} and the push/pop primitives on
+		 * {@link org.apache.juneau.commons.inject.WritableBeanStore}.
+		 *
+		 * <p>
+		 * Composes with {@link #beanStore(WritableBeanStore)}: when both are supplied, the supplied
+		 * external store becomes the regular parent and the overlay becomes the overriding parent of
+		 * a fresh wrapping {@link BasicBeanStore}.
+		 *
+		 * @param store The override layer.  Can be <jk>null</jk> to clear a previously-set value.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		@Override
+		public Builder overridingBeanStore(BeanStore store) {
+			this.overridingBeanStore = store;
+			return this;
+		}
+
+		/**
 		 * Resolves the specified path.
 		 *
 		 * <p>
@@ -652,8 +683,18 @@ public class Microservice implements ConfigEventListener {
 		// Initialize the bean store and register any @Configuration classes.
 		// @Bean-supplied values become candidate inputs for field resolution below.
 		// Explicit builder calls always win and overwrite @Bean contributions afterward.
+		//
+		// Composition with overridingBeanStore (test-time overlay):
+		//   - no external store, no overlay  -> fresh BasicBeanStore()
+		//   - no external store, overlay set -> fresh BasicBeanStore(parent=null, overridingParent=overlay)
+		//   - external store, no overlay     -> use the external store as-is
+		//   - external store + overlay set   -> wrap with BasicBeanStore(parent=external, overridingParent=overlay)
 		// --------------------------------------------------------------------------------
-		this.beanStore = nn(builder.beanStore) ? builder.beanStore : new BasicBeanStore();
+		if (nn(builder.overridingBeanStore)) {
+			this.beanStore = new BasicBeanStore(builder.beanStore, builder.overridingBeanStore);
+		} else {
+			this.beanStore = nn(builder.beanStore) ? builder.beanStore : new BasicBeanStore();
+		}
 		if (! builder.configurations.isEmpty())
 			beanStore.registerConfigurations(builder.configurations.toArray(new Class<?>[0]));
 

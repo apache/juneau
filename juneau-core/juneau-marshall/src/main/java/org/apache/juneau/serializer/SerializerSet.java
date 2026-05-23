@@ -21,6 +21,7 @@ import org.apache.juneau.commons.http.MediaRange;
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.inject.BasicBeanStore;
 import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.BeanStoreOverridable;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -96,11 +97,11 @@ public class SerializerSet {
 	@SuppressWarnings({
 		"java:S115" // Constants use UPPER_snakeCase convention (e.g., CLASS_Inherit)
 	})
-	public static class Builder {
+	public static class Builder implements BeanStoreOverridable<Builder> {
 
 		private static final String CLASS_Inherit = "Inherit";
 
-		private final BeanStore beanStore;
+		private BeanStore beanStore;
 		private SerializerSet impl;
 
 		List<Object> entries;
@@ -149,6 +150,25 @@ public class SerializerSet {
 		 */
 		public BeanStore beanStore() {
 			return beanStore;
+		}
+
+		/**
+		 * Installs the supplied {@link BeanStore} as the {@code overridingParent} of this builder's bean store.
+		 *
+		 * <p>
+		 * Wraps the current {@link #beanStore()} in a fresh {@link BasicBeanStore} whose {@code overridingParent}
+		 * is the supplied store, so test-time overrides win over the builder's regular bean lookups during
+		 * construction-time reflective injection.  Passing {@code null} is a no-op.
+		 *
+		 * @param store The override layer.  Can be <jk>null</jk>.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		@Override
+		public Builder overridingBeanStore(BeanStore store) {
+			if (store != null)
+				this.beanStore = new BasicBeanStore(this.beanStore, store);
+			return this;
 		}
 
 		/**

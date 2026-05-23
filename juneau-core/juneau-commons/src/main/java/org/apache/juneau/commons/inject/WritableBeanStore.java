@@ -238,6 +238,51 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	}
 
 	/**
+	 * Pushes the supplied {@link BeanStore} onto this store's overlay stack.
+	 *
+	 * <p>
+	 * The pushed frame becomes the top-priority lookup target for subsequent bean resolution &mdash; it sits above
+	 * any pre-existing {@code overridingParent} setting, this store's local entries, the regular parent chain, and
+	 * the default-supplier tier.  Frames are popped in LIFO order via {@link #popOverlay(Snapshot)}.
+	 *
+	 * <p>
+	 * This is the framework primitive behind <b>Mode OVERLAY</b> of the test-injection model: a long-lived SUT's
+	 * bean store has a per-test overlay pushed at {@code @BeforeEach}, then popped at {@code @AfterEach}, so
+	 * subsequent tests see the original beans again with no rebuild cost.
+	 *
+	 * <h5 class='section'>Composition with {@code overridingParent}:</h5>
+	 * <p>
+	 * When this store was constructed with an
+	 * {@linkplain BasicBeanStore#BasicBeanStore(BeanStore, BeanStore) overriding parent} <i>and</i> has overlays
+	 * pushed on top, the overlay stack wins (it is "more recent").  Both are still consulted before local entries
+	 * and the regular parent.
+	 *
+	 * @param overlay The bean store to layer on top.  Must not be <jk>null</jk>.
+	 * @return A {@link Snapshot} that must be passed back to {@link #popOverlay(Snapshot)} to remove the frame.
+	 * @throws NullPointerException If {@code overlay} is <jk>null</jk>.
+	 * @since 9.5.0
+	 */
+	Snapshot pushOverlay(BeanStore overlay);
+
+	/**
+	 * Removes the overlay frame identified by the supplied {@link Snapshot}.
+	 *
+	 * <p>
+	 * Pops must be issued in <b>LIFO</b> order &mdash; the supplied snapshot must identify the current top-of-stack
+	 * frame.  Out-of-order pops, pops on an empty stack, and pops of a snapshot produced by a different store all
+	 * throw {@link IllegalStateException} with a descriptive message.  These are programming errors, surfaced loudly
+	 * rather than silently degraded.
+	 *
+	 * @param snapshot The snapshot returned by a prior {@link #pushOverlay(BeanStore)} call.  Must not be
+	 * 	<jk>null</jk>.
+	 * @throws NullPointerException If {@code snapshot} is <jk>null</jk>.
+	 * @throws IllegalStateException If the snapshot was produced by a different store, the overlay stack is empty,
+	 * 	or the snapshot does not identify the top-of-stack frame (LIFO violation).
+	 * @since 9.5.0
+	 */
+	void popOverlay(Snapshot snapshot);
+
+	/**
 	 * Closes this bean store, invoking pre-destroy callbacks.
 	 *
 	 * @throws BeanCreationException on shutdown failures.

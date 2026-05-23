@@ -59,6 +59,7 @@ import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
+import org.apache.juneau.commons.inject.BeanStoreOverridable;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
@@ -258,13 +259,14 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends RestClient.Builder {
+	public static class Builder extends RestClient.Builder implements BeanStoreOverridable<Builder> {
 
 		Object restBean;
 		String contextPath;
 		String servletPath;
 		RestContext restContext;
 		Map<String,String> pathVars;
+		org.apache.juneau.commons.inject.BeanStore overridingBeanStore;
 
 		/**
 		 * No-arg constructor.
@@ -1404,6 +1406,27 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			return this;
 		}
 
+		/**
+		 * Installs a {@link org.apache.juneau.commons.inject.BeanStore BeanStore} as the
+		 * {@code overridingParent} of the {@link RestContext}'s bean store, so test-time overrides
+		 * (e.g. {@code TestBeanStore}) resolve at tier 1 of the lookup chain &mdash; above the
+		 * resource's local {@code @Bean} factory entries.
+		 *
+		 * <p>
+		 * Setting this disables the per-resource {@link RestContext} cache for the duration of this
+		 * build, so the overlay is not silently shared with a previously-cached instance.
+		 *
+		 * @param value The override layer. Can be <jk>null</jk> to clear a previously-set value.
+		 * @return This object.
+		 *
+		 * @since 9.5.0
+		 */
+		@Override
+		public Builder overridingBeanStore(org.apache.juneau.commons.inject.BeanStore value) {
+			overridingBeanStore = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder retryHandler(HttpRequestRetryHandler retryHandler) {
 			super.retryHandler(retryHandler);
@@ -1889,18 +1912,22 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			var restBean = builder.restBean;
 			var contextPath = builder.contextPath;
 			var servletPath = builder.servletPath;
+			var overlay = builder.overridingBeanStore;
 
 			var c = restBean instanceof Class restBean2 ? (Class<?>)restBean2 : restBean.getClass();
-			if (! restContexts.containsKey(c)) {
+			RestContext restBeanCtx;
+			if (overlay == null && restContexts.containsKey(c)) {
+				restBeanCtx = restContexts.get(c);
+			} else {
 				var isClass = restBean instanceof Class;
 				var o = isClass ? ((Class<?>)restBean).getDeclaredConstructor().newInstance() : restBean;
-				RestContext rc = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
+				restBeanCtx = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
 					bs.addBean(Enablement.class, CONDITIONAL);
 					bs.addBeanType(CallLogger.class, BasicTestCallLogger.class);
-				})).postInit().postInitChildFirst();
-				restContexts.put(c, rc);
+				}, overlay)).postInit().postInitChildFirst();
+				if (overlay == null)
+					restContexts.put(c, restBeanCtx);
 			}
-			var restBeanCtx = restContexts.get(c);
 			builder.restContext(restBeanCtx);
 
 			if (servletPath == null)

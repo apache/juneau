@@ -177,12 +177,19 @@ public class RestContext extends Context {
 	 * 	<li>{@code parentContext}, {@code servletConfig} — {@code null} (top-level resource, no servlet container)
 	 * 	<li>{@code path} — {@code ""} (no path prefix)
 	 * 	<li>{@code beanStoreConfigurer} — no-op (no pre-build bean-store mutation)
+	 * 	<li>{@code overridingParent} — {@code null} (no test-time override layer)
 	 * </ul>
 	 *
 	 * <p>
 	 * The {@code beanStoreConfigurer} hook gives test fixtures and integration code a chance to register beans on
 	 * the {@link WritableBeanStore} after the resource has been wired in but before the
 	 * {@code findXxx()} memoizers fire.
+	 *
+	 * <p>
+	 * The {@code overridingParent} hook installs a {@link BeanStore} into the {@code overridingParent} slot of the
+	 * freshly-constructed {@link BasicBeanStore} so that test-time overrides resolve at tier 1 of the lookup chain
+	 * (above the resource's local {@code @Bean} factory entries and the Spring bridge).  This is the
+	 * canonical Mode INJECT wiring point for {@code juneau-junit5}'s {@code TestBeanStore}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -196,6 +203,10 @@ public class RestContext extends Context {
 	 * @param path The path prefix relative to the parent. Defaults to {@code ""}.
 	 * @param beanStoreConfigurer A pre-build hook that runs against the resolved {@link WritableBeanStore}
 	 * 	after the resource has been wired in but before any {@code findXxx()} memoizer fires. Defaults to a no-op.
+	 * @param overridingParent An optional test-time override layer installed into the {@code overridingParent}
+	 * 	slot of the freshly-constructed {@link BasicBeanStore}.  May be {@code null}.  Honored only when the
+	 * 	resource does <i>not</i> declare an {@code @Bean WritableBeanStore} factory method; user-supplied bean
+	 * 	stores are passed through unchanged.
 	 *
 	 * @since 9.5.0
 	 */
@@ -205,7 +216,8 @@ public class RestContext extends Context {
 		ServletConfig servletConfig,
 		Supplier<?> resource,
 		String path,
-		Consumer<WritableBeanStore> beanStoreConfigurer
+		Consumer<WritableBeanStore> beanStoreConfigurer,
+		BeanStore overridingParent
 	) {
 
 		/**
@@ -218,6 +230,28 @@ public class RestContext extends Context {
 				path = "";
 			if (beanStoreConfigurer == null)
 				beanStoreConfigurer = bs -> {};
+		}
+
+		/**
+		 * Convenience constructor without the {@code overridingParent} component &mdash; preserves the
+		 * pre-9.5.0 6-arg call sites and defaults the overlay to {@code null}.
+		 *
+		 * @param resourceClass The {@link Rest @Rest}-annotated REST resource class. Must not be {@code null}.
+		 * @param parentContext The parent {@link RestContext}, or {@code null} if this is a top-level resource.
+		 * @param servletConfig The {@link ServletConfig} from the servlet container, or {@code null} when none is available.
+		 * @param resource The supplier that provides the resource instance during initialization. Must not be {@code null}.
+		 * @param path The path prefix relative to the parent. Defaults to {@code ""}.
+		 * @param beanStoreConfigurer A pre-build hook that runs against the resolved {@link WritableBeanStore}
+		 * 	after the resource has been wired in but before any {@code findXxx()} memoizer fires. Defaults to a no-op.
+		 */
+		public Args(
+				Class<?> resourceClass,
+				RestContext parentContext,
+				ServletConfig servletConfig,
+				Supplier<?> resource,
+				String path,
+				Consumer<WritableBeanStore> beanStoreConfigurer) {
+			this(resourceClass, parentContext, servletConfig, resource, path, beanStoreConfigurer, null);
 		}
 
 	}
@@ -356,17 +390,23 @@ public class RestContext extends Context {
 	 * 		{@link WritableBeanStore} (e.g. {@code SpringRestServlet.createBeanStore(Optional<BeanStore>)}),
 	 * 		that store is used directly.  Spring integration relies on this hook.
 	 * 	<li>Otherwise a fresh {@link BasicBeanStore} is created with {@code parentBs} as its
-	 * 		overriding parent.
+	 * 		regular parent and {@code overridingParent} (if non-{@code null}) installed in the
+	 * 		overriding-parent slot so test-time overrides win over local entries.
 	 * </ol>
 	 *
 	 * @param parentBs
 	 * 	The parent (bootstrap) bean store to layer onto, or {@code null} for root resources.
 	 * @param resource
 	 * 	The REST servlet/bean instance that this context is defined against.
+	 * @param overridingParent
+	 * 	Optional test-time override layer for the {@code overridingParent} slot of the freshly-constructed
+	 * 	{@link BasicBeanStore}.  May be {@code null}.  Ignored when the resource supplies its own
+	 * 	{@link WritableBeanStore} via an {@code @Bean} factory method &mdash; user-supplied stores are
+	 * 	passed through unchanged.
 	 * @return The bean store for this context.
 	 */
-	private WritableBeanStore createBeanStore(BeanStore parentBs, Supplier<?> resource) {
-		var defaultBs = new BasicBeanStore(parentBs);
+	private WritableBeanStore createBeanStore(BeanStore parentBs, Supplier<?> resource, BeanStore overridingParent) {
+		var defaultBs = new BasicBeanStore(parentBs, overridingParent);
 		return defaultBs.createBeanFromMethod(WritableBeanStore.class, resource.get(), RestContext::isBeanMethod)
 			.orElse(defaultBs);
 	}
@@ -1279,18 +1319,25 @@ public class RestContext extends Context {
 
 			// Build the initial beanStore; honor an optional @Bean WritableBeanStore override.
 			// In the new 9.5 precedence model, the parent (Spring or parent-resource bootstrap) is
-			// installed as the overriding parent so it wins over local entries.
+			// installed as the overriding parent so it wins over local entries.  Phase 1 of TODO-35
+			// threads Args.overridingParent into the per-resource (final beanStore) overridingParent
+			// slot so test-time overlays (TestBeanStore) resolve at tier 1 of the chain ahead of
+			// any @Bean factory result registered as a local entry below.
 			// @formatter:off
-			WritableBeanStore bs = createBeanStore(parentBs, rs)
+			var argsOverlay = builder.args.overridingParent();
+			WritableBeanStore bs = createBeanStore(parentBs, rs, parentBs == null ? null : argsOverlay)
 				.addBean(ResourceSupplier.class, rs)
 				.addBean(ServletConfig.class, nn(builder.inner) ? builder.inner : builder)
 				.addBean(ServletContext.class, (nn(builder.inner) ? builder.inner : builder).getServletContext());
 			// @formatter:on
 
 			// If no parent store, promote bs to bootstrap and layer a fresh per-resource v2 store on top.
+			// The overlay belongs on the per-resource store so it wins over @Bean factories registered
+			// as local entries below; the bootstrap deliberately does NOT get the overlay (it sits above
+			// the per-resource entries via the parent chain, which is too low for an overlay).
 			if (parentBs == null) {
 				bootstrapBeanStore = bs;
-				bs = new BasicBeanStore(bootstrapBeanStore);
+				bs = new BasicBeanStore(bootstrapBeanStore, argsOverlay);
 			} else {
 				bootstrapBeanStore = parentBs;
 			}
