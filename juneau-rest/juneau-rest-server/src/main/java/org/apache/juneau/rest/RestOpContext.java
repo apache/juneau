@@ -33,6 +33,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.*;
@@ -115,11 +116,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		private Method restMethod;
 		private RestContext restContext;
+		private Supplier<Object> restResourceSupplier;
 
 		Builder(Method method, RestContext context) {
+			this(method, context, null);
+		}
+
+		Builder(Method method, RestContext context, Supplier<Object> resourceSupplier) {
 
 			this.restContext = context;
 			this.restMethod = method;
+			this.restResourceSupplier = resourceSupplier == null ? context::getResource : resourceSupplier;
 
 			var ap = context.getMarshallingContext().getAnnotationProvider();
 			var mi = MethodInfo.of(context.getResourceClass(), method);
@@ -164,6 +171,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	protected final Method method;
 	protected final MethodInfo mi;
 	protected final RestContext context;
+	private final Supplier<Object> resourceSupplier;
 
 	// The annotation work-list produced during construction.
 	private final AnnotationWorkList appliedAnnotations;
@@ -174,7 +182,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private AnnotationWorkList appliedAnnotations() { return appliedAnnotations; }
 	private BeanStore beanStore() { return context.getBeanStore(); }
 	private WritableBeanStore opBeanStore() { return opBeanStore; }
-	private Object resource() { return context.getResource(); }
+	private Object resource() { return resourceSupplier.get(); }
 	private VarResolver varResolver() { return context.getVarResolver(); }
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -588,7 +596,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	/** The invoker for the operation method itself. */
 	private final Memoizer<RestOpInvoker> methodInvoker = memoizer(() ->
-		new RestOpInvoker(method(), restContext().findRestOperationArgs(method(), opBeanStore()), restContext().getMethodExecStats(method()))
+		new RestOpInvoker(method(), restContext().findRestOperationArgs(method(), opBeanStore()), restContext().getMethodExecStats(method()), this::resource)
 	);
 
 	/** The effective max-input byte limit for this operation. */
@@ -1095,6 +1103,18 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
+	 * 3-arg positional context constructor.
+	 *
+	 * @param method The Java method this context represents. Must not be <jk>null</jk>.
+	 * @param context The owning {@link RestContext}. Must not be <jk>null</jk>.
+	 * @param resourceSupplier Supplier that returns the invocation target for this operation.
+	 * @throws ServletException If context could not be created.
+	 */
+	public RestOpContext(java.lang.reflect.Method method, RestContext context, Supplier<Object> resourceSupplier) throws ServletException {
+		this(new Builder(method, context, resourceSupplier));
+	}
+
+	/**
 	 * Context constructor.
 	 *
 	 * @param builder The builder for this object.
@@ -1109,6 +1129,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			context = builder.restContext;
 			method = builder.restMethod;
+			resourceSupplier = builder.restResourceSupplier;
 
 			mi = MethodInfo.of(method).accessible();
 

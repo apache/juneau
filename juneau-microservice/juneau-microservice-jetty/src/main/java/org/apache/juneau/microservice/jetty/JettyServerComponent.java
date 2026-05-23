@@ -117,11 +117,22 @@ public class JettyServerComponent implements MicroserviceListener {
 		return p;
 	}
 
-	private static String restPathFor(Class<?> cls) {
-		var r = cls.getAnnotation(Rest.class);
-		if (r == null || r.path().isEmpty())
+	private static String normalizeExactPathSpec(String rawPath) {
+		var p = rawPath == null ? "" : trimTrailingSlashes(rawPath);
+		if (p.isEmpty())
 			return "/";
-		return r.path();
+		if (! p.startsWith("/"))
+			p = "/" + p;
+		return p;
+	}
+
+	private static String[] restPathsFor(Class<?> cls) {
+		var r = cls.getAnnotation(Rest.class);
+		if (r == null)
+			return new String[] {"/*"};
+		if (r.paths().length > 0)
+			return Arrays.stream(r.paths()).map(JettyServerComponent::normalizeExactPathSpec).toArray(String[]::new);
+		return new String[] {normalizePathSpec(r.path())};
 	}
 
 	/**
@@ -228,8 +239,11 @@ public class JettyServerComponent implements MicroserviceListener {
 				var cls = servlet.getClass();
 				if (cls.getAnnotation(Rest.class) == null)
 					continue;
-				var pathSpec = restPathFor(cls);
-				mountWithCollisionCheck(servlet, pathSpec, "@Bean " + cls.getName() + (ne(e.getKey()) ? "[" + e.getKey() + "]" : ""), mountedPaths);
+				var pathSpecs = restPathsFor(cls);
+				var source = "@Bean " + cls.getName() + (ne(e.getKey()) ? "[" + e.getKey() + "]" : "");
+				for (var pathSpec : pathSpecs)
+					checkPathCollision(pathSpec, source, mountedPaths);
+				addServlet(servlet, pathSpecs);
 			}
 
 			if (env("juneau.serverPort").isEmpty())
@@ -281,10 +295,22 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * @return This object.
 	 */
 	public JettyServerComponent addServlet(Servlet servlet, String pathSpec) {
-		var sh = new ServletHolder(servlet);
 		if (nn(pathSpec) && ! pathSpec.endsWith("/*"))
 			pathSpec = trimTrailingSlashes(pathSpec) + "/*";
-		getServletContextHandler().addServlet(sh, pathSpec);
+		return addServlet(servlet, new String[] {pathSpec});
+	}
+
+	/**
+	 * Adds an arbitrary servlet to this Jetty server at one or more context paths.
+	 *
+	 * @param servlet The servlet instance.
+	 * @param pathSpecs The context paths of the servlet.
+	 * @return This object.
+	 */
+	public JettyServerComponent addServlet(Servlet servlet, String...pathSpecs) {
+		var sh = new ServletHolder(servlet);
+		for (var pathSpec : pathSpecs)
+			getServletContextHandler().addServlet(sh, pathSpec);
 		return this;
 	}
 
@@ -389,10 +415,14 @@ public class JettyServerComponent implements MicroserviceListener {
 
 	private void mountWithCollisionCheck(Servlet servlet, String rawPath, String source, Map<String,String> mountedPaths) {
 		var pathSpec = normalizePathSpec(rawPath);
+		checkPathCollision(pathSpec, source, mountedPaths);
+		addServlet(servlet, pathSpec);
+	}
+
+	private void checkPathCollision(String pathSpec, String source, Map<String,String> mountedPaths) {
 		var prior = mountedPaths.get(pathSpec);
 		if (nn(prior))
 			throw rex("Servlet mount path collision: ''{0}'' is already mounted by {1}; refused by {2}.", pathSpec, prior, source);
 		mountedPaths.put(pathSpec, source);
-		addServlet(servlet, pathSpec);
 	}
 }

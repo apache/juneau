@@ -1133,7 +1133,24 @@ public class RestContext extends Context {
 		var b = RestOperations.create(bs);
 		var ap = getMarshallingContext().getAnnotationProvider();
 		var rci = ClassInfo.of(resource().get());
-		for (var mi : rci.getPublicMethods()) {
+		var mixinInstances = new LinkedHashMap<Class<?>,Object>();
+		for (var mixinClass : getRestMixinClasses()) {
+			if (mixinClass == resourceClass())
+				continue;
+			var mixinResource = mixinInstances.computeIfAbsent(mixinClass, x -> {
+				var y = bs.instantiate(x);
+				initializeResourceContext(y);
+				return y;
+			});
+			addRestOperationsForClass(b, ap, ClassInfo.of(mixinClass), () -> mixinResource);
+		}
+		addRestOperationsForClass(b, ap, rci, this::getResource);
+		var override = bs.createBeanFromMethod(RestOperations.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
+		return nn(override) ? override : b.build();
+	}));
+
+	private void addRestOperationsForClass(RestOperations.Builder b, AnnotationProvider ap, ClassInfo classInfo, Supplier<Object> targetSupplier) throws ServletException {
+		for (var mi : classInfo.getPublicMethods()) {
 			var al = rstream(ap.find(mi)).filter(REST_OP_GROUP).collect(Collectors.toList());
 			if (al.isEmpty()) {
 				Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface()
@@ -1143,22 +1160,43 @@ public class RestContext extends Context {
 			if (!al.isEmpty()) {
 				try {
 					if (mi.isNotPublic())
-						throw servletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getNameSimple());
-					var roc = new RestOpContext(mi.inner(), this);
+						throw servletException("@RestOp method {0}.{1} must be defined as public.", classInfo.inner().getName(), mi.getNameSimple());
+					var roc = new RestOpContext(mi.inner(), this, targetSupplier);
 					if ("RRPC".equals(roc.getHttpMethod())) {
-						RestOpContext roc2 = new RrpcRestOpContext(mi.inner(), this);
+						RestOpContext roc2 = new RrpcRestOpContext(mi.inner(), this, targetSupplier);
 						b.add("GET", roc2).add("POST", roc2);
 					} else {
 						b.add(roc);
 					}
 				} catch (Exception e) {
-					throw servletException(e, "Problem occurred trying to initialize methods on class {0}", rci.inner().getName());
+					throw servletException(e, "Problem occurred trying to initialize methods on class {0}", classInfo.inner().getName());
 				}
 			}
 		}
-		var override = bs.createBeanFromMethod(RestOperations.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
-		return nn(override) ? override : b.build();
-	}));
+	}
+
+	private LinkedHashSet<Class<?>> getRestMixinClasses() {
+		var out = new LinkedHashSet<Class<?>>();
+		var visited = new HashSet<Class<?>>();
+		getRestAnnotationsForProperty(PROPERTY_mixins).forEach(ai -> {
+			for (var mixin : ai.inner().mixins())
+				collectRestMixins(mixin, out, visited);
+		});
+		return out;
+	}
+
+	private void collectRestMixins(Class<?> mixin, LinkedHashSet<Class<?>> out, Set<Class<?>> visited) {
+		if (mixin == null || mixin == resourceClass())
+			return;
+		if (!visited.add(mixin))
+			return;
+		out.add(mixin);
+		var r = mixin.getAnnotation(Rest.class);
+		if (r != null) {
+			for (var nested : r.mixins())
+				collectRestMixins(nested, out, visited);
+		}
+	}
 
 	/**
 	 * The {@link RestChildren} for this resource — child {@link RestContext} instances registered via
@@ -2659,17 +2697,7 @@ public class RestContext extends Context {
 		if (initialized.get())
 			return this;
 		var resource2 = getResource();
-		// Use getMethod (not getPublicMethod) to match the child-init memoizer at RestContext.restChildren — covers
-		// the protected `setContext` declared on `RestServlet` / `RestObject` so external callers (e.g. MockRestClient,
-		// the @RestInit / lifecycle wiring) can hand the resource its RestContext post-construction.
-		var mi = ClassInfo.of(getResource()).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
-		if (nn(mi)) {
-			try {
-				mi.accessible().invoke(resource2, this);
-			} catch (ExecutableException e) {
-				throw new ServletException(e.unwrap());
-			}
-		}
+		initializeResourceContext(resource2);
 		for (var x : postInitInvokerPair.get().invokers) {
 			try {
 				x.invoke(beanStore, getResource());
@@ -2679,6 +2707,17 @@ public class RestContext extends Context {
 		}
 		getRestChildren().postInit();
 		return this;
+	}
+
+	private void initializeResourceContext(Object resource2) {
+		var mi = ClassInfo.of(resource2).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
+		if (nn(mi)) {
+			try {
+				mi.accessible().invoke(resource2, this);
+			} catch (ExecutableException e) {
+				throw new RuntimeException(e.unwrap());
+			}
+		}
 	}
 
 	/**

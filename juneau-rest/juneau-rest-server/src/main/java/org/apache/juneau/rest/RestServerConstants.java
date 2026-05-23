@@ -204,6 +204,12 @@ public final class RestServerConstants {
 	/** The {@code "path"} annotation attribute name — used in {@code noInherit} matching on {@code @RestOp} / verb annotations. */
 	public static final String PROPERTY_path = "path";
 
+	/** The {@code "paths"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the class-chain walk when resolving top-level multi-mount path specs. */
+	public static final String PROPERTY_paths = "paths";
+
+	/** The {@code "mixins"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the class-chain walk when resolving operation mixins. */
+	public static final String PROPERTY_mixins = "mixins";
+
 	/** The {@code "value"} annotation attribute name — used by {@code @RestOp}/verb annotations to hold the (optional method-prefixed) path; folded into {@link #PROPERTY_path}. */
 	public static final String PROPERTY_value = "value";
 }

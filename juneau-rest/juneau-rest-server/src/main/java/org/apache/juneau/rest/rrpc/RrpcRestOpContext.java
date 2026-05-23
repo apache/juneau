@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.rrpc;
 
 import java.lang.reflect.*;
+import java.util.function.*;
 
 import org.apache.juneau.http.remote.RrpcInterfaceMeta;
 import org.apache.juneau.http.response.*;
@@ -51,7 +52,22 @@ public class RrpcRestOpContext extends RestOpContext {
 	 */
 	public RrpcRestOpContext(Method method, RestContext context) throws ServletException {
 		super(method, context);
+		var interfaceClass = getMarshallingContext().getClassMeta(getJavaMethod().getGenericReturnType());
+		meta = new RrpcInterfaceMeta(interfaceClass.inner(), null);
+		if (meta.getMethodsByPath().isEmpty())
+			throw new InternalServerError("Method {0} returns an interface {1} that doesn't define any remote methods.", getJavaMethod().getName(), interfaceClass.getNameFull());
+	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param method The Java method this context represents. Must not be <jk>null</jk>.
+	 * @param context The owning {@link RestContext}. Must not be <jk>null</jk>.
+	 * @param resourceSupplier Supplier that returns the invocation target for this operation.
+	 * @throws ServletException If context could not be created.
+	 */
+	public RrpcRestOpContext(Method method, RestContext context, Supplier<Object> resourceSupplier) throws ServletException {
+		super(method, context, resourceSupplier);
 		var interfaceClass = getMarshallingContext().getClassMeta(getJavaMethod().getGenericReturnType());
 		meta = new RrpcInterfaceMeta(interfaceClass.inner(), null);
 		if (meta.getMethodsByPath().isEmpty())

@@ -186,6 +186,28 @@ public @interface Rest {
 	Class<?>[] children() default {};
 
 	/**
+	 * REST mixins.
+	 *
+	 * <p>
+	 * Defines operation-provider classes whose {@link RestOp @RestOp}-group methods should be composed into this
+	 * resource.
+	 *
+	 * <p>
+	 * Mixin methods are discovered the same way as local operation methods and share this resource's
+	 * {@link RestContext} configuration.  On path/method collisions, local methods on this resource win over mixin
+	 * methods.
+	 *
+	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <ul>
+	 * 	<li>Mixins on child are combined with those on parent class.
+	 * 	<li>Mixins are listed parent-to-child in the order they appear in the annotation.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	Class<?>[] mixins() default {};
+
+	/**
 	 * Client version header.
 	 *
 	 * <p>
@@ -1087,6 +1109,29 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	String path() default "";
+
+	/**
+	 * Additional servlet mount paths.
+	 *
+	 * <p>
+	 * Optional multi-mount companion to {@link #path()} for top-level servlet deployment.
+	 *
+	 * <p>
+	 * When specified, servlet containers may mount this resource on each listed path.
+	 * This is primarily intended for built-in support endpoints such as health probes where multiple exact URLs
+	 * should be served by a single servlet instance.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Paths are normalized to servlet path-specs by the hosting runtime.
+	 * 	<li class='note'>
+	 * 		When both {@link #path()} and {@link #paths()} are present, runtimes may use {@link #paths()} for
+	 * 		top-level mounting and continue using {@link #path()} for child-resource composition.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] paths() default {};
 
 	/**
 	 * Default path parameter definitions.

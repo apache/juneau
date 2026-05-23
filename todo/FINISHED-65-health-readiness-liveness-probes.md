@@ -1,4 +1,6 @@
-# TODO-65: Health / readiness / liveness probe endpoints + `HealthIndicator` SPI
+# FINISHED-65: Health / readiness / liveness probe endpoints + `HealthIndicator` SPI
+
+**Completed 2026-05-22.** Landed a new health-probe stack across `juneau-rest-server` and `juneau-microservice-jetty`: `org.apache.juneau.rest.health` now includes `HealthIndicator`, `Health`, `HealthStatus`, `HealthProbe`, `HealthProbeSettings`, and `BasicHealthResource` endpoints (`/healthz`, `/readyz`, `/livez`) with aggregate response payloads and `503` on any `DOWN`; `HealthProbeConfiguration` wires the servlet/settings via `@Configuration` for microservice opt-in, with per-indicator timeout control and throwable/timeout-to-`DOWN` conversion. Added focused `juneau-utest` coverage (`HealthIndicator_Test`, `BasicHealthResource_Test`) and docs updates in `juneau-docs` (new topic page + sidebar + 9.5.0 release-notes entries under both `juneau-rest-server` and `juneau-microservice-jetty`).
 
 Source: split out of TODO-18 brainstorm on 2026-05-22.
 

@@ -76,6 +76,7 @@ public class RestAnnotation {
 		private Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
 		private Class<? extends Serializer>[] serializers = new Class[0];
 		private Class<?>[] children = {};
+		private Class<?>[] mixins = {};
 		private Class<?>[] parsers = {};
 		private Swagger swagger = SwaggerAnnotation.DEFAULT;
 		private String disableContentParam = "";
@@ -94,6 +95,7 @@ public class RestAnnotation {
 		private String maxInput = "";
 		private String messages = "";
 		private String path = "";
+		private String[] paths = {};
 		private String problemDetails = "";
 		private String renderResponseStackTraces = "";
 		private String roleGuard = "";
@@ -196,6 +198,17 @@ public class RestAnnotation {
 		 */
 		public Builder children(Class<?>...value) {
 			children = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#mixins()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder mixins(Class<?>...value) {
+			mixins = value;
 			return this;
 		}
 
@@ -500,6 +513,17 @@ public class RestAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Rest#paths()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder paths(String...value) {
+			paths = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Rest#produces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -734,6 +758,7 @@ public class RestAnnotation {
 		private final Class<? extends DebugEnablement> debugEnablement;
 		private final Class<? extends Serializer>[] serializers;
 		private final Class<?>[] children;
+		private final Class<?>[] mixins;
 		private final Class<?>[] parsers;
 		private final Swagger swagger;
 		private final String disableContentParam;
@@ -752,6 +777,7 @@ public class RestAnnotation {
 		private final String maxInput;
 		private final String messages;
 		private final String path;
+		private final String[] paths;
 		private final String problemDetails;
 		private final String renderResponseStackTraces;
 		private final String roleGuard;
@@ -784,6 +810,7 @@ public class RestAnnotation {
 			allowedMethodParams = b.allowedMethodParams;
 			callLogger = b.callLogger;
 			children = copyOf(b.children);
+			mixins = copyOf(b.mixins);
 			clientVersionHeader = b.clientVersionHeader;
 			config = b.config;
 			eagerInit = b.eagerInit;
@@ -810,6 +837,7 @@ public class RestAnnotation {
 			partParser = b.partParser;
 			partSerializer = b.partSerializer;
 			path = b.path;
+			paths = copyOf(b.paths);
 			problemDetails = b.problemDetails;
 			produces = copyOf(b.produces);
 			renderResponseStackTraces = b.renderResponseStackTraces;
@@ -858,6 +886,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public Class<?>[] children() {
 			return children;
+		}
+
+		@Override /* Overridden from Rest */
+		public Class<?>[] mixins() {
+			return mixins;
 		}
 
 		@Override /* Overridden from Rest */
@@ -1003,6 +1036,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String path() {
 			return path;
+		}
+
+		@Override /* Overridden from Rest */
+		public String[] paths() {
+			return paths;
 		}
 
 		@Override /* Overridden from Rest */

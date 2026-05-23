@@ -6,8 +6,6 @@
 
 - [TODO-37] - Agent instruction consolidation.
 
-- [TODO-65] Health / readiness / liveness probe endpoints + `HealthIndicator` SPI. See `todo/TODO-65-health-readiness-liveness-probes.md`.
-
 - [TODO-66] Rate-limit guard + request-id propagation filter. See `todo/TODO-66-rate-limit-and-request-id.md`.
 
 - [TODO-67] Observability hooks — Micrometer + OpenTelemetry seams via `MethodExecStats`. See `todo/TODO-67-observability-micrometer-otel.md`.
@@ -19,3 +17,4 @@
 - [TODO-70] `CompletableFuture<?>` return-type support + optional virtual-thread per-request dispatch. See `todo/TODO-70-async-completablefuture-virtual-threads.md`.
 
 - [TODO-71] Move doc site updates from a github hook to a script that gets executed locally.  Change docusaurus search functionality to @easyops-cn/docusaurus-search-local. 
+

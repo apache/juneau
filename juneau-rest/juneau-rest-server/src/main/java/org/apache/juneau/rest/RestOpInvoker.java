@@ -19,6 +19,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.response.*;
@@ -35,6 +36,7 @@ import org.apache.juneau.rest.stats.*;
 public class RestOpInvoker extends MethodInvoker {
 
 	private final RestOpArg[] opArgs;
+	private final Supplier<Object> resourceSupplier;
 
 	/**
 	 * Constructor.
@@ -44,8 +46,21 @@ public class RestOpInvoker extends MethodInvoker {
 	 * @param stats The instrumentor.
 	 */
 	public RestOpInvoker(Method m, RestOpArg[] opArgs, MethodExecStats stats) {
+		this(m, opArgs, stats, null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param m The method being wrapped.
+	 * @param opArgs The parameter resolvers.
+	 * @param stats The instrumentor.
+	 * @param resourceSupplier Optional resource supplier.  When <jk>null</jk>, falls back to {@link RestSession#getResource()}.
+	 */
+	public RestOpInvoker(Method m, RestOpArg[] opArgs, MethodExecStats stats, Supplier<Object> resourceSupplier) {
 		super(m, stats);
 		this.opArgs = opArgs;
+		this.resourceSupplier = resourceSupplier;
 	}
 
 	/**
@@ -71,7 +86,8 @@ public class RestOpInvoker extends MethodInvoker {
 			RestRequest req = opSession.getRequest();
 			RestResponse res = opSession.getResponse();
 
-			Object output = super.invoke(session.getResource(), args);
+			var target = resourceSupplier == null ? session.getResource() : resourceSupplier.get();
+			Object output = super.invoke(target, args);
 
 			// Handle manual call to req.setDebug().
 			Boolean debug = req.getAttribute("Debug").as(Boolean.class).orElse(null);
