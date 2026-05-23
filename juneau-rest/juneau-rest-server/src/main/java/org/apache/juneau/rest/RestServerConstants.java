@@ -212,4 +212,18 @@ public final class RestServerConstants {
 
 	/** The {@code "value"} annotation attribute name — used by {@code @RestOp}/verb annotations to hold the (optional method-prefixed) path; folded into {@link #PROPERTY_path}. */
 	public static final String PROPERTY_value = "value";
+
+	/**
+	 * Servlet-request attribute key under which the per-request id minted or honored by
+	 * {@code org.apache.juneau.rest.filter.RequestIdFilter} is stashed.
+	 *
+	 * <p>
+	 * Call loggers and observability layers should resolve the id via this key so they all see the same value:
+	 * <p class='bjava'>
+	 * 	String <jv>id</jv> = (String)<jv>req</jv>.getAttribute(RestServerConstants.<jsf>REQUEST_ID</jsf>);
+	 * </p>
+	 *
+	 * @since 9.5.0
+	 */
+	public static final String REQUEST_ID = "requestId";
 }

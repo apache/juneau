@@ -6,8 +6,6 @@
 
 - [TODO-37] - Agent instruction consolidation.
 
-- [TODO-66] Rate-limit guard + request-id propagation filter. See `todo/TODO-66-rate-limit-and-request-id.md`.
-
 - [TODO-67] Observability hooks — Micrometer + OpenTelemetry seams via `MethodExecStats`. See `todo/TODO-67-observability-micrometer-otel.md`.
 
 - [TODO-68] Bean Validation (Jakarta Validation 3.x) integration on request beans. See `todo/TODO-68-bean-validation-integration.md`.
