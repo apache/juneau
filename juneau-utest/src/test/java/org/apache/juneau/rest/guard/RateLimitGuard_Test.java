@@ -70,7 +70,7 @@ class RateLimitGuard_Test extends TestBase {
 		@Bean public RestGuardList guards(BeanStore bs) {
 			return RestGuardList.create(bs).append(
 				RateLimitGuard.create()
-					.permitsPerSecond(100)
+					.permitsPerSecond(1)
 					.burst(1)
 					.keyBy(req -> "static")
 					.exemptPaths()
@@ -85,7 +85,7 @@ class RateLimitGuard_Test extends TestBase {
 		var c = MockRestClient.buildLax(B.class);
 		c.get("/b").run().assertStatus(200);
 		c.get("/b").run().assertStatus(429);
-		Thread.sleep(50);
+		Thread.sleep(1100);
 		c.get("/b").run().assertStatus(200);
 	}
 
