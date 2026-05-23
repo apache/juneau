@@ -69,6 +69,8 @@ class NamedHeaders_Test extends TestBase {
 		// Value types (not HttpHeaderBean subclasses).
 		"EntityTag",
 		"EntityTags",
+		// Fluent builders (produce a header value String, not an HttpHeaderBean).
+		"CacheControlBuilder",
 		"package-info"
 	);
 

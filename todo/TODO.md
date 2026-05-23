@@ -6,8 +6,6 @@
 
 - [TODO-37] - Agent instruction consolidation.
 
-- [TODO-64] Conditional-GET / ETag / `If-Modified-Since` helpers on `RestResponse`. See `todo/TODO-64-etag-conditional-get-helpers.md`.
-
 - [TODO-65] Health / readiness / liveness probe endpoints + `HealthIndicator` SPI. See `todo/TODO-65-health-readiness-liveness-probes.md`.
 
 - [TODO-66] Rate-limit guard + request-id propagation filter. See `todo/TODO-66-rate-limit-and-request-id.md`.

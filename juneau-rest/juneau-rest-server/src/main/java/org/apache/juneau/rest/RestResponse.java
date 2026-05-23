@@ -18,12 +18,17 @@ package org.apache.juneau.rest;
 
 import org.apache.juneau.commons.http.StringRanges;
 import org.apache.juneau.commons.http.MediaType;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
+import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
+import static java.time.temporal.ChronoUnit.SECONDS;
+
 import java.io.*;
 import java.nio.charset.*;
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -81,6 +86,12 @@ import jakarta.servlet.http.*;
  * 			<li class='jm'>{@link RestResponse#setMaxHeaderLength(int) setMaxHeaderLength(int)}
  * 			<li class='jm'>{@link RestResponse#setSafeHeaders() setSafeHeaders()}
  * 			<li class='jm'>{@link RestResponse#downloadAs(String) downloadAs(String)}
+ * 			<li class='jm'>{@link RestResponse#eTag(String) eTag(String)}
+ * 			<li class='jm'>{@link RestResponse#eTag(EntityTag) eTag(EntityTag)}
+ * 			<li class='jm'>{@link RestResponse#lastModified(Instant) lastModified(Instant)}
+ * 			<li class='jm'>{@link RestResponse#lastModified(ZonedDateTime) lastModified(ZonedDateTime)}
+ * 			<li class='jm'>{@link RestResponse#cacheControl(String) cacheControl(String)}
+ * 			<li class='jm'>{@link RestResponse#cacheControl(CacheControlBuilder) cacheControl(CacheControlBuilder)}
  * 		</ul>
  * 		<li>Methods for setting response bodies:
  * 		<ul class='javatreec'>
@@ -119,6 +130,7 @@ import jakarta.servlet.http.*;
 public class RestResponse extends HttpServletResponseWrapper {
 
 	private static final String HEADER_ContentType = "Content-Type";
+	private static final String ARG_VALUE = "value";
 
 	private HttpServletResponse inner;
 	private final RestRequest request;
@@ -645,6 +657,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * 	negotiation on the next {@link #getSerializerMatch()} call.
 	 * @return This object.
 	 */
+	@SuppressWarnings({
+		"java:S2789" // Null invalidates lazy Optional cache so getSerializerMatch() recomputes next access.
+	})
 	public RestResponse setSerializer(Serializer value) {
 		serializer = value;
 		serializerMatch = null;
@@ -739,6 +754,120 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 */
 	public RestResponse downloadAs(String filename) {
 		return setHeader(ContentDisposition.attachment(filename));
+	}
+
+	/**
+	 * Sets the <c>ETag</c> response header to the supplied wire value.
+	 *
+	 * <p>
+	 * The value is validated through {@link EntityTag#of(Object)} — strong tags must be quoted
+	 * (<c>"v1"</c>), weak tags must be prefixed with <c>W/</c> (<c>W/"v1"</c>), and the wildcard
+	 * <c>*</c> is accepted. The header is serialized in canonical form (re-quoted for strong tags,
+	 * <c>W/</c>-prefixed for weak tags).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jv>res</jv>.eTag(<js>"\"v42\""</js>);  <jc>// ETag: "v42"</jc>
+	 * 	<jv>res</jv>.eTag(<js>"W/\"v42\""</js>);  <jc>// ETag: W/"v42"</jc>
+	 * </p>
+	 *
+	 * @param value The entity-tag wire value. Must not be <jk>null</jk>; must match the
+	 * 	{@code entity-tag} grammar per RFC 7232 §2.3.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is malformed.
+	 * @see RestRequest#checkPreconditions(RestResponse)
+	 */
+	public RestResponse eTag(String value) {
+		return eTag(EntityTag.of(value));
+	}
+
+	/**
+	 * Sets the <c>ETag</c> response header to the canonical wire form of the supplied {@link EntityTag}.
+	 *
+	 * @param value The entity tag. Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
+	 */
+	public RestResponse eTag(EntityTag value) {
+		assertArgNotNull(ARG_VALUE, value);
+		return setHeader(ETag.of(value.toString()));
+	}
+
+	/**
+	 * Sets the <c>Last-Modified</c> response header to the supplied instant formatted as an
+	 * <a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7231#section-7.1.1.1'>RFC 7231 IMF-fixdate</a>.
+	 *
+	 * <p>
+	 * The instant is rendered in GMT regardless of the JVM's default timezone. The fractional-second
+	 * portion is truncated, matching the per-spec one-second resolution of HTTP-date timestamps.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jv>res</jv>.lastModified(Instant.<jsm>parse</jsm>(<js>"2026-05-22T00:00:00Z"</js>));
+	 * 	<jc>// Last-Modified: Fri, 22 May 2026 00:00:00 GMT</jc>
+	 * </p>
+	 *
+	 * @param value The last-modified timestamp. Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
+	 * @see RestRequest#checkPreconditions(RestResponse)
+	 */
+	public RestResponse lastModified(Instant value) {
+		assertArgNotNull(ARG_VALUE, value);
+		return lastModified(value.atZone(ZoneOffset.UTC));
+	}
+
+	/**
+	 * Sets the <c>Last-Modified</c> response header to the supplied date-time formatted as an
+	 * <a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7231#section-7.1.1.1'>RFC 7231 IMF-fixdate</a>.
+	 *
+	 * <p>
+	 * The supplied date-time is converted to GMT and truncated to whole seconds before formatting.
+	 *
+	 * @param value The last-modified timestamp. Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
+	 */
+	public RestResponse lastModified(ZonedDateTime value) {
+		assertArgNotNull(ARG_VALUE, value);
+		var z = value.withZoneSameInstant(ZoneOffset.UTC).truncatedTo(SECONDS);
+		return setHeader(LastModified.of(RFC_1123_DATE_TIME.format(z)));
+	}
+
+	/**
+	 * Sets the <c>Cache-Control</c> response header to the supplied directive string.
+	 *
+	 * <p>
+	 * The value is written verbatim — the caller is responsible for supplying a comma-separated
+	 * directive list per <a class='doclink' href='https://www.rfc-editor.org/rfc/rfc9111#name-cache-control'>RFC
+	 * 9111 §5.2</a>.
+	 *
+	 * @param value The directive list (e.g. <js>"public, max-age=3600"</js>). Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
+	 * @see #cacheControl(CacheControlBuilder)
+	 */
+	public RestResponse cacheControl(String value) {
+		assertArgNotNull(ARG_VALUE, value);
+		return setHeader(CacheControl.of(value));
+	}
+
+	/**
+	 * Sets the <c>Cache-Control</c> response header from a {@link CacheControlBuilder}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jv>res</jv>.cacheControl(CacheControlBuilder.<jsm>create</jsm>().publicCache().maxAge(3600));
+	 * 	<jc>// Cache-Control: public, max-age=3600</jc>
+	 * </p>
+	 *
+	 * @param value The builder. Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
+	 */
+	public RestResponse cacheControl(CacheControlBuilder value) {
+		assertArgNotNull(ARG_VALUE, value);
+		return cacheControl(value.build());
 	}
 
 	/**

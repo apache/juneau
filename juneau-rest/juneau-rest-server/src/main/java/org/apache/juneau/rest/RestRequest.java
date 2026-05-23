@@ -19,7 +19,9 @@ package org.apache.juneau.rest;
 import org.apache.juneau.commons.bean.BeanMeta;
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.http.StringRanges;
+import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 import static java.util.Optional.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.rest.RestSharedConstants.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
@@ -34,6 +36,9 @@ import java.lang.reflect.Proxy;
 import java.net.*;
 import java.nio.charset.*;
 import java.text.*;
+import java.time.*;
+import java.time.format.*;
+import java.time.temporal.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -101,6 +106,7 @@ import jakarta.servlet.http.*;
  * 		</ul>
  * 		<li>Methods for accessing HTTP parts:
  * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RestRequest#checkPreconditions(RestResponse) checkPreconditions(RestResponse)}
  * 			<li class='jm'>{@link RestRequest#containsFormParam(String) containsFormParam(String)}
  * 			<li class='jm'>{@link RestRequest#containsHeader(String) containsHeader(String)}
  * 			<li class='jm'>{@link RestRequest#containsQueryParam(String) containsQueryParam(String)}
@@ -386,6 +392,157 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public FluentRequestLineAssertion<RestRequest> assertRequestLine() {
 		return new FluentRequestLineAssertion<>(getRequestLine(), this);
+	}
+
+	/**
+	 * Evaluates the conditional-request headers on this request against the response's currently-set
+	 * <c>ETag</c> and <c>Last-Modified</c> values.
+	 *
+	 * <p>
+	 * Implements the precondition-evaluation order defined by
+	 * <a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7232#section-6'>RFC 7232 §6</a>:
+	 * <ol>
+	 * 	<li><c>If-Match</c> — strong comparison; returns <c>412 Precondition Failed</c> on mismatch.
+	 * 	<li><c>If-Unmodified-Since</c> — only consulted when <c>If-Match</c> is absent;
+	 * 		returns <c>412 Precondition Failed</c> when the response's <c>Last-Modified</c> is
+	 * 		strictly after the supplied date.
+	 * 	<li><c>If-None-Match</c> — weak comparison; returns <c>304 Not Modified</c> on match
+	 * 		(for safe methods, per RFC 7232 §6).
+	 * 	<li><c>If-Modified-Since</c> — only consulted when <c>If-None-Match</c> is absent;
+	 * 		returns <c>304 Not Modified</c> when the response's <c>Last-Modified</c> is at-or-before
+	 * 		the supplied date.
+	 * </ol>
+	 *
+	 * <h5 class='section'>Usage:</h5>
+	 *
+	 * <p>
+	 * Set the response's <c>ETag</c> and/or <c>Last-Modified</c> <b>first</b>, then call this method.
+	 * The check reads the headers currently on the response, so any value set after the call is not
+	 * considered.
+	 *
+	 * <p class='bjava'>
+	 * 	<ja>@RestGet</ja>(<js>"/{id}"</js>)
+	 * 	<jk>public</jk> Order get(<ja>@Path</ja> <jk>long</jk> <jv>id</jv>, RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
+	 * 		<jk>var</jk> <jv>order</jv> = <jv>repo</jv>.find(<jv>id</jv>);
+	 * 		<jv>res</jv>.eTag(<js>"\""</js> + <jv>order</jv>.version() + <js>"\""</js>).lastModified(<jv>order</jv>.updated());
+	 * 		<jv>req</jv>.checkPreconditions(<jv>res</jv>).ifPresent(<jv>e</jv> -&gt; { <jk>throw</jk> <jv>e</jv>; });
+	 * 		<jk>return</jk> <jv>order</jv>;
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>Returns an {@link Optional} so the caller controls how to handle the failure
+	 * 		(throw inline, hand off to a logger, etc.). Both the returned <c>304</c> and <c>412</c>
+	 * 		failures are {@link BasicHttpException} instances, which are {@link RuntimeException}s,
+	 * 		so {@code ifPresent(e -&gt; { throw e; })} compiles cleanly.
+	 * 	<li class='note'><c>If-None-Match: *</c> matches any present <c>ETag</c>; <c>If-Match: *</c>
+	 * 		fails only when no <c>ETag</c> is set on the response.
+	 * 	<li class='note'>Per RFC 7232 §3.1, <c>If-Match</c> requires strong comparison: a weak
+	 * 		<c>ETag</c> on the response side never satisfies an <c>If-Match</c>.
+	 * 	<li class='note'>Per RFC 7232 §3.2, <c>If-None-Match</c> uses weak comparison: the weak/strong
+	 * 		flag is ignored when comparing tag values.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link RestResponse#eTag(String) RestResponse.eTag(String)}
+	 * 	<li class='jm'>{@link RestResponse#lastModified(Instant) RestResponse.lastModified(Instant)}
+	 * </ul>
+	 *
+	 * @param response The response carrying the resource's current <c>ETag</c> and/or <c>Last-Modified</c>.
+	 * 	Must not be <jk>null</jk>.
+	 * @return Empty if all preconditions pass; otherwise an {@link Optional} holding either a
+	 * 	<c>304 Not Modified</c> {@link BasicHttpException} (when the request's cache copy is still
+	 * 	fresh) or a {@link PreconditionFailed} (when an <c>If-Match</c> / <c>If-Unmodified-Since</c>
+	 * 	guard failed).
+	 * @throws IllegalArgumentException If {@code response} is <jk>null</jk>.
+	 */
+	public Optional<BasicHttpException> checkPreconditions(RestResponse response) {
+		assertArgNotNull("response", response);
+		var resTagStr = response.getHeader(ETag.NAME);
+		var resTag = nn(resTagStr) ? EntityTag.of(resTagStr) : null;
+		var resLastModStr = response.getHeader(LastModified.NAME);
+		var resLastMod = nn(resLastModStr) ? parseHttpDate(resLastModStr) : null;
+
+		// RFC 7232 §6 step 1: If-Match (strong comparison; 412 on failure).
+		var ifMatch = getHeaderParam(IfMatch.NAME).orElse(null);
+		if (nn(ifMatch)) {
+			if (! matchesAnyStrong(EntityTags.of(ifMatch), resTag))
+				return Optional.of(preconditionFailed(IfMatch.NAME));
+		} else {
+			// RFC 7232 §6 step 2: If-Unmodified-Since (only when If-Match absent).
+			var ius = getHeaderParam(IfUnmodifiedSince.NAME).orElse(null);
+			if (nn(ius)) {
+				var iusDate = parseHttpDate(ius);
+				if (nn(iusDate) && nn(resLastMod) && resLastMod.toInstant().isAfter(iusDate.toInstant()))
+					return Optional.of(preconditionFailed(IfUnmodifiedSince.NAME));
+			}
+		}
+
+		// RFC 7232 §6 step 3: If-None-Match (weak comparison; 304 on match for safe methods).
+		var ifNoneMatch = getHeaderParam(IfNoneMatch.NAME).orElse(null);
+		if (nn(ifNoneMatch)) {
+			if (matchesAnyWeak(EntityTags.of(ifNoneMatch), resTag))
+				return Optional.of(notModified());
+		} else {
+			// RFC 7232 §6 step 4: If-Modified-Since (only when If-None-Match absent; only for GET/HEAD).
+			if (isSafeMethod()) {
+				var ims = getHeaderParam(IfModifiedSince.NAME).orElse(null);
+				if (nn(ims)) {
+					var imsDate = parseHttpDate(ims);
+					if (nn(imsDate) && nn(resLastMod) && ! resLastMod.toInstant().isAfter(imsDate.toInstant()))
+						return Optional.of(notModified());
+				}
+			}
+		}
+
+		return Optional.empty();
+	}
+
+	private boolean isSafeMethod() {
+		var m = getMethod();
+		return "GET".equalsIgnoreCase(m) || "HEAD".equalsIgnoreCase(m);
+	}
+
+	private static ZonedDateTime parseHttpDate(String value) {
+		try {
+			return ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value)).truncatedTo(ChronoUnit.SECONDS);
+		} catch (@SuppressWarnings("unused") DateTimeParseException e) {
+			return null;
+		}
+	}
+
+	private static boolean matchesAnyStrong(EntityTags clientTags, EntityTag resTag) {
+		if (clientTags == null)
+			return false;
+		for (var t : clientTags.toArray()) {
+			if (t.isAny())
+				return resTag != null;
+			// Strong comparison: both sides must be strong AND opaque-tag values must be equal.
+			if (! t.isWeak() && resTag != null && ! resTag.isWeak() && eq(t.getEntityValue(), resTag.getEntityValue()))
+				return true;
+		}
+		return false;
+	}
+
+	private static boolean matchesAnyWeak(EntityTags clientTags, EntityTag resTag) {
+		if (clientTags == null)
+			return false;
+		for (var t : clientTags.toArray()) {
+			if (t.isAny())
+				return resTag != null;
+			// Weak comparison: opaque-tag values must be equal; weak/strong flag is ignored.
+			if (resTag != null && eq(t.getEntityValue(), resTag.getEntityValue()))
+				return true;
+		}
+		return false;
+	}
+
+	private static BasicHttpException notModified() {
+		return new BasicHttpException(NotModified.STATUS_CODE, NotModified.REASON_PHRASE);
+	}
+
+	private static PreconditionFailed preconditionFailed(String headerName) {
+		return new PreconditionFailed("Precondition ''{0}'' failed.", headerName);
 	}
 
 	/**
