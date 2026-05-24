@@ -1384,6 +1384,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.14c.OpsIntrospectionMixins',
+							label: '10.14c. Ops / Introspection Mixin Pack',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.15.ClientVersioning',
 							label: '10.15. Client Versioning',
 						},
