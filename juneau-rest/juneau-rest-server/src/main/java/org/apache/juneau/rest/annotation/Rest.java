@@ -173,12 +173,27 @@ public @interface Rest {
 	 * REST children.
 	 *
 	 * <p>
-	 * Defines children of this resource.
+	 * Defines children of this resource.  Each child resource is mounted under its own URL subtree (per the
+	 * child's own {@code @Rest(path=...)} / {@code @Rest(paths=...)}) and constructs its own {@link RestContext}.
+	 *
+	 * <h5 class='section'>Children vs. mixins (resolution semantics)</h5>
+	 * <p>
+	 * Children are <b>isolated from the parent's resolution chain</b> by design — a child's serializers, parsers,
+	 * guards, hooks, call-logger, etc. are all resolved against the child's own {@link RestContext} only, NOT walked
+	 * through the parent.  This is the opposite of how {@link #mixins() mixins} resolve.  See the
+	 * <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">Mixin Sub-Contexts &mdash; Mixin-vs-child divergence</a>
+	 * topic for the rationale (children own their lifecycle and are externally mounted; mixins are inline composers
+	 * sharing the host's URL namespace and resolution chain).
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>
 	 * 	<li>Children on child are combined with those on parent class.
 	 * 	<li>Children are list parent-to-child in the order they appear in the annotation.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources">Child Resources</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">Mixin Sub-Contexts</a> (for the mixin-vs-child divergence)
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -193,14 +208,53 @@ public @interface Rest {
 	 * resource.
 	 *
 	 * <p>
-	 * Mixin methods are discovered the same way as local operation methods and share this resource's
-	 * {@link RestContext} configuration.  On path/method collisions, local methods on this resource win over mixin
-	 * methods.
+	 * Mixin methods are discovered the same way as local operation methods and surface under this resource's URL
+	 * namespace.  On path/method collisions, local methods on this resource win over mixin methods.
+	 *
+	 * <h5 class='section'>Per-mixin RestContext + host-to-mixin inheritance (since 9.5.0)</h5>
+	 * <p>
+	 * Each mixin class is elevated to its own {@link RestContext} parent-linked to this host's {@link RestContext}.
+	 * The mixin's class-level {@code @Rest(...)} configuration applies to its own endpoints, with inheritance from
+	 * the host:
+	 * <ul>
+	 * 	<li><b>List-shaped properties</b> ({@code serializers}, {@code parsers}, {@code encoders}, {@code converters},
+	 * 		{@code responseProcessors}, {@code restOpArgs}, {@code guards}) — host's chain runs first, then the mixin's
+	 * 		appended.  Host endpoints see only the host's chain.
+	 * 	<li><b>Replace-shaped properties</b> ({@code callLogger}, {@code debugEnablement}, {@code debugDefault},
+	 * 		{@code partSerializer}, {@code partParser}) — the mixin's value wins over the host's for mixin endpoints
+	 * 		when declared; otherwise the host's value is inherited.
+	 * 	<li><b>{@code messages}</b> — the mixin's bundle is chained as a child of the host's via
+	 * 		{@link org.apache.juneau.cp.Messages#chain Messages.chain(child, parent)} so mixin keys win and missing
+	 * 		keys fall through to the host.
+	 * 	<li><b>Lifecycle hooks</b> ({@code @RestStartCall}, {@code @RestEndCall}, {@code @RestPreCall},
+	 * 		{@code @RestPostCall}, {@code @RestDestroy}) — dual-fire host-then-mixin for mixin-endpoint requests;
+	 * 		host-only for host-endpoint requests.
+	 * </ul>
+	 *
+	 * <p>
+	 * Use {@link #noInherit() @Rest(noInherit={...})} on a mixin class to cut off inheritance for a specific
+	 * property — same token set as the host's {@code noInherit} machinery (e.g. {@code "serializers"},
+	 * {@code "guards"}, {@code "messages"}).
+	 *
+	 * <h5 class='section'>Mixins vs. children</h5>
+	 * <p>
+	 * Mixins are inline composers that share the host's URL namespace and inherit from the host's resolution chain.
+	 * {@link #children() Children} are independently-mounted resources isolated from the host's resolution chain.
+	 * See the
+	 * <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">Mixin Sub-Contexts &mdash; Mixin-vs-child divergence</a>
+	 * topic for the rationale.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>
 	 * 	<li>Mixins on child are combined with those on parent class.
 	 * 	<li>Mixins are listed parent-to-child in the order they appear in the annotation.
+	 * 	<li>Transitive mixins ({@code A} mixes in {@code B}) parent-link flat to the host — both {@code A} and
+	 * 		{@code B} get {@code parentContext = host}, never an {@code A → B} chain.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Mixins and Multi-Mount Paths</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server &mdash; Mixin Sub-Contexts</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -340,8 +394,20 @@ public @interface Rest {
 	 * Each entry is SVL-resolved then comma-split. Prevents the named property from inheriting values from
 	 * parent {@code @Rest} annotations (router hierarchy). The {@code noInherit} attribute itself is never inherited.
 	 *
+	 * <h5 class='section'>Mixin sub-contexts (since 9.5.0)</h5>
+	 * <p>
+	 * On a class declared via {@link #mixins() @Rest(mixins=...)} on a host, {@code noInherit} also blocks the
+	 * host-to-mixin inheritance walk for the named property.  The token set extends to every contribution list
+	 * exposed by {@code @Rest}: {@code "serializers"}, {@code "parsers"}, {@code "encoders"}, {@code "converters"},
+	 * {@code "responseProcessors"}, {@code "restOpArgs"}, {@code "guards"}, {@code "callLogger"},
+	 * {@code "debugEnablement"}, {@code "debugDefault"}, {@code "partSerializer"}, {@code "partParser"}, and
+	 * {@code "messages"}.  For example, {@code @Rest(noInherit={"guards"})} on a mixin removes the host's guard
+	 * chain from the mixin's endpoints (typical pattern for deliberately-unguarded probes like
+	 * {@code BasicHealthResource}).
+	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions">Session Options</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server &mdash; Mixin Sub-Contexts</a> (for the per-property opt-out semantics)
 	 * </ul>
 	 *
 	 * @return The annotation value.

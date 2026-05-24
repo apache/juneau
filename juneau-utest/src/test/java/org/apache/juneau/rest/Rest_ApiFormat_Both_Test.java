@@ -56,7 +56,7 @@ class Rest_ApiFormat_Both_Test extends TestBase {
 	}
 
 	@Test void a03_apiFormatResolvesToBoth() throws Exception {
-		var rc = new RestContext(new RestContext.Args(A.class, null, null, A::new, "", null, null, null));
+		var rc = new RestContext(new RestContext.Args(A.class, null, null, A::new, "", null, null, null, false));
 		assertEquals("both", rc.getApiFormat());
 	}
 }

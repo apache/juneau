@@ -323,6 +323,49 @@ public class Messages extends ResourceBundle {
 		return create(forClass).name(name).build();
 	}
 
+	/**
+	 * Composes two pre-built bundles into a single parent-chained bundle without mutating either input.
+	 *
+	 * <p>
+	 * This is the public seam for parent-chain composition.  Use it when one {@link Messages} bundle is
+	 * built locally and needs to inherit unresolved keys from a separately-built bundle &mdash; for
+	 * example, a REST mixin sub-context inheriting its host's bundle.  The {@link Builder} chains inner
+	 * locations via {@link Builder#parent(Messages)} during its own {@link Builder#build()} pass and
+	 * does not expose this composition as a public API; {@code chain(...)} fills that gap without
+	 * changing existing builder semantics.
+	 *
+	 * <p>
+	 * The returned bundle is a NEW chain of {@link Messages} instances that share the inner
+	 * {@link ResourceBundle}, {@code forClass}, and {@code locale} of {@code child}'s links.  Neither
+	 * {@code child} nor {@code parent} is mutated.  Lookups follow {@code child}'s chain first and
+	 * fall through to {@code parent} for any key not present in the child chain.
+	 *
+	 * @param child
+	 * 	The local bundle whose keys win first.
+	 * 	<br>If {@code null}, {@code parent} is returned unchanged.
+	 * @param parent
+	 * 	The parent bundle whose keys are looked up when {@code child}'s chain doesn't resolve.
+	 * 	<br>If {@code null}, {@code child} is returned unchanged.
+	 * @return The composed bundle, or {@code null} if both arguments are {@code null}.
+	 */
+	public static Messages chain(Messages child, Messages parent) {
+		if (child == null)
+			return parent;
+		if (parent == null)
+			return child;
+		return spliceLeafParent(child, parent);
+	}
+
+	/*
+	 * Returns a deep copy of the {@code c} chain in which the deepest link's {@code parent2 == null}
+	 * has been replaced with {@code newLeafParent}.  Recurses without mutating any input.
+	 */
+	private static Messages spliceLeafParent(Messages c, Messages newLeafParent) {
+		if (c.parent2 == null)
+			return new Messages(c.c, c.rb, c.locale, newLeafParent);
+		return new Messages(c.c, c.rb, c.locale, spliceLeafParent(c.parent2, newLeafParent));
+	}
+
 	private ResourceBundle rb;
 	private Class<?> c;
 	private Messages parent2;

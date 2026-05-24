@@ -45,7 +45,7 @@ class RestPathsRuntimeOverride_Getter_Test extends TestBase {
 
 	@Test
 	void a01_getterPaths_overrideAnnotation() throws Exception {
-		var args = new RestContext.Args(A_GetterOverride.class, null, null, A_GetterOverride::new, "", null, null, null);
+		var args = new RestContext.Args(A_GetterOverride.class, null, null, A_GetterOverride::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/from-getter-1", "/from-getter-2"}, ctx.getPaths(),
@@ -60,7 +60,7 @@ class RestPathsRuntimeOverride_Getter_Test extends TestBase {
 
 	@Test
 	void b01_getterNull_inheritAnnotation() throws Exception {
-		var args = new RestContext.Args(B_GetterReturnsNull.class, null, null, B_GetterReturnsNull::new, "", null, null, null);
+		var args = new RestContext.Args(B_GetterReturnsNull.class, null, null, B_GetterReturnsNull::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/from-annotation"}, ctx.getPaths(),
@@ -75,7 +75,7 @@ class RestPathsRuntimeOverride_Getter_Test extends TestBase {
 
 	@Test
 	void c01_getterEmptyArray_clears() throws Exception {
-		var args = new RestContext.Args(C_GetterReturnsEmpty.class, null, null, C_GetterReturnsEmpty::new, "", null, null, null);
+		var args = new RestContext.Args(C_GetterReturnsEmpty.class, null, null, C_GetterReturnsEmpty::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertEquals(0, ctx.getPaths().length,
@@ -90,7 +90,7 @@ class RestPathsRuntimeOverride_Getter_Test extends TestBase {
 
 	@Test
 	void d01_programmaticBeatsGetter() throws Exception {
-		var args = new RestContext.Args(D_ProgrammaticBeatsGetter.class, null, null, D_ProgrammaticBeatsGetter::new, "", null, null, new String[]{"/from-builder"});
+		var args = new RestContext.Args(D_ProgrammaticBeatsGetter.class, null, null, D_ProgrammaticBeatsGetter::new, "", null, null, new String[]{"/from-builder"}, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/from-builder"}, ctx.getPaths(),
@@ -104,7 +104,7 @@ class RestPathsRuntimeOverride_Getter_Test extends TestBase {
 
 	@Test
 	void e01_restObjectGetter_overrideAnnotation() throws Exception {
-		var args = new RestContext.Args(E_RestObjectGetter.class, null, null, E_RestObjectGetter::new, "", null, null, null);
+		var args = new RestContext.Args(E_RestObjectGetter.class, null, null, E_RestObjectGetter::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/from-restobject-getter"}, ctx.getPaths(),

@@ -307,6 +307,35 @@ public class BasicBeanStore implements WritableBeanStore {
 		return this;
 	}
 
+	/**
+	 * Promotes every locally-registered default supplier to a local entry supplier of the same name and type.
+	 *
+	 * <p>
+	 * Default suppliers normally resolve at tier 4 (after the regular parent walk), which means a parent
+	 * store's default supplier wins over this store's default supplier when both are registered for the same
+	 * type.  Promoting moves each default into the tier-2 local-entry slot so that this store's framework
+	 * defaults take precedence over the parent's same-type defaults &mdash; useful for embedded sub-contexts
+	 * (e.g. per-mixin {@code RestContext}s) that need their own framework objects (serializer set, parser set,
+	 * call logger, etc.) even though the parent is parent-linked for non-framework bean lookups.
+	 *
+	 * <p>
+	 * The original default-supplier registrations are left in place; promoted entries that already exist as
+	 * local entries are not overwritten.  Promotion is idempotent and only affects suppliers registered prior
+	 * to the call &mdash; later {@code addDefaultSupplier(...)} calls do not retroactively promote.
+	 *
+	 * @return This object.
+	 * @since 9.5.0
+	 */
+	public BasicBeanStore promoteDefaultsToLocalSuppliers() {
+		checkOpen();
+		defaults.forEach((beanType, typeMap) -> typeMap.forEach((name, supplier) -> {
+			var localTypeMap = entries.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
+			localTypeMap.putIfAbsent(name, supplier);
+			entryMetadata.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).putIfAbsent(name, BeanSourceMeta.DEFAULT);
+		}));
+		return this;
+	}
+
 	@Override
 	public Snapshot pushOverlay(BeanStore overlay) {
 		Objects.requireNonNull(overlay, "overlay must not be null");

@@ -54,7 +54,7 @@ class Rest_ApiFormat_Swagger_Test extends TestBase {
 	}
 
 	@Test void a03_apiFormatResolvesToSwagger() throws Exception {
-		var rc = new RestContext(new RestContext.Args(A.class, null, null, A::new, "", null, null, null));
+		var rc = new RestContext(new RestContext.Args(A.class, null, null, A::new, "", null, null, null, false));
 		assertEquals("swagger", rc.getApiFormat());
 	}
 }

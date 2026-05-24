@@ -43,7 +43,7 @@ class RestOpContext_OpLevelOverrides_Test extends TestBase {
 
 	private static RestContext build(Class<?> c) throws Exception {
 		var o = c.getDeclaredConstructor().newInstance();
-		return new RestContext(new RestContext.Args(c, null, null, () -> o, "", null, null, null)).postInit().postInitChildFirst();
+		return new RestContext(new RestContext.Args(c, null, null, () -> o, "", null, null, null, false)).postInit().postInitChildFirst();
 	}
 
 	private static RestOpContext op(RestContext ctx) {

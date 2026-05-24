@@ -55,7 +55,7 @@ class Rest_ApiFormat_OpenApi_Test extends TestBase {
 	}
 
 	@Test void a03_apiFormatResolvesToOpenApi() throws Exception {
-		var rc = new RestContext(new RestContext.Args(A.class, null, null, A::new, "", null, null, null));
+		var rc = new RestContext(new RestContext.Args(A.class, null, null, A::new, "", null, null, null, false));
 		assertEquals("openapi", rc.getApiFormat());
 	}
 }

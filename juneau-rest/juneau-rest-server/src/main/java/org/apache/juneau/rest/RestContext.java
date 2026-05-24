@@ -30,6 +30,7 @@ import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.PredicateUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.rest.RestServerConstants.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -212,6 +213,11 @@ public class RestContext extends Context {
 	 * 	default) means &quot;no programmatic override&quot; &mdash; resolution falls through to the resource's
 	 * 	{@code getPaths()} getter, then {@link Rest#paths()} (SVL-resolved per element and comma-split).
 	 * 	An empty array explicitly clears the mount list (no top-level mounts).
+	 * @param mixinContext {@code true} when this context is a per-mixin sub-context constructed by the host's
+	 * 	{@code restOperations} memoizer (parent-linked to the host's {@link RestContext} so that
+	 * 	{@link RestContext#getRestAnnotationsForProperty(String) annotation-property walks} prepend the host's
+	 * 	{@code @Rest} chain before the mixin's own).  {@code false} for top-level resources and for
+	 * 	{@link Rest#children() @Rest(children)} sub-resources (which retain pre-9.5.0 isolated resolution).
 	 *
 	 * @since 9.5.0
 	 */
@@ -223,7 +229,8 @@ public class RestContext extends Context {
 		String path,
 		Consumer<WritableBeanStore> beanStoreConfigurer,
 		BeanStore overridingParent,
-		String[] paths
+		String[] paths,
+		boolean mixinContext
 	) {
 
 		/**
@@ -570,6 +577,7 @@ public class RestContext extends Context {
 	protected final ConcurrentHashMap<Locale,OpenApi> openApiCache = new ConcurrentHashMap<>();
 	protected final Instant startTime;
 	protected final RestContext parentContext;
+	protected final boolean isMixinContext;
 	protected final String fullPath;
 	protected final String path;
 	protected final String[] paths;
@@ -582,6 +590,7 @@ public class RestContext extends Context {
 	private WritableBeanStore beanStore() { return beanStore; }
 	private Supplier<?> resource() { return resource; }
 	private Class<?> resourceClass() { return resourceClass; }
+	private boolean isMixinContextField() { return isMixinContext; }
 
 	/**
 	 * Creates the bean store for this context.
@@ -621,6 +630,43 @@ public class RestContext extends Context {
 	}
 	private RestContext parentContext() { return parentContext; }
 	private RestOperations restOperations() { return restOperations.get(); }
+
+	/**
+	 * Returns {@code true} when this context is a per-mixin sub-context constructed by the host's
+	 * {@code restOperations} memoizer.
+	 *
+	 * <p>
+	 * A mixin sub-context is parent-linked to the host's {@link RestContext} so that
+	 * {@link #getRestAnnotationsForProperty(String) annotation-property walks} prepend the host's {@code @Rest}
+	 * chain before the mixin's own &mdash; serializers, parsers, encoders, converters, response processors,
+	 * REST op args, guards, callLogger, debugEnablement, messages, and varResolver tokens all inherit from the
+	 * host first, with the mixin's contributions appended.  Use {@link Rest#noInherit() @Rest(noInherit)} on the
+	 * mixin class to cut off inheritance for any specific property.
+	 *
+	 * <p>
+	 * {@link Rest#children() @Rest(children)} sub-resources are <i>not</i> mixin contexts &mdash; they retain
+	 * pre-9.5.0 isolated resolution (no parent-context walk).  The mixin-vs-child divergence is intentional:
+	 * mixins are inline composers that share the host's URL namespace; children are heavyweight independent
+	 * resources mounted at their own URL prefix.
+	 *
+	 * @return {@code true} if this is a mixin sub-context, {@code false} for top-level resources and child
+	 * 	resources.
+	 * @since 9.5.0
+	 */
+	public boolean isMixinContext() { return isMixinContext; }
+
+	/**
+	 * Returns the parent {@link RestContext}, or {@code null} for top-level resources.
+	 *
+	 * <p>
+	 * The parent linkage drives the inheritance walk in {@link #getRestAnnotationsForProperty(String)} for
+	 * {@linkplain #isMixinContext() mixin sub-contexts}, and the {@code parentContext} walks performed by
+	 * {@link #getMessages()}, {@link #getVarResolver()}, {@code getFullPath()}, and the bean-store layering.
+	 *
+	 * @return The parent context, or {@code null} for top-level (host) resources.
+	 * @since 9.5.0
+	 */
+	public RestContext getParentContext() { return parentContext; }
 
 	/**
 	 * Registers memoizer-backed default suppliers for every framework-managed bean type on the supplied
@@ -1003,7 +1049,11 @@ public class RestContext extends Context {
 		var vrs = getBootstrapVarResolver().createSession();
 		getRestAnnotationsTopDown().forEach(ai -> ai.getString(PROPERTY_messages).filter(StringUtils::isNotBlank).ifPresent(s -> b.location(vrs.resolve(s))));
 		var override = beanStore().createBeanFromMethod(Messages.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
-		return nn(override) ? override : b.build();
+		var local = nn(override) ? override : b.build();
+		var parent = parentContext();
+		if (isMixinContextField() && nn(parent) && !isNoInheritLiteral(PROPERTY_messages))
+			return Messages.chain(local, parent.getMessages());
+		return local;
 	});
 
 	/**
@@ -1109,6 +1159,28 @@ public class RestContext extends Context {
 	});
 
 	/**
+	 * Pre-resolved invokers for this context's local {@code @RestPostCall} methods, bound to this
+	 * context's resource instance and bean-store-resolved arg resolvers. Used by the {@link #postCall(RestOpSession)}
+	 * parent-chain walk so that host hooks fire before mixin hooks on mixin-endpoint requests.
+	 *
+	 * <p>
+	 * Hook methods aren't op-specific, so the wrapping bean store stubs in the op-only {@link UrlPathMatcher}
+	 * binding with {@code null} so that {@link org.apache.juneau.rest.arg.PathArg#create PathArg.create()} (and
+	 * other op-aware resolvers) can be called by {@link #findRestOperationArgs(java.lang.reflect.Method, BeanStore)}
+	 * and abstain (return {@code null}) for parameters that aren't {@code @Path}-annotated. Using
+	 * {@code @Path} on a {@code @RestPostCall} method is not supported.
+	 */
+	private final Memoizer<RestOpInvoker[]> localPostCallInvokers = memoizer(() -> {
+		var bs = new BasicBeanStore(beanStore());
+		var pm = getPathMatcher() != null ? getPathMatcher() : UrlPathMatcher.of("");
+		bs.addBean(UrlPathMatcher.class, pm);
+		bs.addBean(UrlPathMatcher[].class, new UrlPathMatcher[]{pm});
+		return postCallMethods.get().stream()
+			.map(x -> new RestOpInvoker(x, findRestOperationArgs(x, bs), getMethodExecStats(x), this::getResource))
+			.toArray(RestOpInvoker[]::new);
+	});
+
+	/**
 	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestPostInit @RestPostInit}{@code (childFirst=true)} and their invokers.
 	 */
 	private final Memoizer<LifecycleInvokerPair> postInitChildFirstInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
@@ -1140,6 +1212,28 @@ public class RestContext extends Context {
 		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestPreCall.class).toList()));
 		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "preCallMethods"), v.get()).ifPresent(v::set);
 		return v.get();
+	});
+
+	/**
+	 * Pre-resolved invokers for this context's local {@code @RestPreCall} methods, bound to this
+	 * context's resource instance and bean-store-resolved arg resolvers. Used by the {@link #preCall(RestOpSession)}
+	 * parent-chain walk so that host hooks fire before mixin hooks on mixin-endpoint requests.
+	 *
+	 * <p>
+	 * Hook methods aren't op-specific, so the wrapping bean store stubs in the op-only {@link UrlPathMatcher}
+	 * binding with {@code null} so that {@link org.apache.juneau.rest.arg.PathArg#create PathArg.create()} (and
+	 * other op-aware resolvers) can be called by {@link #findRestOperationArgs(java.lang.reflect.Method, BeanStore)}
+	 * and abstain (return {@code null}) for parameters that aren't {@code @Path}-annotated. Using
+	 * {@code @Path} on a {@code @RestPreCall} method is not supported.
+	 */
+	private final Memoizer<RestOpInvoker[]> localPreCallInvokers = memoizer(() -> {
+		var bs = new BasicBeanStore(beanStore());
+		var pm = getPathMatcher() != null ? getPathMatcher() : UrlPathMatcher.of("");
+		bs.addBean(UrlPathMatcher.class, pm);
+		bs.addBean(UrlPathMatcher[].class, new UrlPathMatcher[]{pm});
+		return preCallMethods.get().stream()
+			.map(x -> new RestOpInvoker(x, findRestOperationArgs(x, bs), getMethodExecStats(x), this::getResource))
+			.toArray(RestOpInvoker[]::new);
 	});
 
 	/**
@@ -1367,6 +1461,73 @@ public class RestContext extends Context {
 	});
 
 	/**
+	 * Per-mixin {@link RestContext} sub-contexts, keyed by the mixin class.
+	 *
+	 * <p>
+	 * Built lazily (alongside {@link #restOperations}) and only on the host's {@link RestContext} &mdash; mixin
+	 * sub-contexts themselves never spawn further sub-contexts (the flat-inheritance rule: a mixin's
+	 * {@code @Rest(mixins=B)} discovers B as a mixin of the host, not as a nested mixin of A).
+	 *
+	 * <p>
+	 * Each sub-context is constructed with {@link Args#mixinContext()} set to {@code true}, with its
+	 * {@code parentContext} pointing at this host context.  That parent-linkage drives the inheritance walk in
+	 * {@link #getRestAnnotationsForProperty(String)} for serializers, parsers, encoders, converters, response
+	 * processors, REST op args, guards, callLogger, debugEnablement, messages, varResolver tokens, etc.
+	 *
+	 * @since 9.5.0
+	 */
+	private final Memoizer<Map<Class<?>,RestContext>> mixinContexts = memoizer(() -> {
+		if (isMixinContextField())
+			return Map.of();
+		var out = new LinkedHashMap<Class<?>,RestContext>();
+		for (var mixinClass : getRestMixinClasses()) {
+			if (mixinClass == resourceClass())
+				continue;
+			RestContext mixinCtx;
+			try {
+				mixinCtx = buildMixinContext(mixinClass);
+			} catch (RuntimeException e) {
+				throw e;
+			} catch (Exception e) {
+				throw rex(e, "Failed to construct mixin sub-context for {0}: {1}", mixinClass.getName(), e.getMessage());
+			}
+			out.put(mixinClass, mixinCtx);
+		}
+		return u(out);
+	});
+
+	/**
+	 * Builds a per-mixin sub-{@link RestContext} for the given mixin class.
+	 *
+	 * <p>
+	 * Instantiates the mixin resource via this host's bean store, constructs a new {@link RestContext} with
+	 * {@code parentContext=this} and {@link Args#mixinContext() mixinContext=true}, and reflectively invokes
+	 * any {@code setContext(RestContext)} method on the mixin instance (mirroring the existing
+	 * {@code RestChildren.buildChildContext(...)} contract).  The host's {@link ServletConfig} is propagated
+	 * so the mixin sees the same servlet container settings.
+	 */
+	private RestContext buildMixinContext(Class<?> mixinClass) throws Exception {
+		var mixinResource = beanStore.instantiate(mixinClass);
+		var args = new Args(mixinClass, this, builder.inner, () -> mixinResource, "", null, null, null, true);
+		var mixinCtx = new RestContext(args);
+		var setCtx = ClassInfo.of(mixinResource).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
+		if (nn(setCtx))
+			setCtx.accessible().invoke(mixinResource, mixinCtx);
+		return mixinCtx;
+	}
+
+	/**
+	 * Returns the per-mixin {@link RestContext} sub-contexts indexed by mixin class.
+	 *
+	 * <p>
+	 * Returns an empty map when this context is itself a mixin sub-context, or when no mixins are declared.
+	 *
+	 * @return An unmodifiable map of mixin class to its sub-{@link RestContext}; never {@code null}.
+	 * @since 9.5.0
+	 */
+	public Map<Class<?>,RestContext> getMixinContexts() { return mixinContexts.get(); }
+
+	/**
 	 * The {@link RestOperations} for this resource — all {@link RestOpContext} instances built from
 	 * methods annotated with {@link org.apache.juneau.rest.annotation.RestOp @RestOp} (and related).
 	 *
@@ -1374,6 +1535,14 @@ public class RestContext extends Context {
 	 * Eagerly initialized in the constructor (via an explicit {@code .get()} call inside the try-catch block)
 	 * so that any {@link ServletException} surfaces at construction time rather than lazily on first request.
 	 * Subsequent calls return the cached instance.
+	 *
+	 * <p>
+	 * For mixin classes declared via {@link Rest#mixins() @Rest(mixins)}, each mixin's {@code @RestOp} methods
+	 * are bound to a per-mixin {@link RestContext} sub-context (see {@link #mixinContexts}) so that the
+	 * mixin's annotation chain inherits from the host's via {@link #getRestAnnotationsForProperty(String)}.
+	 * Mixin sub-contexts themselves never participate in mixin discovery &mdash; the {@code if (!isMixinContext)}
+	 * guard below short-circuits the flat-inheritance rule (a mixin's {@code @Rest(mixins=B)} is collected at
+	 * the host level, not nested under A).
 	 */
 	@SuppressWarnings({"java:S3776", "java:S1141"})
 	private final Memoizer<RestOperations> restOperations = memoizer(() -> safe(() -> {
@@ -1382,23 +1551,20 @@ public class RestContext extends Context {
 		var b = RestOperations.create(bs);
 		var ap = getMarshallingContext().getAnnotationProvider();
 		var rci = ClassInfo.of(resource().get());
-		var mixinInstances = new LinkedHashMap<Class<?>,Object>();
-		for (var mixinClass : getRestMixinClasses()) {
-			if (mixinClass == resourceClass())
-				continue;
-			var mixinResource = mixinInstances.computeIfAbsent(mixinClass, x -> {
-				var y = bs.instantiate(x);
-				initializeResourceContext(y);
-				return y;
-			});
-			addRestOperationsForClass(b, ap, ClassInfo.of(mixinClass), () -> mixinResource);
+		if (!isMixinContextField()) {
+			var contexts = mixinContexts.get();
+			for (var e : contexts.entrySet()) {
+				var mixinClass = e.getKey();
+				var mixinCtx = e.getValue();
+				addRestOperationsForClass(b, ap, ClassInfo.of(mixinClass), mixinCtx, mixinCtx::getResource);
+			}
 		}
-		addRestOperationsForClass(b, ap, rci, this::getResource);
+		addRestOperationsForClass(b, ap, rci, this, this::getResource);
 		var override = bs.createBeanFromMethod(RestOperations.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
 		return nn(override) ? override : b.build();
 	}));
 
-	private void addRestOperationsForClass(RestOperations.Builder b, AnnotationProvider ap, ClassInfo classInfo, Supplier<Object> targetSupplier) throws ServletException {
+	private void addRestOperationsForClass(RestOperations.Builder b, AnnotationProvider ap, ClassInfo classInfo, RestContext opContext, Supplier<Object> targetSupplier) throws ServletException {
 		for (var mi : classInfo.getPublicMethods()) {
 			var al = rstream(ap.find(mi)).filter(REST_OP_GROUP).collect(Collectors.toList());
 			if (al.isEmpty()) {
@@ -1410,9 +1576,9 @@ public class RestContext extends Context {
 				try {
 					if (mi.isNotPublic())
 						throw servletException("@RestOp method {0}.{1} must be defined as public.", classInfo.inner().getName(), mi.getNameSimple());
-					var roc = new RestOpContext(mi.inner(), this, targetSupplier);
+					var roc = new RestOpContext(mi.inner(), opContext, targetSupplier);
 					if ("RRPC".equals(roc.getHttpMethod())) {
-						RestOpContext roc2 = new RrpcRestOpContext(mi.inner(), this, targetSupplier);
+						RestOpContext roc2 = new RrpcRestOpContext(mi.inner(), opContext, targetSupplier);
 						b.add("GET", roc2).add("POST", roc2);
 					} else {
 						b.add(roc);
@@ -1517,6 +1683,7 @@ public class RestContext extends Context {
 			this.builder = builder;
 
 			parentContext = builder.parentContext;
+			isMixinContext = builder.args.mixinContext();
 			resourceClass = builder.resourceClass;
 			var rs = new ResourceSupplier(resourceClass, assertArgNotNull("resource", builder.args.resource()));
 			resource = rs;
@@ -1524,7 +1691,22 @@ public class RestContext extends Context {
 			// --- beanStore setup (May 2026 refactor; precedence-flipped 9.5) ---
 
 			// Determine the parent (bootstrap) store: inherited from parent resource if present.
-			WritableBeanStore parentBs = parentContext != null ? parentContext.bootstrapBeanStore : null;
+			//
+			// For mixin sub-contexts, the parent is the host's FULL beanStore (not just the bootstrap layer)
+			// so that resource-class-level @Bean factory methods declared on the host class are visible to
+			// the mixin's resolution chain.  This matches the FINISHED-72 behavior where mixin endpoints
+			// resolved through the host's beanStore directly; with per-mixin sub-contexts, the same effect is
+			// achieved by parent-linking the mixin's beanStore to the host's full beanStore.
+			//
+			// For top-level resources and @Rest(children) sub-resources, the parent remains the bootstrap
+			// layer (children are intentionally independent of the host's resource-class beans).
+			WritableBeanStore parentBs;
+			if (parentContext != null && isMixinContext)
+				parentBs = parentContext.beanStore;
+			else if (parentContext != null)
+				parentBs = parentContext.bootstrapBeanStore;
+			else
+				parentBs = null;
 
 			// Build the initial beanStore; honor an optional @Bean WritableBeanStore override.
 			// In the new 9.5 precedence model, the parent (Spring or parent-resource bootstrap) is
@@ -1571,6 +1753,19 @@ public class RestContext extends Context {
 			// walk below can now invoke any framework type's factory and still resolve framework
 			// dependencies through the bean store.
 			registerFrameworkDefaults(beanStore);
+
+			// For mixin sub-contexts, the bean store is parent-linked to the host's full beanStore so that
+			// host-declared @Bean factory results (e.g. @Bean(name="db") HealthIndicator dbIndicator()) are
+			// visible through the mixin's lookup chain.  But the parent walk also picks up the host's
+			// framework defaults (SerializerSet, ParserSet, CallLogger, ...) at the parent's tier-4 slot
+			// before this store's tier-4 defaults can fire — which would shadow this mixin's per-context
+			// framework objects.  Promoting our defaults into local entries (tier 2) makes them resolve
+			// ahead of the parent walk while still letting an overriding parent (e.g. Spring) and explicit
+			// local @Bean registrations win.  Top-level resources and @Rest(children=...) sub-resources keep
+			// the original tier-4 default semantics so a parent-supplied framework bean (e.g. Spring's
+			// SerializerSet) still wins as it did before.
+			if (isMixinContext && beanStore instanceof BasicBeanStore mixinBs)
+				mixinBs.promoteDefaultsToLocalSuppliers();
 
 			var rci2 = ClassInfo.of(resourceClass);
 
@@ -1797,16 +1992,28 @@ public class RestContext extends Context {
 	 * Memoized list of every {@link Rest} annotation on the resource class and its supertypes, in child-to-parent order.
 	 *
 	 * <p>
-	 * {@link DefaultConfig} is always synthesized as the top-most (parent-most) entry when not already present in the
-	 * class hierarchy. This makes {@code DefaultConfig.@Rest(...)} the framework's single source of truth for default
-	 * lists (response processors, REST op args, encoders, parsers, serializers, ...), while still letting bare
-	 * {@code @Rest}-annotated resources inherit the framework defaults without explicitly implementing
-	 * {@link BasicUniversalConfig} or any other {@code DefaultConfig} descendant. Resources that <i>do</i> implement
-	 * {@code DefaultConfig} (transitively or directly) won't get a duplicate entry — the list is dedup'd by the
-	 * {@link Class} the annotation was declared on.
+	 * For <b>host</b> contexts (top-level resources), {@link DefaultConfig} is always synthesized as the top-most
+	 * (parent-most) entry when not already present in the class hierarchy. This makes {@code DefaultConfig.@Rest(...)}
+	 * the framework's single source of truth for default lists (response processors, REST op args, encoders, parsers,
+	 * serializers, ...), while still letting bare {@code @Rest}-annotated resources inherit the framework defaults
+	 * without explicitly implementing {@link BasicUniversalConfig} or any other {@code DefaultConfig} descendant.
+	 * Resources that <i>do</i> implement {@code DefaultConfig} (transitively or directly) won't get a duplicate
+	 * entry — the list is dedup'd by the {@link Class} the annotation was declared on.
+	 *
+	 * <p>
+	 * For <b>mixin</b> sub-contexts the synthesized {@code DefaultConfig} fallback is omitted: the mixin's annotation
+	 * chain is composed with the host's chain by
+	 * {@link #getRestAnnotationsForProperty(String) getRestAnnotationsForProperty(...)}, and the host's chain already
+	 * supplies the {@code DefaultConfig} fallback (synthesized or transitive). Including it on the mixin too would
+	 * place a second {@code DefaultConfig} entry between the host's most-derived {@code @Rest} and the mixin's own
+	 * annotations in the combined parent-to-child walk, which would let the framework defaults silently override
+	 * a host's explicit per-property values for any property the mixin doesn't itself declare (e.g.
+	 * {@code partSerializer}, {@code partParser}).
 	 */
 	private final Memoizer<List<AnnotationInfo<Rest>>> restAnnotations = memoizer(() -> {
 		var raw = getAnnotationProvider().find(Rest.class, ClassInfo.of(getResourceClass()));
+		if (isMixinContextField())
+			return raw;
 		var hasDefaultConfig = raw.stream().anyMatch(ai -> ai.getAnnotatable() instanceof ClassInfo ci && DefaultConfig.class.equals(ci.inner()));
 		if (hasDefaultConfig)
 			return raw;
@@ -2002,6 +2209,30 @@ public class RestContext extends Context {
 	});
 
 	/**
+	 * Property names that describe how a class is mounted on the URL tree, and therefore must NOT inherit from a
+	 * parent context when walking annotations on a {@linkplain #isMixinContext() mixin sub-context}.
+	 *
+	 * <p>
+	 * These properties are intentionally host-only:
+	 * <ul>
+	 * 	<li>{@code path} / {@code paths} &mdash; top-level mount declarations only meaningful for the class registered
+	 * 		with the servlet container.  A mixin sub-context inheriting the host's mount paths could cause
+	 * 		nonsensical routing decisions.
+	 * 	<li>{@code mixins} &mdash; the host owns the mixin discovery chain; a mixin sub-context inheriting the host's
+	 * 		mixin list would loop or duplicate route registration.
+	 * 	<li>{@code children} &mdash; child sub-resources are tied to the host's URL namespace, not the mixin's.
+	 * </ul>
+	 *
+	 * <p>
+	 * The host's {@link RestContext} reads {@code path}/{@code paths} from its own annotation chain only (via
+	 * {@link #getRestAnnotations()} rather than {@link #getRestAnnotationsForProperty(String)}); this allowlist
+	 * preserves that invariant when a mixin sub-context walks annotations for these properties.
+	 */
+	private static final Set<String> HOST_ONLY_PROPERTIES = Set.of(
+		PROPERTY_path, PROPERTY_paths, PROPERTY_mixins, "children"
+	);
+
+	/**
 	 * Returns the {@link Rest} annotations on the resource class hierarchy for the specified property,
 	 * in <b>parent-to-child</b> order, with {@code noInherit} cutoff applied.
 	 *
@@ -2009,11 +2240,32 @@ public class RestContext extends Context {
 	 * Used by both this class and {@link RestOpContext} to walk the class-level annotation chain when
 	 * computing memoized op-level settings that inherit from class-level {@code @Rest(...)} attributes.
 	 *
+	 * <p>
+	 * When this context is a {@linkplain #isMixinContext() mixin sub-context}, the parent context's annotation
+	 * chain is prepended to the mixin's own &mdash; serializers, parsers, encoders, converters, response
+	 * processors, guards, callLogger, debugEnablement, messages, and other contribution lists inherit from the
+	 * host first, with the mixin's contributions appended.  The local {@code @Rest(noInherit)} on the mixin
+	 * cuts off the parent walk for any specific property; the {@link #HOST_ONLY_PROPERTIES} allowlist
+	 * unconditionally skips the parent walk for properties whose semantics are host-only (mount paths, the
+	 * mixin discovery chain, and child sub-resources).
+	 *
 	 * @param name The annotation property name (e.g. {@code "converters"}, {@code "guards"}).
 	 * @return A stream of {@link AnnotationInfo} entries in parent-to-child order, never {@code null}.
 	 */
 	Stream<AnnotationInfo<Rest>> getRestAnnotationsForProperty(String name) {
-		var annotations = getRestAnnotations();
+		var localAnnotations = getRestAnnotations();
+		List<AnnotationInfo<Rest>> annotations;
+		if (isMixinContextField() && parentContext != null && !HOST_ONLY_PROPERTIES.contains(name) && !noInherit.get().contains(name)) {
+			var combined = new ArrayList<AnnotationInfo<Rest>>(localAnnotations.size() + parentContext.getRestAnnotations().size());
+			// Local (child-to-parent) annotations first; then parent's (child-to-parent).
+			// Since the final stream is reversed by rstream(), the combined order becomes:
+			//   parent's parent-to-child, then mixin's parent-to-child — i.e. host annotations come first, then mixin.
+			combined.addAll(localAnnotations);
+			combined.addAll(parentContext.getRestAnnotations());
+			annotations = combined;
+		} else {
+			annotations = localAnnotations;
+		}
 		var cutoff = annotations.size();
 		for (var i = 0; i < annotations.size(); i++) {
 			if (resolveCdl(annotations.get(i).getStringArray(PROPERTY_noInherit)).anyMatch(name::equalsIgnoreCase)) {
@@ -2070,6 +2322,31 @@ public class RestContext extends Context {
 	}
 
 	/**
+	 * Returns {@code true} if the local {@code @Rest(noInherit=...)} list contains {@code property} as a literal token.
+	 *
+	 * <p>
+	 * Unlike the {@link #noInherit} memoizer this performs a raw, SVL-free, comma-split check on the local
+	 * {@code @Rest} annotation. It exists for callers that are themselves on the dependency chain of the
+	 * {@code varResolver} memoizer (e.g. the {@code messages} memoizer) — those callers can't reach the
+	 * regular {@link #noInherit} memoizer without inducing a cycle, because the regular path runs
+	 * {@code resolveCdl(...)} → {@link #getVarResolver()} → {@link #getMessages()} → back to messages.
+	 *
+	 * @param property The property name (e.g. {@code "messages"}). Case-insensitive comparison.
+	 * @return {@code true} if {@code property} is named as a literal token in the local {@code @Rest(noInherit=...)}.
+	 */
+	private boolean isNoInheritLiteral(String property) {
+		return getRestAnnotation()
+			.map(x -> x.getStringArray("noInherit").orElse(StringUtils.EMPTY_STRING_ARRAY))
+			.stream()
+			.flatMap(Arrays::stream)
+			.filter(Objects::nonNull)
+			.flatMap(s -> StringUtils.split(s, ',').stream())
+			.map(String::trim)
+			.filter(StringUtils::isNotBlank)
+			.anyMatch(property::equalsIgnoreCase);
+	}
+
+	/**
 	 * Resolves comma-delimited annotation values with SVL variable substitution.
 	 *
 	 * @param values Raw annotation attribute values.
@@ -2121,6 +2398,12 @@ public class RestContext extends Context {
 
 	/**
 	 * Called during servlet destruction to invoke all {@link RestDestroy} methods.
+	 *
+	 * <p>
+	 * Fires this context's own {@code @RestDestroy} methods first, then walks any mixin sub-contexts
+	 * (host destroys before each mixin's), then any {@code @Rest(children=...)} sub-resources, then closes
+	 * the bean store. Mixin sub-contexts recursively destroy themselves via the same path; flat-inheritance
+	 * guarantees no further mixin descent occurs from inside a mixin sub-context.
 	 */
 	public void destroy() {
 		for (var x : destroyInvokerPair.get().invokers) {
@@ -2128,6 +2411,15 @@ public class RestContext extends Context {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
 				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
+			}
+		}
+		if (!isMixinContext) {
+			for (var mctx : mixinContexts.get().values()) {
+				try {
+					mctx.destroy();
+				} catch (Exception e) {
+					getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred destroying mixin sub-context ''{0}''.", mctx.getResourceClass().getName()));
+				}
 			}
 		}
 		var childrenRef = getRestChildren();
@@ -2244,6 +2536,14 @@ public class RestContext extends Context {
 			try {
 				s.finish();
 				endCall(s);
+				// For mixin endpoints, dual-fire endCall on the mixin sub-context after the host's so host
+				// hooks fire first, then the mixin's. Skip when no operation was resolved (e.g. 404 paths).
+				var os = s.getOpSessionOrNull();
+				if (os != null) {
+					var opRestContext = os.getContext().getContext();
+					if (opRestContext.isMixinContext)
+						opRestContext.endCall(s);
+				}
 			} finally {
 				localSession.remove();
 			}
@@ -3157,17 +3457,20 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Called at the end of a request to invoke all {@link RestEndCall} methods.
+	 * Called at the end of a request to invoke all {@link RestEndCall} methods on this context.
 	 *
 	 * <p>
-	 * This is the very last method called in {@link #execute(Object, HttpServletRequest, HttpServletResponse)}.
+	 * Fires this context's own {@code @RestEndCall} methods against its own resource instance. The host's
+	 * {@code endCall(...)} is invoked from {@link #execute(Object, HttpServletRequest, HttpServletResponse)};
+	 * for mixin-endpoint requests, that path additionally calls {@code endCall} on the mixin sub-context
+	 * after the host's so host hooks fire first, then the mixin's.
 	 *
 	 * @param session The current request.
 	 */
 	protected void endCall(RestSession session) {
 		for (var x : endCallInvokerPair.get().invokers) {
 			try {
-				x.invoke(session.getBeanStore(), session.getResource());
+				x.invoke(session.getBeanStore(), getResource());
 			} catch (Exception e) {
 				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
 			}
@@ -3407,12 +3710,21 @@ public class RestContext extends Context {
 	}
 
 	/**
-		 * Called during a request to invoke all {@link RestPostCall} methods.
-		 *
-		 * @param session The current request.
+	 * Called during a request to invoke all {@link RestPostCall} methods.
+	 *
+	 * <p>
+	 * For mixin-endpoint requests, fires the host's {@code @RestPostCall} methods first (via the host's
+	 * {@code localPostCallInvokers}), then the mixin's per-op invokers ({@link RestOpContext#getPostCallMethods()}).
+	 * Host-endpoint requests fire only the host's per-op invokers (the established path; unchanged from pre-9.5.0).
+	 *
+	 * @param session The current request.
 	 * @throws Exception If thrown from call methods.
 	 */
 	protected void postCall(RestOpSession session) throws Exception {
+		var opCtx = session.getContext().getContext();
+		if (opCtx.isMixinContext && opCtx.parentContext != null)
+			for (var m : opCtx.parentContext.localPostCallInvokers.get())
+				m.invoke(session);
 		for (var m : session.getContext().getPostCallMethods())
 			m.invoke(session);
 	}
@@ -3420,10 +3732,19 @@ public class RestContext extends Context {
 	/**
 	 * Called during a request to invoke all {@link RestPreCall} methods.
 	 *
+	 * <p>
+	 * For mixin-endpoint requests, fires the host's {@code @RestPreCall} methods first (via the host's
+	 * {@code localPreCallInvokers}), then the mixin's per-op invokers ({@link RestOpContext#getPreCallMethods()}).
+	 * Host-endpoint requests fire only the host's per-op invokers (the established path; unchanged from pre-9.5.0).
+	 *
 	 * @param session The current request.
 	 * @throws Exception If thrown from call methods.
 	 */
 	protected void preCall(RestOpSession session) throws Exception {
+		var opCtx = session.getContext().getContext();
+		if (opCtx.isMixinContext && opCtx.parentContext != null)
+			for (var m : opCtx.parentContext.localPreCallInvokers.get())
+				m.invoke(session);
 		for (var m : session.getContext().getPreCallMethods())
 			m.invoke(session);
 	}
@@ -3497,7 +3818,14 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Called at the start of a request to invoke all {@link RestStartCall} methods.
+	 * Called at the start of a request to invoke all {@link RestStartCall} methods on this context.
+	 *
+	 * <p>
+	 * Fires this context's own {@code @RestStartCall} methods against its own resource instance. The host
+	 * version is invoked from {@link #execute(Object, HttpServletRequest, HttpServletResponse)} before the
+	 * operation is resolved; once the operation is known to belong to a mixin sub-context,
+	 * {@link RestSession#run()} additionally calls {@code startCall} on the mixin context so host hooks fire
+	 * first, then the mixin's.
 	 *
 	 * @param session The current request.
 	 * @throws BasicHttpException If thrown from call methods.
@@ -3505,7 +3833,7 @@ public class RestContext extends Context {
 	protected void startCall(RestSession session) throws BasicHttpException {
 		for (var x : startCallInvokerPair.get().invokers) {
 			try {
-				x.invoke(session.getBeanStore(), session.getContext().getResource());
+				x.invoke(session.getBeanStore(), getResource());
 			} catch (IllegalAccessException | IllegalArgumentException e) {
 				throw new InternalServerError(e, "Error occurred invoking start-call method ''{0}''.", x.getFullName());
 			} catch (InvocationTargetException e) {

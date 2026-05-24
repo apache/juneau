@@ -52,7 +52,7 @@ class RestPathsRuntimeOverride_CommaSplit_Test extends TestBase {
 
 	@Test
 	void a01_singleElementWithComma_expandsToTwoMounts() throws Exception {
-		var args = new RestContext.Args(A_SingleElementWithComma.class, null, null, A_SingleElementWithComma::new, "", null, null, null);
+		var args = new RestContext.Args(A_SingleElementWithComma.class, null, null, A_SingleElementWithComma::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/healthz", "/readyz"}, ctx.getPaths(),
@@ -68,7 +68,7 @@ class RestPathsRuntimeOverride_CommaSplit_Test extends TestBase {
 
 	@Test
 	void b01_whitespace_trimmedAroundEachPiece() throws Exception {
-		var args = new RestContext.Args(B_WhitespaceAroundCommas.class, null, null, B_WhitespaceAroundCommas::new, "", null, null, null);
+		var args = new RestContext.Args(B_WhitespaceAroundCommas.class, null, null, B_WhitespaceAroundCommas::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/a", "/b"}, ctx.getPaths(),
@@ -84,7 +84,7 @@ class RestPathsRuntimeOverride_CommaSplit_Test extends TestBase {
 
 	@Test
 	void c01_emptyPieces_dropped() throws Exception {
-		var args = new RestContext.Args(C_EmptyPiecesDropped.class, null, null, C_EmptyPiecesDropped::new, "", null, null, null);
+		var args = new RestContext.Args(C_EmptyPiecesDropped.class, null, null, C_EmptyPiecesDropped::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/a", "/b"}, ctx.getPaths(),
@@ -100,7 +100,7 @@ class RestPathsRuntimeOverride_CommaSplit_Test extends TestBase {
 
 	@Test
 	void d01_multipleElements_withCommas_preserveOrder() throws Exception {
-		var args = new RestContext.Args(D_MultiElement_MixedCommas.class, null, null, D_MultiElement_MixedCommas::new, "", null, null, null);
+		var args = new RestContext.Args(D_MultiElement_MixedCommas.class, null, null, D_MultiElement_MixedCommas::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/api", "/a", "/b"}, ctx.getPaths(),
@@ -116,7 +116,7 @@ class RestPathsRuntimeOverride_CommaSplit_Test extends TestBase {
 
 	@Test
 	void e01_blankOnlyElement_dropsToEmpty() throws Exception {
-		var args = new RestContext.Args(E_BlankOnlyElement.class, null, null, E_BlankOnlyElement::new, "", null, null, null);
+		var args = new RestContext.Args(E_BlankOnlyElement.class, null, null, E_BlankOnlyElement::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertNotNull(ctx.getPaths());
@@ -129,7 +129,7 @@ class RestPathsRuntimeOverride_CommaSplit_Test extends TestBase {
 
 	@Test
 	void f01_commasOnlyElement_dropsToEmpty() throws Exception {
-		var args = new RestContext.Args(F_CommasOnlyElement.class, null, null, F_CommasOnlyElement::new, "", null, null, null);
+		var args = new RestContext.Args(F_CommasOnlyElement.class, null, null, F_CommasOnlyElement::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertNotNull(ctx.getPaths());
@@ -148,7 +148,7 @@ class RestPathsRuntimeOverride_CommaSplit_Test extends TestBase {
 	void g01_emptyStringElement_shortCircuits() throws Exception {
 		// "" is the special-case input that lets the SVL pass skip session.resolve(...) entirely (no
 		// variables to resolve in an empty string).  The post-SVL value "" then comma-splits to nothing.
-		var args = new RestContext.Args(G_EmptyStringElement.class, null, null, G_EmptyStringElement::new, "", null, null, null);
+		var args = new RestContext.Args(G_EmptyStringElement.class, null, null, G_EmptyStringElement::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertNotNull(ctx.getPaths());
@@ -167,7 +167,7 @@ class RestPathsRuntimeOverride_CommaSplit_Test extends TestBase {
 	void h01_mixedEmptyAndLiteral_preservesLiteral() throws Exception {
 		// Empty elements drop; the literal element stays.  Useful as a structural test that the loop in
 		// expandPathsElements iterates per element rather than collapsing the whole array into one buffer.
-		var args = new RestContext.Args(H_MixedEmptyAndLiteral.class, null, null, H_MixedEmptyAndLiteral::new, "", null, null, null);
+		var args = new RestContext.Args(H_MixedEmptyAndLiteral.class, null, null, H_MixedEmptyAndLiteral::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/literal"}, ctx.getPaths(),

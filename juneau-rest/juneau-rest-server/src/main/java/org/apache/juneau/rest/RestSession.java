@@ -381,6 +381,20 @@ public class RestSession extends ContextSession {
 	}
 
 	/**
+	 * Returns the {@link RestOpSession} created during {@link #run()} if one has been built, or {@code null} otherwise.
+	 *
+	 * <p>
+	 * Unlike {@link #getOpSession()}, this method does not throw — it lets callers in lifecycle code paths
+	 * (such as mixin endCall dual-firing in {@link RestContext#execute(Object, jakarta.servlet.http.HttpServletRequest,
+	 * jakarta.servlet.http.HttpServletResponse)}) inspect whether an operation was ever resolved without risking
+	 * a spurious 500 when 404/405/412 paths bypass operation creation entirely.
+	 *
+	 * @return The operation session, or {@code null} if one was never created (e.g. early routing failure).
+	 * @since 9.5.0
+	 */
+	public RestOpSession getOpSessionOrNull() { return opSession; }
+
+	/**
 	 * Shortcut for calling <c>getRequest().getPathInfo()</c>.
 	 *
 	 * @return The request servlet path info.
@@ -520,6 +534,12 @@ public class RestSession extends ContextSession {
 	public void run() throws Exception {
 		try {
 			opSession = context.getRestOperations().findOperation(this).createSession(this).build();
+			// For mixin endpoints, fire the mixin's @RestStartCall hooks now that the operation is resolved.
+			// The host's @RestStartCall hooks already fired in RestContext#execute() before s.run().
+			// Order: host first, mixin second.
+			var opRestContext = opSession.getContext().getContext();
+			if (opRestContext.isMixinContext())
+				opRestContext.startCall(this);
 			context.preCall(opSession);
 			opSession.run();
 			context.postCall(opSession);

@@ -5,9 +5,9 @@
 Recommended order for the TODO-67 through TODO-78 family. TODO-20 (rest debug rethink) and TODO-37 (agent instruction consolidation) are not in this order — TODO-20 is parked pending user review, TODO-37 is unscoped.
 
 1. ~~**TODO-73** — Runtime-overridable `@Rest(paths=...)`. Foundational; unblocks TODO-74–78.~~ ✅ done — see `todo/FINISHED-73-rest-paths-runtime-override.md`.
-2. **TODO-81** — Mixin sub-`RestContext` inheritance. Each `@Rest(mixins=...)` class gets its own `RestContext` parent-linked to the host. Foundational for TODO-74's `BasicOpenApiResource` (YAML isolation) and for TODO-77's per-mixin guard/debug/logger overrides; cross-cuts all mixins in TODO-74–78.
+2. ~~**TODO-81** — Mixin sub-`RestContext` inheritance. Each `@Rest(mixins=...)` class gets its own `RestContext` parent-linked to the host. Foundational for TODO-74's `BasicOpenApiResource` (YAML isolation) and for TODO-77's per-mixin guard/debug/logger overrides; cross-cuts all mixins in TODO-74–78.~~ ✅ done — see `todo/FINISHED-81-mixin-sub-context-inheritance.md`. TODO-74 OQ1 (YAML for `/openapi.yaml`) is now unblocked.
 3. **TODO-69** — AuthN guards. Unblocks TODO-77's admin guard chain.
-4. **TODO-74** — API-docs mixin pack (Swagger, Swagger-UI, OpenAPI, Redoc). Consumes TODO-81.
+4. **TODO-74** — API-docs mixin pack (Swagger, Swagger-UI, OpenAPI, Redoc). Consumes the mixin sub-context model from FINISHED-81.
 5. **TODO-75** — Static-files mixin (`BasicStaticFilesResource`).
 6. **TODO-76** — Convention-endpoints pack (favicon / SEO / version / well-known).
 7. **TODO-77** — Ops/introspection pack (echo / admin / route-index). Uses TODO-69.
@@ -46,6 +46,4 @@ Natural review seams: foundations (TODO-73 + TODO-81 + TODO-69) → mixin family
 - [TODO-78] JSP servlet support module (`juneau-rest-server-view-jsp`) — new module shipping `BasicJspResource` mixin + `JspViewRenderer`; isolates Apache Jasper / `jakarta.servlet.jsp.*` / JSTL deps from core. See `todo/TODO-78-mixin-jsp-module.md`.
 
 - [TODO-79] Juneau `@Value` annotation + Spring Boot `application.yaml` bridge for the Config API — introduce a `@Value("${...}")` annotation on top of `Config` so beans / fields / setters can read configuration values declaratively (analog to Spring's `@Value`); add a Spring Boot integration so values defined in `application.yaml` / `application.properties` are accessible through the Juneau `Config` API uniformly with native `*.cfg` files. Plan file TBD.
-
-- [TODO-81] Mixin sub-`RestContext` inheritance — each `@Rest(mixins=...)` class gets its own `RestContext` parent-linked to the host's. Mixin endpoints inherit host's serializers/parsers/encoders/hooks/etc. via `parentContext` walk; mixin's own `@Rest(...)` members APPEND for mixin endpoints only (isolated from host); `@Rest(noInherit={...})` blocks inheritance per property (matches `@RestOp(noInherit)` semantics). `@RestStartCall`/`@RestEndCall` dual-fire (host first, then mixin). Resolves TODO-74 OQ1 (YAML serializer for `/openapi.yaml`). See `todo/TODO-81-mixin-sub-context-inheritance.md`.
 

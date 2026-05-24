@@ -41,7 +41,7 @@ class RestPathsRuntimeOverride_Programmatic_Test extends TestBase {
 
 	@Test
 	void a01_programmaticPaths_overrideAnnotation() throws Exception {
-		var args = new RestContext.Args(A_AnnotationDefault.class, null, null, A_AnnotationDefault::new, "", null, null, new String[]{"/from-builder", "/also-from-builder"});
+		var args = new RestContext.Args(A_AnnotationDefault.class, null, null, A_AnnotationDefault::new, "", null, null, new String[]{"/from-builder", "/also-from-builder"}, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/from-builder", "/also-from-builder"}, ctx.getPaths(),
@@ -51,7 +51,7 @@ class RestPathsRuntimeOverride_Programmatic_Test extends TestBase {
 	@Test
 	void a02_programmaticNull_inheritAnnotation() throws Exception {
 		// Args.paths == null  → no programmatic override; annotation default wins.
-		var args = new RestContext.Args(A_AnnotationDefault.class, null, null, A_AnnotationDefault::new, "", null, null, null);
+		var args = new RestContext.Args(A_AnnotationDefault.class, null, null, A_AnnotationDefault::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/from-annotation"}, ctx.getPaths(),
@@ -61,7 +61,7 @@ class RestPathsRuntimeOverride_Programmatic_Test extends TestBase {
 	@Test
 	void a03_programmaticEmptyArray_clearsAllRungs() throws Exception {
 		// new String[0] is the explicit-clear sentinel — wins over the annotation, leaving no top-level mounts.
-		var args = new RestContext.Args(A_AnnotationDefault.class, null, null, A_AnnotationDefault::new, "", null, null, new String[0]);
+		var args = new RestContext.Args(A_AnnotationDefault.class, null, null, A_AnnotationDefault::new, "", null, null, new String[0], false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertEquals(0, ctx.getPaths().length,
@@ -73,7 +73,7 @@ class RestPathsRuntimeOverride_Programmatic_Test extends TestBase {
 
 	@Test
 	void b01_noAnnotationPaths_emptyResolve() throws Exception {
-		var args = new RestContext.Args(B_NoAnnotationPaths.class, null, null, B_NoAnnotationPaths::new, "", null, null, null);
+		var args = new RestContext.Args(B_NoAnnotationPaths.class, null, null, B_NoAnnotationPaths::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertNotNull(ctx.getPaths(), "getPaths() must not return null — empty array is the empty-state contract");

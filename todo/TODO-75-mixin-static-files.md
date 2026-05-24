@@ -40,8 +40,11 @@ public class CdnResource extends BasicStaticFilesResource { }
 - Single `@RestGet("/{file:.*}")` (greedy) handler that delegates to the active `StaticFiles` impl from the bean store, returning the `HttpResource` directly with `Cache-Control` headers honored.
 - Builder-driven configuration via the existing `BasicStaticFiles` builder — the mixin reads `BeanStore.getBean(StaticFiles.class)` at request time so the importer's `@StaticFile` declarations + classpath defaults are picked up.
 - 404 behavior identical to today: missing files surface as `NotFound` thrown from the handler.
+- **HEAD support.** The handler accepts `HEAD /static/...` for existence probes (no body, headers identical to the `GET`). Achieved via the standard servlet `HEAD`-via-`GET` contract; verify in tests.
+- **Default classpath base — both `static/` and `htdocs/`.** Configurable via the importer's `@Bean StaticFiles` override; the no-arg `BasicStaticFiles` default searches both directories so the out-of-the-box mixin works without configuration.
+- **Excluded from published OpenAPI surface.** The greedy `/{file:.*}` handler is not API-meaningful. Mark with `@OpenApi(hidden=true)` (or whatever the equivalent Juneau-side hidden-from-spec annotation is in the post-FINISHED-63 codebase — confirm in Phase 0) so `BasicOpenApiResource` / `BasicSwaggerResource` don't surface a "GET /static/{file}" route in published specs.
 - Updated default examples / `juneau-examples-rest` to lean on the mixin in place of inherited static-file mounts.
-- Tests in `juneau-utest`: GET hit, GET miss → 404, `Cache-Control` headers, importer's `@StaticFile` overrides default, multi-mount works.
+- Tests in `juneau-utest`: GET hit, GET miss → 404, HEAD existence probe (200 + headers, no body), `Cache-Control` headers, importer's `@StaticFile` overrides default, multi-mount works, OpenAPI spec does NOT include the static-file route.
 
 **Explicitly out of scope (v1):**
 
@@ -78,10 +81,13 @@ public class CdnResource extends BasicStaticFilesResource { }
     - Reads `getContext().getStaticFiles()`.
     - Calls `staticFiles.resolve(file, request.getLocale()).orElseThrow(NotFound::new)`.
     - Returns the `HttpResource` directly so `Cache-Control` and `Content-Type` headers from `BasicStaticFiles` flow through.
+    - Marked with `@OpenApi(hidden=true)` (or the equivalent confirmed in Phase 0) so the route is excluded from published OpenAPI specs.
 3. Tests:
     - `BasicStaticFilesResource_Test` — GET hit, GET miss, multi-mount via `paths`.
+    - `BasicStaticFilesResource_HeadProbe_Test` — `HEAD /static/foo.css` returns 200 + identical headers to the `GET`, with no response body.
     - `BasicStaticFilesResource_CacheControl_Test` — `Cache-Control: max-age=86400, public` is preserved end-to-end.
     - `BasicStaticFilesResource_ImporterOverride_Test` — importer's `@Bean StaticFiles` overrides the default.
+    - `BasicStaticFilesResource_OpenApiHidden_Test` — when mounted alongside `BasicOpenApiResource`, the published OpenAPI spec does NOT include the `/static/{file}` route.
 
 ### Phase 2 — examples migration
 
@@ -106,20 +112,27 @@ public class CdnResource extends BasicStaticFilesResource { }
 - [ ] Mixin form serves a file from a JAR classpath resource at `/static/foo.css` with proper MIME type and `Cache-Control` headers.
 - [ ] Mixin form serves the same file at `/htdocs/foo.css` (multi-mount via the default `paths`).
 - [ ] GET on a missing path returns `404 Not Found` (not 500).
+- [ ] `HEAD /static/foo.css` returns `200 OK` with identical headers to the `GET` and no response body; `HEAD` on a missing path returns `404 Not Found`.
 - [ ] Importer's `@Bean StaticFiles` overrides the default `BasicStaticFiles` configuration.
+- [ ] Default classpath base searches both `static/` and `htdocs/` directories out of the box; importer can override via `@Bean StaticFiles`.
 - [ ] Path override via TODO-73 (`@Rest(paths={"/assets/*"})` or `@Rest(paths={"$C{static.paths}"})`) reroutes the mount cleanly.
+- [ ] `Cache-Control: max-age=86400, public` (the `BasicStaticFiles` default) is preserved end-to-end; importer can override via `BasicStaticFiles.create().headers(...)`.
+- [ ] 404 body format flows through the existing exception-rendering chain (RFC 7807 problem-details when FINISHED-61 opt-in is active; plain text otherwise) — no special-case handling in the mixin.
+- [ ] Published OpenAPI spec from `BasicOpenApiResource` / `BasicSwaggerResource` does NOT include the `/static/{file:.*}` route when `BasicStaticFilesResource` is mounted alongside them.
 - [ ] No regression in `juneau-examples-rest` static-file behavior after the migration.
 - [ ] Mixin works identically when registered via Juneau `BeanStore` (microservice path) and via Spring `@Bean` (Spring Boot path); both paths covered by a test.
 - [ ] Coverage ≥ 95% on `BasicStaticFilesResource`. Full `./scripts/test.py` green.
 
-## Open questions
+## Resolved decisions
 
-1. **Wildcard pattern semantics — `/static/*` (servlet mapping) vs `/static/{file:.*}` (Juneau path-variable)?** **Recommend `/static/*` in the `paths` member** since `paths` are servlet-mapping patterns (Jetty multi-pattern mount), and `/{file:.*}` for the inner `@RestGet` path variable since that's Juneau's path matcher. The two layers are different — keep the conventions distinct.
-2. **Default classpath base — `static/` vs `htdocs/` vs both?** **Recommend configurable, default to both** — matches `BasicStaticFiles`'s existing zero-arg constructor that already searches both directories.
-3. **404 body format.** Default `NotFound` exception body is plain text; should the mixin emit JSON when `apiFormat`/`Accept` indicates? **Recommend let the existing exception-rendering chain handle it** — RFC 7807 problem-details (FINISHED-61) already kicks in if the resource opts in.
-4. **Cache-Control default.** `max-age=86400, public` (1 day) is `BasicStaticFiles`'s built-in default. **Recommend keep the same default** — apps with stricter caching needs override via `BasicStaticFiles.create().headers(...)`.
-5. **HEAD request handling.** Should the mixin handle `HEAD /static/foo.css` so callers can probe existence without downloading the body? **Recommend yes** — Juneau's `@RestGet` already supports HEAD via the standard servlet contract; verify in tests.
-6. **Should the mixin opt out of `apiFormat="openapi"`-driven OpenAPI emission for the static-file path?** A greedy `/{file:.*}` mount is not API-meaningful. **Recommend yes, exclude via `@OpenApi(hidden=true)` or equivalent on the mixin's handler** — keeps the published OpenAPI spec clean.
+All previously open questions resolved 2026-05-24.
+
+1. **Wildcard pattern semantics — two-layer convention.** `paths` member uses servlet-mapping patterns (`/static/*`, `/htdocs/*`) since these are Jetty multi-pattern mounts; inner `@RestGet` uses Juneau's path-variable syntax (`/{file:.*}`). Two layers, two conventions — keep them distinct.
+2. **Default classpath base — configurable, default to both `static/` and `htdocs/`.** Matches `BasicStaticFiles`'s existing zero-arg constructor; importers override via `@Bean StaticFiles`.
+3. **404 body format — defer to existing exception-rendering chain.** `NotFound` flows through the standard renderer; RFC 7807 problem-details (FINISHED-61) kicks in when the importer opts in. No special-case handling in the mixin.
+4. **Cache-Control default — keep `max-age=86400, public`.** `BasicStaticFiles`'s built-in default. Apps with stricter caching override via `BasicStaticFiles.create().headers(...)`.
+5. **HEAD request handling — yes, accept HEAD via the standard servlet `HEAD`-via-`GET` contract.** `HEAD /static/foo.css` returns identical headers to the `GET` with no body; `HEAD` on a missing path returns 404. Test coverage added (`BasicStaticFilesResource_HeadProbe_Test`).
+6. **OpenAPI-emission opt-out — yes, mark the handler with `@OpenApi(hidden=true)` (or the post-FINISHED-63 equivalent — confirm exact annotation in Phase 0).** A greedy `/{file:.*}` mount is not API-meaningful; published specs from `BasicOpenApiResource` / `BasicSwaggerResource` should not surface it. Test coverage added (`BasicStaticFilesResource_OpenApiHidden_Test`).
 
 ## Risks
 

@@ -177,6 +177,21 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final AnnotationWorkList appliedAnnotations;
 
 	private RestContext restContext() { return context; }
+
+	/**
+	 * Returns the {@link RestContext} that owns this operation context.
+	 *
+	 * <p>
+	 * For operations declared directly on the host resource class, returns the host context. For operations
+	 * registered through a {@code @Rest(mixins=...)} mixin, returns the per-mixin sub-context (parent-linked
+	 * to the host's context via {@link RestContext#getParentContext()}). Callers can use this to identify
+	 * whether the operation was contributed by a mixin (via {@link RestContext#isMixinContext()}).
+	 *
+	 * @return The owning {@link RestContext} for this operation.
+	 * @since 9.5.0
+	 */
+	public RestContext getContext() { return context; }
+
 	private Method method() { return method; }
 	private MethodInfo methodInfo() { return mi; }
 	private AnnotationWorkList appliedAnnotations() { return appliedAnnotations; }
@@ -646,12 +661,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	/** The invokers for context-level post-call lifecycle methods. */
 	private final Memoizer<RestOpInvoker[]> postCallMethods = memoizer(() ->
-		restContext().getPostCallMethods().stream().map(x -> new RestOpInvoker(x, restContext().findRestOperationArgs(x, opBeanStore()), restContext().getMethodExecStats(x))).toArray(RestOpInvoker[]::new)
+		restContext().getPostCallMethods().stream().map(x -> new RestOpInvoker(x, restContext().findRestOperationArgs(x, opBeanStore()), restContext().getMethodExecStats(x), this::resource)).toArray(RestOpInvoker[]::new)
 	);
 
 	/** The invokers for context-level pre-call lifecycle methods. */
 	private final Memoizer<RestOpInvoker[]> preCallMethods = memoizer(() ->
-		restContext().getPreCallMethods().stream().map(x -> new RestOpInvoker(x, restContext().findRestOperationArgs(x, opBeanStore()), restContext().getMethodExecStats(x))).toArray(RestOpInvoker[]::new)
+		restContext().getPreCallMethods().stream().map(x -> new RestOpInvoker(x, restContext().findRestOperationArgs(x, opBeanStore()), restContext().getMethodExecStats(x), this::resource)).toArray(RestOpInvoker[]::new)
 	);
 
 	/**
