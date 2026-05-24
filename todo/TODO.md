@@ -8,7 +8,7 @@ Recommended order for the TODO-67 through TODO-78 family. TODO-20 (rest debug re
 2. ~~**TODO-81** — Mixin sub-`RestContext` inheritance. Each `@Rest(mixins=...)` class gets its own `RestContext` parent-linked to the host. Foundational for TODO-74's `BasicOpenApiResource` (YAML isolation) and for TODO-77's per-mixin guard/debug/logger overrides; cross-cuts all mixins in TODO-74–78.~~ ✅ done — see `todo/FINISHED-81-mixin-sub-context-inheritance.md`. TODO-74 OQ1 (YAML for `/openapi.yaml`) is now unblocked.
 3. **TODO-69** — AuthN guards. Unblocks TODO-77's admin guard chain.
 4. ~~**TODO-74** — API-docs mixin pack (Swagger, Swagger-UI, OpenAPI, Redoc). Consumes the mixin sub-context model from FINISHED-81.~~ ✅ done — see `todo/FINISHED-74-mixin-api-docs.md`.
-5. **TODO-75** — Static-files mixin (`BasicStaticFilesResource`).
+5. ~~**TODO-75** — Static-files mixin (`BasicStaticFilesResource`).~~ ✅ done — see `todo/FINISHED-75-mixin-static-files.md`.
 6. **TODO-76** — Convention-endpoints pack (favicon / SEO / version / well-known).
 7. **TODO-77** — Ops/introspection pack (echo / admin / route-index). Uses TODO-69.
 8. **TODO-78** — JSP module (`juneau-rest-server-view-jsp`).
@@ -34,8 +34,6 @@ Natural review seams: foundations (TODO-73 + TODO-81 + TODO-69) → mixin family
 - [TODO-70] `CompletableFuture<?>` return-type support + optional virtual-thread per-request dispatch. See `todo/TODO-70-async-completablefuture-virtual-threads.md`.
 
 - [TODO-71] Move doc site updates from a github hook to a script that gets executed locally.  Change docusaurus search functionality to @easyops-cn/docusaurus-search-local. 
-
-- [TODO-75] Static-files mixin (`BasicStaticFilesResource`) — wrap `BasicStaticFiles` in a multi-mount mixin with default mounts `/static/*` and `/htdocs/*`. See `todo/TODO-75-mixin-static-files.md`.
 
 - [TODO-76] Convention-endpoints mixin pack — `BasicFaviconResource`, `BasicSeoResource` (`/robots.txt`, `/sitemap.xml`), `BasicVersionResource` (`/version`, `/info`, `/about`), `BasicWellKnownResource` (`/.well-known/*`). See `todo/TODO-76-mixin-convention-endpoints.md`.
 

@@ -118,6 +118,13 @@ public interface BasicRestOperations {
 	/**
 	 * [GET /htdocs/*] - Retrieve static file.
 	 *
+	 * <p>
+	 * Excluded from the published Swagger/OpenAPI specification via
+	 * {@link OpSwagger#ignore() @OpSwagger(ignore=true)} &mdash; a greedy {@code /htdocs/*} blob
+	 * handler is not API-meaningful, and emitting it as an operation just produces noise. This
+	 * mirrors the exclusion strategy used by the {@code BasicStaticFilesResource} mixin and keeps
+	 * legacy {@code BasicRestServlet}-hosted apps consistent with mixin-based static-file mounts.
+	 *
 	 * @param path The path to retrieve.
 	 * @param locale The locale of the HTTP request.
 	 * @return An HTTP resource representing the static file.
@@ -125,7 +132,8 @@ public interface BasicRestOperations {
 	@RestGet(
 		path="/htdocs/*",
 		summary="Static files",
-		description="Static file retrieval."
+		description="Static file retrieval.",
+		swagger=@OpSwagger(ignore=true)
 	) HttpResource getHtdoc(@Path String path, Locale locale);
 
 	/**

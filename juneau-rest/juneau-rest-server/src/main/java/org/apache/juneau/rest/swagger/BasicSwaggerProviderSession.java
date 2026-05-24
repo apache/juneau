@@ -361,13 +361,17 @@ public class BasicSwaggerProviderSession {
 			var al = rstream(ap.find(mi)).filter(REST_OP_GROUP).toList();
 			var mn = m.getName();
 
+			// Honor @OpSwagger(ignore=true) — skip the operation entirely so neither the path nor the
+			// HTTP-method entry shows up in the generated spec. Done before getOperation(...) is called
+			// because that method has the side effect of inserting empty entries via computeIfAbsent.
+			var msValue = Value.<OpSwagger>empty();
+			al.forEach(ai -> ai.getValue(OpSwagger.class, "swagger").filter(OpSwaggerAnnotation::notEmpty).ifPresent(msValue::set));
+			var ms = msValue.orElseGet(() -> OpSwaggerAnnotation.create().build());
+			if (ms.ignore())
+				continue;
+
 			// Get the operation from the existing swagger so far.
 			var op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
-
-		// Add @RestOp(swagger)
-		var msValue = Value.<OpSwagger>empty();
-		al.forEach(ai -> ai.getValue(OpSwagger.class, "swagger").filter(OpSwaggerAnnotation::notEmpty).ifPresent(msValue::set));
-		var ms = msValue.orElseGet(() -> OpSwaggerAnnotation.create().build());
 
 			op.append(parseMap(ms.value(), "@OpSwagger(value) on class {0} method {1}", c, m));
 			op.appendIf(ne, SWAGGER_operationId,

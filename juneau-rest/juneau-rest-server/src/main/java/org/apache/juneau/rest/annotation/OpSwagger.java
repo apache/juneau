@@ -98,6 +98,39 @@ public @interface OpSwagger {
 	String[] description() default {};
 
 	/**
+	 * Excludes this operation from the published Swagger / OpenAPI specification.
+	 *
+	 * <p>
+	 * When set to <jk>true</jk>, this operation is skipped during Swagger / OpenAPI generation:
+	 * neither the path entry nor any sibling HTTP method on the same path is emitted unless
+	 * another operation contributes to it. This is useful for endpoints that are not API-meaningful
+	 * (e.g. greedy {@code /*} static-file handlers, {@code /favicon.ico}, internal probes) where
+	 * documenting the operation would just be noise.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@RestGet</ja>(
+	 * 		path=<js>"/static/*"</js>,
+	 * 		swagger=<ja>@OpSwagger</ja>(
+	 * 			ignore=<jk>true</jk>
+	 * 		)
+	 * 	)
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Default is <jk>false</jk> &mdash; operations are emitted by default.
+	 * 	<li class='note'>
+	 * 		Schema-level {@code ignore} flags (on bean fields / parameters) are separate from this
+	 * 		method-level flag &mdash; this one suppresses the entire operation; schema-level flags
+	 * 		suppress individual fields within a referenced schema.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	boolean ignore() default false;
+
+	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/externalDocs</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>

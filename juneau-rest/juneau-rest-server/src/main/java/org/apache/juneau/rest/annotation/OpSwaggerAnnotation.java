@@ -49,6 +49,7 @@ public class OpSwaggerAnnotation {
 		private String[] description = {};
 		private ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		private String deprecated = "";
+		private boolean ignore;
 		private String operationId = "";
 		private String[] consumes = {};
 		private String[] parameters = {};
@@ -116,6 +117,17 @@ public class OpSwaggerAnnotation {
 		 */
 		public Builder externalDocs(ExternalDocs value) {
 			externalDocs = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#ignore()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder ignore(boolean value) {
+			ignore = value;
 			return this;
 		}
 
@@ -217,6 +229,7 @@ public class OpSwaggerAnnotation {
 		private final String[] description;
 		private final ExternalDocs externalDocs;
 		private final String deprecated;
+		private final boolean ignore;
 		private final String operationId;
 		private final String[] consumes;
 		private final String[] parameters;
@@ -233,6 +246,7 @@ public class OpSwaggerAnnotation {
 			consumes = copyOf(b.consumes);
 			deprecated = b.deprecated;
 			externalDocs = b.externalDocs;
+			ignore = b.ignore;
 			operationId = b.operationId;
 			parameters = copyOf(b.parameters);
 			produces = copyOf(b.produces);
@@ -256,6 +270,11 @@ public class OpSwaggerAnnotation {
 		@Override /* Overridden from OpSwagger */
 		public ExternalDocs externalDocs() {
 			return externalDocs;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public boolean ignore() {
+			return ignore;
 		}
 
 		@Override /* Overridden from OpSwagger */

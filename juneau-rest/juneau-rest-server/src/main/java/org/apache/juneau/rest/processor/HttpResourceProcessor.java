@@ -25,6 +25,11 @@ import org.apache.juneau.rest.*;
 /**
  * Response handler for {@link HttpResource} objects.
  *
+ * <p>
+ * {@code HEAD} requests are handled per RFC 7231 §4.3.2: identical headers to the equivalent
+ * {@code GET} are emitted (Content-Type, Content-Length, plus any resource-supplied headers)
+ * but the response body is suppressed.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
@@ -48,6 +53,10 @@ public class HttpResourceProcessor implements ResponseProcessor {
 			res.setHeader(ContentLength.of(contentLength));
 
 		r.getHeaders().forEach(res::addHeader);
+
+		// RFC 7231 §4.3.2: HEAD must mirror GET headers but omit the body.
+		if ("HEAD".equalsIgnoreCase(opSession.getRequest().getMethod()))
+			return FINISHED;
 
 		try (var os = res.getNegotiatedOutputStream()) {
 			r.writeTo(os);
