@@ -1379,6 +1379,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.14b.ConventionEndpointsMixins',
+							label: '10.14b. Convention-Endpoints Mixin Pack',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.15.ClientVersioning',
 							label: '10.15. Client Versioning',
 						},
