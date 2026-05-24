@@ -9,7 +9,7 @@ Recommended order for the TODO-67 through TODO-78 family. TODO-20 (rest debug re
 3. **TODO-69** — AuthN guards. Unblocks TODO-77's admin guard chain.
 4. ~~**TODO-74** — API-docs mixin pack (Swagger, Swagger-UI, OpenAPI, Redoc). Consumes the mixin sub-context model from FINISHED-81.~~ ✅ done — see `todo/FINISHED-74-mixin-api-docs.md`.
 5. ~~**TODO-75** — Static-files mixin (`BasicStaticFilesResource`).~~ ✅ done — see `todo/FINISHED-75-mixin-static-files.md`.
-6. **TODO-76** — Convention-endpoints pack (favicon / SEO / version / well-known).
+6. ~~**TODO-76** — Convention-endpoints pack (favicon / SEO / version / well-known).~~ ✅ done — see `todo/FINISHED-76-mixin-convention-endpoints.md`.
 7. **TODO-77** — Ops/introspection pack (echo / admin / route-index). Uses TODO-69.
 8. **TODO-78** — JSP module (`juneau-rest-server-view-jsp`).
 9. **TODO-67** — Observability (Micrometer + OpenTelemetry).
@@ -34,8 +34,6 @@ Natural review seams: foundations (TODO-73 + TODO-81 + TODO-69) → mixin family
 - [TODO-70] `CompletableFuture<?>` return-type support + optional virtual-thread per-request dispatch. See `todo/TODO-70-async-completablefuture-virtual-threads.md`.
 
 - [TODO-71] Move doc site updates from a github hook to a script that gets executed locally.  Change docusaurus search functionality to @easyops-cn/docusaurus-search-local. 
-
-- [TODO-76] Convention-endpoints mixin pack — `BasicFaviconResource`, `BasicSeoResource` (`/robots.txt`, `/sitemap.xml`), `BasicVersionResource` (`/version`, `/info`, `/about`), `BasicWellKnownResource` (`/.well-known/*`). See `todo/TODO-76-mixin-convention-endpoints.md`.
 
 - [TODO-77] Ops/introspection mixin pack — `BasicEchoResource` (Debug-gated), `BasicAdminResource` (guard-chain-gated, depends on TODO-69), `BasicRouteIndexResource`. See `todo/TODO-77-mixin-ops-introspection.md`.
 

@@ -1472,9 +1472,19 @@ public class RestContext extends Context {
 	 * any {@code setContext(RestContext)} method on the mixin instance (mirroring the existing
 	 * {@code RestChildren.buildChildContext(...)} contract).  The host's {@link ServletConfig} is propagated
 	 * so the mixin sees the same servlet container settings.
+	 *
+	 * <p>
+	 * Mixin instance resolution: an importer-supplied {@code @Bean <MixinClass>} factory in the host's
+	 * bean store wins over reflective instantiation. When the host registers
+	 * {@code @Bean public MyMixin myMixin() { ... }} (or a Spring {@code @Bean} of the same type), that
+	 * pre-built instance is used as the mixin resource; otherwise the mixin is instantiated via
+	 * {@code beanStore.instantiate(mixinClass)} (no-arg / builder / injected-constructor path). This lets
+	 * convention-endpoint mixins (favicon, SEO, version, well-known) be configured by the importer using
+	 * their own builder before the mixin walk wires them in.
 	 */
 	private RestContext buildMixinContext(Class<?> mixinClass) throws Exception {
-		var mixinResource = beanStore.instantiate(mixinClass);
+		Object preBuilt = beanStore.getBean(mixinClass).orElse(null);
+		final var mixinResource = preBuilt != null ? preBuilt : beanStore.instantiate(mixinClass);
 		var args = new Args(mixinClass, this, builder.inner, () -> mixinResource, "", null, null, null, true);
 		var mixinCtx = new RestContext(args);
 		var setCtx = ClassInfo.of(mixinResource).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
