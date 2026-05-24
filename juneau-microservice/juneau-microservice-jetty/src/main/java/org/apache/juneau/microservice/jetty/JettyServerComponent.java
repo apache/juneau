@@ -30,9 +30,11 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.*;
 
+import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 import org.eclipse.jetty.ee11.servlet.*;
@@ -126,12 +128,29 @@ public class JettyServerComponent implements MicroserviceListener {
 		return p;
 	}
 
-	private static String[] restPathsFor(Class<?> cls) {
+	/**
+	 * Resolves the top-level Jetty mount path-specs for an auto-discovered {@code @Rest}-annotated servlet.
+	 *
+	 * <p>
+	 * Delegates to {@link RestContext#resolveTopLevelPaths(Class, Object, BeanStore)} so the runtime-override
+	 * resolution chain (programmatic &gt; {@code getPaths()} getter &gt; annotation default) is honored at
+	 * mount time. The programmatic Builder rung is N/A for Jetty auto-discovery (the {@code RestContext} does
+	 * not exist yet at this point in the lifecycle); users can substitute by overriding {@code getPaths()} on
+	 * the resource class, or by leaning on SVL inside {@code @Rest(paths=...)} elements (e.g.
+	 * {@code paths={"$C{health.paths}"}}) so each element is resolved through {@code Config} /
+	 * {@code $E{...}} / {@code $S{...}} before being comma-split.
+	 *
+	 * @return The normalized exact-match path-specs (for multi-mount), or the singular {@code @Rest(path)}-style
+	 * 	{@code "/...&#47;*"} pathspec when no {@code paths} are resolved.
+	 */
+	private static String[] restPathsFor(Servlet servlet, BeanStore store) {
+		var cls = servlet.getClass();
 		var r = cls.getAnnotation(Rest.class);
 		if (r == null)
 			return new String[] {"/*"};
-		if (r.paths().length > 0)
-			return Arrays.stream(r.paths()).map(JettyServerComponent::normalizeExactPathSpec).toArray(String[]::new);
+		var resolved = RestContext.resolveTopLevelPaths(cls, servlet, store);
+		if (resolved.length > 0)
+			return Arrays.stream(resolved).map(JettyServerComponent::normalizeExactPathSpec).toArray(String[]::new);
 		return new String[] {normalizePathSpec(r.path())};
 	}
 
@@ -239,7 +258,7 @@ public class JettyServerComponent implements MicroserviceListener {
 				var cls = servlet.getClass();
 				if (cls.getAnnotation(Rest.class) == null)
 					continue;
-				var pathSpecs = restPathsFor(cls);
+				var pathSpecs = restPathsFor(servlet, store);
 				var source = "@Bean " + cls.getName() + (ne(e.getKey()) ? "[" + e.getKey() + "]" : "");
 				for (var pathSpec : pathSpecs)
 					checkPathCollision(pathSpec, source, mountedPaths);

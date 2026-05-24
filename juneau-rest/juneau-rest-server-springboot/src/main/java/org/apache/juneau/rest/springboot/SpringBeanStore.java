@@ -180,6 +180,21 @@ public class SpringBeanStore extends BasicBeanStore {
 		if (supplier.isPresent())
 			return supplier;
 
+		// Unnamed lookup: also consult Spring by type so beans like Environment are reachable when this
+		// SpringBeanStore is installed in the BasicBeanStore.overridingParent slot (which always passes
+		// name=null through the resolution chain).  Mirrors the unnamed getBeanSupplier(Class) branch
+		// without delegating to it (avoids polymorphic dispatch back into BasicBeanStore.getBeanSupplier
+		// which would loop).
+		if (name == null && nn(appContext)) {
+			var providerOpt = safeOpt(() -> appContext.getBeanProvider(beanType));
+			if (providerOpt.isPresent()) {
+				var provider = providerOpt.get();
+				if (provider.getIfAvailable() != null)
+					return opt(provider::getIfAvailable);
+			}
+			return opte();
+		}
+
 		// Return a supplier that delegates to Spring context
 		if (nn(appContext) && nn(name) && safeOpt(() -> appContext.containsBean(name) && appContext.isTypeMatch(name, beanType)).orElse(false)) {
 			return opt(() -> safeOpt(() -> appContext.getBean(name, beanType)).orElse(null));

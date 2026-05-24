@@ -1924,7 +1924,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				restBeanCtx = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
 					bs.addBean(Enablement.class, CONDITIONAL);
 					bs.addBeanType(CallLogger.class, BasicTestCallLogger.class);
-				}, overlay)).postInit().postInitChildFirst();
+				}, overlay, null)).postInit().postInitChildFirst();
 				if (overlay == null)
 					restContexts.put(c, restBeanCtx);
 			}

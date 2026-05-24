@@ -176,10 +176,30 @@ Built-ins:
   sub-module so the core has no SLF4J dep.**
 - **`CapturingFormat`** — used by tests; records the rendered output to an
   `AtomicReference<String>` rather than emitting it. Replaces the bespoke
-  `BasicTestCaptureCallLogger`.
+  `BasicTestCaptureCallLogger`. **Implementation should sit on top of
+  `org.apache.juneau.commons.logging.LogRecordCapture`** (already in
+  `juneau-commons`) — it implements `LogRecordListener` + `Closeable`, gives
+  per-test `try-with-resources` capture, and supports format-string-based
+  assertions via `LogRecord.formatted(...)`. Reusing it keeps Juneau's debug
+  capture surface consistent with the existing logging package's idiom and
+  avoids reinventing the listener / formatted-message plumbing.
 
 User-supplied formats resolve via the BeanStore by class, same as today's
 `DebugEnablement`.
+
+**Reuse opportunity — `org.apache.juneau.commons.logging.LogRecordCapture`.**
+The framework already ships a `LogRecordCapture` class in `juneau-commons` that
+implements `LogRecordListener` + `Closeable` and accumulates `LogRecord` events
+from a `Logger.captureEvents()` try-with-resources block. It supports formatted
+record retrieval (`getRecords("{level}: {msg}")`), `clear()` / `size()` /
+`isEmpty()`, and removes itself from the logger on close. **`CapturingFormat`
+should be a thin adapter over this** rather than a parallel
+`AtomicReference<String>` mechanism — the test author writes
+`try (var cap = Logger.getLogger(...).captureEvents()) { ... cap.getRecords(); }`
+and the production-side `DebugFormat` simply emits through `Logger` like every
+other format. Result: `BasicTestCaptureCallLogger` deletion costs zero new
+machinery, and tests inspecting captured debug output get the same API as tests
+inspecting any other log channel. See open question #9 below.
 
 ### 3. `@Debug` annotation replaces five existing attributes
 
@@ -337,6 +357,39 @@ self-contained.
    structured form (`@Debug.On({ @Debug.Rule(targets=…, value=…), …})`)?
    Recommendation: keep the string form for SVL-resolved system-property use cases;
    add `@Debug.Rule` for the in-source form.
+9. **Integrate `org.apache.juneau.commons.logging` package**. The existing
+   `juneau-commons` logging package (`Logger`, `LogRecord`, `LogRecordListener`,
+   `LogRecordCapture`) is the right substrate for the new debug surface to sit on:
+   - **`CapturingFormat`** is a thin wrapper around `LogRecordCapture` (see
+     section 4 above) — `try-with-resources` capture, format-string assertions,
+     `LogRecordListener` plumbing, all already exist.
+   - **`DebugConfig.logger` field** should accept either a `java.util.logging.Logger`
+     (back-compat with today's `CallLogger.Builder.logger(...)`) **or** a
+     `org.apache.juneau.commons.logging.Logger` (the extended subclass). The latter
+     unlocks `Logger.captureEvents()` and the cleaner formatted-message API for
+     framework-internal callers.
+   - **Format-string conventions** in the `commons.logging` package
+     (`{level}: {msg}`, `{thrown}`, etc.) should be the reference set for any
+     placeholder vocabulary `BasicTextFormat` / `OneLineFormat` / `JsonFormat`
+     end up exposing.
+   Recommendation: explicit dependency on `org.apache.juneau.commons.logging` from
+   `org.apache.juneau.rest.debug`; no parallel reinvention of listener / capture /
+   formatted-message machinery.
+9. **`CapturingFormat` vs `LogRecordCapture`**. Two paths:
+   1. Ship a dedicated `CapturingFormat` with its own `AtomicReference<String>`
+      mechanism (the original draft above).
+   2. **Recommended:** route every `DebugFormat` through `org.apache.juneau.commons.logging.Logger`
+      (already wraps `java.util.logging.Logger` and supports `addLogRecordListener` +
+      `captureEvents()`), and have tests use `LogRecordCapture` directly — no
+      bespoke capturing format needed. The capturing API the user already has
+      (`logger.captureEvents()` returning a `LogRecordCapture` `Closeable`) is the
+      idiomatic test surface. The new `DebugConfig.Builder.logger(Logger)` would
+      accept `org.apache.juneau.commons.logging.Logger` (the framework's
+      delegating logger) so this composes for free.
+   Cost of (2): we lose the "format-output-as-string" capture niche (e.g. capture
+   the exact JSON the prod system would have emitted, byte-for-byte). Mitigation:
+   `LogRecord` already carries the rendered message; tests that need the rendered
+   string use `cap.getRecords("{msg}")`. Decision needed before Phase 1.
 
 ## Out of scope
 

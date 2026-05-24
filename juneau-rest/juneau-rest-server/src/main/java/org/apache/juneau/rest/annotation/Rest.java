@@ -1099,6 +1099,11 @@ public @interface Rest {
 	 * 		The paths <js>"/myResource"</js> and <js>"/myResource/*"</js> are equivalent.
 	 * 	<li class='note'>
 	 * 		Paths must not end with <js>"/"</js> (per the servlet spec).
+	 * 	<li class='note'>
+	 * 		Effective only when this class is registered directly with the servlet container as a top-level
+	 * 		resource.  When this class is imported as a mixin via {@code @Rest(mixins=...)}, the importing
+	 * 		host's own {@code path()} or {@link #paths()} governs the mount and this annotation is silently
+	 * 		ignored &mdash; mixin endpoints land in the host's URL namespace.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
@@ -1121,12 +1126,48 @@ public @interface Rest {
 	 * This is primarily intended for built-in support endpoints such as health probes where multiple exact URLs
 	 * should be served by a single servlet instance.
 	 *
+	 * <h5 class='section'>Runtime substitution (since 9.5.0)</h5>
+	 * <p>
+	 * Each array element is treated as a template:
+	 * <ol>
+	 * 	<li>The element runs through
+	 * 		<a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL</a>
+	 * 		variable substitution (e.g. {@code $C{health.paths}}, {@code $E{HEALTH_PATHS,/healthz}},
+	 * 		{@code $S{my.system.prop,/healthz}}) using the bootstrap {@link org.apache.juneau.svl.VarResolver
+	 * 		VarResolver} on the bean store.
+	 * 	<li>The post-SVL value is split on {@code ,}; each piece is trimmed and empty pieces are dropped.
+	 * 		A single template element can therefore expand to zero, one, or many mount paths.
+	 * </ol>
+	 *
+	 * <h5 class='figure'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// 1. Single key resolving to a multi-value config string.</jc>
+	 * 	<ja>@Rest</ja>(paths={<js>"$C{health.paths}"</js>})
+	 *
+	 * 	<jc>// 2. Mix literal + resolved element.</jc>
+	 * 	<ja>@Rest</ja>(paths={<js>"/api"</js>, <js>"$C{extra.paths}"</js>})
+	 *
+	 * 	<jc>// 3. Env var with comma-separated defaults baked in.</jc>
+	 * 	<ja>@Rest</ja>(paths={<js>"$E{HEALTH_PATHS,/healthz,/readyz}"</js>})
+	 * </p>
+	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		Paths are normalized to servlet path-specs by the hosting runtime.
 	 * 	<li class='note'>
 	 * 		When both {@link #path()} and {@link #paths()} are present, runtimes may use {@link #paths()} for
 	 * 		top-level mounting and continue using {@link #path()} for child-resource composition.
+	 * 	<li class='note'>
+	 * 		The annotation default sits at the lowest rung of the runtime-override resolution chain &mdash; see
+	 * 		{@link RestContext#getPaths()} for the full precedence order (programmatic &gt; getter &gt; annotation).
+	 * 	<li class='note'>
+	 * 		An SVL failure (unresolved variable with no default) falls back to the literal element rather than
+	 * 		throwing during construction.
+	 * 	<li class='note'>
+	 * 		Effective only when this class is registered directly with the servlet container as a top-level
+	 * 		resource.  When this class is imported as a mixin via {@code @Rest(mixins=...)}, the importing
+	 * 		host's own {@link #path()} or {@code paths()} governs the mount and this annotation is silently
+	 * 		ignored &mdash; mixin endpoints land in the host's URL namespace.
 	 * </ul>
 	 *
 	 * @return The annotation value.

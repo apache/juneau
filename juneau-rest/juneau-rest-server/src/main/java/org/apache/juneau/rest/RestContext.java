@@ -207,6 +207,11 @@ public class RestContext extends Context {
 	 * 	slot of the freshly-constructed {@link BasicBeanStore}.  May be {@code null}.  Honored only when the
 	 * 	resource does <i>not</i> declare an {@code @Bean WritableBeanStore} factory method; user-supplied bean
 	 * 	stores are passed through unchanged.
+	 * @param paths An optional programmatic override for the top-level mount-paths array (the highest-priority
+	 * 	rung in the runtime-override chain documented on {@link RestContext#getPaths()}).  {@code null} (the
+	 * 	default) means &quot;no programmatic override&quot; &mdash; resolution falls through to the resource's
+	 * 	{@code getPaths()} getter, then {@link Rest#paths()} (SVL-resolved per element and comma-split).
+	 * 	An empty array explicitly clears the mount list (no top-level mounts).
 	 *
 	 * @since 9.5.0
 	 */
@@ -217,7 +222,8 @@ public class RestContext extends Context {
 		Supplier<?> resource,
 		String path,
 		Consumer<WritableBeanStore> beanStoreConfigurer,
-		BeanStore overridingParent
+		BeanStore overridingParent,
+		String[] paths
 	) {
 
 		/**
@@ -231,29 +237,6 @@ public class RestContext extends Context {
 			if (beanStoreConfigurer == null)
 				beanStoreConfigurer = bs -> {};
 		}
-
-		/**
-		 * Convenience constructor without the {@code overridingParent} component &mdash; preserves the
-		 * pre-9.5.0 6-arg call sites and defaults the overlay to {@code null}.
-		 *
-		 * @param resourceClass The {@link Rest @Rest}-annotated REST resource class. Must not be {@code null}.
-		 * @param parentContext The parent {@link RestContext}, or {@code null} if this is a top-level resource.
-		 * @param servletConfig The {@link ServletConfig} from the servlet container, or {@code null} when none is available.
-		 * @param resource The supplier that provides the resource instance during initialization. Must not be {@code null}.
-		 * @param path The path prefix relative to the parent. Defaults to {@code ""}.
-		 * @param beanStoreConfigurer A pre-build hook that runs against the resolved {@link WritableBeanStore}
-		 * 	after the resource has been wired in but before any {@code findXxx()} memoizer fires. Defaults to a no-op.
-		 */
-		public Args(
-				Class<?> resourceClass,
-				RestContext parentContext,
-				ServletConfig servletConfig,
-				Supplier<?> resource,
-				String path,
-				Consumer<WritableBeanStore> beanStoreConfigurer) {
-			this(resourceClass, parentContext, servletConfig, resource, path, beanStoreConfigurer, null);
-		}
-
 	}
 
 	/**
@@ -272,6 +255,23 @@ public class RestContext extends Context {
 		final Args args;
 
 		/**
+		 * Programmatic top-level mount-paths override.
+		 *
+		 * <p>
+		 * Highest-priority rung in the runtime-override chain documented on {@link RestContext#getPaths()}.
+		 * Set via {@link #paths(String...)}.
+		 *
+		 * <ul>
+		 * 	<li>{@code null} (default) &mdash; no programmatic override; falls through to the resource's
+		 * 		{@code getPaths()} getter, then the {@code @Rest(paths=...)} annotation default (SVL-resolved
+		 * 		per element and comma-split).
+		 * 	<li>Empty array &mdash; explicit clear; resource is resolved with no top-level mounts.
+		 * 	<li>Non-empty array &mdash; replaces all lower rungs.
+		 * </ul>
+		 */
+		String[] paths;
+
+		/**
 		 * Package-private constructor.
 		 *
 		 * <p>
@@ -287,6 +287,32 @@ public class RestContext extends Context {
 			this.inner = rci.servletConfig();
 			this.parentContext = rci.parentContext();
 			this.args = rci;
+			this.paths = rci.paths();
+		}
+
+		/**
+		 * Programmatic override for the top-level mount-paths array.
+		 *
+		 * <p>
+		 * This is the highest-priority rung in the runtime-override chain &mdash; see
+		 * {@link RestContext#getPaths()} for the full precedence order.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>
+		 * 		Passing {@code null} resets the override and lets the lower rungs ({@code getPaths()} getter,
+		 * 		{@code @Rest(paths)} annotation) resolve.
+		 * 	<li class='note'>
+		 * 		Passing {@code new String[0]} explicitly clears the mount list &mdash; the resource ends up with
+		 * 		no top-level mounts, which surfaces a clear &quot;no mounts&quot; error from the hosting runtime.
+		 * </ul>
+		 *
+		 * @param value The new mount paths, or {@code null} to inherit. Empty array clears.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder paths(String...value) {
+			paths = value;
+			return this;
 		}
 
 		@Override /* Context.Builder is abstract - copy() is not meaningful for the transient RestContext bootstrap state. */
@@ -342,6 +368,188 @@ public class RestContext extends Context {
 			.map(y -> y.accessible().inner());
 	}
 
+	/**
+	 * Resolves the top-level mount paths for a resource using the runtime-override chain.
+	 *
+	 * <p>
+	 * Walks the three rungs in precedence order (highest first):
+	 * <ol>
+	 * 	<li>Programmatic override on {@link Builder#paths} (set by {@link Builder#paths(String...)} or seeded from
+	 * 		{@link Args#paths()}).
+	 * 	<li>The resource's {@code getPaths()} getter (when non-{@code null}).
+	 * 	<li>{@link Rest#paths() @Rest(paths)} annotation default, walked top-down with the most-derived non-empty
+	 * 		array winning.  Each element is SVL-resolved against a session of {@code vr} backed by
+	 * 		{@code beanStore} (so {@code $C{key}} consults whatever {@link Config} is registered), then
+	 * 		comma-split.
+	 * </ol>
+	 *
+	 * @return The resolved paths array (never {@code null}; possibly empty).
+	 */
+	private static String[] resolveMountPaths(Builder builder, Object resource, VarResolver vr, WritableBeanStore beanStore, List<AnnotationInfo<Rest>> annotations) {
+		// Rung 1: programmatic override (Builder.paths / Args.paths).
+		var programmatic = builder.paths;
+		if (programmatic != null)
+			return programmatic.clone();
+		return resolvePathsCore(annotations, resource, vr, beanStore);
+	}
+
+	/**
+	 * Public mount-time path resolver for use by hosting runtimes that mount {@code @Rest}-annotated resources
+	 * before the {@link RestContext} has been constructed (e.g. {@code JettyServerComponent}'s auto-discovery
+	 * loop, or Spring Boot's {@code ServletRegistrationBean} wiring).
+	 *
+	 * <p>
+	 * Operates on the same chain as {@link RestContext#getPaths()} but skips the programmatic Builder rung
+	 * (which is only meaningful inside the {@link RestContext} constructor):
+	 * <ol>
+	 * 	<li>The resource's {@code getPaths()} virtual getter (defined on {@code RestServlet} /
+	 * 		{@code RestObject}). {@code null} return falls through; non-{@code null} (including empty array) wins.
+	 * 	<li>{@link Rest#paths() @Rest(paths)} annotation default on the most-derived class, SVL-resolved per
+	 * 		element and comma-split.  A {@code VarResolver} is looked up on {@code store} (when present); SVL
+	 * 		variables like {@code $C{key}} resolve against beans visible to the bean store.
+	 * </ol>
+	 *
+	 * @param resourceClass The {@code @Rest}-annotated resource class. Must not be {@code null}.
+	 * @param resource The resource instance. May be {@code null} (in which case the getter rung is skipped).
+	 * @param store The bean store used to look up the {@link VarResolver} for SVL substitution on annotation
+	 * 	elements, and to back the resolver session for bean-driven SVL vars like {@code $C{key}}. May be
+	 * 	{@code null} (SVL is then skipped; literals pass through unchanged).
+	 * @return The resolved paths array (never {@code null}; possibly empty).
+	 * @since 9.5.0
+	 */
+	public static String[] resolveTopLevelPaths(Class<?> resourceClass, Object resource, BeanStore store) {
+		var ap = AnnotationProvider.INSTANCE;
+		var ci = ClassInfo.of(resourceClass);
+		var annotations = rstream(ap.find(Rest.class, ci)).collect(Collectors.toList());
+		var vr = (store == null) ? null : store.getBean(VarResolver.class).orElse(null);
+		// Cast for the bean-store-backed resolver session only — when store is a plain BeanStore (not
+		// WritableBeanStore) we skip the session form and call vr.resolve(...) directly.
+		var ws = (store instanceof WritableBeanStore wbs) ? wbs : null;
+		return resolvePathsCore(annotations, resource, vr, ws);
+	}
+
+	private static String[] resolvePathsCore(List<AnnotationInfo<Rest>> annotations, Object resource, VarResolver vr, WritableBeanStore beanStore) {
+		// Rung 2: getPaths() virtual getter on the resource (RestServlet / RestObject / any matching class).
+		// The getter return is normalized to a flat List<String> of raw leaves (any String / String[] /
+		// Collection / Iterable / Stream / nested mix of those), then each leaf flows through the same
+		// SVL-resolve + comma-split pipeline used for @Rest(paths=...) annotation elements.
+		var raw = invokeGetPaths(resource);
+		if (raw != null) {
+			var leaves = normalizePaths(raw);
+			return expandPathsElements(leaves.toArray(new String[0]), vr, beanStore);
+		}
+
+		// Rung 3: @Rest(paths) annotation default — most-derived non-empty array wins, with each element
+		// SVL-resolved then comma-split (trim each piece, drop empties).  A single template element can
+		// therefore expand to zero, one, or many mount paths.  Annotation arrays from javac are never
+		// null, so the only filter needed is the empty-array case.
+		return annotations.stream()
+			.map(ai -> ai.inner().paths())
+			.filter(arr -> arr.length > 0)
+			.findFirst()
+			.map(arr -> expandPathsElements(arr, vr, beanStore))
+			.orElseGet(() -> new String[0]);
+	}
+
+	/**
+	 * Applies the per-element SVL + comma-split pipeline to a {@code @Rest(paths=...)} array.
+	 *
+	 * <p>
+	 * Each input element is SVL-resolved (via a session of the bootstrap {@link VarResolver} that's backed
+	 * by {@code beanStore} when one is available, so bean-driven vars like {@code $C{key}} can find the
+	 * registered {@link Config}), then split on {@code ,}; each piece is trimmed and empty pieces are
+	 * dropped.  This lets a single element like {@code "$C{health.paths}"} or
+	 * {@code "$E{HEALTH_PATHS,/healthz,/readyz}"} expand to multiple mount paths.
+	 */
+	private static String[] expandPathsElements(String[] elements, VarResolver vr, WritableBeanStore beanStore) {
+		// Open a single session for the whole array — reusing it across elements avoids re-walking the
+		// Var catalog and lets ConfigVar / FileVar / etc. all share one bean-lookup context.
+		var session = (vr == null) ? null : vr.createSession(beanStore);
+		var out = new ArrayList<String>(elements.length);
+		for (var e : elements) {
+			var resolved = applySvl(e, session);
+			splitPathsValue(resolved, out);
+		}
+		return out.toArray(new String[0]);
+	}
+
+	private static String applySvl(String value, VarResolverSession session) {
+		// Callers only pass annotation-array elements, which javac guarantees non-null.  An empty string
+		// has no SVL markers to resolve, so we short-circuit it (avoids a pointless session.resolve call).
+		if (session == null || value.isEmpty())
+			return value;
+		try {
+			return session.resolve(value);
+		} catch (@SuppressWarnings("unused") Exception e) {
+			return value; // SVL failure: prefer the literal over throwing during construction.
+		}
+	}
+
+	private static void splitPathsValue(String value, List<String> out) {
+		// Callers pass the return of applySvl, which never returns null (we control both branches above).
+		if (value.isBlank())
+			return;
+		var parts = value.split(",");
+		for (var p : parts) {
+			var t = p.trim();
+			if (! t.isEmpty())
+				out.add(t);
+		}
+	}
+
+	/**
+	 * Flattens any {@link Object} returned from {@code getPaths()} (String, {@code String[]},
+	 * {@link Collection}, {@link Iterable}, {@link Stream}, primitive array, or nested mixes of these)
+	 * into a flat {@link List} of raw leaf strings.
+	 *
+	 * <p>
+	 * Non-{@link String} leaves are coerced via {@link String#valueOf(Object)}.  The returned list
+	 * preserves traversal order; {@code null} leaves are dropped.  Comma-split + SVL resolution are
+	 * intentionally <i>not</i> applied here &mdash; they happen downstream in
+	 * {@link #expandPathsElements(String[], VarResolver, WritableBeanStore)} so SVL substitution sees the
+	 * raw element (preserving {@code $E{NAME,defaultWithCommas}}-style defaults) before the post-SVL
+	 * comma-split fires.
+	 */
+	private static List<String> normalizePaths(Object o) {
+		if (o == null)
+			return List.of();
+		var out = new ArrayList<String>();
+		CollectionUtils.<Object>accumulate(o).forEach(x -> {
+			if (x != null)
+				out.add(String.valueOf(x));
+		});
+		return out;
+	}
+
+	/**
+	 * Reflectively invokes a no-arg {@code getPaths()} method on the resource (defined on
+	 * {@link org.apache.juneau.rest.servlet.RestServlet RestServlet} and
+	 * {@link org.apache.juneau.rest.servlet.RestObject RestObject}). Reflection is used to avoid coupling this
+	 * static utility to either base class &mdash; if a custom {@code @Rest}-annotated POJO declares
+	 * {@code public Object getPaths()} (or any covariant return type such as {@code String[]},
+	 * {@code List<String>}, etc.), it participates uniformly.
+	 *
+	 * @return The raw getter return value, or {@code null} when no method exists, the method returns
+	 * 	{@code void}, the method returned {@code null}, or reflective invocation failed.
+	 */
+	private static Object invokeGetPaths(Object resource) {
+		if (resource == null)
+			return null;
+		Method m;
+		try {
+			m = resource.getClass().getMethod("getPaths");
+		} catch (@SuppressWarnings("unused") NoSuchMethodException e) {
+			return null;
+		}
+		if (m.getReturnType() == void.class)
+			return null;
+		try {
+			return m.invoke(resource);
+		} catch (@SuppressWarnings("unused") IllegalAccessException | java.lang.reflect.InvocationTargetException e) {
+			return null;
+		}
+	}
+
 	private static boolean isBeanMethod(MethodInfo mi) {
 		return isBeanMethod(mi, null);
 	}
@@ -364,6 +572,7 @@ public class RestContext extends Context {
 	protected final RestContext parentContext;
 	protected final String fullPath;
 	protected final String path;
+	protected final String[] paths;
 	protected final ThreadLocal<RestSession> localSession = new ThreadLocal<>();
 	protected final UrlPathMatcher pathMatcher;
 	private final Supplier<?> resource;
@@ -1474,6 +1683,17 @@ public class RestContext extends Context {
 				p += "/*";
 			pathMatcher = UrlPathMatcher.of(p);
 
+			// Top-level mount-paths resolution chain (programmatic > getter > annotation default).
+			// See javadoc on getPaths() for the full precedence order. Resolution happens once at construction;
+			// the resolved array is what hosting runtimes (Jetty auto-discovery, Spring Boot ServletRegistrationBean)
+			// should consume rather than reading the raw @Rest(paths) annotation directly.  Each @Rest(paths)
+			// element is SVL-resolved through a VarResolver session backed by the live bean store — so
+			// $C{key} consults whatever Config is currently registered (test overlay, @Bean factory, or the
+			// framework's runtime Config) and $E{NAME,default} / $S{prop,default} use the bootstrap variable
+			// catalog without needing any beans.  The session-with-beanstore form is what makes test-time
+			// Config injection visible to SVL without firing the full runtime VarResolver memoizer.
+			paths = resolveMountPaths(builder, resource.get(), getBootstrapVarResolver(), beanStore, getRestAnnotations());
+
 			// Build annotation work list, then trigger beanContextBuilder (which applies it).
 			var vrs = getBootstrapVarResolver().createSession();
 			annotationWork = AnnotationWorkList.of(vrs, rstream(AnnotationProvider.INSTANCE.find(rci2)).filter(CONTEXT_APPLY_FILTER));
@@ -2324,6 +2544,48 @@ public class RestContext extends Context {
 	 * @return The servlet path.
 	 */
 	public String getPath() { return path; }
+
+	/**
+	 * Returns the resolved top-level mount paths for this resource.
+	 *
+	 * <p>
+	 * Computed once during {@link RestContext} construction by walking the runtime-override resolution chain
+	 * (highest precedence first):
+	 * <ol>
+	 * 	<li><b>Programmatic</b> &mdash; {@link Builder#paths(String...)} setter (or {@link Args#paths()} record
+	 * 		field). Highest precedence; an empty array (not {@code null}) explicitly clears the mount list.
+	 * 	<li><b>Getter</b> &mdash; the resource's {@code getPaths()} virtual method (defined on
+	 * 		{@code RestServlet} and {@code RestObject}). {@code null} return inherits; non-{@code null} (including
+	 * 		empty array) wins over the annotation default.
+	 * 	<li><b>Annotation default</b> &mdash; {@link Rest#paths()}, walked top-down across the resource-class
+	 * 		hierarchy with the most-derived non-empty value winning. Each element is
+	 * 		<a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL</a>-resolved
+	 * 		against the bootstrap {@link org.apache.juneau.svl.VarResolver VarResolver}, then comma-split (trim
+	 * 		each piece, drop empties).  A single element like {@code "$C{health.paths}"} can therefore expand
+	 * 		to multiple mount paths.
+	 * </ol>
+	 *
+	 * <p>
+	 * The resolved array is what hosting runtimes &mdash; Jetty's auto-discovery flow in
+	 * {@code JettyServerComponent}, and Spring Boot's {@code ServletRegistrationBean} wiring &mdash; should
+	 * consume when mounting the resource at the top level.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Returns an empty array (not {@code null}) when none of the rungs resolve. Hosting runtimes interpret
+	 * 		an empty array as &quot;no top-level mounts&quot; and surface a clear error naming the resource.
+	 * 	<li class='note'>
+	 * 		The scalar {@link #getPath()} accessor remains orthogonal to this method.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#paths()}
+	 * </ul>
+	 *
+	 * @return The resolved mount paths (never {@code null}; possibly empty).
+	 * @since 9.5.0
+	 */
+	public String[] getPaths() { return paths; }
 
 	/**
 	 * Returns the path matcher for this context.

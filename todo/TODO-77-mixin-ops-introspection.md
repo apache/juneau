@@ -144,7 +144,7 @@ public class ApiResource extends RestServlet {
 - [ ] `/admin/threads`, `/admin/heap`, `/admin/cache/flush`, `/admin/ratelimit` each work as documented; `/admin/ratelimit` returns 404 when no `RateLimitGuard` is registered.
 - [ ] `BasicRouteIndexResource` enumerates importer + mixin `@RestOp` methods correctly; filter beans excluded.
 - [ ] Each mixin works as both grafted (`@Rest(mixins=...)`) and standalone-via-paths.
-- [ ] Path overrides via TODO-73 (`paths` setter / `pathsKey`) reroute each mixin's mount cleanly.
+- [ ] Path overrides via TODO-73 (programmatic `paths` setter / `getPaths()` override / SVL on `@Rest(paths=...)` elements) reroute each mixin's mount cleanly.
 - [ ] Mixin works identically when registered via Juneau `BeanStore` (microservice path) and via Spring `@Bean` (Spring Boot path); both paths covered by a test (per mixin).
 - [ ] Coverage ≥ 95% per mixin. Full `./scripts/test.py` green.
 

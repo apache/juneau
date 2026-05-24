@@ -130,6 +130,57 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
+	 * Returns the runtime-overridden top-level mount paths for this resource.
+	 *
+	 * <p>
+	 * Subclasses can override this method to substitute the {@link Rest#paths() @Rest(paths)} annotation
+	 * defaults at construction time. This is the &quot;getter&quot; rung in the runtime-override resolution
+	 * chain documented on {@link RestContext#getPaths()}:
+	 * <ol>
+	 * 	<li>Programmatic ({@code RestContext.Builder.paths(String...)}) &mdash; highest precedence.
+	 * 	<li>This {@code getPaths()} getter (when non-{@code null}).
+	 * 	<li>{@code @Rest(paths={...})} annotation default (SVL-resolved per element, comma-split) &mdash;
+	 * 		lowest precedence.
+	 * </ol>
+	 *
+	 * <h5 class='section'>Accepted return shapes:</h5><ul>
+	 * 	<li>{@code null} &mdash; no override; resolution falls through to the {@code @Rest(paths=...)}
+	 * 		annotation default.
+	 * 	<li>{@link String} &mdash; a single path or a comma-delimited list, e.g.
+	 * 		{@code "/healthz,/readyz"}.
+	 * 	<li>{@code String[]} &mdash; each element may itself be a comma-delimited list.
+	 * 	<li>{@link java.util.Collection Collection}, {@link java.util.List List},
+	 * 		{@link java.util.Set Set}, {@link Iterable}, or {@link java.util.stream.Stream Stream}
+	 * 		of any of the above (nested mixes are recursively flattened).
+	 * 	<li>Primitive arrays (boxed during flattening).
+	 * </ul>
+	 *
+	 * <p>
+	 * Non-{@link String} leaves are coerced via {@link String#valueOf(Object)}.  Each leaf string then runs
+	 * through the same per-element pipeline used for {@code @Rest(paths=...)} annotation elements: SVL is
+	 * applied via the bean-store-backed {@link org.apache.juneau.commons.svl.VarResolverSession VarResolverSession}
+	 * (so {@code $C{key}} consults the live {@link org.apache.juneau.config.Config Config}, {@code $E{NAME,default}}
+	 * and {@code $S{prop,default}} resolve through the bootstrap variable catalog), and the post-SVL value is
+	 * comma-split with each piece trimmed and empty pieces dropped.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Returning {@code null} (the default) means &quot;inherit annotation&quot; &mdash; the next rung resolves.
+	 * 	<li class='note'>
+	 * 		Returning {@code new String[0]}, an empty collection, an empty string, or a blank string means
+	 * 		&quot;explicitly clear&quot; &mdash; no top-level mounts.
+	 * 	<li class='note'>
+	 * 		The scalar accessor {@link #getPath()} remains orthogonal to this method &mdash; the singular
+	 * 		{@code @Rest(path=...)} attribute has its own resolution chain and is unaffected.
+	 * </ul>
+	 *
+	 * @return The runtime-overridden mount paths in any accepted shape, or {@code null} to inherit the
+	 * 	annotation default.
+	 * @since 9.5.0
+	 */
+	public Object getPaths() { return null; }
+
+	/**
 	 * Returns the current thread-local HTTP request.
 	 *
 	 * @return The current thread-local HTTP request, or <jk>null</jk> if it wasn't created.
@@ -149,7 +200,7 @@ public abstract class RestServlet extends HttpServlet {
 			if (nn(context.get()))
 				return;
 			super.init(servletConfig);
-			context.set(new RestContext(new RestContext.Args(this.getClass(), null, servletConfig, () -> this, "", null)));
+			context.set(new RestContext(new RestContext.Args(this.getClass(), null, servletConfig, () -> this, "", null, null, null)));
 			context.get().postInit();
 			context.get().postInitChildFirst();
 		} catch (ServletException e) {

@@ -389,7 +389,7 @@ public class RestChildren {
 			Object o = BeanInstantiator.of(resourceClass, beanStore).run();
 			so = () -> o;
 		}
-		var cc = new RestContext(new RestContext.Args(resourceClass, parent, servletConfig, so, pathOverride, null));
+		var cc = new RestContext(new RestContext.Args(resourceClass, parent, servletConfig, so, pathOverride, null, null, null));
 		var mi = ClassInfo.of(so.get())
 			.getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class))
 			.orElse(null);

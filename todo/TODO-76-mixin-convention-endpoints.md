@@ -146,7 +146,7 @@ public class FaviconResource extends BasicFaviconResource { }
 - [ ] `BasicVersionResource` serves `/version`, `/info`, `/about` with manifest-derived metadata; falls back to `(unknown)` when manifest is absent; reads `git.properties` when present.
 - [ ] `BasicWellKnownResource` serves `/.well-known/security.txt` per RFC 9116; reserves the path-variable seam for future entries.
 - [ ] Each mixin works as both grafted (`@Rest(mixins=...)`) and standalone-via-paths.
-- [ ] Path overrides via TODO-73 (`paths` setter / `pathsKey`) reroute each mixin's mount cleanly.
+- [ ] Path overrides via TODO-73 (programmatic `paths` setter / `getPaths()` override / SVL on `@Rest(paths=...)` elements) reroute each mixin's mount cleanly.
 - [ ] No regression in existing `juneau-examples-rest` / `juneau-examples-rest-springboot` apps.
 - [ ] Mixin works identically when registered via Juneau `BeanStore` (microservice path) and via Spring `@Bean` (Spring Boot path); both paths covered by a test (per mixin).
 - [ ] Coverage ≥ 95% per mixin. Full `./scripts/test.py` green.

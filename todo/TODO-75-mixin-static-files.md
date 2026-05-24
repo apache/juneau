@@ -55,7 +55,7 @@ public class CdnResource extends BasicStaticFilesResource { }
 - **Mixin instance resolution.** `BasicStaticFilesResource` is instantiated via the FINISHED-72 mixin walk; the importer's bean store resolves `BeanStore.getBean(BasicStaticFilesResource.class)` first, falling back to a no-arg constructor reflection. Both microservice (`BasicBeanStore`) and Spring Boot (`SpringBeanStore` → `ApplicationContext.getBean(...)`) paths use this lookup verbatim.
 - **Builder-time configuration sourcing.** The mixin reads two builder-time inputs:
     - **`StaticFiles` impl.** Looked up via `getContext().getStaticFiles()` (which delegates to `BeanStore.getBean(StaticFiles.class)`). Microservice users register it via `@Bean StaticFiles staticFiles() { return BasicStaticFiles.create(beanStore()).dir("static").build(); }` on the importer; Spring Boot users register `@Bean StaticFiles` in a `@Configuration` and the `SpringBeanStore` exposes it. The default `BasicStaticFiles` constructor (zero-arg) auto-wires sensible defaults — both DI paths get this for free if they don't register a bean.
-    - **Path overrides.** Sourced via TODO-73's resolution chain (`@Rest(pathsKey="static.paths")` reads from `Config` under microservice, additionally from `Environment` under Spring Boot).
+    - **Path overrides.** Sourced via TODO-73's resolution chain — SVL on the `@Rest(paths={...})` elements lets `@Rest(paths={"$C{static.paths}"})` read from `Config` (or `$E{STATIC_PATHS,/static/*}` from an env var) under both microservice and Spring Boot; the comma-split happens after SVL.
 - **Spring-Boot-specific gotchas.**
     - **Classpath resource resolution under `spring-boot:run` vs an executable jar.** `BasicStaticFiles.cp(getClass(), "htdocs", true)` walks the classloader at request time; under `spring-boot:run` (Maven plugin) and inside a Spring Boot fat jar, both work — but the `getClass()` here must be the *importer's* class, not `BasicStaticFilesResource`'s. The mixin must use `getContext().getResourceSupplier().getResourceClass()` (which the FINISHED-72 mixin walk already provides) so the classpath search starts at the user's resource, not in the framework jar. Document loudly.
     - **`META-INF/resources/`** is Spring Boot's preferred static-resource location for embedded Tomcat/Jetty; the mixin should not break this — `BasicStaticFiles` already searches `static/` and `htdocs/`, and we should make sure the example test confirms `META-INF/resources/`-served files still flow through Spring's own handler rather than getting shadowed by the mixin's catch-all path.
@@ -107,7 +107,7 @@ public class CdnResource extends BasicStaticFilesResource { }
 - [ ] Mixin form serves the same file at `/htdocs/foo.css` (multi-mount via the default `paths`).
 - [ ] GET on a missing path returns `404 Not Found` (not 500).
 - [ ] Importer's `@Bean StaticFiles` overrides the default `BasicStaticFiles` configuration.
-- [ ] Path override via TODO-73 (`@Rest(paths={"/assets/*"})` or `pathsKey`) reroutes the mount cleanly.
+- [ ] Path override via TODO-73 (`@Rest(paths={"/assets/*"})` or `@Rest(paths={"$C{static.paths}"})`) reroutes the mount cleanly.
 - [ ] No regression in `juneau-examples-rest` static-file behavior after the migration.
 - [ ] Mixin works identically when registered via Juneau `BeanStore` (microservice path) and via Spring `@Bean` (Spring Boot path); both paths covered by a test.
 - [ ] Coverage ≥ 95% on `BasicStaticFilesResource`. Full `./scripts/test.py` green.
