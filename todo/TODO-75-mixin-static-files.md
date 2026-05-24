@@ -29,7 +29,7 @@ public class CdnResource extends BasicStaticFilesResource { }
 ## Why now
 
 - Static-file URLs are by convention multi-prefix (`/static/`, `/htdocs/`, `/public/`, `/assets/`); FINISHED-72's multi-mount story is the right primitive to wrap them.
-- Today, static-file serving requires either inheriting from `BasicRestServlet` or hand-rolling a `@RestGet("/static/{file:.*}")` method that delegates to `StaticFiles`. Neither surfaces the multi-prefix pattern cleanly.
+- Today, static-file serving requires either inheriting from `BasicRestServlet` or hand-rolling a `@RestGet("/static/*")` method (with `@Path("/*") String path` capturing the remainder) that delegates to `StaticFiles`. Neither surfaces the multi-prefix pattern cleanly.
 - TODO-74 (api-docs mixin) ships Swagger-UI / Redoc static assets through the same `StaticFiles` infrastructure — landing this mixin cleanly establishes the boundary between "REST handlers" and "blob-serving" so the api-docs mixin can lean on it without duplication.
 
 ## Scope
@@ -37,12 +37,12 @@ public class CdnResource extends BasicStaticFilesResource { }
 **In scope (v1):**
 
 - New class `org.apache.juneau.rest.staticfile.BasicStaticFilesResource` (servlet-class form) with default `@Rest(paths={"/static/*","/htdocs/*"})`.
-- Single `@RestGet("/{file:.*}")` (greedy) handler that delegates to the active `StaticFiles` impl from the bean store, returning the `HttpResource` directly with `Cache-Control` headers honored.
+- Single `@RestGet("/*")` (greedy trailing-wildcard) handler with `@Path("/*") String path` capturing the multi-segment remainder, that delegates to the active `StaticFiles` impl from the bean store, returning the `HttpResource` directly with `Cache-Control` headers honored. **Note:** Juneau's path matcher does NOT support Spring/JAX-RS `{var:regex}` syntax (each `{var}` matches a single path segment only); multi-segment matching is only available via the trailing-`*` remainder pattern, matching `BasicRestServlet.getHtdoc(...)`'s existing idiom.
 - Builder-driven configuration via the existing `BasicStaticFiles` builder — the mixin reads `BeanStore.getBean(StaticFiles.class)` at request time so the importer's `@StaticFile` declarations + classpath defaults are picked up.
 - 404 behavior identical to today: missing files surface as `NotFound` thrown from the handler.
 - **HEAD support.** The handler accepts `HEAD /static/...` for existence probes (no body, headers identical to the `GET`). Achieved via the standard servlet `HEAD`-via-`GET` contract; verify in tests.
 - **Default classpath base — both `static/` and `htdocs/`.** Configurable via the importer's `@Bean StaticFiles` override; the no-arg `BasicStaticFiles` default searches both directories so the out-of-the-box mixin works without configuration.
-- **Excluded from published OpenAPI surface.** The greedy `/{file:.*}` handler is not API-meaningful. Mark with `@OpenApi(hidden=true)` (or whatever the equivalent Juneau-side hidden-from-spec annotation is in the post-FINISHED-63 codebase — confirm in Phase 0) so `BasicOpenApiResource` / `BasicSwaggerResource` don't surface a "GET /static/{file}" route in published specs.
+- **Excluded from published OpenAPI surface.** The greedy `/*` handler is not API-meaningful. Mark with `@OpenApi(hidden=true)` (or whatever the equivalent Juneau-side hidden-from-spec annotation is in the post-FINISHED-63 codebase — confirm in Phase 0) so `BasicOpenApiResource` / `BasicSwaggerResource` don't surface the static-file route in published specs.
 - Updated default examples / `juneau-examples-rest` to lean on the mixin in place of inherited static-file mounts.
 - Tests in `juneau-utest`: GET hit, GET miss → 404, HEAD existence probe (200 + headers, no body), `Cache-Control` headers, importer's `@StaticFile` overrides default, multi-mount works, OpenAPI spec does NOT include the static-file route.
 
@@ -72,14 +72,14 @@ public class CdnResource extends BasicStaticFilesResource { }
 1. `BasicStaticFiles` constructor + builder — confirm the no-arg constructor's classpath defaults (`static/`, `htdocs/`) and the `ResourceSupplier`-based classpath resolution. Inspect `juneau-rest/juneau-rest-server/src/main/java/org/apache/juneau/rest/staticfile/BasicStaticFiles.java`.
 2. `RestContext.getStaticFiles()` — confirm the bean-store lookup chain returns the importer's registered `StaticFiles` (or the default) under both microservice and Spring Boot paths.
 3. `StaticFiles.resolve(String, Locale)` returning `Optional<HttpResource>` — confirm the existing 404 semantics translate to `throw new NotFound()` cleanly from the mixin's `@RestGet` handler.
-4. Greedy path-variable `{file:.*}` — confirm Juneau's path matcher supports the regex syntax for paths like `/static/css/styles.css`.
+4. **Path-matcher syntax constraint.** Juneau's `UrlPathMatcher` (`juneau-rest-server/src/main/java/org/apache/juneau/rest/util/UrlPathMatcher.java`) uses `\{([^\}]+)\}` to extract variable names — there is NO colon-delimited regex form (no Spring/JAX-RS `{var:regex}`). Each `{var}` matches exactly one path segment; multi-segment matching is only available via the trailing-`*` remainder (the `hasRemainder` flag). The mixin must use `@RestGet(path="/*")` + `@Path("/*") String path` per `BasicRestServlet.getHtdoc(...)`'s existing pattern — not `@RestGet(path="/{file:.*}")`. Confirm this idiom routes correctly for paths like `/static/css/styles.css` (sanity check on existing tests; expected to work since `BasicRestServlet` already serves multi-segment static paths this way).
 
 ### Phase 1 — `BasicStaticFilesResource` mixin
 
 1. New class `org.apache.juneau.rest.staticfile.BasicStaticFilesResource` with default `@Rest(paths={"/static/*","/htdocs/*"})`.
-2. Single `@RestGet(path="/{file:.*}")` handler that:
+2. Single `@RestGet(path="/*")` handler signature `HttpResource get(@Path("/*") String path, Locale locale)` that:
     - Reads `getContext().getStaticFiles()`.
-    - Calls `staticFiles.resolve(file, request.getLocale()).orElseThrow(NotFound::new)`.
+    - Calls `staticFiles.resolve(path, locale).orElseThrow(NotFound::new)`.
     - Returns the `HttpResource` directly so `Cache-Control` and `Content-Type` headers from `BasicStaticFiles` flow through.
     - Marked with `@OpenApi(hidden=true)` (or the equivalent confirmed in Phase 0) so the route is excluded from published OpenAPI specs.
 3. Tests:
@@ -118,7 +118,7 @@ public class CdnResource extends BasicStaticFilesResource { }
 - [ ] Path override via TODO-73 (`@Rest(paths={"/assets/*"})` or `@Rest(paths={"$C{static.paths}"})`) reroutes the mount cleanly.
 - [ ] `Cache-Control: max-age=86400, public` (the `BasicStaticFiles` default) is preserved end-to-end; importer can override via `BasicStaticFiles.create().headers(...)`.
 - [ ] 404 body format flows through the existing exception-rendering chain (RFC 7807 problem-details when FINISHED-61 opt-in is active; plain text otherwise) — no special-case handling in the mixin.
-- [ ] Published OpenAPI spec from `BasicOpenApiResource` / `BasicSwaggerResource` does NOT include the `/static/{file:.*}` route when `BasicStaticFilesResource` is mounted alongside them.
+- [ ] Published OpenAPI spec from `BasicOpenApiResource` / `BasicSwaggerResource` does NOT include the `/static/*` route when `BasicStaticFilesResource` is mounted alongside them.
 - [ ] No regression in `juneau-examples-rest` static-file behavior after the migration.
 - [ ] Mixin works identically when registered via Juneau `BeanStore` (microservice path) and via Spring `@Bean` (Spring Boot path); both paths covered by a test.
 - [ ] Coverage ≥ 95% on `BasicStaticFilesResource`. Full `./scripts/test.py` green.
@@ -127,17 +127,17 @@ public class CdnResource extends BasicStaticFilesResource { }
 
 All previously open questions resolved 2026-05-24.
 
-1. **Wildcard pattern semantics — two-layer convention.** `paths` member uses servlet-mapping patterns (`/static/*`, `/htdocs/*`) since these are Jetty multi-pattern mounts; inner `@RestGet` uses Juneau's path-variable syntax (`/{file:.*}`). Two layers, two conventions — keep them distinct.
+1. **Wildcard pattern semantics — two-layer convention, same syntax.** `paths` member uses servlet-mapping patterns (`/static/*`, `/htdocs/*`) for the Jetty multi-pattern mount; inner `@RestGet` uses Juneau's trailing-`/*` remainder pattern (`@RestGet(path="/*")` paired with `@Path("/*") String remainder`). The two layers are conceptually different (mount vs. matcher) but the surface syntax happens to coincide on `/*`. Juneau does NOT support Spring/JAX-RS `{var:regex}` syntax for multi-segment matching — see Phase 0 step 4.
 2. **Default classpath base — configurable, default to both `static/` and `htdocs/`.** Matches `BasicStaticFiles`'s existing zero-arg constructor; importers override via `@Bean StaticFiles`.
 3. **404 body format — defer to existing exception-rendering chain.** `NotFound` flows through the standard renderer; RFC 7807 problem-details (FINISHED-61) kicks in when the importer opts in. No special-case handling in the mixin.
 4. **Cache-Control default — keep `max-age=86400, public`.** `BasicStaticFiles`'s built-in default. Apps with stricter caching override via `BasicStaticFiles.create().headers(...)`.
 5. **HEAD request handling — yes, accept HEAD via the standard servlet `HEAD`-via-`GET` contract.** `HEAD /static/foo.css` returns identical headers to the `GET` with no body; `HEAD` on a missing path returns 404. Test coverage added (`BasicStaticFilesResource_HeadProbe_Test`).
-6. **OpenAPI-emission opt-out — yes, mark the handler with `@OpenApi(hidden=true)` (or the post-FINISHED-63 equivalent — confirm exact annotation in Phase 0).** A greedy `/{file:.*}` mount is not API-meaningful; published specs from `BasicOpenApiResource` / `BasicSwaggerResource` should not surface it. Test coverage added (`BasicStaticFilesResource_OpenApiHidden_Test`).
+6. **OpenAPI-emission opt-out — yes, mark the handler with `@OpenApi(hidden=true)` (or the post-FINISHED-63 equivalent — confirm exact annotation in Phase 0).** A greedy `/*` mount is not API-meaningful; published specs from `BasicOpenApiResource` / `BasicSwaggerResource` should not surface it. Test coverage added (`BasicStaticFilesResource_OpenApiHidden_Test`).
 
 ## Risks
 
 - **Path collision with TODO-74's api-docs mixin.** Swagger-UI and Redoc ship JS/CSS assets via `BasicStaticFiles`; if a user mixes both `BasicApiDocsResource` and `BasicStaticFilesResource` and the static-files mixin's catch-all `/static/*` shadows a Swagger asset URL, the docs render breaks. Mitigation: test the cross-product (`BasicApiDocsResource_StaticFilesCoexistence_Test`).
-- **Greedy `{file:.*}` matching unexpected requests.** A `paths={"/api/*"}` user who also mounts `BasicStaticFilesResource` via `paths={"/api/static/*"}` could see `/api/foo` resolve to `/static/foo` if mount precedence is misconfigured. Mitigation: explicit-match paths (FINISHED-72) prevent this; document loudly.
+- **Greedy `/*` matching unexpected requests.** A `paths={"/api/*"}` user who also mounts `BasicStaticFilesResource` via `paths={"/api/static/*"}` could see `/api/foo` resolve to `/static/foo` if mount precedence is misconfigured. Mitigation: explicit-match paths (FINISHED-72) prevent this; document loudly.
 - **Path-traversal attacks (`/static/../../etc/passwd`).** `BasicStaticFiles` already excludes via regex (`.class|.properties`) and the `FileFinder` chain uses `Paths.get(...).normalize()` semantics, but the mixin must not introduce a new attack surface. Mitigation: explicit `BasicStaticFilesResource_PathTraversal_Test` exercising `..` segments and URL-encoded variants.
 - **Spring Boot `META-INF/resources/` shadow.** A misconfigured user could see Spring Boot's auto-served resources shadowed (or shadow) the mixin's mount. Mitigation: documented + tested in Phase 3.
 - **Eclipse / Maven incremental-build classpath staleness.** `BasicStaticFiles.cp(getClass(), "htdocs", true)` reads at request time; if the user's `htdocs/` directory wasn't copied to `target/classes` due to "Build Automatically" interference, the mixin returns 404 confusingly. Mitigation: AGENTS.md "Build Automatically" caveat already documented; reference it in the mixin's javadoc.

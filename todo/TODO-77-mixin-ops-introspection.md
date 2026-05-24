@@ -50,7 +50,7 @@ public class ApiResource extends RestServlet {
 **In scope (v1):**
 
 - New package `org.apache.juneau.rest.ops` containing all three mixins.
-- **`BasicEchoResource`** — `@RestOp` (any method) at `/{path:.*}` with default `paths={"/echo","/debug/echo"}`. Returns JSON: `{ method, path, headers, queryParams, attributes, contentLength, content (optional, capped) }`. Gated behind `getContext().getDebugEnablement().isDebug(req)` — returns 404 when debug is off. Configurable `bodyLimit` (default 1MB).
+- **`BasicEchoResource`** — `@RestOp(method="*", path="/*")` (any HTTP method, trailing wildcard) with default `paths={"/echo/*","/debug/echo/*"}`. Handler signature includes `@Path("/*") String pathRemainder` so the echoed path captures any sub-segments. Returns JSON: `{ method, path, headers, queryParams, attributes, contentLength, content (optional, capped) }`. Gated behind `getContext().getDebugEnablement().isDebug(req)` — returns 404 when debug is off. Configurable `bodyLimit` (default 1MB). **Note:** Juneau's path matcher does NOT support Spring/JAX-RS `{var:regex}` syntax for multi-segment matching — use trailing `/*` per `BasicRestServlet.getHtdoc(...)`'s pattern.
 - **`BasicAdminResource`** — four sub-mixins under one builder:
     - `/admin/threads` — `Thread.getAllStackTraces()` formatted as JSON (filtered to exclude framework noise; configurable filter).
     - `/admin/heap` — `Runtime.getRuntime()` heap stats + `MemoryMXBean` non-heap stats. No heap-dump file generation in v1.
@@ -148,16 +148,18 @@ public class ApiResource extends RestServlet {
 - [ ] Mixin works identically when registered via Juneau `BeanStore` (microservice path) and via Spring `@Bean` (Spring Boot path); both paths covered by a test (per mixin).
 - [ ] Coverage ≥ 95% per mixin. Full `./scripts/test.py` green.
 
-## Open questions
+## Resolved decisions
 
-1. **`/admin/cache/flush` mutation method — POST vs DELETE?** **Recommend POST** with optional body for selective flush — `DELETE` body semantics are inconsistent across HTTP clients, and POST aligns with "this is a non-idempotent action" intent. Document.
-2. **Echo body limit default.** **Recommend 1MB cap, configurable via `bodyLimit(...)`** — large enough for realistic debug, small enough to avoid memory pressure under sustained probing.
-3. **Route-index excludes filter beans (`@RestStartCall` / `@RestEndCall`)?** **Recommend yes — only `@RestOp` methods** — filters are infrastructure, not part of the public route surface. Document.
-4. **Echo header redaction default list.** **Recommend `Authorization`, `Cookie`, `Set-Cookie`, `Proxy-Authorization`, `X-API-Key`** — covers the common token-bearing headers. Configurable.
-5. **Default-deny role-guard placeholder.** **Recommend `roleGuard="ROLE_ADMIN_NONE_DEFAULT"` (a deliberately-non-existent role)** — forces the user to override with a real guard or get 403s. Naming is verbose but unambiguous.
-6. **`/admin/threads` filter default.** **Recommend exclude `java.*`, `javax.*`, `jakarta.*`, `org.eclipse.jetty.*`, `org.springframework.*`** — application threads only by default. Configurable.
-7. **`/admin/ratelimit` returns multi-`RateLimitGuard` breakdown — JSON shape?** **Recommend `{ "guards": { "<bean-name>": { "buckets": [...], "config": {...} } } }`** — keyed by bean name from `getBeansOfType(...)`. Stable for tooling.
-8. **Should `BasicRouteIndexResource` overlap with `BasicGroupOperations.getChildren(...)` (the navigation page) or stay JSON-only?** **Recommend JSON-only** — the navigation page is HTML-doc-config-driven for humans; the route-index mixin is for tooling. Different consumers.
+All previously open questions resolved 2026-05-24.
+
+1. **`/admin/cache/flush` mutation method — POST.** Optional body for selective flush. `DELETE` body semantics are inconsistent across HTTP clients; POST aligns with "this is a non-idempotent action" intent. Documented on the handler javadoc.
+2. **Echo body limit default — 1MB cap, configurable via `bodyLimit(...)`.** Large enough for realistic debug, small enough to avoid memory pressure under sustained probing.
+3. **Route-index excludes filter beans — yes, only `@RestOp` methods surface.** `@RestStartCall` / `@RestEndCall` / filter beans are infrastructure, not part of the public route surface. Document on the topic page + the handler's javadoc.
+4. **Echo header redaction default list — `Authorization`, `Cookie`, `Set-Cookie`, `Proxy-Authorization`, `X-API-Key`.** Covers the common token-bearing headers. Configurable via builder.
+5. **Default-deny role-guard placeholder — `roleGuard="ROLE_ADMIN_NONE_DEFAULT"` (a deliberately-non-existent role).** Forces the user to override with a real guard or get 403s. Naming is verbose but unambiguous and self-documenting in stack traces. Pair with the startup-warning risk mitigation listed in the Risks section.
+6. **`/admin/threads` filter default — exclude `java.*`, `javax.*`, `jakarta.*`, `org.eclipse.jetty.*`, `org.springframework.*`.** Application threads only by default. Configurable via builder.
+7. **`/admin/ratelimit` multi-`RateLimitGuard` JSON shape — `{ "guards": { "<bean-name>": { "buckets": [...], "config": {...} } } }`.** Keyed by bean name from `getBeansOfType(...)`. Stable for tooling consumption.
+8. **`BasicRouteIndexResource` vs `BasicGroupOperations.getChildren(...)` — JSON-only, no overlap.** The navigation page is HTML-doc-config-driven for humans; the route-index mixin is for tooling consumers. Different audiences, different formats; ship them as complementary rather than convergent.
 
 ## Risks
 

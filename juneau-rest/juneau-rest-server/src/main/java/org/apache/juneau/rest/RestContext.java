@@ -1397,39 +1397,6 @@ public class RestContext extends Context {
 	});
 
 	/**
-	 * The resolved API documentation format for this resource.
-	 *
-	 * <p>
-	 * Resolution precedence (most-specific wins):
-	 * <ol>
-	 * 	<li>{@code @Rest(apiFormat=…)} — most-derived non-empty class-hierarchy value
-	 * 	<li>System property {@code juneau.rest.apiFormat}
-	 * 	<li>Default: {@code "swagger"}
-	 * </ol>
-	 */
-	private final Memoizer<String> apiFormat = memoizer(() -> {
-		var fromAnnotation = getRestAnnotationsForProperty(PROPERTY_apiFormat)
-			.map(ai -> ai.inner().apiFormat())
-			.filter(v -> v != null && ! v.isEmpty())
-			.reduce((first, second) -> second)
-			.orElse(null);
-		if (nn(fromAnnotation))
-			return normalizeApiFormat(fromAnnotation);
-		var fromSystem = System.getProperty(SYSPROP_apiFormat);
-		if (nn(fromSystem) && ! fromSystem.isEmpty())
-			return normalizeApiFormat(fromSystem);
-		return API_FORMAT_SWAGGER;
-	});
-
-	private static String normalizeApiFormat(String value) {
-		var v = value.trim().toLowerCase(Locale.ROOT);
-		return switch (v) {
-			case API_FORMAT_SWAGGER, API_FORMAT_OPENAPI, API_FORMAT_BOTH -> v;
-			default -> API_FORMAT_SWAGGER;
-		};
-	}
-
-	/**
 	 * The {@link ThrownStore} for this resource, used to track exception statistics.
 	 *
 	 * <p>
@@ -3097,20 +3064,6 @@ public class RestContext extends Context {
 	 * 	<br>May be <jk>null</jk>.
 	 */
 	public OpenApiProvider getOpenApiProvider() { return beanStore.getBean(OpenApiProvider.class).orElse(null); }
-
-	/**
-	 * Returns the resolved API documentation format for this resource.
-	 *
-	 * <p>
-	 * Resolution precedence: {@code @Rest(apiFormat=…)} → system property
-	 * {@code juneau.rest.apiFormat} → default {@code "swagger"}.
-	 *
-	 * <p>Recognized values are {@link RestServerConstants#API_FORMAT_SWAGGER},
-	 * {@link RestServerConstants#API_FORMAT_OPENAPI}, and {@link RestServerConstants#API_FORMAT_BOTH}.
-	 *
-	 * @return The resolved API format. Never {@code null}.
-	 */
-	public String getApiFormat() { return apiFormat.get(); }
 
 	/**
 	 * Returns the stack trace database associated with this context.

@@ -17,15 +17,9 @@
 package org.apache.juneau.rest.servlet;
 
 import static org.apache.juneau.http.HttpMethod.*;
-import static org.apache.juneau.rest.RestServerConstants.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.openapi3.OpenApi;
-import org.apache.juneau.bean.openapi3.ui.*;
-import org.apache.juneau.bean.swagger.Swagger;
-import org.apache.juneau.bean.swagger.ui.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.*;
@@ -33,19 +27,20 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.docs.*;
 import org.apache.juneau.rest.stats.*;
 
 /**
  * Basic REST operation methods.
  *
  * <p>
- * 	Defines 5 special use REST operation endpoints:
+ * 	Defines the residual cross-cutting endpoints that are still part of the {@code BasicRestServlet}
+ * 	chain after the API-docs surface ({@code /api}, {@code /openapi}, etc.) was lifted into the
+ * 	{@link BasicSwaggerResource} / {@link BasicSwaggerUiResource} / {@link BasicOpenApiResource} /
+ * 	{@link BasicRedocResource} mixin pack:
  * </p>
  *
  * <p class='bjava'>
- * 	<ja>@RestGet</ja>(path=<js>"/api/*"</js></js>)
- * 	<jk>public</jk> {@link Swagger} {@link #getSwagger(RestRequest) getSwagger}({@link RestRequest} <jv>req</jv>);
- *
  * 	<ja>@RestGet</ja>(path=<js>"/htdocs/*"</js>)
  * 	<jk>public</jk> {@link HttpResource} {@link #getHtdoc(String,Locale) getHtdoc}(<ja>@Path</ja> String <jv>path</jv>, Locale <jv>locale</jv>);
  *
@@ -87,9 +82,9 @@ import org.apache.juneau.rest.stats.*;
 	addDescriptionsTo="bean,collection,array,map,enum",
 	// Add example to the following types:
 	addExamplesTo="bean,collection,array,map",
-	// Don't generate schema information on the Swagger bean itself or HTML beans.
-	ignoreTypes="Swagger,org.apache.juneau.bean.html5.*",
-	// Use $ref references for bean definitions to reduce duplication in Swagger.
+	// Don't generate schema information on the Swagger / OpenApi beans themselves or HTML beans.
+	ignoreTypes="Swagger,OpenApi,org.apache.juneau.bean.html5.*",
+	// Use $ref references for bean definitions to reduce duplication in generated specs.
 	useBeanDefs="true"
 )
 public interface BasicRestOperations {
@@ -156,81 +151,4 @@ public interface BasicRestOperations {
 		aside="NONE"
 	)
 	RestContextStats getStats(RestRequest req);
-
-	/**
-	 * [GET /api] - Show resource options.
-	 *
-	 * @param req The HTTP request.
-	 * @return A bean containing the contents for the OPTIONS page.
-	 */
-	@RestGet(
-		path="/api/*",
-		summary="Swagger documentation",
-		description="Swagger documentation for this resource."
-	)
-	@HtmlDocConfig(
-		// Should override config annotations defined on class.
-		rank=10,
-		// Override the nav links for the swagger page.
-		navlinks={
-			"back: servlet:/",
-			"json: servlet:/?Accept=text/json&plainText=true"
-		},
-		// Never show aside contents of page inherited from class.
-		aside="NONE"
-	)
-	@MarshalledConfig(
-		// POJO swaps to apply to all serializers/parsers on this method.
-		swaps={
-			// Use the SwaggerUI swap when rendering Swagger beans.
-			// This is a per-media-type swap that only applies to text/html requests.
-			SwaggerUI.class
-		}
-	)
-	default Swagger getSwagger(RestRequest req) {
-		// apiFormat="openapi" — /api/* is not the canonical endpoint in this mode; clients use /openapi/*.
-		if (API_FORMAT_OPENAPI.equals(req.getContext().getApiFormat()))
-			throw new NotFound();
-		return req.getSwagger().orElseThrow(NotFound::new);
-	}
-
-	/**
-	 * [GET /openapi] - Show OpenAPI 3.1 documentation.
-	 *
-	 * <p>
-	 * Sibling of {@link #getSwagger(RestRequest)}; emits an OpenAPI 3.1 document for the resource. The
-	 * {@link RedocUI} swap renders an HTML view of the document for {@code text/html} requests.
-	 *
-	 * <p>
-	 * Active when {@link Rest#apiFormat()} is {@code "openapi"} or {@code "both"} (and via the
-	 * {@code juneau.rest.apiFormat} system property override). Returns 404 when {@code apiFormat} is
-	 * {@code "swagger"} (the default) so legacy resources keep their pre-9.5.0 surface unchanged.
-	 *
-	 * @param req The HTTP request.
-	 * @return A bean representing the OpenAPI document.
-	 */
-	@RestGet(
-		path="/openapi/*",
-		summary="OpenAPI 3.1 documentation",
-		description="OpenAPI 3.1 documentation for this resource."
-	)
-	@HtmlDocConfig(
-		rank=10,
-		navlinks={
-			"back: servlet:/",
-			"json: servlet:/openapi?Accept=text/json&plainText=true"
-		},
-		aside="NONE"
-	)
-	@MarshalledConfig(
-		swaps={
-			RedocUI.class
-		}
-	)
-	default OpenApi getOpenApi(RestRequest req) {
-		// apiFormat="swagger" (default) — /openapi/* not mounted in this mode.
-		if (API_FORMAT_SWAGGER.equals(req.getContext().getApiFormat()))
-			throw new NotFound();
-		return req.getOpenApi().orElseThrow(NotFound::new);
-	}
 }

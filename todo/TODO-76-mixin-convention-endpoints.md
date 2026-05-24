@@ -55,7 +55,7 @@ public class FaviconResource extends BasicFaviconResource { }
     - `/robots.txt` — builder-driven policy: `robotsAllow(String... agents, String... paths)` / `robotsDisallow(...)`. Default policy: `User-agent: *\nDisallow: /\n` (deny-all — explicit opt-in for indexing).
     - `/sitemap.xml` — builder-driven entries: `sitemapEntry(String url)` / `sitemapEntry(String url, ZonedDateTime lastmod, String changefreq, double priority)`. Empty default = `<urlset>` with no entries.
 - **`BasicVersionResource`** — single `@RestGet("/")` returning a JSON bean with `name`, `version`, `gitCommit`, `gitBranch`, `buildTime`, `javaVersion`. Reads from `META-INF/MANIFEST.MF` (`Implementation-*` keys) by default; optional `git.properties` ingestion from `pflannik/git-commit-id-maven-plugin` output. Builder accepts custom `Map<String,String>` for full programmatic control.
-- **`BasicWellKnownResource`** — single `@RestGet("/{path:.*}")` with default `paths={"/.well-known/security.txt"}`. Builder accepts `securityTxt(String)` (RFC 9116). Reserves the seam for future `oidcConfiguration(...)`, `assetlinks(...)`, etc. — but only `security.txt` ships in v1.
+- **`BasicWellKnownResource`** — handler shape depends on how the future extensibility seam (resolved decision #7) is wired. v1 ships with default `paths={"/.well-known/security.txt"}` (literal mount, no wildcard) and a single `@RestGet("/")` handler returning the configured `security.txt` body — no path variable needed. The future `register(String suffix, Supplier<Object> handler)` builder method (resolved decision #7) is expected to add additional literal `paths` entries (e.g. `/.well-known/openid-configuration`) plus a dispatch map; if/when that lands, the mount may shift to `paths={"/.well-known/*"}` with an inner `@RestGet("/*")` + `@Path("/*") String suffix` handler that dispatches by suffix. v1 keeps it simple: literal mount, single handler. **Note:** Juneau's path matcher does NOT support Spring/JAX-RS `{var:regex}` syntax for multi-segment matching — use trailing `/*` per `BasicRestServlet.getHtdoc(...)`'s pattern.
 - Each mixin works as both grafted (`@Rest(mixins=...)`) and standalone-via-paths.
 - Tests in `juneau-utest`: per-mixin happy-path, override path, content-type/headers, edge cases (missing manifest, missing favicon).
 
@@ -151,15 +151,17 @@ public class FaviconResource extends BasicFaviconResource { }
 - [ ] Mixin works identically when registered via Juneau `BeanStore` (microservice path) and via Spring `@Bean` (Spring Boot path); both paths covered by a test (per mixin).
 - [ ] Coverage ≥ 95% per mixin. Full `./scripts/test.py` green.
 
-## Open questions
+## Resolved decisions
 
-1. **Default favicon source — Juneau project image vs blank 1x1 transparent?** **Recommend Juneau project image** — locked-in via classpath resource so users replace by overriding `getFaviconBytes()` or registering an alternate `BasicFaviconResource` bean. Reduces "why is my favicon broken" surface area.
-2. **Sitemap auto-generation from `BasicGroupOperations` index — yes/no?** **Recommend defer to v2** — v1 ships static-config builder only. Auto-generation has subtle correctness traps (which paths to include, how to compute `lastmod`).
-3. **`security.txt` default — empty 404 vs explicit `Disallow:` placeholder?** RFC 9116 has no "default" — the file's presence is itself meaningful. **Recommend require explicit configuration**: if no `securityTxt(...)` was set, the mixin's path returns 404 (cleanest semantic — "we don't have one"). Document loudly.
-4. **`/version` body format.** JSON bean (recommended) vs plain-text key/value vs both via content negotiation. **Recommend JSON-only** — content negotiation can be added later; JSON is the de-facto deployment-introspection format. Sites that want plain-text override the handler.
-5. **Multi-module manifest aggregation.** A Spring Boot fat-jar contains many `MANIFEST.MF` files (one per dependency); which one wins? **Recommend the importer's app manifest** (root jar's `META-INF/MANIFEST.MF`), matching what Spring Boot's `BuildProperties` autoconfiguration does. Document.
-6. **`/info` and `/about` — synonyms or differentiated payloads?** **Recommend synonyms in v1** — same JSON payload at all three paths. Future iterations may differentiate (`/info` = condensed, `/about` = full); keep it simple now.
-7. **Inheriting future `.well-known/openid-configuration` from TODO-69.** The seam should be path-variable-routed so TODO-69 can register a handler without touching `BasicWellKnownResource` source. **Recommend the well-known mixin expose a `register(String suffix, Supplier<Object> handler)` builder method** — TODO-69 calls into it from its own bean wiring. Document the contract.
+All previously open questions resolved 2026-05-24.
+
+1. **Default favicon source — Juneau-branded project image.** Shipped as a small (~≤1 KB) classpath resource at `juneau-rest-server/src/main/resources/juneau-favicon.ico`. Users replace by overriding `getFaviconBytes()` or registering an alternate `BasicFaviconResource` bean. Reduces "why is my favicon broken" surface area; the binary asset is a stable design asset (not generated code) so the AGENTS.md "no binary code" rule does not apply.
+2. **Sitemap auto-generation — deferred to v2.** v1 ships the static-config builder only. Auto-generation from `BasicGroupOperations` index has subtle correctness traps (which paths to include, how to compute `lastmod`) and warrants its own design pass.
+3. **`security.txt` default — explicit configuration required; 404 when unset.** RFC 9116 has no "default"; the file's presence is itself meaningful. If no `securityTxt(...)` is set, the mixin's path returns `404 Not Found` ("we don't have one"). Document loudly in the topic page.
+4. **`/version` body format — JSON-only in v1.** JSON is the de-facto deployment-introspection format. Content negotiation can be added later if there's demand; sites that want plain-text override the handler.
+5. **Multi-module manifest aggregation — importer's app manifest wins.** Root jar's `META-INF/MANIFEST.MF` is the authoritative source, matching what Spring Boot's `BuildProperties` autoconfiguration does. Document the lookup contract in the `BasicVersionResource` javadoc.
+6. **`/info` and `/about` — synonyms in v1.** All three paths (`/version`, `/info`, `/about`) return the same JSON payload. Future iterations may differentiate (e.g. `/info` = condensed, `/about` = full), but v1 keeps it simple.
+7. **`BasicWellKnownResource` extensibility seam — `register(String suffix, Supplier<Object> handler)` builder method.** Future entries (TODO-69's `.well-known/openid-configuration`, etc.) call into it from their own bean wiring without touching `BasicWellKnownResource` source. Document the contract on the builder method and on TODO-69's plan as the wiring point.
 
 ## Risks
 

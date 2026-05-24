@@ -24,6 +24,7 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.docs.*;
 import org.apache.juneau.rest.stats.*;
 
 /**
@@ -37,7 +38,11 @@ import org.apache.juneau.rest.stats.*;
  * for details.
  *
  * <p>
- * Implements the basic REST endpoints defined in {@link BasicRestOperations}.
+ * Implements the basic REST endpoints defined in {@link BasicRestOperations}, plus the api-docs
+ * mixin pack ({@link BasicSwaggerUiResource} and {@link BasicRedocResource}, which transitively
+ * pull in {@link BasicSwaggerResource} and {@link BasicOpenApiResource}). Resulting endpoints:
+ * {@code /api}, {@code /swagger}, {@code /openapi}, {@code /openapi.json}, {@code /openapi.yaml},
+ * {@code /redoc}, {@code /htdocs/*}, {@code /favicon.ico}, {@code /stats}, {@code /error}.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
@@ -45,7 +50,7 @@ import org.apache.juneau.rest.stats.*;
  *
  * @serial exclude
  */
-@Rest
+@Rest(mixins={BasicSwaggerUiResource.class, BasicRedocResource.class})
 public abstract class BasicRestServlet extends RestServlet implements BasicRestOperations, BasicUniversalConfig {
 	private static final long serialVersionUID = 1L;
 

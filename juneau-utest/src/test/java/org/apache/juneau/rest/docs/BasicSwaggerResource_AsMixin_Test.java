@@ -14,31 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest;
-
-import static org.junit.jupiter.api.Assertions.*;
+package org.apache.juneau.rest.docs;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.docs.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Verifies the default {@code apiFormat="swagger"} mode behavior:
- * {@code /api/*} serves Swagger v2 (200) and {@code /openapi/*} returns 404.
+ * Validates {@link BasicSwaggerResource} mounted as a mixin via {@code @Rest(mixins=...)} on a
+ * vanilla {@link RestServlet}.
+ *
+ * <p>
+ * Acceptance:
+ * <ul>
+ * 	<li>{@code GET /api} (no Accept) returns the Swagger document — this mixin uses Juneau's
+ * 		standard content negotiation, so the serializer-default media type wins (HTML by default).
+ * 	<li>{@code Accept: application/json} returns the Swagger v2 spec as JSON.
+ * 	<li>{@code Accept: text/html} renders the Swagger-UI HTML view.
+ * 	<li>The host's own endpoints are unaffected.
+ * </ul>
  */
-class Rest_ApiFormat_Swagger_Test extends TestBase {
+class BasicSwaggerResource_AsMixin_Test extends TestBase {
 
-	@Rest
+	@Rest(mixins=BasicSwaggerResource.class)
 	public static class A extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestGet public String hello() { return "hello"; }
+		@RestGet(path="/items") public String items() { return "items"; }
 	}
 
 	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
-	@Test void a01_apiServesSwagger() throws Exception {
+	@Test void a01_apiServesSwaggerSpec_jsonAccept() throws Exception {
 		c.get("/api")
 			.accept("application/json")
 			.run()
@@ -46,15 +55,19 @@ class Rest_ApiFormat_Swagger_Test extends TestBase {
 			.assertContent().asString().isContains("\"swagger\":\"2.0\"");
 	}
 
-	@Test void a02_openapiReturns404() throws Exception {
-		c.get("/openapi?noTrace=true")
-			.accept("application/json")
+	@Test void a02_apiServesSwaggerUi_htmlAccept() throws Exception {
+		c.get("/api")
+			.accept("text/html")
 			.run()
-			.assertStatus(404);
+			.assertStatus(200)
+			.assertContent().asString().isContains("<html");
 	}
 
-	@Test void a03_apiFormatResolvesToSwagger() throws Exception {
-		var rc = new RestContext(new RestContext.Args(A.class, null, null, A::new, "", null, null, null, false));
-		assertEquals("swagger", rc.getApiFormat());
+	@Test void a03_hostEndpointStillReachable() throws Exception {
+		c.get("/items")
+			.accept("application/json")
+			.run()
+			.assertStatus(200)
+			.assertContent().asString().isContains("items");
 	}
 }

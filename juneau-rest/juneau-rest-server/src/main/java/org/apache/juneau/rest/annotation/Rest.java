@@ -1597,30 +1597,6 @@ public @interface Rest {
 	Class<? extends OpenApiProvider> openApiProvider() default OpenApiProvider.Void.class;
 
 	/**
-	 * API documentation format.
-	 *
-	 * <p>
-	 * Selects which spec format the canonical {@code /api/*} endpoint serves and whether the
-	 * {@code /openapi/*} sibling endpoint is mounted.
-	 *
-	 * <ul>
-	 * 	<li>{@code "swagger"} (default): {@code /api/*} emits Swagger v2 + Swagger UI for {@code text/html}.
-	 * 		{@code /openapi/*} returns 404.
-	 * 	<li>{@code "openapi"}: {@code /api/*} returns 404 (the canonical endpoint is now {@code /openapi/*}).
-	 * 		{@code /openapi/*} emits OpenAPI 3.1 + Redoc for {@code text/html}.
-	 * 	<li>{@code "both"}: {@code /api/*} keeps Swagger v2 + Swagger UI, AND {@code /openapi/*} is active
-	 * 		with OpenAPI 3.1 + Redoc. Both endpoints live alongside.
-	 * </ul>
-	 *
-	 * <p>
-	 * Empty string (default) defers to the system property {@code juneau.rest.apiFormat} and ultimately
-	 * falls back to {@code "swagger"}.
-	 *
-	 * @return The annotation value.
-	 */
-	String apiFormat() default "";
-
-	/**
 	 * Optional servlet title.
 	 *
 	 * <p>

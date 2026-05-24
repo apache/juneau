@@ -129,11 +129,7 @@ import org.apache.juneau.serializer.annotation.*;
 	debugEnablement=DebugEnablement.Void.class,  // Defaults to BasicDefaultEnablement.
 	staticFiles=StaticFiles.Void.class,  // Defaults to BasicStaticFiles.
 	swaggerProvider=SwaggerProvider.Void.class,  // Defaults to BasicSwaggerProvider.
-	openApiProvider=OpenApiProvider.Void.class,  // Defaults to BasicOpenApiProvider.
-
-	// API format selector for /api and /openapi endpoints. Empty string defers to system property
-	// juneau.rest.apiFormat and ultimately falls back to "swagger" for back-compat.
-	apiFormat=""
+	openApiProvider=OpenApiProvider.Void.class  // Defaults to BasicOpenApiProvider.
 )
 @BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.

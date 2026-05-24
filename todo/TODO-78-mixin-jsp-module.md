@@ -44,15 +44,20 @@ public class AppResource extends RestServlet {
 **In scope (v1):**
 
 - New Maven module `juneau-rest/juneau-rest-server-view-jsp/` with a `pom.xml` mirroring `juneau-rest-server-mcp` (closest sibling — small, single-purpose, opt-in module).
-- `org.apache.juneau.rest.view.jsp.BasicJspResource` mixin with default `@Rest(paths={"/jsp/*"})`. Single `@RestGet("/{path:.*}")` handler that:
+- `org.apache.juneau.rest.view.jsp.BasicJspResource` mixin with default `@Rest(paths={"/jsp/*"})`. Single `@RestGet("/*")` handler (with `@Path("/*") String path` capturing the multi-segment remainder) that:
     - Reads the configured base-path (default `/`).
     - Looks up `<basePath>/<path>` from the importer's classpath via `getContext().getResourceSupplier()`.
     - Forwards the request to the embedded JSP engine via `ServletContext.getRequestDispatcher(...).forward(...)`.
 - `org.apache.juneau.rest.view.jsp.JspView` value-class — a `View` bean carrying `(templateName, Map<String,Object> attributes)`. `@RestOp` methods can return `JspView` directly and the framework's `ResponseProcessor` chain dispatches to the renderer.
 - `org.apache.juneau.rest.view.jsp.JspViewRenderer` `ResponseProcessor` impl — handles `JspView` returns by setting request attributes and forwarding to the JSP engine.
-- POM dependencies (in `provided` scope so the consumer pulls the version they want):
-    - `org.glassfish.web:jakarta.servlet.jsp.jstl` — JSTL runtime.
-    - Jetty EE10 JSP engine (`org.eclipse.jetty.ee10:jetty-ee10-apache-jsp`) — to align with the rest of the Jetty stack used in `juneau-microservice-jetty`. **Confirm exact version pinning at land time.**
+- POM dependencies (all `provided` scope — engine-agnostic stance per resolved decision #2):
+    - `jakarta.servlet.jsp:jakarta.servlet.jsp-api` — JSP API spec (interface only; no engine).
+    - `org.glassfish.web:jakarta.servlet.jsp.jstl` — JSTL runtime (standards-compliant reference impl; container-agnostic).
+- **No default JSP engine ships with the bridge module.** The runtime code uses standard Servlet API (`ServletContext.getRequestDispatcher(...).forward(...)`) and is engine-agnostic; consumers add the engine matching their deployment container. Three documented choices:
+    - **Jetty 12 EE10** (e.g. `juneau-microservice-jetty`, Spring Boot embedded Jetty): `org.eclipse.jetty.ee10:jetty-ee10-apache-jsp`.
+    - **Embedded Tomcat** (Spring Boot default): `org.apache.tomcat.embed:tomcat-embed-jasper`.
+    - **External WAR deploy** (Tomcat / JBoss / WildFly / etc.): engine already on the container's classpath; no additional dep needed.
+    The module README and the `JspViewSupport.md` topic page document this "Choosing a JSP engine" matrix. The module's own test classpath supplies `tomcat-embed-jasper` in `test` scope so the bridge module can exercise its rendering path standalone; the `juneau-examples-rest-jetty-jsp` example module supplies `jetty-ee10-apache-jsp` to exercise the Jetty path.
 - New example module: `juneau-examples/juneau-examples-rest-jetty-jsp/` with a Hello-World JSP rendering at `/jsp/hello.jsp`.
 - Tests in the new module + `juneau-examples-rest-jetty-jsp` exercising both `JspView`-returning and raw-`.jsp`-serving paths.
 
@@ -83,20 +88,28 @@ public class AppResource extends RestServlet {
 
 ### Phase 0 — confirm seams (read-only)
 
-1. Confirm Jetty version in use across `juneau-microservice-jetty` and `juneau-examples-rest-jetty`. Inspect parent `pom.xml`s for the canonical Jetty `jetty.version` property.
-2. Confirm Spring Boot's embedded JSP story for the current supported Spring Boot version (3.x, Jakarta EE 10) — what's the recommended `META-INF/resources/` layout for `.jsp` files? Verify against current Spring docs.
+1. Confirm Jetty version in use across `juneau-microservice-jetty` and `juneau-examples-rest-jetty`. Inspect parent `pom.xml`s for the canonical Jetty `jetty.version` property. Used by the example module's POM (the bridge module itself does not pin an engine — Option B).
+2. Confirm Spring Boot's embedded JSP story for the current supported Spring Boot version (3.x, Jakarta EE 10) — what's the recommended `META-INF/resources/` layout for `.jsp` files? Verify against current Spring docs. Confirm `tomcat-embed-jasper` is the recommended engine for Spring Boot's embedded-Tomcat default.
 3. Confirm Juneau's `ResponseProcessor` chain accepts a `JspView`-typed return value via the standard precedence (matches by type before falling through to default serializers).
 4. Confirm `RestRequest.getServletContext().getRequestDispatcher(...).forward(...)` works from inside an `@RestOp` method when the surrounding container has a JSP engine registered.
+5. **JSP engine inventory.** Verify the three documented engine choices (Jetty 12 EE10, embedded Tomcat, external-WAR container-supplied) work end-to-end against the bridge code. Test matrix coverage:
+    - Jetty 12 EE10: `juneau-examples-rest-jetty-jsp` end-to-end test.
+    - Embedded Tomcat: bridge module's own `test`-scope `tomcat-embed-jasper` dep exercises `BasicJspResource_RawJsp_Test` / `JspView_Test`.
+    - External WAR: documentation-only (no CI gate; container's own integration test surface).
 
 ### Phase 1 — module skeleton + POM
 
 1. New module `juneau-rest/juneau-rest-server-view-jsp/` with `pom.xml` mirroring `juneau-rest-server-mcp`.
-2. POM dependencies in `provided` scope: `org.eclipse.jetty.ee10:jetty-ee10-apache-jsp`, `org.glassfish.web:jakarta.servlet.jsp.jstl`. Confirm versions align with the rest of the Jetty stack at land time.
+2. POM dependencies (engine-agnostic per resolved decision #2):
+    - `provided` scope: `jakarta.servlet.jsp:jakarta.servlet.jsp-api`, `org.glassfish.web:jakarta.servlet.jsp.jstl`.
+    - **No JSP engine dep in the bridge module's main POM.** Consumers pick the engine matching their container.
+    - `test` scope: `org.apache.tomcat.embed:tomcat-embed-jasper` (lets the bridge module exercise its rendering path standalone without depending on Jetty).
 3. Module skeleton compiles + ships an empty test to verify the build.
+4. New `BasicJspResource_NoEngine_Test` asserts the diagnostic message (Phase 3 / acceptance) when the test classpath is stripped of `tomcat-embed-jasper` (Surefire system-property toggle or a separate test-classifier — pick whichever is simpler in Phase 1).
 
 ### Phase 2 — `BasicJspResource` mixin
 
-1. New class with default `@Rest(paths={"/jsp/*"})` and `@RestGet("/{path:.*}")` handler.
+1. New class with default `@Rest(paths={"/jsp/*"})` and `@RestGet("/*")` handler (signature: `Object render(@Path("/*") String path, ...)` capturing the trailing remainder). **Note:** Juneau's path matcher does NOT support Spring/JAX-RS `{var:regex}` syntax for multi-segment matching — use trailing `/*` per `BasicRestServlet.getHtdoc(...)`'s pattern.
 2. Builder accepts `basePath(String)`.
 3. Forwarding logic: `req.getServletContext().getRequestDispatcher(basePath + path).forward(req.getHttpServletRequest(), res.getHttpServletResponse())`.
 4. Tests:
@@ -115,7 +128,7 @@ public class AppResource extends RestServlet {
 
 ### Phase 4 — example module
 
-1. New module `juneau-examples/juneau-examples-rest-jetty-jsp/` mirroring `juneau-examples-rest-jetty` structure.
+1. New module `juneau-examples/juneau-examples-rest-jetty-jsp/` mirroring `juneau-examples-rest-jetty` structure. **Adds `org.eclipse.jetty.ee10:jetty-ee10-apache-jsp` to its own `pom.xml`** (Jetty-flavored engine) — the bridge module is engine-agnostic under Option B, so the example explicitly picks Jetty's Jasper bundle for its embedded server.
 2. Hello-World JSP at `META-INF/resources/WEB-INF/views/hello.jsp` rendered by `@RestGet("/hello/{name}") public View hello(@Path String name)`.
 3. Tests:
     - `JuneauJspExample_Test` — end-to-end smoke test through the example.
@@ -139,28 +152,91 @@ public class AppResource extends RestServlet {
 ## Acceptance criteria
 
 - [ ] New module `juneau-rest-server-view-jsp` builds and tests pass standalone.
-- [ ] Example app `juneau-examples-rest-jetty-jsp` renders a JSP at `/jsp/hello.jsp` from a JAR classpath resource.
+- [ ] Bridge module's POM contains **no JSP-engine dependency** in `main` scope — only the JSP API (`jakarta.servlet.jsp:jakarta.servlet.jsp-api`) and JSTL impl (`org.glassfish.web:jakarta.servlet.jsp.jstl`), both `provided`. `tomcat-embed-jasper` is `test`-scope only.
+- [ ] Rendering works under both Jetty 12 EE10 (verified via the example module's end-to-end test) and embedded Tomcat (verified via the bridge module's own test classpath).
+- [ ] Example app `juneau-examples-rest-jetty-jsp` renders a JSP at `/jsp/hello.jsp` from a JAR classpath resource; the example's POM explicitly adds `jetty-ee10-apache-jsp`.
 - [ ] `JspView`-returning `@RestGet` method dispatches via `JspViewRenderer` correctly.
-- [ ] No JSP engine on classpath → clear diagnostic error message naming the missing dependency.
+- [ ] No JSP engine on classpath → clear diagnostic error message naming the missing dependency and linking to the "Choosing a JSP engine" matrix in the module README.
 - [ ] `META-INF/resources/WEB-INF/views/` layout works under both microservice (Jetty) and Spring Boot deployments.
+- [ ] "Choosing a JSP engine" matrix documented in the module README and the `JspViewSupport.md` topic page (Jetty / embedded Tomcat / external WAR).
 - [ ] Mixin works identically when registered via Juneau `BeanStore` (microservice path) and via Spring `@Bean` (Spring Boot path); both paths covered by a test.
 - [ ] Coverage ≥ 95% on the new module's main code. Full `./scripts/test.py` green.
 
-## Open questions
+## Test architecture
 
-1. **Module name — `juneau-rest-server-jsp` vs `juneau-rest-server-view-jsp` (anticipating `-view-thymeleaf`, `-view-mustache` in future)?** **Recommend `juneau-rest-server-view-jsp`** — forward-compatible naming for a future view-renderer module family. Cleaner convention than retrofitting later.
-2. **Jetty version pinning.** Does the JSP engine pin a Jetty 10/11/12 version that conflicts with `juneau-microservice-jetty`? **Recommend align with Jetty 12 EE10** (`org.eclipse.jetty.ee10:jetty-ee10-apache-jsp`) to match the rest of the stack. Confirm at land time by inspecting the parent POM.
-3. **Spring Boot support — best-effort or first-class?** **Recommend first-class** — ship `BasicJspResource_Springboot_Test` and the example app with a Spring Boot variant. The Spring Boot path has more risk surface than the microservice one but the user's note says they're fine with the module-level POM deps.
-4. **Auto-register `JspViewRenderer` on the mixin?** **Recommend yes** — `@Rest(responseProcessors={JspViewRenderer.class})` on `BasicJspResource` itself, so callers who add the mixin don't have to remember to also add the renderer. Reduces boilerplate without added magic.
-5. **Default base path.** `/` (recommended) vs `/WEB-INF/views/` vs `/META-INF/resources/WEB-INF/views/`. **Recommend `/`** — most flexible default; users who want `/WEB-INF/views/` set it explicitly. The example app demonstrates the convention.
-6. **Should `JspView` extend a generic `View` interface (anticipating future `ThymeleafView`, `MustacheView`)?** **Recommend yes** — minor design effort up front prevents a breaking change later. The `View` interface lives in core `juneau-rest-server` (so future view modules don't all have to depend on the JSP module just for the interface), with the `JspView` impl in the JSP module.
-7. **Multi-base-path support.** A user with `/views/` and `/admin/views/` JSPs — multiple `BasicJspResource` beans, each with its own `paths` override and `basePath`. **Recommend documented and tested**, no special builder support beyond the standard "register two beans" pattern.
+**Decision: tests live in `juneau-utest`, following the existing codebase convention.**
+
+Every production module under `juneau-rest/` (including `juneau-rest-server-springboot`, `juneau-rest-server-mcp`, `juneau-rest-server-rdf`, etc.) ships with an empty `src/test/`; ALL juneau-rest tests live in `juneau-utest`. The bridge module `juneau-rest-server-view-jsp` follows the same pattern. `juneau-utest/pom.xml` already pulls in `spring-boot-starter-web`, `juneau-microservice-jetty`, and `juneau-rest-server-springboot`, so adding the JSP bridge + JSP-engine deps to `juneau-utest`'s test-scope dependencies is a small incremental change rather than a structural shift.
+
+**Test class matrix (lives in `juneau-utest/src/test/java/org/apache/juneau/rest/view/jsp/`):**
+
+| Test class | Container | JSP engine | Verifies |
+|---|---|---|---|
+| `BasicJspResource_Tomcat_Test` | Real embedded Tomcat (started programmatically) | `tomcat-embed-jasper` (test-scope on `juneau-utest`) | Bridge works under the dominant Spring-Boot-default engine. Catches Tomcat-specific Jasper quirks. |
+| `BasicJspResource_Jetty_Test` | Real embedded Jetty (via `juneau-microservice-jetty` test harness) | `jetty-ee10-apache-jsp` (test-scope on `juneau-utest`) | Bridge works under the Juneau-microservice-default engine. Catches Jetty-EE10 packaging differences. |
+| `BasicJspResource_Springboot_Test` | `@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)` | Spring Boot embedded Tomcat (default) | Full Spring Boot context + `SpringBeanStore` adapter + auto-configured `RequestDispatcher` end-to-end. The most-realistic Spring-Boot-on-Juneau combination. |
+| `BasicJspResource_NoEngine_Test` | `MockRest` (no real container) | None — explicitly absent | Diagnostic message when no JSP engine is on the classpath names the missing dep AND links to the "Choosing a JSP engine" matrix. This is the error-path UX test. |
+| `BasicJspResource_MultiBasePath_Test` | Whichever is lightest (likely Tomcat) | `tomcat-embed-jasper` | The documented "register two beans" pattern from resolved decision #7 works under both DI paths. |
+
+**Why centralized rather than split into a dedicated `juneau-rest-tests-jsp` module:**
+
+1. **Convention.** Diverging for one module creates a "where do I find the JSP tests?" cognitive cost. Future view-module siblings (TODO-82/83/84) follow the same convention so the question never gets asked.
+2. **Fixture reuse.** A lot of test scaffolding (`MockRestClient` helpers, JUnit 5 base classes, `RestObject` setup) lives in `juneau-utest`. Splitting means extracting or duplicating it.
+3. **CI complexity.** A new Maven module adds parent-POM updates, BOM updates, and release-process touch-points (the same kind of overhead the "Risks" section already flags for the bridge module itself).
+4. **Multiple-container coexistence is fine.** Tomcat and Jetty embedded containers don't share package roots — they can coexist in one classloader during a test run. The only real cost is per-test-class startup time, which is bounded (5 test classes here, not 50).
+
+**Escape hatch.** If startup time / resource usage proves prohibitive in `juneau-utest` as the `view-*` family grows to 4+ modules with full container matrices each, split view-module real-container tests into a dedicated `juneau-rest-tests-views` test-only module. Not a v1 problem — defer until measurement actually shows it's hurting.
+
+**New deps `juneau-utest/pom.xml` picks up (all test scope):**
+
+```xml
+<dependency>
+    <groupId>org.apache.juneau</groupId>
+    <artifactId>juneau-rest-server-view-jsp</artifactId>
+    <version>${project.version}</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.apache.tomcat.embed</groupId>
+    <artifactId>tomcat-embed-jasper</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.eclipse.jetty.ee10</groupId>
+    <artifactId>jetty-ee10-apache-jsp</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+(Sibling view-module TODOs — TODO-82/83/84 — inherit this test architecture by default; each follows the same "module-local empty `src/test/`, tests in `juneau-utest`, real-container test classes per engine combo" template.)
+
+## Resolved decisions
+
+All previously open questions resolved 2026-05-24.
+
+1. **Module name — `juneau-rest-server-view-jsp`.** Forward-compatible naming for a `juneau-rest-server-view-*` module family (Thymeleaf, Mustache, FreeMarker tracked as separate TODOs — see "Follow-on TODOs" below). Cleaner convention than retrofitting later.
+2. **JSP engine bundling — engine-agnostic (Option B), but BOTH Spring Boot and Jetty must work end-to-end.** The bridge module ships only the JSP API + JSTL impl in `provided` scope; **no default JSP-engine dep**. Consumers pick the engine matching their container — Jetty 12 EE10 (`jetty-ee10-apache-jsp`), embedded Tomcat (`tomcat-embed-jasper`), or external-WAR container-supplied. **Both Spring Boot AND Jetty Microservice are first-class supported configurations** (per resolved decision #3) — Option B's "engine-agnostic POM" does NOT mean "engine-agnostic verification": Phase 5's test matrix MUST exercise both container/engine combos end-to-end (real embedded container, real JSP rendering), even if each requires container-specific configuration documented in the "Choosing a JSP engine" matrix. Rationale: the bridge runtime uses only standard Servlet API, so engine choice is a container-deployment concern, not a framework concern; baking in a Jetty default would put confusing dead-weight in the POM for the substantial fraction of users on Tomcat-flavored deployments (Spring Boot defaults to embedded Tomcat). The example module `juneau-examples-rest-jetty-jsp` explicitly adds `jetty-ee10-apache-jsp` to demonstrate the Jetty path; the bridge module's own test classpath (via `juneau-utest` — see "Test architecture" below) uses `tomcat-embed-jasper` to demonstrate the Tomcat path. A "Choosing a JSP engine" matrix documents the three options in the module README and the topic page. Note: the underlying JSP engine in all cases is Apache Jasper (the Tomcat project's); Jetty's artifact is just a repackaged Jasper bundle aligned with a specific Jakarta EE generation. EE10 is the current alignment; future EE11+ upgrade is a coordinated change across `juneau-microservice-jetty`, this module's test classpath, and the example module.
+3. **Spring Boot support — first-class.** Ship `BasicJspResource_Springboot_Test` and the example app with a Spring Boot variant; Phase 5 carries the smoke-test matrix. The Spring Boot path has more risk surface than the microservice one (per the "Spring Boot risk callout" below), but first-class is the right level of investment given how common Spring Boot + Juneau combinations are in practice; the engine-agnostic Option B stance also de-risks the Spring Boot path by letting users pair the bridge with whichever embedded container engine they already have (typically `tomcat-embed-jasper`).
+4. **Auto-register `JspViewRenderer` on the mixin — yes.** `@Rest(responseProcessors={JspViewRenderer.class})` is declared on `BasicJspResource` itself so callers who add the mixin don't have to remember to also add the renderer. Reduces boilerplate without added magic; the renderer's behavior is opt-in by virtue of the user explicitly returning a `JspView` from their handler.
+5. **Default base path — `/`.** Most flexible default; users who want `/WEB-INF/views/` (or any other prefix) set it explicitly via `BasicJspResource.create().basePath(...)`. The example app demonstrates the `/WEB-INF/views/` convention to keep the canonical Spring-Boot-compatible layout visible.
+6. **`JspView` extends a generic `View` interface — yes.** The `View` interface lives in core `juneau-rest-server` (so future view modules — Thymeleaf, Mustache, FreeMarker — don't all have to depend on the JSP module just for the interface). `JspView` is the first impl, lives in the JSP bridge module. Minor design effort up front prevents a breaking change later when sibling view modules ship. Document the interface contract (`templateName`, `attributes` map, optional response-headers seam) on `View` so future impls have a stable target.
+7. **Multi-base-path support — documented "register two beans" pattern, no special builder support.** A user with `/views/` JSPs and `/admin/views/` JSPs registers two `BasicJspResource` beans, each with its own `paths` override and `basePath`. Test coverage in `BasicJspResource_MultiBasePath_Test` confirms the pattern works under both microservice and Spring Boot DI paths.
+
+## Follow-on TODOs to track after this lands
+
+Per the "view-module family" naming convention (resolved decision #1), sibling view modules for other JVM templating engines are tracked as separate TODOs. Each follows the same pattern as TODO-78 (bridge module + `View` interface impl + example module + Spring Boot smoke test):
+
+- **TODO-82** — Thymeleaf view module (`juneau-rest-server-view-thymeleaf`). High priority since Thymeleaf is Spring Boot's default web view technology; large existing user base for Spring-Boot-on-Juneau migrations.
+- **TODO-83** — Mustache view module (`juneau-rest-server-view-mustache`). Logic-less templates; common choice for content authored by non-Java developers.
+- **TODO-84** — FreeMarker view module (`juneau-rest-server-view-freemarker`). Apache FreeMarker; widely used in admin consoles and reporting tools.
+
+(JSF / Facelets is explicitly NOT planned — separately scoped out in this TODO's "Explicitly out of scope" section.)
 
 ## Risks
 
 - **Spring Boot JSP support flakiness.** Spring Boot's official position is "we recommend you don't use JSP under embedded containers." Real-world reports show it works but with sharp edges (fat-jar packaging, classpath resource resolution, exploded-vs-jar variance). Mitigation: explicit Spring Boot smoke tests; document loudly; if Phase 5 surfaces gotchas not foreseen here, escalate (call out as a follow-up TODO rather than silently shipping a broken-on-Spring-Boot mixin).
 - **Jetty version drift.** A future Jetty upgrade in `juneau-microservice-jetty` could break the JSP module if the JSP engine doesn't keep pace. Mitigation: dependency-pinning + explicit version test in CI; document that the JSP module is tested against the same Jetty version as `juneau-microservice-jetty`.
-- **`provided`-scope deps confusion.** Users who add the JSP module without also explicitly adding the JSP runtime (because the deps are `provided`) will see runtime `ClassNotFoundException`. Mitigation: javadoc + a `JspViewRenderer_NoEngine_Test` that confirms the diagnostic message is human-readable.
+- **Engine selection burden on the user (Option B trade-off).** The bridge module ships with no default JSP engine — consumers MUST add one (`jetty-ee10-apache-jsp` for Jetty, `tomcat-embed-jasper` for embedded Tomcat, or rely on the deployment container). Without an engine, the failure surfaces at request time (`ClassNotFoundException` or a Juneau-wrapped diagnostic), not build time. Mitigation: javadoc + module README "Choosing a JSP engine" matrix + `BasicJspResource_NoEngine_Test` confirms the diagnostic message is human-readable and names both the missing dependency AND the matrix link so users have a one-click recovery path. The opposite trade-off — bake in a Jetty default — was considered (Option A in the OQ#2 deliberation) and rejected because it puts confusing dead-weight in the POM for the substantial fraction of users on Tomcat-flavored deployments (Spring Boot defaults to embedded Tomcat).
 - **`forward()`-based dispatch eats the response cleanly.** `RequestDispatcher.forward()` resets the response output stream; if Juneau has already written response headers (e.g. via a `RestPreCall` hook), the forward may fail or produce malformed responses. Mitigation: document the constraint; the `JspViewRenderer` runs at response-resolution time so most user code never hits this, but `RestPreCall` interactions need testing.
 - **CSP / security headers.** JSP-rendered HTML may need different `Content-Security-Policy` than Juneau's default JSON responses. Mitigation: out of scope for v1; document the integration point with TODO-69 / future security-headers TODOs.
 - **JSTL version skew across Jakarta EE 10 / 11.** `jakarta.servlet.jsp.jstl` artifact coordinates have shifted. Mitigation: pin to the EE10 coordinates that match Jetty 12; document.

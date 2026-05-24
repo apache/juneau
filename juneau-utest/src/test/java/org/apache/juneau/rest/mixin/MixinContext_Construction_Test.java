@@ -41,18 +41,18 @@ class MixinContext_Construction_Test extends TestBase {
 		@RestGet(path="/m2") public String m2() { return "m2"; }
 	}
 
-	@Rest(mixins={M1.class})
+	@Rest(mixins={M1.class}, noInherit={"mixins"})
 	public static class HostOne extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/host") public String host() { return "host"; }
 	}
 
-	@Rest(mixins={M1.class, M2.class})
+	@Rest(mixins={M1.class, M2.class}, noInherit={"mixins"})
 	public static class HostMulti extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 	}
 
-	@Rest(mixins={M1.class})
+	@Rest(mixins={M1.class}, noInherit={"mixins"})
 	public static class HostNoOps extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 	}
@@ -63,7 +63,7 @@ class MixinContext_Construction_Test extends TestBase {
 		var ctx = RestContext.getGlobalRegistry().get(HostOne.class);
 		assertNotNull(ctx, "Host RestContext should be registered after MockRestClient build");
 		var mixinContexts = ctx.getMixinContexts();
-		assertEquals(1, mixinContexts.size(), "Expected exactly one mixin sub-context");
+		assertEquals(1, mixinContexts.size(), "Expected exactly one mixin sub-context (noInherit cuts off BasicRestServlet's docs mixins)");
 		var m1Ctx = mixinContexts.get(M1.class);
 		assertNotNull(m1Ctx, "Missing mixin sub-context for M1");
 		assertSame(ctx, m1Ctx.getParentContext(), "Mixin sub-context parent should be the host context");
@@ -79,7 +79,7 @@ class MixinContext_Construction_Test extends TestBase {
 		var ctx = RestContext.getGlobalRegistry().get(HostMulti.class);
 		assertNotNull(ctx);
 		var mixinContexts = ctx.getMixinContexts();
-		assertEquals(2, mixinContexts.size(), "Expected exactly two mixin sub-contexts");
+		assertEquals(2, mixinContexts.size(), "Expected exactly two mixin sub-contexts (noInherit cuts off BasicRestServlet's docs mixins)");
 		assertNotNull(mixinContexts.get(M1.class));
 		assertNotNull(mixinContexts.get(M2.class));
 		assertNotSame(mixinContexts.get(M1.class), mixinContexts.get(M2.class),

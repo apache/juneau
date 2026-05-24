@@ -14,32 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest;
-
-import static org.junit.jupiter.api.Assertions.*;
+package org.apache.juneau.rest.docs;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.docs.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Verifies the {@code apiFormat="both"} mode behavior:
- * {@code /api/*} keeps Swagger v2 + Swagger UI (200), AND {@code /openapi/*} is active
- * with OpenAPI 3.1 + Redoc (200).
+ * Validates {@link BasicSwaggerResource} composed onto a vanilla {@link RestServlet} — i.e. used
+ * outside of the {@code BasicRestServlet} chain.
+ *
+ * <p>
+ * The mixin's {@code @RestOp} methods are pure POJOs that inherit serializers/parsers from the
+ * host's {@code RestContext} via the FINISHED-81 sub-context model. This test demonstrates that a
+ * minimal host (vanilla {@link RestObject} + {@link BasicUniversalConfig}) is sufficient to mount
+ * the {@code /api} endpoint without dragging in the rest of the {@code BasicRestOperations}
+ * surface.
  */
-class Rest_ApiFormat_Both_Test extends TestBase {
+class BasicSwaggerResource_Standalone_Test extends TestBase {
 
-	@Rest(apiFormat="both")
-	public static class A extends BasicRestServlet {
-		private static final long serialVersionUID = 1L;
-		@RestGet public String hello() { return "hello"; }
-	}
+	@Rest(mixins=BasicSwaggerResource.class)
+	public static class A extends RestObject implements BasicUniversalConfig {}
 
-	private static final MockRestClient c = MockRestClient.build(A.class);
+	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
-	@Test void a01_apiServesSwagger() throws Exception {
+	@Test void a01_apiServesSwaggerSpec_jsonAccept() throws Exception {
 		c.get("/api")
 			.accept("application/json")
 			.run()
@@ -47,16 +50,11 @@ class Rest_ApiFormat_Both_Test extends TestBase {
 			.assertContent().asString().isContains("\"swagger\":\"2.0\"");
 	}
 
-	@Test void a02_openapiServesOpenApi() throws Exception {
-		c.get("/openapi")
-			.accept("application/json")
+	@Test void a02_apiServesSwaggerUi_htmlAccept() throws Exception {
+		c.get("/api")
+			.accept("text/html")
 			.run()
 			.assertStatus(200)
-			.assertContent().asString().isContains("\"openapi\":\"3.1.0\"");
-	}
-
-	@Test void a03_apiFormatResolvesToBoth() throws Exception {
-		var rc = new RestContext(new RestContext.Args(A.class, null, null, A::new, "", null, null, null, false));
-		assertEquals("both", rc.getApiFormat());
+			.assertContent().asString().isContains("<html");
 	}
 }
