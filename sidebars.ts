@@ -1387,16 +1387,21 @@ const sidebars: SidebarsConfig = {
 									id: 'topics/10.16.01.SwaggerBasics',
 									label: '10.16.1. Swagger Basics',
 								},
-								{
-									type: 'doc',
-									id: 'topics/10.16.02.BasicRestServletSwagger',
-									label: '10.16.2. Basic REST Servlet Swagger',
-								},
-								{
-									type: 'doc',
-									id: 'topics/10.16.03.BasicSwaggerInfo',
-									label: '10.16.3. Basic Swagger Info',
-								},
+							{
+								type: 'doc',
+								id: 'topics/10.16.02.BasicRestServletSwagger',
+								label: '10.16.2. Basic REST Servlet Swagger',
+							},
+							{
+								type: 'doc',
+								id: 'topics/10.16.02a.ApiDocsMixins',
+								label: '10.16.2a. API-Docs Mixin Pack',
+							},
+							{
+								type: 'doc',
+								id: 'topics/10.16.03.BasicSwaggerInfo',
+								label: '10.16.3. Basic Swagger Info',
+							},
 								{
 									type: 'doc',
 									id: 'topics/10.16.04.SwaggerTags',
