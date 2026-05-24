@@ -1374,6 +1374,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.14a.StaticFilesMixin',
+							label: '10.14a. Static-Files Mixin',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.15.ClientVersioning',
 							label: '10.15. Client Versioning',
 						},
