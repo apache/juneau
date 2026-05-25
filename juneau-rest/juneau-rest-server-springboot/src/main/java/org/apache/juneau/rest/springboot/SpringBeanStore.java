@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.settings.*;
 import org.springframework.context.*;
 
 /**
@@ -57,8 +58,20 @@ public class SpringBeanStore extends BasicBeanStore {
 
 	private final ApplicationContext appContext;
 
+	// Captured so clear() can deregister the bridge from the process-wide Settings singleton and
+	// avoid cross-test bleed when multiple Spring contexts come and go in the same JVM.
+	private final SpringEnvironmentPropertySource environmentSource;
+
 	/**
 	 * Constructor.
+	 *
+	 * <p>
+	 * If {@code appContext} is non-null, this constructor also installs a
+	 * {@link SpringEnvironmentPropertySource} on the process-wide {@link Settings} singleton so that
+	 * {@link org.apache.juneau.commons.inject.Value @Value("${...}")} placeholders resolve against
+	 * the Spring {@link org.springframework.core.env.Environment Environment} (i.e. against
+	 * {@code application.yaml}, env vars, system properties, etc.).  The source is removed by
+	 * {@link #clear()}.
 	 *
 	 * @param appContext The Spring application context used to resolve beans. Can be <jk>null</jk>.
 	 * @param parent The parent bean store. Can be <jk>null</jk>.
@@ -66,12 +79,24 @@ public class SpringBeanStore extends BasicBeanStore {
 	public SpringBeanStore(ApplicationContext appContext, BeanStore parent) {
 		super(parent);
 		this.appContext = appContext;
+		// Register a lazy bridge to Spring's Environment. The supplier form defers the
+		// appContext.getEnvironment() call to first @Value("${...}") lookup, so the constructor has
+		// no observable interaction with the application context — important for callers (and
+		// tests) that don't actually use Spring properties.  Null appContext means no bridge.
+		if (nn(appContext)) {
+			this.environmentSource = new SpringEnvironmentPropertySource(appContext::getEnvironment);
+			Settings.get().addSource(this.environmentSource);
+		} else {
+			this.environmentSource = null;
+		}
 	}
 
 	@Override
 	@SuppressWarnings("resource") // super.clear() returns this; the discarded return is the store we already own
 	public SpringBeanStore clear() {
 		super.clear();
+		if (nn(environmentSource))
+			Settings.get().removeSource(environmentSource);
 		return this;
 	}
 

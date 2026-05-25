@@ -65,6 +65,11 @@ public final class JsrSupport {
 	public static final String JAKARTA_PREDESTROY = "jakarta.annotation.PreDestroy";
 	public static final String JAVAX_PREDESTROY = "javax.annotation.PreDestroy";
 
+	// Config-value injection (Juneau + Spring).  Detected by FQN so juneau-commons stays free of a
+	// compile-time Spring dependency, mirroring the SPRING_AUTOWIRED trick above.
+	public static final String JUNEAU_VALUE = "org.apache.juneau.commons.inject.Value";
+	public static final String SPRING_VALUE = "org.springframework.beans.factory.annotation.Value";
+
 	private JsrSupport() {}
 
 	/**
@@ -136,5 +141,38 @@ public final class JsrSupport {
 		if (isQualifierMeta(annotation))
 			return annotation.getValue().orElse(null);
 		return null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the annotation is a config-value marker.
+	 *
+	 * <p>
+	 * Recognizes both Juneau's {@code @Value} and Spring's
+	 * {@code org.springframework.beans.factory.annotation.Value} by FQN — no compile-time Spring
+	 * dependency in {@code juneau-commons}.
+	 *
+	 * @param annotation The annotation to inspect.
+	 * @return <jk>true</jk> if {@code annotation} is one of the recognized {@code @Value} variants.
+	 */
+	public static boolean isValueAnnotation(AnnotationInfo<?> annotation) {
+		var name = annotation.getName();
+		return eqAny(name, JUNEAU_VALUE, SPRING_VALUE);
+	}
+
+	/**
+	 * Returns the configuration expression carried by a {@code @Value} annotation, or {@code null}
+	 * if the annotation is not a recognized {@code @Value}.
+	 *
+	 * <p>
+	 * Both Juneau's {@code @Value} and Spring's {@code @Value} expose a single {@code String value()}
+	 * attribute, so a uniform {@code getValue()} lookup against the annotation works for either.
+	 *
+	 * @param annotation The annotation to inspect.
+	 * @return The {@code value()} string, or {@code null} if {@code annotation} is not a {@code @Value}.
+	 */
+	public static String valueExpression(AnnotationInfo<?> annotation) {
+		if (! isValueAnnotation(annotation))
+			return null;
+		return annotation.getValue().orElse(null);
 	}
 }

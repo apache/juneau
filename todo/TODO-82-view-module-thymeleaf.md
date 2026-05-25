@@ -215,10 +215,14 @@ Sibling view-module TODOs (TODO-83/84) inherit this test architecture by default
 - Localization / i18n integration with Juneau's existing `Messages` infrastructure (Thymeleaf has its own `MessageSource` abstraction; bridge could adapter-wrap `Messages`).
 - Reactive / WebFlux integration once Juneau's async story (TODO-70) lands.
 
+## Resolved decisions — OQA
+
+1. **Default `index.html` template in the bridge — RESOLVED 2026-05-25 as NO.** Bridge ships no opinionated default template. The "Choosing a `TemplateEngine`" matrix in the module README + the example module (Phase 4) are the discoverability path; a zero-config deployment with no user-supplied templates returns 404 from `/thymeleaf/*` with a clear "no template named X under base-path Y" message. Aligns with the plan's prior recommendation and matches FINISHED-75's "no opinionated defaults in the mixin" stance.
+2. **JVM floor — RESOLVED 2026-05-25 as CONFIRMED (JDK 17).** Juneau's stated floor is already JDK 17 (verified in `juneau-core/pom.xml`), so Thymeleaf 3.1.x is usable without pinning back to 3.0.x and without a per-module floor bump. Phase 0's "verify before settling" check is satisfied; no further action.
+
 ## Open questions
 
-1. **Default `index.html` template in the bridge?** Should the bridge ship a tiny `index.html` template so a zero-config "hello world" deployment renders SOMETHING at `/thymeleaf/index`? Pro: discoverability. Con: bloat + opinionated default that users will want to delete. **Recommend: NO**, but flagged for user review.
-2. **JVM floor.** Thymeleaf 3.1+ requires JDK 17 per the Thymeleaf release notes. Juneau's current stated floor is JDK 17 already (verify in `juneau-core/pom.xml`); if the floor is lower, this module either bumps the floor for itself only or pins to Thymeleaf 3.0.x. **Verify in Phase 0** before settling.
+_All open questions resolved 2026-05-25. See "Resolved decisions — OQA" above._
 
 ## Risks
 

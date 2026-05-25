@@ -1,6 +1,6 @@
 # TODO-86: `juneau-petstore-jetty` — canonical Jetty sample application
 
-Source: split out of the TODO.md backlog on 2026-05-23; plan written 2026-05-24.
+Source: split out of the TODO.md backlog on 2026-05-23; plan written 2026-05-24. Scope-expansion notes added 2026-05-25 (see "Update notes" section below — pending OQA before propagating through the rest of the plan).
 
 ## Goal
 
@@ -23,6 +23,88 @@ java -jar target/juneau-petstore-jetty-9.5.0.jar
 ```
 
 A reader who opens `juneau-petstore-jetty` should be able to point at any feature in the post-FINISHED-77 mixin family — plus runtime-overridable paths (FINISHED-73), AuthN guards (TODO-69), and a non-trivial bean model exercised across the marshall layer — and see a working in-context example.
+
+## Update notes (2026-05-25)
+
+User-supplied additions to consider while expanding this plan. These are **flagged for OQA** before the Scope §1 module structure, §3 feature table, and Phase 0–7 step list are revised to match — the changes below grow the v1 footprint substantially and the scope-affecting open questions need user direction first.
+
+### 1. Existing `apache/juneau-petstore` repo (legacy)
+
+There is a legacy Juneau petstore at <https://github.com/apache/juneau-petstore> with three subprojects (`juneau-petstore-api`, `juneau-petstore-server`, `juneau-petstore-client`). It is **very old** — predates the FINISHED-72/74/75/76/77 mixin family, FINISHED-73 runtime-paths, FINISHED-69 AuthN guards, FINISHED-81 sub-context inheritance, and the v9.5.x marshall layer changes. **Not sure how much is applicable** — Phase 0 should add an inventory pass:
+
+- **Domain model** (`Pet` / `Order` / `Customer` shape) — probably still right (Swagger Petstore is a stable reference); verify and reuse the bean shapes if they match.
+- **`@Remote` interface shape** (in legacy `juneau-petstore-api`) — directly applicable to the new `juneau-petstore-api` module proposed below; likely some boilerplate is reusable verbatim, but the `@Remote` / `@RemoteOp` annotation surface may have evolved post-FINISHED-38 (rest-client → rest-client-classic rename).
+- **Server-side resource structure** (legacy `juneau-petstore-server`) — likely obsolete (pre-mixin-family); read as historical context only, do NOT copy.
+- **Client-side `RestClient.getRemote(...)` patterns** (legacy `juneau-petstore-client`) — directly applicable to the proposed new `juneau-petstore-client` module; same `@Remote`-proxy invocation shape.
+- **Apache-2.0 license headers** — any reused snippets must carry compliant headers in the new tree (RAT will catch missing ones, but easier to prepend at copy-time).
+- **Dockerfile** — the legacy repo ships a Dockerfile; per the existing OQ #2 (Docker out of scope for v1) we ignore it for now.
+
+The legacy repo will eventually need an "archived in favor of the in-tree petstore" pointer in its README; tracked as a follow-on (not part of TODO-86 acceptance).
+
+### 2. Multiple view-engine examples side-by-side
+
+The current plan picks ONE view engine per deployment (Thymeleaf preferred, JSP fallback per resolved decision #3) and routes `/views/about` to it. The expanded scope wants the petstore to demonstrate **multiple engines side-by-side** so readers see the bridge pattern across engines without spinning up multiple sample apps. Proposed adaptation:
+
+- Add `/views/jsp/about`, `/views/thymeleaf/about`, `/views/mustache/about`, `/views/freemarker/about` endpoints, each backed by the corresponding view-engine module (TODO-78 / TODO-82 / TODO-83 / TODO-84).
+- Each endpoint renders the same `AboutModel` so readers can compare templates side-by-side.
+- Each engine is opt-in via a Maven profile (e.g. `-Pviews-jsp,views-thymeleaf,...`) so consumers who don't want every engine on the classpath aren't forced to pull them.
+- **Hard prereq on TODO-78** (introduces the `View` interface); soft prereq on TODO-82/83/84 (each adds its own endpoint when present, skipped otherwise).
+- The `/views/about` URL from the current plan would either become a default that aliases to one of the engine-specific endpoints, or be replaced by an index page at `/views/` listing the available engines.
+
+**Open question (OQ-A):** ship all four engine endpoints in v1 (gated by TODO-78/82/83/84 landing), or only the engines that have landed by the time TODO-86 starts implementation? **Tentative recommend:** ship whatever's landed; document the rest as `/views/<engine>/about` 404 stubs with a "to be added when TODO-XX lands" pointer.
+
+### 3. `@Remote`-annotated interfaces for accessing REST
+
+Promote the legacy repo's `juneau-petstore-api` + `juneau-petstore-client` split into the new tree. Proposed module additions:
+
+- **`juneau-petstore-api`** (NEW, sibling of `juneau-petstore-core` under `juneau-petstore/`) — contains the `PetService` / `OrderService` / `CustomerService` Java interfaces annotated with `@Remote` + `@RemoteOp(method=GET, path="/pets/{id}")`-style member annotations. Server-side resource classes implement these interfaces; client-side uses `RestClient.create().build().getRemote(PetService.class)` to get a proxy. Pure interfaces + DTO references; no server or in-memory-impl code.
+- **`juneau-petstore-client`** (NEW, sibling of `juneau-petstore-jetty`) — client-side library + a small `App.java` that exercises every server-side endpoint via `@Remote` proxies against `http://localhost:10000`. Demonstrates `getRemote(PetService.class)`, paging through results, error handling, request-bean / response-bean conventions, and the client-side auth flavors from §4 below.
+
+**Open question (OQ-B):** should the `@Remote` interfaces live in `juneau-petstore-core` (collapsing api + core into one module) or stay in a separate `juneau-petstore-api` (matching the legacy repo split)? **Tentative recommend:** **separate**, because `juneau-petstore-core` contains the in-memory repository impls which are server-only; `juneau-petstore-api` is pure interface + DTO reference and is shared 1:1 between server and client. Module graph becomes:
+
+```
+juneau-petstore-core        (DTOs + repository SPI + in-memory impls)
+juneau-petstore-api         (depends on -core's DTOs only; @Remote interfaces)
+juneau-petstore-jetty       (depends on -core + -api; implements -api's interfaces)
+juneau-petstore-client      (depends on -api only; @Remote proxy consumer)
+juneau-petstore-springboot  (depends on -core + -api; TODO-87's deliverable)
+```
+
+### 4. Various authentication flavors with REST client examples
+
+Currently TODO-86's auth story is "one `BearerTokenGuard` on `/admin/*`". Expanded scope demonstrates multiple AuthN flavors side-by-side, both server-side AND client-side:
+
+**Server-side** (separate guarded mount-paths per flavor):
+
+- `/admin/jwt/*` → `BearerTokenGuard` (FINISHED-69)
+- `/admin/apikey/*` → `ApiKeyGuard` (FINISHED-69)
+- `/admin/saml/*` → `SamlFilter` (TODO-94b)
+- `/admin/oauth/*` → `OAuthFilter` (TODO-94c)
+
+**Client-side** (in the proposed `juneau-petstore-client`, each flavor shown as a separate `RestClient` builder configuration):
+
+- `RestClient.create().bearerAuth(jwt).build()` calling `/admin/jwt/*`
+- `RestClient.create().header("X-API-Key", apiKey).build()` calling `/admin/apikey/*`
+- SAML / OAuth equivalents once TODO-94b/c land (with stubs in v1 if those haven't landed yet).
+
+**Hard prereq on FINISHED-69** (JWT + ApiKey); **soft prereq on TODO-94a/b/c** (filter framework + SAML + OAuth — each flavor lands when its TODO lands).
+
+**Open question (OQ-C):** should the client examples be a single class in `juneau-petstore-client` with all four flavors demoed, or split across separate `juneau-petstore-client-examples-jwt` / `-apikey` / `-saml` / `-oauth` sub-modules? **Tentative recommend:** **single class** in `juneau-petstore-client` with `@DisplayName`-style headings per flavor; multiple example modules feels over-engineered for v1.
+
+### Scope expansion summary
+
+These additions grow TODO-86 from **3 modules** (`core` + `jetty` + Spring-Boot-stub) to **5 modules** (`core` + `api` + `jetty` + `client` + Spring-Boot-stub) and from **one** view-engine endpoint to **four**. Soft-dep surface grows from `{TODO-69, TODO-82-or-TODO-78, TODO-85}` to `{FINISHED-69, TODO-78, TODO-82, TODO-83, TODO-84, TODO-85, TODO-94a, TODO-94b, TODO-94c}`. TODO-87 (Spring Boot mirror) will inherit the same scope changes — the `@Remote` interfaces + multiple view engines + multiple auth flavors all flow through the shared `-core` + `-api` modules.
+
+Once OQ-A, OQ-B, OQ-C are answered, expand:
+
+- **Scope §1** (module structure) — add `juneau-petstore-api` + `juneau-petstore-client` per OQ-B's resolution.
+- **Scope §3** (feature cross-section table) — add rows for `@Remote` interfaces, multi-engine views, and the four auth flavors.
+- **Scope §5** (view-rendered HTML page) — re-shape to "view-engine showcase" with per-engine endpoints.
+- **Phase 0** — add the legacy-repo inventory pass + a step for the new module wiring.
+- **Phase 2–5** — restructure to land `-api` + `-client` modules; restructure §5 to multi-engine; restructure §6 to multi-auth.
+- **Phase 6** smoke test — add per-`@Remote`-interface integration assertions + per-view-engine endpoint assertions + per-auth-flavor 401/200 assertions.
+- **Related work** — add FINISHED-38 (rest-client-classic rename), TODO-94a/b/c, the legacy repo URL.
+- **Risks** — add "scope sprawl" + "soft-dep matrix complexity" (any TODO-94 sub-piece slipping cascades into the petstore's auth-flavor showcase being incomplete).
 
 ## Why now
 

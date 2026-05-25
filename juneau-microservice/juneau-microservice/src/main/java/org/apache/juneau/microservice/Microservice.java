@@ -37,6 +37,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.svl.vars.*;
+import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
@@ -659,6 +660,7 @@ public class Microservice implements ConfigEventListener {
 	private final String configName;
 	private final WritableBeanStore beanStore;
 	private volatile boolean stopped;
+	private final ConfigPropertySource settingsSource;
 
 	private final AtomicReference<Logger> logger = new AtomicReference<>();
 
@@ -772,6 +774,8 @@ public class Microservice implements ConfigEventListener {
 		this.config = config2;
 		Config.setSystemDefault(this.config);
 		this.config.addListener(this);
+		this.settingsSource = new ConfigPropertySource(this.config);
+		Settings.get().addSource(this.settingsSource);
 		beanStore.addBean(Config.class, this.config);
 		this.varResolver = builder.varResolver.bean(Config.class, config2).build();
 		beanStore.addBean(VarResolver.class, this.varResolver);
@@ -1300,6 +1304,8 @@ public class Microservice implements ConfigEventListener {
 		if (stopped)
 			return this;
 		stopped = true;
+		if (nn(settingsSource))
+			Settings.get().removeSource(settingsSource);
 		var listeners = new ArrayList<>(beanStore.getBeansOfType(MicroserviceListener.class).values());
 		Collections.reverse(listeners);
 		for (var l : listeners)

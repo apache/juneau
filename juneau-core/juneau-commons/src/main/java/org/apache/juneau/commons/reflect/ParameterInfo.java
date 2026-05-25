@@ -31,7 +31,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.commons.settings.Settings;
+import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -787,6 +787,11 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	public boolean canResolve(BeanStore beanStore, Object... otherBeans) {
 		var pt = getParameterType();
 
+		// @Value sites resolve from Settings/Env, not the bean store — always considered resolvable
+		// here. (Mutual-exclusion with @Inject is enforced in resolveValue(...).)
+		if (ValueResolver.hasValueAnnotation(getAnnotations()))
+			return true;
+
 		if (pt.is(Optional.class) || pt.isInjectCollectionType()) // Optional/Collection/array types are always satisfied (even if empty).
 			return true;
 
@@ -826,6 +831,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	public String getMissingType(BeanStore beanStore, Object... otherBeans) {
 		var pt = getParameterType();
+		if (ValueResolver.hasValueAnnotation(getAnnotations()))
+			return null;
 		if (pt.is(Optional.class) || pt.isInjectCollectionType()) // Optional/Collection/array types are always satisfied (even if empty).
 			return null;
 		var bq = getResolvedQualifier();  // Use @Named/@Qualified for bean injection
@@ -887,6 +894,14 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		var pt = getParameterType();
 		var bq = getResolvedQualifier();
 		var ptu = pt.unwrap(Optional.class);
+
+		// @Value sites resolve from Settings/VarResolver, not the bean store.
+		var annos = getAnnotations();
+		var valueExpr = ValueResolver.findValueExpression(annos);
+		if (valueExpr != null) {
+			ValueResolver.checkInjectConflict(annos, this.toString());
+			return ValueResolver.resolve(valueExpr, ptu.inner(), this.toString());
+		}
 
 		if (JsrSupport.isProviderType(ptu.inner())) {
 			var valueType = ptu.innerType() instanceof ParameterizedType parameterizedType

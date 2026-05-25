@@ -3094,14 +3094,14 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @throws ExecutableException If any field or method cannot be injected (e.g., required bean not found in the bean store).
 	 */
 	public <T> T inject(T bean, BeanStore beanStore) {
-		// Inject into fields
+		// Inject into fields.
 		getAllFields().stream()
-			.filter(x -> x.isNotFinal() && x.getAnnotations().stream().anyMatch(JsrSupport::isInjectAnnotation))
+			.filter(x -> x.isNotFinal() && x.getAnnotations().stream().anyMatch(ClassInfo::isInjectOrValueAnnotation))
 			.forEach(x -> x.inject(beanStore, bean));
 
-		// Inject into methods
+		// Inject into methods.
 		getAllMethods().stream()
-		.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0) && x.getAnnotations().stream().anyMatch(JsrSupport::isInjectAnnotation))
+		.filter(x -> x.isNotAbstract() && eq(x.getTypeParameters().length, 0) && x.getAnnotations().stream().anyMatch(ClassInfo::isInjectOrValueAnnotation))
 			.forEach(x -> x.inject(beanStore, bean));
 
 		// Call @PostConstruct methods after all injection is complete
@@ -3113,6 +3113,10 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 			.forEach(x -> x.inject(beanStore, bean));
 
 		return bean;
+	}
+
+	private static boolean isInjectOrValueAnnotation(AnnotationInfo<?> ai) {
+		return JsrSupport.isInjectAnnotation(ai) || JsrSupport.isValueAnnotation(ai);
 	}
 
 }

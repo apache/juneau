@@ -285,31 +285,28 @@ rg -n --type java 'jwksCacheTtl|rateLimitWindow|debugRequestHeader' \
 - Phase 6 runs **before or alongside** Phase 5 (docs); the docs phase's
   release-notes entries pick up the migrated sites.
 
-## Open questions
+## Resolved decisions — Phase 6
 
-1. **Internal-only framework knob migration.** Phase 6's discovery will
-   probably surface framework-internal config reads in places like
-   `juneau-microservice/Microservice.java`'s own bootstrap config knobs,
-   `RestContext.Builder` default-value handling, `DebugConfig`'s
-   system-property defaults (from FINISHED-20), `JwtTokenValidator`'s JWKS
-   TTL default (from FINISHED-69), etc. — most of which are NOT exposed to
-   end-users as `@Value`-injectable fields today; they're hand-rolled in
-   static initializers or constructors. Two paths:
+1. **Internal-only framework knob migration — RESOLVED 2026-05-25 as Option 1
+   (stay user-facing).** Phase 6's discovery scope is bounded to sites that
+   are already on a `BeanInstantiator`-managed lifecycle — i.e. sites where
+   a user would naturally place `@Value` themselves (e.g. user-defined
+   `@Bean` factories, `@Rest`-host constructors, custom `RestServlet`
+   subclasses with `@Inject` constructors). Framework-internal config
+   readers that today hand-roll lookups in static initializers or
+   un-injected constructors (notably `juneau-microservice/Microservice.java`
+   bootstrap, `RestContext.Builder` defaults, `DebugConfig`'s
+   system-property defaults from FINISHED-20, `JwtTokenValidator`'s JWKS
+   TTL default from FINISHED-69) are out of Phase 6 scope. Each surfaces in
+   the discovery report under the **Defer** bucket with a `TODO-92`
+   reference.
 
-    1. **Stay user-facing.** Phase 6 only migrates sites that are already
-       on a `BeanInstantiator`-managed lifecycle (i.e. sites where a user
-       would naturally place `@Value` themselves). Internal sites get a
-       defer note. Smaller, lower-risk PR.
-    2. **Include framework internals.** Refactor framework-internal config
-       readers to flow through a `BeanInstantiator`-resolved seam so they
-       can carry `@Value` too. Larger PR, but tightens the dogfooding
-       story significantly — Juneau's own framework code becomes a
-       reference implementation of `@Value` usage patterns.
-
-    Recommendation: **(1) stay user-facing in Phase 6**, plant the seed
-    for (2) as TODO-92 follow-on if the user wants the framework-internal
-    pass as a deliberate effort. Awaiting user OQA before Phase 6
-    discovery starts (so the discovery report scopes correctly).
+   A follow-on **TODO-92 — `@Value` framework-internal adoption pass**
+   will be filed alongside TODO-79's landing to track the larger
+   refactor (route framework-internal config readers through a
+   `BeanInstantiator`-resolved seam so they can carry `@Value`). It is
+   deliberately a separate PR — keeps TODO-79 reviewable and lets the
+   framework-internal pass be sequenced independently.
 
 ## Risk notes
 

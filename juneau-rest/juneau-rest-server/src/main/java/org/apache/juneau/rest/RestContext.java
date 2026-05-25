@@ -1774,6 +1774,11 @@ public class RestContext extends Context {
 			// runtime Config) — @RestInit hooks that take Config as a parameter will see the fully
 			// resolved instance instead of the raw bootstrap Config (9.5 behavior change).
 			rawConfig.get();
+			// NOTE: per-RestContext bridging of the @Rest(config=...) Config into Settings.get()
+			// was removed in 9.5 (perf regression — leaked ConfigPropertySource instances into the
+			// global Settings list because MockRestClient caches RestContext instances statically
+			// and never invokes destroy()). Per-RestContext @Value("${cfg-key}") resolution
+			// against the resource-scoped Config is tracked as TODO-95 (BeanStore-routed lookup).
 
 			// Register memoizer-backed defaults for every framework-managed type.  These sit at the
 			// bottom of the precedence order and only fire when no @Bean method, no programmatic

@@ -378,6 +378,31 @@ public class Settings {
 	}
 
 	/**
+	 * Removes a previously-added property source.
+	 *
+	 * <p>
+	 * The match is by identity ({@code ==}), not equality.  Callers that mutate the singleton
+	 * {@link #get() Settings.get()} from a test should capture the exact reference returned to/passed
+	 * into {@link #addSource(PropertySource)} and pass it back here in their teardown to avoid
+	 * cross-test bleed.
+	 *
+	 * @param source The property source to remove. Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the source was present and removed, <jk>false</jk> otherwise.
+	 */
+	public boolean removeSource(PropertySource source) {
+		assertArgNotNull(ARG_source, source);
+		// Identity-based removal so that PropertySource impls without a sensible equals() still
+		// round-trip cleanly through add/remove pairs.
+		for (var i = 0; i < sources.size(); i++) {
+			if (sources.get(i) == source) {
+				sources.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Returns a {@link StringSetting} for the specified system property.
 	 *
 	 * <p>
@@ -634,7 +659,7 @@ public class Settings {
 		"unchecked", // Type erasure requires unchecked cast
 		"rawtypes" // Raw types necessary for generic type handling
 	})
-	protected <T> T toType(String s, Class<T> c) {
+	public <T> T toType(String s, Class<T> c) {
 		assertArgNotNull(ARG_s, s);
 		assertArgNotNull(ARG_c, c);
 		var f = (Function<String,T>)toTypeFunctions.get(c);
@@ -645,6 +670,10 @@ public class Settings {
 				return (T)Enum.valueOf((Class<? extends Enum>)c, s);
 			ClassInfoTyped<T> ci = info(c);
 			f = ci.getDeclaredMethod(x -> x.isStatic() && x.hasParameterTypes(String.class) && x.hasReturnType(c) && FROM_STRING_METHOD_NAMES.contains(x.getName())).map(x -> (Function<String,T>)s2 -> x.invoke(null, s2)).orElse(null);
+			// Also accept `static T parse(CharSequence)` etc. — common for java.time types (Instant,
+			// LocalDate, Duration) whose static factories declare the wider CharSequence parameter.
+			if (f == null)
+				f = ci.getDeclaredMethod(x -> x.isStatic() && x.hasParameterTypes(CharSequence.class) && x.hasReturnType(c) && FROM_STRING_METHOD_NAMES.contains(x.getName())).map(x -> (Function<String,T>)s2 -> x.invoke(null, s2)).orElse(null);
 			if (f == null)
 				f = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class)).map(x -> (Function<String,T>)x::newInstance).orElse(null);
 			if (f != null)

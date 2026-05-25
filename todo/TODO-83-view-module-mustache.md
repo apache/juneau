@@ -211,10 +211,14 @@ Sibling view-module TODOs (TODO-82/84) inherit this test architecture by default
 - Localization / i18n integration with Juneau's existing `Messages` infrastructure — Mustache is logic-less so the i18n integration is a thin shim that passes resolved messages in as scope attributes.
 - First-class `com.samskivert:jmustache` bridge (separate `MustacheViewRenderer` variant) for users who prefer jmustache (or who already have `spring-boot-starter-mustache` on the classpath).
 
+## Resolved decisions — OQA
+
+1. **Default `index.mustache` template in the bridge — RESOLVED 2026-05-25 as NO.** Bridge ships no opinionated default template. Zero-config deployment with no user-supplied templates returns 404 with a clear "no template named X under base-path Y" message. Aligns with the plan's prior recommendation, the FINISHED-75 "no opinionated defaults in the mixin" stance, and the parallel TODO-82 OQA decision.
+2. **`.mustache` vs `.html` extension default — RESOLVED 2026-05-25 as CONFIGURABLE.** Bridge default behavior is unchanged ("no implicit suffix" — the literal `templateName` passed to `MustacheView.of(...)` is used as-is, which matches `mustache.java`'s own convention). But the builder gains a `.templateSuffix(String suffix)` knob (default `""`/none) so users can opt into `.mustache`, `.html`, or any other implicit suffix without re-typing it at every call site. When set, the bridge appends the suffix to template names that don't already end with it (idempotent). Documented in the topic page (Phase 6) alongside the engine-collision warning. **Implementation note:** add the builder method in Phase 2 alongside `basePath(String)`; add a test case `BasicMustacheResource_TemplateSuffix_Test` in Phase 2 verifying both "no suffix" (default) and `.mustache` / `.html` suffix configurations.
+
 ## Open questions
 
-1. **Default `index.mustache` template in the bridge?** Should the bridge ship a tiny `index.mustache` template so a zero-config "hello world" deployment renders SOMETHING at `/mustache/index.mustache`? **Recommend: NO**, but flagged for user review.
-2. **`.mustache` vs `.html` extension default.** Mustache templates traditionally use `.mustache` but some teams use `.html` to keep IDE / editor highlighting clean. The bridge default uses the literal `templateName` passed to `MustacheView.of(...)` as-is — no implicit suffix. Worth flagging in case the user prefers an implicit suffix policy.
+_All open questions resolved 2026-05-25. See "Resolved decisions — OQA" above._
 
 ## Risks
 

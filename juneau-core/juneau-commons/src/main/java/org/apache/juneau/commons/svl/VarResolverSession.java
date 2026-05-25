@@ -66,6 +66,43 @@ public class VarResolverSession {
 	private static final AsciiSet AS1 = AsciiSet.of("\\{");
 	private static final AsciiSet AS2 = AsciiSet.of("\\${}");
 
+	/**
+	 * Var name targeted by the {@code ${xxx}} shortcut.
+	 *
+	 * <p>
+	 * Resolves to {@code PropertyVar.NAME}. Declared as a string literal here (rather than imported
+	 * from {@code org.apache.juneau.commons.svl.vars.PropertyVar}) to keep the {@code svl} parent
+	 * package free of a compile-time dependency on its {@code svl.vars} child package.
+	 */
+	private static final String DOLLAR_BRACE_VAR = "P";
+
+	/**
+	 * Translates the first top-level {@code ':'} in a {@code ${...}}-shortcut body to {@code ','}
+	 * so that the body matches {@link DefaultingVar}'s {@code key,default} separator.
+	 *
+	 * <p>
+	 * "Top-level" means the {@code ':'} is not inside a nested {@code {...}} block — those colons
+	 * belong to the inner var and must remain untouched until that inner var's own translation runs.
+	 *
+	 * @param body The raw body extracted from inside the outer {@code ${...}}.
+	 * @return The body with the first top-level {@code ':'} rewritten to {@code ','}, or the input
+	 * 	unchanged if no top-level {@code ':'} is present.
+	 */
+	private static String translateDollarBraceDefault(String body) {
+		var depth = 0;
+		var length = body.length();
+		for (var i = 0; i < length; i++) {
+			var c = body.charAt(i);
+			if (c == '{')
+				depth++;
+			else if (c == '}' && depth > 0)
+				depth--;
+			else if (c == ':' && depth == 0)
+				return body.substring(0, i) + ',' + body.substring(i + 1);
+		}
+		return body;
+	}
+
 	private static boolean containsVars(Collection<?> c) {
 		var f = Flag.create();
 		c.forEach(x -> {
@@ -204,7 +241,15 @@ public class VarResolverSession {
 		if (isSimpleVar(s)) {
 		String varName = s.substring(1, s.indexOf('{'));
 		String val = s.substring(s.indexOf('{') + 1, s.length() - 1);
+		// ${xxx} shortcut → $P{xxx}: an empty varName means the source was "${...}", route to PropertyVar
+		// and translate the first ":" (Spring-style default separator) to "," (DefaultingVar's separator).
+		// Back-compat: if an empty-name var is explicitly registered (legacy), prefer it.
 		Var v = getVar(varName);
+		if (v == null && varName.isEmpty()) {
+			varName = DOLLAR_BRACE_VAR;
+			val = translateDollarBraceDefault(val);
+			v = getVar(varName);
+		}
 			if (nn(v)) {
 				try {
 					if (v.streamed) {
@@ -360,6 +405,10 @@ public class VarResolverSession {
 		var x = 0;
 		var x2 = 0;
 		var depth = 0;
+		// Tracks whether the current var came from the "${...}" shortcut (vs. an explicit "$P{...}").
+		// When true, the body's first top-level ':' is rewritten to ',' before inner resolution so
+		// that DefaultingVar's "key,default" syntax accepts Spring-style "${key:default}".
+		var isDollarBraceShortcut = false;
 		var length = s.length();
 		for (var i = 0; i < length; i++) {
 			var c = s.charAt(i);
@@ -388,6 +437,12 @@ public class VarResolverSession {
 					isInEscape = true;
 				} else if (c == '{') {
 					varType = s.substring(x + 1, i);
+					// ${xxx} shortcut: empty varType means the source was "${...}". Defer the
+					// rewrite-to-PropertyVar decision until the closing '}' is found, so that
+					// malformed inputs (e.g. "${{foo}") fall through unchanged and so that a
+					// legacy empty-name var (if registered) still wins for back-compat.
+					if (varType.isEmpty())
+						isDollarBraceShortcut = true;
 					x = i;
 					depth = 0;
 					state = S3;
@@ -414,7 +469,17 @@ public class VarResolverSession {
 						depth--;
 					} else {
 						varVal = s.substring(x + 1, i);
+						// For the "${...}" shortcut: rewrite the first top-level ':' to ',' so the
+						// body matches DefaultingVar's "key,default" separator. Done BEFORE inner
+						// resolution because any ':' produced by a resolved inner var must NOT be
+						// re-interpreted as a default separator.
+						if (isDollarBraceShortcut)
+							varVal = translateDollarBraceDefault(varVal);
+						// Back-compat: prefer an explicit empty-name var if registered. Only fall
+						// back to PropertyVar when the shortcut form has no legacy resolver.
 						Var r = getVar(varType);
+						if (r == null && isDollarBraceShortcut)
+							r = getVar(DOLLAR_BRACE_VAR);
 						if (r == null) {
 							if (hasInnerEscapes)
 								out.append(unescapeChars(s.substring(x2, i + 1), AS2));
@@ -444,6 +509,7 @@ public class VarResolverSession {
 						}
 						state = S1;
 						hasInnerEscapes = false;
+						isDollarBraceShortcut = false;
 					}
 				}
 			}

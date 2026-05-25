@@ -44,6 +44,13 @@ class SpringBeanStore_Test extends TestBase {
 		beanStore = new SpringBeanStore(mockAppContext, null);
 	}
 
+	@AfterEach
+	void tearDown() {
+		// Each SpringBeanStore constructor installs a SpringEnvironmentPropertySource on the
+		// process-wide Settings.  Clear it after every test to prevent cross-test bleed.
+		beanStore.clear();
+	}
+
 	//====================================================================================================
 	// Test classes
 	//====================================================================================================

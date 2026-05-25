@@ -223,10 +223,14 @@ Sibling view-module TODOs (TODO-82/83) inherit this test architecture by default
 - SQL / database template loader sample showing how to supply a custom `Configuration` for non-classpath template sources.
 - `OutputFormat` customization beyond HTML / plain-text (XML, RTF, custom escape policies).
 
+## Resolved decisions — OQA
+
+1. **Default `index.ftlh` template in the bridge — RESOLVED 2026-05-25 as NO.** Bridge ships no opinionated default template. Zero-config deployment with no user-supplied templates returns 404 with a clear "no template named X under base-path Y" message. Aligns with the plan's prior recommendation, the FINISHED-75 "no opinionated defaults in the mixin" stance, and the parallel TODO-82 / TODO-83 OQA decisions.
+2. **`Configuration.VERSION_2_3_X` pin — RESOLVED 2026-05-25 as PINNED-WITH-DELIBERATE-BUMPS.** Bridge default constructs the fallback `Configuration` with an explicitly pinned `IncompatibleImprovements` version (e.g. `Configuration.VERSION_2_3_32` for v1) so behavior is stable across consumer upgrades of `org.freemarker:freemarker`. Bumping the pin is a deliberate per-release decision documented in the release notes (auto-escape defaults / exception-handler defaults / etc. that change between FreeMarker minors are surfaced to the user instead of silently shifting). Users who want always-latest behavior register their own `freemarker.template.Configuration` bean with `IncompatibleImprovements` set to `Configuration.getVersion()`; the bridge picks it up via `BeanStore.getBean(Configuration.class)`. Documented in the topic page (Phase 6) and in the module README.
+
 ## Open questions
 
-1. **Default `index.ftlh` template in the bridge?** Should the bridge ship a tiny `index.ftlh` template so a zero-config "hello world" deployment renders SOMETHING at `/freemarker/index.ftlh`? **Recommend: NO**, but flagged for user review.
-2. **`Configuration.VERSION_2_3_X` pin.** The bridge pins `IncompatibleImprovements` to a specific minor version. Newer FreeMarker minors may change defaults (auto-escape rules, exception-handling defaults) — the pin protects against silent behavior drift, but means the bridge has to opt-in to newer behavior via a version bump. Worth flagging in case the user wants a different pinning policy (e.g. always-latest).
+_All open questions resolved 2026-05-25. See "Resolved decisions — OQA" above._
 
 ## Risks
 

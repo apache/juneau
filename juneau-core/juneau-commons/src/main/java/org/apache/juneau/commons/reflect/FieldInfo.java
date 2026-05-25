@@ -599,8 +599,27 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		accessible();
 		var fieldType = getFieldType();
 
+		// @Value sites resolve from Settings/VarResolver, not the bean store.
+		var annos = getAnnotations();
+		var valueExpr = ValueResolver.findValueExpression(annos);
+		if (valueExpr != null) {
+			ValueResolver.checkInjectConflict(annos, this.toString());
+			var unwrapped = fieldType.unwrap(Optional.class).inner();
+			var resolved = ValueResolver.resolve(valueExpr, unwrapped, this.toString());
+			if (fieldType.is(Optional.class)) {
+				// VarResolver substitutes "" for a missing key with no default. Collapse both to
+				// Optional.empty() so @Value("${maybe}") Optional<T> behaves the same as Spring's.
+				set(bean, (resolved == null || (resolved instanceof String s && s.isEmpty()))
+					? Optional.empty()
+					: Optional.of(resolved));
+			} else {
+				set(bean, resolved);
+			}
+			return bean;
+		}
+
 		// Find qualifier from @Named or @Qualifier annotation (same logic as ParameterInfo.getResolvedQualifier)
-		var beanQualifier = getAnnotations().stream()
+		var beanQualifier = annos.stream()
 			.map(JsrSupport::qualifierValue)
 			.filter(Objects::nonNull)
 			.findFirst()
