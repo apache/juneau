@@ -347,6 +347,11 @@ const sidebars: SidebarsConfig = {
 									id: 'topics/02.21.05.SvlOtherNotes',
 									label: '2.21.5. SVL Other Notes',
 								},
+								{
+									type: 'doc',
+									id: 'topics/02.21.06.ValueAnnotationBasics',
+									label: '2.21.6. @Value Annotation Basics',
+								},
 							],
 						},
 						{
