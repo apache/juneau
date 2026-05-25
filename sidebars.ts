@@ -1523,6 +1523,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.20e.RestServerAuthGuards',
+							label: '10.20e. AuthN Guards — Bearer / API-Key / JWT',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.21.BuiltInParameters',
 							label: '10.21. Built-In Parameters',
 						},
