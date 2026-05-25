@@ -46,7 +46,7 @@ class BasicOps_OpenApiHidden_Test extends TestBase {
 			BasicRouteIndexResource.class,
 			BasicOpenApiResource.class
 		},
-		debug="always",
+		debug=@Debug("always"),
 		swaggerProvider=BasicSwaggerProvider.class
 	)
 	public static class A extends RestServlet {

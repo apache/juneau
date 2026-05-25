@@ -197,6 +197,120 @@ Lookup precedence inside `Settings` is already "sources in reverse insertion ord
     - Spring Boot bridge — what works automatically, what doesn't.
 - Cross-link from existing `SimpleVariableLanguageBasics` and `VariableBasics` topic pages.
 
+### Phase 6 — Internal adoption audit + migration (added 2026-05-25)
+
+Once `@Value` exists, sweep the Juneau codebase for places that today read
+configuration declaratively (and awkwardly) and migrate them to `@Value` —
+both as a dogfooding pass that proves the annotation in production-quality
+code, and as a way to delete hand-rolled defaulting / property-lookup code.
+
+**Discovery — ripgrep patterns to surface candidates:**
+
+```bash
+# System property + env-var reads (the obvious migration candidates)
+rg -n --type java 'System\.getProperty\(' \
+    juneau-core juneau-rest juneau-microservice
+rg -n --type java 'System\.getenv\(' \
+    juneau-core juneau-rest juneau-microservice
+
+# Hand-rolled "property name constant + default" pairs
+rg -n --type java 'static\s+final\s+String\s+\w+\s*=\s*"\w+(\.\w+)+"' \
+    juneau-core juneau-rest juneau-microservice
+
+# Direct Config builder usages that could be auto-wired instead
+rg -n --type java 'Config\.create\(\)\.name\(' \
+    juneau-core juneau-rest juneau-microservice
+
+# Known-good config-shaped knobs from recent landings (FINISHED-66, FINISHED-69, FINISHED-77)
+rg -n --type java 'jwksCacheTtl|rateLimitWindow|debugRequestHeader' \
+    juneau-rest
+```
+
+**Classify each candidate into one of three buckets:**
+
+- **Migrate (clear win):** single-key configurable value with a sensible
+  default, read from a bean constructor / `@Bean` factory / `@Rest`-host
+  initializer. Direct replacement with `@Value("${...:default}")`.
+- **Defer (borderline):** value is read in a hot path or from a place
+  without a `BeanInstantiator`-managed lifecycle (e.g. static initializer,
+  inside a `Memoizer` lambda). Document as a follow-on TODO candidate and
+  move on.
+- **Skip:** not really configurable (constant, framework-internal,
+  hard-coded by intent). No action.
+
+**Migration scope guardrails:**
+
+- Cap Phase 6 at **5–15 user-facing migrations** in this PR. The point is
+  proof-of-concept dogfooding, not a wholesale config refactor.
+- If discovery surfaces more than ~15 strong candidates, migrate the
+  highest-impact 5–15 in this PR and file a follow-on TODO ("**TODO-91 —
+  expand `@Value` internal adoption to remaining sites**") with the
+  inventory.
+- Internal-only / framework-defaults knobs (Open Question 1 below) gated
+  on user OQA before any migration of those sites.
+
+**Per-migration checklist:**
+
+1. Replace the hand-rolled lookup with `@Value("${key.path:default}")` at
+   the field, constructor parameter, or setter.
+2. Delete the now-unused property-name constant and any `getProperty(...)
+   != null ? ... : default` defaulting code.
+3. Update any test that hard-coded the legacy property name to use either
+   the same `${key.path}` form via `System.setProperty(...)` in a
+   `@BeforeEach`, or — when the test is `BeanInstantiator`-aware — a
+   `@Value`-injected constructor parameter so the migration is round-tripped
+   in tests too.
+4. If the legacy lookup had a custom-typed coercion (e.g. parsed a
+   comma-delimited list), confirm `Settings.toType(...)` handles the same
+   type, or add an `asType(...)` test in `Settings_Test`.
+
+**Acceptance criteria:**
+
+- Discovery report exists in the PR description (or as a stub TODO-91 plan
+  file) listing every candidate found, its bucket (migrate / defer / skip),
+  and a one-line rationale for the bucket.
+- At least 5 migrations land in this PR (lower-bound for "this counts as
+  dogfooding"); upper bound 15 per the guardrail above.
+- All migrated sites carry a release-notes mention under the appropriate
+  `### juneau-*` module section in `9.5.0.md` — users upgrading need to
+  know which knobs are now Juneau-`@Value`-resolved (which means they pick
+  up the new resolution order: thread-local → global → sources → sys-props
+  → env → Spring `Environment`).
+- Tests for every migrated site pass.
+
+**Sequencing:**
+
+- Phase 6 runs **after** Phases 1–4 land (it depends on the
+  `BeanInstantiator`-managed `@Value` resolution being live).
+- Phase 6 runs **before or alongside** Phase 5 (docs); the docs phase's
+  release-notes entries pick up the migrated sites.
+
+## Open questions
+
+1. **Internal-only framework knob migration.** Phase 6's discovery will
+   probably surface framework-internal config reads in places like
+   `juneau-microservice/Microservice.java`'s own bootstrap config knobs,
+   `RestContext.Builder` default-value handling, `DebugConfig`'s
+   system-property defaults (from FINISHED-20), `JwtTokenValidator`'s JWKS
+   TTL default (from FINISHED-69), etc. — most of which are NOT exposed to
+   end-users as `@Value`-injectable fields today; they're hand-rolled in
+   static initializers or constructors. Two paths:
+
+    1. **Stay user-facing.** Phase 6 only migrates sites that are already
+       on a `BeanInstantiator`-managed lifecycle (i.e. sites where a user
+       would naturally place `@Value` themselves). Internal sites get a
+       defer note. Smaller, lower-risk PR.
+    2. **Include framework internals.** Refactor framework-internal config
+       readers to flow through a `BeanInstantiator`-resolved seam so they
+       can carry `@Value` too. Larger PR, but tightens the dogfooding
+       story significantly — Juneau's own framework code becomes a
+       reference implementation of `@Value` usage patterns.
+
+    Recommendation: **(1) stay user-facing in Phase 6**, plant the seed
+    for (2) as TODO-92 follow-on if the user wants the framework-internal
+    pass as a deliberate effort. Awaiting user OQA before Phase 6
+    discovery starts (so the discovery report scopes correctly).
+
 ## Risk notes
 
 - The `${...}` tokenizer change is the only place in the plan that touches a hot path (every `VarResolver.resolve(...)` call). Mitigation: keep the change in `VarResolverSession.parse(...)` to a single 3-line lookahead (`$` followed by `{` → emit `P` as the var name), and run the full existing VarResolver test suite before any other change in Phase 2.

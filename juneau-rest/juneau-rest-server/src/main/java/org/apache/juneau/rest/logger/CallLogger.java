@@ -34,6 +34,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.rest.util.*;
 
@@ -562,6 +563,17 @@ public class CallLogger {
 		"java:S6541", // Single-threaded context; synchronization unnecessary
 	})
 	public void log(HttpServletRequest req, HttpServletResponse res) {
+		var debugConfig = cast(DebugConfig.class, req.getAttribute("DebugConfig"));
+		if (debugConfig != null) {
+			var dr = debugConfig.resolve((org.apache.juneau.rest.RestContext)null, req);
+			if (dr.enabled() && dr.level() != Level.OFF) {
+				var e2 = cast(Throwable.class, req.getAttribute("Exception"));
+				var execTime2 = cast(Long.class, req.getAttribute("ExecTime"));
+				var msg = dr.format().format(new DebugFormatContext(req, res, e2, execTime2, getRequestContent(req), getResponseContent(req, res)));
+				log(dr.level(), msg, e2);
+			}
+			return;
+		}
 
 		var rule = getRule(req, res);
 

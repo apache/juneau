@@ -275,15 +275,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return (nn(override) ? override : b.build()).asArray();
 	});
 
-	/** The effective {@link DebugEnablement} for this operation. */
-	private final Memoizer<DebugEnablement> debugEnablement = memoizer(() -> {
-		var v = findOpString(PROPERTY_debug);
-		if (v.isPresent())
-			return DebugEnablement.create(beanStore()).enable(Enablement.fromString(v.get()), "*").build();
-		if (isInherited(PROPERTY_debug))
-			return restContext().getDebugEnablement();
-		return DebugEnablement.create(beanStore()).build();
-	});
+	/** The effective {@link DebugConfig} for this operation. */
+	private final Memoizer<DebugConfig> debugConfig = memoizer(() -> restContext().getDebugConfig());
 
 	/** The effective default {@link Charset} for this operation, resolved from op annotations, context, or env. */
 	private final Memoizer<Charset> defaultCharset = memoizer(() -> {
@@ -1277,7 +1270,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
 	public RestOpSession.Builder createSession(RestSession session) throws Exception {
-		return RestOpSession.create(this, session).logger(getCallLogger()).debug(debugEnablement.get().isDebug(this, session.getRequest()));
+		return RestOpSession.create(this, session).logger(getCallLogger()).debug(debugConfig.get().resolve(this, session.getRequest()).enabled());
 	}
 
 	@Override /* Overridden from Object */
@@ -1445,6 +1438,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public CallLogger getCallLogger() { return callLogger.get(); }
+
+	/**
+	 * Returns the debug config for this operation.
+	 *
+	 * @return The debug config for this operation.
+	 */
+	public DebugConfig getDebugConfig() { return debugConfig.get(); }
 
 	/**
 	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.

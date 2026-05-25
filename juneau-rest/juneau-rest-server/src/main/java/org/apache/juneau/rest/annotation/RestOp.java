@@ -174,7 +174,7 @@ public @interface RestOp {
 	 *
 	 * @return The annotation value.
 	 */
-	String debug() default "";
+	Debug debug() default @Debug;
 
 	/**
 	 * Default <c>Accept</c> header.

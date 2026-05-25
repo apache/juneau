@@ -16,99 +16,73 @@
  */
 package org.apache.juneau.rest.mixin;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.TestBase;
-import org.apache.juneau.rest.RestContext;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-/**
- * Phase 2 regression matrix &mdash; verifies that {@code @Rest(debugDefault=...)} on the host is inherited as the
- * default {@link Enablement} on a mixin sub-context, that the mixin's own {@code debugDefault} replaces the
- * inherited value, and that {@code noInherit="debugDefault"} blocks the parent walk.
- *
- * <p>
- * The resolved {@code debugDefault} is published into the context's bean store as an {@link Enablement} bean
- * (see {@code RestContext.debugEnablement} memoizer). We trigger the memoizer via
- * {@link RestContext#getDebugEnablement()} and then read the bean to verify the resolved value.
- */
+/** Regression matrix for typed `@Debug` inheritance on mixins. */
 class MixinInheritance_DebugDefault_Test extends TestBase {
 
 	@Rest
 	public static class M_NoDebugDefault {
-		@RestGet(path="/me") public String me() { return "me"; }
+		@RestGet(path="/me") public boolean me(RestRequest req) { return req.isDebug(); }
 	}
 
-	@Rest(debugDefault="ALWAYS")
+	@Rest(debug=@Debug("always"))
 	public static class M_OverridesAlways {
-		@RestGet(path="/my") public String my() { return "my"; }
+		@RestGet(path="/my") public boolean my(RestRequest req) { return req.isDebug(); }
 	}
 
-	@Rest(noInherit="debugDefault", debugDefault="ALWAYS")
+	@Rest(noInherit="debug", debug=@Debug("always"))
 	public static class M_NoInheritAlways {
-		@RestGet(path="/my") public String my() { return "my"; }
+		@RestGet(path="/my") public boolean my(RestRequest req) { return req.isDebug(); }
 	}
 
-	@Rest(debugDefault="CONDITIONAL", mixins={M_NoDebugDefault.class})
+	@Rest(debug=@Debug("conditional"), mixins={M_NoDebugDefault.class})
 	public static class HostInheritsToMixin extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestGet(path="/h") public String h() { return "h"; }
+		@RestGet(path="/h") public boolean h(RestRequest req) { return req.isDebug(); }
 	}
 
-	@Rest(debugDefault="CONDITIONAL", mixins={M_OverridesAlways.class})
+	@Rest(debug=@Debug("conditional"), mixins={M_OverridesAlways.class})
 	public static class HostWithMixinOverride extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestGet(path="/h") public String h() { return "h"; }
+		@RestGet(path="/h") public boolean h(RestRequest req) { return req.isDebug(); }
 	}
 
-	@Rest(debugDefault="CONDITIONAL", mixins={M_NoInheritAlways.class})
+	@Rest(debug=@Debug("conditional"), mixins={M_NoInheritAlways.class})
 	public static class HostWithNoInherit extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestGet(path="/h") public String h() { return "h"; }
-	}
-
-	private static Enablement resolvedDebugDefault(RestContext c) {
-		c.getDebugEnablement();
-		return c.getBeanStore().getBean(Enablement.class).orElse(null);
+		@RestGet(path="/h") public boolean h(RestRequest req) { return req.isDebug(); }
 	}
 
 	@Test void a01_mixinInheritsHostDebugDefault() throws Exception {
-		MockRestClient.buildLax(HostInheritsToMixin.class);
-		var hostCtx = RestContext.getGlobalRegistry().get(HostInheritsToMixin.class);
-		var mixinCtx = hostCtx.getMixinContexts().get(M_NoDebugDefault.class);
-		assertNotNull(mixinCtx);
-
-		assertEquals(Enablement.CONDITIONAL, resolvedDebugDefault(hostCtx),
-			"Host must resolve its declared debugDefault=\"CONDITIONAL\"");
-		assertEquals(Enablement.CONDITIONAL, resolvedDebugDefault(mixinCtx),
-			"Mixin with no debugDefault declaration must inherit the host's CONDITIONAL");
+		var c = MockRestClient.buildJson5(HostInheritsToMixin.class);
+		var cd = MockRestClient.create(HostInheritsToMixin.class).json5().debug().suppressLogging().build();
+		c.get("/h").run().assertContent("false");
+		c.get("/me").run().assertContent("false");
+		cd.get("/h").run().assertContent("true");
+		cd.get("/me").run().assertContent("true");
 	}
 
 	@Test void a02_mixinDebugDefaultOverridesHost() throws Exception {
-		MockRestClient.buildLax(HostWithMixinOverride.class);
-		var hostCtx = RestContext.getGlobalRegistry().get(HostWithMixinOverride.class);
-		var mixinCtx = hostCtx.getMixinContexts().get(M_OverridesAlways.class);
-		assertNotNull(mixinCtx);
-
-		assertEquals(Enablement.CONDITIONAL, resolvedDebugDefault(hostCtx),
-			"Host endpoint must keep its CONDITIONAL — mixin override is scoped to mixin context");
-		assertEquals(Enablement.ALWAYS, resolvedDebugDefault(mixinCtx),
-			"Mixin endpoint must use mixin's debugDefault=\"ALWAYS\" (most-derived wins)");
+		var c = MockRestClient.buildJson5(HostWithMixinOverride.class);
+		var cd = MockRestClient.create(HostWithMixinOverride.class).json5().debug().suppressLogging().build();
+		c.get("/h").run().assertContent("false");
+		c.get("/my").run().assertContent("true");
+		cd.get("/h").run().assertContent("true");
+		cd.get("/my").run().assertContent("true");
 	}
 
 	@Test void a03_noInheritOnMixinUsesMixinOnly() throws Exception {
-		MockRestClient.buildLax(HostWithNoInherit.class);
-		var hostCtx = RestContext.getGlobalRegistry().get(HostWithNoInherit.class);
-		var mixinCtx = hostCtx.getMixinContexts().get(M_NoInheritAlways.class);
-		assertNotNull(mixinCtx);
-
-		assertEquals(Enablement.ALWAYS, resolvedDebugDefault(mixinCtx),
-			"Mixin with noInherit=\"debugDefault\" must use its own ALWAYS");
-		assertEquals(Enablement.CONDITIONAL, resolvedDebugDefault(hostCtx),
-			"Host must retain its CONDITIONAL regardless of mixin's noInherit");
+		var c = MockRestClient.buildJson5(HostWithNoInherit.class);
+		var cd = MockRestClient.create(HostWithNoInherit.class).json5().debug().suppressLogging().build();
+		c.get("/h").run().assertContent("false");
+		c.get("/my").run().assertContent("true");
+		cd.get("/h").run().assertContent("true");
+		cd.get("/my").run().assertContent("true");
 	}
 }

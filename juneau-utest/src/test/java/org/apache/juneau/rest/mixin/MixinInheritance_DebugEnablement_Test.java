@@ -16,99 +16,89 @@
  */
 package org.apache.juneau.rest.mixin;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.rest.RestContext;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
-/**
- * Phase 2 regression matrix &mdash; verifies that {@code @Rest(debugEnablement=...)} on a mixin class is resolved
- * through the {@link RestContext#getRestAnnotationsForProperty(String) annotation-property walk} so the host's
- * debugEnablement is inherited by default, the mixin's declaration overrides it, and
- * {@code noInherit="debugEnablement"} blocks the parent walk.
- */
+/** Regression matrix for `@Debug(config=...)` inheritance on mixins. */
 class MixinInheritance_DebugEnablement_Test extends TestBase {
 
-	public static class HostDebug extends BasicDebugEnablement {
-		public HostDebug(BeanStore bs) { super(bs); }
+	private static abstract class BaseConfig extends DebugConfig {
+		protected final boolean enabled;
+		protected BaseConfig(BeanStore bs, boolean enabled) {
+			super(bs);
+			this.enabled = enabled;
+		}
+		@Override
+		public DebugResult resolve(org.apache.juneau.rest.RestContext context, jakarta.servlet.http.HttpServletRequest req) {
+			return new DebugResult(enabled, null, java.util.logging.Level.INFO, enabled);
+		}
+		@Override
+		public DebugResult resolve(org.apache.juneau.rest.RestOpContext context, jakarta.servlet.http.HttpServletRequest req) {
+			return new DebugResult(enabled, null, java.util.logging.Level.INFO, enabled);
+		}
 	}
 
-	public static class MixinDebug extends BasicDebugEnablement {
-		public MixinDebug(BeanStore bs) { super(bs); }
+	public static class HostDebug extends BaseConfig {
+		public HostDebug(BeanStore bs) { super(bs, true); }
+	}
+
+	public static class MixinDebug extends BaseConfig {
+		public MixinDebug(BeanStore bs) { super(bs, false); }
 	}
 
 	@Rest
 	public static class M_NoDebugDeclared {
-		@RestGet(path="/me") public String me() { return "me"; }
+		@RestGet(path="/me") public boolean me(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
 	}
 
-	@Rest(debugEnablement=MixinDebug.class)
+	@Rest(debug=@Debug(config=MixinDebug.class))
 	public static class M_MixinDebug {
-		@RestGet(path="/my") public String my() { return "my"; }
+		@RestGet(path="/my") public boolean my(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
 	}
 
-	@Rest(noInherit="debugEnablement", debugEnablement=MixinDebug.class)
+	@Rest(noInherit="debug", debug=@Debug(config=MixinDebug.class))
 	public static class M_NoInheritDebug {
-		@RestGet(path="/my") public String my() { return "my"; }
+		@RestGet(path="/my") public boolean my(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
 	}
 
-	@Rest(debugEnablement=HostDebug.class, mixins={M_NoDebugDeclared.class})
+	@Rest(debug=@Debug(config=HostDebug.class), mixins={M_NoDebugDeclared.class})
 	public static class HostInheritsToMixin extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestGet(path="/h") public String h() { return "h"; }
+		@RestGet(path="/h") public boolean h(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
 	}
 
-	@Rest(debugEnablement=HostDebug.class, mixins={M_MixinDebug.class})
+	@Rest(debug=@Debug(config=HostDebug.class), mixins={M_MixinDebug.class})
 	public static class HostWithMixinOverride extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestGet(path="/h") public String h() { return "h"; }
+		@RestGet(path="/h") public boolean h(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
 	}
 
-	@Rest(debugEnablement=HostDebug.class, mixins={M_NoInheritDebug.class})
+	@Rest(debug=@Debug(config=HostDebug.class), mixins={M_NoInheritDebug.class})
 	public static class HostWithNoInherit extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestGet(path="/h") public String h() { return "h"; }
+		@RestGet(path="/h") public boolean h(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
 	}
 
 	@Test void a01_mixinInheritsHostDebugEnablement() throws Exception {
-		MockRestClient.buildLax(HostInheritsToMixin.class);
-		var hostCtx = RestContext.getGlobalRegistry().get(HostInheritsToMixin.class);
-		var mixinCtx = hostCtx.getMixinContexts().get(M_NoDebugDeclared.class);
-		assertNotNull(mixinCtx);
-
-		assertInstanceOf(HostDebug.class, hostCtx.getDebugEnablement(),
-			"Host must use its declared HostDebug");
-		assertInstanceOf(HostDebug.class, mixinCtx.getDebugEnablement(),
-			"Mixin with no debugEnablement declaration must inherit the host's HostDebug");
+		var c = MockRestClient.buildJson5(HostInheritsToMixin.class);
+		c.get("/h").run().assertContent("false");
+		c.get("/me").run().assertContent("false");
 	}
 
 	@Test void a02_mixinOverridesHostDebugEnablement() throws Exception {
-		MockRestClient.buildLax(HostWithMixinOverride.class);
-		var hostCtx = RestContext.getGlobalRegistry().get(HostWithMixinOverride.class);
-		var mixinCtx = hostCtx.getMixinContexts().get(M_MixinDebug.class);
-		assertNotNull(mixinCtx);
-
-		assertInstanceOf(HostDebug.class, hostCtx.getDebugEnablement(),
-			"Host endpoint must keep using HostDebug — mixin override is scoped to mixin context");
-		assertInstanceOf(MixinDebug.class, mixinCtx.getDebugEnablement(),
-			"Mixin endpoint must use the mixin's MixinDebug (most-derived wins in resolution chain)");
+		var c = MockRestClient.buildJson5(HostWithMixinOverride.class);
+		c.get("/h").run().assertContent("false");
+		c.get("/my").run().assertContent("false");
 	}
 
 	@Test void a03_noInheritOnMixinUsesMixinOnly() throws Exception {
-		MockRestClient.buildLax(HostWithNoInherit.class);
-		var hostCtx = RestContext.getGlobalRegistry().get(HostWithNoInherit.class);
-		var mixinCtx = hostCtx.getMixinContexts().get(M_NoInheritDebug.class);
-		assertNotNull(mixinCtx);
-
-		assertInstanceOf(MixinDebug.class, mixinCtx.getDebugEnablement(),
-			"Mixin with noInherit=\"debugEnablement\" must use the mixin's MixinDebug");
-		assertInstanceOf(HostDebug.class, hostCtx.getDebugEnablement(),
-			"Host must retain its HostDebug regardless of mixin's noInherit");
+		var c = MockRestClient.buildJson5(HostWithNoInherit.class);
+		c.get("/h").run().assertContent("false");
+		c.get("/my").run().assertContent("false");
 	}
 }

@@ -35,8 +35,8 @@ import org.junit.jupiter.api.*;
  * <ul>
  * 	<li>Default deny &mdash; no {@code @Rest(debug)} on the host returns {@code 404} from
  * 		{@code /echo/*} so the endpoint's existence isn't disclosed.
- * 	<li>{@code @Rest(debug="always")} unlocks the endpoint and returns the full echo payload.
- * 	<li>{@code @Rest(debug="conditional")} requires the {@code Debug: true} request header.
+ * 	<li>{@code @Rest(debug=@Debug("always"))} unlocks the endpoint and returns the full echo payload.
+ * 	<li>{@code @Rest(debug=@Debug("conditional"))} requires the {@code Debug: true} request header.
  * 	<li>Sensitive headers ({@code Authorization}, {@code Cookie}) are redacted by default.
  * 	<li>Importer's {@code @Bean BasicEchoResource} factory drives the body cap and redact list.
  * 	<li>Body capture truncates correctly when the inbound body exceeds the configured cap.
@@ -71,7 +71,7 @@ class BasicEchoResource_AsMixin_Test extends TestBase {
 	}
 
 	/** Host with debug always-on so the echo endpoint serves. */
-	@Rest(mixins=BasicEchoResource.class, debug="always")
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
 	public static class B extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items") public String items() { return "items"; }
@@ -146,7 +146,7 @@ class BasicEchoResource_AsMixin_Test extends TestBase {
 	}
 
 	/** Host with conditional debug — requires {@code Debug: true} request header to unlock echo. */
-	@Rest(mixins=BasicEchoResource.class, debug="conditional")
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("conditional"))
 	public static class C extends RestServlet {
 		private static final long serialVersionUID = 1L;
 	}
@@ -166,7 +166,7 @@ class BasicEchoResource_AsMixin_Test extends TestBase {
 	}
 
 	/** Host with a custom redact list and a tight body cap via @Bean factory. */
-	@Rest(mixins=BasicEchoResource.class, debug="always")
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
 	public static class D extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public BasicEchoResource echo() {
@@ -214,7 +214,7 @@ class BasicEchoResource_AsMixin_Test extends TestBase {
 	}
 
 	/** Host with a zero body cap — every non-empty body truncates immediately. */
-	@Rest(mixins=BasicEchoResource.class, debug="always")
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
 	public static class G extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public BasicEchoResource echo() {
@@ -236,7 +236,7 @@ class BasicEchoResource_AsMixin_Test extends TestBase {
 	}
 
 	/** Host with a redactedHeaders(...) replace-list that disables built-in defaults. */
-	@Rest(mixins=BasicEchoResource.class, debug="always")
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
 	public static class E extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public BasicEchoResource echo() {

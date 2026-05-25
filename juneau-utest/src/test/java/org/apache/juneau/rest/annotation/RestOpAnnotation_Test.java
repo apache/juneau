@@ -107,7 +107,7 @@ class RestOpAnnotation_Test extends TestBase {
 	@Test void a01_basic() {
 		assertBean(a1,
 			"allowedParserOptions,allowedSerializerOptions,clientVersion,consumes,converters,debug,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestFormData,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,maxInput,method,noInherit,parsers,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
-			"[v1],[v2],a,[b],[RestConverter],c,d,e,f,[i],[g],[j],[h],[k],[l],[Encoder],[RestGuard],[RestMatcher],m,n,[v3],[Parser],[p],[q],r,s,[Serializer],t,{[],,[],{[],},,[],[],[],[],[],[],[]},u");
+			"[v1],[v2],a,[b],[RestConverter],{config=Void,format=Void,level=,on=,value=c},d,e,f,[i],[g],[j],[h],[k],[l],[Encoder],[RestGuard],[RestMatcher],m,n,[v3],[Parser],[p],[q],r,s,[Serializer],t,{[],,[],{[],},,[],[],[],[],[],[],[]},u");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -139,7 +139,7 @@ class RestOpAnnotation_Test extends TestBase {
 			clientVersion="a",
 			consumes="b",
 			converters=RestConverter.class,
-			debug="c",
+			debug=@Debug("c"),
 			defaultAccept="d",
 			defaultCharset="e",
 			defaultContentType="f",
@@ -173,7 +173,7 @@ class RestOpAnnotation_Test extends TestBase {
 			clientVersion="a",
 			consumes="b",
 			converters=RestConverter.class,
-			debug="c",
+			debug=@Debug("c"),
 			defaultAccept="d",
 			defaultCharset="e",
 			defaultContentType="f",

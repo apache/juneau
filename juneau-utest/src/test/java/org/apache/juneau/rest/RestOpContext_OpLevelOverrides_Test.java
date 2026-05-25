@@ -76,7 +76,7 @@ class RestOpContext_OpLevelOverrides_Test extends TestBase {
 
 	@Rest
 	public static class C {
-		@RestGet(debug = "true")
+		@RestGet(debug="true")
 		public void get() {}
 	}
 

@@ -53,7 +53,7 @@ import org.springframework.test.annotation.*;
  * 		ApplicationContext.getBean(...)}.
  * 	<li>End-to-end format-pinned JSON ({@link org.apache.juneau.rest.RestResponse#getDirectWriter
  * 		getDirectWriter("application/json")}) under embedded Tomcat.
- * 	<li>{@code @Rest(debug="always")} resolving through Spring's container into the mixin
+ * 	<li>{@code @Rest(debug=@Debug("always"))} resolving through Spring's container into the mixin
  * 		sub-context's debug enablement.
  * </ul>
  *
@@ -79,7 +79,7 @@ class BasicEchoResource_Springboot_Test {
 		}
 	}
 
-	@Rest(mixins=BasicEchoResource.class, debug="always")
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
 	public static class Host extends BasicSpringRestServlet {
 		private static final long serialVersionUID = 1L;
 	}

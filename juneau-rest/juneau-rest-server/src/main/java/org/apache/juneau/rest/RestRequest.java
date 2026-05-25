@@ -63,6 +63,7 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.assertions.*;
+import org.apache.juneau.rest.debug.format.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
@@ -1583,6 +1584,70 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public boolean isDebug() { return getAttribute("Debug").as(Boolean.class).orElse(false); }
 
 	/**
+	 * Returns a fluent debug scope for this request.
+	 *
+	 * @return A debug scope.
+	 */
+	public DebugScope debug() {
+		return new DebugScope(this);
+	}
+
+	/**
+	 * Request-scoped debug controls.
+	 */
+	public static class DebugScope {
+		private final RestRequest req;
+
+		DebugScope(RestRequest req) {
+			this.req = req;
+		}
+
+		/**
+		 * Enables debug.
+		 *
+		 * @return This object.
+		 * @throws IOException If debug could not be enabled.
+		 */
+		public DebugScope enable() throws IOException {
+			req.setDebug(true);
+			return this;
+		}
+
+		/**
+		 * Enables debug with a capturing format marker.
+		 *
+		 * @param formatType The format type.
+		 * @return This object.
+		 * @throws IOException If debug could not be enabled.
+		 */
+		public DebugScope enable(Class<?> formatType) throws IOException {
+			req.setDebug(true);
+			req.setAttribute("DebugFormatType", formatType == null ? BasicTextFormat.class : formatType);
+			return this;
+		}
+
+		/**
+		 * Disables debug.
+		 *
+		 * @return This object.
+		 * @throws IOException If debug could not be disabled.
+		 */
+		public DebugScope disable() throws IOException {
+			req.setDebug(false);
+			return this;
+		}
+
+		/**
+		 * Returns whether debug is enabled.
+		 *
+		 * @return Whether debug is enabled.
+		 */
+		public boolean isEnabled() {
+			return req.isDebug();
+		}
+	}
+
+	/**
 	 * Returns <jk>true</jk> if <c>&amp;plainText=true</c> was specified as a URL parameter.
 	 *
 	 * <p>
@@ -1815,7 +1880,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException If content could not be cached.
 	 */
 	public RestRequest setDebug() throws IOException {
-		return setDebug(true);
+		debug().enable();
+		return this;
 	}
 
 	/**

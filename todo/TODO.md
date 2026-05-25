@@ -21,7 +21,7 @@ Four foundational TODOs (TODO-73, TODO-81, TODO-69) and four mixin packs (TODO-7
 
 **Phase B — debug rethink (next in flight):**
 
-8. **TODO-20** — Rest debug rethink. Collapses five `@Rest`/`@RestOp` debug attributes + `DebugEnablement` + parallel `CallLogger` rule lists into a single `DebugConfig` bean + a typed `@Debug` annotation. **Hard break** (no deprecation cycle; migration notes in `juneau-docs/pages/topics/23.01.V9.5-migration-guide.md`). **Source-of-truth pattern** — `@Debug` is nested as `@Rest(debug=@Debug(...))` and `@RestOp(debug=@Debug(...))` so the `@Rest`/`@RestOp` annotation is the canonical capability surface, with standalone `@Debug` retained as an escape hatch. FINISHED-35 satisfies the only external dep. Plan: `todo/TODO-20-rest-debug-rethink.md`.
+8. ~~**TODO-20** — Rest debug rethink. Collapses five `@Rest`/`@RestOp` debug attributes + `DebugEnablement` + parallel `CallLogger` rule lists into a single `DebugConfig` bean + a typed `@Debug` annotation. **Hard break** (no deprecation cycle; migration notes in `juneau-docs/pages/topics/23.01.V9.5-migration-guide.md`). **Source-of-truth pattern** — `@Debug` is nested as `@Rest(debug=@Debug(...))` and `@RestOp(debug=@Debug(...))` so the `@Rest`/`@RestOp` annotation is the canonical capability surface, with standalone `@Debug` retained as an escape hatch. FINISHED-35 satisfies the only external dep.~~ ✅ done — see `todo/FINISHED-20-rest-debug-rethink.md`.
 
 **Phase C — view infrastructure (hard prereq for Phase D):**
 
@@ -63,8 +63,6 @@ Four foundational TODOs (TODO-73, TODO-81, TODO-69) and four mixin packs (TODO-7
 Foundations (TODO-73 + TODO-81 + TODO-69) → mixin family (TODO-74–77) → debug rethink (TODO-20) → view infrastructure + siblings (TODO-78 + TODO-82/83/84) → application showcase (TODO-85/86/87) → quality-of-life (TODO-89 + TODO-71 + TODO-88) → server-feature track (TODO-67 + TODO-68 + TODO-70 + TODO-79).
 
 ## Items
-
-- [TODO-20] Rest debug rethink — collapses `DebugEnablement` + `CallLogger` rule lists + five `@Rest`/`@RestOp` debug attributes into a single `DebugConfig` bean + typed `@Debug` annotation. Hard break in 9.5 (no deprecation cycle) with migration notes. Source-of-truth pattern — `@Debug` is nested as `@Rest(debug=@Debug(...))` and `@RestOp(debug=@Debug(...))` (primary placement) with standalone `@Debug` retained as an escape hatch. See `todo/TODO-20-rest-debug-rethink.md`.
 
 - [TODO-37] - Agent instruction consolidation.
 

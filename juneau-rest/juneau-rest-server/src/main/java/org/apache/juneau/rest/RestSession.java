@@ -295,6 +295,8 @@ public class RestSession extends ContextSession {
 			exception(e);
 		}
 		if (nn(logger))
+			req.setAttribute("DebugConfig", opSession != null ? opSession.getContext().getDebugConfig() : context.getDebugConfig());
+		if (nn(logger))
 			logger.log(req, res);
 		return this;
 	}

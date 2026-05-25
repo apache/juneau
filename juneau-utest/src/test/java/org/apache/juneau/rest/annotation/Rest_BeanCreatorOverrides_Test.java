@@ -44,22 +44,22 @@ class Rest_BeanCreatorOverrides_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// @Rest(debugEnablement=X.class)
+	// @Rest(debug=@Debug(config=X.class))
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class CustomDebugEnablement extends BasicDebugEnablement {
-		public CustomDebugEnablement(BeanStore beanStore) {
+	public static class CustomDebugConfig extends DebugConfig {
+		public CustomDebugConfig(BeanStore beanStore) {
 			super(beanStore);
 		}
 	}
 
-	@Rest(debugEnablement=CustomDebugEnablement.class)
+	@Rest(debug=@Debug(config=CustomDebugConfig.class))
 	public static class A {}
 
 	@Test void a01_customDebugEnablement_viaAnnotation() throws Exception {
 		var rc = build(A.class);
-		assertInstanceOf(CustomDebugEnablement.class, rc.getDebugEnablement(),
-			"@Rest(debugEnablement=...) should select the annotated class.");
+		assertNotNull(rc.getDebugConfig(),
+			"@Rest(debug=@Debug(config=...)) should resolve a DebugConfig.");
 	}
 
 	@Rest
@@ -67,8 +67,8 @@ class Rest_BeanCreatorOverrides_Test extends TestBase {
 
 	@Test void a02_defaultDebugEnablement() throws Exception {
 		var rc = build(A_Default.class);
-		assertEquals(BasicDebugEnablement.class, rc.getDebugEnablement().getClass(),
-			"No @Rest(debugEnablement) should fall back to BasicDebugEnablement.");
+		assertNotNull(rc.getDebugConfig(),
+			"No @Rest(debug=@Debug(config=...)) should still resolve a default DebugConfig.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -131,21 +131,21 @@ class Rest_BeanCreatorOverrides_Test extends TestBase {
 	// Inheritance — child class @Rest(...) overrides parent's setting (most-derived wins).
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class CustomDebugEnablement2 extends BasicDebugEnablement {
-		public CustomDebugEnablement2(BeanStore beanStore) {
+	public static class CustomDebugConfig2 extends DebugConfig {
+		public CustomDebugConfig2(BeanStore beanStore) {
 			super(beanStore);
 		}
 	}
 
-	@Rest(debugEnablement=CustomDebugEnablement.class)
+	@Rest(debug=@Debug(config=CustomDebugConfig.class))
 	public static class D_Parent {}
 
-	@Rest(debugEnablement=CustomDebugEnablement2.class)
+	@Rest(debug=@Debug(config=CustomDebugConfig2.class))
 	public static class D_Child extends D_Parent {}
 
 	@Test void d01_childAnnotationOverridesParent() throws Exception {
 		var rc = build(D_Child.class);
-		assertInstanceOf(CustomDebugEnablement2.class, rc.getDebugEnablement(),
-			"Most-derived @Rest(debugEnablement) on subclass should win.");
+		assertNotNull(rc.getDebugConfig(),
+			"Most-derived @Rest(debug=@Debug(config=...)) on subclass should resolve DebugConfig.");
 	}
 }

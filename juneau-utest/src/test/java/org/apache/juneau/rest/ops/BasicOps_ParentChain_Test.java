@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  * <p>
  * Setup: a single {@link RestServlet} host mounts all three ops mixins
  * ({@link BasicEchoResource}, {@link BasicAdminResource}, {@link BasicRouteIndexResource}) plus a
- * vanilla {@code /items} op of its own. {@code @Rest(debug="always")} unlocks the echo endpoint;
+ * vanilla {@code /items} op of its own. {@code @Rest(debug=@Debug("always"))} unlocks the echo endpoint;
  * an empty {@code @Bean RestGuardList} factory replaces the {@link DenyAllGuard} default to
  * unlock the admin endpoints.
  *
@@ -56,7 +56,7 @@ class BasicOps_ParentChain_Test extends TestBase {
 
 	@Rest(
 		mixins={BasicEchoResource.class, BasicAdminResource.class, BasicRouteIndexResource.class},
-		debug="always")
+		debug=@Debug("always"))
 	public static class A extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items", summary="List items") public String items() { return "items"; }

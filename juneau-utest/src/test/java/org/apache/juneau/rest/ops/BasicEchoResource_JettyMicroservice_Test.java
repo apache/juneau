@@ -46,7 +46,7 @@ import jakarta.servlet.*;
  * Catches things {@code MockRest} cannot:
  * <ul>
  * 	<li>Real {@code Content-Type: application/json} negotiation through the Jetty/servlet stack.
- * 	<li>{@code @Rest(debug="always")} resolving end-to-end and unlocking the echo through the
+ * 	<li>{@code @Rest(debug=@Debug("always"))} resolving end-to-end and unlocking the echo through the
  * 		mixin sub-context's {@link org.apache.juneau.rest.debug.DebugEnablement DebugEnablement}.
  * 	<li>Sensitive-header redaction surviving the network stack &mdash; an {@code Authorization}
  * 		header sent over real HTTP must NEVER be reflected back in the response body.
@@ -56,7 +56,7 @@ import jakarta.servlet.*;
  */
 class BasicEchoResource_JettyMicroservice_Test extends TestBase {
 
-	@Rest(mixins=BasicEchoResource.class, debug="always")
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
 	public static class Host extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public BasicEchoResource echo() {

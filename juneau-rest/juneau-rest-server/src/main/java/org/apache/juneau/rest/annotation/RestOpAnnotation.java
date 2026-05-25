@@ -65,7 +65,7 @@ public class RestOpAnnotation {
 		private Class<?>[] parsers = {};
 		private OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		private String clientVersion = "";
-		private String debug = "";
+		private Debug debug = DebugAnnotation.DEFAULT;
 		private String defaultAccept = "";
 		private String defaultCharset = "";
 		private String defaultContentType = "";
@@ -156,7 +156,18 @@ public class RestOpAnnotation {
 		 * @return This object.
 		 */
 		public Builder debug(String value) {
-			debug = value;
+			debug = DebugAnnotation.create().value(value).build();
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#debug()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder debug(Debug value) {
+			debug = value == null ? DebugAnnotation.DEFAULT : value;
 			return this;
 		}
 
@@ -471,7 +482,7 @@ public class RestOpAnnotation {
 		private final Class<?>[] parsers;
 		private final OpSwagger swagger;
 		private final String clientVersion;
-		private final String debug;
+		private final Debug debug;
 		private final String defaultAccept;
 		private final String defaultCharset;
 		private final String defaultContentType;
@@ -545,7 +556,7 @@ public class RestOpAnnotation {
 		}
 
 		@Override /* Overridden from RestOp */
-		public String debug() {
+		public Debug debug() {
 			return debug;
 		}
 

@@ -25,7 +25,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.converter.*;
-import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.openapi.*;
@@ -72,7 +71,7 @@ public class RestAnnotation {
 		private Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Void.class;
 		private Class<? extends OpenApiProvider> openApiProvider = OpenApiProvider.Void.class;
 		private Class<? extends RestOpArg>[] restOpArgs = new Class[0];
-		private Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
+		private Debug debug = DebugAnnotation.DEFAULT;
 		private Class<? extends Serializer>[] serializers = new Class[0];
 		private Class<?>[] children = {};
 		private Class<?>[] mixins = {};
@@ -85,9 +84,6 @@ public class RestAnnotation {
 		private String clientVersionHeader = "";
 		private String config = "";
 		private String eagerInit = "";
-		private String debug = "";
-		private String debugDefault = "";
-		private String debugOn = "";
 		private String defaultAccept = "";
 		private String defaultCharset = "";
 		private String defaultContentType = "";
@@ -307,40 +303,18 @@ public class RestAnnotation {
 		 * @return This object.
 		 */
 		public Builder debug(String value) {
-			debug = value;
+			debug = DebugAnnotation.create().value(value).build();
 			return this;
 		}
 
 		/**
-		 * Sets the {@link Rest#debugEnablement()} property on this annotation.
+		 * Sets the {@link Rest#debug()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder debugEnablement(Class<? extends DebugEnablement> value) {
-			debugEnablement = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#debugDefault()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder debugDefault(String value) {
-			debugDefault = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#debugOn()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder debugOn(String value) {
-			debugOn = value;
+		public Builder debug(Debug value) {
+			debug = value == null ? DebugAnnotation.DEFAULT : value;
 			return this;
 		}
 
@@ -742,7 +716,7 @@ public class RestAnnotation {
 		private final Class<? extends SwaggerProvider> swaggerProvider;
 		private final Class<? extends OpenApiProvider> openApiProvider;
 		private final Class<? extends RestOpArg>[] restOpArgs;
-		private final Class<? extends DebugEnablement> debugEnablement;
+		private final Debug debug;
 		private final Class<? extends Serializer>[] serializers;
 		private final Class<?>[] children;
 		private final Class<?>[] mixins;
@@ -755,9 +729,6 @@ public class RestAnnotation {
 		private final String clientVersionHeader;
 		private final String config;
 		private final String eagerInit;
-		private final String debug;
-		private final String debugDefault;
-		private final String debugOn;
 		private final String defaultAccept;
 		private final String defaultCharset;
 		private final String defaultContentType;
@@ -807,9 +778,6 @@ public class RestAnnotation {
 			consumes = copyOf(b.consumes);
 			converters = copyOf(b.converters);
 			debug = b.debug;
-			debugDefault = b.debugDefault;
-			debugEnablement = b.debugEnablement;
-			debugOn = b.debugOn;
 			defaultAccept = b.defaultAccept;
 			defaultCharset = b.defaultCharset;
 			defaultContentType = b.defaultContentType;
@@ -920,23 +888,8 @@ public class RestAnnotation {
 		}
 
 		@Override /* Overridden from Rest */
-		public String debug() {
+		public Debug debug() {
 			return debug;
-		}
-
-		@Override /* Overridden from Rest */
-		public Class<? extends DebugEnablement> debugEnablement() {
-			return debugEnablement;
-		}
-
-		@Override /* Overridden from Rest */
-		public String debugDefault() {
-			return debugDefault;
-		}
-
-		@Override /* Overridden from Rest */
-		public String debugOn() {
-			return debugOn;
 		}
 
 		@Override /* Overridden from Rest */

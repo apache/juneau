@@ -22,7 +22,6 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.auth.*;
-import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.openapi.*;
 import org.apache.juneau.rest.processor.*;
@@ -101,8 +100,7 @@ import org.apache.juneau.serializer.annotation.*;
 	allowedMethodHeaders="$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}",
 	allowedMethodParams="$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}",
 	clientVersionHeader="$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}",
-	debug="$S{j.debug,$E{J_DEBUG,}}",
-	debugOn="$S{j.debugOn,$E{J_DEBUG_ON,}}",
+	debug=@Debug("$S{j.debug,$E{J_DEBUG,}}"),
 	defaultAccept="$S{j.defaultAccept,$E{J_DEFAULT_ACCEPT,}}",
 	defaultCharset="$S{j.defaultCharset,$E{J_DEFAULT_CHARSET,UTF-8}}",
 	defaultContentType="$S{j.defaultContentType,$E{J_DEFAULT_CONTENT_TYPE,}}",
@@ -128,7 +126,6 @@ import org.apache.juneau.serializer.annotation.*;
 
 	// Injectable/overridable beans.
 	callLogger=CallLogger.Void.class,  // Defaults to BasicCallLogger.
-	debugEnablement=DebugEnablement.Void.class,  // Defaults to BasicDefaultEnablement.
 	staticFiles=StaticFiles.Void.class,  // Defaults to BasicStaticFiles.
 	swaggerProvider=SwaggerProvider.Void.class,  // Defaults to BasicSwaggerProvider.
 	openApiProvider=OpenApiProvider.Void.class  // Defaults to BasicOpenApiProvider.

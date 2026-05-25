@@ -81,6 +81,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.debug.*;
+import org.apache.juneau.rest.debug.format.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.processor.*;
@@ -703,6 +704,7 @@ public class RestContext extends Context {
 		bs.addDefaultSupplier(StaticFiles.class, staticFiles::get);
 		bs.addDefaultSupplier(FileFinder.class, staticFiles::get);
 		bs.addDefaultSupplier(DebugEnablement.class, debugEnablement::get);
+		bs.addDefaultSupplier(DebugConfig.class, debugConfig::get);
 		bs.addDefaultSupplier(SwaggerProvider.class, swaggerProvider::get);
 		bs.addDefaultSupplier(OpenApiProvider.class, openApiProvider::get);
 		bs.addDefaultSupplier(RestOperations.class, restOperations::get);
@@ -893,14 +895,64 @@ public class RestContext extends Context {
 			bs.addBean(Enablement.class, isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
 		var creator = BeanInstantiator.of(DebugEnablement.class, bs).type(BasicDebugEnablement.class).noBuilder();
 		bs.getBeanType(DebugEnablement.class).ifPresent(creator::type);
-		// @Rest(debugEnablement=X) — most-derived non-Void wins. See callLogger for the reduce-last rationale.
-		getRestAnnotationsForProperty(PROPERTY_debugEnablement)
-			.map(ai -> ai.inner().debugEnablement())
-			.filter(c -> c != DebugEnablement.Void.class)
-			.reduce((first, second) -> second)
-			.ifPresent(creator::type);
 		bs.createBeanFromMethod(DebugEnablement.class, resource().get(), RestContext::isBeanMethod).ifPresent(creator::impl);
 		return creator.asOptional().orElse(null);
+	});
+
+	/**
+	 * The {@link DebugConfig} for this resource.
+	 */
+	private final Memoizer<DebugConfig> debugConfig = memoizer(() -> {
+		var bs = beanStore();
+		var mode = getRestAnnotationsForProperty(PROPERTY_debug)
+			.map(ai -> resolve(ai.inner().debug().value()))
+			.filter(StringUtils::isNotBlank)
+			.reduce((first, second) -> second)
+			.orElse("");
+		var formatType = getRestAnnotationsForProperty(PROPERTY_debug)
+			.map(ai -> ai.inner().debug().format())
+			.filter(c -> c != DebugFormat.Void.class)
+			.reduce((first, second) -> second)
+			.orElse(null);
+		var levelStr = getRestAnnotationsForProperty(PROPERTY_debug)
+			.map(ai -> resolve(ai.inner().debug().level()))
+			.filter(StringUtils::isNotBlank)
+			.reduce((first, second) -> second)
+			.orElse("");
+		var format = formatType == null ? new BasicTextFormat() : BeanInstantiator.of(DebugFormat.class, bs).type(formatType).run();
+		var level = StringUtils.isNotBlank(levelStr) ? Level.parse(levelStr) : Level.parse(env(CallLogger.SP_level, "INFO"));
+		var mode2 = mode;
+		return new DebugConfig(bs) {
+			@Override
+			public DebugResult resolve(RestContext context, HttpServletRequest req) {
+				var enabled = isTrue(cast(Boolean.class, req.getAttribute("Debug")));
+				if (!enabled) {
+					if ("always".equalsIgnoreCase(mode2) || "true".equalsIgnoreCase(mode2))
+						enabled = true;
+					else if ("conditional".equalsIgnoreCase(mode2))
+						enabled = "true".equalsIgnoreCase(req.getHeader("Debug"));
+				}
+				var cacheBodies = enabled;
+				return new DebugResult(enabled, format, level, cacheBodies);
+			}
+
+			@Override
+			public DebugResult resolve(RestOpContext context, HttpServletRequest req) {
+				var opDebug = AnnotationProvider.INSTANCE.find(RestOp.class, ClassInfo.of(context.getJavaMethod())).stream().findFirst();
+				if (opDebug.isPresent()) {
+					var v = RestContext.this.resolve(opDebug.get().inner().debug().value());
+					if (StringUtils.isNotBlank(v)) {
+						if ("always".equalsIgnoreCase(v) || "true".equalsIgnoreCase(v))
+							return new DebugResult(true, format, level, true);
+						if ("never".equalsIgnoreCase(v) || "false".equalsIgnoreCase(v))
+							return new DebugResult(false, format, level, false);
+						if ("conditional".equalsIgnoreCase(v))
+							return new DebugResult("true".equalsIgnoreCase(req.getHeader("Debug")), format, level, true);
+					}
+				}
+				return resolve(context.getContext(), req);
+			}
+		};
 	});
 
 	/**
@@ -2675,6 +2727,13 @@ public class RestContext extends Context {
 	public DebugEnablement getDebugEnablement() { return beanStore.getBean(DebugEnablement.class).orElse(null); }
 
 	/**
+	 * Returns the debug configuration bean for this context.
+	 *
+	 * @return The debug configuration bean for this context.
+	 */
+	public DebugConfig getDebugConfig() { return beanStore.getBean(DebugConfig.class).orElse(null); }
+
+	/**
 	 * Returns the default request attributes for this resource.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -3314,7 +3373,7 @@ public class RestContext extends Context {
 	}
 
 	private boolean isDebug(RestSession call) {
-		return getDebugEnablement().isDebug(this, call.getRequest());
+		return getDebugConfig().resolve(this, call.getRequest()).enabled();
 	}
 
 	/**
@@ -3342,6 +3401,7 @@ public class RestContext extends Context {
 		getDefaultResponseHeaders();
 		getDefaultRequestAttributes();
 		getDebugEnablement();
+		getDebugConfig();
 		getSwaggerProvider();
 		getOpenApiProvider();
 	}
