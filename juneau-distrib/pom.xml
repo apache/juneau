@@ -508,6 +508,31 @@
 									<destFileName>org.apache.juneau.rest.server.jwt_${project.version}.jar</destFileName>
 								</artifactItem>
 
+								<!-- juneau-rest-server-view-jsp -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-view-jsp</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-server-view-jsp-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-view-jsp</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-server-view-jsp-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-view-jsp</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.server.view.jsp_${project.version}.jar</destFileName>
+								</artifactItem>
+
 								<!-- juneau-rest-server-springboot -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>

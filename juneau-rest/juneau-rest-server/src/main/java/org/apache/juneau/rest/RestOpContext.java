@@ -735,25 +735,50 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code noInherit={"path"}} cuts off any further parent-chain contribution. A
 	 * {@code @Bean UrlPathMatcherList} bean (matching this operation's method scope) REPLACES
 	 * the entire result.
+	 *
+	 * <p>
+	 * SVL variables (e.g. {@code $S{key,default}} or the shorthand {@code ${key:default}}) in path
+	 * strings are resolved via the host {@link RestContext}'s {@link VarResolver} before being
+	 * compiled into {@link UrlPathMatcher} patterns &mdash; this closes the asymmetry with class-level
+	 * {@link Rest#path() @Rest(path)} / {@link Rest#paths() @Rest(paths)}, which are also
+	 * SVL-resolved. Strings that contain no SVL markers pass through unchanged, so this is a strict
+	 * superset of the previous behavior. Path strings whose entire SVL resolution yields an empty
+	 * string are skipped (matching how empty pieces are dropped from the post-comma-split pipeline at
+	 * the class level &mdash; see {@code RestContext#splitPathsValue}). Unresolved variables (no
+	 * registered {@link Var}) pass through to {@link UrlPathMatcher#of} as the literal {@code ${...}}
+	 * placeholder, which then fails predictably at routing time. The auto-detected fallback path
+	 * (derived from the method name via {@link HttpUtils#detectHttpPath}) is intentionally
+	 * <i>not</i> SVL-resolved &mdash; it is framework-derived, not user input.
 	 */
 	@SuppressWarnings("java:S3776")
 	private final Memoizer<UrlPathMatcher[]> pathMatchers = memoizer(() -> {
 		var v = Value.of(UrlPathMatcherList.create());
+		var vr = varResolver();
 		getRestOpAnnotationsForProperty(PROPERTY_path).forEach(ai -> {
-			for (var p : ai.getStringArray(PROPERTY_path).orElse(StringUtils.EMPTY_STRING_ARRAY))
-				v.get().add(UrlPathMatcher.of(p));
+			for (var p : ai.getStringArray(PROPERTY_path).orElse(StringUtils.EMPTY_STRING_ARRAY)) {
+				var resolved = vr.resolve(p);
+				if (!resolved.isEmpty())
+					v.get().add(UrlPathMatcher.of(resolved));
+			}
 			// On verb annotations (@RestGet/@RestPost/etc.) value() is always the path. On @RestOp,
 			// value() is "[METHOD] [path]" where the leading method token is optional — only when a
 			// space is present does the trailing token represent a path. To keep this loop annotation-
 			// agnostic, we apply the @RestOp space-split rule only when an @RestOp annotation is in
 			// play (i.e. the annotation type matches), and otherwise treat value() as a plain path.
+			// SVL is applied AFTER the space-split rule so a resolved path can never be misinterpreted
+			// as a "METHOD path" pair (the method token is structural, not user-overridable via SVL).
 			ai.getString(PROPERTY_value).filter(StringUtils::isNotBlank).map(String::trim).ifPresent(s -> {
 				if (ai.inner() instanceof RestOp) {
 					var i = s.indexOf(' ');
-					if (i != -1)
-						v.get().add(UrlPathMatcher.of(s.substring(i).trim()));
+					if (i != -1) {
+						var resolved = vr.resolve(s.substring(i).trim());
+						if (!resolved.isEmpty())
+							v.get().add(UrlPathMatcher.of(resolved));
+					}
 				} else {
-					v.get().add(UrlPathMatcher.of(s));
+					var resolved = vr.resolve(s);
+					if (!resolved.isEmpty())
+						v.get().add(UrlPathMatcher.of(resolved));
 				}
 			});
 		});

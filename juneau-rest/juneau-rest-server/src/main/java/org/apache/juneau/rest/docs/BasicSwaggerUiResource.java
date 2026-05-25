@@ -40,6 +40,25 @@ import org.apache.juneau.rest.annotation.*;
  * is composed into a host. The two endpoints share the same Swagger document; they differ only in
  * URL surface and content-negotiation defaults.
  *
+ * <h5 class='section'>Configurable mount path:</h5>
+ *
+ * <p>
+ * The default mount {@code /swagger/*} can be overridden via the SVL variable
+ * {@code ${juneau.swaggerui.path:swagger}} &mdash; set via system property
+ * ({@code -Djuneau.swaggerui.path=docs}), environment variable
+ * ({@code JUNEAU_SWAGGERUI_PATH=docs}), or {@code Config} key
+ * ({@code juneau.swaggerui.path = docs}) to change the runtime mount without subclassing.
+ * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
+ * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ *
+ * <h5 class='section'>Mixin-only deployment:</h5>
+ *
+ * <p>
+ * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
+ * pinned at the op level by {@link RestGet @RestGet(path="/${juneau.swaggerui.path:swagger}/*")}
+ * on {@link #getSwaggerUi}; a class-level {@code @Rest(paths=...)} declaration would be silently
+ * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
+ *
  * <h5 class='figure'>Composition example:</h5>
  *
  * <p class='bjava'>
@@ -73,7 +92,6 @@ import org.apache.juneau.rest.annotation.*;
  */
 // @formatter:off
 @Rest(
-	paths={"/swagger"},
 	mixins={BasicSwaggerResource.class},
 	defaultAccept="text/html"
 )
@@ -93,7 +111,7 @@ public class BasicSwaggerUiResource {
 	 * @throws NotFound If no Swagger document is available for this resource.
 	 */
 	@RestGet(
-		path="/swagger/*",
+		path="/${juneau.swaggerui.path:swagger}/*",
 		summary="Swagger UI",
 		description="Swagger-UI HTML view of the Swagger v2 documentation for this resource."
 	)

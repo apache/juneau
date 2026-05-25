@@ -38,8 +38,25 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=BasicFaviconResource.class)};
  * the {@code /favicon.ico} URL becomes available alongside the host's own endpoints with no further
- * wiring. Or extend the class directly for a standalone deployment whose mount paths come from the
- * inherited {@link Rest#paths() @Rest(paths)} default.
+ * wiring.
+ *
+ * <h5 class='section'>Hardcoded mount path:</h5>
+ *
+ * <p>
+ * Unlike the sibling api-docs and ops mixins (see {@link BasicSwaggerResource},
+ * {@link BasicVersionResource}, etc.) the mount path here is <b>not</b> SVL-configurable
+ * &mdash; {@code /favicon.ico} is fixed by browser convention and the {@code link rel="icon"}
+ * default the HTML spec inherits from <a href="https://html.spec.whatwg.org/multipage/links.html#rel-icon">WHATWG HTML</a>.
+ * Browsers fetch {@code /favicon.ico} from the site root regardless of any application-level
+ * routing rewrites, so a runtime mount-path override here would have no practical effect.
+ *
+ * <h5 class='section'>Mixin-only deployment:</h5>
+ *
+ * <p>
+ * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
+ * pinned at the op level by {@link RestGet @RestGet(path="/favicon.ico")} on {@link #getFavicon};
+ * a class-level {@code @Rest(paths=...)} declaration would be silently ignored under the mixin
+ * pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
  * <h5 class='figure'>Composition example:</h5>
  *
@@ -90,7 +107,7 @@ import org.apache.juneau.rest.annotation.*;
  * @since 9.5.0
  */
 // @formatter:off
-@Rest(paths={"/favicon.ico"})
+@Rest
 public class BasicFaviconResource {
 
 	/** Default {@code Cache-Control} header value: {@code max-age=2592000, public} (30 days). */
@@ -142,7 +159,7 @@ public class BasicFaviconResource {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getFavicon() {
-		var hdrs = new ArrayList<HttpHeader>();
+		var hdrs = new ArrayList<HttpHeader>();  // TODO - Use Utils.list()
 		hdrs.add(ContentType.of("image/x-icon"));
 		hdrs.add(CacheControl.of(cacheControl));
 		return HttpResourceBean.of(ByteArrayBody.of(bytes, "image/x-icon"), hdrs);

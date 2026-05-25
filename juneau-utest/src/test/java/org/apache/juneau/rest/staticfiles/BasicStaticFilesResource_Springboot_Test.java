@@ -129,7 +129,9 @@ class BasicStaticFilesResource_Springboot_Test {
 			"Content-Type should be text/css but was: " + ct);
 	}
 
-	@Test void a02_htdocsPathServesFileUnderSpringBoot() throws Exception {
+	@Test void a02_htdocsPathServesFileViaLegacyMount() throws Exception {
+		// FINISHED-101: /htdocs/* is no longer a multi-path default on the mixin, but
+		// BasicSpringRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
 		var resp = get("/htdocs/javadoc.css");
 		assertEquals(200, resp.statusCode());
 		assertTrue(resp.body().contains("Licensed to the Apache Software Foundation"),

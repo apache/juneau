@@ -25,6 +25,8 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+import org.apache.juneau.commons.utils.FileUtils;
+
 import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.bean.*;
 import org.apache.juneau.config.*;
@@ -437,13 +439,24 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 	}
 
+	/**
+	 * Resolves a request path against {@link #rootDir} with a canonical-path boundary check
+	 * so {@code ..} segments, absolute paths, and symlink-out cannot escape the configured root.
+	 *
+	 * <p>
+	 * The check is intentionally applied at this single funnel because every public operation on
+	 * this resource (view, download, delete, upload, info) resolves the user-supplied path through
+	 * this method. Delegates to {@link FileUtils#resolveSafely(File, String)} — the canonical
+	 * shared implementation; the caller-layer mapping is: boundary violation → 403 (Forbidden),
+	 * non-existent target → 404 (NotFound).
+	 */
 	private File getFile(String path) throws NotFound {
-		if (path == null)
-			return rootDir;
-		var f = new File(rootDir.getAbsolutePath() + '/' + path);
-		if (f.exists())
-			return f;
-		throw new NotFound("File not found.");
+		try {
+			return FileUtils.resolveSafely(rootDir, path)
+				.orElseThrow(() -> new NotFound("File not found."));
+		} catch (IllegalArgumentException e) {
+			throw new Forbidden(e.getMessage());
+		}
 	}
 
 	/**

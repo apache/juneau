@@ -118,10 +118,13 @@ class BasicEchoResource_JettyMicroservice_Test extends TestBase {
 		assertTrue(resp.body().contains(BasicEchoResource.REDACTED));
 	}
 
-	@Test void a03_debugEchoMountAlsoServes() throws Exception {
+	@Test void a03_debugEchoLegacyAliasNotMountedByDefault() throws Exception {
+		// FINISHED-101: /debug/echo/* is no longer a multi-path default. Default-build hosts
+		// route the request through the host's normal routing — which returns 404 or 500
+		// depending on container error mapping; both indicate "not handled by the echo mixin".
 		var resp = get("/debug/echo/abc");
-		assertEquals(200, resp.statusCode());
-		assertTrue(resp.body().contains("\"pathRemainder\": \"abc\""), "body: " + resp.body());
+		assertTrue(resp.statusCode() == 404 || resp.statusCode() == 500,
+			"expected 404 or 500 (not mounted); got " + resp.statusCode() + ": " + resp.body());
 	}
 
 	@Test void a04_postEchoesBody() throws Exception {

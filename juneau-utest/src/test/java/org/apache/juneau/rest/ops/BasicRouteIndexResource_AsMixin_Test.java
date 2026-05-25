@@ -32,7 +32,8 @@ import org.junit.jupiter.api.*;
  * <p>
  * Cases:
  * <ul>
- * 	<li>{@code GET /options} and {@code GET /routes} return the same JSON list, ordered by path.
+ * 	<li>{@code GET /options} returns the JSON list, ordered by path (single SVL-configurable
+ * 		default mount).
  * 	<li>Every host {@code @RestOp}-annotated method appears in the listing with method, path,
  * 		and {@code summary} fields populated.
  * 	<li>The route-index endpoint omits itself from the listing.
@@ -40,6 +41,12 @@ import org.junit.jupiter.api.*;
  * 		(consistent with their absence from the OpenAPI spec).
  * 	<li>{@link Deprecated @Deprecated} methods surface {@code "deprecated": true}.
  * </ul>
+ *
+ * <p>
+ * Per the FINISHED-101 multi-path collapse, the historical {@code /routes} mount alias
+ * (formerly a dual default on a single op) is now reached via
+ * {@code -Djuneau.routeindex.path=routes}; that behavior is covered by
+ * {@code BasicRouteIndexResource_SvlPathOverride_Test}.
  *
  * @since 9.5.0
  */
@@ -74,10 +81,10 @@ class BasicRouteIndexResource_AsMixin_Test extends TestBase {
 		Assertions.assertFalse(parsed.isEmpty(), "route index should not be empty");
 	}
 
-	@Test void a02_routesIsSynonymForOptions() throws Exception {
-		var o = ca.get("/options").run().assertStatus(200).getContent().asString();
-		var r = ca.get("/routes").run().assertStatus(200).getContent().asString();
-		Assertions.assertEquals(o, r, "/options and /routes must produce identical output");
+	@Test void a02_legacyRoutesAliasNotMountedByDefault() throws Exception {
+		// FINISHED-101: /routes is no longer a multi-path default. It only mounts when the
+		// deployer overrides juneau.routeindex.path=routes. Default-build hosts get 404 here.
+		ca.get("/routes").run().assertStatus(404);
 	}
 
 	@Test void a03_listsAllVisibleHostEndpoints() throws Exception {
@@ -93,8 +100,6 @@ class BasicRouteIndexResource_AsMixin_Test extends TestBase {
 		var paths = pathsOf(entries);
 		Assertions.assertFalse(paths.contains("/options"),
 			"Route index must not echo itself; got: " + paths);
-		Assertions.assertFalse(paths.contains("/routes"),
-			"Route index must not echo /routes either; got: " + paths);
 	}
 
 	@Test void a05_excludesOpSwaggerIgnoreEndpoints() throws Exception {

@@ -47,11 +47,12 @@ public class AppResource extends RestServlet {
 **In scope (v1):**
 
 - New Maven module `juneau-rest/juneau-rest-server-view-freemarker/` with a `pom.xml` mirroring `juneau-rest-server-view-jsp` (sibling pattern from TODO-78) and `juneau-rest-server-mcp` (closest small-single-purpose precedent).
-- `org.apache.juneau.rest.view.freemarker.BasicFreemarkerResource` mixin with default `@Rest(paths={"/freemarker/*"})`. Single `@RestGet("/*")` handler (with `@Path("/*") String path` capturing the multi-segment remainder, `swagger=@OpSwagger(ignore=true)`) that:
+- `org.apache.juneau.rest.view.freemarker.BasicFreemarkerResource` mixin class (mixin-only — **no class-level `@Rest(paths=...)`**; see "Configurable mount path" section below). Single `@RestGet(path="/freemarker/*", swagger=@OpSwagger(ignore=true))` handler (with `@Path("/*") String path` capturing the multi-segment remainder) that:
     - Reads the configured base-path (default `/`).
     - Resolves the template by asking the `Configuration` for `<basePath><path>`.
     - Builds a model `Map<String,Object>` populated with request + session attributes (no Java model, since this is the raw-rendering path).
     - Writes the engine's output directly to the response writer with `Content-Type: text/html;charset=UTF-8` (for `.ftlh` / `.html` templates; FreeMarker's `OutputFormat` auto-selects HTML escaping for `.ftlh`).
+    - **Path-traversal hardening:** the resolved `<basePath><path>` MUST be validated via `FileUtils.resolveVirtualPathSafely(basePath, path)` (added in Phase C2 alongside FINISHED-100; see `BasicJspResource.render` for the canonical caller). The helper throws `IllegalArgumentException` on any `..` segment that escapes `basePath`; the handler maps that to HTTP 403. This is the same hardening pattern used by `DirectoryResource`, `LogsResource`, and `BasicJspResource`.
 - `org.apache.juneau.rest.view.freemarker.FreemarkerView` value-class — a `View` bean carrying `(templateName, Map<String,Object> attributes)`. `@RestOp` methods can return `FreemarkerView` directly and the framework's `ResponseProcessor` chain dispatches to the renderer.
 - `org.apache.juneau.rest.view.freemarker.FreemarkerViewRenderer` `ResponseProcessor` impl — detects `FreemarkerView` returns, asks the active `Configuration` for the named template, and calls `template.process(view.getAttributes(), res.getWriter())`.
 - POM dependencies (engine-agnostic per resolved decision #2):
@@ -86,6 +87,36 @@ public class AppResource extends RestServlet {
     - **`@Primary`/`@Qualifier` for multiple `Configuration` beans.** Rare. Spring's `@Primary` semantics flow through `SpringBeanStore.getBean(freemarker.template.Configuration.class)`. Document.
 - **Acceptance bullet** added below: "Mixin works identically when registered via Juneau `BeanStore` (microservice path) and via Spring `@Bean` (Spring Boot path); both paths covered by a test."
 
+## Configurable mount path (SVL pattern, FINISHED-99)
+
+The default `/freemarker/*` mount is pinned at the **op level** by
+`@RestGet(path="/freemarker/*")` on the `render` handler — **not** by a class-level
+`@Rest(paths=...)` declaration. Per the framework Javadoc at `Rest.java:1017-1021` (and
+`Rest.java:1081-1085` for `paths()`), `@Rest(path)` / `@Rest(paths)` on a mixin class is
+**silently ignored** when the host imports the class via `@Rest(mixins=...)`; the importing
+host's own `path()` / `paths()` governs the mount and mixin endpoints land in the host's URL
+namespace. This is why the mixin shape in Scope above carries no class-level `paths=...`.
+
+For runtime-configurable mounts, FINISHED-99 lit up Juneau SVL resolution on op paths. The
+recommended pattern in this module is:
+
+```java
+@RestGet(path="/${myroute:freemarker}/*", swagger=@OpSwagger(ignore=true))
+public void render(@Path("/*") String path, RestRequest req, RestResponse res) { ... }
+```
+
+The `${myroute:freemarker}` SVL expression resolves at startup via the
+{@link org.apache.juneau.svl.VarResolver VarResolver} on the bean store. Worked examples:
+
+- **System property:** `-Dmyroute=views` → mount at `/views/*`.
+- **Environment variable:** with op shape `@RestGet(path="/${E:MYROUTE,freemarker}/*")`,
+  `MYROUTE=views` in the environment → `/views/*`; default `freemarker` otherwise.
+- **`Config` override:** with op shape `@RestGet(path="/${C:myroute,freemarker}/*")`,
+  `juneau.cfg` carries `myroute = views` → `/views/*`.
+
+Sibling bridge modules (TODO-82 Thymeleaf, TODO-83 Mustache) inherit this pattern; the only
+per-engine variation is the default mount segment.
+
 ## Phased steps
 
 ### Phase 0 — confirm seams (read-only)
@@ -111,7 +142,7 @@ public class AppResource extends RestServlet {
 
 ### Phase 2 — `BasicFreemarkerResource` mixin
 
-1. New class with default `@Rest(paths={"/freemarker/*"}, responseProcessors={FreemarkerViewRenderer.class})` and `@RestGet(path="/*", swagger=@OpSwagger(ignore=true))` handler.
+1. New class with `@Rest(responseProcessors={FreemarkerViewRenderer.class})` (NO `paths=...` — see "Configurable mount path" below) and `@RestGet(path="/freemarker/*", swagger=@OpSwagger(ignore=true))` handler that validates the resolved target via `FileUtils.resolveVirtualPathSafely(basePath, path)` before asking the `Configuration` for the template.
 2. Builder accepts `basePath(String)`, `cacheTemplates(boolean)`, `version(freemarker.template.Version)` (default pinned to the bridge-tested minor).
 3. Default-configuration construction logic: on first request, if no `Configuration` bean is registered, build one with `ClassTemplateLoader(importerClass, basePath)`, `setDefaultEncoding("UTF-8")`, `setOutputFormat(HTMLOutputFormat.INSTANCE)`, `setIncompatibleImprovements(VERSION_2_3_X)`, `setTemplateUpdateDelayMilliseconds(cacheFlag ? Long.MAX_VALUE : 0)`.
 4. Tests:
@@ -212,7 +243,7 @@ Sibling view-module TODOs (TODO-82/83) inherit this test architecture by default
 4. **Auto-register `FreemarkerViewRenderer` on the mixin — yes.** `@Rest(responseProcessors={FreemarkerViewRenderer.class})` declared on `BasicFreemarkerResource`.
 5. **Default base path — `/`.** Most flexible. Example app uses `/templates/` to demonstrate the conventional layout.
 6. **`FreemarkerView extends View` — yes.** `View` interface in core `juneau-rest-server` per TODO-78 resolved decision #6 (HARD dependency on TODO-78 landing first). `FreemarkerView` is the impl in this bridge module.
-7. **Multi-base-path support — documented "register two beans" pattern, no special builder API.** Same convention as TODO-78 #7, TODO-82 #7, TODO-83 #7.
+7. **Multi-base-path support — documented "register two beans" pattern, no special builder API.** A user with `/templates/` and `/admin/templates/` registers two `BasicFreemarkerResource` beans, each with its own op-level `@RestGet(path=...)` override and `basePath`. (The bridge class itself has no class-level `@Rest(paths=...)` — that would be silently ignored under the mixin pattern; see "Configurable mount path" section above.) Same convention as TODO-78 #7, TODO-82 #7, TODO-83 #7.
 8. **Template loaders in v1 — `ClassTemplateLoader` (bridge default) + `FileTemplateLoader` (user-wired).** SQL / DB / URL / S3-backed loaders work transparently if the user supplies a custom `Configuration`, but are not specifically tested in v1.
 
 ## Follow-on TODOs to track after this lands

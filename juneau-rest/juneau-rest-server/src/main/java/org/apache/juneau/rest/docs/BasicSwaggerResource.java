@@ -37,8 +37,25 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=BasicSwaggerResource.class)};
  * the {@code /api} URL becomes available alongside the host's own endpoints with no further wiring.
- * Or extend the class directly for a standalone deployment whose mount paths come from the inherited
- * {@link Rest#paths() @Rest(paths)} default.
+ *
+ * <h5 class='section'>Configurable mount path:</h5>
+ *
+ * <p>
+ * The default mount {@code /api/*} can be overridden via the SVL variable
+ * {@code ${juneau.swagger.path:api}} &mdash; set via system property
+ * ({@code -Djuneau.swagger.path=swagger}), environment variable
+ * ({@code JUNEAU_SWAGGER_PATH=swagger}), or {@code Config} key
+ * ({@code juneau.swagger.path = swagger}) to change the runtime mount without subclassing.
+ * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
+ * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ *
+ * <h5 class='section'>Mixin-only deployment:</h5>
+ *
+ * <p>
+ * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
+ * pinned at the op level by {@link RestGet @RestGet(path="/${juneau.swagger.path:api}/*")} on
+ * {@link #getSwagger}; a class-level {@code @Rest(paths=...)} declaration would be silently
+ * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
  * <h5 class='figure'>Composition example:</h5>
  *
@@ -68,7 +85,7 @@ import org.apache.juneau.rest.annotation.*;
  * @since 9.5.0
  */
 // @formatter:off
-@Rest(paths={"/api"})
+@Rest
 @JsonSchemaConfig(
 	addDescriptionsTo="bean,collection,array,map,enum",
 	addExamplesTo="bean,collection,array,map",
@@ -85,7 +102,7 @@ public class BasicSwaggerResource {
 	 * @throws NotFound If no Swagger document is available for this resource.
 	 */
 	@RestGet(
-		path="/api/*",
+		path="/${juneau.swagger.path:api}/*",
 		summary="Swagger documentation",
 		description="Swagger v2 documentation for this resource."
 	)

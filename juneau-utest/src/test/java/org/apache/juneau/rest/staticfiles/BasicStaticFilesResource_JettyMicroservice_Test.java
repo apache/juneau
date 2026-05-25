@@ -41,7 +41,10 @@ import jakarta.servlet.*;
  * Boots a {@link org.apache.juneau.microservice.Microservice Microservice} backed by
  * {@link org.apache.juneau.microservice.jetty.JettyConfiguration JettyConfiguration} on an
  * ephemeral port via {@link MicroserviceTestFixture}, mounts a {@link BasicRestServlet} host with
- * the static-files mixin, and hits the {@code /static/*} and {@code /htdocs/*} URLs over real HTTP.
+ * the static-files mixin, and hits the {@code /static/*} URL over real HTTP. The {@code /htdocs/*} mount has been removed from the mixin's default URL surface under
+ * FINISHED-101 (single path per op), but the {@code Host} class extends {@link BasicRestServlet}
+ * which still owns the legacy {@code /htdocs/*} via {@code BasicRestOperations#getHtdoc}; the
+ * second test below verifies that legacy mount still serves end-to-end.
  *
  * <p>
  * Catches things {@code MockRest} can't:
@@ -115,7 +118,9 @@ class BasicStaticFilesResource_JettyMicroservice_Test extends TestBase {
 			"Cache-Control should preserve the BasicStaticFiles default");
 	}
 
-	@Test void a02_getHtdocsFileOverRealHttp() throws Exception {
+	@Test void a02_getHtdocsFileViaLegacyMount() throws Exception {
+		// FINISHED-101: /htdocs/* is no longer a multi-path default on the mixin, but
+		// BasicRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
 		var resp = get("/htdocs/javadoc.css");
 		assertEquals(200, resp.statusCode());
 		assertTrue(resp.body().contains("Licensed to the Apache Software Foundation"),

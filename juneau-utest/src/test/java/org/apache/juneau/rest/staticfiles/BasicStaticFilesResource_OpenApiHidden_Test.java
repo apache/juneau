@@ -26,9 +26,8 @@ import org.apache.juneau.rest.swagger.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Validates that the static-files mixin's greedy {@code /static/*} and {@code /htdocs/*} handlers
- * are excluded from the generated Swagger/OpenAPI spec, per
- * {@link OpSwagger#ignore() @OpSwagger(ignore=true)} on
+ * Validates that the static-files mixin's greedy {@code /static/*} handler is excluded from the
+ * generated Swagger/OpenAPI spec, per {@link OpSwagger#ignore() @OpSwagger(ignore=true)} on
  * {@link BasicStaticFilesResource#getStaticFile} and the matching HEAD handler.
  *
  * <p>
@@ -79,9 +78,11 @@ class BasicStaticFilesResource_OpenApiHidden_Test extends TestBase {
 		c.get("/static/javadoc.css")
 			.run()
 			.assertStatus(200);
+		// FINISHED-101: /htdocs/* is no longer a multi-path default; migration covered by
+		// BasicStaticFilesResource_SvlPathOverride_Test#a02.
 		c.get("/htdocs/javadoc.css")
 			.run()
-			.assertStatus(200);
+			.assertStatus(404);
 	}
 
 	/**

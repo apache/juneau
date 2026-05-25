@@ -206,3 +206,23 @@ All previously open questions resolved 2026-05-24.
 - `./scripts/test.py -t` — full unit-test run **green**. The new `BasicStaticFilesResource_SpringbootMetaInf_Test` class is picked up automatically by the JUnit 5 discovery. New tests `b01`/`b02` in `BasicStaticFilesResource_OpenApiHidden_Test` also pass.
 - `./scripts/test.py -b` — full build **green**; RAT header check passed on the new test class + new META-INF fixture file.
 - `./scripts/coverage.py juneau-rest/juneau-rest-server/src/main/java/org/apache/juneau/rest/staticfile/ --run` — mixin coverage holds at 100% line/branch (no source changes to the mixin this session).
+
+## Post-completion correction (2026-05-25) — `@Rest(paths=...)` dead-code removal
+
+A Phase C2 cleanup pass on 2026-05-25 stripped the class-level `@Rest(paths={"/static/*","/htdocs/*"})` annotation from `BasicStaticFilesResource` after rediscovering — via the framework Javadoc at `Rest.java:1017-1021` (and `Rest.java:1081-1085` for `paths()`) — that the annotation is **silently ignored** under the mixin pattern. The framework note says it plainly: when a class is imported as a mixin via `@Rest(mixins=...)`, the importing host's own `path()` / `paths()` governs the mount and the mixin's class-level path declaration lands in the dead-code bucket; mixin endpoints land in the host's URL namespace via the op-level `@RestGet(path=...)` declaration.
+
+**Per-class decision and rationale:**
+
+| Mixin | Decision | Rationale |
+|---|---|---|
+| `BasicStaticFilesResource` | **Mixin-only** — stripped `paths={"/static/*","/htdocs/*"}`; kept empty `@Rest`. | The two mount paths are pinned at the op level by `@RestGet(path={"/static/*","/htdocs/*"})` on `getStaticFile` (and the matching `@RestOp(method="HEAD", path=...)` for `HEAD`). Class doesn't extend `RestServlet` today, so even the original "Standalone deployment example" in the Javadoc was misleading — the example showed a user writing their own `@Rest(paths=...)` subclass, at which point the parent class's `paths=...` is moot anyway. The "Standalone deployment example" Javadoc section was removed as part of this correction. |
+
+No tests were modified — every existing test exercises the mixin via `@Rest(mixins=...)` on a host class. The Jetty + Spring Boot integration tests boot real servlets but compose the mixin onto `BasicRestServlet` hosts; the parent class's `paths` was never the wiring. The class's Javadoc gained a "Mixin-only deployment" section explaining the silent-ignore rule and pointing readers to FINISHED-99 (SVL resolution on `@RestOp(path)`) for the recommended runtime-configurable mount pattern, e.g. `@RestGet(path="${myroute:default}/*")`.
+
+**Multi-mode dispositon (parent agent's hint was "multi-mode candidate"):** declined. Even the Javadoc's pre-correction "Standalone deployment example" showed the user writing their own `@Rest(paths={...})` subclass, so the parent's `paths` was inert under the standalone path too. Making the class `extends RestServlet` would add `Serializable` + `serialVersionUID` API surface that's never been used; no test or example uses this class as a standalone servlet. Filed as an observation; not changed in this pass.
+
+## FINISHED-101 follow-up — SVL-configurable mount path + multi-path collapse
+
+`BasicStaticFilesResource` now declares its op-level path as `/${juneau.staticfiles.path:static}/*` so deployers can relocate the mount via system property, env var, or Config without subclassing.
+
+As part of FINISHED-101's "single path per op" principle, the original dual-path default `{"/static/*","/htdocs/*"}` was collapsed to a single SVL-configurable path. The historical `/htdocs/*` alias is now reached by overriding the SVL variable: `-Djuneau.staticfiles.path=htdocs`. The default `BasicStaticFiles` classpath search root still walks both `static/` and `htdocs/` directories at the JAR-resource layer — only the URL-side mount alias has been removed. Three secondary-alias assertions in `BasicStaticFilesResource_AsMixin_Test` were rewritten as "legacy alias not mounted by default" 404 checks; the migration scenario is covered by `BasicStaticFilesResource_SvlPathOverride_Test#a02`. See `todo/FINISHED-101-mixin-svl-paths.md` for the full audit.

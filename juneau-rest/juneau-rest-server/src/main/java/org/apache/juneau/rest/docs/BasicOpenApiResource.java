@@ -57,6 +57,28 @@ import org.apache.juneau.yaml.*;
  * requested via {@code Accept}. Sub-context inheritance (per the mixin sub-context model) confines this
  * contribution to this mixin's endpoints &mdash; the host's other endpoints retain their own serializer set.
  *
+ * <h5 class='section'>Configurable mount path:</h5>
+ *
+ * <p>
+ * The default mount prefix {@code /openapi} can be overridden via the SVL variable
+ * {@code ${juneau.openapi.path:openapi}} &mdash; the same variable is reused for all three mounts
+ * ({@code /openapi/*}, {@code /openapi.json}, {@code /openapi.yaml}) so a single override
+ * relocates the whole surface. Set via system property
+ * ({@code -Djuneau.openapi.path=v1/openapi}), environment variable
+ * ({@code JUNEAU_OPENAPI_PATH=v1/openapi}), or {@code Config} key
+ * ({@code juneau.openapi.path = v1/openapi}) to change the runtime mount without subclassing.
+ * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
+ * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ *
+ * <h5 class='section'>Mixin-only deployment:</h5>
+ *
+ * <p>
+ * This resource is designed for composition via {@code @Rest(mixins=...)}. The three mount paths
+ * ({@code /openapi/*}, {@code /openapi.json}, {@code /openapi.yaml}) are pinned at the op level
+ * by {@link RestGet @RestGet(path=...)} on the handler methods; a class-level
+ * {@code @Rest(paths=...)} declaration would be silently ignored under the mixin pattern (see
+ * {@link Rest#paths() @Rest(paths)} Javadoc).
+ *
  * <h5 class='figure'>Composition example:</h5>
  *
  * <p class='bjava'>
@@ -77,7 +99,6 @@ import org.apache.juneau.yaml.*;
  */
 // @formatter:off
 @Rest(
-	paths={"/openapi"},
 	serializers={YamlSerializer.class}
 )
 @JsonSchemaConfig(
@@ -101,7 +122,7 @@ public class BasicOpenApiResource {
 	 * @throws NotFound If no OpenAPI document is available for this resource.
 	 */
 	@RestGet(
-		path="/openapi/*",
+		path="/${juneau.openapi.path:openapi}/*",
 		summary="OpenAPI 3.1 documentation",
 		description="OpenAPI 3.1 documentation for this resource."
 	)
@@ -136,7 +157,7 @@ public class BasicOpenApiResource {
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@RestGet(
-		path="/openapi.json",
+		path="/${juneau.openapi.path:openapi}.json",
 		summary="OpenAPI 3.1 documentation (JSON)",
 		description="OpenAPI 3.1 documentation for this resource as JSON."
 	)
@@ -159,7 +180,7 @@ public class BasicOpenApiResource {
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@RestGet(
-		path="/openapi.yaml",
+		path="/${juneau.openapi.path:openapi}.yaml",
 		summary="OpenAPI 3.1 documentation (YAML)",
 		description="OpenAPI 3.1 documentation for this resource as YAML."
 	)

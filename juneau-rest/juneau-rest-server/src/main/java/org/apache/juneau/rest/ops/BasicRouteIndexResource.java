@@ -27,12 +27,41 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Mixin that emits a JSON index of all {@link RestOp @RestOp}-annotated methods on the host
- * resource (and any other mixins on it) at {@code /options} and {@code /routes}.
+ * resource (and any other mixins on it) at {@code /options} (configurable).
  *
  * <p>
- * Sibling of {@link BasicEchoResource} ({@code /echo/*} / {@code /debug/echo/*}) and
- * {@link BasicAdminResource} ({@code /admin/*}). All three classes live in the
- * {@code org.apache.juneau.rest.ops} ops/introspection mixin pack.
+ * Sibling of {@link BasicEchoResource} ({@code /echo/*}) and {@link BasicAdminResource}
+ * ({@code /admin/*}). All three classes live in the {@code org.apache.juneau.rest.ops}
+ * ops/introspection mixin pack.
+ *
+ * <h5 class='section'>Configurable mount path:</h5>
+ *
+ * <p>
+ * The default mount {@code /options} can be overridden via the SVL variable
+ * {@code ${juneau.routeindex.path:options}} &mdash; set via system property
+ * ({@code -Djuneau.routeindex.path=routes}), environment variable
+ * ({@code JUNEAU_ROUTEINDEX_PATH=routes}), or {@code Config} key
+ * ({@code juneau.routeindex.path = routes}) to change the runtime mount without subclassing.
+ * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
+ * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ *
+ * <p>
+ * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at both
+ * {@code /options} <i>and</i> {@code /routes} as historical aliases on a single op. That dual
+ * default has been collapsed to a single SVL-configurable mount as part of the
+ * "single path per op" principle (see FINISHED-101). Deployers who relied on the
+ * {@code /routes} alias must now set {@code -Djuneau.routeindex.path=routes} or compose a
+ * second instance with the override.
+ *
+ * <h5 class='section'>Mixin-only deployment:</h5>
+ *
+ * <p>
+ * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
+ * pinned at the op level by {@link RestGet @RestGet(path="/${juneau.routeindex.path:options}")}
+ * on {@link #getRoutes}; a class-level {@code @Rest(paths=...)} declaration would be silently
+ * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc). Note also
+ * that the route-index walks the host's {@link RestContext} via {@link #resolveHostContext}
+ * &mdash; it only makes sense in a host-attached composition, not standalone.
  *
  * <h5 class='figure'>Composition example:</h5>
  *
@@ -90,7 +119,7 @@ import org.apache.juneau.rest.annotation.*;
  * @since 9.5.0
  */
 // @formatter:off
-@Rest(paths={"/options","/routes"})
+@Rest
 public class BasicRouteIndexResource {
 
 	private static final List<Class<? extends Annotation>> REST_OP_ANNOTATIONS = List.of(
@@ -101,14 +130,14 @@ public class BasicRouteIndexResource {
 	public BasicRouteIndexResource() {}
 
 	/**
-	 * [GET /options | /routes] &mdash; emit the route index as a JSON list.
+	 * [GET /options] &mdash; emit the route index as a JSON list.
 	 *
 	 * @param req The current REST request &mdash; supplies the host {@link RestContext}.
 	 * @param res The current REST response.
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@RestGet(
-		path={"/options","/routes"},
+		path="/${juneau.routeindex.path:options}",
 		summary="Route index",
 		description="JSON list of @RestOp-annotated methods on the host (excluding hidden / ops endpoints).",
 		swagger=@OpSwagger(ignore=true)

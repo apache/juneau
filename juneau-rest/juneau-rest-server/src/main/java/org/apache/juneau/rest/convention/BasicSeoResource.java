@@ -36,8 +36,28 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=BasicSeoResource.class)};
  * the {@code /robots.txt} and {@code /sitemap.xml} URLs become available alongside the host's own
- * endpoints with no further wiring. Or extend the class directly for a standalone deployment whose
- * mount paths come from the inherited {@link Rest#paths() @Rest(paths)} default.
+ * endpoints with no further wiring.
+ *
+ * <h5 class='section'>Hardcoded mount paths:</h5>
+ *
+ * <p>
+ * Unlike the sibling api-docs and ops mixins (see {@link BasicSwaggerResource},
+ * {@link BasicVersionResource}, etc.), the two mount paths here are <b>not</b> SVL-configurable.
+ * {@code /robots.txt} is fixed by the Robots Exclusion Protocol
+ * (<a href="https://www.rfc-editor.org/rfc/rfc9309">RFC 9309</a>) which prescribes that
+ * crawlers fetch the policy from {@code /robots.txt} at the site root; {@code /sitemap.xml} is
+ * fixed by the <a href="https://www.sitemaps.org/protocol.html">sitemaps.org protocol</a>
+ * (and consumed by search engines configured to look for the file at that exact path). A
+ * runtime mount-path override here would have no practical effect.
+ *
+ * <h5 class='section'>Mixin-only deployment:</h5>
+ *
+ * <p>
+ * This resource is designed for composition via {@code @Rest(mixins=...)}. The two mount paths
+ * ({@code /robots.txt}, {@code /sitemap.xml}) are pinned at the op level by
+ * {@link RestGet @RestGet(path=...)} on the handler methods; a class-level
+ * {@code @Rest(paths=...)} declaration would be silently ignored under the mixin pattern (see
+ * {@link Rest#paths() @Rest(paths)} Javadoc).
  *
  * <h5 class='figure'>Composition example:</h5>
  *
@@ -85,7 +105,7 @@ import org.apache.juneau.rest.annotation.*;
  * @since 9.5.0
  */
 // @formatter:off
-@Rest(paths={"/robots.txt","/sitemap.xml"})
+@Rest
 public class BasicSeoResource {
 
 	/** Default robots policy: deny everything. */

@@ -24,27 +24,23 @@ import org.junit.jupiter.api.*;
 
 /**
  * Validates {@link BasicStaticFilesResource} deployed as a <em>standalone</em> resource (Path B
- * in TODO-75) &mdash; the user extends {@code BasicStaticFilesResource} directly and the inherited
- * {@code @Rest(paths={"/static/*","/htdocs/*"})} declares both mount points without any additional
- * configuration.
+ * in TODO-75) &mdash; the user extends {@code BasicStaticFilesResource} directly and the
+ * inherited op-level {@code @RestGet(path="/${juneau.staticfiles.path:static}/*")} declares the
+ * mount point without any additional configuration.
  *
  * <p>
- * Two layers of {@code paths} interact here:
- * <ul>
- * 	<li><b>Servlet-mount paths</b> (from {@link Rest#paths() @Rest(paths)} on the class) &mdash;
- * 		container-level deployment seam, surfaced by real Jetty/Spring Boot deployments and
- * 		exercised by {@code BasicStaticFilesResource_JettyMicroservice_Test} (real-container test).
- * 	<li><b>Inner {@code @RestGet(path=...)}</b> &mdash; the URL-path matcher used by Juneau's
- * 		{@code UrlPathMatcher} once a request lands on the servlet. {@link BasicStaticFilesResource}
- * 		declares {@code path={"/static/*","/htdocs/*"}} so a single Java method binds to both
- * 		default URL prefixes.
- * </ul>
+ * Inner {@code @RestGet(path=...)} is the URL-path matcher used by Juneau's
+ * {@code UrlPathMatcher} once a request lands on the servlet. Per FINISHED-101's "single path
+ * per op" principle the historical dual default ({@code "/static/*"} + {@code "/htdocs/*"}) was
+ * collapsed to a single SVL-configurable path; the {@code /htdocs/*} alias is reached via
+ * {@code -Djuneau.staticfiles.path=htdocs} and is covered by
+ * {@code BasicStaticFilesResource_SvlPathOverride_Test#a02}.
  *
  * <p>
- * {@code MockRest} dispatches directly to the inner matcher and does NOT model the container-level
- * servlet-mapping layer, so this test focuses on the standalone-extends-mixin shape and the inner
- * handler's behavior. The container-level multi-path mount is validated in the real-Jetty parity
- * test.
+ * {@code MockRest} dispatches directly to the inner matcher and does NOT model the
+ * container-level servlet-mapping layer, so this test focuses on the standalone-extends-mixin
+ * shape and the inner handler's behavior. The container-level mount is validated in the
+ * real-Jetty parity test.
  *
  * @since 9.5.0
  */
@@ -61,11 +57,12 @@ class BasicStaticFilesResource_Standalone_Test extends TestBase {
 			.assertContent().asString().isContains("Licensed to the Apache Software Foundation");
 	}
 
-	@Test void a02_standaloneServesFromHtdocsMount() throws Exception {
+	@Test void a02_legacyHtdocsAliasNotMountedByDefault() throws Exception {
+		// FINISHED-101: /htdocs/* is no longer a multi-path default. Migration covered by
+		// BasicStaticFilesResource_SvlPathOverride_Test#a02.
 		c.get("/htdocs/javadoc.css")
 			.run()
-			.assertStatus(200)
-			.assertContent().asString().isContains("Licensed to the Apache Software Foundation");
+			.assertStatus(404);
 	}
 
 	@Test void a03_standaloneMissingFileReturns404() throws Exception {

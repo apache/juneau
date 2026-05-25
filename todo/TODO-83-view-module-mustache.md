@@ -46,11 +46,12 @@ public class AppResource extends RestServlet {
 **In scope (v1):**
 
 - New Maven module `juneau-rest/juneau-rest-server-view-mustache/` with a `pom.xml` mirroring `juneau-rest-server-view-jsp` (sibling pattern from TODO-78) and `juneau-rest-server-mcp` (closest small-single-purpose precedent).
-- `org.apache.juneau.rest.view.mustache.BasicMustacheResource` mixin with default `@Rest(paths={"/mustache/*"})`. Single `@RestGet("/*")` handler (with `@Path("/*") String path` capturing the multi-segment remainder, `swagger=@OpSwagger(ignore=true)`) that:
+- `org.apache.juneau.rest.view.mustache.BasicMustacheResource` mixin class (mixin-only — **no class-level `@Rest(paths=...)`**; see "Configurable mount path" section below). Single `@RestGet(path="/mustache/*", swagger=@OpSwagger(ignore=true))` handler (with `@Path("/*") String path` capturing the multi-segment remainder) that:
     - Reads the configured base-path (default `/`).
     - Resolves the template by asking the `MustacheFactory` to compile `<basePath><path>`.
     - Renders with a small built-in scope containing request + session attributes (no Java model, since this is the raw-rendering path).
     - Writes the engine's output directly to the response writer with `Content-Type: text/html;charset=UTF-8`.
+    - **Path-traversal hardening:** the resolved `<basePath><path>` MUST be validated via `FileUtils.resolveVirtualPathSafely(basePath, path)` (added in Phase C2 alongside FINISHED-100; see `BasicJspResource.render` for the canonical caller). The helper throws `IllegalArgumentException` on any `..` segment that escapes `basePath`; the handler maps that to HTTP 403. This is the same hardening pattern used by `DirectoryResource`, `LogsResource`, and `BasicJspResource`.
 - `org.apache.juneau.rest.view.mustache.MustacheView` value-class — a `View` bean carrying `(templateName, Map<String,Object> attributes)`. `@RestOp` methods can return `MustacheView` directly and the framework's `ResponseProcessor` chain dispatches to the renderer.
 - `org.apache.juneau.rest.view.mustache.MustacheViewRenderer` `ResponseProcessor` impl — detects `MustacheView` returns, compiles the template via the active `MustacheFactory`, and writes the rendered output to the response writer using the attributes map as the scope.
 - POM dependencies (engine-agnostic per resolved decision #2):
@@ -82,6 +83,36 @@ public class AppResource extends RestServlet {
     - **`@Primary`/`@Qualifier` for multiple `MustacheFactory` beans.** Rare. Spring's `@Primary` semantics flow through `SpringBeanStore.getBean(MustacheFactory.class)`. Document.
 - **Acceptance bullet** added below: "Mixin works identically when registered via Juneau `BeanStore` (microservice path) and via Spring `@Bean` (Spring Boot path); both paths covered by a test."
 
+## Configurable mount path (SVL pattern, FINISHED-99)
+
+The default `/mustache/*` mount is pinned at the **op level** by
+`@RestGet(path="/mustache/*")` on the `render` handler — **not** by a class-level
+`@Rest(paths=...)` declaration. Per the framework Javadoc at `Rest.java:1017-1021` (and
+`Rest.java:1081-1085` for `paths()`), `@Rest(path)` / `@Rest(paths)` on a mixin class is
+**silently ignored** when the host imports the class via `@Rest(mixins=...)`; the importing
+host's own `path()` / `paths()` governs the mount and mixin endpoints land in the host's URL
+namespace. This is why the mixin shape in Scope above carries no class-level `paths=...`.
+
+For runtime-configurable mounts, FINISHED-99 lit up Juneau SVL resolution on op paths. The
+recommended pattern in this module is:
+
+```java
+@RestGet(path="/${myroute:mustache}/*", swagger=@OpSwagger(ignore=true))
+public void render(@Path("/*") String path, RestRequest req, RestResponse res) { ... }
+```
+
+The `${myroute:mustache}` SVL expression resolves at startup via the
+{@link org.apache.juneau.svl.VarResolver VarResolver} on the bean store. Worked examples:
+
+- **System property:** `-Dmyroute=views` → mount at `/views/*`.
+- **Environment variable:** with op shape `@RestGet(path="/${E:MYROUTE,mustache}/*")`,
+  `MYROUTE=views` in the environment → `/views/*`; default `mustache` otherwise.
+- **`Config` override:** with op shape `@RestGet(path="/${C:myroute,mustache}/*")`,
+  `juneau.cfg` carries `myroute = views` → `/views/*`.
+
+Sibling bridge modules (TODO-82 Thymeleaf, TODO-84 FreeMarker) inherit this pattern; the only
+per-engine variation is the default mount segment.
+
 ## Phased steps
 
 ### Phase 0 — confirm seams (read-only)
@@ -105,7 +136,7 @@ public class AppResource extends RestServlet {
 
 ### Phase 2 — `BasicMustacheResource` mixin
 
-1. New class with default `@Rest(paths={"/mustache/*"}, responseProcessors={MustacheViewRenderer.class})` and `@RestGet(path="/*", swagger=@OpSwagger(ignore=true))` handler.
+1. New class with `@Rest(responseProcessors={MustacheViewRenderer.class})` (NO `paths=...` — see "Configurable mount path" below) and `@RestGet(path="/mustache/*", swagger=@OpSwagger(ignore=true))` handler that validates the resolved target via `FileUtils.resolveVirtualPathSafely(basePath, path)` before compiling the template.
 2. Builder accepts `basePath(String)`.
 3. Default-factory construction logic: on first request, if no `MustacheFactory` bean is registered, build a `DefaultMustacheFactory` anchored on the importer's classloader, with the configured base-path as its resource-prefix.
 4. Tests:
@@ -202,7 +233,7 @@ Sibling view-module TODOs (TODO-82/84) inherit this test architecture by default
 5. **Auto-register `MustacheViewRenderer` on the mixin — yes.** `@Rest(responseProcessors={MustacheViewRenderer.class})` declared on `BasicMustacheResource`.
 6. **Default base path — `/`.** Most flexible. Example app uses `/templates/` to demonstrate the conventional layout.
 7. **`MustacheView extends View` — yes.** `View` interface in core `juneau-rest-server` per TODO-78 resolved decision #6 (HARD dependency on TODO-78 landing first). `MustacheView` is the impl in this bridge module.
-8. **Multi-base-path support — documented "register two beans" pattern, no special builder API.** Same convention as TODO-78 #7 and TODO-82 #7.
+8. **Multi-base-path support — documented "register two beans" pattern, no special builder API.** A user with `/templates/` and `/admin/templates/` registers two `BasicMustacheResource` beans, each with its own op-level `@RestGet(path=...)` override and `basePath`. (The bridge class itself has no class-level `@Rest(paths=...)` — that would be silently ignored under the mixin pattern; see "Configurable mount path" section above.) Same convention as TODO-78 #7 and TODO-82 #7.
 
 ## Follow-on TODOs to track after this lands
 

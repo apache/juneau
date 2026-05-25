@@ -62,7 +62,11 @@ class BasicStaticFilesResource_ImporterOverride_Test extends TestBase {
 			.assertHeader("Cache-Control").is("no-store");
 	}
 
-	@Test void a02_overrideAppliesAtHtdocsMount() throws Exception {
+	@Test void a02_overrideAppliesAtLegacyHtdocPath() throws Exception {
+		// FINISHED-101: /htdocs/* is no longer a multi-path default on the mixin, but
+		// BasicRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
+		// That handler also reads from BeanStore.getBean(StaticFiles.class), so the importer's
+		// override still applies.
 		c.get("/htdocs/javadoc.css")
 			.run()
 			.assertStatus(200)

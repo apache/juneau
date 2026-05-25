@@ -78,9 +78,11 @@ class BasicOps_ParentChain_Test extends TestBase {
 			"Expected exactly three mixin contexts; got: " + ctxs.keySet());
 	}
 
-	@Test void a02_echoServesAtBothMounts() throws Exception {
+	@Test void a02_echoServesAtPrimaryMount() throws Exception {
+		// FINISHED-101: /debug/echo/* is no longer a multi-path default. Migration to that
+		// secondary alias is covered by BasicEchoResource_SvlPathOverride_Test#a02.
 		c.get("/echo/x").run().assertStatus(200);
-		c.get("/debug/echo/x").run().assertStatus(200);
+		c.get("/debug/echo/x").run().assertStatus(404);
 	}
 
 	@Test void a03_adminThreadsResolves() throws Exception {
@@ -108,12 +110,12 @@ class BasicOps_ParentChain_Test extends TestBase {
 			"admin endpoints must be excluded from index; body: " + body);
 		assertFalse(body.contains("\"path\": \"/options\""),
 			"route-index endpoint must not echo itself; body: " + body);
-		assertFalse(body.contains("\"path\": \"/routes\""),
-			"route-index endpoint must not echo itself; body: " + body);
 	}
 
-	@Test void a06_routeIndexRoutesResolves() throws Exception {
-		c.get("/routes").run().assertStatus(200);
+	@Test void a06_legacyRoutesAliasNotMountedByDefault() throws Exception {
+		// FINISHED-101: /routes is no longer a multi-path default. Migration covered by
+		// BasicRouteIndexResource_SvlPathOverride_Test#a02.
+		c.get("/routes").run().assertStatus(404);
 	}
 
 	@Test void a07_hostEndpointStillReachable() throws Exception {

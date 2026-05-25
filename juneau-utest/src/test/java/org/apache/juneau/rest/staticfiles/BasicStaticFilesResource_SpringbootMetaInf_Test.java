@@ -123,8 +123,10 @@ class BasicStaticFilesResource_SpringbootMetaInf_Test {
 			"Body should contain the META-INF/resources fixture content, was: " + resp.body());
 	}
 
-	@Test void a02_metaInfResourcesServedViaMixinHtdocsMount() throws Exception {
-		// Same file is reachable through the second default mount.
+	@Test void a02_metaInfResourcesServedViaLegacyHtdocsMount() throws Exception {
+		// FINISHED-101: /htdocs/* is no longer a multi-path default on the mixin, but
+		// BasicSpringRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
+		// The same META-INF/resources file is reachable through the legacy mount.
 		var resp = get("/htdocs/spring-fixture.txt");
 		assertEquals(200, resp.statusCode());
 		assertTrue(resp.body().contains("spring-boot meta-inf fixture"),

@@ -363,3 +363,29 @@ This TODO is the first concrete step in retiring both interfaces. Cross-TODO map
 | `getChildren(RestRequest)` | `GET /` | TBD — `BasicRouteIndexResource` candidate | TODO-77 |
 
 Once all rows are migrated, `BasicRestOperations` and `BasicGroupOperations` are deleted. Tracked by an implicit follow-on TODO created after TODO-77 lands.
+
+## Post-completion correction (2026-05-25) — `@Rest(paths=...)` dead-code removal
+
+A Phase C2 cleanup pass on 2026-05-25 stripped the class-level `@Rest(paths=...)` annotation from all four api-docs mixins (`BasicSwaggerResource`, `BasicSwaggerUiResource`, `BasicOpenApiResource`, `BasicRedocResource`) after rediscovering — via the framework Javadoc at `Rest.java:1017-1021` (and `Rest.java:1081-1085` for `paths()`) — that the annotation is **silently ignored** under the mixin pattern. The framework note says it plainly: when a class is imported as a mixin via `@Rest(mixins=...)`, the importing host's own `path()` / `paths()` governs the mount and the mixin's class-level path declaration lands in the dead-code bucket; mixin endpoints land in the host's URL namespace via the op-level `@RestGet(path=...)` declarations.
+
+**Per-class decision and rationale:**
+
+| Mixin | Decision | Rationale |
+|---|---|---|
+| `BasicSwaggerResource` | **Mixin-only** — stripped `@Rest(paths={"/api"})`; kept empty `@Rest`. | The `/api/*` mount is pinned at the op level by `@RestGet(path="/api/*")` on `getSwagger`. Class doesn't extend `RestServlet` today; no standalone-use call site in tests. The `BasicSwaggerResource_Standalone_Test` confirms "standalone" in this codebase means *standalone of the `BasicRestServlet` chain* (mixed into a `RestObject` host), not standalone deployment. |
+| `BasicSwaggerUiResource` | **Mixin-only** — stripped `paths={"/swagger"}`; kept `mixins={BasicSwaggerResource.class}` + `defaultAccept="text/html"` (load-bearing). | Same reasoning — op-level `@RestGet(path="/swagger/*")` is the live mount. |
+| `BasicOpenApiResource` | **Mixin-only** — stripped `paths={"/openapi"}`; kept `serializers={YamlSerializer.class}` (load-bearing). | Three op-level mounts (`/openapi/*`, `/openapi.json`, `/openapi.yaml`) are the live wiring. |
+| `BasicRedocResource` | **Mixin-only** — stripped `paths={"/redoc"}`; kept `mixins={BasicOpenApiResource.class}` + `defaultAccept="text/html"` (load-bearing). | Op-level `@RestGet(path="/redoc/*")` is the live mount. |
+
+No tests were modified — every existing test exercises the mixin via `@Rest(mixins=...)` on a host class, so they continued to pass verbatim. Each class's Javadoc gained a "Mixin-only deployment" section explaining the silent-ignore rule and pointing readers to FINISHED-99 (SVL resolution on `@RestOp(path)`) for the recommended runtime-configurable mount pattern, e.g. `@RestGet(path="${myroute:default}/*")`. The misleading "Or extend the class directly for a standalone deployment whose mount paths come from the inherited `@Rest(paths)` default." sentence was removed from every class's class-level Javadoc.
+
+**Observation (filed but not fixed in this pass):** none of these classes extend `RestServlet` today, so the dead-code annotation was never live in any scenario. Multi-mode deployment would have required adding `extends RestServlet` + `serialVersionUID` + restructured constructors — a meaningful API surface change without clear standalone-use demand. The simpler, consistent call here is "all mixin-only"; if a future use case justifies multi-mode for one of these, it's a separate refactor.
+
+## FINISHED-101 follow-up — SVL-configurable mount paths
+
+The four mixins in this pack now declare their op-level paths as `/${juneau.<role>.path:<default>}` so deployers can relocate the mount via system property, env var, or Config without subclassing. See `todo/FINISHED-101-mixin-svl-paths.md` for the full audit, naming convention, migration notes, and the per-class `*_SvlPathOverride_Test` coverage.
+
+- `BasicSwaggerResource`: `${juneau.swagger.path:api}` → default `/api/*`.
+- `BasicSwaggerUiResource`: `${juneau.swaggerui.path:swagger}` → default `/swagger/*`.
+- `BasicOpenApiResource`: `${juneau.openapi.path:openapi}` → default `/openapi/*`, `/openapi.json`, `/openapi.yaml` (single shared variable controls all three op-paths on three distinct methods).
+- `BasicRedocResource`: `${juneau.redoc.path:redoc}` → default `/redoc/*`.

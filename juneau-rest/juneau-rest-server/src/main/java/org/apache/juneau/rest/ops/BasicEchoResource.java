@@ -27,8 +27,8 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Mixin that serves a request-echo / round-trip introspection endpoint at {@code /echo/*} and
- * {@code /debug/echo/*}.
+ * Mixin that serves a request-echo / round-trip introspection endpoint at {@code /echo/*}
+ * (configurable).
  *
  * <p>
  * Sibling of {@link BasicAdminResource} ({@code /admin/*}) and {@link BasicRouteIndexResource}
@@ -37,10 +37,35 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * Compose into a host resource via
- * {@link Rest#mixins() @Rest(mixins=BasicEchoResource.class)}; the {@code /echo/*} and
- * {@code /debug/echo/*} URLs become available alongside the host's own endpoints with no further
- * wiring. Or extend the class directly for a standalone deployment whose mount paths come from
- * the inherited {@link Rest#paths() @Rest(paths)} default.
+ * {@link Rest#mixins() @Rest(mixins=BasicEchoResource.class)}; the {@code /echo/*} URL becomes
+ * available alongside the host's own endpoints with no further wiring.
+ *
+ * <h5 class='section'>Configurable mount path:</h5>
+ *
+ * <p>
+ * The default mount {@code /echo/*} can be overridden via the SVL variable
+ * {@code ${juneau.echo.path:echo}} &mdash; set via system property
+ * ({@code -Djuneau.echo.path=introspect}), environment variable
+ * ({@code JUNEAU_ECHO_PATH=introspect}), or {@code Config} key
+ * ({@code juneau.echo.path = introspect}) to change the runtime mount without subclassing.
+ * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
+ * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ *
+ * <p>
+ * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at both
+ * {@code /echo/*} <i>and</i> {@code /debug/echo/*} as historical aliases on a single op. That
+ * dual default has been collapsed to a single SVL-configurable mount as part of the
+ * "single path per op" principle (see FINISHED-101). Deployers who relied on the
+ * {@code /debug/echo/*} alias must now either set {@code -Djuneau.echo.path=debug/echo} or
+ * compose a second instance with the override.
+ *
+ * <h5 class='section'>Mixin-only deployment:</h5>
+ *
+ * <p>
+ * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
+ * pinned at the op level by {@link RestOp @RestOp(path="/${juneau.echo.path:echo}/*")} on
+ * {@link #echo}; a class-level {@code @Rest(paths=...)} declaration would be silently ignored
+ * under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
  * <h5 class='figure'>Composition example:</h5>
  *
@@ -123,7 +148,7 @@ import org.apache.juneau.rest.annotation.*;
  * @since 9.5.0
  */
 // @formatter:off
-@Rest(paths={"/echo/*","/debug/echo/*"})
+@Rest
 public class BasicEchoResource {
 
 	/** Sentinel value emitted in place of redacted header values. */
@@ -170,7 +195,7 @@ public class BasicEchoResource {
 	}
 
 	/**
-	 * [* /echo/* | /debug/echo/*] &mdash; emit an introspection echo of the inbound request.
+	 * [* /echo/*] &mdash; emit an introspection echo of the inbound request.
 	 *
 	 * <p>
 	 * Returns {@code 404 Not Found} when {@code Debug} is not enabled for the current request.
@@ -183,7 +208,7 @@ public class BasicEchoResource {
 	 */
 	@RestOp(
 		method="*",
-		path={"/echo/*","/debug/echo/*"},
+		path="/${juneau.echo.path:echo}/*",
 		summary="Request echo",
 		description="Round-trip introspection of the inbound request. Debug-gated.",
 		swagger=@OpSwagger(ignore=true)

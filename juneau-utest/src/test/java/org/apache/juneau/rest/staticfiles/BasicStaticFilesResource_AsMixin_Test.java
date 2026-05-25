@@ -31,9 +31,9 @@ import org.junit.jupiter.api.*;
  * <p>
  * Acceptance:
  * <ul>
- * 	<li>{@code GET /static/javadoc.css} returns the file (multi-mount default {@code paths}).
- * 	<li>{@code GET /htdocs/javadoc.css} returns the same file at the second default mount.
+ * 	<li>{@code GET /static/javadoc.css} returns the file (single SVL-configurable default mount).
  * 	<li>{@code GET} on a missing path returns 404.
+ * 	<li>{@code HEAD /static/...} mirrors GET headers with empty body.
  * 	<li>The host's own endpoints are unaffected by the mixin.
  * </ul>
  *
@@ -41,6 +41,11 @@ import org.junit.jupiter.api.*;
  * The classpath resource {@code htdocs/javadoc.css} ships with {@code juneau-rest-server} and is
  * therefore visible to {@code juneau-utest}'s test classpath via the
  * {@link BasicStaticFiles} default constructor's recursive {@code cp(...,"htdocs",true)} walk.
+ * The default {@link BasicStaticFiles} classpath search root still walks both {@code static/}
+ * and {@code htdocs/} directories &mdash; only the URL-side mount is now single. Per the
+ * FINISHED-101 multi-path collapse, the {@code /htdocs/*} mount alias (formerly a dual default)
+ * is now reached via {@code -Djuneau.staticfiles.path=htdocs}; that behavior is covered by
+ * {@code BasicStaticFilesResource_SvlPathOverride_Test}.
  *
  * @since 9.5.0
  */
@@ -61,26 +66,13 @@ class BasicStaticFilesResource_AsMixin_Test extends TestBase {
 			.assertContent().asString().isContains("Licensed to the Apache Software Foundation");
 	}
 
-	@Test void a02_htdocsPathServesSameFile() throws Exception {
-		c.get("/htdocs/javadoc.css")
-			.run()
-			.assertStatus(200)
-			.assertContent().asString().isContains("Licensed to the Apache Software Foundation");
-	}
-
-	@Test void a03_missingFileReturns404() throws Exception {
+	@Test void a02_missingFileReturns404() throws Exception {
 		c.get("/static/does-not-exist.css")
 			.run()
 			.assertStatus(404);
 	}
 
-	@Test void a04_missingFileAtHtdocsReturns404() throws Exception {
-		c.get("/htdocs/does-not-exist.css")
-			.run()
-			.assertStatus(404);
-	}
-
-	@Test void a05_hostEndpointStillReachable() throws Exception {
+	@Test void a03_hostEndpointStillReachable() throws Exception {
 		c.get("/items")
 			.accept("application/json")
 			.run()
@@ -88,7 +80,7 @@ class BasicStaticFilesResource_AsMixin_Test extends TestBase {
 			.assertContent().asString().isContains("items");
 	}
 
-	@Test void a06_headStaticReturnsHeadersWithEmptyBody() throws Exception {
+	@Test void a04_headStaticReturnsHeadersWithEmptyBody() throws Exception {
 		// HEAD must mirror GET's Content-Type and Content-Length while suppressing the body.
 		var get = c.get("/static/javadoc.css").run();
 		get.assertStatus(200);
@@ -106,18 +98,10 @@ class BasicStaticFilesResource_AsMixin_Test extends TestBase {
 			head.assertHeader("Content-Type").is(getContentType);
 		if (!getContentLength.isEmpty())
 			head.assertHeader("Content-Length").is(getContentLength);
-		// Suppress unused-warning when neither header was set on the GET; both branches above already
-		// drive the actual assertion.
 		assert headContentType != null && headContentLength != null;
 	}
 
-	@Test void a07_headHtdocsReturnsHeadersWithEmptyBody() throws Exception {
-		var head = c.head("/htdocs/javadoc.css").run();
-		head.assertStatus(200);
-		head.assertContent().is("");
-	}
-
-	@Test void a08_headMissingFileReturns404() throws Exception {
+	@Test void a05_headMissingFileReturns404() throws Exception {
 		c.head("/static/does-not-exist.css")
 			.run()
 			.assertStatus(404);

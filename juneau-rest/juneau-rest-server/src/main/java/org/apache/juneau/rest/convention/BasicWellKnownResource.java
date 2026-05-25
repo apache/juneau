@@ -42,8 +42,27 @@ import org.apache.juneau.rest.annotation.*;
  * Compose into a host resource via
  * {@link Rest#mixins() @Rest(mixins=BasicWellKnownResource.class)}; the
  * {@code /.well-known/security.txt} URL becomes available alongside the host's own endpoints with
- * no further wiring. Or extend the class directly for a standalone deployment whose mount paths
- * come from the inherited {@link Rest#paths() @Rest(paths)} default.
+ * no further wiring.
+ *
+ * <h5 class='section'>Hardcoded mount path:</h5>
+ *
+ * <p>
+ * Unlike the sibling api-docs and ops mixins (see {@link BasicSwaggerResource},
+ * {@link BasicVersionResource}, etc.), the mount path here is <b>not</b> SVL-configurable
+ * &mdash; {@code /.well-known/security.txt} is fixed by
+ * <a href="https://www.rfc-editor.org/rfc/rfc8615">RFC 8615</a> (Well-Known URIs) and
+ * <a href="https://www.rfc-editor.org/rfc/rfc9116">RFC 9116</a> (security.txt). Both RFCs are
+ * explicit that the {@code /.well-known/} prefix is the discovery convention and that the
+ * filename suffix is the protocol-defined registry key &mdash; a runtime override here would
+ * make the endpoint undiscoverable by spec-compliant clients.
+ *
+ * <h5 class='section'>Mixin-only deployment:</h5>
+ *
+ * <p>
+ * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
+ * pinned at the op level by {@link RestGet @RestGet(path="/.well-known/security.txt")} on
+ * {@link #getSecurityTxt}; a class-level {@code @Rest(paths=...)} declaration would be silently
+ * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
  * <h5 class='figure'>Composition example:</h5>
  *
@@ -83,7 +102,7 @@ import org.apache.juneau.rest.annotation.*;
  * @since 9.5.0
  */
 // @formatter:off
-@Rest(paths={"/.well-known/security.txt"})
+@Rest
 public class BasicWellKnownResource {
 
 	/**

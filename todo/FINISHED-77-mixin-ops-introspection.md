@@ -275,3 +275,29 @@ All previously open questions resolved 2026-05-24.
 - Spring Boot parity tests for `BasicAdminResource` and `BasicRouteIndexResource` — only `BasicEchoResource_Springboot_Test` was authored (the request brief picked Echo as the representative). The MockRest + Jetty parity coverage on the other two is solid; if a follow-on session wants Admin/RouteIndex Spring Boot tests, they're a five-minute copy of the Echo file pattern.
 
 **Confirmation:** nothing committed, nothing pushed. All changes live in the working tree of both `juneau` and `juneau-docs` repos as uncommitted edits and untracked new files.
+
+## Post-completion correction (2026-05-25) — `@Rest(paths=...)` dead-code removal
+
+A Phase C2 cleanup pass on 2026-05-25 stripped the class-level `@Rest(paths=...)` annotation from all three ops/introspection mixins (`BasicEchoResource`, `BasicAdminResource`, `BasicRouteIndexResource`) after rediscovering — via the framework Javadoc at `Rest.java:1017-1021` (and `Rest.java:1081-1085` for `paths()`) — that the annotation is **silently ignored** under the mixin pattern. The framework note says it plainly: when a class is imported as a mixin via `@Rest(mixins=...)`, the importing host's own `path()` / `paths()` governs the mount and the mixin's class-level path declaration lands in the dead-code bucket; mixin endpoints land in the host's URL namespace via the op-level `@RestOp(path=...)` declarations.
+
+**Per-class decision and rationale:**
+
+| Mixin | Decision | Rationale |
+|---|---|---|
+| `BasicEchoResource` | **Mixin-only** — stripped `paths={"/echo/*","/debug/echo/*"}`; kept empty `@Rest`. | Op-level `@RestOp(method="*", path={"/echo/*","/debug/echo/*"})` on `echo` is the live wiring. Class doesn't extend `RestServlet`. |
+| `BasicAdminResource` | **Mixin-only** — stripped `paths={"/admin/threads",...}` (four paths); kept `guards=DenyAllGuard.class` (load-bearing — secure-by-default posture). | Four separate op-level `@RestGet`/`@RestPost(path=...)` declarations carry the live mounts; the deny-all guard is a class-level concern that stays. |
+| `BasicRouteIndexResource` | **Mixin-only** — stripped `paths={"/options","/routes"}`; kept empty `@Rest`. | Op-level `@RestGet(path={"/options","/routes"})` is the live wiring. Notably, this resource walks the host's `RestContext` via `resolveHostContext` — by design it only makes sense in a host-attached composition, not standalone. |
+
+No tests were modified — every existing test exercises the mixin via `@Rest(mixins=...)` on a host class, so they continued to pass verbatim. Each class's Javadoc gained a "Mixin-only deployment" section explaining the silent-ignore rule and pointing readers to FINISHED-99 (SVL resolution on `@RestOp(path)`) for the recommended runtime-configurable mount pattern, e.g. `@RestGet(path="${myroute:default}")`. The misleading "Or extend the class directly for a standalone deployment whose mount paths come from the inherited `@Rest(paths)` default." sentence was removed from every class's class-level Javadoc.
+
+**Multi-mode disposition (parent agent's hint was "multi-mode candidate" for `BasicAdminResource`):** declined. None of these classes extend `RestServlet` today. `BasicAdminResource` in particular is designed to be subclassed/overridden by the user to plug in their own `@Bean RestGuardList` chain replacing the deny-all default — at which point the user's subclass carries its own `@Rest(...)` annotation and the parent's `paths` is moot anyway. Making the class multi-mode would require adding `extends RestServlet` + `serialVersionUID` + restructured constructors. Filed as an observation; not changed in this pass.
+
+## FINISHED-101 follow-up — SVL-configurable mount paths + multi-path collapse
+
+All three mixins in this pack now declare SVL-configurable mount paths under FINISHED-101:
+
+- `BasicEchoResource`: `${juneau.echo.path:echo}` → default `/echo/*`. The dual-path default `{"/echo/*","/debug/echo/*"}` was collapsed to a single SVL-configurable path under FINISHED-101's "single path per op" principle. The historical `/debug/echo/*` alias is now reached by overriding the SVL variable: `-Djuneau.echo.path=debug/echo`. Two secondary-alias assertions in `BasicEchoResource_AsMixin_Test` (`a02`, `b02`) were rewritten as "legacy alias not mounted by default" 404 checks; migration coverage lives in `BasicEchoResource_SvlPathOverride_Test#a02`.
+- `BasicAdminResource`: `${juneau.admin.path:admin}` → default `/admin/threads`, `/admin/heap`, `/admin/cache/flush`, `/admin/ratelimit`. The four admin endpoints sit on separate handler methods sharing a common prefix variable, so a single override relocates the whole admin surface. The mixin keeps its `DenyAllGuard` default — the SVL override changes the URL, not the security posture.
+- `BasicRouteIndexResource`: `${juneau.routeindex.path:options}` → default `/options`. The dual-path default `{"/options","/routes"}` was collapsed to a single SVL-configurable path. The historical `/routes` alias is now reached by overriding the SVL variable: `-Djuneau.routeindex.path=routes`. The synonym assertion in `BasicRouteIndexResource_AsMixin_Test#a02` was rewritten as a "legacy alias not mounted by default" 404 check; migration coverage lives in `BasicRouteIndexResource_SvlPathOverride_Test#a02`.
+
+See `todo/FINISHED-101-mixin-svl-paths.md` for the full audit.

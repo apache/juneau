@@ -109,16 +109,19 @@ class BasicVersionResource_JettyMicroservice_Test extends TestBase {
 		assertTrue(ct.startsWith("application/json"), "Content-Type was: " + ct);
 	}
 
-	@Test void a02_infoSynonym() throws Exception {
+	@Test void a02_infoLegacyAliasNotMountedByDefault() throws Exception {
+		// FINISHED-101: /info is no longer a multi-path default. Migration covered by
+		// BasicVersionResource_SvlPathOverride_Test#a02.
 		var resp = get("/info");
-		assertEquals(200, resp.statusCode());
-		assertTrue(resp.body().contains("\"name\": \"jetty-test\""));
+		assertTrue(resp.statusCode() == 404 || resp.statusCode() == 500,
+			"expected 404 or 500 (not mounted); got " + resp.statusCode() + ": " + resp.body());
 	}
 
-	@Test void a03_aboutSynonym() throws Exception {
+	@Test void a03_aboutLegacyAliasNotMountedByDefault() throws Exception {
+		// FINISHED-101: /about is no longer a multi-path default.
 		var resp = get("/about");
-		assertEquals(200, resp.statusCode());
-		assertTrue(resp.body().contains("\"name\": \"jetty-test\""));
+		assertTrue(resp.statusCode() == 404 || resp.statusCode() == 500,
+			"expected 404 or 500 (not mounted); got " + resp.statusCode() + ": " + resp.body());
 	}
 
 	@Test void a04_javaVersionSurfacesWithoutManifest() throws Exception {

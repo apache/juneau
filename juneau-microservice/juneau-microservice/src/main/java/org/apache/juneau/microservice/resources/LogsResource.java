@@ -24,6 +24,8 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
 
+import org.apache.juneau.commons.utils.FileUtils;
+
 import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.bean.*;
 import org.apache.juneau.commons.time.*;
@@ -464,13 +466,24 @@ public class LogsResource extends BasicRestServlet {
 		}
 	}
 
+	/**
+	 * Resolves a request path against {@link #logDir} with a canonical-path boundary check
+	 * so {@code ..} segments, absolute paths, and symlink-out cannot escape the configured root.
+	 *
+	 * <p>
+	 * The check is intentionally applied at this single funnel because every public operation on
+	 * this resource (view, parse, download, delete, info) resolves the user-supplied path through
+	 * this method. Delegates to {@link FileUtils#resolveSafely(File, String)} — the canonical
+	 * shared implementation; the caller-layer mapping is: boundary violation → 403 (Forbidden),
+	 * non-existent target → 404 (NotFound).
+	 */
 	private static File getFile(String path) throws NotFound {
-		if (path == null)
-			return logDir;
-		var f = new File(logDir.getAbsolutePath() + '/' + path);
-		if (f.exists())
-			return f;
-		throw new NotFound("File not found.");
+		try {
+			return FileUtils.resolveSafely(logDir, path)
+				.orElseThrow(() -> new NotFound("File not found."));
+		} catch (IllegalArgumentException e) {
+			throw new Forbidden(e.getMessage());
+		}
 	}
 
 	private static LogParser getLogParser(File f, Date start, Date end, String thread, String[] loggers, String[] severity) throws IOException {

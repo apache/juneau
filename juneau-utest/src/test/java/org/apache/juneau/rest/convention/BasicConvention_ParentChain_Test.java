@@ -116,14 +116,15 @@ class BasicConvention_ParentChain_Test extends TestBase {
 			.assertContent().asString().isContains("\"name\": \"convention-pack\"");
 	}
 
-	@Test void a06_infoEndpointResolves() throws Exception {
-		c.get("/info").run().assertStatus(200)
-			.assertContent().asString().isContains("\"version\": \"9.5.0\"");
+	@Test void a06_infoLegacyAliasNotMountedByDefault() throws Exception {
+		// FINISHED-101: /info is no longer a multi-path default. Migration to that secondary
+		// alias is covered by BasicVersionResource_SvlPathOverride_Test#a02.
+		c.get("/info").run().assertStatus(404);
 	}
 
-	@Test void a07_aboutEndpointResolves() throws Exception {
-		c.get("/about").run().assertStatus(200)
-			.assertContent().asString().isContains("\"name\": \"convention-pack\"");
+	@Test void a07_aboutLegacyAliasNotMountedByDefault() throws Exception {
+		// FINISHED-101: /about is no longer a multi-path default.
+		c.get("/about").run().assertStatus(404);
 	}
 
 	@Test void a08_securityTxtResolves() throws Exception {

@@ -176,6 +176,31 @@
 			<artifactId>juneau-rest-server-springboot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!--
+			JSP view bridge + per-container JSP engines for the BasicJspResource / JspView test
+			matrix. Engine-agnostic POM stance (TODO-78 resolved decision #2): the bridge module
+			itself has no engine dep, so juneau-utest supplies BOTH engines in `test` scope so the
+			Jetty- and Tomcat-flavored test classes can each exercise the bridge against its
+			matching container.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-view-jsp</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<version>10.1.34</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty.ee${jetty.ee.version}</groupId>
+			<artifactId>jetty-ee${jetty.ee.version}-apache-jsp</artifactId>
+			<version>${jetty.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

@@ -237,3 +237,36 @@ All previously open questions resolved 2026-05-24.
   - **Sitemap auto-generation from `BasicGroupOperations` index** — deferred to v2 per the resolved decision. v1 ships the static-config builder only.
   - **`/info` and `/about` differentiation** — synonyms in v1 per the resolved decision; future iterations may differentiate (e.g. `/info` = condensed, `/about` = full).
   - **Additional `/.well-known/*` entries** (OIDC discovery, change-password, etc.) — `BasicWellKnownResource` reserves the seam; TODO-69 owns the OIDC entry wiring.
+
+## Post-completion correction (2026-05-25) — `@Rest(paths=...)` dead-code removal
+
+A Phase C2 cleanup pass on 2026-05-25 stripped the class-level `@Rest(paths=...)` annotation from all four convention mixins (`BasicFaviconResource`, `BasicSeoResource`, `BasicVersionResource`, `BasicWellKnownResource`) after rediscovering — via the framework Javadoc at `Rest.java:1017-1021` (and `Rest.java:1081-1085` for `paths()`) — that the annotation is **silently ignored** under the mixin pattern. The framework note says it plainly: when a class is imported as a mixin via `@Rest(mixins=...)`, the importing host's own `path()` / `paths()` governs the mount and the mixin's class-level path declaration lands in the dead-code bucket; mixin endpoints land in the host's URL namespace via the op-level `@RestGet(path=...)` declarations.
+
+**Per-class decision and rationale:**
+
+| Mixin | Decision | Rationale |
+|---|---|---|
+| `BasicFaviconResource` | **Mixin-only** — stripped `paths={"/favicon.ico"}`; kept empty `@Rest`. | Single-endpoint resource; op-level `@RestGet(path="/favicon.ico")` is the live mount. Class doesn't extend `RestServlet`. |
+| `BasicSeoResource` | **Mixin-only** — stripped `paths={"/robots.txt","/sitemap.xml"}`; kept empty `@Rest`. | Op-level `@RestGet(path="/robots.txt")` + `@RestGet(path="/sitemap.xml")` carry the live mounts. |
+| `BasicVersionResource` | **Mixin-only** — stripped `paths={"/version","/info","/about"}`; kept empty `@Rest`. | Op-level `@RestGet(path={"/version","/info","/about"})` is the live wiring (all three paths bind to one Java method). |
+| `BasicWellKnownResource` | **Mixin-only** — stripped `paths={"/.well-known/security.txt"}`; kept empty `@Rest`. | Single op-level `@RestGet(path="/.well-known/security.txt")` is the live mount. |
+
+No tests were modified — every existing test exercises the mixin via `@Rest(mixins=...)` on a host class, so they continued to pass verbatim. Each class's Javadoc gained a "Mixin-only deployment" section explaining the silent-ignore rule and pointing readers to FINISHED-99 (SVL resolution on `@RestOp(path)`) for the recommended runtime-configurable mount pattern, e.g. `@RestGet(path="${myroute:default}")`. The misleading "Or extend the class directly for a standalone deployment whose mount paths come from the inherited `@Rest(paths)` default." sentence was removed from every class's class-level Javadoc.
+
+**Multi-mode disposition (parent agent's hint was "multi-mode candidate" for `BasicWellKnownResource`):** declined. None of these classes extend `RestServlet` today, so the dead-code annotation was never live in any scenario. Making the well-known resource multi-mode would require adding `extends RestServlet` + `serialVersionUID` + restructured constructors; no test or example uses any of these classes as a standalone servlet. Filed as an observation; not changed in this pass.
+
+## FINISHED-101 follow-up — SVL-configurable mount path + multi-path collapse + hardcoded notes
+
+The convention mixin pack split into "configurable" (one mixin) and "hardcoded" (three mixins) under FINISHED-101's mount-path retrofit.
+
+**Configurable:**
+
+- `BasicVersionResource`: `${juneau.version.path:version}` → default `/version`. The original triple-path default `{"/version","/info","/about"}` was collapsed to a single SVL-configurable path under FINISHED-101's "single path per op" principle. Historical `/info` and `/about` aliases are now reached by overriding the SVL variable, e.g. `-Djuneau.version.path=info`. The synonym assertion in `BasicVersionResource_AsMixin_Test#a02` was rewritten as a "legacy aliases not mounted by default" 404 check; migration coverage lives in `BasicVersionResource_SvlPathOverride_Test#a02`.
+
+**Hardcoded (with new in-class Javadoc rationale citing the relevant spec):**
+
+- `BasicFaviconResource` — `/favicon.ico` is fixed by browser convention and the WHATWG HTML `rel="icon"` default.
+- `BasicSeoResource` — `/robots.txt` and `/sitemap.xml` are fixed by RFC 9309 (Robots Exclusion Protocol) and the sitemaps.org protocol respectively. The two endpoints sit on separate handler methods, not a multi-path array, so they were not collapsed.
+- `BasicWellKnownResource` — `/.well-known/security.txt` is fixed by RFC 8615 + RFC 9116.
+
+Each hardcoded class gained a `<h5 class='section'>Hardcoded mount path:</h5>` Javadoc section citing the spec, so future contributors are not tempted to "complete" the SVL retrofit. See `todo/FINISHED-101-mixin-svl-paths.md` for the full audit.

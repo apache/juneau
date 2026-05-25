@@ -26,32 +26,54 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Mixin that serves static files from the active {@link StaticFiles} implementation under
- * {@code /static/*} and {@code /htdocs/*}.
+ * {@code /static/*} (configurable).
  *
  * <p>
  * Wraps the existing {@link BasicStaticFiles} plumbing (a {@link StaticFiles} implementation, not a
- * servlet) in a servlet-level mixin with multi-mount support so any Juneau resource can opt into
- * static-file serving via {@link Rest#mixins() @Rest(mixins=BasicStaticFilesResource.class)}. The
- * mixin reads the active {@link StaticFiles} from the bean store at request time
- * &mdash; importer's {@code @Bean StaticFiles} declarations + classpath defaults are picked up
- * automatically.
+ * servlet) in a servlet-level mixin so any Juneau resource can opt into static-file serving via
+ * {@link Rest#mixins() @Rest(mixins=BasicStaticFilesResource.class)}. The mixin reads the active
+ * {@link StaticFiles} from the bean store at request time &mdash; importer's
+ * {@code @Bean StaticFiles} declarations + classpath defaults are picked up automatically.
+ *
+ * <h5 class='section'>Configurable mount path:</h5>
+ *
+ * <p>
+ * The default mount {@code /static/*} can be overridden via the SVL variable
+ * {@code ${juneau.staticfiles.path:static}} &mdash; set via system property
+ * ({@code -Djuneau.staticfiles.path=assets}), environment variable
+ * ({@code JUNEAU_STATICFILES_PATH=assets}), or {@code Config} key
+ * ({@code juneau.staticfiles.path = assets}) to change the runtime mount without subclassing.
+ * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
+ * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ *
+ * <p>
+ * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at both
+ * {@code /static/*} <i>and</i> {@code /htdocs/*} as historical convenience aliases &mdash; that
+ * dual default has been collapsed to a single SVL-configurable mount as part of the
+ * "single path per op" principle (see FINISHED-101). Deployers who relied on the {@code /htdocs/*}
+ * alias must now either set {@code -Djuneau.staticfiles.path=htdocs} or compose a second
+ * resource mounted with the {@code htdocs} override. The default {@link StaticFiles} classpath
+ * search root still walks both {@code static/} and {@code htdocs/} directories &mdash; only the
+ * URL-side mount is now single.
+ *
+ * <h5 class='section'>Mixin-only deployment:</h5>
+ *
+ * <p>
+ * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
+ * pinned at the op level by
+ * {@link RestGet @RestGet(path="/${juneau.staticfiles.path:static}/*")} on {@link #getStaticFile}
+ * (and the matching {@link RestOp} for {@code HEAD}); a class-level {@code @Rest(paths=...)}
+ * declaration would be silently ignored under the mixin pattern (see
+ * {@link Rest#paths() @Rest(paths)} Javadoc).
  *
  * <h5 class='figure'>Composition example:</h5>
  *
  * <p class='bjava'>
- * 	<jc>// Vanilla resource gains static-file serving at /static/* and /htdocs/*.</jc>
+ * 	<jc>// Vanilla resource gains static-file serving at /static/*.</jc>
  * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins=BasicStaticFilesResource.<jk>class</jk>)
  * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet {
  * 		<ja>@RestGet</ja>(<js>"/items"</js>) <jk>public</jk> List&lt;Item&gt; items() { ... }
  * 	}
- * </p>
- *
- * <h5 class='figure'>Standalone deployment example:</h5>
- *
- * <p class='bjava'>
- * 	<jc>// Mount as a standalone resource; the inherited paths declare both mount points.</jc>
- * 	<ja>@Rest</ja>(paths={<js>"/static/*"</js>,<js>"/htdocs/*"</js>,<js>"/assets/*"</js>})
- * 	<jk>public class</jk> CdnResource <jk>extends</jk> BasicStaticFilesResource { }
  * </p>
  *
  * <h5 class='section'>Behavior:</h5>
@@ -76,12 +98,13 @@ import org.apache.juneau.rest.annotation.*;
  * <h5 class='section'>Path matching:</h5>
  *
  * <p>
- * The handler declares {@code @RestGet(path={"/static/*","/htdocs/*"})} so a single Java method
- * binds to both URL prefixes. The trailing {@code /*} captures the multi-segment remainder via
- * {@code @Path("/*") String path}. Juneau's {@code UrlPathMatcher} does not support the
- * Spring/JAX-RS {@code {var:regex}} syntax &mdash; each {@code {var}} matches a single segment
- * only, and multi-segment matching is only available via the trailing-{@code *} pattern shown here
- * (same idiom as the legacy {@code BasicRestServlet.getHtdoc(...)} accessor).
+ * The handler declares {@code @RestGet(path="/${juneau.staticfiles.path:static}/*")} so a single
+ * Java method binds to the configured prefix (default {@code /static/*}). The trailing
+ * {@code /*} captures the multi-segment remainder via {@code @Path("/*") String path}. Juneau's
+ * {@code UrlPathMatcher} does not support the Spring/JAX-RS {@code {var:regex}} syntax &mdash;
+ * each {@code {var}} matches a single segment only, and multi-segment matching is only available
+ * via the trailing-{@code *} pattern shown here (same idiom as the legacy
+ * {@code BasicRestServlet.getHtdoc(...)} accessor).
  * </p>
  *
  * <h5 class='section'>OpenAPI surface:</h5>
@@ -101,11 +124,11 @@ import org.apache.juneau.rest.annotation.*;
  * @since 9.5.0
  */
 // @formatter:off
-@Rest(paths={"/static/*","/htdocs/*"})
+@Rest
 public class BasicStaticFilesResource {
 
 	/**
-	 * [GET /static/* | /htdocs/*] &mdash; serve a static file from the active {@link StaticFiles} bean.
+	 * [GET /static/*] &mdash; serve a static file from the active {@link StaticFiles} bean.
 	 *
 	 * <p>
 	 * The {@code @Path("/*") String path} captures the multi-segment trailing remainder. The
@@ -121,7 +144,7 @@ public class BasicStaticFilesResource {
 	 * @throws NotFound If no resource matches the requested path.
 	 */
 	@RestGet(
-		path={"/static/*","/htdocs/*"},
+		path="/${juneau.staticfiles.path:static}/*",
 		summary="Static files",
 		description="Static file retrieval.",
 		swagger=@OpSwagger(ignore=true)
@@ -131,7 +154,7 @@ public class BasicStaticFilesResource {
 	}
 
 	/**
-	 * [HEAD /static/* | /htdocs/*] &mdash; return GET headers for a static file without the body.
+	 * [HEAD /static/*] &mdash; return GET headers for a static file without the body.
 	 *
 	 * <p>
 	 * Per RFC 7231 §4.3.2, {@code HEAD} mirrors the equivalent {@code GET}'s headers (Content-Type,
@@ -148,7 +171,7 @@ public class BasicStaticFilesResource {
 	 */
 	@RestOp(
 		method="HEAD",
-		path={"/static/*","/htdocs/*"},
+		path="/${juneau.staticfiles.path:static}/*",
 		summary="Static files (HEAD)",
 		description="Static file metadata retrieval.",
 		swagger=@OpSwagger(ignore=true)

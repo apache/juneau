@@ -34,12 +34,18 @@ import org.junit.jupiter.api.*;
  * <p>
  * Cases:
  * <ul>
- * 	<li>{@code /version}, {@code /info}, {@code /about} all return the same JSON map.
+ * 	<li>{@code /version} returns the JSON map (single SVL-configurable default mount).
  * 	<li>{@code Content-Type: application/json}.
  * 	<li>Importer's {@code @Bean BasicVersionResource} factory drives the entries map (manifest
  * 		read, programmatic entries, custom Manifest).
  * 	<li>Missing manifest gracefully resolves to {@code (unknown)}.
  * </ul>
+ *
+ * <p>
+ * Per the FINISHED-101 multi-path collapse, the historical {@code /info} and {@code /about}
+ * mount aliases (formerly a triple default on a single op) are now reached via
+ * {@code -Djuneau.version.path=info} (or {@code about}); that behavior is covered by
+ * {@code BasicVersionResource_SvlPathOverride_Test}.
  *
  * @since 9.5.0
  */
@@ -60,12 +66,11 @@ class BasicVersionResource_AsMixin_Test extends TestBase {
 			.assertHeader("Content-Type").isContains("application/json");
 	}
 
-	@Test void a02_versionInfoAboutAreSynonyms() throws Exception {
-		var v = ca.get("/version").run().assertStatus(200).getContent().asString();
-		var i = ca.get("/info").run().assertStatus(200).getContent().asString();
-		var ab = ca.get("/about").run().assertStatus(200).getContent().asString();
-		Assertions.assertEquals(v, i, "/version and /info must be synonyms");
-		Assertions.assertEquals(v, ab, "/version and /about must be synonyms");
+	@Test void a02_legacyAliasesNotMountedByDefault() throws Exception {
+		// FINISHED-101: /info and /about are no longer multi-path defaults. They only mount when
+		// the deployer overrides juneau.version.path. Default-build hosts get 404 here.
+		ca.get("/info").run().assertStatus(404);
+		ca.get("/about").run().assertStatus(404);
 	}
 
 	@Test void a03_defaultPayloadHasJavaVersionAtMinimum() throws Exception {

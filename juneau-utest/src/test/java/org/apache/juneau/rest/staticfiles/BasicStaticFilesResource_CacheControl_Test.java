@@ -56,7 +56,11 @@ class BasicStaticFilesResource_CacheControl_Test extends TestBase {
 			.assertHeader("Cache-Control").is("max-age=86400, public");
 	}
 
-	@Test void a02_cacheControlOnHtdocsMount() throws Exception {
+	@Test void a02_cacheControlOnLegacyHtdocPath() throws Exception {
+		// FINISHED-101: /htdocs/* is no longer a multi-path default on the mixin, but
+		// BasicRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.
+		// That handler also reads from BasicStaticFiles, so the Cache-Control default flows
+		// through unchanged.
 		c.get("/htdocs/javadoc.css")
 			.run()
 			.assertStatus(200)

@@ -27,8 +27,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
- * Mixin that serves deployment-introspection metadata at {@code /version}, {@code /info}, and
- * {@code /about}.
+ * Mixin that serves deployment-introspection metadata at {@code /version} (configurable).
  *
  * <p>
  * Sibling of {@link BasicFaviconResource}, {@link BasicSeoResource}, and
@@ -38,9 +37,35 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * Compose into a host resource via
  * {@link Rest#mixins() @Rest(mixins=BasicVersionResource.class)}; the three URLs become available
- * alongside the host's own endpoints with no further wiring. Or extend the class directly for a
- * standalone deployment whose mount paths come from the inherited
- * {@link Rest#paths() @Rest(paths)} default.
+ * alongside the host's own endpoints with no further wiring.
+ *
+ * <h5 class='section'>Configurable mount path:</h5>
+ *
+ * <p>
+ * The default mount {@code /version} can be overridden via the SVL variable
+ * {@code ${juneau.version.path:version}} &mdash; set via system property
+ * ({@code -Djuneau.version.path=build-info}), environment variable
+ * ({@code JUNEAU_VERSION_PATH=build-info}), or {@code Config} key
+ * ({@code juneau.version.path = build-info}) to change the runtime mount without subclassing.
+ * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
+ * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ *
+ * <p>
+ * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at three
+ * historical aliases &mdash; {@code /version}, {@code /info}, and {@code /about} &mdash; on a
+ * single op. That multi-path default has been collapsed to a single SVL-configurable mount as
+ * part of the "single path per op" principle (see FINISHED-101). Deployers who relied on the
+ * {@code /info} or {@code /about} aliases must now either set
+ * {@code -Djuneau.version.path=info} (or {@code about}), compose a second instance with the
+ * desired override, or subclass and supply their own {@code @RestGet(path=...)} method.
+ *
+ * <h5 class='section'>Mixin-only deployment:</h5>
+ *
+ * <p>
+ * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
+ * pinned at the op level by {@link RestGet @RestGet(path="/${juneau.version.path:version}")} on
+ * {@link #getInfo}; a class-level {@code @Rest(paths=...)} declaration would be silently
+ * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
  * <h5 class='figure'>Composition example:</h5>
  *
@@ -108,7 +133,7 @@ import org.apache.juneau.rest.annotation.*;
  * @since 9.5.0
  */
 // @formatter:off
-@Rest(paths={"/version","/info","/about"})
+@Rest
 public class BasicVersionResource {
 
 	/** Sentinel value returned for entries that the mixin couldn't resolve. */
@@ -156,7 +181,7 @@ public class BasicVersionResource {
 	}
 
 	/**
-	 * [GET /version | /info | /about] &mdash; emit the assembled metadata as a JSON map.
+	 * [GET /version] &mdash; emit the assembled metadata as a JSON map.
 	 *
 	 * <p>
 	 * Format-pinned to {@code application/json} per the v1 resolved decision &mdash; bypasses
@@ -167,7 +192,7 @@ public class BasicVersionResource {
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@RestGet(
-		path={"/version","/info","/about"},
+		path="/${juneau.version.path:version}",
 		summary="Version / build metadata",
 		description="Deployment-introspection metadata (name, version, git, build).",
 		swagger=@OpSwagger(ignore=true)

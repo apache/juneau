@@ -46,11 +46,12 @@ public class AppResource extends RestServlet {
 **In scope (v1):**
 
 - New Maven module `juneau-rest/juneau-rest-server-view-thymeleaf/` with a `pom.xml` mirroring `juneau-rest-server-view-jsp` (sibling pattern from TODO-78) and `juneau-rest-server-mcp` (closest small-single-purpose precedent).
-- `org.apache.juneau.rest.view.thymeleaf.BasicThymeleafResource` mixin with default `@Rest(paths={"/thymeleaf/*"})`. Single `@RestGet("/*")` handler (with `@Path("/*") String path` capturing the multi-segment remainder, `swagger=@OpSwagger(ignore=true)`) that:
+- `org.apache.juneau.rest.view.thymeleaf.BasicThymeleafResource` mixin class (mixin-only — **no class-level `@Rest(paths=...)`**; see "Configurable mount path" section below). Single `@RestGet(path="/thymeleaf/*", swagger=@OpSwagger(ignore=true))` handler (with `@Path("/*") String path` capturing the multi-segment remainder) that:
     - Reads the configured base-path (default `/`).
     - Resolves the template by stripping any trailing extension and asking the `TemplateEngine` for `<basePath><path-without-ext>` (Thymeleaf appends `.html` via the resolver's suffix).
     - Builds a `Context` populated with request + session attributes (no Java model, since this is the raw-rendering path).
     - Writes the engine's output directly to the response writer with `Content-Type: text/html;charset=UTF-8`.
+    - **Path-traversal hardening:** the resolved `<basePath><path>` MUST be validated via `FileUtils.resolveVirtualPathSafely(basePath, path)` (added in Phase C2 alongside FINISHED-100; see `BasicJspResource.render` for the canonical caller). The helper throws `IllegalArgumentException` on any `..` segment that escapes `basePath`; the handler maps that to HTTP 403. This is the same hardening pattern used by `DirectoryResource`, `LogsResource`, and `BasicJspResource`.
 - `org.apache.juneau.rest.view.thymeleaf.ThymeleafView` value-class — a `View` bean carrying `(templateName, Map<String,Object> attributes)`. `@RestOp` methods can return `ThymeleafView` directly and the framework's `ResponseProcessor` chain dispatches to the renderer.
 - `org.apache.juneau.rest.view.thymeleaf.ThymeleafViewRenderer` `ResponseProcessor` impl — detects `ThymeleafView` returns, copies attributes into a `Context`, asks the `TemplateEngine` to render to the response writer.
 - POM dependencies (engine-agnostic per resolved decision #2):
@@ -84,6 +85,36 @@ public class AppResource extends RestServlet {
     - **`@Primary`/`@Qualifier` for multiple `TemplateEngine` beans.** Rare, but if a user has both `SpringTemplateEngine` and a custom `TemplateEngine`, Spring's `@Primary` semantics flow through `SpringBeanStore.getBean(TemplateEngine.class)`. Document the precedence.
 - **Acceptance bullet** added below: "Mixin works identically when registered via Juneau `BeanStore` (microservice path) and via Spring `@Bean` (Spring Boot path); both paths covered by a test."
 
+## Configurable mount path (SVL pattern, FINISHED-99)
+
+The default `/thymeleaf/*` mount is pinned at the **op level** by
+`@RestGet(path="/thymeleaf/*")` on the `render` handler — **not** by a class-level
+`@Rest(paths=...)` declaration. Per the framework Javadoc at `Rest.java:1017-1021` (and
+`Rest.java:1081-1085` for `paths()`), `@Rest(path)` / `@Rest(paths)` on a mixin class is
+**silently ignored** when the host imports the class via `@Rest(mixins=...)`; the importing
+host's own `path()` / `paths()` governs the mount and mixin endpoints land in the host's URL
+namespace. This is why the mixin shape in Scope above carries no class-level `paths=...`.
+
+For runtime-configurable mounts, FINISHED-99 lit up Juneau SVL resolution on op paths. The
+recommended pattern in this module is:
+
+```java
+@RestGet(path="/${myroute:thymeleaf}/*", swagger=@OpSwagger(ignore=true))
+public void render(@Path("/*") String path, RestRequest req, RestResponse res) { ... }
+```
+
+The `${myroute:thymeleaf}` SVL expression resolves at startup via the
+{@link org.apache.juneau.svl.VarResolver VarResolver} on the bean store. Worked examples:
+
+- **System property:** `-Dmyroute=views` → mount at `/views/*`.
+- **Environment variable:** with op shape `@RestGet(path="/${E:MYROUTE,thymeleaf}/*")`,
+  `MYROUTE=views` in the environment → `/views/*`; default `thymeleaf` otherwise.
+- **`Config` override:** with op shape `@RestGet(path="/${C:myroute,thymeleaf}/*")`,
+  `juneau.cfg` carries `myroute = views` → `/views/*`.
+
+Sibling bridge modules (TODO-83 Mustache, TODO-84 FreeMarker) inherit this pattern; the only
+per-engine variation is the default mount segment (`mustache`, `freemarker`).
+
 ## Phased steps
 
 ### Phase 0 — confirm seams (read-only)
@@ -108,7 +139,7 @@ public class AppResource extends RestServlet {
 
 ### Phase 2 — `BasicThymeleafResource` mixin
 
-1. New class with default `@Rest(paths={"/thymeleaf/*"}, responseProcessors={ThymeleafViewRenderer.class})` and `@RestGet(path="/*", swagger=@OpSwagger(ignore=true))` handler (signature: `void render(@Path("/*") String path, RestRequest req, RestResponse res, ...)` writing directly to `res.getWriter()`).
+1. New class with `@Rest(responseProcessors={ThymeleafViewRenderer.class})` (NO `paths=...` — see "Configurable mount path" below) and `@RestGet(path="/thymeleaf/*", swagger=@OpSwagger(ignore=true))` handler (signature: `void render(@Path("/*") String path, RestRequest req, RestResponse res, ...)` writing directly to `res.getWriter()` after `FileUtils.resolveVirtualPathSafely(basePath, path)` validates the resolved target).
 2. Builder accepts `basePath(String)`, `cacheTemplates(boolean)`, `templateMode(TemplateMode)` (HTML default).
 3. Default-engine construction logic: on first request, if no `TemplateEngine` bean is registered, build one with `ClassLoaderTemplateResolver(prefix=basePath, suffix=".html", templateMode=HTML, cacheable=cacheFlag)` anchored on the importer's classloader.
 4. Tests:
@@ -206,7 +237,7 @@ Sibling view-module TODOs (TODO-83/84) inherit this test architecture by default
 4. **Auto-register `ThymeleafViewRenderer` on the mixin — yes.** `@Rest(responseProcessors={ThymeleafViewRenderer.class})` is declared on `BasicThymeleafResource` so callers don't have to register the renderer separately.
 5. **Default base path — `/`.** Most flexible. Example app uses `/templates/` to demonstrate the conventional Spring-Boot-compatible layout.
 6. **`ThymeleafView extends View` — yes.** `View` interface lives in core `juneau-rest-server` per TODO-78 resolved decision #6 (HARD dependency on TODO-78 landing first). `ThymeleafView` is the impl in this bridge module.
-7. **Multi-base-path support — documented "register two beans" pattern, no special builder API.** A user with `/templates/` and `/admin/templates/` registers two `BasicThymeleafResource` beans, each with its own `paths` override and `basePath`. Same convention as TODO-78 #7.
+7. **Multi-base-path support — documented "register two beans" pattern, no special builder API.** A user with `/templates/` and `/admin/templates/` registers two `BasicThymeleafResource` beans, each with its own op-level `@RestGet(path=...)` override and `basePath`. (The bridge class itself has no class-level `@Rest(paths=...)` — that would be silently ignored under the mixin pattern; see "Configurable mount path" section above.) Same convention as TODO-78 #7.
 
 ## Follow-on TODOs to track after this lands
 

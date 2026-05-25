@@ -24,6 +24,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.*;
 
 /**
  * File utilities.
@@ -40,8 +41,14 @@ public class FileUtils {
 	private FileUtils() {}
 
 	// Argument name constants for assertArgNotNull
+	private static final String ARG_basePath = "basePath";
 	private static final String ARG_f = "f";
 	private static final String ARG_path = "path";
+	private static final String ARG_rootDir = "rootDir";
+
+	// Shared message text — kept identical across the two boundary-check sites so attackers
+	// cannot distinguish "rejected by pre-existence check" from "rejected by symlink check".
+	private static final String MSG_pathEscape = "Path escapes configured root directory.";
 
 	/**
 	 * Creates a file if it doesn't already exist using {@link File#createNewFile()}.
@@ -232,6 +239,165 @@ public class FileUtils {
 	public static File mkdirs(String path, boolean clean) {
 		assertArgNotNull(ARG_path, path);
 		return mkdirs(new File(path), clean);
+	}
+
+	/**
+	 * Resolves a user-supplied path string against a root directory with a strict
+	 * filesystem-boundary check &mdash; rejects any path that escapes the root (via
+	 * {@code ../}, absolute-path injection, symlinks pointing outside, etc.).
+	 *
+	 * <p>
+	 * Resolves both {@code rootDir} and the resolved target via
+	 * {@link Path#toRealPath Path.toRealPath()} + {@link Path#normalize Path.normalize()}
+	 * to handle symlinks deterministically, then asserts {@code target.startsWith(root)}
+	 * before returning the resolved {@link File}.
+	 *
+	 * <p>
+	 * Symlinks <i>inside</i> {@code rootDir} that resolve <i>inside</i> {@code rootDir} are
+	 * followed silently. Symlinks that resolve <i>outside</i> {@code rootDir} are rejected with
+	 * {@link IllegalArgumentException} (callers should map to a {@code 403 Forbidden}).
+	 *
+	 * <p>
+	 * Pre-existence semantics: when the resolved target does not exist on the filesystem, the
+	 * helper returns {@link Optional#empty()} so the caller can map to a {@code 404 Not Found}.
+	 * Boundary violation always wins over pre-existence &mdash; even a non-existent path that
+	 * escapes {@code rootDir} (after {@code ../} normalization) is rejected with
+	 * {@link IllegalArgumentException} rather than {@code Optional.empty()}.
+	 *
+	 * <p>
+	 * Used by {@code DirectoryResource}, {@code LogsResource}, and any other resource that
+	 * resolves an HTTP-supplied path under a configured root directory.
+	 *
+	 * @param rootDir The configured root directory. Must not be <jk>null</jk>.
+	 * @param userPath The user-supplied path, relative to {@code rootDir}. May be
+	 * 	<jk>null</jk> or empty &mdash; in which case the helper returns the resolved root
+	 * 	itself.
+	 * @return An {@link Optional} containing the resolved {@link File} if it exists inside
+	 * 	{@code rootDir}, or {@link Optional#empty()} if the target does not exist.
+	 * @throws IllegalArgumentException If the resolved target escapes {@code rootDir}, or if
+	 * 	the supplied {@code userPath} is not a valid path string. Callers should map to
+	 * 	{@code 403 Forbidden}.
+	 */
+	public static Optional<File> resolveSafely(File rootDir, String userPath) {
+		assertArgNotNull(ARG_rootDir, rootDir);
+		var root = canonicalizeRoot(rootDir.toPath());
+		if (userPath == null || userPath.isEmpty())
+			return opt(root.toFile());
+		Path target;
+		try {
+			target = root.resolve(userPath).normalize();
+		} catch (@SuppressWarnings("unused") InvalidPathException e) {
+			throw illegalArg(MSG_pathEscape);
+		}
+		if (! target.startsWith(root))
+			throw illegalArg(MSG_pathEscape);
+		var f = target.toFile();
+		if (! f.exists())
+			return Optional.empty();
+		try {
+			if (! target.toRealPath().startsWith(root))
+				throw illegalArg(MSG_pathEscape);
+		} catch (@SuppressWarnings("unused") NoSuchFileException e) {
+			return Optional.empty();
+		} catch (IOException e) {
+			throw rex(e, "Could not canonicalize ''{0}''", target);
+		}
+		return opt(f);
+	}
+
+	/**
+	 * Virtual-path variant of {@link #resolveSafely(File, String)} for use with servlet-context
+	 * paths, classpath resource lookups, or other virtual-path resolvers where no filesystem
+	 * operation is desired.
+	 *
+	 * <p>
+	 * Operates purely on the virtual path string &mdash; no {@code toRealPath()} call, no
+	 * filesystem touch, no symlink resolution. Safe to use against base paths whose resources
+	 * do not exist on the local filesystem at all (e.g. {@code /WEB-INF/views/} inside a
+	 * Spring Boot fat jar, or a classpath URL).
+	 *
+	 * <p>
+	 * Normalizes the combined path by walking segments and applying {@code ./} (drop) and
+	 * {@code ../} (pop) semantics, then asserts the result stays under the normalized
+	 * {@code basePath}. {@code ../} segments that would pop above {@code basePath} are
+	 * rejected.
+	 *
+	 * <p>
+	 * URL-encoding is the caller's responsibility &mdash; this helper treats the literal
+	 * {@code %2e%2e} as a normal path segment (not as {@code ..}). Callers that receive
+	 * user input from URLs should URL-decode before calling.
+	 *
+	 * @param basePath The configured base path (virtual; e.g. {@code "/WEB-INF/views/"}).
+	 * 	Must not be <jk>null</jk> or blank.
+	 * @param userPath The user-supplied path, relative to {@code basePath}. May be
+	 * 	<jk>null</jk> or empty &mdash; in which case the helper returns the normalized
+	 * 	{@code basePath}.
+	 * @return The resolved virtual path string (always starting with {@code basePath}).
+	 * @throws IllegalArgumentException If the resolved target escapes {@code basePath}, or if
+	 * 	{@code basePath} is <jk>null</jk> or blank. Callers should map to
+	 * 	{@code 403 Forbidden}.
+	 */
+	public static String resolveVirtualPathSafely(String basePath, String userPath) {
+		assertArgNotNull(ARG_basePath, basePath);
+		if (basePath.isBlank())
+			throw illegalArg("basePath must not be blank.");
+		var bp = normalizeVirtualPath(basePath);
+		if (bp == null)
+			throw illegalArg("basePath escapes its own root.");
+		if (! bp.endsWith("/"))
+			bp = bp + "/";
+		if (userPath == null || userPath.isEmpty())
+			return bp;
+		var up = userPath.startsWith("/") ? userPath.substring(1) : userPath;
+		var combined = normalizeVirtualPath(bp + up);
+		if (combined == null || ! combined.startsWith(bp))
+			throw illegalArg(MSG_pathEscape);
+		return combined;
+	}
+
+	/**
+	 * Resolves {@code rootDir} via {@link Path#toRealPath()} so symlinks at the root itself
+	 * are normalized once per call. Falls back to {@link Path#toAbsolutePath()} +
+	 * {@link Path#normalize()} when the directory does not exist at the moment of the call
+	 * (rare; legacy contract tolerated this).
+	 */
+	private static Path canonicalizeRoot(Path rootDir) {
+		try {
+			return rootDir.toRealPath();
+		} catch (@SuppressWarnings("unused") IOException e) {
+			return rootDir.toAbsolutePath().normalize();
+		}
+	}
+
+	/**
+	 * String-level path normalization for forward-slash separated virtual paths.
+	 * Returns {@code null} if a {@code ..} segment would pop above the root.
+	 */
+	@SuppressWarnings("java:S3776") // Cognitive complexity: small loop with three early-exit cases; splitting hurts readability.
+	private static String normalizeVirtualPath(String path) {
+		if (path == null)
+			return null;
+		var startsWithSlash = path.startsWith("/");
+		var endsWithSlash = path.length() > 1 && path.endsWith("/");
+		var segments = new ArrayList<String>();
+		for (var s : path.split("/")) {
+			if (s.isEmpty() || ".".equals(s))
+				continue;
+			if ("..".equals(s)) {
+				if (segments.isEmpty())
+					return null;
+				segments.remove(segments.size() - 1);
+				continue;
+			}
+			segments.add(s);
+		}
+		var sb = new StringBuilder();
+		if (startsWithSlash)
+			sb.append('/');
+		sb.append(String.join("/", segments));
+		if (endsWithSlash && (sb.length() == 0 || sb.charAt(sb.length() - 1) != '/'))
+			sb.append('/');
+		return sb.toString();
 	}
 
 	/**
