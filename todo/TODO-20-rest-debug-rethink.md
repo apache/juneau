@@ -2,26 +2,27 @@
 
 Source: promoted from `TODO.md` on 2026-05-21.
 
-## Dependency on TODO-35
+## Dependency on FINISHED-35
 
-Phase 3 of this plan (test-time `@TestBean DebugConfig` overlay) **depends on TODO-35
-Phase 2** landing first (`@TestBean` annotation + `JuneauBeanStoreExtension` in
-`juneau-junit5`). Phases 1, 2, and 4 can land independently of TODO-35 — only the
-test-side ergonomics in Phase 3 need the BeanStore overlay machinery.
-
-If TODO-35 slips, Phase 3 can still land using direct
-`MockRestClient.Builder.debugConfig(DebugConfig)` wiring (proposed in Phase 3 below),
-just without the `@TestBean` declarative form.
+Phase 3 of this plan (test-time `@TestBean DebugConfig` overlay) depends on
+**FINISHED-35** (`@TestBean` annotation + `JuneauBeanStoreExtension` in
+`juneau-junit5`) — already landed, so this dep is satisfied at the time of
+plan-update (2026-05-25). All four phases can proceed without external blockers.
 
 ## Goal
 
 Replace the current debugging mechanism — split across `DebugEnablement`,
 `CallLogger`'s parallel `normalRules`/`debugRules` lists, five `@Rest`/`@RestOp`
 attributes, and a single `Boolean` request attribute — with a **single bean +
-single annotation** surface that:
+single typed annotation slot on `@Rest`/`@RestOp`** that:
 
-1. Configures per-endpoint debug **at compile time** (annotation) and **at runtime**
-   (injected bean / programmatic `RestRequest` knob).
+1. Configures per-endpoint debug **at compile time** via `@Rest(debug=@Debug(...))`
+   and `@RestOp(debug=@Debug(...))` (with standalone `@Debug` as an escape hatch
+   for annotation-composition / inherited-`@Rest` scenarios) and **at runtime** via
+   an injected `DebugConfig` bean and a programmatic `RestRequest.debug()` knob.
+   Putting the debug config inside the `@Rest`/`@RestOp` annotation makes those
+   annotations a **source-of-truth for the resource/op's capabilities** — a reader
+   scanning `@Rest(...)` sees every configurable capability in one place.
 2. Carries a **pluggable log format** per matched endpoint (text-with-detail-levels,
    JSON, one-line, SLF4J-structured, capture-for-tests, user-supplied).
 3. Plays well with the `BeanStore` so test code can swap the whole debug config (or
@@ -201,7 +202,9 @@ other format. Result: `BasicTestCaptureCallLogger` deletion costs zero new
 machinery, and tests inspecting captured debug output get the same API as tests
 inspecting any other log channel. See open question #9 below.
 
-### 3. `@Debug` annotation replaces five existing attributes
+### 3. `@Debug` annotation — primary placement on `@Rest`/`@RestOp`, secondary placement standalone
+
+The `@Debug` annotation type definition:
 
 ```java
 @Retention(RUNTIME)
@@ -225,14 +228,78 @@ public @interface Debug {
 }
 ```
 
-- Class-level `@Debug(...)` replaces `@Rest(debug)`, `@Rest(debugDefault)`,
-  `@Rest(debugEnablement)`, `@Rest(debugOn)`.
-- Method-level `@Debug(...)` replaces `@RestOp(debug)`.
-- The five existing attributes are deprecated (with identical semantics retained
-  internally for one release) and removed in 9.7.
+`@Rest` and `@RestOp` each gain a new typed slot `debug=@Debug(...)`. The slot
+name `debug` is **reused** for the new typed form (the old `String`-typed slot
+is removed in the same release — see §6 below). The old four `@Rest` debug
+attributes (`debug`, `debugDefault`, `debugEnablement`, `debugOn`) collapse into
+this single typed slot.
 
-Compile-time configuration becomes one annotation per place. Runtime configuration
-becomes one bean (`DebugConfig`) reachable via the BeanStore.
+**Primary placement — nested on `@Rest`/`@RestOp` (source-of-truth pattern, preferred):**
+
+```java
+@Rest(
+    path="/widgets",
+    debug=@Debug(value="conditional", format=JsonFormat.class)
+)
+public class WidgetResource extends BasicRestServlet {
+
+    @RestGet(path="/", debug=@Debug("always"))
+    public List<Widget> list() { ... }
+}
+```
+
+Putting debug config inside `@Rest`/`@RestOp` makes those annotations the
+canonical source-of-truth for the resource/op's capabilities — a reader scanning
+`@Rest(...)` sees every configurable capability in one place rather than having
+to scan for sibling annotations on the same class.
+
+This pattern generalizes beyond debug. Any future configurable capability that
+grows beyond a `String`/`Class` shape should follow the same nested-typed-annotation
+placement on `@Rest`/`@RestOp` rather than spawn a new standalone sibling
+annotation. See Open Question #10 below for a candidate follow-on TODO that
+audits the `@Rest`/`@RestOp` surface for other capabilities that could benefit.
+
+**Secondary placement — standalone (escape hatch):**
+
+```java
+@Debug(value="conditional", format=JsonFormat.class)
+public class WidgetResource extends BaseResource {  // @Rest is inherited from BaseResource
+    ...
+}
+```
+
+Standalone `@Debug` on class or method is retained for cases where:
+
+- The target class inherits `@Rest` from a base class and doesn't re-declare it.
+- An annotation-composition pattern aggregates debug config independently of `@Rest`.
+- A method enters the op-method scan via a custom non-`@RestOp` annotation and
+  still needs debug config.
+
+In all of these the standalone form composes with whatever `@Rest`/`@RestOp`
+configuration is in scope.
+
+**Precedence when both placements are present on the same target:**
+
+`@RestOp(debug=@Debug(...))` on the method beats standalone `@Debug` on the
+method, which beats `@Rest(debug=@Debug(...))` on the class, which beats
+standalone `@Debug` on the class. Specificity wins.
+
+**Mapping table — old attributes → new typed slot:**
+
+| Old | New |
+| --- | --- |
+| `@Rest(debug="true")` | `@Rest(debug=@Debug("always"))` |
+| `@Rest(debug="false")` | `@Rest(debug=@Debug("never"))` |
+| `@Rest(debug="conditional")` | `@Rest(debug=@Debug("conditional"))` |
+| `@Rest(debugDefault="true")` | `@Rest(debug=@Debug("always"))` (collapsed) |
+| `@Rest(debugEnablement=MyEnablement.class)` | `@Rest(debug=@Debug(config=MyDebugConfig.class))` |
+| `@Rest(debugOn="MyResource.doX=true")` | `@Rest(debug=@Debug(on="MyResource.doX=true"))` |
+| `@RestOp(debug="true")` | `@RestOp(debug=@Debug("always"))` |
+| `@RestOp(debug="conditional")` | `@RestOp(debug=@Debug("conditional"))` |
+
+Compile-time configuration becomes one annotation slot (`debug=@Debug(...)`) on
+`@Rest`/`@RestOp` — with optional standalone `@Debug` for escape hatches. Runtime
+configuration becomes one bean (`DebugConfig`) reachable via the BeanStore.
 
 ### 4. Runtime fluent surface on `RestRequest`
 
@@ -290,23 +357,76 @@ dial-up of `level` / `format` is just a builder call.
 `MockRestClient.Builder.debugConfig(DebugConfig)` method — less ergonomic, but
 self-contained.
 
-### 6. Migration
+### 6. Migration — hard break, no deprecation cycle
 
-- **9.5.x (current release line)** — land the new `DebugConfig` + `@Debug` +
-  `DebugFormat` alongside the existing system. `BasicDebugEnablement` and
-  `BasicCallLogger` are reimplemented as thin adapters that read `@Rest(debug)` /
-  `@RestOp(debug)` / `@Rest(debugOn)` into a `DebugConfig` builder internally.
-  Existing tests and resources keep working with **zero code changes**.
-- **9.5.x release notes** — entry in
-  `juneau-docs/docs/pages/release-notes/9.5.0.md` (or 9.5.1 if that's open) under
-  `juneau-rest-server`: new annotation, new bean, deprecation note for the old
-  surface.
-- **9.6** — deprecate `@Rest(debug)`, `@Rest(debugDefault)`,
-  `@Rest(debugEnablement)`, `@Rest(debugOn)`, `@RestOp(debug)`, `DebugEnablement`,
-  `BasicDebugEnablement`, `BasicCallLogger`'s `normalRules` / `debugRules`.
-  Migration entry in `juneau-docs/pages/topics/23.01.V9.5-migration-guide.md`
-  (TODO-17 territory) with Old → New rows.
-- **9.7** — remove deprecated surface.
+**Decision (2026-05-25):** no two-release deprecation cycle. The old debug
+surface is **removed in 9.5** in the same release that lands the new
+`@Debug` / `DebugConfig` / `DebugFormat` surface. Migration is documented but
+not automated.
+
+**Rationale:** the old surface is a five-attribute mess (`debug`, `debugDefault`,
+`debugEnablement`, `debugOn` on `@Rest`, plus `debug` on `@RestOp`) with a
+transitional 9.5 wart already in it (the `debug` vs `debugDefault` distinction
+landed mid-release). Carrying it as deprecated-but-functional for a 9.6 → 9.7
+window would mean shipping two parallel code paths (the back-compat adapter
+chain reading old attributes into a new `DebugConfig` builder, plus the new
+typed surface) for a year, doubling the surface area for tests, docs, and
+review. The hard break trades one explicit migration step at the 9.5 boundary
+for a cleaner long-term shape.
+
+**What gets removed in 9.5 (this TODO's PR):**
+
+- `@Rest(debug)` (String) — replaced by `@Rest(debug=@Debug(...))`.
+- `@Rest(debugDefault)` (String) — collapsed into `@Rest(debug=@Debug(...))`.
+- `@Rest(debugEnablement)` (Class) — replaced by
+  `@Rest(debug=@Debug(config=...))`.
+- `@Rest(debugOn)` (String) — replaced by `@Rest(debug=@Debug(on="..."))`.
+- `@RestOp(debug)` (String) — replaced by `@RestOp(debug=@Debug(...))`.
+- `DebugEnablement` class + `BasicDebugEnablement` impl — replaced by
+  `DebugConfig` + `BasicDebugConfig`.
+- `CallLogger.Builder.normalRules` / `debugRules` — collapsed into
+  `DebugConfig.rule(...)` builders with per-rule format + level.
+- `BasicCallLogger`'s parallel-rule wiring — replaced by single-rule resolve
+  through `DebugConfig`.
+- `BasicTestCallLogger`, `BasicTestCaptureCallLogger` — replaced by
+  `CapturingFormat` (or by direct `LogRecordCapture` use per OQ #9).
+
+**What gets preserved:**
+
+- `RestRequest.setDebug()` / `setDebug(Boolean)` / `isDebug()` — kept as
+  one-liner shortcuts over the new `req.debug()` fluent surface.
+- `CallLogger` class itself — refactored to delegate to `DebugConfig`, not
+  removed.
+- System-property knobs (`juneau.restLogger.*` / `JUNEAU_RESTLOGGER_*`) — kept;
+  they map onto `DebugConfig` builder defaults at construction time.
+
+**Migration notes (delivered with the PR):**
+
+A new migration-guide section lands in
+`juneau-docs/pages/topics/23.01.V9.5-migration-guide.md` (TODO-17 territory)
+with explicit Old → New rows covering every removed surface. Sections:
+
+1. **Annotation migration** — Old → New table mirroring the mapping table in
+   §3 above, with side-by-side code samples.
+2. **`DebugEnablement` → `DebugConfig` migration** — for the (small) population
+   of users with a custom `DebugEnablement` subclass: pattern for porting
+   `ReflectionMap<Enablement>` lookups onto `DebugConfig.Builder.rule(...)`.
+3. **`CallLogger` rule-list migration** — pattern for porting parallel
+   `normalRules` / `debugRules` setups onto unified `DebugRule` instances that
+   carry both gating predicate and format.
+4. **Test-side migration** — for users with `BasicTestCallLogger` /
+   `BasicTestCaptureCallLogger` subclasses: pattern for replacing them with
+   `CapturingFormat` (or with direct `LogRecordCapture` per OQ #9 once
+   resolved).
+5. **System-property migration** — none required; the `juneau.restLogger.*`
+   knobs continue to work and now feed the new `DebugConfig` builder.
+
+**Release-notes entry** in `juneau-docs/docs/pages/release-notes/9.5.0.md`
+under `### juneau-rest-server` with a `**Breaking change**` callout pointing
+at the migration-guide section.
+
+Future-release impact: 9.6 onwards has no carried-over deprecated debug
+surface to remove — TODO-20 lands clean in one shot.
 
 ### 7. Class summary
 
@@ -318,7 +438,9 @@ self-contained.
 | `DebugFormat` (interface) | `org.apache.juneau.rest.debug` | `juneau-rest-server` | Pluggable formatter. |
 | `BasicTextFormat`, `OneLineFormat`, `JsonFormat`, `CapturingFormat` | `org.apache.juneau.rest.debug.format` | `juneau-rest-server` | Built-in formats. |
 | `Slf4jStructuredFormat` | `org.apache.juneau.rest.debug.format.slf4j` | new `juneau-rest-server-slf4j` | SLF4J-only sub-module; keeps core SLF4J-free. |
-| `@Debug` | `org.apache.juneau.rest.annotation` | `juneau-rest-server` | Replaces 5 existing attributes. |
+| `@Debug` | `org.apache.juneau.rest.annotation` | `juneau-rest-server` | Used both as `@Rest(debug=@Debug(...))` / `@RestOp(debug=@Debug(...))` (primary, source-of-truth) and standalone on class/method (secondary, escape hatch). |
+| `@Rest.debug` slot type change | `org.apache.juneau.rest.annotation` | `juneau-rest-server` | `String` → `@Debug`. Hard break — see §6. |
+| `@RestOp.debug` slot type change | `org.apache.juneau.rest.annotation` | `juneau-rest-server` | `String` → `@Debug`. Hard break — see §6. |
 | `RestRequest.debug()` fluent | `org.apache.juneau.rest` | `juneau-rest-server` | New runtime knob; `setDebug`/`isDebug` retained as shortcuts. |
 
 ## Open questions
@@ -357,11 +479,15 @@ self-contained.
    structured form (`@Debug.On({ @Debug.Rule(targets=…, value=…), …})`)?
    Recommendation: keep the string form for SVL-resolved system-property use cases;
    add `@Debug.Rule` for the in-source form.
-9. **Integrate `org.apache.juneau.commons.logging` package**. The existing
-   `juneau-commons` logging package (`Logger`, `LogRecord`, `LogRecordListener`,
-   `LogRecordCapture`) is the right substrate for the new debug surface to sit on:
-   - **`CapturingFormat`** is a thin wrapper around `LogRecordCapture` (see
-     section 4 above) — `try-with-resources` capture, format-string assertions,
+9. **Integrate `org.apache.juneau.commons.logging` package + `CapturingFormat` vs
+   `LogRecordCapture`**. Two related sub-questions, captured together for
+   readability.
+
+   **(a) Substrate.** The existing `juneau-commons` logging package
+   (`Logger`, `LogRecord`, `LogRecordListener`, `LogRecordCapture`) is the right
+   substrate for the new debug surface to sit on:
+   - **`CapturingFormat`** is a thin wrapper around `LogRecordCapture` (see §2
+     above) — `try-with-resources` capture, format-string assertions,
      `LogRecordListener` plumbing, all already exist.
    - **`DebugConfig.logger` field** should accept either a `java.util.logging.Logger`
      (back-compat with today's `CallLogger.Builder.logger(...)`) **or** a
@@ -372,24 +498,69 @@ self-contained.
      (`{level}: {msg}`, `{thrown}`, etc.) should be the reference set for any
      placeholder vocabulary `BasicTextFormat` / `OneLineFormat` / `JsonFormat`
      end up exposing.
+
    Recommendation: explicit dependency on `org.apache.juneau.commons.logging` from
    `org.apache.juneau.rest.debug`; no parallel reinvention of listener / capture /
    formatted-message machinery.
-9. **`CapturingFormat` vs `LogRecordCapture`**. Two paths:
+
+   **(b) `CapturingFormat` vs `LogRecordCapture`.** Two paths:
    1. Ship a dedicated `CapturingFormat` with its own `AtomicReference<String>`
       mechanism (the original draft above).
-   2. **Recommended:** route every `DebugFormat` through `org.apache.juneau.commons.logging.Logger`
-      (already wraps `java.util.logging.Logger` and supports `addLogRecordListener` +
+   2. **Recommended:** route every `DebugFormat` through
+      `org.apache.juneau.commons.logging.Logger` (already wraps
+      `java.util.logging.Logger` and supports `addLogRecordListener` +
       `captureEvents()`), and have tests use `LogRecordCapture` directly — no
       bespoke capturing format needed. The capturing API the user already has
-      (`logger.captureEvents()` returning a `LogRecordCapture` `Closeable`) is the
-      idiomatic test surface. The new `DebugConfig.Builder.logger(Logger)` would
-      accept `org.apache.juneau.commons.logging.Logger` (the framework's
-      delegating logger) so this composes for free.
+      (`logger.captureEvents()` returning a `LogRecordCapture` `Closeable`) is
+      the idiomatic test surface.
+
    Cost of (2): we lose the "format-output-as-string" capture niche (e.g. capture
    the exact JSON the prod system would have emitted, byte-for-byte). Mitigation:
    `LogRecord` already carries the rendered message; tests that need the rendered
    string use `cap.getRecords("{msg}")`. Decision needed before Phase 1.
+
+10. **Source-of-truth audit follow-on TODO** (new, surfaced 2026-05-25). User has
+    articulated a broader design principle: *"we want the `@Rest` and `@RestOp`
+    annotations to be a source-of-truth for capabilities."* TODO-20 implements
+    this principle for debug (§3 above). Are there other capabilities on
+    `@Rest`/`@RestOp` today that have grown beyond their original `String`/`Class`
+    slot shapes and would benefit from the same nested-typed-annotation upgrade?
+    Quick scan of candidates (not exhaustive):
+    - `@Rest(callLogger=Class)` → potentially `@Rest(callLogger=@CallLogger(...))`
+      if `@CallLogger` ever grows fields beyond a class reference. Today it's
+      just a class, so no migration needed. **Re-evaluate after TODO-20 lands**
+      — if `DebugConfig` ends up subsuming most `CallLogger` configuration, the
+      `callLogger` slot may shrink further or be eliminated.
+    - `@Rest(swagger=...)` / `@Rest(openApi=...)` (FINISHED-74 territory) —
+      these are already nested annotation types. Already source-of-truth-shaped.
+      No action.
+    - `@Rest(properties=...)` / `@Rest(beanProperties=...)` — already nested
+      annotation types. Already source-of-truth-shaped. No action.
+    - `@Rest(rolesDeclared)`, `@Rest(roleGuard)` — `String` slots that interact
+      with the AuthN guards landed in FINISHED-69. Worth re-evaluating once
+      TODO-69's `@Auth` surface is in user hands — they could become
+      `@Rest(auth=@Auth(...))`-shaped if the roles-vs-AuthN-guard division turns
+      out to be ergonomically awkward.
+
+    Recommendation: file a follow-on **TODO-90 — `@Rest`/`@RestOp` source-of-truth
+    annotation pattern audit** after TODO-20 lands, to do a systematic pass over
+    every slot on both annotations and identify candidates for the
+    nested-typed-annotation upgrade. Don't scope-creep TODO-20 to do this audit
+    now — it would balloon the PR.
+
+11. **Confirm the hard-break decision boundary**. §6 commits to a hard break in
+    9.5 (this TODO's PR) — no deprecation cycle. This is consistent with the
+    user's 2026-05-25 direction. Two micro-confirmations worth raising before
+    Phase 2 starts:
+    - **`RestRequest.setDebug()` / `setDebug(Boolean)` / `isDebug()`** — kept
+      per §6. Confirm these stay as one-liner shortcuts and do NOT get removed
+      alongside the annotation surface.
+    - **System-property knobs** (`juneau.restLogger.*` / `JUNEAU_RESTLOGGER_*`)
+      — kept per §6. Confirm these continue to feed `DebugConfig` builder
+      defaults, even though the underlying bean shape changes.
+
+    Recommendation: both kept. The annotation surface is the breaking change;
+    the runtime/operator surface stays stable.
 
 ## Out of scope
 
@@ -421,46 +592,67 @@ self-contained.
    - `DebugFormat_Test` — each built-in produces the expected output.
    - `CallLogger_DebugConfig_Test` — end-to-end through `MockRestClient`.
 
-### Phase 2 — `@Debug` annotation + adapter on top of existing annotations
+### Phase 2 — `@Debug` annotation + new typed slots on `@Rest`/`@RestOp` (hard break)
 
-1. Add `@Debug` annotation (class + method scope).
-2. `BasicDebugEnablement` reads `@Debug` first, falls back to `@Rest(debug)` /
-   `@RestOp(debug)` / `@Rest(debugOn)` for unchanged user code.
-3. `RestContext.debugEnablement` memoizer simplifies: collapse the `debug` /
-   `debugDefault` priority dance to a single `@Debug.value()` read.
-4. Migrate `Rest_Debug_Test` cases over (the file is the canonical 1085-line
-   covers-everything test — keep the existing matrix, add a parallel
-   `@Debug`-based matrix).
+Per §6, this phase **removes** the old debug surface in the same step that lands
+the new one — no back-compat adapter, no two-release deprecation cycle.
+
+1. Add `@Debug` annotation (class + method scope per §3).
+2. Add typed `debug=@Debug(...)` slot to `@Rest` and `@RestOp`. Old `String`
+   `debug` / `debugDefault` / `debugEnablement` / `debugOn` attributes on `@Rest`
+   and `String debug` on `@RestOp` are **deleted** in this step (not deprecated).
+3. `RestContext.debugEnablement` memoizer is **deleted**. The new
+   `RestContext.debugConfig` memoizer reads `@Rest(debug=@Debug(...))`,
+   `@RestOp(debug=@Debug(...))`, and standalone `@Debug` per the precedence rules
+   in §3, builds a `DebugConfig`, publishes it into the BeanStore.
+4. `Rest_Debug_Test` (the canonical 1085-line covers-everything test) is
+   **rewritten** to use the new annotation surface — the existing test matrix
+   moves over to `@Rest(debug=@Debug(...))` / `@RestOp(debug=@Debug(...))` /
+   standalone `@Debug` placements. No "parallel matrix" — the old surface no
+   longer exists.
 5. Tests:
-   - `Debug_Annotation_Test` — full annotation matrix (mirrors today's
-     `Rest_Debug_Test`, on the new annotation).
-   - `Debug_BackCompat_Test` — confirms old `@Rest(debug)` / `@Rest(debugOn)` /
-     `@RestOp(debug)` still produce identical behavior.
+   - `Debug_Annotation_Test` — full annotation matrix on the new surface, covering
+     all three placement options (nested-on-`@Rest`, nested-on-`@RestOp`, standalone)
+     and the precedence rules from §3.
+   - `Debug_SourceOfTruth_Test` — confirms that the source-of-truth principle
+     reads correctly: a single `@Rest(debug=@Debug(...))` produces the same
+     resolved `DebugConfig` as the equivalent standalone `@Debug` on the class.
 
-### Phase 3 — runtime fluent surface + TODO-35 integration
+### Phase 3 — runtime fluent surface + FINISHED-35 integration
 
-**Depends on TODO-35 Phase 2 for the `@TestBean` form.** Direct
-`MockRestClient.Builder.debugConfig(DebugConfig)` wiring can land independently.
+**FINISHED-35** is landed, so both forms below ship in this phase.
 
 1. Add `RestRequest.debug()` fluent (returns a `DebugScope` per-request handle).
    Keep `setDebug` / `isDebug` as one-liners on top of it.
 2. Add `MockRestClient.Builder.debugConfig(DebugConfig)` for direct test wiring
-   (parallel to TODO-35's `.overridingBeanStore(...)`).
+   (parallel to FINISHED-35's `.overridingBeanStore(...)`).
 3. Tests:
    - `Debug_Runtime_Test` — `req.debug().enable(JsonFormat.class).level(FINE)`
      works.
-   - `Debug_TestBean_Test` (in `juneau-utest`, after TODO-35 Phase 2 lands) — uses
-     `@TestBean DebugConfig` + `JuneauBeanStoreExtension` to swap formats and
-     capture output.
+   - `Debug_TestBean_Test` — uses `@TestBean DebugConfig` +
+     `JuneauBeanStoreExtension` (from FINISHED-35) to swap formats and capture
+     output without rebuilding `MockRestClient`.
 
-### Phase 4 — deprecate the old surface (9.6)
+### Phase 4 — migration notes + release notes (juneau-docs)
 
-1. Add `@Deprecated(since="9.6", forRemoval=true)` to `@Rest(debug)`,
-   `@Rest(debugDefault)`, `@Rest(debugEnablement)`, `@Rest(debugOn)`,
-   `@RestOp(debug)`, `DebugEnablement`, `BasicDebugEnablement`,
-   `CallLogger.Builder.normalRules` / `debugRules`, `BasicCallLogger`'s per-status
-   rule wiring.
-2. Release-notes + migration-guide entries
-   (`juneau-docs/docs/pages/release-notes/9.5.0.md` and
-   `juneau-docs/pages/topics/23.01.V9.5-migration-guide.md`).
-3. No code removal yet — that's the 9.7 cycle.
+No code removal here — Phase 2 already removed the old surface. This phase is
+documentation-only.
+
+1. New migration-guide section in
+   `juneau-docs/pages/topics/23.01.V9.5-migration-guide.md` (TODO-17 territory)
+   covering the five Old → New migration tracks per §6:
+   - Annotation migration (Old → New table from §3).
+   - `DebugEnablement` → `DebugConfig` migration (custom-subclass porting pattern).
+   - `CallLogger` rule-list migration (parallel `normalRules`/`debugRules` →
+     unified `DebugRule`).
+   - Test-side migration (`BasicTestCallLogger` / `BasicTestCaptureCallLogger` →
+     `CapturingFormat` or `LogRecordCapture` per OQ #9).
+   - System-property migration (none required; auto-mapped).
+2. Release-notes entry in `juneau-docs/docs/pages/release-notes/9.5.0.md` under
+   `### juneau-rest-server` with a `**Breaking change**` callout pointing at the
+   migration-guide section.
+3. New topic page or sub-section under
+   `juneau-docs/pages/topics/10.20.RestServerDebug.md` (or equivalent slot — pick
+   the cleanest spot in the existing topics tree) walking through the new
+   `@Debug` placement options, the source-of-truth principle, and worked
+   examples for each `DebugFormat` built-in.

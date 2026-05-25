@@ -360,12 +360,14 @@ public class BasicVersionResource {
 					try (var in = u.openStream()) {
 						var m = new Manifest(in);
 						// Prefer an Implementation-Title-bearing manifest; otherwise hold the
-						// first one found as a fallback. Walking each candidate is cheap (one
-						// open per manifest in the resources enumeration).
+						// most recent one as a fallback. ClassLoader.getResources walks the
+						// parent chain FIRST, so caller-supplied URLs come last in the
+						// enumeration — last-wins ensures the explicit classloader argument
+						// trumps any unrelated MANIFEST.MF leaked from a parent (e.g. JDK
+						// module manifests in the boot layer, Surefire's manifest-jar, etc.).
 						if (m.getMainAttributes().getValue("Implementation-Title") != null)
 							return toMap(m);
-						if (fallback == null)
-							fallback = m;
+						fallback = m;
 					}
 				}
 			} catch (IOException e) {

@@ -1,8 +1,8 @@
 # TODO
 
-## Execution order (re-evaluated 2026-05-24)
+## Execution order (re-evaluated 2026-05-25)
 
-Four foundational TODOs (TODO-73, TODO-81, TODO-69) and four mixin packs (TODO-74–77) have landed; next up per execution order is TODO-78 (JSP view module). Plans for TODO-71, TODO-82–84, TODO-85–87, and TODO-89 are now fleshed out (2026-05-24). TODO-20 (rest debug rethink) and TODO-37 (agent instruction consolidation) remain parked.
+Four foundational TODOs (TODO-73, TODO-81, TODO-69) and four mixin packs (TODO-74–77) have landed. **TODO-20 (rest debug rethink) was un-parked 2026-05-25** with a hard-break decision + source-of-truth nested-annotation pattern added to the plan; it is now the next-in-flight item ahead of TODO-78. Plans for TODO-71, TODO-82–84, TODO-85–87, and TODO-89 are fleshed out (2026-05-24). TODO-37 (agent instruction consolidation) remains parked.
 
 ### Completed foundations + mixin family
 
@@ -19,49 +19,52 @@ Four foundational TODOs (TODO-73, TODO-81, TODO-69) and four mixin packs (TODO-7
 
 7. ~~**TODO-69** — AuthN guards + isolated `juneau-rest-server-jwt` sub-module.~~ ✅ done — see `todo/FINISHED-69-authn-guards-jwt-apikey.md`.
 
-**Phase B — view infrastructure (hard prereq for Phase C):**
+**Phase B — debug rethink (next in flight):**
 
-8. **TODO-78** — JSP module (`juneau-rest-server-view-jsp`). Introduces the generic `View` interface in core `juneau-rest-server` and the `ResponseProcessor`-based renderer pattern that TODO-82/83/84 build on. Engine-agnostic POM (Option B) stance baked in. HARD prereq for TODO-82/83/84.
+8. **TODO-20** — Rest debug rethink. Collapses five `@Rest`/`@RestOp` debug attributes + `DebugEnablement` + parallel `CallLogger` rule lists into a single `DebugConfig` bean + a typed `@Debug` annotation. **Hard break** (no deprecation cycle; migration notes in `juneau-docs/pages/topics/23.01.V9.5-migration-guide.md`). **Source-of-truth pattern** — `@Debug` is nested as `@Rest(debug=@Debug(...))` and `@RestOp(debug=@Debug(...))` so the `@Rest`/`@RestOp` annotation is the canonical capability surface, with standalone `@Debug` retained as an escape hatch. FINISHED-35 satisfies the only external dep. Plan: `todo/TODO-20-rest-debug-rethink.md`.
 
-**Phase C — view module siblings (parallelizable after TODO-78 lands; no inter-sibling deps):**
+**Phase C — view infrastructure (hard prereq for Phase D):**
 
-9. **TODO-82** — Thymeleaf view module. Highest priority of the three (Spring Boot's default web view; biggest existing-user-base migration path). Plan: `todo/TODO-82-view-module-thymeleaf.md`.
-10. **TODO-83** — Mustache view module. Smallest surface area, lowest risk. Plan: `todo/TODO-83-view-module-mustache.md`.
-11. **TODO-84** — FreeMarker view module. Apache-family alignment bonus. Plan: `todo/TODO-84-view-module-freemarker.md`.
+9. **TODO-78** — JSP module (`juneau-rest-server-view-jsp`). Introduces the generic `View` interface in core `juneau-rest-server` and the `ResponseProcessor`-based renderer pattern that TODO-82/83/84 build on. Engine-agnostic POM (Option B) stance baked in. HARD prereq for TODO-82/83/84.
 
-**Phase D — application showcase tier:**
+**Phase D — view module siblings (parallelizable after TODO-78 lands; no inter-sibling deps):**
 
-12. **TODO-85** — `juneau-microservice-jetty-starter`. Standalone, no hard deps; can land any time after FINISHED-74/75/76/77 (which it bundles). Plan: `todo/TODO-85-microservice-jetty-starter.md`.
-13. **TODO-86** — `juneau-petstore-jetty` sample app. Soft deps on TODO-85 (starter fallback to raw `juneau-microservice-jetty`), TODO-69 (auth fallback to `DenyAllGuard`), TODO-82 (preferred view engine: Thymeleaf, fallback to TODO-78 JSP). Defines the shared `juneau-petstore-core` module consumed by TODO-87. Plan: `todo/TODO-86-petstore-jetty-app.md`.
-14. **TODO-87** — `juneau-petstore-springboot` sample app. HARD dep on `juneau-petstore-core` from TODO-86; should land alongside or immediately after TODO-86 as a coherent landing. Plan: `todo/TODO-87-petstore-springboot-app.md`.
+10. **TODO-82** — Thymeleaf view module. Highest priority of the three (Spring Boot's default web view; biggest existing-user-base migration path). Plan: `todo/TODO-82-view-module-thymeleaf.md`.
+11. **TODO-83** — Mustache view module. Smallest surface area, lowest risk. Plan: `todo/TODO-83-view-module-mustache.md`.
+12. **TODO-84** — FreeMarker view module. Apache-family alignment bonus. Plan: `todo/TODO-84-view-module-freemarker.md`.
+
+**Phase E — application showcase tier:**
+
+13. **TODO-85** — `juneau-microservice-jetty-starter`. Standalone, no hard deps; can land any time after FINISHED-74/75/76/77 (which it bundles). Plan: `todo/TODO-85-microservice-jetty-starter.md`.
+14. **TODO-86** — `juneau-petstore-jetty` sample app. Soft deps on TODO-85 (starter fallback to raw `juneau-microservice-jetty`), TODO-69 (auth fallback to `DenyAllGuard`), TODO-82 (preferred view engine: Thymeleaf, fallback to TODO-78 JSP). Defines the shared `juneau-petstore-core` module consumed by TODO-87. Plan: `todo/TODO-86-petstore-jetty-app.md`.
+15. **TODO-87** — `juneau-petstore-springboot` sample app. HARD dep on `juneau-petstore-core` from TODO-86; should land alongside or immediately after TODO-86 as a coherent landing. Plan: `todo/TODO-87-petstore-springboot-app.md`.
 
 > **Open question for TODO-86/87** (surfaced by planning worker): factor REST resource classes into a third sibling `juneau-petstore-rest` module so both sample apps consume identical resource classes? Worth resolving before either starts implementation.
 
-**Phase E — quality-of-life follow-ons (parallelizable, any order, anytime after Phase A):**
+**Phase F — quality-of-life follow-ons (parallelizable, any order, anytime after Phase A):**
 
-15. **TODO-89** — `RateLimitGuard.Storage.snapshot()` SPI + `BasicAdminResource` enrichment. Small (~30 LOC + 2 test files), closes a known carry-over from FINISHED-77 (`"buckets": []` placeholder). Plan: `todo/TODO-89-ratelimit-storage-snapshot-spi.md`.
-16. **TODO-71** — Doc-site script + Docusaurus search swap. Mostly already done (planning worker found `juneau-docs/scripts/build-docs.py` + `.github/workflows/deploy-docs.yml.disabled` already in place); this TODO is now a cutover/cleanup + the Algolia → `@easyops-cn/docusaurus-search-local` swap. Plan: `todo/TODO-71-docs-site-script-search-swap.md`.
-17. **TODO-88** — YAML parser buffer-underflow on large OpenAPI 3.1 documents. Latent parser bug in `juneau-marshall`; opportunistic. Plan file TBD.
+16. **TODO-89** — `RateLimitGuard.Storage.snapshot()` SPI + `BasicAdminResource` enrichment. Small (~30 LOC + 2 test files), closes a known carry-over from FINISHED-77 (`"buckets": []` placeholder). Plan: `todo/TODO-89-ratelimit-storage-snapshot-spi.md`.
+17. **TODO-71** — Doc-site script + Docusaurus search swap. Mostly already done (planning worker found `juneau-docs/scripts/build-docs.py` + `.github/workflows/deploy-docs.yml.disabled` already in place); this TODO is now a cutover/cleanup + the Algolia → `@easyops-cn/docusaurus-search-local` swap. Plan: `todo/TODO-71-docs-site-script-search-swap.md`.
+18. **TODO-88** — YAML parser buffer-underflow on large OpenAPI 3.1 documents. Latent parser bug in `juneau-marshall`; opportunistic. Plan file TBD.
 
-**Phase F — server-feature track (independent; can interleave anywhere after Phase A):**
+**Phase G — server-feature track (independent; can interleave anywhere after Phase A):**
 
-18. **TODO-67** — Observability (Micrometer + OpenTelemetry). Plan: `todo/TODO-67-observability-micrometer-otel.md`.
-19. **TODO-68** — Bean Validation (Jakarta Validation 3.x). Plan: `todo/TODO-68-bean-validation-integration.md`.
-20. **TODO-70** — `CompletableFuture<?>` return-type + virtual-thread per-request dispatch. Plan: `todo/TODO-70-async-completablefuture-virtual-threads.md`.
-21. **TODO-79** — Juneau `@Value` annotation + Spring Boot `application.yaml` bridge for the Config API. Plan file TBD.
+19. **TODO-67** — Observability (Micrometer + OpenTelemetry). Plan: `todo/TODO-67-observability-micrometer-otel.md`.
+20. **TODO-68** — Bean Validation (Jakarta Validation 3.x). Plan: `todo/TODO-68-bean-validation-integration.md`.
+21. **TODO-70** — `CompletableFuture<?>` return-type + virtual-thread per-request dispatch. Plan: `todo/TODO-70-async-completablefuture-virtual-threads.md`.
+22. **TODO-79** — Juneau `@Value` annotation + Spring Boot `application.yaml` bridge for the Config API. Plan: `todo/TODO-79-value-annotation-config-bridge.md`.
 
 ### Parked / unscheduled
 
-- **TODO-20** — Rest debug rethink (parked pending user review).
 - **TODO-37** — Agent instruction consolidation (unscoped).
 
 ### Natural review seams
 
-Foundations (TODO-73 + TODO-81 + TODO-69) → mixin family (TODO-74–77) → view infrastructure + siblings (TODO-78 + TODO-82/83/84) → application showcase (TODO-85/86/87) → quality-of-life (TODO-89 + TODO-71 + TODO-88) → server-feature track (TODO-67 + TODO-68 + TODO-70 + TODO-79).
+Foundations (TODO-73 + TODO-81 + TODO-69) → mixin family (TODO-74–77) → debug rethink (TODO-20) → view infrastructure + siblings (TODO-78 + TODO-82/83/84) → application showcase (TODO-85/86/87) → quality-of-life (TODO-89 + TODO-71 + TODO-88) → server-feature track (TODO-67 + TODO-68 + TODO-70 + TODO-79).
 
 ## Items
 
-- [TODO-20] - Rest debug rethink.
+- [TODO-20] Rest debug rethink — collapses `DebugEnablement` + `CallLogger` rule lists + five `@Rest`/`@RestOp` debug attributes into a single `DebugConfig` bean + typed `@Debug` annotation. Hard break in 9.5 (no deprecation cycle) with migration notes. Source-of-truth pattern — `@Debug` is nested as `@Rest(debug=@Debug(...))` and `@RestOp(debug=@Debug(...))` (primary placement) with standalone `@Debug` retained as an escape hatch. See `todo/TODO-20-rest-debug-rethink.md`.
 
 - [TODO-37] - Agent instruction consolidation.
 
@@ -74,8 +77,6 @@ Foundations (TODO-73 + TODO-81 + TODO-69) → mixin family (TODO-74–77) → vi
 - [TODO-71] Move doc site updates from a github hook to a script that gets executed locally. Change docusaurus search functionality to @easyops-cn/docusaurus-search-local. See `todo/TODO-71-docs-site-script-search-swap.md`.
 
 - [TODO-78] JSP servlet support module (`juneau-rest-server-view-jsp`) — new module shipping `BasicJspResource` mixin + `JspViewRenderer`; isolates Apache Jasper / `jakarta.servlet.jsp.*` / JSTL deps from core. See `todo/TODO-78-mixin-jsp-module.md`.
-
-- [TODO-79] Juneau `@Value` annotation + Spring Boot `application.yaml` bridge for the Config API — introduce a `@Value("${...}")` annotation on top of `Config` so beans / fields / setters can read configuration values declaratively (analog to Spring's `@Value`); add a Spring Boot integration so values defined in `application.yaml` / `application.properties` are accessible through the Juneau `Config` API uniformly with native `*.cfg` files. Plan file TBD.
 
 - [TODO-82] Thymeleaf view module (`juneau-rest-server-view-thymeleaf`) — sibling to TODO-78's JSP module. New Maven module shipping `BasicThymeleafResource` mixin + `ThymeleafViewRenderer` + `ThymeleafView` impl of the `View` interface introduced by TODO-78. High priority since Thymeleaf is Spring Boot's default web view technology; large existing user base for Spring-Boot-on-Juneau migrations. Same engine-agnostic POM stance as TODO-78 (Option B): bridge module declares Thymeleaf core API in `provided` scope only; example module supplies the concrete `thymeleaf` + `thymeleaf-spring6` deps. See `todo/TODO-82-view-module-thymeleaf.md`.
 
