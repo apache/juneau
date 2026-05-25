@@ -1394,6 +1394,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.14d.JspViewSupport',
+							label: '10.14d. JSP View Support',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.15.ClientVersioning',
 							label: '10.15. Client Versioning',
 						},
