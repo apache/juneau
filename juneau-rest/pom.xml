@@ -36,6 +36,7 @@
 		<module>juneau-rest-server</module>
 		<module>juneau-rest-server-rdf</module>
 		<module>juneau-rest-server-mcp</module>
+		<module>juneau-rest-server-jwt</module>
 		<module>juneau-rest-server-springboot</module>
 		<module>juneau-rest-client</module>
 		<module>juneau-rest-client-classic</module>

@@ -211,4 +211,36 @@ public final class RestServerConstants {
 	 * @since 9.5.0
 	 */
 	public static final String REQUEST_ID = "requestId";
+
+	/**
+	 * Servlet-request attribute key under which the authenticated {@link java.security.Principal}
+	 * is stashed by {@code org.apache.juneau.rest.auth.BearerTokenGuard} /
+	 * {@code org.apache.juneau.rest.auth.ApiKeyGuard} and resolved by
+	 * {@code org.apache.juneau.rest.auth.AuthArg} for {@code @Auth Principal} parameters.
+	 *
+	 * <p>
+	 * Op handlers can resolve the principal via the typed argument injector:
+	 * <p class='bjava'>
+	 * 	<ja>@RestGet</ja>(path=<js>"/me"</js>)
+	 * 	<jk>public</jk> Profile me(<ja>@Auth</ja> Principal <jv>p</jv>) { ... }
+	 * </p>
+	 *
+	 * <p>
+	 * Or directly:
+	 * <p class='bjava'>
+	 * 	Principal <jv>p</jv> = (Principal)<jv>req</jv>.getAttribute(RestServerConstants.<jsf>PRINCIPAL_ATTR</jsf>);
+	 * </p>
+	 *
+	 * @since 9.5.0
+	 */
+	public static final String PRINCIPAL_ATTR = "juneau.principal";
+
+	/**
+	 * Default header name read by {@code org.apache.juneau.rest.auth.ApiKeyGuard} when configured
+	 * with the {@link org.apache.juneau.rest.auth.ApiKeyGuard.Source#HEADER HEADER} source and no
+	 * custom name is supplied.
+	 *
+	 * @since 9.5.0
+	 */
+	public static final String API_KEY_HEADER = "X-API-Key";
 }

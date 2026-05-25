@@ -21,6 +21,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
+import org.apache.juneau.rest.auth.*;
 import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.openapi.*;
@@ -63,6 +64,7 @@ import org.apache.juneau.serializer.annotation.*;
 	},
 	restOpArgs={
 		AttributeArg.class,
+		AuthArg.class,
 		ContentArg.class,
 		FormDataArg.class,
 		HasFormDataArg.class,

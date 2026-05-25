@@ -154,6 +154,25 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-jwt</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!--
+			juneau-rest-server-jwt declares nimbus-jose-jwt as `provided` scope so the dep does NOT
+			leak transitively into consumer projects. juneau-utest exercises the JWT tests end-to-end
+			against a real validator, so we add nimbus here in `test` scope explicitly. See TODO-69
+			Resolved Decision #1 — the containment requirement is verified by
+			`mvn -pl juneau-rest/juneau-rest-server dependency:tree | grep -i nimbus` returning nothing.
+		-->
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>10.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-springboot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
