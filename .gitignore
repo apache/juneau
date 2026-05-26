@@ -1,3 +1,9 @@
+# Local Cursor / AI assistant config (not part of Apache source tree)
+AGENTS.md
+/agents/
+/.cursor/
+/.claude/
+
 # Dependencies
 /node_modules
 
