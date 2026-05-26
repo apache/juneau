@@ -379,6 +379,95 @@ public class RateLimitGuard extends RestGuard {
 	public record RateLimitInfo(String key, int limit, int remaining, long secondsUntilReset, boolean allowed) {}
 
 	/**
+	 * Point-in-time view of a single token bucket as exposed by {@link Storage#snapshot()}.
+	 *
+	 * <p>
+	 * Used by operator-facing tooling (e.g. {@code BasicAdminResource}'s {@code /admin/ratelimit} endpoint) to
+	 * surface live per-key bucket state alongside the static configuration.  Token-bucket vocabulary
+	 * intentionally — there is no discrete refill window because the bucket refills continuously at
+	 * {@code permitsPerSecond}, so this record reports the current fill level ({@link #tokens()}), the integer
+	 * tokens currently available ({@link #remaining()}), a convenience throttled flag, and the wall-clock instant
+	 * of the bucket's last activity.
+	 *
+	 * @param key The per-request key (e.g. remote address, principal name).
+	 * @param tokens The current fractional token count in the bucket.  Continuously refilled at the
+	 * 	configured {@code permitsPerSecond} rate up to the configured capacity.
+	 * @param remaining The integer number of tokens currently available — {@code floor(tokens)}.
+	 * 	Mirrors the {@code X-RateLimit-Remaining} advisory header.
+	 * @param throttled <jk>true</jk> when the bucket is empty enough that the next request would be rejected
+	 * 	({@code tokens < 1.0}).  Convenience flag for at-a-glance operator dashboards.
+	 * @param lastRequest The wall-clock {@link Instant} at which the bucket was last touched.
+	 *
+	 * @since 9.5.0
+	 */
+	public record BucketState(String key, double tokens, int remaining, boolean throttled, Instant lastRequest) {}
+
+	/**
+	 * Returns the bucket capacity (the maximum number of tokens a bucket can hold).
+	 *
+	 * @return The bucket capacity.
+	 * @since 9.5.0
+	 */
+	public int getCapacity() {
+		return capacity;
+	}
+
+	/**
+	 * Returns the steady-state refill rate in permits per second.
+	 *
+	 * @return The refill rate.
+	 * @since 9.5.0
+	 */
+	public double getPermitsPerSecond() {
+		return permitsPerSecond;
+	}
+
+	/**
+	 * Returns whether {@code X-Forwarded-For}-aware key resolution is enabled.
+	 *
+	 * @return <jk>true</jk> if {@code X-Forwarded-For} resolution is enabled.
+	 * @since 9.5.0
+	 */
+	public boolean isXForwardedForAware() {
+		return xForwardedForAware;
+	}
+
+	/**
+	 * Returns the set of request paths that bypass throttling.
+	 *
+	 * @return The exempt paths.  Never <jk>null</jk>.
+	 * @since 9.5.0
+	 */
+	public Set<String> getExemptPaths() {
+		return exemptPaths;
+	}
+
+	/**
+	 * Returns the bucket-state storage backend in use by this guard.
+	 *
+	 * @return The storage backend.  Never <jk>null</jk>.
+	 * @since 9.5.0
+	 */
+	public Storage getStorage() {
+		return storage;
+	}
+
+	/**
+	 * Convenience accessor for {@link Storage#snapshot()} on the underlying storage backend.
+	 *
+	 * <p>
+	 * Returns an empty map when the configured {@link Storage} does not override
+	 * {@link Storage#snapshot()} (the default behavior for storages — e.g. Redis-backed — that can't cheaply
+	 * enumerate every bucket).
+	 *
+	 * @return A point-in-time map of per-key bucket state.  Never <jk>null</jk>.
+	 * @since 9.5.0
+	 */
+	public Map<String,BucketState> snapshot() {
+		return storage.snapshot();
+	}
+
+	/**
 	 * SPI for storing per-key token-bucket state.
 	 *
 	 * <p>
@@ -410,6 +499,34 @@ public class RateLimitGuard extends RestGuard {
 		 * @param ttl The idle threshold.  Buckets last touched longer than {@code ttl} ago are removed.
 		 */
 		void evict(Duration ttl);
+
+		/**
+		 * Returns a point-in-time view of every per-key bucket currently held by this storage backend.
+		 *
+		 * <p>
+		 * Optional operation for operational visibility.  The default implementation returns an empty map so
+		 * that external storage backends (Redis, DynamoDB, etc.) that can't cheaply enumerate every bucket
+		 * stay backwards-compatible without code changes.  In-memory implementations <b>SHOULD</b> override
+		 * this to expose live bucket state — see the bundled {@link #inMemory()} implementation, which walks
+		 * its internal map and returns one {@link BucketState} per entry.
+		 *
+		 * <p>
+		 * The returned map is a snapshot, not a live view — concurrent modifications to the underlying
+		 * storage after this method returns are not reflected.  Per-bucket reads are individually consistent
+		 * (the in-memory implementation reads each bucket under its own monitor), but the snapshot as a whole
+		 * is not a global point-in-time consistent view.
+		 *
+		 * <p>
+		 * <b>Cardinality warning:</b> on storages that hold many buckets (the bundled in-memory storage caps
+		 * at 100&nbsp;000 keys by default) the returned map can be large.  Operator-facing callers should
+		 * either filter client-side or use a paginated alternative if one is offered by the backend.
+		 *
+		 * @return A point-in-time map of per-key bucket state, keyed by per-request key.  Never <jk>null</jk>.
+		 * @since 9.5.0
+		 */
+		default Map<String,BucketState> snapshot() {
+			return Map.of();
+		}
 
 		/**
 		 * Creates a new in-memory storage backend with the default size cap (100 000 keys).
@@ -473,6 +590,23 @@ public class RateLimitGuard extends RestGuard {
 			buckets.entrySet().removeIf(e -> e.getValue().lastTouchedNanos() < threshold);
 		}
 
+		@Override
+		public Map<String,BucketState> snapshot() {
+			var out = new LinkedHashMap<String,BucketState>();
+			for (var e : buckets.entrySet()) {
+				var b = e.getValue();
+				var tokens = b.tokens();
+				out.put(e.getKey(), new BucketState(
+					e.getKey(),
+					tokens,
+					(int) Math.floor(tokens),
+					tokens < 1.0,
+					Instant.ofEpochMilli(b.lastWallMillis())
+				));
+			}
+			return Map.copyOf(out);
+		}
+
 		int size() {
 			return buckets.size();
 		}
@@ -497,10 +631,12 @@ public class RateLimitGuard extends RestGuard {
 
 		private double tokens;
 		private long lastNanos;
+		private long lastWallMillis;
 
 		Bucket(int capacity) {
 			this.tokens = capacity;
 			this.lastNanos = System.nanoTime();
+			this.lastWallMillis = System.currentTimeMillis();
 		}
 
 		synchronized Storage.AcquireResult tryAcquire(int capacity, double permitsPerSecond) {
@@ -508,6 +644,7 @@ public class RateLimitGuard extends RestGuard {
 			var elapsedSeconds = (now - lastNanos) / 1_000_000_000.0;
 			tokens = Math.min(capacity, tokens + elapsedSeconds * permitsPerSecond);
 			lastNanos = now;
+			lastWallMillis = System.currentTimeMillis();
 			if (tokens >= 1.0) {
 				tokens -= 1.0;
 				return new Storage.AcquireResult(true, (int) Math.floor(tokens), secondsUntilFull(capacity, permitsPerSecond));
@@ -517,6 +654,14 @@ public class RateLimitGuard extends RestGuard {
 
 		synchronized long lastTouchedNanos() {
 			return lastNanos;
+		}
+
+		synchronized double tokens() {
+			return tokens;
+		}
+
+		synchronized long lastWallMillis() {
+			return lastWallMillis;
 		}
 
 		private long secondsUntilFull(int capacity, double permitsPerSecond) {

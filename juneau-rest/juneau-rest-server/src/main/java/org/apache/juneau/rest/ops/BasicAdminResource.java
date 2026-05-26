@@ -28,6 +28,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.guard.*;
+import org.apache.juneau.rest.guard.RateLimitGuard.BucketState;
 
 /**
  * Mixin that serves operational-introspection endpoints under {@code /admin/*}: thread dump,
@@ -116,10 +117,14 @@ import org.apache.juneau.rest.guard.*;
  * 		{@link Builder#cacheFlush(String,Runnable)}; users that want async semantics own the
  * 		threading model.
  * 	<li><b>{@code GET /admin/ratelimit}</b> &mdash; emits a JSON map keyed by bean name listing the
- * 		registered {@link RateLimitGuard} configuration. Returns {@code 404 Not Found} when no
- * 		{@code RateLimitGuard} bean is registered on the importer's bean store. Bucket-level
- * 		inspection (per-key counters) is reserved for a follow-on once {@code RateLimitGuard.Storage}
- * 		exposes a snapshot SPI; v1 emits configuration only.
+ * 		registered {@link RateLimitGuard} configuration and live per-bucket state. Each entry has
+ * 		two sub-fields: {@code config} (the guard's static configuration &mdash; {@code class},
+ * 		{@code limit}, {@code permitsPerSecond}, {@code xForwardedForAware}, {@code exemptPaths})
+ * 		and {@code snapshot} (a sorted array of {@link BucketState} entries describing every
+ * 		per-key bucket the storage backend currently tracks). Returns {@code 404 Not Found} when
+ * 		no {@code RateLimitGuard} bean is registered on the importer's bean store. Storage
+ * 		backends that don't override {@link RateLimitGuard.Storage#snapshot()} (e.g. Redis-backed
+ * 		impls that can't cheaply enumerate buckets) emit an empty {@code snapshot} array.
  * </ul>
  *
  * <p>
@@ -315,9 +320,12 @@ public class BasicAdminResource {
 			throw new NotFound("No RateLimitGuard bean is registered.");
 		var entries = new LinkedHashMap<String,Object>();
 		for (var e : guards.entrySet()) {
+			var g = e.getValue();
 			var bucket = new LinkedHashMap<String,Object>();
-			bucket.put("config", describeRateLimitGuard(e.getValue()));
-			bucket.put("buckets", List.of());
+			bucket.put("config", describeRateLimitGuard(g));
+			bucket.put("snapshot", g.snapshot().values().stream()
+				.sorted(Comparator.comparing(BucketState::key))
+				.toList());
 			entries.put(e.getKey(), bucket);
 		}
 		var out = new LinkedHashMap<String,Object>();
@@ -365,6 +373,10 @@ public class BasicAdminResource {
 	private static Map<String,Object> describeRateLimitGuard(RateLimitGuard g) {
 		var m = new LinkedHashMap<String,Object>();
 		m.put("class", g.getClass().getName());
+		m.put("limit", g.getCapacity());
+		m.put("permitsPerSecond", g.getPermitsPerSecond());
+		m.put("xForwardedForAware", g.isXForwardedForAware());
+		m.put("exemptPaths", g.getExemptPaths().stream().sorted().toList());
 		return m;
 	}
 
