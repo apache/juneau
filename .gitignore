@@ -13,6 +13,9 @@ cursor-*
 # Local Cursor / AI assistant config (not part of Apache source tree)
 AGENTS.md
 .cursor/
+/agents/
+/.claude/
+/todo/
 
 # Maven Shade Plugin generated files
 **/dependency-reduced-pom.xml
