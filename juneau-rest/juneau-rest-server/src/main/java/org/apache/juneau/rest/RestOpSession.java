@@ -215,7 +215,7 @@ public class RestOpSession extends ContextSession {
 				return;
 		}
 
-		ctx.getMethodInvoker().invoke(this);
+		ctx.getMethodInvoker().invokeOp(this);
 
 		if (res.hasContent())
 			for (var converter : ctx.getConverters())

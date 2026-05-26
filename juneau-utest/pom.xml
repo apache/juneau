@@ -353,6 +353,57 @@
 			<version>5.0.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!--
+			Micrometer + OpenTelemetry observability bridge modules. Both module poms declare
+			their external dep (`micrometer-core` / `opentelemetry-api`) in `provided` scope so
+			the consumer picks the version they want — juneau-utest exercises the bridges
+			end-to-end against the real Micrometer / OTel runtimes, so we add the runtime libs
+			here in `test` scope explicitly. The Prometheus registry covers the Spring-style
+			scrape-output assertion in the Micrometer bridge tests; the OpenTelemetry SDK
+			testing artifact provides the in-memory span exporter the OTel bridge tests use.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-micrometer</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-core</artifactId>
+			<version>1.13.6</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>1.13.6</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-otel</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-api</artifactId>
+			<version>1.43.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-sdk</artifactId>
+			<version>1.43.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-sdk-testing</artifactId>
+			<version>1.43.0</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.openjdk.jmh</groupId>
 			<artifactId>jmh-core</artifactId>
