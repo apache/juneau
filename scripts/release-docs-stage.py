@@ -38,6 +38,36 @@ import sys
 import webbrowser
 from pathlib import Path
 
+# Identity guard — required for any push to ASF.
+REQUIRED_GIT_EMAIL = "jamesbognar@apache.org"
+
+
+def verify_apache_identity(repo_dir):
+    """Refuse to proceed unless git is configured with the ASF committer identity."""
+    try:
+        result = subprocess.run(
+            ["git", "config", "--get", "user.email"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        email = result.stdout.strip()
+    except Exception as e:
+        print(f"❌ ERROR: Could not read git user.email: {e}")
+        return False
+
+    if email != REQUIRED_GIT_EMAIL:
+        print("❌ ERROR: Git identity is not the ASF committer identity.")
+        print(f"   Found:    user.email = '{email or '(unset)'}'")
+        print(f"   Required: user.email = '{REQUIRED_GIT_EMAIL}'")
+        print("")
+        print("   Fix (this script cannot mutate git config):")
+        print(f"     git config user.email {REQUIRED_GIT_EMAIL}")
+        print('     git config user.name "James Bognar"')
+        return False
+    return True
+
 
 def run_command(cmd, cwd=None, check=True, description=None):
     """Run a shell command and handle errors."""
@@ -180,9 +210,16 @@ def main():
     print("Release Documentation to Staging Branch")
     print("=" * 79)
     print()
-    
+
+    # Step 0: Identity guard — must hold before any work begins.
+    print("Step 0: Verifying git identity (apache.org email)...")
+    if not verify_apache_identity(docs_dir):
+        play_sound(success=False)
+        sys.exit(1)
+    print("✅ Git identity verified")
+
     # Step 1: Run build-docs.py with --staging flag
-    print("Step 1: Building documentation for staging...")
+    print("\nStep 1: Building documentation for staging...")
     build_script = script_dir / 'build-docs.py'
     if not build_script.exists():
         print(f"❌ ERROR: {build_script} not found")

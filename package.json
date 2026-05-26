@@ -32,6 +32,7 @@
     "@docusaurus/module-type-aliases": "3.8.1",
     "@docusaurus/tsconfig": "3.8.1",
     "@docusaurus/types": "3.8.1",
+    "@easyops-cn/docusaurus-search-local": "^0.54.1",
     "string-replace-loader": "^3.2.0",
     "typescript": "~5.6.2",
     "unist-util-visit": "^5.0.0"

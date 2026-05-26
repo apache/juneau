@@ -30,11 +30,15 @@ Steps performed:
 
 Usage:
     python3 scripts/build-docs.py [--skip-npm] [--skip-maven] [--skip-copy]
+                                  [--staging] [--dry-run] [--verbose]
     
 Options:
     --skip-npm      Skip npm install and Docusaurus build
     --skip-maven    Skip Maven compilation and site generation
     --skip-copy     Skip copying Maven site to static directory
+    --staging       Build for staging (sets SITE_URL to juneau.staged.apache.org)
+    --dry-run       Print the commands that would run; perform no work
+    --verbose       Print full per-stage banner output (default: one line per stage)
 """
 
 import argparse
@@ -47,28 +51,34 @@ from datetime import datetime
 from pathlib import Path
 
 
-def find_master_branch_sibling(script_dir):
+def find_master_branch_sibling(script_dir, allow_missing=False):
     """
     Find the master branch sibling folder.
-    
+
     The docs branch and master branch should be sibling folders:
     - /git/apache/juneau/docs/
     - /git/apache/juneau/master/
-    
+
     Args:
         script_dir: Path to the scripts directory (should be in docs/scripts)
-        
+        allow_missing: If True (e.g. during --dry-run), return the expected path
+            even when it doesn't exist instead of aborting.
+
     Returns:
         Path to the master branch folder
-        
+
     Raises:
-        SystemExit: If the master branch sibling folder doesn't exist
+        SystemExit: If the master branch sibling folder doesn't exist and
+            allow_missing is False.
     """
     # Get the parent of the docs folder (should be /git/apache/juneau/)
     docs_dir = script_dir.parent  # docs/
     parent_dir = docs_dir.parent  # /git/apache/juneau/
     master_dir = parent_dir / 'master'
-    
+
+    if allow_missing:
+        return master_dir
+
     if not master_dir.exists():
         print(f"ERROR: Master branch sibling folder not found at {master_dir}")
         print(f"Expected structure:")
@@ -83,9 +93,27 @@ def find_master_branch_sibling(script_dir):
     
     return master_dir
 
+# Module-level toggle flipped from main() so every run_command/stage_banner sees the choice.
+DRY_RUN = False
+VERBOSE = False
+
+
+def stage_banner(title):
+    """Emit a stage header. Verbose mode keeps the full banner; default mode prints one line."""
+    if VERBOSE:
+        print(f"\n=== {title} ===")
+    else:
+        print(f"-> {title}")
+
+
 def run_command(cmd, cwd=None, check=True, env=None):
-    """Run a shell command and return the result."""
-    print(f"Running: {' '.join(cmd)}")
+    """Run a shell command and return the result. Honors DRY_RUN."""
+    cmd_str = ' '.join(cmd)
+    if DRY_RUN:
+        loc = f" (in {cwd})" if cwd else ""
+        print(f"[dry-run] would run: {cmd_str}{loc}")
+        return None
+    print(f"Running: {cmd_str}")
     if cwd:
         print(f"  (in directory: {cwd})")
     result = subprocess.run(cmd, cwd=cwd, check=check, capture_output=False, env=env)
@@ -115,36 +143,41 @@ def check_prerequisites():
 
 def install_npm_dependencies(docs_dir):
     """Install npm dependencies for Docusaurus."""
-    print("\n=== Installing npm dependencies ===")
+    stage_banner("Installing npm dependencies")
     run_command(['npm', 'ci'], cwd=docs_dir)
 
 def build_docusaurus(docs_dir, staging=False):
     """Build Docusaurus documentation."""
-    print("\n=== Building Docusaurus ===")
+    stage_banner("Building Docusaurus")
     env = os.environ.copy()
     if staging:
         env['SITE_URL'] = 'https://juneau.staged.apache.org'
-        print("  Setting SITE_URL for staging build")
+        if VERBOSE:
+            print("  Setting SITE_URL for staging build")
     run_command(['npm', 'run', 'build'], cwd=docs_dir, env=env)
 
 def compile_java_modules(master_root):
     """Compile and install all Java modules to local repository."""
-    print("\n=== Compiling and installing Java modules ===")
+    stage_banner("Compiling and installing Java modules")
     run_command(['mvn', 'clean', 'install', '-DskipTests'], cwd=master_root)
 
 def generate_maven_site(master_root):
     """Generate Maven site."""
-    print("\n=== Generating Maven site ===")
+    stage_banner("Generating Maven site")
     run_command(['mvn', 'site', '-DskipTests'], cwd=master_root)
 
 def copy_maven_site(master_root, docs_dir):
     """Copy Maven site to static directory (Docusaurus will copy it to build)."""
-    print("\n=== Copying Maven site to static directory ===")
-    
+    stage_banner("Copying Maven site to static directory")
+
     source_site = Path(master_root) / 'target' / 'site'
     static_dir = Path(docs_dir) / 'static'
     static_site = static_dir / 'site'
-    
+
+    if DRY_RUN:
+        print(f"[dry-run] would copy {source_site} -> {static_site}")
+        return
+
     if not source_site.exists():
         print(f"ERROR: Maven site not found at {source_site}")
         sys.exit(1)
@@ -161,8 +194,11 @@ def copy_maven_site(master_root, docs_dir):
 
 def verify_apidocs(master_root):
     """Verify that apidocs were generated."""
-    print("\n=== Verifying apidocs generation ===")
-    
+    stage_banner("Verifying apidocs generation")
+    if DRY_RUN:
+        print("[dry-run] would verify apidocs at target/site/apidocs")
+        return
+
     apidocs_dir = Path(master_root) / 'target' / 'site' / 'apidocs'
     
     if not apidocs_dir.exists():
@@ -205,8 +241,11 @@ def get_current_release(master_root):
 
 def copy_current_javadocs(master_root, docs_dir):
     """Copy current javadocs to versioned folder and update JSON index."""
-    print("\n=== Copying current javadocs to versioned folder ===")
-    
+    stage_banner("Copying current javadocs to versioned folder")
+    if DRY_RUN:
+        print("[dry-run] would copy target/site/apidocs to static/javadocs/<version>")
+        return
+
     # Get current release version
     current_version = get_current_release(master_root)
     if not current_version:
@@ -236,7 +275,7 @@ def copy_current_javadocs(master_root, docs_dir):
 
 def update_javadocs_json(docs_dir, current_version):
     """Update or create JSON file with javadoc release information."""
-    print("\n=== Updating javadocs release index ===")
+    stage_banner("Updating javadocs release index")
     
     javadocs_dir = Path(docs_dir) / 'static' / 'javadocs'
     json_file = javadocs_dir / 'releases.json'
@@ -294,7 +333,7 @@ def update_javadocs_json(docs_dir, current_version):
 
 def check_topic_links(master_root, docs_dir):
     """Run the topic link checker to validate documentation links."""
-    print("\n=== Checking topic links ===")
+    stage_banner("Checking topic links")
     # Use the checker script from docs/scripts (it's already there)
     script_dir = Path(__file__).parent
     checker_script = script_dir / 'check-topic-links.py'
@@ -309,7 +348,7 @@ def check_topic_links(master_root, docs_dir):
 
 def check_ai_artifacts(docs_dir):
     """Run AI artifact drift checks."""
-    print("\n=== Checking AI artifacts ===")
+    stage_banner("Checking AI artifacts")
     script_dir = Path(__file__).parent
     checker_script = script_dir / 'check-ai-artifacts.py'
     if not checker_script.exists():
@@ -318,35 +357,49 @@ def check_ai_artifacts(docs_dir):
     run_command(['python3', str(checker_script)], cwd=docs_dir)
 
 def main():
+    global DRY_RUN, VERBOSE
+
     parser = argparse.ArgumentParser(description='Build Apache Juneau documentation')
     parser.add_argument('--skip-npm', action='store_true', help='Skip npm install and Docusaurus build')
     parser.add_argument('--skip-maven', action='store_true', help='Skip Maven compilation and site generation')
     parser.add_argument('--skip-copy', action='store_true', help='Skip copying Maven site to static directory')
     parser.add_argument('--staging', action='store_true', help='Build for staging (sets SITE_URL to juneau.staged.apache.org)')
-    
+    parser.add_argument('--dry-run', action='store_true', help='Print every command/copy that would run; perform no work')
+    parser.add_argument('--verbose', action='store_true', help='Print full per-stage banner output (default: one line per stage)')
+
     args = parser.parse_args()
-    
+    DRY_RUN = args.dry_run
+    VERBOSE = args.verbose
+
     # Determine script directory and find master branch sibling
     script_dir = Path(__file__).parent.absolute()
     docs_dir = script_dir.parent  # docs/
-    master_root = find_master_branch_sibling(script_dir)
+    master_root = find_master_branch_sibling(script_dir, allow_missing=DRY_RUN)
     
     print(f"Master branch root: {master_root}")
     print(f"Docs directory: {docs_dir}")
-    
+    if DRY_RUN:
+        print("DRY-RUN: no commands will be executed")
+
     # Check prerequisites
-    check_prerequisites()
-    
+    if DRY_RUN:
+        print("[dry-run] would check prerequisites (node, npm, mvn, java)")
+    else:
+        check_prerequisites()
+
     # Change to docs directory for npm operations
     os.chdir(docs_dir)
     
     # Delete build directory to ensure fresh build
     build_dir = Path(docs_dir) / 'build'
     if build_dir.exists():
-        print(f"\n=== Cleaning build directory ===")
-        print(f"Removing {build_dir}")
-        shutil.rmtree(build_dir)
-        print("✓ Build directory cleaned")
+        stage_banner("Cleaning build directory")
+        if DRY_RUN:
+            print(f"[dry-run] would remove {build_dir}")
+        else:
+            print(f"Removing {build_dir}")
+            shutil.rmtree(build_dir)
+            print("✓ Build directory cleaned")
     
     try:
         # Install npm dependencies (can be done early)
@@ -386,17 +439,32 @@ def main():
         if not args.skip_copy:
             build_dir = Path(docs_dir) / 'build'
             asf_yaml = Path(master_root) / '.asf.yaml'
-            if asf_yaml.exists() and build_dir.exists():
-                print(f"\n=== Copying .asf.yaml to build directory ===")
+            if DRY_RUN:
+                stage_banner("Copying .asf.yaml to build directory")
+                print(f"[dry-run] would copy {asf_yaml} -> {build_dir}/.asf.yaml")
+            elif asf_yaml.exists() and build_dir.exists():
+                stage_banner("Copying .asf.yaml to build directory")
                 shutil.copy2(asf_yaml, build_dir)
-        
+
         # Check topic links (runs once at the end)
         check_topic_links(master_root, docs_dir)
         check_ai_artifacts(docs_dir)
-        
+
         print("\n=== Documentation build complete ===")
         print(f"Documentation is available in: {docs_dir / 'build'}")
-        
+
+        # Publish reminder — only when this was a real, complete build
+        # (no skips, not a dry-run). Skipped runs are typically partial/iterative
+        # and the reminder would be misleading.
+        any_skip = args.skip_npm or args.skip_maven or args.skip_copy
+        if not DRY_RUN and not any_skip:
+            print()
+            print("Next step — publish:")
+            print("  python3 scripts/release-docs-stage.py             # deploy to asf-staging")
+            print("  python3 scripts/release-docs-stage.py --no-push   # rehearse without pushing")
+            print("Then, after eyeballing https://juneau.staged.apache.org:")
+            print("  python3 scripts/release-docs.py                   # promote asf-staging -> asf-site (LIVE)")
+
     except subprocess.CalledProcessError as e:
         print(f"\nERROR: Command failed with exit code {e.returncode}")
         sys.exit(1)

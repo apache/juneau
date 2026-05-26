@@ -313,7 +313,67 @@ Juneau is packed with features that may not be obvious at first. Users are encou
    * juneau-rest-client - Apache HttpClient 4.5+.
 * Built on top of Servlet and Apache HttpClient APIs that allow you to use the newest HTTP/2 features such as request/response multiplexing and server push.
 
-## Building
+## Building the docs site
+
+The documentation site is a [Docusaurus 3](https://docusaurus.io/) project. Builds and deploys are driven by local Python scripts under `scripts/` — there is no longer a `push`-triggered GitHub Action; publishes happen when a human runs the script.
+
+**Prerequisites:**
+* Node.js 18+ and npm
+* Java 17 (`~/jdk/openjdk_17.0.14.0.101_17.57.18_aarch64/bin/java` on this workstation)
+* Apache Maven (for the Java tree's `site` build)
+* A sibling `master` checkout of the Juneau Java repository at `../master/` (`scripts/build-docs.py` runs Maven `site` there to harvest the javadocs)
+
+**Dev server (hot reload, no deploy):**
+
+```bash
+python3 scripts/start-docusaurus.py        # serves http://localhost:3000
+```
+
+The script kills any process on port 3000, clears the Docusaurus cache, runs `npm install` if needed, and starts `npm start`. Edit `pages/` and the page reloads automatically.
+
+**Full local build (Maven site + Docusaurus + link checks):**
+
+```bash
+python3 scripts/build-docs.py                       # full pipeline
+python3 scripts/build-docs.py --dry-run             # print everything it would do, run nothing
+python3 scripts/build-docs.py --verbose             # full per-stage banners
+python3 scripts/build-docs.py --skip-maven          # Docusaurus only (no Java work)
+python3 scripts/build-docs.py --skip-npm            # Maven site only
+python3 scripts/build-docs.py --staging             # set SITE_URL to juneau.staged.apache.org
+```
+
+Output lands in `build/`. On a successful full build the script prints a publish reminder.
+
+**Local production preview** (no deploy, just `docusaurus serve` over the prod build):
+
+```bash
+npm run build && npm run serve
+```
+
+**Deploy to staging** (`https://juneau.staged.apache.org`):
+
+```bash
+git config --get user.email           # must be jamesbognar@apache.org
+python3 scripts/release-docs-stage.py
+# (use --no-push to rehearse without pushing)
+```
+
+The script verifies the git identity, runs the staged build, clones (or updates) a sibling `../asf-staging/` checkout, copies the build output in, commits, and force-pushes `asf-staging` to origin. Open `http://juneau.staged.apache.org` to verify before promoting.
+
+**Promote staging to production** (`https://juneau.apache.org`):
+
+```bash
+git config --get user.email           # must be jamesbognar@apache.org
+python3 scripts/release-docs.py
+# (use --no-push to rehearse)
+```
+
+This promotes whatever is currently on `origin/asf-staging` to `asf-site`. Only run after eyeballing the staged site.
+
+**AI-driven flows:** the Cursor / Claude `@juneau-docs-workflow` skill provides natural-phrase routing for all of the above ("start docs locally", "deploy docs to stage", "deploy docs to prod", "add to release notes", etc.).
+
+## Building the Java tree
+
 Building requires:
 * [Apache Maven](https://maven.apache.org/)
 * Java 17 is required to build and run.
