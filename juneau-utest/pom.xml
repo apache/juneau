@@ -247,6 +247,27 @@
 			<version>0.9.14</version>
 			<scope>test</scope>
 		</dependency>
+		<!--
+			FreeMarker view bridge + engine for the BasicFreemarkerResource / FreemarkerView test
+			matrix. Engine-agnostic POM stance (TODO-84 resolved decision #2 / mirrored from
+			TODO-78 #2 + TODO-82 #2 + TODO-83 #2): the bridge module itself has no concrete
+			engine dep, so juneau-utest supplies the FreeMarker engine in `test` scope. Spring
+			Boot's spring-boot-starter-freemarker is not added here in v1 — the real-container
+			Spring-Boot integration matrix is deferred to a follow-on TODO behind the TODO-96
+			response-processor-prepend prereq.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-view-freemarker</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.34</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
