@@ -201,6 +201,31 @@
 			<version>${jetty.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!--
+			Thymeleaf view bridge + engines for the BasicThymeleafResource / ThymeleafView test
+			matrix. Engine-agnostic POM stance (TODO-82 resolved decision #2 / mirrored from
+			TODO-78 #2): the bridge module itself has no concrete engine dep, so juneau-utest
+			supplies thymeleaf in `test` scope for the MockRest / Jetty flavors, and the Spring
+			Boot starter for the Spring-Boot flavor (autoconfigured SpringTemplateEngine).
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-view-thymeleaf</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf</groupId>
+			<artifactId>thymeleaf</artifactId>
+			<version>3.1.3.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
