@@ -1558,6 +1558,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.20g.RestServerObservability',
+							label: '10.20g. Observability — Micrometer + OpenTelemetry',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.21.BuiltInParameters',
 							label: '10.21. Built-In Parameters',
 						},
