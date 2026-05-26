@@ -1404,6 +1404,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.14f.MustacheViewSupport',
+							label: '10.14f. Mustache View Support',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.15.ClientVersioning',
 							label: '10.15. Client Versioning',
 						},
