@@ -53,6 +53,7 @@ import java.util.logging.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.bean.rfc7807.Problem;
 import org.apache.juneau.bean.rfc7807.adapter.ProblemAdapters;
 import org.apache.juneau.bean.openapi3.OpenApi;
 import org.apache.juneau.bean.swagger.Swagger;
@@ -92,6 +93,7 @@ import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.rest.openapi.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.validation.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.svl.*;
@@ -3644,6 +3646,9 @@ public class RestContext extends Context {
 		try {
 			var statusCode = e2.getStatusLine().getStatusCode();
 
+			if (e2 instanceof ValidationException ve && writeValidationErrorBody(res, ve, statusCode, isProblemDetails()))
+				return;
+
 			if (isProblemDetails() && writeProblemDetailsBody(res, e2, statusCode))
 				return;
 
@@ -3687,6 +3692,57 @@ public class RestContext extends Context {
 			res.setHeader("Content-Encoding", "identity");
 			var os = res.getOutputStream();
 			JsonSerializer.DEFAULT.serialize(problem, os);
+			os.flush();
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	/**
+	 * Writes a {@link ValidationException} as a structured JSON body carrying the per-field
+	 * {@link ValidationViolation} list, so client UIs can render field-level errors.
+	 *
+	 * <p>
+	 * Two shapes depending on the resource's {@code @Rest(problemDetails)} opt-in:
+	 * <ul class='spaced-list'>
+	 * 	<li><b>Problem-details ON</b> &mdash; emits {@code application/problem+json} with the standard
+	 * 		RFC 7807 {@code status}/{@code title}/{@code detail} members plus an {@code errors[]} extension
+	 * 		array populated from {@link ValidationException#getViolations()}. Bypasses the generic
+	 * 		{@link ProblemAdapters#fromException(BasicHttpException)} path because that adapter is
+	 * 		intentionally narrow (no extensions) &mdash; validation needs its own per-field payload.
+	 * 	<li><b>Problem-details OFF (default)</b> &mdash; emits {@code application/json} with the simple
+	 * 		{@code { "status":400, "errors":[ ... ] }} envelope. Keeps the response usable from clients that
+	 * 		can't parse {@code application/problem+json} without making validation responses look like a
+	 * 		text/plain stack trace.
+	 * </ul>
+	 *
+	 * @return {@code true} if the body was written (response committed). {@code false} on serialization
+	 * 	failure so the caller can fall back to the legacy {@code text/plain} writer.
+	 */
+	@SuppressWarnings({
+		"resource"  // output stream owned by the servlet response; closed by the container
+	})
+	private static boolean writeValidationErrorBody(HttpServletResponse res, ValidationException ve, int statusCode, boolean problemDetails) {
+		try {
+			res.setStatus(statusCode);
+			res.setHeader("Content-Encoding", "identity");
+			var os = res.getOutputStream();
+			if (problemDetails) {
+				var problem = new Problem()
+					.setStatus(statusCode)
+					.setTitle(ve.getStatusLine().getReasonPhrase())
+					.setDetail(ve.getMessage())
+					.set("errors", ve.getViolations());
+				res.setContentType(ContentType.APPLICATION_PROBLEM_JSON.getValue());
+				JsonSerializer.DEFAULT.serialize(problem, os);
+			} else {
+				var envelope = new LinkedHashMap<String,Object>();
+				envelope.put("status", statusCode);
+				envelope.put("errors", ve.getViolations());
+				res.setContentType("application/json");
+				JsonSerializer.DEFAULT.serialize(envelope, os);
+			}
 			os.flush();
 			return true;
 		} catch (Exception ex) {

@@ -24,6 +24,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
+import org.apache.juneau.rest.validation.*;
 
 /**
  * Resolves method parameters and parameter types annotated with {@link Content} on {@link RestOp}-annotated Java methods.
@@ -66,6 +67,14 @@ public class ContentArg implements RestOpArg {
 	private final Type type;
 
 	/**
+	 * Pre-computed flag &mdash; {@code true} iff this parameter carries a Jakarta Bean Validation
+	 * {@code @Valid} (or equivalent) marker. Validation is off by default; only parameters that opt in
+	 * pay the per-request {@link BeanValidator#validate(Object, org.apache.juneau.commons.inject.BeanStore)}
+	 * cost.
+	 */
+	private final boolean validate;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
@@ -73,10 +82,12 @@ public class ContentArg implements RestOpArg {
 	protected ContentArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = HttpPartSchema.create(Content.class, paramInfo);
+		this.validate = BeanValidator.isValidationRequested(paramInfo);
 	}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getRequest().getContent().setSchema(schema).as(type);
+		var bean = opSession.getRequest().getContent().setSchema(schema).as(type);
+		return validate ? BeanValidator.validate(bean, opSession.getBeanStore()) : bean;
 	}
 }

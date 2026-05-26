@@ -75,6 +75,19 @@
 			<artifactId>jakarta.servlet-api</artifactId>
 			<version>6.1.0</version>
 		</dependency>
+
+		<!--
+			Jakarta Bean Validation 3.x — opt-in, off by default.
+			Declared "provided" so consumers who never write @Valid pay no transitive cost; the
+			BeanValidator integration is a no-op at runtime when the API and a concrete provider
+			(e.g. org.hibernate.validator:hibernate-validator) are not on the consumer's classpath.
+		-->
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>3.0.2</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

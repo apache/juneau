@@ -32,6 +32,7 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
+import org.apache.juneau.rest.validation.*;
 
 /**
  * Resolves method parameters and parameter types annotated with {@link FormData} on {@link RestOp}-annotated Java methods.
@@ -118,6 +119,12 @@ public class FormDataArg implements RestOpArg {
 	private final ClassInfo type;
 
 	/**
+	 * Pre-computed flag &mdash; {@code true} iff this parameter carries a Jakarta Bean Validation
+	 * {@code @Valid} (or equivalent) marker. Off-by-default opt-in &mdash; see {@link BeanValidator}.
+	 */
+	private final boolean validate;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param pi The Java method parameter being resolved.
@@ -140,6 +147,7 @@ public class FormDataArg implements RestOpArg {
 		var pp = (Class<? extends HttpPartParser>)schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
+		this.validate = BeanValidator.isValidationRequested(pi);
 
 		if (multi && ! type.isCollectionOrArray())
 			throw new ArgException(pi, "Use of multipart flag on @FormData parameter that is not an array or Collection");
@@ -157,6 +165,7 @@ public class FormDataArg implements RestOpArg {
 		var bs = req.getMarshallingSession();
 		var cm = bs.getClassMeta(type.innerType());
 
+		Object result;
 		if (multi) {
 			Collection c;
 			if (cm.isArray()) {
@@ -167,15 +176,14 @@ public class FormDataArg implements RestOpArg {
 				c = new JsonList();
 			}
 			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(c::add);
-			return cm.isArray() ? toArray(c, cm.getElementType().inner()) : c;
-		}
-
-		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
+			result = cm.isArray() ? toArray(c, cm.getElementType().inner()) : c;
+		} else if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 			var m = new JsonMap();
 			rh.forEach(e -> m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).as(cm.getValueType()).orElse(null)));
-			return req.getMarshallingSession().convertToType(m, cm);
+			result = req.getMarshallingSession().convertToType(m, cm);
+		} else {
+			result = rh.getLast(name).parser(ps).schema(schema).def(def).as(type.innerType()).orElse(null);
 		}
-
-		return rh.getLast(name).parser(ps).schema(schema).def(def).as(type.innerType()).orElse(null);
+		return validate ? BeanValidator.validate(result, opSession.getBeanStore()) : result;
 	}
 }

@@ -22,6 +22,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.validation.*;
 
 /**
  * Resolves method parameters annotated with {@link Request} on {@link RestOp}-annotated Java methods.
@@ -61,6 +62,12 @@ public class RequestBeanArg implements RestOpArg {
 	private final RequestBeanMeta meta;
 
 	/**
+	 * Pre-computed flag &mdash; {@code true} iff this parameter carries a Jakarta Bean Validation
+	 * {@code @Valid} (or equivalent) marker. Off-by-default opt-in &mdash; see {@link BeanValidator}.
+	 */
+	private final boolean validate;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
@@ -68,10 +75,12 @@ public class RequestBeanArg implements RestOpArg {
 	 */
 	protected RequestBeanArg(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		this.meta = RequestBeanMeta.create(paramInfo, annotations);
+		this.validate = BeanValidator.isValidationRequested(paramInfo);
 	}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getRequest().getRequest(meta);
+		var bean = opSession.getRequest().getRequest(meta);
+		return validate ? BeanValidator.validate(bean, opSession.getBeanStore()) : bean;
 	}
 }

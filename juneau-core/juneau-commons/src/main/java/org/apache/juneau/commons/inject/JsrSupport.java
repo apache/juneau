@@ -70,6 +70,14 @@ public final class JsrSupport {
 	public static final String JUNEAU_VALUE = "org.apache.juneau.commons.inject.Value";
 	public static final String SPRING_VALUE = "org.springframework.beans.factory.annotation.Value";
 
+	// Jakarta Bean Validation 3.x (and the older javax. namespace).  Detected by FQN so juneau-commons
+	// stays free of a compile-time jakarta.validation dependency; the opt-in marker is recognized whether
+	// the consumer pulls in jakarta.validation-api 3.x, javax.validation:validation-api 2.x, or Spring's
+	// own @Validated.
+	public static final String JAKARTA_VALID = "jakarta.validation.Valid";
+	public static final String JAVAX_VALID = "javax.validation.Valid";
+	public static final String SPRING_VALIDATED = "org.springframework.validation.annotation.Validated";
+
 	private JsrSupport() {}
 
 	/**
@@ -174,5 +182,21 @@ public final class JsrSupport {
 		if (! isValueAnnotation(annotation))
 			return null;
 		return annotation.getValue().orElse(null);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the annotation is a Jakarta Bean Validation opt-in marker.
+	 *
+	 * <p>
+	 * Recognizes Jakarta 3.x ({@code jakarta.validation.Valid}), the older Javax 2.x equivalent
+	 * ({@code javax.validation.Valid}), and Spring's {@code @Validated} group-selector by FQN &mdash; no
+	 * compile-time Jakarta Validation or Spring dependency in {@code juneau-commons}.
+	 *
+	 * @param annotation The annotation to inspect.
+	 * @return <jk>true</jk> if {@code annotation} is one of the recognized validation opt-in markers.
+	 */
+	public static boolean isValidAnnotation(AnnotationInfo<?> annotation) {
+		var name = annotation.getName();
+		return eqAny(name, JAKARTA_VALID, JAVAX_VALID, SPRING_VALIDATED);
 	}
 }

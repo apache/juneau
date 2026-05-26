@@ -330,6 +330,29 @@
 			<version>3.0.2</version>
 			<scope>test</scope>
 		</dependency>
+		<!--
+			Hibernate Validator 8.0.x is the Jakarta Bean Validation 3.0 reference implementation.
+			Provides the concrete jakarta.validation.Validator engine that backs the optional
+			BeanValidator integration in juneau-rest-server. Test-scope only — production consumers
+			supply their own provider on their classpath.
+		-->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>8.0.3.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<!--
+			Jakarta Expression Language implementation — required at runtime by Hibernate Validator
+			for interpolating dynamic constraint messages. Without it the validator throws
+			ValidationException on first .validate() call ("HV000183: Unable to load 'jakarta.el.*'").
+		-->
+		<dependency>
+			<groupId>org.glassfish.expressly</groupId>
+			<artifactId>expressly</artifactId>
+			<version>5.0.0</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.openjdk.jmh</groupId>
 			<artifactId>jmh-core</artifactId>
