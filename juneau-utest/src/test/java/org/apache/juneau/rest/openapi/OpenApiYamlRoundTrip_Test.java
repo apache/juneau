@@ -87,11 +87,13 @@ class OpenApiYamlRoundTrip_Test extends TestBase {
 		@RestPost(path="/pet") public Pet createPet(@Content Pet pet) { return pet; }
 	}
 
-	// noInherit applied here too so the /openapi endpoint document (served via the docs mixins) stays
-	// small enough to round-trip cleanly through the YAML parser. The full mixin surface produces a
-	// larger document that exposes a separate YAML parser limitation (deeply nested/complex docs hit a
-	// buffer-underflow on the round-trip path) — tracked separately from this TODO.
-	@Rest(noInherit={"mixins"}, mixins={org.apache.juneau.rest.docs.BasicOpenApiResource.class})
+	// Inherits the FULL BasicRestServlet api-docs mixin surface — six api-docs URLs, full schema
+	// set, the works. Earlier this resource shipped with noInherit={"mixins"} + mixins={
+	// BasicOpenApiResource} because round-tripping the full doc through the YAML parser threw
+	// IOException: Buffer underflow; that latent ParserReader limitation was fixed by widening the
+	// reader's no-mark unread-lookback window (see ParserReader.UNMARKED_LOOKBACK_CHARS), so c01
+	// now asserts against the FULL mixin-pack mount surface.
+	@Rest
 	public static class B extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/pet") public Pet getPet() { return new Pet(); }

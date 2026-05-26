@@ -51,6 +51,19 @@ public class ParserReader extends Reader implements Positionable {
 	// Error message constants
 	private static final String MSG_bufferUnderflow = "Buffer underflow.";
 
+	/**
+	 * Maximum number of previously-read characters preserved as unread lookback when the buffer is
+	 * refilled <em>without</em> an active {@link #mark()}. Originally 10, which was sufficient for
+	 * JSON's short tokens but too small for YAML's indent-aware parser: a deeply-nested OpenAPI 3.1
+	 * document can have indent depth well past 10 chars on a single line, and the YAML parser's
+	 * {@code skipBlanksAndCountIndent} / {@code unreadSpaces} pair (and similar peek-then-unread
+	 * patterns in block-scalar handling) tries to unread the entire indent at once. When the indent
+	 * read crossed the buffer boundary, the rest underflowed. 256 chars covers any realistic YAML
+	 * document indent depth (128 levels at 2-space indent) while still leaving 768 chars per
+	 * 1024-char refill for forward-progress reads.
+	 */
+	private static final int UNMARKED_LOOKBACK_CHARS = 256;
+
 	/** Wrapped reader */
 	protected final Reader r;
 
@@ -427,8 +440,11 @@ public class ParserReader extends Reader implements Positionable {
 					}
 					iEnd = iCurrent + x;
 				} else {
-					// Copy the last 10 chars in the buffer to the beginning of the buffer.
-					int copyBuff = Math.min(iCurrent, 10);
+					// Copy the last UNMARKED_LOOKBACK_CHARS chars in the buffer to the beginning so
+					// callers can still unread() that far across a buffer-boundary refill. See the
+					// constant's javadoc for why 256 (not 10) — widened to handle YAML's deep-indent
+					// peek-then-unread patterns where a single line's indent can exceed 10 chars.
+					int copyBuff = Math.min(iCurrent, UNMARKED_LOOKBACK_CHARS);
 					System.arraycopy(buff, iCurrent - copyBuff, buff, 0, copyBuff);
 
 					// Number of characters we expect to copy on the next read.
