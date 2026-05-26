@@ -16,7 +16,10 @@
  */
 package org.apache.juneau.commons.inject;
 
+import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.settings.*;
@@ -48,6 +51,39 @@ import org.apache.juneau.commons.svl.*;
 public final class ValueResolver {
 
 	private ValueResolver() {}
+
+	/**
+	 * Per-expression {@link VarTemplate} cache shared by all {@code @Value} injection sites.
+	 * The cache key is the {@code @Value} expression text —
+	 * which is bounded by the number of distinct expressions in the application, not by user
+	 * input — so the unbounded map cannot grow uncontrollably in practice. Compilation
+	 * happens at most once per distinct expression; subsequent {@code @Value} resolutions
+	 * read the cached {@link VarTemplate} and skip the tokenizer + var-registry-lookup
+	 * pipeline entirely.
+	 */
+	private static final ConcurrentMap<String, VarTemplate> TEMPLATE_CACHE = new ConcurrentHashMap<>();
+
+	/**
+	 * Returns the compiled {@link VarTemplate} for the given expression, computing and caching
+	 * on first use. Intended for use by reflection-layer injection sites
+	 * ({@link FieldInfo#inject}, {@link ParameterInfo#resolveValue}) that want to amortize
+	 * tokenization across repeated bean constructions.
+	 *
+	 * @param expression The {@code @Value} expression text. Must not be {@code null}.
+	 * @return The cached compiled template (uses {@link VarResolver#DEFAULT}).
+	 */
+	public static VarTemplate getCompiledTemplate(String expression) {
+		return TEMPLATE_CACHE.computeIfAbsent(expression, VarResolver.DEFAULT::compile);
+	}
+
+	/**
+	 * Clears the internal {@link VarTemplate} cache. Primarily intended for tests that need to
+	 * exercise the compile-time path repeatedly with different {@link VarResolver}s. Production
+	 * code should not need to call this.
+	 */
+	public static void clearTemplateCache() {
+		TEMPLATE_CACHE.clear();
+	}
 
 	/**
 	 * Returns the {@code value()} expression carried by the first {@code @Value} annotation in the list,
@@ -123,9 +159,64 @@ public final class ValueResolver {
 	 * @return The coerced value.
 	 */
 	public static Object resolve(String expression, Class<?> targetType, String siteDescription) {
-		// Resolve placeholders via VarResolver.DEFAULT — this picks up the ${...} shortcut from
-		// Phase 2 (lowered to $P{...}) and routes through Settings.get(key) for the final lookup.
-		var resolved = VarResolver.DEFAULT.resolve(expression);
+		if (expression == null)
+			return resolveCoerce(null, targetType, expression, siteDescription);
+		var template = getCompiledTemplate(expression);
+		var resolved = template.resolve(VarResolver.DEFAULT.createSession());
+		return resolveCoerce(resolved, targetType, expression, siteDescription);
+	}
+
+	/**
+	 * Generic-aware {@code @Value} resolution that honors {@link Supplier}{@code <String>}
+	 * field types by returning a re-evaluating, threadsafe Supplier instead of a one-shot
+	 * resolved value (field-type autodetect — bare {@code String} resolves once, {@code Supplier<String>}
+	 * re-evaluates per {@code .get()}).
+	 *
+	 * <p>
+	 * Behavior by {@code genericTargetType}:
+	 * <ul>
+	 * 	<li>{@code Supplier<String>} → returns a {@link Supplier} that re-evaluates the
+	 * 		compiled template on every {@link Supplier#get()} call, each time against a
+	 * 		fresh {@link VarResolverSession}. Safe to share across threads.
+	 * 	<li>Anything else → delegates to {@link #resolve(String, Class, String)} with the
+	 * 		raw target class (preserves existing behavior).
+	 * </ul>
+	 *
+	 * @param expression The {@code @Value} expression. May be {@code null}.
+	 * @param targetType The erased target class (e.g. {@code String.class} or {@code Supplier.class}).
+	 * @param genericTargetType The declared generic type (e.g. {@code Supplier<String>}). May be
+	 * 	{@code null}, in which case Supplier-detection is skipped.
+	 * @param siteDescription Human-readable site description for error messages.
+	 * @return Either a one-shot coerced value, or a {@code Supplier<String>} factory.
+	 */
+	public static Object resolve(String expression, Class<?> targetType, Type genericTargetType, String siteDescription) {
+		if (isSupplierOfString(targetType, genericTargetType)) {
+			if (expression == null)
+				return (Supplier<String>) () -> null;
+			var template = getCompiledTemplate(expression);
+			// Literal templates fast-path: capture the resolved string once and hand back a
+			// constant Supplier. Saves a per-.get() session allocation when the expression
+			// has no variables (e.g. @Value("literal") Supplier<String>).
+			if (template.isLiteral()) {
+				var literal = template.resolve(VarResolver.DEFAULT.createSession());
+				return (Supplier<String>) () -> literal;
+			}
+			return template.asSupplierWithFreshSessions(VarResolver.DEFAULT);
+		}
+		return resolve(expression, targetType, siteDescription);
+	}
+
+	/** Returns {@code true} if the declared field/parameter type is exactly {@code Supplier<String>}. */
+	private static boolean isSupplierOfString(Class<?> targetType, Type genericTargetType) {
+		if (targetType != Supplier.class)
+			return false;
+		if (!(genericTargetType instanceof ParameterizedType pt))
+			return false;
+		var args = pt.getActualTypeArguments();
+		return args.length == 1 && args[0] == String.class;
+	}
+
+	private static Object resolveCoerce(String resolved, Class<?> targetType, String expression, String siteDescription) {
 		var effectiveType = box(targetType);
 
 		if (resolved == null || resolved.isEmpty()) {
@@ -133,7 +224,6 @@ public final class ValueResolver {
 				throw new BeanCreationException("Could not resolve required @Value('" + expression + "') for primitive site " + siteDescription);
 			if (resolved == null)
 				return null;
-			// Empty string is a legitimate value for String / CharSequence target types.
 			if (effectiveType == String.class)
 				return resolved;
 		}

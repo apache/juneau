@@ -41,27 +41,27 @@ public class SvlExample {
 		// $S{key[,default]} for getting system properties (uses System.getProperty() )
 		Logger.getLogger(SvlExample.class).info(vr.resolve("os.name=$S{os.name, not defined}"));
 
-		// $IF{key[,default]} general if or if-else condition
-		// $NE{arg} will return true if not empty
-		Logger.getLogger(SvlExample.class).info(vr.resolve("TEST_VAR is $IF{$NE{$E{TEST_VAR}}, not empty, empty}"));
+		// #{if(cond, then, else)} general if or if-else condition
+		// #{notEmpty(s)} returns true if not empty
+		Logger.getLogger(SvlExample.class).info(vr.resolve("TEST_VAR is #{if(#{notEmpty($E{TEST_VAR})}, not empty, empty)}"));
 
-		// $SW{arg,pattern1:then1[,pattern2:then2...]} switch-case
-		System.out.println(vr.resolve("$SW{Carrot, *Ap*:Fruit, *Car*:Veg, *:N/A}"));
+		// #{switch(value, pattern1, val1, ..., default)} glob-pattern switch-case
+		System.out.println(vr.resolve("#{switch(Carrot, *Ap*, Fruit, *Car*, Veg, *, N/A)}"));
 
-		// $PR{arg,pattern,replace} pattern replace
-		Logger.getLogger(SvlExample.class).info(vr.resolve("Java version=$PR{$S{java.version}, (_([0-9]+)), \\ build=\\$2}"));
+		// #{replaceRegex(s, regex, replacement)} pattern replace
+		Logger.getLogger(SvlExample.class).info(vr.resolve("Java version=#{replaceRegex($S{java.version}, \"(_([0-9]+))\", \" build=$2\")}"));
 
-		// $UC{arg} uppercase $LC{arg} lowecase
-		Logger.getLogger(SvlExample.class).info(vr.resolve("$LC{JAVA_HOME} $UC{$E{JAVA_HOME}}"));
+		// #{upper(s)} / #{lower(s)} case conversion
+		Logger.getLogger(SvlExample.class).info(vr.resolve("#{lower(JAVA_HOME)} #{upper($E{JAVA_HOME})}"));
 
-		// $LN{arg[,delimiter]} length var example
-		Logger.getLogger(SvlExample.class).info(vr.resolve("parts = $LN{$S{os.version},.}, charcount = $LN{$S{os.version}}"));
+		// #{len(s[,delimiter])} length / part count
+		Logger.getLogger(SvlExample.class).info(vr.resolve("parts = #{len($S{os.version}, \".\")}, charcount = #{len($S{os.version})}"));
 
-		// $ST{arg,start[,end]} substring var example
-		Logger.getLogger(SvlExample.class).info(vr.resolve("version = $ST{$S{java.version}, 0, 3}"));
+		// #{substring(s, start[, end])} substring extraction
+		Logger.getLogger(SvlExample.class).info(vr.resolve("version = #{substring($S{java.version}, 0, 3)}"));
 
-		// $PE{arg,start[,end]} pattern extractor var example
-		Logger.getLogger(SvlExample.class).info(vr.resolve("update = $PE{$S{java.version},_([0-9]+),1}"));
+		// #{extract(s, regex[, group])} regex group extraction
+		Logger.getLogger(SvlExample.class).info(vr.resolve("update = #{extract($S{java.version}, \"_([0-9]+)\", 1)}"));
 
 		/*
 		 *  See all supported variable types at,

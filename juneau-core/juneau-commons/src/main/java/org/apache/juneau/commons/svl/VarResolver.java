@@ -21,8 +21,10 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.svl.functions.*;
 import org.apache.juneau.commons.svl.vars.*;
 
 /**
@@ -78,6 +80,7 @@ public class VarResolver {
 		private WritableBeanStore beanStore;
 		final VarList vars;
 		final LinkedHashMap<Class<?>,Object> userBeans;
+		final List<VarFunction> functions;
 
 		/**
 		 * Constructor.
@@ -86,6 +89,7 @@ public class VarResolver {
 			this.beanStore = new BasicBeanStore();
 			vars = VarList.create();
 			userBeans = new LinkedHashMap<>();
+			functions = new ArrayList<>();
 		}
 
 		/**
@@ -97,6 +101,7 @@ public class VarResolver {
 			this.beanStore = copyFrom.beanStore;
 			vars = VarList.of(copyFrom.vars);
 			userBeans = new LinkedHashMap<>();
+			functions = new ArrayList<>(Arrays.asList(copyFrom.functions));
 		}
 
 		/**
@@ -134,22 +139,19 @@ public class VarResolver {
 		 * <ul>
 		 * 	<li>{@link SystemPropertiesVar}
 		 * 	<li>{@link EnvVariablesVar}
-	 * 	<li>{@link EnvFileVar}
-	 * 	<li>{@link DotenvVar}
+		 * 	<li>{@link EnvFileVar}
+		 * 	<li>{@link DotenvVar}
 		 * 	<li>{@link ArgsVar}
 		 * 	<li>{@link ManifestFileVar}
-		 * 	<li>{@link SwitchVar}
-		 * 	<li>{@link IfVar}
-		 * 	<li>{@link CoalesceVar}
-		 * 	<li>{@link PatternMatchVar}
-		 * 	<li>{@link PatternReplaceVar}
-		 * 	<li>{@link PatternExtractVar}
-		 * 	<li>{@link UpperCaseVar}
-		 * 	<li>{@link LowerCaseVar}
-		 * 	<li>{@link NotEmptyVar}
-		 * 	<li>{@link LenVar}
-		 * 	<li>{@link SubstringVar}
 		 * </ul>
+		 *
+		 * <p>
+		 * The 11 transformation {@code Var}s previously listed here ({@code SwitchVar},
+		 * {@code IfVar}, {@code CoalesceVar}, {@code PatternMatchVar}, {@code PatternReplaceVar},
+		 * {@code PatternExtractVar}, {@code UpperCaseVar}, {@code LowerCaseVar},
+		 * {@code NotEmptyVar}, {@code LenVar}, {@code SubstringVar}) were deleted in 9.5.0 and
+		 * replaced by the {@code #{...}} script syntax. Use {@link #defaultFunctions()} to
+		 * register the built-in catalog.
 		 *
 		 * @return This object .
 		 */
@@ -200,6 +202,66 @@ public class VarResolver {
 		}
 
 		/**
+		 * Register one or more {@link VarFunction} instances on this builder.
+		 *
+		 * <p>
+		 * Functions registered here win over {@code BeanStore} / {@code ServiceLoader} / built-in
+		 * catalog entries with the same {@link VarFunction#name() name} (later-wins-on-collision).
+		 * Discovery channels merge these registrations with the auto-discovered set at
+		 * {@link #build()} time.
+		 *
+		 * @param values The functions to register.
+		 * @return This builder.
+		 */
+		public Builder functions(VarFunction... values) {
+			Collections.addAll(functions, values);
+			return this;
+		}
+
+		/**
+		 * Register one or more {@link VarFunction} <i>classes</i> on this builder. Each class
+		 * must have a public no-arg constructor; instances are created via the bean store at
+		 * {@link #build()} time so dependency injection works the same way it does for
+		 * {@link Var}s.
+		 *
+		 * @param values The function classes to register.
+		 * @return This builder.
+		 */
+		@SafeVarargs
+		public final Builder functions(Class<? extends VarFunction>... values) {
+			for (var c : values)
+				functions.add(BeanInstantiator.of(VarFunction.class, beanStore).type(c).run());
+			return this;
+		}
+
+		/**
+		 * Registers the built-in {@link VarFunction} catalog plus any third-party functions
+		 * discovered via {@link ServiceLoader#load(Class)} on {@link VarFunction}.
+		 *
+		 * <p>
+		 * Registration order is:
+		 * <ol>
+		 * 	<li>Built-in catalog — string, type-conversion, arithmetic, boolean, conditional,
+		 * 		regex, encoding, date, random/UUID, and JSON-navigation functions.
+		 * 	<li>Third-party functions from {@code META-INF/services/org.apache.juneau.commons.svl.VarFunction}.
+		 * </ol>
+		 *
+		 * <p>
+		 * Later registrations win on name collision — third-party {@code ServiceLoader} entries
+		 * override built-ins, and explicit {@link #functions(VarFunction...)} /
+		 * {@link #functions(Class...)} calls override both.
+		 *
+		 * @return This builder.
+		 */
+		public Builder defaultFunctions() {
+			for (var c : BUILTIN_FUNCTION_CLASSES)
+				functions.add(BeanInstantiator.of(VarFunction.class, beanStore).type(c).run());
+			for (var f : ServiceLoader.load(VarFunction.class, VarResolver.class.getClassLoader()))
+				functions.add(f);
+			return this;
+		}
+
+		/**
 		 * Builds the var resolver.
 		 *
 		 * @return A new {@link VarResolver}.
@@ -210,8 +272,46 @@ public class VarResolver {
 	}
 
 	/**
-	 * Default string variable resolver with support for system properties and environment variables:
+	 * Built-in {@link VarFunction} classes registered by {@link Builder#defaultFunctions()}.
 	 *
+	 * <p>
+	 * Order matters only for collisions inside the built-in catalog itself (and there should be
+	 * none). Third-party functions discovered via {@link ServiceLoader} register <i>after</i>
+	 * this list, so they override built-ins on name collision.
+	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private static final Class<? extends VarFunction>[] BUILTIN_FUNCTION_CLASSES = (Class<? extends VarFunction>[]) concat(
+		StringFunctions.ALL,
+		TypeConversionFunctions.ALL,
+		ArithmeticFunctions.ALL,
+		BooleanFunctions.ALL,
+		ConditionalFunctions.ALL,
+		RegexFunctions.ALL,
+		EncodingFunctions.ALL,
+		DateFunctions.ALL,
+		RandomFunctions.ALL,
+		JsonFunctions.ALL
+	);
+
+	@SafeVarargs
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private static <T> Class<? extends T>[] concat(Class<? extends T>[]... arrays) {
+		var total = 0;
+		for (var a : arrays) total += a.length;
+		var out = (Class<? extends T>[]) new Class[total];
+		var idx = 0;
+		for (var a : arrays) {
+			System.arraycopy(a, 0, out, idx, a.length);
+			idx += a.length;
+		}
+		return out;
+	}
+
+	/**
+	 * Default string variable resolver with support for system properties, environment
+	 * variables, and the built-in {@link VarFunction} catalog.
+	 *
+	 * <h5 class='section'>Built-in {@link Var} bindings:</h5>
 	 * <ul>
 	 * 	<li><c>$S{key[,default]}</c> - {@link SystemPropertiesVar}
 	 * 	<li><c>$E{key[,default]}</c> - {@link EnvVariablesVar}
@@ -219,20 +319,23 @@ public class VarResolver {
 	 * 	<li><c>$DE{key[,default]}</c> - {@link DotenvVar}
 	 * 	<li><c>$A{key[,default]}</c> - {@link ArgsVar}
 	 * 	<li><c>$MF{key[,default]}</c> - {@link ManifestFileVar}
-	 * 	<li><c>$SW{stringArg,pattern:thenValue[,pattern:thenValue...]}</c> - {@link SwitchVar}
-	 * 	<li><c>$IF{arg,then[,else]}</c> - {@link IfVar}
-	 * 	<li><c>$CO{arg[,arg2...]}</c> - {@link CoalesceVar}
-	 * 	<li><c>$PM{arg,pattern}</c> - {@link PatternMatchVar}
-	 * 	<li><c>$PR{stringArg,pattern,replace}</c>- {@link PatternReplaceVar}
-	 * 	<li><c>$PE{arg,pattern,groupIndex}</c> - {@link PatternExtractVar}
-	 * 	<li><c>$UC{arg}</c> - {@link UpperCaseVar}
-	 * 	<li><c>$LC{arg}</c> - {@link LowerCaseVar}
-	 * 	<li><c>$NE{arg}</c> - {@link NotEmptyVar}
-	 * 	<li><c>$LN{arg[,delimiter]}</c> - {@link LenVar}
-	 * 	<li><c>$ST{arg,start[,end]}</c> - {@link SubstringVar}
 	 * </ul>
+	 *
+	 * <h5 class='section'>Built-in {@link VarFunction} catalog:</h5>
+	 * <p>
+	 * Ships ~68 built-in functions across 10 categories — string, type-conversion, arithmetic,
+	 * boolean, conditional, regex, encoding, date/time, random/UUID, and JSON-navigation.
+	 * Functions are invoked via the {@code #{name(args...)}} syntax. See
+	 * {@link Builder#defaultFunctions()} for the registration mechanism.
+	 *
+	 * <p>
+	 * The 11 transformation/conditional {@code Var}s previously bundled here
+	 * ({@code SwitchVar}, {@code IfVar}, {@code CoalesceVar}, {@code PatternMatchVar},
+	 * {@code PatternReplaceVar}, {@code PatternExtractVar}, {@code UpperCaseVar},
+	 * {@code LowerCaseVar}, {@code NotEmptyVar}, {@code LenVar}, {@code SubstringVar}) were
+	 * deleted in 9.5.0; their behavior is now covered by the {@code #{...}} script syntax.
 	 */
-	public static final VarResolver DEFAULT = create().defaultVars().build();
+	public static final VarResolver DEFAULT = create().defaultVars().defaultFunctions().build();
 
 	/**
 	 * Instantiates a new clean-slate {@link Builder} object.
@@ -255,6 +358,9 @@ public class VarResolver {
 	final Var[] vars;
 	private final Map<String,Var> varMap;
 
+	final VarFunction[] functions;
+	private final Map<String,VarFunction> functionMap;
+
 	final WritableBeanStore beanStore;
 
 	/**
@@ -274,6 +380,13 @@ public class VarResolver {
 			m.put(v.getName(), v);
 
 		this.varMap = u(m);
+		this.functions = builder.functions.toArray(new VarFunction[0]);
+
+		var fm = new ConcurrentSkipListMap<String,VarFunction>();
+		for (var f : functions)
+			fm.put(f.name(), f);
+		this.functionMap = u(fm);
+
 		var bs = new BasicBeanStore(builder.beanStore());
 		builder.userBeans.forEach((c, v) -> bs.addBean((Class) c, v));
 		this.beanStore = bs;
@@ -336,6 +449,75 @@ public class VarResolver {
 	}
 
 	/**
+	 * Compiles a template string into a reusable {@link VarTemplate}.
+	 *
+	 * <p>
+	 * Compilation is the dual of {@link #resolve(String)} — instead of tokenizing and resolving
+	 * in one pass, the input is parsed once and the result returned as an immutable
+	 * {@link VarTemplate} that callers can reuse across many resolutions:
+	 *
+	 * <p class='bjava'>
+	 * 	<jc>// Compile once...</jc>
+	 * 	<jk>var</jk> <jv>tpl</jv> = <jv>vr</jv>.compile(<js>"hello, ${name:world}"</js>);
+	 *
+	 * 	<jc>// ...resolve many times.</jc>
+	 * 	<jk>for</jk> (<jk>var</jk> <jv>req</jv> : <jv>requests</jv>) {
+	 * 		<jk>var</jk> <jv>session</jv> = <jv>vr</jv>.createSession().bean(<jv>req</jv>);
+	 * 		<jv>writer</jv>.write(<jv>tpl</jv>.resolve(<jv>session</jv>));
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * The returned {@link VarTemplate} is immutable and threadsafe; the {@link VarResolverSession}
+	 * passed to {@link VarTemplate#resolve(VarResolverSession)} inherits its own threadsafety
+	 * contract (sessions are <b>not</b> threadsafe). Use {@link #resolveSupplier(String)} or
+	 * {@link VarTemplate#asSupplierWithFreshSessions(VarResolver)} for a threadsafe re-evaluating
+	 * Supplier.
+	 *
+	 * <h5 class='section'>Compile-binding contract:</h5>
+	 * <p>
+	 * The compiled template is bound to <i>this</i> resolver. Cached {@link Var} (and, in the
+	 * future, function) references are resolved at compile time. Passing the compiled template
+	 * to a session belonging to a different {@link VarResolver} is undefined behavior.
+	 * Rebuilding the resolver invalidates compiled templates from the previous instance.
+	 *
+	 * <p>
+	 * Templates are <b>not</b> cached on the resolver. Callers that compile the same input
+	 * repeatedly (e.g. framework consumers compiling per {@code @Value} field) should cache
+	 * the returned {@link VarTemplate} on their own per-site metadata.
+	 *
+	 * @param input The template string to compile. May be {@code null}.
+	 * @return A new {@link VarTemplate} bound to this resolver.
+	 */
+	public VarTemplate compile(String input) {
+		return VarTemplateCompiler.compile(this, input);
+	}
+
+	/**
+	 * Returns a threadsafe {@link Supplier} that resolves the given template against this
+	 * resolver each time {@link Supplier#get()} is called.
+	 *
+	 * <p>
+	 * Each call to {@link Supplier#get()} opens a fresh {@link VarResolverSession}, so the
+	 * returned {@code Supplier} is safe to share across threads — making it the recommended
+	 * default for user-facing code (e.g. {@code @Value Supplier<String>} field types,
+	 * hot-reload config patterns).
+	 *
+	 * <p>
+	 * Equivalent to {@code compile(input).asSupplierWithFreshSessions(this)}.
+	 *
+	 * <p>
+	 * For a session-bound (and therefore <i>not</i> threadsafe) variant, see
+	 * {@link VarResolverSession#resolveSupplier(String)}.
+	 *
+	 * @param input The template string. May be {@code null}.
+	 * @return A threadsafe {@code Supplier<String>}.
+	 */
+	public Supplier<String> resolveSupplier(String input) {
+		return compile(input).asSupplierWithFreshSessions(this);
+	}
+
+	/**
 	 * Resolve variables in the specified string and sends the results to the specified writer.
 	 *
 	 * <p>
@@ -364,4 +546,12 @@ public class VarResolver {
 	 * @return A new array containing the variables in this context.
 	 */
 	protected Var[] getVars() { return Arrays.copyOf(vars, vars.length); }
+
+	/**
+	 * Returns an unmodifiable map of {@link VarFunction VarFunctions} associated with this context.
+	 *
+	 * @return A map whose keys are function names (e.g. <js>"upper"</js>) and values are
+	 *	 {@link VarFunction} instances.
+	 */
+	protected Map<String,VarFunction> getFunctionMap() { return functionMap; }
 }

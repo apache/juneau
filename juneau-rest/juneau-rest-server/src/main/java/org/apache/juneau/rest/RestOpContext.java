@@ -754,9 +754,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final Memoizer<UrlPathMatcher[]> pathMatchers = memoizer(() -> {
 		var v = Value.of(UrlPathMatcherList.create());
 		var vr = varResolver();
+		// Use a single VarResolverSession + explicit compile(...) / .resolve(session) per path
+		// so the framework hot path exercises the compiled-template seam explicitly.
+		// Each distinct path string is tokenized once into a VarTemplate, then resolved against
+		// this session. If we ever switch to per-request dynamic path resolution, the seam is
+		// already in place — only the .resolve(session) call moves to the request handler.
+		var session = vr.createSession();
 		getRestOpAnnotationsForProperty(PROPERTY_path).forEach(ai -> {
 			for (var p : ai.getStringArray(PROPERTY_path).orElse(StringUtils.EMPTY_STRING_ARRAY)) {
-				var resolved = vr.resolve(p);
+				var resolved = vr.compile(p).resolve(session);
 				if (!resolved.isEmpty())
 					v.get().add(UrlPathMatcher.of(resolved));
 			}
@@ -771,12 +777,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				if (ai.inner() instanceof RestOp) {
 					var i = s.indexOf(' ');
 					if (i != -1) {
-						var resolved = vr.resolve(s.substring(i).trim());
+						var resolved = vr.compile(s.substring(i).trim()).resolve(session);
 						if (!resolved.isEmpty())
 							v.get().add(UrlPathMatcher.of(resolved));
 					}
 				} else {
-					var resolved = vr.resolve(s);
+					var resolved = vr.compile(s).resolve(session);
 					if (!resolved.isEmpty())
 						v.get().add(UrlPathMatcher.of(resolved));
 				}

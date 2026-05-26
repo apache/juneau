@@ -605,7 +605,9 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		if (valueExpr != null) {
 			ValueResolver.checkInjectConflict(annos, this.toString());
 			var unwrapped = fieldType.unwrap(Optional.class).inner();
-			var resolved = ValueResolver.resolve(valueExpr, unwrapped, this.toString());
+			// Pass the declared (generic) field type so @Value Supplier<String> autodetects
+			// Field type IS the opt-in signal for re-evaluating reads (Supplier<String> autodetect).
+			var resolved = ValueResolver.resolve(valueExpr, unwrapped, inner.getGenericType(), this.toString());
 			if (fieldType.is(Optional.class)) {
 				// VarResolver substitutes "" for a missing key with no default. Collapse both to
 				// Optional.empty() so @Value("${maybe}") Optional<T> behaves the same as Spring's.

@@ -900,7 +900,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		var valueExpr = ValueResolver.findValueExpression(annos);
 		if (valueExpr != null) {
 			ValueResolver.checkInjectConflict(annos, this.toString());
-			return ValueResolver.resolve(valueExpr, ptu.inner(), this.toString());
+			// Pass the declared (generic) parameter type so @Value Supplier<String> autodetects
+			// Supplier<String> field/parameter type opts in to re-evaluating reads.
+			return ValueResolver.resolve(valueExpr, ptu.inner(), inner.getParameterizedType(), this.toString());
 		}
 
 		if (JsrSupport.isProviderType(ptu.inner())) {

@@ -92,18 +92,16 @@ public class VarList extends ArrayList<Object> {
 	 * 	<li>{@link DotenvVar}
 	 * 	<li>{@link ArgsVar}
 	 * 	<li>{@link ManifestFileVar}
-	 * 	<li>{@link SwitchVar}
-	 * 	<li>{@link IfVar}
-	 * 	<li>{@link CoalesceVar}
-	 * 	<li>{@link PatternMatchVar}
-	 * 	<li>{@link PatternReplaceVar}
-	 * 	<li>{@link PatternExtractVar}
-	 * 	<li>{@link UpperCaseVar}
-	 * 	<li>{@link LowerCaseVar}
-	 * 	<li>{@link NotEmptyVar}
-	 * 	<li>{@link LenVar}
-	 * 	<li>{@link SubstringVar}
 	 * </ul>
+	 *
+	 * <p>
+	 * The 11 transformation/conditional {@code Var}s that previously lived here
+	 * ({@code SwitchVar}, {@code IfVar}, {@code CoalesceVar}, {@code PatternMatchVar},
+	 * {@code PatternReplaceVar}, {@code PatternExtractVar}, {@code UpperCaseVar},
+	 * {@code LowerCaseVar}, {@code NotEmptyVar}, {@code LenVar}, {@code SubstringVar}) were
+	 * deleted in 9.5.0 and replaced by the {@code #{...}} script syntax. The
+	 * built-in {@code VarFunction} catalog is registered separately via
+	 * {@link VarResolver.Builder#defaultFunctions()}.
 	 *
 	 * @return This object.
 	 */
@@ -116,18 +114,7 @@ public class VarList extends ArrayList<Object> {
 			EnvFileVar.class,
 			DotenvVar.class,
 			ManifestFileVar.class,
-			ArgsVar.class,
-			SwitchVar.class,
-			IfVar.class,
-			CoalesceVar.class,
-			PatternMatchVar.class,
-			PatternReplaceVar.class,
-			PatternExtractVar.class,
-			UpperCaseVar.class,
-			LowerCaseVar.class,
-			NotEmptyVar.class,
-			LenVar.class,
-			SubstringVar.class
+			ArgsVar.class
 		);
 		// @formatter:on
 	}

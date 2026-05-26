@@ -164,6 +164,54 @@ public abstract class Var {
 	}
 
 	/**
+	 * Returns {@code true} if this variable's resolved value is stable for the lifetime of the
+	 * resolver — same body produces the same output regardless of when (or in what session) it
+	 * is resolved.
+	 *
+	 * <p>
+	 * Stable vars opt in to <b>compile-time folding</b> by {@link VarTemplateCompiler}: rather
+	 * than producing a {@link VarRefSegment} that dispatches at resolve time, the compiler
+	 * resolves the var <i>once</i> at compile time and stores a {@link LiteralSegment} carrying
+	 * the resolved value. This eliminates the per-resolve dispatch cost for hot paths like
+	 * {@code @Value("${HOSTNAME:localhost}")} where the underlying var (env / system property
+	 * / etc.) is treated as a build-time constant by the application.
+	 *
+	 * <p>
+	 * Default: {@code false}. Vars that read mutable session-scoped state (request beans, args,
+	 * config files) <b>must</b> leave this {@code false} — folding would cache an arbitrary
+	 * resolution as a literal and break per-session correctness.
+	 *
+	 * <p>
+	 * Common opt-ins:
+	 * <ul>
+	 * 	<li>{@link org.apache.juneau.commons.svl.vars.SystemPropertiesVar SystemPropertiesVar} — system
+	 * 		properties are mutable in principle (via {@link System#setProperty}) but treated as
+	 * 		stable in normal application code; if a deployment relies on post-resolver mutations,
+	 * 		opt-out by sub-classing.
+	 * 	<li>{@link org.apache.juneau.commons.svl.vars.EnvVariablesVar EnvVariablesVar} — process
+	 * 		environment is immutable.
+	 * 	<li>{@link org.apache.juneau.commons.svl.vars.DotenvVar DotenvVar} /
+	 * 		{@link org.apache.juneau.commons.svl.vars.EnvFileVar EnvFileVar} — .env files are read
+	 * 		once at startup.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Folding contract:</h5>
+	 * <p>
+	 * When a {@link Var} returns {@code true} here, the compiler invokes
+	 * {@link #doResolve(VarResolverSession, String)} on a no-bean session at compile time.
+	 * Implementations must not throw on absent session beans during stable folding; if the
+	 * stable resolution would itself depend on session state (i.e. it isn't really stable),
+	 * either return {@code false} from this method or throw a {@link VarResolverException}
+	 * from {@link #doResolve(VarResolverSession, String)} which the compiler treats as
+	 * "cannot fold; emit a normal {@link VarRefSegment}".
+	 *
+	 * @return {@code true} if this variable's resolution is invariant across sessions.
+	 */
+	protected boolean isStable() {
+		return false;
+	}
+
+	/**
 	 * The method called from {@link VarResolver}.
 	 *
 	 * <p>

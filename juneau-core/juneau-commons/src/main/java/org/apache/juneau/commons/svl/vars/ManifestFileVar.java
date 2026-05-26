@@ -93,4 +93,15 @@ public class ManifestFileVar extends DefaultingVar {
 		var v = source.get(key);
 		return v.isPresent() ? v.value().orElse(null) : "";
 	}
+
+	/**
+	 * Manifest entries are immutable for the lifetime of the classpath. This var opts in to
+	 * compile-time stable-value folding.
+	 *
+	 * @return Always {@code true}.
+	 */
+	@Override /* Overridden from Var */
+	protected boolean isStable() {
+		return true;
+	}
 }

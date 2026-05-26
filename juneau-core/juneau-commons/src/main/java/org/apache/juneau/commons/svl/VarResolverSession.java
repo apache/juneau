@@ -16,16 +16,14 @@
  */
 package org.apache.juneau.commons.svl;
 
-import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
@@ -63,46 +61,6 @@ public class VarResolverSession {
 	private static final String PROP_sessionBeanStore = "session.beanStore";
 	private static final String PROP_var = "var";
 
-	private static final AsciiSet AS1 = AsciiSet.of("\\{");
-	private static final AsciiSet AS2 = AsciiSet.of("\\${}");
-
-	/**
-	 * Var name targeted by the {@code ${xxx}} shortcut.
-	 *
-	 * <p>
-	 * Resolves to {@code PropertyVar.NAME}. Declared as a string literal here (rather than imported
-	 * from {@code org.apache.juneau.commons.svl.vars.PropertyVar}) to keep the {@code svl} parent
-	 * package free of a compile-time dependency on its {@code svl.vars} child package.
-	 */
-	private static final String DOLLAR_BRACE_VAR = "P";
-
-	/**
-	 * Translates the first top-level {@code ':'} in a {@code ${...}}-shortcut body to {@code ','}
-	 * so that the body matches {@link DefaultingVar}'s {@code key,default} separator.
-	 *
-	 * <p>
-	 * "Top-level" means the {@code ':'} is not inside a nested {@code {...}} block — those colons
-	 * belong to the inner var and must remain untouched until that inner var's own translation runs.
-	 *
-	 * @param body The raw body extracted from inside the outer {@code ${...}}.
-	 * @return The body with the first top-level {@code ':'} rewritten to {@code ','}, or the input
-	 * 	unchanged if no top-level {@code ':'} is present.
-	 */
-	private static String translateDollarBraceDefault(String body) {
-		var depth = 0;
-		var length = body.length();
-		for (var i = 0; i < length; i++) {
-			var c = body.charAt(i);
-			if (c == '{')
-				depth++;
-			else if (c == '}' && depth > 0)
-				depth--;
-			else if (c == ':' && depth == 0)
-				return body.substring(0, i) + ',' + body.substring(i + 1);
-		}
-		return body;
-	}
-
 	private static boolean containsVars(Collection<?> c) {
 		var f = Flag.create();
 		c.forEach(x -> {
@@ -128,48 +86,6 @@ public class VarResolverSession {
 				return true;
 		}
 		return false;
-	}
-
-	/*
-	 * Checks to see if string is of the simple form "$X{...}" with no embedded variables.
-	 * This is a common case, and we can avoid using StringWriters.
-	 */
-	@SuppressWarnings({
-		"java:S125",     // State-machine comments (S1: ..., S2: ...)
-		"java:S3776"     // Cognitive complexity acceptable for variable resolution state machine
-	})
-	private static boolean isSimpleVar(String s) {
-		// S1: Not in variable, looking for $
-		// S2: Found $, Looking for {
-		// S3: Found {, Looking for }
-		// S4: Found }
-
-		int length = s.length();
-		var state = S1;
-		for (var i = 0; i < length; i++) {
-			var c = s.charAt(i);
-			if (state == S1) {
-				if (c == '$') {
-					state = S2;
-				} else {
-					return false;
-				}
-			} else if (state == S2) {
-				if (c == '{') {
-					state = S3;
-				} else if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a')) {   // False trigger "$X "
-					return false;
-				}
-			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
-				if (c == '}')
-					state = S4;
-				else if (c == '{' || c == '$')
-					return false;
-			} else if (state == S4) {
-				return false;
-			}
-		}
-		return state == S4;
 	}
 
 	private final VarResolver context;
@@ -228,53 +144,50 @@ public class VarResolverSession {
 	 * 	The new string with all variables resolved, or the same string if no variables were found.
 	 * 	<br>Returns <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for variable resolution
-	})
 	public String resolve(String s) {
-
-		if (s == null || s.isEmpty() || (s.indexOf('$') == -1 && s.indexOf('\\') == -1))
+		if (s == null)
+			return null;
+		if (s.isEmpty())
 			return s;
+		return context.compile(s).resolve(this);
+	}
 
-		// Special case where value consists of a single variable with no embedded variables (e.g. "$X{...}").
-		// This is a common case, so we want an optimized solution that doesn't involve string builders.
-		if (isSimpleVar(s)) {
-		String varName = s.substring(1, s.indexOf('{'));
-		String val = s.substring(s.indexOf('{') + 1, s.length() - 1);
-		// ${xxx} shortcut → $P{xxx}: an empty varName means the source was "${...}", route to PropertyVar
-		// and translate the first ":" (Spring-style default separator) to "," (DefaultingVar's separator).
-		// Back-compat: if an empty-name var is explicitly registered (legacy), prefer it.
-		Var v = getVar(varName);
-		if (v == null && varName.isEmpty()) {
-			varName = DOLLAR_BRACE_VAR;
-			val = translateDollarBraceDefault(val);
-			v = getVar(varName);
-		}
-			if (nn(v)) {
-				try {
-					if (v.streamed) {
-						var sw = new StringWriter();
-						v.resolveTo(this, sw, val);
-						return sw.toString();
-					}
-					s = v.doResolve(this, val);
-					if (s == null)
-						s = "";
-					return (v.allowRecurse() ? resolve(s) : s);
-				} catch (VarResolverException e) {
-					throw e;
-				} catch (Exception e) {
-					throw new VarResolverException(e, "Problem occurred resolving variable ''{0}'' in string ''{1}''", varName, s);
-				}
-			}
-			return s;
-		}
+	/**
+	 * Compiles the given template string into a reusable {@link VarTemplate}.
+	 *
+	 * <p>
+	 * Equivalent to {@link VarResolver#compile(String) this.context.compile(input)}; provided on
+	 * the session for symmetry with {@link #resolve(String)}. The returned template is bound to
+	 * the underlying {@link VarResolver}, not to this session — see the {@link VarTemplate}
+	 * class javadoc for the compile-binding contract.
+	 *
+	 * @param input The template string. May be {@code null}.
+	 * @return A new {@link VarTemplate} bound to the underlying resolver.
+	 */
+	public VarTemplate compile(String input) {
+		return context.compile(input);
+	}
 
-		try {
-			return resolveTo(s, new StringWriter()).toString();
-		} catch (IOException e) {
-			throw toRex(e); // Never happens.
-		}
+	/**
+	 * Returns a session-bound {@link Supplier} that re-resolves the given template against
+	 * <i>this</i> session each time {@link Supplier#get()} is called.
+	 *
+	 * <p>
+	 * Unlike {@link VarResolver#resolveSupplier(String)} — which opens a fresh session per
+	 * {@code .get()} and is threadsafe to share — this Supplier captures the existing session
+	 * and reuses it. <b>It is therefore not threadsafe</b>; it inherits the standard
+	 * "{@link VarResolverSession} is not guaranteed to be thread safe" contract.
+	 *
+	 * <p>
+	 * Use this variant only when the caller owns the session lifecycle and the perf saving of
+	 * skipping per-call session construction matters. For shared / cross-thread use cases,
+	 * prefer {@link VarResolver#resolveSupplier(String)}.
+	 *
+	 * @param input The template string. May be {@code null}.
+	 * @return A {@code Supplier<String>} bound to this session.
+	 */
+	public Supplier<String> resolveSupplier(String input) {
+		return compile(input).asSupplier(this);
 	}
 
 	/**
@@ -384,143 +297,13 @@ public class VarResolverSession {
 	 * @return The same writer.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({
-		"java:S125", // State-machine comments
-		"java:S2583", // Condition always true/false; state persists across iterations or calls
-		"java:S6541", // Single-threaded context; synchronization unnecessary
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-	})
 	public Writer resolveTo(String s, Writer out) throws IOException {
-
-		// S1: Not in variable, looking for $
-		// S2: Found $, Looking for {
-		// S3: Found {, Looking for }
-
-		var state = S1;
-		var isInEscape = false;
-		var hasInternalVar = false;
-		var hasInnerEscapes = false;
-		String varType = null;
-		String varVal;
-		var x = 0;
-		var x2 = 0;
-		var depth = 0;
-		// Tracks whether the current var came from the "${...}" shortcut (vs. an explicit "$P{...}").
-		// When true, the body's first top-level ':' is rewritten to ',' before inner resolution so
-		// that DefaultingVar's "key,default" syntax accepts Spring-style "${key:default}".
-		var isDollarBraceShortcut = false;
-		var length = s.length();
-		for (var i = 0; i < length; i++) {
-			var c = s.charAt(i);
-			if (state == S1) {
-				if (isInEscape) {
-					if (c == '\\' || c == '$') {
-						out.append(c);
-					} else {
-						out.append('\\').append(c);
-					}
-					isInEscape = false;
-				} else if (c == '\\') {
-					isInEscape = true;
-				} else if (c == '$') {
-					x = i;
-					x2 = i;
-					state = S2;
-				} else {
-					out.append(c);
-				}
-			} else if (state == S2) {
-				if (isInEscape) {
-					isInEscape = false;
-				} else if (c == '\\') {
-					hasInnerEscapes = true;
-					isInEscape = true;
-				} else if (c == '{') {
-					varType = s.substring(x + 1, i);
-					// ${xxx} shortcut: empty varType means the source was "${...}". Defer the
-					// rewrite-to-PropertyVar decision until the closing '}' is found, so that
-					// malformed inputs (e.g. "${{foo}") fall through unchanged and so that a
-					// legacy empty-name var (if registered) still wins for back-compat.
-					if (varType.isEmpty())
-						isDollarBraceShortcut = true;
-					x = i;
-					depth = 0;
-					state = S3;
-				} else if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a')) {  // False trigger "$X "
-					if (hasInnerEscapes)
-						out.append(unescapeChars(s.substring(x, i + 1), AS1));
-					else
-						out.append(s, x, i + 1);
-					x = i + 1;
-					state = S1;
-					hasInnerEscapes = false;
-				}
-			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
-				if (isInEscape) {
-					isInEscape = false;
-				} else if (c == '\\') {
-					isInEscape = true;
-					hasInnerEscapes = true;
-				} else if (c == '{') {
-					depth++;
-					hasInternalVar = true;
-				} else if (c == '}') {
-					if (depth > 0) {
-						depth--;
-					} else {
-						varVal = s.substring(x + 1, i);
-						// For the "${...}" shortcut: rewrite the first top-level ':' to ',' so the
-						// body matches DefaultingVar's "key,default" separator. Done BEFORE inner
-						// resolution because any ':' produced by a resolved inner var must NOT be
-						// re-interpreted as a default separator.
-						if (isDollarBraceShortcut)
-							varVal = translateDollarBraceDefault(varVal);
-						// Back-compat: prefer an explicit empty-name var if registered. Only fall
-						// back to PropertyVar when the shortcut form has no legacy resolver.
-						Var r = getVar(varType);
-						if (r == null && isDollarBraceShortcut)
-							r = getVar(DOLLAR_BRACE_VAR);
-						if (r == null) {
-							if (hasInnerEscapes)
-								out.append(unescapeChars(s.substring(x2, i + 1), AS2));
-							else
-								out.append(s, x2, i + 1);
-							x = i + 1;
-						} else {
-							varVal = (hasInternalVar && r.allowNested() ? resolve(varVal) : varVal);
-							try {
-								if (r.streamed)
-									r.resolveTo(this, out, varVal);
-								else {
-									String replacement = r.doResolve(this, varVal);
-									if (replacement == null)
-										replacement = "";
-									// If the replacement also contains variables, replace them now.
-									if (replacement.indexOf('$') != -1 && r.allowRecurse())
-										replacement = resolve(replacement);
-									out.append(replacement);
-								}
-							} catch (VarResolverException e) {
-								throw e;
-							} catch (Exception e) {
-								throw new VarResolverException(e, "Problem occurred resolving variable ''{0}'' in string ''{1}''", varType, s);
-							}
-							x = i + 1;
-						}
-						state = S1;
-						hasInnerEscapes = false;
-						isDollarBraceShortcut = false;
-					}
-				}
-			}
+		if (s == null)
+			return out;
+		if (s.isEmpty()) {
+			return out;
 		}
-		if (isInEscape)
-			out.append('\\');
-		else if (state == S2)
-			out.append('$').append(unescapeChars(s.substring(x + 1), AS1));
-		else if (state == S3)
-			out.append('$').append(varType).append('{').append(unescapeChars(s.substring(x + 1), AS2));
-		return out;
+		return context.compile(s).resolveTo(this, out);
 	}
 
 	protected FluentMap<String,Object> properties() {

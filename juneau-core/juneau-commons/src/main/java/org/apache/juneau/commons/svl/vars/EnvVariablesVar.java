@@ -61,4 +61,19 @@ public class EnvVariablesVar extends DefaultingVar {
 		var v = source.get(varVal);
 		return v.isPresent() ? v.value().orElse(null) : null;
 	}
+
+	/**
+	 * Process environment variables are immutable for the lifetime of the JVM, so this var
+	 * opts in to compile-time stable-value folding.
+	 *
+	 * <p>
+	 * Compiled templates resolve {@code $E{...}} references once at compile time and replace
+	 * them with literal segments — the runtime dispatch is eliminated.
+	 *
+	 * @return Always {@code true}.
+	 */
+	@Override /* Overridden from Var */
+	protected boolean isStable() {
+		return true;
+	}
 }

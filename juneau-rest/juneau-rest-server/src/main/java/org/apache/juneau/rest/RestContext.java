@@ -796,6 +796,7 @@ public class RestContext extends Context {
 		Value<VarResolver> v = Value.of(
 			VarResolver.create()
 				.defaultVars()
+				.defaultFunctions()
 				.vars(VarList.of(
 					ConfigVar.class, FileVar.class, LocalizationVar.class,
 					RequestAttributeVar.class, RequestFormDataVar.class, RequestHeaderVar.class,

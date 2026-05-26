@@ -61,4 +61,23 @@ public class SystemPropertiesVar extends DefaultingVar {
 		var v = source.get(key);
 		return v.isPresent() ? v.value().orElse(null) : null;
 	}
+
+	/**
+	 * System properties are mutable in principle (via {@link System#setProperty}) but treated
+	 * as stable in normal application code. This var opts in to compile-time stable-value
+	 * folding.
+	 *
+	 * <h5 class='section'>Caveat:</h5>
+	 * <p>
+	 * If a deployment relies on {@link System#setProperty} mutations <i>after</i>
+	 * {@link VarResolver} build, those mutations will <b>not</b> be picked up by templates
+	 * that were compiled before the mutation. Either re-build the resolver after the property
+	 * change, or override this method to return {@code false} via a subclass.
+	 *
+	 * @return Always {@code true} for the default implementation.
+	 */
+	@Override /* Overridden from Var */
+	protected boolean isStable() {
+		return true;
+	}
 }

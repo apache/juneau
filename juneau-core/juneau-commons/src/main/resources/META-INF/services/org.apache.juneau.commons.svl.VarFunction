@@ -1,0 +1,13 @@
+# Third-party VarFunction discovery file.
+#
+# Plug-ins distributing custom VarFunction implementations should ship a similar file
+# under their own META-INF/services/ folder.
+#
+# Built-in functions ship via Builder.defaultFunctions() (programmatic registration in
+# VarResolver.DEFAULT), NOT via this file — listing them here would double-register them.
+#
+# Resolution priority (later wins on name collision per OQA #3):
+#
+#   built-in catalog < ServiceLoader entries < explicit Builder.functions(...) calls
+#
+# So third-party entries here automatically override built-ins on name collision.
