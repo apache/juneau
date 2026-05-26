@@ -1409,6 +1409,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.14g.FreemarkerViewSupport',
+							label: '10.14g. FreeMarker View Support',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.15.ClientVersioning',
 							label: '10.15. Client Versioning',
 						},
