@@ -331,6 +331,26 @@
 						<java.locale.providers>JRE,COMPAT,SPI,CLDR</java.locale.providers>
 					</systemPropertyVariables>
 				</configuration>
+				<executions>
+					<execution>
+						<id>default-test</id>
+						<configuration>
+							<excludedGroups>container</excludedGroups>
+							<reportsDirectory>${project.build.directory}/surefire-reports/core</reportsDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>container-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<groups>container</groups>
+							<reportsDirectory>${project.build.directory}/surefire-reports/container</reportsDirectory>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>

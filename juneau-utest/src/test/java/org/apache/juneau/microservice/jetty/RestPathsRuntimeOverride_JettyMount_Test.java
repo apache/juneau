@@ -53,6 +53,7 @@ import jakarta.servlet.*;
  *
  * @since 9.5.0
  */
+@org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class RestPathsRuntimeOverride_JettyMount_Test extends TestBase {
 
 	private static Microservice create(Class<?>... configurations) throws Exception {

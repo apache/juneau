@@ -54,6 +54,7 @@ import jakarta.servlet.*;
  *
  * @since 9.5.0
  */
+@org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class BasicEchoResource_JettyMicroservice_Test extends TestBase {
 
 	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))

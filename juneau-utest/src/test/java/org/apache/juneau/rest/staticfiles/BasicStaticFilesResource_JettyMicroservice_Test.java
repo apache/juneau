@@ -61,6 +61,7 @@ import jakarta.servlet.*;
  *
  * @since 9.5.0
  */
+@org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class BasicStaticFilesResource_JettyMicroservice_Test extends TestBase {
 
 	/** Test host: vanilla {@link BasicRestServlet} subclass with the static-files mixin attached. */

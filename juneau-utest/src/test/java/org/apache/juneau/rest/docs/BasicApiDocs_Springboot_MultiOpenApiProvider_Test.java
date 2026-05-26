@@ -68,6 +68,7 @@ import org.springframework.context.annotation.*;
  *
  * @since 9.5.0
  */
+@org.apache.juneau.testing.annotations.SpringbootTest
 class BasicApiDocs_Springboot_MultiOpenApiProvider_Test {
 
 	/** Spring Boot app config with two {@link OpenApiProvider} beans, one {@code @Primary}. */

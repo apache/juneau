@@ -54,6 +54,7 @@ import org.springframework.test.context.*;
  * minimal {@code @SpringBootConfiguration} class, no web environment, dirty context after the
  * class so subsequent tests don't see the bridge.
  */
+@org.apache.juneau.testing.annotations.SpringbootTest
 @SpringBootTest(classes = SpringEnvironmentPropertySource_SpringbootIntegration_Test.TestApp.class,
 	webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @TestPropertySource(properties = {

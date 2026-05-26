@@ -34,6 +34,7 @@ import org.junit.jupiter.api.*;
  * for each lifecycle event ({@link Microservice#start()}, {@link Microservice#stop()}, and config-change
  * notifications). {@code onStart} runs in registration order; {@code onStop} runs in the reverse order.
  */
+@org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class Microservice_Listener_Fanout_Test extends TestBase {
 
 	/**

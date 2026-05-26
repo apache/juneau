@@ -39,6 +39,7 @@ import jakarta.servlet.http.*;
  * that auto-discovered <c>@Rest</c> servlets are mounted at <c>@Rest(path=...)</c>, and that duplicate
  * mount paths fail fast.
  */
+@org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class JettyConfiguration_Test extends TestBase {
 
 	private static Microservice create(Class<?>... configurations) throws Exception {

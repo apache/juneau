@@ -64,6 +64,7 @@ import jakarta.servlet.*;
  *
  * @since 9.5.0
  */
+@org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class BasicApiDocs_JettyMicroservice_Test extends TestBase {
 
 	/** Test host: vanilla {@link BasicRestServlet} subclass; inherits the four-mixin pack. */

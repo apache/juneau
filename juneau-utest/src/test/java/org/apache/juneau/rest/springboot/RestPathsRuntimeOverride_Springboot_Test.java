@@ -58,6 +58,7 @@ import org.springframework.context.*;
  *
  * @since 9.5.0
  */
+@org.apache.juneau.testing.annotations.SpringbootTest
 @SuppressWarnings({
 	"unchecked"  // ApplicationContext.getBeanProvider(Class) is unchecked-bound in the Spring API.
 })

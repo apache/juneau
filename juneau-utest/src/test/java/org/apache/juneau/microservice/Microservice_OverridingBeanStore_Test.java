@@ -30,6 +30,7 @@ import org.junit.jupiter.api.*;
  * resolve before locally-registered beans during the microservice's startup-time injection
  * (Phase 4 of TODO-35).
  */
+@org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class Microservice_OverridingBeanStore_Test extends TestBase {
 
 	interface ExternalApi {

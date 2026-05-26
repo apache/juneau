@@ -31,6 +31,7 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;
 
+@org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class Rest_Paths_Test extends TestBase {
 
 	private static Microservice create(Class<?>... configurations) throws Exception {

@@ -31,6 +31,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link Microservice.Builder} methods.
  */
+@org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class Microservice_Builder_Test extends TestBase {
 
 	@Test void a01_create() {

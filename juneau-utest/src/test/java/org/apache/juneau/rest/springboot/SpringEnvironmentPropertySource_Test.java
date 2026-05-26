@@ -49,6 +49,7 @@ import org.springframework.mock.env.*;
  * context which now installs the bridge automatically via {@link SpringBeanStore}'s constructor.
  * This test keeps the focus on the bridge itself.
  */
+@org.apache.juneau.testing.annotations.SpringbootTest
 @SuppressWarnings({
 	"java:S2094" // Test fixture / data class, no methods required.
 })

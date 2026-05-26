@@ -294,6 +294,27 @@ def check_upstream_changes(repo_dir):
         return (False, f"Error checking upstream changes: {e}")
 
 
+def current_branch(repo_dir):
+    """Get current git branch name."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return result.stdout.strip()
+    except Exception:
+        return "unknown"
+
+
+def timing_log_path(repo_dir):
+    """Out-of-repo branch-specific timing history location."""
+    branch = current_branch(repo_dir).replace("/", "__")
+    return Path.home() / ".cache" / "juneau-push-timings" / f"{branch}.jsonl"
+
+
 def play_sound(success=True):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
     """
     Play a system sound to indicate success or failure.
@@ -412,7 +433,11 @@ Examples:
         print(f"  {step_num}. Prompt for PGP passphrase (dummy call)")
         step_num += 1
         if not args.skip_tests:
-            print(f"  {step_num}. Run tests: python3 scripts/test.py --full")
+            print(f"  {step_num}. Verify container test tags: python3 scripts/check-container-tags.py")
+            step_num += 1
+            print(f"  {step_num}. Run tests with timing capture: python3 scripts/test.py --full --timing-log ~/.cache/juneau-push-timings/<branch>.jsonl")
+            step_num += 1
+            print(f"  {step_num}. Print timing deltas: python3 scripts/push-timings.py --log ~/.cache/juneau-push-timings/<branch>.jsonl")
             step_num += 1
         print(f"  {step_num}. Build and install: mvn clean package install -DskipTests")
         step_num += 1
@@ -437,12 +462,25 @@ Examples:
     
     # Step 1: Run tests (optional)
     if not args.skip_tests:
+        check_container_tags = script_dir / "check-container-tags.py"
+        if check_container_tags.exists():
+            if not run_command(
+                [sys.executable, str(check_container_tags)],
+                f"🔎 Step {step_num}: Checking container test tags...",
+                juneau_root
+            ):
+                print("\n❌ Build process aborted due to missing container test tags.")
+                play_sound(success=False)
+                return 1
+            step_num += 1
+
         test_script = script_dir / 'test.py'
+        timing_file = timing_log_path(juneau_root)
         if test_script.exists():
             print(f"\n🧪 Step {step_num}: Running tests via test.py...")
             try:
                 result = subprocess.run(
-                    [sys.executable, str(test_script), "--full"],
+                    [sys.executable, str(test_script), "--full", "--timing-log", str(timing_file)],
                     cwd=juneau_root,
                     check=False
                 )
@@ -465,6 +503,13 @@ Examples:
                 print("\n❌ Build process aborted due to test failures.")
                 play_sound(success=False)
                 return 1
+        timing_report = script_dir / "push-timings.py"
+        if timing_report.exists():
+            run_command(
+                [sys.executable, str(timing_report), "--log", str(timing_file)],
+                f"📊 Step {step_num}: Timing regression report...",
+                juneau_root
+            )
         step_num += 1
     else:
         print(f"\n⏭️  Step {step_num}: Skipping tests (--skip-tests flag)")
