@@ -226,6 +226,27 @@
 			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!--
+			Mustache view bridge + mustache.java engine for the BasicMustacheResource /
+			MustacheView test matrix. Engine-agnostic POM stance (TODO-83 resolved decision #2 /
+			mirrored from TODO-78 #2 + TODO-82 #2): the bridge module itself has no concrete
+			engine dep, so juneau-utest supplies mustache.java's compiler in `test` scope. The
+			bridge is mustache.java-specific (Spring Boot's spring-boot-starter-mustache ships
+			com.samskivert:jmustache instead), so there is no Spring-Boot-starter flavor in this
+			test surface.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-view-mustache</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.spullara.mustache.java</groupId>
+			<artifactId>compiler</artifactId>
+			<version>0.9.14</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

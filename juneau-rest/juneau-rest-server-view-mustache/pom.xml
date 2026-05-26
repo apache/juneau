@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.juneau</groupId>
+		<artifactId>juneau-rest</artifactId>
+		<version>9.5.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>juneau-rest-server-view-mustache</artifactId>
+	<name>Apache Juneau REST Server View — Mustache</name>
+	<description>Apache Juneau REST Server - Mustache view-rendering bridge (BasicMustacheResource mixin + MustacheViewRenderer).</description>
+	<packaging>bundle</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<mustache.version>0.9.14</mustache.version>
+	</properties>
+
+	<!--
+		Engine-agnostic POM stance (mirrors juneau-rest-server-view-jsp resolved decision #2 and
+		juneau-rest-server-view-thymeleaf resolved decision #2).
+
+		The bridge module declares ONLY the mustache.java compiler API in `provided` scope. NO
+		concrete Mustache engine dependency leaks into consumer projects through this module.
+		Consumers add the engine matching their deployment:
+			- Juneau microservice / Jetty / Spring Boot: add
+			  `com.github.spullara.mustache.java:compiler` directly; the bridge builds a default
+			  `MustacheFactory` lazily at first use if no bean is registered.
+			- Custom: user supplies their own `MustacheFactory` `@Bean` with whatever
+			  resolvers / object handlers / encoders they want.
+
+		Note: Spring Boot's `spring-boot-starter-mustache` ships `com.samskivert:jmustache`, NOT
+		mustache.java; the bridge's renderer is mustache.java-specific. See "Choosing a
+		MustacheFactory" matrix in MustacheViewSupport.md for the full guidance.
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.spullara.mustache.java</groupId>
+			<artifactId>compiler</artifactId>
+			<version>${mustache.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<supportIncrementalBuild>true</supportIncrementalBuild>
+				</configuration>
+				<executions>
+					<execution>
+						<id>bundle-manifest</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
