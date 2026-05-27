@@ -52,10 +52,10 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	public HtmlClassMeta(ClassMeta<?> cm, HtmlMetaProvider mp) {
 		super(cm);
 
-		var noTables2 = Value.<Boolean>empty();
-		var noTableHeaders2 = Value.<Boolean>empty();
-		var format2 = Value.<HtmlFormat>empty();
-		var render2 = Value.<HtmlRender<?>>empty();
+		var noTables2 = Holder.<Boolean>empty();
+		var noTableHeaders2 = Holder.<Boolean>empty();
+		var format2 = Holder.<HtmlFormat>empty();
+		var render2 = Holder.<HtmlRender<?>>empty();
 
 		Consumer<Html> c = x -> {
 			if (x.noTables())

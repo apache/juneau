@@ -364,7 +364,7 @@ public class BasicSwaggerProviderSession {
 			// Honor @OpSwagger(ignore=true) — skip the operation entirely so neither the path nor the
 			// HTTP-method entry shows up in the generated spec. Done before getOperation(...) is called
 			// because that method has the side effect of inserting empty entries via computeIfAbsent.
-			var msValue = Value.<OpSwagger>empty();
+			var msValue = Holder.<OpSwagger>empty();
 			al.forEach(ai -> ai.getValue(OpSwagger.class, "swagger").filter(OpSwaggerAnnotation::notEmpty).ifPresent(msValue::set));
 			var ms = msValue.orElseGet(() -> OpSwaggerAnnotation.create().build());
 			if (ms.ignore())
@@ -382,7 +382,7 @@ public class BasicSwaggerProviderSession {
 				)
 			);
 
-		var summaryValue = Value.<String>empty();
+		var summaryValue = Holder.<String>empty();
 		al.forEach(ai -> ai.getValue(String.class, SWAGGER_summary).filter(NOT_EMPTY).ifPresent(summaryValue::set));
 		op.appendIf(ne, SWAGGER_summary,
 			firstNonEmpty(
@@ -393,7 +393,7 @@ public class BasicSwaggerProviderSession {
 			)
 		);
 
-		var descriptionValue = Value.<String[]>empty();
+		var descriptionValue = Holder.<String[]>empty();
 		al.forEach(ai -> ai.getValue(String[].class, SWAGGER_description).filter(x -> x.length > 0).ifPresent(descriptionValue::set));
 		op.appendIf(ne, SWAGGER_description,
 			firstNonEmpty(
@@ -539,21 +539,21 @@ public class BasicSwaggerProviderSession {
 					var ecmi = methods.get(i);
 					var a = ecmi.getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 						if (a == null)
-							a = ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
+							a = ecmi.getReturnType().unwrap(Holder.class, Optional.class).getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 						if (nn(a) && ! isMulti(a)) {
 							var ha = a.name();
 							for (var code : codes) {
 								var header = responses.getMap(String.valueOf(code), true).getMap(SWAGGER_headers, true).getMap(ha, true);
 								rstream(ap.find(Schema.class, ecmi)).forEach(x -> merge(header, x.inner()));
-								rstream(ap.find(Schema.class, ecmi.getReturnType().unwrap(Value.class, Optional.class))).forEach(x -> merge(header, x.inner()));
-								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap(SWAGGER_schema), ecmi.getReturnType().unwrap(Value.class, Optional.class).innerType(), bs));
+								rstream(ap.find(Schema.class, ecmi.getReturnType().unwrap(Holder.class, Optional.class))).forEach(x -> merge(header, x.inner()));
+								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap(SWAGGER_schema), ecmi.getReturnType().unwrap(Holder.class, Optional.class).innerType(), bs));
 							}
 						}
 					}
 				}
 			}
 
-			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Value.class, Optional.class).hasAnnotation(Response.class)) {
+			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Holder.class, Optional.class).hasAnnotation(Response.class)) {
 				var la = rstream(ap.find(Response.class, mi)).map(x -> x.inner()).toList();
 				var la2 = rstream(ap.find(StatusCode.class, mi)).map(x -> x.inner()).toList();
 				var codes = getCodes(la2, 200);
@@ -579,7 +579,7 @@ public class BasicSwaggerProviderSession {
 								for (var code : codes) {
 									var header = responses.getMap(String.valueOf(code), true).getMap(SWAGGER_headers, true).getMap(ha, true);
 									rstream(ap.find(Schema.class, ecmi)).forEach(x -> merge(header, x.inner()));
-									rstream(ap.find(Schema.class, ecmi.getReturnType().unwrap(Value.class, Optional.class))).forEach(x -> merge(header, x.inner()));
+									rstream(ap.find(Schema.class, ecmi.getReturnType().unwrap(Holder.class, Optional.class))).forEach(x -> merge(header, x.inner()));
 									merge(header, a.schema());
 									pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, ecmi.getReturnType().innerType(), bs));
 								}
@@ -602,12 +602,12 @@ public class BasicSwaggerProviderSession {
 
 				var pt = mpi.getParameterType();
 
-				if (pt.is(Value.class) && (ap.has(Header.class, mpi))) {
+				if (pt.is(Holder.class) && (ap.has(Header.class, mpi))) {
 					var la = rstream(ap.find(Header.class, mpi)).map(AnnotationInfo::inner).toList();
 					var la2 = rstream(ap.find(StatusCode.class, mpi)).map(AnnotationInfo::inner).toList();
 					var codes = getCodes(la2, 200);
 					var name = findAnnotationName(ap, Header.class, mpi).orElse(null);
-					var type = Value.unwrap(mpi.getParameterType().innerType());
+					var type = Holder.unwrap(mpi.getParameterType().innerType());
 					for (var a : la) {
 						if (! isMulti(a)) {
 							for (var code : codes) {
@@ -623,7 +623,7 @@ public class BasicSwaggerProviderSession {
 					var la = rstream(ap.find(Response.class, mpi)).map(AnnotationInfo::inner).toList();
 					var la2 = rstream(ap.find(StatusCode.class, mpi)).map(AnnotationInfo::inner).toList();
 					var codes = getCodes(la2, 200);
-					var type = Value.unwrap(mpi.getParameterType().innerType());
+					var type = Holder.unwrap(mpi.getParameterType().innerType());
 					for (var a : la) {
 						for (var code : codes) {
 							var om = responses.getMap(String.valueOf(code), true);

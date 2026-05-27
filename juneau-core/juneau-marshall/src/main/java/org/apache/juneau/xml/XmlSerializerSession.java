@@ -640,8 +640,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		String type2 = null;
 
-		var eName = Value.of(type2);
-		var eNs = Value.<Namespace>empty();
+		var eName = Holder.of(type2);
+		var eNs = Holder.<Namespace>empty();
 
 		if (nn(ppMeta)) {
 			XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(ppMeta);
@@ -650,7 +650,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		}
 
 		// Track if previous element was a text node for delimiter insertion
-		var previousWasTextNode = Value.of(false);
+		var previousWasTextNode = Holder.of(false);
 
 		forEachEntry(c, x -> {
 			var currentIsTextNode = isTextNode(x);
@@ -671,8 +671,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		var eeType = eType.getElementType();
 
-		var eName = Value.<String>empty();
-		var eNs = Value.<Namespace>empty();
+		var eName = Holder.<String>empty();
+		var eNs = Holder.<Namespace>empty();
 
 		if (nn(ppMeta)) {
 			XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(ppMeta);
@@ -680,7 +680,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			eNs.set(bpXml.getNamespace());
 		}
 
-		var previousWasTextNode = Value.of(false);
+		var previousWasTextNode = Holder.of(false);
 
 		forEachStreamableEntry(in, sType, x -> {
 			var currentIsTextNode = isTextNode(x);
@@ -764,7 +764,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				bm = toBeanMap(o);
 			} else if (aType.isDelegate()) {
 				var innerType = (ClassMeta<?>)((Delegate<?>)o).getBeanInfo();
-				var ns = Value.of(getXmlClassMeta(innerType).getNamespace());
+				var ns = Holder.of(getXmlClassMeta(innerType).getNamespace());
 				if (ns.isPresent()) {
 					if (nn(ns.get().uri))
 						addNamespace(ns.get());

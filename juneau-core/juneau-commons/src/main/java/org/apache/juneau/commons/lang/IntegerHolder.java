@@ -19,24 +19,22 @@ package org.apache.juneau.commons.lang;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.util.concurrent.atomic.*;
-
 /**
- * A simple mutable short value.
+ * A simple mutable integer value.
  *
  * <p>
- * This class extends {@link Value}&lt;{@link Short}&gt; and adds a convenience method for incrementing
+ * This class extends {@link Holder}&lt;{@link Integer}&gt; and adds a convenience method for incrementing
  * the value, which is useful for counting operations in lambdas and loops.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
- * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link AtomicInteger} instead.
+ * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link java.util.concurrent.atomic.AtomicInteger} instead.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a counter</jc>
- * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>create</jsm>();
+ * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>create</jsm>();
  *
  * 	<jc>// Use in a lambda to count valid items</jc>
  * 	list.forEach(<jv>x</jv> -&gt; {
@@ -55,40 +53,47 @@ import java.util.concurrent.atomic.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class ShortValue extends Value<Short> {
+public class IntegerHolder extends Holder<Integer> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_values = "values";
 
 	/**
-	 * Creates a new short value initialized to <c>0</c>.
+	 * Creates a new integer value initialized to <c>0</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>create</jsm>();
+	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>(0, <jv>counter</jv>.get());
 	 * </p>
 	 *
-	 * @return A new short value.
+	 * @return A new integer value.
 	 */
-	public static ShortValue create() {
-		return of((short)0);
+	public static IntegerHolder create() {
+		return of(0);
 	}
 
 	/**
-	 * Creates a new short value with the specified initial value.
+	 * Creates a new integer value with the specified initial value.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)42);
+	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(42);
 	 * 	<jsm>assertEquals</jsm>(42, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @param value The initial value.
-	 * @return A new short value.
+	 * @return A new integer value.
 	 */
-	public static ShortValue of(Short value) {
-		return new ShortValue(value);
+	public static IntegerHolder of(Integer value) {
+		return new IntegerHolder(value);
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public IntegerHolder() {
+		super(0);
 	}
 
 	/**
@@ -96,8 +101,8 @@ public class ShortValue extends Value<Short> {
 	 *
 	 * @param value The initial value.
 	 */
-	public ShortValue(Short value) {
-		super(value);
+	public IntegerHolder(Integer value) {
+		super(value == null ? 0 : value);
 	}
 
 	/**
@@ -105,17 +110,16 @@ public class ShortValue extends Value<Short> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)10);
-	 * 	<jv>value</jv>.add((<jk>short</jk>)5);
+	 * 	IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(10);
+	 * 	<jv>value</jv>.add(5);
 	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @param x The value to add.
 	 * @return This object.
 	 */
-	public ShortValue add(Short x) {
-		var v = get();
-		set((short)((v == null ? 0 : v) + (x == null ? 0 : x)));
+	public IntegerHolder add(Integer x) {
+		set(get() + (x == null ? 0 : x));
 		return this;
 	}
 
@@ -124,19 +128,17 @@ public class ShortValue extends Value<Short> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)10);
-	 * 	<jk>short</jk> <jv>result</jv> = <jv>value</jv>.addAndGet((<jk>short</jk>)5);  <jc>// Returns 15</jc>
+	 * 	IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(10);
+	 * 	<jk>int</jk> <jv>result</jv> = <jv>value</jv>.addAndGet(5);  <jc>// Returns 15</jc>
 	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @param x The value to add.
 	 * @return The new value after addition.
 	 */
-	public Short addAndGet(Short x) {
-		var v = get();
-		var result = (short)((v == null ? 0 : v) + (x == null ? 0 : x));
-		set(result);
-		return result;
+	public Integer addAndGet(Integer x) {
+		set(get() + (x == null ? 0 : x));
+		return get();
 	}
 
 	/**
@@ -144,16 +146,15 @@ public class ShortValue extends Value<Short> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
 	 * 	<jv>counter</jv>.decrement();
 	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return This object.
 	 */
-	public ShortValue decrement() {
-		var v = get();
-		set((short)((v == null ? 0 : v) - 1));
+	public IntegerHolder decrement() {
+		set(get() - 1);
 		return this;
 	}
 
@@ -162,36 +163,38 @@ public class ShortValue extends Value<Short> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
-	 * 	<jk>short</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
+	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
+	 * 	<jk>int</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
 	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return The decremented value.
 	 */
-	public Short decrementAndGet() {
-		var v = get();
-		var result = (short)((v == null ? 0 : v) - 1);
-		set(result);
-		return result;
+	public Integer decrementAndGet() {
+		set(get() - 1);
+		return get();
 	}
 
 	/**
 	 * Returns the current value and then increments it.
 	 *
+	 * <p>
+	 * This is a convenience method commonly used for counting operations in lambdas and loops.
+	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
-	 * 	<jk>short</jk> <jv>current</jv> = <jv>counter</jv>.getAndIncrement();  <jc>// Returns 5</jc>
-	 * 	<jk>short</jk> <jv>next</jv> = <jv>counter</jv>.get();                <jc>// Returns 6</jc>
+	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
+	 * 	<jk>int</jk> <jv>current</jv> = <jv>counter</jv>.getAndIncrement();  <jc>// Returns 5</jc>
+	 * 	<jk>int</jk> <jv>next</jv> = <jv>counter</jv>.get();                <jc>// Returns 6</jc>
 	 * </p>
 	 *
 	 * @return The value before it was incremented.
 	 */
-	public short getAndIncrement() {
+	public Integer getAndIncrement() {
 		var v = get();
-		set(v == null ? 1 : (short)(v + 1));
-		return v == null ? 0 : v;
+		var result = v == null ? 0 : v;
+		set(result + 1);
+		return result;
 	}
 
 	/**
@@ -199,16 +202,15 @@ public class ShortValue extends Value<Short> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
 	 * 	<jv>counter</jv>.increment();
 	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return This object.
 	 */
-	public ShortValue increment() {
-		var v = get();
-		set((short)((v == null ? 0 : v) + 1));
+	public IntegerHolder increment() {
+		set(get() + 1);
 		return this;
 	}
 
@@ -217,18 +219,16 @@ public class ShortValue extends Value<Short> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
-	 * 	<jk>short</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
+	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
+	 * 	<jk>int</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
 	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return The incremented value.
 	 */
-	public Short incrementAndGet() {
-		var v = get();
-		var result = (short)((v == null ? 0 : v) + 1);
-		set(result);
-		return result;
+	public Integer incrementAndGet() {
+		set(get() + 1);
+		return get();
 	}
 
 	/**
@@ -239,16 +239,16 @@ public class ShortValue extends Value<Short> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)42);
-	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is((<jk>short</jk>)42));
-	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is((<jk>short</jk>)43));
+	 * 	IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(42);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(42));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(43));
 	 * </p>
 	 *
 	 * @param value The value to compare to.
 	 * @return <jk>true</jk> if the current value is equal to the specified value.
 	 */
 	@Override
-	public boolean is(Short value) {
+	public boolean is(Integer value) {
 		return eq(get(), value);
 	}
 
@@ -260,15 +260,15 @@ public class ShortValue extends Value<Short> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
-	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny((<jk>short</jk>)3, (<jk>short</jk>)5, (<jk>short</jk>)7));
-	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny((<jk>short</jk>)1, (<jk>short</jk>)2));
+	 * 	IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(5);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(3, 5, 7));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(1, 2));
 	 * </p>
 	 *
 	 * @param values The values to compare to.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
-	public boolean isAny(Short...values) {
+	public boolean isAny(Integer...values) {
 		assertArgNotNull(ARG_values, values);
 		var current = get();
 		for (var value : values)

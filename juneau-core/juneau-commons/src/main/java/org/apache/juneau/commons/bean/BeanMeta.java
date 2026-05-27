@@ -33,7 +33,7 @@ import java.util.function.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.lang.Value;
+import org.apache.juneau.commons.lang.Holder;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.commons.utils.*;
@@ -190,7 +190,7 @@ public class BeanMeta<T> {
 	 * <p class='bjava'>
 	 * 	<jc>// Create bean metadata for a class via the marshalling-side context.</jc>
 	 * 	BeanInfo&lt;Person&gt; <jv>cm</jv> = <jv>marshallingContext</jv>.getClassMeta(Person.<jk>class</jk>);
-	 * 	BeanMetaValue&lt;Person&gt; <jv>result</jv> = BeanMeta.<jsm>create</jsm>(<jv>cm</jv>, <jk>null</jk>);
+	 * 	BeanMetaHolder&lt;Person&gt; <jv>result</jv> = BeanMeta.<jsm>create</jsm>(<jv>cm</jv>, <jk>null</jk>);
 	 *
 	 * 	<jc>// Check if it's a bean</jc>
 	 * 	<jk>if</jk> (<jv>result</jv>.beanMeta() != <jk>null</jk>) {
@@ -255,7 +255,7 @@ public class BeanMeta<T> {
 		if (! n.isEmpty())
 			return last(n).value();
 
-		var name = Value.of(p.isEmpty() ? null : "");
+		var name = Holder.of(p.isEmpty() ? null : "");
 		p.forEach(x -> {
 			if (! x.value().isEmpty())
 				name.set(x.value());
@@ -435,11 +435,11 @@ public class BeanMeta<T> {
 		var c = classInfo.inner();
 		var ci = classInfo;
 		String notABeanReasonTemp = null;
-		var propertiesValue = Value.<Map<String,BeanPropertyMeta>>empty();
+		var propertiesValue = Holder.<Map<String,BeanPropertyMeta>>empty();
 		var hiddenPropertiesMap = CollectionUtils.<String,BeanPropertyMeta>map();
 		var getterPropsMap = CollectionUtils.<Method,String>map();  // Convert to MethodInfo keys
 		var setterPropsMap = CollectionUtils.<Method,String>map();
-		var dynaPropertyValue = Value.<BeanPropertyMeta>empty();
+		var dynaPropertyValue = Holder.<BeanPropertyMeta>empty();
 		var propertyBeanRegistriesTemp = CollectionUtils.<BeanPropertyMeta,BeanRegistryLookup>map();  // Per-property BeanRegistry side-map.
 		var unsortedPropertiesTemp = false;
 		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, classInfo);

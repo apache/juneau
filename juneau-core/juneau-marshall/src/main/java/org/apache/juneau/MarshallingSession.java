@@ -1305,7 +1305,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 			return null;
 		var componentType = type.isArgs() ? object() : type.getElementType();
 		var array = Array.newInstance(componentType.inner(), list.size());
-		var i = IntegerValue.create();
+		var i = IntegerHolder.create();
 		list.forEach(x -> {
 			var x2 = x;
 			if (! type.isInstance(x)) {

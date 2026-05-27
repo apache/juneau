@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.Flag;
-import org.apache.juneau.commons.lang.IntegerValue;
+import org.apache.juneau.commons.lang.IntegerHolder;
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
@@ -2356,7 +2356,7 @@ class BeanInstantiator_Test extends TestBase {
 		 */
 		@Test
 		void h07_asMemoizerWithPostCreateHooks() {
-			var hookCallCount = IntegerValue.create();
+			var hookCallCount = IntegerHolder.create();
 
 			var supplier = bc(SimpleBean.class)
 				.postCreateHook(b -> hookCallCount.increment())
@@ -2498,7 +2498,7 @@ class BeanInstantiator_Test extends TestBase {
 		 */
 		@Test
 		void i09_implementationMethodBypassesCreation() {
-			var counter = IntegerValue.create();
+			var counter = IntegerHolder.create();
 
 			var bean = new SimpleBean() {
 				{ counter.increment(); }
@@ -2754,7 +2754,7 @@ class BeanInstantiator_Test extends TestBase {
 		 */
 		@Test
 		void l02_multipleHooks() {
-			var counter = IntegerValue.create();
+			var counter = IntegerHolder.create();
 
 			var bean = bc(InitializableBean.class)
 				.postCreateHook(b -> b.initialize())
@@ -2808,7 +2808,7 @@ class BeanInstantiator_Test extends TestBase {
 		 */
 		@Test
 		void l05_hookWithCached() {
-			var callCount = IntegerValue.create();
+			var callCount = IntegerHolder.create();
 
 			var creator = bc(InitializableBean.class)
 				.cached()
@@ -2832,7 +2832,7 @@ class BeanInstantiator_Test extends TestBase {
 		 */
 		@Test
 		void l06_hookWithoutCached() {
-			var callCount = IntegerValue.create();
+			var callCount = IntegerHolder.create();
 
 			var creator = bc(InitializableBean.class)
 				.postCreateHook(b -> {

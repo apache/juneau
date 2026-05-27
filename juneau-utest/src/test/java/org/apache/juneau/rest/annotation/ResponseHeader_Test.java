@@ -35,15 +35,15 @@ class ResponseHeader_Test extends TestBase {
 	@Rest
 	public static class A {
 		@RestGet
-		public void a(Value<A1> h) {
+		public void a(Holder<A1> h) {
 			h.set(new A1());
 		}
 		@RestGet
-		public void b(@Header(name="Foo") Value<String> h) {
+		public void b(@Header(name="Foo") Holder<String> h) {
 			h.set("foo");
 		}
 		@RestGet
-		public void c(@Header(name="Bar") Value<A1> h) {
+		public void c(@Header(name="Bar") Holder<A1> h) {
 			h.set(new A1());
 		}
 	}
@@ -86,7 +86,7 @@ class ResponseHeader_Test extends TestBase {
 		)
 		public static class B1 {}
 		@RestGet
-		public void a(Value<B1> h) { /* no-op */ }
+		public void a(Holder<B1> h) { /* no-op */ }
 
 		@Header(
 			name="H",
@@ -94,7 +94,7 @@ class ResponseHeader_Test extends TestBase {
 		)
 		public static class B2 {}
 		@RestGet
-		public void b(Value<B2> h) { /* no-op */ }
+		public void b(Holder<B2> h) { /* no-op */ }
 
 		@Header(
 			name="H",
@@ -106,27 +106,27 @@ class ResponseHeader_Test extends TestBase {
 		)
 		public static class B3 {}
 		@RestGet
-		public void c(Value<B3> h) { /* no-op */ }
+		public void c(Holder<B3> h) { /* no-op */ }
 
 		@Header(name="H") @StatusCode(100)
 		public static class B4 {}
 		@RestGet
-		public void d(Value<B4> h) { /* no-op */ }
+		public void d(Holder<B4> h) { /* no-op */ }
 
 		@Header(name="H") @StatusCode({100,101})
 		public static class B5 {}
 		@RestGet
-		public void e(Value<B5> h) { /* no-op */ }
+		public void e(Holder<B5> h) { /* no-op */ }
 
 		@Header(name="H") @Schema(description="a")
 		public static class B6 {}
 		@RestGet
-		public void f(Value<B6> h) { /* no-op */ }
+		public void f(Holder<B6> h) { /* no-op */ }
 
 		@Header("H")
 		public static class B7 {}
 		@RestGet
-		public void g(Value<B7> h) { /* no-op */ }
+		public void g(Holder<B7> h) { /* no-op */ }
 	}
 
 	@Test void b01_swagger_onPojo() {
@@ -175,7 +175,7 @@ class ResponseHeader_Test extends TestBase {
 				description="a",
 				type="string"
 			)
-			Value<C1> h) { /* no-op */ }
+			Holder<C1> h) { /* no-op */ }
 
 		public static class C2 {}
 		@RestGet
@@ -184,7 +184,7 @@ class ResponseHeader_Test extends TestBase {
 				name="H",
 				schema=@Schema(description="a",type="string")
 			)
-			Value<C2> h) { /* no-op */ }
+			Holder<C2> h) { /* no-op */ }
 
 		public static class C3 {}
 		@RestGet
@@ -197,23 +197,23 @@ class ResponseHeader_Test extends TestBase {
 				description="a",
 				type="string"
 			)
-			Value<C3> h) { /* no-op */ }
+			Holder<C3> h) { /* no-op */ }
 
 		public static class C4 {}
 		@RestGet
-		public void d(@Header(name="H") @StatusCode(100) Value<C4> h) { /* no-op */ }
+		public void d(@Header(name="H") @StatusCode(100) Holder<C4> h) { /* no-op */ }
 
 		public static class C5 {}
 		@RestGet
-		public void e(@Header(name="H") @StatusCode({100,101}) Value<C5> h) { /* no-op */ }
+		public void e(@Header(name="H") @StatusCode({100,101}) Holder<C5> h) { /* no-op */ }
 
 		public static class C6 {}
 		@RestGet
-		public void f(@Header(name="H") @Schema(description="a") Value<C6> h) { /* no-op */ }
+		public void f(@Header(name="H") @Schema(description="a") Holder<C6> h) { /* no-op */ }
 
 		public static class C7 {}
 		@RestGet
-		public void g(@Header("H") Value<C7> h) { /* no-op */ }
+		public void g(@Header("H") Holder<C7> h) { /* no-op */ }
 	}
 
 	@Test void c01_swagger_onMethodParameters() {

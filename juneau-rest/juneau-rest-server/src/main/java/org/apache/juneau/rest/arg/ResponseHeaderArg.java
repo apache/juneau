@@ -61,7 +61,7 @@ public class ResponseHeaderArg implements RestOpArg {
 	 * @return A new {@link ResponseHeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
 	public static ResponseHeaderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
-		if (paramInfo.getParameterType().is(Value.class) && AP.has(Header.class, paramInfo))
+		if (paramInfo.getParameterType().is(Holder.class) && AP.has(Header.class, paramInfo))
 			return new ResponseHeaderArg(paramInfo, annotations);
 		return null;
 	}
@@ -105,13 +105,13 @@ public class ResponseHeaderArg implements RestOpArg {
 		} else {
 			c = null;
 		}
-		if (c != Value.class)
-			throw new ArgException(pi, "Type must be Value<?> on parameter annotated with @Header annotation");
+		if (c != Holder.class)
+			throw new ArgException(pi, "Type must be Holder<?> on parameter annotated with @Header annotation");
 	}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		var v = new Value<>();
+		var v = new Holder<>();
 		v.listener(o -> {
 			var req = opSession.getRequest();
 			var res = opSession.getResponse();

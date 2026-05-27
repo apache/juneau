@@ -95,7 +95,7 @@ class RestClient_Response_Headers_Test extends TestBase {
 		var s = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString().orElse(null);
 		assertEquals("bar", s);
 
-		var m = Value.<String>empty();
+		var m = Holder.<String>empty();
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString(m);
 		assertEquals("bar", m.get());
 
@@ -114,14 +114,14 @@ class RestClient_Response_Headers_Test extends TestBase {
 		var i = checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(Integer.class).orElse(null);
 		assertEquals(123, i.intValue());
 
-		var m1 = Value.<Integer>empty();
+		var m1 = Holder.<Integer>empty();
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(m1,Integer.class);
 		assertEquals(123, m1.get().intValue());
 
 		var l = (List<Integer>) checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(LinkedList.class,Integer.class).get();
 		assertList(l, "1", "2");
 
-		var m2 = Value.empty();
+		var m2 = Holder.empty();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m2,LinkedList.class,Integer.class);
 
 		ClassMeta<LinkedList<Integer>> cm1 = MarshallingContext.DEFAULT.getClassMeta(LinkedList.class, Integer.class);
@@ -130,7 +130,7 @@ class RestClient_Response_Headers_Test extends TestBase {
 		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(cm1).get();
 		assertList(l, "1", "2");
 
-		Value<LinkedList<Integer>> m3 = Value.empty();
+		Holder<LinkedList<Integer>> m3 = Holder.empty();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m3,cm1);
 		assertList(m3.get(), "1", "2");
 

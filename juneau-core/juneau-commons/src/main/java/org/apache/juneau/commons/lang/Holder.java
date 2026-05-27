@@ -37,6 +37,9 @@ import org.apache.juneau.commons.reflect.ClassInfo;
  * The class supports method chaining through fluent setters and provides various convenience methods for working
  * with the wrapped value, including mapping, conditional execution, and default value handling.
  *
+ * <p>
+ * Renamed from {@code Value} in 9.5.0 to resolve an import-name collision with the {@code @Value} injection annotation.
+ *
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
  * 	<li>Mutable value container with fluent API
@@ -55,12 +58,12 @@ import org.apache.juneau.commons.reflect.ClassInfo;
  * <h5 class='section'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Basic usage</jc>
- * 	Value&lt;String&gt; <jv>name</jv> = Value.<jsm>of</jsm>(<js>"John"</js>);
+ * 	Holder&lt;String&gt; <jv>name</jv> = Holder.<jsm>of</jsm>(<js>"John"</js>);
  * 	<jv>name</jv>.set(<js>"Jane"</js>);
  * 	String <jv>result</jv> = <jv>name</jv>.get();  <jc>// Returns "Jane"</jc>
  *
  * 	<jc>// Use in lambda (effectively final variable)</jc>
- * 	Value&lt;String&gt; <jv>result</jv> = Value.<jsm>empty</jsm>();
+ * 	Holder&lt;String&gt; <jv>result</jv> = Holder.<jsm>empty</jsm>();
  * 	list.forEach(<jv>x</jv> -&gt; {
  * 		<jk>if</jk> (<jv>x</jv>.matches(criteria)) {
  * 			<jv>result</jv>.set(<jv>x</jv>);
@@ -68,15 +71,15 @@ import org.apache.juneau.commons.reflect.ClassInfo;
  * 	});
  *
  * 	<jc>// With default values</jc>
- * 	Value&lt;String&gt; <jv>optional</jv> = Value.<jsm>empty</jsm>();
+ * 	Holder&lt;String&gt; <jv>optional</jv> = Holder.<jsm>empty</jsm>();
  * 	String <jv>value</jv> = <jv>optional</jv>.orElse(<js>"default"</js>);  <jc>// Returns "default"</jc>
  *
  * 	<jc>// Mapping values</jc>
- * 	Value&lt;Integer&gt; <jv>number</jv> = Value.<jsm>of</jsm>(5);
- * 	Value&lt;String&gt; <jv>text</jv> = <jv>number</jv>.map(Object::toString);  <jc>// Value of "5"</jc>
+ * 	Holder&lt;Integer&gt; <jv>number</jv> = Holder.<jsm>of</jsm>(5);
+ * 	Holder&lt;String&gt; <jv>text</jv> = <jv>number</jv>.map(Object::toString);  <jc>// Holder of "5"</jc>
  *
  * 	<jc>// With listener for change notification</jc>
- * 	Value&lt;String&gt; <jv>monitored</jv> = Value.<jsm>of</jsm>(<js>"initial"</js>)
+ * 	Holder&lt;String&gt; <jv>monitored</jv> = Holder.<jsm>of</jsm>(<js>"initial"</js>)
  * 		.listener(<jv>newValue</jv> -&gt; <jsm>log</jsm>(<js>"Value changed to: "</js> + <jv>newValue</jv>));
  * 	<jv>monitored</jv>.set(<js>"updated"</js>);  <jc>// Triggers listener</jc>
  * </p>
@@ -85,21 +88,21 @@ import org.apache.juneau.commons.reflect.ClassInfo;
  * <p>
  * For primitive types and common use cases, specialized subclasses are available with additional convenience methods:
  * <ul class='spaced-list'>
- * 	<li>{@link IntegerValue} - For mutable integers with {@code getAndIncrement()}
- * 	<li>{@link LongValue} - For mutable longs with {@code getAndIncrement()}
- * 	<li>{@link ShortValue} - For mutable shorts with {@code getAndIncrement()}
- * 	<li>{@link FloatValue} - For mutable floats
- * 	<li>{@link DoubleValue} - For mutable doubles
- * 	<li>{@link CharValue} - For mutable characters
- * 	<li>{@link BooleanValue} - For nullable booleans with {@code isTrue()}/{@code isNotTrue()}
+ * 	<li>{@link IntegerHolder} - For mutable integers with {@code getAndIncrement()}
+ * 	<li>{@link LongHolder} - For mutable longs with {@code getAndIncrement()}
+ * 	<li>{@link ShortHolder} - For mutable shorts with {@code getAndIncrement()}
+ * 	<li>{@link FloatHolder} - For mutable floats
+ * 	<li>{@link DoubleHolder} - For mutable doubles
+ * 	<li>{@link CharHolder} - For mutable characters
+ * 	<li>{@link BooleanHolder} - For nullable booleans with {@code isTrue()}/{@code isNotTrue()}
  * 	<li>{@link Flag} - For non-nullable boolean flags (true/false only, no null state)
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * 	<li class='jc'>{@link ValueListener}
- * 	<li class='jc'>{@link IntegerValue}
- * 	<li class='jc'>{@link BooleanValue}
+ * 	<li class='jc'>{@link IntegerHolder}
+ * 	<li class='jc'>{@link BooleanHolder}
  * 	<li class='jc'>{@link Flag}
  * </ul>
  *
@@ -109,7 +112,7 @@ import org.apache.juneau.commons.reflect.ClassInfo;
 	"java:S115",  // Constants use UPPER_snakeCase convention
 	"java:S3740"  // Raw Consumer/Supplier types used in value holder utility where callback type parameter cannot be further bounded
 })
-public class Value<T> {
+public class Holder<T> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_mapper = "mapper";
@@ -120,16 +123,16 @@ public class Value<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>empty</jsm>();
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>empty</jsm>();
 	 * 	<jsm>assertNull</jsm>(<jv>value</jv>.get());
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isEmpty());
 	 * </p>
 	 *
 	 * @param <T> The value type.
-	 * @return A new empty {@link Value} object.
+	 * @return A new empty {@link Holder} object.
 	 */
-	public static <T> Value<T> empty() {
-		return new Value<>(null);
+	public static <T> Holder<T> empty() {
+		return new Holder<>(null);
 	}
 
 	/**
@@ -139,7 +142,7 @@ public class Value<T> {
 	 * @return <jk>true</jk> if the specified type is this class.
 	 */
 	public static boolean isType(Type t) {
-		return (t instanceof ParameterizedType t2 && t2.getRawType() == Value.class) || (t instanceof Class t3 && Value.class.isAssignableFrom(t3));
+		return (t instanceof ParameterizedType t2 && t2.getRawType() == Holder.class) || (t instanceof Class t3 && Holder.class.isAssignableFrom(t3));
 	}
 
 	/**
@@ -147,33 +150,33 @@ public class Value<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
 	 * 	<jsm>assertEquals</jsm>(<js>"hello"</js>, <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @param <T> The value type.
 	 * @param object The object being wrapped. Can be <jk>null</jk>.
-	 * @return A new {@link Value} object containing the specified value.
+	 * @return A new {@link Holder} object containing the specified value.
 	 */
-	public static <T> Value<T> of(T object) {
-		return new Value<>(object);
+	public static <T> Holder<T> of(T object) {
+		return new Holder<>(object);
 	}
 
 	/**
-	 * Returns the generic parameter type of the Value type.
+	 * Returns the generic parameter type of the Holder type.
 	 *
 	 * @param t The type to find the parameter type of.
-	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Value</c>.
+	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Holder</c>.
 	 */
 	public static Type getParameterType(Type t) {
 		if (t instanceof ParameterizedType t2) {
-			if (t2.getRawType() == Value.class) {
+			if (t2.getRawType() == Holder.class) {
 				var ta = t2.getActualTypeArguments();
 				if (ta.length > 0)
 					return ta[0];
 			}
-		} else if ((t instanceof Class<?> t3) && Value.class.isAssignableFrom(t3)) {
-			return ClassInfo.of(t3).getParameterType(0, Value.class);
+		} else if ((t instanceof Class<?> t3) && Holder.class.isAssignableFrom(t3)) {
+			return ClassInfo.of(t3).getParameterType(0, Holder.class);
 		}
 
 		return null;
@@ -183,7 +186,7 @@ public class Value<T> {
 	 * Returns the unwrapped type.
 	 *
 	 * @param t The type to unwrap.
-	 * @return The unwrapped type, or the same type if the type isn't {@link Value}.
+	 * @return The unwrapped type, or the same type if the type isn't {@link Holder}.
 	 */
 	public static Type unwrap(Type t) {
 		var x = getParameterType(t);
@@ -196,82 +199,82 @@ public class Value<T> {
 	/**
 	 * Constructor.
 	 */
-	public Value() {}
+	public Holder() {}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param t Initial value.
 	 */
-	public Value(T t) {
+	public Holder(T t) {
 		set(t);
 	}
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object obj) {
-		return obj instanceof Value<?> obj2 && eq(this, obj2, (x, y) -> eq(x.t, y.t));
+		return obj instanceof Holder<?> obj2 && eq(this, obj2, (x, y) -> eq(x.t, y.t));
 	}
 
 	/**
-	 * If a value is present, and the value matches the given predicate, returns a {@link Value} describing the
-	 * value, otherwise returns an empty {@link Value}.
+	 * If a value is present, and the value matches the given predicate, returns a {@link Holder} describing the
+	 * value, otherwise returns an empty {@link Holder}.
 	 *
 	 * <p>
 	 * This method is analogous to {@link java.util.Optional#filter(Predicate)}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
-	 * 	Value&lt;String&gt; <jv>filtered</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 3);
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	Holder&lt;String&gt; <jv>filtered</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 3);
 	 * 	<jsm>assertTrue</jsm>(<jv>filtered</jv>.isPresent());
 	 *
-	 * 	Value&lt;String&gt; <jv>filtered2</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 10);
+	 * 	Holder&lt;String&gt; <jv>filtered2</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 10);
 	 * 	<jsm>assertFalse</jsm>(<jv>filtered2</jv>.isPresent());
 	 * </p>
 	 *
 	 * @param predicate The predicate to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return A {@link Value} describing the value if it is present and matches the predicate, otherwise an empty {@link Value}.
+	 * @return A {@link Holder} describing the value if it is present and matches the predicate, otherwise an empty {@link Holder}.
 	 */
-	public Value<T> filter(Predicate<? super T> predicate) {
+	public Holder<T> filter(Predicate<? super T> predicate) {
 		assertArgNotNull(ARG_predicate, predicate);
 		if (t == null)
-			return Value.empty();
-		return predicate.test(t) ? this : Value.empty();
+			return Holder.empty();
+		return predicate.test(t) ? this : Holder.empty();
 	}
 
 	/**
-	 * If a value is present, returns the result of applying the given {@link Value}-bearing mapping function to
-	 * the value, otherwise returns an empty {@link Value}.
+	 * If a value is present, returns the result of applying the given {@link Holder}-bearing mapping function to
+	 * the value, otherwise returns an empty {@link Holder}.
 	 *
 	 * <p>
-	 * This method is similar to {@link #map(Function)}, but the mapping function returns a {@link Value} rather
+	 * This method is similar to {@link #map(Function)}, but the mapping function returns a {@link Holder} rather
 	 * than a simple value. This is analogous to {@link java.util.Optional#flatMap(Function)}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
-	 * 	Value&lt;Integer&gt; <jv>length</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Value.<jsm>of</jsm>(<jv>s</jv>.length()));
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	Holder&lt;Integer&gt; <jv>length</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Holder.<jsm>of</jsm>(<jv>s</jv>.length()));
 	 * 	<jsm>assertEquals</jsm>(5, <jv>length</jv>.get());
 	 *
 	 * 	<jc>// Returns empty if mapper returns empty</jc>
-	 * 	Value&lt;String&gt; <jv>empty</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Value.<jsm>empty</jsm>());
+	 * 	Holder&lt;String&gt; <jv>empty</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Holder.<jsm>empty</jsm>());
 	 * 	<jsm>assertFalse</jsm>(<jv>empty</jv>.isPresent());
 	 * </p>
 	 *
-	 * @param <T2> The type of value in the {@link Value} returned by the mapping function.
+	 * @param <T2> The type of value in the {@link Holder} returned by the mapping function.
 	 * @param mapper The mapping function to apply to the value, if present. Must not be <jk>null</jk>.
-	 * @return The result of applying the {@link Value}-bearing mapping function to the value if present,
-	 *         otherwise an empty {@link Value}.
+	 * @return The result of applying the {@link Holder}-bearing mapping function to the value if present,
+	 *         otherwise an empty {@link Holder}.
 	 */
 	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to Value<T2>
+		"unchecked" // Type erasure requires cast to Holder<T2>
 	})
-	public <T2> Value<T2> flatMap(Function<? super T,? extends Value<? extends T2>> mapper) {
+	public <T2> Holder<T2> flatMap(Function<? super T,? extends Holder<? extends T2>> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		if (t == null)
-			return Value.empty();
+			return Holder.empty();
 		var result = mapper.apply(t);
-		return (Value<T2>)result;
+		return (Holder<T2>)result;
 	}
 
 	/**
@@ -288,7 +291,7 @@ public class Value<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"old"</js>);
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"old"</js>);
 	 * 	String <jv>oldValue</jv> = <jv>value</jv>.getAndSet(<js>"new"</js>);  <jc>// Returns "old"</jc>
 	 * 	String <jv>newValue</jv> = <jv>value</jv>.get();                   <jc>// Returns "new"</jc>
 	 * </p>
@@ -310,7 +313,7 @@ public class Value<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"data"</js>);
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"data"</js>);
 	 * 	String <jv>result</jv> = <jv>value</jv>.getAndUnset();  <jc>// Returns "data"</jc>
 	 * 	<jsm>assertNull</jsm>(<jv>value</jv>.get());           <jc>// Value is now null</jc>
 	 * </p>
@@ -333,10 +336,10 @@ public class Value<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
 	 * 	<jv>value</jv>.ifPresent(<jsm>System.out</jsm>::<jv>println</jv>);  <jc>// Prints "hello"</jc>
 	 *
-	 * 	Value&lt;String&gt; <jv>empty</jv> = Value.<jsm>empty</jsm>();
+	 * 	Holder&lt;String&gt; <jv>empty</jv> = Holder.<jsm>empty</jsm>();
 	 * 	<jv>empty</jv>.ifPresent(<jsm>System.out</jsm>::<jv>println</jv>);  <jc>// Does nothing</jc>
 	 * </p>
 	 *
@@ -356,17 +359,17 @@ public class Value<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(<js>"hello"</js>));
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(<js>"world"</js>));
 	 *
 	 * 	<jc>// Handles null values safely</jc>
-	 * 	Value&lt;String&gt; <jv>empty</jv> = Value.<jsm>empty</jsm>();
+	 * 	Holder&lt;String&gt; <jv>empty</jv> = Holder.<jsm>empty</jsm>();
 	 * 	<jsm>assertTrue</jsm>(<jv>empty</jv>.is(<jk>null</jk>));
 	 * 	<jsm>assertFalse</jsm>(<jv>empty</jv>.is(<js>"test"</js>));
 	 *
 	 * 	<jc>// Works with any type</jc>
-	 * 	Value&lt;Integer&gt; <jv>number</jv> = Value.<jsm>of</jsm>(42);
+	 * 	Holder&lt;Integer&gt; <jv>number</jv> = Holder.<jsm>of</jsm>(42);
 	 * 	<jsm>assertTrue</jsm>(<jv>number</jv>.is(42));
 	 * 	<jsm>assertFalse</jsm>(<jv>number</jv>.is(43));
 	 * </p>
@@ -400,7 +403,7 @@ public class Value<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"initial"</js>);
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"initial"</js>);
 	 * 	<jv>value</jv>.listener(<jv>newValue</jv> -&gt; <jsm>log</jsm>(<js>"Changed to: "</js> + <jv>newValue</jv>));
 	 *
 	 * 	<jv>value</jv>.set(<js>"updated"</js>);  <jc>// Triggers listener, logs "Changed to: updated"</jc>
@@ -410,35 +413,35 @@ public class Value<T> {
 	 * @return This object for method chaining.
 	 * @see ValueListener
 	 */
-	public Value<T> listener(ValueListener<T> listener) {
+	public Holder<T> listener(ValueListener<T> listener) {
 		this.listener = listener;
 		return this;
 	}
 
 	/**
-	 * Applies a mapping function to the value if present, returning a new {@link Value} with the result.
+	 * Applies a mapping function to the value if present, returning a new {@link Holder} with the result.
 	 *
 	 * <p>
 	 * If this value is empty (<jk>null</jk>), returns an empty value without applying the mapper.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>name</jv> = Value.<jsm>of</jsm>(<js>"john"</js>);
-	 * 	Value&lt;String&gt; <jv>upper</jv> = <jv>name</jv>.map(String::toUpperCase);
+	 * 	Holder&lt;String&gt; <jv>name</jv> = Holder.<jsm>of</jsm>(<js>"john"</js>);
+	 * 	Holder&lt;String&gt; <jv>upper</jv> = <jv>name</jv>.map(String::toUpperCase);
 	 * 	<jsm>assertEquals</jsm>(<js>"JOHN"</js>, <jv>upper</jv>.get());
 	 *
-	 * 	Value&lt;Integer&gt; <jv>length</jv> = <jv>name</jv>.map(String::length);
+	 * 	Holder&lt;Integer&gt; <jv>length</jv> = <jv>name</jv>.map(String::length);
 	 * 	<jsm>assertEquals</jsm>(4, <jv>length</jv>.get());
 	 *
-	 * 	Value&lt;String&gt; <jv>empty</jv> = Value.<jsm>empty</jsm>();
-	 * 	Value&lt;Integer&gt; <jv>result</jv> = <jv>empty</jv>.map(String::length);  <jc>// Returns empty Value</jc>
+	 * 	Holder&lt;String&gt; <jv>empty</jv> = Holder.<jsm>empty</jsm>();
+	 * 	Holder&lt;Integer&gt; <jv>result</jv> = <jv>empty</jv>.map(String::length);  <jc>// Returns empty Holder</jc>
 	 * </p>
 	 *
 	 * @param <T2> The mapped value type.
 	 * @param mapper The mapping function to apply. Must not be <jk>null</jk>.
-	 * @return A new {@link Value} containing the mapped result, or an empty value if this value is empty.
+	 * @return A new {@link Holder} containing the mapped result, or an empty value if this value is empty.
 	 */
-	public <T2> Value<T2> map(Function<? super T,T2> mapper) {
+	public <T2> Holder<T2> map(Function<? super T,T2> mapper) {
 		assertArgNotNull(ARG_mapper, mapper);
 		if (nn(t))
 			return of(mapper.apply(t));
@@ -495,7 +498,7 @@ public class Value<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>empty</jsm>();
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>empty</jsm>();
 	 * 	<jv>value</jv>.set(<js>"hello"</js>).set(<js>"world"</js>);  <jc>// Method chaining</jc>
 	 * 	<jsm>assertEquals</jsm>(<js>"world"</js>, <jv>value</jv>.get());
 	 * </p>
@@ -503,7 +506,7 @@ public class Value<T> {
 	 * @param t The new value. Can be <jk>null</jk>.
 	 * @return This object for method chaining.
 	 */
-	public Value<T> set(T t) {
+	public Holder<T> set(T t) {
 		this.t = t;
 		if (nn(listener))
 			listener.onSet(t);
@@ -515,7 +518,7 @@ public class Value<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"old"</js>);
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"old"</js>);
 	 * 	<jv>value</jv>.setIf(<jk>true</jk>, <js>"new"</js>);   <jc>// Sets to "new"</jc>
 	 * 	<jv>value</jv>.setIf(<jk>false</jk>, <js>"newer"</js>);  <jc>// Does nothing</jc>
 	 * 	<jsm>assertEquals</jsm>(<js>"new"</js>, <jv>value</jv>.get());
@@ -525,7 +528,7 @@ public class Value<T> {
 	 * @param t The value to set if condition is <jk>true</jk>.
 	 * @return This object.
 	 */
-	public Value<T> setIf(boolean condition, T t) {
+	public Holder<T> setIf(boolean condition, T t) {
 		if (condition)
 			set(t);
 		return this;
@@ -539,7 +542,7 @@ public class Value<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>empty</jsm>();
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>empty</jsm>();
 	 * 	<jv>value</jv>.setIfEmpty(<js>"first"</js>);   <jc>// Sets value to "first"</jc>
 	 * 	<jv>value</jv>.setIfEmpty(<js>"second"</js>);  <jc>// Does nothing, value remains "first"</jc>
 	 * 	<jsm>assertEquals</jsm>(<js>"first"</js>, <jv>value</jv>.get());
@@ -548,7 +551,7 @@ public class Value<T> {
 	 * @param t The new value. Can be <jk>null</jk>.
 	 * @return This object for method chaining.
 	 */
-	public Value<T> setIfEmpty(T t) {
+	public Holder<T> setIfEmpty(T t) {
 		if (isEmpty())
 			set(t);
 		return this;
@@ -556,7 +559,7 @@ public class Value<T> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return "Value(" + t + ")";
+		return "Holder(" + t + ")";
 	}
 
 	/**
@@ -567,12 +570,12 @@ public class Value<T> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
 	 * 	<jv>value</jv>.update(String::toUpperCase);
 	 * 	<jsm>assertEquals</jsm>(<js>"HELLO"</js>, <jv>value</jv>.get());
 	 *
 	 * 	<jc>// No-op when null</jc>
-	 * 	Value&lt;String&gt; <jv>empty</jv> = Value.<jsm>empty</jsm>();
+	 * 	Holder&lt;String&gt; <jv>empty</jv> = Holder.<jsm>empty</jsm>();
 	 * 	<jv>empty</jv>.update(String::toUpperCase);  <jc>// Does nothing</jc>
 	 * 	<jsm>assertNull</jsm>(<jv>empty</jv>.get());
 	 * </p>
@@ -580,7 +583,7 @@ public class Value<T> {
 	 * @param updater The function to apply to the current value. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public Value<T> update(UnaryOperator<T> updater) {
+	public Holder<T> update(UnaryOperator<T> updater) {
 		if (nn(t))
 			set(updater.apply(t));
 		return this;

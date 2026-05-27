@@ -138,7 +138,7 @@ public class ResponseHeader extends BasicHeader {
 	 * @param type The type to convert to.
 	 * @return This object.
 	 */
-	public <T> RestResponse as(Value<T> value, Class<T> type) {
+	public <T> RestResponse as(Holder<T> value, Class<T> type) {
 		value.set(as(type).orElse(null));
 		return response;
 	}
@@ -151,7 +151,7 @@ public class ResponseHeader extends BasicHeader {
 	 * @param type The type to convert to.
 	 * @return This object.
 	 */
-	public <T> RestResponse as(Value<T> value, ClassMeta<T> type) {
+	public <T> RestResponse as(Holder<T> value, ClassMeta<T> type) {
 		value.set(as(type).orElse(null));
 		return response;
 	}
@@ -171,7 +171,7 @@ public class ResponseHeader extends BasicHeader {
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires unchecked casts
 	})
-	public <T> RestResponse as(Value<T> value, Type type, Type...args) {
+	public <T> RestResponse as(Holder<T> value, Type type, Type...args) {
 		value.set((T)as(type, args).orElse(null));
 		return response;
 	}
@@ -483,7 +483,7 @@ public class ResponseHeader extends BasicHeader {
 	 * @param value The mutable to set the header value in.
 	 * @return This object.
 	 */
-	public RestResponse asString(Value<String> value) {
+	public RestResponse asString(Holder<String> value) {
 		value.set(orElse(null));
 		return response;
 	}

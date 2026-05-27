@@ -1052,8 +1052,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} else if (sType.isBean()) {
 				BeanMap m = toBeanMap(o);
 				if (getAnnotationProvider().has(HtmlLink.class, aType)) {
-					var uriProperty = Value.<String>empty();
-					var nameProperty = Value.<String>empty();
+					var uriProperty = Holder.<String>empty();
+					var nameProperty = Holder.<String>empty();
 					aType.forEachAnnotation(HtmlLink.class, x -> ne(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
 					aType.forEachAnnotation(HtmlLink.class, x -> ne(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
 					Object urlProp = m.get(uriProperty.orElse(""));

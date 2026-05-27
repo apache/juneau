@@ -39,7 +39,7 @@ import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.Memoizer;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.commons.lang.Value;
+import org.apache.juneau.commons.lang.Holder;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.encoders.*;
@@ -101,7 +101,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * before the {@link #defaultCharset} memoizer fires; resolved from {@code RestContext.defaultCharset} or
 	 * {@code "UTF-8"}.
 	 */
-	@org.apache.juneau.commons.inject.Value("${RestContext.defaultCharset:UTF-8}")
+	@Value("${RestContext.defaultCharset:UTF-8}")
 	private String defaultCharsetName;
 
 	/**
@@ -109,7 +109,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * before the {@link #maxInput} memoizer fires; resolved from {@code RestContext.maxInput} or
 	 * {@code "100000000"}.
 	 */
-	@org.apache.juneau.commons.inject.Value("${RestContext.maxInput:100000000}")
+	@Value("${RestContext.maxInput:100000000}")
 	private String defaultMaxInputString;
 
 	/**
@@ -237,7 +237,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var parent = restContext().getBeanContextBuilder();
 		if (!parent.canApply(aa))
 			return restContext().getMarshallingContext();
-		Value<MarshallingContext.Builder> v = Value.of(parent.copy());
+		Holder<MarshallingContext.Builder> v = Holder.of(parent.copy());
 		v.get().apply(aa);
 		var bs = new BasicBeanStore(beanStore())
 			.addBean(Method.class, method())
@@ -306,7 +306,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * operation's method scope) REPLACES the entire result.
 	 */
 	private final Memoizer<NamedAttributeMap> defaultRequestAttributes = memoizer(() -> {
-		var v = Value.of(restContext().getDefaultRequestAttributes().copy());
+		var v = Holder.of(restContext().getDefaultRequestAttributes().copy());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestAttributes).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestAttributes).orElse(EMPTY_STRING_ARRAY))
 				v.get().add(BasicNamedAttribute.ofPair(s));
@@ -328,7 +328,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * bean (matching this operation's method scope) REPLACES the entire result.
 	 */
 	private final Memoizer<HttpPartList> defaultRequestFormData = memoizer(() -> {
-		var v = Value.of(HttpPartList.create());
+		var v = Holder.of(HttpPartList.create());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestFormData).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestFormData).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(HttpStringPart.ofPair(s));
@@ -366,7 +366,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * method scope) REPLACES the entire result.
 	 */
 	private final Memoizer<HttpHeaderList> defaultRequestHeaders = memoizer(() -> {
-		var v = Value.of(restContext().getDefaultRequestHeaders().copy());
+		var v = Holder.of(restContext().getDefaultRequestHeaders().copy());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestHeaders).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestHeaders).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(HttpStringHeader.ofPair(s));
@@ -399,7 +399,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * bean (matching this operation's method scope) REPLACES the entire result.
 	 */
 	private final Memoizer<HttpPartList> defaultRequestQueryData = memoizer(() -> {
-		var v = Value.of(HttpPartList.create());
+		var v = Holder.of(HttpPartList.create());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultRequestQueryData).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultRequestQueryData).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(HttpStringPart.ofPair(s));
@@ -430,7 +430,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * method scope) REPLACES the entire result.
 	 */
 	private final Memoizer<HttpHeaderList> defaultResponseHeaders = memoizer(() -> {
-		var v = Value.of(restContext().getDefaultResponseHeaders().copy());
+		var v = Holder.of(restContext().getDefaultResponseHeaders().copy());
 		getRestOpAnnotationsForProperty(PROPERTY_defaultResponseHeaders).forEach(ai -> {
 			for (var s : ai.getStringArray(PROPERTY_defaultResponseHeaders).orElse(EMPTY_STRING_ARRAY))
 				v.get().setDefault(HttpStringHeader.ofPair(s));
@@ -459,7 +459,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (nn(c) && c.length > 0)
 				b.set(c);
 		});
-		var v = Value.of(b.build());
+		var v = Holder.of(b.build());
 		bs.createBeanFromMethod(EncoderSet.class, resource(), this::matchesInjectScope)
 			.ifPresent(v::set);
 		return v.get();
@@ -560,7 +560,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var parent = restContext().getJsonSchemaGeneratorBuilder();
 		if (!parent.canApply(aa))
 			return restContext().getJsonSchemaGenerator();
-		Value<JsonSchemaGenerator.Builder> v = Value.of(parent.copy());
+		Holder<JsonSchemaGenerator.Builder> v = Holder.of(parent.copy());
 		v.get().apply(aa);
 		var bs = new BasicBeanStore(beanStore())
 			.addBean(Method.class, method())
@@ -721,7 +721,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (nn(c) && c.length > 0)
 				b.set(c);
 		});
-		var result = Value.of(b.build());
+		var result = Holder.of(b.build());
 		bs.createBeanFromMethod(ParserSet.class, resource(), this::matchesInjectScope)
 			.ifPresent(result::set);
 		return result.get();
@@ -733,7 +733,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var parent = restContext().getPartParserCreator();
 		if (!parent.canApply(aa))
 			return restContext().getPartParser();
-		Value<HttpPartParser.Creator> v = Value.of(parent.copy());
+		Holder<HttpPartParser.Creator> v = Holder.of(parent.copy());
 		v.get().apply(aa);
 		var bs = new BasicBeanStore(beanStore())
 			.addBean(Method.class, method())
@@ -749,7 +749,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var parent = restContext().getPartSerializerCreator();
 		if (!parent.canApply(aa))
 			return restContext().getPartSerializer();
-		Value<HttpPartSerializer.Creator> v = Value.of(parent.copy());
+		Holder<HttpPartSerializer.Creator> v = Holder.of(parent.copy());
 		v.get().apply(aa);
 		var bs = new BasicBeanStore(beanStore())
 			.addBean(Method.class, method())
@@ -790,7 +790,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 */
 	@SuppressWarnings("java:S3776")
 	private final Memoizer<UrlPathMatcher[]> pathMatchers = memoizer(() -> {
-		var v = Value.of(UrlPathMatcherList.create());
+		var v = Holder.of(UrlPathMatcherList.create());
 		var vr = varResolver();
 		// Use a single VarResolverSession + explicit compile(...) / .resolve(session) per path
 		// so the framework hot path exercises the compiled-template seam explicitly.
@@ -906,7 +906,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (nn(c) && c.length > 0)
 				b.set(c);
 		});
-		var result = Value.of(b.build());
+		var result = Holder.of(b.build());
 		bs.createBeanFromMethod(SerializerSet.class, resource(), this::matchesInjectScope)
 			.ifPresent(result::set);
 		return result.get();

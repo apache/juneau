@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class BooleanValue_Test extends TestBase {
+class BooleanHolder_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -31,25 +31,25 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void a01_create() {
-		var v = BooleanValue.create();
+		var v = BooleanHolder.create();
 		assertEquals(false, v.get());
 	}
 
 	@Test
 	void a02_of() {
-		var v = BooleanValue.of(true);
+		var v = BooleanHolder.of(true);
 		assertEquals(true, v.get());
 	}
 
 	@Test
 	void a03_constructor() {
-		var v = new BooleanValue(true);
+		var v = new BooleanHolder(true);
 		assertEquals(true, v.get());
 	}
 
 	@Test
 	void a04_constructor_withNull() {
-		var v = new BooleanValue(null);
+		var v = new BooleanHolder(null);
 		assertNull(v.get());
 	}
 
@@ -59,31 +59,31 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void b01_isTrue_whenTrue() {
-		var v = BooleanValue.of(true);
+		var v = BooleanHolder.of(true);
 		assertTrue(v.isTrue());
 		assertFalse(v.isNotTrue());
 	}
 
 	@Test
 	void b02_isTrue_whenFalse() {
-		var v = BooleanValue.of(false);
+		var v = BooleanHolder.of(false);
 		assertFalse(v.isTrue());
 		assertTrue(v.isNotTrue());
 	}
 
 	@Test
 	void b03_isTrue_whenNull() {
-		var v = new BooleanValue(null);
+		var v = new BooleanHolder(null);
 		assertFalse(v.isTrue());
 		assertTrue(v.isNotTrue());
 	}
 
 	@Test
 	void b04_threeStates() {
-		// Test that BooleanValue supports three states: true, false, null
-		var vTrue = BooleanValue.of(true);
-		var vFalse = BooleanValue.of(false);
-		var vNull = new BooleanValue(null);
+		// Test that BooleanHolder supports three states: true, false, null
+		var vTrue = BooleanHolder.of(true);
+		var vFalse = BooleanHolder.of(false);
+		var vNull = new BooleanHolder(null);
 
 		assertTrue(vTrue.get());
 		assertFalse(vFalse.get());
@@ -101,19 +101,19 @@ class BooleanValue_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Inherited Value<Boolean> methods
+	// Inherited Holder<Boolean> methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
 	void c01_set() {
-		var v = BooleanValue.create();
+		var v = BooleanHolder.create();
 		v.set(true);
 		assertEquals(true, v.get());
 	}
 
 	@Test
 	void c02_setIfEmpty() {
-		var v = new BooleanValue(null);
+		var v = new BooleanHolder(null);
 		v.setIfEmpty(true);
 		assertEquals(true, v.get());
 
@@ -123,7 +123,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void c03_orElse() {
-		var v = new BooleanValue(null);
+		var v = new BooleanHolder(null);
 		assertEquals(true, v.orElse(true));
 
 		v.set(false);
@@ -132,14 +132,14 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void c04_map() {
-		var v = BooleanValue.of(true);
-		Value<Boolean> v2 = v.map(x -> !x);
+		var v = BooleanHolder.of(true);
+		Holder<Boolean> v2 = v.map(x -> !x);
 		assertEquals(false, v2.get());
 	}
 
 	@Test
 	void c05_ifPresent() {
-		var v = BooleanValue.of(true);
+		var v = BooleanHolder.of(true);
 		var sb = new StringBuilder();
 		v.ifPresent(sb::append);
 		assertEquals("true", sb.toString());
@@ -147,7 +147,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void c06_isPresent() {
-		var v = new BooleanValue(null);
+		var v = new BooleanHolder(null);
 		assertFalse(v.isPresent());
 
 		v.set(false);
@@ -156,7 +156,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void c07_isEmpty() {
-		var v = new BooleanValue(null);
+		var v = new BooleanHolder(null);
 		assertEmpty(v);
 
 		v.set(true);
@@ -165,14 +165,14 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void c08_getAndSet() {
-		var v = BooleanValue.of(true);
+		var v = BooleanHolder.of(true);
 		assertEquals(true, v.getAndSet(false));
 		assertEquals(false, v.get());
 	}
 
 	@Test
 	void c09_getAndUnset() {
-		var v = BooleanValue.of(true);
+		var v = BooleanHolder.of(true);
 		assertEquals(true, v.getAndUnset());
 		assertNull(v.get());
 	}
@@ -183,7 +183,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void d01_trackingConditionMet() {
-		var found = BooleanValue.of(false);
+		var found = BooleanHolder.of(false);
 
 		l(1, 2, 3, 4, 5).forEach(x -> {
 			if (x > 3) {
@@ -196,7 +196,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void d02_allConditionsMet() {
-		var allValid = BooleanValue.of(true);
+		var allValid = BooleanHolder.of(true);
 
 		l(2, 4, 6, 8, 10).forEach(x -> {
 			if (x % 2 != 0) {
@@ -209,7 +209,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void d03_toggle() {
-		var toggle = BooleanValue.of(false);
+		var toggle = BooleanHolder.of(false);
 
 		// Toggle it 5 times
 		for (var i = 0; i < 5; i++) {
@@ -221,7 +221,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void d04_nullStateTracking() {
-		var state = new BooleanValue(null);
+		var state = new BooleanHolder(null);
 
 		// Uninitialized state (null)
 		assertNull(state.get());
@@ -248,7 +248,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void e01_is_whenTrue() {
-		var v = BooleanValue.of(true);
+		var v = BooleanHolder.of(true);
 		assertTrue(v.is(true));
 		assertFalse(v.is(false));
 		assertFalse(v.is(null));
@@ -256,7 +256,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void e02_is_whenFalse() {
-		var v = BooleanValue.of(false);
+		var v = BooleanHolder.of(false);
 		assertFalse(v.is(true));
 		assertTrue(v.is(false));
 		assertFalse(v.is(null));
@@ -264,7 +264,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void e03_is_whenNull() {
-		var v = new BooleanValue(null);
+		var v = new BooleanHolder(null);
 		assertFalse(v.is(true));
 		assertFalse(v.is(false));
 		assertTrue(v.is(null));
@@ -272,7 +272,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void e04_is_afterSet() {
-		var v = BooleanValue.of(true);
+		var v = BooleanHolder.of(true);
 		assertTrue(v.is(true));
 
 		v.set(false);
@@ -291,7 +291,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void f01_isAny_whenTrue() {
-		var v = BooleanValue.of(true);
+		var v = BooleanHolder.of(true);
 		assertTrue(v.isAny(true, null));
 		assertTrue(v.isAny(true, false));
 		assertTrue(v.isAny(true));
@@ -302,7 +302,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void f02_isAny_whenFalse() {
-		var v = BooleanValue.of(false);
+		var v = BooleanHolder.of(false);
 		assertTrue(v.isAny(false, null));
 		assertTrue(v.isAny(true, false));
 		assertTrue(v.isAny(false));
@@ -313,7 +313,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void f03_isAny_whenNull() {
-		var v = new BooleanValue(null);
+		var v = new BooleanHolder(null);
 		assertTrue(v.isAny((Boolean)null, true));
 		assertTrue(v.isAny(false, (Boolean)null));
 		assertTrue(v.isAny((Boolean)null));
@@ -328,7 +328,7 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void f04_isAny_afterSet() {
-		var v = BooleanValue.of(true);
+		var v = BooleanHolder.of(true);
 		assertTrue(v.isAny(true, false));
 
 		v.set(false);
@@ -342,9 +342,9 @@ class BooleanValue_Test extends TestBase {
 
 	@Test
 	void f05_isAny_allThreeStates() {
-		var vTrue = BooleanValue.of(true);
-		var vFalse = BooleanValue.of(false);
-		var vNull = new BooleanValue(null);
+		var vTrue = BooleanHolder.of(true);
+		var vFalse = BooleanHolder.of(false);
+		var vNull = new BooleanHolder(null);
 
 		// All should match when all three states are provided
 		assertTrue(vTrue.isAny(true, false, null));

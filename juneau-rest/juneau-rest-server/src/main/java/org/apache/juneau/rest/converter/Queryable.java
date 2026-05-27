@@ -136,7 +136,7 @@ public class Queryable implements RestConverter {
 		if (o == null)
 			return null;
 
-		Value<Object> v = Value.of(o);
+		Holder<Object> v = Holder.of(o);
 		RequestQueryParamList params = req.getQueryParams();
 		MarshallingSession bs = req.getMarshallingSession();
 

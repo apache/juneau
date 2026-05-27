@@ -64,13 +64,13 @@ public class ResponseCodeArg implements RestOpArg {
 		} else {
 			c = null;
 		}
-		if (c != Value.class || Value.getParameterType(type) != Integer.class)
-			throw new ArgException(paramInfo, "Type must be Value<Integer> on parameter annotated with @StatusCode annotation");
+		if (c != Holder.class || Holder.getParameterType(type) != Integer.class)
+			throw new ArgException(paramInfo, "Type must be Holder<Integer> on parameter annotated with @StatusCode annotation");
 	}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		var v = new Value<>();
+		var v = new Holder<>();
 		v.listener(o -> opSession.getResponse().setStatus(Integer.parseInt(o.toString())));
 		return v;
 	}

@@ -19,11 +19,11 @@ package org.apache.juneau.commons.lang;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 /**
- * A simple mutable float value.
+ * A simple mutable double value.
  *
  * <p>
- * This class extends {@link Value}&lt;{@link Float}&gt; and provides a convenient way to pass mutable
- * float references to lambdas, inner classes, or methods.
+ * This class extends {@link Holder}&lt;{@link Double}&gt; and provides a convenient way to pass mutable
+ * double references to lambdas, inner classes, or methods.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
@@ -32,12 +32,12 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jc>// Create a float value to track a running sum</jc>
- * 	FloatValue <jv>sum</jv> = FloatValue.<jsm>create</jsm>();
+ * 	<jc>// Create a double value to track a running sum</jc>
+ * 	DoubleHolder <jv>sum</jv> = DoubleHolder.<jsm>create</jsm>();
  *
  * 	<jc>// Use in a lambda to accumulate values</jc>
  * 	list.forEach(<jv>x</jv> -&gt; {
- * 		<jv>sum</jv>.set(<jv>sum</jv>.get() + <jv>x</jv>.floatValue());
+ * 		<jv>sum</jv>.set(<jv>sum</jv>.get() + <jv>x</jv>.doubleValue());
  * 	});
  *
  * 	<jsm>log</jsm>(<js>"Total: "</js> + <jv>sum</jv>.get());
@@ -50,40 +50,40 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class FloatValue extends Value<Float> {
+public class DoubleHolder extends Holder<Double> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_values = "values";
 
 	/**
-	 * Creates a new float value initialized to <c>0.0f</c>.
+	 * Creates a new double value initialized to <c>0.0</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	FloatValue <jv>value</jv> = FloatValue.<jsm>create</jsm>();
-	 * 	<jsm>assertEquals</jsm>(0.0f, <jv>value</jv>.get());
+	 * 	DoubleHolder <jv>value</jv> = DoubleHolder.<jsm>create</jsm>();
+	 * 	<jsm>assertEquals</jsm>(0.0, <jv>value</jv>.get());
 	 * </p>
 	 *
-	 * @return A new float value.
+	 * @return A new double value.
 	 */
-	public static FloatValue create() {
-		return of(0.0f);
+	public static DoubleHolder create() {
+		return of(0.0);
 	}
 
 	/**
-	 * Creates a new float value with the specified initial value.
+	 * Creates a new double value with the specified initial value.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	FloatValue <jv>value</jv> = FloatValue.<jsm>of</jsm>(3.14f);
-	 * 	<jsm>assertEquals</jsm>(3.14f, <jv>value</jv>.get());
+	 * 	DoubleHolder <jv>value</jv> = DoubleHolder.<jsm>of</jsm>(3.14159);
+	 * 	<jsm>assertEquals</jsm>(3.14159, <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @param value The initial value.
-	 * @return A new float value.
+	 * @return A new double value.
 	 */
-	public static FloatValue of(Float value) {
-		return new FloatValue(value);
+	public static DoubleHolder of(Double value) {
+		return new DoubleHolder(value);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class FloatValue extends Value<Float> {
 	 *
 	 * @param value The initial value.
 	 */
-	public FloatValue(Float value) {
+	public DoubleHolder(Double value) {
 		super(value);
 	}
 
@@ -105,19 +105,18 @@ public class FloatValue extends Value<Float> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	FloatValue <jv>value</jv> = FloatValue.<jsm>of</jsm>(3.14f);
-	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(3.14f, 0.01f));    <jc>// Exact match within 0.01</jc>
-	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(3.15f, 0.02f));    <jc>// Within 0.02</jc>
-	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(3.15f, 0.001f));  <jc>// Not within 0.001</jc>
+	 * 	DoubleHolder <jv>value</jv> = DoubleHolder.<jsm>of</jsm>(3.14159);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(3.14, 0.01));      <jc>// Within 0.01</jc>
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(3.14, 0.001));    <jc>// Not within 0.001</jc>
 	 *
 	 * 	<jc>// Handles null values</jc>
-	 * 	FloatValue <jv>empty</jv> = FloatValue.<jsm>create</jsm>();
+	 * 	DoubleHolder <jv>empty</jv> = DoubleHolder.<jsm>create</jsm>();
 	 * 	<jv>empty</jv>.set(<jk>null</jk>);
-	 * 	<jsm>assertFalse</jsm>(<jv>empty</jv>.is(3.14f, 0.01f));   <jc>// Null doesn't match any value</jc>
+	 * 	<jsm>assertFalse</jsm>(<jv>empty</jv>.is(3.14, 0.01));     <jc>// Null doesn't match any value</jc>
 	 *
-	 * 	<jc>// Precision-based comparison</jc>
-	 * 	FloatValue <jv>pi</jv> = FloatValue.<jsm>of</jsm>(3.14159f);
-	 * 	<jsm>assertTrue</jsm>(<jv>pi</jv>.is(3.14f, 0.002f));      <jc>// Within 0.002 precision</jc>
+	 * 	<jc>// Floating-point precision example</jc>
+	 * 	DoubleHolder <jv>calc</jv> = DoubleHolder.<jsm>of</jsm>(0.1 + 0.2);  <jc>// Actually 0.30000000000000004</jc>
+	 * 	<jsm>assertTrue</jsm>(<jv>calc</jv>.is(0.3, 0.000001));    <jc>// Handles rounding errors</jc>
 	 * </p>
 	 *
 	 * @param other The value to compare with.
@@ -125,7 +124,7 @@ public class FloatValue extends Value<Float> {
 	 * @return <jk>true</jk> if the absolute difference between the values is less than or equal to precision.
 	 * @throws IllegalArgumentException if precision is negative.
 	 */
-	public boolean is(float other, float precision) {
+	public boolean is(double other, double precision) {
 		assertArg(precision >= 0, "Precision must be non-negative");
 		var v = get();
 		if (v == null) {
@@ -143,12 +142,12 @@ public class FloatValue extends Value<Float> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	FloatValue <jv>value</jv> = FloatValue.<jsm>of</jsm>(3.14f);
-	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(0.01f, 2.5f, 3.15f, 5.0f));   <jc>// Matches 3.15f within 0.01</jc>
-	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(0.001f, 1.0f, 2.0f, 5.0f));  <jc>// No match within 0.001</jc>
+	 * 	DoubleHolder <jv>value</jv> = DoubleHolder.<jsm>of</jsm>(3.14159);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(0.01, 2.5, 3.15, 5.0));   <jc>// Matches 3.15 within 0.01</jc>
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(0.001, 1.0, 2.0, 5.0));  <jc>// No match within 0.001</jc>
 	 *
 	 * 	<jc>// Empty array returns false</jc>
-	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(0.01f));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(0.01));
 	 * </p>
 	 *
 	 * @param precision The maximum allowed difference for equality. Must be non-negative and is the first parameter.
@@ -156,7 +155,7 @@ public class FloatValue extends Value<Float> {
 	 * @return <jk>true</jk> if the current value matches any of the specified values within the precision.
 	 * @throws IllegalArgumentException if precision is negative.
 	 */
-	public boolean isAny(float precision, float...values) {
+	public boolean isAny(double precision, double...values) {
 		assertArg(precision >= 0, "Precision must be non-negative");
 		assertArgNotNull(ARG_values, values);
 		var v = get();

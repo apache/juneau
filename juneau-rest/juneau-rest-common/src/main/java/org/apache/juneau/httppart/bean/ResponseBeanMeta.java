@@ -118,10 +118,10 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(MethodInfo m, AnnotationWorkList annotations) {
-		if (! (m.hasAnnotation(Response.class) || m.getReturnType().unwrap(Value.class, Optional.class).hasAnnotation(Response.class)))
+		if (! (m.hasAnnotation(Response.class) || m.getReturnType().unwrap(Holder.class, Optional.class).hasAnnotation(Response.class)))
 			return null;
 		var b = new Builder(annotations);
-		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
+		b.apply(m.getReturnType().unwrap(Holder.class, Optional.class).innerType());
 		var ap = AP;
 		rstream(ap.find(Response.class, m)).forEach(x -> b.apply(x.inner()));
 		rstream(ap.find(StatusCode.class, m)).forEach(x -> b.apply(x.inner()));
@@ -139,7 +139,7 @@ public class ResponseBeanMeta {
 		if (! AP.has(Response.class, mpi))
 			return null;
 		var b = new Builder(annotations);
-		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
+		b.apply(mpi.getParameterType().unwrap(Holder.class, Optional.class).innerType());
 		rstream(AP.find(Response.class, mpi)).forEach(x -> b.apply(x.inner()));
 		rstream(AP.find(StatusCode.class, mpi)).forEach(x -> b.apply(x.inner()));
 		return b.build();
@@ -153,7 +153,7 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(Type t, AnnotationWorkList annotations) {
-		var ci = info(t).unwrap(Value.class, Optional.class);
+		var ci = info(t).unwrap(Holder.class, Optional.class);
 		if (! ci.hasAnnotation(Response.class))
 			return null;
 		var b = new Builder(annotations);

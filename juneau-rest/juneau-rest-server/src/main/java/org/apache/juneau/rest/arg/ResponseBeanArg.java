@@ -79,13 +79,13 @@ public class ResponseBeanArg implements RestOpArg {
 		} else {
 			c = null;
 		}
-		if (c != Value.class)
-			throw new ArgException(paramInfo, "Type must be Value<?> on parameter annotated with @Response annotation");
+		if (c != Holder.class)
+			throw new ArgException(paramInfo, "Type must be Holder<?> on parameter annotated with @Response annotation");
 	}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		var v = new Value<>();
+		var v = new Holder<>();
 		v.listener(o -> {
 			RestRequest req = opSession.getRequest();
 			RestResponse res = opSession.getResponse();

@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
  * A simple mutable string value.
  *
  * <p>
- * This class extends {@link Value}&lt;{@link String}&gt; and adds convenience methods for string
+ * This class extends {@link Holder}&lt;{@link String}&gt; and adds convenience methods for string
  * equality testing, which are useful in lambdas and conditional logic.
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -34,7 +34,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a mutable string</jc>
- * 	StringValue <jv>name</jv> = StringValue.<jsm>of</jsm>(<js>"John"</js>);
+ * 	StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"John"</js>);
  *
  * 	<jc>// Check equality</jc>
  * 	<jk>if</jk> (<jv>name</jv>.is(<js>"John"</js>)) {
@@ -54,7 +54,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class StringValue extends Value<String> {
+public class StringHolder extends Holder<String> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_values = "values";
@@ -64,13 +64,13 @@ public class StringValue extends Value<String> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	StringValue <jv>name</jv> = StringValue.<jsm>create</jsm>();
+	 * 	StringHolder <jv>name</jv> = StringHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertNull</jsm>(<jv>name</jv>.get());
 	 * </p>
 	 *
 	 * @return A new string value.
 	 */
-	public static StringValue create() {
+	public static StringHolder create() {
 		return of(null);
 	}
 
@@ -79,21 +79,21 @@ public class StringValue extends Value<String> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	StringValue <jv>name</jv> = StringValue.<jsm>of</jsm>(<js>"Hello"</js>);
+	 * 	StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"Hello"</js>);
 	 * 	<jsm>assertEquals</jsm>(<js>"Hello"</js>, <jv>name</jv>.get());
 	 * </p>
 	 *
 	 * @param value The initial value.
 	 * @return A new string value.
 	 */
-	public static StringValue of(String value) {
-		return new StringValue(value);
+	public static StringHolder of(String value) {
+		return new StringHolder(value);
 	}
 
 	/**
 	 * Constructor.
 	 */
-	public StringValue() {
+	public StringHolder() {
 		super(null);
 	}
 
@@ -102,7 +102,7 @@ public class StringValue extends Value<String> {
 	 *
 	 * @param value The initial value.
 	 */
-	public StringValue(String value) {
+	public StringHolder(String value) {
 		super(value);
 	}
 
@@ -114,12 +114,12 @@ public class StringValue extends Value<String> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	StringValue <jv>name</jv> = StringValue.<jsm>of</jsm>(<js>"John"</js>);
+	 * 	StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"John"</js>);
 	 * 	<jsm>assertTrue</jsm>(<jv>name</jv>.is(<js>"John"</js>));
 	 * 	<jsm>assertFalse</jsm>(<jv>name</jv>.is(<js>"Jane"</js>));
 	 *
 	 * 	<jc>// Handles null safely</jc>
-	 * 	StringValue <jv>empty</jv> = StringValue.<jsm>create</jsm>();
+	 * 	StringHolder <jv>empty</jv> = StringHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertTrue</jsm>(<jv>empty</jv>.is(<jk>null</jk>));
 	 * </p>
 	 *
@@ -139,7 +139,7 @@ public class StringValue extends Value<String> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	StringValue <jv>name</jv> = StringValue.<jsm>of</jsm>(<js>"John"</js>);
+	 * 	StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"John"</js>);
 	 * 	<jsm>assertTrue</jsm>(<jv>name</jv>.isAny(<js>"John"</js>, <js>"Jane"</js>, <js>"Bob"</js>));
 	 * 	<jsm>assertFalse</jsm>(<jv>name</jv>.isAny(<js>"Alice"</js>, <js>"Charlie"</js>));
 	 *

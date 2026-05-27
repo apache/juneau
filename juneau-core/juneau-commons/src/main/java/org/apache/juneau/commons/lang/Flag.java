@@ -33,7 +33,7 @@ import org.apache.juneau.commons.function.*;
  * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link java.util.concurrent.atomic.AtomicBoolean} instead.
  * 	<li class='note'>
  * 		This class supports only two states (<c>true</c>/<c>false</c>). If you need to represent three states
- * 		(<c>true</c>/<c>false</c>/<c>null</c>), use {@link BooleanValue} instead.
+ * 		(<c>true</c>/<c>false</c>/<c>null</c>), use {@link BooleanHolder} instead.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
@@ -56,7 +56,7 @@ import org.apache.juneau.commons.function.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
- * 	<li class='jc'>{@link BooleanValue}
+ * 	<li class='jc'>{@link BooleanHolder}
  * </ul>
  */
 public class Flag {

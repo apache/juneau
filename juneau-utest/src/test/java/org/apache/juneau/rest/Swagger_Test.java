@@ -28,7 +28,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.commons.annotation.ExternalDocs;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.commons.lang.Value;  // Disambiguate vs. org.apache.juneau.commons.inject.Value (added in TODO-79).
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Tag;
@@ -1461,7 +1460,7 @@ class Swagger_Test extends TestBase {
 	@Rest
 	public static class O1a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<O1c> foo) {/* no-op */}
+		public void a(Holder<O1c> foo) {/* no-op */}
 	}
 	@Rest
 	public static class O1b {
@@ -1485,7 +1484,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O2 {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(@StatusCode Value<Integer> foo) {/* no-op */}
+		public void a(@StatusCode Holder<Integer> foo) {/* no-op */}
 	}
 
 	@Test void o02_response_100_description_swaggerOnClass() throws Exception {
@@ -1496,7 +1495,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O3 {
 		@RestGet(path="/path/{foo}/responses/100",swagger=@OpSwagger("responses:{100:{description:'b-100-description'}}"))
-		public void a(@StatusCode Value<Integer> foo) {/* no-op */}
+		public void a(@StatusCode Holder<Integer> foo) {/* no-op */}
 	}
 
 	@Test void o03_response_100_description_swaggerOnMethod() throws Exception {
@@ -1507,7 +1506,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O4a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<O4c> foo) {/* no-op */}
+		public void a(Holder<O4c> foo) {/* no-op */}
 	}
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O4b {
@@ -1529,7 +1528,7 @@ class Swagger_Test extends TestBase {
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O5a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<O5c> foo) {/* no-op */}
+		public void a(Holder<O5c> foo) {/* no-op */}
 	}
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class O5b {
@@ -1555,7 +1554,7 @@ class Swagger_Test extends TestBase {
 	@Rest
 	public static class P1a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<P1c> foo) {/* no-op */}
+		public void a(Holder<P1c> foo) {/* no-op */}
 	}
 	@Rest
 	public static class P1b {
@@ -1579,7 +1578,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P2 {
 		@RestGet(path="/path/{foo}/responses/100")
-		public X a(@StatusCode Value<Integer> foo) {
+		public X a(@StatusCode Holder<Integer> foo) {
 			return null;
 		}
 	}
@@ -1592,7 +1591,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P3 {
 		@RestGet(path="/path/{foo}/responses/100",swagger=@OpSwagger("responses:{100:{headers:{'X-Foo':{description:'c-description',type:'integer',format:'int32'}}}}"))
-		public X a(@StatusCode Value<Integer> foo) {
+		public X a(@StatusCode Holder<Integer> foo) {
 			return null;
 		}
 	}
@@ -1605,7 +1604,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P4a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<P4c> foo) {/* no-op */}
+		public void a(Holder<P4c> foo) {/* no-op */}
 	}
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P4b {
@@ -1627,7 +1626,7 @@ class Swagger_Test extends TestBase {
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P5a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<P5c> foo) {/* no-op */}
+		public void a(Holder<P5c> foo) {/* no-op */}
 	}
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class P5b {
@@ -1653,7 +1652,7 @@ class Swagger_Test extends TestBase {
 	@Rest
 	public static class R1a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<R1c> foo) {/* no-op */}
+		public void a(Holder<R1c> foo) {/* no-op */}
 	}
 	@Rest
 	public static class R1b {
@@ -1677,7 +1676,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R2 {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(@StatusCode Value<Integer> foo) {/* no-op */}
+		public void a(@StatusCode Holder<Integer> foo) {/* no-op */}
 	}
 
 	@Test void r02_response_100_examples_swaggerOnClass() throws Exception {
@@ -1688,7 +1687,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R3 {
 		@RestGet(path="/path/{foo}/responses/100",swagger=@OpSwagger("responses:{100:{examples:{foo:{bar:'c'}}}}"))
-		public void a(@StatusCode Value<Integer> foo) {/* no-op */}
+		public void a(@StatusCode Holder<Integer> foo) {/* no-op */}
 	}
 
 	@Test void r03_response_100_examples_swaggerOnMethod() throws Exception {
@@ -1699,7 +1698,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R4a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<R4c> foo) {/* no-op */}
+		public void a(Holder<R4c> foo) {/* no-op */}
 	}
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R4b {
@@ -1721,7 +1720,7 @@ class Swagger_Test extends TestBase {
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R5a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<R5c> foo) {/* no-op */}
+		public void a(Holder<R5c> foo) {/* no-op */}
 	}
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class R5b {
@@ -1747,7 +1746,7 @@ class Swagger_Test extends TestBase {
 	@Rest
 	public static class S1a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<S1c> foo) {/* no-op */}
+		public void a(Holder<S1c> foo) {/* no-op */}
 	}
 	@Rest
 	public static class S1b {
@@ -1769,7 +1768,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S2 {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(@StatusCode Value<Integer> foo) {/* no-op */}
+		public void a(@StatusCode Holder<Integer> foo) {/* no-op */}
 	}
 
 	@Test void s02_response_100_schema_swaggerOnClass() throws Exception {
@@ -1780,7 +1779,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S3 {
 		@RestGet(path="/path/{foo}/responses/100",swagger=@OpSwagger("responses:{100:{schema:{$ref:'c'}}}}"))
-		public void a(@StatusCode Value<Integer> foo) {/* no-op */}
+		public void a(@StatusCode Holder<Integer> foo) {/* no-op */}
 	}
 
 	@Test void s03_response_100_schema_swaggerOnMethoe() throws Exception {
@@ -1791,7 +1790,7 @@ class Swagger_Test extends TestBase {
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S4a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<S4c> foo) {/* no-op */}
+		public void a(Holder<S4c> foo) {/* no-op */}
 	}
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S4b {
@@ -1813,7 +1812,7 @@ class Swagger_Test extends TestBase {
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S5a {
 		@RestGet(path="/path/{foo}/responses/100")
-		public void a(Value<S5c> foo) {/* no-op */}
+		public void a(Holder<S5c> foo) {/* no-op */}
 	}
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class S5b {

@@ -2614,8 +2614,8 @@ public class HttpPartSchema {
 		Builder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
 			if (t instanceof Class<?> c2) {
 				rstream(AP.find(c, info(c2))).forEach(x -> apply(x.inner()));
-			} else if (Value.isType(t)) {
-				apply(c, Value.getParameterType(t));
+			} else if (Holder.isType(t)) {
+				apply(c, Holder.getParameterType(t));
 			}
 			return this;
 		}

@@ -27,7 +27,7 @@ class ResponseStatus_Test extends TestBase {
 	@Rest
 	public static class A {
 		@RestGet
-		public void a(@StatusCode Value<Integer> status) {
+		public void a(@StatusCode Holder<Integer> status) {
 			status.set(202);
 		}
 	}

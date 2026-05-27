@@ -19,31 +19,33 @@ package org.apache.juneau.commons.lang;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.concurrent.atomic.*;
+
 /**
- * A simple mutable byte value.
+ * A simple mutable short value.
  *
  * <p>
- * This class extends {@link Value}&lt;{@link Byte}&gt; and adds convenience methods for incrementing,
- * decrementing, and testing byte values, which are useful in lambdas and byte manipulation operations.
+ * This class extends {@link Holder}&lt;{@link Short}&gt; and adds a convenience method for incrementing
+ * the value, which is useful for counting operations in lambdas and loops.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
- * 		This class is <b>not thread-safe</b>. For concurrent access, use synchronization or atomic classes.
+ * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link AtomicInteger} instead.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a counter</jc>
- * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>create</jsm>();
+ * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>create</jsm>();
  *
- * 	<jc>// Use in a lambda to count items</jc>
+ * 	<jc>// Use in a lambda to count valid items</jc>
  * 	list.forEach(<jv>x</jv> -&gt; {
  * 		<jk>if</jk> (<jv>x</jv>.isValid()) {
- * 			<jv>counter</jv>.increment();
+ * 			<jv>counter</jv>.getAndIncrement();
  * 		}
  * 	});
  *
- * 	<jsm>log</jsm>(<js>"Count: "</js> + <jv>counter</jv>.get());
+ * 	<jsm>log</jsm>(<js>"Valid items: "</js> + <jv>counter</jv>.get());
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -53,47 +55,40 @@ import static org.apache.juneau.commons.utils.Utils.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class ByteValue extends Value<Byte> {
+public class ShortHolder extends Holder<Short> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_values = "values";
 
 	/**
-	 * Creates a new byte value initialized to <c>0</c>.
+	 * Creates a new short value initialized to <c>0</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>create</jsm>();
+	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>(0, <jv>counter</jv>.get());
 	 * </p>
 	 *
-	 * @return A new byte value.
+	 * @return A new short value.
 	 */
-	public static ByteValue create() {
-		return of((byte)0);
+	public static ShortHolder create() {
+		return of((short)0);
 	}
 
 	/**
-	 * Creates a new byte value with the specified initial value.
+	 * Creates a new short value with the specified initial value.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ByteValue <jv>value</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)42);
-	 * 	<jsm>assertEquals</jsm>(42, <jv>value</jv>.get());
+	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)42);
+	 * 	<jsm>assertEquals</jsm>(42, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @param value The initial value.
-	 * @return A new byte value.
+	 * @return A new short value.
 	 */
-	public static ByteValue of(Byte value) {
-		return new ByteValue(value);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public ByteValue() {
-		super((byte)0);
+	public static ShortHolder of(Short value) {
+		return new ShortHolder(value);
 	}
 
 	/**
@@ -101,8 +96,8 @@ public class ByteValue extends Value<Byte> {
 	 *
 	 * @param value The initial value.
 	 */
-	public ByteValue(Byte value) {
-		super(value == null ? 0 : value);
+	public ShortHolder(Short value) {
+		super(value);
 	}
 
 	/**
@@ -110,16 +105,17 @@ public class ByteValue extends Value<Byte> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ByteValue <jv>value</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)10);
-	 * 	<jv>value</jv>.add((<jk>byte</jk>)5);
+	 * 	ShortHolder <jv>value</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)10);
+	 * 	<jv>value</jv>.add((<jk>short</jk>)5);
 	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @param x The value to add.
 	 * @return This object.
 	 */
-	public ByteValue add(Byte x) {
-		set((byte)(get() + (x == null ? 0 : x)));
+	public ShortHolder add(Short x) {
+		var v = get();
+		set((short)((v == null ? 0 : v) + (x == null ? 0 : x)));
 		return this;
 	}
 
@@ -128,17 +124,19 @@ public class ByteValue extends Value<Byte> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ByteValue <jv>value</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)10);
-	 * 	<jk>byte</jk> <jv>result</jv> = <jv>value</jv>.addAndGet((<jk>byte</jk>)5);  <jc>// Returns 15</jc>
+	 * 	ShortHolder <jv>value</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)10);
+	 * 	<jk>short</jk> <jv>result</jv> = <jv>value</jv>.addAndGet((<jk>short</jk>)5);  <jc>// Returns 15</jc>
 	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @param x The value to add.
 	 * @return The new value after addition.
 	 */
-	public Byte addAndGet(Byte x) {
-		set((byte)(get() + (x == null ? 0 : x)));
-		return get();
+	public Short addAndGet(Short x) {
+		var v = get();
+		var result = (short)((v == null ? 0 : v) + (x == null ? 0 : x));
+		set(result);
+		return result;
 	}
 
 	/**
@@ -146,15 +144,16 @@ public class ByteValue extends Value<Byte> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
+	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
 	 * 	<jv>counter</jv>.decrement();
 	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return This object.
 	 */
-	public ByteValue decrement() {
-		set((byte)(get() - 1));
+	public ShortHolder decrement() {
+		var v = get();
+		set((short)((v == null ? 0 : v) - 1));
 		return this;
 	}
 
@@ -163,16 +162,36 @@ public class ByteValue extends Value<Byte> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
-	 * 	<jk>byte</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
+	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	<jk>short</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
 	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return The decremented value.
 	 */
-	public Byte decrementAndGet() {
-		set((byte)(get() - 1));
-		return get();
+	public Short decrementAndGet() {
+		var v = get();
+		var result = (short)((v == null ? 0 : v) - 1);
+		set(result);
+		return result;
+	}
+
+	/**
+	 * Returns the current value and then increments it.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	<jk>short</jk> <jv>current</jv> = <jv>counter</jv>.getAndIncrement();  <jc>// Returns 5</jc>
+	 * 	<jk>short</jk> <jv>next</jv> = <jv>counter</jv>.get();                <jc>// Returns 6</jc>
+	 * </p>
+	 *
+	 * @return The value before it was incremented.
+	 */
+	public short getAndIncrement() {
+		var v = get();
+		set(v == null ? 1 : (short)(v + 1));
+		return v == null ? 0 : v;
 	}
 
 	/**
@@ -180,15 +199,16 @@ public class ByteValue extends Value<Byte> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
+	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
 	 * 	<jv>counter</jv>.increment();
 	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return This object.
 	 */
-	public ByteValue increment() {
-		set((byte)(get() + 1));
+	public ShortHolder increment() {
+		var v = get();
+		set((short)((v == null ? 0 : v) + 1));
 		return this;
 	}
 
@@ -197,16 +217,18 @@ public class ByteValue extends Value<Byte> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ByteValue <jv>counter</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
-	 * 	<jk>byte</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
+	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	<jk>short</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
 	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return The incremented value.
 	 */
-	public Byte incrementAndGet() {
-		set((byte)(get() + 1));
-		return get();
+	public Short incrementAndGet() {
+		var v = get();
+		var result = (short)((v == null ? 0 : v) + 1);
+		set(result);
+		return result;
 	}
 
 	/**
@@ -217,16 +239,16 @@ public class ByteValue extends Value<Byte> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ByteValue <jv>value</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)42);
-	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is((<jk>byte</jk>)42));
-	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is((<jk>byte</jk>)43));
+	 * 	ShortHolder <jv>value</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)42);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is((<jk>short</jk>)42));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is((<jk>short</jk>)43));
 	 * </p>
 	 *
 	 * @param value The value to compare to.
 	 * @return <jk>true</jk> if the current value is equal to the specified value.
 	 */
 	@Override
-	public boolean is(Byte value) {
+	public boolean is(Short value) {
 		return eq(get(), value);
 	}
 
@@ -238,15 +260,15 @@ public class ByteValue extends Value<Byte> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	ByteValue <jv>value</jv> = ByteValue.<jsm>of</jsm>((<jk>byte</jk>)5);
-	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny((<jk>byte</jk>)3, (<jk>byte</jk>)5, (<jk>byte</jk>)7));
-	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny((<jk>byte</jk>)1, (<jk>byte</jk>)2));
+	 * 	ShortHolder <jv>value</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny((<jk>short</jk>)3, (<jk>short</jk>)5, (<jk>short</jk>)7));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny((<jk>short</jk>)1, (<jk>short</jk>)2));
 	 * </p>
 	 *
 	 * @param values The values to compare to.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
-	public boolean isAny(Byte...values) {
+	public boolean isAny(Short...values) {
 		assertArgNotNull(ARG_values, values);
 		var current = get();
 		for (var value : values)

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class StringValue_Test extends TestBase {
+class StringHolder_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -30,34 +30,34 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void a01_create() {
-		var a = StringValue.create();
+		var a = StringHolder.create();
 		assertNull(a.get());
 		assertFalse(a.isPresent());
 	}
 
 	@Test
 	void a02_of() {
-		var a = StringValue.of("Hello");
+		var a = StringHolder.of("Hello");
 		assertEquals("Hello", a.get());
 		assertTrue(a.isPresent());
 	}
 
 	@Test
 	void a03_of_null() {
-		var a = StringValue.of(null);
+		var a = StringHolder.of(null);
 		assertNull(a.get());
 		assertFalse(a.isPresent());
 	}
 
 	@Test
 	void a04_constructor_default() {
-		var a = new StringValue();
+		var a = new StringHolder();
 		assertNull(a.get());
 	}
 
 	@Test
 	void a05_constructor_withValue() {
-		var a = new StringValue("Test");
+		var a = new StringHolder("Test");
 		assertEquals("Test", a.get());
 	}
 
@@ -67,26 +67,26 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void b01_is_match() {
-		var a = StringValue.of("John");
+		var a = StringHolder.of("John");
 		assertTrue(a.is("John"));
 	}
 
 	@Test
 	void b02_is_noMatch() {
-		var a = StringValue.of("John");
+		var a = StringHolder.of("John");
 		assertFalse(a.is("Jane"));
 	}
 
 	@Test
 	void b03_is_null() {
-		var a = StringValue.create();
+		var a = StringHolder.create();
 		assertTrue(a.is(null));
 		assertFalse(a.is("something"));
 	}
 
 	@Test
 	void b04_is_nullArg() {
-		var a = StringValue.of("John");
+		var a = StringHolder.of("John");
 		assertFalse(a.is(null));
 	}
 
@@ -96,31 +96,31 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void c01_isAny_match() {
-		var a = StringValue.of("John");
+		var a = StringHolder.of("John");
 		assertTrue(a.isAny("John", "Jane", "Bob"));
 	}
 
 	@Test
 	void c02_isAny_noMatch() {
-		var a = StringValue.of("John");
+		var a = StringHolder.of("John");
 		assertFalse(a.isAny("Alice", "Charlie"));
 	}
 
 	@Test
 	void c03_isAny_empty() {
-		var a = StringValue.of("John");
+		var a = StringHolder.of("John");
 		assertFalse(a.isAny());
 	}
 
 	@Test
 	void c04_isAny_withNull() {
-		var a = StringValue.create();
+		var a = StringHolder.create();
 		assertTrue(a.isAny("John", null, "Jane"));
 	}
 
 	@Test
 	void c05_isAny_allNull() {
-		var a = StringValue.create();
+		var a = StringHolder.create();
 		assertTrue(a.isAny((String)null));
 	}
 
@@ -130,21 +130,21 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void d01_setIf_true() {
-		var a = StringValue.of("old");
+		var a = StringHolder.of("old");
 		a.setIf(true, "new");
 		assertEquals("new", a.get());
 	}
 
 	@Test
 	void d02_setIf_false() {
-		var a = StringValue.of("old");
+		var a = StringHolder.of("old");
 		a.setIf(false, "new");
 		assertEquals("old", a.get());
 	}
 
 	@Test
 	void d03_setIf_chain() {
-		var a = StringValue.of("start");
+		var a = StringHolder.of("start");
 		a.setIf(false, "skip1").setIf(true, "set").setIf(false, "skip2");
 		assertEquals("set", a.get());
 	}
@@ -155,28 +155,28 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void e01_update_basic() {
-		var a = StringValue.of("hello");
+		var a = StringHolder.of("hello");
 		a.update(String::toUpperCase);
 		assertEquals("HELLO", a.get());
 	}
 
 	@Test
 	void e02_update_null() {
-		var a = StringValue.create();
+		var a = StringHolder.create();
 		a.update(String::toUpperCase);
 		assertNull(a.get());  // Should be no-op
 	}
 
 	@Test
 	void e03_update_chain() {
-		var a = StringValue.of("hello");
+		var a = StringHolder.of("hello");
 		a.update(String::toUpperCase).update(s -> s + "!");
 		assertEquals("HELLO!", a.get());
 	}
 
 	@Test
 	void e04_update_withTrim() {
-		var a = StringValue.of("  spaces  ");
+		var a = StringHolder.of("  spaces  ");
 		a.update(String::trim);
 		assertEquals("spaces", a.get());
 	}
@@ -187,14 +187,14 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void f01_set() {
-		var a = StringValue.create();
+		var a = StringHolder.create();
 		a.set("Value");
 		assertEquals("Value", a.get());
 	}
 
 	@Test
 	void f02_setIfEmpty() {
-		var a = StringValue.of("existing");
+		var a = StringHolder.of("existing");
 		a.setIfEmpty("new");
 		assertEquals("existing", a.get());  // Should not change
 
@@ -205,7 +205,7 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void f03_getAndSet() {
-		var a = StringValue.of("old");
+		var a = StringHolder.of("old");
 		var b = a.getAndSet("new");
 		assertEquals("old", b);
 		assertEquals("new", a.get());
@@ -213,7 +213,7 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void f04_getAndUnset() {
-		var a = StringValue.of("value");
+		var a = StringHolder.of("value");
 		var b = a.getAndUnset();
 		assertEquals("value", b);
 		assertNull(a.get());
@@ -222,7 +222,7 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void f05_orElse() {
-		var a = StringValue.of("value");
+		var a = StringHolder.of("value");
 		assertEquals("value", a.orElse("default"));
 
 		a.set(null);
@@ -231,7 +231,7 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void f06_map() {
-		var a = StringValue.of("test");
+		var a = StringHolder.of("test");
 		var b = a.map(s -> s.length());
 		assertEquals(4, b.get());
 
@@ -246,7 +246,7 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void g01_trackLastValue() {
-		var a = StringValue.create();
+		var a = StringHolder.create();
 
 		var list = l("a", "b", "c", "d", "e");
 		list.forEach(a::set);
@@ -256,7 +256,7 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void g02_conditionalUpdate() {
-		var a = StringValue.create();
+		var a = StringHolder.create();
 
 		var list = l("apple", "banana", "apricot", "avocado");
 		list.forEach(x -> a.setIf(x.startsWith("a"), x));
@@ -266,7 +266,7 @@ class StringValue_Test extends TestBase {
 
 	@Test
 	void g03_transformationPipeline() {
-		var a = StringValue.of("  hello world  ");
+		var a = StringHolder.of("  hello world  ");
 		a.update(String::trim)
 			.update(String::toUpperCase)
 			.update(s -> s.replace(" ", "_"));

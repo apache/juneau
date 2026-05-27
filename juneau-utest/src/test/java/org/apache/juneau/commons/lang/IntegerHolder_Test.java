@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class IntegerValue_Test extends TestBase {
+class IntegerHolder_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -31,34 +31,34 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void a01_create() {
-		var a = IntegerValue.create();
+		var a = IntegerHolder.create();
 		assertEquals(0, a.get());
 		assertTrue(a.isPresent());
 	}
 
 	@Test
 	void a02_of() {
-		var a = IntegerValue.of(42);
+		var a = IntegerHolder.of(42);
 		assertEquals(42, a.get());
 		assertTrue(a.isPresent());
 	}
 
 	@Test
 	void a03_of_null() {
-		var a = IntegerValue.of(null);
+		var a = IntegerHolder.of(null);
 		assertEquals(0, a.get());
 		assertTrue(a.isPresent());
 	}
 
 	@Test
 	void a04_constructor_default() {
-		var a = new IntegerValue();
+		var a = new IntegerHolder();
 		assertEquals(0, a.get());
 	}
 
 	@Test
 	void a05_constructor_withValue() {
-		var a = new IntegerValue(100);
+		var a = new IntegerHolder(100);
 		assertEquals(100, a.get());
 	}
 
@@ -68,21 +68,21 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void b01_getAndIncrement_basic() {
-		var a = IntegerValue.of(5);
+		var a = IntegerHolder.of(5);
 		assertEquals(5, a.getAndIncrement());
 		assertEquals(6, a.get());
 	}
 
 	@Test
 	void b02_getAndIncrement_fromZero() {
-		var a = IntegerValue.create();
+		var a = IntegerHolder.create();
 		assertEquals(0, a.getAndIncrement());
 		assertEquals(1, a.get());
 	}
 
 	@Test
 	void b03_getAndIncrement_multiple() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		assertEquals(10, a.getAndIncrement());
 		assertEquals(11, a.getAndIncrement());
 		assertEquals(12, a.getAndIncrement());
@@ -91,7 +91,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void b04_getAndIncrement_withNull() {
-		var a = new IntegerValue();
+		var a = new IntegerHolder();
 		a.set(null);
 		assertEquals(0, a.getAndIncrement());
 		assertEquals(1, a.get());
@@ -103,105 +103,105 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void b05_increment() {
-		var a = IntegerValue.of(5);
+		var a = IntegerHolder.of(5);
 		a.increment();
 		assertEquals(6, a.get());
 	}
 
 	@Test
 	void b06_decrement() {
-		var a = IntegerValue.of(5);
+		var a = IntegerHolder.of(5);
 		a.decrement();
 		assertEquals(4, a.get());
 	}
 
 	@Test
 	void b07_incrementAndGet() {
-		var a = IntegerValue.of(5);
+		var a = IntegerHolder.of(5);
 		assertEquals(6, a.incrementAndGet());
 		assertEquals(6, a.get());
 	}
 
 	@Test
 	void b08_decrementAndGet() {
-		var a = IntegerValue.of(5);
+		var a = IntegerHolder.of(5);
 		assertEquals(4, a.decrementAndGet());
 		assertEquals(4, a.get());
 	}
 
 	@Test
 	void b09_add() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		a.add(5);
 		assertEquals(15, a.get());
 	}
 
 	@Test
 	void b09b_add_null() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		a.add(null);
 		assertEquals(10, a.get()); // null should be treated as 0
 	}
 
 	@Test
 	void b09c_add_negative() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		a.add(-3);
 		assertEquals(7, a.get());
 	}
 
 	@Test
 	void b09d_add_zero() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		a.add(0);
 		assertEquals(10, a.get());
 	}
 
 	@Test
 	void b09e_add_chain() {
-		var a = IntegerValue.of(0);
+		var a = IntegerHolder.of(0);
 		a.add(5).add(10).add(15);
 		assertEquals(30, a.get());
 	}
 
 	@Test
 	void b10_addAndGet() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		assertEquals(15, a.addAndGet(5));
 		assertEquals(15, a.get());
 	}
 
 	@Test
 	void b10b_addAndGet_null() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		assertEquals(10, a.addAndGet(null)); // null should be treated as 0
 		assertEquals(10, a.get());
 	}
 
 	@Test
 	void b10c_addAndGet_negative() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		assertEquals(7, a.addAndGet(-3));
 		assertEquals(7, a.get());
 	}
 
 	@Test
 	void b10d_addAndGet_zero() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		assertEquals(10, a.addAndGet(0));
 		assertEquals(10, a.get());
 	}
 
 	@Test
 	void b11_is() {
-		var a = IntegerValue.of(42);
+		var a = IntegerHolder.of(42);
 		assertTrue(a.is(42));
 		assertFalse(a.is(43));
 	}
 
 	@Test
 	void b12_isAny() {
-		var a = IntegerValue.of(5);
+		var a = IntegerHolder.of(5);
 		assertTrue(a.isAny(3, 5, 7));
 		assertFalse(a.isAny(1, 2));
 	}
@@ -212,14 +212,14 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void c01_set() {
-		var a = IntegerValue.create();
+		var a = IntegerHolder.create();
 		a.set(99);
 		assertEquals(99, a.get());
 	}
 
 	@Test
 	void c02_setIfEmpty() {
-		var a = IntegerValue.of(5);
+		var a = IntegerHolder.of(5);
 		a.setIfEmpty(10);
 		assertEquals(5, a.get());  // Should not change
 
@@ -230,7 +230,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void c03_getAndUnset() {
-		var a = IntegerValue.of(42);
+		var a = IntegerHolder.of(42);
 		var b = a.getAndUnset();
 		assertEquals(42, b);
 		assertNull(a.get());
@@ -239,7 +239,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void c04_isPresent_isEmpty() {
-		var a = IntegerValue.of(5);
+		var a = IntegerHolder.of(5);
 		assertTrue(a.isPresent());
 		assertNotEmpty(a);
 
@@ -250,7 +250,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void c05_orElse() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		assertEquals(10, a.orElse(999));
 
 		a.set(null);
@@ -259,7 +259,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void c06_orElseGet() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		assertEquals(10, a.orElseGet(() -> 999));
 
 		a.set(null);
@@ -268,7 +268,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void c07_orElseThrow() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		assertEquals(10, a.orElseThrow(() -> new RuntimeException("error")));
 
 		a.set(null);
@@ -277,7 +277,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void c08_ifPresent() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		var b = Flag.create();
 
 		a.ifPresent(x -> b.set());
@@ -291,7 +291,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void c09_map() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		var b = a.map(x -> x * 2);
 		assertEquals(20, b.get());
 
@@ -303,7 +303,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void c10_setIf() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		a.setIf(true, 20);
 		assertEquals(20, a.get());
 
@@ -313,7 +313,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void c11_update() {
-		var a = IntegerValue.of(10);
+		var a = IntegerHolder.of(10);
 		a.update(x -> x * 2);
 		assertEquals(20, a.get());
 
@@ -328,7 +328,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void d01_counterInLambda() {
-		var a = IntegerValue.create();
+		var a = IntegerHolder.create();
 
 		var list = l("a", "b", "c", "d", "e");
 		list.forEach(x -> a.getAndIncrement());
@@ -338,7 +338,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void d02_conditionalCounting() {
-		var a = IntegerValue.create();
+		var a = IntegerHolder.create();
 
 		l(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
 			if (x % 2 == 0) {
@@ -351,8 +351,8 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void d03_multipleCounters() {
-		var a = IntegerValue.create();
-		var b = IntegerValue.create();
+		var a = IntegerHolder.create();
+		var b = IntegerHolder.create();
 
 		l(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
 			if (x % 2 == 0) {
@@ -368,7 +368,7 @@ class IntegerValue_Test extends TestBase {
 
 	@Test
 	void d04_resetAndReuse() {
-		var a = IntegerValue.of(100);
+		var a = IntegerHolder.of(100);
 		assertEquals(100, a.get());
 
 		a.set(0);

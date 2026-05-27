@@ -385,7 +385,7 @@ public class RequestHeaderList extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeader getLast(String name) {
 		assertArgNotNull(ARG_name, name);
-		var v = Value.<RequestHeader>empty();
+		var v = Holder.<RequestHeader>empty();
 		stream(name).forEach(v::set);
 		return v.orElseGet(() -> new RequestHeader(req, name, null).parser(parser));
 	}

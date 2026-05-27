@@ -546,8 +546,8 @@ import org.apache.juneau.xml.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Interested in multiple values.</jc>
- * 	Value&lt;Integer&gt; <jv>statusCode</jv> = Value.<jsm>create</jsm>();
- * 	Value&lt;String&gt; <jv>reasonPhrase</jv> = Value.<jsm>create</jsm>();
+ * 	Holder&lt;Integer&gt; <jv>statusCode</jv> = Holder.<jsm>create</jsm>();
+ * 	Holder&lt;String&gt; <jv>reasonPhrase</jv> = Holder.<jsm>create</jsm>();
  *
  * 	<jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode(<jv>statusCode</jv>).getReasonPhrase(<jv>reasonPhrase</jv>);
  * 	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+<jv>statusCode</jv>.get()+<js>", reasonPhrase="</js>+<jv>reasonPhrase</jv>.get());

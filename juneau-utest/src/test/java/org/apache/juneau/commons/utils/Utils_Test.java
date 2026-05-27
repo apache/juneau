@@ -1109,7 +1109,7 @@ class Utils_Test extends TestBase {
 		assertEquals("test", unwrap(supplier));
 
 		// Test with Value
-		var value = Value.of("test");
+		var value = Holder.of("test");
 		assertEquals("test", unwrap(value));
 
 		// Test with Optional

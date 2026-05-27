@@ -51,7 +51,7 @@ class Swagger_Response_Test extends TestBase {
 			public A1(String x){}
 		}
 		@RestGet
-		public void a(Value<A1> r) { /* no-op */ }
+		public void a(Holder<A1> r) { /* no-op */ }
 		@RestPut
 		public A1 b() {return null;}
 
@@ -64,7 +64,7 @@ class Swagger_Response_Test extends TestBase {
 			public A2(String x){}
 		}
 		@RestPost
-		public void c(Value<A2> r) { /* no-op */ }
+		public void c(Holder<A2> r) { /* no-op */ }
 		@RestDelete
 		public A2 d() {return null;}
 
@@ -77,28 +77,28 @@ class Swagger_Response_Test extends TestBase {
 			public A3(String x){}
 		}
 		@RestOp
-		public void e(Value<A3> r) { /* no-op */ }
+		public void e(Holder<A3> r) { /* no-op */ }
 		@RestOp
 		public A3 f() {return null;}
 
 		@Response @StatusCode(100)
 		public static class A4 {}
 		@RestOp
-		public void g(Value<A4> r) { /* no-op */ }
+		public void g(Holder<A4> r) { /* no-op */ }
 		@RestOp
 		public A4 h() {return null;}
 
 		@Response @StatusCode(100)
 		public static class A5 {}
 		@RestOp
-		public void i(Value<A5> r) { /* no-op */ }
+		public void i(Holder<A5> r) { /* no-op */ }
 		@RestOp
 		public A5 j() {return null;}
 
 		@Response(headers=@Header(name="foo",schema=@Schema(type="object")))
 		public static class A6 {}
 		@RestOp
-		public void k(Value<A6> r) { /* no-op */ }
+		public void k(Holder<A6> r) { /* no-op */ }
 		@RestOp
 		public A6 l() {return null;}
 	}
@@ -149,7 +149,7 @@ class Swagger_Response_Test extends TestBase {
 		@Response(schema=@Schema(type="number"))
 		public static class B1 {}
 		@RestGet
-		public void a(Value<B1> r) { /* no-op */ }
+		public void a(Holder<B1> r) { /* no-op */ }
 		@RestPut
 		public B1 b() {return null;}
 
@@ -158,7 +158,7 @@ class Swagger_Response_Test extends TestBase {
 			public String f1;
 		}
 		@RestPost
-		public void c(Value<B2> b) { /* no-op */ }
+		public void c(Holder<B2> b) { /* no-op */ }
 		@RestDelete
 		public B2 d() {return null;}
 
@@ -167,14 +167,14 @@ class Swagger_Response_Test extends TestBase {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestOp
-		public void e(Value<B3> b) { /* no-op */ }
+		public void e(Holder<B3> b) { /* no-op */ }
 		@RestOp
 		public B3 f() {return null;}
 
 		@Response
 		public static class B4 {}
 		@RestOp
-		public void g(Value<B4> b) { /* no-op */ }
+		public void g(Holder<B4> b) { /* no-op */ }
 		@RestOp
 		public B4 h() {return null;}
 	}
@@ -214,7 +214,7 @@ class Swagger_Response_Test extends TestBase {
 			public String f1;
 		}
 		@RestGet
-		public void a(Value<C1> r) { /* no-op */ }
+		public void a(Holder<C1> r) { /* no-op */ }
 		@RestPut
 		public C1 b() {return null;}
 
@@ -223,7 +223,7 @@ class Swagger_Response_Test extends TestBase {
 			public C2(String x){}
 		}
 		@RestPost
-		public void c(Value<C2> r) { /* no-op */ }
+		public void c(Holder<C2> r) { /* no-op */ }
 		@RestDelete
 		public C2 d() {return null;}
 	}

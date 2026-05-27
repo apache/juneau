@@ -92,7 +92,7 @@ class Response_Test extends TestBase {
 			throw new B2();
 		}
 		@RestGet
-		public void d(@Response Value<String> value) {
+		public void d(@Response Holder<String> value) {
 			value.set("foo");
 		}
 	}
@@ -162,11 +162,11 @@ class Response_Test extends TestBase {
 			throw new D4();
 		}
 		@RestGet
-		public void g(@Response(schema=@Schema(collectionFormat="pipes")) Value<String[]> value) {
+		public void g(@Response(schema=@Schema(collectionFormat="pipes")) Holder<String[]> value) {
 			value.set(CollectionUtils.a("foo","bar"));
 		}
 		@RestGet
-		public void h(@Response(schema=@Schema(type="string",format="byte")) Value<byte[]> value) {
+		public void h(@Response(schema=@Schema(type="string",format="byte")) Holder<byte[]> value) {
 			value.set("foo".getBytes());
 		}
 	}
@@ -242,11 +242,11 @@ class Response_Test extends TestBase {
 	@Rest
 	public static class E {
 		@RestGet
-		public void a(@Response Value<E1> body) {
+		public void a(@Response Holder<E1> body) {
 			body.set(new E1());
 		}
 		@RestGet
-		public void b(Value<E2> body) {
+		public void b(Holder<E2> body) {
 			body.set(new E2());
 		}
 		@RestGet
@@ -298,11 +298,11 @@ class Response_Test extends TestBase {
 	@Rest(serializers=Json5Serializer.class)
 	public static class G {
 		@RestGet
-		public void a(@Response Value<List<Integer>> body) {
+		public void a(@Response Holder<List<Integer>> body) {
 			body.set(l(1,2));
 		}
 		@RestGet
-		public void b(Value<G1> body) {
+		public void b(Holder<G1> body) {
 			body.set(new G1());
 		}
 		@RestGet

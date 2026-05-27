@@ -104,7 +104,7 @@ public class BuilderSwap<T,B> {
 		"java:S1452"   // Wildcard required - BuilderSwap<?,?> for dynamically discovered builder types
 	})
 	public static BuilderSwap<?,?> findSwapFromObjectClass(MarshallingContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {
-		var builderClass = Value.<Class<?>>empty();
+		var builderClass = Holder.<Class<?>>empty();
 		MethodInfo objectCreateMethod;
 		MethodInfo builderCreateMethod;
 		ConstructorInfo objectConstructor = null;

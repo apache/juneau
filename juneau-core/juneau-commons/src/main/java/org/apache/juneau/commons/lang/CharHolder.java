@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
  * A simple mutable character value.
  *
  * <p>
- * This class extends {@link Value}&lt;{@link Character}&gt; and provides a convenient way to pass mutable
+ * This class extends {@link Holder}&lt;{@link Character}&gt; and provides a convenient way to pass mutable
  * character references to lambdas, inner classes, or methods.
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -34,7 +34,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a character value to track the last character seen</jc>
- * 	CharValue <jv>lastChar</jv> = CharValue.<jsm>create</jsm>();
+ * 	CharHolder <jv>lastChar</jv> = CharHolder.<jsm>create</jsm>();
  *
  * 	<jc>// Use in a lambda to track state</jc>
  * 	charStream.forEach(<jv>ch</jv> -&gt; {
@@ -53,7 +53,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class CharValue extends Value<Character> {
+public class CharHolder extends Holder<Character> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_values = "values";
@@ -63,13 +63,13 @@ public class CharValue extends Value<Character> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>create</jsm>();
+	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>('\0', <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @return A new character value.
 	 */
-	public static CharValue create() {
+	public static CharHolder create() {
 		return of('\0');
 	}
 
@@ -78,15 +78,15 @@ public class CharValue extends Value<Character> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jsm>assertEquals</jsm>('A', <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @param value The initial value.
 	 * @return A new character value.
 	 */
-	public static CharValue of(Character value) {
-		return new CharValue(value);
+	public static CharHolder of(Character value) {
+		return new CharHolder(value);
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class CharValue extends Value<Character> {
 	 *
 	 * @param value The initial value.
 	 */
-	public CharValue(Character value) {
+	public CharHolder(Character value) {
 		super(value);
 	}
 
@@ -103,7 +103,7 @@ public class CharValue extends Value<Character> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jv>value</jv>.add((<jk>char</jk>)5);
 	 * 	<jsm>assertEquals</jsm>('F', <jv>value</jv>.get());
 	 * </p>
@@ -111,7 +111,7 @@ public class CharValue extends Value<Character> {
 	 * @param x The value to add.
 	 * @return This object.
 	 */
-	public CharValue add(Character x) {
+	public CharHolder add(Character x) {
 		var v = get();
 		set((char)((v == null ? 0 : v) + (x == null ? 0 : x)));
 		return this;
@@ -122,7 +122,7 @@ public class CharValue extends Value<Character> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.addAndGet((<jk>char</jk>)5);  <jc>// Returns 'F'</jc>
 	 * 	<jsm>assertEquals</jsm>('F', <jv>value</jv>.get());
 	 * </p>
@@ -142,14 +142,14 @@ public class CharValue extends Value<Character> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
+	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('B');
 	 * 	<jv>value</jv>.decrement();
 	 * 	<jsm>assertEquals</jsm>('A', <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @return This object.
 	 */
-	public CharValue decrement() {
+	public CharHolder decrement() {
 		var v = get();
 		set((char)((v == null ? 0 : v) - 1));
 		return this;
@@ -160,7 +160,7 @@ public class CharValue extends Value<Character> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
+	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('B');
 	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.decrementAndGet();  <jc>// Returns 'A'</jc>
 	 * 	<jsm>assertEquals</jsm>('A', <jv>value</jv>.get());
 	 * </p>
@@ -179,14 +179,14 @@ public class CharValue extends Value<Character> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jv>value</jv>.increment();
 	 * 	<jsm>assertEquals</jsm>('B', <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @return This object.
 	 */
-	public CharValue increment() {
+	public CharHolder increment() {
 		var v = get();
 		set((char)((v == null ? 0 : v) + 1));
 		return this;
@@ -197,7 +197,7 @@ public class CharValue extends Value<Character> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.incrementAndGet();  <jc>// Returns 'B'</jc>
 	 * 	<jsm>assertEquals</jsm>('B', <jv>value</jv>.get());
 	 * </p>
@@ -219,7 +219,7 @@ public class CharValue extends Value<Character> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is('A'));
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is('B'));
 	 * </p>
@@ -240,7 +240,7 @@ public class CharValue extends Value<Character> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
+	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('B');
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny('A', 'B', 'C'));
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny('X', 'Y'));
 	 * </p>
@@ -262,7 +262,7 @@ public class CharValue extends Value<Character> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
+	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('B');
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(<js>"ABC"</js>));
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(<js>"XYZ"</js>));
 	 *

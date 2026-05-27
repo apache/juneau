@@ -65,7 +65,7 @@ public class RemoteOperationReturn {
 		if (rt.is(void.class) || rt.is(Void.class)) {
 			rv = RemoteReturn.NONE;
 		} else {
-			Value<RemoteReturn> v = Value.of(RemoteReturn.BODY);
+			Holder<RemoteReturn> v = Holder.of(RemoteReturn.BODY);
 			al.forEach(ai -> ai.getValue(RemoteReturn.class, "returns").ifPresent(v::set));
 			rv = v.get();
 		}

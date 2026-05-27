@@ -223,7 +223,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
 		var m = new TreeMap<Integer,Object>();
-		var i = IntegerValue.create();
+		var i = IntegerHolder.create();
 		c.forEach(o -> m.put(i.getAndIncrement(), o));
 		return m;
 	}
@@ -399,7 +399,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 	private SerializerWriter serializeStreamableAsCollectionMap(UonWriter out, Object o, ClassMeta<?> sType) throws SerializeException {
 		var addAmp = Flag.create();
-		var i = IntegerValue.create();
+		var i = IntegerHolder.create();
 		forEachStreamableEntry(o, sType, v -> {
 			addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 			out.append(i.getAndIncrement()).append('=');

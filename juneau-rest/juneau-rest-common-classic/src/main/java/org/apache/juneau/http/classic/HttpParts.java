@@ -50,28 +50,28 @@ public class HttpParts {
 	private HttpParts() {}
 
 	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
-		var n = Value.<String>empty();
+		var n = Holder.<String>empty();
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> ne(y.value()), y -> n.set(y.value()));
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> ne(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> QUERY_NAME_FUNCTION = x -> {
-		var n = Value.<String>empty();
+		var n = Holder.<String>empty();
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> ne(y.value()), y -> n.set(y.value()));
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> ne(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> FORMDATA_NAME_FUNCTION = x -> {
-		var n = Value.<String>empty();
+		var n = Holder.<String>empty();
 		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> ne(y.value()), y -> n.set(y.value()));
 		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> ne(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> PATH_NAME_FUNCTION = x -> {
-		var n = Value.<String>empty();
+		var n = Holder.<String>empty();
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> ne(y.value()), y -> n.set(y.value()));
 		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> ne(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);

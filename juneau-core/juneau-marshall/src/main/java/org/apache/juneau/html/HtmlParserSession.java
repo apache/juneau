@@ -270,8 +270,8 @@ public class HtmlParserSession extends XmlParserSession {
 		String href = r.getAttributeValue(null, "href");
 		String name = getElementText(r);
 		if (nn(beanType) && getAnnotationProvider().has(HtmlLink.class, beanType)) {
-			var uriProperty = Value.<String>empty();
-			var nameProperty = Value.<String>empty();
+			var uriProperty = Holder.<String>empty();
+			var nameProperty = Holder.<String>empty();
 			beanType.forEachAnnotation(HtmlLink.class, x -> ne(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
 			beanType.forEachAnnotation(HtmlLink.class, x -> ne(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
 			BeanMap<T> m = newBeanMap(beanType.inner());

@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.*;
  * A simple mutable boolean value.
  *
  * <p>
- * This class extends {@link Value}&lt;{@link Boolean}&gt; and provides a convenient way to pass mutable
+ * This class extends {@link Holder}&lt;{@link Boolean}&gt; and provides a convenient way to pass mutable
  * boolean references to lambdas, inner classes, or methods. Unlike {@link Flag}, this class supports three
  * states: <c>true</c>, <c>false</c>, and <c>null</c>.
  *
@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a boolean value to track if a condition was met</jc>
- * 	BooleanValue <jv>found</jv> = BooleanValue.<jsm>create</jsm>();
+ * 	BooleanHolder <jv>found</jv> = BooleanHolder.<jsm>create</jsm>();
  *
  * 	<jc>// Use in a lambda</jc>
  * 	list.forEach(<jv>x</jv> -&gt; {
@@ -62,7 +62,7 @@ import java.util.concurrent.atomic.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class BooleanValue extends Value<Boolean> {
+public class BooleanHolder extends Holder<Boolean> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_values = "values";
@@ -72,13 +72,13 @@ public class BooleanValue extends Value<Boolean> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>create</jsm>();
+	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>(<jk>false</jk>, <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @return A new boolean value.
 	 */
-	public static BooleanValue create() {
+	public static BooleanHolder create() {
 		return of(false);
 	}
 
@@ -87,15 +87,15 @@ public class BooleanValue extends Value<Boolean> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>of</jsm>(<jk>true</jk>);
+	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jsm>assertEquals</jsm>(<jk>true</jk>, <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @param value The initial value.
 	 * @return A new boolean value.
 	 */
-	public static BooleanValue of(Boolean value) {
-		return new BooleanValue(value);
+	public static BooleanHolder of(Boolean value) {
+		return new BooleanHolder(value);
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class BooleanValue extends Value<Boolean> {
 	 *
 	 * @param value The initial value.
 	 */
-	public BooleanValue(Boolean value) {
+	public BooleanHolder(Boolean value) {
 		super(value);
 	}
 
@@ -115,12 +115,12 @@ public class BooleanValue extends Value<Boolean> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>of</jsm>(<jk>true</jk>);
+	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(<jk>true</jk>));
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(<jk>false</jk>));
 	 *
 	 * 	<jc>// Handles null safely</jc>
-	 * 	BooleanValue <jv>empty</jv> = BooleanValue.<jsm>of</jsm>(<jk>null</jk>);
+	 * 	BooleanHolder <jv>empty</jv> = BooleanHolder.<jsm>of</jsm>(<jk>null</jk>);
 	 * 	<jsm>assertTrue</jsm>(<jv>empty</jv>.is(<jk>null</jk>));
 	 * </p>
 	 *
@@ -140,7 +140,7 @@ public class BooleanValue extends Value<Boolean> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>of</jsm>(<jk>true</jk>);
+	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(<jk>true</jk>, <jk>null</jk>));
 	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(<jk>false</jk>));
 	 * </p>
@@ -162,7 +162,7 @@ public class BooleanValue extends Value<Boolean> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>of</jsm>(<jk>false</jk>);
+	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>false</jk>);
 	 * 	<jk>if</jk> (<jv>value</jv>.isNotTrue()) {
 	 * 		<jsm>log</jsm>(<js>"Value is not true"</js>);
 	 * 	}
@@ -177,7 +177,7 @@ public class BooleanValue extends Value<Boolean> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>of</jsm>(<jk>true</jk>);
+	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jk>if</jk> (<jv>value</jv>.isTrue()) {
 	 * 		<jsm>log</jsm>(<js>"Value is true"</js>);
 	 * 	}

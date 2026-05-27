@@ -1063,7 +1063,7 @@ public class AnnotationProvider {
 				l.addAll(find(element2.getDeclaringClass(), a(PARENTS)));
 			}
 			if (t.contains(RETURN_TYPE)) {
-				l.addAll(find(element2.getReturnType().unwrap(Value.class, Optional.class), a(PARENTS)));
+				l.addAll(find(element2.getReturnType().unwrap(Holder.class, Optional.class), a(PARENTS)));
 			}
 			if (t.contains(PACKAGE) && element2.getDeclaringClass().getPackage() != null)
 				l.addAll(element2.getDeclaringClass().getPackage().getAnnotations());
@@ -1087,7 +1087,7 @@ public class AnnotationProvider {
 				}
 			}
 			if (t.contains(PARAMETER_TYPE)) {
-				l.addAll(find(element2.getParameterType().unwrap(Value.class, Optional.class), a(PARENTS, PACKAGE)));
+				l.addAll(find(element2.getParameterType().unwrap(Holder.class, Optional.class), a(PARENTS, PACKAGE)));
 			}
 		}
 

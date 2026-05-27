@@ -37,7 +37,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.commons.lang.Value;  // Disambiguate vs. org.apache.juneau.commons.inject.Value (added in TODO-79).
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -180,11 +179,11 @@ public class ClassInfo_Test extends TestBase {
 
 	public class A1 {}
 
-	public class A2 extends Value<A1> {}
+	public class A2 extends Holder<A1> {}
 
-	public class A3 extends Value<Map<String,List<String>>> {}
+	public class A3 extends Holder<Map<String,List<String>>> {}
 
-	public class A4 extends Value<Map<String,String[][]>> {}
+	public class A4 extends Holder<Map<String,String[][]>> {}
 
 	public static Type aType, pType, pTypeDimensional, pTypeGeneric, pTypeGenericArg;
 	static {
@@ -203,7 +202,7 @@ public class ClassInfo_Test extends TestBase {
 			return null;
 		}
 
-		public Value<A1> m2(Value<A1> bar) {
+		public Holder<A1> m2(Holder<A1> bar) {
 			return null;
 		}
 	}
@@ -1301,7 +1300,7 @@ public class ClassInfo_Test extends TestBase {
 
 		// Test line 1112: inner == null && ! isParameterizedType (branch 3)
 		// Create a ClassInfo with inner == null and innerType being a TypeVariable (not ParameterizedType)
-		// aType is a TypeVariable from A2 extends Value<A1>
+		// aType is a TypeVariable from A2 extends Holder<A1>
 		// By explicitly passing null for inner, we ensure inner == null
 		// TypeVariable is not a ParameterizedType, so isParameterizedType == false
 		var typeVariableInfo = ClassInfo.of((Class<?>)null, aType);
@@ -3468,16 +3467,16 @@ public class ClassInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a106_unwrap() {
-		check("A1", of(A1.class).unwrap(Value.class));
-		check("A1", of(A2.class).unwrap(Value.class));
+		check("A1", of(A1.class).unwrap(Holder.class));
+		check("A1", of(A2.class).unwrap(Holder.class));
 
 		// Test unwrap on parameter types
 		var mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m1")).get();
 		check("A1", mi2.getParameter(0).getParameterType().unwrap(Optional.class));
 		check("A1", mi2.getReturnType().unwrap(Optional.class));
 		mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m2")).get();
-		check("A1", mi2.getParameter(0).getParameterType().unwrap(Value.class));
-		check("A1", mi2.getReturnType().unwrap(Value.class));
+		check("A1", mi2.getParameter(0).getParameterType().unwrap(Holder.class));
+		check("A1", mi2.getReturnType().unwrap(Holder.class));
 
 		// Test unwrap with ParameterizedType (line 2382)
 		// Create a ParameterizedType directly
@@ -3518,19 +3517,19 @@ public class ClassInfo_Test extends TestBase {
 		assertSame(ciEmpty, ciEmpty.unwrap(Optional.class));
 
 		// Test unwrap with Class that extends wrapper (line 2387, 2388)
-		// A2 extends Value<A1>, so unwrap should work
+		// A2 extends Holder<A1>, so unwrap should work
 		// This covers: innerType instanceof Class<?> is true, innerType3 != parameterizedType is true, isAssignableFrom is true
-		check("A1", of(A2.class).unwrap(Value.class));
+		check("A1", of(A2.class).unwrap(Holder.class));
 
 		// Test unwrap with Class that doesn't extend wrapper (line 2388 - false branch)
 		// A1 doesn't extend Value, so unwrap should return itself
 		// This covers: innerType instanceof Class<?> is true, innerType3 != parameterizedType is true, isAssignableFrom is false
-		assertSame(of(A1.class), of(A1.class).unwrap(Value.class));
+		assertSame(of(A1.class), of(A1.class).unwrap(Holder.class));
 
 		// Test unwrap when innerType3 == parameterizedType (line 2388 - false branch of !=)
-		// When unwrapping Value.class from Value.class itself, innerType3 == parameterizedType, so should return itself
+		// When unwrapping Holder.class from Holder.class itself, innerType3 == parameterizedType, so should return itself
 		// This covers: innerType instanceof Class<?> is true, innerType3 != parameterizedType is false (short-circuit)
-		assertSame(of(Value.class), of(Value.class).unwrap(Value.class));
+		assertSame(of(Holder.class), of(Holder.class).unwrap(Holder.class));
 
 		// Test unwrap when innerType is not a Class<?> (line 2387 - false branch)
 		// When innerType is a ParameterizedType, the else if branch is not entered

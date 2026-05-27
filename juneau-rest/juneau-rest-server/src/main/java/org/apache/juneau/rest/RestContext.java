@@ -22,6 +22,7 @@ import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.commons.inject.BeanAnnotation;
 import org.apache.juneau.commons.inject.BeanInstantiator;
 import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.Value;
 import org.apache.juneau.commons.inject.WritableBeanStore;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
@@ -846,7 +847,7 @@ public class RestContext extends Context {
 	 * work is applied before the builder is used by any other memoizer.
 	 */
 	private final Memoizer<MarshallingContext.Builder> beanContextBuilder = memoizer(() -> {
-		var v = Value.of(MarshallingContext.create());
+		var v = Holder.of(MarshallingContext.create());
 		v.get().apply(annotationWork);
 		return v.get();
 	});
@@ -866,11 +867,11 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<Config> rawConfig = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.<Config>empty();
+		var v = Holder.<Config>empty();
 		// Bootstrap VarResolver is registered under PROP_bootstrapVarResolver during construction; the
 		// unnamed VarResolver slot is reserved for the full runtime resolver default supplier.
 		var vr = bs.getBean(VarResolver.class, PROP_bootstrapVarResolver).orElseGet(this::getBootstrapVarResolver);
-		var cfv = Value.<String>empty();
+		var cfv = Holder.<String>empty();
 		rstream(AnnotationProvider.INSTANCE.find(Rest.class, info(resourceClass()))).map(x -> x.inner().config()).filter(Utils::ne).forEach(x -> cfv.set(vr.resolve(x)));
 		var cf = cfv.orElse("");
 		if (v.isEmpty() && "SYSTEM_DEFAULT".equals(cf))
@@ -897,7 +898,7 @@ public class RestContext extends Context {
 	// @formatter:off
 	private final Memoizer<VarResolver> bootstrapVarResolver = memoizer(() -> {
 		var bs = beanStore();
-		Value<VarResolver> v = Value.of(
+		Holder<VarResolver> v = Holder.of(
 			VarResolver.create()
 				.defaultVars()
 				.defaultFunctions()
@@ -983,63 +984,63 @@ public class RestContext extends Context {
 	//---------------------------------------------------------------------------------------------
 
 	/** Env-driven default for {@code @Rest(debugDefault)}; consumed by the {@link #debugEnablement} memoizer. */
-	@org.apache.juneau.commons.inject.Value("${RestContext.debugDefault:}")
+	@Value("${RestContext.debugDefault:}")
 	private String defaultDebugDefault;
 
 	/** Env-driven default for the call-logger debug level fallback in the {@link #debugConfig} memoizer. */
-	@org.apache.juneau.commons.inject.Value("${juneau.restLogger.level:INFO}")
+	@Value("${juneau.restLogger.level:INFO}")
 	private String defaultDebugLevel;
 
 	/** Env-driven default for {@code @Rest(allowedHeaderParams)}. */
-	@org.apache.juneau.commons.inject.Value("${RestContext.allowedHeaderParams:Accept,Content-Type}")
+	@Value("${RestContext.allowedHeaderParams:Accept,Content-Type}")
 	private String defaultAllowedHeaderParams;
 
 	/** Env-driven default for {@code @Rest(allowedMethodHeaders)}. */
-	@org.apache.juneau.commons.inject.Value("${RestContext.allowedMethodHeaders:}")
+	@Value("${RestContext.allowedMethodHeaders:}")
 	private String defaultAllowedMethodHeaders;
 
 	/** Env-driven default for {@code @Rest(allowedMethodParams)}. */
-	@org.apache.juneau.commons.inject.Value("${RestContext.allowedMethodParams:HEAD,OPTIONS}")
+	@Value("${RestContext.allowedMethodParams:HEAD,OPTIONS}")
 	private String defaultAllowedMethodParams;
 
 	/** Env-driven default for {@code @Rest(disableContentParam)}. */
-	@org.apache.juneau.commons.inject.Value("${RestContext.disableContentParam:false}")
+	@Value("${RestContext.disableContentParam:false}")
 	private boolean defaultDisableContentParam;
 
 	/** Env-driven default for {@code @Rest(renderResponseStackTraces)}. */
-	@org.apache.juneau.commons.inject.Value("${RestContext.renderResponseStackTraces:false}")
+	@Value("${RestContext.renderResponseStackTraces:false}")
 	private boolean defaultRenderResponseStackTraces;
 
 	/** Env-driven default for {@code @Rest(problemDetails)}. */
-	@org.apache.juneau.commons.inject.Value("${RestContext.problemDetails:false}")
+	@Value("${RestContext.problemDetails:false}")
 	private boolean defaultProblemDetails;
 
 	/** Env-driven default for {@code @Rest(virtualThreads)}. */
-	@org.apache.juneau.commons.inject.Value("${RestContext.virtualThreads:false}")
+	@Value("${RestContext.virtualThreads:false}")
 	private boolean defaultVirtualThreads;
 
 	/** Env-driven default for {@code @Rest(eagerInit)}. */
-	@org.apache.juneau.commons.inject.Value("${RestContext.eagerInit:false}")
+	@Value("${RestContext.eagerInit:false}")
 	private boolean defaultEagerInit;
 
 	/** Env-driven default for {@code @Rest(clientVersionHeader)}. */
-	@org.apache.juneau.commons.inject.Value("${RestContext.clientVersionHeader:Client-Version}")
+	@Value("${RestContext.clientVersionHeader:Client-Version}")
 	private String defaultClientVersionHeader;
 
 	/** Env-driven default for {@code @Rest(uriRelativity)}; resolves to empty string when unset (treated as "no default"). */
-	@org.apache.juneau.commons.inject.Value("${RestContext.uriRelativity:}")
+	@Value("${RestContext.uriRelativity:}")
 	private String defaultUriRelativity;
 
 	/** Env-driven default for {@code @Rest(uriAuthority)}; {@link Optional#empty()} when unset (preserves null-vs-empty distinction). */
-	@org.apache.juneau.commons.inject.Value("${RestContext.uriAuthority}")
+	@Value("${RestContext.uriAuthority}")
 	private Optional<String> defaultUriAuthority;
 
 	/** Env-driven default for {@code @Rest(uriContext)}; {@link Optional#empty()} when unset (preserves null-vs-empty distinction). */
-	@org.apache.juneau.commons.inject.Value("${RestContext.uriContext}")
+	@Value("${RestContext.uriContext}")
 	private Optional<String> defaultUriContext;
 
 	/** Env-driven default for {@code @Rest(uriResolution)}; resolves to empty string when unset (treated as "no default"). */
-	@org.apache.juneau.commons.inject.Value("${RestContext.uriResolution:}")
+	@Value("${RestContext.uriResolution:}")
 	private String defaultUriResolution;
 
 	/**
@@ -1138,7 +1139,7 @@ public class RestContext extends Context {
 	 * the accumulated result.
 	 */
 	private final Memoizer<NamedAttributeMap> defaultRequestAttributes = memoizer(() -> {
-		var v = Value.of(NamedAttributeMap.create());
+		var v = Holder.of(NamedAttributeMap.create());
 		getRestAnnotationsTopDown().forEach(ai -> Arrays.stream(ai.inner().defaultRequestAttributes())
 			.filter(StringUtils::isNotBlank)
 			.map(this::resolve)
@@ -1158,7 +1159,7 @@ public class RestContext extends Context {
 	 * override or {@code @Bean} factory method REPLACES the accumulated result.
 	 */
 	private final Memoizer<HttpHeaderList> defaultRequestHeaders = memoizer(() -> {
-		var v = Value.of(HttpHeaderList.create());
+		var v = Holder.of(HttpHeaderList.create());
 		getRestAnnotationsTopDown().forEach(ai -> {
 			Rest a = ai.inner();
 			Arrays.stream(a.defaultRequestHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(HttpStringHeader::ofPair).forEach(v.get()::setDefault);
@@ -1181,7 +1182,7 @@ public class RestContext extends Context {
 	 * override or {@code @Bean} factory method REPLACES the accumulated result.
 	 */
 	private final Memoizer<HttpHeaderList> defaultResponseHeaders = memoizer(() -> {
-		var v = Value.of(HttpHeaderList.create());
+		var v = Holder.of(HttpHeaderList.create());
 		getRestAnnotationsTopDown().forEach(ai -> Arrays.stream(ai.inner().defaultResponseHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(HttpStringHeader::ofPair).forEach(v.get()::setDefault));
 		beanStore().createBeanFromMethod(HttpHeaderList.class, resource().get(), x -> isBeanMethod(x, PROP_defaultResponseHeaders), v.get()).ifPresent(v::set);
 		return v.get();
@@ -1192,7 +1193,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<LifecycleInvokerPair> destroyInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
-		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestDestroy.class).toList()));
+		var v = Holder.of(MethodList.of(getAnnotatedMethods(resource(), RestDestroy.class).toList()));
 		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "destroyMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	}));
@@ -1209,7 +1210,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<EncoderSet.Builder> encodersBuilder = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(EncoderSet.create(bs));
+		var v = Holder.of(EncoderSet.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_encoders).forEach(ai -> v.get().add(ai.inner().encoders()));
 		bs.createBeanFromMethod(EncoderSet.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
@@ -1225,7 +1226,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<LifecycleInvokerPair> endCallInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
-		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestEndCall.class).toList()));
+		var v = Holder.of(MethodList.of(getAnnotatedMethods(resource(), RestEndCall.class).toList()));
 		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "endCallMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	}));
@@ -1235,7 +1236,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<JsonSchemaGenerator.Builder> jsonSchemaGeneratorBuilder = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(JsonSchemaGenerator.create());
+		var v = Holder.of(JsonSchemaGenerator.create());
 		bs.createBeanFromMethod(JsonSchemaGenerator.class, resource().get(), RestContext::isBeanMethod).ifPresent(x -> v.get().impl(x));
 		v.get().apply(annotationWork);
 		return v.get();
@@ -1254,7 +1255,7 @@ public class RestContext extends Context {
 	 * {@code @Bean} factory method REPLACES the default.
 	 */
 	private final Memoizer<Logger> logger = memoizer(() -> {
-		var v = Value.of(Logger.getLogger(cn(resourceClass())));
+		var v = Holder.of(Logger.getLogger(cn(resourceClass())));
 		beanStore().createBeanFromMethod(Logger.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(v::set);
 		return v.get();
 	});
@@ -1305,7 +1306,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<ParserSet.Builder> parsersBuilder = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(ParserSet.create(bs));
+		var v = Holder.of(ParserSet.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_parsers).forEach(ai -> v.get().add(ai.inner().parsers()));
 		bs.createBeanFromMethod(ParserSet.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
@@ -1321,7 +1322,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<HttpPartParser.Creator> partParserCreator = memoizer(() -> {
 		var bs = beanStore();
-		Value<HttpPartParser.Creator> v = Value.of(HttpPartParser.creator().type(OpenApiParser.class));
+		Holder<HttpPartParser.Creator> v = Holder.of(HttpPartParser.creator().type(OpenApiParser.class));
 		opt(resource().get() instanceof HttpPartParser x ? x : null).ifPresent(x -> v.get().impl(x));
 		bs.createBeanFromMethod(HttpPartParser.class, resource().get(), RestContext::isBeanMethod).ifPresent(x -> v.get().impl(x));
 		v.get().apply(annotationWork);
@@ -1350,7 +1351,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<HttpPartSerializer.Creator> partSerializerCreator = memoizer(() -> {
 		var bs = beanStore();
-		Value<HttpPartSerializer.Creator> v = Value.of(HttpPartSerializer.creator().type(OpenApiSerializer.class));
+		Holder<HttpPartSerializer.Creator> v = Holder.of(HttpPartSerializer.creator().type(OpenApiSerializer.class));
 		opt(resource().get() instanceof HttpPartSerializer x ? x : null).ifPresent(x -> v.get().impl(x));
 		bs.createBeanFromMethod(HttpPartSerializer.class, resource().get(), RestContext::isBeanMethod).ifPresent(x -> v.get().impl(x));
 		v.get().apply(annotationWork);
@@ -1379,7 +1380,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<MethodList> postCallMethods = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestPostCall.class).toList()));
+		var v = Holder.of(MethodList.of(getAnnotatedMethods(resource(), RestPostCall.class).toList()));
 		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "postCallMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	});
@@ -1411,7 +1412,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<LifecycleInvokerPair> postInitChildFirstInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
-		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestPostInit.class)
+		var v = Holder.of(MethodList.of(getAnnotatedMethods(resource(), RestPostInit.class)
 			.filter(m -> rstream(AnnotationProvider.INSTANCE.find(RestPostInit.class, MethodInfo.of(m))).map(AnnotationInfo::inner).anyMatch(RestPostInit::childFirst))
 			.toList()));
 		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "postInitChildFirstMethods"), v.get()).ifPresent(v::set);
@@ -1423,7 +1424,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<LifecycleInvokerPair> postInitInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
-		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestPostInit.class)
+		var v = Holder.of(MethodList.of(getAnnotatedMethods(resource(), RestPostInit.class)
 			.filter(m -> rstream(AnnotationProvider.INSTANCE.find(RestPostInit.class, MethodInfo.of(m))).map(AnnotationInfo::inner).anyMatch(x -> !x.childFirst()))
 			.toList()));
 		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "postInitMethods"), v.get()).ifPresent(v::set);
@@ -1435,7 +1436,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<MethodList> preCallMethods = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestPreCall.class).toList()));
+		var v = Holder.of(MethodList.of(getAnnotatedMethods(resource(), RestPreCall.class).toList()));
 		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "preCallMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	});
@@ -1534,7 +1535,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<SerializerSet.Builder> serializersBuilder = memoizer(() -> {
 		var bs = beanStore();
-		var v = Value.of(SerializerSet.create(bs));
+		var v = Holder.of(SerializerSet.create(bs));
 		getRestAnnotationsForProperty(PROPERTY_serializers).forEach(ai -> v.get().add(ai.inner().serializers()));
 		bs.createBeanFromMethod(SerializerSet.class, resource().get(), RestContext::isBeanMethod, v.get()).ifPresent(x -> v.get().impl(x));
 		return v.get();
@@ -1550,7 +1551,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<LifecycleInvokerPair> startCallInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
-		var v = Value.of(MethodList.of(getAnnotatedMethods(resource(), RestStartCall.class).toList()));
+		var v = Holder.of(MethodList.of(getAnnotatedMethods(resource(), RestStartCall.class).toList()));
 		bs.createBeanFromMethod(MethodList.class, resource().get(), x -> isBeanMethod(x, "startCallMethods"), v.get()).ifPresent(v::set);
 		return v.get();
 	}));

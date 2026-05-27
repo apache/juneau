@@ -19,22 +19,24 @@ package org.apache.juneau.commons.lang;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.concurrent.atomic.*;
+
 /**
- * A simple mutable integer value.
+ * A simple mutable long value.
  *
  * <p>
- * This class extends {@link Value}&lt;{@link Integer}&gt; and adds a convenience method for incrementing
+ * This class extends {@link Holder}&lt;{@link Long}&gt; and adds a convenience method for incrementing
  * the value, which is useful for counting operations in lambdas and loops.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>
- * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link java.util.concurrent.atomic.AtomicInteger} instead.
+ * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link AtomicLong} instead.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a counter</jc>
- * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>create</jsm>();
+ * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>create</jsm>();
  *
  * 	<jc>// Use in a lambda to count valid items</jc>
  * 	list.forEach(<jv>x</jv> -&gt; {
@@ -53,47 +55,40 @@ import static org.apache.juneau.commons.utils.Utils.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class IntegerValue extends Value<Integer> {
+public class LongHolder extends Holder<Long> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_values = "values";
 
 	/**
-	 * Creates a new integer value initialized to <c>0</c>.
+	 * Creates a new long value initialized to <c>0</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>create</jsm>();
-	 * 	<jsm>assertEquals</jsm>(0, <jv>counter</jv>.get());
+	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>create</jsm>();
+	 * 	<jsm>assertEquals</jsm>(0L, <jv>counter</jv>.get());
 	 * </p>
 	 *
-	 * @return A new integer value.
+	 * @return A new long value.
 	 */
-	public static IntegerValue create() {
-		return of(0);
+	public static LongHolder create() {
+		return of(0L);
 	}
 
 	/**
-	 * Creates a new integer value with the specified initial value.
+	 * Creates a new long value with the specified initial value.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(42);
-	 * 	<jsm>assertEquals</jsm>(42, <jv>counter</jv>.get());
+	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(42L);
+	 * 	<jsm>assertEquals</jsm>(42L, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @param value The initial value.
-	 * @return A new integer value.
+	 * @return A new long value.
 	 */
-	public static IntegerValue of(Integer value) {
-		return new IntegerValue(value);
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public IntegerValue() {
-		super(0);
+	public static LongHolder of(Long value) {
+		return new LongHolder(value);
 	}
 
 	/**
@@ -101,8 +96,8 @@ public class IntegerValue extends Value<Integer> {
 	 *
 	 * @param value The initial value.
 	 */
-	public IntegerValue(Integer value) {
-		super(value == null ? 0 : value);
+	public LongHolder(Long value) {
+		super(value);
 	}
 
 	/**
@@ -110,16 +105,17 @@ public class IntegerValue extends Value<Integer> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(10);
-	 * 	<jv>value</jv>.add(5);
-	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
+	 * 	LongHolder <jv>value</jv> = LongHolder.<jsm>of</jsm>(10L);
+	 * 	<jv>value</jv>.add(5L);
+	 * 	<jsm>assertEquals</jsm>(15L, <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @param x The value to add.
 	 * @return This object.
 	 */
-	public IntegerValue add(Integer x) {
-		set(get() + (x == null ? 0 : x));
+	public LongHolder add(Long x) {
+		var v = get();
+		set((v == null ? 0L : v) + (x == null ? 0L : x));
 		return this;
 	}
 
@@ -128,17 +124,19 @@ public class IntegerValue extends Value<Integer> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(10);
-	 * 	<jk>int</jk> <jv>result</jv> = <jv>value</jv>.addAndGet(5);  <jc>// Returns 15</jc>
-	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
+	 * 	LongHolder <jv>value</jv> = LongHolder.<jsm>of</jsm>(10L);
+	 * 	<jk>long</jk> <jv>result</jv> = <jv>value</jv>.addAndGet(5L);  <jc>// Returns 15L</jc>
+	 * 	<jsm>assertEquals</jsm>(15L, <jv>value</jv>.get());
 	 * </p>
 	 *
 	 * @param x The value to add.
 	 * @return The new value after addition.
 	 */
-	public Integer addAndGet(Integer x) {
-		set(get() + (x == null ? 0 : x));
-		return get();
+	public Long addAndGet(Long x) {
+		var v = get();
+		var result = (v == null ? 0L : v) + (x == null ? 0L : x);
+		set(result);
+		return result;
 	}
 
 	/**
@@ -146,15 +144,16 @@ public class IntegerValue extends Value<Integer> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
+	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(5L);
 	 * 	<jv>counter</jv>.decrement();
-	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * 	<jsm>assertEquals</jsm>(4L, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return This object.
 	 */
-	public IntegerValue decrement() {
-		set(get() - 1);
+	public LongHolder decrement() {
+		var v = get();
+		set((v == null ? 0L : v) - 1L);
 		return this;
 	}
 
@@ -163,38 +162,36 @@ public class IntegerValue extends Value<Integer> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
-	 * 	<jk>int</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
-	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(5L);
+	 * 	<jk>long</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4L</jc>
+	 * 	<jsm>assertEquals</jsm>(4L, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return The decremented value.
 	 */
-	public Integer decrementAndGet() {
-		set(get() - 1);
-		return get();
+	public Long decrementAndGet() {
+		var v = get();
+		var result = (v == null ? 0L : v) - 1L;
+		set(result);
+		return result;
 	}
 
 	/**
 	 * Returns the current value and then increments it.
 	 *
-	 * <p>
-	 * This is a convenience method commonly used for counting operations in lambdas and loops.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
-	 * 	<jk>int</jk> <jv>current</jv> = <jv>counter</jv>.getAndIncrement();  <jc>// Returns 5</jc>
-	 * 	<jk>int</jk> <jv>next</jv> = <jv>counter</jv>.get();                <jc>// Returns 6</jc>
+	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(5L);
+	 * 	<jk>long</jk> <jv>current</jv> = <jv>counter</jv>.getAndIncrement();  <jc>// Returns 5L</jc>
+	 * 	<jk>long</jk> <jv>next</jv> = <jv>counter</jv>.get();                <jc>// Returns 6L</jc>
 	 * </p>
 	 *
 	 * @return The value before it was incremented.
 	 */
-	public Integer getAndIncrement() {
+	public long getAndIncrement() {
 		var v = get();
-		var result = v == null ? 0 : v;
-		set(result + 1);
-		return result;
+		set(v == null ? 1L : v + 1L);
+		return v == null ? 0L : v;
 	}
 
 	/**
@@ -202,15 +199,16 @@ public class IntegerValue extends Value<Integer> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
+	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(5L);
 	 * 	<jv>counter</jv>.increment();
-	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
+	 * 	<jsm>assertEquals</jsm>(6L, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return This object.
 	 */
-	public IntegerValue increment() {
-		set(get() + 1);
+	public LongHolder increment() {
+		var v = get();
+		set((v == null ? 0L : v) + 1L);
 		return this;
 	}
 
@@ -219,16 +217,18 @@ public class IntegerValue extends Value<Integer> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
-	 * 	<jk>int</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
-	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
+	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(5L);
+	 * 	<jk>long</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6L</jc>
+	 * 	<jsm>assertEquals</jsm>(6L, <jv>counter</jv>.get());
 	 * </p>
 	 *
 	 * @return The incremented value.
 	 */
-	public Integer incrementAndGet() {
-		set(get() + 1);
-		return get();
+	public Long incrementAndGet() {
+		var v = get();
+		var result = (v == null ? 0L : v) + 1L;
+		set(result);
+		return result;
 	}
 
 	/**
@@ -239,16 +239,16 @@ public class IntegerValue extends Value<Integer> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(42);
-	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(42));
-	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(43));
+	 * 	LongHolder <jv>value</jv> = LongHolder.<jsm>of</jsm>(42L);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(42L));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(43L));
 	 * </p>
 	 *
 	 * @param value The value to compare to.
 	 * @return <jk>true</jk> if the current value is equal to the specified value.
 	 */
 	@Override
-	public boolean is(Integer value) {
+	public boolean is(Long value) {
 		return eq(get(), value);
 	}
 
@@ -260,15 +260,15 @@ public class IntegerValue extends Value<Integer> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(5);
-	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(3, 5, 7));
-	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(1, 2));
+	 * 	LongHolder <jv>value</jv> = LongHolder.<jsm>of</jsm>(5L);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(3L, 5L, 7L));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(1L, 2L));
 	 * </p>
 	 *
 	 * @param values The values to compare to.
 	 * @return <jk>true</jk> if the current value matches any of the specified values.
 	 */
-	public boolean isAny(Integer...values) {
+	public boolean isAny(Long...values) {
 		assertArgNotNull(ARG_values, values);
 		var current = get();
 		for (var value : values)

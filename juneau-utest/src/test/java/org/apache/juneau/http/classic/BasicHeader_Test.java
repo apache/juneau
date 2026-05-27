@@ -70,7 +70,7 @@ class BasicHeader_Test extends TestBase {
 	}
 
 	@Test void a08_getElements() {
-		var m = Value.of(1);
+		var m = Holder.of(1);
 		var h1 = header("X1","1");
 		var h2 = header("X2",()->m);
 		var h3 = header("X3",null);
@@ -85,11 +85,11 @@ class BasicHeader_Test extends TestBase {
 
 		x = h2.getElements();
 		assertEquals(1, x.length);
-		assertEquals("Value(1)", x[0].getName());
+		assertEquals("Holder(1)", x[0].getName());
 		m.set(2);
 		x = h2.getElements();
 		assertEquals(1, x.length);
-		assertEquals("Value(2)", x[0].getName());
+		assertEquals("Holder(2)", x[0].getName());
 
 		x = h3.getElements();
 		assertEquals(0, x.length);

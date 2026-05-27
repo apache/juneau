@@ -55,7 +55,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 			var bmcm = (ClassMeta<?>) beanMeta.getBeanInfo();
 			var c = bmcm.inner();
 			var ci = bmcm;
-			var defaultFormat = Value.<XmlFormat>empty();
+			var defaultFormat = Holder.<XmlFormat>empty();
 
 			bmcm.getMarshallingContext().getAnnotationProvider().find(Xml.class, ci).stream().map(AnnotationInfo::inner).forEach(x -> {
 				var xf = x.format();

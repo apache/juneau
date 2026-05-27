@@ -2242,7 +2242,7 @@ public class Utils {
 	public static Object unwrap(Object o) {
 		if (o instanceof Supplier<?> o2)
 			o = unwrap(o2.get());
-		if (o instanceof Value<?> o2)
+		if (o instanceof Holder<?> o2)
 			o = unwrap(o2.get());
 		if (o instanceof Optional<?> o2)
 			o = unwrap(o2.orElse(null));

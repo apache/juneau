@@ -76,17 +76,17 @@ public class RemoteOperationMeta {
 
 			var al = rstream(AP.find(mi)).filter(REMOTE_OP_GROUP).toList();
 			if (al.isEmpty())
-				al = rstream(AP.find(mi.getReturnType().unwrap(Value.class, Optional.class))).filter(REMOTE_OP_GROUP).toList();
+				al = rstream(AP.find(mi.getReturnType().unwrap(Holder.class, Optional.class))).filter(REMOTE_OP_GROUP).toList();
 
-		var httpMethodValue = Value.<String>empty();
-		var pathValue = Value.<String>empty();
+		var httpMethodValue = Holder.<String>empty();
+		var pathValue = Holder.<String>empty();
 		al.stream().map(x -> x.getNameSimple().substring(6).toUpperCase()).filter(x -> ! x.equals("OP")).forEach(httpMethodValue::set);
 		al.forEach(ai -> ai.getValue(String.class, "method").filter(NOT_EMPTY).ifPresent(x -> httpMethodValue.set(x.trim().toUpperCase())));
 		al.forEach(ai -> ai.getValue(String.class, "path").filter(NOT_EMPTY).ifPresent(x -> pathValue.set(x.trim())));
 		httpMethod = httpMethodValue.orElse("").trim();
 		path = pathValue.orElse("").trim();
 
-			Value<String> value = Value.empty();
+			Holder<String> value = Holder.empty();
 			al.stream().filter(x -> x.isType(RemoteOp.class) && ne(((RemoteOp)x.inner()).value().trim())).forEach(x -> value.set(((RemoteOp)x.inner()).value().trim()));
 
 			if (value.isPresent()) {

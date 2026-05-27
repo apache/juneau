@@ -441,7 +441,7 @@ public class ClassUtils {
 		// Pattern: com.example.MyClass$$EnhancerBySpringCGLIB$$abc123
 		if (s.contains("$$EnhancerBySpringCGLIB$$")) {
 			// Try to invoke getTargetClass() if available (Spring specific)
-			var v = Value.<Class<?>>empty();
+			var v = Holder.<Class<?>>empty();
 			info(c).getPublicMethods().stream().filter(m -> m.hasName("getTargetClass") && m.getParameterCount() == 0 && m.hasReturnType(Class.class)).forEach(m -> safe(() -> v.set(m.invoke(o)))); // HTT - Requires bytecode manipulation to create classes with $$EnhancerBySpringCGLIB$$ in name
 			return v.isPresent() ? v.get() : c.getSuperclass(); // HTT - Requires bytecode manipulation to create classes with $$EnhancerBySpringCGLIB$$ in name
 		}

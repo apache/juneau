@@ -59,7 +59,7 @@ public class RrpcInterfaceMeta {
 	 */
 	public RrpcInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;
-		Value<String> path2 = Value.of("");
+		Holder<String> path2 = Holder.of("");
 		var ci = ClassInfo.of(c);
 
 		rstream(AP.find(Remote.class, ci)).map(x -> x.inner().path()).filter(Utils::ne).forEach(x -> path2.set(trimSlashes(x)));
