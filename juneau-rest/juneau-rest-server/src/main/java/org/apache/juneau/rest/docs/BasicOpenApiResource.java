@@ -70,6 +70,10 @@ import org.apache.juneau.yaml.*;
  * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
  * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
  *
+ * <p>
+ * Override accepts bare token ({@code openapi}), leading slash ({@code /openapi}), trailing slash
+ * ({@code openapi/}), or wildcard suffix ({@code /openapi/*}) &mdash; all resolve to the same mount.
+ *
  * <h5 class='section'>Mixin-only deployment:</h5>
  *
  * <p>
@@ -122,7 +126,7 @@ public class BasicOpenApiResource {
 	 * @throws NotFound If no OpenAPI document is available for this resource.
 	 */
 	@RestGet(
-		path="/${juneau.openapi.path:openapi}/*",
+		path="/#{pathToken(${juneau.openapi.path:openapi})}/*",
 		summary="OpenAPI 3.1 documentation",
 		description="OpenAPI 3.1 documentation for this resource."
 	)
@@ -157,7 +161,7 @@ public class BasicOpenApiResource {
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@RestGet(
-		path="/${juneau.openapi.path:openapi}.json",
+		path="/#{pathToken(${juneau.openapi.path:openapi})}.json",
 		summary="OpenAPI 3.1 documentation (JSON)",
 		description="OpenAPI 3.1 documentation for this resource as JSON."
 	)
@@ -180,7 +184,7 @@ public class BasicOpenApiResource {
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@RestGet(
-		path="/${juneau.openapi.path:openapi}.yaml",
+		path="/#{pathToken(${juneau.openapi.path:openapi})}.yaml",
 		summary="OpenAPI 3.1 documentation (YAML)",
 		description="OpenAPI 3.1 documentation for this resource as YAML."
 	)

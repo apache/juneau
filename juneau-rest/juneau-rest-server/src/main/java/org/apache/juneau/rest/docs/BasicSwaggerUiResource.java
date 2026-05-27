@@ -51,6 +51,10 @@ import org.apache.juneau.rest.annotation.*;
  * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
  * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
  *
+ * <p>
+ * Override accepts bare token ({@code swagger}), leading slash ({@code /swagger}), trailing slash
+ * ({@code swagger/}), or wildcard suffix ({@code /swagger/*}) &mdash; all resolve to the same mount.
+ *
  * <h5 class='section'>Mixin-only deployment:</h5>
  *
  * <p>
@@ -111,7 +115,7 @@ public class BasicSwaggerUiResource {
 	 * @throws NotFound If no Swagger document is available for this resource.
 	 */
 	@RestGet(
-		path="/${juneau.swaggerui.path:swagger}/*",
+		path="/#{pathToken(${juneau.swaggerui.path:swagger})}/*",
 		summary="Swagger UI",
 		description="Swagger-UI HTML view of the Swagger v2 documentation for this resource."
 	)

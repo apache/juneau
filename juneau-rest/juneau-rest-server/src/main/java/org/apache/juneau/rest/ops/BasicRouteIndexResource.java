@@ -46,6 +46,10 @@ import org.apache.juneau.rest.annotation.*;
  * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
  *
  * <p>
+ * Override accepts bare token ({@code options}), leading slash ({@code /options}), or trailing
+ * slash ({@code options/}) &mdash; all resolve to the same mount.
+ *
+ * <p>
  * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at both
  * {@code /options} <i>and</i> {@code /routes} as historical aliases on a single op. That dual
  * default has been collapsed to a single SVL-configurable mount as part of the
@@ -137,7 +141,7 @@ public class BasicRouteIndexResource {
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@RestGet(
-		path="/${juneau.routeindex.path:options}",
+		path="/#{pathToken(${juneau.routeindex.path:options})}",
 		summary="Route index",
 		description="JSON list of @RestOp-annotated methods on the host (excluding hidden / ops endpoints).",
 		swagger=@OpSwagger(ignore=true)

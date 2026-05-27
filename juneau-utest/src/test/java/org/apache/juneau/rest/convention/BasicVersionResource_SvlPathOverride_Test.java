@@ -92,4 +92,94 @@ class BasicVersionResource_SvlPathOverride_Test extends TestBase {
 			else System.setProperty(key, prev);
 		}
 	}
+
+	@Rest(mixins=BasicVersionResource.class)
+	public static class A03_BareToken extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a03_overrideBareToken() throws Exception {
+		var key = "juneau.version.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx");
+		try {
+			var c = MockRestClient.buildLax(A03_BareToken.class);
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("javaVersion");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicVersionResource.class)
+	public static class A04_LeadingSlash extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a04_overrideLeadingSlash() throws Exception {
+		var key = "juneau.version.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx");
+		try {
+			var c = MockRestClient.buildLax(A04_LeadingSlash.class);
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("javaVersion");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicVersionResource.class)
+	public static class A05_TrailingSlash extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a05_overrideTrailingSlash() throws Exception {
+		var key = "juneau.version.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx/");
+		try {
+			var c = MockRestClient.buildLax(A05_TrailingSlash.class);
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("javaVersion");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicVersionResource.class)
+	public static class A06_BothSlashes extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a06_overrideBothSlashes() throws Exception {
+		var key = "juneau.version.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx/");
+		try {
+			var c = MockRestClient.buildLax(A06_BothSlashes.class);
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("javaVersion");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicVersionResource.class)
+	public static class A07_MultiSegment extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a07_overrideMultiSegment() throws Exception {
+		var key = "juneau.version.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/api/v1/xxx");
+		try {
+			var c = MockRestClient.buildLax(A07_MultiSegment.class);
+			c.get("/api/v1/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("javaVersion");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
 }

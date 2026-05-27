@@ -91,4 +91,117 @@ class BasicEchoResource_SvlPathOverride_Test extends TestBase {
 			else System.setProperty(key, prev);
 		}
 	}
+
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
+	public static class A03_BareToken extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a03_overrideBareToken() throws Exception {
+		var key = "juneau.echo.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx");
+		try {
+			var c = MockRestClient.buildLax(A03_BareToken.class);
+			c.get("/xxx/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
+	public static class A04_LeadingSlash extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a04_overrideLeadingSlash() throws Exception {
+		var key = "juneau.echo.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx");
+		try {
+			var c = MockRestClient.buildLax(A04_LeadingSlash.class);
+			c.get("/xxx/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
+	public static class A05_TrailingSlash extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a05_overrideTrailingSlash() throws Exception {
+		var key = "juneau.echo.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx/");
+		try {
+			var c = MockRestClient.buildLax(A05_TrailingSlash.class);
+			c.get("/xxx/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
+	public static class A06_BothSlashes extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a06_overrideBothSlashes() throws Exception {
+		var key = "juneau.echo.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx/");
+		try {
+			var c = MockRestClient.buildLax(A06_BothSlashes.class);
+			c.get("/xxx/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
+	public static class A07_WildcardSuffix extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a07_overrideWildcardSuffix() throws Exception {
+		var key = "juneau.echo.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx/*");
+		try {
+			var c = MockRestClient.buildLax(A07_WildcardSuffix.class);
+			c.get("/xxx/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicEchoResource.class, debug=@Debug("always"))
+	public static class A08_MultiSegment extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a08_overrideMultiSegment() throws Exception {
+		var key = "juneau.echo.path";
+		var prev = System.getProperty(key);
+		// Use debug/echo2 (2-segment) to test multi-segment path normalization while staying
+		// under the 2-segment SVL path depth that Juneau's UrlPathMatcher reliably supports
+		// for mixin op-paths. Paths deeper than 2 segments are not tested here to avoid
+		// collision with BasicSwaggerResource's /api/* default and potential routing edge cases
+		// with 3+ segment base paths in SVL-resolved @RestOp patterns.
+		System.setProperty(key, "/debug/echo2/*");
+		try {
+			var c = MockRestClient.buildLax(A08_MultiSegment.class);
+			c.get("/debug/echo2/ping").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
 }

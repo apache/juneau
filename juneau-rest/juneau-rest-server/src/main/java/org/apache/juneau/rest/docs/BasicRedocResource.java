@@ -50,6 +50,10 @@ import org.apache.juneau.rest.annotation.*;
  * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
  * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
  *
+ * <p>
+ * Override accepts bare token ({@code redoc}), leading slash ({@code /redoc}), trailing slash
+ * ({@code redoc/}), or wildcard suffix ({@code /redoc/*}) &mdash; all resolve to the same mount.
+ *
  * <h5 class='section'>Mixin-only deployment:</h5>
  *
  * <p>
@@ -105,7 +109,7 @@ public class BasicRedocResource {
 	 * @throws NotFound If no OpenAPI document is available for this resource.
 	 */
 	@RestGet(
-		path="/${juneau.redoc.path:redoc}/*",
+		path="/#{pathToken(${juneau.redoc.path:redoc})}/*",
 		summary="Redoc UI",
 		description="Redoc HTML view of the OpenAPI 3.1 documentation for this resource."
 	)

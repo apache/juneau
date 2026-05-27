@@ -70,6 +70,10 @@ import org.apache.juneau.rest.guard.RateLimitGuard.BucketState;
  * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
  * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
  *
+ * <p>
+ * Override accepts bare token ({@code admin}), leading slash ({@code /admin}), trailing slash
+ * ({@code admin/}), or wildcard suffix ({@code /admin/*}) &mdash; all resolve to the same mount.
+ *
  * <h5 class='section'>Mixin-only deployment:</h5>
  *
  * <p>
@@ -192,7 +196,7 @@ public class BasicAdminResource {
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@RestGet(
-		path="/${juneau.admin.path:admin}/threads",
+		path="/#{pathToken(${juneau.admin.path:admin})}/threads",
 		summary="Thread dump",
 		description="JSON list of currently-live threads (filtered to exclude framework noise by default).",
 		swagger=@OpSwagger(ignore=true)
@@ -226,7 +230,7 @@ public class BasicAdminResource {
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@RestGet(
-		path="/${juneau.admin.path:admin}/heap",
+		path="/#{pathToken(${juneau.admin.path:admin})}/heap",
 		summary="Heap statistics",
 		description="JVM heap + non-heap memory statistics (Runtime + MemoryMXBean).",
 		swagger=@OpSwagger(ignore=true)
@@ -268,7 +272,7 @@ public class BasicAdminResource {
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@RestPost(
-		path="/${juneau.admin.path:admin}/cache/flush",
+		path="/#{pathToken(${juneau.admin.path:admin})}/cache/flush",
 		summary="Cache flush",
 		description="Runs the registered cache-flush hooks (all by default; ?names=foo,bar for a subset).",
 		swagger=@OpSwagger(ignore=true)
@@ -308,7 +312,7 @@ public class BasicAdminResource {
 	 * 	store.
 	 */
 	@RestGet(
-		path="/${juneau.admin.path:admin}/ratelimit",
+		path="/#{pathToken(${juneau.admin.path:admin})}/ratelimit",
 		summary="Rate-limit inspection",
 		description="JSON map of registered RateLimitGuard beans keyed by bean name.",
 		swagger=@OpSwagger(ignore=true)

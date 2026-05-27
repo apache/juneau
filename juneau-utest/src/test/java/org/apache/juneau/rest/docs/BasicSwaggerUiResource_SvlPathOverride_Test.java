@@ -61,4 +61,112 @@ class BasicSwaggerUiResource_SvlPathOverride_Test extends TestBase {
 			else System.setProperty(key, prev);
 		}
 	}
+
+	@Rest(mixins=BasicSwaggerUiResource.class)
+	public static class A02_BareToken extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a02_overrideBareToken() throws Exception {
+		var key = "juneau.swaggerui.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx");
+		try {
+			var c = MockRestClient.buildLax(A02_BareToken.class);
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("\"swagger\":\"2.0\"");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicSwaggerUiResource.class)
+	public static class A03_LeadingSlash extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a03_overrideLeadingSlash() throws Exception {
+		var key = "juneau.swaggerui.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx");
+		try {
+			var c = MockRestClient.buildLax(A03_LeadingSlash.class);
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("\"swagger\":\"2.0\"");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicSwaggerUiResource.class)
+	public static class A04_TrailingSlash extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a04_overrideTrailingSlash() throws Exception {
+		var key = "juneau.swaggerui.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx/");
+		try {
+			var c = MockRestClient.buildLax(A04_TrailingSlash.class);
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("\"swagger\":\"2.0\"");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicSwaggerUiResource.class)
+	public static class A05_BothSlashes extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a05_overrideBothSlashes() throws Exception {
+		var key = "juneau.swaggerui.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx/");
+		try {
+			var c = MockRestClient.buildLax(A05_BothSlashes.class);
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("\"swagger\":\"2.0\"");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicSwaggerUiResource.class)
+	public static class A06_WildcardSuffix extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a06_overrideWildcardSuffix() throws Exception {
+		var key = "juneau.swaggerui.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx/*");
+		try {
+			var c = MockRestClient.buildLax(A06_WildcardSuffix.class);
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("\"swagger\":\"2.0\"");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicSwaggerUiResource.class)
+	public static class A07_MultiSegment extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a07_overrideMultiSegment() throws Exception {
+		var key = "juneau.swaggerui.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/api/v1/xxx/*");
+		try {
+			var c = MockRestClient.buildLax(A07_MultiSegment.class);
+			c.get("/api/v1/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("\"swagger\":\"2.0\"");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
 }

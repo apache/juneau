@@ -52,6 +52,10 @@ import org.apache.juneau.rest.annotation.*;
  * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
  *
  * <p>
+ * Override accepts bare token ({@code echo}), leading slash ({@code /echo}), trailing slash
+ * ({@code echo/}), or wildcard suffix ({@code /echo/*}) &mdash; all resolve to the same mount.
+ *
+ * <p>
  * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at both
  * {@code /echo/*} <i>and</i> {@code /debug/echo/*} as historical aliases on a single op. That
  * dual default has been collapsed to a single SVL-configurable mount as part of the
@@ -208,7 +212,7 @@ public class BasicEchoResource {
 	 */
 	@RestOp(
 		method="*",
-		path="/${juneau.echo.path:echo}/*",
+		path="/#{pathToken(${juneau.echo.path:echo})}/*",
 		summary="Request echo",
 		description="Round-trip introspection of the inbound request. Debug-gated.",
 		swagger=@OpSwagger(ignore=true)

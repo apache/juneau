@@ -78,4 +78,118 @@ class BasicAdminResource_SvlPathOverride_Test extends TestBase {
 			else System.setProperty(key, prev);
 		}
 	}
+
+	@Rest(mixins=BasicAdminResource.class)
+	public static class A02_BareToken extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public RestGuardList guards(BeanStore bs) { return RestGuardList.create(bs).build(); }
+	}
+
+	@Test void a02_overrideBareToken() throws Exception {
+		var key = "juneau.admin.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx");
+		try {
+			var c = MockRestClient.buildLax(A02_BareToken.class);
+			c.get("/xxx/threads").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicAdminResource.class)
+	public static class A03_LeadingSlash extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public RestGuardList guards(BeanStore bs) { return RestGuardList.create(bs).build(); }
+	}
+
+	@Test void a03_overrideLeadingSlash() throws Exception {
+		var key = "juneau.admin.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx");
+		try {
+			var c = MockRestClient.buildLax(A03_LeadingSlash.class);
+			c.get("/xxx/threads").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicAdminResource.class)
+	public static class A04_TrailingSlash extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public RestGuardList guards(BeanStore bs) { return RestGuardList.create(bs).build(); }
+	}
+
+	@Test void a04_overrideTrailingSlash() throws Exception {
+		var key = "juneau.admin.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx/");
+		try {
+			var c = MockRestClient.buildLax(A04_TrailingSlash.class);
+			c.get("/xxx/threads").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicAdminResource.class)
+	public static class A05_BothSlashes extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public RestGuardList guards(BeanStore bs) { return RestGuardList.create(bs).build(); }
+	}
+
+	@Test void a05_overrideBothSlashes() throws Exception {
+		var key = "juneau.admin.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx/");
+		try {
+			var c = MockRestClient.buildLax(A05_BothSlashes.class);
+			c.get("/xxx/threads").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicAdminResource.class)
+	public static class A06_WildcardSuffix extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public RestGuardList guards(BeanStore bs) { return RestGuardList.create(bs).build(); }
+	}
+
+	@Test void a06_overrideWildcardSuffix() throws Exception {
+		var key = "juneau.admin.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx/*");
+		try {
+			var c = MockRestClient.buildLax(A06_WildcardSuffix.class);
+			c.get("/xxx/threads").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicAdminResource.class)
+	public static class A07_MultiSegment extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public RestGuardList guards(BeanStore bs) { return RestGuardList.create(bs).build(); }
+	}
+
+	@Test void a07_overrideMultiSegment() throws Exception {
+		var key = "juneau.admin.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/api/v1/xxx/*");
+		try {
+			var c = MockRestClient.buildLax(A07_MultiSegment.class);
+			c.get("/api/v1/xxx/threads").run().assertStatus(200).assertHeader("Content-Type").isContains("application/json");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
 }

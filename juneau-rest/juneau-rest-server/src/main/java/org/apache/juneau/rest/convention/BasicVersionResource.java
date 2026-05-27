@@ -54,6 +54,10 @@ import org.apache.juneau.rest.annotation.*;
  * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
  *
  * <p>
+ * Override accepts bare token ({@code version}), leading slash ({@code /version}), or trailing
+ * slash ({@code version/}) &mdash; all resolve to the same mount.
+ *
+ * <p>
  * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at three
  * historical aliases &mdash; {@code /version}, {@code /info}, and {@code /about} &mdash; on a
  * single op. That multi-path default has been collapsed to a single SVL-configurable mount as
@@ -208,7 +212,7 @@ public class BasicVersionResource {
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
 	@RestGet(
-		path="/${juneau.version.path:version}",
+		path="/#{pathToken(${juneau.version.path:version})}",
 		summary="Version / build metadata",
 		description="Deployment-introspection metadata (name, version, git, build).",
 		swagger=@OpSwagger(ignore=true)

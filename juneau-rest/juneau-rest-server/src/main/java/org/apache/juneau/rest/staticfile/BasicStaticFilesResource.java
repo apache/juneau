@@ -47,6 +47,10 @@ import org.apache.juneau.rest.annotation.*;
  * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
  *
  * <p>
+ * Override accepts bare token ({@code static}), leading slash ({@code /static}), trailing slash
+ * ({@code static/}), or wildcard suffix ({@code /static/*}) &mdash; all resolve to the same mount.
+ *
+ * <p>
  * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at both
  * {@code /static/*} <i>and</i> {@code /htdocs/*} as historical convenience aliases &mdash; that
  * dual default has been collapsed to a single SVL-configurable mount as part of the
@@ -144,7 +148,7 @@ public class BasicStaticFilesResource {
 	 * @throws NotFound If no resource matches the requested path.
 	 */
 	@RestGet(
-		path="/${juneau.staticfiles.path:static}/*",
+		path="/#{pathToken(${juneau.staticfiles.path:static})}/*",
 		summary="Static files",
 		description="Static file retrieval.",
 		swagger=@OpSwagger(ignore=true)
@@ -171,7 +175,7 @@ public class BasicStaticFilesResource {
 	 */
 	@RestOp(
 		method="HEAD",
-		path="/${juneau.staticfiles.path:static}/*",
+		path="/#{pathToken(${juneau.staticfiles.path:static})}/*",
 		summary="Static files (HEAD)",
 		description="Static file metadata retrieval.",
 		swagger=@OpSwagger(ignore=true)

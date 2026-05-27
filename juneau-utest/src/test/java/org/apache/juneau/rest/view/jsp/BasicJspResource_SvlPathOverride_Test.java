@@ -60,4 +60,113 @@ class BasicJspResource_SvlPathOverride_Test extends TestBase {
 			else System.setProperty(key, prev);
 		}
 	}
+
+	@Rest(mixins=BasicJspResource.class)
+	public static class A02_BareToken extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a02_overrideBareToken() throws Exception {
+		var key = "juneau.jsp.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx");
+		try {
+			var c = MockRestClient.buildLax(A02_BareToken.class);
+			c.get("/xxx/test.jsp").run().assertStatus(500);
+			c.get("/jsp/test.jsp").run().assertStatus(404);
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicJspResource.class)
+	public static class A03_LeadingSlash extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a03_overrideLeadingSlash() throws Exception {
+		var key = "juneau.jsp.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx");
+		try {
+			var c = MockRestClient.buildLax(A03_LeadingSlash.class);
+			c.get("/xxx/test.jsp").run().assertStatus(500);
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicJspResource.class)
+	public static class A04_TrailingSlash extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a04_overrideTrailingSlash() throws Exception {
+		var key = "juneau.jsp.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx/");
+		try {
+			var c = MockRestClient.buildLax(A04_TrailingSlash.class);
+			c.get("/xxx/test.jsp").run().assertStatus(500);
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicJspResource.class)
+	public static class A05_BothSlashes extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a05_overrideBothSlashes() throws Exception {
+		var key = "juneau.jsp.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx/");
+		try {
+			var c = MockRestClient.buildLax(A05_BothSlashes.class);
+			c.get("/xxx/test.jsp").run().assertStatus(500);
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicJspResource.class)
+	public static class A06_WildcardSuffix extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a06_overrideWildcardSuffix() throws Exception {
+		var key = "juneau.jsp.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx/*");
+		try {
+			var c = MockRestClient.buildLax(A06_WildcardSuffix.class);
+			c.get("/xxx/test.jsp").run().assertStatus(500);
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicJspResource.class)
+	public static class A07_MultiSegment extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void a07_overrideMultiSegment() throws Exception {
+		var key = "juneau.jsp.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/api/v1/xxx/*");
+		try {
+			var c = MockRestClient.buildLax(A07_MultiSegment.class);
+			c.get("/api/v1/xxx/test.jsp").run().assertStatus(500);
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
 }

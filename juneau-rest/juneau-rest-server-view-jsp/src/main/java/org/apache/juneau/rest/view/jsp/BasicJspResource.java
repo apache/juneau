@@ -72,6 +72,10 @@ import org.apache.juneau.rest.annotation.*;
  * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
  * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
  *
+ * <p>
+ * Override accepts bare token ({@code jsp}), leading slash ({@code /jsp}), trailing slash
+ * ({@code jsp/}), or wildcard suffix ({@code /jsp/*}) &mdash; all resolve to the same mount.
+ *
  * <h5 class='section'>Mixin-only deployment:</h5>
  *
  * <p>
@@ -208,7 +212,7 @@ public class BasicJspResource {
 	 * @throws NotFound If the JSP resource cannot be resolved.
 	 */
 	@RestGet(
-		path="/${juneau.jsp.path:jsp}/*",
+		path="/#{pathToken(${juneau.jsp.path:jsp})}/*",
 		summary="JSP view",
 		description="Forward a request to the JSP engine for a raw .jsp resource under the configured base path.",
 		swagger=@OpSwagger(ignore=true)

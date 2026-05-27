@@ -90,4 +90,99 @@ class BasicRouteIndexResource_SvlPathOverride_Test extends TestBase {
 			else System.setProperty(key, prev);
 		}
 	}
+
+	@Rest(mixins=BasicRouteIndexResource.class)
+	public static class A03_BareToken extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@RestGet(path="/items") public String items() { return "items"; }
+	}
+
+	@Test void a03_overrideBareToken() throws Exception {
+		var key = "juneau.routeindex.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx");
+		try {
+			var c = MockRestClient.buildLax(A03_BareToken.class);
+			c.get("/xxx").run().assertStatus(200).assertContent().asString().isContains("/items");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicRouteIndexResource.class)
+	public static class A04_LeadingSlash extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@RestGet(path="/items") public String items() { return "items"; }
+	}
+
+	@Test void a04_overrideLeadingSlash() throws Exception {
+		var key = "juneau.routeindex.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx");
+		try {
+			var c = MockRestClient.buildLax(A04_LeadingSlash.class);
+			c.get("/xxx").run().assertStatus(200).assertContent().asString().isContains("/items");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicRouteIndexResource.class)
+	public static class A05_TrailingSlash extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@RestGet(path="/items") public String items() { return "items"; }
+	}
+
+	@Test void a05_overrideTrailingSlash() throws Exception {
+		var key = "juneau.routeindex.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "xxx/");
+		try {
+			var c = MockRestClient.buildLax(A05_TrailingSlash.class);
+			c.get("/xxx").run().assertStatus(200).assertContent().asString().isContains("/items");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicRouteIndexResource.class)
+	public static class A06_BothSlashes extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@RestGet(path="/items") public String items() { return "items"; }
+	}
+
+	@Test void a06_overrideBothSlashes() throws Exception {
+		var key = "juneau.routeindex.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/xxx/");
+		try {
+			var c = MockRestClient.buildLax(A06_BothSlashes.class);
+			c.get("/xxx").run().assertStatus(200).assertContent().asString().isContains("/items");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
+
+	@Rest(mixins=BasicRouteIndexResource.class)
+	public static class A07_MultiSegment extends RestServlet {
+		private static final long serialVersionUID = 1L;
+		@RestGet(path="/items") public String items() { return "items"; }
+	}
+
+	@Test void a07_overrideMultiSegment() throws Exception {
+		var key = "juneau.routeindex.path";
+		var prev = System.getProperty(key);
+		System.setProperty(key, "/api/v1/xxx");
+		try {
+			var c = MockRestClient.buildLax(A07_MultiSegment.class);
+			c.get("/api/v1/xxx").run().assertStatus(200).assertContent().asString().isContains("/items");
+		} finally {
+			if (prev == null) System.clearProperty(key);
+			else System.setProperty(key, prev);
+		}
+	}
 }
