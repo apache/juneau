@@ -24,6 +24,24 @@ import org.apache.juneau.commons.svl.*;
  *
  * <p>
  * The format for this var is <js>"$P{propertyName[,defaultValue]}"</js>.
+ *
+ * <h5 class='section'>Caller-scoped property sources:</h5>
+ * <p>
+ * Resolution consults the singleton {@link Settings} chain by default. Callers (notably the
+ * {@code @Value} injection path) that need to inject additional, caller-scoped
+ * {@link PropertySource}s in front of the global chain can attach them to the
+ * {@link VarResolverSession} as a session bean of type {@code PropertySource[]}:
+ *
+ * <p class='bjava'>
+ * 	<jv>session</jv>.bean(PropertySource[].<jk>class</jk>, <jk>new</jk> PropertySource[] { <jv>source1</jv>, <jv>source2</jv> });
+ * </p>
+ *
+ * <p>
+ * When the session carries that bean, this var consults the array in order between the
+ * {@link Settings#getOverride(String) local/global override stores} (which still win &mdash;
+ * matching the existing test-override contract) and the regular {@link Settings#get(String)
+ * Settings sources chain}. Sources earlier in the array take precedence over sources later
+ * in the array. The contract is identical to today when no such session bean is attached.
  */
 public class PropertyVar extends DefaultingVar {
 
@@ -39,6 +57,22 @@ public class PropertyVar extends DefaultingVar {
 
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
+		var scoped = session == null ? null : session.getBean(PropertySource[].class).orElse(null);
+		if (scoped == null || scoped.length == 0)
+			return Settings.get().get(key).orElse(null);
+
+		// Caller-scoped sources are present. Honor Settings local/global overrides first
+		// so test-override semantics still win over caller-scoped sources, then walk the
+		// caller-scoped chain, then fall through to the global sources list.
+		if (Settings.get().isOverridden(key))
+			return Settings.get().getOverride(key).orElse(null);
+		for (var src : scoped) {
+			if (src == null)
+				continue;
+			var r = src.get(key);
+			if (r.isPresent())
+				return r.value().orElse(null);
+		}
 		return Settings.get().get(key).orElse(null);
 	}
 }

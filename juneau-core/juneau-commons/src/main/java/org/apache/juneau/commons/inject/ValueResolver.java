@@ -159,10 +159,37 @@ public final class ValueResolver {
 	 * @return The coerced value.
 	 */
 	public static Object resolve(String expression, Class<?> targetType, String siteDescription) {
+		return resolve(expression, targetType, siteDescription, null);
+	}
+
+	/**
+	 * Same as {@link #resolve(String, Class, String)} but consults caller-scoped
+	 * {@link PropertySource} beans resolved from the supplied {@link BeanStore} between
+	 * the {@link Settings} local/global override stores and the {@link Settings} sources chain.
+	 *
+	 * <p>
+	 * The {@code beanStore} parameter is preserved by-reference; if its
+	 * {@code PropertySource}-typed contents change between calls, the next resolution picks up
+	 * the current state. Passing {@code null} (or a {@code BeanStore} with no
+	 * {@code PropertySource}-typed beans) is byte-for-byte equivalent to the zero-argument
+	 * overload &mdash; no extra allocation and no behavior change.
+	 *
+	 * @param expression The {@code @Value} expression.
+	 * @param targetType The target Java type. May be a primitive.
+	 * @param siteDescription A human-readable description of the site (used in error messages).
+	 * @param beanStore Caller-scoped {@link BeanStore} consulted for {@link PropertySource} beans.
+	 * 	May be {@code null}.
+	 * @return The coerced value.
+	 */
+	public static Object resolve(String expression, Class<?> targetType, String siteDescription, BeanStore beanStore) {
 		if (expression == null)
 			return resolveCoerce(null, targetType, expression, siteDescription);
 		var template = getCompiledTemplate(expression);
-		var resolved = template.resolve(VarResolver.DEFAULT.createSession());
+		var session = VarResolver.DEFAULT.createSession();
+		var sources = scopedSources(beanStore);
+		if (sources != null)
+			session.bean(PropertySource[].class, sources);
+		var resolved = template.resolve(session);
 		return resolveCoerce(resolved, targetType, expression, siteDescription);
 	}
 
@@ -190,6 +217,28 @@ public final class ValueResolver {
 	 * @return Either a one-shot coerced value, or a {@code Supplier<String>} factory.
 	 */
 	public static Object resolve(String expression, Class<?> targetType, Type genericTargetType, String siteDescription) {
+		return resolve(expression, targetType, genericTargetType, siteDescription, null);
+	}
+
+	/**
+	 * Same as {@link #resolve(String, Class, Type, String)} but consults caller-scoped
+	 * {@link PropertySource} beans resolved from the supplied {@link BeanStore}.
+	 *
+	 * <p>
+	 * The {@code beanStore} reference is captured (not snapshotted) by the returned
+	 * {@code Supplier<String>} when the declared field/parameter type is {@code Supplier<String>},
+	 * so re-evaluating reads always see the current state of {@code beanStore.getBeansOfType(PropertySource.class)}.
+	 *
+	 * @param expression The {@code @Value} expression. May be {@code null}.
+	 * @param targetType The erased target class.
+	 * @param genericTargetType The declared generic type. May be {@code null}.
+	 * @param siteDescription Human-readable site description for error messages.
+	 * @param beanStore Caller-scoped {@link BeanStore} consulted for {@link PropertySource} beans.
+	 * 	May be {@code null}.
+	 * @return Either a one-shot coerced value, or a {@code Supplier<String>} factory.
+	 */
+	public static Object resolve(String expression, Class<?> targetType, Type genericTargetType, String siteDescription,
+			BeanStore beanStore) {
 		if (isSupplierOfString(targetType, genericTargetType)) {
 			if (expression == null)
 				return (Supplier<String>) () -> null;
@@ -201,9 +250,40 @@ public final class ValueResolver {
 				var literal = template.resolve(VarResolver.DEFAULT.createSession());
 				return (Supplier<String>) () -> literal;
 			}
-			return template.asSupplierWithFreshSessions(VarResolver.DEFAULT);
+			if (beanStore == null)
+				return template.asSupplierWithFreshSessions(VarResolver.DEFAULT);
+			// Capture the BeanStore by-reference so re-evaluating reads see the current state of
+			// its PropertySource-typed beans (matches the "by-reference, not snapshot" contract).
+			final BeanStore scope = beanStore;
+			return (Supplier<String>) () -> {
+				var s = VarResolver.DEFAULT.createSession();
+				var sources = scopedSources(scope);
+				if (sources != null)
+					s.bean(PropertySource[].class, sources);
+				return template.resolve(s);
+			};
 		}
-		return resolve(expression, targetType, siteDescription);
+		return resolve(expression, targetType, siteDescription, beanStore);
+	}
+
+	/**
+	 * Returns the caller-scoped {@link PropertySource} array for the supplied {@link BeanStore},
+	 * or {@code null} if the store has no {@code PropertySource}-typed beans (matching the
+	 * "no behavior change when no scoped sources are present" contract).
+	 *
+	 * <p>
+	 * Walks {@link BeanStore#getBeansOfType(Class) beanStore.getBeansOfType(PropertySource.class)}.
+	 * The returned array preserves the iteration order of {@code getBeansOfType} (parent-chain
+	 * beans before local beans before overriding-parent beans, then sorted by
+	 * {@code @Order/@Primary/@Bean.priority()}).
+	 */
+	private static PropertySource[] scopedSources(BeanStore beanStore) {
+		if (beanStore == null)
+			return null;
+		var map = beanStore.getBeansOfType(PropertySource.class);
+		if (map.isEmpty())
+			return null;
+		return map.values().toArray(new PropertySource[0]);
 	}
 
 	/** Returns {@code true} if the declared field/parameter type is exactly {@code Supplier<String>}. */

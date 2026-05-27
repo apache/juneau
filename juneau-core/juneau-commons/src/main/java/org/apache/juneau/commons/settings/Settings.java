@@ -378,6 +378,23 @@ public class Settings {
 	}
 
 	/**
+	 * Returns the number of {@link PropertySource}s currently registered with this
+	 * {@code Settings} instance.
+	 *
+	 * <p>
+	 * Intended primarily for tests that need to verify nothing has leaked extra sources into the
+	 * process-wide {@link #get() Settings.get()} singleton &mdash; the historical failure mode
+	 * documented in {@code FINISHED-79-phase6-discovery-report.md} where a per-{@code RestContext}
+	 * config bridge added a {@code ConfigPropertySource} per cached {@code RestContext} via
+	 * {@link #addSource(PropertySource)} and never removed it.
+	 *
+	 * @return The current source count. Always {@code &gt;= 0}.
+	 */
+	public int sourceCount() {
+		return sources.size();
+	}
+
+	/**
 	 * Removes a previously-added property source.
 	 *
 	 * <p>
@@ -446,6 +463,64 @@ public class Settings {
 
 			return null;
 		});
+	}
+
+	/**
+	 * Returns the override value for the specified property, consulting only the per-thread
+	 * (local) and global stores &mdash; <i>not</i> the sources list.
+	 *
+	 * <p>
+	 * Intended for callers (notably the {@code @Value} resolution path) that interleave a
+	 * caller-scoped property source between the Settings override stores and the sources list.
+	 * Using this method, the caller can honor the "{@link #setLocal(String, String) local}
+	 * / {@link #setGlobal(String, String) global} override wins" contract before consulting
+	 * its own scoped sources, and still fall through to {@link #get(String)} (which checks
+	 * the sources list) afterwards without the override stores accidentally being consulted twice.
+	 *
+	 * <p>
+	 * Lookup order honored by this method:
+	 * <ol>
+	 * 	<li>Per-thread (local) store
+	 * 	<li>Global store
+	 * </ol>
+	 *
+	 * <p>
+	 * If a store is present with an empty value (i.e. an explicit null override), the returned
+	 * {@link Optional} is {@code Optional.empty()} but {@link #isOverridden(String)} would
+	 * return {@code true}. Callers needing to distinguish "absent" from "explicit null" should
+	 * use {@link #isOverridden(String)} alongside this method.
+	 *
+	 * @param name The property name. Must not be <jk>null</jk>.
+	 * @return The override value, or {@link Optional#empty()} if neither store carries an override.
+	 * @see #isOverridden(String)
+	 * @see #get(String)
+	 */
+	public Optional<String> getOverride(String name) {
+		assertArgNotNull(ARG_name, name);
+		var v = localStore.get().get(name);
+		if (v.isPresent())
+			return v.value();
+		v = globalStore.get().get(name);
+		if (v.isPresent())
+			return v.value();
+		return Optional.empty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified property has an override in either the per-thread
+	 * (local) or global store.
+	 *
+	 * <p>
+	 * Distinguishes the "explicit null override" case &mdash; where {@link #getOverride(String)}
+	 * returns {@link Optional#empty()} because the override value itself was {@code null} &mdash;
+	 * from the "no override" case.
+	 *
+	 * @param name The property name. Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if either store carries an override (even with a {@code null} value).
+	 */
+	public boolean isOverridden(String name) {
+		assertArgNotNull(ARG_name, name);
+		return localStore.get().get(name).isPresent() || globalStore.get().get(name).isPresent();
 	}
 
 	/**

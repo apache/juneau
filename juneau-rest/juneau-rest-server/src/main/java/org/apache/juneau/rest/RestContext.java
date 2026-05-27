@@ -63,6 +63,7 @@ import org.apache.juneau.commons.function.Memoizer;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
@@ -724,6 +725,107 @@ public class RestContext extends Context {
 		bs.addDefaultSupplier(MethodList.class, preCallMethods::get, "preCallMethods");
 		bs.addDefaultSupplier(MethodList.class, () -> startCallInvokerPair.get().methods, "startCallMethods");
 		// @formatter:on
+	}
+
+	/**
+	 * Registers a {@link PropertySource} bean named {@code "rest.config"} in this resource's
+	 * {@code BeanStore} so that {@code @Value("${cfg-key}")} fields on the resource bean (and on
+	 * request-scoped beans whose {@code BeanStore} parent-walks to this one) resolve against the
+	 * resource's {@code @Rest(config=...)} {@link Config}(s).
+	 *
+	 * <p>
+	 * Lookup order honored by the registered source:
+	 * <ol>
+	 * 	<li>The child class's resolved {@link Config} &mdash; sourced from {@link #rawConfig} so that
+	 * 		any {@link Bean @Bean Config} factory-method override on the resource bean is preserved.
+	 * 	<li>Any additional, distinct {@code @Rest(config=...)} {@code Config}s declared on parent
+	 * 		classes (child-to-parent order, dedup'd by resolved file name). Child keys win on
+	 * 		collision; parent keys fill the gaps.
+	 * </ol>
+	 *
+	 * <p>
+	 * Critically, this registration lives on the per-resource {@code BeanStore} &mdash; <i>not</i> on
+	 * the process-wide {@code Settings.get()} singleton. The static {@code RestContext} cache in
+	 * {@code MockRestClient} (and any other long-lived cache) is therefore benign: leaked
+	 * {@code RestContext}s carry their {@code PropertySource}s in their own {@code BeanStore}s.
+	 * The global {@code Settings} source list does not grow, and {@code Settings.get(name)}'s
+	 * reverse-order walk stays O(constant).
+	 */
+	private void registerRestConfigPropertySources() {
+		var sources = collectRestConfigPropertySources();
+		if (sources.isEmpty())
+			return;
+		final List<PropertySource> chain = List.copyOf(sources);
+		PropertySource src;
+		if (chain.size() == 1) {
+			src = chain.get(0);
+		} else {
+			src = name -> {
+				for (var s : chain) {
+					var r = s.get(name);
+					if (r.isPresent())
+						return r;
+				}
+				return PropertyLookupResult.missing();
+			};
+		}
+		beanStore.addBean(PropertySource.class, src, "rest.config");
+	}
+
+	/**
+	 * Walks the {@code @Rest(config=...)} annotation chain (child-first) and builds a
+	 * {@link ConfigPropertySource} for each distinct, non-empty config attribute.
+	 *
+	 * <p>
+	 * The first (most-derived) slot reuses {@code rawConfig.get()} so that any {@link Bean @Bean}
+	 * {@code Config} factory-method override on the resource bean is preserved &mdash; the rest of
+	 * the framework already sees that exact instance via {@link #getConfig()} and {@code @RestInit}
+	 * parameter resolution. Parent slots load via {@code Config.create().name(...)} since {@code @Bean}
+	 * overrides apply to the most-derived class only.
+	 *
+	 * <p>
+	 * Edge case: a resource with no {@code @Rest(config=...)} annotation but with a {@link Bean @Bean}
+	 * {@code Config} factory method has a non-null {@code rawConfig.get()} and no annotation-driven
+	 * slot. That single {@code rawConfig} is still registered so user-supplied {@code Config}s flow
+	 * through to {@code @Value} resolution.
+	 */
+	private List<PropertySource> collectRestConfigPropertySources() {
+		var bs = beanStore();
+		var vr = bs.getBean(VarResolver.class, PROP_bootstrapVarResolver).orElseGet(this::getBootstrapVarResolver);
+		var result = new ArrayList<PropertySource>();
+		var seen = new LinkedHashSet<String>();
+		// AnnotationProvider returns child-first; iterate in the same order so child wins on collision.
+		var anns = AnnotationProvider.INSTANCE.find(Rest.class, info(resourceClass));
+		for (var i = 0; i < anns.size(); i++) {
+			var raw = anns.get(i).inner().config();
+			if (raw == null || raw.isEmpty())
+				continue;
+			var resolvedName = vr.resolve(raw);
+			if (resolvedName == null || resolvedName.isEmpty())
+				continue;
+			if (! seen.add(resolvedName))
+				continue;
+			Config cfg;
+			if (result.isEmpty()) {
+				// Most-derived child slot. rawConfig.get() captures @Bean Config override; reuse it.
+				cfg = rawConfig.get();
+			} else if ("SYSTEM_DEFAULT".equals(resolvedName)) {
+				cfg = Config.getSystemDefault();
+			} else {
+				cfg = Config.create().varResolver(vr).name(resolvedName).build();
+			}
+			if (cfg != null)
+				result.add(new ConfigPropertySource(cfg));
+		}
+		// Edge case: no @Rest(config=...) annotation produced a slot, but rawConfig.get() is non-null
+		// (e.g. a @Bean Config factory method without a matching @Rest(config=...) attribute, or the
+		// SYSTEM_DEFAULT branch fired without an annotation). Still register rawConfig as the sole source.
+		if (result.isEmpty()) {
+			var rc = rawConfig.get();
+			if (rc != null)
+				result.add(new ConfigPropertySource(rc));
+		}
+		return result;
 	}
 
 	private static final class LifecycleInvokerPair {
@@ -1846,11 +1948,12 @@ public class RestContext extends Context {
 			// runtime Config) — @RestInit hooks that take Config as a parameter will see the fully
 			// resolved instance instead of the raw bootstrap Config (9.5 behavior change).
 			rawConfig.get();
-			// NOTE: per-RestContext bridging of the @Rest(config=...) Config into Settings.get()
-			// was removed in 9.5 (perf regression — leaked ConfigPropertySource instances into the
-			// global Settings list because MockRestClient caches RestContext instances statically
-			// and never invokes destroy()). Per-RestContext @Value("${cfg-key}") resolution
-			// against the resource-scoped Config is tracked as TODO-95 (BeanStore-routed lookup).
+			// Per-RestContext @Value resolution bridge: register the @Rest(config=...) Configs as
+			// PropertySource beans inside THIS resource's BeanStore (NOT on the process-wide
+			// Settings.get() singleton — that path was a 6.7x perf regression because
+			// MockRestClient's static RestContext cache leaks instances and Settings.get()'s source
+			// list grew unbounded). Per-resource isolation comes for free from the BeanStore scope.
+			registerRestConfigPropertySources();
 
 			// Register memoizer-backed defaults for every framework-managed type.  These sit at the
 			// bottom of the precedence order and only fire when no @Bean method, no programmatic

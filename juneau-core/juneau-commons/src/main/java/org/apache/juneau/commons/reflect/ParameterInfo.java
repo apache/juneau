@@ -902,7 +902,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			ValueResolver.checkInjectConflict(annos, this.toString());
 			// Pass the declared (generic) parameter type so @Value Supplier<String> autodetects
 			// Supplier<String> field/parameter type opts in to re-evaluating reads.
-			return ValueResolver.resolve(valueExpr, ptu.inner(), inner.getParameterizedType(), this.toString());
+			// BeanStore is forwarded so caller-scoped PropertySource beans (e.g. per-RestContext
+			// @Rest(config=...) Configs) participate in expression resolution alongside Settings.
+			return ValueResolver.resolve(valueExpr, ptu.inner(), inner.getParameterizedType(), this.toString(), beanStore);
 		}
 
 		if (JsrSupport.isProviderType(ptu.inner())) {

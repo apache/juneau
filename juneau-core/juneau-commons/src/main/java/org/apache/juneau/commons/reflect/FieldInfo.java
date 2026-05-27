@@ -607,7 +607,9 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 			var unwrapped = fieldType.unwrap(Optional.class).inner();
 			// Pass the declared (generic) field type so @Value Supplier<String> autodetects
 			// Field type IS the opt-in signal for re-evaluating reads (Supplier<String> autodetect).
-			var resolved = ValueResolver.resolve(valueExpr, unwrapped, inner.getGenericType(), this.toString());
+			// BeanStore is forwarded so caller-scoped PropertySource beans (e.g. per-RestContext
+			// @Rest(config=...) Configs) participate in expression resolution alongside Settings.
+			var resolved = ValueResolver.resolve(valueExpr, unwrapped, inner.getGenericType(), this.toString(), beanStore);
 			if (fieldType.is(Optional.class)) {
 				// VarResolver substitutes "" for a missing key with no default. Collapse both to
 				// Optional.empty() so @Value("${maybe}") Optional<T> behaves the same as Spring's.
