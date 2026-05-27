@@ -1563,6 +1563,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.20h.RestServerAsyncDispatch',
+							label: '10.20h. Async Returns + Virtual-Thread Dispatch',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.21.BuiltInParameters',
 							label: '10.21. Built-In Parameters',
 						},
