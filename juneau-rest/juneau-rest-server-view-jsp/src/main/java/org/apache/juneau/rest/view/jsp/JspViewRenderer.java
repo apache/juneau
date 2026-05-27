@@ -22,6 +22,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.processor.*;
+import org.apache.juneau.rest.view.*;
 
 /**
  * {@link ResponseProcessor} that detects {@link JspView}-typed return values and dispatches them
@@ -77,7 +78,7 @@ import org.apache.juneau.rest.processor.*;
  *
  * @since 9.5.0
  */
-public class JspViewRenderer implements ResponseProcessor {
+public class JspViewRenderer implements ViewRenderer {
 
 	/**
 	 * Diagnostic message emitted when no JSP engine can be found on the classpath at forward-time.

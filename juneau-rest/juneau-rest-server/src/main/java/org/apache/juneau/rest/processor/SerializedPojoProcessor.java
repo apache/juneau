@@ -39,7 +39,7 @@ import org.apache.juneau.serializer.*;
 @SuppressWarnings({
 	"resource" // SerializedPojoProcessor manages Closeable resources
 })
-public class SerializedPojoProcessor implements ResponseProcessor {
+public class SerializedPojoProcessor implements CatchAllResponseProcessor {
 
 	@Override /* Overridden from ResponseProcessor */
 	@SuppressWarnings({

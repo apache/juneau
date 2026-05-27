@@ -23,6 +23,7 @@ import com.github.mustachejava.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.processor.*;
+import org.apache.juneau.rest.view.*;
 
 /**
  * {@link ResponseProcessor} that detects {@link MustacheView}-typed return values and asks the
@@ -66,7 +67,7 @@ import org.apache.juneau.rest.processor.*;
  *
  * @since 9.5.0
  */
-public class MustacheViewRenderer implements ResponseProcessor {
+public class MustacheViewRenderer implements ViewRenderer {
 
 	/** Default {@code Content-Type} applied when the view does not specify one explicitly. */
 	public static final String DEFAULT_CONTENT_TYPE = "text/html;charset=UTF-8";

@@ -23,6 +23,7 @@ import freemarker.template.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.processor.*;
+import org.apache.juneau.rest.view.*;
 
 /**
  * {@link ResponseProcessor} that detects {@link FreemarkerView}-typed return values and asks the
@@ -66,7 +67,7 @@ import org.apache.juneau.rest.processor.*;
  *
  * @since 9.5.0
  */
-public class FreemarkerViewRenderer implements ResponseProcessor {
+public class FreemarkerViewRenderer implements ViewRenderer {
 
 	/** Default {@code Content-Type} applied when the view does not specify one explicitly. */
 	public static final String DEFAULT_CONTENT_TYPE = "text/html;charset=UTF-8";

@@ -21,6 +21,7 @@ import java.io.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.processor.*;
+import org.apache.juneau.rest.view.*;
 import org.thymeleaf.*;
 import org.thymeleaf.context.*;
 
@@ -65,7 +66,7 @@ import org.thymeleaf.context.*;
  *
  * @since 9.5.0
  */
-public class ThymeleafViewRenderer implements ResponseProcessor {
+public class ThymeleafViewRenderer implements ViewRenderer {
 
 	/** Default {@code Content-Type} applied when the view does not specify one explicitly. */
 	public static final String DEFAULT_CONTENT_TYPE = "text/html;charset=UTF-8";
