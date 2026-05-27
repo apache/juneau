@@ -352,6 +352,11 @@ const sidebars: SidebarsConfig = {
 									id: 'topics/02.21.06.ValueAnnotationBasics',
 									label: '2.21.6. @Value Annotation Basics',
 								},
+								{
+									type: 'doc',
+									id: 'topics/02.21.07.ValueFrameworkInternal',
+									label: '2.21.7. @Value Framework-Internal Adoption',
+								},
 							],
 						},
 						{
