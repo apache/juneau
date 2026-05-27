@@ -640,6 +640,41 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return false;
 	});
 
+	/**
+	 * Whether this operation opts into per-request virtual-thread dispatch on Java 21+.
+	 *
+	 * <p>
+	 * Tri-state semantics on {@code @RestOp}-group annotations: {@code "true"} enables, {@code "false"} disables
+	 * (overrides an opted-in resource), and {@code ""} (default) inherits from {@code @Rest(virtualThreads)}. Honored
+	 * only when the resource-level {@link RestContext#getVirtualThreadExecutor()} is non-{@code null} (Java 21+).
+	 */
+	private final Memoizer<Boolean> virtualThreadsEnabled = memoizer(() -> {
+		var v = findOpString(PROPERTY_virtualThreads);
+		if (v.isPresent())
+			return Boolean.parseBoolean(v.get());
+		if (isInherited(PROPERTY_virtualThreads))
+			return restContext().isVirtualThreadsEnabled();
+		return false;
+	});
+
+	/**
+	 * Configurable async-response timeout (milliseconds) for this operation; {@code -1} when neither the op
+	 * annotation nor the resource declares a value (so {@code AsyncResponseProcessor}'s 30-second default applies).
+	 */
+	private final Memoizer<Long> asyncTimeoutMillis = memoizer(() -> {
+		var v = findOpString(PROPERTY_asyncTimeoutMillis);
+		if (v.isPresent()) {
+			try {
+				return Long.parseLong(v.get().trim());
+			} catch (NumberFormatException nfe) {
+				return -1L;
+			}
+		}
+		if (isInherited(PROPERTY_asyncTimeoutMillis))
+			return restContext().getAsyncTimeoutMillis();
+		return -1L;
+	});
+
 	/** Aggregated {@code noInherit} keys from all RestOp-group annotations on this operation. */
 	private final Memoizer<SortedSet<String>> noInheritOp = memoizer(() -> {
 		var l = getRestOpAnnotations().stream()
@@ -1409,6 +1444,27 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return <jk>true</jk> if RFC 7807 problem-details responses are enabled on this operation.
 	 */
 	public boolean isProblemDetails() { return problemDetails.get(); }
+
+	/**
+	 * Returns whether this operation opts into per-request virtual-thread dispatch on Java 21+.
+	 *
+	 * <p>
+	 * The op-level {@code @RestOp(virtualThreads)} value (when non-blank) wins; otherwise the value is inherited
+	 * from {@link RestContext#isVirtualThreadsEnabled()} (resource-level {@code @Rest(virtualThreads)}). Honored
+	 * only when the resource-level {@link RestContext#getVirtualThreadExecutor()} is non-{@code null} (Java 21+).
+	 *
+	 * @return <jk>true</jk> if virtual-thread dispatch is configured on this operation.
+	 */
+	public boolean isVirtualThreadsEnabled() { return virtualThreadsEnabled.get(); }
+
+	/**
+	 * Returns the configured async-response timeout (milliseconds) for this operation, or {@code -1} when no
+	 * value was supplied at the op or resource level — in which case the default 30-second fallback applies in
+	 * {@link org.apache.juneau.rest.processor.AsyncResponseProcessor}.
+	 *
+	 * @return The async timeout in milliseconds, or {@code -1} when unset.
+	 */
+	public long getAsyncTimeoutMillis() { return asyncTimeoutMillis.get(); }
 
 	/**
 	 * Returns the parsers to use for this method.

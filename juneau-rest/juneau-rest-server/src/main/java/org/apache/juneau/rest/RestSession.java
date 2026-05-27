@@ -288,7 +288,8 @@ public class RestSession extends ContextSession {
 			req.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 			if (nn(opSession))
 				opSession.finish();
-			else {
+			else if (! org.apache.juneau.rest.processor.AsyncResponseProcessor.isAsyncDispatchOwned(req)) {
+				// TODO-70: skip flush when AsyncContext has been started — see AsyncResponseProcessor.
 				res.flushBuffer();
 			}
 		} catch (Exception e) {

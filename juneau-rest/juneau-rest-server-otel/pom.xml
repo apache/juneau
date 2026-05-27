@@ -32,7 +32,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<opentelemetry.version>1.43.0</opentelemetry.version>
+		<opentelemetry.version>1.62.0</opentelemetry.version>
 	</properties>
 
 	<dependencies>

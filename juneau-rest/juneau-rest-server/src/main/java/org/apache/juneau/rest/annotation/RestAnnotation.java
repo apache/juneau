@@ -92,6 +92,8 @@ public class RestAnnotation {
 		private String path = "";
 		private String[] paths = {};
 		private String problemDetails = "";
+		private String virtualThreads = "";
+		private String asyncTimeoutMillis = "";
 		private String renderResponseStackTraces = "";
 		private String roleGuard = "";
 		private String rolesDeclared = "";
@@ -519,6 +521,28 @@ public class RestAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Rest#virtualThreads()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder virtualThreads(String value) {
+			virtualThreads = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#asyncTimeoutMillis()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder asyncTimeoutMillis(String value) {
+			asyncTimeoutMillis = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Rest#renderResponseStackTraces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -737,6 +761,8 @@ public class RestAnnotation {
 		private final String path;
 		private final String[] paths;
 		private final String problemDetails;
+		private final String virtualThreads;
+		private final String asyncTimeoutMillis;
 		private final String renderResponseStackTraces;
 		private final String roleGuard;
 		private final String rolesDeclared;
@@ -794,6 +820,8 @@ public class RestAnnotation {
 			path = b.path;
 			paths = copyOf(b.paths);
 			problemDetails = b.problemDetails;
+			virtualThreads = b.virtualThreads;
+			asyncTimeoutMillis = b.asyncTimeoutMillis;
 			produces = copyOf(b.produces);
 			renderResponseStackTraces = b.renderResponseStackTraces;
 			responseProcessors = copyOf(b.responseProcessors);
@@ -1000,6 +1028,16 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String problemDetails() {
 			return problemDetails;
+		}
+
+		@Override /* Overridden from Rest */
+		public String virtualThreads() {
+			return virtualThreads;
+		}
+
+		@Override /* Overridden from Rest */
+		public String asyncTimeoutMillis() {
+			return asyncTimeoutMillis;
 		}
 
 		@Override /* Overridden from Rest */

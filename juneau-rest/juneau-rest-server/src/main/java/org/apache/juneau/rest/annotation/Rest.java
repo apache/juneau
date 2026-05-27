@@ -694,6 +694,82 @@ public @interface Rest {
 	String problemDetails() default "";
 
 	/**
+	 * Opt this resource into per-request virtual-thread dispatch (Java 21+).
+	 *
+	 * <p>
+	 * When enabled, every {@code @RestOp}-annotated handler invocation on this resource is submitted to a
+	 * {@link java.util.concurrent.Executors#newVirtualThreadPerTaskExecutor() virtual-thread-per-task executor}
+	 * lazily built by the {@link org.apache.juneau.rest.RestContext}. The platform request thread blocks on
+	 * the virtual thread's completion (so the handler's return value, exceptions, and observability hooks are
+	 * preserved verbatim), but blocking I/O inside the handler now parks a virtual thread instead of the
+	 * carrier — i.e. the carrier thread is freed to service other concurrent requests while the handler is
+	 * parked on socket / file / lock waits. Combined with {@link java.util.concurrent.CompletableFuture}
+	 * return types ({@code @RestGet} / {@code @RestPost} returning {@code CompletableFuture<T>}) this is the
+	 * high-throughput pattern.
+	 *
+	 * <p>
+	 * <b>Graceful degradation on Java 17/18/19/20:</b> the flag is detected during {@code RestContext}
+	 * initialization. If the runtime is older than Java 21, a one-shot {@code WARNING} is logged and the
+	 * resource falls back to the standard caller-thread dispatch path — no runtime error.
+	 *
+	 * <p>
+	 * Per-{@code @RestOp} overrides are available via {@link RestOp#virtualThreads()}; the op-level setting
+	 * takes precedence over the resource-level setting.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> &mdash; enable virtual-thread dispatch on Java 21+ (silently disabled on older JVMs).
+	 * 	<li><js>"false"</js> &mdash; explicitly disable.
+	 * 	<li><js>""</js> (default) &mdash; inherit from the next-most-derived {@code @Rest} in the resource-class
+	 * 		hierarchy.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$E{ENABLE_VIRTUAL_THREADS,false}"</js>).
+	 * 	<li class='note'>
+	 * 		Synchronized blocks and JNI calls in handler code <i>pin</i> a virtual thread to its carrier thread
+	 * 		— prefer {@link java.util.concurrent.locks.ReentrantLock} over {@code synchronized} in handlers run
+	 * 		under this flag.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link RestOp#virtualThreads()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String virtualThreads() default "";
+
+	/**
+	 * Configurable timeout (milliseconds) applied to {@link java.util.concurrent.CompletableFuture}-returning
+	 * handlers by {@link org.apache.juneau.rest.processor.AsyncResponseProcessor}. Default is 30,000 ms.
+	 *
+	 * <p>
+	 * On timeout, the future is cancelled with {@code mayInterruptIfRunning=true} and the response is
+	 * committed as {@code 504 Gateway Timeout}. Set to {@code "0"} to disable the timeout entirely.
+	 *
+	 * <p>
+	 * Per-{@code @RestOp} overrides are available via {@link RestOp#asyncTimeoutMillis()}; the op-level
+	 * setting takes precedence over the resource-level setting.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$E{ASYNC_TIMEOUT_MS,30000}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link org.apache.juneau.rest.processor.AsyncResponseProcessor}
+	 * 	<li class='ja'>{@link RestOp#asyncTimeoutMillis()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String asyncTimeoutMillis() default "";
+
+	/**
 	 * Specifies the compression encoders for this resource.
 	 *
 	 * <p>

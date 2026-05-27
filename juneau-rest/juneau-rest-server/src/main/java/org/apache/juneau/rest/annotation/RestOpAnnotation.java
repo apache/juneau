@@ -72,6 +72,8 @@ public class RestOpAnnotation {
 		private String maxInput = "";
 		private String method = "";
 		private String problemDetails = "";
+		private String virtualThreads = "";
+		private String asyncTimeoutMillis = "";
 		private String rolesDeclared = "";
 		private String roleGuard = "";
 		private String summary = "";
@@ -351,6 +353,28 @@ public class RestOpAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestOp#virtualThreads()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder virtualThreads(String value) {
+			virtualThreads = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#asyncTimeoutMillis()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder asyncTimeoutMillis(String value) {
+			asyncTimeoutMillis = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestOp#produces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -489,6 +513,8 @@ public class RestOpAnnotation {
 		private final String maxInput;
 		private final String method;
 		private final String problemDetails;
+		private final String virtualThreads;
+		private final String asyncTimeoutMillis;
 		private final String rolesDeclared;
 		private final String roleGuard;
 		private final String summary;
@@ -528,6 +554,8 @@ public class RestOpAnnotation {
 			parsers = copyOf(b.parsers);
 			path = copyOf(b.path);
 			problemDetails = b.problemDetails;
+			virtualThreads = b.virtualThreads;
+			asyncTimeoutMillis = b.asyncTimeoutMillis;
 			produces = copyOf(b.produces);
 			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
 			allowedParserOptions = copyOf(b.allowedParserOptions);
@@ -638,6 +666,16 @@ public class RestOpAnnotation {
 		@Override /* Overridden from RestOp */
 		public String problemDetails() {
 			return problemDetails;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String virtualThreads() {
+			return virtualThreads;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String asyncTimeoutMillis() {
+			return asyncTimeoutMillis;
 		}
 
 		@Override /* Overridden from RestOp */

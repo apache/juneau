@@ -2166,6 +2166,69 @@ public class RestContext extends Context {
 		mergeReplacedBooleanAttribute(PROPERTY_problemDetails, env("RestContext.problemDetails", false)));
 
 	/**
+	 * Whether the resource opts into per-request virtual-thread dispatch on Java 21+; resolved from
+	 * {@code @Rest(virtualThreads)} (TODO-70).
+	 *
+	 * <p>
+	 * Detection happens at context-init via {@link #mergeReplacedBooleanAttribute(String, boolean)}; on JVMs older
+	 * than Java 21 the flag is logged once and ignored — see {@link #virtualThreadExecutor}.
+	 */
+	private final Memoizer<Boolean> virtualThreadsEnabled = memoizer(() ->
+		mergeReplacedBooleanAttribute(PROPERTY_virtualThreads, env("RestContext.virtualThreads", false)));
+
+	/**
+	 * Configurable async-response timeout (milliseconds) applied by {@code AsyncResponseProcessor} to
+	 * {@link CompletableFuture}-returning handlers; resolved from {@code @Rest(asyncTimeoutMillis)} (TODO-70).
+	 *
+	 * <p>
+	 * {@code 0} disables the timeout. The default 30-second fallback is applied by {@code AsyncResponseProcessor}
+	 * itself when neither the resource nor the operation declares a value.
+	 */
+	private final Memoizer<Long> asyncTimeoutMillis = memoizer(() -> {
+		var s = mergeReplacedStringAttribute(PROPERTY_asyncTimeoutMillis, null);
+		if (s == null || s.isEmpty())
+			return -1L;
+		try {
+			return Long.parseLong(s.trim());
+		} catch (NumberFormatException nfe) {
+			ASYNC_LOG.log(Level.WARNING, () -> "Invalid @Rest(asyncTimeoutMillis) value '" + s + "' — falling back to default.");
+			return -1L;
+		}
+	});
+
+	/**
+	 * Lazily-instantiated virtual-thread executor used by {@link RestOpInvoker} when
+	 * {@code @Rest(virtualThreads=true)} is set on this resource and the runtime is Java 21+.
+	 *
+	 * <p>
+	 * On Java 17/18/19/20 the supplier returns {@code null} and emits a one-shot {@code WARNING} log so the
+	 * resource degrades gracefully to caller-thread dispatch (TODO-70 graceful-degradation contract).
+	 */
+	private final Memoizer<Executor> virtualThreadExecutor = memoizer(() -> {
+		// NOTE: Intentionally not gated on resource-level {@code virtualThreadsEnabled.get()} — per-op
+		// {@code @RestOp(virtualThreads="true")} can opt in even when the enclosing {@code @Rest} doesn't.
+		// Callers ({@link RestOpInvoker#invokeOp}) only reach this method when the effective op-level flag is true,
+		// so the warning emitted on Java &lt;21 is appropriate at first call regardless of where the flag is set.
+		if (Runtime.version().feature() < 21) {
+			ASYNC_LOG.log(Level.WARNING, () -> "virtualThreads=true configured on " + getResourceClass().getName()
+				+ " but runtime is Java " + Runtime.version().feature() + " — virtual-thread dispatch requires Java 21+. "
+				+ "Falling back to caller-thread dispatch.");
+			return null;
+		}
+		try {
+			var m = Executors.class.getMethod("newVirtualThreadPerTaskExecutor");
+			return (Executor) m.invoke(null);
+		} catch (ReflectiveOperationException e) {
+			ASYNC_LOG.log(Level.WARNING, e, () -> "Reflective creation of virtual-thread executor failed on "
+				+ getResourceClass().getName() + " — falling back to caller-thread dispatch.");
+			return null;
+		}
+	});
+
+	/** Logger for async / virtual-thread setup events (TODO-70). Used at memoizer init before {@link #getLogger()} may be wired up. */
+	private static final Logger ASYNC_LOG = Logger.getLogger(RestContext.class.getName() + ".async");
+
+	/**
 	 * Whether framework memoizers and operation/child contexts should be force-initialized during constructor execution;
 	 * resolved from {@code @Rest(eagerInit)}.
 	 */
@@ -3316,6 +3379,36 @@ public class RestContext extends Context {
 	public boolean isProblemDetails() { return problemDetails.get(); }
 
 	/**
+	 * Returns whether the resource opted into per-request virtual-thread dispatch (Java 21+) via
+	 * {@code @Rest(virtualThreads=true)}.
+	 *
+	 * <p>
+	 * The flag is honored only when {@link #getVirtualThreadExecutor()} returns a non-{@code null} executor; on
+	 * runtimes older than Java 21 the executor is {@code null} and the flag is logged once at context init.
+	 *
+	 * @return <jk>true</jk> if virtual-thread dispatch is configured on this resource.
+	 */
+	public boolean isVirtualThreadsEnabled() { return virtualThreadsEnabled.get(); }
+
+	/**
+	 * Returns the lazily-instantiated virtual-thread executor for this resource, or {@code null} when
+	 * {@code @Rest(virtualThreads=true)} is unset, the runtime is older than Java 21, or executor construction
+	 * failed (in which case a {@code WARNING} was logged at context init).
+	 *
+	 * @return The executor, or {@code null} if virtual-thread dispatch is not active for this resource.
+	 */
+	public Executor getVirtualThreadExecutor() { return virtualThreadExecutor.get(); }
+
+	/**
+	 * Returns the configured async-response timeout (milliseconds) for this resource. {@code -1} indicates that no
+	 * value was supplied at the resource level — the per-op value (or {@code AsyncResponseProcessor}'s 30-second
+	 * default) applies in that case.
+	 *
+	 * @return The async timeout in milliseconds, or {@code -1} when unset.
+	 */
+	public long getAsyncTimeoutMillis() { return asyncTimeoutMillis.get(); }
+
+	/**
 	 * Returns whether framework beans and operation/child contexts are eagerly initialized at construction time.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -3457,7 +3550,7 @@ public class RestContext extends Context {
 	 * @param t The thrown object.
 	 * @return The converted thrown object.
 	 */
-	protected Throwable convertThrowable(Throwable t) {
+	public Throwable convertThrowable(Throwable t) {
 
 		if (t instanceof InvocationTargetException t2)
 			t = t2.getTargetException();
@@ -3855,7 +3948,7 @@ public class RestContext extends Context {
 	@SuppressWarnings({
 		"java:S127" // Loop counter i resets to -1 on RESTART
 	})
-	protected void processResponse(RestOpSession opSession) throws IOException, BasicHttpException, NotImplemented {
+	public void processResponse(RestOpSession opSession) throws IOException, BasicHttpException, NotImplemented {
 
 		// Loop until we find the correct processor for the POJO.
 		int loops = 5;

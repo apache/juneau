@@ -26,6 +26,7 @@ import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.logger.*;
+import org.apache.juneau.rest.processor.*;
 
 /**
  * A session for a single HTTP request.
@@ -147,6 +148,11 @@ public class RestOpSession extends ContextSession {
 	 * @return This object.
 	 */
 	public RestOpSession finish() {
+		// TODO-70: when AsyncResponseProcessor has handed off to a real AsyncContext, the response will be
+		// committed by AsyncContext.complete() inside the future's whenComplete callback — synchronously
+		// flushing here would commit the response prematurely.
+		if (AsyncResponseProcessor.isAsyncDispatchOwned(this))
+			return this;
 		try {
 			res.flushBuffer();
 			req.close();

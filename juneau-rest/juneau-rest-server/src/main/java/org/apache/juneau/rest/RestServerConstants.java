@@ -69,6 +69,20 @@ public final class RestServerConstants {
 	/** The {@code "eagerInit"} annotation attribute name — used in {@code noInherit} matching. */
 	public static final String PROPERTY_eagerInit = "eagerInit";
 
+	/**
+	 * The {@code "virtualThreads"} annotation attribute name — used in {@code noInherit} matching to opt the resource
+	 * (or one of its {@code @RestOp}-annotated methods) into per-request virtual-thread dispatch on Java 21+. On
+	 * runtimes older than Java 21 the flag is logged once and ignored.
+	 */
+	public static final String PROPERTY_virtualThreads = "virtualThreads";
+
+	/**
+	 * The {@code "asyncTimeoutMillis"} annotation attribute name — used in {@code noInherit} matching to override the
+	 * default 30-second timeout applied by {@link org.apache.juneau.rest.processor.AsyncResponseProcessor} to
+	 * {@link java.util.concurrent.CompletableFuture}-returning handlers. {@code "0"} disables the timeout entirely.
+	 */
+	public static final String PROPERTY_asyncTimeoutMillis = "asyncTimeoutMillis";
+
 	/** The {@code "clientVersionHeader"} annotation attribute name — used in {@code noInherit} matching. */
 	public static final String PROPERTY_clientVersionHeader = "clientVersionHeader";
 

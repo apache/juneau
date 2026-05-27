@@ -50,6 +50,7 @@ import org.apache.juneau.serializer.annotation.*;
 	partParser=OpenApiParser.class,
 	partSerializer=OpenApiSerializer.class,
 	responseProcessors={
+		AsyncResponseProcessor.class,
 		ReaderProcessor.class,
 		InputStreamProcessor.class,
 		ThrowableProcessor.class,

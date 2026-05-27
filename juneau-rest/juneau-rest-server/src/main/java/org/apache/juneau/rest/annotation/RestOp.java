@@ -692,6 +692,55 @@ public @interface RestOp {
 	String problemDetails() default "";
 
 	/**
+	 * Per-operation override for {@link Rest#virtualThreads() @Rest(virtualThreads)}.
+	 *
+	 * <p>
+	 * When set, this value takes precedence over the resource-level setting for this operation. Tri-state
+	 * semantics:
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> &mdash; enable virtual-thread dispatch for this operation (Java 21+ only;
+	 * 		gracefully ignored on older JVMs).
+	 * 	<li><js>"false"</js> &mdash; disable virtual-thread dispatch for this operation (overrides an
+	 * 		opted-in resource).
+	 * 	<li><js>""</js> (default) &mdash; inherit from {@link Rest#virtualThreads()}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$E{ENABLE_VT,false}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#virtualThreads()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String virtualThreads() default "";
+
+	/**
+	 * Per-operation override for {@link Rest#asyncTimeoutMillis() @Rest(asyncTimeoutMillis)}.
+	 *
+	 * <p>
+	 * Configurable timeout (milliseconds) applied to {@link java.util.concurrent.CompletableFuture}-returning
+	 * handlers. Default is 30,000 ms inherited from the resource. Set to {@code "0"} to disable the timeout.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#asyncTimeoutMillis()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String asyncTimeoutMillis() default "";
+
+	/**
 	 * Supported accept media types.
 	 *
 	 * <p>
