@@ -24,15 +24,29 @@ Options:
     --verbose, -v            Show full Maven output
     --no-container           Exclude @Tag("container") tests
     --timing-log <path>      Append per-bucket timing JSONL records
+    --enforce-perf           Hard-fail if wall-clock exceeds perf-baseline.txt ±20% tolerance
     --profile <module>       Run one-shot JFR profile for module tests
     --help, -h               Show this help message
+
+Perf guard:
+    --enforce-perf compares the actual tests-only wall-clock against the suite baseline in
+    juneau-utest/perf-baseline.txt (line 1).  Uses env-var JUNEAU_CI_PERF_THRESHOLD (default
+    0.20, i.e. ±20%) — separate from JUNEAU_PUSH_TIMING_THRESHOLD.
+
+    When --timing-log is also passed the per-bucket Surefire XML totals are compared against
+    the core / container.springboot / container.jetty baselines (lines 2–4 of perf-baseline.txt).
+
+    Without --enforce-perf the check runs in warn-only mode (prints results, never exits non-zero
+    for a perf breach).
 """
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
+import time
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
@@ -154,6 +168,111 @@ def write_timing_log(path: Path, passed: bool):
 	print(f"🕒 Timing metrics appended to {path}")
 
 
+def read_baselines(baseline_file: Path) -> dict:
+	"""Read baselines from perf-baseline.txt.
+
+	Returns a dict mapping label to float:
+	  'suite'               — line 1, suite wall-clock (used by --enforce-perf).
+	  'core'                — line 2, core Surefire XML total.
+	  'container.springboot'— line 3, springboot Surefire XML total.
+	  'container.jetty'     — line 4, jetty Surefire XML total.
+	"""
+	keys = ["suite", "core", "container.springboot", "container.jetty"]
+	result = {}
+	if not baseline_file.exists():
+		return result
+	idx = 0
+	for line in baseline_file.read_text(encoding="utf-8").splitlines():
+		stripped = line.strip()
+		if not stripped or stripped.startswith("#"):
+			continue
+		if idx >= len(keys):
+			break
+		try:
+			value = float(stripped.split()[0])
+			result[keys[idx]] = value
+			idx += 1
+		except (ValueError, IndexError):
+			continue
+	return result
+
+
+def _read_latest_jsonl_run(log_path: Path) -> dict:
+	"""Return {execution: wallclock_s} for the latest run_id in the JSONL."""
+	rows = []
+	for line in log_path.read_text(encoding="utf-8").splitlines():
+		stripped = line.strip()
+		if not stripped:
+			continue
+		try:
+			rows.append(json.loads(stripped))
+		except json.JSONDecodeError:
+			continue
+	if not rows:
+		return {}
+	latest_run_id = rows[-1].get("run_id")
+	result = {}
+	for row in rows:
+		if row.get("run_id") == latest_run_id:
+			execution = row.get("execution", "")
+			result[execution] = float(row.get("wallclock_s", 0.0))
+	return result
+
+
+def run_perf_guard(test_elapsed: float, baseline_file: Path, timing_log_path, enforce: bool) -> int:
+	"""Run the v1 (suite wall-clock) and v2 (per-bucket Surefire XML) perf guards.
+
+	Returns exit code: 0 = pass or warn-only mode, 1 = threshold breached with enforce=True.
+	"""
+	tolerance = float(os.environ.get("JUNEAU_CI_PERF_THRESHOLD", "0.20"))
+	baselines = read_baselines(baseline_file)
+	if not baselines:
+		print(f"PERF-GUARD: baseline file not found ({baseline_file}); skipping check.")
+		return 0
+
+	pct = f"±{tolerance * 100:.0f}%"
+	perf_failed = False
+
+	suite_baseline = baselines.get("suite")
+	if suite_baseline is not None:
+		threshold = suite_baseline * (1 + tolerance)
+		if test_elapsed > threshold:
+			print(
+				f"PERF-GUARD FAIL: tests took {test_elapsed:.1f}s "
+				f"(baseline {suite_baseline}s, tolerance {pct}, threshold {threshold:.1f}s).\n"
+				f"If this is intentional, bump juneau-utest/perf-baseline.txt and the FINISHED archive's ## Perf block in the same PR."
+			)
+			perf_failed = True
+		else:
+			print(f"PERF-GUARD OK: tests took {test_elapsed:.1f}s (baseline {suite_baseline}s, tolerance {pct}).")
+
+	if timing_log_path is not None:
+		log_path = Path(timing_log_path).expanduser()
+		if log_path.exists():
+			latest_run = _read_latest_jsonl_run(log_path)
+			for bucket in ("core", "container.springboot", "container.jetty"):
+				bucket_actual = latest_run.get(bucket)
+				bucket_baseline = baselines.get(bucket)
+				if bucket_actual is None or bucket_baseline is None:
+					continue
+				bucket_threshold = bucket_baseline * (1 + tolerance)
+				if bucket_actual > bucket_threshold:
+					print(
+						f"PERF-GUARD FAIL [{bucket}]: {bucket_actual:.1f}s "
+						f"(baseline {bucket_baseline}s, tolerance {pct}, threshold {bucket_threshold:.1f}s).\n"
+						f"If this is intentional, bump juneau-utest/perf-baseline.txt and the FINISHED archive's ## Perf block in the same PR."
+					)
+					perf_failed = True
+				else:
+					print(f"PERF-GUARD OK [{bucket}]: {bucket_actual:.1f}s (baseline {bucket_baseline}s, tolerance {pct}).")
+
+	if perf_failed:
+		if not enforce:
+			print("PERF-GUARD: warn-only mode (pass --enforce-perf to hard-fail on breach).")
+		return 1 if enforce else 0
+	return 0
+
+
 def build(verbose=False):
 	return run_command("mvn clean install -DskipTests", verbose)
 
@@ -187,6 +306,7 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 	parser.add_argument("--verbose", "-v", action="store_true")
 	parser.add_argument("--no-container", action="store_true")
 	parser.add_argument("--timing-log")
+	parser.add_argument("--enforce-perf", action="store_true")
 	parser.add_argument("--profile")
 	parser.add_argument("--help", "-h", action="store_true")
 	args, unknown = parser.parse_known_args()
@@ -223,7 +343,11 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 	if test_only or full:
 		if full:
 			print("\n" + "=" * 80)
+		if not args.enforce_perf:
+			print("PERF-GUARD: warn-only mode (pass --enforce-perf to hard-fail on breach).")
+		test_start = time.time()
 		exit_code, last_test_output = test(verbose, no_container=args.no_container)
+		test_elapsed = time.time() - test_start
 		if exit_code != 0:
 			_, failures, errors = parse_test_results(last_test_output)
 			if failures is not None and errors is not None:
@@ -236,8 +360,11 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 			write_timing_log(Path(args.timing_log), passed=(exit_code == 0))
 		if exit_code != 0:
 			return exit_code
+		baseline_file = Path(__file__).parent.parent / "juneau-utest" / "perf-baseline.txt"
+		perf_exit = run_perf_guard(test_elapsed, baseline_file, args.timing_log, enforce=args.enforce_perf)
+		if perf_exit != 0:
+			return perf_exit
 	return exit_code
 
 if __name__ == '__main__':
     sys.exit(main())
-

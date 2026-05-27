@@ -1,0 +1,25 @@
+# juneau-utest performance baselines.
+#
+# Line format: <seconds>  # <label>; as of <YYYY-MM-DD>; tolerance ±<pct>%; set by FINISHED-<id>.
+#
+# Line 1 — suite wall-clock (subprocess time of `mvn test`).
+#   Used by: scripts/test.py --enforce-perf
+#   Measured on: developer M1 Pro laptop (warm cache).
+#
+# Lines 2–4 — per-bucket Surefire XML aggregate totals.
+#   Used by: scripts/ci-perf-guard.py (reads Surefire XML or --timing-log JSONL)
+#   Measured on: developer M1 Pro laptop via ~/.cache/juneau-push-timings/ JSONL.
+#
+# To re-baseline: run `python3 scripts/test.py --full --timing-log /tmp/juneau-timing.jsonl`,
+# read the wall-clock and bucket values, update this file AND add a ## Perf block to the
+# FINISHED archive in the same PR.  Full procedure in todo/PERF-BASELINE.md.
+#
+# NOTE: The per-bucket baselines (lines 2–4) were measured on a developer M1 Pro and will
+# differ from CI Linux values.  The first Jenkins run after this guard lands will likely
+# fail; follow the first-CI-run calibration procedure in todo/PERF-BASELINE.md to set
+# the canonical CI baseline.
+
+99  # suite wall-clock; as of 2026-05-27; tolerance ±20%; set by FINISHED-95.
+60  # core; as of 2026-05-27; tolerance ±20%; set by FINISHED-139.
+3   # container.springboot; as of 2026-05-27; tolerance ±20%; set by FINISHED-139.
+1   # container.jetty; as of 2026-05-27; tolerance ±20%; set by FINISHED-139.

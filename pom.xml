@@ -165,6 +165,9 @@
 
 						<!-- ServiceLoader provider files - plain text, no comment syntax for license headers -->
 						<exclude>**/META-INF/services/**</exclude>
+
+						<!-- Performance baseline data file - plain text metrics, no license header syntax -->
+						<exclude>**/perf-baseline.txt</exclude>
 					</excludes>
 					<consoleOutput>true</consoleOutput>
 					<!-- Note:  useEclipseDefaultExcludes does not work for subprojects.  See RAT-107 -->
