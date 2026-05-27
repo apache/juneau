@@ -16,12 +16,15 @@
  */
 package org.apache.juneau.rest.convention;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.jar.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -140,12 +143,25 @@ public class BasicVersionResource {
 	public static final String UNKNOWN = "(unknown)";
 
 	/**
-	 * Creates a new builder.
+	 * Creates a new builder, with {@link Value @Value}-annotated fields populated through
+	 * {@link BeanInstantiator} from the active
+	 * {@link org.apache.juneau.commons.settings.Settings Settings} chain.
 	 *
 	 * @return A new builder.
 	 */
 	public static Builder create() {
-		return new Builder();
+		return create(BasicBeanStore.INSTANCE);
+	}
+
+	/**
+	 * Creates a new builder using the supplied {@link BeanStore} for {@link Value @Value}-resolution
+	 * and dependency injection.
+	 *
+	 * @param beanStore The bean store to use for dependency injection.
+	 * @return A new builder.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return BeanInstantiator.of(Builder.class, beanStore).run();
 	}
 
 	private final Map<String,String> info;
@@ -220,7 +236,21 @@ public class BasicVersionResource {
 		private final Map<String,String> entries = new LinkedHashMap<>();
 		private boolean explicit;
 
-		/** Constructor &mdash; package access for {@link BasicVersionResource#create()}. */
+		/**
+		 * Env-driven default for the {@code javaVersion} entry; resolved from the {@code java.version}
+		 * system property (defaulting to the literal {@code (unknown)}, matching
+		 * {@link BasicVersionResource#UNKNOWN}). Populated by {@link BeanInstantiator} via
+		 * {@link Value @Value} field injection.
+		 *
+		 * <p>
+		 * The default is inlined as a string literal rather than referencing {@code UNKNOWN} via
+		 * concatenation, per the project-wide rule that every {@code @Value} expression is a
+		 * fully self-contained string literal.
+		 */
+		@Value("${java.version:(unknown)}")
+		String javaVersionDefault;
+
+		/** Constructor &mdash; protected access for {@link BasicVersionResource#create()}. */
 		protected Builder() {}
 
 		/**
@@ -356,7 +386,7 @@ public class BasicVersionResource {
 		 * @return This object.
 		 */
 		public Builder fromJavaVersion() {
-			entries.putIfAbsent("javaVersion", System.getProperty("java.version", UNKNOWN));
+			entries.putIfAbsent("javaVersion", opt(javaVersionDefault).orElse(UNKNOWN));
 			explicit = true;
 			return this;
 		}

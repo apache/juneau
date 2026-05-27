@@ -24,6 +24,7 @@ import java.text.*;
 import java.time.*;
 import java.util.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.auth.*;
 
 import com.nimbusds.jose.*;
@@ -99,10 +100,26 @@ public class JwtTokenValidator implements TokenValidator {
 	/**
 	 * Static creator.
 	 *
+	 * <p>
+	 * Routes builder construction through {@link BeanInstantiator} so the
+	 * {@link Builder#jwksCacheTtl jwksCacheTtl} default is resolved via {@link Value @Value} from the
+	 * active {@link org.apache.juneau.commons.settings.Settings Settings} chain
+	 * ({@code juneau.jwt.jwksCacheTtl} property &rarr; {@code PT5M}).
+	 *
 	 * @return A new builder.
 	 */
 	public static Builder create() {
-		return new Builder();
+		return create(BasicBeanStore.INSTANCE);
+	}
+
+	/**
+	 * Static creator with explicit bean store.
+	 *
+	 * @param beanStore The bean store to use for dependency injection.
+	 * @return A new builder.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return BeanInstantiator.of(Builder.class, beanStore).run();
 	}
 
 	/**
@@ -116,7 +133,14 @@ public class JwtTokenValidator implements TokenValidator {
 		private String audience;
 		private Set<JWSAlgorithm> algorithms = new LinkedHashSet<>(Arrays.asList(JWSAlgorithm.RS256, JWSAlgorithm.ES256));
 		private Duration clockSkew = Duration.ofSeconds(60);
-		private Duration jwksCacheTtl = Duration.ofMinutes(5);
+
+		/**
+		 * JWKS cache TTL; populated via {@link Value @Value} from
+		 * {@code juneau.jwt.jwksCacheTtl} (ISO-8601 duration, default {@code PT5M} = 5 minutes).
+		 */
+		@Value("${juneau.jwt.jwksCacheTtl:PT5M}")
+		Duration jwksCacheTtl;
+
 		private Clock clock = Clock.systemUTC();
 
 		/** Constructor. */

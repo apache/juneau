@@ -871,6 +871,75 @@ public class RestContext extends Context {
 		return u(toList(s));
 	});
 
+	//---------------------------------------------------------------------------------------------
+	// @Value-injected env-driven defaults
+	//
+	// Populated by ClassInfo.of(this).inject(this, beanStore) during construction; consumed by the
+	// memoizer lambdas below (which run lazily, i.e. after injection has completed). Each field
+	// is the env-driven default that flows into mergeReplacedStringAttribute / mergeReplacedBooleanAttribute
+	// as the initial value before the @Rest annotation chain is walked.
+	//---------------------------------------------------------------------------------------------
+
+	/** Env-driven default for {@code @Rest(debugDefault)}; consumed by the {@link #debugEnablement} memoizer. */
+	@org.apache.juneau.commons.inject.Value("${RestContext.debugDefault:}")
+	private String defaultDebugDefault;
+
+	/** Env-driven default for the call-logger debug level fallback in the {@link #debugConfig} memoizer. */
+	@org.apache.juneau.commons.inject.Value("${juneau.restLogger.level:INFO}")
+	private String defaultDebugLevel;
+
+	/** Env-driven default for {@code @Rest(allowedHeaderParams)}. */
+	@org.apache.juneau.commons.inject.Value("${RestContext.allowedHeaderParams:Accept,Content-Type}")
+	private String defaultAllowedHeaderParams;
+
+	/** Env-driven default for {@code @Rest(allowedMethodHeaders)}. */
+	@org.apache.juneau.commons.inject.Value("${RestContext.allowedMethodHeaders:}")
+	private String defaultAllowedMethodHeaders;
+
+	/** Env-driven default for {@code @Rest(allowedMethodParams)}. */
+	@org.apache.juneau.commons.inject.Value("${RestContext.allowedMethodParams:HEAD,OPTIONS}")
+	private String defaultAllowedMethodParams;
+
+	/** Env-driven default for {@code @Rest(disableContentParam)}. */
+	@org.apache.juneau.commons.inject.Value("${RestContext.disableContentParam:false}")
+	private boolean defaultDisableContentParam;
+
+	/** Env-driven default for {@code @Rest(renderResponseStackTraces)}. */
+	@org.apache.juneau.commons.inject.Value("${RestContext.renderResponseStackTraces:false}")
+	private boolean defaultRenderResponseStackTraces;
+
+	/** Env-driven default for {@code @Rest(problemDetails)}. */
+	@org.apache.juneau.commons.inject.Value("${RestContext.problemDetails:false}")
+	private boolean defaultProblemDetails;
+
+	/** Env-driven default for {@code @Rest(virtualThreads)}. */
+	@org.apache.juneau.commons.inject.Value("${RestContext.virtualThreads:false}")
+	private boolean defaultVirtualThreads;
+
+	/** Env-driven default for {@code @Rest(eagerInit)}. */
+	@org.apache.juneau.commons.inject.Value("${RestContext.eagerInit:false}")
+	private boolean defaultEagerInit;
+
+	/** Env-driven default for {@code @Rest(clientVersionHeader)}. */
+	@org.apache.juneau.commons.inject.Value("${RestContext.clientVersionHeader:Client-Version}")
+	private String defaultClientVersionHeader;
+
+	/** Env-driven default for {@code @Rest(uriRelativity)}; resolves to empty string when unset (treated as "no default"). */
+	@org.apache.juneau.commons.inject.Value("${RestContext.uriRelativity:}")
+	private String defaultUriRelativity;
+
+	/** Env-driven default for {@code @Rest(uriAuthority)}; {@link Optional#empty()} when unset (preserves null-vs-empty distinction). */
+	@org.apache.juneau.commons.inject.Value("${RestContext.uriAuthority}")
+	private Optional<String> defaultUriAuthority;
+
+	/** Env-driven default for {@code @Rest(uriContext)}; {@link Optional#empty()} when unset (preserves null-vs-empty distinction). */
+	@org.apache.juneau.commons.inject.Value("${RestContext.uriContext}")
+	private Optional<String> defaultUriContext;
+
+	/** Env-driven default for {@code @Rest(uriResolution)}; resolves to empty string when unset (treated as "no default"). */
+	@org.apache.juneau.commons.inject.Value("${RestContext.uriResolution:}")
+	private String defaultUriResolution;
+
 	/**
 	 * The {@link DebugEnablement} for this resource.
 	 *
@@ -888,7 +957,7 @@ public class RestContext extends Context {
 		// If neither a debugDefault annotation value NOR a pre-registered Enablement bean is present, fall back
 		// to the @Rest(debug=true|false) boolean flag — ALWAYS when set, NEVER otherwise.
 		var bs = beanStore();
-		String debugDefaultStr = mergeReplacedStringAttribute(PROPERTY_debugDefault, env("RestContext.debugDefault").orElse(null));
+		String debugDefaultStr = mergeReplacedStringAttribute(PROPERTY_debugDefault, defaultDebugDefault);
 		Enablement resolvedDebugDefault = null;
 		if (nn(debugDefaultStr) && !debugDefaultStr.isBlank())
 			resolvedDebugDefault = Enablement.fromString(debugDefaultStr);
@@ -923,7 +992,7 @@ public class RestContext extends Context {
 			.reduce((first, second) -> second)
 			.orElse("");
 		var format = formatType == null ? new BasicTextFormat() : BeanInstantiator.of(DebugFormat.class, bs).type(formatType).run();
-		var level = StringUtils.isNotBlank(levelStr) ? Level.parse(levelStr) : Level.parse(env(CallLogger.SP_level, "INFO"));
+		var level = StringUtils.isNotBlank(levelStr) ? Level.parse(levelStr) : Level.parse(defaultDebugLevel);
 		var mode2 = mode;
 		return new DebugConfig(bs) {
 			@Override
@@ -1939,6 +2008,11 @@ public class RestContext extends Context {
 				.addBean(AnnotationWorkList.class, annotationWork);
 			// @formatter:on
 
+			// Inject @Value-annotated env-driven defaults onto this RestContext instance so that the
+			// memoizer lambdas below (which run lazily on first .get() call) read fully resolved values.
+			// Must run BEFORE isEagerInit() since the eagerInit memoizer itself reads defaultEagerInit.
+			ClassInfo.of(this).inject(this, beanStore);
+
 			if (isEagerInit()) {
 				// Force-fire the framework-bean memoizers in dependency-friendly order so their @Rest()
 				// annotation walks (e.g. `@Rest(partParser=…)`, `@Rest(partSerializer=…)`, `@Rest(encoders=…)`,
@@ -2128,42 +2202,42 @@ public class RestContext extends Context {
 	 * default {@code "Accept,Content-Type"}.
 	 */
 	private final Memoizer<Set<String>> allowedHeaderParams = memoizer(() ->
-		Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedHeaderParams, env("RestContext.allowedHeaderParams", "Accept,Content-Type")))));
+		Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedHeaderParams, defaultAllowedHeaderParams))));
 
 	/**
 	 * HTTP method names that may be specified via a request header; resolved from {@code @Rest(allowedMethodHeaders)},
 	 * default empty.
 	 */
 	private final Memoizer<Set<String>> allowedMethodHeaders = memoizer(() ->
-		Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodHeaders, env("RestContext.allowedMethodHeaders").orElse("")))));
+		Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodHeaders, defaultAllowedMethodHeaders))));
 
 	/**
 	 * HTTP method names that may be specified via URL query parameter; resolved from {@code @Rest(allowedMethodParams)},
 	 * default {@code "HEAD,OPTIONS"}.
 	 */
 	private final Memoizer<Set<String>> allowedMethodParams = memoizer(() ->
-		Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodParams, env("RestContext.allowedMethodParams", "HEAD,OPTIONS")))));
+		Collections.unmodifiableSet(newCaseInsensitiveSet(mergeReplacedStringAttribute(PROPERTY_allowedMethodParams, defaultAllowedMethodParams))));
 
 	/**
 	 * Whether a {@code &content=} URL parameter may override the request body; inverse of
 	 * {@code @Rest(disableContentParam)}.
 	 */
 	private final Memoizer<Boolean> allowContentParam = memoizer(() ->
-		!mergeReplacedBooleanAttribute(PROPERTY_disableContentParam, env("RestContext.disableContentParam", false)));
+		!mergeReplacedBooleanAttribute(PROPERTY_disableContentParam, defaultDisableContentParam));
 
 	/**
 	 * Whether exception stack traces are rendered in error responses; resolved from
 	 * {@code @Rest(renderResponseStackTraces)}.
 	 */
 	private final Memoizer<Boolean> renderResponseStackTraces = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_renderResponseStackTraces, env("RestContext.renderResponseStackTraces", false)));
+		mergeReplacedBooleanAttribute(PROPERTY_renderResponseStackTraces, defaultRenderResponseStackTraces));
 
 	/**
 	 * Whether the resource emits RFC 7807 {@code application/problem+json} responses; resolved from
 	 * {@code @Rest(problemDetails)}.
 	 */
 	private final Memoizer<Boolean> problemDetails = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_problemDetails, env("RestContext.problemDetails", false)));
+		mergeReplacedBooleanAttribute(PROPERTY_problemDetails, defaultProblemDetails));
 
 	/**
 	 * Whether the resource opts into per-request virtual-thread dispatch on Java 21+; resolved from
@@ -2174,7 +2248,7 @@ public class RestContext extends Context {
 	 * than Java 21 the flag is logged once and ignored — see {@link #virtualThreadExecutor}.
 	 */
 	private final Memoizer<Boolean> virtualThreadsEnabled = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_virtualThreads, env("RestContext.virtualThreads", false)));
+		mergeReplacedBooleanAttribute(PROPERTY_virtualThreads, defaultVirtualThreads));
 
 	/**
 	 * Configurable async-response timeout (milliseconds) applied by {@code AsyncResponseProcessor} to
@@ -2233,14 +2307,14 @@ public class RestContext extends Context {
 	 * resolved from {@code @Rest(eagerInit)}.
 	 */
 	private final Memoizer<Boolean> eagerInit = memoizer(() ->
-		mergeReplacedBooleanAttribute(PROPERTY_eagerInit, env("RestContext.eagerInit", false)));
+		mergeReplacedBooleanAttribute(PROPERTY_eagerInit, defaultEagerInit));
 
 	/**
 	 * The request header used for client-version matching; resolved from {@code @Rest(clientVersionHeader)},
 	 * default {@code "Client-Version"}.
 	 */
 	private final Memoizer<String> clientVersionHeader = memoizer(() ->
-		mergeReplacedStringAttribute(PROPERTY_clientVersionHeader, env("RestContext.clientVersionHeader", "Client-Version")));
+		mergeReplacedStringAttribute(PROPERTY_clientVersionHeader, defaultClientVersionHeader));
 
 	/**
 	 * The {@link UriRelativity} strategy for URI resolution in this resource.
@@ -2251,7 +2325,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<UriRelativity> uriRelativity = memoizer(() -> {
 		var v = new AtomicReference<>(
-			parseEnumConstant(UriRelativity.class, resolve(emptyIfNull(env("RestContext.uriRelativity").get())))
+			parseEnumConstant(UriRelativity.class, resolve(emptyIfNull(defaultUriRelativity)))
 				.orElse(UriRelativity.RESOURCE)
 		);
 		restAnnotationsForPropertySortedByRank(PROPERTY_uriRelativity).forEach(ai -> ai.getString(PROPERTY_uriRelativity).filter(StringUtils::isNotBlank).ifPresent(s ->
@@ -2268,7 +2342,7 @@ public class RestContext extends Context {
 	 * blocked by {@code noInherit}. {@code null} means no override.
 	 */
 	private final Memoizer<String> uriAuthority = memoizer(() -> {
-		String local = mergeReplacedStringAttribute(PROPERTY_uriAuthority, env("RestContext.uriAuthority").orElse(null));
+		String local = mergeReplacedStringAttribute(PROPERTY_uriAuthority, defaultUriAuthority.orElse(null));
 		if (nn(local))
 			return local;
 		var pc = parentContext();
@@ -2283,7 +2357,7 @@ public class RestContext extends Context {
 	 * blocked by {@code noInherit}. {@code null} means no override.
 	 */
 	private final Memoizer<String> uriContext = memoizer(() -> {
-		String local = mergeReplacedStringAttribute(PROPERTY_uriContext, env("RestContext.uriContext").orElse(null));
+		String local = mergeReplacedStringAttribute(PROPERTY_uriContext, defaultUriContext.orElse(null));
 		if (nn(local))
 			return local;
 		var pc = parentContext();
@@ -2299,7 +2373,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<UriResolution> uriResolution = memoizer(() -> {
 		var v = new AtomicReference<>(
-			parseEnumConstant(UriResolution.class, resolve(emptyIfNull(env("RestContext.uriResolution").get())))
+			parseEnumConstant(UriResolution.class, resolve(emptyIfNull(defaultUriResolution)))
 				.orElse(UriResolution.ROOT_RELATIVE)
 		);
 		restAnnotationsForPropertySortedByRank(PROPERTY_uriResolution).forEach(ai -> ai.getString(PROPERTY_uriResolution).filter(StringUtils::isNotBlank).ifPresent(s ->

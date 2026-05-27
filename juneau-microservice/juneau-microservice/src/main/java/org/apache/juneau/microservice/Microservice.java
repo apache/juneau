@@ -124,7 +124,7 @@ public class Microservice implements ConfigEventListener {
 		Scanner consoleReader;
 		PrintWriter consoleWriter;
 		MicroserviceListener listener;
-		File workingDir = env("juneau.workingDir").map(File::new).orElse(null);
+		File workingDir;
 		WritableBeanStore beanStore;
 		BeanStore overridingBeanStore;
 		List<Class<?>> configurations = list();
@@ -133,6 +133,21 @@ public class Microservice implements ConfigEventListener {
 		 * Constructor.
 		 */
 		protected Builder() {}
+
+		/**
+		 * {@link Inject @Inject}-annotated initializer that populates {@link #workingDir} from the
+		 * {@code juneau.workingDir} property (system property &rarr; environment variable &rarr;
+		 * registered property sources) when the property is set. Has no effect if {@code workingDir}
+		 * was already set programmatically.
+		 *
+		 * @param workingDirEnv The resolved {@code juneau.workingDir} value, or {@code null}/empty
+		 * 	when not configured.
+		 */
+		@Inject
+		public void initWorkingDirFromEnv(@Value("${juneau.workingDir}") String workingDirEnv) {
+			if (workingDir == null && workingDirEnv != null && !workingDirEnv.isEmpty())
+				workingDir = new File(workingDirEnv);
+		}
 
 		/**
 		 * Copy constructor.
@@ -621,10 +636,26 @@ public class Microservice implements ConfigEventListener {
 	/**
 	 * Creates a new builder for this object.
 	 *
+	 * <p>
+	 * Routes builder construction through {@link BeanInstantiator} so that the
+	 * {@code juneau.workingDir} env default is resolved through the active
+	 * {@link org.apache.juneau.commons.settings.Settings Settings} chain.
+	 *
 	 * @return A new microservice builder.
 	 */
 	public static Builder create() {
-		return new Builder();
+		return create(BasicBeanStore.INSTANCE);
+	}
+
+	/**
+	 * Creates a new builder for this object using the supplied {@link BeanStore} for
+	 * {@link Value @Value}-resolution and dependency injection.
+	 *
+	 * @param beanStore The bean store to use for dependency injection.
+	 * @return A new microservice builder.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return BeanInstantiator.of(Builder.class, beanStore).run();
 	}
 
 	/**

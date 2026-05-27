@@ -19,7 +19,6 @@ package org.apache.juneau.rest;
 import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.IoUtils.UTF8;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -97,17 +96,21 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
-	private static Charset envDefaultRestCharset() {
-		return env("RestContext.defaultCharset").map(Charset::forName).orElse(UTF8);
-	}
+	/**
+	 * Env-driven default charset for this operation, populated by {@link ClassInfo#inject(Object, BeanStore)}
+	 * before the {@link #defaultCharset} memoizer fires; resolved from {@code RestContext.defaultCharset} or
+	 * {@code "UTF-8"}.
+	 */
+	@org.apache.juneau.commons.inject.Value("${RestContext.defaultCharset:UTF-8}")
+	private String defaultCharsetName;
 
-	private static long envDefaultRestMaxInput() {
-		return env("RestContext.maxInput").map(RestOpContext::parseMaxInputEnv).orElse(100_000_000L);
-	}
-
-	private static long parseMaxInputEnv(String value) {
-		return parseLongWithSuffix(value);
-	}
+	/**
+	 * Env-driven default max-input string for this operation, populated by {@link ClassInfo#inject(Object, BeanStore)}
+	 * before the {@link #maxInput} memoizer fires; resolved from {@code RestContext.maxInput} or
+	 * {@code "100000000"}.
+	 */
+	@org.apache.juneau.commons.inject.Value("${RestContext.maxInput:100000000}")
+	private String defaultMaxInputString;
 
 	/**
 	 * Internal construction-time state holder.
@@ -288,7 +291,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (rv != null && !rv.isEmpty())
 				return Charset.forName(rv);
 		}
-		return envDefaultRestCharset();
+		return Charset.forName(defaultCharsetName);
 	});
 
 	/**
@@ -617,7 +620,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (rv != null && !rv.isEmpty())
 				return parseLongWithSuffix(rv);
 		}
-		return envDefaultRestMaxInput();
+		return parseLongWithSuffix(defaultMaxInputString);
 	});
 
 	/**
@@ -1222,6 +1225,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			bs.add(HttpPartParser.class, getPartParser());
 			bs.add(HttpPartSerializer.class, getPartSerializer());
 			bs.add(SerializerSet.class, getSerializers());
+
+			// Inject @Value-annotated env-driven defaults onto this RestOpContext instance so that the
+			// memoizer lambdas (defaultCharset, maxInput) read fully resolved values when first invoked.
+			ClassInfo.of(this).inject(this, bs);
 
 			// The 6 formerly-eager scalar fields are now memoized; no eagerness needed here.
 			// Pre-warm httpMethod so it is in the memoizer cache for immediate use by compareTo/match.

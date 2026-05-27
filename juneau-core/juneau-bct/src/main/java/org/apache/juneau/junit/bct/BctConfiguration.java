@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.settings.*;
 
 /**
@@ -341,5 +342,74 @@ public class BctConfiguration {
 	 */
 	static BeanConverter getConverter() {
 		return opt(BctConfiguration.CONVERTER_OVERRIDE.get()).orElseGet(CONVERTER_SUPPLIER.get());
+	}
+
+	/**
+	 * Returns the {@link Value @Value}-resolved defaults for {@link #BCT_SORT_MAPS} and
+	 * {@link #BCT_SORT_COLLECTIONS}, sourced from the active
+	 * {@link org.apache.juneau.commons.settings.Settings Settings} chain (system properties
+	 * &rarr; environment variables &rarr; registered property sources). Each invocation creates
+	 * a fresh, fully-injected instance.
+	 *
+	 * <p>
+	 * This is the canonical seam for &quot;BCT default sort flags&quot; reads — production code that
+	 * makes a per-call decision based on the resolved defaults should call
+	 * {@code BctConfiguration.defaults().isSortMaps()} / {@code .isSortCollections()} instead of
+	 * hand-rolling its own {@code System.getProperty(...)} read.
+	 *
+	 * @return A new {@link Defaults} instance, populated via {@link BeanInstantiator}.
+	 */
+	public static Defaults defaults() {
+		return BeanInstantiator.of(Defaults.class, BasicBeanStore.INSTANCE).run();
+	}
+
+	/**
+	 * Holder for {@link Value @Value}-resolved BCT default sort flags.
+	 *
+	 * <p>
+	 * Constructed by {@link #defaults()} via {@link BeanInstantiator}; both fields are populated
+	 * by {@link Value @Value} annotations whose SVL expressions inline the canonical
+	 * {@link #BCT_SORT_MAPS} and {@link #BCT_SORT_COLLECTIONS} property names as string literals
+	 * (per the project-wide rule that every {@code @Value} expression is a fully self-contained
+	 * string literal &mdash; no concatenation with Java constants). The constants remain the
+	 * canonical reference for external callers ({@link Listifiers}, {@code BctConfigExtension},
+	 * and the {@code BctConfiguration.set/get} helpers).
+	 */
+	public static class Defaults {
+
+		/**
+		 * The {@code Bct.sortMaps} default; {@code true} when the {@link #BCT_SORT_MAPS} property is
+		 * set to a truthy value, {@code false} otherwise.
+		 */
+		@Value("${Bct.sortMaps:false}")
+		boolean sortMaps;
+
+		/**
+		 * The {@code Bct.sortCollections} default; {@code true} when the {@link #BCT_SORT_COLLECTIONS}
+		 * property is set to a truthy value, {@code false} otherwise.
+		 */
+		@Value("${Bct.sortCollections:false}")
+		boolean sortCollections;
+
+		/** Constructor &mdash; instantiated by {@link BeanInstantiator} via {@link #defaults()}. */
+		protected Defaults() {}
+
+		/**
+		 * Returns the resolved {@code Bct.sortMaps} default.
+		 *
+		 * @return {@code true} when the {@link #BCT_SORT_MAPS} property is set to a truthy value, {@code false} otherwise.
+		 */
+		public boolean isSortMaps() {
+			return sortMaps;
+		}
+
+		/**
+		 * Returns the resolved {@code Bct.sortCollections} default.
+		 *
+		 * @return {@code true} when the {@link #BCT_SORT_COLLECTIONS} property is set to a truthy value, {@code false} otherwise.
+		 */
+		public boolean isSortCollections() {
+			return sortCollections;
+		}
 	}
 }

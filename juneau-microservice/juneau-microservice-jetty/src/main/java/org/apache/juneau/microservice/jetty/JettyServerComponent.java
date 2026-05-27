@@ -31,6 +31,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.*;
 
 import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.Value;
+import org.apache.juneau.commons.reflect.ClassInfo;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.*;
@@ -84,6 +86,20 @@ public class JettyServerComponent implements MicroserviceListener {
 	private final Messages messages = Messages.of(JettyServerComponent.class);
 	private final AtomicReference<Server> server = new AtomicReference<>();
 	private final AtomicReference<Microservice> microservice = new AtomicReference<>();
+
+	/**
+	 * Env-driven sentinel for {@code availablePort}; {@link Optional#empty()} when unset (in which case
+	 * {@link #onStart(Microservice)} publishes the bound port back as the {@code availablePort} system property).
+	 */
+	@Value("${availablePort}")
+	Optional<String> availablePortEnv;
+
+	/**
+	 * Env-driven sentinel for {@code juneau.serverPort}; {@link Optional#empty()} when unset (in which case
+	 * {@link #onStart(Microservice)} publishes the bound port back as the {@code juneau.serverPort} system property).
+	 */
+	@Value("${juneau.serverPort}")
+	Optional<String> serverPortEnv;
 
 	private static int[] parseIntArray(String csv) {
 		if (csv == null || csv.isEmpty())
@@ -172,6 +188,7 @@ public class JettyServerComponent implements MicroserviceListener {
 		try {
 			microservice.set(ms);
 			var store = ms.getBeanStore();
+			ClassInfo.of(this).inject(this, store);
 			var cf = ms.getConfig();
 			var mf = ms.getManifest();
 			var vr = ms.getVarResolver();
@@ -184,7 +201,7 @@ public class JettyServerComponent implements MicroserviceListener {
 					.orElseGet(() -> mf.get("Jetty-Port").map(JettyServerComponent::parseIntArray).orElseGet(() -> ints(8000)));
 			var availablePort = findOpenPort(ports);
 
-			if (env("availablePort").isEmpty())
+			if (availablePortEnv == null || availablePortEnv.isEmpty())
 				System.setProperty("availablePort", String.valueOf(availablePort));
 
 			// Prefer a @Bean-supplied Server, else build one from jetty.xml.
@@ -265,7 +282,7 @@ public class JettyServerComponent implements MicroserviceListener {
 				addServlet(servlet, pathSpecs);
 			}
 
-			if (env("juneau.serverPort").isEmpty())
+			if (serverPortEnv == null || serverPortEnv.isEmpty())
 				System.setProperty("juneau.serverPort", String.valueOf(availablePort));
 
 			server.get().start();

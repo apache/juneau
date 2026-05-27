@@ -119,10 +119,19 @@ public class CallLogger {
 		ThrownStore thrownStore;
 		List<CallLoggerRule> normalRules = list();
 		List<CallLoggerRule> debugRules = list();
+
+		@Value("${juneau.restLogger.enabled:ALWAYS}")
 		Enablement enabled;
-		Predicate<HttpServletRequest> enabledTest;
+
+		Predicate<HttpServletRequest> enabledTest = x -> false;
+
+		@Value("${juneau.restLogger.requestDetail:STATUS_LINE}")
 		CallLoggingDetail requestDetail;
+
+		@Value("${juneau.restLogger.responseDetail:STATUS_LINE}")
 		CallLoggingDetail responseDetail;
+
+		@Value("${juneau.restLogger.level:OFF}")
 		Level level;
 
 		/**
@@ -131,12 +140,19 @@ public class CallLogger {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(BeanStore beanStore) {
-			logger = Logger.getLogger(env(SP_logger, "global"));
-			enabled = env(SP_enabled, ALWAYS);
-			enabledTest = x -> false;
-			requestDetail = env(SP_requestDetail, STATUS_LINE);
-			responseDetail = env(SP_responseDetail, STATUS_LINE);
-			level = env(SP_level).map(Level::parse).orElse(OFF);
+		}
+
+		/**
+		 * Init method invoked by {@link BeanInstantiator} after construction; resolves the default
+		 * logger from the {@code juneau.restLogger.logger} property (defaulting to {@code "global"})
+		 * and installs it as this builder's logger.
+		 *
+		 * @param loggerName The resolved logger name. Defaulted to {@code "global"} when unset.
+		 */
+		@Inject
+		public void initLoggerFromName(@Value("${juneau.restLogger.logger:global}") String loggerName) {
+			if (logger == null)
+				logger = Logger.getLogger(loggerName);
 		}
 
 		/**
@@ -180,8 +196,8 @@ public class CallLogger {
 		 * <p>
 		 * If not specified, the setting is determined via the following:
 		 * <ul>
-		 * 	<li><js>{@link CallLogger#SP_enabled "juneau.restLogger.enabled"} system property.
-		 * 	<li><js>{@link CallLogger#SP_enabled "JUNEAU_RESTLOGGER_ENABLED"} environment variable.
+		 * 	<li><js>"juneau.restLogger.enabled"</js> system property.
+		 * 	<li><js>"JUNEAU_RESTLOGGER_ENABLED"</js> environment variable.
 		 * 	<li><js>"ALWAYS"</js>.
 		 * </ul>
 		 *
@@ -231,8 +247,8 @@ public class CallLogger {
 		 * <p>
 		 * If not specified, the setting is determined via the following:
 		 * <ul>
-		 * 	<li><js>{@link CallLogger#SP_level "juneau.restLogger.level"} system property.
-		 * 	<li><js>{@link CallLogger#SP_level "JUNEAU_RESTLOGGER_level"} environment variable.
+		 * 	<li><js>"juneau.restLogger.level"</js> system property.
+		 * 	<li><js>"JUNEAU_RESTLOGGER_LEVEL"</js> environment variable.
 		 * 	<li><js>"OFF"</js>.
 		 * </ul>
 		 *
@@ -251,8 +267,8 @@ public class CallLogger {
 		 * <p>
 		 * If not specified, the logger name is determined in the following order:
 		 * <ol>
-		 * 	<li><js>{@link CallLogger#SP_logger "juneau.restLogger.logger"} system property.
-		 * 	<li><js>{@link CallLogger#SP_logger "JUNEAU_RESTLOGGER_LOGGER"} environment variable.
+		 * 	<li><js>"juneau.restLogger.logger"</js> system property.
+		 * 	<li><js>"JUNEAU_RESTLOGGER_LOGGER"</js> environment variable.
 		 * 	<li><js>"global"</js>.
 		 * </ol>
 		 *
@@ -277,8 +293,8 @@ public class CallLogger {
 		 * <p>
 		 * If not specified, the logger name is determined in the following order:
 		 * <ol>
-		 * 	<li><js>{@link CallLogger#SP_logger "juneau.restLogger.logger"} system property.
-		 * 	<li><js>{@link CallLogger#SP_logger "JUNEAU_RESTLOGGER_LOGGER"} environment variable.
+		 * 	<li><js>"juneau.restLogger.logger"</js> system property.
+		 * 	<li><js>"JUNEAU_RESTLOGGER_LOGGER"</js> environment variable.
 		 * 	<li><js>"global"</js>.
 		 * </ol>
 		 *
@@ -329,8 +345,8 @@ public class CallLogger {
 		 * <p>
 		 * If not specified, the setting is determined via the following:
 		 * <ul>
-		 * 	<li><js>{@link CallLogger#SP_requestDetail "juneau.restLogger.requestDetail"} system property.
-		 * 	<li><js>{@link CallLogger#SP_requestDetail "JUNEAU_RESTLOGGER_requestDetail"} environment variable.
+		 * 	<li><js>"juneau.restLogger.requestDetail"</js> system property.
+		 * 	<li><js>"JUNEAU_RESTLOGGER_REQUESTDETAIL"</js> environment variable.
 		 * 	<li><js>"STATUS_LINE"</js>.
 		 * </ul>
 		 *
@@ -358,8 +374,8 @@ public class CallLogger {
 		 * <p>
 		 * If not specified, the setting is determined via the following:
 		 * <ul>
-		 * 	<li><js>{@link CallLogger#SP_responseDetail "juneau.restLogger.responseDetail"} system property.
-		 * 	<li><js>{@link CallLogger#SP_responseDetail "JUNEAU_RESTLOGGER_responseDetail"} environment variable.
+		 * 	<li><js>"juneau.restLogger.responseDetail"</js> system property.
+		 * 	<li><js>"JUNEAU_RESTLOGGER_RESPONSEDETAIL"</js> environment variable.
 		 * 	<li><js>"STATUS_LINE"</js>.
 		 * </ul>
 		 *
@@ -429,80 +445,21 @@ public class CallLogger {
 	private static final CallLoggerRule DEFAULT_RULE = CallLoggerRule.create(BasicBeanStore.INSTANCE).build();
 
 	/**
-	 * System property name for the default logger name to use for {@link CallLogger} objects.
-	 * <p>
-	 * Can also use a <c>JUNEAU_RESTLOGGER_LOGGER</c> environment variable.
-	 * <p>
-	 * If not specified, the default is <js>"global"</js>.
-	 */
-	public static final String SP_logger = "juneau.restLogger.logger";
-
-	/**
-	 * System property name for the default enablement setting for {@link CallLogger} objects.
-	 * <p>
-	 * Can also use a <c>JUNEAU_RESTLOGGER_ENABLED</c> environment variable.
-	 * <p>
-	 * The possible values are:
-	 * <ul>
-	 * 	<li>{@link Enablement#ALWAYS "ALWAYS"} (default) - Logging is enabled.
-	 * 	<li>{@link Enablement#NEVER "NEVER"} - Logging is disabled.
-	 * 	<li>{@link Enablement#CONDITIONAL "CONDITIONALLY"} - Logging is enabled if it passes the {@link Builder#enabledTest(Predicate)} test.
-	 * </ul>
-	 */
-	public static final String SP_enabled = "juneau.restLogger.enabled";
-
-	/**
-	 * System property name for the default request detail setting for {@link CallLogger} objects.
-	 * <p>
-	 * Can also use a <c>JUNEAU_RESTLOGGER_REQUESTDETAIL</c> environment variable.
-	 *
-	 * <ul class='values'>
-	 * 	<li>{@link CallLoggingDetail#STATUS_LINE "STATUS_LINE"} (default) - Log only the status line.
-	 * 	<li>{@link CallLoggingDetail#HEADER "HEADER"} - Log the status line and headers.
-	 * 	<li>{@link CallLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and content if available.
-	 * </ul>
-	 */
-	public static final String SP_requestDetail = "juneau.restLogger.requestDetail";
-
-	/**
-	 * System property name for the default response detail setting for {@link CallLogger} objects.
-	 * <p>
-	 * Can also use a <c>JUNEAU_RESTLOGGER_RESPONSEDETAIL</c> environment variable.
-	 *
-	 * <ul class='values'>
-	 * 	<li>{@link CallLoggingDetail#STATUS_LINE "STATUS_LINE"} (default) - Log only the status line.
-	 * 	<li>{@link CallLoggingDetail#HEADER "HEADER"} - Log the status line and headers.
-	 * 	<li>{@link CallLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and content if available.
-	 * </ul>
-	 */
-	public static final String SP_responseDetail = "juneau.restLogger.responseDetail";
-
-	/**
-	 * System property name for the logging level setting for {@link CallLogger} objects.
-	 * <p>
-	 * Can also use a <c>JUNEAU_RESTLOGGER_LEVEL</c> environment variable.
-	 *
-	 * <ul class='values'>
-	 * 	<li>{@link Level#OFF "OFF"} (default)
-	 * 	<li>{@link Level#SEVERE "SEVERE"}
-	 * 	<li>{@link Level#WARNING "WARNING"}
-	 * 	<li>{@link Level#INFO "INFO"}
-	 * 	<li>{@link Level#CONFIG "CONFIG"}
-	 * 	<li>{@link Level#FINE "FINE"}
-	 * 	<li>{@link Level#FINER "FINER"}
-	 * 	<li>{@link Level#FINEST "FINEST"}
-	 * </ul>
-	 */
-	public static final String SP_level = "juneau.restLogger.level";
-
-	/**
 	 * Static creator.
+	 *
+	 * <p>
+	 * Routes builder construction through {@link BeanInstantiator} so that {@link Value @Value}-annotated
+	 * fields and the {@code @Inject}-annotated logger initializer pick up
+	 * {@code juneau.restLogger.logger}, {@code juneau.restLogger.enabled}, {@code juneau.restLogger.requestDetail},
+	 * {@code juneau.restLogger.responseDetail}, and {@code juneau.restLogger.level} from the active
+	 * {@link org.apache.juneau.commons.settings.Settings} chain (system properties &rarr; environment
+	 * variables &rarr; registered property sources).
 	 *
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
 	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
+		return BeanInstantiator.of(Builder.class, beanStore).run();
 	}
 
 	private final Logger logger;
@@ -762,7 +719,7 @@ public class CallLogger {
 	 * @return A new builder object.
 	 */
 	protected Builder init(BeanStore beanStore) {
-		return new Builder(beanStore).logger(beanStore.getBean(Logger.class).orElse(null)).thrownStore(beanStore.getBean(ThrownStore.class).orElse(null));
+		return create(beanStore).logger(beanStore.getBean(Logger.class).orElse(null)).thrownStore(beanStore.getBean(ThrownStore.class).orElse(null));
 	}
 
 	/**
