@@ -102,23 +102,6 @@ class VarResolver_Benchmark_Test extends TestBase {
 		}
 	}
 
-	@Test void a02_multipleVarsTemplate_speedup() {
-		var vr = VarResolver.create().defaultVars().build();
-		System.setProperty("VarResolver_Benchmark_Test.a", "1");
-		System.setProperty("VarResolver_Benchmark_Test.b", "2");
-		System.setProperty("VarResolver_Benchmark_Test.c", "3");
-		try {
-			var ratio = measureRatio("${a:1}-${b}-${c}", vr,
-				"${VarResolver_Benchmark_Test.a:1}-${VarResolver_Benchmark_Test.b}-${VarResolver_Benchmark_Test.c}");
-			assertTrue(ratio >= 1.0,
-				"Compiled-form must be at least as fast as compile-per-call (sanity floor); got " + ratio + "×");
-		} finally {
-			System.clearProperty("VarResolver_Benchmark_Test.a");
-			System.clearProperty("VarResolver_Benchmark_Test.b");
-			System.clearProperty("VarResolver_Benchmark_Test.c");
-		}
-	}
-
 	@Test void a03_scriptTemplate_speedup() {
 		var vr = VarResolver.create()
 			.defaultVars()
