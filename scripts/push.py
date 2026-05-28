@@ -641,6 +641,62 @@ Examples:
         play_sound(success=False)
         return 1
     
+    step_num += 1
+
+    # Step 6 (optional): juneau-docs follow-up — smoke check + commit + push
+    docs_root = juneau_root.parent / "juneau-docs"
+    if docs_root.exists() and check_git_status(docs_root):
+        print(f"\n📚 Step {step_num}: juneau-docs has changes — running Docusaurus smoke check first...")
+
+        docs_build_script = docs_root / "scripts" / "build-docs.py"
+        docs_smoke_start = time.time()
+        try:
+            result = subprocess.run(
+                [sys.executable, str(docs_build_script), "--skip-maven"],
+                cwd=docs_root,
+                check=False
+            )
+            docs_smoke_elapsed = time.time() - docs_smoke_start
+            if result.returncode != 0:
+                print(f"\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.")
+                play_sound(success=False)
+                return 1
+            print(f"✅ Docs smoke check passed ({docs_smoke_elapsed:.1f}s)")
+        except Exception as e:
+            print(f"\n❌ Docs smoke check failed: {e}")
+            play_sound(success=False)
+            return 1
+
+        if not run_command(
+            ["git", "add", "."],
+            f"  {step_num}.1: Staging juneau-docs changes...",
+            docs_root
+        ):
+            print("\n❌ Build process aborted due to juneau-docs git add failure.")
+            play_sound(success=False)
+            return 1
+
+        if not run_command(
+            ["git", "commit", "-m", args.message],
+            f"  {step_num}.2: Committing juneau-docs changes...",
+            docs_root
+        ):
+            print("\n❌ Build process aborted due to juneau-docs git commit failure.")
+            play_sound(success=False)
+            return 1
+
+        if not run_command(
+            ["git", "push"],
+            f"  {step_num}.3: Pushing juneau-docs changes...",
+            docs_root
+        ):
+            print("\n❌ juneau-docs push failed.")
+            print("⚠ juneau-docs changes have been committed locally but not pushed.")
+            play_sound(success=False)
+            return 1
+
+        print(f"✅ Step {step_num}: juneau-docs pushed successfully.")
+
     # Success!
     print("\n" + "=" * 70)
     print("🎉 All operations completed successfully!")
