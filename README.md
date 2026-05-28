@@ -372,6 +372,8 @@ This promotes whatever is currently on `origin/asf-staging` to `asf-site`. Only 
 
 **AI-driven flows:** the Cursor / Claude `@juneau-docs-workflow` skill provides natural-phrase routing for all of the above ("start docs locally", "deploy docs to stage", "deploy docs to prod", "add to release notes", etc.).
 
+**PR smoke check:** every pull request that touches Markdown, config, or scripts automatically runs `python3 scripts/build-docs.py --skip-maven` via `.github/workflows/docs-smoke.yml`. If your PR fails CI, run the same command locally to reproduce — the Docusaurus error output points directly to the broken file and line.
+
 ## Building the Java tree
 
 Building requires:

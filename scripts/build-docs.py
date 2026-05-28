@@ -374,7 +374,9 @@ def main():
     # Determine script directory and find master branch sibling
     script_dir = Path(__file__).parent.absolute()
     docs_dir = script_dir.parent  # docs/
-    master_root = find_master_branch_sibling(script_dir, allow_missing=DRY_RUN)
+    # When --skip-maven is set, the master branch is not needed; treat it as allowed-missing
+    # so CI runners (which have no sibling master checkout) can still run the Docusaurus smoke.
+    master_root = find_master_branch_sibling(script_dir, allow_missing=DRY_RUN or args.skip_maven)
     
     print(f"Master branch root: {master_root}")
     print(f"Docs directory: {docs_dir}")
@@ -423,7 +425,8 @@ def main():
         # Copy Maven site to static directory BEFORE building Docusaurus
         # (Docusaurus will automatically copy static/ contents to build/ during build)
         # Note: javadocs are already in static/javadocs, so no copy needed
-        if not args.skip_copy:
+        # Also skip if --skip-maven: there is no Maven output to copy in that case.
+        if not args.skip_copy and not args.skip_maven:
             # Copy Maven site to static directory
             copy_maven_site(master_root, docs_dir)
         else:
@@ -436,7 +439,8 @@ def main():
             print("\n=== Skipping Docusaurus build ===")
         
         # Copy .asf.yaml to build directory (needed for deployment)
-        if not args.skip_copy:
+        # Skip when --skip-maven: master_root may not exist in that scenario (CI smoke check).
+        if not args.skip_copy and not args.skip_maven:
             build_dir = Path(docs_dir) / 'build'
             asf_yaml = Path(master_root) / '.asf.yaml'
             if DRY_RUN:
@@ -446,9 +450,11 @@ def main():
                 stage_banner("Copying .asf.yaml to build directory")
                 shutil.copy2(asf_yaml, build_dir)
 
-        # Check topic links (runs once at the end)
-        check_topic_links(master_root, docs_dir)
-        check_ai_artifacts(docs_dir)
+        # Checks that require sibling repos — skip in --skip-maven / CI smoke runs
+        # where only the docs repo is checked out.
+        if not args.skip_maven:
+            check_topic_links(master_root, docs_dir)
+            check_ai_artifacts(docs_dir)
 
         print("\n=== Documentation build complete ===")
         print(f"Documentation is available in: {docs_dir / 'build'}")
