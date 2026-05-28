@@ -85,12 +85,6 @@ import org.apache.juneau.rest.guard.*;
  */
 public class BearerTokenGuard extends RestGuard {
 
-	/** Authorization header name. */
-	private static final String AUTHORIZATION = "Authorization";
-
-	/** Authorization header bearer scheme prefix (case-insensitive). */
-	private static final String BEARER_PREFIX = "Bearer ";
-
 	/** WWW-Authenticate response header name (RFC 7235 §4.1). */
 	private static final String WWW_AUTHENTICATE = "WWW-Authenticate";
 
@@ -180,20 +174,17 @@ public class BearerTokenGuard extends RestGuard {
 
 	@Override /* Overridden from RestGuard */
 	public boolean guard(RestRequest req, RestResponse res) {
-		var header = req.getHeader(AUTHORIZATION);
+		var header = req.getHeader(BearerTokenExtractor.AUTHORIZATION);
 		if (isBlank(header)) {
 			res.setHeader(WWW_AUTHENTICATE, challenge);
 			throw missing();
 		}
-		if (header.length() <= BEARER_PREFIX.length() || ! header.regionMatches(true, 0, BEARER_PREFIX, 0, BEARER_PREFIX.length())) {
+		var optToken = BearerTokenExtractor.extract(header);
+		if (optToken.isEmpty()) {
 			res.setHeader(WWW_AUTHENTICATE, challenge);
 			throw malformed();
 		}
-		var token = header.substring(BEARER_PREFIX.length()).trim();
-		if (token.isEmpty()) {
-			res.setHeader(WWW_AUTHENTICATE, challenge);
-			throw malformed();
-		}
+		var token = optToken.get();
 		Principal p;
 		try {
 			p = validator.validate(token);

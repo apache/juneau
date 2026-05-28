@@ -34,6 +34,58 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<!--
+		Pin the Apache HttpComponents 5.x stack on the test classpath.  Both nimbus-jose-jwt 10.3
+		(via juneau-rest-server-jwt) and OpenSAML 5.2.2 (via juneau-rest-server-saml's transitive
+		shib-networking) pull older httpclient5/httpcore5 builds that conflict with the 5.6.1 /
+		5.4 versions juneau-rest-client-apache-httpclient-50 declares in compile scope.  Without
+		this pin, Maven's nearest-wins mediation picks 5.3.1/5.2.5 and ApacheHc5Transport_Test
+		fails with NoSuchMethodError on DefaultHttpRequestWriterFactory.<init>(Http1Config).
+	-->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.httpcomponents.client5</groupId>
+				<artifactId>httpclient5</artifactId>
+				<version>5.6.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents.client5</groupId>
+				<artifactId>httpclient5-cache</artifactId>
+				<version>5.6.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents.core5</groupId>
+				<artifactId>httpcore5</artifactId>
+				<version>5.4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents.core5</groupId>
+				<artifactId>httpcore5-h2</artifactId>
+				<version>5.4</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<!--
+		Shibboleth repository (OpenSAML 5.x test deps).  See juneau-rest-server-saml/pom.xml for the
+		repository policy rationale.  Confined to the test surface; consumers of juneau-rest-server-saml
+		pull OpenSAML from this repository on their own classpath.
+	-->
+	<repositories>
+		<repository>
+			<id>shibboleth-releases</id>
+			<name>Shibboleth Releases Repository</name>
+			<url>https://build.shibboleth.net/maven/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
@@ -169,6 +221,80 @@
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
 			<version>10.3</version>
+			<scope>test</scope>
+		</dependency>
+		<!--
+			juneau-rest-server-saml + opensaml deps (test scope).  See TODO-94b POM comment for why
+			OpenSAML lives on the Shibboleth repository (declared on the SAML module's own pom.xml).
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-saml</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml-core-api</artifactId>
+			<version>5.2.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml-core-impl</artifactId>
+			<version>5.2.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml-saml-api</artifactId>
+			<version>5.2.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml-saml-impl</artifactId>
+			<version>5.2.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml-security-api</artifactId>
+			<version>5.2.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml-security-impl</artifactId>
+			<version>5.2.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml-xmlsec-api</artifactId>
+			<version>5.2.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml-xmlsec-impl</artifactId>
+			<version>5.2.2</version>
+			<scope>test</scope>
+		</dependency>
+		<!--
+			juneau-rest-server-oauth + Nimbus OAuth 2.0 SDK (test scope).  Nimbus is `provided` on the
+			OAuth module's POM so the upstream tree never sees it.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-oauth</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>oauth2-oidc-sdk</artifactId>
+			<version>11.37.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

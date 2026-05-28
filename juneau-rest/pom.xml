@@ -37,6 +37,8 @@
 		<module>juneau-rest-server-rdf</module>
 		<module>juneau-rest-server-mcp</module>
 		<module>juneau-rest-server-jwt</module>
+		<module>juneau-rest-server-saml</module>
+		<module>juneau-rest-server-oauth</module>
 		<module>juneau-rest-server-micrometer</module>
 		<module>juneau-rest-server-otel</module>
 		<module>juneau-rest-server-view-jsp</module>

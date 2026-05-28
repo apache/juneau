@@ -508,6 +508,56 @@
 									<destFileName>org.apache.juneau.rest.server.jwt_${project.version}.jar</destFileName>
 								</artifactItem>
 
+								<!-- juneau-rest-server-saml -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-saml</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-server-saml-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-saml</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-server-saml-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-saml</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.server.saml_${project.version}.jar</destFileName>
+								</artifactItem>
+
+								<!-- juneau-rest-server-oauth -->
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-oauth</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+									<destFileName>apache-juneau-rest-server-oauth-${project.version}-sources.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-oauth</artifactId>
+									<version>${project.version}</version>
+									<destFileName>apache-juneau-rest-server-oauth-${project.version}.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-oauth</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.server.oauth_${project.version}.jar</destFileName>
+								</artifactItem>
+
 								<!-- juneau-rest-server-view-jsp -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>

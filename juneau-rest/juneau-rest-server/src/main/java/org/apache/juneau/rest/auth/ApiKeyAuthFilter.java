@@ -19,65 +19,48 @@ package org.apache.juneau.rest.auth;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
-import java.security.*;
+import java.util.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.guard.*;
+
+import jakarta.servlet.http.*;
 
 /**
- * AuthN {@link RestGuard} that authenticates requests via a raw API-key string.
+ * {@link AuthFilter} that authenticates requests via a raw API-key string.
  *
  * <p>
- * On every request, the guard:
+ * On each request this filter:
  * <ol>
- * 	<li>Extracts the key from the configured {@linkplain Source source} &mdash; header (default
- * 		{@code X-API-Key}), query parameter, or cookie.
- * 	<li>Delegates lookup to the configured {@link ApiKeyStore}.
- * 	<li>On success, stashes the returned {@link Principal} on the request attributes under
- * 		{@link RestServerConstants#PRINCIPAL_ATTR}.
- * 	<li>On any failure path (missing key, unknown key), throws {@link AuthenticationException}
- * 		with a {@code WWW-Authenticate: ApiKey realm="<realm>"} response header.
+ * 	<li>Extracts the key from the configured source &mdash; header (default {@code X-API-Key}), query parameter, or
+ * 		cookie.
+ * 	<li>If the key is absent (blank), returns {@link Optional#empty()} (filter does not apply).
+ * 	<li>Delegates to the configured {@link ApiKeyStore}.
+ * 	<li>On success ({@link Optional#of(Object) Optional.of(Principal)} returned), builds an {@link AuthResult}
+ * 		carrying the {@link java.security.Principal} and any roles extracted from a {@link ClaimsPrincipal} claim.
+ * 	<li>On lookup miss ({@link Optional#empty()} returned by the store), throws {@link AuthenticationException}.
  * </ol>
  *
  * <h5 class='topic'>Usage</h5>
  *
  * <p class='bjava'>
- * 	<jc>// Default source: X-API-Key header.</jc>
- * 	ApiKeyGuard.<jsm>create</jsm>().store(<jv>store</jv>).build();
- *
- * 	<jc>// Custom header.</jc>
- * 	ApiKeyGuard.<jsm>create</jsm>().store(<jv>store</jv>).fromHeader(<js>"X-Acme-Token"</js>).build();
- *
- * 	<jc>// Query-param source (handy for browser clients that can't set custom headers).</jc>
- * 	ApiKeyGuard.<jsm>create</jsm>().store(<jv>store</jv>).fromQuery(<js>"apiKey"</js>).build();
- *
- * 	<jc>// Cookie source.</jc>
- * 	ApiKeyGuard.<jsm>create</jsm>().store(<jv>store</jv>).fromCookie(<js>"api_key"</js>).build();
+ * 	AuthFilterChain.<jsm>create</jsm>(<jv>bs</jv>)
+ * 		.append(ApiKeyAuthFilter.<jsm>create</jsm>()
+ * 			.pattern(<js>"/api/*"</js>)
+ * 			.store(<jv>apiKeyStore</jv>)
+ * 			.build())
+ * 		.build();
  * </p>
- *
- * <h5 class='topic'>Security notes</h5>
- *
- * <ul>
- * 	<li>API keys are <b>credentials</b>; never log them, always pair with TLS.
- * 	<li>Query-string keys leak into proxy / access logs and browser history &mdash; prefer header or
- * 		cookie sources for production traffic. Query-string is offered for legacy / debugging use only.
- * 	<li>{@link ApiKeyStore} implementations should compare keys in constant time
- * 		({@link java.security.MessageDigest#isEqual(byte[], byte[])}).
- * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link ApiKeyStore}
  * 	<li class='jc'>{@link AuthenticationException}
- * 	<li class='jc'>{@link Auth}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthGuards">AuthN Guards</a>
+ * 	<li class='jc'>{@link AuthFilter}
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework</a>
  * </ul>
  *
  * @since 9.5.0
  */
-public class ApiKeyGuard extends RestGuard {
-
-	/** WWW-Authenticate response header name (RFC 7235 §4.1). */
-	private static final String WWW_AUTHENTICATE = "WWW-Authenticate";
+public class ApiKeyAuthFilter extends AuthFilter {
 
 	/** Source of the API-key string. */
 	public enum Source {
@@ -88,6 +71,8 @@ public class ApiKeyGuard extends RestGuard {
 		/** Read from a cookie. */
 		COOKIE
 	}
+
+	private static final String DEFAULT_ROLES_CLAIM = "roles";
 
 	/**
 	 * Static creator.
@@ -107,6 +92,7 @@ public class ApiKeyGuard extends RestGuard {
 		private Source source = Source.HEADER;
 		private String name = RestServerConstants.API_KEY_HEADER;
 		private String realm = "api";
+		private String rolesClaim = DEFAULT_ROLES_CLAIM;
 
 		/**
 		 * Constructor.
@@ -114,7 +100,7 @@ public class ApiKeyGuard extends RestGuard {
 		protected Builder() {}
 
 		/**
-		 * Sets the API-key store the guard delegates to.
+		 * Sets the API-key store.
 		 *
 		 * @param value The store. Must not be <jk>null</jk>.
 		 * @return This object.
@@ -128,8 +114,7 @@ public class ApiKeyGuard extends RestGuard {
 		 * Reads the key from the supplied request header.
 		 *
 		 * <p>
-		 * Calls equivalent to {@code source(Source.HEADER)} plus {@code name(value)}. Defaults to
-		 * {@link RestServerConstants#API_KEY_HEADER} ({@code "X-API-Key"}) when not set.
+		 * Defaults to {@link RestServerConstants#API_KEY_HEADER} ({@code "X-API-Key"}) when not set.
 		 *
 		 * @param value The header name. Must not be <jk>null</jk> or blank.
 		 * @return This object.
@@ -176,14 +161,28 @@ public class ApiKeyGuard extends RestGuard {
 		}
 
 		/**
-		 * Builds the guard.
+		 * Sets the {@link ClaimsPrincipal} claim name used to extract roles.
 		 *
-		 * @return A new {@link ApiKeyGuard}.
+		 * <p>
+		 * Defaults to {@code "roles"}.
+		 *
+		 * @param value The claim name. Must not be <jk>null</jk> or blank.
+		 * @return This object.
 		 */
-		public ApiKeyGuard build() {
+		public Builder rolesClaim(String value) {
+			rolesClaim = assertArgNotNullOrBlank("value", value);
+			return this;
+		}
+
+		/**
+		 * Builds the filter.
+		 *
+		 * @return A new {@link ApiKeyAuthFilter}.
+		 */
+		public ApiKeyAuthFilter build() {
 			if (store == null)
-				throw new IllegalStateException("ApiKeyGuard requires an ApiKeyStore");
-			return new ApiKeyGuard(this);
+				throw new IllegalStateException("ApiKeyAuthFilter requires an ApiKeyStore");
+			return new ApiKeyAuthFilter(this);
 		}
 	}
 
@@ -191,74 +190,52 @@ public class ApiKeyGuard extends RestGuard {
 	private final Source source;
 	private final String name;
 	private final String challenge;
+	private final String rolesClaim;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder to read configuration from.
 	 */
-	protected ApiKeyGuard(Builder builder) {
+	protected ApiKeyAuthFilter(Builder builder) {
 		this.store = builder.store;
 		this.source = builder.source;
 		this.name = builder.name;
 		this.challenge = "ApiKey realm=\"" + builder.realm + "\"";
+		this.rolesClaim = builder.rolesClaim;
 	}
 
-	/**
-	 * Convenience constructor: header source with default name {@code "X-API-Key"} and default realm.
-	 *
-	 * @param store The API-key store. Must not be <jk>null</jk>.
-	 */
-	public ApiKeyGuard(ApiKeyStore store) {
-		this(create().store(store));
-	}
-
-	@Override /* Overridden from RestGuard */
-	public boolean guard(RestRequest req, RestResponse res) {
+	@Override /* Overridden from AuthFilter */
+	public Optional<AuthResult> authenticate(HttpServletRequest req) throws AuthenticationException {
 		var key = readKey(req);
-		if (isBlank(key)) {
-			res.setHeader(WWW_AUTHENTICATE, challenge);
-			throw missing();
-		}
-		Principal p;
+		if (isBlank(key))
+			return Optional.empty();
+
+		java.security.Principal principal;
 		try {
 			var result = store.lookup(key);
-			if (result.isEmpty()) {
-				res.setHeader(WWW_AUTHENTICATE, challenge);
-				throw unknown();
-			}
-			p = result.get();
+			if (result.isEmpty())
+				throw new AuthenticationException("API key not recognized").wwwAuthenticate(challenge);
+			principal = result.get();
 		} catch (AuthenticationException e) {
-			res.setHeader(WWW_AUTHENTICATE, challenge);
+			var hasChallenge = e.getHeaders().stream()
+				.anyMatch(h -> WWW_AUTHENTICATE.equalsIgnoreCase(h.getName()));
+			if (!hasChallenge)
+				e.wwwAuthenticate(challenge);
 			throw e;
 		} catch (RuntimeException e) {
-			res.setHeader(WWW_AUTHENTICATE, challenge);
 			throw new AuthenticationException(e, "API key lookup failed").wwwAuthenticate(challenge);
 		}
-		req.getAttributes().set(RestServerConstants.PRINCIPAL_ATTR, p);
-		return true;
+
+		var roles = ClaimsRoleExtractor.extractRoles(principal, rolesClaim);
+		return Optional.of(AuthResult.of(principal, roles));
 	}
 
-	@Override /* Overridden from RestGuard */
-	public boolean isRequestAllowed(RestRequest req) {
-		// Not used: this guard overrides guard(req, res) directly because it needs to mutate request
-		// attributes and set the WWW-Authenticate challenge on the rejection path.
-		return false;
-	}
-
-	private String readKey(RestRequest req) {
+	private String readKey(HttpServletRequest req) {
 		return switch (source) {
 			case HEADER -> req.getHeader(name);
-			case QUERY -> req.getQueryParam(name).orElse(null);
+			case QUERY -> req.getParameter(name);
 			case COOKIE -> ApiKeyExtractor.readCookie(req, name);
 		};
-	}
-
-	private AuthenticationException missing() {
-		return new AuthenticationException("API key missing").wwwAuthenticate(challenge);
-	}
-
-	private AuthenticationException unknown() {
-		return new AuthenticationException("API key not recognized").wwwAuthenticate(challenge);
 	}
 }

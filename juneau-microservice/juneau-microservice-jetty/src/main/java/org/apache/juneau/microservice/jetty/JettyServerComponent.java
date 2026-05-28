@@ -30,6 +30,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.*;
 
+import jakarta.servlet.DispatcherType;
+
 import org.apache.juneau.commons.inject.BeanStore;
 import org.apache.juneau.commons.inject.Value;
 import org.apache.juneau.commons.reflect.ClassInfo;
@@ -38,6 +40,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.auth.*;
 import org.apache.juneau.rest.servlet.*;
 import org.eclipse.jetty.ee11.servlet.*;
 import org.eclipse.jetty.server.*;
@@ -268,6 +271,10 @@ public class JettyServerComponent implements MicroserviceListener {
 
 			cf.get("Jetty/servletAttributes").asMap().orElse(EMPTY_MAP).forEach(this::addServletAttribute);
 
+			// Auto-mount @Bean AuthFilterChain at /* before any servlet registration so the filter
+			// runs before routing for all requests.
+			store.getBean(AuthFilterChain.class).ifPresent(chain -> addFilter(chain, "/*"));
+
 			// Auto-discover @Rest servlets contributed via @Configuration/@Bean methods.
 			// Path source precedence: @Rest(path=...) on the resource class, else "/".
 			for (var e : store.getBeansOfType(Servlet.class).entrySet()) {
@@ -347,6 +354,31 @@ public class JettyServerComponent implements MicroserviceListener {
 		var sh = new ServletHolder(servlet);
 		for (var pathSpec : pathSpecs)
 			getServletContextHandler().addServlet(sh, pathSpec);
+		return this;
+	}
+
+	/**
+	 * Adds a servlet filter to this Jetty server at the specified URL pattern.
+	 *
+	 * @param filter The filter instance.
+	 * @param urlPattern The URL pattern the filter applies to (e.g. {@code "/*"}, {@code "/api/*"}).
+	 * @return This object.
+	 */
+	public JettyServerComponent addFilter(jakarta.servlet.Filter filter, String urlPattern) {
+		return addFilter(filter, new String[]{urlPattern});
+	}
+
+	/**
+	 * Adds a servlet filter to this Jetty server at one or more URL patterns.
+	 *
+	 * @param filter The filter instance.
+	 * @param urlPatterns The URL patterns the filter applies to.
+	 * @return This object.
+	 */
+	public JettyServerComponent addFilter(jakarta.servlet.Filter filter, String... urlPatterns) {
+		var fh = new FilterHolder(filter);
+		for (var urlPattern : urlPatterns)
+			getServletContextHandler().addFilter(fh, urlPattern, EnumSet.of(DispatcherType.REQUEST));
 		return this;
 	}
 
