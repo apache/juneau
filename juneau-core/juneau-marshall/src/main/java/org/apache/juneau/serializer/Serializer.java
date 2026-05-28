@@ -275,6 +275,12 @@ public class Serializer extends MarshallingTraverseContext {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder classLoader(ClassLoader value) {
+			super.classLoader(value);
+			return this;
+		}
+
 		/**
 		 * 	Specifies the accept media types that the serializer can handle.
 		 *

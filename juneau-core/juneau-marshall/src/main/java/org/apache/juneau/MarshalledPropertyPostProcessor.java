@@ -1034,7 +1034,10 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 
 			@Override /* ObjectSwap */
 			public Class<?> unswap(MarshallingSession session, String o, ClassMeta<?> hint) {
-				return ClassFormat.parse(o, format, Thread.currentThread().getContextClassLoader());
+				ClassLoader cl = session != null ? session.getClassLoader() : null;
+				if (cl == null)
+					cl = Thread.currentThread().getContextClassLoader();
+				return ClassFormat.parse(o, format, cl);
 			}
 		};
 	}

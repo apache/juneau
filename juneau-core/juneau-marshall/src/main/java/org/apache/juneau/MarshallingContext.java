@@ -220,6 +220,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	private static final String PROP_floatFormat = "floatFormat";
 	private static final String PROP_currencyFormat = "currencyFormat";
 	private static final String PROP_classFormat = "classFormat";
+	private static final String PROP_classLoader = "classLoader";
 	private static final String PROP_useInterfaceProxies = "useInterfaceProxies";
 	private static final String PROP_useJavaBeanIntrospector = "useJavaBeanIntrospector";
 	private static final String PROP_validateSchema = "validateSchema";
@@ -296,6 +297,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		private FloatFormat floatFormat;
 		private CurrencyFormat currencyFormat;
 		private ClassFormat classFormat;
+		private ClassLoader classLoader;
 		private Class<? extends PropertyNamer> propertyNamer;
 		private List<ClassInfo> beanDictionary;
 		private List<Object> swaps;
@@ -406,6 +408,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			floatFormat = copyFrom.floatFormat;
 			currencyFormat = copyFrom.currencyFormat;
 			classFormat = copyFrom.classFormat;
+			classLoader = copyFrom.classLoader;
 			typePropertyName = copyFrom.typePropertyName;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
 			validateSchema = copyFrom.validateSchema;
@@ -461,6 +464,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			floatFormat = copyFrom.floatFormat;
 			currencyFormat = copyFrom.currencyFormat;
 			classFormat = copyFrom.classFormat;
+			classLoader = copyFrom.classLoader;
 			typePropertyName = copyFrom.typePropertyName;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
 			validateSchema = copyFrom.validateSchema;
@@ -2394,7 +2398,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 				classFormat,
 				locale,
 				propertyNamer,
-				System.identityHashCode(beanStore)
+				System.identityHashCode(beanStore),
+				System.identityHashCode(classLoader)
 			);
 			// @formatter:on
 		}
@@ -3683,6 +3688,26 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			return this;
 		}
 
+		/**
+		 * Session classloader.
+		 *
+		 * <p>
+		 * Sets the classloader used when parsing wire-format class names (e.g. FQCN or binary-name strings
+		 * written by {@link ClassFormatSwap}).  When <jk>null</jk>, the thread-context classloader is
+		 * used as a fallback — which is the historical behavior.
+		 *
+		 * <p>
+		 * Useful in OSGi bundles, webapp classloaders, and plugin systems where the thread-context
+		 * classloader does not have visibility into the classes that the session needs to resolve.
+		 *
+		 * @param value The classloader to use for class resolution. Can be <jk>null</jk> to reset to thread-context fallback.
+		 * @return This object.
+		 */
+		public Builder classLoader(ClassLoader value) {
+			classLoader = value;
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends Context> value) {
 			assertArgNotNull(ARG_value, value);
@@ -3996,6 +4021,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	private final FloatFormat floatFormat;
 	private final CurrencyFormat currencyFormat;
 	private final ClassFormat classFormat;
+	private final ClassLoader classLoader;
 	private final Visibility beanClassVisibility;
 	private final Visibility beanConstructorVisibility;
 	private final Visibility beanFieldVisibility;
@@ -4051,6 +4077,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		floatFormat = builder.floatFormat;
 		currencyFormat = builder.currencyFormat;
 		classFormat = builder.classFormat;
+		classLoader = builder.classLoader;
 		typePropertyName = opt(builder.typePropertyName).orElse("_type");
 		useInterfaceProxies = ! builder.disableInterfaceProxies;
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
@@ -5258,6 +5285,17 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	public final ClassFormat getClassFormat() { return classFormat; }
 
 	/**
+	 * Session classloader.
+	 *
+	 * <p>
+	 * Returns the classloader explicitly configured via {@link Builder#classLoader(ClassLoader)}, or
+	 * <jk>null</jk> if none was set (callers should fall back to the thread-context classloader).
+	 *
+	 * @return The session classloader, or <jk>null</jk> if not set.
+	 */
+	public final ClassLoader getClassLoader() { return classLoader; }
+
+	/**
 	 * Ignore transient fields.
 	 *
 	 * @see MarshallingContext.Builder#disableIgnoreTransientFields()
@@ -5363,8 +5401,9 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			.a(PROP_booleanFormat, booleanFormat)
 			.a(PROP_floatFormat, floatFormat)
 			.a(PROP_currencyFormat, currencyFormat)
-			.a(PROP_classFormat, classFormat)
-			.a(PROP_useInterfaceProxies, useInterfaceProxies)
+		.a(PROP_classFormat, classFormat)
+		.a(PROP_classLoader, classLoader)
+		.a(PROP_useInterfaceProxies, useInterfaceProxies)
 			.a(PROP_useJavaBeanIntrospector, useJavaBeanIntrospector)
 			.a(PROP_validateSchema, validateSchema);
 	}

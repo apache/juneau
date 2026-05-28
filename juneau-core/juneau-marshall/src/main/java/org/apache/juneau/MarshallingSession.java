@@ -741,6 +741,17 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	public final PropertyNamer getPropertyNamer() { return ctx.getPropertyNamer(); }
 
 	/**
+	 * Session classloader.
+	 *
+	 * <p>
+	 * Returns the classloader explicitly configured via {@link MarshallingContext.Builder#classLoader(ClassLoader)},
+	 * or <jk>null</jk> if none was set (callers should fall back to the thread-context classloader).
+	 *
+	 * @return The session classloader, or <jk>null</jk> if not set.
+	 */
+	public final ClassLoader getClassLoader() { return ctx.getClassLoader(); }
+
+	/**
 	 * Java object swaps.
 	 *
 	 * @see MarshallingContext.Builder#swaps(Class...)

@@ -2994,6 +2994,17 @@ public abstract class MarshallingContextable extends Context {
 			return this;
 		}
 
+		/**
+		 * Session classloader.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder classLoader(ClassLoader value) {
+			bcBuilder.classLoader(value);
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends Context> value) {
 			super.type(value);

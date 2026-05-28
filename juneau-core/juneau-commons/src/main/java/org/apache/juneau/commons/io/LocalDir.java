@@ -18,10 +18,13 @@ package org.apache.juneau.commons.io;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.net.*;
 import java.nio.file.*;
+
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Represents a directory that can be located either on the classpath or in the file system.
@@ -220,19 +223,34 @@ public class LocalDir {
 	 * 	LocalFile <jv>file2</jv> = <jv>dir</jv>.resolve(<js>"pages/about.html"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Security Note:</h5>
+	 * <h5 class='section'>Security (CWE-22 / path-traversal):</h5>
 	 * <p>
-	 * This method does not perform path validation or security checks (e.g., checking for path
-	 * traversal attacks or malformed values). The caller is responsible for ensuring the path
-	 * is safe and valid.
+	 * For filesystem-root {@code LocalDir} instances, path resolution is delegated to
+	 * {@link FileUtils#resolveSafely(java.io.File, String)} which enforces a strict boundary check:
+	 * any resolved path that escapes the configured root (via {@code ../}, absolute-path injection,
+	 * or symlinks pointing outside the root) is rejected with {@link IllegalArgumentException}.
+	 * This makes {@code LocalDir} the single-source-of-truth enforcement point — callers do not
+	 * need to pre-validate the path.
+	 * </p>
+	 *
+	 * <p>
+	 * For classpath-resource {@code LocalDir} instances, path traversal via {@code ..} segments is
+	 * rejected with {@link IllegalArgumentException}. URL-encoded traversal sequences (e.g.
+	 * {@code %2e%2e}) are <em>not</em> decoded by this method and therefore treated as literal path
+	 * segments — callers that receive URL-encoded input must decode before calling.
+	 * </p>
 	 *
 	 * @param path The relative path to the file to resolve within this directory.
 	 *             Must be a non-null relative path.
 	 * @return A {@link LocalFile} instance if the file exists and is readable, or <jk>null</jk> if it does not.
+	 * @throws IllegalArgumentException If the resolved path escapes the configured root (filesystem branch),
+	 *                                  or if the path contains {@code ..} segments (classpath branch).
 	 */
 	public LocalFile resolve(String path) {
 		assertArgNotNull(ARG_path, path);
 		if (nn(clazz)) {
+			if (path.contains(".."))
+				throw illegalArg("Path escapes configured root directory.");
 			String p;
 			if (clazzPath == null) {
 				// Relative to class package - keep path relative
@@ -250,9 +268,12 @@ public class LocalDir {
 			if (isClasspathFile(clazz.getResource(p)))
 				return new LocalFile(clazz, p);
 		} else {
-			var p = this.path.resolve(path);
-			if (Files.isReadable(p) && ! Files.isDirectory(p))
-				return new LocalFile(p);
+			var opt = FileUtils.resolveSafely(this.path.toFile(), path);
+			if (opt.isPresent()) {
+				var p = opt.get().toPath();
+				if (Files.isReadable(p) && ! Files.isDirectory(p))
+					return new LocalFile(p);
+			}
 		}
 		return null;
 	}

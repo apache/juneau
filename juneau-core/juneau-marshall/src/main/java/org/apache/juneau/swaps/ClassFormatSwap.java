@@ -54,7 +54,10 @@ public class ClassFormatSwap extends StringSwap<Class<?>> {
 		if (o == null)
 			return null;
 		var fmt = resolveFormat(session);
-		return ClassFormat.parse(o, fmt, Thread.currentThread().getContextClassLoader());
+		ClassLoader cl = session != null ? session.getClassLoader() : null;
+		if (cl == null)
+			cl = Thread.currentThread().getContextClassLoader();
+		return ClassFormat.parse(o, fmt, cl);
 	}
 
 	private static ClassFormat resolveFormat(MarshallingSession session) {

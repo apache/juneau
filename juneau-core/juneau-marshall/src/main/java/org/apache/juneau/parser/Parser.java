@@ -295,6 +295,12 @@ public class Parser extends MarshallingContextable {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder classLoader(ClassLoader value) {
+			super.classLoader(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
 			return this;
