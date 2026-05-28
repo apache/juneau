@@ -351,7 +351,10 @@ public class HoconTokenizer {
 		if (c == ':') {
 			return Token.of(TokenType.COLON);
 		}
-		if (c == '=' && peekChar() != '+')
+		// '=' is always the EQUALS token regardless of the next character.
+		// The '+=' (PLUS_EQUALS) operator is handled by the check below, which reads '+' first;
+		// the two-char sequence '=+' is therefore never mistaken for a partial '+='.
+		if (c == '=')
 			return Token.of(TokenType.EQUALS);
 		if (c == '+' && peekChar() == '=') {
 			readChar();

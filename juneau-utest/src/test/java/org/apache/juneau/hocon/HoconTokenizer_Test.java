@@ -155,4 +155,27 @@ class HoconTokenizer_Test extends TestBase {
 		t.skipWhitespaceAndComments();
 		assertEquals(UNQUOTED_STRING, t.read().type());
 	}
+
+	// Regression test for the '=+' lookahead bug (TODO-137).
+	// '=' is always EQUALS regardless of the following character; the '+=' (PLUS_EQUALS)
+	// operator is handled by a separate branch that reads '+' first, so '=+' is never
+	// confused with a partial '+='.
+	@Test
+	void g13_equalsFollowedByPlus() throws Exception {
+		// '=' when the next char is '+' must still emit EQUALS, not throw.
+		var t = tokenizer("=+");
+		assertEquals(EQUALS, t.read().type());
+		// '+' alone is in UNQUOTED_FORBIDDEN and has no continuation; reading it throws.
+		assertThrows(IOException.class, t::read);
+	}
+
+	// Confirm '+=', '=', and their interleaving all tokenize independently after the fix.
+	@Test
+	void g14_equalsAndPlusEqualsDontInterfere() throws Exception {
+		var t = tokenizer("= +=");
+		assertEquals(EQUALS, t.read().type());
+		t.skipWhitespaceAndComments();
+		assertEquals(PLUS_EQUALS, t.read().type());
+		assertEquals(EOF, t.read().type());
+	}
 }
