@@ -39,6 +39,9 @@ import os
 import platform
 import subprocess
 import sys
+import time
+import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -381,6 +384,58 @@ def play_sound(success=True):  # NOSONAR python:S3776 -- Cognitive complexity is
         pass
 
 
+def _collect_surefire_stats(juneau_root: Path):
+    """Aggregate tests/failures/errors/skipped from all Surefire XML files under juneau-utest."""
+    reports = juneau_root / "juneau-utest" / "target" / "surefire-reports"
+    totals = {"tests": 0, "failures": 0, "errors": 0, "skipped": 0}
+    found = False
+    for xml_path in sorted(reports.rglob("TEST-*.xml")):
+        try:
+            root = ET.parse(xml_path).getroot()
+            for key in totals:
+                totals[key] += int(root.attrib.get(key, 0))
+            found = True
+        except Exception:
+            pass
+    return (totals["tests"], totals["failures"], totals["errors"], totals["skipped"]) if found else None
+
+
+def _append_test_run_history(juneau_root: Path, wall_sec: int) -> None:
+    """Append one row to juneau-utest/test-run-history.tsv; creates with header if absent. Never raises."""
+    try:
+        tsv_path = juneau_root / "juneau-utest" / "test-run-history.tsv"
+        header = "timestamp\tgit_sha\tbranch\ttests_run\tfailures\terrors\tskipped\twall_sec"
+        need_header = not tsv_path.exists() or tsv_path.stat().st_size == 0
+
+        ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        try:
+            sha = subprocess.check_output(
+                ["git", "rev-parse", "HEAD"], cwd=juneau_root, text=True, stderr=subprocess.DEVNULL
+            ).strip()[:12]
+        except Exception:
+            sha = "?"
+
+        branch = current_branch(juneau_root)
+
+        stats = _collect_surefire_stats(juneau_root)
+        if stats is not None:
+            tests_run, failures, errors, skipped = stats
+        else:
+            tests_run = failures = errors = skipped = "?"
+
+        row = "\t".join(str(v) for v in [ts, sha, branch, tests_run, failures, errors, skipped, wall_sec])
+
+        with tsv_path.open("a", encoding="utf-8") as f:
+            if need_header:
+                f.write(header + "\n")
+            f.write(row + "\n")
+
+        print(f"📊 Test metrics appended → juneau-utest/test-run-history.tsv ({tests_run} tests, {wall_sec}s)")
+    except Exception as exc:
+        print(f"⚠ Warning: Could not append test metrics: {exc}")
+
+
 def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
     parser = argparse.ArgumentParser(
         description="Build, test, and push Juneau project to Git repository",
@@ -479,30 +534,37 @@ Examples:
         if test_script.exists():
             print(f"\n🧪 Step {step_num}: Running tests via test.py...")
             try:
+                _test_start = time.time()
                 result = subprocess.run(
                     [sys.executable, str(test_script), "--full", "--timing-log", str(timing_file)],
                     cwd=juneau_root,
                     check=False
                 )
+                _test_wall_sec = int(time.time() - _test_start)
                 if result.returncode != 0:
                     print("\n❌ Build process aborted due to test failures.")
                     play_sound(success=False)
                     return 1
                 print(f"✅ Step {step_num}: Tests passed")
+                _append_test_run_history(juneau_root, _test_wall_sec)
             except Exception as e:
                 print(f"\n❌ Error running tests: {e}")
                 play_sound(success=False)
                 return 1
         else:
             # Fallback to direct mvn test if test.py doesn't exist
-            if not run_command(
+            _test_start = time.time()
+            _mvn_ok = run_command(
                 ["mvn", "test"],
                 f"🧪 Step {step_num}: Running tests...",
                 juneau_root
-            ):
+            )
+            _test_wall_sec = int(time.time() - _test_start)
+            if not _mvn_ok:
                 print("\n❌ Build process aborted due to test failures.")
                 play_sound(success=False)
                 return 1
+            _append_test_run_history(juneau_root, _test_wall_sec)
         timing_report = script_dir / "push-timings.py"
         if timing_report.exists():
             run_command(
