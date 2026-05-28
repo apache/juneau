@@ -23,3 +23,19 @@
 60  # core; as of 2026-05-27; tolerance ±20%; set by FINISHED-139.
 3   # container.springboot; as of 2026-05-27; tolerance ±20%; set by FINISHED-139.
 1   # container.jetty; as of 2026-05-27; tolerance ±20%; set by FINISHED-139.
+
+# ─── [observability] ──────────────────────────────────────────────────────────
+#
+# Baseline for the JMH ObservabilityNoopBenchmark (TODO-116).
+# Metric: gc.alloc.rate.norm = bytes allocated per benchmark invocation.
+# Assertion threshold: ≤ 8 bytes/op (see scripts/microbench.py --threshold).
+#
+# To re-baseline: run `python3 scripts/microbench.py observability`,
+# read the reported gc.alloc.rate.norm, and update the line below.
+#
+# Measured on: developer M1 Pro laptop (Apple M1 Pro, Zulu JDK 25, forks=0).
+# Note: forks=0 means the benchmark shares the JVM with Maven (exec:java).
+#       Numbers are still valid for allocation assertions since gc.alloc.rate.norm
+#       is deterministic per invocation modulo JIT warm-up.
+#
+observability-noop-alloc-bytes-per-op = 0.000  # as of 2026-05-28; set by FINISHED-116.

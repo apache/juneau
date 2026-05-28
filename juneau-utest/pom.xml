@@ -544,6 +544,57 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<!--
+			Micro-benchmark profile.  Not activated by default; benchmarks are run out-of-band
+			by `scripts/microbench.py` or manually:
+
+			    mvn -f juneau-utest/pom.xml -Pmicrobench test-compile exec:java \
+			        -Dexec.mainClass=org.apache.juneau.microbench.observability.ObservabilityNoopBenchmark
+
+			Use -f rather than -pl to avoid the .mvn/maven.config also-make flag causing
+			exec:java to run on the root project before juneau-utest is compiled.
+
+			JMH deps (jmh-core + jmh-generator-annprocess) are already declared in test scope
+			above so they are available without this profile.  The profile contributes only the
+			exec-maven-plugin configuration to simplify the invocation.
+		-->
+		<profile>
+			<id>microbench</id>
+			<build>
+				<plugins>
+					<!--
+						Force full annotation processing so jmh-generator-annprocess generates
+						META-INF/BenchmarkList.  Without this, maven-compiler-plugin 3.13+ uses
+						incremental mode which skips annotation processors on unchanged sources.
+					-->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<proc>full</proc>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.3.0</version>
+						<configuration>
+							<!--
+								Use test-compile scope so all JMH and project test deps are on the
+								classpath.  The caller runs `mvn test-compile exec:java` to compile
+								first; the exec plugin then launches the benchmark main() method.
+							-->
+							<classpathScope>test</classpathScope>
+							<!-- Default benchmark; override with -Dexec.mainClass=... for others. -->
+							<mainClass>org.apache.juneau.microbench.observability.ObservabilityNoopBenchmark</mainClass>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>

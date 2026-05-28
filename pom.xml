@@ -169,6 +169,9 @@
 						<!-- Performance baseline data file - plain text metrics, no license header syntax -->
 					<exclude>**/perf-baseline.txt</exclude>
 					<exclude>**/test-run-history.tsv</exclude>
+
+						<!-- JMH micro-benchmark output directory - generated result data + .gitkeep placeholder, no license header syntax -->
+					<exclude>**/jmh-results/**</exclude>
 				</excludes>
 					<consoleOutput>true</consoleOutput>
 					<!-- Note:  useEclipseDefaultExcludes does not work for subprojects.  See RAT-107 -->
