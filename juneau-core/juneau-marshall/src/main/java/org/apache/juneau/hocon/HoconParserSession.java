@@ -352,11 +352,10 @@ public class HoconParserSession extends ReaderParserSession {
 			} else {
 				throw new ParseException(this, "Expected =, : or brace at line {0}", t.getLine());
 			}
-			// Mirror the parseArray guard: peek-before-skip so that a `}` cached as `peeked` by
-			// parseValueOrConcat's concat loop doesn't cause skipWhitespaceAndComments below to
-			// chew through a newline that lives OUTSIDE this object's scope.
-			if (t.peek().type() == HoconTokenizer.TokenType.RBRACE || t.peek().type() == HoconTokenizer.TokenType.EOF)
-				break;
+			// skipWhitespaceAndComments is a no-op while a token is cached (see HoconTokenizer), so a
+			// closing `}` already peeked by parseValueOrConcat's concat loop is preserved here and the
+			// loop terminates naturally via the while-condition above rather than chewing through a
+			// newline that belongs to an enclosing scope.
 			t.skipWhitespaceAndComments();
 			if (t.peek().type() == HoconTokenizer.TokenType.COMMA || t.peek().type() == HoconTokenizer.TokenType.NEWLINE)
 				t.read();
@@ -378,16 +377,14 @@ public class HoconParserSession extends ReaderParserSession {
 			// that point.  Here we must add the element as-is so nested arrays like
 			// `[[1,2,3], [4,5,6]]` (with separators) stay nested rather than flattening.
 			arr.getElements().add(parseValueOrConcat(t));
-			// Check for closing ] / EOF BEFORE calling skipWhitespaceAndComments.  parseValueOrConcat's
-			// internal concat loop calls peekNoSkip(), which eagerly consumes the closing-bracket char
-			// from the underlying reader and stashes it as peeked=RBRACKET.  If we then called
-			// skipWhitespaceAndComments here, it would read PAST the cached `]` and eat any newline
-			// that follows — but that newline is the in-array separator for the NEXT element (when
-			// we're nested inside an outer parseArray), or a meaningful boundary for outer scopes.
-			// Eating it would cause adjacent newline-separated inner arrays like `[[1,2]\n[3,4]]` to
-			// be silently re-merged via HOCON array-concatenation in parseValueOrConcat above us.
-			if (t.peek().type() == HoconTokenizer.TokenType.RBRACKET || t.peek().type() == HoconTokenizer.TokenType.EOF)
-				break;
+			// parseValueOrConcat's internal concat loop calls peekNoSkip(), which eagerly consumes the
+			// closing-bracket char from the underlying reader and stashes it as peeked=RBRACKET.
+			// skipWhitespaceAndComments is a no-op while a token is cached (see HoconTokenizer), so it
+			// will NOT read past the cached `]` and eat a following newline — a newline that is either
+			// the in-array separator for the NEXT element of an enclosing array or a meaningful boundary
+			// for an outer scope.  This prevents adjacent newline-separated inner arrays like
+			// `[[1,2]\n[3,4]]` from being silently re-merged via HOCON array-concatenation above us.
+			// The loop terminates on the cached `]` via the while-condition above.
 			t.skipWhitespaceAndComments();
 			if (t.peek().type() == HoconTokenizer.TokenType.COMMA || t.peek().type() == HoconTokenizer.TokenType.NEWLINE)
 				t.read();

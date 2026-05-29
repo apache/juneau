@@ -259,4 +259,67 @@ class HoconParser_Test {
 		assertEquals(1, ((Number) obj.get("a")).intValue());
 		assertEquals(2, ((Number) obj.get("b")).intValue());
 	}
+
+	// Regression for the tokenizer peek/skip invariant (work item 135 / FINISHED-57 OQ #13).
+	// Newline-separated inner arrays inside an outer array must stay NESTED — the newline is an
+	// element separator, NOT a value-concatenation join.  If skipWhitespaceAndComments wrongly read
+	// past the closing ']' cached by parseValueOrConcat's peekNoSkip and ate the following newline,
+	// the two inner arrays would silently flatten via HOCON array-concatenation.
+	@Test
+	void b27_nestedArraysNewlineSeparatedStayNested() throws Exception {
+		var hocon = "outer = [\n  [1, 2]\n  [3, 4]\n]";
+		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var outer = (List<?>) m.get("outer");
+		assertNotNull(outer);
+		assertEquals(2, outer.size());
+		var first = (List<?>) outer.get(0);
+		var second = (List<?>) outer.get(1);
+		assertEquals(2, first.size());
+		assertEquals(2, second.size());
+		assertEquals(1, ((Number) first.get(0)).intValue());
+		assertEquals(2, ((Number) first.get(1)).intValue());
+		assertEquals(3, ((Number) second.get(0)).intValue());
+		assertEquals(4, ((Number) second.get(1)).intValue());
+	}
+
+	// Companion to b25: space-separated inner arrays on the SAME line still concatenate per the
+	// HOCON array-concatenation rule.  Confirms the structural fix did not break that feature.
+	@Test
+	void b28_sameLineInnerArraysStillConcatenate() throws Exception {
+		var hocon = "outer = [\n  [1, 2] [3, 4]\n]";
+		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var outer = (List<?>) m.get("outer");
+		assertNotNull(outer);
+		assertEquals(1, outer.size());
+		var inner = (List<?>) outer.get(0);
+		assertEquals(4, inner.size());
+		assertEquals(1, ((Number) inner.get(0)).intValue());
+		assertEquals(4, ((Number) inner.get(3)).intValue());
+	}
+
+	// Regression for the parseObject side of the invariant: when a nested object's closing '}' is
+	// cached as a peeked token, the newline that separates the next sibling key must survive so the
+	// sibling is parsed at the correct scope rather than being swallowed.
+	@Test
+	void b29_nestedObjectClosePreservesSiblingNewline() throws Exception {
+		var hocon = "a {\n  b = 1\n}\nc = 2";
+		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var a = (Map<String, Object>) m.get("a");
+		assertNotNull(a);
+		assertEquals(1, ((Number) a.get("b")).intValue());
+		assertEquals(2, ((Number) m.get("c")).intValue());
+	}
+
+	// Newline-separated objects inside an array must remain distinct elements rather than merging
+	// via HOCON object-concatenation (which only applies to same-line adjacency).
+	@Test
+	void b30_arrayOfObjectsNewlineSeparatedStayDistinct() throws Exception {
+		var hocon = "items = [\n  { id = 1 }\n  { id = 2 }\n]";
+		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
+		var items = (List<?>) m.get("items");
+		assertNotNull(items);
+		assertEquals(2, items.size());
+		assertEquals(1, ((Number) ((Map<String, Object>) items.get(0)).get("id")).intValue());
+		assertEquals(2, ((Number) ((Map<String, Object>) items.get(1)).get("id")).intValue());
+	}
 }

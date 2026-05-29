@@ -255,9 +255,21 @@ public class HoconTokenizer {
 	/**
 	 * Skips whitespace and comments.
 	 *
+	 * <p>
+	 * No-op when a token has already been peeked (i.e. {@link #peek()} or {@link #peekNoSkip()}
+	 * cached a token). Once a token is cached, the underlying reader is positioned <em>after</em>
+	 * that token, so skipping whitespace here would consume characters that semantically come after
+	 * the cached token rather than before it. The leading whitespace before the cached token was
+	 * already consumed when the token was produced, so this method has nothing left to do until the
+	 * cached token is read. This invariant keeps callers from accidentally reading past a peeked
+	 * structural token (such as a closing {@code ]} or {@code }}) and swallowing a separator that
+	 * belongs to an enclosing scope.
+	 *
 	 * @throws IOException If a read error occurs.
 	 */
 	public void skipWhitespaceAndComments() throws IOException {
+		if (peeked != null)
+			return;
 		while (true) {
 			var c = readChar();
 			if (c < 0)

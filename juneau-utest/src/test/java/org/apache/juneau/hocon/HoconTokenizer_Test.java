@@ -178,4 +178,32 @@ class HoconTokenizer_Test extends TestBase {
 		assertEquals(PLUS_EQUALS, t.read().type());
 		assertEquals(EOF, t.read().type());
 	}
+
+	// Structural invariant (work item 135): skipWhitespaceAndComments is a no-op while a token is
+	// cached.  peekNoSkip() reads a structural token and leaves the underlying reader positioned
+	// AFTER it.  A subsequent skipWhitespaceAndComments() must NOT advance past the cached token and
+	// swallow the whitespace/newline that follows it — that whitespace belongs to the enclosing
+	// scope (e.g. an in-array element separator).
+	@Test
+	void g15_skipIsNoopWhileTokenCached() throws Exception {
+		var t = tokenizer("]\nx");
+		// peekNoSkip caches RBRACKET; the reader is now positioned at the '\n' that follows ']'.
+		assertEquals(RBRACKET, t.peekNoSkip().type());
+		// Must be a no-op: the trailing '\n' must survive.
+		t.skipWhitespaceAndComments();
+		// The cached RBRACKET is still returned first...
+		assertEquals(RBRACKET, t.read().type());
+		// ...and the '\n' that followed ']' was preserved, not swallowed.
+		assertEquals(NEWLINE, t.peekNoSkip().type());
+	}
+
+	// Companion to g15: the no-op guard must not regress the normal (nothing-cached) skip behavior.
+	@Test
+	void g16_skipStillWorksWhenNothingCached() throws Exception {
+		var t = tokenizer("   # comment\n   z");
+		t.skipWhitespaceAndComments();
+		var tok = t.read();
+		assertEquals(UNQUOTED_STRING, tok.type());
+		assertEquals("z", tok.stringValue());
+	}
 }
