@@ -1573,6 +1573,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.20m.RestServerReactive',
+							label: '10.20m. Reactive-Streams Returns',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.21.BuiltInParameters',
 							label: '10.21. Built-In Parameters',
 						},
