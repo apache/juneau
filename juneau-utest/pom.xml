@@ -541,6 +541,55 @@
 			<version>1.62.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!--
+			Reactive-Streams return-type modules (both opt-in; the reactive feature is no longer in
+			juneau-rest-server core / DefaultConfig — see FINISHED-119/120).
+
+			- juneau-rest-server-reactive: dependency-free JDK Flow.Publisher spine + ReactiveStreamsAdapter
+			  SPI + the ServiceLoader auto-registration file for ReactiveResponseProcessor. Its mere presence
+			  on this test classpath is what activates the reactive processor for ReactiveResponseProcessor_Test
+			  (the JDK-native path needs no third-party library). Pulled transitively by reactor, but declared
+			  explicitly here for clarity and so the JDK-Flow tests don't silently depend on reactor.
+			- juneau-rest-server-reactor: the Reactor / RxJava / Reactive-Streams adapter bridge. The module
+			  declares reactor-core / rxjava / reactive-streams in `provided` scope (so they never leak into
+			  consumers); juneau-utest exercises all three adapters end-to-end, so we add the runtime libs here
+			  in `test` scope explicitly.
+
+			NOTE: because juneau-rest-server-reactive is on this classpath, EVERY resource in juneau-utest gets
+			the ReactiveResponseProcessor auto-discovered. The "bare juneau-rest-server has zero reactive
+			behavior" assertion therefore cannot live here — it is exercised in juneau-rest-mock (whose test
+			classpath has no reactive module). See ReactiveOptIn_BareServer_Test.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-reactive</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-reactor</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.reactivestreams</groupId>
+			<artifactId>reactive-streams</artifactId>
+			<version>1.0.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-core</artifactId>
+			<version>3.6.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.reactivex.rxjava3</groupId>
+			<artifactId>rxjava</artifactId>
+			<version>3.1.10</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.openjdk.jmh</groupId>
 			<artifactId>jmh-core</artifactId>

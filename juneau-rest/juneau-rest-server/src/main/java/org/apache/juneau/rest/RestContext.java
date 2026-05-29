@@ -1609,6 +1609,59 @@ public class RestContext extends Context {
 	});
 
 	/**
+	 * JVM-wide cache of {@link ResponseProcessor} provider classes discovered via {@link ServiceLoader}.
+	 *
+	 * <p>
+	 * Populated lazily on first use and shared across all {@link RestContext} instances. Empty on a bare
+	 * {@code juneau-rest-server} classpath; non-empty only when an opt-in module (e.g.
+	 * {@code juneau-rest-server-reactive}) ships a
+	 * {@code META-INF/services/org.apache.juneau.rest.processor.ResponseProcessor} provider file.
+	 */
+	private static volatile List<Class<? extends ResponseProcessor>> serviceLoaderResponseProcessors;
+
+	/**
+	 * Returns the module-contributed {@link ResponseProcessor} classes discovered via {@link ServiceLoader},
+	 * caching the result for the lifetime of the JVM.
+	 *
+	 * <p>
+	 * Provider <em>types</em> are resolved (not instantiated) so each {@link RestContext} can instantiate its
+	 * own bean-store-injected copy. Discovery failures are swallowed at {@code FINE} so a malformed provider
+	 * never fails resource startup; on a bare classpath the returned list is empty and the default processor
+	 * chain is unchanged.
+	 *
+	 * @return The discovered processor classes (possibly empty, never {@code null}).
+	 */
+	private static List<Class<? extends ResponseProcessor>> discoverServiceLoaderResponseProcessors() {
+		var p = serviceLoaderResponseProcessors;
+		if (p == null) {
+			synchronized (RestContext.class) {
+				p = serviceLoaderResponseProcessors;
+				if (p == null) {
+					p = loadServiceLoaderResponseProcessors();
+					serviceLoaderResponseProcessors = p;
+				}
+			}
+		}
+		return p;
+	}
+
+	private static List<Class<? extends ResponseProcessor>> loadServiceLoaderResponseProcessors() {
+		var out = new ArrayList<Class<? extends ResponseProcessor>>();
+		try {
+			for (var it = ServiceLoader.load(ResponseProcessor.class).stream().iterator(); it.hasNext();) {
+				try {
+					out.add(it.next().type());
+				} catch (ServiceConfigurationError | RuntimeException e) {
+					LOG.log(Level.FINE, e, () -> "Skipping ServiceLoader-discovered ResponseProcessor: " + e.getMessage());
+				}
+			}
+		} catch (ServiceConfigurationError | RuntimeException e) {
+			LOG.log(Level.FINE, e, () -> "ServiceLoader for ResponseProcessor failed: " + e.getMessage());
+		}
+		return List.copyOf(out);
+	}
+
+	/**
 	 * The ordered array of {@link ResponseProcessor} instances for this resource.
 	 *
 	 * <p>
@@ -1626,6 +1679,12 @@ public class RestContext extends Context {
 		// at request time when no TracerHook stashed a trace context, so it's zero-cost on the no-tracer path.
 		if (defaultResponseTraceparent)
 			b.add(TraceContextResponseProcessor.class);
+		// TODO-119/120 refactor: front-load any module-contributed ResponseProcessors discovered via
+		// ServiceLoader (e.g. the opt-in juneau-rest-server-reactive module's ReactiveResponseProcessor,
+		// which must run ahead of AsyncResponseProcessor). Inert on a bare juneau-rest-server classpath —
+		// when no module ships a META-INF/services/...ResponseProcessor provider file the list is empty and
+		// the chain is identical to the pre-feature default.
+		discoverServiceLoaderResponseProcessors().forEach(b::add);
 		getRestAnnotationsForProperty(PROPERTY_responseProcessors)
 			.forEach(ai -> b.add(ai.inner().responseProcessors()));
 		// @Bean method override REPLACES the entire annotation-derived list.
