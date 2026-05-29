@@ -91,9 +91,11 @@ public class RestAnnotation {
 		private String messages = "";
 		private String path = "";
 		private String[] paths = {};
+		private String observability = "";
 		private String problemDetails = "";
 		private String virtualThreads = "";
 		private String asyncTimeoutMillis = "";
+		private String asyncCompletionExecutor = "";
 		private String renderResponseStackTraces = "";
 		private String roleGuard = "";
 		private String rolesDeclared = "";
@@ -521,6 +523,17 @@ public class RestAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Rest#observability()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder observability(String value) {
+			observability = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Rest#virtualThreads()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -539,6 +552,17 @@ public class RestAnnotation {
 		 */
 		public Builder asyncTimeoutMillis(String value) {
 			asyncTimeoutMillis = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#asyncCompletionExecutor()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder asyncCompletionExecutor(String value) {
+			asyncCompletionExecutor = value;
 			return this;
 		}
 
@@ -760,9 +784,11 @@ public class RestAnnotation {
 		private final String messages;
 		private final String path;
 		private final String[] paths;
+		private final String observability;
 		private final String problemDetails;
 		private final String virtualThreads;
 		private final String asyncTimeoutMillis;
+		private final String asyncCompletionExecutor;
 		private final String renderResponseStackTraces;
 		private final String roleGuard;
 		private final String rolesDeclared;
@@ -819,9 +845,11 @@ public class RestAnnotation {
 			partSerializer = b.partSerializer;
 			path = b.path;
 			paths = copyOf(b.paths);
+			observability = b.observability;
 			problemDetails = b.problemDetails;
 			virtualThreads = b.virtualThreads;
 			asyncTimeoutMillis = b.asyncTimeoutMillis;
+			asyncCompletionExecutor = b.asyncCompletionExecutor;
 			produces = copyOf(b.produces);
 			renderResponseStackTraces = b.renderResponseStackTraces;
 			responseProcessors = copyOf(b.responseProcessors);
@@ -1026,6 +1054,11 @@ public class RestAnnotation {
 		}
 
 		@Override /* Overridden from Rest */
+		public String observability() {
+			return observability;
+		}
+
+		@Override /* Overridden from Rest */
 		public String problemDetails() {
 			return problemDetails;
 		}
@@ -1038,6 +1071,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String asyncTimeoutMillis() {
 			return asyncTimeoutMillis;
+		}
+
+		@Override /* Overridden from Rest */
+		public String asyncCompletionExecutor() {
+			return asyncCompletionExecutor;
 		}
 
 		@Override /* Overridden from Rest */

@@ -53,7 +53,15 @@ import com.nimbusds.jwt.proc.*;
  * 	<li><b>Clock skew</b> — defaults to 60 seconds tolerance for {@code exp} and {@code nbf}.
  * 		Capped at 300 seconds by the builder.
  * 	<li><b>JWKS caching</b> — keys are fetched and cached for 5 minutes by default. On fetch failure
- * 		the cache continues serving past TTL with a warning logged (see {@link JwksCache}).
+ * 		the cache continues serving past TTL with a warning logged (see {@link JwksCache}). When a
+ * 		fresh-cache selection returns no keys (typically because an IdP rotated its signing key
+ * 		mid-TTL), the cache performs one eager out-of-band refresh before failing the request. This
+ * 		behavior is <b>enabled by default</b> ({@link Builder#jwksEagerRefreshOnKidMiss(boolean)
+ * 		jwksEagerRefreshOnKidMiss(true)}) and bounded by a per-cache cooldown (default 10 seconds)
+ * 		plus a single-in-flight guard. Opt out via
+ * 		{@link Builder#jwksEagerRefreshOnKidMiss(boolean) jwksEagerRefreshOnKidMiss(false)}.
+ * 		Applies only to {@link Builder#jwksUrl(java.net.URI) jwksUrl(...)}-backed caches; a
+ * 		caller-supplied {@link Builder#jwkSource(JWKSource) jwkSource(...)} is unaffected.
  * </ul>
  *
  * <h5 class='topic'>Usage</h5>
@@ -140,6 +148,22 @@ public class JwtTokenValidator implements TokenValidator {
 		 */
 		@Value("${juneau.jwt.jwksCacheTtl:PT5M}")
 		Duration jwksCacheTtl;
+
+		/**
+		 * Whether to perform an eager JWKS refresh on a {@code kid} cache miss; populated via
+		 * {@link Value @Value} from {@code juneau.jwt.jwksEagerRefreshOnKidMiss} (boolean, default
+		 * {@code true}).
+		 */
+		@Value("${juneau.jwt.jwksEagerRefreshOnKidMiss:true}")
+		boolean jwksEagerRefreshOnKidMiss;
+
+		/**
+		 * Minimum interval between eager JWKS refreshes; populated via {@link Value @Value} from
+		 * {@code juneau.jwt.jwksEagerRefreshCooldown} (ISO-8601 duration, default {@code PT10S} = 10
+		 * seconds).
+		 */
+		@Value("${juneau.jwt.jwksEagerRefreshCooldown:PT10S}")
+		Duration jwksEagerRefreshCooldown;
 
 		private Clock clock = Clock.systemUTC();
 
@@ -256,6 +280,55 @@ public class JwtTokenValidator implements TokenValidator {
 		}
 
 		/**
+		 * Enables or disables the eager JWKS refresh that fires on a fresh-cache {@code kid} miss.
+		 *
+		 * <p>
+		 * When {@code true} (the default), the first request that presents a token whose signing
+		 * key is not in the current (still-fresh) cache triggers a single out-of-band JWKS refresh.
+		 * This closes the rotation window where an IdP publishes a new key mid-TTL and clients would
+		 * otherwise see up to {@code jwksCacheTtl} minutes of spurious 401 responses for perfectly
+		 * valid tokens. The refresh is bounded by {@link #jwksEagerRefreshCooldown(Duration)} and a
+		 * single-in-flight guard (no thundering herd).
+		 *
+		 * <p>
+		 * Applies only to {@link #jwksUrl(java.net.URI) jwksUrl(...)}-backed caches. A
+		 * caller-supplied {@link #jwkSource(JWKSource) jwkSource(...)} is unaffected.
+		 *
+		 * @param value {@code true} to enable (default); {@code false} to restore pre-9.5.0 behavior.
+		 * @return This object.
+		 */
+		public Builder jwksEagerRefreshOnKidMiss(boolean value) {
+			jwksEagerRefreshOnKidMiss = value;
+			return this;
+		}
+
+		/**
+		 * Sets the minimum spacing between consecutive eager JWKS refreshes.
+		 *
+		 * <p>
+		 * A burst of unknown-{@code kid} tokens (e.g. misconfigured client, replay attack) or a
+		 * JWKS-endpoint outage will trigger at most one eager refresh per cooldown window. This
+		 * prevents the eager-refresh path from becoming a vector for amplified JWKS-endpoint load.
+		 *
+		 * <p>
+		 * Must be positive, at most 60 seconds, and at most {@link #jwksCacheTtl(Duration)
+		 * jwksCacheTtl} (validated at {@link #build()} time).
+		 *
+		 * @param value The cooldown. Must not be {@code null}.
+		 * @return This object.
+		 */
+		public Builder jwksEagerRefreshCooldown(Duration value) {
+			assertArgNotNull("value", value);
+			if (value.isZero() || value.isNegative())
+				throw new IllegalArgumentException("jwksEagerRefreshCooldown must be positive");
+			if (value.compareTo(Duration.ofSeconds(60)) > 0)
+				throw new IllegalArgumentException(
+					"jwksEagerRefreshCooldown must not exceed 60 seconds (was " + value + ")");
+			jwksEagerRefreshCooldown = value;
+			return this;
+		}
+
+		/**
 		 * Overrides the {@link Clock} used for {@code exp} / {@code nbf} comparisons and JWKS cache
 		 * TTL. Useful in tests.
 		 *
@@ -281,6 +354,10 @@ public class JwtTokenValidator implements TokenValidator {
 				throw new IllegalStateException("JwtTokenValidator requires either jwksUrl(...) or jwkSource(...)");
 			if (jwksUrl != null && jwkSource != null)
 				throw new IllegalStateException("JwtTokenValidator: jwksUrl(...) and jwkSource(...) are mutually exclusive");
+			if (jwksEagerRefreshCooldown.compareTo(jwksCacheTtl) > 0)
+				throw new IllegalStateException(
+					"jwksEagerRefreshCooldown (" + jwksEagerRefreshCooldown
+					+ ") must not exceed jwksCacheTtl (" + jwksCacheTtl + ")");
 			return new JwtTokenValidator(this);
 		}
 	}
@@ -305,7 +382,8 @@ public class JwtTokenValidator implements TokenValidator {
 		this.clock = builder.clock;
 		this.jwkSource = builder.jwkSource != null
 			? builder.jwkSource
-			: new JwksCache(createRemoteJwkSource(builder.jwksUrl), builder.jwksCacheTtl, builder.clock);
+			: new JwksCache(createRemoteJwkSource(builder.jwksUrl), builder.jwksCacheTtl, builder.clock,
+				builder.jwksEagerRefreshOnKidMiss, builder.jwksEagerRefreshCooldown);
 	}
 
 	/**

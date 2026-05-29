@@ -83,6 +83,14 @@ public final class RestServerConstants {
 	 */
 	public static final String PROPERTY_asyncTimeoutMillis = "asyncTimeoutMillis";
 
+	/**
+	 * The {@code "asyncCompletionExecutor"} annotation attribute name — names a {@link java.util.concurrent.Executor}
+	 * bean (resolved from the resource's {@link org.apache.juneau.commons.inject.BeanStore}) that routes
+	 * {@link java.util.concurrent.CompletableFuture} completion callbacks through a dedicated thread pool instead of
+	 * the future's natural completion thread (TODO-118). Empty string (default) = no override.
+	 */
+	public static final String PROPERTY_asyncCompletionExecutor = "asyncCompletionExecutor";
+
 	/** The {@code "clientVersionHeader"} annotation attribute name — used in {@code noInherit} matching. */
 	public static final String PROPERTY_clientVersionHeader = "clientVersionHeader";
 
@@ -211,6 +219,35 @@ public final class RestServerConstants {
 
 	/** The {@code "value"} annotation attribute name — used by {@code @RestOp}/verb annotations to hold the (optional method-prefixed) path; folded into {@link #PROPERTY_path}. */
 	public static final String PROPERTY_value = "value";
+
+	/**
+	 * The {@code "observability"} annotation attribute name — tri-state per-resource / per-op observability control.
+	 * {@code "true"} opts the resource in and requires a wired backend (startup-fail if missing); {@code "false"} short-circuits
+	 * the observability block entirely; {@code ""} (default) inherits / uses the existing silent-no-op behavior.
+	 *
+	 * @see org.apache.juneau.rest.annotation.Rest#observability()
+	 * @see org.apache.juneau.rest.annotation.RestOp#observability()
+	 */
+	public static final String PROPERTY_observability = "observability";
+
+	/**
+	 * The {@code "metricName"} annotation attribute name — per-op override for the metric name passed to
+	 * {@link org.apache.juneau.rest.metrics.MetricsRecorder#record record()}. Empty string (default) uses
+	 * the recorder's own default name derivation.
+	 *
+	 * @see org.apache.juneau.rest.annotation.RestOp#metricName()
+	 */
+	public static final String PROPERTY_metricName = "metricName";
+
+	/**
+	 * The {@code "metricTags"} annotation attribute name — per-op additional metric tags passed to
+	 * {@link org.apache.juneau.rest.metrics.MetricsRecorder#record record()}. Format: comma-separated
+	 * {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}). Empty string (default) means
+	 * no additional tags.
+	 *
+	 * @see org.apache.juneau.rest.annotation.RestOp#metricTags()
+	 */
+	public static final String PROPERTY_metricTags = "metricTags";
 
 	/**
 	 * Servlet-request attribute key under which the per-request id minted or honored by

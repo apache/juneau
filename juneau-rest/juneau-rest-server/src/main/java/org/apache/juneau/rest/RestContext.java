@@ -87,6 +87,7 @@ import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.debug.format.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
+import org.apache.juneau.rest.metrics.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.rrpc.*;
 import org.apache.juneau.rest.servlet.*;
@@ -94,6 +95,7 @@ import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.rest.openapi.*;
 import org.apache.juneau.rest.swagger.*;
+import org.apache.juneau.rest.tracing.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.validation.*;
 import org.apache.juneau.rest.vars.*;
@@ -284,6 +286,26 @@ public class RestContext extends Context {
 		String[] paths;
 
 		/**
+		 * Programmatic override for the MDC async propagation flag.
+		 *
+		 * <p>
+		 * {@code null} (default) &mdash; defers to the {@code RestContext.mdcAsyncPropagation} env-driven
+		 * default (itself defaulting to {@code true} when SLF4J is detected). Set via
+		 * {@link #mdcAsyncPropagation(boolean)}.
+		 */
+		Boolean mdcAsyncPropagation;
+
+		/**
+		 * Programmatic override for the async-completion executor bean name.
+		 *
+		 * <p>
+		 * {@code null} (default) &mdash; resolved from the {@code @Rest(asyncCompletionExecutor)} annotation chain.
+		 * Set via {@link #asyncCompletionExecutor(String)} to supply the bean-name programmatically (useful in
+		 * test rigs that construct a {@link RestContext} directly without annotations).
+		 */
+		String asyncCompletionExecutorName;
+
+		/**
 		 * Package-private constructor.
 		 *
 		 * <p>
@@ -324,6 +346,49 @@ public class RestContext extends Context {
 		 */
 		public Builder paths(String...value) {
 			paths = value;
+			return this;
+		}
+
+		/**
+		 * Enables or disables SLF4J MDC propagation from the request thread to
+		 * {@link java.util.concurrent.CompletableFuture} completion threads.
+		 *
+		 * <p>
+		 * Default is {@code true} (enabled) when SLF4J is on the runtime classpath.
+		 * When enabled, the {@link org.apache.juneau.rest.processor.MdcAsyncListener} snapshots the
+		 * request thread's MDC map before the async dispatch and restores it inside the
+		 * {@link java.util.concurrent.CompletionStage#whenComplete(java.util.function.BiConsumer) whenComplete}
+		 * callback so that log statements emitted during async completion see the original request context.
+		 *
+		 * <p>
+		 * Call {@code mdcAsyncPropagation(false)} to opt a resource out of MDC propagation. The global default
+		 * can also be overridden via the {@code RestContext.mdcAsyncPropagation} env-driven default.
+		 *
+		 * @param value {@code false} to disable MDC propagation on this resource.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder mdcAsyncPropagation(boolean value) {
+			mdcAsyncPropagation = value;
+			return this;
+		}
+
+		/**
+		 * Programmatically sets the {@link java.util.concurrent.Executor} bean name used to route
+		 * {@link java.util.concurrent.CompletableFuture} completion callbacks through a dedicated thread pool
+		 * (TODO-118). Equivalent to {@link Rest#asyncCompletionExecutor()} on the resource class.
+		 *
+		 * <p>
+		 * The value is looked up by name in the resource's bean store at context-build time. If the name does
+		 * not resolve to an {@link java.util.concurrent.Executor} bean, the context constructor throws. Pass
+		 * {@code null} (or omit this call) to clear the override and fall back to the annotation chain.
+		 *
+		 * @param beanName The bean-store name of the {@link java.util.concurrent.Executor} to use, or {@code null} to clear.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder asyncCompletionExecutor(String beanName) {
+			asyncCompletionExecutorName = beanName;
 			return this;
 		}
 
@@ -1019,6 +1084,25 @@ public class RestContext extends Context {
 	@Value("${RestContext.virtualThreads:false}")
 	private boolean defaultVirtualThreads;
 
+	/**
+	 * Env-driven default controlling whether the {@link TraceContextResponseProcessor} is registered so the
+	 * server writes W3C {@code traceparent} / {@code tracestate} response headers when a {@link TracerHook} is
+	 * active (TODO-114). Defaults to {@code true} (on-when-tracer); set {@code RestContext.responseTraceparent=false}
+	 * to keep the processor out of the chain entirely.
+	 */
+	@Value("${RestContext.responseTraceparent:true}")
+	private boolean defaultResponseTraceparent;
+
+	/**
+	 * Env-driven default controlling whether {@link org.apache.juneau.rest.processor.MdcAsyncListener} propagates
+	 * the request thread's SLF4J MDC map to {@link java.util.concurrent.CompletableFuture} completion threads
+	 * (TODO-117). Defaults to {@code true} (on when SLF4J is detected). Set
+	 * {@code RestContext.mdcAsyncPropagation=false} to disable globally, or call
+	 * {@link Builder#mdcAsyncPropagation(boolean)} per resource.
+	 */
+	@Value("${RestContext.mdcAsyncPropagation:true}")
+	private boolean defaultMdcAsyncPropagation;
+
 	/** Env-driven default for {@code @Rest(eagerInit)}. */
 	@Value("${RestContext.eagerInit:false}")
 	private boolean defaultEagerInit;
@@ -1497,6 +1581,11 @@ public class RestContext extends Context {
 		// ResponseProcessorList.Builder.add(...) uses addAll (append) — final order: [DefaultConfig, parent, child].
 		var bs = beanStore();
 		var b = ResponseProcessorList.create(bs);
+		// TODO-114: When enabled (default on-when-tracer), front-load the W3C trace-context processor so it
+		// writes traceparent/tracestate headers before the body-rendering processors run. It short-circuits
+		// at request time when no TracerHook stashed a trace context, so it's zero-cost on the no-tracer path.
+		if (defaultResponseTraceparent)
+			b.add(TraceContextResponseProcessor.class);
 		getRestAnnotationsForProperty(PROPERTY_responseProcessors)
 			.forEach(ai -> b.add(ai.inner().responseProcessors()));
 		// @Bean method override REPLACES the entire annotation-derived list.
@@ -2112,12 +2201,21 @@ public class RestContext extends Context {
 				.addBean(AnnotationWorkList.class, annotationWork);
 			// @formatter:on
 
-			// Inject @Value-annotated env-driven defaults onto this RestContext instance so that the
-			// memoizer lambdas below (which run lazily on first .get() call) read fully resolved values.
-			// Must run BEFORE isEagerInit() since the eagerInit memoizer itself reads defaultEagerInit.
-			ClassInfo.of(this).inject(this, beanStore);
+		// Inject @Value-annotated env-driven defaults onto this RestContext instance so that the
+		// memoizer lambdas below (which run lazily on first .get() call) read fully resolved values.
+		// Must run BEFORE isEagerInit() since the eagerInit memoizer itself reads defaultEagerInit.
+		ClassInfo.of(this).inject(this, beanStore);
 
-			if (isEagerInit()) {
+		// Startup-fail if @Rest(observability="true") is set but neither MetricsRecorder nor TracerHook is
+		// supplied. The check runs after all @Bean method injection so that consumer-provided beans are visible.
+		checkObservabilityBackendPresent();
+
+		// Startup-fail (TODO-118): if asyncCompletionExecutor is configured (either by annotation or
+		// programmatically), force-evaluate the memoizer now so "bean not found" surfaces at context
+		// init time rather than lazily on the first request.
+		checkAsyncCompletionExecutorPresent();
+
+		if (isEagerInit()) {
 				// Force-fire the framework-bean memoizers in dependency-friendly order so their @Rest()
 				// annotation walks (e.g. `@Rest(partParser=…)`, `@Rest(partSerializer=…)`, `@Rest(encoders=…)`,
 				// etc.) execute eagerly inside the try-catch.  These walks MUTATE the cached creators that
@@ -2355,6 +2453,17 @@ public class RestContext extends Context {
 		mergeReplacedBooleanAttribute(PROPERTY_virtualThreads, defaultVirtualThreads));
 
 	/**
+	 * Resource-level observability tri-state from {@code @Rest(observability)}: {@code "true"} (strict opt-in),
+	 * {@code "false"} (explicit opt-out), or {@code null} / empty (default inherit behavior).
+	 *
+	 * <p>
+	 * Per-operation overrides (from verb / {@code @RestOp} annotations) are resolved independently in
+	 * {@link RestOpContext}.
+	 */
+	private final Memoizer<String> observabilityAttribute = memoizer(() ->
+		mergeReplacedStringAttribute(PROPERTY_observability, null));
+
+	/**
 	 * Configurable async-response timeout (milliseconds) applied by {@code AsyncResponseProcessor} to
 	 * {@link CompletableFuture}-returning handlers; resolved from {@code @Rest(asyncTimeoutMillis)} (TODO-70).
 	 *
@@ -2373,6 +2482,38 @@ public class RestContext extends Context {
 			return -1L;
 		}
 	});
+
+	/**
+	 * The async-completion executor for this resource, resolved by name from the bean store; {@code null} when
+	 * {@code @Rest(asyncCompletionExecutor)} is blank (the common case).
+	 *
+	 * <p>
+	 * The memoizer throws {@link IllegalStateException} at first access if the bean name was supplied but no
+	 * matching {@link Executor} bean is found — this surfaces as a startup failure, not a silent no-op (TODO-118).
+	 */
+	private final Memoizer<Executor> asyncCompletionExecutor = memoizer(() -> {
+		// Programmatic override takes priority over the annotation chain.
+		var name = resolveAsyncCompletionExecutorName();
+		if (name == null || name.isBlank())
+			return null;
+		var resolved = beanStore().getBean(Executor.class, name);
+		// Try ExecutorService as well (a common supertype users supply that is-a Executor).
+		if (resolved.isEmpty())
+			resolved = beanStore().getBean(ExecutorService.class, name).map(e -> (Executor) e);
+		if (resolved.isEmpty())
+			throw new IllegalStateException(
+				"@Rest(asyncCompletionExecutor) on " + getResourceClass().getName()
+					+ " references bean name '" + name + "' but no Executor (or ExecutorService) bean"
+					+ " with that name is registered in the resource's bean store.");
+		return resolved.get();
+	});
+
+	// Extracted to a method so the compiler does not flag a blank-final-field access inside a field-initializer lambda.
+	private String resolveAsyncCompletionExecutorName() {
+		return builder.asyncCompletionExecutorName != null
+			? builder.asyncCompletionExecutorName
+			: mergeReplacedStringAttribute(PROPERTY_asyncCompletionExecutor, null);
+	}
 
 	/**
 	 * Lazily-instantiated virtual-thread executor used by {@link RestOpInvoker} when
@@ -3569,6 +3710,66 @@ public class RestContext extends Context {
 	public boolean isVirtualThreadsEnabled() { return virtualThreadsEnabled.get(); }
 
 	/**
+	 * Returns the raw resource-level observability attribute value from {@code @Rest(observability)}.
+	 *
+	 * <ul class='values'>
+	 * 	<li>{@code "true"} &mdash; strict opt-in: all operations on this resource require a wired backend.
+	 * 	<li>{@code "false"} &mdash; explicit opt-out: the observability block is disabled for all operations.
+	 * 	<li>{@code null} / empty &mdash; default (inherit / no-op fallback) behavior.
+	 * </ul>
+	 *
+	 * <p>
+	 * Per-operation overrides from {@link org.apache.juneau.rest.annotation.RestOp#observability()} (and verb
+	 * annotations) take precedence over this value; they are resolved in {@link RestOpContext}.
+	 *
+	 * @return The resolved {@code @Rest(observability)} string, or {@code null} when not set.
+	 */
+	public String getObservabilityAttribute() { return observabilityAttribute.get(); }
+
+	/**
+	 * Returns whether the resource explicitly opted out of observability via {@code @Rest(observability="false")}.
+	 *
+	 * @return <jk>true</jk> when the resource-level observability is disabled.
+	 */
+	public boolean isObservabilityDisabled() {
+		var v = observabilityAttribute.get();
+		return v != null && v.equalsIgnoreCase("false");
+	}
+
+	/**
+	 * Returns whether the server writes W3C {@code traceparent} / {@code tracestate} response headers when a
+	 * {@link TracerHook} is active on the request (TODO-114).
+	 *
+	 * <p>
+	 * Defaults to {@code true} (on-when-tracer); resolved from the {@code RestContext.responseTraceparent}
+	 * env-driven default. When {@code true}, a {@link TraceContextResponseProcessor} is registered in the
+	 * response-processor chain &mdash; it writes the headers only when a non-no-op {@code TracerHook} stashed a
+	 * trace context for the request, so it stays zero-cost on the no-tracer path. When {@code false}, the
+	 * processor is not registered at all.
+	 *
+	 * @return <jk>true</jk> if trace-context response-header propagation is enabled on this resource.
+	 */
+	public boolean isResponseTraceparent() { return defaultResponseTraceparent; }
+
+	/**
+	 * Returns whether SLF4J MDC propagation is enabled for {@link java.util.concurrent.CompletableFuture}
+	 * completion threads on this resource (TODO-117).
+	 *
+	 * <p>
+	 * Defaults to {@code true}; resolved first from the programmatic {@link Builder#mdcAsyncPropagation(boolean)}
+	 * override (if set), then from the {@code RestContext.mdcAsyncPropagation} env-driven default.
+	 * When {@code true}, {@link org.apache.juneau.rest.processor.MdcAsyncListener} wraps the
+	 * {@link java.util.concurrent.CompletionStage#whenComplete(java.util.function.BiConsumer) whenComplete} callback
+	 * registered by {@link org.apache.juneau.rest.processor.AsyncResponseProcessor} so the completion thread sees
+	 * the request thread's MDC context. When {@code false}, no MDC work is done.
+	 *
+	 * @return <jk>true</jk> if MDC async propagation is enabled on this resource.
+	 */
+	public boolean isMdcAsyncPropagation() {
+		return builder.mdcAsyncPropagation != null ? builder.mdcAsyncPropagation : defaultMdcAsyncPropagation;
+	}
+
+	/**
 	 * Returns the lazily-instantiated virtual-thread executor for this resource, or {@code null} when
 	 * {@code @Rest(virtualThreads=true)} is unset, the runtime is older than Java 21, or executor construction
 	 * failed (in which case a {@code WARNING} was logged at context init).
@@ -3585,6 +3786,16 @@ public class RestContext extends Context {
 	 * @return The async timeout in milliseconds, or {@code -1} when unset.
 	 */
 	public long getAsyncTimeoutMillis() { return asyncTimeoutMillis.get(); }
+
+	/**
+	 * Returns the {@link java.util.concurrent.Executor} configured for routing
+	 * {@link java.util.concurrent.CompletableFuture} completion callbacks on this resource (TODO-118), or
+	 * {@code null} when {@code @Rest(asyncCompletionExecutor)} is unset (natural completion thread).
+	 *
+	 * @return The executor, or {@code null} if no async-completion executor is configured.
+	 * @since 9.5.0
+	 */
+	public Executor getAsyncCompletionExecutor() { return asyncCompletionExecutor.get(); }
 
 	/**
 	 * Returns whether framework beans and operation/child contexts are eagerly initialized at construction time.
@@ -3659,6 +3870,52 @@ public class RestContext extends Context {
 	 * Ensures framework bean memoizers that can mutate creator state from {@code @Rest(...)} annotation walks
 	 * have run before {@link RestOpContext} instances are built.
 	 */
+	/**
+	 * Validates that when {@code @Rest(observability="true")} is declared on this resource, at least one real
+	 * observability backend ({@link org.apache.juneau.rest.metrics.MetricsRecorder} or
+	 * {@link org.apache.juneau.rest.tracing.TracerHook}) is registered in the bean store.
+	 *
+	 * <p>
+	 * Called once during {@link RestContext} construction, after all {@code @Bean} method injection has run.
+	 * If the attribute is {@code "true"} and both beans resolve to their {@code NoOp} singletons, construction
+	 * fails with a {@link org.apache.juneau.rest.BasicHttpException InternalServerError} whose message precisely
+	 * identifies the missing backends.
+	 *
+	 * <p>
+	 * Per-operation {@code @RestOp(observability="true")} startup-fails are handled the same way inside
+	 * {@link RestOpContext}.
+	 *
+	 * @throws InternalServerError when {@code @Rest(observability="true")} is set but no backend is wired.
+	 */
+	private void checkObservabilityBackendPresent() {
+		var attr = observabilityAttribute.get();
+		if (!"true".equalsIgnoreCase(attr))
+			return;
+		var recorder = beanStore.getBean(MetricsRecorder.class).orElse(null);
+		var tracer = beanStore.getBean(TracerHook.class).orElse(null);
+		boolean hasRecorder = recorder != null && !(recorder instanceof NoOpMetricsRecorder);
+		boolean hasTracer = tracer != null && !(tracer instanceof NoOpTracerHook);
+		if (!hasRecorder && !hasTracer)
+			throw new InternalServerError(
+				"@Rest(observability=\"true\") is set on " + getResourceClass().getSimpleName()
+				+ " but no MetricsRecorder or TracerHook @Bean is registered. "
+				+ "Either wire a backend or change observability to \"\" (inherit) or \"false\" (opt-out).");
+	}
+
+	/**
+	 * Eagerly evaluates the {@link #asyncCompletionExecutor} memoizer when the annotation or programmatic
+	 * override is non-blank, ensuring "bean not found" surfaces as a startup failure (TODO-118).
+	 *
+	 * @throws IllegalStateException if the named executor bean is not in the bean store.
+	 */
+	private void checkAsyncCompletionExecutorPresent() {
+		var name = builder.asyncCompletionExecutorName != null
+			? builder.asyncCompletionExecutorName
+			: mergeReplacedStringAttribute(PROPERTY_asyncCompletionExecutor, null);
+		if (name != null && !name.isBlank())
+			asyncCompletionExecutor.get(); // throws IllegalStateException if bean is missing
+	}
+
 	private void initializeFrameworkBeansForRestOps() {
 		getMarshallingContext();
 		getEncoders();

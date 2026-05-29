@@ -614,6 +614,70 @@ public @interface RestPut {
 	String problemDetails() default "";
 
 	/**
+	 * Per-operation observability opt-in / opt-out control.
+	 *
+	 * <p>
+	 * Overrides the resource-level {@link Rest#observability()} setting for this specific operation.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> &mdash; strict opt-in; requires a wired observability backend.
+	 * 	<li><js>"false"</js> &mdash; explicit opt-out; short-circuits the observability block.
+	 * 	<li><js>""</js> (default) &mdash; inherits the resource-level setting.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link RestOp#observability()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String observability() default "";
+
+	/**
+	 * Per-operation override for {@link Rest#asyncCompletionExecutor() @Rest(asyncCompletionExecutor)}.
+	 *
+	 * <p>
+	 * Names the {@link java.util.concurrent.Executor} bean used to route completion callbacks for this
+	 * specific operation through a dedicated thread pool. Empty string (default) inherits from
+	 * {@link Rest#asyncCompletionExecutor()}.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link RestOp#asyncCompletionExecutor()}
+	 * 	<li class='ja'>{@link Rest#asyncCompletionExecutor()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String asyncCompletionExecutor() default "";
+
+	/**
+	 * Per-operation metric name override. Empty string (default) uses the recorder's own name derivation.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link RestOp#metricName()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String metricName() default "";
+
+	/**
+	 * Per-operation metric tags. Format: comma-separated {@code key=value} pairs.
+	 * Empty string (default) means no additional tags.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link RestOp#metricTags()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String metricTags() default "";
+
+	/**
 	 * Supported accept media types.
 	 *
 	 * <p>

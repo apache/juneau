@@ -904,7 +904,15 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			// Supplier<String> field/parameter type opts in to re-evaluating reads.
 			// BeanStore is forwarded so caller-scoped PropertySource beans (e.g. per-RestContext
 			// @Rest(config=...) Configs) participate in expression resolution alongside Settings.
-			return ValueResolver.resolve(valueExpr, ptu.inner(), inner.getParameterizedType(), this.toString(), beanStore);
+			var resolved = ValueResolver.resolve(valueExpr, ptu.inner(), inner.getParameterizedType(), this.toString(), beanStore);
+			// Mirror FieldInfo.inject: wrap in Optional when the declared parameter type is Optional<T>.
+			// VarResolver substitutes "" for a missing key with no default — collapse both null and ""
+			// to Optional.empty() so @Value("${maybe}") Optional<T> behaves the same as Spring's.
+			if (pt.is(Optional.class))
+				return (resolved == null || (resolved instanceof String s && s.isEmpty()))
+					? Optional.empty()
+					: Optional.of(resolved);
+			return resolved;
 		}
 
 		if (JsrSupport.isProviderType(ptu.inner())) {

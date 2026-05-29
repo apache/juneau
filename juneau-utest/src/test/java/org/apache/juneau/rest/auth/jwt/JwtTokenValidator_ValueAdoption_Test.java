@@ -31,17 +31,23 @@ import org.junit.jupiter.api.*;
  */
 class JwtTokenValidator_ValueAdoption_Test {
 
-	private static final String SP = "juneau.jwt.jwksCacheTtl";
+	private static final String TTL_KEY = "juneau.jwt.jwksCacheTtl";
+	private static final String EAGER_KEY = "juneau.jwt.jwksEagerRefreshOnKidMiss";
+	private static final String COOLDOWN_KEY = "juneau.jwt.jwksEagerRefreshCooldown";
 
 	@AfterEach
 	void cleanup() {
-		Settings.get().unsetGlobal(SP);
-		System.clearProperty(SP);
+		for (var k : new String[]{TTL_KEY, EAGER_KEY, COOLDOWN_KEY}) {
+			Settings.get().unsetGlobal(k);
+			System.clearProperty(k);
+		}
 	}
+
+	// ---- jwksCacheTtl -----------------------------------------------------------------------
 
 	@Test
 	void a01_jwksCacheTtl_set() {
-		System.setProperty(SP, "PT10M");
+		System.setProperty(TTL_KEY, "PT10M");
 		assertEquals(Duration.ofMinutes(10), JwtTokenValidator.create().jwksCacheTtl);
 	}
 
@@ -52,7 +58,45 @@ class JwtTokenValidator_ValueAdoption_Test {
 
 	@Test
 	void a03_jwksCacheTtl_setGlobal() {
-		Settings.get().setGlobal(SP, "PT15M");
+		Settings.get().setGlobal(TTL_KEY, "PT15M");
 		assertEquals(Duration.ofMinutes(15), JwtTokenValidator.create().jwksCacheTtl);
+	}
+
+	// ---- jwksEagerRefreshOnKidMiss ----------------------------------------------------------
+
+	@Test
+	void b01_jwksEagerRefreshOnKidMiss_set() {
+		System.setProperty(EAGER_KEY, "false");
+		assertEquals(false, JwtTokenValidator.create().jwksEagerRefreshOnKidMiss);
+	}
+
+	@Test
+	void b02_jwksEagerRefreshOnKidMiss_unset() {
+		assertEquals(true, JwtTokenValidator.create().jwksEagerRefreshOnKidMiss);
+	}
+
+	@Test
+	void b03_jwksEagerRefreshOnKidMiss_setGlobal() {
+		Settings.get().setGlobal(EAGER_KEY, "false");
+		assertEquals(false, JwtTokenValidator.create().jwksEagerRefreshOnKidMiss);
+	}
+
+	// ---- jwksEagerRefreshCooldown -----------------------------------------------------------
+
+	@Test
+	void c01_jwksEagerRefreshCooldown_set() {
+		System.setProperty(COOLDOWN_KEY, "PT30S");
+		assertEquals(Duration.ofSeconds(30), JwtTokenValidator.create().jwksEagerRefreshCooldown);
+	}
+
+	@Test
+	void c02_jwksEagerRefreshCooldown_unset() {
+		assertEquals(Duration.ofSeconds(10), JwtTokenValidator.create().jwksEagerRefreshCooldown);
+	}
+
+	@Test
+	void c03_jwksEagerRefreshCooldown_setGlobal() {
+		Settings.get().setGlobal(COOLDOWN_KEY, "PT20S");
+		assertEquals(Duration.ofSeconds(20), JwtTokenValidator.create().jwksEagerRefreshCooldown);
 	}
 }

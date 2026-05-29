@@ -53,6 +53,7 @@ import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.common.utils.*;
 import org.apache.juneau.rest.converter.*;
@@ -678,6 +679,63 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return -1L;
 	});
 
+	/**
+	 * Per-op async-completion executor: op-level bean name overrides {@code @Rest}-level, then both are
+	 * resolved against the resource's bean store. {@code null} when unset (natural completion thread).
+	 */
+	private final Memoizer<Executor> asyncCompletionExecutor = memoizer(() -> {
+		var v = findOpString(PROPERTY_asyncCompletionExecutor);
+		if (v.isPresent()) {
+			var name = v.get();
+			var bs = beanStore();
+			var resolved = bs.getBean(Executor.class, name);
+			if (resolved.isEmpty())
+				resolved = bs.getBean(ExecutorService.class, name).map(e -> (Executor) e);
+			if (resolved.isEmpty())
+				throw new IllegalStateException(
+					"@RestOp(asyncCompletionExecutor) on " + restContext().getResourceClass().getName()
+						+ "#" + method().getName() + " references bean name '" + name + "' but no Executor"
+						+ " (or ExecutorService) bean with that name is registered in the resource's bean store.");
+			return resolved.get();
+		}
+		if (isInherited(PROPERTY_asyncCompletionExecutor))
+			return restContext().getAsyncCompletionExecutor();
+		return null;
+	});
+
+	/**
+	 * Effective per-op observability state, resolving verb / {@code @RestOp} annotation override first,
+	 * then falling back to the resource-level {@code @Rest(observability)} attribute.
+	 *
+	 * <ul class='values'>
+	 * 	<li>{@code "true"} &mdash; strict opt-in; this operation requires a wired backend.
+	 * 	<li>{@code "false"} &mdash; explicit opt-out; the observability block is short-circuited.
+	 * 	<li>{@code null} &mdash; default inherit behavior; a missing backend silently falls back to NoOp.
+	 * </ul>
+	 */
+	private final Memoizer<String> observabilityAttr = memoizer(() -> {
+		var v = findOpString(PROPERTY_observability);
+		if (v.isPresent())
+			return v.get();
+		if (isInherited(PROPERTY_observability))
+			return restContext().getObservabilityAttribute();
+		return null;
+	});
+
+	/**
+	 * Per-op metric name override from {@code @RestOp(metricName)}.
+	 * Empty string (default) means the recorder uses its own default name derivation.
+	 */
+	private final Memoizer<String> metricName = memoizer(() ->
+		findOpString(PROPERTY_metricName).orElse(""));
+
+	/**
+	 * Per-op additional metric tags from {@code @RestOp(metricTags)}.
+	 * Format: comma-separated {@code key=value} pairs. Empty string (default) means no additional tags.
+	 */
+	private final Memoizer<String> metricTags = memoizer(() ->
+		findOpString(PROPERTY_metricTags).orElse(""));
+
 	/** Aggregated {@code noInherit} keys from all RestOp-group annotations on this operation. */
 	private final Memoizer<SortedSet<String>> noInheritOp = memoizer(() -> {
 		var l = getRestOpAnnotations().stream()
@@ -1088,6 +1146,32 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @param attr The annotation attribute name (e.g. {@code "defaultCharset"}).
 	 * @return The resolved string, or empty if no annotation defines it.
 	 */
+	/**
+	 * Startup-fail: validates that when the effective observability attribute for this op is {@code "true"},
+	 * at least one real backend ({@link org.apache.juneau.rest.metrics.MetricsRecorder} or
+	 * {@link org.apache.juneau.rest.tracing.TracerHook}) is registered.
+	 *
+	 * <p>
+	 * Called once during construction.  The resource-level check in {@link RestContext#checkObservabilityBackendPresent()}
+	 * already fires for {@code @Rest(observability="true")}; this companion fires for individual
+	 * {@code @RestOp(observability="true")} overrides that elevate a single op into strict mode.
+	 */
+	private void checkOpObservabilityBackendPresent() {
+		var attr = observabilityAttr.get();
+		if (!"true".equalsIgnoreCase(attr))
+			return;
+		var bs = beanStore();
+		var recorder = bs.getBean(org.apache.juneau.rest.metrics.MetricsRecorder.class).orElse(null);
+		var tracer = bs.getBean(org.apache.juneau.rest.tracing.TracerHook.class).orElse(null);
+		boolean hasRecorder = recorder != null && !(recorder instanceof org.apache.juneau.rest.metrics.NoOpMetricsRecorder);
+		boolean hasTracer = tracer != null && !(tracer instanceof org.apache.juneau.rest.tracing.NoOpTracerHook);
+		if (!hasRecorder && !hasTracer)
+			throw new InternalServerError(
+				"@RestOp(observability=\"true\") is set on " + context.getResourceClass().getSimpleName() + "." + method.getName()
+				+ " but no MetricsRecorder or TracerHook @Bean is registered. "
+				+ "Either wire a backend or change observability to \"\" (inherit) or \"false\" (opt-out).");
+	}
+
 	private Optional<String> findOpString(String attr) {
 		var vr = varResolver();
 		for (var ai : getRestOpAnnotations()) {
@@ -1226,13 +1310,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			bs.add(HttpPartSerializer.class, getPartSerializer());
 			bs.add(SerializerSet.class, getSerializers());
 
-			// Inject @Value-annotated env-driven defaults onto this RestOpContext instance so that the
-			// memoizer lambdas (defaultCharset, maxInput) read fully resolved values when first invoked.
-			ClassInfo.of(this).inject(this, bs);
+		// Inject @Value-annotated env-driven defaults onto this RestOpContext instance so that the
+		// memoizer lambdas (defaultCharset, maxInput) read fully resolved values when first invoked.
+		ClassInfo.of(this).inject(this, bs);
 
-			// The 6 formerly-eager scalar fields are now memoized; no eagerness needed here.
-			// Pre-warm httpMethod so it is in the memoizer cache for immediate use by compareTo/match.
-			httpMethod.get();
+		// Startup-fail check: if this op (or its resource) declares observability="true" but neither
+		// MetricsRecorder nor TracerHook is wired, fail fast with a precise error.
+		checkOpObservabilityBackendPresent();
+
+		// The 6 formerly-eager scalar fields are now memoized; no eagerness needed here.
+		// Pre-warm httpMethod so it is in the memoizer cache for immediate use by compareTo/match.
+		httpMethod.get();
 
 			var pm = getPathMatchers();
 			bs.add(UrlPathMatcher[].class, pm);
@@ -1465,6 +1553,43 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	public boolean isVirtualThreadsEnabled() { return virtualThreadsEnabled.get(); }
 
 	/**
+	 * Returns whether the observability block is enabled for this operation.
+	 *
+	 * <p>
+	 * Returns {@code false} when the effective resolved attribute is {@code "false"} (explicit opt-out).
+	 * Returns {@code true} in all other cases ({@code "true"} strict opt-in or empty/null default).
+	 *
+	 * <p>
+	 * Note: the default behavior (empty/null attribute) still runs the observability block, but silently
+	 * falls back to {@link org.apache.juneau.rest.metrics.NoOpMetricsRecorder} when no backend is wired.
+	 * Only {@code "false"} completely short-circuits the block.
+	 *
+	 * @return <jk>false</jk> when this operation has explicitly opted out of observability.
+	 * @see RestOp#observability()
+	 * @see Rest#observability()
+	 */
+	public boolean isObservabilityEnabled() {
+		var v = observabilityAttr.get();
+		return !"false".equalsIgnoreCase(v);
+	}
+
+	/**
+	 * Returns the per-op metric name override from {@code @RestOp(metricName)}.
+	 *
+	 * @return The metric name override, or an empty string when not set.
+	 * @see RestOp#metricName()
+	 */
+	public String getMetricName() { return metricName.get(); }
+
+	/**
+	 * Returns the per-op additional metric tags from {@code @RestOp(metricTags)}.
+	 *
+	 * @return The tags string (comma-separated {@code key=value} pairs), or empty string when not set.
+	 * @see RestOp#metricTags()
+	 */
+	public String getMetricTags() { return metricTags.get(); }
+
+	/**
 	 * Returns the configured async-response timeout (milliseconds) for this operation, or {@code -1} when no
 	 * value was supplied at the op or resource level — in which case the default 30-second fallback applies in
 	 * {@link org.apache.juneau.rest.processor.AsyncResponseProcessor}.
@@ -1472,6 +1597,16 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The async timeout in milliseconds, or {@code -1} when unset.
 	 */
 	public long getAsyncTimeoutMillis() { return asyncTimeoutMillis.get(); }
+
+	/**
+	 * Returns the effective {@link java.util.concurrent.Executor} for routing
+	 * {@link java.util.concurrent.CompletableFuture} completion callbacks on this operation (TODO-118), or
+	 * {@code null} when neither the op nor the resource configures an executor (natural completion thread).
+	 *
+	 * @return The executor, or {@code null} if no async-completion executor is configured.
+	 * @since 9.5.0
+	 */
+	public Executor getAsyncCompletionExecutor() { return asyncCompletionExecutor.get(); }
 
 	/**
 	 * Returns the parsers to use for this method.

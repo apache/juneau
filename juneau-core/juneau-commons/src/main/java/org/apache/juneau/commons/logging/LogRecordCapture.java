@@ -20,7 +20,6 @@ import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * Captures log records for testing purposes.
@@ -63,27 +62,12 @@ public class LogRecordCapture implements LogRecordListener, Closeable {
 	private final List<LogRecord> records = Collections.synchronizedList(new ArrayList<>());
 
 	/**
-	 * The logger level saved before capture started, restored on {@link #close()}.
-	 *
-	 * <p>
-	 * Saved and restored so that {@link Logger#isLoggable(Level)} always returns {@code true}
-	 * for every level while capture is active. Without this, certain JDK 25 implementations
-	 * skip the {@code doLog} body when the effective level is coarser than the logged level
-	 * (e.g. INFO when a FINE record is emitted), resulting in 0 captured records.
-	 */
-	private final Level savedLevel;
-
-	/**
 	 * Constructor.
 	 *
 	 * @param logger The logger to capture records from.
 	 */
 	LogRecordCapture(Logger logger) {
 		this.logger = logger;
-		this.savedLevel = logger.getLevel();
-		// Force level to ALL so every log record reaches our listener regardless
-		// of the logger's configured level on any JDK version.
-		logger.setLevel(Level.ALL);
 		logger.addLogRecordListener(this);
 	}
 
@@ -152,11 +136,10 @@ public class LogRecordCapture implements LogRecordListener, Closeable {
 	}
 
 	/**
-	 * Closes this capture, removes it from the logger's listeners, and restores the logger level.
+	 * Closes this capture and removes it from the logger's listeners.
 	 */
 	@Override
 	public void close() {
 		logger.removeLogRecordListener(this);
-		logger.setLevel(savedLevel);
 	}
 }

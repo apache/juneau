@@ -126,6 +126,50 @@ class JwtTokenValidator_Builder_Test extends TestBase {
 		);
 	}
 
+	@Test void b06_zeroEagerRefreshCooldown_rejected() {
+		assertThrows(IllegalArgumentException.class, () ->
+			JwtTokenValidator.create().jwksEagerRefreshCooldown(Duration.ZERO)
+		);
+	}
+
+	@Test void b07_negativeEagerRefreshCooldown_rejected() {
+		assertThrows(IllegalArgumentException.class, () ->
+			JwtTokenValidator.create().jwksEagerRefreshCooldown(Duration.ofSeconds(-1))
+		);
+	}
+
+	@Test void b08_eagerRefreshCooldownOverSixtySeconds_rejected() {
+		assertThrows(IllegalArgumentException.class, () ->
+			JwtTokenValidator.create().jwksEagerRefreshCooldown(Duration.ofSeconds(61))
+		);
+	}
+
+	@Test void b09_eagerRefreshCooldownExceedsTtl_rejectedAtBuild() throws Exception {
+		var rsa = generateRsa("kid-1");
+		// ttl = 20s, cooldown = 30s (≤ 60s but > ttl) → rejected at build().
+		assertThrows(IllegalStateException.class, () ->
+			JwtTokenValidator.create()
+				.issuer(DEFAULT_ISSUER)
+				.audience(DEFAULT_AUDIENCE)
+				.jwkSource(fixed(rsa))
+				.jwksCacheTtl(Duration.ofSeconds(20))
+				.jwksEagerRefreshCooldown(Duration.ofSeconds(30))
+				.build()
+		);
+	}
+
+	@Test void b10_eagerRefreshOnKidMiss_setterDisablesFeature() throws Exception {
+		var rsa = generateRsa("kid-1");
+		// Should build successfully with eager disabled.
+		var v = JwtTokenValidator.create()
+			.issuer(DEFAULT_ISSUER)
+			.audience(DEFAULT_AUDIENCE)
+			.jwkSource(fixed(rsa))
+			.jwksEagerRefreshOnKidMiss(false)
+			.build();
+		assertNotNull(v);
+	}
+
 	// -----------------------------------------------------------------------------------------
 	// Getters expose the configured state.
 	// -----------------------------------------------------------------------------------------

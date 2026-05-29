@@ -22,10 +22,10 @@ import static java.util.logging.Level.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 
-import org.apache.juneau.commons.collections.Cache;
 import org.apache.juneau.commons.utils.Utils;
 
 /**
@@ -84,13 +84,18 @@ import org.apache.juneau.commons.utils.Utils;
 public class Logger extends java.util.logging.Logger {
 
 	/**
-	 * Cache of logger instances by name.
+	 * Permanent registry of logger instances by name.
 	 *
 	 * <p>
-	 * Logger instances are cached and reused for the same name, ensuring that listeners
-	 * attached to a logger persist across multiple calls to {@link #getLogger(String)}.
+	 * Uses an unbounded {@link ConcurrentHashMap} so every name maps to exactly one
+	 * {@link Logger} instance for the JVM lifetime.  An evictable cache (e.g. one with a
+	 * {@code maxSize} that clears the whole map) would cause a class-loaded
+	 * {@code static final Logger} field to refer to an instance that is no longer in the
+	 * registry; a subsequent call to {@link #getLogger(String)} would then return a new,
+	 * different instance, breaking {@link LogRecordCapture} and any other code that
+	 * assumes one name == one identity.
 	 */
-	private static final Cache<String, Logger> loggers = Cache.of(String.class, Logger.class).supplier(k -> new Logger(java.util.logging.Logger.getLogger(k))).build();
+	private static final ConcurrentHashMap<String, Logger> loggers = new ConcurrentHashMap<>();
 
 	/**
 	 * The underlying logger instance that we delegate to.
@@ -125,7 +130,7 @@ public class Logger extends java.util.logging.Logger {
 	 * @return A logger instance (cached and reused for the same name).
 	 */
 	public static Logger getLogger(String name) {
-		return loggers.get(name);
+		return loggers.computeIfAbsent(name, k -> new Logger(java.util.logging.Logger.getLogger(k)));
 	}
 
 	/**

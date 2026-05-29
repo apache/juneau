@@ -297,6 +297,17 @@
 			<version>11.37.2</version>
 			<scope>test</scope>
 		</dependency>
+		<!--
+			juneau-rest-server-oidc-rp (OpenID Connect Relying Party login).  Nimbus is `provided` on
+			the module's POM, so the upstream tree never sees it; juneau-utest pulls it explicitly in
+			`test` scope to drive the end-to-end stub-IdP tests.
+		-->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-oidc-rp</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-springboot</artifactId>

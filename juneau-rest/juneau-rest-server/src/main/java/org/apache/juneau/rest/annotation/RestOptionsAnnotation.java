@@ -65,6 +65,10 @@ public class RestOptionsAnnotation {
 		private String debug = "";
 		private String defaultAccept = "";
 		private String defaultCharset = "";
+		private String observability = "";
+		private String asyncCompletionExecutor = "";
+		private String metricName = "";
+		private String metricTags = "";
 		private String problemDetails = "";
 		private String rolesDeclared = "";
 		private String roleGuard = "";
@@ -277,6 +281,50 @@ public class RestOptionsAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestOptions#observability()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder observability(String value) {
+			observability = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOptions#asyncCompletionExecutor()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder asyncCompletionExecutor(String value) {
+			asyncCompletionExecutor = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOptions#metricName()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder metricName(String value) {
+			metricName = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOptions#metricTags()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder metricTags(String value) {
+			metricTags = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestOptions#allowedSerializerOptions()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -399,6 +447,10 @@ public class RestOptionsAnnotation {
 		private final String debug;
 		private final String defaultAccept;
 		private final String defaultCharset;
+		private final String observability;
+		private final String asyncCompletionExecutor;
+		private final String metricName;
+		private final String metricTags;
 		private final String problemDetails;
 		private final String rolesDeclared;
 		private final String roleGuard;
@@ -433,6 +485,10 @@ public class RestOptionsAnnotation {
 			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
 			noInherit = copyOf(b.noInherit);
 			path = copyOf(b.path);
+			observability = b.observability;
+			asyncCompletionExecutor = b.asyncCompletionExecutor;
+			metricName = b.metricName;
+			metricTags = b.metricTags;
 			problemDetails = b.problemDetails;
 			produces = copyOf(b.produces);
 			roleGuard = b.roleGuard;
@@ -521,6 +577,26 @@ public class RestOptionsAnnotation {
 		@Override /* Overridden from RestOptions */
 		public String[] path() {
 			return path;
+		}
+
+		@Override /* Overridden from RestOptions */
+		public String observability() {
+			return observability;
+		}
+
+		@Override /* Overridden from RestOptions */
+		public String asyncCompletionExecutor() {
+			return asyncCompletionExecutor;
+		}
+
+		@Override /* Overridden from RestOptions */
+		public String metricName() {
+			return metricName;
+		}
+
+		@Override /* Overridden from RestOptions */
+		public String metricTags() {
+			return metricTags;
 		}
 
 		@Override /* Overridden from RestOptions */

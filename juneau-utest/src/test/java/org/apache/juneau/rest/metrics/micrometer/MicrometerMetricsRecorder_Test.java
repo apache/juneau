@@ -69,7 +69,7 @@ class MicrometerMetricsRecorder_Test extends TestBase {
 	@Test void a05_happyPath_registersTimerWithExpectedTags() {
 		var registry = new SimpleMeterRegistry();
 		var r = new MicrometerMetricsRecorder(registry);
-		r.record("MyResource.get(java.lang.String)", "GET", "/users/{id}", 200, Duration.ofMillis(7), null);
+		r.record("MyResource.get(java.lang.String)", "GET", "/users/{id}", 200, Duration.ofMillis(7), null, "", "");
 
 		var timer = registry.find("http.server.requests")
 			.tag("method", "GET")
@@ -85,7 +85,7 @@ class MicrometerMetricsRecorder_Test extends TestBase {
 	@Test void a06_exceptionPath_recordsExceptionSimpleNameTag() {
 		var registry = new SimpleMeterRegistry();
 		var r = new MicrometerMetricsRecorder(registry);
-		r.record("op", "POST", "/orders", 500, Duration.ofMillis(3), new IllegalStateException());
+		r.record("op", "POST", "/orders", 500, Duration.ofMillis(3), new IllegalStateException(), "", "");
 
 		var timer = registry.find("http.server.requests")
 			.tag("exception", "IllegalStateException")
@@ -97,8 +97,8 @@ class MicrometerMetricsRecorder_Test extends TestBase {
 	@Test void a07_separateTagSets_produceSeparateTimers() {
 		var registry = new SimpleMeterRegistry();
 		var r = new MicrometerMetricsRecorder(registry);
-		r.record("op", "GET", "/a", 200, Duration.ofMillis(1), null);
-		r.record("op", "GET", "/b", 200, Duration.ofMillis(2), null);
+		r.record("op", "GET", "/a", 200, Duration.ofMillis(1), null, "", "");
+		r.record("op", "GET", "/b", 200, Duration.ofMillis(2), null, "", "");
 
 		assertEquals(1, registry.find("http.server.requests").tag("uri", "/a").timer().count());
 		assertEquals(1, registry.find("http.server.requests").tag("uri", "/b").timer().count());
@@ -107,7 +107,7 @@ class MicrometerMetricsRecorder_Test extends TestBase {
 	@Test void a08_blankUri_emitsEmptyStringTag() {
 		var registry = new SimpleMeterRegistry();
 		var r = new MicrometerMetricsRecorder(registry);
-		r.record("op", "GET", "", 200, Duration.ofMillis(1), null);
+		r.record("op", "GET", "", 200, Duration.ofMillis(1), null, "", "");
 		assertNotNull(registry.find("http.server.requests").tag("uri", "").timer());
 	}
 
@@ -168,7 +168,7 @@ class MicrometerMetricsRecorder_Test extends TestBase {
 	@Test void c01_prometheusScrapeContainsExpectedSample() {
 		var registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT, new PrometheusRegistry(), io.micrometer.core.instrument.Clock.SYSTEM);
 		var r = new MicrometerMetricsRecorder(registry);
-		r.record("op", "GET", "/users/{id}", 200, Duration.ofMillis(5), null);
+		r.record("op", "GET", "/users/{id}", 200, Duration.ofMillis(5), null, "", "");
 
 		String scrape = registry.scrape();
 		assertTrue(scrape.contains("http_server_requests_seconds_count"), "scrape output: " + scrape);

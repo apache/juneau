@@ -75,6 +75,14 @@ import org.apache.juneau.rest.*;
  * cooperation guarantees that {@link CompletableFuture} provides. Handlers that need async dispatch
  * must return {@link CompletableFuture} or {@link CompletionStage}.
  *
+ * <h5 class='section'>Completion executor</h5>
+ * <p>
+ * When {@code @Rest(asyncCompletionExecutor="poolName")} or the per-op equivalent is set, this processor
+ * switches from {@code future.whenComplete(callback)} to {@code future.whenCompleteAsync(callback, executor)},
+ * routing the response-handler work through the named {@link java.util.concurrent.Executor} bean. The MDC
+ * snapshot (see below) is taken on the request thread <em>before</em> the executor routing so the MDC context
+ * is always available regardless of which thread the executor picks (TODO-118).
+ *
  * <h5 class='section'>Thread-local caveats</h5>
  * <p>
  * Anything carried via {@link ThreadLocal} (SLF4J MDC, security contexts) does NOT survive the
@@ -208,9 +216,27 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 			}
 		});
 
-		cf.whenComplete((value, error) ->
-			finalizeAsync(opSession, cf, asyncCtx, error, done, /* timeout */ false, timeoutMs, value)
+		// MDC bridge (TODO-117): snapshot request-thread MDC at dispatch time, then restore it on the
+		// completion thread so log statements inside the whenComplete callback see the same diagnostic
+		// context (requestId, userId, etc.) that was set by upstream filters.
+		// NOTE: the MDC wrap happens BEFORE the executor routing (TODO-118) so the snapshot is always
+		// available regardless of which thread the executor picks.
+		var mdcSnapshot = opSession.getRestContext().isMdcAsyncPropagation()
+			? MdcAsyncListener.snapshot()
+			: null;
+
+		var callback = MdcAsyncListener.wrap(
+			(value, error) -> finalizeAsync(opSession, cf, asyncCtx, error, done, /* timeout */ false, timeoutMs, value),
+			mdcSnapshot
 		);
+
+		// TODO-118: if a per-op or resource-level completion executor is configured, route the callback
+		// through it via whenCompleteAsync; otherwise use the natural completion thread.
+		var executor = opSession.getContext().getAsyncCompletionExecutor();
+		if (executor != null)
+			cf.whenCompleteAsync(callback, executor);
+		else
+			cf.whenComplete(callback);
 	}
 
 	private void finalizeAsync(RestOpSession opSession, CompletableFuture<?> cf, AsyncContext asyncCtx,

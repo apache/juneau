@@ -32,6 +32,8 @@ import com.nimbusds.oauth2.sdk.http.HTTPRequest;
 import com.nimbusds.oauth2.sdk.id.ClientID;
 import com.nimbusds.oauth2.sdk.id.State;
 import com.nimbusds.oauth2.sdk.pkce.*;
+import com.nimbusds.openid.connect.sdk.AuthenticationRequest;
+import com.nimbusds.openid.connect.sdk.Nonce;
 
 /**
  * Authorization-code grant (RFC 6749 &sect;4.1) flow helper with mandatory PKCE per RFC 7636.
@@ -247,6 +249,45 @@ public class OAuthAuthorizationCodeFlow {
 			.codeChallenge(codeChallenge, CodeChallengeMethod.S256)
 			.build();
 		return request.toURI();
+	}
+
+	/**
+	 * Builds an OpenID Connect {@code authorize?...} URL carrying an OIDC {@code nonce} parameter.
+	 *
+	 * <p>
+	 * Unlike {@link #buildAuthorizationUrl(String, CodeChallenge)} (which emits a plain OAuth 2.0
+	 * {@link AuthorizationRequest} with no {@code nonce}), this method emits an OIDC
+	 * {@link AuthenticationRequest} so the IdP echoes the supplied {@code nonce} back inside the issued
+	 * ID token.  An OpenID Connect relying party stores the {@code nonce} before the redirect and
+	 * verifies the {@code nonce} claim on the returned ID token to defeat token replay.
+	 *
+	 * <p>
+	 * The configured {@code scope(...)} set is used as-is; OIDC requires it to contain {@code openid}.
+	 * The optional {@code customizer} receives the underlying {@link AuthenticationRequest.Builder} so
+	 * callers can set OIDC-specific parameters (e.g. {@code prompt}, {@code max_age}, {@code acr_values})
+	 * without this module needing to surface each one.
+	 *
+	 * @param state The opaque {@code state} parameter (CSRF protection).  Must not be <jk>null</jk> or
+	 * 	blank.
+	 * @param codeChallenge The PKCE code challenge.  Must not be <jk>null</jk>.  Always uses S256.
+	 * @param nonce The OIDC {@code nonce} value.  Must not be <jk>null</jk> or blank.
+	 * @param customizer Optional hook on the {@link AuthenticationRequest.Builder} for OIDC-specific
+	 * 	parameters.  May be <jk>null</jk>.
+	 * @return The authorization URL.
+	 */
+	public URI buildAuthenticationUrl(String state, CodeChallenge codeChallenge, String nonce, Consumer<AuthenticationRequest.Builder> customizer) {
+		assertArgNotNullOrBlank("state", state);
+		assertArgNotNull("codeChallenge", codeChallenge);
+		assertArgNotNullOrBlank("nonce", nonce);
+		Scope nimbusScope = scopes.isEmpty() ? new Scope("openid") : new Scope(scopes.toArray(new String[0]));
+		var builder = new AuthenticationRequest.Builder(new ResponseType(ResponseType.Value.CODE), nimbusScope, new ClientID(clientId), redirectUri)
+			.endpointURI(authorizationEndpoint)
+			.state(new State(state))
+			.nonce(new Nonce(nonce))
+			.codeChallenge(codeChallenge, CodeChallengeMethod.S256);
+		if (customizer != null)
+			customizer.accept(builder);
+		return builder.build().toURI();
 	}
 
 	/**

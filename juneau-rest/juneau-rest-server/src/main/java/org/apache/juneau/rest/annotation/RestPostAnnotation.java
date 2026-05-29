@@ -68,6 +68,10 @@ public class RestPostAnnotation {
 		private String defaultCharset = "";
 		private String defaultContentType = "";
 		private String maxInput = "";
+		private String observability = "";
+		private String asyncCompletionExecutor = "";
+		private String metricName = "";
+		private String metricTags = "";
 		private String problemDetails = "";
 		private String rolesDeclared = "";
 		private String roleGuard = "";
@@ -326,6 +330,50 @@ public class RestPostAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestPost#observability()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder observability(String value) {
+			observability = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestPost#asyncCompletionExecutor()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder asyncCompletionExecutor(String value) {
+			asyncCompletionExecutor = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestPost#metricName()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder metricName(String value) {
+			metricName = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestPost#metricTags()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder metricTags(String value) {
+			metricTags = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestPost#produces()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -462,6 +510,10 @@ public class RestPostAnnotation {
 		private final String defaultCharset;
 		private final String defaultContentType;
 		private final String maxInput;
+		private final String observability;
+		private final String asyncCompletionExecutor;
+		private final String metricName;
+		private final String metricTags;
 		private final String problemDetails;
 		private final String rolesDeclared;
 		private final String roleGuard;
@@ -503,6 +555,10 @@ public class RestPostAnnotation {
 			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
 			noInherit = copyOf(b.noInherit);
 			path = copyOf(b.path);
+			observability = b.observability;
+			asyncCompletionExecutor = b.asyncCompletionExecutor;
+			metricName = b.metricName;
+			metricTags = b.metricTags;
 			problemDetails = b.problemDetails;
 			produces = copyOf(b.produces);
 			roleGuard = b.roleGuard;
@@ -616,6 +672,26 @@ public class RestPostAnnotation {
 		@Override /* Overridden from RestPost */
 		public String[] path() {
 			return path;
+		}
+
+		@Override /* Overridden from RestPost */
+		public String observability() {
+			return observability;
+		}
+
+		@Override /* Overridden from RestPost */
+		public String asyncCompletionExecutor() {
+			return asyncCompletionExecutor;
+		}
+
+		@Override /* Overridden from RestPost */
+		public String metricName() {
+			return metricName;
+		}
+
+		@Override /* Overridden from RestPost */
+		public String metricTags() {
+			return metricTags;
 		}
 
 		@Override /* Overridden from RestPost */

@@ -54,7 +54,7 @@ class Value_Test extends TestBase {
 		var s = Settings.get();
 		for (var k : List.of(P_STRING, P_INT, P_BOOL, P_URI, P_INSTANT, "Value_Test.optional",
 			"Value_Test.timeout.ms", "Value_Test.field", "Value_Test.setter", "Value_Test.springStyle",
-			"Value_Test.coerceFail"))
+			"Value_Test.coerceFail", "Value_Test.optionalSetter", "Value_Test.optionalCtor"))
 			s.unsetGlobal(k);
 	}
 
@@ -132,6 +132,30 @@ class Value_Test extends TestBase {
 		@Inject
 		public void setField(@Value("${Value_Test.setter:via-setter}") String field) {
 			this.field = field;
+		}
+	}
+
+	/** Setter that accepts an {@code Optional<String>} @Value parameter — worked example of the TODO-128 fix. */
+	public static class OptionalSetterBean {
+		Optional<String> maybe;
+
+		@Inject
+		public void setMaybe(@Value("${Value_Test.optionalSetter}") Optional<String> maybe) {
+			this.maybe = maybe;
+		}
+	}
+
+	/** Constructor that mixes a plain and an Optional @Value parameter — worked example of the TODO-128 fix. */
+	public static class OptionalConstructorBean {
+		final String plain;
+		final Optional<String> maybe;
+
+		@Inject
+		public OptionalConstructorBean(
+				@Value("${Value_Test.string:hello}") String plain,
+				@Value("${Value_Test.optionalCtor}") Optional<String> maybe) {
+			this.plain = plain;
+			this.maybe = maybe;
 		}
 	}
 
@@ -273,6 +297,42 @@ class Value_Test extends TestBase {
 		Settings.get().setGlobal("Value_Test.setter", "from-settings");
 		var bean = BeanInstantiator.of(SetterBean.class, beanStore).run();
 		assertEquals("from-settings", bean.field);
+	}
+
+	// TODO-128 worked example: Optional<T> setter parameter previously threw IAE at reflective invoke.
+	@Test
+	void c03_setter_optionalParam_missing_isEmpty() {
+		var bean = BeanInstantiator.of(OptionalSetterBean.class, beanStore).run();
+		assertNotNull(bean.maybe);
+		assertTrue(bean.maybe.isEmpty());
+	}
+
+	@Test
+	void c04_setter_optionalParam_present() {
+		Settings.get().setGlobal("Value_Test.optionalSetter", "setter-opt");
+		var bean = BeanInstantiator.of(OptionalSetterBean.class, beanStore).run();
+		assertNotNull(bean.maybe);
+		assertTrue(bean.maybe.isPresent());
+		assertEquals("setter-opt", bean.maybe.get());
+	}
+
+	// TODO-128 worked example: Optional<T> constructor parameter.
+	@Test
+	void b03_constructorParam_optionalMissing_isEmpty() {
+		var bean = BeanInstantiator.of(OptionalConstructorBean.class, beanStore).run();
+		assertEquals("hello", bean.plain);
+		assertNotNull(bean.maybe);
+		assertTrue(bean.maybe.isEmpty());
+	}
+
+	@Test
+	void b04_constructorParam_optionalPresent() {
+		Settings.get().setGlobal("Value_Test.optionalCtor", "ctor-opt");
+		var bean = BeanInstantiator.of(OptionalConstructorBean.class, beanStore).run();
+		assertEquals("hello", bean.plain);
+		assertNotNull(bean.maybe);
+		assertTrue(bean.maybe.isPresent());
+		assertEquals("ctor-opt", bean.maybe.get());
 	}
 
 	//====================================================================================================

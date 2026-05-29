@@ -120,7 +120,7 @@ public class ObservabilityNoopBenchmark {
 		} finally {
 			scope.close();
 			var elapsed = Duration.ofNanos(System.nanoTime() - startNanos);
-			recorder.record(OP_NAME, HTTP_METHOD, URI_TEMPLATE, STATUS_CODE, elapsed, null);
+			recorder.record(OP_NAME, HTTP_METHOD, URI_TEMPLATE, STATUS_CODE, elapsed, null, "", "");
 		}
 		bh.consume(scope);
 	}

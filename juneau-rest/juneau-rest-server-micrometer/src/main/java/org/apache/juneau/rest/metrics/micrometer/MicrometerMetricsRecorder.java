@@ -82,6 +82,12 @@ import io.micrometer.core.instrument.*;
  * 	<jk>new</jk> MicrometerMetricsRecorder(<jv>r</jv>, <js>"my.service.http.timer"</js>)
  * </p>
  *
+ * <p>
+ * Per-operation overrides are available via {@link org.apache.juneau.rest.annotation.RestOp#metricName()}.
+ * When a non-empty {@code metricName} is passed to {@code record(...)}, it takes precedence over the
+ * recorder-level timer name. Per-op tags added via {@link org.apache.juneau.rest.annotation.RestOp#metricTags()}
+ * are merged into the standard tag set as additional {@code key=value} pairs.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link MetricsRecorder}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
@@ -144,14 +150,20 @@ public class MicrometerMetricsRecorder implements MetricsRecorder {
 	public String getTimerName() { return timerName; }
 
 	@Override /* MetricsRecorder */
-	public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error) {
-		Timer.builder(timerName)
+	public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
+		var effectiveName = (metricName != null && !metricName.isEmpty()) ? metricName : timerName;
+		var builder = Timer.builder(effectiveName)
 			.tag(TAG_METHOD, defaultIfBlank(httpMethod, ""))
 			.tag(TAG_URI, defaultIfBlank(uriTemplate, ""))
 			.tag(TAG_STATUS, Integer.toString(statusCode))
-			.tag(TAG_EXCEPTION, exceptionTag(error))
-			.register(registry)
-			.record(elapsed);
+			.tag(TAG_EXCEPTION, exceptionTag(error));
+		if (metricTags != null && !metricTags.isEmpty())
+			for (var pair : metricTags.split(",")) {
+				var kv = pair.split("=", 2);
+				if (kv.length == 2)
+					builder = builder.tag(kv[0].strip(), kv[1].strip());
+			}
+		builder.register(registry).record(elapsed);
 	}
 
 	private static String exceptionTag(Throwable error) {

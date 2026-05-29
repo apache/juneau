@@ -165,7 +165,11 @@ public class RestOpInvoker extends MethodInvoker {
 		long startNanos = 0L;
 		Throwable observed = null;
 		boolean observabilityDeferred = false;
-		if (observable) {
+		var opContext = opSession.getContext();
+		// observable=true means this is the @RestOp handler (not a pre/post call), AND observability is not
+		// explicitly disabled for this operation via @Rest(observability="false") or @RestOp(observability="false").
+		boolean effectivelyObservable = observable && opContext.isObservabilityEnabled();
+		if (effectivelyObservable) {
 			var bs = opSession.getRestContext().getBeanStore();
 			recorder = bs.getBean(MetricsRecorder.class).orElse(NoOpMetricsRecorder.INSTANCE);
 			var tracer = bs.getBean(TracerHook.class).orElse(NoOpTracerHook.INSTANCE);
@@ -190,9 +194,9 @@ public class RestOpInvoker extends MethodInvoker {
 			if (! inner().hasReturnType(Void.TYPE) && (nn(output) || ! res.getOutputStreamCalled()))
 				res.setContent(output);
 
-			if (observable && output instanceof CompletionStage<?> stage) {
+			if (effectivelyObservable && output instanceof CompletionStage<?> stage) {
 				observabilityDeferred = true;
-				deferObservability(stage, recorder, tracerScope, startNanos, opSession);
+				deferObservability(stage, recorder, tracerScope, startNanos, opSession, opContext.getMetricName(), opContext.getMetricTags());
 			}
 
 		} catch (IllegalAccessException | IllegalArgumentException e) {
@@ -204,7 +208,7 @@ public class RestOpInvoker extends MethodInvoker {
 			res.setStatus(500);  // May be overridden later.
 			res.setContent(opSession.getRestContext().convertThrowable(e2));
 		} finally {
-			if (observable && ! observabilityDeferred) {
+			if (effectivelyObservable && ! observabilityDeferred) {
 				int status = res.getStatus();
 				if (status == 0)
 					status = (observed == null) ? 200 : 500;
@@ -216,9 +220,9 @@ public class RestOpInvoker extends MethodInvoker {
 					try {
 						tracerScope.close();
 					} finally {
-						var elapsed = Duration.ofNanos(System.nanoTime() - startNanos);
-						var pathTemplate = resolveUriTemplate(opSession);
-						recorder.record(getFullName(), req.getMethod(), pathTemplate, status, elapsed, observed);
+					var elapsed = Duration.ofNanos(System.nanoTime() - startNanos);
+					var pathTemplate = resolveUriTemplate(opSession);
+					recorder.record(getFullName(), req.getMethod(), pathTemplate, status, elapsed, observed, opContext.getMetricName(), opContext.getMetricTags());
 					}
 				}
 			}
@@ -226,7 +230,7 @@ public class RestOpInvoker extends MethodInvoker {
 	}
 
 	private void deferObservability(CompletionStage<?> stage, MetricsRecorder recorder, Scope tracerScope,
-			long startNanos, RestOpSession opSession) {
+			long startNanos, RestOpSession opSession, String metricName, String metricTags) {
 		var fullName = getFullName();
 		var httpMethod = opSession.getRequest().getMethod();
 		var pathTemplate = resolveUriTemplate(opSession);
@@ -241,8 +245,8 @@ public class RestOpInvoker extends MethodInvoker {
 				try {
 					tracerScope.close();
 				} finally {
-					var elapsed = Duration.ofNanos(System.nanoTime() - startNanos);
-					recorder.record(fullName, httpMethod, pathTemplate, status, elapsed, err);
+				var elapsed = Duration.ofNanos(System.nanoTime() - startNanos);
+				recorder.record(fullName, httpMethod, pathTemplate, status, elapsed, err, metricName, metricTags);
 				}
 			}
 		});

@@ -742,6 +742,47 @@ public @interface Rest {
 	String virtualThreads() default "";
 
 	/**
+	 * Per-resource observability opt-in / opt-out control.
+	 *
+	 * <p>
+	 * Controls whether the FINISHED-67 observability block ({@link org.apache.juneau.rest.metrics.MetricsRecorder} /
+	 * {@link org.apache.juneau.rest.tracing.TracerHook}) fires for operations on this resource.
+	 * Per-operation overrides are available via {@link RestOp#observability()} (and the verb annotations).
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> &mdash; strict opt-in: the resource <em>requires</em> a wired observability backend.
+	 * 		If neither a {@code @Bean MetricsRecorder} nor a {@code @Bean TracerHook} is registered when the
+	 * 		{@link org.apache.juneau.rest.RestContext} is built, construction fails with a precise error.
+	 * 		All operations on this resource have observability enabled.
+	 * 	<li><js>"false"</js> &mdash; explicit opt-out: the observability block is short-circuited for every
+	 * 		operation on this resource, even when a wired backend is present. Also suppresses
+	 * 		{@link org.apache.juneau.rest.tracing.TraceContextResponseProcessor} header injection for this resource.
+	 * 	<li><js>""</js> (default) &mdash; inherits the existing behavior: the observability block runs per-op,
+	 * 		but a missing {@code @Bean} silently falls back to the NoOp singleton — no startup error.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$E{ENABLE_OBSERVABILITY,false}"</js>).
+	 * 	<li class='note'>
+	 * 		Per-operation overrides via {@link RestOp#observability()} (or verb annotations) take precedence over
+	 * 		this resource-level setting.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link RestOp#observability()}
+	 * 	<li class='jc'>{@link org.apache.juneau.rest.metrics.MetricsRecorder}
+	 * 	<li class='jc'>{@link org.apache.juneau.rest.tracing.TracerHook}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String observability() default "";
+
+	/**
 	 * Configurable timeout (milliseconds) applied to {@link java.util.concurrent.CompletableFuture}-returning
 	 * handlers by {@link org.apache.juneau.rest.processor.AsyncResponseProcessor}. Default is 30,000 ms.
 	 *
@@ -768,6 +809,59 @@ public @interface Rest {
 	 * @since 9.5.0
 	 */
 	String asyncTimeoutMillis() default "";
+
+	/**
+	 * Names the {@link java.util.concurrent.Executor} bean used to route {@link java.util.concurrent.CompletableFuture}
+	 * completion callbacks through a dedicated thread pool.
+	 *
+	 * <p>
+	 * When set, the {@link org.apache.juneau.rest.processor.AsyncResponseProcessor} switches from
+	 * {@code future.whenComplete(callback)} to {@code future.whenCompleteAsync(callback, executor)}, so the
+	 * response-handler work runs on the named pool instead of the future's natural completion thread (often an
+	 * I/O-driver or database-callback thread).
+	 *
+	 * <p>
+	 * The value is the {@link org.apache.juneau.commons.inject.Bean#name() @Bean(name=...)} lookup key for an
+	 * {@link java.util.concurrent.Executor} registered in the resource's bean store.  Empty string (default)
+	 * means no override — completion callbacks run on the future's natural thread (the existing behavior).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Rest</ja>(path=<js>"/api"</js>, asyncCompletionExecutor=<js>"myCompletionPool"</js>)
+	 * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet {
+	 *
+	 * 		<ja>@Bean</ja>(name=<js>"myCompletionPool"</js>)
+	 * 		<jk>public</jk> Executor completionPool() {
+	 * 			<jk>return</jk> Executors.newFixedThreadPool(8);
+	 * 		}
+	 *
+	 * 		<ja>@RestGet</ja>(<js>"/orders/{id}"</js>)
+	 * 		<jk>public</jk> CompletableFuture&lt;Order&gt; getOrder(<ja>@Path</ja> String id) {
+	 * 			<jk>return</jk> orderService.fetchAsync(id); <jc>// callback runs on myCompletionPool</jc>
+	 * 		}
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * Per-operation overrides are available via {@link RestOp#asyncCompletionExecutor()} (and the verb annotations).
+	 * A reference to a bean name that does not resolve in the bean store causes a startup failure.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		MDC propagation (TODO-117) still works when this executor is set — the
+	 * 		{@link org.apache.juneau.rest.processor.MdcAsyncListener} wraps the callback <em>before</em> it is
+	 * 		routed through the executor, so the MDC snapshot is restored on whichever thread the executor picks.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link org.apache.juneau.rest.processor.AsyncResponseProcessor}
+	 * 	<li class='ja'>{@link RestOp#asyncCompletionExecutor()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String asyncCompletionExecutor() default "";
 
 	/**
 	 * Specifies the compression encoders for this resource.

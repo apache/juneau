@@ -41,7 +41,7 @@ class MetricsRecorder_Contract_Test extends TestBase {
 		public final List<Event> events = new CopyOnWriteArrayList<>();
 
 		@Override
-		public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error) {
+		public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
 			events.add(new Event(opName, httpMethod, uriTemplate, statusCode, elapsed, error));
 		}
 
@@ -175,7 +175,7 @@ class MetricsRecorder_Contract_Test extends TestBase {
 	}
 
 	@Test void d02_noOpRecorder_recordIsNoOp() {
-		assertDoesNotThrow(() -> NoOpMetricsRecorder.INSTANCE.record("op", "GET", "/x", 200, Duration.ofMillis(1), null));
-		assertDoesNotThrow(() -> NoOpMetricsRecorder.INSTANCE.record(null, null, null, 0, Duration.ZERO, new RuntimeException()));
+		assertDoesNotThrow(() -> NoOpMetricsRecorder.INSTANCE.record("op", "GET", "/x", 200, Duration.ofMillis(1), null, "", ""));
+		assertDoesNotThrow(() -> NoOpMetricsRecorder.INSTANCE.record(null, null, null, 0, Duration.ZERO, new RuntimeException(), "", ""));
 	}
 }

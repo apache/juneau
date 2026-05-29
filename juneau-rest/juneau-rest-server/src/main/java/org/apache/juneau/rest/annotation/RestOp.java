@@ -721,6 +721,87 @@ public @interface RestOp {
 	String virtualThreads() default "";
 
 	/**
+	 * Per-operation observability opt-in / opt-out control.
+	 *
+	 * <p>
+	 * Overrides the resource-level {@link Rest#observability()} setting for this specific operation.
+	 * Controls whether the FINISHED-67 observability block ({@link org.apache.juneau.rest.metrics.MetricsRecorder} /
+	 * {@link org.apache.juneau.rest.tracing.TracerHook}) fires for this operation.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> &mdash; strict opt-in: this operation <em>requires</em> a wired observability backend.
+	 * 		If neither a {@code @Bean MetricsRecorder} nor a {@code @Bean TracerHook} is registered when the
+	 * 		{@link org.apache.juneau.rest.RestContext} is built, construction fails with a precise error.
+	 * 	<li><js>"false"</js> &mdash; explicit opt-out: the observability block is short-circuited for this operation,
+	 * 		even when a wired backend is present. Also suppresses
+	 * 		{@link org.apache.juneau.rest.tracing.TraceContextResponseProcessor} header injection.
+	 * 	<li><js>""</js> (default) &mdash; inherits the resource-level {@link Rest#observability()} setting.
+	 * 		If the resource-level setting is also empty, uses the existing behavior: the observability block
+	 * 		runs per-op, but a missing backend silently falls back to the NoOp singleton.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$E{ENABLE_OP_OBSERVABILITY,false}"</js>).
+	 * 	<li class='note'>
+	 * 		This per-operation setting takes full precedence over {@link Rest#observability()}.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#observability()}
+	 * 	<li class='jc'>{@link org.apache.juneau.rest.metrics.MetricsRecorder}
+	 * 	<li class='jc'>{@link org.apache.juneau.rest.tracing.TracerHook}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String observability() default "";
+
+	/**
+	 * Per-operation metric name override.
+	 *
+	 * <p>
+	 * Overrides the metric name passed to {@link org.apache.juneau.rest.metrics.MetricsRecorder#record record()}
+	 * for this operation.  When empty (default), the recorder uses its own default name derivation (typically the
+	 * fully-qualified operation name).
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>.
+	 * 	<li class='note'>
+	 * 		Has no effect when observability is disabled for this operation.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String metricName() default "";
+
+	/**
+	 * Per-operation metric tags.
+	 *
+	 * <p>
+	 * Additional metric tags to pass to {@link org.apache.juneau.rest.metrics.MetricsRecorder#record record()}.
+	 * Format: comma-separated {@code key=value} pairs, e.g. {@code "team=payments,region=us-east"}.
+	 * When empty (default), no additional tags are passed.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>.
+	 * 	<li class='note'>
+	 * 		The recorder implementation is responsible for parsing the comma-separated {@code key=value} string.
+	 * 	<li class='note'>
+	 * 		Has no effect when observability is disabled for this operation.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String metricTags() default "";
+
+	/**
 	 * Per-operation override for {@link Rest#asyncTimeoutMillis() @Rest(asyncTimeoutMillis)}.
 	 *
 	 * <p>
@@ -739,6 +820,23 @@ public @interface RestOp {
 	 * @return The annotation value.
 	 */
 	String asyncTimeoutMillis() default "";
+
+	/**
+	 * Per-operation override for {@link Rest#asyncCompletionExecutor() @Rest(asyncCompletionExecutor)}.
+	 *
+	 * <p>
+	 * Names the {@link java.util.concurrent.Executor} bean used to route completion callbacks for this
+	 * specific operation through a dedicated thread pool. Empty string (default) inherits from
+	 * {@link Rest#asyncCompletionExecutor()}.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#asyncCompletionExecutor()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.5.0
+	 */
+	String asyncCompletionExecutor() default "";
 
 	/**
 	 * Supported accept media types.

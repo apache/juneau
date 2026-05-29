@@ -623,4 +623,24 @@ class Logger_Test extends TestBase {
 			assertSize(1, capture2.getRecords()); // Only new message
 		}
 	}
+
+	//====================================================================================================
+	// Registry stability under high logger-name volume
+	// Regression for the Java-25 Q_logging failure: a Cache-backed registry cleared itself once
+	// 1000+ distinct names existed, causing getLogger(X) to return a new instance for a name
+	// whose class had pinned the old instance in a static final field.
+	//====================================================================================================
+
+	@Test void h01_registryStable_afterManyDistinctNames() {
+		// Pin the instance before flooding the registry.
+		var pinned = Logger.getLogger("h01.pinned");
+
+		// Create enough distinct logger names to exceed the old Cache maxSize threshold (1000).
+		for (int i = 0; i < 1500; i++)
+			Logger.getLogger("h01.flood." + i);
+
+		// The registry must still return the exact same object for the original name.
+		assertSame(pinned, Logger.getLogger("h01.pinned"),
+			"Logger registry must be stable: getLogger(name) must always return the same instance");
+	}
 }

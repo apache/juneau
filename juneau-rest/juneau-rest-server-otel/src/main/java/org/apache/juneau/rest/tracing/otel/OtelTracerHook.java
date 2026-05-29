@@ -19,6 +19,8 @@ package org.apache.juneau.rest.tracing.otel;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.util.*;
+
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.tracing.*;
 import org.apache.juneau.rest.tracing.Scope;
@@ -174,10 +176,34 @@ public class OtelTracerHook implements TracerHook {
 
 		Span span = spanBuilder.startSpan();
 		Context spanContext = extracted.with(span);
+
+		// TODO-114: Render the W3C trace-context headers from the server-started span's context (the only
+		// point where it's reliably active) and stash them as request attributes for
+		// TraceContextResponseProcessor to write on the response. The configured propagator only injects
+		// traceparent when the span context is valid, and tracestate only when non-empty, so both guards are
+		// handled here for free.
+		stashTraceContext(request, spanContext);
+
 		io.opentelemetry.context.Scope otelScope = spanContext.makeCurrent();
 
 		return new OtelScope(span, otelScope);
 	}
+
+	private void stashTraceContext(RestRequest request, Context spanContext) {
+		var carrier = new HashMap<String,String>(4);
+		propagator.inject(spanContext, carrier, MAP_SETTER);
+		var traceparent = carrier.get("traceparent");
+		if (nn(traceparent))
+			request.setAttribute(TraceContextResponseProcessor.ATTR_TRACEPARENT, traceparent);
+		var tracestate = carrier.get("tracestate");
+		if (nn(tracestate) && ! tracestate.isEmpty())
+			request.setAttribute(TraceContextResponseProcessor.ATTR_TRACESTATE, tracestate);
+	}
+
+	private static final TextMapSetter<HashMap<String,String>> MAP_SETTER = (carrier, key, value) -> {
+		if (nn(carrier))
+			carrier.put(key, value);
+	};
 
 	/**
 	 * Returns the {@link Tracer} this hook publishes spans to.

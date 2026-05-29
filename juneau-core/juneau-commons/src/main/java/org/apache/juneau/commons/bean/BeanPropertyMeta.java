@@ -1217,25 +1217,24 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 						if (propertyClass.isInstance(valueList) || (nn(setter) && setter.getParameterTypes().get(0).is(Collection.class))) {
 							if (! elementType.isObject()) {
-								var l = new ArrayList<>(valueList);
-								for (var i = l.listIterator(); i.hasNext();) {
-									var v = i.next();
+								// Element coercion is required.  Build the coerced elements into a concrete collection
+								// whose shape is assignable to the (abstract) property type — never a bare ArrayList —
+								// so Deque/Queue/SortedSet fields aren't handed an incompatible container.  (The source
+								// value can incidentally satisfy propertyClass.isInstance(...) — e.g. the parser's
+								// generic list is a LinkedList, which is-a Deque/Queue — yet still need coercion.)
+								Collection coerced = createDefaultCollectionForAbstractType(propertyClass);
+								for (var v : valueList) {
 									var needsConversion = v == null ? elementType.isOptional() : ! elementType.isInstance(v);
-									if (needsConversion)
-										i.set(session.convertToType(v, elementType));
+									coerced.add(needsConversion ? session.convertToType(v, elementType) : v);
 								}
-								valueList = l;
+								valueList = coerced;
 							}
 							invokeSetter(bean, pName, valueList);
 							return r;
 						}
 
+						// Robust best-effort-then-fallback materialization — never returns null (see helper Javadoc).
 						propList = createDefaultCollectionForAbstractType(propertyClass);
-						if (propList == null) {
-							throw bex(beanMeta.getBeanInfo(),
-								"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null",
-								name, propertyClass.getName(), cn(value1));
-						}
 						invokeSetter(bean, pName, propList);
 					}
 					propList.clear();
@@ -1370,16 +1369,48 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return beanMeta.getClassInfo().getName();
 	}
 
+	/**
+	 * Returns a concrete {@link Collection} instance suitable for populating an abstract collection-typed bean
+	 * property that has no setter and no {@code @BeanProp(type=...)} override.
+	 *
+	 * <p>
+	 * Resolution is <b>best-effort-then-fallback</b>:
+	 * <ol>
+	 * 	<li><b>Best-effort materialization of the declared type.</b>  First attempts to instantiate
+	 * 		{@code propertyClass} directly via {@link BeanInstantiator} (preferring a zero-arg constructor).  This
+	 * 		succeeds when the declared type is itself instantiable — e.g. a concrete {@link AbstractSet} /
+	 * 		{@link AbstractList} subclass with an accessible no-arg constructor, or any type
+	 * 		{@code BeanInstantiator} can otherwise construct.  The attempt never throws; on any failure it silently
+	 * 		degrades to the shape-based fallback below.
+	 * 	<li><b>Shape-based fallback.</b>  When the declared type is genuinely not instantiable (a {@link Set} /
+	 * 		{@link List} / {@link Queue} interface, a truly abstract class, or a class with no usable constructor),
+	 * 		a default concrete type is chosen by collection shape:
+	 * 		<ul>
+	 * 			<li>{@link SortedSet} / {@link NavigableSet} &rarr; {@link TreeSet}
+	 * 			<li>{@link Set} &rarr; {@link LinkedHashSet} (preserves insertion order)
+	 * 			<li>{@link Deque} / {@link Queue} &rarr; {@link ArrayDeque}
+	 * 			<li>{@link List} / raw {@link Collection} (and any other collection shape) &rarr; {@link ArrayList}
+	 * 		</ul>
+	 * </ol>
+	 *
+	 * @param propertyClass The declared (abstract or interface) collection type of the property.
+	 * @return A new, empty, concrete {@link Collection} instance.  Never <jk>null</jk>.
+	 */
 	private Collection<?> createDefaultCollectionForAbstractType(Class<?> propertyClass) {
-		if (propertyClass == SortedSet.class || propertyClass == NavigableSet.class)
+		// Best-effort: try to materialize the declared type itself (handles concrete AbstractSet/AbstractList
+		// subclasses, registered defaults, etc.).  Never throws — degrades to the shape-based fallback on failure.
+		Collection declared = BeanInstantiator.of(Collection.class).type(info(propertyClass)).preferZeroArgConstructor().fallback(() -> null).run();
+		if (nn(declared))
+			return declared;
+
+		// Shape-based fallback for genuinely non-instantiable declared types.
+		if (SortedSet.class.isAssignableFrom(propertyClass) || NavigableSet.class.isAssignableFrom(propertyClass))
 			return new TreeSet<>();
-		if (propertyClass == Set.class)
+		if (Set.class.isAssignableFrom(propertyClass))
 			return new LinkedHashSet<>();
-		if (propertyClass == Deque.class || propertyClass == Queue.class)
+		if (Deque.class.isAssignableFrom(propertyClass) || Queue.class.isAssignableFrom(propertyClass))
 			return new ArrayDeque<>();
-		if (propertyClass == List.class || propertyClass == Collection.class)
-			return new ArrayList<>();
-		return null;
+		return new ArrayList<>();  // List or raw Collection (and any other collection shape).
 	}
 
 	/**

@@ -41,7 +41,7 @@ public final class NoOpMetricsRecorder implements MetricsRecorder {
 	private NoOpMetricsRecorder() {}
 
 	@Override /* MetricsRecorder */
-	public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error) {
+	public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
 		// Intentionally empty — the default off-by-default behaviour is to drop every event.
 	}
 }
