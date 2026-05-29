@@ -84,6 +84,7 @@ public class RestAnnotation {
 		private String clientVersionHeader = "";
 		private String config = "";
 		private String eagerInit = "";
+		private String lazyChildren = "";
 		private String defaultAccept = "";
 		private String defaultCharset = "";
 		private String defaultContentType = "";
@@ -241,6 +242,17 @@ public class RestAnnotation {
 		 */
 		public Builder eagerInit(String value) {
 			eagerInit = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#lazyChildren()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder lazyChildren(String value) {
+			lazyChildren = value;
 			return this;
 		}
 
@@ -777,6 +789,7 @@ public class RestAnnotation {
 		private final String clientVersionHeader;
 		private final String config;
 		private final String eagerInit;
+		private final String lazyChildren;
 		private final String defaultAccept;
 		private final String defaultCharset;
 		private final String defaultContentType;
@@ -824,6 +837,7 @@ public class RestAnnotation {
 			clientVersionHeader = b.clientVersionHeader;
 			config = b.config;
 			eagerInit = b.eagerInit;
+			lazyChildren = b.lazyChildren;
 			allowedParserOptions = copyOf(b.allowedParserOptions);
 			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
 			noInherit = copyOf(b.noInherit);
@@ -916,6 +930,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public String eagerInit() {
 			return eagerInit;
+		}
+
+		@Override /* Overridden from Rest */
+		public String lazyChildren() {
+			return lazyChildren;
 		}
 
 		@Override /* Overridden from Rest */

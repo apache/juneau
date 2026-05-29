@@ -306,6 +306,20 @@ public class RestContext extends Context {
 		String asyncCompletionExecutorName;
 
 		/**
+		 * Programmatic override for the lazy-children flag.
+		 *
+		 * <p>
+		 * {@code null} (default) &mdash; defers to the {@link Rest#lazyChildren() @Rest(lazyChildren)} annotation
+		 * chain, then to the {@code RestContext.lazyChildren} env-driven default (itself defaulting to
+		 * {@code false}). Set via {@link #lazyChildInit(boolean)}.
+		 *
+		 * <p>
+		 * When {@code true}, all children registered via {@link Rest#children() @Rest(children)} on this resource
+		 * are built lazily on first invocation rather than eagerly at parent startup.
+		 */
+		Boolean lazyChildInit;
+
+		/**
 		 * Package-private constructor.
 		 *
 		 * <p>
@@ -389,6 +403,28 @@ public class RestContext extends Context {
 		 */
 		public Builder asyncCompletionExecutor(String beanName) {
 			asyncCompletionExecutorName = beanName;
+			return this;
+		}
+
+		/**
+		 * Programmatically opt this resource into (or out of) deferred child construction.
+		 *
+		 * <p>
+		 * When {@code true}, all children registered via {@link Rest#children() @Rest(children)} are built
+		 * lazily on first invocation instead of eagerly at parent startup.  The routing entry for each child
+		 * is always populated at startup so URL matching works immediately.
+		 *
+		 * <p>
+		 * This is the highest-priority knob — it overrides both the
+		 * {@link Rest#lazyChildren() @Rest(lazyChildren)} annotation and the
+		 * {@code RestContext.lazyChildren} env-driven default.
+		 *
+		 * @param value {@code true} to defer child construction to first invocation.
+		 * @return This object.
+		 * @since 9.5.0
+		 */
+		public Builder lazyChildInit(boolean value) {
+			lazyChildInit = value;
 			return this;
 		}
 
@@ -1106,6 +1142,10 @@ public class RestContext extends Context {
 	/** Env-driven default for {@code @Rest(eagerInit)}. */
 	@Value("${RestContext.eagerInit:false}")
 	private boolean defaultEagerInit;
+
+	/** Env-driven default for {@code @Rest(lazyChildren)}: deferred child construction opt-in. */
+	@Value("${RestContext.lazyChildren:false}")
+	private boolean defaultLazyChildren;
 
 	/** Env-driven default for {@code @Rest(clientVersionHeader)}. */
 	@Value("${RestContext.clientVersionHeader:Client-Version}")
@@ -1930,10 +1970,18 @@ public class RestContext extends Context {
 		var seen = new LinkedHashSet<Class<?>>();
 		getRestAnnotations().forEach(ai -> seen.addAll(Arrays.asList(ai.inner().children())));
 
+		var lazy = isLazyChildren();
+
 		for (var rc2 : seen) {
 			if (rc2 == resourceClass())
 				continue;  // Guard against self-reference infinite loop.
-			b.add(RestChildren.buildChildContext(this, bs, servletConfig, rc2, null, ""));
+			if (lazy) {
+				// Lazy: register a routing stub now; defer full RestContext construction to first request.
+				b.addLazy(rc2, "");
+			} else {
+				// Eager (default): build the full child RestContext immediately.
+				b.add(RestChildren.buildChildContext(this, bs, servletConfig, rc2, null, ""));
+			}
 		}
 
 		// @Bean override — allows replacing the entire RestChildren instance.
@@ -2553,6 +2601,18 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<Boolean> eagerInit = memoizer(() ->
 		mergeReplacedBooleanAttribute(PROPERTY_eagerInit, defaultEagerInit));
+
+	/**
+	 * Annotation + env-driven component of the lazy-children flag.
+	 *
+	 * <p>
+	 * Reads the {@link Rest#lazyChildren() @Rest(lazyChildren)} annotation chain and falls back to the
+	 * {@code RestContext.lazyChildren} env-driven default.  The programmatic
+	 * {@link Builder#lazyChildInit(boolean)} knob is applied in {@link #isLazyChildren()} instead of here
+	 * because blank-final-field rules prevent the memoizer lambda from safely capturing {@link #builder}.
+	 */
+	private final Memoizer<Boolean> lazyChildrenAnnotation = memoizer(() ->
+		mergeReplacedBooleanAttribute(PROPERTY_lazyChildren, defaultLazyChildren));
 
 	/**
 	 * The request header used for client-version matching; resolved from {@code @Rest(clientVersionHeader)},
@@ -3807,6 +3867,30 @@ public class RestContext extends Context {
 	 * @return <jk>true</jk> if eager initialization is enabled.
 	 */
 	public boolean isEagerInit() { return eagerInit.get(); }
+
+	/**
+	 * Returns whether this resource's {@code @Rest(children=...)} entries are built lazily on first invocation
+	 * rather than eagerly at parent startup.
+	 *
+	 * <p>
+	 * Resolution order (highest wins):
+	 * <ol>
+	 *   <li>{@link Builder#lazyChildInit(boolean)} programmatic knob (if explicitly set).</li>
+	 *   <li>{@link Rest#lazyChildren() @Rest(lazyChildren)} annotation chain (most-derived wins).</li>
+	 *   <li>{@code RestContext.lazyChildren} env-driven default (default {@code false}).</li>
+	 * </ol>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Rest#lazyChildren()}
+	 * 	<li class='jm'>{@link Builder#lazyChildInit(boolean)}
+	 * </ul>
+	 *
+	 * @return <jk>true</jk> if lazy child initialization is enabled.
+	 * @since 9.5.0
+	 */
+	public boolean isLazyChildren() {
+		return builder.lazyChildInit != null ? builder.lazyChildInit : lazyChildrenAnnotation.get();
+	}
 
 	/**
 	 * Called during servlet initialization to invoke all {@link RestPostInit} child-last methods.

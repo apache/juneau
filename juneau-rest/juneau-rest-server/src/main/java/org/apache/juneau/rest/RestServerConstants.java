@@ -70,6 +70,15 @@ public final class RestServerConstants {
 	public static final String PROPERTY_eagerInit = "eagerInit";
 
 	/**
+	 * The {@code "lazyChildren"} annotation attribute name — used in {@code noInherit} matching to opt the
+	 * parent resource into deferred (first-invocation) construction of its {@code @Rest(children=...)} sub-resources
+	 * instead of the default eager construction at startup.
+	 *
+	 * @see org.apache.juneau.rest.annotation.Rest#lazyChildren()
+	 */
+	public static final String PROPERTY_lazyChildren = "lazyChildren";
+
+	/**
 	 * The {@code "virtualThreads"} annotation attribute name — used in {@code noInherit} matching to opt the resource
 	 * (or one of its {@code @RestOp}-annotated methods) into per-request virtual-thread dispatch on Java 21+. On
 	 * runtimes older than Java 21 the flag is logged once and ignored.

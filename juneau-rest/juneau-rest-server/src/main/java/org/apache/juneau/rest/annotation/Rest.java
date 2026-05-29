@@ -326,6 +326,52 @@ public @interface Rest {
 	String eagerInit() default "";
 
 	/**
+	 * Opt this parent resource into deferred (first-invocation) construction of its {@link #children()} sub-resources.
+	 *
+	 * <p>
+	 * When {@code "true"}, the {@link RestContext} instances for all {@code @Rest(children=...)} entries are
+	 * <em>not</em> built at parent startup.  Instead, each child's routing entry is registered immediately (so URL
+	 * matching is fully operational from the first request), but the full {@link RestContext} — including all of its
+	 * bean-store setup, memoizers, and lifecycle hooks — is constructed on the first inbound request to that child's
+	 * URL prefix.  Subsequent requests reuse the already-built context.
+	 *
+	 * <p>
+	 * This is particularly useful when a parent resource exposes heavyweight admin or diagnostic children that are
+	 * rarely invoked in production.  Setting {@code lazyChildren="true"} on the parent lets the parent boot fast;
+	 * each child pays its construction cost only when (and if) it is first accessed.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> - Children are constructed on first invocation (deferred).
+	 * 	<li><js>"false"</js> (default) - Children are constructed eagerly at parent startup.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The first request to a lazy child pays the full construction cost, which can be significant for
+	 * 		heavyweight children.  If predictable first-request latency is required, do not opt in.
+	 * 	<li class='note'>
+	 * 		Concurrent first-requests to the same lazy child are serialized: only one thread runs the construction;
+	 * 		others block until it completes.
+	 * 	<li class='note'>
+	 * 		A lazy child that is never invoked is never constructed.  Its lifecycle {@code @RestDestroy} / shutdown
+	 * 		hooks are skipped at parent destruction time.
+	 * 	<li class='note'>
+	 * 		The programmatic knob {@link RestContext.Builder#lazyChildInit(boolean)} overrides this annotation.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$E{LAZY_CHILDREN,false}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link RestContext.Builder#lazyChildInit(boolean)}
+	 * 	<li class='jm'>{@link #children()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String lazyChildren() default "";
+
+	/**
 	 * Supported content media types.
 	 *
 	 * <p>
@@ -388,7 +434,7 @@ public @interface Rest {
 	 * Accepted values include {@code "allowedParserOptions"}, {@code "allowedSerializerOptions"},
 	 * {@code "allowedHeaderParams"}, {@code "allowedMethodHeaders"}, {@code "allowedMethodParams"},
 	 * {@code "disableContentParam"}, {@code "renderResponseStackTraces"}, {@code "problemDetails"},
-	 * {@code "eagerInit"}, {@code "clientVersionHeader"},
+	 * {@code "eagerInit"}, {@code "lazyChildren"}, {@code "clientVersionHeader"},
 	 * {@code "uriAuthority"}, {@code "uriContext"}, {@code "uriRelativity"}, and {@code "uriResolution"}.
 	 * Each entry is SVL-resolved then comma-split. Prevents the named property from inheriting values from
 	 * parent {@code @Rest} annotations (router hierarchy). The {@code noInherit} attribute itself is never inherited.
