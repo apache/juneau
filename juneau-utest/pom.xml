@@ -718,7 +718,7 @@
 					<execution>
 						<id>default-test</id>
 						<configuration>
-							<excludedGroups>container</excludedGroups>
+							<excludedGroups>container,benchmark</excludedGroups>
 							<reportsDirectory>${project.build.directory}/surefire-reports/core</reportsDirectory>
 						</configuration>
 					</execution>
@@ -730,6 +730,7 @@
 						</goals>
 						<configuration>
 							<groups>container</groups>
+							<excludedGroups>benchmark</excludedGroups>
 							<reportsDirectory>${project.build.directory}/surefire-reports/container</reportsDirectory>
 						</configuration>
 					</execution>
