@@ -25,6 +25,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.view.*;
 import org.thymeleaf.*;
 import org.thymeleaf.templatemode.*;
 import org.thymeleaf.templateresolver.*;
@@ -141,7 +142,7 @@ import org.thymeleaf.templateresolver.*;
 @Rest(
 	responseProcessors={ThymeleafViewRenderer.class}
 )
-public class BasicThymeleafResource {
+public class BasicThymeleafResource implements RawTemplateDispatcher {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
 	public static final String DEFAULT_BASE_PATH = "/";
@@ -316,6 +317,7 @@ public class BasicThymeleafResource {
 	 * @throws BasicHttpException On boundary violation (403), missing engine (500), or render
 	 * 	failure (500).
 	 */
+	@Override /* RawTemplateDispatcher */
 	@RestGet(
 		path="/${juneau.thymeleaf.path:thymeleaf}/*",
 		summary="Thymeleaf view",

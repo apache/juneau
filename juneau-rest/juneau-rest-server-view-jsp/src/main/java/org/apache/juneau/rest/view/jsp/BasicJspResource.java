@@ -24,6 +24,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.view.*;
 
 /**
  * Mixin that wires JSP view-rendering onto any Juneau REST resource.
@@ -140,7 +141,7 @@ import org.apache.juneau.rest.annotation.*;
 @Rest(
 	responseProcessors={JspViewRenderer.class}
 )
-public class BasicJspResource {
+public class BasicJspResource implements RawTemplateDispatcher {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
 	public static final String DEFAULT_BASE_PATH = "/";
@@ -211,6 +212,7 @@ public class BasicJspResource {
 	 * @throws IOException If the underlying servlet writer fails.
 	 * @throws NotFound If the JSP resource cannot be resolved.
 	 */
+	@Override /* RawTemplateDispatcher */
 	@RestGet(
 		path="/#{pathToken(${juneau.jsp.path:jsp})}/*",
 		summary="JSP view",

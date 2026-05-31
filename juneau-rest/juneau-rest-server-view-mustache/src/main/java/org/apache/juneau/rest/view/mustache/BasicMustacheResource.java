@@ -28,6 +28,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.view.*;
 
 /**
  * Mixin that wires Mustache view-rendering onto any Juneau REST resource.
@@ -154,7 +155,7 @@ import org.apache.juneau.rest.annotation.*;
 @Rest(
 	responseProcessors={MustacheViewRenderer.class}
 )
-public class BasicMustacheResource {
+public class BasicMustacheResource implements RawTemplateDispatcher {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
 	public static final String DEFAULT_BASE_PATH = "/";
@@ -353,6 +354,7 @@ public class BasicMustacheResource {
 	 * @throws BasicHttpException On boundary violation (403), missing engine (500), or render
 	 * 	failure (500).
 	 */
+	@Override /* RawTemplateDispatcher */
 	@RestGet(
 		path="/${juneau.mustache.path:mustache}/*",
 		summary="Mustache view",

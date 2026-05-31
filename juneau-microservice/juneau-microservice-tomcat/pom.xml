@@ -21,26 +21,42 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau</artifactId>
+		<artifactId>juneau-microservice-parent</artifactId>
 		<version>9.5.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-microservice-parent</artifactId>
-	<packaging>pom</packaging>
-	<name>Apache Juneau Microservices</name>
-	<description>Apache Juneau Microservice APIs</description>
+	<artifactId>juneau-microservice-tomcat</artifactId>
+	<name>Apache Juneau Microservice Tomcat</name>
+	<description>Apache Juneau Microservice Server</description>
 
-	<modules>
-		<module>juneau-microservice</module>
-		<module>juneau-microservice-jetty</module>
-		<module>juneau-microservice-tomcat</module>
-		<module>juneau-my-jetty-microservice</module>
-		<module>juneau-my-tomcat-microservice</module>
-		<module>juneau-my-springboot-microservice</module>
-	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-microservice</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-core</artifactId>
+			<version>${tomcat.version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 

@@ -29,6 +29,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.view.*;
 
 /**
  * Mixin that wires Apache FreeMarker view-rendering onto any Juneau REST resource.
@@ -163,7 +164,7 @@ import org.apache.juneau.rest.annotation.*;
 @Rest(
 	responseProcessors={FreemarkerViewRenderer.class}
 )
-public class BasicFreemarkerResource {
+public class BasicFreemarkerResource implements RawTemplateDispatcher {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
 	public static final String DEFAULT_BASE_PATH = "/";
@@ -398,6 +399,7 @@ public class BasicFreemarkerResource {
 	 * @throws BasicHttpException On boundary violation (403), missing engine (500), or render
 	 * 	failure (500).
 	 */
+	@Override /* RawTemplateDispatcher */
 	@RestGet(
 		path="/${juneau.freemarker.path:freemarker}/*",
 		summary="FreeMarker view",

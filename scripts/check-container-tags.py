@@ -18,8 +18,8 @@
 """
 Guardrail for container-backed tests.
 
-Fails when a container-booting test class is missing @SpringbootTest or
-@JettyMicroserviceTest.
+Fails when a container-booting test class is missing @SpringbootTest,
+@JettyMicroserviceTest, or @TomcatMicroserviceTest.
 """
 
 from __future__ import annotations
@@ -44,8 +44,10 @@ JETTY_HINTS = (
 TAG_MARKERS = (
     "@SpringbootTest",
     "@JettyMicroserviceTest",
+    "@TomcatMicroserviceTest",
     "@org.apache.juneau.testing.annotations.SpringbootTest",
     "@org.apache.juneau.testing.annotations.JettyMicroserviceTest",
+    "@org.apache.juneau.testing.annotations.TomcatMicroserviceTest",
 )
 
 
@@ -78,7 +80,7 @@ def main() -> int:
     for path in offenders:
         rel = path.relative_to(repo_root)
         print(f"  - {rel}")
-    print("\nAdd @SpringbootTest or @JettyMicroserviceTest to each class.")
+    print("\nAdd @SpringbootTest, @JettyMicroserviceTest, or @TomcatMicroserviceTest to each class.")
     return 1
 
 
