@@ -1344,6 +1344,16 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.07c.RestServerStandaloneVsMixin',
+							label: '10.7c. Standalone vs Mixin Resources',
+						},
+						{
+							type: 'doc',
+							id: 'topics/10.07d.RestServerSelfRegistration',
+							label: '10.7d. Servlet Self-Registration',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.08.RestServerSse',
 							label: '10.8. Server-Sent Events',
 						},
