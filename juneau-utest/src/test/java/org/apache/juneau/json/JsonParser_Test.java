@@ -22,6 +22,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -169,5 +170,104 @@ class JsonParser_Test extends TestBase {
 
 	private static Reader reader(String in) {
 		return new CloseableStringReader(in);
+	}
+
+	//====================================================================================================
+	// TODO-147: Empty JSON array/object into an abstract, currently-null collection property.
+	// Regression discovered downstream (IRS) on the 8.2.0 -> 9.1.0 upgrade: an empty array ([]) into an
+	// abstract, null Set<Enum> field threw BeanRuntimeException ("property type is abstract, and the
+	// property value is currently null").  FINISHED-127 hardened the abstract-collection materialization
+	// helper.  These tests pin the full empty-collection matrix as a permanent regression guard.
+	//====================================================================================================
+
+	public enum B_Enum { A, B, C }
+
+	public static class B01_Bean {
+		private Set<B_Enum> v;
+		public Set<B_Enum> getV() { return v; }
+		public B01_Bean setV(Set<B_Enum> x) { v = x; return this; }
+	}
+
+	// Headline case, mirroring the exact repro from TODO-147 (abstract Set<Enum>, empty array, null field).
+	@Test void b01_emptyArrayIntoAbstractSetOfEnum() throws Exception {
+		var p2 = JsonParser.create().ignoreUnknownBeanProperties().build();
+		var x = p2.parse("{\"v\":[]}", B01_Bean.class);
+		assertNotNull(x.getV());
+		assertTrue(x.getV().isEmpty());
+		assertInstanceOf(LinkedHashSet.class, x.getV());
+	}
+
+	// Non-empty array of the same shape must still populate (guards the populated path).
+	@Test void b02_populatedArrayIntoAbstractSetOfEnum() throws Exception {
+		var x = p.parse("{\"v\":[\"A\",\"B\"]}", B01_Bean.class);
+		assertInstanceOf(LinkedHashSet.class, x.getV());
+		assertEquals(Set.of(B_Enum.A, B_Enum.B), x.getV());
+	}
+
+	public static class B03_Bean {
+		private List<B_Enum> v;
+		public List<B_Enum> getV() { return v; }
+		public B03_Bean setV(List<B_Enum> x) { v = x; return this; }
+	}
+
+	// For a List field the parser's native JsonList is itself a List, so it is assigned directly (no
+	// abstract-materialization coercion is needed).  Either way the contract is: non-null, empty List.
+	@Test void b03_emptyArrayIntoAbstractListOfEnum() throws Exception {
+		var x = p.parse("{\"v\":[]}", B03_Bean.class);
+		assertNotNull(x.getV());
+		assertTrue(x.getV().isEmpty());
+		assertInstanceOf(List.class, x.getV());
+	}
+
+	public static class B04_Bean {
+		private Map<String,B_Enum> v;
+		public Map<String,B_Enum> getV() { return v; }
+		public B04_Bean setV(Map<String,B_Enum> x) { v = x; return this; }
+	}
+
+	@Test void b04_emptyObjectIntoAbstractMapOfEnum() throws Exception {
+		var x = p.parse("{\"v\":{}}", B04_Bean.class);
+		assertNotNull(x.getV());
+		assertTrue(x.getV().isEmpty());
+		assertInstanceOf(LinkedHashMap.class, x.getV());
+	}
+
+	public static class B05_Bean {
+		private Set<String> v;
+		public Set<String> getV() { return v; }
+		public B05_Bean setV(Set<String> x) { v = x; return this; }
+	}
+
+	@Test void b05_emptyArrayIntoAbstractSetOfString() throws Exception {
+		var x = p.parse("{\"v\":[]}", B05_Bean.class);
+		assertNotNull(x.getV());
+		assertTrue(x.getV().isEmpty());
+		assertInstanceOf(LinkedHashSet.class, x.getV());
+	}
+
+	public static class B06_Bean {
+		private List<String> v;
+		public List<String> getV() { return v; }
+		public B06_Bean setV(List<String> x) { v = x; return this; }
+	}
+
+	@Test void b06_emptyArrayIntoAbstractListOfString() throws Exception {
+		var x = p.parse("{\"v\":[]}", B06_Bean.class);
+		assertNotNull(x.getV());
+		assertTrue(x.getV().isEmpty());
+		assertInstanceOf(List.class, x.getV());
+	}
+
+	public static class B07_Bean {
+		private Map<String,String> v;
+		public Map<String,String> getV() { return v; }
+		public B07_Bean setV(Map<String,String> x) { v = x; return this; }
+	}
+
+	@Test void b07_emptyObjectIntoAbstractMapOfString() throws Exception {
+		var x = p.parse("{\"v\":{}}", B07_Bean.class);
+		assertNotNull(x.getV());
+		assertTrue(x.getV().isEmpty());
+		assertInstanceOf(LinkedHashMap.class, x.getV());
 	}
 }
