@@ -4588,15 +4588,20 @@ class BeanInstantiator_Test extends TestBase {
 		}
 
 		@Test
-		@DisplayName("W09 - Builder inner class is discovered when declared on a parent class (Priority 3c)")
+		@DisplayName("W09 - Supertype-only parent inner builder loses to the subtype's direct constructor (TODO-143 Option D)")
 		void w09_builderInParentClass() {
-			// W_BeanWithParentInnerBuilder has no declared @Builder, no static factory, and no inner
-			// class.  Priority 3c walks the parent chain and finds W_BeanWithInnerBuilder.Builder.
+			// W_BeanWithParentInnerBuilder has no declared @Builder, no static factory, and no inner class of
+			// its own.  Priority 3c does find W_BeanWithInnerBuilder.Builder on the parent, BUT that builder's
+			// build() only promises the *supertype* W_BeanWithInnerBuilder.  Under TODO-143 Option D a
+			// supertype-only builder candidate must not displace a usable direct constructor on the more-specific
+			// requested type, so selection is declined in favor of the no-arg constructor.  (Previously the
+			// parent-only builder was reported as discovered even though its output — a parent instance — was
+			// always rejected and discarded in favor of this same constructor; that was heuristic-pinning, not a
+			// functional path.)
 			var b = bc(W_BeanWithParentInnerBuilder.class);
-			b.run();
-			var builderType = b.getBuilderType();
-			assertNotNull(builderType, "Builder type must be discovered via parent inner class");
-			assertTrue(builderType.getName().endsWith("$Builder"));
+			var bean = b.run();
+			assertNull(b.getBuilderType(), "Supertype-only parent inner builder must not be selected when a direct constructor exists.");
+			assertEquals("parent-default", bean.origin, "Instance must be built via the direct constructor.");
 		}
 
 		public static class W_BeanWithSupplierSetter {

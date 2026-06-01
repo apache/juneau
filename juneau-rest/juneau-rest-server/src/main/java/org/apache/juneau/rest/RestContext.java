@@ -89,6 +89,9 @@ import org.apache.juneau.rest.debug.format.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.metrics.*;
+import org.apache.juneau.rest.servlet.RestMixin;
+import org.apache.juneau.rest.servlet.RestResource;
+import org.apache.juneau.rest.servlet.RestServlet;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.rrpc.*;
 import org.apache.juneau.rest.servlet.*;
@@ -238,7 +241,8 @@ public class RestContext extends Context {
 		Consumer<WritableBeanStore> beanStoreConfigurer,
 		BeanStore overridingParent,
 		String[] paths,
-		boolean mixinContext
+		boolean mixinContext,
+		RestBuilder restBuilder
 	) {
 
 		/**
@@ -251,6 +255,27 @@ public class RestContext extends Context {
 				path = "";
 			if (beanStoreConfigurer == null)
 				beanStoreConfigurer = bs -> {};
+		}
+
+		/**
+		 * Back-compatible constructor without the {@code restBuilder} component (defaults it to <jk>null</jk>).
+		 *
+		 * <p>
+		 * The {@code restBuilder} (TODO-143) is then resolved during {@link RestContext} construction from the
+		 * resource instance's stashed builder, so call sites that don't carry one keep working unchanged.
+		 *
+		 * @param resourceClass The resource class.
+		 * @param parentContext The parent context, or <jk>null</jk>.
+		 * @param servletConfig The servlet config, or <jk>null</jk>.
+		 * @param resource The resource supplier.
+		 * @param path The mount path override, or <jk>null</jk>.
+		 * @param beanStoreConfigurer The bean-store configurer, or <jk>null</jk>.
+		 * @param overridingParent The overriding parent bean store, or <jk>null</jk>.
+		 * @param paths The programmatic mount-paths override, or <jk>null</jk>.
+		 * @param mixinContext Whether this is a mixin sub-context.
+		 */
+		public Args(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig, Supplier<?> resource, String path, Consumer<WritableBeanStore> beanStoreConfigurer, BeanStore overridingParent, String[] paths, boolean mixinContext) {
+			this(resourceClass, parentContext, servletConfig, resource, path, beanStoreConfigurer, overridingParent, paths, mixinContext, null);
 		}
 	}
 
@@ -692,6 +717,22 @@ public class RestContext extends Context {
 	protected final UrlPathMatcher pathMatcher;
 	private final Supplier<?> resource;
 	private AnnotationWorkList annotationWork;
+
+	/**
+	 * The programmatic configuration builder for this resource (TODO-143), or <jk>null</jk> when configured purely
+	 * by annotation.  Resolved during construction from {@link Args#restBuilder()} or, failing that, from the
+	 * resource instance's stashed builder.  When non-<jk>null</jk>, a synthetic highest-priority {@code @Rest}
+	 * annotation built from its set members is prepended to {@link #getRestAnnotations()} so builder-supplied
+	 * values take precedence over the resource class's own {@code @Rest} annotation values.
+	 */
+	private final RestBuilder restBuilder;
+
+	/**
+	 * The synthetic {@code @Rest} annotation built from {@link #restBuilder}'s set members, or <jk>null</jk> when
+	 * there is no programmatic builder.  Prepended at the most-derived (child) position of
+	 * {@link #getRestAnnotations()} so builder-supplied values win over the resource class's own annotation.
+	 */
+	private final Rest builderRestAnnotation;
 
 	// Private accessors used by memoizer lambdas to satisfy Java's definite-assignment rules for blank final fields.
 	private WritableBeanStore beanStore() { return beanStore; }
@@ -2096,6 +2137,24 @@ public class RestContext extends Context {
 			var rs = new ResourceSupplier(resourceClass, assertArgNotNull("resource", builder.args.resource()));
 			resource = rs;
 
+			// TODO-143: resolve the programmatic configuration builder.  Prefer the one carried on Args (set by
+			// RestServlet.init()); otherwise read the builder stashed on the resource instance (non-reflective) so
+			// programmatic construction via MockRestClient, child mounting, and mixin composition all honor it.
+			var rb = builder.args.restBuilder();
+			if (rb == null)
+				rb = stashedRestBuilder(rs.get());
+			restBuilder = rb;
+			if (restBuilder instanceof AbstractRestBuilder<?,?> arb) {
+				// Synthetic, highest-priority @Rest carrying the builder-set members; prepended (most-derived
+				// child position) to the @Rest chain by the restAnnotations memoizer so builder values win.
+				builderRestAnnotation = arb.toRestAnnotation();
+				// Programmatic mdcAsyncPropagation knob (no @Rest member) wins over the env-driven default.
+				if (arb.getMdcAsyncPropagation() != null && builder.mdcAsyncPropagation == null)
+					builder.mdcAsyncPropagation = arb.getMdcAsyncPropagation();
+			} else {
+				builderRestAnnotation = null;
+			}
+
 			// --- beanStore setup (May 2026 refactor; precedence-flipped 9.5) ---
 
 			// Determine the parent (bootstrap) store: inherited from parent resource if present.
@@ -2438,7 +2497,15 @@ public class RestContext extends Context {
 	 * a host's explicit per-property values for any property the mixin doesn't itself declare (e.g.
 	 * {@code partSerializer}, {@code partParser}).
 	 */
-	private final Memoizer<List<AnnotationInfo<Rest>>> restAnnotations = memoizer(() -> {
+	private final Memoizer<List<AnnotationInfo<Rest>>> restAnnotations = memoizer(() -> prependBuilderRestAnnotation(computeRawRestAnnotations()));
+
+	/**
+	 * Computes the raw {@code @Rest} annotation chain (most-derived first), folding in the framework
+	 * {@code DefaultConfig} annotations for non-mixin contexts.  Does not include the synthetic builder annotation.
+	 *
+	 * @return The raw annotation chain.
+	 */
+	private List<AnnotationInfo<Rest>> computeRawRestAnnotations() {
 		var raw = getAnnotationProvider().find(Rest.class, ClassInfo.of(getResourceClass()));
 		if (isMixinContextField())
 			return raw;
@@ -2451,7 +2518,41 @@ public class RestContext extends Context {
 		var combined = new ArrayList<>(raw);
 		combined.addAll(defaultConfigAnnotations);
 		return Collections.unmodifiableList(combined);
-	});
+	}
+
+	/**
+	 * Prepends the synthetic builder-supplied {@code @Rest} annotation (TODO-143) at the most-derived (child)
+	 * position so its set members win in both child-first ({@code findFirst}) and parent-to-child
+	 * ({@code reduce-last}) resolution walks.  Returns {@code base} unchanged when there is no programmatic builder.
+	 *
+	 * @param base The raw annotation chain.
+	 * @return The chain with the synthetic annotation prepended (when present).
+	 */
+	private List<AnnotationInfo<Rest>> prependBuilderRestAnnotation(List<AnnotationInfo<Rest>> base) {
+		if (builderRestAnnotation == null)
+			return base;
+		var combined = new ArrayList<AnnotationInfo<Rest>>(base.size() + 1);
+		combined.add(AnnotationInfo.of(ClassInfo.of(getResourceClass()), builderRestAnnotation));
+		combined.addAll(base);
+		return Collections.unmodifiableList(combined);
+	}
+
+	/**
+	 * Non-reflectively reads the programmatic configuration builder stashed on a resource/mixin instance
+	 * (TODO-143 &sect;2.4), or returns <jk>null</jk> when the instance carries none or is not a builder-aware base type.
+	 *
+	 * @param r The resource instance.
+	 * @return The stashed builder, or <jk>null</jk>.
+	 */
+	private static RestBuilder stashedRestBuilder(Object r) {
+		if (r instanceof RestServlet x)
+			return x.getRestBuilder();
+		if (r instanceof RestResource x)
+			return x.getRestBuilder();
+		if (r instanceof RestMixin x)
+			return x.getRestBuilder();
+		return null;
+	}
 
 	/**
 	 * The {@code @Rest} annotation list for this resource in parent-to-child (top-down) order.

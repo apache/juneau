@@ -17,7 +17,9 @@
 package org.apache.juneau.rest.convention;
 
 import org.apache.juneau.http.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.servlet.*;
 
 /**
  * Mixin that serves a {@code favicon.ico} icon at {@code /favicon.ico}.
@@ -101,7 +103,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 // @formatter:off
 @Rest
-public class FaviconMixin {
+public class FaviconMixin extends RestMixin {
 
 	/** Default {@code Cache-Control} header value: {@code max-age=2592000, public} (30 days). */
 	public static final String DEFAULT_CACHE_CONTROL = FaviconProvider.DEFAULT_CACHE_CONTROL;
@@ -137,6 +139,35 @@ public class FaviconMixin {
 	}
 
 	/**
+	 * Worker + builder constructor (TODO-143 OQ-11 / &sect;2.4).
+	 *
+	 * <p>
+	 * Used by {@link Builder#build()} to both delegate to the shared {@link FaviconProvider} worker and stash the
+	 * programmatic {@link RestBuilder} (carrying any {@code @Rest}-level overrides such as {@code path}) so those
+	 * values take precedence over the mixin class's own {@link Rest @Rest} annotation.
+	 *
+	 * <h5 class='section'>Why worker + builder, not the flavor Builder:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Takes the already-built <b>worker bean</b> (not the flavor {@link Builder}) so the flavor can be
+	 * 		constructed from ANY independently-supplied worker &mdash; e.g. a user's own {@code @Bean FaviconProvider}
+	 * 		or BeanStore bean, per the delegate-bean model &mdash; not only via this flavor's own builder.
+	 * 	<li>Takes the generic {@link RestBuilder} (here {@code this} from {@link Builder#build()}) so it honors the
+	 * 		uniform &sect;2.4 {@code Foo(RestBuilder)} injection contract the base class and DI resolution key on; the
+	 * 		base knows nothing about the concrete flavor builder or the worker type.
+	 * 	<li>Holds the finished worker product (the {@code final} {@link FaviconProvider} field), not a transient
+	 * 		builder; the worker is materialized exactly once at {@link Builder#build()} time.
+	 * 	<li>Keeps the capability worker and the REST-level config as two distinct inputs.
+	 * </ul>
+	 *
+	 * @param worker The shared {@link FaviconProvider} worker this flavor delegates to. Must not be <jk>null</jk>.
+	 * @param builder The programmatic configuration builder. May be <jk>null</jk>.
+	 */
+	protected FaviconMixin(FaviconProvider worker, RestBuilder builder) {
+		super(builder);
+		this.worker = worker;
+	}
+
+	/**
 	 * [GET /favicon.ico] &mdash; serve the configured favicon bytes.
 	 *
 	 * @return The favicon as an {@link HttpResource} with proper headers.
@@ -158,13 +189,23 @@ public class FaviconMixin {
 	 * Mirrors {@link FaviconProvider.Builder}'s configuration methods on the mixin's own surface and
 	 * forwards each call to an underlying {@link FaviconProvider.Builder}, which builds the shared worker
 	 * the mixin delegates to (TODO-145 &sect;2.3.1 / OQ-11).
+	 *
+	 * <p>
+	 * Extends {@link RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke worker-config setters
+	 * ({@link #bytes(byte[])}, {@link #classpath(String)}, {@link #cacheControl(String)}) chain with true
+	 * covariant returns alongside the inherited {@link RestBuilder} surface (e.g. {@code path}, {@code roleGuard}).
+	 * This is how a multi-flavor capability avoids triplicating its REST-level config: the worker config is
+	 * forwarded once into {@link FaviconProvider.Builder}, and the REST config is inherited once from
+	 * {@link AbstractRestBuilder}.
 	 */
-	public static class Builder {
+	public static class Builder extends RestMixin.Builder<FaviconMixin, Builder> {
 
 		private final FaviconProvider.Builder worker = FaviconProvider.create();
 
 		/** Constructor &mdash; package access for {@link FaviconMixin#create()}. */
-		protected Builder() {}
+		protected Builder() {
+			super(FaviconMixin.class);
+		}
 
 		/**
 		 * Sets the raw favicon bytes.
@@ -213,12 +254,14 @@ public class FaviconMixin {
 		}
 
 		/**
-		 * Builds a {@link FaviconMixin} instance.
+		 * Builds a {@link FaviconMixin} instance, delegating to the shared {@link FaviconProvider} worker and
+		 * stashing this builder so its {@code @Rest}-level overrides take precedence over the annotation.
 		 *
 		 * @return A configured instance.
 		 */
+		@Override /* AbstractRestBuilder */
 		public FaviconMixin build() {
-			return new FaviconMixin(worker.build());
+			return new FaviconMixin(worker.build(), this);
 		}
 	}
 }

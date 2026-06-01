@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.servlet.*;
 
 /**
  * Mixin that serves SEO-conventional endpoints {@code /robots.txt} and {@code /sitemap.xml}.
@@ -106,7 +107,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 // @formatter:off
 @Rest
-public class SeoMixin {
+public class SeoMixin extends RestMixin {
 
 	/** Default robots policy: deny everything. */
 	public static final String DEFAULT_ROBOTS = "User-agent: *\nDisallow: /\n";
@@ -131,9 +132,15 @@ public class SeoMixin {
 	/**
 	 * Builder constructor.
 	 *
+	 * <p>
+	 * Stashes the programmatic {@link RestBuilder} (the builder itself, carrying any {@code @Rest}-level
+	 * overrides such as {@code path}) via {@code super(builder)} so those values take precedence over this
+	 * mixin's own {@link Rest @Rest} annotation (TODO-143 &sect;2.4).
+	 *
 	 * @param builder The builder.
 	 */
 	protected SeoMixin(Builder builder) {
+		super(builder);
 		robotsTxt = builder.buildRobots();
 		sitemapEntries = List.copyOf(builder.sitemapEntries);
 	}
@@ -215,15 +222,22 @@ public class SeoMixin {
 
 	/**
 	 * Builder for {@link SeoMixin} instances.
+	 *
+	 * <p>
+	 * Extends {@link RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke robots/sitemap setters chain
+	 * with true covariant returns alongside the inherited {@link RestBuilder} surface (e.g. {@code path},
+	 * {@code roleGuard}).
 	 */
-	public static class Builder {
+	public static class Builder extends RestMixin.Builder<SeoMixin, Builder> {
 
 		private final List<RobotsRule> robotsRules = new ArrayList<>();
 		private final List<SitemapEntry> sitemapEntries = new ArrayList<>();
 		private String customRobotsTxt;
 
 		/** Constructor &mdash; package access for {@link SeoMixin#create()}. */
-		protected Builder() {}
+		protected Builder() {
+			super(SeoMixin.class);
+		}
 
 		/**
 		 * Adds an {@code Allow} rule to the robots policy.
@@ -305,6 +319,7 @@ public class SeoMixin {
 		 *
 		 * @return A configured instance.
 		 */
+		@Override /* AbstractRestBuilder */
 		public SeoMixin build() {
 			return new SeoMixin(this);
 		}

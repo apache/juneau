@@ -41,14 +41,13 @@ import org.apache.juneau.rest.annotation.*;
  * base-less; the new single-responsibility op-mixins extend this base to make the triad membership
  * explicit.
  *
- * <h5 class='section'>Builder support (deferred):</h5>
+ * <h5 class='section'>Builder support:</h5>
  *
  * <p>
- * The fluent programmatic-builder surface ({@code RestBuilder}/{@code RestMixin.Builder}) that would let
- * a mixin be configured programmatically rather than by annotation is <b>not</b> part of this base yet
- * &mdash; it is deferred along with the resource/servlet builder work. Until then, {@code RestMixin}
- * carries no builder or stashed-builder state and mixins are configured purely by their {@code @Rest} /
- * {@code @RestOp} annotations.
+ * The fluent programmatic-builder surface ({@link RestBuilder} / {@link Builder}) lets a mixin be configured
+ * programmatically rather than (or in addition to) by annotation &mdash; builder-supplied values take precedence
+ * over {@link Rest @Rest} annotation values.  Use {@link #builder(Class)} for the common case, or subclass
+ * {@link Builder} for capability mixins that add their own setters (TODO-143 Option B).
  *
  * <h5 class='section'>Reaching the host resource:</h5>
  *
@@ -86,6 +85,49 @@ public abstract class RestMixin {
 	 * {@link Rest#mixins() @Rest(mixins=...)}), in which case {@link #getHostContext()} returns {@code null}.
 	 */
 	private final AtomicReference<RestContext> context = new AtomicReference<>();
+
+	/**
+	 * The programmatic configuration builder stashed on this instance (TODO-143 &sect;2.4), or <jk>null</jk> when the
+	 * mixin was constructed without a builder.  Mutable so it can be written by either the
+	 * {@link #RestMixin(RestBuilder)} constructor or {@link Builder#build()}.  Read non-reflectively by
+	 * {@link RestContext} during mixin sub-context construction so builder-supplied values take precedence over
+	 * {@link Rest @Rest} annotation values.
+	 */
+	RestBuilder restBuilder;
+
+	/**
+	 * Default constructor.
+	 */
+	protected RestMixin() {}
+
+	/**
+	 * Builder-injection constructor (TODO-145 &sect;2.4 constructor trio).
+	 *
+	 * @param builder The programmatic configuration builder.  May be <jk>null</jk>.
+	 */
+	protected RestMixin(RestBuilder builder) {
+		this.restBuilder = builder;
+	}
+
+	/**
+	 * Returns the programmatic configuration builder stashed on this mixin, or <jk>null</jk> if none.
+	 *
+	 * @return The stashed builder, or <jk>null</jk>.
+	 */
+	public RestBuilder getRestBuilder() {
+		return restBuilder;
+	}
+
+	/**
+	 * Creates a new fluent builder for programmatically configuring an instance of the specified mixin type.
+	 *
+	 * @param <R> The mixin type.
+	 * @param type The mixin type to build.  Must not be <jk>null</jk>.
+	 * @return A new builder.
+	 */
+	public static <R extends RestMixin> DefaultBuilder<R> builder(Class<R> type) {
+		return new DefaultBuilder<>(type);
+	}
 
 	/**
 	 * Captures the per-mixin {@link RestContext} sub-context this mixin instance is bound to.
@@ -130,5 +172,48 @@ public abstract class RestMixin {
 	public RestContext getHostContext() {
 		var c = context.get();
 		return c == null ? null : c.getParentContext();
+	}
+
+	/**
+	 * Fluent builder for programmatically configuring a {@link RestMixin} subclass.
+	 *
+	 * <p>
+	 * Subclassable, self-typed (CRTP) flavor builder (TODO-143 Option B).  Capability mixins (e.g.
+	 * {@code FaviconMixin}) extend this and add their own worker-config setters, which chain with true covariant
+	 * returns alongside the inherited {@link RestBuilder} surface.  For the common (non-subclassed) case use
+	 * {@link RestMixin#builder(Class)} which returns the concrete {@link DefaultBuilder} leaf.
+	 *
+	 * @param <R> The mixin type produced by {@link #build()}.
+	 * @param <SELF> The concrete builder type (self type).
+	 */
+	public static class Builder<R extends RestMixin, SELF extends Builder<R, SELF>> extends AbstractRestBuilder<R, SELF> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param type The mixin type produced by {@link #build()}.  Must not be <jk>null</jk>.
+		 */
+		protected Builder(Class<R> type) {
+			super(type);
+		}
+
+		@Override /* AbstractRestBuilder */
+		public R build() {
+			var r = createResource();
+			r.restBuilder = this;
+			return r;
+		}
+	}
+
+	/**
+	 * Concrete default leaf builder returned by {@link RestMixin#builder(Class)} for the common (non-subclassed)
+	 * case.
+	 *
+	 * @param <R> The mixin type produced by {@link #build()}.
+	 */
+	public static final class DefaultBuilder<R extends RestMixin> extends Builder<R, DefaultBuilder<R>> {
+		DefaultBuilder(Class<R> type) {
+			super(type);
+		}
 	}
 }

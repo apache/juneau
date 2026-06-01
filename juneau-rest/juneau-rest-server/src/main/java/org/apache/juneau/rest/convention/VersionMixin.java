@@ -23,6 +23,7 @@ import java.util.jar.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.servlet.*;
 
 /**
  * Mixin that serves deployment-introspection metadata at {@code /version} (configurable).
@@ -136,7 +137,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 // @formatter:off
 @Rest
-public class VersionMixin {
+public class VersionMixin extends RestMixin {
 
 	/** Sentinel value returned for entries that the worker couldn't resolve. */
 	public static final String UNKNOWN = VersionProvider.UNKNOWN;
@@ -185,6 +186,35 @@ public class VersionMixin {
 	}
 
 	/**
+	 * Worker + builder constructor (TODO-143 OQ-11 / &sect;2.4).
+	 *
+	 * <p>
+	 * Used by {@link Builder#build()} to both delegate to the shared {@link VersionProvider} worker and stash the
+	 * programmatic {@link RestBuilder} (carrying any {@code @Rest}-level overrides such as {@code path}) so those
+	 * values take precedence over the mixin class's own {@link Rest @Rest} annotation.
+	 *
+	 * <h5 class='section'>Why worker + builder, not the flavor Builder:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Takes the already-built <b>worker bean</b> (not the flavor {@link Builder}) so the flavor can be
+	 * 		constructed from ANY independently-supplied worker &mdash; e.g. a user's own {@code @Bean VersionProvider}
+	 * 		or BeanStore bean, per the delegate-bean model &mdash; not only via this flavor's own builder.
+	 * 	<li>Takes the generic {@link RestBuilder} (here {@code this} from {@link Builder#build()}) so it honors the
+	 * 		uniform &sect;2.4 {@code Foo(RestBuilder)} injection contract the base class and DI resolution key on; the
+	 * 		base knows nothing about the concrete flavor builder or the worker type.
+	 * 	<li>Holds the finished worker product (the {@code final} {@link VersionProvider} field), not a transient
+	 * 		builder; the worker is materialized exactly once at {@link Builder#build()} time.
+	 * 	<li>Keeps the capability worker and the REST-level config as two distinct inputs.
+	 * </ul>
+	 *
+	 * @param worker The shared {@link VersionProvider} worker this flavor delegates to. Must not be <jk>null</jk>.
+	 * @param builder The programmatic configuration builder. May be <jk>null</jk>.
+	 */
+	protected VersionMixin(VersionProvider worker, RestBuilder builder) {
+		super(builder);
+		this.worker = worker;
+	}
+
+	/**
 	 * [GET /version] &mdash; emit the assembled metadata as a JSON map.
 	 *
 	 * @param res The current REST response.
@@ -216,13 +246,20 @@ public class VersionMixin {
 	 * Mirrors {@link VersionProvider.Builder}'s configuration methods on the mixin's own surface and
 	 * forwards each call to an underlying {@link VersionProvider.Builder}, which builds the shared worker
 	 * the mixin delegates to (TODO-145 &sect;2.3.1 / OQ-11).
+	 *
+	 * <p>
+	 * Extends {@link RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke worker-config setters chain
+	 * with true covariant returns alongside the inherited {@link RestBuilder} surface (e.g. {@code path},
+	 * {@code roleGuard}). The worker config is forwarded once into {@link VersionProvider.Builder} and the REST
+	 * config is inherited once from {@link AbstractRestBuilder} &mdash; no triplication across the Version flavors.
 	 */
-	public static class Builder {
+	public static class Builder extends RestMixin.Builder<VersionMixin, Builder> {
 
 		private final VersionProvider.Builder worker;
 
 		/** Constructor &mdash; protected access for {@link VersionMixin#create()}. */
 		protected Builder(VersionProvider.Builder worker) {
+			super(VersionMixin.class);
 			this.worker = worker;
 		}
 
@@ -325,8 +362,9 @@ public class VersionMixin {
 		 *
 		 * @return A configured instance.
 		 */
+		@Override /* AbstractRestBuilder */
 		public VersionMixin build() {
-			return new VersionMixin(worker.build());
+			return new VersionMixin(worker.build(), this);
 		}
 	}
 }

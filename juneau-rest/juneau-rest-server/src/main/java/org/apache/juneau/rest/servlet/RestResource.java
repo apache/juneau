@@ -46,6 +46,49 @@ public abstract class RestResource {
 	private AtomicReference<RestContext> context = new AtomicReference<>();
 
 	/**
+	 * The programmatic configuration builder stashed on this instance (TODO-143 &sect;2.4), or <jk>null</jk> when the
+	 * resource was constructed without a builder.  Mutable so it can be written by either the
+	 * {@link #RestResource(RestBuilder)} constructor or {@link Builder#build()}.  Read non-reflectively by
+	 * {@link RestContext} during construction so builder-supplied values take precedence over {@code @Rest}
+	 * annotation values.
+	 */
+	RestBuilder restBuilder;
+
+	/**
+	 * Default constructor.
+	 */
+	protected RestResource() {}
+
+	/**
+	 * Builder-injection constructor (TODO-145 &sect;2.4 constructor trio).
+	 *
+	 * @param builder The programmatic configuration builder.  May be <jk>null</jk>.
+	 */
+	protected RestResource(RestBuilder builder) {
+		this.restBuilder = builder;
+	}
+
+	/**
+	 * Returns the programmatic configuration builder stashed on this resource, or <jk>null</jk> if none.
+	 *
+	 * @return The stashed builder, or <jk>null</jk>.
+	 */
+	public RestBuilder getRestBuilder() {
+		return restBuilder;
+	}
+
+	/**
+	 * Creates a new fluent builder for programmatically configuring an instance of the specified resource type.
+	 *
+	 * @param <R> The resource type.
+	 * @param type The resource type to build.  Must not be <jk>null</jk>.
+	 * @return A new builder.
+	 */
+	public static <R extends RestResource> DefaultBuilder<R> builder(Class<R> type) {
+		return new DefaultBuilder<>(type);
+	}
+
+	/**
 	 * Returns the current thread-local HTTP request.
 	 *
 	 * @return The current thread-local HTTP request, or <jk>null</jk> if it wasn't created.
@@ -176,5 +219,46 @@ public abstract class RestResource {
 	 */
 	protected void setContext(RestContext context) throws ServletException {
 		this.context.set(context);
+	}
+
+	/**
+	 * Fluent builder for programmatically configuring a {@link RestResource} subclass.
+	 *
+	 * <p>
+	 * Subclassable, self-typed (CRTP) flavor builder (TODO-143 Option B).  For the common (non-subclassed) case
+	 * use {@link RestResource#builder(Class)} which returns the concrete {@link DefaultBuilder} leaf.
+	 *
+	 * @param <R> The resource type produced by {@link #build()}.
+	 * @param <SELF> The concrete builder type (self type).
+	 */
+	public static class Builder<R extends RestResource, SELF extends Builder<R, SELF>> extends AbstractRestBuilder<R, SELF> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param type The resource type produced by {@link #build()}.  Must not be <jk>null</jk>.
+		 */
+		protected Builder(Class<R> type) {
+			super(type);
+		}
+
+		@Override /* AbstractRestBuilder */
+		public R build() {
+			var r = createResource();
+			r.restBuilder = this;
+			return r;
+		}
+	}
+
+	/**
+	 * Concrete default leaf builder returned by {@link RestResource#builder(Class)} for the common (non-subclassed)
+	 * case.
+	 *
+	 * @param <R> The resource type produced by {@link #build()}.
+	 */
+	public static final class DefaultBuilder<R extends RestResource> extends Builder<R, DefaultBuilder<R>> {
+		DefaultBuilder(Class<R> type) {
+			super(type);
+		}
 	}
 }

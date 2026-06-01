@@ -2129,17 +2129,30 @@ public class BeanInstantiator<T> {
 		}
 
 		// Priority 3: Autodetect
-		// 3a: Look for static create/builder method that returns a potential builder type
-		r = beanSubType.getPublicMethods().stream()
+		// 3a: Look for static create/builder method that returns a potential builder type.
+		var staticBuilderTypes = beanSubType.getPublicMethods().stream()
 			.filter(x -> x.isAll(STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 			.filter(x -> builderMethodNames.contains(x.getNameSimple()))
 			.filter(x -> ! x.hasReturnType(beanSubType)) // Must not return the bean type itself
 			.filter(x -> isValidBuilderType(x.getReturnType()))
-			.findFirst()
-			.map(MethodInfo::getReturnType);
-		if (r.isPresent()) {
-			log("Found builder via static method: %s", r.get().getName());
-			return r.get();
+			.map(MethodInfo::getReturnType)
+			.toList();
+		if (! staticBuilderTypes.isEmpty()) {
+			// TODO-143 (Option D): prefer a factory whose builder builds the EXACT requested type (or a
+			// subtype) over one that only promises a supertype — e.g. an inherited generic builder(Class)
+			// whose build() erases to a base class. A supertype-only factory must not displace a stricter path.
+			var strict = staticBuilderTypes.stream().filter(this::isStrictBuilderType).findFirst();
+			if (strict.isPresent()) {
+				log("Found builder via static method (strict): %s", strict.get().getName());
+				return strict.get();
+			}
+			var weak = gateWeakBuilder(staticBuilderTypes.get(0));
+			if (weak != null) {
+				log("Found builder via static method: %s", weak.getName());
+				return weak;
+			}
+			// Weak/supertype-only static factory rejected in favor of a direct constructor; fall through to
+			// 3b/3c (a stricter inner Builder may still exist) and ultimately the constructor path.
 		}
 
 		// 3b: Look for inner Builder class
@@ -2150,12 +2163,17 @@ public class BeanInstantiator<T> {
 		if (r.isPresent()) {
 			var builderClass = r.get();
 			if (isValidBuilderType(builderClass)) {
-				log("Found builder via inner class: %s", builderClass.getName());
+				var gated = isStrictBuilderType(builderClass) ? builderClass : gateWeakBuilder(builderClass);
+				if (gated != null) {
+					log("Found builder via inner class: %s", gated.getName());
+					return gated;
+				}
+				// Weak inner builder rejected in favor of a direct constructor; fall through.
+			} else {
+				// Still return it so we can provide a better error message when trying to use it
+				log("Found builder class via inner class but it is not valid: %s", builderClass.getName());
 				return builderClass;
 			}
-			// Still return it so we can provide a better error message when trying to use it
-			log("Found builder class via inner class but it is not valid: %s", builderClass.getName());
-			return builderClass;
 		}
 
 		// 3c: Look for builder in parent classes and implemented interfaces (skip beanSubType itself,
@@ -2170,8 +2188,13 @@ public class BeanInstantiator<T> {
 			if (r.isPresent()) {
 				var builderClass = r.get();
 				if (isValidBuilderType(builderClass)) {
-					log("Found builder via parent inner class: %s", builderClass.getName());
-					return builderClass;
+					var gated = isStrictBuilderType(builderClass) ? builderClass : gateWeakBuilder(builderClass);
+					if (gated != null) {
+						log("Found builder via parent inner class: %s", gated.getName());
+						return gated;
+					}
+					// Weak parent inner builder rejected in favor of a direct constructor; keep scanning.
+					continue;
 				}
 				// Still return it so we can provide a better error message when trying to use it
 				log("Found builder class via parent inner class but it is not valid: %s", builderClass.getName());
@@ -2182,6 +2205,61 @@ public class BeanInstantiator<T> {
 		// No builder type found
 		log("No builder type found");
 		return null;
+	}
+
+	/**
+	 * Tests whether a builder candidate builds the <b>exact</b> requested bean type (or a subtype of it),
+	 * as opposed to only promising a supertype.
+	 *
+	 * <p>
+	 * Used by {@link #findBuilderType()} (TODO-143 Option D) to prefer a precise builder over an inherited
+	 * generic base builder whose {@code build()} erases to a parent class (e.g. a self-typed REST
+	 * {@code DefaultBuilder} whose {@code build()} returns {@code RestMixin}).
+	 *
+	 * @param builderCandidate The builder type to test.
+	 * @return <jk>true</jk> if the candidate has a 0-arg (or {@code @Inject}) build/create/get method whose
+	 * 	return type is {@code beanSubType} or a subtype of it.
+	 */
+	private boolean isStrictBuilderType(ClassInfo builderCandidate) {
+		return builderCandidate.getPublicMethods().stream()
+			.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
+			.filter(x -> buildMethodNames.contains(x.getNameSimple()))
+			.filter(x -> { var rt = x.getReturnType(); return rt.is(beanSubType.inner()) || beanSubType.isParentOf(rt); })
+			.anyMatch(x -> x.getAnnotations().stream().anyMatch(JsrSupport::isInjectAnnotation) || x.getParameterCount() == 0);
+	}
+
+	/**
+	 * TODO-143 Option D gate: a builder candidate that only builds a <i>supertype</i> of the requested bean
+	 * type must not be used when the requested type is concretely instantiable via a direct constructor.
+	 *
+	 * <p>
+	 * Returns the candidate unchanged when it is safe to use, or {@code null} to signal "prefer the
+	 * constructor path". This is only invoked for non-strict (supertype-only) candidates.
+	 *
+	 * @param builderCandidate The (weak) builder candidate.
+	 * @return The candidate, or {@code null} to prefer the direct-constructor path.
+	 */
+	private ClassInfo gateWeakBuilder(ClassInfo builderCandidate) {
+		if (hasUsableDirectConstructor()) {
+			log("Builder candidate %s only builds a supertype of %s and a usable direct constructor exists; preferring the constructor.", builderCandidate.getName(), beanSubType.getName());
+			return null;
+		}
+		return builderCandidate;
+	}
+
+	/**
+	 * Tests whether the requested bean type is concretely instantiable via a non-private constructor whose
+	 * parameters can all be resolved from the bean store (a no-arg constructor always qualifies).
+	 *
+	 * @return <jk>true</jk> if a usable direct constructor exists on {@code beanSubType}.
+	 */
+	private boolean hasUsableDirectConstructor() {
+		if (beanSubType.isAbstract() || beanSubType.isInterface())
+			return false;
+		return beanSubType.getDeclaredConstructors().stream()
+			.filter(x -> x.isAll(NOT_DEPRECATED, NOT_PRIVATE))
+			.filter(x -> x.isDeclaringClass(beanSubType))
+			.anyMatch(x -> x.canResolveAllParameters(store, enclosingInstance));
 	}
 
 	/**

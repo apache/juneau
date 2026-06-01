@@ -78,6 +78,54 @@ public abstract class RestServlet extends HttpServlet {
 	private final AtomicReference<RestContext> context = new AtomicReference<>();
 	private final AtomicReference<Exception> initException = new AtomicReference<>();
 
+	/**
+	 * The programmatic configuration builder stashed on this instance (TODO-143 &sect;2.4), or <jk>null</jk> when the
+	 * resource was constructed without a builder.  Mutable so it can be written by either the
+	 * {@link #RestServlet(RestBuilder)} constructor or {@link Builder#build()} (the no-arg-only setter-stash path).
+	 * Read non-reflectively by {@link RestContext} during construction so builder-supplied values take precedence
+	 * over {@link Rest @Rest} annotation values.
+	 */
+	RestBuilder restBuilder;
+
+	/**
+	 * Default constructor.
+	 */
+	protected RestServlet() {}
+
+	/**
+	 * Builder-injection constructor (TODO-145 &sect;2.4 constructor trio).
+	 *
+	 * @param builder The programmatic configuration builder.  May be <jk>null</jk>.
+	 */
+	protected RestServlet(RestBuilder builder) {
+		this.restBuilder = builder;
+	}
+
+	/**
+	 * Returns the programmatic configuration builder stashed on this resource, or <jk>null</jk> if none.
+	 *
+	 * @return The stashed builder, or <jk>null</jk>.
+	 * @since 9.5.0
+	 */
+	public RestBuilder getRestBuilder() {
+		return restBuilder;
+	}
+
+	/**
+	 * Creates a new fluent builder for programmatically configuring an instance of the specified resource type.
+	 *
+	 * <p>
+	 * Builder-supplied values take precedence over the resource class's own {@link Rest @Rest} annotation values.
+	 *
+	 * @param <R> The resource type.
+	 * @param type The resource type to build.  Must not be <jk>null</jk>.
+	 * @return A new builder.
+	 * @since 9.5.0
+	 */
+	public static <R extends RestServlet> DefaultBuilder<R> builder(Class<R> type) {
+		return new DefaultBuilder<>(type);
+	}
+
 	@Override /* Overridden from GenericServlet */
 	public synchronized void destroy() {
 		if (nn(context.get()))
@@ -200,7 +248,7 @@ public abstract class RestServlet extends HttpServlet {
 			if (nn(context.get()))
 				return;
 			super.init(servletConfig);
-			context.set(new RestContext(new RestContext.Args(this.getClass(), null, servletConfig, () -> this, "", null, null, null, false)));
+			context.set(new RestContext(new RestContext.Args(this.getClass(), null, servletConfig, () -> this, "", null, null, null, false, restBuilder)));
 			context.get().postInit();
 			context.get().postInitChildFirst();
 		} catch (ServletException e) {
@@ -300,6 +348,51 @@ public abstract class RestServlet extends HttpServlet {
 		if (this.context.get() == null) {
 			super.init(context.getBuilder());
 			this.context.set(context);
+		}
+	}
+
+	/**
+	 * Fluent builder for programmatically configuring a {@link RestServlet} subclass.
+	 *
+	 * <p>
+	 * This is the subclassable, self-typed (CRTP) flavor builder.  Its {@code SELF} type parameter is left open so
+	 * a user subclass's bespoke setters chain with true covariant returns alongside the inherited
+	 * {@link RestBuilder} surface (TODO-143 Option B).  For the common case where the builder is not subclassed,
+	 * use {@link RestServlet#builder(Class)} which returns the concrete {@link DefaultBuilder} leaf.
+	 *
+	 * @param <R> The resource type produced by {@link #build()}.
+	 * @param <SELF> The concrete builder type (self type).
+	 * @since 9.5.0
+	 */
+	public static class Builder<R extends RestServlet, SELF extends Builder<R, SELF>> extends AbstractRestBuilder<R, SELF> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param type The resource type produced by {@link #build()}.  Must not be <jk>null</jk>.
+		 */
+		protected Builder(Class<R> type) {
+			super(type);
+		}
+
+		@Override /* AbstractRestBuilder */
+		public R build() {
+			var r = createResource();
+			r.restBuilder = this;
+			return r;
+		}
+	}
+
+	/**
+	 * Concrete default leaf builder returned by {@link RestServlet#builder(Class)} for the common (non-subclassed)
+	 * case, so callers are not forced to spell the {@code SELF} type parameter.
+	 *
+	 * @param <R> The resource type produced by {@link #build()}.
+	 * @since 9.5.0
+	 */
+	public static final class DefaultBuilder<R extends RestServlet> extends Builder<R, DefaultBuilder<R>> {
+		DefaultBuilder(Class<R> type) {
+			super(type);
 		}
 	}
 }

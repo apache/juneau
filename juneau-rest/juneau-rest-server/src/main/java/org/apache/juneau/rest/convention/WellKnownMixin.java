@@ -21,6 +21,7 @@ import java.io.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.servlet.*;
 
 /**
  * Mixin that serves <a href="https://www.rfc-editor.org/rfc/rfc8615">RFC 8615</a>
@@ -103,7 +104,7 @@ import org.apache.juneau.rest.annotation.*;
  */
 // @formatter:off
 @Rest
-public class WellKnownMixin {
+public class WellKnownMixin extends RestMixin {
 
 	/**
 	 * Creates a new builder.
@@ -124,9 +125,15 @@ public class WellKnownMixin {
 	/**
 	 * Builder constructor.
 	 *
+	 * <p>
+	 * Stashes the programmatic {@link RestBuilder} (the builder itself, carrying any {@code @Rest}-level
+	 * overrides such as {@code path}) via {@code super(builder)} so those values take precedence over this
+	 * mixin's own {@link Rest @Rest} annotation (TODO-143 &sect;2.4).
+	 *
 	 * @param builder The builder.
 	 */
 	protected WellKnownMixin(Builder builder) {
+		super(builder);
 		securityTxt = builder.securityTxt;
 	}
 
@@ -163,13 +170,20 @@ public class WellKnownMixin {
 
 	/**
 	 * Builder for {@link WellKnownMixin} instances.
+	 *
+	 * <p>
+	 * Extends {@link RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke {@link #securityTxt(String)}
+	 * setter chains with true covariant returns alongside the inherited {@link RestBuilder} surface (e.g.
+	 * {@code path}, {@code roleGuard}).
 	 */
-	public static class Builder {
+	public static class Builder extends RestMixin.Builder<WellKnownMixin, Builder> {
 
 		private String securityTxt;
 
 		/** Constructor &mdash; package access for {@link WellKnownMixin#create()}. */
-		protected Builder() {}
+		protected Builder() {
+			super(WellKnownMixin.class);
+		}
 
 		/**
 		 * Sets the {@code security.txt} body that will be served at
@@ -193,6 +207,7 @@ public class WellKnownMixin {
 		 *
 		 * @return A configured instance.
 		 */
+		@Override /* AbstractRestBuilder */
 		public WellKnownMixin build() {
 			return new WellKnownMixin(this);
 		}
