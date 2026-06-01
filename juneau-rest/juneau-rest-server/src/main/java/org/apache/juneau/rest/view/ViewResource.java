@@ -30,7 +30,8 @@ import org.apache.juneau.rest.servlet.*;
  * Mirror of {@link ViewServlet} for routed-child deployment: each per-engine bridge module ships a thin
  * {@code <Engine>Resource} subclass that declares its own subtree mount via
  * {@link Rest#path() @Rest(path)} (e.g. {@code "/jsp"}) and supplies the per-engine
- * {@link RawTemplateDispatcher} (the matching {@code <Engine>Mixin} instance) via {@link #dispatcher()}.
+ * {@link RawTemplateDispatcher} (the matching flavor-neutral {@code <Engine>Dispatcher} worker) via
+ * {@link #dispatcher()}.
  *
  * <p>
  * The single greedy op declared here ({@code @RestGet(path="/*")}) captures the trailing remainder under
@@ -53,7 +54,7 @@ public abstract class ViewResource extends RestResource {
 	 * to.
 	 *
 	 * <p>
-	 * Typically the matching {@code <Engine>Mixin} instance (which implements
+	 * Typically the matching flavor-neutral {@code <Engine>Dispatcher} worker (which implements
 	 * {@link RawTemplateDispatcher}).  Never {@code null}.
 	 *
 	 * @return The raw-template dispatcher. Never {@code null}.

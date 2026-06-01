@@ -30,9 +30,10 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <p>
  * Mounts as a <b>routed child</b> via {@link Rest#children() @Rest(children=StaticFilesResource.class)}
- * under a parent at the subtree {@code /static} and serves static files from the active
- * {@link StaticFiles} bean by delegating to a shared {@link StaticFilesMixin} instance &mdash; the same
- * logic the mixin and {@link StaticFilesServlet servlet} flavors use, so the three forms cannot drift.
+ * under a parent at the subtree {@code /static} and serves static files by delegating to the
+ * flavor-neutral {@link StaticFiles} worker bean resolved from the request context
+ * ({@link RestContext#getStaticFiles()}) &mdash; the same worker the {@link StaticFilesMixin mixin} and
+ * {@link StaticFilesServlet servlet} flavors use, so the three forms cannot drift.
  *
  * <p>
  * Whereas the {@link StaticFilesMixin} mixin pins its op at {@code /static/*} to merge into a host's
@@ -54,27 +55,10 @@ import org.apache.juneau.rest.servlet.*;
 @Rest(path="/static")
 public class StaticFilesResource extends RestResource {
 
-	private final transient StaticFilesMixin delegate;
-
-	/** No-arg constructor &mdash; uses a default {@link StaticFilesMixin} delegate. */
-	public StaticFilesResource() {
-		this(new StaticFilesMixin());
-	}
-
 	/**
-	 * Delegate constructor.
+	 * [GET /*] &mdash; serve a static file from the active {@link StaticFiles} worker bean.
 	 *
-	 * @param delegate The shared static-files mixin this child delegates to. Must not be
-	 * 	{@code null}.
-	 */
-	protected StaticFilesResource(StaticFilesMixin delegate) {
-		this.delegate = delegate;
-	}
-
-	/**
-	 * [GET /*] &mdash; serve a static file from the active {@link StaticFiles} bean.
-	 *
-	 * @param req The current REST request.
+	 * @param req The current REST request &mdash; supplies {@link RestContext#getStaticFiles()}.
 	 * @param path The trailing remainder after the mount prefix.
 	 * @param locale The request locale (used for localized resource lookups).
 	 * @return The matching {@link HttpResource} (with content type + cache headers).
@@ -87,13 +71,13 @@ public class StaticFilesResource extends RestResource {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getStaticFile(RestRequest req, @Path("/*") String path, Locale locale) {
-		return delegate.getStaticFile(req, path, locale);
+		return req.getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
 	}
 
 	/**
 	 * [HEAD /*] &mdash; return GET headers for a static file without the body.
 	 *
-	 * @param req The current REST request.
+	 * @param req The current REST request &mdash; supplies {@link RestContext#getStaticFiles()}.
 	 * @param path The trailing remainder after the mount prefix.
 	 * @param locale The request locale (used for localized resource lookups).
 	 * @return The matching {@link HttpResource} (with headers; body suppressed by the processor).
@@ -107,6 +91,6 @@ public class StaticFilesResource extends RestResource {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource headStaticFile(RestRequest req, @Path("/*") String path, Locale locale) {
-		return delegate.headStaticFile(req, path, locale);
+		return getStaticFile(req, path, locale);
 	}
 }

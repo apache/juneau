@@ -19,12 +19,8 @@ package org.apache.juneau.rest.ops;
 import java.io.*;
 import java.lang.management.*;
 import java.util.*;
-import java.util.function.*;
 
-import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.response.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.guard.*;
@@ -155,12 +151,7 @@ public class AdminMixin {
 	 * Default thread-name-prefix exclude list: filter out JVM internals, servlet container, and
 	 * Spring Boot infrastructure threads.
 	 */
-	public static final List<String> DEFAULT_THREAD_NAME_PREFIX_EXCLUDE = List.of(
-		"Reference Handler", "Finalizer", "Signal Dispatcher", "Common-Cleaner",
-		"Notification Thread", "Attach Listener",
-		"jetty-", "qtp",
-		"spring-",
-		"GC ", "G1 ");
+	public static final List<String> DEFAULT_THREAD_NAME_PREFIX_EXCLUDE = AdminProvider.DEFAULT_THREAD_NAME_PREFIX_EXCLUDE;
 
 	/**
 	 * Creates a new builder.
@@ -171,22 +162,24 @@ public class AdminMixin {
 		return new Builder();
 	}
 
-	private final Map<String,Runnable> cacheFlushHooks;
-	private final List<String> threadNamePrefixExclude;
+	private final AdminProvider worker;
 
-	/** No-arg constructor &mdash; uses the default thread filter and no cache-flush hooks. */
+	/**
+	 * No-arg constructor &mdash; delegates to a default {@link AdminProvider} worker (default thread filter
+	 * and no cache-flush hooks).
+	 */
 	public AdminMixin() {
-		this(create());
+		this(new AdminProvider());
 	}
 
 	/**
-	 * Builder constructor.
+	 * Worker constructor.
 	 *
-	 * @param builder The builder.
+	 * @param worker The shared {@link AdminProvider} worker this flavor delegates to. Must not be
+	 * 	<jk>null</jk>.
 	 */
-	protected AdminMixin(Builder builder) {
-		cacheFlushHooks = Collections.unmodifiableMap(new LinkedHashMap<>(builder.cacheFlushHooks));
-		threadNamePrefixExclude = List.copyOf(builder.threadNamePrefixExclude);
+	protected AdminMixin(AdminProvider worker) {
+		this.worker = worker;
 	}
 
 	/**
@@ -202,25 +195,7 @@ public class AdminMixin {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void getThreads(RestResponse res) throws IOException {
-		var allTraces = Thread.getAllStackTraces();
-		var out = new ArrayList<Map<String,Object>>();
-		for (var e : allTraces.entrySet()) {
-			var t = e.getKey();
-			if (isExcludedThread(t.getName()))
-				continue;
-			var entry = new LinkedHashMap<String,Object>();
-			entry.put("name", t.getName());
-			entry.put("id", t.getId());
-			entry.put("state", t.getState().toString());
-			entry.put("daemon", t.isDaemon());
-			entry.put("priority", t.getPriority());
-			var stack = new ArrayList<String>();
-			for (var f : e.getValue())
-				stack.add(f.toString());
-			entry.put("stack", stack);
-			out.add(entry);
-		}
-		writeJson(res, out);
+		worker.serveThreads(res);
 	}
 
 	/**
@@ -236,36 +211,11 @@ public class AdminMixin {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void getHeap(RestResponse res) throws IOException {
-		var rt = Runtime.getRuntime();
-		var heap = new LinkedHashMap<String,Object>();
-		heap.put("total", rt.totalMemory());
-		heap.put("free", rt.freeMemory());
-		heap.put("max", rt.maxMemory());
-		heap.put("used", rt.totalMemory() - rt.freeMemory());
-
-		var mx = ManagementFactory.getMemoryMXBean();
-		var nonHeapUsage = mx.getNonHeapMemoryUsage();
-		var nonHeap = new LinkedHashMap<String,Object>();
-		nonHeap.put("init", nonHeapUsage.getInit());
-		nonHeap.put("used", nonHeapUsage.getUsed());
-		nonHeap.put("committed", nonHeapUsage.getCommitted());
-		nonHeap.put("max", nonHeapUsage.getMax());
-
-		var out = new LinkedHashMap<String,Object>();
-		out.put("heap", heap);
-		out.put("nonHeap", nonHeap);
-		out.put("availableProcessors", rt.availableProcessors());
-		writeJson(res, out);
+		worker.serveHeap(res);
 	}
 
 	/**
 	 * [POST /admin/cache/flush] &mdash; run all registered cache-flush hooks (or a subset).
-	 *
-	 * <p>
-	 * When {@code names} is supplied, only the named hooks are invoked. Unknown names are
-	 * silently ignored (404-on-unknown would leak the registered hook set). Hook execution is
-	 * synchronous; long-running hooks block the request thread &mdash; users that want async
-	 * semantics should register a hook that hands work off to an executor.
 	 *
 	 * @param req The current REST request &mdash; {@code names} query parameter is read off it.
 	 * @param res The current REST response.
@@ -278,25 +228,7 @@ public class AdminMixin {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void postCacheFlush(RestRequest req, RestResponse res) throws IOException {
-		var namesParam = req.getQueryParams().get("names").asString().orElse(null);
-		Set<String> selected = null;
-		if (namesParam != null && ! namesParam.isBlank()) {
-			selected = new LinkedHashSet<>();
-			for (var n : namesParam.split(","))
-				if (! n.isBlank())
-					selected.add(n.trim());
-		}
-		var executed = new ArrayList<String>();
-		for (var e : cacheFlushHooks.entrySet()) {
-			if (selected != null && ! selected.contains(e.getKey()))
-				continue;
-			e.getValue().run();
-			executed.add(e.getKey());
-		}
-		var out = new LinkedHashMap<String,Object>();
-		out.put("registered", new ArrayList<>(cacheFlushHooks.keySet()));
-		out.put("executed", executed);
-		writeJson(res, out);
+		worker.serveCacheFlush(req, res);
 	}
 
 	/**
@@ -308,8 +240,6 @@ public class AdminMixin {
 	 * @param req The current REST request &mdash; supplies the bean store for guard lookup.
 	 * @param res The current REST response.
 	 * @throws IOException If an I/O error occurs while writing the response.
-	 * @throws NotFound If no {@link RateLimitGuard} bean is registered on the importer's bean
-	 * 	store.
 	 */
 	@RestGet(
 		path="/#{pathToken(${juneau.admin.path:admin})}/ratelimit",
@@ -318,23 +248,7 @@ public class AdminMixin {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void getRateLimit(RestRequest req, RestResponse res) throws IOException {
-		var bs = req.getContext().getBeanStore();
-		var guards = collectRateLimitGuards(bs);
-		if (guards.isEmpty())
-			throw new NotFound("No RateLimitGuard bean is registered.");
-		var entries = new LinkedHashMap<String,Object>();
-		for (var e : guards.entrySet()) {
-			var g = e.getValue();
-			var bucket = new LinkedHashMap<String,Object>();
-			bucket.put("config", describeRateLimitGuard(g));
-			bucket.put("snapshot", g.snapshot().values().stream()
-				.sorted(Comparator.comparing(BucketState::key))
-				.toList());
-			entries.put(e.getKey(), bucket);
-		}
-		var out = new LinkedHashMap<String,Object>();
-		out.put("guards", entries);
-		writeJson(res, out);
+		worker.serveRateLimit(req, res);
 	}
 
 	/**
@@ -343,7 +257,7 @@ public class AdminMixin {
 	 * @return The hooks, keyed by registration name. Never {@code null}.
 	 */
 	public Map<String,Runnable> getCacheFlushHooks() {
-		return cacheFlushHooks;
+		return worker.getCacheFlushHooks();
 	}
 
 	/**
@@ -352,51 +266,20 @@ public class AdminMixin {
 	 * @return The exclude list. Never {@code null}.
 	 */
 	public List<String> getThreadNamePrefixExclude() {
-		return threadNamePrefixExclude;
-	}
-
-	private boolean isExcludedThread(String threadName) {
-		for (var prefix : threadNamePrefixExclude)
-			if (threadName != null && threadName.startsWith(prefix))
-				return true;
-		return false;
-	}
-
-	private static Map<String,RateLimitGuard> collectRateLimitGuards(BeanStore bs) {
-		// Multi-bean lookup so users running per-tier guards (free / paid / etc.) see every
-		// registered bean keyed by its bean name. Falls through to the single-bean path when no
-		// per-tier configuration is registered.
-		var byName = bs.getBeansOfType(RateLimitGuard.class);
-		if (byName != null && ! byName.isEmpty())
-			return new LinkedHashMap<>(byName);
-		var out = new LinkedHashMap<String,RateLimitGuard>();
-		bs.getBean(RateLimitGuard.class).ifPresent(g -> out.put("rateLimit", g));
-		return out;
-	}
-
-	private static Map<String,Object> describeRateLimitGuard(RateLimitGuard g) {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("class", g.getClass().getName());
-		m.put("limit", g.getCapacity());
-		m.put("permitsPerSecond", g.getPermitsPerSecond());
-		m.put("xForwardedForAware", g.isXForwardedForAware());
-		m.put("exemptPaths", g.getExemptPaths().stream().sorted().toList());
-		return m;
-	}
-
-	private static void writeJson(RestResponse res, Object payload) throws IOException {
-		try (var w = res.getDirectWriter("application/json")) {
-			JsonSerializer.DEFAULT_READABLE.serialize(payload, w);
-		}
+		return worker.getThreadNamePrefixExclude();
 	}
 
 	/**
 	 * Builder for {@link AdminMixin} instances.
+	 *
+	 * <p>
+	 * Mirrors {@link AdminProvider.Builder}'s configuration methods on the mixin's own surface and forwards
+	 * each call to an underlying {@link AdminProvider.Builder}, which builds the shared worker the mixin
+	 * delegates to (TODO-145 &sect;2.3.1 / OQ-11).
 	 */
 	public static class Builder {
 
-		private final Map<String,Runnable> cacheFlushHooks = new LinkedHashMap<>();
-		private final List<String> threadNamePrefixExclude = new ArrayList<>(DEFAULT_THREAD_NAME_PREFIX_EXCLUDE);
+		private final AdminProvider.Builder worker = AdminProvider.create();
 
 		/** Constructor &mdash; package access for {@link AdminMixin#create()}. */
 		protected Builder() {}
@@ -413,11 +296,7 @@ public class AdminMixin {
 		 * @return This object.
 		 */
 		public Builder cacheFlush(String name, Runnable hook) {
-			if (name == null || name.isBlank())
-				throw new IllegalArgumentException("Argument 'name' must not be null or blank");
-			if (hook == null)
-				throw new IllegalArgumentException("Argument 'hook' must not be null");
-			cacheFlushHooks.put(name, hook);
+			worker.cacheFlush(name, hook);
 			return this;
 		}
 
@@ -428,8 +307,7 @@ public class AdminMixin {
 		 * @return This object.
 		 */
 		public Builder cacheFlushAll(Map<String,Runnable> hooks) {
-			if (hooks != null)
-				hooks.forEach(this::cacheFlush);
+			worker.cacheFlushAll(hooks);
 			return this;
 		}
 
@@ -445,47 +323,17 @@ public class AdminMixin {
 		 * @return This object.
 		 */
 		public Builder threadNamePrefixExclude(String...values) {
-			threadNamePrefixExclude.clear();
-			if (values != null)
-				for (var v : values)
-					if (v != null && ! v.isEmpty())
-						threadNamePrefixExclude.add(v);
+			worker.threadNamePrefixExclude(values);
 			return this;
 		}
 
 		/**
-		 * Builds a {@link AdminMixin} instance.
+		 * Builds an {@link AdminMixin} instance.
 		 *
 		 * @return A configured instance.
 		 */
 		public AdminMixin build() {
-			return new AdminMixin(this);
-		}
-
-		/**
-		 * Returns the registered cache-flush hooks (builder-time inspection helper).
-		 *
-		 * @return The hooks, keyed by registration name. Never {@code null}.
-		 */
-		Map<String,Runnable> getCacheFlushHooksForTesting() {
-			return cacheFlushHooks;
-		}
-
-		/**
-		 * Returns the configured thread-name-prefix exclude list (builder-time inspection
-		 * helper).
-		 *
-		 * @return The exclude list. Never {@code null}.
-		 */
-		List<String> getThreadNamePrefixExcludeForTesting() {
-			return threadNamePrefixExclude;
+			return new AdminMixin(worker.build());
 		}
 	}
-
-	/**
-	 * Reserved Spring-style {@link Supplier} surface for callers that want lazy hook resolution.
-	 * Currently unused publicly; left as a sealed extension point.
-	 */
-	@SuppressWarnings("unused")
-	private interface CacheFlushSupplier extends Supplier<Runnable> {}
 }

@@ -27,11 +27,12 @@ import org.apache.juneau.rest.servlet.*;
  * <p>
  * Mounts as a <b>routed child</b> via {@link Rest#children() @Rest(children=FaviconResource.class)}
  * under a parent at the subtree {@code /favicon.ico} and serves the configured favicon bytes by
- * delegating to a shared {@link FaviconMixin} instance &mdash; so the forms cannot drift.
+ * delegating to a shared flavor-neutral {@link FaviconProvider} worker bean &mdash; so the forms cannot drift.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link FaviconMixin}
  * 	<li class='jc'>{@link FaviconServlet}
+ * 	<li class='jc'>{@link FaviconProvider}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
@@ -41,20 +42,21 @@ import org.apache.juneau.rest.servlet.*;
 @Rest(path="/favicon.ico")
 public class FaviconResource extends RestResource {
 
-	private final transient FaviconMixin delegate;
+	private final transient FaviconProvider worker;
 
-	/** No-arg constructor &mdash; uses a default {@link FaviconMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link FaviconProvider} worker. */
 	public FaviconResource() {
-		this(new FaviconMixin());
+		this(new FaviconProvider());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared favicon mixin this child delegates to. Must not be {@code null}.
+	 * @param worker The shared flavor-neutral favicon worker this child delegates to. Must not be
+	 * 	{@code null}.
 	 */
-	protected FaviconResource(FaviconMixin delegate) {
-		this.delegate = delegate;
+	protected FaviconResource(FaviconProvider worker) {
+		this.worker = worker;
 	}
 
 	/**
@@ -69,6 +71,6 @@ public class FaviconResource extends RestResource {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getFavicon() {
-		return delegate.getFavicon();
+		return worker.serve();
 	}
 }

@@ -26,8 +26,8 @@ import freemarker.template.*;
 /**
  * Unit tests for the {@link FreemarkerMixin.Builder} contract, the
  * {@link FreemarkerMixin#applyTemplateSuffix applyTemplateSuffix} helper, the
- * {@link FreemarkerMixin#toResourceRoot toResourceRoot} helper, and the
- * {@link FreemarkerMixin#stripBasePath stripBasePath} helper.
+ * {@link FreemarkerDispatcher#toResourceRoot toResourceRoot} helper, and the
+ * {@link FreemarkerDispatcher#stripBasePath stripBasePath} helper.
  *
  * <p>
  * Mirrors the {@code MustacheMixin_Builder_Test} /
@@ -126,7 +126,7 @@ class FreemarkerMixin_Builder_Test extends TestBase {
 		// resolveConfiguration itself. This test pins the contract that the constructor is
 		// idempotent (each call returns a non-null Configuration with the expected loader
 		// configured).
-		var r = FreemarkerMixin.create().basePath("/freemarker-templates/").build();
+		var r = FreemarkerDispatcher.create().basePath("/freemarker-templates/").build();
 		var c1 = r.buildDefaultConfiguration();
 		var c2 = r.buildDefaultConfiguration();
 		assertNotNull(c1);
@@ -168,32 +168,32 @@ class FreemarkerMixin_Builder_Test extends TestBase {
 	 * ---------------------------------------------------------------------------------------- */
 
 	@Test void c01_toResourceRootKeepsLeadingSlashTrimsTrailing() {
-		assertEquals("/templates", FreemarkerMixin.toResourceRoot("/templates/"));
+		assertEquals("/templates", FreemarkerDispatcher.toResourceRoot("/templates/"));
 	}
 
 	@Test void c02_toResourceRootAddsLeadingSlash() {
-		assertEquals("/templates", FreemarkerMixin.toResourceRoot("templates/"));
+		assertEquals("/templates", FreemarkerDispatcher.toResourceRoot("templates/"));
 	}
 
 	@Test void c03_toResourceRootHandlesNoTrailingSlash() {
-		assertEquals("/templates", FreemarkerMixin.toResourceRoot("/templates"));
+		assertEquals("/templates", FreemarkerDispatcher.toResourceRoot("/templates"));
 	}
 
 	@Test void c04_toResourceRootHandlesRootBase() {
-		assertEquals("/", FreemarkerMixin.toResourceRoot("/"));
+		assertEquals("/", FreemarkerDispatcher.toResourceRoot("/"));
 	}
 
 	@Test void c05_toResourceRootHandlesNullBase() {
-		assertEquals("/", FreemarkerMixin.toResourceRoot(null));
+		assertEquals("/", FreemarkerDispatcher.toResourceRoot(null));
 	}
 
 	@Test void c06_toResourceRootHandlesBlankBase() {
-		assertEquals("/", FreemarkerMixin.toResourceRoot(""));
-		assertEquals("/", FreemarkerMixin.toResourceRoot("   "));
+		assertEquals("/", FreemarkerDispatcher.toResourceRoot(""));
+		assertEquals("/", FreemarkerDispatcher.toResourceRoot("   "));
 	}
 
 	@Test void c07_toResourceRootHandlesMultiSegmentBase() {
-		assertEquals("/a/b/c", FreemarkerMixin.toResourceRoot("/a/b/c/"));
+		assertEquals("/a/b/c", FreemarkerDispatcher.toResourceRoot("/a/b/c/"));
 	}
 
 	/* ---------------------------------------------------------------------------------------- *
@@ -202,37 +202,37 @@ class FreemarkerMixin_Builder_Test extends TestBase {
 
 	@Test void d01_stripBasePathRemovesPrefix() {
 		assertEquals("hello",
-			FreemarkerMixin.stripBasePath("/templates/", "/templates/hello"));
+			FreemarkerDispatcher.stripBasePath("/templates/", "/templates/hello"));
 	}
 
 	@Test void d02_stripBasePathHandlesMissingTrailingSlash() {
 		assertEquals("hello",
-			FreemarkerMixin.stripBasePath("/templates", "/templates/hello"));
+			FreemarkerDispatcher.stripBasePath("/templates", "/templates/hello"));
 	}
 
 	@Test void d03_stripBasePathHandlesRootBase() {
 		assertEquals("hello",
-			FreemarkerMixin.stripBasePath("/", "/hello"));
+			FreemarkerDispatcher.stripBasePath("/", "/hello"));
 	}
 
 	@Test void d04_stripBasePathHandlesNullBase() {
 		// null base normalizes to "/" (matches the helper's contract).
 		assertEquals("hello",
-			FreemarkerMixin.stripBasePath(null, "/hello"));
+			FreemarkerDispatcher.stripBasePath(null, "/hello"));
 	}
 
 	@Test void d05_stripBasePathHandlesEmptyBase() {
 		assertEquals("hello",
-			FreemarkerMixin.stripBasePath("", "/hello"));
+			FreemarkerDispatcher.stripBasePath("", "/hello"));
 	}
 
 	@Test void d06_stripBasePathHandlesMultiSegment() {
 		assertEquals("admin/dashboard",
-			FreemarkerMixin.stripBasePath("/templates/", "/templates/admin/dashboard"));
+			FreemarkerDispatcher.stripBasePath("/templates/", "/templates/admin/dashboard"));
 	}
 
 	@Test void d07_stripBasePathThrowsWhenResolvedOutsideBase() {
 		assertThrows(IllegalArgumentException.class,
-			() -> FreemarkerMixin.stripBasePath("/templates/", "/other/hello"));
+			() -> FreemarkerDispatcher.stripBasePath("/templates/", "/other/hello"));
 	}
 }

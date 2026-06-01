@@ -29,7 +29,8 @@ import org.apache.juneau.rest.servlet.*;
  * <p>
  * Mounts as a <b>routed child</b> via {@link Rest#children() @Rest(children=VersionResource.class)}
  * under a parent at the subtree {@code /version} and serves the same deployment-introspection JSON map
- * as the mixin by delegating to a shared {@link VersionMixin} instance &mdash; so the forms cannot drift.
+ * as the mixin by delegating to a shared flavor-neutral {@link VersionProvider} worker bean &mdash; so the forms
+ * cannot drift.
  *
  * <p>
  * Whereas the {@link VersionMixin} mixin pins its op at {@code /version} for composition into a host at
@@ -39,6 +40,7 @@ import org.apache.juneau.rest.servlet.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link VersionMixin}
  * 	<li class='jc'>{@link VersionServlet}
+ * 	<li class='jc'>{@link VersionProvider}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
@@ -48,20 +50,21 @@ import org.apache.juneau.rest.servlet.*;
 @Rest(path="/version")
 public class VersionResource extends RestResource {
 
-	private final transient VersionMixin delegate;
+	private final transient VersionProvider worker;
 
-	/** No-arg constructor &mdash; uses a default {@link VersionMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link VersionProvider} worker. */
 	public VersionResource() {
-		this(new VersionMixin());
+		this(new VersionProvider());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared version mixin this child delegates to. Must not be {@code null}.
+	 * @param worker The shared flavor-neutral version worker this child delegates to. Must not be
+	 * 	{@code null}.
 	 */
-	protected VersionResource(VersionMixin delegate) {
-		this.delegate = delegate;
+	protected VersionResource(VersionProvider worker) {
+		this.worker = worker;
 	}
 
 	/**
@@ -77,6 +80,6 @@ public class VersionResource extends RestResource {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void getInfo(RestResponse res) throws IOException {
-		delegate.getInfo(res);
+		worker.serve(res);
 	}
 }

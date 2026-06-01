@@ -16,14 +16,7 @@
  */
 package org.apache.juneau.rest.convention;
 
-import java.io.*;
-import java.util.*;
-
-import org.apache.juneau.http.entity.*;
-import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -111,10 +104,7 @@ import org.apache.juneau.rest.annotation.*;
 public class FaviconMixin {
 
 	/** Default {@code Cache-Control} header value: {@code max-age=2592000, public} (30 days). */
-	public static final String DEFAULT_CACHE_CONTROL = "max-age=2592000, public";
-
-	/** Classpath location of the framework-shipped default favicon. */
-	private static final String DEFAULT_FAVICON_RESOURCE = "/juneau-favicon.ico";
+	public static final String DEFAULT_CACHE_CONTROL = FaviconProvider.DEFAULT_CACHE_CONTROL;
 
 	/**
 	 * Creates a new builder for configuring a {@link FaviconMixin}.
@@ -125,26 +115,25 @@ public class FaviconMixin {
 		return new Builder();
 	}
 
-	private final byte[] bytes;
-	private final String cacheControl;
+	private final FaviconProvider worker;
 
 	/**
 	 * No-arg constructor &mdash; used when a host registers the mixin without supplying a
-	 * builder-configured {@code @Bean FaviconMixin}. Loads the default Juneau-branded
-	 * favicon from the classpath.
+	 * builder-configured {@code @Bean FaviconMixin}. Delegates to a default {@link FaviconProvider} worker
+	 * (the framework-shipped Juneau-branded favicon).
 	 */
 	public FaviconMixin() {
-		this(create());
+		this(new FaviconProvider());
 	}
 
 	/**
-	 * Builder constructor.
+	 * Worker constructor.
 	 *
-	 * @param builder The builder.
+	 * @param worker The shared {@link FaviconProvider} worker this flavor delegates to. Must not be
+	 * 	<jk>null</jk>.
 	 */
-	protected FaviconMixin(Builder builder) {
-		bytes = builder.resolveBytes();
-		cacheControl = builder.cacheControl;
+	protected FaviconMixin(FaviconProvider worker) {
+		this.worker = worker;
 	}
 
 	/**
@@ -159,20 +148,20 @@ public class FaviconMixin {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getFavicon() {
-		var hdrs = new ArrayList<HttpHeader>();  // TODO - Use Utils.list()
-		hdrs.add(ContentType.of("image/x-icon"));
-		hdrs.add(CacheControl.of(cacheControl));
-		return HttpResourceBean.of(ByteArrayBody.of(bytes, "image/x-icon"), hdrs);
+		return worker.serve();
 	}
 
 	/**
 	 * Builder for {@link FaviconMixin} instances.
+	 *
+	 * <p>
+	 * Mirrors {@link FaviconProvider.Builder}'s configuration methods on the mixin's own surface and
+	 * forwards each call to an underlying {@link FaviconProvider.Builder}, which builds the shared worker
+	 * the mixin delegates to (TODO-145 &sect;2.3.1 / OQ-11).
 	 */
 	public static class Builder {
 
-		private byte[] bytes;
-		private String classpath;
-		private String cacheControl = DEFAULT_CACHE_CONTROL;
+		private final FaviconProvider.Builder worker = FaviconProvider.create();
 
 		/** Constructor &mdash; package access for {@link FaviconMixin#create()}. */
 		protected Builder() {}
@@ -189,8 +178,7 @@ public class FaviconMixin {
 		 * @return This object.
 		 */
 		public Builder bytes(byte[] value) {
-			bytes = value;
-			classpath = null;
+			worker.bytes(value);
 			return this;
 		}
 
@@ -198,17 +186,15 @@ public class FaviconMixin {
 		 * Sets the classpath resource path from which to load the favicon bytes.
 		 *
 		 * <p>
-		 * Resolved via {@link Class#getResourceAsStream(String) FaviconMixin.class.getResourceAsStream(...)}
-		 * at {@link #build()} time. A resolved-to-{@code null} stream falls back to the framework's
-		 * default favicon. Mutually exclusive with {@link #bytes(byte[])}.
+		 * A resolved-to-{@code null} stream falls back to the framework's default favicon.
+		 * Mutually exclusive with {@link #bytes(byte[])}.
 		 *
 		 * @param value The classpath resource path (e.g. {@code "/myapp/icon.ico"}).
 		 * 	Must not be <jk>null</jk> or blank.
 		 * @return This object.
 		 */
 		public Builder classpath(String value) {
-			classpath = value;
-			bytes = null;
+			worker.classpath(value);
 			return this;
 		}
 
@@ -222,7 +208,7 @@ public class FaviconMixin {
 		 * @return This object.
 		 */
 		public Builder cacheControl(String value) {
-			cacheControl = value;
+			worker.cacheControl(value);
 			return this;
 		}
 
@@ -232,32 +218,7 @@ public class FaviconMixin {
 		 * @return A configured instance.
 		 */
 		public FaviconMixin build() {
-			return new FaviconMixin(this);
-		}
-
-		byte[] resolveBytes() {
-			if (bytes != null)
-				return bytes;
-			if (classpath != null) {
-				var resolved = readClasspath(classpath);
-				if (resolved != null)
-					return resolved;
-			}
-			// Falls through to the framework's default-shipping ICO; the resource is shipped in
-			// the same jar as this class so it must be present at runtime.
-			return readClasspath(DEFAULT_FAVICON_RESOURCE);
-		}
-
-		private static byte[] readClasspath(String path) {
-			try (var in = FaviconMixin.class.getResourceAsStream(path)) {
-				if (in == null)
-					return null;
-				return in.readAllBytes();
-			} catch (IOException e) {
-				// readAllBytes on a classpath resource is effectively unreachable; the catch is
-				// here only to satisfy the checked exception contract.
-				throw new InternalServerError(e);
-			}
+			return new FaviconMixin(worker.build());
 		}
 	}
 }

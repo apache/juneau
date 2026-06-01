@@ -26,10 +26,10 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <p>
  * Mounts as a <b>sibling top-level servlet</b> at {@code /favicon.ico} and serves the configured favicon
- * bytes by delegating to a shared {@link FaviconMixin} instance &mdash; the same logic the mixin uses,
- * so the two forms cannot drift. Browsers fetch {@code /favicon.ico} from the site root, so a standalone
- * servlet at that fixed path is the natural deployment for sites that do not compose the mixin into an
- * existing host resource.
+ * bytes by delegating to a shared flavor-neutral {@link FaviconProvider} worker bean &mdash; the same worker the
+ * {@link FaviconMixin mixin} and {@link FaviconResource child} flavors use, so the forms cannot drift.
+ * Browsers fetch {@code /favicon.ico} from the site root, so a standalone servlet at that fixed path is
+ * the natural deployment for sites that do not compose the mixin into an existing host resource.
  *
  * <h5 class='figure'>Microservice registration:</h5>
  *
@@ -41,6 +41,7 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link FaviconMixin}
+ * 	<li class='jc'>{@link FaviconProvider}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
@@ -53,20 +54,21 @@ public class FaviconServlet extends RestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final transient FaviconMixin delegate;
+	private final transient FaviconProvider worker;
 
-	/** No-arg constructor &mdash; uses a default {@link FaviconMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link FaviconProvider} worker. */
 	public FaviconServlet() {
-		this(new FaviconMixin());
+		this(new FaviconProvider());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared favicon mixin this servlet delegates to. Must not be {@code null}.
+	 * @param worker The shared flavor-neutral favicon worker this servlet delegates to. Must not be
+	 * 	{@code null}.
 	 */
-	protected FaviconServlet(FaviconMixin delegate) {
-		this.delegate = delegate;
+	protected FaviconServlet(FaviconProvider worker) {
+		this.worker = worker;
 	}
 
 	/**
@@ -81,6 +83,6 @@ public class FaviconServlet extends RestServlet {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getFavicon() {
-		return delegate.getFavicon();
+		return worker.serve();
 	}
 }

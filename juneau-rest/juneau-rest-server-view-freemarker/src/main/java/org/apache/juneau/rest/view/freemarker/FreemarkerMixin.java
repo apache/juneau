@@ -16,20 +16,14 @@
  */
 package org.apache.juneau.rest.view.freemarker;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-
 import java.io.*;
-import java.util.*;
 
-import freemarker.core.*;
 import freemarker.template.*;
 
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.view.*;
 
 /**
  * Mixin that wires Apache FreeMarker view-rendering onto any Juneau REST resource.
@@ -164,25 +158,18 @@ import org.apache.juneau.rest.view.*;
 @Rest(
 	responseProcessors={FreemarkerViewRenderer.class}
 )
-public class FreemarkerMixin implements RawTemplateDispatcher {
+public class FreemarkerMixin {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
-	public static final String DEFAULT_BASE_PATH = "/";
+	public static final String DEFAULT_BASE_PATH = FreemarkerDispatcher.DEFAULT_BASE_PATH;
 
 	/** Default template suffix &mdash; empty (literal template names, no implicit suffix). */
-	public static final String DEFAULT_TEMPLATE_SUFFIX = "";
+	public static final String DEFAULT_TEMPLATE_SUFFIX = FreemarkerDispatcher.DEFAULT_TEMPLATE_SUFFIX;
 
 	/** Default template-cache flag &mdash; {@code true} (production-safe). */
-	public static final boolean DEFAULT_CACHE_TEMPLATES = true;
+	public static final boolean DEFAULT_CACHE_TEMPLATES = FreemarkerDispatcher.DEFAULT_CACHE_TEMPLATES;
 
-	private final String basePath;
-	private final String templateSuffix;
-	private final boolean cacheTemplates;
-
-	// Lazy bridge-default configuration. Built on first call to resolveConfiguration(...) when
-	// no Configuration bean is registered in the request's BeanStore. Volatile so the
-	// double-checked-locking idiom is safe under concurrent first-request load.
-	private volatile Configuration defaultConfiguration;
+	private final FreemarkerDispatcher worker;
 
 	/**
 	 * Creates a new builder.
@@ -213,51 +200,34 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 	 * @param builder The builder. Must not be {@code null}.
 	 */
 	protected FreemarkerMixin(Builder builder) {
-		basePath = builder.basePath;
-		templateSuffix = builder.templateSuffix;
-		cacheTemplates = builder.cacheTemplates;
+		worker = builder.worker.build();
 	}
 
 	/**
 	 * Returns the base path under which template resources are resolved.
 	 *
-	 * <p>
-	 * Used to derive the bridge-default configuration's classpath resource root, and as the
-	 * boundary for the path-traversal check in {@link #render render(...)}.
-	 *
 	 * @return The base path. Never {@code null}.
 	 */
 	public String getBasePath() {
-		return basePath;
+		return worker.getBasePath();
 	}
 
 	/**
 	 * Returns the configured template-name suffix.
 	 *
-	 * <p>
-	 * When non-blank, the bridge appends this suffix to any template name that does not already
-	 * end with it (idempotent). Defaults to {@link #DEFAULT_TEMPLATE_SUFFIX} (empty &mdash;
-	 * literal names).
-	 *
 	 * @return The template suffix. Never {@code null}.
 	 */
 	public String getTemplateSuffix() {
-		return templateSuffix;
+		return worker.getTemplateSuffix();
 	}
 
 	/**
 	 * Returns the template-cache flag.
 	 *
-	 * <p>
-	 * {@code true} means the bridge-default {@link Configuration} pins
-	 * {@code TemplateUpdateDelayMilliseconds} to {@code Long.MAX_VALUE} (cache forever &mdash;
-	 * production-safe); {@code false} means {@code 0} (re-check on every request &mdash;
-	 * suitable for dev hot-reload).
-	 *
 	 * @return The cache flag.
 	 */
 	public boolean isCacheTemplates() {
-		return cacheTemplates;
+		return worker.isCacheTemplates();
 	}
 
 	/**
@@ -267,100 +237,17 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 	 * @return The template name with the configured suffix appended (if applicable).
 	 */
 	public String applyTemplateSuffix(String name) {
-		if (templateSuffix == null || templateSuffix.isEmpty())
-			return name;
-		if (name.endsWith(templateSuffix))
-			return name;
-		return name + templateSuffix;
+		return worker.applyTemplateSuffix(name);
 	}
 
 	/**
-	 * Resolves the active {@link Configuration}.
-	 *
-	 * <p>
-	 * Lookup order:
-	 * <ol class='spaced-list'>
-	 * 	<li>{@code req.getContext().getBeanStore().getBean(Configuration.class)} &mdash; any
-	 * 		user-supplied bean (Spring {@code @Bean} including Spring Boot autoconfig, microservice
-	 * 		{@code BasicBeanStore.put}, etc.).
-	 * 	<li>Lazy bridge default &mdash; constructed on first call when no configuration bean is
-	 * 		registered. Anchored on a classpath resource root derived from {@link #basePath}, with
-	 * 		{@code IncompatibleImprovements} pinned to the bridge-tested minor version.
-	 * </ol>
+	 * Resolves the active {@link Configuration} via the shared {@link FreemarkerDispatcher} worker.
 	 *
 	 * @param req The current REST request.
 	 * @return The active FreeMarker configuration. Never {@code null}.
 	 */
 	public Configuration resolveConfiguration(RestRequest req) {
-		var bean = req.getContext().getBeanStore().getBean(Configuration.class);
-		if (bean.isPresent())
-			return bean.get();
-		var local = defaultConfiguration;
-		if (local == null) {
-			synchronized (this) {
-				local = defaultConfiguration;
-				if (local == null) {
-					local = buildDefaultConfiguration();
-					defaultConfiguration = local;
-				}
-			}
-		}
-		return local;
-	}
-
-	/**
-	 * Constructs the bridge-default {@link Configuration}.
-	 *
-	 * <p>
-	 * Anchored on a classpath resource root derived from {@link #basePath} (leading + trailing
-	 * slashes trimmed; a {@code "/"} base yields a root-of-classpath resolver). The default pins
-	 * {@code IncompatibleImprovements} to {@link Configuration#VERSION_2_3_34} so behavior is
-	 * stable across consumer upgrades of {@code org.freemarker:freemarker}; sets
-	 * {@code DefaultEncoding} to {@code UTF-8} and {@code OutputFormat} to
-	 * {@link HTMLOutputFormat#INSTANCE} so HTML escaping is the natural target; and applies
-	 * {@code TemplateUpdateDelayMilliseconds} per the configured
-	 * {@link #isCacheTemplates() cacheTemplates} flag.
-	 *
-	 * <p>
-	 * Subclasses may override to plug in custom loaders / encodings / output formats without
-	 * registering a separate {@code @Bean Configuration}.
-	 *
-	 * @return A new {@link Configuration} instance.
-	 */
-	protected Configuration buildDefaultConfiguration() {
-		var cfg = new Configuration(Configuration.VERSION_2_3_34);
-		cfg.setClassLoaderForTemplateLoading(FreemarkerMixin.class.getClassLoader(), toResourceRoot(basePath));
-		cfg.setDefaultEncoding("UTF-8");
-		cfg.setOutputFormat(HTMLOutputFormat.INSTANCE);
-		cfg.setTemplateUpdateDelayMilliseconds(cacheTemplates ? Long.MAX_VALUE : 0L);
-		return cfg;
-	}
-
-	/**
-	 * Translates a virtual base path (e.g. {@code "/templates/"}) into a FreeMarker
-	 * {@code ClassLoaderTemplateLoader} resource root (e.g. {@code "/templates"}).
-	 *
-	 * <p>
-	 * FreeMarker's
-	 * {@link Configuration#setClassLoaderForTemplateLoading(ClassLoader, String)
-	 * setClassLoaderForTemplateLoading(ClassLoader, String basePackagePath)} expects a
-	 * classpath-relative root with a leading {@code "/"}. We trim any trailing slash and ensure a
-	 * single leading slash; a {@code null} / blank / {@code "/"} base yields {@code "/"} (root of
-	 * classpath).
-	 *
-	 * @param base The virtual base path.
-	 * @return The FreeMarker classloader resource root (never {@code null}; always starts with
-	 * 	{@code "/"}).
-	 */
-	static String toResourceRoot(String base) {
-		if (base == null || base.isBlank())
-			return "/";
-		var s = base;
-		while (s.endsWith("/") && s.length() > 1)
-			s = s.substring(0, s.length() - 1);
-		if (! s.startsWith("/"))
-			s = "/" + s;
-		return s;
+		return worker.resolveConfiguration(req);
 	}
 
 	/**
@@ -369,21 +256,8 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 	 * <p>
 	 * The {@code @Path("/*") String path} captures the multi-segment trailing remainder (e.g. a
 	 * request for {@code /freemarker/about.ftlh} matches the mount with
-	 * {@code path = "about.ftlh"}; a request for {@code /freemarker/admin/dashboard.ftlh} matches
-	 * with {@code path = "admin/dashboard.ftlh"}). Behavior:
-	 *
-	 * <ol class='spaced-list'>
-	 * 	<li>Validate the resolved {@code <basePath><path>} via
-	 * 		{@link FileUtils#resolveVirtualPathSafely(String, String)} &mdash; reject any
-	 * 		{@code ..} traversal with HTTP 403.
-	 * 	<li>Apply the configured template suffix idempotently (e.g. with
-	 * 		{@code templateSuffix(".ftlh")}, a request for {@code /freemarker/about} resolves
-	 * 		template {@code "about.ftlh"} via {@link #applyTemplateSuffix}).
-	 * 	<li>Ask the active {@link Configuration} for the template and process it with an empty
-	 * 		data model directly onto the response writer; request attributes and parameters are
-	 * 		not auto-bound (callers who want attributes use {@link FreemarkerView} from a typed
-	 * 		handler instead).
-	 * </ol>
+	 * {@code path = "about.ftlh"}). Delegates to the shared {@link FreemarkerDispatcher} worker
+	 * (path-traversal hardening, suffix application, configuration resolution, and render).
 	 *
 	 * <p>
 	 * Missing template surfaces as the engine's own {@link TemplateNotFoundException}
@@ -399,7 +273,6 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 	 * @throws BasicHttpException On boundary violation (403), missing engine (500), or render
 	 * 	failure (500).
 	 */
-	@Override /* RawTemplateDispatcher */
 	@RestGet(
 		path="/${juneau.freemarker.path:freemarker}/*",
 		summary="FreeMarker view",
@@ -408,81 +281,20 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 	)
 	public void render(@Path("/*") String path, RestRequest req, RestResponse res)
 			throws IOException, BasicHttpException {
-
-		var template = (path == null) ? "" : path;
-
-		// resolveVirtualPathSafely validates that the resolved virtual path stays inside the
-		// configured basePath. The traversal check operates on basePath + template so a template
-		// name like "../../etc/passwd" or "a/b/../../../secret" is rejected before reaching the
-		// engine. We re-derive the configuration-relative template name from the safe result by
-		// stripping the (already-normalized) basePath prefix.
-		String safeTemplate;
-		try {
-			var resolved = FileUtils.resolveVirtualPathSafely(basePath, template);
-			safeTemplate = stripBasePath(basePath, resolved);
-		} catch (@SuppressWarnings("unused") IllegalArgumentException ex) {
-			throw new Forbidden("Path escapes configured base path.");
-		}
-
-		// Apply suffix idempotently so /freemarker/about resolves to about.ftlh (when
-		// templateSuffix is configured), while /freemarker/about.ftlh stays as-is.
-		safeTemplate = applyTemplateSuffix(safeTemplate);
-
-		try {
-			var cfg = resolveConfiguration(req);
-			if (! res.containsHeader("Content-Type"))
-				res.setHeader("Content-Type", FreemarkerViewRenderer.DEFAULT_CONTENT_TYPE);
-			var tpl = cfg.getTemplate(safeTemplate);
-			tpl.process(Map.of(), res.getWriter());
-			res.getWriter().flush();
-		} catch (LinkageError ex) {
-			throw new InternalServerError(ex, FreemarkerViewRenderer.NO_ENGINE_DIAGNOSTIC);
-		} catch (IOException ex) {
-			throw ex;
-		} catch (BasicHttpException ex) {
-			throw ex;
-		} catch (TemplateException ex) {
-			throw new InternalServerError(ex, "FreeMarker render failed for ''{0}''", safeTemplate);
-		} catch (RuntimeException ex) {
-			throw new InternalServerError(ex, "FreeMarker render failed for ''{0}''", safeTemplate);
-		}
-	}
-
-	/**
-	 * Strips the normalized {@code basePath} prefix from a {@code resolveVirtualPathSafely}
-	 * result so the leftover string is configuration-relative (the bridge's default configuration
-	 * re-adds the configured resource-root prefix via its template loader).
-	 *
-	 * <p>
-	 * Normalization mirrors {@code FileUtils.resolveVirtualPathSafely}: a {@code null} / empty
-	 * base normalizes to {@code "/"}; otherwise the base is guaranteed to start with {@code "/"}
-	 * and end with {@code "/"} once the helper has normalized it.
-	 *
-	 * @param base The configured base path (typically {@code "/templates/"}).
-	 * @param resolved The output of {@code resolveVirtualPathSafely} (always starts with the
-	 * 	normalized base).
-	 * @return The configuration-relative template name (e.g. {@code "hello.ftlh"} for base
-	 * 	{@code "/templates/"} and resolved {@code "/templates/hello.ftlh"}).
-	 */
-	static String stripBasePath(String base, String resolved) {
-		var bp = (base == null || base.isEmpty()) ? "/" : base;
-		if (! bp.endsWith("/"))
-			bp = bp + "/";
-		if (! bp.startsWith("/"))
-			bp = "/" + bp;
-		if (resolved.startsWith(bp))
-			return resolved.substring(bp.length());
-		throw illegalArg("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);
+		worker.render(path, req, res);
 	}
 
 	/**
 	 * Builder for {@link FreemarkerMixin}.
+	 *
+	 * <p>
+	 * Mirrors {@link FreemarkerDispatcher.Builder}'s configuration methods on its own surface and
+	 * forwards each call into a held {@link FreemarkerDispatcher.Builder} (§2.3.1 worker-bean
+	 * composition).
 	 */
 	public static class Builder {
 
-		private String basePath = DEFAULT_BASE_PATH;
-		private String templateSuffix = DEFAULT_TEMPLATE_SUFFIX;
-		private boolean cacheTemplates = DEFAULT_CACHE_TEMPLATES;
+		private final FreemarkerDispatcher.Builder worker = FreemarkerDispatcher.create();
 
 		/** Constructor &mdash; package access for {@link FreemarkerMixin#create()}. */
 		protected Builder() {}
@@ -500,7 +312,7 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder basePath(String value) {
-			basePath = (value == null || value.isBlank()) ? DEFAULT_BASE_PATH : value;
+			worker.basePath(value);
 			return this;
 		}
 
@@ -518,7 +330,7 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder templateSuffix(String value) {
-			templateSuffix = (value == null) ? DEFAULT_TEMPLATE_SUFFIX : value;
+			worker.templateSuffix(value);
 			return this;
 		}
 
@@ -538,7 +350,7 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder cacheTemplates(boolean value) {
-			cacheTemplates = value;
+			worker.cacheTemplates(value);
 			return this;
 		}
 
@@ -548,7 +360,7 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 		 * @return The base path. Never {@code null}.
 		 */
 		public String getBasePath() {
-			return basePath;
+			return worker.getBasePath();
 		}
 
 		/**
@@ -557,7 +369,7 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 		 * @return The template suffix. Never {@code null}.
 		 */
 		public String getTemplateSuffix() {
-			return templateSuffix;
+			return worker.getTemplateSuffix();
 		}
 
 		/**
@@ -566,7 +378,7 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 		 * @return The cache flag.
 		 */
 		public boolean isCacheTemplates() {
-			return cacheTemplates;
+			return worker.isCacheTemplates();
 		}
 
 		/**
@@ -575,8 +387,6 @@ public class FreemarkerMixin implements RawTemplateDispatcher {
 		 * @return A new {@link FreemarkerMixin} instance.
 		 */
 		public FreemarkerMixin build() {
-			if (basePath == null)
-				throw illegalArg("basePath must not be null");
 			return new FreemarkerMixin(this);
 		}
 	}

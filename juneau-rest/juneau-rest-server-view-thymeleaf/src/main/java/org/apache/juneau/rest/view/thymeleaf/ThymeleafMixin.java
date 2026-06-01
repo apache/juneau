@@ -16,19 +16,14 @@
  */
 package org.apache.juneau.rest.view.thymeleaf;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-
 import java.io.*;
 
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.view.*;
 import org.thymeleaf.*;
 import org.thymeleaf.templatemode.*;
-import org.thymeleaf.templateresolver.*;
 
 /**
  * Mixin that wires Thymeleaf view-rendering onto any Juneau REST resource.
@@ -142,25 +137,18 @@ import org.thymeleaf.templateresolver.*;
 @Rest(
 	responseProcessors={ThymeleafViewRenderer.class}
 )
-public class ThymeleafMixin implements RawTemplateDispatcher {
+public class ThymeleafMixin {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
-	public static final String DEFAULT_BASE_PATH = "/";
+	public static final String DEFAULT_BASE_PATH = ThymeleafDispatcher.DEFAULT_BASE_PATH;
 
 	/** Default template-cache flag &mdash; production-safe; opt out per-builder for dev. */
-	public static final boolean DEFAULT_CACHE_TEMPLATES = true;
+	public static final boolean DEFAULT_CACHE_TEMPLATES = ThymeleafDispatcher.DEFAULT_CACHE_TEMPLATES;
 
 	/** Default template mode for the bridge's fallback engine. */
-	public static final TemplateMode DEFAULT_TEMPLATE_MODE = TemplateMode.HTML;
+	public static final TemplateMode DEFAULT_TEMPLATE_MODE = ThymeleafDispatcher.DEFAULT_TEMPLATE_MODE;
 
-	private final String basePath;
-	private final boolean cacheTemplates;
-	private final TemplateMode templateMode;
-
-	// Lazy bridge-default engine. Built on first call to resolveTemplateEngine(...) when no
-	// TemplateEngine bean is registered in the request's BeanStore. Volatile so the
-	// double-checked-locking idiom is safe under concurrent first-request load.
-	private volatile TemplateEngine defaultEngine;
+	private final ThymeleafDispatcher worker;
 
 	/**
 	 * Creates a new builder.
@@ -190,23 +178,16 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 	 * @param builder The builder. Must not be {@code null}.
 	 */
 	protected ThymeleafMixin(Builder builder) {
-		basePath = builder.basePath;
-		cacheTemplates = builder.cacheTemplates;
-		templateMode = builder.templateMode;
+		worker = builder.worker.build();
 	}
 
 	/**
 	 * Returns the base path under which template resources are resolved.
 	 *
-	 * <p>
-	 * Used as the {@link ClassLoaderTemplateResolver#setPrefix(String) prefix} of the bridge's
-	 * default engine, and as the boundary for the path-traversal check in
-	 * {@link #render render(...)}.
-	 *
 	 * @return The base path. Never {@code null}.
 	 */
 	public String getBasePath() {
-		return basePath;
+		return worker.getBasePath();
 	}
 
 	/**
@@ -215,7 +196,7 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 	 * @return The cache flag. Defaults to {@link #DEFAULT_CACHE_TEMPLATES}.
 	 */
 	public boolean isCacheTemplates() {
-		return cacheTemplates;
+		return worker.isCacheTemplates();
 	}
 
 	/**
@@ -224,64 +205,17 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 	 * @return The template mode. Defaults to {@link #DEFAULT_TEMPLATE_MODE}.
 	 */
 	public TemplateMode getTemplateMode() {
-		return templateMode;
+		return worker.getTemplateMode();
 	}
 
 	/**
-	 * Resolves the active {@link TemplateEngine}.
-	 *
-	 * <p>
-	 * Lookup order:
-	 * <ol class='spaced-list'>
-	 * 	<li>{@code req.getContext().getBeanStore().getBean(TemplateEngine.class)} &mdash; covers
-	 * 		Spring Boot autoconfig (`SpringTemplateEngine` is-a `TemplateEngine`) and any
-	 * 		user-supplied bean.
-	 * 	<li>Lazy bridge default &mdash; constructed on first call when no engine bean is
-	 * 		registered. Carries a single {@link ClassLoaderTemplateResolver} keyed off
-	 * 		({@link #basePath}, {@code .html}, {@link #templateMode}, {@link #cacheTemplates}).
-	 * </ol>
+	 * Resolves the active {@link TemplateEngine} via the shared {@link ThymeleafDispatcher} worker.
 	 *
 	 * @param req The current REST request.
 	 * @return The active template engine. Never {@code null}.
 	 */
 	public TemplateEngine resolveTemplateEngine(RestRequest req) {
-		var bean = req.getContext().getBeanStore().getBean(TemplateEngine.class);
-		if (bean.isPresent())
-			return bean.get();
-		var local = defaultEngine;
-		if (local == null) {
-			synchronized (this) {
-				local = defaultEngine;
-				if (local == null) {
-					local = buildDefaultEngine();
-					defaultEngine = local;
-				}
-			}
-		}
-		return local;
-	}
-
-	/**
-	 * Constructs the bridge-default {@link TemplateEngine}.
-	 *
-	 * <p>
-	 * Single {@link ClassLoaderTemplateResolver} with {@code prefix=basePath},
-	 * {@code suffix=".html"}, {@code templateMode=templateMode}, and
-	 * {@code cacheable=cacheTemplates}. Subclasses may override to plug in custom resolvers /
-	 * dialects without registering a separate {@code @Bean TemplateEngine}.
-	 *
-	 * @return A new {@link TemplateEngine} instance.
-	 */
-	protected TemplateEngine buildDefaultEngine() {
-		var resolver = new ClassLoaderTemplateResolver();
-		resolver.setPrefix(basePath);
-		resolver.setSuffix(".html");
-		resolver.setTemplateMode(templateMode);
-		resolver.setCacheable(cacheTemplates);
-		resolver.setCharacterEncoding("UTF-8");
-		var engine = new TemplateEngine();
-		engine.setTemplateResolver(resolver);
-		return engine;
+		return worker.resolveTemplateEngine(req);
 	}
 
 	/**
@@ -289,20 +223,9 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 	 *
 	 * <p>
 	 * The {@code @Path("/*") String path} captures the multi-segment trailing remainder (e.g. a
-	 * request for {@code /thymeleaf/about} matches the mount with {@code path = "about"}; a
-	 * request for {@code /thymeleaf/admin/dashboard.html} matches with
-	 * {@code path = "admin/dashboard.html"}). Behavior:
-	 *
-	 * <ol class='spaced-list'>
-	 * 	<li>Strip any trailing {@code .html} extension (the engine resolver re-adds it).
-	 * 	<li>Validate the resolved {@code <basePath><path>} via
-	 * 		{@link FileUtils#resolveVirtualPathSafely(String, String)} &mdash; reject any
-	 * 		{@code ..} traversal with HTTP 403.
-	 * 	<li>Ask the active {@link TemplateEngine} to render the template directly onto the
-	 * 		response writer with the request's locale as the {@link org.thymeleaf.context.Context
-	 * 		Context}'s locale; request attributes and parameters are not auto-bound (callers who
-	 * 		want attributes use {@link ThymeleafView} from a typed handler instead).
-	 * </ol>
+	 * request for {@code /thymeleaf/about} matches the mount with {@code path = "about"}).
+	 * Delegates to the shared {@link ThymeleafDispatcher} worker ({@code .html}-suffix handling,
+	 * path-traversal hardening, engine resolution, and render).
 	 *
 	 * <p>
 	 * Missing template surfaces as the engine's own {@code TemplateInputException} (HTTP 500 from
@@ -317,7 +240,6 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 	 * @throws BasicHttpException On boundary violation (403), missing engine (500), or render
 	 * 	failure (500).
 	 */
-	@Override /* RawTemplateDispatcher */
 	@RestGet(
 		path="/${juneau.thymeleaf.path:thymeleaf}/*",
 		summary="Thymeleaf view",
@@ -326,78 +248,20 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 	)
 	public void render(@Path("/*") String path, RestRequest req, RestResponse res)
 			throws IOException, BasicHttpException {
-
-		// The engine resolver re-adds the .html suffix; strip if present so callers can request
-		// /thymeleaf/hello, /thymeleaf/hello.html, or /thymeleaf/admin/dashboard.html uniformly.
-		var template = (path == null) ? "" : path;
-		if (template.endsWith(".html"))
-			template = template.substring(0, template.length() - ".html".length());
-
-		// resolveVirtualPathSafely validates that the resolved virtual path stays inside the
-		// configured basePath. The traversal check operates on basePath + template so a template
-		// name like "../../etc/passwd" or "a/b/../../../secret" is rejected before reaching the
-		// engine. We re-derive the engine-relative template name from the safe result by
-		// stripping the (already-normalized) basePath prefix.
-		String safeTemplate;
-		try {
-			var resolved = FileUtils.resolveVirtualPathSafely(basePath, template);
-			safeTemplate = stripBasePath(basePath, resolved);
-		} catch (@SuppressWarnings("unused") IllegalArgumentException ex) {
-			throw new Forbidden("Path escapes configured base path.");
-		}
-
-		try {
-			var engine = resolveTemplateEngine(req);
-			var ctx = new org.thymeleaf.context.Context(req.getLocale());
-			if (! res.containsHeader("Content-Type"))
-				res.setHeader("Content-Type", ThymeleafViewRenderer.DEFAULT_CONTENT_TYPE);
-			engine.process(safeTemplate, ctx, res.getWriter());
-		} catch (LinkageError ex) {
-			throw new InternalServerError(ex, ThymeleafViewRenderer.NO_ENGINE_DIAGNOSTIC);
-		} catch (IOException ex) {
-			throw ex;
-		} catch (BasicHttpException ex) {
-			throw ex;
-		} catch (Exception ex) {
-			throw new InternalServerError(ex, "Thymeleaf render failed for ''{0}''", safeTemplate);
-		}
-	}
-
-	/**
-	 * Strips the normalized {@code basePath} prefix from a {@code resolveVirtualPathSafely}
-	 * result so the leftover string is engine-relative (the resolver re-adds the configured
-	 * prefix + suffix).
-	 *
-	 * <p>
-	 * Normalization mirrors {@code FileUtils.resolveVirtualPathSafely}: a {@code null} / empty
-	 * base normalizes to {@code "/"}; otherwise the base is guaranteed to start with {@code "/"}
-	 * and end with {@code "/"} once the helper has normalized it.
-	 *
-	 * @param base The configured base path (typically {@code "/templates/"}).
-	 * @param resolved The output of {@code resolveVirtualPathSafely} (always starts with the
-	 * 	normalized base).
-	 * @return The engine-relative template name (e.g. {@code "hello"} for base
-	 * 	{@code "/templates/"} and resolved {@code "/templates/hello"}).
-	 */
-	static String stripBasePath(String base, String resolved) {
-		var bp = (base == null || base.isEmpty()) ? "/" : base;
-		if (! bp.endsWith("/"))
-			bp = bp + "/";
-		if (! bp.startsWith("/"))
-			bp = "/" + bp;
-		if (resolved.startsWith(bp))
-			return resolved.substring(bp.length());
-		throw illegalArg("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);
+		worker.render(path, req, res);
 	}
 
 	/**
 	 * Builder for {@link ThymeleafMixin}.
+	 *
+	 * <p>
+	 * Mirrors {@link ThymeleafDispatcher.Builder}'s configuration methods on its own surface and
+	 * forwards each call into a held {@link ThymeleafDispatcher.Builder} (§2.3.1 worker-bean
+	 * composition).
 	 */
 	public static class Builder {
 
-		private String basePath = DEFAULT_BASE_PATH;
-		private boolean cacheTemplates = DEFAULT_CACHE_TEMPLATES;
-		private TemplateMode templateMode = DEFAULT_TEMPLATE_MODE;
+		private final ThymeleafDispatcher.Builder worker = ThymeleafDispatcher.create();
 
 		/** Constructor &mdash; package access for {@link ThymeleafMixin#create()}. */
 		protected Builder() {}
@@ -414,7 +278,7 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder basePath(String value) {
-			basePath = (value == null || value.isBlank()) ? DEFAULT_BASE_PATH : value;
+			worker.basePath(value);
 			return this;
 		}
 
@@ -431,7 +295,7 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder cacheTemplates(boolean value) {
-			cacheTemplates = value;
+			worker.cacheTemplates(value);
 			return this;
 		}
 
@@ -448,7 +312,7 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder templateMode(TemplateMode value) {
-			templateMode = (value == null) ? DEFAULT_TEMPLATE_MODE : value;
+			worker.templateMode(value);
 			return this;
 		}
 
@@ -458,7 +322,7 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 		 * @return The base path. Never {@code null}.
 		 */
 		public String getBasePath() {
-			return basePath;
+			return worker.getBasePath();
 		}
 
 		/**
@@ -467,7 +331,7 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 		 * @return The cache flag.
 		 */
 		public boolean isCacheTemplates() {
-			return cacheTemplates;
+			return worker.isCacheTemplates();
 		}
 
 		/**
@@ -476,7 +340,7 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 		 * @return The template mode. Never {@code null}.
 		 */
 		public TemplateMode getTemplateMode() {
-			return templateMode;
+			return worker.getTemplateMode();
 		}
 
 		/**
@@ -485,8 +349,6 @@ public class ThymeleafMixin implements RawTemplateDispatcher {
 		 * @return A new {@link ThymeleafMixin} instance.
 		 */
 		public ThymeleafMixin build() {
-			if (basePath == null)
-				throw illegalArg("basePath must not be null");
 			return new ThymeleafMixin(this);
 		}
 	}

@@ -25,8 +25,9 @@ import org.apache.juneau.rest.view.*;
  * <p>
  * Mounts as a <b>routed child</b> via {@link Rest#children() @Rest(children=MustacheResource.class)}
  * under a parent at the subtree {@code /mustache} and renders raw Mustache templates by delegating to a
- * shared {@link MustacheMixin} instance &mdash; the same {@link RawTemplateDispatcher} implementation the
- * mixin and {@link MustacheServlet servlet} flavors use, so the three forms cannot drift.
+ * shared {@link MustacheDispatcher} worker &mdash; the same flavor-neutral {@link RawTemplateDispatcher}
+ * implementation the {@link MustacheMixin mixin} and {@link MustacheServlet servlet} flavors hold, so the
+ * three forms cannot drift.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link MustacheMixin}
@@ -44,25 +45,25 @@ import org.apache.juneau.rest.view.*;
 )
 public class MustacheResource extends ViewResource {
 
-	private final transient MustacheMixin delegate;
+	private final transient MustacheDispatcher worker;
 
-	/** No-arg constructor &mdash; uses a default {@link MustacheMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link MustacheDispatcher} worker. */
 	public MustacheResource() {
-		this(MustacheMixin.create().build());
+		this(MustacheDispatcher.create().build());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared Mustache renderer/mixin this child delegates raw dispatch to. Must
-	 * 	not be {@code null}.
+	 * @param worker The shared flavor-neutral Mustache dispatcher this child delegates raw dispatch
+	 * 	to. Must not be {@code null}.
 	 */
-	protected MustacheResource(MustacheMixin delegate) {
-		this.delegate = delegate;
+	protected MustacheResource(MustacheDispatcher worker) {
+		this.worker = worker;
 	}
 
 	@Override /* ViewResource */
 	protected RawTemplateDispatcher dispatcher() {
-		return delegate;
+		return worker;
 	}
 }

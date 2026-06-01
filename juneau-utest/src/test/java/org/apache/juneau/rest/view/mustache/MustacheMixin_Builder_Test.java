@@ -26,8 +26,8 @@ import com.github.mustachejava.*;
 /**
  * Unit tests for the {@link MustacheMixin.Builder} contract, the
  * {@link MustacheMixin#applyTemplateSuffix applyTemplateSuffix} helper,
- * the {@link MustacheMixin#toResourceRoot toResourceRoot} helper, and the
- * {@link MustacheMixin#stripBasePath stripBasePath} helper.
+ * the {@link MustacheDispatcher#toResourceRoot toResourceRoot} helper, and the
+ * {@link MustacheDispatcher#stripBasePath stripBasePath} helper.
  *
  * <p>
  * Mirrors the {@code JspMixin_Builder_Test} / {@code ThymeleafMixin_Builder_Test}
@@ -111,7 +111,7 @@ class MustacheMixin_Builder_Test extends TestBase {
 		// buildDefaultFactory returns a fresh instance each call; the caching is in
 		// resolveMustacheFactory itself. This test pins the contract that the constructor is
 		// idempotent (each call returns a non-null factory of the bridge default type).
-		var r = MustacheMixin.create().basePath("/mustache-templates/").build();
+		var r = MustacheDispatcher.create().basePath("/mustache-templates/").build();
 		var f1 = r.buildDefaultFactory();
 		var f2 = r.buildDefaultFactory();
 		assertNotNull(f1);
@@ -152,32 +152,32 @@ class MustacheMixin_Builder_Test extends TestBase {
 	 * ---------------------------------------------------------------------------------------- */
 
 	@Test void c01_toResourceRootTrimsLeadingAndTrailingSlashes() {
-		assertEquals("templates", MustacheMixin.toResourceRoot("/templates/"));
+		assertEquals("templates", MustacheDispatcher.toResourceRoot("/templates/"));
 	}
 
 	@Test void c02_toResourceRootHandlesNoLeadingSlash() {
-		assertEquals("templates", MustacheMixin.toResourceRoot("templates/"));
+		assertEquals("templates", MustacheDispatcher.toResourceRoot("templates/"));
 	}
 
 	@Test void c03_toResourceRootHandlesNoTrailingSlash() {
-		assertEquals("templates", MustacheMixin.toResourceRoot("/templates"));
+		assertEquals("templates", MustacheDispatcher.toResourceRoot("/templates"));
 	}
 
 	@Test void c04_toResourceRootHandlesRootBase() {
-		assertEquals("", MustacheMixin.toResourceRoot("/"));
+		assertEquals("", MustacheDispatcher.toResourceRoot("/"));
 	}
 
 	@Test void c05_toResourceRootHandlesNullBase() {
-		assertEquals("", MustacheMixin.toResourceRoot(null));
+		assertEquals("", MustacheDispatcher.toResourceRoot(null));
 	}
 
 	@Test void c06_toResourceRootHandlesBlankBase() {
-		assertEquals("", MustacheMixin.toResourceRoot(""));
-		assertEquals("", MustacheMixin.toResourceRoot("   "));
+		assertEquals("", MustacheDispatcher.toResourceRoot(""));
+		assertEquals("", MustacheDispatcher.toResourceRoot("   "));
 	}
 
 	@Test void c07_toResourceRootHandlesMultiSegmentBase() {
-		assertEquals("a/b/c", MustacheMixin.toResourceRoot("/a/b/c/"));
+		assertEquals("a/b/c", MustacheDispatcher.toResourceRoot("/a/b/c/"));
 	}
 
 	/* ---------------------------------------------------------------------------------------- *
@@ -186,37 +186,37 @@ class MustacheMixin_Builder_Test extends TestBase {
 
 	@Test void d01_stripBasePathRemovesPrefix() {
 		assertEquals("hello",
-			MustacheMixin.stripBasePath("/templates/", "/templates/hello"));
+			MustacheDispatcher.stripBasePath("/templates/", "/templates/hello"));
 	}
 
 	@Test void d02_stripBasePathHandlesMissingTrailingSlash() {
 		assertEquals("hello",
-			MustacheMixin.stripBasePath("/templates", "/templates/hello"));
+			MustacheDispatcher.stripBasePath("/templates", "/templates/hello"));
 	}
 
 	@Test void d03_stripBasePathHandlesRootBase() {
 		assertEquals("hello",
-			MustacheMixin.stripBasePath("/", "/hello"));
+			MustacheDispatcher.stripBasePath("/", "/hello"));
 	}
 
 	@Test void d04_stripBasePathHandlesNullBase() {
 		// null base normalizes to "/" (matches the helper's contract).
 		assertEquals("hello",
-			MustacheMixin.stripBasePath(null, "/hello"));
+			MustacheDispatcher.stripBasePath(null, "/hello"));
 	}
 
 	@Test void d05_stripBasePathHandlesEmptyBase() {
 		assertEquals("hello",
-			MustacheMixin.stripBasePath("", "/hello"));
+			MustacheDispatcher.stripBasePath("", "/hello"));
 	}
 
 	@Test void d06_stripBasePathHandlesMultiSegment() {
 		assertEquals("admin/dashboard",
-			MustacheMixin.stripBasePath("/templates/", "/templates/admin/dashboard"));
+			MustacheDispatcher.stripBasePath("/templates/", "/templates/admin/dashboard"));
 	}
 
 	@Test void d07_stripBasePathThrowsWhenResolvedOutsideBase() {
 		assertThrows(IllegalArgumentException.class,
-			() -> MustacheMixin.stripBasePath("/templates/", "/other/hello"));
+			() -> MustacheDispatcher.stripBasePath("/templates/", "/other/hello"));
 	}
 }

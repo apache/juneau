@@ -31,11 +31,11 @@ import org.apache.juneau.rest.*;
  * {@code .html} template directly by its trailing request path.
  *
  * <p>
- * The per-engine mixin resources ({@code JspMixin}, {@code FreemarkerMixin},
- * {@code MustacheMixin}, {@code ThymeleafMixin}) implement this interface so the
- * raw dispatch they already perform can be reused verbatim by their {@code Basic*Servlet} standalone
- * companions through {@link ViewServlet}. Sharing a single implementation means the standalone
- * and mixin forms cannot drift in their file-serving behavior.
+ * The per-engine flavor-neutral worker beans ({@code JspDispatcher}, {@code FreemarkerDispatcher},
+ * {@code MustacheDispatcher}, {@code ThymeleafDispatcher}) implement this interface; the three flavor
+ * classes ({@code <Engine>Mixin} / {@code <Engine>Servlet} / {@code <Engine>Resource}) each hold one
+ * of these workers and delegate to it (§2.3.1). Sharing a single implementation at the worker-bean
+ * level means the mixin, servlet, and child forms cannot drift in their file-serving behavior.
  *
  * <p>
  * The single {@link #render(String, RestRequest, RestResponse) render(...)} method receives the

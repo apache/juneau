@@ -35,6 +35,14 @@ import org.apache.juneau.rest.servlet.*;
  * Indicators are resolved from the host's bean store, so a host registers its own
  * {@link HealthIndicator} beans (e.g. via Spring {@code @Bean} or a Juneau {@code BeanStore}).
  *
+ * <p>
+ * Extends {@link BasicRestResource} &mdash; the child-flavor mirror of {@link BasicRestServlet} that the
+ * {@link HealthServlet} servlet flavor extends &mdash; so the {@link HealthAggregator.HealthResponse}
+ * bean returned by the probe ops is serialized out of the box via the {@code BasicUniversalConfig}
+ * serializer set (JSON/XML/HTML/&hellip;). A bare {@code RestResource} child would carry no serializers
+ * and force every consumer to re-declare one; deriving from {@code BasicRestResource} keeps the child
+ * flavor at parity with its servlet twin.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link HealthServlet}
  * 	<li class='jc'>{@link HealthMixin}
@@ -45,7 +53,7 @@ import org.apache.juneau.rest.servlet.*;
  * @since 9.5.0
  */
 @Rest(path="/health")
-public class HealthResource extends RestResource {
+public class HealthResource extends BasicRestResource {
 
 	private final transient HealthAggregator aggregator = new HealthAggregator();
 

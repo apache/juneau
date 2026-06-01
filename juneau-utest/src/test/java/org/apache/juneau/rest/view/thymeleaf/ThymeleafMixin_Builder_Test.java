@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 import org.thymeleaf.templatemode.*;
 
 /**
- * Unit tests for the {@link ThymeleafMixin.Builder} contract + {@code stripBasePath}
+ * Unit tests for the {@link ThymeleafMixin.Builder} contract + {@code ThymeleafDispatcher.stripBasePath}
  * helper.
  *
  * <p>
@@ -121,7 +121,7 @@ class ThymeleafMixin_Builder_Test extends TestBase {
 		// resolveTemplateEngine builds the default engine on first call; second call must
 		// return the cached instance. (Calls go through a request-scoped lookup in the renderer;
 		// the helper here exercises only the lazy-construction branch.)
-		var r = ThymeleafMixin.create().build();
+		var r = ThymeleafDispatcher.create().build();
 		var e1 = r.buildDefaultEngine();
 		var e2 = r.buildDefaultEngine();
 		// buildDefaultEngine returns a fresh instance each call; the caching is in
@@ -139,37 +139,37 @@ class ThymeleafMixin_Builder_Test extends TestBase {
 
 	@Test void b01_stripBasePathRemovesPrefix() {
 		assertEquals("hello",
-			ThymeleafMixin.stripBasePath("/templates/", "/templates/hello"));
+			ThymeleafDispatcher.stripBasePath("/templates/", "/templates/hello"));
 	}
 
 	@Test void b02_stripBasePathHandlesMissingTrailingSlash() {
 		assertEquals("hello",
-			ThymeleafMixin.stripBasePath("/templates", "/templates/hello"));
+			ThymeleafDispatcher.stripBasePath("/templates", "/templates/hello"));
 	}
 
 	@Test void b03_stripBasePathHandlesRootBase() {
 		assertEquals("hello",
-			ThymeleafMixin.stripBasePath("/", "/hello"));
+			ThymeleafDispatcher.stripBasePath("/", "/hello"));
 	}
 
 	@Test void b04_stripBasePathHandlesNullBase() {
 		// null base normalizes to "/" (matches the helper's contract).
 		assertEquals("hello",
-			ThymeleafMixin.stripBasePath(null, "/hello"));
+			ThymeleafDispatcher.stripBasePath(null, "/hello"));
 	}
 
 	@Test void b05_stripBasePathHandlesEmptyBase() {
 		assertEquals("hello",
-			ThymeleafMixin.stripBasePath("", "/hello"));
+			ThymeleafDispatcher.stripBasePath("", "/hello"));
 	}
 
 	@Test void b06_stripBasePathHandlesMultiSegment() {
 		assertEquals("admin/dashboard",
-			ThymeleafMixin.stripBasePath("/templates/", "/templates/admin/dashboard"));
+			ThymeleafDispatcher.stripBasePath("/templates/", "/templates/admin/dashboard"));
 	}
 
 	@Test void b07_stripBasePathThrowsWhenResolvedOutsideBase() {
 		assertThrows(IllegalArgumentException.class,
-			() -> ThymeleafMixin.stripBasePath("/templates/", "/other/hello"));
+			() -> ThymeleafDispatcher.stripBasePath("/templates/", "/other/hello"));
 	}
 }

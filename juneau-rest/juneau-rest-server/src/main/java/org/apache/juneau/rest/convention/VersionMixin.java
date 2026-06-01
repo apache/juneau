@@ -16,16 +16,11 @@
  */
 package org.apache.juneau.rest.convention;
 
-import static org.apache.juneau.commons.utils.Utils.*;
-
 import java.io.*;
-import java.net.*;
 import java.util.*;
-import java.util.function.*;
 import java.util.jar.*;
 
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -143,8 +138,8 @@ import org.apache.juneau.rest.annotation.*;
 @Rest
 public class VersionMixin {
 
-	/** Sentinel value returned for entries that the mixin couldn't resolve. */
-	public static final String UNKNOWN = "(unknown)";
+	/** Sentinel value returned for entries that the worker couldn't resolve. */
+	public static final String UNKNOWN = VersionProvider.UNKNOWN;
 
 	/**
 	 * Creates a new builder, with {@link Value @Value}-annotated fields populated through
@@ -165,48 +160,32 @@ public class VersionMixin {
 	 * @return A new builder.
 	 */
 	public static Builder create(BeanStore beanStore) {
-		return BeanInstantiator.of(Builder.class, beanStore).run();
+		return new Builder(VersionProvider.create(beanStore));
 	}
 
-	private final Map<String,String> info;
+	private final VersionProvider worker;
 
 	/**
-	 * No-arg constructor &mdash; reads {@code MANIFEST.MF}, {@code git.properties}, and the JVM
-	 * version from the framework classloader. Equivalent to
-	 * {@code create().build()}; the builder applies the same defaults whether instantiated
-	 * directly or via the {@link org.apache.juneau.commons.inject.BeanInstantiator BeanInstantiator}
-	 * builder-detection path.
+	 * No-arg constructor &mdash; delegates to a default {@link VersionProvider} worker (reads
+	 * {@code MANIFEST.MF}, {@code git.properties}, and the JVM version from the framework
+	 * classloader).
 	 */
 	public VersionMixin() {
-		this(create());
+		this(new VersionProvider());
 	}
 
 	/**
-	 * Builder constructor.
+	 * Worker constructor.
 	 *
-	 * <p>
-	 * Applies the default lookup chain ({@link Builder#fromManifest()} +
-	 * {@link Builder#fromGitProperties()} + {@link Builder#fromJavaVersion()}) when no other
-	 * builder method has been called &mdash; ensuring that a freshly-created builder
-	 * (whether instantiated directly via {@code new VersionMixin(create())} or via the
-	 * {@link org.apache.juneau.commons.inject.BeanInstantiator BeanInstantiator}'s
-	 * builder-detection path) always produces a non-empty payload.
-	 *
-	 * @param builder The builder.
+	 * @param worker The shared {@link VersionProvider} worker this flavor delegates to. Must not be
+	 * 	<jk>null</jk>.
 	 */
-	protected VersionMixin(Builder builder) {
-		if (! builder.explicit)
-			builder.fromManifest().fromGitProperties().fromJavaVersion();
-		info = Collections.unmodifiableMap(new LinkedHashMap<>(builder.entries));
+	protected VersionMixin(VersionProvider worker) {
+		this.worker = worker;
 	}
 
 	/**
 	 * [GET /version] &mdash; emit the assembled metadata as a JSON map.
-	 *
-	 * <p>
-	 * Format-pinned to {@code application/json} per the v1 resolved decision &mdash; bypasses
-	 * the host's content negotiation so the endpoint serves JSON even on a vanilla
-	 * {@code RestServlet} host that hasn't wired up JSON serializers explicitly.
 	 *
 	 * @param res The current REST response.
 	 * @throws IOException If an I/O error occurs while writing the response.
@@ -218,9 +197,7 @@ public class VersionMixin {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void getInfo(RestResponse res) throws IOException {
-		try (var w = res.getDirectWriter("application/json")) {
-			JsonSerializer.DEFAULT_READABLE.serialize(info, w);
-		}
+		worker.serve(res);
 	}
 
 	/**
@@ -229,33 +206,25 @@ public class VersionMixin {
 	 * @return The info map.
 	 */
 	public Map<String,String> getInfoMap() {
-		return info;
+		return worker.getInfoMap();
 	}
 
 	/**
 	 * Builder for {@link VersionMixin} instances.
+	 *
+	 * <p>
+	 * Mirrors {@link VersionProvider.Builder}'s configuration methods on the mixin's own surface and
+	 * forwards each call to an underlying {@link VersionProvider.Builder}, which builds the shared worker
+	 * the mixin delegates to (TODO-145 &sect;2.3.1 / OQ-11).
 	 */
 	public static class Builder {
 
-		private final Map<String,String> entries = new LinkedHashMap<>();
-		private boolean explicit;
-
-		/**
-		 * Env-driven default for the {@code javaVersion} entry; resolved from the {@code java.version}
-		 * system property (defaulting to the literal {@code (unknown)}, matching
-		 * {@link VersionMixin#UNKNOWN}). Populated by {@link BeanInstantiator} via
-		 * {@link Value @Value} field injection.
-		 *
-		 * <p>
-		 * The default is inlined as a string literal rather than referencing {@code UNKNOWN} via
-		 * concatenation, per the project-wide rule that every {@code @Value} expression is a
-		 * fully self-contained string literal.
-		 */
-		@Value("${java.version:(unknown)}")
-		String javaVersionDefault;
+		private final VersionProvider.Builder worker;
 
 		/** Constructor &mdash; protected access for {@link VersionMixin#create()}. */
-		protected Builder() {}
+		protected Builder(VersionProvider.Builder worker) {
+			this.worker = worker;
+		}
 
 		/**
 		 * Sets a single entry, overwriting any prior value for that key.
@@ -266,8 +235,7 @@ public class VersionMixin {
 		 * @return This object.
 		 */
 		public Builder entry(String key, String value) {
-			entries.put(key, value == null ? UNKNOWN : value);
-			explicit = true;
+			worker.entry(key, value);
 			return this;
 		}
 
@@ -279,48 +247,30 @@ public class VersionMixin {
 		 * @return This object.
 		 */
 		public Builder entries(Map<String,String> values) {
-			if (values != null)
-				values.forEach(this::entry);
-			explicit = true;
+			worker.entries(values);
 			return this;
 		}
 
 		/**
 		 * Reads {@code Implementation-Title}, {@code Implementation-Version},
 		 * {@code Implementation-Vendor}, and {@code Build-Jdk} from
-		 * {@code /META-INF/MANIFEST.MF} on the {@link VersionMixin} classloader.
-		 *
-		 * <p>
-		 * Missing keys are recorded as {@link VersionMixin#UNKNOWN}. A missing
-		 * {@code MANIFEST.MF} resource is silently skipped.
+		 * {@code /META-INF/MANIFEST.MF} on the framework classloader.
 		 *
 		 * @return This object.
 		 */
 		public Builder fromManifest() {
-			return fromManifest(VersionMixin.class.getClassLoader());
+			worker.fromManifest();
+			return this;
 		}
 
 		/**
 		 * Reads manifest attributes from {@code /META-INF/MANIFEST.MF} on the supplied classloader.
 		 *
-		 * <p>
-		 * Useful under Spring Boot fat jars, where the importer's app manifest is reachable from
-		 * its own classloader but not the framework's. Missing keys are recorded as
-		 * {@link VersionMixin#UNKNOWN}; a missing {@code MANIFEST.MF} resource is silently
-		 * skipped.
-		 *
 		 * @param classLoader The classloader to walk.
 		 * @return This object.
 		 */
 		public Builder fromManifest(ClassLoader classLoader) {
-			var attrs = readManifestAttributes(classLoader);
-			ifNotEmpty(attrs, "Implementation-Title", v -> entry("name", v));
-			ifNotEmpty(attrs, "Implementation-Version", v -> entry("version", v));
-			ifNotEmpty(attrs, "Implementation-Vendor", v -> entry("vendor", v));
-			ifNotEmpty(attrs, "Build-Jdk", v -> entry("javaVersion", v));
-			entries.putIfAbsent("name", UNKNOWN);
-			entries.putIfAbsent("version", UNKNOWN);
-			explicit = true;
+			worker.fromManifest(classLoader);
 			return this;
 		}
 
@@ -328,40 +278,23 @@ public class VersionMixin {
 		 * Reads a {@link Manifest} that the importer registered as a bean (e.g.
 		 * {@code @Bean Manifest appManifest()}).
 		 *
-		 * <p>
-		 * Convenience for callers that already loaded the manifest via Spring Boot's
-		 * {@code BuildProperties} autoconfiguration or by hand.
-		 *
 		 * @param manifest The manifest to read. Must not be <jk>null</jk>.
 		 * @return This object.
 		 */
 		public Builder fromManifest(Manifest manifest) {
-			var main = manifest.getMainAttributes();
-			var attrs = new HashMap<String,String>();
-			for (var k : main.keySet())
-				attrs.put(k.toString(), String.valueOf(main.get(k)));
-			ifNotEmpty(attrs, "Implementation-Title", v -> entry("name", v));
-			ifNotEmpty(attrs, "Implementation-Version", v -> entry("version", v));
-			ifNotEmpty(attrs, "Implementation-Vendor", v -> entry("vendor", v));
-			ifNotEmpty(attrs, "Build-Jdk", v -> entry("javaVersion", v));
-			explicit = true;
+			worker.fromManifest(manifest);
 			return this;
 		}
 
 		/**
 		 * Reads {@code git.commit.id}, {@code git.branch}, and {@code git.build.time} from
-		 * {@code /git.properties} on the {@link VersionMixin} classloader.
-		 *
-		 * <p>
-		 * Output of the
-		 * <a href="https://github.com/git-commit-id/git-commit-id-maven-plugin">git-commit-id-maven-plugin</a>;
-		 * other values written to the same file are also surfaced (each {@code git.foo.bar} key is
-		 * remapped to {@code gitFooBar}).
+		 * {@code /git.properties} on the framework classloader.
 		 *
 		 * @return This object.
 		 */
 		public Builder fromGitProperties() {
-			return fromGitProperties(VersionMixin.class.getClassLoader());
+			worker.fromGitProperties();
+			return this;
 		}
 
 		/**
@@ -371,14 +304,7 @@ public class VersionMixin {
 		 * @return This object.
 		 */
 		public Builder fromGitProperties(ClassLoader classLoader) {
-			var props = readProperties(classLoader, "git.properties");
-			if (props == null)
-				return this;
-			ifNotEmptyValue(props.getProperty("git.commit.id"), v -> entry("gitCommit", v));
-			ifNotEmptyValue(props.getProperty("git.commit.id.abbrev"), v -> entries.putIfAbsent("gitCommit", v));
-			ifNotEmptyValue(props.getProperty("git.branch"), v -> entry("gitBranch", v));
-			ifNotEmptyValue(props.getProperty("git.build.time"), v -> entry("buildTime", v));
-			explicit = true;
+			worker.fromGitProperties(classLoader);
 			return this;
 		}
 
@@ -390,81 +316,17 @@ public class VersionMixin {
 		 * @return This object.
 		 */
 		public Builder fromJavaVersion() {
-			entries.putIfAbsent("javaVersion", opt(javaVersionDefault).orElse(UNKNOWN));
-			explicit = true;
+			worker.fromJavaVersion();
 			return this;
 		}
 
 		/**
 		 * Builds a {@link VersionMixin} instance.
 		 *
-		 * <p>
-		 * The constructor applies the default lookup chain ({@link #fromManifest()} +
-		 * {@link #fromGitProperties()} + {@link #fromJavaVersion()}) when no builder method has
-		 * been called &mdash; so a freshly-created builder always produces a non-empty payload
-		 * regardless of which entry point is used.
-		 *
 		 * @return A configured instance.
 		 */
 		public VersionMixin build() {
-			return new VersionMixin(this);
-		}
-
-		private static Map<String,String> readManifestAttributes(ClassLoader cl) {
-			Manifest fallback = null;
-			try {
-				var resources = cl.getResources("META-INF/MANIFEST.MF");
-				while (resources.hasMoreElements()) {
-					var u = resources.nextElement();
-					try (var in = u.openStream()) {
-						var m = new Manifest(in);
-						// Prefer an Implementation-Title-bearing manifest; otherwise hold the
-						// most recent one as a fallback. ClassLoader.getResources walks the
-						// parent chain FIRST, so caller-supplied URLs come last in the
-						// enumeration — last-wins ensures the explicit classloader argument
-						// trumps any unrelated MANIFEST.MF leaked from a parent (e.g. JDK
-						// module manifests in the boot layer, Surefire's manifest-jar, etc.).
-						if (m.getMainAttributes().getValue("Implementation-Title") != null)
-							return toMap(m);
-						fallback = m;
-					}
-				}
-			} catch (IOException e) {
-				// Best-effort path: a malformed classpath manifest yields an empty map rather
-				// than bubbling up an exception during startup.
-				return Map.of();
-			}
-			return fallback == null ? Map.of() : toMap(fallback);
-		}
-
-		private static Map<String,String> toMap(Manifest m) {
-			var attrs = new HashMap<String,String>();
-			for (var k : m.getMainAttributes().keySet())
-				attrs.put(k.toString(), String.valueOf(m.getMainAttributes().get(k)));
-			return attrs;
-		}
-
-		private static Properties readProperties(ClassLoader cl, String path) {
-			try (var in = cl.getResourceAsStream(path)) {
-				if (in == null)
-					return null;
-				var p = new Properties();
-				p.load(in);
-				return p;
-			} catch (IOException e) {
-				return null;
-			}
-		}
-
-		private static void ifNotEmpty(Map<String,String> attrs, String key, Consumer<String> sink) {
-			var v = attrs.get(key);
-			if (v != null && !v.isEmpty())
-				sink.accept(v);
-		}
-
-		private static void ifNotEmptyValue(String v, Consumer<String> sink) {
-			if (v != null && !v.isEmpty())
-				sink.accept(v);
+			return new VersionMixin(worker.build());
 		}
 	}
 }

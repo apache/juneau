@@ -32,7 +32,7 @@ import org.apache.juneau.rest.servlet.*;
  * Mounts as a <b>routed child</b> via {@link Rest#children() @Rest(children=AdminResource.class)} under
  * a parent at the subtree {@code /admin} and serves the same operational endpoints ({@code /threads},
  * {@code /heap}, {@code /cache/flush}, {@code /ratelimit}) as the mixin by delegating to a shared
- * {@link AdminMixin} instance &mdash; so the forms cannot drift.
+ * flavor-neutral {@link AdminProvider} worker bean &mdash; so the forms cannot drift.
  *
  * <p>
  * Whereas the {@link AdminMixin} mixin pins its ops at {@code /admin/<endpoint>} for composition into a
@@ -50,6 +50,7 @@ import org.apache.juneau.rest.servlet.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link AdminMixin}
  * 	<li class='jc'>{@link AdminServlet}
+ * 	<li class='jc'>{@link AdminProvider}
  * 	<li class='jc'>{@link DenyAllGuard}
  * 	<li class='jc'>{@link RestGuardList}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
@@ -64,20 +65,21 @@ import org.apache.juneau.rest.servlet.*;
 )
 public class AdminResource extends RestResource {
 
-	private final transient AdminMixin delegate;
+	private final transient AdminProvider worker;
 
-	/** No-arg constructor &mdash; uses a default {@link AdminMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link AdminProvider} worker. */
 	public AdminResource() {
-		this(new AdminMixin());
+		this(new AdminProvider());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared admin mixin this child delegates to. Must not be {@code null}.
+	 * @param worker The shared flavor-neutral admin worker this child delegates to. Must not be
+	 * 	{@code null}.
 	 */
-	protected AdminResource(AdminMixin delegate) {
-		this.delegate = delegate;
+	protected AdminResource(AdminProvider worker) {
+		this.worker = worker;
 	}
 
 	/**
@@ -93,7 +95,7 @@ public class AdminResource extends RestResource {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void getThreads(RestResponse res) throws IOException {
-		delegate.getThreads(res);
+		worker.serveThreads(res);
 	}
 
 	/**
@@ -109,7 +111,7 @@ public class AdminResource extends RestResource {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void getHeap(RestResponse res) throws IOException {
-		delegate.getHeap(res);
+		worker.serveHeap(res);
 	}
 
 	/**
@@ -126,7 +128,7 @@ public class AdminResource extends RestResource {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void postCacheFlush(RestRequest req, RestResponse res) throws IOException {
-		delegate.postCacheFlush(req, res);
+		worker.serveCacheFlush(req, res);
 	}
 
 	/**
@@ -145,6 +147,6 @@ public class AdminResource extends RestResource {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void getRateLimit(RestRequest req, RestResponse res) throws IOException {
-		delegate.getRateLimit(req, res);
+		worker.serveRateLimit(req, res);
 	}
 }

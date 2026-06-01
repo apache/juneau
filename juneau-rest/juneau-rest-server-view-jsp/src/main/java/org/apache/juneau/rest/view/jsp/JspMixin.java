@@ -16,15 +16,12 @@
  */
 package org.apache.juneau.rest.view.jsp;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-
 import java.io.*;
 
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.view.*;
 
 /**
  * Mixin that wires JSP view-rendering onto any Juneau REST resource.
@@ -141,12 +138,12 @@ import org.apache.juneau.rest.view.*;
 @Rest(
 	responseProcessors={JspViewRenderer.class}
 )
-public class JspMixin implements RawTemplateDispatcher {
+public class JspMixin {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
-	public static final String DEFAULT_BASE_PATH = "/";
+	public static final String DEFAULT_BASE_PATH = JspDispatcher.DEFAULT_BASE_PATH;
 
-	private final String basePath;
+	private final JspDispatcher worker;
 
 	/**
 	 * Creates a new builder.
@@ -174,7 +171,7 @@ public class JspMixin implements RawTemplateDispatcher {
 	 * @param builder The builder. Must not be {@code null}.
 	 */
 	protected JspMixin(Builder builder) {
-		basePath = builder.basePath;
+		worker = builder.worker.build();
 	}
 
 	/**
@@ -188,7 +185,7 @@ public class JspMixin implements RawTemplateDispatcher {
 	 * @return The base path. Never {@code null}.
 	 */
 	public String getBasePath() {
-		return basePath;
+		return worker.getBasePath();
 	}
 
 	/**
@@ -197,9 +194,9 @@ public class JspMixin implements RawTemplateDispatcher {
 	 * <p>
 	 * The {@code @Path("/*") String path} captures the multi-segment trailing remainder (e.g. a
 	 * request for {@code /jsp/admin/dashboard.jsp} matches the mount with
-	 * {@code path = "admin/dashboard.jsp"}). The handler then dispatches via
-	 * {@code ServletContext.getRequestDispatcher(basePath + path).forward(...)} so the
-	 * container's JSP engine renders the template.
+	 * {@code path = "admin/dashboard.jsp"}). Delegates to the shared {@link JspDispatcher} worker,
+	 * which dispatches via {@code ServletContext.getRequestDispatcher(basePath + path).forward(...)}
+	 * so the container's JSP engine renders the template.
 	 *
 	 * <p>
 	 * Missing JSP resources surface as a 404 from the underlying container; missing JSP engine
@@ -212,7 +209,6 @@ public class JspMixin implements RawTemplateDispatcher {
 	 * @throws IOException If the underlying servlet writer fails.
 	 * @throws NotFound If the JSP resource cannot be resolved.
 	 */
-	@Override /* RawTemplateDispatcher */
 	@RestGet(
 		path="/#{pathToken(${juneau.jsp.path:jsp})}/*",
 		summary="JSP view",
@@ -220,38 +216,19 @@ public class JspMixin implements RawTemplateDispatcher {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void render(@Path("/*") String path, RestRequest req, RestResponse res) throws IOException, NotFound {
-		// joinPath delegates to FileUtils.resolveVirtualPathSafely, which throws IAE on any
-		// resolved target that escapes basePath (../, %2e%2e treated as literal, absolute-path
-		// injection, etc.). Map IAE → 403 (Forbidden); attackers can't distinguish from the
-		// container-layer rejection of malformed paths.
-		String target;
-		try {
-			target = JspViewRenderer.joinPath(basePath, path);
-		} catch (@SuppressWarnings("unused") IllegalArgumentException ex) {
-			throw new Forbidden("Path escapes configured base path.");
-		}
-		try {
-			var ctx = req.getServletContext();
-			var rd = ctx.getRequestDispatcher(target);
-			if (rd == null)
-				throw new InternalServerError("Could not resolve RequestDispatcher for ''{0}''. {1}",
-					target, JspViewRenderer.NO_ENGINE_DIAGNOSTIC);
-			rd.forward(req.getHttpServletRequest(), res.getHttpServletResponse());
-		} catch (NoClassDefFoundError ex) {
-			throw new InternalServerError(ex, JspViewRenderer.NO_ENGINE_DIAGNOSTIC);
-		} catch (IOException | NotFound ex) {
-			throw ex;
-		} catch (Exception ex) {
-			throw new InternalServerError(ex, "JSP render failed for ''{0}''", target);
-		}
+		worker.render(path, req, res);
 	}
 
 	/**
 	 * Builder for {@link JspMixin}.
+	 *
+	 * <p>
+	 * Mirrors {@link JspDispatcher.Builder}'s configuration methods on its own surface and forwards
+	 * each call into a held {@link JspDispatcher.Builder} (§2.3.1 worker-bean composition).
 	 */
 	public static class Builder {
 
-		private String basePath = DEFAULT_BASE_PATH;
+		private final JspDispatcher.Builder worker = JspDispatcher.create();
 
 		/** Constructor &mdash; package access for {@link JspMixin#create()}. */
 		protected Builder() {}
@@ -269,7 +246,7 @@ public class JspMixin implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder basePath(String value) {
-			basePath = (value == null || value.isBlank()) ? DEFAULT_BASE_PATH : value;
+			worker.basePath(value);
 			return this;
 		}
 
@@ -279,7 +256,7 @@ public class JspMixin implements RawTemplateDispatcher {
 		 * @return The base path. Never {@code null}.
 		 */
 		public String getBasePath() {
-			return basePath;
+			return worker.getBasePath();
 		}
 
 		/**
@@ -288,8 +265,6 @@ public class JspMixin implements RawTemplateDispatcher {
 		 * @return A new {@link JspMixin} instance.
 		 */
 		public JspMixin build() {
-			if (basePath == null)
-				throw illegalArg("basePath must not be null");
 			return new JspMixin(this);
 		}
 	}

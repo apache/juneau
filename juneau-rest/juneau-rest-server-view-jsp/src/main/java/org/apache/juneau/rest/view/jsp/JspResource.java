@@ -25,8 +25,9 @@ import org.apache.juneau.rest.view.*;
  * <p>
  * Mounts as a <b>routed child</b> via {@link Rest#children() @Rest(children=JspResource.class)} under a
  * parent at the subtree {@code /jsp} and serves raw {@code .jsp} resources by delegating to a shared
- * {@link JspMixin} instance &mdash; the same {@link RawTemplateDispatcher} implementation the mixin and
- * {@link JspServlet servlet} flavors use, so the three forms cannot drift.
+ * {@link JspDispatcher} worker &mdash; the same flavor-neutral {@link RawTemplateDispatcher}
+ * implementation the {@link JspMixin mixin} and {@link JspServlet servlet} flavors hold, so the three
+ * forms cannot drift.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link JspMixin}
@@ -44,25 +45,25 @@ import org.apache.juneau.rest.view.*;
 )
 public class JspResource extends ViewResource {
 
-	private final transient JspMixin delegate;
+	private final transient JspDispatcher worker;
 
-	/** No-arg constructor &mdash; uses a default {@link JspMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link JspDispatcher} worker. */
 	public JspResource() {
-		this(JspMixin.create().build());
+		this(JspDispatcher.create().build());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared JSP renderer/mixin this child delegates raw dispatch to. Must not be
-	 * 	{@code null}.
+	 * @param worker The shared flavor-neutral JSP dispatcher this child delegates raw dispatch to.
+	 * 	Must not be {@code null}.
 	 */
-	protected JspResource(JspMixin delegate) {
-		this.delegate = delegate;
+	protected JspResource(JspDispatcher worker) {
+		this.worker = worker;
 	}
 
 	@Override /* ViewResource */
 	protected RawTemplateDispatcher dispatcher() {
-		return delegate;
+		return worker;
 	}
 }

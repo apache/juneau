@@ -35,8 +35,8 @@ import org.apache.juneau.rest.servlet.*;
  * 	<li>Declares its own sibling top-level mount via {@link Rest#paths() @Rest(paths)} (e.g.
  * 		{@code "/jsp/*"}), so the servlet is registered as a sibling of the host application's other
  * 		servlets ({@code /rest/*}, {@code /jsp/*}, ...) rather than composed under a host root.
- * 	<li>Supplies the per-engine {@link RawTemplateDispatcher} (the matching {@code Basic*Resource}
- * 		mixin instance) via {@link #dispatcher()}.
+ * 	<li>Supplies the per-engine {@link RawTemplateDispatcher} (the matching flavor-neutral
+ * 		{@code <Engine>Dispatcher} worker) via {@link #dispatcher()}.
  * </ol>
  *
  * <p>
@@ -72,7 +72,7 @@ public abstract class ViewServlet extends RestServlet {
 	 * dispatch to.
 	 *
 	 * <p>
-	 * Typically the matching {@code Basic*Resource} mixin instance (which implements
+	 * Typically the matching flavor-neutral {@code <Engine>Dispatcher} worker (which implements
 	 * {@link RawTemplateDispatcher}).  Never {@code null}.
 	 *
 	 * @return The raw-template dispatcher. Never {@code null}.

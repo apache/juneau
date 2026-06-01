@@ -29,9 +29,10 @@ import org.apache.juneau.rest.servlet.*;
  * Standalone servlet companion of the {@link StaticFilesMixin} mixin.
  *
  * <p>
- * Mounts as a <b>sibling top-level servlet</b> at {@code /static/*} and serves static files from the
- * active {@link StaticFiles} bean by delegating to a shared {@link StaticFilesMixin}
- * instance &mdash; the same logic the mixin uses, so the two forms cannot drift.
+ * Mounts as a <b>sibling top-level servlet</b> at {@code /static/*} and serves static files by
+ * delegating to the flavor-neutral {@link StaticFiles} worker bean resolved from the request context
+ * ({@link RestContext#getStaticFiles()}) &mdash; the same worker the {@link StaticFilesMixin mixin}
+ * and {@link StaticFilesResource child} flavors use, so the forms cannot drift.
  *
  * <p>
  * Whereas the {@link StaticFilesMixin} mixin pins its op at {@code /static/*} for composition
@@ -50,6 +51,7 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link StaticFilesMixin}
+ * 	<li class='jc'>{@link StaticFilesResource}
  * 	<li class='jc'>{@link StaticFiles}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
@@ -64,27 +66,10 @@ public class StaticFilesServlet extends RestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final transient StaticFilesMixin delegate;
-
-	/** No-arg constructor &mdash; uses a default {@link StaticFilesMixin} delegate. */
-	public StaticFilesServlet() {
-		this(new StaticFilesMixin());
-	}
-
 	/**
-	 * Delegate constructor.
+	 * [GET /*] &mdash; serve a static file from the active {@link StaticFiles} worker bean.
 	 *
-	 * @param delegate The shared static-files mixin this servlet delegates to. Must not be
-	 * 	{@code null}.
-	 */
-	protected StaticFilesServlet(StaticFilesMixin delegate) {
-		this.delegate = delegate;
-	}
-
-	/**
-	 * [GET /*] &mdash; serve a static file from the active {@link StaticFiles} bean.
-	 *
-	 * @param req The current REST request.
+	 * @param req The current REST request &mdash; supplies {@link RestContext#getStaticFiles()}.
 	 * @param path The trailing remainder after the mount prefix.
 	 * @param locale The request locale (used for localized resource lookups).
 	 * @return The matching {@link HttpResource} (with content type + cache headers).
@@ -97,13 +82,13 @@ public class StaticFilesServlet extends RestServlet {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource getStaticFile(RestRequest req, @Path("/*") String path, Locale locale) {
-		return delegate.getStaticFile(req, path, locale);
+		return req.getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
 	}
 
 	/**
 	 * [HEAD /*] &mdash; return GET headers for a static file without the body.
 	 *
-	 * @param req The current REST request.
+	 * @param req The current REST request &mdash; supplies {@link RestContext#getStaticFiles()}.
 	 * @param path The trailing remainder after the mount prefix.
 	 * @param locale The request locale (used for localized resource lookups).
 	 * @return The matching {@link HttpResource} (with headers; body suppressed by the processor).
@@ -117,6 +102,6 @@ public class StaticFilesServlet extends RestServlet {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public HttpResource headStaticFile(RestRequest req, @Path("/*") String path, Locale locale) {
-		return delegate.headStaticFile(req, path, locale);
+		return getStaticFile(req, path, locale);
 	}
 }

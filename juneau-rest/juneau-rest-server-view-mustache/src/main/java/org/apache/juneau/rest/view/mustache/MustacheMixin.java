@@ -16,19 +16,14 @@
  */
 package org.apache.juneau.rest.view.mustache;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-
 import java.io.*;
-import java.util.*;
 
 import com.github.mustachejava.*;
 
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.view.*;
 
 /**
  * Mixin that wires Mustache view-rendering onto any Juneau REST resource.
@@ -155,21 +150,15 @@ import org.apache.juneau.rest.view.*;
 @Rest(
 	responseProcessors={MustacheViewRenderer.class}
 )
-public class MustacheMixin implements RawTemplateDispatcher {
+public class MustacheMixin {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */
-	public static final String DEFAULT_BASE_PATH = "/";
+	public static final String DEFAULT_BASE_PATH = MustacheDispatcher.DEFAULT_BASE_PATH;
 
 	/** Default template suffix &mdash; empty (literal template names, no implicit suffix). */
-	public static final String DEFAULT_TEMPLATE_SUFFIX = "";
+	public static final String DEFAULT_TEMPLATE_SUFFIX = MustacheDispatcher.DEFAULT_TEMPLATE_SUFFIX;
 
-	private final String basePath;
-	private final String templateSuffix;
-
-	// Lazy bridge-default factory. Built on first call to resolveMustacheFactory(...) when no
-	// MustacheFactory bean is registered in the request's BeanStore. Volatile so the
-	// double-checked-locking idiom is safe under concurrent first-request load.
-	private volatile MustacheFactory defaultFactory;
+	private final MustacheDispatcher worker;
 
 	/**
 	 * Creates a new builder.
@@ -199,35 +188,25 @@ public class MustacheMixin implements RawTemplateDispatcher {
 	 * @param builder The builder. Must not be {@code null}.
 	 */
 	protected MustacheMixin(Builder builder) {
-		basePath = builder.basePath;
-		templateSuffix = builder.templateSuffix;
+		worker = builder.worker.build();
 	}
 
 	/**
 	 * Returns the base path under which template resources are resolved.
 	 *
-	 * <p>
-	 * Used to derive the bridge-default factory's resource root, and as the boundary for the
-	 * path-traversal check in {@link #render render(...)}.
-	 *
 	 * @return The base path. Never {@code null}.
 	 */
 	public String getBasePath() {
-		return basePath;
+		return worker.getBasePath();
 	}
 
 	/**
 	 * Returns the configured template-name suffix.
 	 *
-	 * <p>
-	 * When non-blank, the bridge appends this suffix to any template name that does not already
-	 * end with it (idempotent). Defaults to {@link #DEFAULT_TEMPLATE_SUFFIX} (empty &mdash;
-	 * literal names).
-	 *
 	 * @return The template suffix. Never {@code null}.
 	 */
 	public String getTemplateSuffix() {
-		return templateSuffix;
+		return worker.getTemplateSuffix();
 	}
 
 	/**
@@ -237,85 +216,17 @@ public class MustacheMixin implements RawTemplateDispatcher {
 	 * @return The template name with the configured suffix appended (if applicable).
 	 */
 	public String applyTemplateSuffix(String name) {
-		if (templateSuffix == null || templateSuffix.isEmpty())
-			return name;
-		if (name.endsWith(templateSuffix))
-			return name;
-		return name + templateSuffix;
+		return worker.applyTemplateSuffix(name);
 	}
 
 	/**
-	 * Resolves the active {@link MustacheFactory}.
-	 *
-	 * <p>
-	 * Lookup order:
-	 * <ol class='spaced-list'>
-	 * 	<li>{@code req.getContext().getBeanStore().getBean(MustacheFactory.class)} &mdash; any
-	 * 		user-supplied bean (Spring {@code @Bean}, microservice {@code BasicBeanStore.put},
-	 * 		etc.).
-	 * 	<li>Lazy bridge default &mdash; constructed on first call when no factory bean is
-	 * 		registered. Carries a {@link DefaultMustacheFactory} anchored on a resource root
-	 * 		derived from {@link #basePath} (leading + trailing slashes trimmed).
-	 * </ol>
+	 * Resolves the active {@link MustacheFactory} via the shared {@link MustacheDispatcher} worker.
 	 *
 	 * @param req The current REST request.
 	 * @return The active Mustache factory. Never {@code null}.
 	 */
 	public MustacheFactory resolveMustacheFactory(RestRequest req) {
-		var bean = req.getContext().getBeanStore().getBean(MustacheFactory.class);
-		if (bean.isPresent())
-			return bean.get();
-		var local = defaultFactory;
-		if (local == null) {
-			synchronized (this) {
-				local = defaultFactory;
-				if (local == null) {
-					local = buildDefaultFactory();
-					defaultFactory = local;
-				}
-			}
-		}
-		return local;
-	}
-
-	/**
-	 * Constructs the bridge-default {@link MustacheFactory}.
-	 *
-	 * <p>
-	 * {@link DefaultMustacheFactory} anchored on a classpath resource root derived from
-	 * {@link #basePath} (leading + trailing slashes trimmed). A {@code "/"} base yields a
-	 * no-prefix factory. Subclasses may override to plug in custom resolvers / object handlers
-	 * without registering a separate {@code @Bean MustacheFactory}.
-	 *
-	 * @return A new {@link MustacheFactory} instance.
-	 */
-	protected MustacheFactory buildDefaultFactory() {
-		var root = toResourceRoot(basePath);
-		return root.isEmpty() ? new DefaultMustacheFactory() : new DefaultMustacheFactory(root);
-	}
-
-	/**
-	 * Translates a virtual base path (e.g. {@code "/templates/"}) into a mustache.java resource
-	 * root (e.g. {@code "templates"}).
-	 *
-	 * <p>
-	 * mustache.java's {@link DefaultMustacheFactory#DefaultMustacheFactory(String)} expects a
-	 * classpath-relative root without a leading slash and treats a trailing slash as part of the
-	 * resolved path, so we trim both ends. A {@code null} / blank / {@code "/"} base yields an
-	 * empty string &mdash; meaning "no prefix" (factory resolves names directly).
-	 *
-	 * @param base The virtual base path.
-	 * @return The mustache.java resource root (never {@code null}).
-	 */
-	static String toResourceRoot(String base) {
-		if (base == null || base.isBlank())
-			return "";
-		var s = base;
-		while (s.startsWith("/"))
-			s = s.substring(1);
-		while (s.endsWith("/"))
-			s = s.substring(0, s.length() - 1);
-		return s;
+		return worker.resolveMustacheFactory(req);
 	}
 
 	/**
@@ -324,21 +235,8 @@ public class MustacheMixin implements RawTemplateDispatcher {
 	 * <p>
 	 * The {@code @Path("/*") String path} captures the multi-segment trailing remainder (e.g. a
 	 * request for {@code /mustache/about.mustache} matches the mount with
-	 * {@code path = "about.mustache"}; a request for {@code /mustache/admin/dashboard.mustache}
-	 * matches with {@code path = "admin/dashboard.mustache"}). Behavior:
-	 *
-	 * <ol class='spaced-list'>
-	 * 	<li>Validate the resolved {@code <basePath><path>} via
-	 * 		{@link FileUtils#resolveVirtualPathSafely(String, String)} &mdash; reject any
-	 * 		{@code ..} traversal with HTTP 403.
-	 * 	<li>Apply the configured template suffix idempotently (e.g. with
-	 * 		{@code templateSuffix(".mustache")}, a request for {@code /mustache/about} resolves
-	 * 		template {@code "about.mustache"} via {@link #applyTemplateSuffix}).
-	 * 	<li>Ask the active {@link MustacheFactory} to compile the template and execute it with
-	 * 		an empty scope directly onto the response writer; request attributes and parameters
-	 * 		are not auto-bound (callers who want attributes use {@link MustacheView} from a typed
-	 * 		handler instead).
-	 * </ol>
+	 * {@code path = "about.mustache"}). Delegates to the shared {@link MustacheDispatcher} worker
+	 * (path-traversal hardening, suffix application, factory resolution, and render).
 	 *
 	 * <p>
 	 * Missing template surfaces as the engine's own {@link MustacheNotFoundException}
@@ -354,7 +252,6 @@ public class MustacheMixin implements RawTemplateDispatcher {
 	 * @throws BasicHttpException On boundary violation (403), missing engine (500), or render
 	 * 	failure (500).
 	 */
-	@Override /* RawTemplateDispatcher */
 	@RestGet(
 		path="/${juneau.mustache.path:mustache}/*",
 		summary="Mustache view",
@@ -363,77 +260,20 @@ public class MustacheMixin implements RawTemplateDispatcher {
 	)
 	public void render(@Path("/*") String path, RestRequest req, RestResponse res)
 			throws IOException, BasicHttpException {
-
-		var template = (path == null) ? "" : path;
-
-		// resolveVirtualPathSafely validates that the resolved virtual path stays inside the
-		// configured basePath. The traversal check operates on basePath + template so a template
-		// name like "../../etc/passwd" or "a/b/../../../secret" is rejected before reaching the
-		// engine. We re-derive the factory-relative template name from the safe result by
-		// stripping the (already-normalized) basePath prefix.
-		String safeTemplate;
-		try {
-			var resolved = FileUtils.resolveVirtualPathSafely(basePath, template);
-			safeTemplate = stripBasePath(basePath, resolved);
-		} catch (@SuppressWarnings("unused") IllegalArgumentException ex) {
-			throw new Forbidden("Path escapes configured base path.");
-		}
-
-		// Apply suffix idempotently so /mustache/about resolves to about.mustache (when
-		// templateSuffix is configured), while /mustache/about.mustache stays as-is.
-		safeTemplate = applyTemplateSuffix(safeTemplate);
-
-		try {
-			var factory = resolveMustacheFactory(req);
-			if (! res.containsHeader("Content-Type"))
-				res.setHeader("Content-Type", MustacheViewRenderer.DEFAULT_CONTENT_TYPE);
-			var mustache = factory.compile(safeTemplate);
-			mustache.execute(res.getWriter(), Map.of()).flush();
-		} catch (LinkageError ex) {
-			throw new InternalServerError(ex, MustacheViewRenderer.NO_ENGINE_DIAGNOSTIC);
-		} catch (IOException ex) {
-			throw ex;
-		} catch (BasicHttpException ex) {
-			throw ex;
-		} catch (Exception ex) {
-			throw new InternalServerError(ex, "Mustache render failed for ''{0}''", safeTemplate);
-		}
-	}
-
-	/**
-	 * Strips the normalized {@code basePath} prefix from a {@code resolveVirtualPathSafely}
-	 * result so the leftover string is factory-relative (the bridge's default factory re-adds
-	 * the configured resource-root prefix).
-	 *
-	 * <p>
-	 * Normalization mirrors {@code FileUtils.resolveVirtualPathSafely}: a {@code null} / empty
-	 * base normalizes to {@code "/"}; otherwise the base is guaranteed to start with {@code "/"}
-	 * and end with {@code "/"} once the helper has normalized it.
-	 *
-	 * @param base The configured base path (typically {@code "/templates/"}).
-	 * @param resolved The output of {@code resolveVirtualPathSafely} (always starts with the
-	 * 	normalized base).
-	 * @return The factory-relative template name (e.g. {@code "hello.mustache"} for base
-	 * 	{@code "/templates/"} and resolved {@code "/templates/hello.mustache"}).
-	 */
-	static String stripBasePath(String base, String resolved) {
-		var bp = (base == null || base.isEmpty()) ? "/" : base;
-		if (! bp.endsWith("/"))
-			bp = bp + "/";
-		if (! bp.startsWith("/"))
-			bp = "/" + bp;
-		if (resolved.startsWith(bp))
-			return resolved.substring(bp.length());
-		throw illegalArg("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);
+		worker.render(path, req, res);
 	}
 
 	/**
 	 * Builder for {@link MustacheMixin}.
+	 *
+	 * <p>
+	 * Mirrors {@link MustacheDispatcher.Builder}'s configuration methods on its own surface and
+	 * forwards each call into a held {@link MustacheDispatcher.Builder} (§2.3.1 worker-bean
+	 * composition).
 	 */
 	public static class Builder {
 
-		private String basePath = DEFAULT_BASE_PATH;
-		private String templateSuffix = DEFAULT_TEMPLATE_SUFFIX;
+		private final MustacheDispatcher.Builder worker = MustacheDispatcher.create();
 
 		/** Constructor &mdash; package access for {@link MustacheMixin#create()}. */
 		protected Builder() {}
@@ -451,7 +291,7 @@ public class MustacheMixin implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder basePath(String value) {
-			basePath = (value == null || value.isBlank()) ? DEFAULT_BASE_PATH : value;
+			worker.basePath(value);
 			return this;
 		}
 
@@ -468,7 +308,7 @@ public class MustacheMixin implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder templateSuffix(String value) {
-			templateSuffix = (value == null) ? DEFAULT_TEMPLATE_SUFFIX : value;
+			worker.templateSuffix(value);
 			return this;
 		}
 
@@ -478,7 +318,7 @@ public class MustacheMixin implements RawTemplateDispatcher {
 		 * @return The base path. Never {@code null}.
 		 */
 		public String getBasePath() {
-			return basePath;
+			return worker.getBasePath();
 		}
 
 		/**
@@ -487,7 +327,7 @@ public class MustacheMixin implements RawTemplateDispatcher {
 		 * @return The template suffix. Never {@code null}.
 		 */
 		public String getTemplateSuffix() {
-			return templateSuffix;
+			return worker.getTemplateSuffix();
 		}
 
 		/**
@@ -496,8 +336,6 @@ public class MustacheMixin implements RawTemplateDispatcher {
 		 * @return A new {@link MustacheMixin} instance.
 		 */
 		public MustacheMixin build() {
-			if (basePath == null)
-				throw illegalArg("basePath must not be null");
 			return new MustacheMixin(this);
 		}
 	}

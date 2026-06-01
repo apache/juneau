@@ -24,8 +24,9 @@ import org.apache.juneau.rest.view.*;
  *
  * <p>
  * Mounts as a <b>sibling top-level servlet</b> at {@code /freemarker/*} and renders raw FreeMarker
- * templates by delegating to a shared {@link FreemarkerMixin} instance &mdash; the same
- * {@link RawTemplateDispatcher} implementation the mixin uses, so the two forms cannot drift.
+ * templates by delegating to a shared {@link FreemarkerDispatcher} worker &mdash; the same
+ * flavor-neutral {@link RawTemplateDispatcher} implementation the mixin and child flavors hold, so
+ * the forms cannot drift.
  *
  * <p>
  * Whereas the {@link FreemarkerMixin} mixin pins its op at {@code /freemarker/*} for
@@ -51,25 +52,25 @@ public class FreemarkerServlet extends ViewServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final transient FreemarkerMixin delegate;
+	private final transient FreemarkerDispatcher worker;
 
-	/** No-arg constructor &mdash; uses a default {@link FreemarkerMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link FreemarkerDispatcher} worker. */
 	public FreemarkerServlet() {
-		this(FreemarkerMixin.create().build());
+		this(FreemarkerDispatcher.create().build());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared FreeMarker renderer/mixin this servlet delegates raw dispatch to.
-	 * 	Must not be {@code null}.
+	 * @param worker The shared flavor-neutral FreeMarker dispatcher this servlet delegates raw
+	 * 	dispatch to. Must not be {@code null}.
 	 */
-	protected FreemarkerServlet(FreemarkerMixin delegate) {
-		this.delegate = delegate;
+	protected FreemarkerServlet(FreemarkerDispatcher worker) {
+		this.worker = worker;
 	}
 
 	@Override /* ViewServlet */
 	protected RawTemplateDispatcher dispatcher() {
-		return delegate;
+		return worker;
 	}
 }

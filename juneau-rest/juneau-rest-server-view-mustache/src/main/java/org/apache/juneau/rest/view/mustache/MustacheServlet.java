@@ -24,8 +24,9 @@ import org.apache.juneau.rest.view.*;
  *
  * <p>
  * Mounts as a <b>sibling top-level servlet</b> at {@code /mustache/*} and renders raw Mustache
- * templates by delegating to a shared {@link MustacheMixin} instance &mdash; the same
- * {@link RawTemplateDispatcher} implementation the mixin uses, so the two forms cannot drift.
+ * templates by delegating to a shared {@link MustacheDispatcher} worker &mdash; the same
+ * flavor-neutral {@link RawTemplateDispatcher} implementation the mixin and child flavors hold, so
+ * the forms cannot drift.
  *
  * <p>
  * Whereas the {@link MustacheMixin} mixin pins its op at {@code /mustache/*} for composition
@@ -51,25 +52,25 @@ public class MustacheServlet extends ViewServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final transient MustacheMixin delegate;
+	private final transient MustacheDispatcher worker;
 
-	/** No-arg constructor &mdash; uses a default {@link MustacheMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link MustacheDispatcher} worker. */
 	public MustacheServlet() {
-		this(MustacheMixin.create().build());
+		this(MustacheDispatcher.create().build());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared Mustache renderer/mixin this servlet delegates raw dispatch to.
-	 * 	Must not be {@code null}.
+	 * @param worker The shared flavor-neutral Mustache dispatcher this servlet delegates raw
+	 * 	dispatch to. Must not be {@code null}.
 	 */
-	protected MustacheServlet(MustacheMixin delegate) {
-		this.delegate = delegate;
+	protected MustacheServlet(MustacheDispatcher worker) {
+		this.worker = worker;
 	}
 
 	@Override /* ViewServlet */
 	protected RawTemplateDispatcher dispatcher() {
-		return delegate;
+		return worker;
 	}
 }

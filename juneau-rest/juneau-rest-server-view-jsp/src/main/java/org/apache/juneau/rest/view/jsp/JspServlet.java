@@ -25,8 +25,9 @@ import org.apache.juneau.rest.view.*;
  * <p>
  * Mounts as a <b>sibling top-level servlet</b> at {@code /jsp/*} (a sibling of the host
  * application's other servlets, e.g. {@code /rest/*}) and serves raw {@code .jsp} resources by
- * delegating to a shared {@link JspMixin} instance &mdash; the same
- * {@link RawTemplateDispatcher} implementation the mixin uses, so the two forms cannot drift.
+ * delegating to a shared {@link JspDispatcher} worker &mdash; the same flavor-neutral
+ * {@link RawTemplateDispatcher} implementation the mixin and child flavors hold, so the forms cannot
+ * drift.
  *
  * <p>
  * Whereas the {@link JspMixin} mixin pins its op at {@code /jsp/*} for composition into a
@@ -46,7 +47,7 @@ import org.apache.juneau.rest.view.*;
  * <p>
  * The default mount {@code /jsp/*} can be relocated by overriding {@link #getPaths()} or via the
  * programmatic {@code RestContext.Builder.paths(...)} rung; the underlying base path for resolving
- * {@code .jsp} files is configured on the {@link JspMixin} delegate.
+ * {@code .jsp} files is configured on the {@link JspDispatcher} worker.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link JspMixin}
@@ -66,25 +67,25 @@ public class JspServlet extends ViewServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final transient JspMixin delegate;
+	private final transient JspDispatcher worker;
 
-	/** No-arg constructor &mdash; uses a default {@link JspMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link JspDispatcher} worker. */
 	public JspServlet() {
-		this(JspMixin.create().build());
+		this(JspDispatcher.create().build());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared JSP renderer/mixin this servlet delegates raw dispatch to. Must
-	 * 	not be {@code null}.
+	 * @param worker The shared flavor-neutral JSP dispatcher this servlet delegates raw dispatch
+	 * 	to. Must not be {@code null}.
 	 */
-	protected JspServlet(JspMixin delegate) {
-		this.delegate = delegate;
+	protected JspServlet(JspDispatcher worker) {
+		this.worker = worker;
 	}
 
 	@Override /* ViewServlet */
 	protected RawTemplateDispatcher dispatcher() {
-		return delegate;
+		return worker;
 	}
 }

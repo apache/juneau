@@ -28,8 +28,8 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <p>
  * Mounts as a <b>sibling top-level servlet</b> at {@code /version/*} and serves the same
- * deployment-introspection JSON map as the mixin by delegating to a shared
- * {@link VersionMixin} instance &mdash; so the two forms cannot drift.
+ * deployment-introspection JSON map as the mixin by delegating to a shared flavor-neutral
+ * {@link VersionProvider} worker bean &mdash; so the two forms cannot drift.
  *
  * <p>
  * Whereas the {@link VersionMixin} mixin pins its op at {@code /version} for composition
@@ -46,6 +46,7 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link VersionMixin}
+ * 	<li class='jc'>{@link VersionProvider}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
@@ -58,21 +59,21 @@ public class VersionServlet extends RestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final transient VersionMixin delegate;
+	private final transient VersionProvider worker;
 
-	/** No-arg constructor &mdash; uses a default {@link VersionMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link VersionProvider} worker. */
 	public VersionServlet() {
-		this(new VersionMixin());
+		this(new VersionProvider());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared version mixin this servlet delegates to. Must not be
+	 * @param worker The shared flavor-neutral version worker this servlet delegates to. Must not be
 	 * 	{@code null}.
 	 */
-	protected VersionServlet(VersionMixin delegate) {
-		this.delegate = delegate;
+	protected VersionServlet(VersionProvider worker) {
+		this.worker = worker;
 	}
 
 	/**
@@ -88,6 +89,6 @@ public class VersionServlet extends RestServlet {
 		swagger=@OpSwagger(ignore=true)
 	)
 	public void getInfo(RestResponse res) throws IOException {
-		delegate.getInfo(res);
+		worker.serve(res);
 	}
 }

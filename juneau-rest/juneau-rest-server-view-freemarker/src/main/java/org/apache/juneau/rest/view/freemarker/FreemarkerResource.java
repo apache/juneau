@@ -25,8 +25,9 @@ import org.apache.juneau.rest.view.*;
  * <p>
  * Mounts as a <b>routed child</b> via {@link Rest#children() @Rest(children=FreemarkerResource.class)}
  * under a parent at the subtree {@code /freemarker} and renders raw FreeMarker templates by delegating to
- * a shared {@link FreemarkerMixin} instance &mdash; the same {@link RawTemplateDispatcher} implementation
- * the mixin and {@link FreemarkerServlet servlet} flavors use, so the three forms cannot drift.
+ * a shared {@link FreemarkerDispatcher} worker &mdash; the same flavor-neutral {@link RawTemplateDispatcher}
+ * implementation the {@link FreemarkerMixin mixin} and {@link FreemarkerServlet servlet} flavors hold, so the
+ * three forms cannot drift.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link FreemarkerMixin}
@@ -44,25 +45,25 @@ import org.apache.juneau.rest.view.*;
 )
 public class FreemarkerResource extends ViewResource {
 
-	private final transient FreemarkerMixin delegate;
+	private final transient FreemarkerDispatcher worker;
 
-	/** No-arg constructor &mdash; uses a default {@link FreemarkerMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link FreemarkerDispatcher} worker. */
 	public FreemarkerResource() {
-		this(FreemarkerMixin.create().build());
+		this(FreemarkerDispatcher.create().build());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared FreeMarker renderer/mixin this child delegates raw dispatch to. Must
-	 * 	not be {@code null}.
+	 * @param worker The shared flavor-neutral FreeMarker dispatcher this child delegates raw dispatch
+	 * 	to. Must not be {@code null}.
 	 */
-	protected FreemarkerResource(FreemarkerMixin delegate) {
-		this.delegate = delegate;
+	protected FreemarkerResource(FreemarkerDispatcher worker) {
+		this.worker = worker;
 	}
 
 	@Override /* ViewResource */
 	protected RawTemplateDispatcher dispatcher() {
-		return delegate;
+		return worker;
 	}
 }

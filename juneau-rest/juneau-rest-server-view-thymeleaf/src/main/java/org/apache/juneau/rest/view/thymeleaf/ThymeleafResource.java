@@ -25,8 +25,9 @@ import org.apache.juneau.rest.view.*;
  * <p>
  * Mounts as a <b>routed child</b> via {@link Rest#children() @Rest(children=ThymeleafResource.class)}
  * under a parent at the subtree {@code /thymeleaf} and renders raw Thymeleaf templates by delegating to a
- * shared {@link ThymeleafMixin} instance &mdash; the same {@link RawTemplateDispatcher} implementation the
- * mixin and {@link ThymeleafServlet servlet} flavors use, so the three forms cannot drift.
+ * shared {@link ThymeleafDispatcher} worker &mdash; the same flavor-neutral {@link RawTemplateDispatcher}
+ * implementation the {@link ThymeleafMixin mixin} and {@link ThymeleafServlet servlet} flavors hold, so the
+ * three forms cannot drift.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link ThymeleafMixin}
@@ -44,25 +45,25 @@ import org.apache.juneau.rest.view.*;
 )
 public class ThymeleafResource extends ViewResource {
 
-	private final transient ThymeleafMixin delegate;
+	private final transient ThymeleafDispatcher worker;
 
-	/** No-arg constructor &mdash; uses a default {@link ThymeleafMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link ThymeleafDispatcher} worker. */
 	public ThymeleafResource() {
-		this(ThymeleafMixin.create().build());
+		this(ThymeleafDispatcher.create().build());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared Thymeleaf renderer/mixin this child delegates raw dispatch to. Must
-	 * 	not be {@code null}.
+	 * @param worker The shared flavor-neutral Thymeleaf dispatcher this child delegates raw dispatch
+	 * 	to. Must not be {@code null}.
 	 */
-	protected ThymeleafResource(ThymeleafMixin delegate) {
-		this.delegate = delegate;
+	protected ThymeleafResource(ThymeleafDispatcher worker) {
+		this.worker = worker;
 	}
 
 	@Override /* ViewResource */
 	protected RawTemplateDispatcher dispatcher() {
-		return delegate;
+		return worker;
 	}
 }

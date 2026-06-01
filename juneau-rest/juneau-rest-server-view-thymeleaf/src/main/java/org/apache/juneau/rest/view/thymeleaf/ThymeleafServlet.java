@@ -24,8 +24,9 @@ import org.apache.juneau.rest.view.*;
  *
  * <p>
  * Mounts as a <b>sibling top-level servlet</b> at {@code /thymeleaf/*} and renders raw Thymeleaf
- * templates by delegating to a shared {@link ThymeleafMixin} instance &mdash; the same
- * {@link RawTemplateDispatcher} implementation the mixin uses, so the two forms cannot drift.
+ * templates by delegating to a shared {@link ThymeleafDispatcher} worker &mdash; the same
+ * flavor-neutral {@link RawTemplateDispatcher} implementation the mixin and child flavors hold, so
+ * the forms cannot drift.
  *
  * <p>
  * Whereas the {@link ThymeleafMixin} mixin pins its op at {@code /thymeleaf/*} for
@@ -51,25 +52,25 @@ public class ThymeleafServlet extends ViewServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final transient ThymeleafMixin delegate;
+	private final transient ThymeleafDispatcher worker;
 
-	/** No-arg constructor &mdash; uses a default {@link ThymeleafMixin} delegate. */
+	/** No-arg constructor &mdash; uses a default {@link ThymeleafDispatcher} worker. */
 	public ThymeleafServlet() {
-		this(ThymeleafMixin.create().build());
+		this(ThymeleafDispatcher.create().build());
 	}
 
 	/**
-	 * Delegate constructor.
+	 * Worker constructor.
 	 *
-	 * @param delegate The shared Thymeleaf renderer/mixin this servlet delegates raw dispatch to.
-	 * 	Must not be {@code null}.
+	 * @param worker The shared flavor-neutral Thymeleaf dispatcher this servlet delegates raw
+	 * 	dispatch to. Must not be {@code null}.
 	 */
-	protected ThymeleafServlet(ThymeleafMixin delegate) {
-		this.delegate = delegate;
+	protected ThymeleafServlet(ThymeleafDispatcher worker) {
+		this.worker = worker;
 	}
 
 	@Override /* ViewServlet */
 	protected RawTemplateDispatcher dispatcher() {
-		return delegate;
+		return worker;
 	}
 }
