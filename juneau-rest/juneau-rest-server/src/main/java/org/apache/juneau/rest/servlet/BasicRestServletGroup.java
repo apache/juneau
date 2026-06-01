@@ -20,6 +20,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.ops.*;
 
 import jakarta.servlet.*;
 
@@ -36,8 +37,12 @@ import jakarta.servlet.*;
  * <p>
  * Adds the group-navigation endpoint ({@code GET /}) as a concrete method on top of the residual op-mixins
  * inherited from {@link BasicRestServlet}. The navigation page is rendered as a method of the host resource
- * (rather than a sub-context mixin) so it inherits the host's {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig}
- * page decoration.
+ * (rather than the {@link NavigationMixin} sub-context mixin) so it inherits the host's
+ * {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig} page decoration &mdash; a mixin
+ * sub-context does not inherit the host's class-level {@code @HtmlDocConfig}, so a navigation op living on a
+ * mixin renders without the host's navlinks/aside/footer/theme.  {@link NavigationMixin} (backed by
+ * {@link RestMixin#getHostContext()}) is the mixin flavor for hosts where that page decoration is not
+ * required (e.g. JSON-only APIs).
  *
  * <p>
  * Children are attached to this resource using the {@link Rest#children() @Rest(children)} annotation.

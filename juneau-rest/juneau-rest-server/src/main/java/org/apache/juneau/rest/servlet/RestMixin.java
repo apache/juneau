@@ -16,6 +16,9 @@
  */
 package org.apache.juneau.rest.servlet;
 
+import java.util.concurrent.atomic.*;
+
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -47,12 +50,85 @@ import org.apache.juneau.rest.annotation.*;
  * carries no builder or stashed-builder state and mixins are configured purely by their {@code @Rest} /
  * {@code @RestOp} annotations.
  *
+ * <h5 class='section'>Reaching the host resource:</h5>
+ *
+ * <p>
+ * Because a mixin's {@code @RestOp} methods are bound to a per-mixin {@link RestContext} sub-context (the
+ * sub-context has no children of its own), host-level introspection performed against the mixin's <i>own</i>
+ * context comes back empty.  {@link #getHostContext()} bridges that gap: it returns the {@link RestContext} of
+ * the host (mixed-into) resource so a mixin op can enumerate the host's child resources, swagger, stats, etc.
+ *
+ * <p class='bjava'>
+ * 	<jc>// Render the host's child-resource navigation list from a mixin op.</jc>
+ * 	<ja>@RestGet</ja>(path=<js>"/"</js>)
+ * 	<jk>public</jk> ChildResourceDescriptions getChildren(RestRequest <jv>req</jv>) {
+ * 		<jk>return new</jk> ChildResourceDescriptions(getHostContext(), <jv>req</jv>);
+ * 	}
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link RestServlet}
  * 	<li class='jc'>{@link RestResource}
+ * 	<li class='jm'>{@link #getHostContext()}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
  * @since 9.5.0
  */
-public abstract class RestMixin {}
+public abstract class RestMixin {
+
+	/**
+	 * The per-mixin {@link RestContext} sub-context this mixin instance is bound to, captured via
+	 * {@link #setContext(RestContext)} when the host composes the mixin.
+	 *
+	 * <p>
+	 * Remains {@code null} when a {@code RestMixin} subclass is instantiated directly (not composed via
+	 * {@link Rest#mixins() @Rest(mixins=...)}), in which case {@link #getHostContext()} returns {@code null}.
+	 */
+	private final AtomicReference<RestContext> context = new AtomicReference<>();
+
+	/**
+	 * Captures the per-mixin {@link RestContext} sub-context this mixin instance is bound to.
+	 *
+	 * <p>
+	 * Invoked reflectively by the host's {@code RestContext.buildMixinContext(...)} while composing the mixin
+	 * (mirroring the {@code setContext(RestContext)} contract honored by {@link RestServlet} and
+	 * {@link RestResource} for child resources).  The supplied context is the mixin sub-context whose
+	 * {@link RestContext#getParentContext() parent} is the host &mdash; that linkage is what {@link #getHostContext()}
+	 * reads.
+	 *
+	 * @param value The mixin sub-context. Must not be <jk>null</jk>.
+	 */
+	protected void setContext(RestContext value) {
+		context.set(value);
+	}
+
+	/**
+	 * Returns the {@link RestContext} of the host (mixed-into) resource this mixin is composed into.
+	 *
+	 * <p>
+	 * A mixin's {@code @RestOp} methods are bound to a per-mixin sub-context that has no children of its own;
+	 * this accessor returns the host context so a mixin op (or config-time code) can introspect the host
+	 * &mdash; most commonly its child resources via {@link RestContext#getRestChildren()} for the navigation
+	 * page.  It is backed by the mixin sub-context's already-populated
+	 * {@link RestContext#getParentContext() parent linkage}, so it is usable at config time and does not depend
+	 * on an in-flight request.
+	 *
+	 * <h5 class='section'>Edge cases:</h5><ul>
+	 * 	<li class='note'><b>Standalone / no host</b> &mdash; when a {@code RestMixin} subclass is instantiated
+	 * 		directly rather than composed via {@link Rest#mixins() @Rest(mixins=...)}, this returns {@code null},
+	 * 		mirroring {@link RestContext#getParentContext()}'s top-level contract.  Callers needing host-only
+	 * 		behavior should null-check.
+	 * 	<li class='note'><b>Nested mixins</b> &mdash; under nested {@code @Rest(mixins=...)} the flat-inheritance
+	 * 		rule collects every mixin as a mixin of the single top-level host, so this returns that top-level
+	 * 		host (never an intermediate mixin).
+	 * </ul>
+	 *
+	 * @return The host resource's {@link RestContext}, or {@code null} when this mixin is not composed into a host.
+	 * @since 9.5.0
+	 */
+	public RestContext getHostContext() {
+		var c = context.get();
+		return c == null ? null : c.getParentContext();
+	}
+}
