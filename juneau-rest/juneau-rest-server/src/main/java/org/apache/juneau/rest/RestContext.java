@@ -27,6 +27,7 @@ import org.apache.juneau.commons.inject.WritableBeanStore;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -977,6 +978,13 @@ public class RestContext extends Context {
 		var cf = cfv.orElse("");
 		if (v.isEmpty() && "SYSTEM_DEFAULT".equals(cf))
 			v.set(Config.getSystemDefault());
+		if (v.isEmpty() && cf.isEmpty() && isMixinContextField() && getParentContext() != null)
+			// Mixin sub-contexts with no own @Rest(config) inherit the host's raw Config, so that $C{...}
+			// SVL variables embedded in inherited class-level config (e.g. the @HtmlDocConfig theme/header/
+			// footer declared via $C{REST/...} on BasicRestConfig) resolve against the host's loaded config
+			// rather than an empty one.  This mirrors the way messages and varResolver tokens already inherit
+			// from the host for mixin sub-contexts.
+			v.set(getParentContext().rawConfig.get());
 		if (v.isEmpty()) {
 			Config.Builder cb = Config.create().varResolver(vr);
 			if (!cf.isEmpty())
@@ -2812,6 +2820,40 @@ public class RestContext extends Context {
 			}
 		}
 		return rstream(annotations.subList(0, cutoff));
+	}
+
+	/**
+	 * For a {@linkplain #isMixinContext() mixin sub-context}, returns the <b>host</b> resource class's
+	 * class-level annotation infos (host class chain, in parent-to-child order) so a mixin operation can
+	 * inherit the host's class-level {@link org.apache.juneau.annotation.ContextApply @ContextApply} config
+	 * (e.g. {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig},
+	 * {@link org.apache.juneau.serializer.annotation.SerializerConfig @SerializerConfig}).
+	 *
+	 * <p>
+	 * Used by {@link RestOpContext.Builder} to prepend the host's class-level config annotations <i>ahead of</i>
+	 * the mixin class's own class annotations in the op's annotation work-list, so the effective precedence is
+	 * method &gt; mixin-class &gt; host-class.  This is the page-decoration counterpart of the context-level
+	 * inheritance walk in {@link #getRestAnnotationsForProperty(String)}: that walk inherits {@code @Rest}
+	 * properties (serializers, parsers, guards, ...) from the host, while this method inherits standalone
+	 * class-level config annotations that are not {@code @Rest} attributes.
+	 *
+	 * <p>
+	 * Inheritance is automatic for every mixin sub-context.  A mixin can opt out of inheriting a specific host
+	 * config annotation by naming its annotation type in {@link Rest#noInherit() @Rest(noInherit)} on the mixin
+	 * class (e.g. {@code @Rest(noInherit={"HtmlDocConfig"})}), reusing the same {@code noInherit} resolution that
+	 * gates the context-level walk so the opt-out is uniform.  For non-mixin contexts (top-level resources and
+	 * child resources) this returns an empty stream &mdash; only mixin ops inherit from a composition host.
+	 *
+	 * @param ap The annotation provider to resolve the host class chain with.
+	 * @return The host class chain's annotation infos in parent-to-child order, or an empty stream when this is
+	 * 	not a mixin sub-context (or has no parent).
+	 */
+	Stream<AnnotationInfo<?>> getInheritedHostClassAnnotations(AnnotationProvider ap) {
+		if (! isMixinContextField() || parentContext == null)
+			return Stream.empty();
+		var blocked = noInherit.get();
+		return rstream(ap.find(ClassInfo.of(parentContext.getResourceClass()), SELF, PARENTS))
+			.filter(ai -> ! blocked.contains(ai.annotationType().getSimpleName()));
 	}
 
 	/**

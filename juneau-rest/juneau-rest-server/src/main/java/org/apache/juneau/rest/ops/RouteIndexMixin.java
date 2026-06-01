@@ -16,18 +16,25 @@
  */
 package org.apache.juneau.rest.ops;
 
-import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.beans.*;
 
 /**
- * Mixin that emits a JSON index of all {@link RestOp @RestOp}-annotated methods on the host
- * resource (and any other mixins on it) at {@code /options} (configurable).
+ * Mixin that exposes a content-negotiated index of all {@link RestOp @RestOp}-annotated methods on the
+ * host resource (and any other mixins on it) at {@code /options} (configurable).
+ *
+ * <p>
+ * The op returns a {@link RouteDescriptions} POJO rather than writing a fixed format, so Juneau's content
+ * negotiation serves a browsable HTML page (with clickable route links), JSON, or XML based on the request
+ * {@code Accept} header &mdash; mirroring the way {@code NavigationMixin.getChildren(...)} produces a
+ * navigation page while still serving JSON to API clients. The host therefore needs serializers configured
+ * (e.g. via {@code BasicUniversalConfig} / a {@code Basic*} servlet base); a bare {@code @Rest} host with no
+ * serializers cannot content-negotiate the listing.
  *
  * <p>
  * Sibling of {@link EchoMixin} ({@code /echo/*}) and {@link AdminMixin}
@@ -80,7 +87,8 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * Each {@code @RestOp}-annotated method on the host (and on any other mixins on the host) is
- * surfaced as a single entry; the request returns a JSON list ordered by path:
+ * surfaced as a single entry, ordered by path. Rendered as JSON (for an {@code Accept: application/json}
+ * request) the listing looks like:
  *
  * <p class='bjson'>
  * 	[
@@ -134,24 +142,27 @@ public class RouteIndexMixin {
 	public RouteIndexMixin() {}
 
 	/**
-	 * [GET /options] &mdash; emit the route index as a JSON list.
+	 * [GET /options] &mdash; return the route index as a content-negotiated POJO.
+	 *
+	 * <p>
+	 * Returns a {@link RouteDescriptions} list rather than writing a fixed format, so the response is
+	 * content-negotiated through the host's configured serializers: an {@code Accept: text/html} request
+	 * renders a browsable table (with each {@linkplain RouteDescription#getPath() path} as a clickable link),
+	 * while {@code application/json} / {@code text/xml} clients receive the same entries in their requested
+	 * format &mdash; mirroring the way {@code NavigationMixin.getChildren(...)} backs the child-resource
+	 * navigation page.
 	 *
 	 * @param req The current REST request &mdash; supplies the host {@link RestContext}.
-	 * @param res The current REST response.
-	 * @throws IOException If an I/O error occurs while writing the response.
+	 * @return The route-index entries, ordered by path.
 	 */
 	@RestGet(
 		path="/#{pathToken(${juneau.routeindex.path:options})}",
 		summary="Route index",
-		description="JSON list of @RestOp-annotated methods on the host (excluding hidden / ops endpoints).",
+		description="Content-negotiated list of @RestOp-annotated methods on the host (excluding hidden / ops endpoints).",
 		swagger=@OpSwagger(ignore=true)
 	)
-	public void getRoutes(RestRequest req, RestResponse res) throws IOException {
-		var hostCtx = resolveHostContext(req.getContext());
-		var entries = collect(hostCtx);
-		try (var w = res.getDirectWriter("application/json")) {
-			JsonSerializer.DEFAULT_READABLE.serialize(entries, w);
-		}
+	public RouteDescriptions getRoutes(RestRequest req) {
+		return collect(resolveHostContext(req.getContext()));
 	}
 
 	private static RestContext resolveHostContext(RestContext c) {
@@ -168,9 +179,9 @@ public class RouteIndexMixin {
 	 * @param hostCtx The host context. Must not be {@code null}.
 	 * @return A list of route-index entries, ordered by path.
 	 */
-	public List<Map<String,Object>> collect(RestContext hostCtx) {
+	public RouteDescriptions collect(RestContext hostCtx) {
 		var seen = new HashSet<Method>();
-		var entries = new ArrayList<Map<String,Object>>();
+		var entries = new RouteDescriptions();
 		for (var oc : hostCtx.getRestOperations().getOpContexts())
 			addEntry(entries, seen, oc);
 		for (var mixinCtx : hostCtx.getMixinContexts().values())
@@ -180,7 +191,7 @@ public class RouteIndexMixin {
 		return entries;
 	}
 
-	private static void addEntry(List<Map<String,Object>> entries, Set<Method> seen, RestOpContext oc) {
+	private static void addEntry(RouteDescriptions entries, Set<Method> seen, RestOpContext oc) {
 		var m = oc.getJavaMethod();
 		if (m == null || ! seen.add(m))
 			return;
@@ -188,14 +199,13 @@ public class RouteIndexMixin {
 			return;
 		if (isSelfHandler(m))
 			return;
-		var entry = new LinkedHashMap<String,Object>();
-		entry.put("path", oc.getPathPattern());
-		entry.put("methods", List.of(oc.getHttpMethod()));
-		entry.put("summary", readSummary(m));
-		entry.put("description", readDescription(m));
-		entry.put("deprecated", m.isAnnotationPresent(Deprecated.class)
-			|| m.getDeclaringClass().isAnnotationPresent(Deprecated.class));
-		entries.add(entry);
+		entries.append(
+			oc.getPathPattern(),
+			List.of(oc.getHttpMethod()),
+			readSummary(m),
+			readDescription(m),
+			m.isAnnotationPresent(Deprecated.class) || m.getDeclaringClass().isAnnotationPresent(Deprecated.class)
+		);
 	}
 
 	@SuppressWarnings("java:S3776") // Cognitive-complexity: linear walk over a small annotation list; splitting hurts JIT.
@@ -257,10 +267,10 @@ public class RouteIndexMixin {
 		return "";
 	}
 
-	private static int compareByPathThenMethod(Map<String,Object> a, Map<String,Object> b) {
-		var c = String.valueOf(a.get("path")).compareTo(String.valueOf(b.get("path")));
+	private static int compareByPathThenMethod(RouteDescription a, RouteDescription b) {
+		var c = String.valueOf(a.getPath()).compareTo(String.valueOf(b.getPath()));
 		if (c != 0)
 			return c;
-		return String.valueOf(a.get("methods")).compareTo(String.valueOf(b.get("methods")));
+		return String.valueOf(a.getMethods()).compareTo(String.valueOf(b.getMethods()));
 	}
 }

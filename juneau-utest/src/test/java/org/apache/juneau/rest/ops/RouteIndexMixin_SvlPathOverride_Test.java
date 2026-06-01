@@ -18,6 +18,7 @@ package org.apache.juneau.rest.ops;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
@@ -41,7 +42,7 @@ import org.junit.jupiter.api.*;
 class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 
 	@Rest(mixins=RouteIndexMixin.class)
-	public static class A01_OverridePath extends RestServlet {
+	public static class A01_OverridePath extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items") public String items() { return "items"; }
 	}
@@ -56,6 +57,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 			c.get("/options").run().assertStatus(404);
 
 			c.get("/all-routes")
+				.accept("application/json")
 				.run()
 				.assertStatus(200)
 				.assertHeader("Content-Type").isContains("application/json")
@@ -67,7 +69,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 	}
 
 	@Rest(mixins=RouteIndexMixin.class)
-	public static class A02_RoutesAliasMigration extends RestServlet {
+	public static class A02_RoutesAliasMigration extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items") public String items() { return "items"; }
 	}
@@ -82,6 +84,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 			c.get("/options").run().assertStatus(404);
 
 			c.get("/routes")
+				.accept("application/json")
 				.run()
 				.assertStatus(200)
 				.assertContent().asString().isContains("/items");
@@ -92,7 +95,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 	}
 
 	@Rest(mixins=RouteIndexMixin.class)
-	public static class A03_BareToken extends RestServlet {
+	public static class A03_BareToken extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items") public String items() { return "items"; }
 	}
@@ -103,7 +106,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 		System.setProperty(key, "xxx");
 		try {
 			var c = MockRestClient.buildLax(A03_BareToken.class);
-			c.get("/xxx").run().assertStatus(200).assertContent().asString().isContains("/items");
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("/items");
 		} finally {
 			if (prev == null) System.clearProperty(key);
 			else System.setProperty(key, prev);
@@ -111,7 +114,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 	}
 
 	@Rest(mixins=RouteIndexMixin.class)
-	public static class A04_LeadingSlash extends RestServlet {
+	public static class A04_LeadingSlash extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items") public String items() { return "items"; }
 	}
@@ -122,7 +125,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 		System.setProperty(key, "/xxx");
 		try {
 			var c = MockRestClient.buildLax(A04_LeadingSlash.class);
-			c.get("/xxx").run().assertStatus(200).assertContent().asString().isContains("/items");
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("/items");
 		} finally {
 			if (prev == null) System.clearProperty(key);
 			else System.setProperty(key, prev);
@@ -130,7 +133,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 	}
 
 	@Rest(mixins=RouteIndexMixin.class)
-	public static class A05_TrailingSlash extends RestServlet {
+	public static class A05_TrailingSlash extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items") public String items() { return "items"; }
 	}
@@ -141,7 +144,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 		System.setProperty(key, "xxx/");
 		try {
 			var c = MockRestClient.buildLax(A05_TrailingSlash.class);
-			c.get("/xxx").run().assertStatus(200).assertContent().asString().isContains("/items");
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("/items");
 		} finally {
 			if (prev == null) System.clearProperty(key);
 			else System.setProperty(key, prev);
@@ -149,7 +152,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 	}
 
 	@Rest(mixins=RouteIndexMixin.class)
-	public static class A06_BothSlashes extends RestServlet {
+	public static class A06_BothSlashes extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items") public String items() { return "items"; }
 	}
@@ -160,7 +163,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 		System.setProperty(key, "/xxx/");
 		try {
 			var c = MockRestClient.buildLax(A06_BothSlashes.class);
-			c.get("/xxx").run().assertStatus(200).assertContent().asString().isContains("/items");
+			c.get("/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("/items");
 		} finally {
 			if (prev == null) System.clearProperty(key);
 			else System.setProperty(key, prev);
@@ -168,7 +171,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 	}
 
 	@Rest(mixins=RouteIndexMixin.class)
-	public static class A07_MultiSegment extends RestServlet {
+	public static class A07_MultiSegment extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items") public String items() { return "items"; }
 	}
@@ -179,7 +182,7 @@ class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 		System.setProperty(key, "/api/v1/xxx");
 		try {
 			var c = MockRestClient.buildLax(A07_MultiSegment.class);
-			c.get("/api/v1/xxx").run().assertStatus(200).assertContent().asString().isContains("/items");
+			c.get("/api/v1/xxx").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("/items");
 		} finally {
 			if (prev == null) System.clearProperty(key);
 			else System.setProperty(key, prev);

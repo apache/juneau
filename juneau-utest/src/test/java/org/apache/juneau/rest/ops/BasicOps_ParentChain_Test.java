@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
@@ -57,7 +58,7 @@ class BasicOps_ParentChain_Test extends TestBase {
 	@Rest(
 		mixins={EchoMixin.class, AdminMixin.class, RouteIndexMixin.class},
 		debug=@Debug("always"))
-	public static class A extends RestServlet {
+	public static class A extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items", summary="List items") public String items() { return "items"; }
 
@@ -94,7 +95,7 @@ class BasicOps_ParentChain_Test extends TestBase {
 	}
 
 	@Test void a05_routeIndexOptionsResolves() throws Exception {
-		var body = c.get("/options").run().assertStatus(200).getContent().asString();
+		var body = c.get("/options").accept("application/json").run().assertStatus(200).getContent().asString();
 		// Host's own endpoint must appear.
 		assertTrue(body.contains("/items"), "host /items must be in the index; body: " + body);
 		// Ops endpoints must NOT appear (all carry @OpSwagger(ignore=true)).
@@ -108,7 +109,7 @@ class BasicOps_ParentChain_Test extends TestBase {
 			"admin endpoints must be excluded from index; body: " + body);
 		assertFalse(body.contains("/admin/ratelimit"),
 			"admin endpoints must be excluded from index; body: " + body);
-		assertFalse(body.contains("\"path\": \"/options\""),
+		assertFalse(body.contains("/options"),
 			"route-index endpoint must not echo itself; body: " + body);
 	}
 

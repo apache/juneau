@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
@@ -53,7 +54,7 @@ import org.junit.jupiter.api.*;
 class RouteIndexMixin_AsMixin_Test extends TestBase {
 
 	@Rest(mixins=RouteIndexMixin.class)
-	public static class A extends RestServlet {
+	public static class A extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
 
 		@RestGet(path="/items", summary="List items") public String items() { return "items"; }
@@ -73,6 +74,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 
 	@Test void a01_optionsReturnsJsonList() throws Exception {
 		var body = ca.get("/options")
+			.accept("application/json")
 			.run()
 			.assertStatus(200)
 			.assertHeader("Content-Type").isContains("application/json")
@@ -88,7 +90,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 	}
 
 	@Test void a03_listsAllVisibleHostEndpoints() throws Exception {
-		var entries = parseEntries(ca.get("/options").run().assertStatus(200).getContent().asString());
+		var entries = parseEntries(ca.get("/options").accept("application/json").run().assertStatus(200).getContent().asString());
 		var paths = pathsOf(entries);
 		Assertions.assertTrue(paths.contains("/items"), "GET /items should appear");
 		Assertions.assertTrue(paths.contains("/items/{id}"), "GET /items/{id} should appear");
@@ -96,28 +98,28 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 	}
 
 	@Test void a04_excludesItself() throws Exception {
-		var entries = parseEntries(ca.get("/options").run().assertStatus(200).getContent().asString());
+		var entries = parseEntries(ca.get("/options").accept("application/json").run().assertStatus(200).getContent().asString());
 		var paths = pathsOf(entries);
 		Assertions.assertFalse(paths.contains("/options"),
 			"Route index must not echo itself; got: " + paths);
 	}
 
 	@Test void a05_excludesOpSwaggerIgnoreEndpoints() throws Exception {
-		var entries = parseEntries(ca.get("/options").run().assertStatus(200).getContent().asString());
+		var entries = parseEntries(ca.get("/options").accept("application/json").run().assertStatus(200).getContent().asString());
 		var paths = pathsOf(entries);
 		Assertions.assertFalse(paths.contains("/internal"),
 			"@OpSwagger(ignore=true) endpoints must be excluded; got: " + paths);
 	}
 
 	@Test void a06_summaryFieldPopulated() throws Exception {
-		var entries = parseEntries(ca.get("/options").run().assertStatus(200).getContent().asString());
+		var entries = parseEntries(ca.get("/options").accept("application/json").run().assertStatus(200).getContent().asString());
 		var byPath = byPath(entries);
 		Assertions.assertEquals("List items", byPath.get("/items GET").get("summary"));
 		Assertions.assertEquals("Get item", byPath.get("/items/{id} GET").get("summary"));
 	}
 
 	@Test void a07_methodsMapsToRequestMethod() throws Exception {
-		var entries = parseEntries(ca.get("/options").run().assertStatus(200).getContent().asString());
+		var entries = parseEntries(ca.get("/options").accept("application/json").run().assertStatus(200).getContent().asString());
 		var byPath = byPath(entries);
 		Assertions.assertEquals(List.of("GET"), byPath.get("/items GET").get("methods"));
 		Assertions.assertEquals(List.of("POST"), byPath.get("/items POST").get("methods"));
@@ -125,7 +127,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 	}
 
 	@Test void a08_deprecatedFlagPropagates() throws Exception {
-		var entries = parseEntries(ca.get("/options").run().assertStatus(200).getContent().asString());
+		var entries = parseEntries(ca.get("/options").accept("application/json").run().assertStatus(200).getContent().asString());
 		var byPath = byPath(entries);
 		var legacy = byPath.get("/legacy GET");
 		Assertions.assertNotNull(legacy, "legacy entry must be present");
@@ -135,7 +137,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 	}
 
 	@Test void a09_orderedByPathAscending() throws Exception {
-		var entries = parseEntries(ca.get("/options").run().assertStatus(200).getContent().asString());
+		var entries = parseEntries(ca.get("/options").accept("application/json").run().assertStatus(200).getContent().asString());
 		var paths = pathsOf(entries);
 		var sorted = new ArrayList<>(paths);
 		Collections.sort(sorted);
@@ -151,7 +153,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 
 	@Deprecated
 	@Rest(mixins=RouteIndexMixin.class)
-	public static class C extends RestServlet {
+	public static class C extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/c-item", summary="C item",
 			description={"line one", "line two"})
@@ -161,7 +163,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 	private static final MockRestClient cc = MockRestClient.buildLax(C.class);
 
 	@Test void c01_classLevelDeprecatedPropagates() throws Exception {
-		var entries = parseEntries(cc.get("/options").run().assertStatus(200).getContent().asString());
+		var entries = parseEntries(cc.get("/options").accept("application/json").run().assertStatus(200).getContent().asString());
 		var byPath = byPath(entries);
 		var entry = byPath.get("/c-item GET");
 		Assertions.assertNotNull(entry, "class-level @Deprecated entry must be present");
@@ -170,7 +172,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 	}
 
 	@Test void c02_multilineDescriptionJoined() throws Exception {
-		var entries = parseEntries(cc.get("/options").run().assertStatus(200).getContent().asString());
+		var entries = parseEntries(cc.get("/options").accept("application/json").run().assertStatus(200).getContent().asString());
 		var byPath = byPath(entries);
 		var entry = byPath.get("/c-item GET");
 		Assertions.assertEquals("line one line two", entry.get("description"),
@@ -183,7 +185,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------
 
 	@Rest(mixins=RouteIndexMixin.class)
-	public static class B extends RestServlet {
+	public static class B extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/only") public String only() { return "only"; }
 	}
@@ -191,7 +193,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 	private static final MockRestClient cb = MockRestClient.buildLax(B.class);
 
 	@Test void b01_minimalHostListsOneEntry() throws Exception {
-		var entries = parseEntries(cb.get("/options").run().assertStatus(200).getContent().asString());
+		var entries = parseEntries(cb.get("/options").accept("application/json").run().assertStatus(200).getContent().asString());
 		var paths = pathsOf(entries);
 		Assertions.assertEquals(List.of("/only"), paths,
 			"Only the host's own /only endpoint should appear; got: " + paths);

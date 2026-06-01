@@ -143,9 +143,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				// Parent-to-child merge: class-level annotations (parent class chain) applied first, then method-level
 				// (matching-methods chain, return type, package). Method annotations thus override class annotations
 				// for the same property. LinkedHashSet deduplicates while preserving order.
+				//
+				// For a mixin op (the op's context is a mixin sub-context), the host's class-level @ContextApply
+				// config (e.g. @HtmlDocConfig, @SerializerConfig) is prepended ahead of the mixin class's own class
+				// annotations, so the effective precedence is method > mixin-class > host-class. This is the
+				// op-level counterpart of the context-level inheritance walk and is gated by @Rest(noInherit) on
+				// the mixin. For non-mixin contexts the host stream is empty (no behavior change).
+				var hostClassAnnotations = context.getInheritedHostClassAnnotations(ap);
 				var declaringClassAnnotations = rstream(ap.find(resourceClass, SELF, PARENTS));
 				var methodAnnotations = rstream(ap.find(mi, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE));
 				var allAnnotationsSet = new java.util.LinkedHashSet<AnnotationInfo<?>>();
+				hostClassAnnotations.forEach(allAnnotationsSet::add);
 				declaringClassAnnotations.forEach(allAnnotationsSet::add);
 				methodAnnotations.forEach(allAnnotationsSet::add);
 				var work = AnnotationWorkList.of(vrs, allAnnotationsSet.stream().filter(CONTEXT_APPLY_FILTER));

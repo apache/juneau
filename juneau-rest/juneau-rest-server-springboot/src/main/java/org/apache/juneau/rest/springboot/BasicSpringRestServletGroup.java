@@ -16,9 +16,7 @@
  */
 package org.apache.juneau.rest.springboot;
 
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.ops.*;
 
@@ -33,14 +31,13 @@ import org.apache.juneau.rest.ops.*;
  * for details.
  *
  * <p>
- * Adds the group-navigation endpoint ({@code GET /}) as a concrete method on top of the residual op-mixins
- * inherited from {@link BasicSpringRestServlet}. The navigation page is rendered as a method of the host
- * resource (rather than the {@link NavigationMixin} sub-context mixin) so it inherits the host's
- * {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig} page decoration &mdash; a mixin
- * sub-context does not inherit the host's class-level {@code @HtmlDocConfig}, so a navigation op living on a
- * mixin renders without the host's navlinks/aside/footer/theme.  {@link NavigationMixin} (backed by
- * {@link org.apache.juneau.rest.servlet.RestMixin#getHostContext()}) is the mixin flavor for hosts where that
- * page decoration is not required (e.g. JSON-only APIs).
+ * Adds the group-navigation endpoint ({@code GET /}) by composing {@link NavigationMixin} via
+ * {@link Rest#mixins() @Rest(mixins=...)} on top of the residual op-mixins inherited from
+ * {@link BasicSpringRestServlet}. The navigation op lives on the {@code NavigationMixin} sub-context (backed
+ * by {@link org.apache.juneau.rest.servlet.RestMixin#getHostContext()}) but renders with the host's
+ * {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig} page decoration &mdash; mixin
+ * sub-contexts inherit the host's class-level {@code @HtmlDocConfig} (and other class-level config), so the
+ * navigation page matches the host's other endpoints.
  *
  * <p>
  * Children are attached to this resource using the {@link Rest#children() @Rest(children)} annotation.
@@ -52,25 +49,10 @@ import org.apache.juneau.rest.ops.*;
  *
  * @serial exclude
  */
-@Rest
+@Rest(mixins=NavigationMixin.class)
 @SuppressWarnings({
 	"java:S110" // Inheritance depth acceptable for BasicSpringRestServletGroup hierarchy
 })
 public abstract class BasicSpringRestServletGroup extends BasicSpringRestServlet {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * [GET /] - Get child resources.
-	 *
-	 * <p>
-	 * Returns a bean that lists and allows navigation to child resources. Default implementation
-	 * delegates to {@link ChildResourceDescriptions#of(RestRequest)}; subclasses may override.
-	 *
-	 * @param req The HTTP request.
-	 * @return The bean containing links to the child resources.
-	 */
-	@RestGet(path="/", summary="Navigation page")
-	public ChildResourceDescriptions getChildren(RestRequest req) {
-		return ChildResourceDescriptions.of(req);
-	}
 }
