@@ -48,9 +48,9 @@ class JuneauRestServletContainerInitializer_Test extends TestBase {
 		var ctx = mockContext("true", dyn);
 
 		new JuneauRestServletContainerInitializer()
-			.onStartup(Set.of(BasicVersionServlet.class), ctx);
+			.onStartup(Set.of(VersionServlet.class), ctx);
 
-		verify(ctx).addServlet(eq(BasicVersionServlet.class.getName()), any(BasicVersionServlet.class));
+		verify(ctx).addServlet(eq(VersionServlet.class.getName()), any(VersionServlet.class));
 		verify(dyn).addMapping("/version/*");
 	}
 
@@ -59,7 +59,7 @@ class JuneauRestServletContainerInitializer_Test extends TestBase {
 		var ctx = mockContext(null, dyn);
 
 		new JuneauRestServletContainerInitializer()
-			.onStartup(Set.of(BasicVersionServlet.class), ctx);
+			.onStartup(Set.of(VersionServlet.class), ctx);
 
 		verify(ctx, never()).addServlet(anyString(), any(Servlet.class));
 	}
@@ -68,10 +68,10 @@ class JuneauRestServletContainerInitializer_Test extends TestBase {
 		var dyn = mock(ServletRegistration.Dynamic.class);
 		var ctx = mockContext("true", dyn);
 
-		// BasicVersionResource is a plain mixin (no top-level paths, not even a RestServlet) — it must
+		// VersionMixin is a plain mixin (no top-level paths, not even a RestServlet) — it must
 		// be filtered out and never mounted.
 		new JuneauRestServletContainerInitializer()
-			.onStartup(Set.of(BasicVersionResource.class), ctx);
+			.onStartup(Set.of(VersionMixin.class), ctx);
 
 		verify(ctx, never()).addServlet(anyString(), any(Servlet.class));
 	}

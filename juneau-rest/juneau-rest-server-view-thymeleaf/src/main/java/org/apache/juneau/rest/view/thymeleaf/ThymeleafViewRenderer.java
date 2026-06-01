@@ -30,7 +30,7 @@ import org.thymeleaf.context.*;
  * configured {@link TemplateEngine} to render them directly onto the response writer.
  *
  * <p>
- * Auto-registered by {@link BasicThymeleafResource} via
+ * Auto-registered by {@link ThymeleafMixin} via
  * {@link org.apache.juneau.rest.annotation.Rest#responseProcessors() @Rest(responseProcessors=...)}
  * &mdash; callers who add the mixin don't need to wire up this class explicitly. Callers who want
  * to handle {@code ThymeleafView} returns <i>without</i> adopting the mixin can add this class to
@@ -42,7 +42,7 @@ import org.thymeleaf.context.*;
  * <ol class='spaced-list'>
  * 	<li>Inspect the response content. If the value is not a {@link ThymeleafView}, return
  * 		{@link ResponseProcessor#NEXT NEXT} so the rest of the chain runs.
- * 	<li>Read the active {@link BasicThymeleafResource} from the {@code RestContext} bean store to
+ * 	<li>Read the active {@link ThymeleafMixin} from the {@code RestContext} bean store to
  * 		discover the {@link TemplateEngine} (lazy default if no engine bean is registered).
  * 	<li>Build a Thymeleaf {@link Context} populated with the view's attribute map.
  * 	<li>Apply every entry from {@link ThymeleafView#getResponseHeaders()} via
@@ -58,7 +58,7 @@ import org.thymeleaf.context.*;
  * </ol>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicThymeleafResource}
+ * 	<li class='jc'>{@link ThymeleafMixin}
  * 	<li class='jc'>{@link ThymeleafView}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ThymeleafViewSupport">Thymeleaf View Support</a>
@@ -96,10 +96,10 @@ public class ThymeleafViewRenderer implements ViewRenderer {
 			return NEXT;
 
 		// Resolve the bridge resource (carries TemplateEngine + cached default). Fall back to a
-		// fresh BasicThymeleafResource when the renderer is used standalone without the mixin.
+		// fresh ThymeleafMixin when the renderer is used standalone without the mixin.
 		var bridge = req.getContext().getBeanStore()
-			.getBean(BasicThymeleafResource.class)
-			.orElseGet(BasicThymeleafResource::new);
+			.getBean(ThymeleafMixin.class)
+			.orElseGet(ThymeleafMixin::new);
 
 		// Apply caller-supplied response headers first so a caller-provided Content-Type wins
 		// over the bridge's default below.

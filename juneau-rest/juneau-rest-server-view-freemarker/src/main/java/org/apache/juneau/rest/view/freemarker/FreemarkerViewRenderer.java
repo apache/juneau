@@ -30,7 +30,7 @@ import org.apache.juneau.rest.view.*;
  * configured {@link Configuration} to render them directly onto the response writer.
  *
  * <p>
- * Auto-registered by {@link BasicFreemarkerResource} via
+ * Auto-registered by {@link FreemarkerMixin} via
  * {@link org.apache.juneau.rest.annotation.Rest#responseProcessors() @Rest(responseProcessors=...)}
  * &mdash; callers who add the mixin don't need to wire up this class explicitly. Callers who want
  * to handle {@code FreemarkerView} returns <i>without</i> adopting the mixin can add this class
@@ -42,7 +42,7 @@ import org.apache.juneau.rest.view.*;
  * <ol class='spaced-list'>
  * 	<li>Inspect the response content. If the value is not a {@link FreemarkerView}, return
  * 		{@link ResponseProcessor#NEXT NEXT} so the rest of the chain runs.
- * 	<li>Read the active {@link BasicFreemarkerResource} from the {@code RestContext} bean store
+ * 	<li>Read the active {@link FreemarkerMixin} from the {@code RestContext} bean store
  * 		to discover the {@link Configuration} (lazy default if no configuration bean is
  * 		registered) and the optional template-suffix knob.
  * 	<li>Apply every entry from {@link FreemarkerView#getResponseHeaders()} via
@@ -59,7 +59,7 @@ import org.apache.juneau.rest.view.*;
  * </ol>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicFreemarkerResource}
+ * 	<li class='jc'>{@link FreemarkerMixin}
  * 	<li class='jc'>{@link FreemarkerView}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport">FreeMarker View Support</a>
@@ -100,11 +100,11 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 			return NEXT;
 
 		// Resolve the bridge resource (carries Configuration + cached default + templateSuffix).
-		// Fall back to a fresh BasicFreemarkerResource when the renderer is used standalone
+		// Fall back to a fresh FreemarkerMixin when the renderer is used standalone
 		// without the mixin.
 		var bridge = req.getContext().getBeanStore()
-			.getBean(BasicFreemarkerResource.class)
-			.orElseGet(BasicFreemarkerResource::new);
+			.getBean(FreemarkerMixin.class)
+			.orElseGet(FreemarkerMixin::new);
 
 		// Apply caller-supplied response headers first so a caller-provided Content-Type wins
 		// over the bridge's default below.

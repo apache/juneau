@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 class RestClient_Config_Parser_Test extends TestBase {
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestPost
 		public Reader echoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
 			return req.getContent().getReader();

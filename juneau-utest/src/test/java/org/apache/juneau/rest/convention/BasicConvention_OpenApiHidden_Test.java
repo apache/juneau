@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * The host extends vanilla {@link RestServlet} (not {@link BasicRestServlet}) and mounts the four
- * convention mixins plus {@link BasicOpenApiResource} (the OpenAPI generator). The generated spec
+ * convention mixins plus {@link OpenApiMixin} (the OpenAPI generator). The generated spec
  * must list the host's own {@code /items} endpoint but NOT the convention paths.
  *
  * @since 9.5.0
@@ -40,11 +40,11 @@ class BasicConvention_OpenApiHidden_Test extends TestBase {
 
 	@Rest(
 		mixins={
-			BasicFaviconResource.class,
-			BasicSeoResource.class,
-			BasicVersionResource.class,
-			BasicWellKnownResource.class,
-			BasicOpenApiResource.class
+			FaviconMixin.class,
+			SeoMixin.class,
+			VersionMixin.class,
+			WellKnownMixin.class,
+			OpenApiMixin.class
 		},
 		swaggerProvider=BasicSwaggerProvider.class
 	)
@@ -53,12 +53,12 @@ class BasicConvention_OpenApiHidden_Test extends TestBase {
 
 		@RestGet(path="/items") public String items() { return "items"; }
 
-		@Bean public BasicVersionResource version() {
-			return BasicVersionResource.create().entry("name", "convention-openapi-test").build();
+		@Bean public VersionMixin version() {
+			return VersionMixin.create().entry("name", "convention-openapi-test").build();
 		}
 
-		@Bean public BasicWellKnownResource wellKnown() {
-			return BasicWellKnownResource.create().securityTxt("Contact: x@example.com\n").build();
+		@Bean public WellKnownMixin wellKnown() {
+			return WellKnownMixin.create().securityTxt("Contact: x@example.com\n").build();
 		}
 	}
 

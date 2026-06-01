@@ -71,7 +71,7 @@ class JuneauRestAutoConfiguration_Test extends TestBase {
 	@Configuration
 	static class ServletOnlyConfig {
 		@org.springframework.context.annotation.Bean
-		Servlet versionServlet() { return new BasicVersionServlet(); }
+		Servlet versionServlet() { return new VersionServlet(); }
 	}
 
 	@Test void b01_mountsRestServletAtSelfDeclaredPath() throws Exception {
@@ -82,18 +82,18 @@ class JuneauRestAutoConfiguration_Test extends TestBase {
 
 			new JuneauRestAutoConfiguration().juneauRestAutoRegistrar(appContext).onStartup(servletContext);
 
-			verify(servletContext).addServlet(anyString(), any(BasicVersionServlet.class));
+			verify(servletContext).addServlet(anyString(), any(VersionServlet.class));
 			verify(dyn).addMapping("/version/*");
 		}
 	}
 
 	@Configuration
 	static class ManuallyRegisteredConfig {
-		private final BasicVersionServlet servlet = new BasicVersionServlet();
+		private final VersionServlet servlet = new VersionServlet();
 		@org.springframework.context.annotation.Bean
 		Servlet versionServlet() { return servlet; }
 		@org.springframework.context.annotation.Bean
-		ServletRegistrationBean<BasicVersionServlet> versionRegistration() {
+		ServletRegistrationBean<VersionServlet> versionRegistration() {
 			return new ServletRegistrationBean<>(servlet, "/custom/*");
 		}
 	}

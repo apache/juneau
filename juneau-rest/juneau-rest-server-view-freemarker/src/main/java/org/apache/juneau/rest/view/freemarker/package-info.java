@@ -23,7 +23,7 @@
  * <a href="https://freemarker.apache.org/">Apache FreeMarker</a> templates:
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.view.freemarker.BasicFreemarkerResource} &mdash;
+ * 	<li class='jc'>{@link org.apache.juneau.rest.view.freemarker.FreemarkerMixin} &mdash;
  * 		mixin that renders raw FreeMarker templates from the importer's classpath under
  * 		{@code /freemarker/*} and auto-registers
  * 		{@link org.apache.juneau.rest.view.freemarker.FreemarkerViewRenderer}.
@@ -42,11 +42,11 @@
  * <h5 class='figure'>Composition example (microservice):</h5>
  *
  * <p class='bjava'>
- * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=BasicFreemarkerResource.<jk>class</jk>)
+ * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=FreemarkerMixin.<jk>class</jk>)
  * 	<jk>public class</jk> AppResource <jk>extends</jk> RestServlet {
  *
- * 		<ja>@Bean</ja> BasicFreemarkerResource freemarker() {
- * 			<jk>return</jk> BasicFreemarkerResource.<jsm>create</jsm>()
+ * 		<ja>@Bean</ja> FreemarkerMixin freemarker() {
+ * 			<jk>return</jk> FreemarkerMixin.<jsm>create</jsm>()
  * 				.basePath(<js>"/templates/"</js>)
  * 				.templateSuffix(<js>".ftlh"</js>)
  * 				.build();

@@ -44,7 +44,7 @@ class RestClient_Config_Serializer_Test extends TestBase {
 	private static ABean bean = ABean.get();
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestPost
 		public Reader echoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
 			return req.getContent().getReader();

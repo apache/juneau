@@ -194,9 +194,9 @@ public final class ValueResolver {
 	}
 
 	/**
-	 * Generic-aware {@code @Value} resolution that honors {@link Supplier}{@code <String>}
+	 * Generic-aware {@code @Value} resolution that honors {@link Supplier}{@code <T>}
 	 * field types by returning a re-evaluating, threadsafe Supplier instead of a one-shot
-	 * resolved value (field-type autodetect — bare {@code String} resolves once, {@code Supplier<String>}
+	 * resolved value (field-type autodetect — bare {@code String} resolves once, {@code Supplier<T>}
 	 * re-evaluates per {@code .get()}).
 	 *
 	 * <p>
@@ -205,16 +205,25 @@ public final class ValueResolver {
 	 * 	<li>{@code Supplier<String>} → returns a {@link Supplier} that re-evaluates the
 	 * 		compiled template on every {@link Supplier#get()} call, each time against a
 	 * 		fresh {@link VarResolverSession}. Safe to share across threads.
-	 * 	<li>Anything else → delegates to {@link #resolve(String, Class, String)} with the
-	 * 		raw target class (preserves existing behavior).
+	 * 	<li>{@code Supplier<T>} for {@code T != String} → returns a {@link Supplier} that, on every
+	 * 		{@link Supplier#get()} call, re-evaluates the template <i>and</i> coerces the resolved
+	 * 		string into {@code T} via the same {@code String -> T} converter machinery that plain
+	 * 		{@code @Value T} uses ({@link Settings#toType(String, Class)}). The coerced value is never
+	 * 		memoized (late-binding contract); coercion failures surface as a {@link RuntimeException}
+	 * 		from {@code .get()} naming the {@code @Value} key and target type. {@code T} is taken from
+	 * 		any type the converter registry can build from a {@code String} (e.g. {@code Integer},
+	 * 		{@code Long}, {@code Boolean}, {@code Duration}, {@code URI}, {@code Path}, enums).
+	 * 	<li>Anything else (including raw {@code Supplier} and {@code Optional<Supplier<T>>}) → delegates
+	 * 		to {@link #resolve(String, Class, String)} with the raw target class (preserves existing
+	 * 		behavior; the {@code Optional<Supplier<T>>} nesting is intentionally not specially handled).
 	 * </ul>
 	 *
 	 * @param expression The {@code @Value} expression. May be {@code null}.
 	 * @param targetType The erased target class (e.g. {@code String.class} or {@code Supplier.class}).
-	 * @param genericTargetType The declared generic type (e.g. {@code Supplier<String>}). May be
+	 * @param genericTargetType The declared generic type (e.g. {@code Supplier<Integer>}). May be
 	 * 	{@code null}, in which case Supplier-detection is skipped.
 	 * @param siteDescription Human-readable site description for error messages.
-	 * @return Either a one-shot coerced value, or a {@code Supplier<String>} factory.
+	 * @return Either a one-shot coerced value, or a {@code Supplier<T>} factory.
 	 */
 	public static Object resolve(String expression, Class<?> targetType, Type genericTargetType, String siteDescription) {
 		return resolve(expression, targetType, genericTargetType, siteDescription, null);
@@ -226,7 +235,7 @@ public final class ValueResolver {
 	 *
 	 * <p>
 	 * The {@code beanStore} reference is captured (not snapshotted) by the returned
-	 * {@code Supplier<String>} when the declared field/parameter type is {@code Supplier<String>},
+	 * {@code Supplier<T>} when the declared field/parameter type is {@code Supplier<...>},
 	 * so re-evaluating reads always see the current state of {@code beanStore.getBeansOfType(PropertySource.class)}.
 	 *
 	 * @param expression The {@code @Value} expression. May be {@code null}.
@@ -235,35 +244,63 @@ public final class ValueResolver {
 	 * @param siteDescription Human-readable site description for error messages.
 	 * @param beanStore Caller-scoped {@link BeanStore} consulted for {@link PropertySource} beans.
 	 * 	May be {@code null}.
-	 * @return Either a one-shot coerced value, or a {@code Supplier<String>} factory.
+	 * @return Either a one-shot coerced value, or a {@code Supplier<T>} factory.
 	 */
 	public static Object resolve(String expression, Class<?> targetType, Type genericTargetType, String siteDescription,
 			BeanStore beanStore) {
-		if (isSupplierOfString(targetType, genericTargetType)) {
-			if (expression == null)
-				return (Supplier<String>) () -> null;
-			var template = getCompiledTemplate(expression);
-			// Literal templates fast-path: capture the resolved string once and hand back a
-			// constant Supplier. Saves a per-.get() session allocation when the expression
-			// has no variables (e.g. @Value("literal") Supplier<String>).
-			if (template.isLiteral()) {
-				var literal = template.resolve(VarResolver.DEFAULT.createSession());
-				return (Supplier<String>) () -> literal;
-			}
-			if (beanStore == null)
-				return template.asSupplierWithFreshSessions(VarResolver.DEFAULT);
-			// Capture the BeanStore by-reference so re-evaluating reads see the current state of
-			// its PropertySource-typed beans (matches the "by-reference, not snapshot" contract).
-			final BeanStore scope = beanStore;
-			return (Supplier<String>) () -> {
-				var s = VarResolver.DEFAULT.createSession();
-				var sources = scopedSources(scope);
-				if (sources != null)
-					s.bean(PropertySource[].class, sources);
-				return template.resolve(s);
-			};
+		var elementType = supplierElementType(targetType, genericTargetType);
+		if (elementType != null) {
+			// Build the re-evaluating string Supplier once. This is the same factory the bare
+			// Supplier<String> path has always used.
+			var stringSupplier = buildStringSupplier(expression, beanStore);
+			if (elementType == String.class)
+				return stringSupplier;
+			// Supplier<T> for T != String: coerce per .get() using the same String -> T converter
+			// machinery that plain @Value T uses (resolveCoerce -> Settings.toType). Per the
+			// late-binding contract, the string is re-resolved AND re-coerced on every .get() — the
+			// coerced value is never memoized. Only the converter lookup is cached (Settings.toType
+			// memoizes the discovered String -> T function per type in its toTypeFunctions registry,
+			// so each .get() pays the coercion but not the reflective converter discovery). A coercion
+			// failure surfaces as a BeanCreationException (a RuntimeException) from .get(), naming the
+			// @Value expression and the target type.
+			final Class<?> et = elementType;
+			return (Supplier<Object>) () -> resolveCoerce(stringSupplier.get(), et, expression, siteDescription);
 		}
 		return resolve(expression, targetType, siteDescription, beanStore);
+	}
+
+	/**
+	 * Builds the re-evaluating {@code Supplier<String>} used by the {@code @Value Supplier<...>}
+	 * autodetect path. Each {@link Supplier#get()} re-resolves the compiled template against a fresh
+	 * {@link VarResolverSession}, so live config changes are reflected (the late-binding contract).
+	 *
+	 * @param expression The {@code @Value} expression. May be {@code null}.
+	 * @param beanStore Caller-scoped {@link BeanStore} consulted for {@link PropertySource} beans. May be {@code null}.
+	 * @return A threadsafe, re-evaluating {@code Supplier<String>}.
+	 */
+	private static Supplier<String> buildStringSupplier(String expression, BeanStore beanStore) {
+		if (expression == null)
+			return () -> null;
+		var template = getCompiledTemplate(expression);
+		// Literal templates fast-path: capture the resolved string once and hand back a
+		// constant Supplier. Saves a per-.get() session allocation when the expression
+		// has no variables (e.g. @Value("literal") Supplier<String>).
+		if (template.isLiteral()) {
+			var literal = template.resolve(VarResolver.DEFAULT.createSession());
+			return () -> literal;
+		}
+		if (beanStore == null)
+			return template.asSupplierWithFreshSessions(VarResolver.DEFAULT);
+		// Capture the BeanStore by-reference so re-evaluating reads see the current state of
+		// its PropertySource-typed beans (matches the "by-reference, not snapshot" contract).
+		final BeanStore scope = beanStore;
+		return () -> {
+			var s = VarResolver.DEFAULT.createSession();
+			var sources = scopedSources(scope);
+			if (sources != null)
+				s.bean(PropertySource[].class, sources);
+			return template.resolve(s);
+		};
 	}
 
 	/**
@@ -286,14 +323,29 @@ public final class ValueResolver {
 		return map.values().toArray(new PropertySource[0]);
 	}
 
-	/** Returns {@code true} if the declared field/parameter type is exactly {@code Supplier<String>}. */
-	private static boolean isSupplierOfString(Class<?> targetType, Type genericTargetType) {
+	/**
+	 * Returns the {@code T} element class of a declared {@code Supplier<T>} injection site, or
+	 * {@code null} if the declared type is not a coercible {@code Supplier<T>}.
+	 *
+	 * <p>
+	 * Returns {@code null} (i.e. "not a typed Supplier site, fall through to one-shot resolution")
+	 * for raw {@code Supplier}, non-{@code Supplier} parameterized types such as
+	 * {@code Optional<Supplier<T>>} (whose raw type is {@code Optional}, not {@code Supplier} — the
+	 * nesting is intentionally not specially handled), and type arguments that are not a concrete
+	 * {@link Class} (wildcards / type variables). {@code Supplier<String>} returns {@code String.class},
+	 * which the caller treats as the pre-existing pass-through behavior.
+	 */
+	private static Class<?> supplierElementType(Class<?> targetType, Type genericTargetType) {
 		if (targetType != Supplier.class)
-			return false;
+			return null;
 		if (!(genericTargetType instanceof ParameterizedType pt))
-			return false;
+			return null;
+		if (pt.getRawType() != Supplier.class)
+			return null;
 		var args = pt.getActualTypeArguments();
-		return args.length == 1 && args[0] == String.class;
+		if (args.length != 1)
+			return null;
+		return args[0] instanceof Class<?> c ? c : null;
 	}
 
 	private static Object resolveCoerce(String resolved, Class<?> targetType, String expression, String siteDescription) {

@@ -49,33 +49,33 @@ import org.junit.jupiter.api.*;
 class BasicConvention_ParentChain_Test extends TestBase {
 
 	@Rest(mixins={
-		BasicFaviconResource.class,
-		BasicSeoResource.class,
-		BasicVersionResource.class,
-		BasicWellKnownResource.class
+		FaviconMixin.class,
+		SeoMixin.class,
+		VersionMixin.class,
+		WellKnownMixin.class
 	})
 	public static class A extends RestServlet {
 		private static final long serialVersionUID = 1L;
 
 		@RestGet(path="/items") public String items() { return "items"; }
 
-		@Bean public BasicSeoResource seo() {
-			return BasicSeoResource.create()
+		@Bean public SeoMixin seo() {
+			return SeoMixin.create()
 				.robotsAllow("*", "/")
 				.sitemapEntry("https://example.com/items")
 				.build();
 		}
 
-		@Bean public BasicVersionResource version() {
-			return BasicVersionResource.create()
+		@Bean public VersionMixin version() {
+			return VersionMixin.create()
 				.entry("name", "convention-pack")
 				.entry("version", "9.5.0")
 				.fromJavaVersion()
 				.build();
 		}
 
-		@Bean public BasicWellKnownResource wellKnown() {
-			return BasicWellKnownResource.create()
+		@Bean public WellKnownMixin wellKnown() {
+			return WellKnownMixin.create()
 				.securityTxt("Contact: security@example.com\nExpires: 2027-01-01T00:00:00Z\n")
 				.build();
 		}
@@ -88,10 +88,10 @@ class BasicConvention_ParentChain_Test extends TestBase {
 		var hostCtx = RestContext.getGlobalRegistry().get(A.class);
 		var ctxs = hostCtx.getMixinContexts();
 
-		assertNotNull(ctxs.get(BasicFaviconResource.class), "Favicon mixin context registered");
-		assertNotNull(ctxs.get(BasicSeoResource.class), "SEO mixin context registered");
-		assertNotNull(ctxs.get(BasicVersionResource.class), "Version mixin context registered");
-		assertNotNull(ctxs.get(BasicWellKnownResource.class), "Well-known mixin context registered");
+		assertNotNull(ctxs.get(FaviconMixin.class), "Favicon mixin context registered");
+		assertNotNull(ctxs.get(SeoMixin.class), "SEO mixin context registered");
+		assertNotNull(ctxs.get(VersionMixin.class), "Version mixin context registered");
+		assertNotNull(ctxs.get(WellKnownMixin.class), "Well-known mixin context registered");
 		assertEquals(4, ctxs.size(),
 			"Expected exactly four mixin contexts; got: " + ctxs.keySet());
 	}
@@ -118,7 +118,7 @@ class BasicConvention_ParentChain_Test extends TestBase {
 
 	@Test void a06_infoLegacyAliasNotMountedByDefault() throws Exception {
 		// FINISHED-101: /info is no longer a multi-path default. Migration to that secondary
-		// alias is covered by BasicVersionResource_SvlPathOverride_Test#a02.
+		// alias is covered by VersionMixin_SvlPathOverride_Test#a02.
 		c.get("/info").run().assertStatus(404);
 	}
 

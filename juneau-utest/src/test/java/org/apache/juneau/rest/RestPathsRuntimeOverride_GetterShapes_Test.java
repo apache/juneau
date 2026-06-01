@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Validates the permissive {@link Object}-typed return contract for the {@code getPaths()} virtual
- * getter on {@link RestServlet} / {@link RestObject}.
+ * getter on {@link RestServlet} / {@link RestResource}.
  *
  * <p>
  * Since 9.5.0 the {@code getPaths()} signature returns {@link Object}, accepting any of:

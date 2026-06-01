@@ -16,19 +16,15 @@
  */
 package org.apache.juneau.rest.springboot;
 
-import java.util.*;
-
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.response.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
-import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.rest.stats.*;
+import org.apache.juneau.rest.convention.*;
+import org.apache.juneau.rest.ops.*;
 
 /**
- * Subclass of {@link SpringRestServlet} with default settings and standard methods defined.
+ * Subclass of {@link SpringRestServlet} with default settings and standard endpoints defined.
  *
  * <p>
  * Meant as base class for top-level REST resources in Spring Boot environments.
@@ -38,7 +34,8 @@ import org.apache.juneau.rest.stats.*;
  * for details.
  *
  * <p>
- * Implements the basic REST endpoints defined in {@link BasicRestOperations}.
+ * The residual cross-cutting endpoints are supplied by single-responsibility op-mixins ({@link ErrorMixin},
+ * {@link HtdocMixin}, {@link StatsMixin}, and {@link FaviconMixin}).
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>
@@ -47,26 +44,27 @@ import org.apache.juneau.rest.stats.*;
  *
  * @serial exclude
  */
-@Rest
-public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicRestOperations, BasicUniversalConfig {
+// @formatter:off
+@Rest(mixins={ErrorMixin.class, HtdocMixin.class, StatsMixin.class, FaviconMixin.class})
+@HtmlDocConfig(
+	// Basic page navigation links.
+	navlinks={
+		"up: request:/..",
+		"api: servlet:/api",
+		"stats: servlet:/stats"
+	}
+)
+@JsonSchemaConfig(
+	// Add descriptions to the following types when not specified:
+	addDescriptionsTo="bean,collection,array,map,enum",
+	// Add example to the following types:
+	addExamplesTo="bean,collection,array,map",
+	// Don't generate schema information on the Swagger / OpenApi beans themselves or HTML beans.
+	ignoreTypes="Swagger,OpenApi,org.apache.juneau.bean.html5.*",
+	// Use $ref references for bean definitions to reduce duplication in generated specs.
+	useBeanDefs="true"
+)
+// @formatter:on
+public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicUniversalConfig {
 	private static final long serialVersionUID = 1L;
-
-	@Override /* Overridden from BasicRestConfig */
-	public void error() {}
-
-	@Override /* Overridden from BasicRestConfig */
-	public HttpResource getFavIcon() {
-		var favIcon = getContext().getConfig().get("REST/favicon").orElse("images/juneau.png");
-		return getHtdoc(favIcon, null);
-	}
-
-	@Override /* Overridden from BasicRestConfig */
-	public HttpResource getHtdoc(@Path("/*") String path, Locale locale) throws NotFound {
-		return getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
-	}
-
-	@Override /* Overridden from BasicRestConfig */
-	public RestContextStats getStats(RestRequest req) {
-		return req.getContext().getStats();
-	}
 }

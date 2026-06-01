@@ -16,19 +16,16 @@
  */
 package org.apache.juneau.rest.servlet;
 
-import java.util.*;
-
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.response.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.convention.*;
 import org.apache.juneau.rest.docs.*;
-import org.apache.juneau.rest.stats.*;
+import org.apache.juneau.rest.ops.*;
 
 /**
- * Subclass of {@link RestServlet} with default settings and standard methods defined.
+ * Subclass of {@link RestServlet} with default settings and standard endpoints defined.
  *
  * <p>
  * Meant as a base class for top-level REST resources in servlet containers.
@@ -38,9 +35,10 @@ import org.apache.juneau.rest.stats.*;
  * for details.
  *
  * <p>
- * Implements the basic REST endpoints defined in {@link BasicRestOperations}, plus the api-docs
- * mixin pack ({@link BasicSwaggerUiResource} and {@link BasicRedocResource}, which transitively
- * pull in {@link BasicSwaggerResource} and {@link BasicOpenApiResource}). Resulting endpoints:
+ * The residual cross-cutting endpoints are supplied by single-responsibility op-mixins ({@link ErrorMixin},
+ * {@link HtdocMixin}, {@link StatsMixin}, and {@link FaviconMixin}), and the api-docs surface by the
+ * api-docs mixin pack ({@link SwaggerUiMixin} and {@link RedocMixin}, which transitively pull in
+ * {@link SwaggerMixin} and {@link OpenApiMixin}). Resulting endpoints:
  * {@code /api}, {@code /swagger}, {@code /openapi}, {@code /openapi.json}, {@code /openapi.yaml},
  * {@code /redoc}, {@code /htdocs/*}, {@code /favicon.ico}, {@code /stats}, {@code /error}.
  *
@@ -50,26 +48,27 @@ import org.apache.juneau.rest.stats.*;
  *
  * @serial exclude
  */
-@Rest(mixins={BasicSwaggerUiResource.class, BasicRedocResource.class})
-public abstract class BasicRestServlet extends RestServlet implements BasicRestOperations, BasicUniversalConfig {
+// @formatter:off
+@Rest(mixins={SwaggerUiMixin.class, RedocMixin.class, ErrorMixin.class, HtdocMixin.class, StatsMixin.class, FaviconMixin.class})
+@HtmlDocConfig(
+	// Basic page navigation links.
+	navlinks={
+		"up: request:/..",
+		"api: servlet:/api",
+		"stats: servlet:/stats"
+	}
+)
+@JsonSchemaConfig(
+	// Add descriptions to the following types when not specified:
+	addDescriptionsTo="bean,collection,array,map,enum",
+	// Add example to the following types:
+	addExamplesTo="bean,collection,array,map",
+	// Don't generate schema information on the Swagger / OpenApi beans themselves or HTML beans.
+	ignoreTypes="Swagger,OpenApi,org.apache.juneau.bean.html5.*",
+	// Use $ref references for bean definitions to reduce duplication in generated specs.
+	useBeanDefs="true"
+)
+// @formatter:on
+public abstract class BasicRestServlet extends RestServlet implements BasicUniversalConfig {
 	private static final long serialVersionUID = 1L;
-
-	@Override /* Overridden from BasicRestOperations */
-	public void error() {}
-
-	@Override /* Overridden from BasicRestOperations */
-	public HttpResource getFavIcon() {
-		String favIcon = getContext().getConfig().get("REST/favicon").orElse("images/juneau.png");
-		return getHtdoc(favIcon, null);
-	}
-
-	@Override /* Overridden from BasicRestOperations */
-	public HttpResource getHtdoc(@Path("/*") String path, Locale locale) throws NotFound {
-		return getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
-	}
-
-	@Override /* Overridden from BasicRestOperations */
-	public RestContextStats getStats(RestRequest req) {
-		return req.getContext().getStats();
-	}
 }

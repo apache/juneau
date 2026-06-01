@@ -37,7 +37,7 @@ import org.apache.juneau.rest.servlet.*;
 		"</div>"
 	}
 )
-public class HelloWorldResource extends BasicRestObject {
+public class HelloWorldResource extends BasicRestResource {
 
 	/**
 	 * [HTTP GET /helloworld]

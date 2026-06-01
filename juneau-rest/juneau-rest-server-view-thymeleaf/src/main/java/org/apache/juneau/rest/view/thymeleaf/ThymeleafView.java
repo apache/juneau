@@ -27,7 +27,7 @@ import org.apache.juneau.rest.view.*;
  * render a Thymeleaf template.
  *
  * <p>
- * Companion to {@link BasicThymeleafResource} and {@link ThymeleafViewRenderer}: the mixin sets up
+ * Companion to {@link ThymeleafMixin} and {@link ThymeleafViewRenderer}: the mixin sets up
  * the {@code /thymeleaf/*} mount and registers the renderer; the renderer detects
  * {@code ThymeleafView} returns in the response-processor chain and asks the configured
  * {@code org.thymeleaf.TemplateEngine} to {@code process(templateName, context, writer)} directly
@@ -60,7 +60,7 @@ import org.apache.juneau.rest.view.*;
  * singleton built once and returned from many handlers).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicThymeleafResource}
+ * 	<li class='jc'>{@link ThymeleafMixin}
  * 	<li class='jc'>{@link ThymeleafViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ThymeleafViewSupport">Thymeleaf View Support</a>
  * </ul>

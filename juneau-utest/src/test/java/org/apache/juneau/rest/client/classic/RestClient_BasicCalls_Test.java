@@ -58,7 +58,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	private static ABean bean = ABean.get();
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestOp(path="/bean") public ABean getBean() { return bean; }
 		@RestOp(path="/bean") public ABean postBean(@Content ABean b) { return b; }
 		@RestOp(path="/bean") public ABean putBean(@Content ABean b) { return b; }

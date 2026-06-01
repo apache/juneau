@@ -27,7 +27,7 @@ import org.apache.juneau.rest.view.*;
  * render a Mustache template.
  *
  * <p>
- * Companion to {@link BasicMustacheResource} and {@link MustacheViewRenderer}: the mixin sets up
+ * Companion to {@link MustacheMixin} and {@link MustacheViewRenderer}: the mixin sets up
  * the {@code /mustache/*} mount and registers the renderer; the renderer detects
  * {@code MustacheView} returns in the response-processor chain and asks the configured
  * {@code com.github.mustachejava.MustacheFactory} to {@code compile(templateName)} and then
@@ -57,7 +57,7 @@ import org.apache.juneau.rest.view.*;
  * Unlike the Thymeleaf bridge (which always appends {@code .html} via the engine resolver's
  * suffix setting), mustache.java does not have a built-in resolver-suffix concept &mdash; the
  * literal template name is what {@code factory.compile(...)} sees. The
- * {@link BasicMustacheResource.Builder#templateSuffix(String) templateSuffix(...)} builder knob
+ * {@link MustacheMixin.Builder#templateSuffix(String) templateSuffix(...)} builder knob
  * fills the gap: when set, the bridge appends the suffix to template names that don't already
  * end with it (idempotent), so the caller can write {@code MustacheView.of("hello")} and the
  * bridge resolves it as {@code "hello.mustache"} on the classpath.
@@ -71,7 +71,7 @@ import org.apache.juneau.rest.view.*;
  * singleton built once and returned from many handlers).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicMustacheResource}
+ * 	<li class='jc'>{@link MustacheMixin}
  * 	<li class='jc'>{@link MustacheViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MustacheViewSupport">Mustache View Support</a>
  * </ul>

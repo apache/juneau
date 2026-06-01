@@ -85,7 +85,7 @@ import org.apache.juneau.serializer.annotation.*;
  * <p class='bjava'>
  * 	<jc>// Used on a child resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicJsonHtmlConfig { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestResource <jk>implements</jk> BasicJsonHtmlConfig { ... }
  * </p>
  *
  * <p>

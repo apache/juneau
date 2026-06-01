@@ -21,7 +21,7 @@
  * Provides three sibling pieces that together let a Juneau REST resource render JSP templates:
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.view.jsp.BasicJspResource} &mdash; mixin that
+ * 	<li class='jc'>{@link org.apache.juneau.rest.view.jsp.JspMixin} &mdash; mixin that
  * 		serves raw {@code .jsp} resources from the importer's classpath under
  * 		{@code /jsp/*} and auto-registers {@link org.apache.juneau.rest.view.jsp.JspViewRenderer}.
  * 	<li class='jc'>{@link org.apache.juneau.rest.view.jsp.JspView} &mdash; immutable value class
@@ -37,11 +37,11 @@
  * <h5 class='figure'>Composition example (microservice):</h5>
  *
  * <p class='bjava'>
- * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=BasicJspResource.<jk>class</jk>)
+ * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=JspMixin.<jk>class</jk>)
  * 	<jk>public class</jk> AppResource <jk>extends</jk> RestServlet {
  *
- * 		<ja>@Bean</ja> BasicJspResource jsp() {
- * 			<jk>return</jk> BasicJspResource.<jsm>create</jsm>()
+ * 		<ja>@Bean</ja> JspMixin jsp() {
+ * 			<jk>return</jk> JspMixin.<jsm>create</jsm>()
  * 				.basePath(<js>"/WEB-INF/views/"</js>)
  * 				.build();
  * 		}

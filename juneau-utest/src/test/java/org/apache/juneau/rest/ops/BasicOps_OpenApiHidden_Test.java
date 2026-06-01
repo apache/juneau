@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * The host extends vanilla {@link RestServlet} and mounts the three ops mixins plus
- * {@link BasicOpenApiResource} (the OpenAPI generator). The generated spec must list the host's
+ * {@link OpenApiMixin} (the OpenAPI generator). The generated spec must list the host's
  * own {@code /items} endpoint but NOT the ops-pack paths.
  *
  * @since 9.5.0
@@ -41,10 +41,10 @@ class BasicOps_OpenApiHidden_Test extends TestBase {
 
 	@Rest(
 		mixins={
-			BasicEchoResource.class,
-			BasicAdminResource.class,
-			BasicRouteIndexResource.class,
-			BasicOpenApiResource.class
+			EchoMixin.class,
+			AdminMixin.class,
+			RouteIndexMixin.class,
+			OpenApiMixin.class
 		},
 		debug=@Debug("always"),
 		swaggerProvider=BasicSwaggerProvider.class

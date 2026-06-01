@@ -135,7 +135,6 @@ import jakarta.servlet.http.*;
  * 		</ul>
  * 		<li>Methods for accessing static files:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RestRequest#getStaticFiles() getStaticFiles()}
  * 			<li class='jm'>{@link RestRequest#getVarResolverSession() getVarResolverSession()}
  * 		</ul>
  * 		<li>Methods for assertions:
@@ -1394,16 +1393,6 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var sp = inner.getServletPath();
 		return cp == null || ! sp.startsWith(cp) ? sp : sp.substring(cp.length());
 	}
-
-	/**
-	 * Returns the static files registered on the REST resource context object.
-	 *
-	 * <p>
-	 * Used to retrieve localized files to be served up as static files through the REST API.
-	 *
-	 * @return This object.
-	 */
-	public StaticFiles getStaticFiles() { return context.getStaticFiles(); }
 
 	/**
 	 * Returns the localized swagger associated with the resource.

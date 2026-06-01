@@ -27,7 +27,7 @@ import org.apache.juneau.rest.view.*;
  * render a JSP template.
  *
  * <p>
- * Companion to {@link BasicJspResource} and {@link JspViewRenderer}: the mixin sets up the
+ * Companion to {@link JspMixin} and {@link JspViewRenderer}: the mixin sets up the
  * {@code /jsp/*} mount and registers the renderer; the renderer detects {@code JspView} returns
  * in the response-processor chain and dispatches via
  * {@link jakarta.servlet.RequestDispatcher#forward(jakarta.servlet.ServletRequest,
@@ -53,7 +53,7 @@ import org.apache.juneau.rest.view.*;
  * once and returned from many handlers).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicJspResource}
+ * 	<li class='jc'>{@link JspMixin}
  * 	<li class='jc'>{@link JspViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JspViewSupport">JSP View Support</a>
  * </ul>
@@ -70,7 +70,7 @@ public final class JspView implements View {
 	 * Creates a new {@code JspView} carrying the given template name and no attributes.
 	 *
 	 * @param templateName The template name (relative to the
-	 * 	{@link BasicJspResource.Builder#basePath base path}). Must not be {@code null} or blank.
+	 * 	{@link JspMixin.Builder#basePath base path}). Must not be {@code null} or blank.
 	 * @return A new {@code JspView} instance.
 	 * @throws IllegalArgumentException If {@code templateName} is {@code null} or blank.
 	 */

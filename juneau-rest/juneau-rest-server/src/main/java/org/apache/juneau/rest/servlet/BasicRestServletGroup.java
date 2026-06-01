@@ -18,6 +18,7 @@ package org.apache.juneau.rest.servlet;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;
 
 import jakarta.servlet.*;
@@ -33,7 +34,10 @@ import jakarta.servlet.*;
  * for details.
  *
  * <p>
- * Implements the basic REST endpoints defined in {@link BasicRestOperations} and {@link BasicGroupOperations}.
+ * Adds the group-navigation endpoint ({@code GET /}) as a concrete method on top of the residual op-mixins
+ * inherited from {@link BasicRestServlet}. The navigation page is rendered as a method of the host resource
+ * (rather than a sub-context mixin) so it inherits the host's {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig}
+ * page decoration.
  *
  * <p>
  * Children are attached to this resource using the {@link Rest#children() @Rest(children)} annotation.
@@ -53,8 +57,23 @@ import jakarta.servlet.*;
  * @serial exclude
  */
 @Rest
-public abstract class BasicRestServletGroup extends BasicRestServlet implements BasicGroupOperations {
+public abstract class BasicRestServletGroup extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * [GET /] - Get child resources.
+	 *
+	 * <p>
+	 * Returns a bean that lists and allows navigation to child resources. Default implementation
+	 * delegates to {@link ChildResourceDescriptions#of(RestRequest)}; subclasses may override.
+	 *
+	 * @param req The HTTP request.
+	 * @return The bean containing links to the child resources.
+	 */
+	@RestGet(path="/", summary="Navigation page")
+	public ChildResourceDescriptions getChildren(RestRequest req) {
+		return ChildResourceDescriptions.of(req);
+	}
 
 	/**
 	 * Returns the {@link RestChildren} registry backing this group resource.

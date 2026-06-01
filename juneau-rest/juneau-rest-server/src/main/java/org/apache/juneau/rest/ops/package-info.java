@@ -23,20 +23,20 @@
  * Three sibling mixins compose into the host {@code @Rest}-annotated resource. Each mixin owns
  * its default mount paths, ships secure-by-default (debug-gated for echo, deny-all-guard for
  * admin), and is independently mountable; the three together drop in as a pack via
- * {@code @Rest(mixins={BasicEchoResource.class, BasicAdminResource.class, BasicRouteIndexResource.class})}.
+ * {@code @Rest(mixins={EchoMixin.class, AdminMixin.class, RouteIndexMixin.class})}.
  * </p>
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.ops.BasicEchoResource} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.ops.EchoMixin} —
  * 		{@code /echo/*} and {@code /debug/echo/*} request echo, gated behind the host's
  * 		{@link org.apache.juneau.rest.debug.DebugEnablement DebugEnablement}; sensitive headers
  * 		({@code Authorization}, {@code Cookie}, etc.) are redacted by default.
- * 	<li class='jc'>{@link org.apache.juneau.rest.ops.BasicAdminResource} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.ops.AdminMixin} —
  * 		{@code /admin/threads}, {@code /admin/heap}, {@code /admin/cache/flush} (POST), and
  * 		{@code /admin/ratelimit}; default-deny via
  * 		{@link org.apache.juneau.rest.guard.DenyAllGuard} until the importer registers an
  * 		{@code @Bean RestGuardList} factory.
- * 	<li class='jc'>{@link org.apache.juneau.rest.ops.BasicRouteIndexResource} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.ops.RouteIndexMixin} —
  * 		{@code /options} and {@code /routes} returning a JSON list of every
  * 		{@code @RestOp}-annotated method on the host (plus mixins), excluding
  * 		{@code @OpSwagger(ignore=true)} ops.
@@ -48,11 +48,11 @@
  * 	<ja>@Rest</ja>(
  * 		path=<js>"/api"</js>,
  * 		mixins={
- * 			BasicEchoResource.<jk>class</jk>,
- * 			BasicAdminResource.<jk>class</jk>,
- * 			BasicRouteIndexResource.<jk>class</jk>
+ * 			EchoMixin.<jk>class</jk>,
+ * 			AdminMixin.<jk>class</jk>,
+ * 			RouteIndexMixin.<jk>class</jk>
  * 		},
- * 		debug=<js>"conditional"</js>            <jc>// gates BasicEchoResource per-request</jc>
+ * 		debug=<js>"conditional"</js>            <jc>// gates EchoMixin per-request</jc>
  * 	)
  * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet {
  *
@@ -64,8 +64,8 @@
  * 				.build();
  * 		}
  *
- * 		<ja>@Bean</ja> BasicAdminResource admin() {
- * 			<jk>return</jk> BasicAdminResource.<jsm>create</jsm>()
+ * 		<ja>@Bean</ja> AdminMixin admin() {
+ * 			<jk>return</jk> AdminMixin.<jsm>create</jsm>()
  * 				.cacheFlush(<js>"primary"</js>, () -&gt; primaryCache.invalidateAll())
  * 				.build();
  * 		}

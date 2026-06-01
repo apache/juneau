@@ -31,10 +31,10 @@ import org.apache.juneau.rest.*;
  * {@code .html} template directly by its trailing request path.
  *
  * <p>
- * The per-engine mixin resources ({@code BasicJspResource}, {@code BasicFreemarkerResource},
- * {@code BasicMustacheResource}, {@code BasicThymeleafResource}) implement this interface so the
+ * The per-engine mixin resources ({@code JspMixin}, {@code FreemarkerMixin},
+ * {@code MustacheMixin}, {@code ThymeleafMixin}) implement this interface so the
  * raw dispatch they already perform can be reused verbatim by their {@code Basic*Servlet} standalone
- * companions through {@link BasicViewServlet}. Sharing a single implementation means the standalone
+ * companions through {@link ViewServlet}. Sharing a single implementation means the standalone
  * and mixin forms cannot drift in their file-serving behavior.
  *
  * <p>
@@ -44,7 +44,7 @@ import org.apache.juneau.rest.*;
  * output directly onto the response.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicViewServlet}
+ * 	<li class='jc'>{@link ViewServlet}
  * 	<li class='jic'>{@link ViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>

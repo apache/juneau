@@ -530,7 +530,7 @@ class Remote_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class F extends BasicRestObject {
+	public static class F extends BasicRestResource {
 		@RestGet
 		public String[] headers(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
@@ -579,7 +579,7 @@ class Remote_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class G extends BasicRestObject {}
+	public static class G extends BasicRestResource {}
 
 	@Remote
 	public interface G1 {
@@ -596,7 +596,7 @@ class Remote_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class H extends BasicRestObject {
+	public static class H extends BasicRestResource {
 		@RestOp(method="*", path="/*")
 		public String echoMethod(@Method String method, @Path("/*") String path) {
 			return method + " " + path;

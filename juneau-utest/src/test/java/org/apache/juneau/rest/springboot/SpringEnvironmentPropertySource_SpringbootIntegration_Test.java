@@ -50,7 +50,7 @@ import org.springframework.test.context.*;
  * </ul>
  *
  * <p>
- * Mirrors the pattern used by {@code BasicStaticFilesResource_Springboot_Test} and friends:
+ * Mirrors the pattern used by {@code StaticFilesMixin_Springboot_Test} and friends:
  * minimal {@code @SpringBootConfiguration} class, no web environment, dirty context after the
  * class so subsequent tests don't see the bridge.
  */

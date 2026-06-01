@@ -129,7 +129,7 @@ import org.apache.juneau.xml.*;
  * <p class='bjava'>
  * 	<jc>// Used on a child resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicUniversalJenaConfig { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestResource <jk>implements</jk> BasicUniversalJenaConfig { ... }
  * </p>
  *
  * <p>
@@ -142,8 +142,8 @@ import org.apache.juneau.xml.*;
  * 	<ul class='javatreec'>
  * 		<li class='jc'>{@link BasicRestServlet}
  * 		<li class='jc'>{@link BasicRestServletGroup}
- * 		<li class='jc'>{@link BasicRestObject}
- * 		<li class='jc'>{@link BasicRestObjectGroup}
+ * 		<li class='jc'>{@link BasicRestResource}
+ * 		<li class='jc'>{@link BasicRestResourceGroup}
  *	</ul>
  * 	<li class='link'>{doc jrs.AnnotatedClasses}
  * </ul>

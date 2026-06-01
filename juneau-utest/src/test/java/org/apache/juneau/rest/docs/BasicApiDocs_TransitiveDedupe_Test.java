@@ -21,7 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.convention.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.ops.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
@@ -30,40 +32,49 @@ import org.junit.jupiter.api.*;
  * together.
  *
  * <p>
- * {@code @Rest(mixins={BasicSwaggerUiResource.class, BasicRedocResource.class})} should pull in
- * {@code BasicSwaggerResource} (via {@code BasicSwaggerUiResource}) and
- * {@code BasicOpenApiResource} (via {@code BasicRedocResource}) exactly once each &mdash; not twice,
+ * {@code @Rest(mixins={SwaggerUiMixin.class, RedocMixin.class})} should pull in
+ * {@code SwaggerMixin} (via {@code SwaggerUiMixin}) and
+ * {@code OpenApiMixin} (via {@code RedocMixin}) exactly once each &mdash; not twice,
  * even though the user could equivalently have listed all four mixins explicitly.
  *
  * <p>
  * Acceptance:
  * <ul>
- * 	<li>All four mixin classes are present in the host's {@code mixinContexts} map.
- * 	<li>Each mixin appears exactly once (no duplicates).
- * 	<li>All six URL paths (across the four mixins) resolve correctly.
+ * 	<li>The four api-docs mixin classes are present in the host's {@code mixinContexts} map, alongside the
+ * 		four residual op-mixins ({@code ErrorMixin}, {@code HtdocMixin}, {@code StatsMixin},
+ * 		{@code FaviconMixin}) contributed by {@code BasicRestServlet}.
+ * 	<li>Each mixin appears exactly once (no duplicates) &mdash; eight in total.
+ * 	<li>All six api-docs URL paths resolve correctly.
  * </ul>
  */
 class BasicApiDocs_TransitiveDedupe_Test extends TestBase {
 
-	@Rest(mixins={BasicSwaggerUiResource.class, BasicRedocResource.class})
+	@Rest(mixins={SwaggerUiMixin.class, RedocMixin.class})
 	public static class A extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 	}
 
 	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
-	@Test void a01_allFourMixinContextsPresent() throws Exception {
+	@Test void a01_allMixinContextsPresent() throws Exception {
 		MockRestClient.buildLax(A.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(A.class);
 		var contexts = hostCtx.getMixinContexts();
 
-		assertNotNull(contexts.get(BasicSwaggerUiResource.class));
-		assertNotNull(contexts.get(BasicSwaggerResource.class));
-		assertNotNull(contexts.get(BasicRedocResource.class));
-		assertNotNull(contexts.get(BasicOpenApiResource.class));
+		// api-docs pack — deduped from A's explicit SwaggerUiMixin/RedocMixin + BasicRestServlet's own list
+		// plus the transitive SwaggerMixin/OpenApiMixin pulls (each present exactly once).
+		assertNotNull(contexts.get(SwaggerUiMixin.class));
+		assertNotNull(contexts.get(SwaggerMixin.class));
+		assertNotNull(contexts.get(RedocMixin.class));
+		assertNotNull(contexts.get(OpenApiMixin.class));
+		// Residual op-mixins contributed by BasicRestServlet.
+		assertNotNull(contexts.get(ErrorMixin.class));
+		assertNotNull(contexts.get(HtdocMixin.class));
+		assertNotNull(contexts.get(StatsMixin.class));
+		assertNotNull(contexts.get(FaviconMixin.class));
 
-		assertEquals(4, contexts.size(),
-			"Expected exactly four mixin contexts (no duplicates); got: " + contexts.keySet());
+		assertEquals(8, contexts.size(),
+			"Expected exactly eight mixin contexts (no duplicates); got: " + contexts.keySet());
 	}
 
 	@Test void a02_apiPathReachable() throws Exception {

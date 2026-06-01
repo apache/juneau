@@ -41,7 +41,7 @@ import org.apache.juneau.rest.processor.*;
  * <h5 class='figure'>End-state usage:</h5>
  *
  * <p class='bjava'>
- * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=BasicJspResource.<jk>class</jk>)
+ * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=JspMixin.<jk>class</jk>)
  * 	<jk>public class</jk> AppResource <jk>extends</jk> RestServlet {
  *
  * 		<ja>@RestGet</ja>(<js>"/hello/{name}"</js>)

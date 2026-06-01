@@ -54,7 +54,7 @@ import org.apache.juneau.commons.bean.*;
 	},
 	asideFloat="RIGHT"
 )
-public class UtilityBeansResource extends BasicRestObject {
+public class UtilityBeansResource extends BasicRestResource {
 
 	/**
 	 * Sample address bean used for demonstrating utility bean functionality.

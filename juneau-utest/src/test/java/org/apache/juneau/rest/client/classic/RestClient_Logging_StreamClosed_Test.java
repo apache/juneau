@@ -56,7 +56,7 @@ import org.junit.jupiter.api.*;
 class RestClient_Logging_StreamClosed_Test extends TestBase {
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestGet
 		public String hello() {
 			return "hello world";

@@ -40,7 +40,7 @@ import org.apache.juneau.commons.bean.*;
 class RestClient_Config_MarshallingContext_Test extends TestBase {
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestPost
 		public Reader echoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
 			return req.getContent().getReader();
@@ -91,7 +91,7 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 	}
 
 	@Rest
-	public static class A2b extends BasicRestObject {
+	public static class A2b extends BasicRestResource {
 		@RestPost
 		public Reader test(org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws IOException {
 			res.setHeader("X",req.getHeaderParam("X").orElse(null));

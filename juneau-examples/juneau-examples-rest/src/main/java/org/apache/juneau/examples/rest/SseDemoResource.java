@@ -54,7 +54,7 @@ import org.apache.juneau.sse.*;
 	title = "SSE demo",
 	description = "Emits a stream of Server-Sent Events with a short delay between events."
 )
-public class SseDemoResource extends BasicRestObject {
+public class SseDemoResource extends BasicRestResource {
 
 	private static final int EVENT_COUNT = 10;
 	private static final long SLEEP_MILLIS = 500L;

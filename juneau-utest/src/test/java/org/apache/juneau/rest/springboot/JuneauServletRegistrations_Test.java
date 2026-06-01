@@ -35,7 +35,7 @@ import org.junit.jupiter.api.*;
 class JuneauServletRegistrations_Test extends TestBase {
 
 	@Test void a01_derivesMappingFromAnnotation() {
-		var bean = JuneauServletRegistrations.forServlet(new BasicVersionServlet(), null);
+		var bean = JuneauServletRegistrations.forServlet(new VersionServlet(), null);
 		assertTrue(bean.getUrlMappings().contains("/version/*"),
 			"Mapping should be derived from @Rest(paths); was: " + bean.getUrlMappings());
 	}

@@ -42,7 +42,7 @@ import org.springframework.beans.factory.annotation.*;
 		"</div>"
 	}
 )
-public class HelloWorldResource extends BasicRestObject {
+public class HelloWorldResource extends BasicRestResource {
 
 	@Autowired
 	private HelloWorldMessageProvider messageProvider;

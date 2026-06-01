@@ -39,8 +39,8 @@ import org.springframework.test.annotation.*;
  * <p>
  * Boots a full Spring Boot context with embedded Tomcat on a random port, registers a
  * {@link BasicSpringRestServlet}-based host wired up with the four-mixin pack
- * ({@link BasicSwaggerUiResource} + {@link BasicRedocResource} &mdash; transitively pulling in
- * {@link BasicSwaggerResource} + {@link BasicOpenApiResource}) via {@link ServletRegistrationBean},
+ * ({@link SwaggerUiMixin} + {@link RedocMixin} &mdash; transitively pulling in
+ * {@link SwaggerMixin} + {@link OpenApiMixin}) via {@link ServletRegistrationBean},
  * and hits the six canonical api-docs URLs over real HTTP via {@link HttpClient}.
  *
  * <p>
@@ -109,7 +109,7 @@ class BasicApiDocs_Springboot_Test {
 	 * Inherited}, so this child annotation aggregates with the parent's via the mixin walk
 	 * (parent-first, child-appended; {@code LinkedHashSet} dedupes by class identity).
 	 */
-	@Rest(mixins = {BasicSwaggerUiResource.class, BasicRedocResource.class})
+	@Rest(mixins = {SwaggerUiMixin.class, RedocMixin.class})
 	public static class Host extends BasicSpringRestServlet {
 		private static final long serialVersionUID = 1L;
 	}

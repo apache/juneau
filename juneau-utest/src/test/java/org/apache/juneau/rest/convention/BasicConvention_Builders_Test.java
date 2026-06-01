@@ -43,22 +43,22 @@ import org.junit.jupiter.api.io.*;
  */
 class BasicConvention_Builders_Test extends TestBase {
 
-	// -------- BasicFaviconResource --------
+	// -------- FaviconMixin --------
 
 	@Test void favicon_noArgConstructorLoadsDefault() {
-		var f = new BasicFaviconResource();
+		var f = new FaviconMixin();
 		assertNotNull(f);
 	}
 
 	@Test void favicon_classpathResolvesExistingResource() {
-		var f = BasicFaviconResource.create()
+		var f = FaviconMixin.create()
 			.classpath("/juneau-favicon.ico")
 			.build();
 		assertNotNull(f);
 	}
 
 	@Test void favicon_classpathFallsBackOnMissingResource() {
-		var f = BasicFaviconResource.create()
+		var f = FaviconMixin.create()
 			.classpath("/no-such-resource.ico")
 			.build();
 		assertNotNull(f, "Missing classpath path must fall back to default favicon");
@@ -66,7 +66,7 @@ class BasicConvention_Builders_Test extends TestBase {
 
 	@Test void favicon_bytesAndClasspathAreMutuallyExclusive() {
 		var bytes = new byte[]{1,2,3};
-		var f = BasicFaviconResource.create()
+		var f = FaviconMixin.create()
 			.classpath("/anything.ico")
 			.bytes(bytes)
 			.build();
@@ -75,22 +75,22 @@ class BasicConvention_Builders_Test extends TestBase {
 	}
 
 	@Test void favicon_customCacheControl() {
-		var f = BasicFaviconResource.create()
+		var f = FaviconMixin.create()
 			.bytes(new byte[]{1,2})
 			.cacheControl("no-store")
 			.build();
 		assertNotNull(f);
 	}
 
-	// -------- BasicSeoResource --------
+	// -------- SeoMixin --------
 
 	@Test void seo_noArgConstructorYieldsDenyAll() {
-		var s = new BasicSeoResource();
+		var s = new SeoMixin();
 		assertNotNull(s);
 	}
 
 	@Test void seo_robotsAllowAndDisallowMix() {
-		var s = BasicSeoResource.create()
+		var s = SeoMixin.create()
 			.robotsAllow("Googlebot", "/")
 			.robotsDisallow("BadBot", "/private", "/admin")
 			.build();
@@ -98,7 +98,7 @@ class BasicConvention_Builders_Test extends TestBase {
 	}
 
 	@Test void seo_sitemapEntryWithFullMetadata() {
-		var s = BasicSeoResource.create()
+		var s = SeoMixin.create()
 			.sitemapEntry("https://example.com/page",
 				ZonedDateTime.parse("2026-05-24T18:00:00Z"),
 				"weekly",
@@ -108,7 +108,7 @@ class BasicConvention_Builders_Test extends TestBase {
 	}
 
 	@Test void seo_sitemapEntryDirectInstance() {
-		var e = new BasicSeoResource.SitemapEntry(
+		var e = new SeoMixin.SitemapEntry(
 			"https://x.example.com/<unsafe&\"chars'>",
 			ZonedDateTime.parse("2026-05-24T18:00:00+02:00"),
 			"daily",
@@ -132,45 +132,45 @@ class BasicConvention_Builders_Test extends TestBase {
 
 	@Test void seo_emptyPathArrayInRobotsRuleIsTolerated() {
 		// Internal RobotsRule's path-array handling — null/empty paths is just an empty rule.
-		var s = BasicSeoResource.create().robotsAllow("MyBot").build();
+		var s = SeoMixin.create().robotsAllow("MyBot").build();
 		assertNotNull(s);
 	}
 
-	// -------- BasicVersionResource --------
+	// -------- VersionMixin --------
 
 	@Test void version_noArgConstructorPopulatesDefaults() {
-		var v = new BasicVersionResource();
+		var v = new VersionMixin();
 		assertNotNull(v.getInfoMap().get("javaVersion"), "no-arg ctor must surface javaVersion");
 	}
 
 	@Test void version_entryAcceptsNullValue() {
-		var v = BasicVersionResource.create()
+		var v = VersionMixin.create()
 			.entry("missing", null)
 			.build();
-		assertEquals(BasicVersionResource.UNKNOWN, v.getInfoMap().get("missing"));
+		assertEquals(VersionMixin.UNKNOWN, v.getInfoMap().get("missing"));
 	}
 
 	@Test void version_entriesMapSink() {
 		var values = new LinkedHashMap<String,String>();
 		values.put("a", "1");
 		values.put("b", null);
-		var v = BasicVersionResource.create().entries(values).build();
+		var v = VersionMixin.create().entries(values).build();
 		assertEquals("1", v.getInfoMap().get("a"));
-		assertEquals(BasicVersionResource.UNKNOWN, v.getInfoMap().get("b"));
+		assertEquals(VersionMixin.UNKNOWN, v.getInfoMap().get("b"));
 	}
 
 	@Test void version_entriesNullMapIsTolerated() {
-		var v = BasicVersionResource.create().entries(null).build();
+		var v = VersionMixin.create().entries(null).build();
 		assertNotNull(v);
 	}
 
 	@Test void version_fromManifestFallbackUnknownNameAndVersion() {
 		// URLClassLoader with no manifest available: name+version fall back to (unknown).
-		var v = BasicVersionResource.create()
+		var v = VersionMixin.create()
 			.fromManifest(new URLClassLoader(new URL[0], null))
 			.build();
-		assertEquals(BasicVersionResource.UNKNOWN, v.getInfoMap().get("name"));
-		assertEquals(BasicVersionResource.UNKNOWN, v.getInfoMap().get("version"));
+		assertEquals(VersionMixin.UNKNOWN, v.getInfoMap().get("name"));
+		assertEquals(VersionMixin.UNKNOWN, v.getInfoMap().get("version"));
 	}
 
 	@Test void version_fromManifestObjectFullAttrs() {
@@ -181,7 +181,7 @@ class BasicConvention_Builders_Test extends TestBase {
 		attrs.putValue("Implementation-Version", "5.0.0");
 		attrs.putValue("Implementation-Vendor", "Co");
 		attrs.putValue("Build-Jdk", "21");
-		var v = BasicVersionResource.create().fromManifest(m).build();
+		var v = VersionMixin.create().fromManifest(m).build();
 		assertEquals("obj-app", v.getInfoMap().get("name"));
 		assertEquals("5.0.0", v.getInfoMap().get("version"));
 		assertEquals("Co", v.getInfoMap().get("vendor"));
@@ -196,7 +196,7 @@ class BasicConvention_Builders_Test extends TestBase {
 			+ "git.build.time=2026-05-24T17:00:00Z\n";
 		Files.writeString(tempDir.resolve("git.properties"), props, StandardCharsets.UTF_8);
 		try (var cl = new URLClassLoader(new URL[]{ tempDir.toUri().toURL() }, null)) {
-			var v = BasicVersionResource.create()
+			var v = VersionMixin.create()
 				.fromGitProperties(cl)
 				.build();
 			assertEquals("abcdef0123456789", v.getInfoMap().get("gitCommit"));
@@ -210,7 +210,7 @@ class BasicConvention_Builders_Test extends TestBase {
 			+ "git.branch=main\n";
 		Files.writeString(tempDir.resolve("git.properties"), props, StandardCharsets.UTF_8);
 		try (var cl = new URLClassLoader(new URL[]{ tempDir.toUri().toURL() }, null)) {
-			var v = BasicVersionResource.create()
+			var v = VersionMixin.create()
 				.fromGitProperties(cl)
 				.build();
 			assertEquals("abcdef0", v.getInfoMap().get("gitCommit"),
@@ -220,7 +220,7 @@ class BasicConvention_Builders_Test extends TestBase {
 
 	@Test void version_fromGitPropertiesMissingFileIsSilent() throws Exception {
 		try (var cl = new URLClassLoader(new URL[0], null)) {
-			var v = BasicVersionResource.create()
+			var v = VersionMixin.create()
 				.fromGitProperties(cl)
 				.build();
 			assertNull(v.getInfoMap().get("gitCommit"),
@@ -236,17 +236,17 @@ class BasicConvention_Builders_Test extends TestBase {
 			"Manifest-Version: 1.0\nBuild-Jdk: 22\n\n",
 			StandardCharsets.UTF_8);
 		try (var cl = new URLClassLoader(new URL[]{ tempDir.toUri().toURL() }, null)) {
-			var v = BasicVersionResource.create()
+			var v = VersionMixin.create()
 				.fromManifest(cl)
 				.build();
 			assertEquals("22", v.getInfoMap().get("javaVersion"));
-			assertEquals(BasicVersionResource.UNKNOWN, v.getInfoMap().get("name"),
+			assertEquals(VersionMixin.UNKNOWN, v.getInfoMap().get("name"),
 				"name unset → (unknown)");
 		}
 	}
 
 	@Test void version_fromJavaVersionPutsIfAbsent() {
-		var v = BasicVersionResource.create()
+		var v = VersionMixin.create()
 			.entry("javaVersion", "preset")
 			.fromJavaVersion()
 			.build();
@@ -262,7 +262,7 @@ class BasicConvention_Builders_Test extends TestBase {
 		attrs.putValue("Implementation-Title", "x");
 		attrs.putValue("Implementation-Version", "1");
 		attrs.putValue("Implementation-Vendor", "");
-		var v = BasicVersionResource.create().fromManifest(m).build();
+		var v = VersionMixin.create().fromManifest(m).build();
 		assertNull(v.getInfoMap().get("vendor"), "empty string Implementation-Vendor must be skipped");
 	}
 
@@ -272,7 +272,7 @@ class BasicConvention_Builders_Test extends TestBase {
 			+ "git.build.time=\n";
 		Files.writeString(tempDir.resolve("git.properties"), props, StandardCharsets.UTF_8);
 		try (var cl = new URLClassLoader(new URL[]{ tempDir.toUri().toURL() }, null)) {
-			var v = BasicVersionResource.create().fromGitProperties(cl).build();
+			var v = VersionMixin.create().fromGitProperties(cl).build();
 			assertNull(v.getInfoMap().get("gitCommit"), "empty git.commit.id skipped");
 			assertNull(v.getInfoMap().get("gitBranch"), "empty git.branch skipped");
 			assertNull(v.getInfoMap().get("buildTime"), "empty git.build.time skipped");
@@ -288,9 +288,9 @@ class BasicConvention_Builders_Test extends TestBase {
 				throw new IOException("boom");
 			}
 		};
-		var v = BasicVersionResource.create().fromManifest(brokenCl).build();
-		assertEquals(BasicVersionResource.UNKNOWN, v.getInfoMap().get("name"));
-		assertEquals(BasicVersionResource.UNKNOWN, v.getInfoMap().get("version"));
+		var v = VersionMixin.create().fromManifest(brokenCl).build();
+		assertEquals(VersionMixin.UNKNOWN, v.getInfoMap().get("name"));
+		assertEquals(VersionMixin.UNKNOWN, v.getInfoMap().get("version"));
 	}
 
 	@Test void version_fromGitPropertiesClassLoaderThrowsIOException() {
@@ -307,7 +307,7 @@ class BasicConvention_Builders_Test extends TestBase {
 				};
 			}
 		};
-		var v = BasicVersionResource.create().fromGitProperties(brokenCl).build();
+		var v = VersionMixin.create().fromGitProperties(brokenCl).build();
 		assertNull(v.getInfoMap().get("gitCommit"), "broken git.properties read produces no entry");
 	}
 
@@ -321,8 +321,8 @@ class BasicConvention_Builders_Test extends TestBase {
 			"Manifest-Version: 1.0\nImplementation-Title: gone\n\n", StandardCharsets.UTF_8);
 		try (var cl = new URLClassLoader(new URL[]{ tempDir.toUri().toURL() }, null)) {
 			Files.delete(manifest);
-			var v = BasicVersionResource.create().fromManifest(cl).build();
-			assertEquals(BasicVersionResource.UNKNOWN, v.getInfoMap().get("name"));
+			var v = VersionMixin.create().fromManifest(cl).build();
+			assertEquals(VersionMixin.UNKNOWN, v.getInfoMap().get("name"));
 		}
 	}
 
@@ -340,22 +340,22 @@ class BasicConvention_Builders_Test extends TestBase {
 			StandardCharsets.UTF_8);
 		try (var cl = new URLClassLoader(
 				new URL[]{ dirA.toUri().toURL(), dirB.toUri().toURL() }, null)) {
-			var v = BasicVersionResource.create().fromManifest(cl).build();
+			var v = VersionMixin.create().fromManifest(cl).build();
 			assertEquals("titled", v.getInfoMap().get("name"),
 				"Locator must prefer Implementation-Title-bearing manifest");
 		}
 	}
 
-	// -------- BasicWellKnownResource --------
+	// -------- WellKnownMixin --------
 
 	@Test void wellKnown_noArgConstructorYieldsNullBody() {
-		var w = new BasicWellKnownResource();
+		var w = new WellKnownMixin();
 		assertNull(w.getSecurityTxtBody());
 	}
 
 	@Test void wellKnown_securityTxtBodyAccessor() {
 		var body = "Contact: x@example.com\nExpires: 2027-01-01T00:00:00Z\n";
-		var w = BasicWellKnownResource.create().securityTxt(body).build();
+		var w = WellKnownMixin.create().securityTxt(body).build();
 		assertEquals(body, w.getSecurityTxtBody());
 	}
 }

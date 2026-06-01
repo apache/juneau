@@ -41,7 +41,7 @@ import org.junit.jupiter.api.*;
 class SerializedHttpEntity_Test extends TestBase {
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestPost
 		public String[] checkHeader(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);

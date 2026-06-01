@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 class RestClient_Paths_Test extends TestBase {
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestGet(path="/echo/*")
 		public String getEcho(org.apache.juneau.rest.RestRequest req) {
 			return req.toString();

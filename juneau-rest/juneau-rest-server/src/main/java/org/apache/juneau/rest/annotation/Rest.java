@@ -448,7 +448,7 @@ public @interface Rest {
 	 * {@code "debugEnablement"}, {@code "debugDefault"}, {@code "partSerializer"}, {@code "partParser"}, and
 	 * {@code "messages"}.  For example, {@code @Rest(noInherit={"guards"})} on a mixin removes the host's guard
 	 * chain from the mixin's endpoints (typical pattern for deliberately-unguarded probes like
-	 * {@code BasicHealthResource}).
+	 * {@code HealthMixin}).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions">Session Options</a>
@@ -1589,7 +1589,7 @@ public @interface Rest {
 	 * Used to retrieve localized files to be served up as static files through the REST API via the following
 	 * predefined methods:
 	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link BasicRestObject#getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@link BasicRestResource#getHtdoc(String, Locale)}.
 	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
 	 * </ul>
 	 *
@@ -1597,7 +1597,6 @@ public @interface Rest {
 	 * The static file finder can be accessed through the following methods:
 	 * <ul class='javatree'>
 	 * 	<li class='jm'>{@link RestContext#getStaticFiles()}
-	 * 	<li class='jm'>{@link RestRequest#getStaticFiles()}
 	 * </ul>
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>

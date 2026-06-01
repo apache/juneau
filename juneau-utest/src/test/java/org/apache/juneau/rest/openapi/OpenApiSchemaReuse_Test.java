@@ -63,7 +63,7 @@ class OpenApiSchemaReuse_Test extends TestBase {
 	}
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestGet(path="/pet") public Pet getPet() { return new Pet(); }
 		@RestPost(path="/pet") public Pet createPet(@Content Pet pet) { return pet; }
 	}

@@ -38,8 +38,8 @@ import jakarta.servlet.*;
  * {@link org.apache.juneau.microservice.jetty.JettyConfiguration JettyConfiguration} on an
  * ephemeral port via {@link MicroserviceTestFixture}, mounts a {@link BasicRestServlet} host that
  * inherits the four-mixin pack
- * ({@link BasicSwaggerUiResource} + {@link BasicRedocResource} &mdash; transitively pulling in
- * {@link BasicSwaggerResource} + {@link BasicOpenApiResource}), and then hits the six canonical
+ * ({@link SwaggerUiMixin} + {@link RedocMixin} &mdash; transitively pulling in
+ * {@link SwaggerMixin} + {@link OpenApiMixin}), and then hits the six canonical
  * api-docs URLs over real HTTP.
  *
  * <p>

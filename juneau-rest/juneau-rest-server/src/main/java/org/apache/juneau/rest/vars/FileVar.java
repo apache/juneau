@@ -29,7 +29,7 @@ import org.apache.juneau.commons.svl.*;
  * The format for this var is <js>"$F{path[,defaultValue]}"</js>.
  *
  * <p>
- * Contents of files are retrieved from the request using {@link RestRequest#getStaticFiles()}.
+ * Contents of files are retrieved from the resource context using {@link RestContext#getStaticFiles()}.
 
  * <p>
  * Localized resources (based on the locale of the HTTP request) are supported.
@@ -84,7 +84,7 @@ public class FileVar extends DefaultingVar {
 
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 
-		String s = req.getStaticFiles().getString(key, null).orElse(null);
+		String s = req.getContext().getStaticFiles().getString(key, null).orElse(null);
 		if (s == null)
 			return null;
 		String subType = getFileExtension(key);

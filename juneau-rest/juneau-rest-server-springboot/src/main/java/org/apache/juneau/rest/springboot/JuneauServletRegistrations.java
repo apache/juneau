@@ -34,7 +34,7 @@ import org.springframework.boot.web.servlet.*;
  * <p class='bjava'>
  * 	<ja>@Bean</ja>
  * 	<jk>public</jk> ServletRegistrationBean&lt;?&gt; jspServlet(BeanStore <jv>beanStore</jv>) {
- * 		<jk>return</jk> JuneauServletRegistrations.<jsm>forServlet</jsm>(<jk>new</jk> BasicJspServlet(), <jv>beanStore</jv>);
+ * 		<jk>return</jk> JuneauServletRegistrations.<jsm>forServlet</jsm>(<jk>new</jk> JspServlet(), <jv>beanStore</jv>);
  * 	}
  * </p>
  *

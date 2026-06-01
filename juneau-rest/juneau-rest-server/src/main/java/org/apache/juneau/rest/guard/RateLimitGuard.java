@@ -382,7 +382,7 @@ public class RateLimitGuard extends RestGuard {
 	 * Point-in-time view of a single token bucket as exposed by {@link Storage#snapshot()}.
 	 *
 	 * <p>
-	 * Used by operator-facing tooling (e.g. {@code BasicAdminResource}'s {@code /admin/ratelimit} endpoint) to
+	 * Used by operator-facing tooling (e.g. {@code AdminMixin}'s {@code /admin/ratelimit} endpoint) to
 	 * surface live per-key bucket state alongside the static configuration.  Token-bucket vocabulary
 	 * intentionally — there is no discrete refill window because the bucket refills continuously at
 	 * {@code permitsPerSecond}, so this record reports the current fill level ({@link #tokens()}), the integer

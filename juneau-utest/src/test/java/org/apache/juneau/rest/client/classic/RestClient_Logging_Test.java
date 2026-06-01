@@ -43,7 +43,7 @@ class RestClient_Logging_Test extends TestBase {
 	private static ABean bean = ABean.get();
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestPost
 		public ABean bean(@Content ABean b) {
 			return b;

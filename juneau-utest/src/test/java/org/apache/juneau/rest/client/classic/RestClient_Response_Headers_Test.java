@@ -44,7 +44,7 @@ import org.junit.jupiter.api.*;
 class RestClient_Response_Headers_Test extends TestBase {
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestGet
 		public String echo(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
 			var c = req.getHeaderParam("Check").orElse(null);

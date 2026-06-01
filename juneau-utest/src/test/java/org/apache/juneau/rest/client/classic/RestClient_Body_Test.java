@@ -34,7 +34,7 @@ import org.junit.jupiter.api.*;
 class RestClient_Body_Test extends TestBase {
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestPost
 		public Reader post(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) throws IOException {
 			for (var e : req.getHeaders())

@@ -516,7 +516,7 @@ public class RestContext extends Context {
 	 * (which is only meaningful inside the {@link RestContext} constructor):
 	 * <ol>
 	 * 	<li>The resource's {@code getPaths()} virtual getter (defined on {@code RestServlet} /
-	 * 		{@code RestObject}). {@code null} return falls through; non-{@code null} (including empty array) wins.
+	 * 		{@code RestResource}). {@code null} return falls through; non-{@code null} (including empty array) wins.
 	 * 	<li>{@link Rest#paths() @Rest(paths)} annotation default on the most-derived class, SVL-resolved per
 	 * 		element and comma-split.  A {@code VarResolver} is looked up on {@code store} (when present); SVL
 	 * 		variables like {@code $C{key}} resolve against beans visible to the bean store.
@@ -542,7 +542,7 @@ public class RestContext extends Context {
 	}
 
 	private static String[] resolvePathsCore(List<AnnotationInfo<Rest>> annotations, Object resource, VarResolver vr, WritableBeanStore beanStore) {
-		// Rung 2: getPaths() virtual getter on the resource (RestServlet / RestObject / any matching class).
+		// Rung 2: getPaths() virtual getter on the resource (RestServlet / RestResource / any matching class).
 		// The getter return is normalized to a flat List<String> of raw leaves (any String / String[] /
 		// Collection / Iterable / Stream / nested mix of those), then each leaf flows through the same
 		// SVL-resolve + comma-split pipeline used for @Rest(paths=...) annotation elements.
@@ -637,7 +637,7 @@ public class RestContext extends Context {
 	/**
 	 * Reflectively invokes a no-arg {@code getPaths()} method on the resource (defined on
 	 * {@link org.apache.juneau.rest.servlet.RestServlet RestServlet} and
-	 * {@link org.apache.juneau.rest.servlet.RestObject RestObject}). Reflection is used to avoid coupling this
+	 * {@link org.apache.juneau.rest.servlet.RestResource RestResource}). Reflection is used to avoid coupling this
 	 * static utility to either base class &mdash; if a custom {@code @Rest}-annotated POJO declares
 	 * {@code public Object getPaths()} (or any covariant return type such as {@code String[]},
 	 * {@code List<String>}, etc.), it participates uniformly.
@@ -3400,7 +3400,7 @@ public class RestContext extends Context {
 	 * 	<li><b>Programmatic</b> &mdash; {@link Builder#paths(String...)} setter (or {@link Args#paths()} record
 	 * 		field). Highest precedence; an empty array (not {@code null}) explicitly clears the mount list.
 	 * 	<li><b>Getter</b> &mdash; the resource's {@code getPaths()} virtual method (defined on
-	 * 		{@code RestServlet} and {@code RestObject}). {@code null} return inherits; non-{@code null} (including
+	 * 		{@code RestServlet} and {@code RestResource}). {@code null} return inherits; non-{@code null} (including
 	 * 		empty array) wins over the annotation default.
 	 * 	<li><b>Annotation default</b> &mdash; {@link Rest#paths()}, walked top-down across the resource-class
 	 * 		hierarchy with the most-derived non-empty value winning. Each element is

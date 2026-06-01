@@ -22,7 +22,7 @@ import org.apache.juneau.rest.health.*;
 import jakarta.servlet.*;
 
 /**
- * Opt-in probe configuration that auto-mounts {@link BasicHealthResource}.
+ * Opt-in probe configuration that auto-mounts {@link HealthServlet}.
  *
  * @since 9.5.0
  */
@@ -48,6 +48,6 @@ public class HealthProbeConfiguration {
 	@Bean(name="healthProbeServlet")
 	@ConditionalOnMissingBean(name="healthProbeServlet")
 	public Servlet healthProbeServlet() {
-		return new BasicHealthResource();
+		return new HealthServlet();
 	}
 }

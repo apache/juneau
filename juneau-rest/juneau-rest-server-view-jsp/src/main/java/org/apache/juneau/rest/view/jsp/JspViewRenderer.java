@@ -31,7 +31,7 @@ import org.apache.juneau.rest.view.*;
  * jakarta.servlet.ServletResponse) ServletContext.getRequestDispatcher(...).forward(...)}.
  *
  * <p>
- * Auto-registered by {@link BasicJspResource} via
+ * Auto-registered by {@link JspMixin} via
  * {@link org.apache.juneau.rest.annotation.Rest#responseProcessors() @Rest(responseProcessors=...)}
  * &mdash; callers who add the mixin don't need to wire up this class explicitly. Callers who want
  * to handle {@code JspView} returns <i>without</i> adopting the mixin (e.g. mounting their own
@@ -44,7 +44,7 @@ import org.apache.juneau.rest.view.*;
  * 	<li>Inspect the response content. If the value is not a {@link JspView}, return
  * 		{@link ResponseProcessor#NEXT NEXT} so the rest of the chain runs (the standard POJO
  * 		serializer / plain-text fallback handle non-{@code JspView} returns).
- * 	<li>Read the active {@link BasicJspResource} from the {@code RestContext} bean store to
+ * 	<li>Read the active {@link JspMixin} from the {@code RestContext} bean store to
  * 		discover the configured base path; fall back to {@code "/"} when none is registered (a
  * 		caller using the renderer standalone without the mixin).
  * 	<li>Copy every entry from {@link JspView#getAttributes()} onto the request as a request
@@ -70,7 +70,7 @@ import org.apache.juneau.rest.view.*;
  * accident; document the constraint for any user relying on {@code RestPreCall}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicJspResource}
+ * 	<li class='jc'>{@link JspMixin}
  * 	<li class='jc'>{@link JspView}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JspViewSupport">JSP View Support</a>
@@ -103,11 +103,11 @@ public class JspViewRenderer implements ViewRenderer {
 		if (! (content instanceof JspView view))
 			return NEXT;
 
-		// Resolve the base path. Prefer the registered BasicJspResource bean (which the mixin
+		// Resolve the base path. Prefer the registered JspMixin bean (which the mixin
 		// instantiates), fall back to "/" when the renderer is used standalone.
 		var basePath = req.getContext().getBeanStore()
-			.getBean(BasicJspResource.class)
-			.map(BasicJspResource::getBasePath)
+			.getBean(JspMixin.class)
+			.map(JspMixin::getBasePath)
 			.orElse("/");
 
 		// Copy attributes onto the request so the JSP / JSTL EL can resolve them.
@@ -120,7 +120,7 @@ public class JspViewRenderer implements ViewRenderer {
 		// A path that escapes basePath (e.g. template names assembled from user input that
 		// included ../ segments) is rejected with InternalServerError — template names are
 		// caller-controlled, so an escape attempt indicates a server-side bug, not a request-
-		// side attack. (User-input flowing into JSP rendering is handled by BasicJspResource.render
+		// side attack. (User-input flowing into JSP rendering is handled by JspMixin.render
 		// which catches IAE and surfaces it as Forbidden.)
 		String target;
 		try {
@@ -156,7 +156,7 @@ public class JspViewRenderer implements ViewRenderer {
 	 *
 	 * <p>
 	 * Delegates to {@link FileUtils#resolveVirtualPathSafely(String, String)} — the canonical
-	 * shared implementation reused by {@code BasicJspResource.render(...)} for the
+	 * shared implementation reused by {@code JspMixin.render(...)} for the
 	 * raw-{@code .jsp} dispatch path. Handles every {@code (basePath, template)} combination of
 	 * trailing/leading slashes uniformly so callers can pass {@code basePath("/WEB-INF/views")} or
 	 * {@code basePath("/WEB-INF/views/")} and {@code "hello.jsp"} or {@code "/hello.jsp"} without
@@ -164,7 +164,7 @@ public class JspViewRenderer implements ViewRenderer {
 	 *
 	 * <p>
 	 * A {@code null} or empty {@code basePath} is normalized to {@code "/"} (the
-	 * {@link BasicJspResource#DEFAULT_BASE_PATH default}) before the boundary check runs.
+	 * {@link JspMixin#DEFAULT_BASE_PATH default}) before the boundary check runs.
 	 *
 	 * @param basePath The base path (e.g. {@code "/WEB-INF/views/"}).
 	 * @param template The template name (e.g. {@code "hello.jsp"}).

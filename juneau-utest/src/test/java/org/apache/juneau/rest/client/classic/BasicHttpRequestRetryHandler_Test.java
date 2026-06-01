@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
 class BasicHttpRequestRetryHandler_Test extends TestBase {
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestGet
 		public Ok get() {
 			return OK;

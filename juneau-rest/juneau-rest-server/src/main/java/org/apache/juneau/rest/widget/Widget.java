@@ -136,7 +136,7 @@ public abstract class Widget implements HtmlWidget {
 	 * @return The file finder to used for finding files on the file system.
 	 */
 	protected FileFinder getFileFinder(RestRequest req) {
-		return req.getStaticFiles();
+		return req.getContext().getStaticFiles();
 	}
 
 	/**

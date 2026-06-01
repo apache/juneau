@@ -22,7 +22,7 @@
  * templates via <a href="https://github.com/spullara/mustache.java">mustache.java</a>:
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.view.mustache.BasicMustacheResource} &mdash;
+ * 	<li class='jc'>{@link org.apache.juneau.rest.view.mustache.MustacheMixin} &mdash;
  * 		mixin that renders raw Mustache templates from the importer's classpath under
  * 		{@code /mustache/*} and auto-registers
  * 		{@link org.apache.juneau.rest.view.mustache.MustacheViewRenderer}.
@@ -40,11 +40,11 @@
  * <h5 class='figure'>Composition example (microservice):</h5>
  *
  * <p class='bjava'>
- * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=BasicMustacheResource.<jk>class</jk>)
+ * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=MustacheMixin.<jk>class</jk>)
  * 	<jk>public class</jk> AppResource <jk>extends</jk> RestServlet {
  *
- * 		<ja>@Bean</ja> BasicMustacheResource mustache() {
- * 			<jk>return</jk> BasicMustacheResource.<jsm>create</jsm>()
+ * 		<ja>@Bean</ja> MustacheMixin mustache() {
+ * 			<jk>return</jk> MustacheMixin.<jsm>create</jsm>()
  * 				.basePath(<js>"/templates/"</js>)
  * 				.templateSuffix(<js>".mustache"</js>)
  * 				.build();

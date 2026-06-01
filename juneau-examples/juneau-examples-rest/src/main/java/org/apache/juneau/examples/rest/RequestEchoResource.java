@@ -73,7 +73,7 @@ import org.apache.juneau.commons.bean.*;
 @BeanTypeApply(on="HttpServletRequest",value=@BeanType(interfaceClass=HttpServletRequest.class))
 @BeanTypeApply(on="HttpSession",value=@BeanType(interfaceClass=HttpSession.class))
 @BeanTypeApply(on="ServletContext",value=@BeanType(interfaceClass=ServletContext.class))
-public class RequestEchoResource extends BasicRestObject {
+public class RequestEchoResource extends BasicRestResource {
 
 	/**
 	 * [HTTP GET /echo/*]

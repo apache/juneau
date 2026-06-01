@@ -32,7 +32,7 @@ import org.junit.jupiter.api.io.*;
  *
  * <p>
  * The two helpers are the shared canonical implementations behind the path-traversal hardening
- * in {@code DirectoryResource}, {@code LogsResource}, and {@code BasicJspResource}; the tests
+ * in {@code DirectoryResource}, {@code LogsResource}, and {@code JspMixin}; the tests
  * here exercise the shared semantic invariants directly so the per-resource regression suites
  * can focus on caller-layer behavior (HTTP status codes, response shape).
  */

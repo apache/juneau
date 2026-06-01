@@ -58,7 +58,7 @@ class RestClient_Response_Test extends TestBase {
 	private static final ZonedDateTime ZONEDDATETIME = ZonedDateTime.from(RFC_1123_DATE_TIME.parse("Sat, 29 Oct 1994 19:43:31 GMT")).truncatedTo(SECONDS);
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestGet
 		public ABean bean() {
 			return bean;
@@ -123,7 +123,7 @@ class RestClient_Response_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class C extends BasicRestObject {
+	public static class C extends BasicRestResource {
 		@RestGet(path="/")
 		public String getHeader(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
 			var n = req.getHeaderParam("Check").orElse(null);
@@ -197,7 +197,7 @@ class RestClient_Response_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class D extends BasicRestObject {
+	public static class D extends BasicRestResource {
 		@RestPost
 		public ABean bean(@Content ABean bean) {
 			return bean;

@@ -30,7 +30,7 @@ import org.apache.juneau.rest.view.*;
  * configured {@link MustacheFactory} to render them directly onto the response writer.
  *
  * <p>
- * Auto-registered by {@link BasicMustacheResource} via
+ * Auto-registered by {@link MustacheMixin} via
  * {@link org.apache.juneau.rest.annotation.Rest#responseProcessors() @Rest(responseProcessors=...)}
  * &mdash; callers who add the mixin don't need to wire up this class explicitly. Callers who want
  * to handle {@code MustacheView} returns <i>without</i> adopting the mixin can add this class to
@@ -42,7 +42,7 @@ import org.apache.juneau.rest.view.*;
  * <ol class='spaced-list'>
  * 	<li>Inspect the response content. If the value is not a {@link MustacheView}, return
  * 		{@link ResponseProcessor#NEXT NEXT} so the rest of the chain runs.
- * 	<li>Read the active {@link BasicMustacheResource} from the {@code RestContext} bean store to
+ * 	<li>Read the active {@link MustacheMixin} from the {@code RestContext} bean store to
  * 		discover the {@link MustacheFactory} (lazy default if no factory bean is registered) and
  * 		the optional template-suffix knob.
  * 	<li>Apply every entry from {@link MustacheView#getResponseHeaders()} via
@@ -59,7 +59,7 @@ import org.apache.juneau.rest.view.*;
  * </ol>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicMustacheResource}
+ * 	<li class='jc'>{@link MustacheMixin}
  * 	<li class='jc'>{@link MustacheView}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MustacheViewSupport">Mustache View Support</a>
@@ -99,11 +99,11 @@ public class MustacheViewRenderer implements ViewRenderer {
 			return NEXT;
 
 		// Resolve the bridge resource (carries MustacheFactory + cached default + templateSuffix).
-		// Fall back to a fresh BasicMustacheResource when the renderer is used standalone without
+		// Fall back to a fresh MustacheMixin when the renderer is used standalone without
 		// the mixin.
 		var bridge = req.getContext().getBeanStore()
-			.getBean(BasicMustacheResource.class)
-			.orElseGet(BasicMustacheResource::new);
+			.getBean(MustacheMixin.class)
+			.orElseGet(MustacheMixin::new);
 
 		// Apply caller-supplied response headers first so a caller-provided Content-Type wins
 		// over the bridge's default below.

@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.*;
 @Rest(title = "Hello World", description = "An example of the simplest-possible resource", path = "/helloWorld")
 @HtmlDocConfig(aside = { "<div style='max-width:400px' class='text'>", "\t<p>This page shows a resource that simply response with a 'Hello world!' message</p>",
 	"\t<p>The POJO serialized is a simple String.</p>", "</div>" })
-public class HelloWorldResource extends BasicRestObject {
+public class HelloWorldResource extends BasicRestResource {
 
 	private final String message;
 

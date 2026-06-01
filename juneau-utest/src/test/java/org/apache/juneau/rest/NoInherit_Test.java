@@ -26,20 +26,20 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.juneau.TestBase;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.servlet.BasicRestObject;
+import org.apache.juneau.rest.servlet.BasicRestResource;
 import org.junit.jupiter.api.*;
 
 class NoInherit_Test extends TestBase {
 
-	private static RestContext restContext(Class<? extends BasicRestObject> c) throws Exception {
+	private static RestContext restContext(Class<? extends BasicRestResource> c) throws Exception {
 		var o = c.getDeclaredConstructor().newInstance();
 		
-		// Check if class has a parent REST resource (not BasicRestObject)
+		// Check if class has a parent REST resource (not BasicRestResource)
 		RestContext parentContext = null;
 		var superClass = c.getSuperclass();
-		if (superClass != null && superClass != BasicRestObject.class && BasicRestObject.class.isAssignableFrom(superClass)) {
+		if (superClass != null && superClass != BasicRestResource.class && BasicRestResource.class.isAssignableFrom(superClass)) {
 			@SuppressWarnings("unchecked")
-			var parentClass = (Class<? extends BasicRestObject>) superClass;
+			var parentClass = (Class<? extends BasicRestResource>) superClass;
 			parentContext = restContext(parentClass);
 		}
 		
@@ -47,7 +47,7 @@ class NoInherit_Test extends TestBase {
 	}
 
 	@Rest(allowedSerializerOptions = "parentSer")
-	public static class ParentSer extends BasicRestObject {}
+	public static class ParentSer extends BasicRestResource {}
 
 	@Rest(allowedSerializerOptions = "childSer", noInherit = "allowedSerializerOptions")
 	public static class ChildSer extends ParentSer {}
@@ -62,7 +62,7 @@ class NoInherit_Test extends TestBase {
 	}
 
 	@Rest(allowedSerializerOptions = "pBoth")
-	public static class ParentBoth extends BasicRestObject {}
+	public static class ParentBoth extends BasicRestResource {}
 
 	@Rest(allowedSerializerOptions = "cBoth")
 	public static class ChildBoth extends ParentBoth {}
@@ -76,7 +76,7 @@ class NoInherit_Test extends TestBase {
 		assertTrue(keys.contains("cBoth"));
 	}
 
-	public static class ParentM extends BasicRestObject {
+	public static class ParentM extends BasicRestResource {
 		@RestGet(allowedSerializerOptions = "parentM")
 		public void get() {
 			// Intentionally empty - method only used for annotation metadata testing
@@ -109,7 +109,7 @@ class NoInherit_Test extends TestBase {
 	// Test case for aggregated noInherit: parent has noInherit="prop1", child has noInherit="prop2"
 	// The aggregated noInherit should be {"prop1", "prop2"}, but allowedSerializerOptions should
 	// include values from both parent and child since neither blocks allowedSerializerOptions
-	public static class ParentAggregated extends BasicRestObject {
+	public static class ParentAggregated extends BasicRestResource {
 		@RestGet(allowedSerializerOptions = "parentOpt", noInherit = "prop1")
 		public void get() {
 			// Intentionally empty - method only used for annotation metadata testing
@@ -140,7 +140,7 @@ class NoInherit_Test extends TestBase {
 
 	// Test that noInherit blocks REST class context inheritance but NOT parent method inheritance
 	@Rest(allowedSerializerOptions = "classLevel")
-	public static class ParentWithClassLevel extends BasicRestObject {
+	public static class ParentWithClassLevel extends BasicRestResource {
 		@RestGet(allowedSerializerOptions = "parentMethod")
 		public void get() {
 			// Intentionally empty - method only used for annotation metadata testing
@@ -173,7 +173,7 @@ class NoInherit_Test extends TestBase {
 	}
 
 	/**
-	 * Plain {@code @Rest} POJO (not {@link BasicRestObject}) so {@code BasicUniversalConfig} does not pre-populate
+	 * Plain {@code @Rest} POJO (not {@link BasicRestResource}) so {@code BasicUniversalConfig} does not pre-populate
 	 * charset / maxInput on the op builder — needed to exercise {@code @Rest}-hierarchy fallbacks and {@code noInherit}.
 	 */
 	@Rest(defaultCharset = "ISO-8859-1")

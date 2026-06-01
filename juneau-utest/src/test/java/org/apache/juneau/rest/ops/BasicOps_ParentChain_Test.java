@@ -35,7 +35,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * Setup: a single {@link RestServlet} host mounts all three ops mixins
- * ({@link BasicEchoResource}, {@link BasicAdminResource}, {@link BasicRouteIndexResource}) plus a
+ * ({@link EchoMixin}, {@link AdminMixin}, {@link RouteIndexMixin}) plus a
  * vanilla {@code /items} op of its own. {@code @Rest(debug=@Debug("always"))} unlocks the echo endpoint;
  * an empty {@code @Bean RestGuardList} factory replaces the {@link DenyAllGuard} default to
  * unlock the admin endpoints.
@@ -55,13 +55,13 @@ import org.junit.jupiter.api.*;
 class BasicOps_ParentChain_Test extends TestBase {
 
 	@Rest(
-		mixins={BasicEchoResource.class, BasicAdminResource.class, BasicRouteIndexResource.class},
+		mixins={EchoMixin.class, AdminMixin.class, RouteIndexMixin.class},
 		debug=@Debug("always"))
 	public static class A extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@RestGet(path="/items", summary="List items") public String items() { return "items"; }
 
-		// Allow-all guard chain — replaces the BasicAdminResource deny-all default.
+		// Allow-all guard chain — replaces the AdminMixin deny-all default.
 		@Bean public RestGuardList guards(BeanStore bs) { return RestGuardList.create(bs).build(); }
 	}
 
@@ -71,16 +71,16 @@ class BasicOps_ParentChain_Test extends TestBase {
 		MockRestClient.buildLax(A.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(A.class);
 		var ctxs = hostCtx.getMixinContexts();
-		assertNotNull(ctxs.get(BasicEchoResource.class), "Echo mixin context registered");
-		assertNotNull(ctxs.get(BasicAdminResource.class), "Admin mixin context registered");
-		assertNotNull(ctxs.get(BasicRouteIndexResource.class), "RouteIndex mixin context registered");
+		assertNotNull(ctxs.get(EchoMixin.class), "Echo mixin context registered");
+		assertNotNull(ctxs.get(AdminMixin.class), "Admin mixin context registered");
+		assertNotNull(ctxs.get(RouteIndexMixin.class), "RouteIndex mixin context registered");
 		assertEquals(3, ctxs.size(),
 			"Expected exactly three mixin contexts; got: " + ctxs.keySet());
 	}
 
 	@Test void a02_echoServesAtPrimaryMount() throws Exception {
 		// FINISHED-101: /debug/echo/* is no longer a multi-path default. Migration to that
-		// secondary alias is covered by BasicEchoResource_SvlPathOverride_Test#a02.
+		// secondary alias is covered by EchoMixin_SvlPathOverride_Test#a02.
 		c.get("/echo/x").run().assertStatus(200);
 		c.get("/debug/echo/x").run().assertStatus(404);
 	}
@@ -114,7 +114,7 @@ class BasicOps_ParentChain_Test extends TestBase {
 
 	@Test void a06_legacyRoutesAliasNotMountedByDefault() throws Exception {
 		// FINISHED-101: /routes is no longer a multi-path default. Migration covered by
-		// BasicRouteIndexResource_SvlPathOverride_Test#a02.
+		// RouteIndexMixin_SvlPathOverride_Test#a02.
 		c.get("/routes").run().assertStatus(404);
 	}
 

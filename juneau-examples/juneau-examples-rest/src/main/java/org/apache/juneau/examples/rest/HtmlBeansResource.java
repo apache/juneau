@@ -56,7 +56,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	asideFloat="RIGHT"
 )
-public class HtmlBeansResource extends BasicRestObject {
+public class HtmlBeansResource extends BasicRestResource {
 
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;

@@ -39,9 +39,9 @@ import jakarta.servlet.*;
  *
  * <p>
  * Boots a {@link org.apache.juneau.microservice.Microservice Microservice} on an ephemeral port and
- * mounts three standalone servlets as siblings &mdash; {@link BasicVersionServlet} at
- * {@code /version/*}, {@link BasicStaticFilesServlet} at {@code /static/*}, and
- * {@link BasicAdminServlet} at {@code /admin/*} &mdash; relying on the {@code JettyServerComponent}
+ * mounts three standalone servlets as siblings &mdash; {@link VersionServlet} at
+ * {@code /version/*}, {@link StaticFilesServlet} at {@code /static/*}, and
+ * {@link AdminServlet} at {@code /admin/*} &mdash; relying on the {@code JettyServerComponent}
  * auto-discovery loop to read each servlet's {@code @Rest(paths)} via
  * {@code RestContext.resolveTopLevelPaths(...)}. This is the cross-runtime parity check that the
  * sibling top-level mount + op-at-{@code /*} shape resolves correctly through a real servlet
@@ -54,9 +54,9 @@ class StandaloneServlets_JettyMicroservice_Test extends TestBase {
 
 	@Configuration
 	public static class Config {
-		@Bean(name="versionServlet") public Servlet versionServlet() { return new BasicVersionServlet(); }
-		@Bean(name="staticFilesServlet") public Servlet staticFilesServlet() { return new BasicStaticFilesServlet(); }
-		@Bean(name="adminServlet") public Servlet adminServlet() { return new BasicAdminServlet(); }
+		@Bean(name="versionServlet") public Servlet versionServlet() { return new VersionServlet(); }
+		@Bean(name="staticFilesServlet") public Servlet staticFilesServlet() { return new StaticFilesServlet(); }
+		@Bean(name="adminServlet") public Servlet adminServlet() { return new AdminServlet(); }
 	}
 
 	@RegisterExtension

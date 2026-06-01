@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 /**
  * Validates the {@code getPaths()} virtual-getter rung of the runtime-override resolution chain on
  * {@link RestContext#getPaths()}: a {@link RestServlet#getPaths() RestServlet.getPaths()} (or
- * {@link RestObject#getPaths() RestObject.getPaths()}) override beats the annotation default; a
+ * {@link RestResource#getPaths() RestResource.getPaths()}) override beats the annotation default; a
  * {@code null} return falls through to the annotation; an explicit {@code new String[0]} return clears.
  *
  * <p>
@@ -98,16 +98,16 @@ class RestPathsRuntimeOverride_Getter_Test extends TestBase {
 	}
 
 	@Rest(paths={"/from-annotation"})
-	public static class E_RestObjectGetter extends RestObject {
+	public static class E_RestResourceGetter extends RestResource {
 		@Override public String[] getPaths() { return new String[]{"/from-restobject-getter"}; }
 	}
 
 	@Test
 	void e01_restObjectGetter_overrideAnnotation() throws Exception {
-		var args = new RestContext.Args(E_RestObjectGetter.class, null, null, E_RestObjectGetter::new, "", null, null, null, false);
+		var args = new RestContext.Args(E_RestResourceGetter.class, null, null, E_RestResourceGetter::new, "", null, null, null, false);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/from-restobject-getter"}, ctx.getPaths(),
-			"RestObject.getPaths() override should also beat the annotation default");
+			"RestResource.getPaths() override should also beat the annotation default");
 	}
 }

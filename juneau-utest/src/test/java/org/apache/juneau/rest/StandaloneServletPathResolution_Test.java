@@ -49,31 +49,31 @@ class StandaloneServletPathResolution_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_jspServlet() {
-		assertArrayEquals(new String[]{"/jsp/*"}, paths(BasicJspServlet.class, new BasicJspServlet()));
+		assertArrayEquals(new String[]{"/jsp/*"}, paths(JspServlet.class, new JspServlet()));
 	}
 
 	@Test void a02_freemarkerServlet() {
-		assertArrayEquals(new String[]{"/freemarker/*"}, paths(BasicFreemarkerServlet.class, new BasicFreemarkerServlet()));
+		assertArrayEquals(new String[]{"/freemarker/*"}, paths(FreemarkerServlet.class, new FreemarkerServlet()));
 	}
 
 	@Test void a03_mustacheServlet() {
-		assertArrayEquals(new String[]{"/mustache/*"}, paths(BasicMustacheServlet.class, new BasicMustacheServlet()));
+		assertArrayEquals(new String[]{"/mustache/*"}, paths(MustacheServlet.class, new MustacheServlet()));
 	}
 
 	@Test void a04_thymeleafServlet() {
-		assertArrayEquals(new String[]{"/thymeleaf/*"}, paths(BasicThymeleafServlet.class, new BasicThymeleafServlet()));
+		assertArrayEquals(new String[]{"/thymeleaf/*"}, paths(ThymeleafServlet.class, new ThymeleafServlet()));
 	}
 
 	@Test void a05_staticFilesServlet() {
-		assertArrayEquals(new String[]{"/static/*"}, paths(BasicStaticFilesServlet.class, new BasicStaticFilesServlet()));
+		assertArrayEquals(new String[]{"/static/*"}, paths(StaticFilesServlet.class, new StaticFilesServlet()));
 	}
 
 	@Test void a06_versionServlet() {
-		assertArrayEquals(new String[]{"/version/*"}, paths(BasicVersionServlet.class, new BasicVersionServlet()));
+		assertArrayEquals(new String[]{"/version/*"}, paths(VersionServlet.class, new VersionServlet()));
 	}
 
 	@Test void a07_adminServlet() {
-		assertArrayEquals(new String[]{"/admin/*"}, paths(BasicAdminServlet.class, new BasicAdminServlet()));
+		assertArrayEquals(new String[]{"/admin/*"}, paths(AdminServlet.class, new AdminServlet()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -81,14 +81,14 @@ class StandaloneServletPathResolution_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_versionMixin_noTopLevelPaths() {
-		assertEquals(0, paths(BasicVersionResource.class, new BasicVersionResource()).length);
+		assertEquals(0, paths(VersionMixin.class, new VersionMixin()).length);
 	}
 
 	@Test void b02_adminMixin_noTopLevelPaths() {
-		assertEquals(0, paths(BasicAdminResource.class, new BasicAdminResource()).length);
+		assertEquals(0, paths(AdminMixin.class, new AdminMixin()).length);
 	}
 
 	@Test void b03_staticFilesMixin_noTopLevelPaths() {
-		assertEquals(0, paths(BasicStaticFilesResource.class, new BasicStaticFilesResource()).length);
+		assertEquals(0, paths(StaticFilesMixin.class, new StaticFilesMixin()).length);
 	}
 }

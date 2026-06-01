@@ -31,8 +31,7 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans">Utility Beans</a>
- * 	<li class='jic'>{@link BasicGroupOperations}
-
+ * 	<li class='jc'>{@link org.apache.juneau.rest.servlet.BasicRestServletGroup}
  * </ul>
  *
  * @serial exclude

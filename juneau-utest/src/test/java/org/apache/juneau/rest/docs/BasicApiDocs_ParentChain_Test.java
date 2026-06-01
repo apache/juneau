@@ -21,7 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.convention.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.ops.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
@@ -32,27 +34,27 @@ import org.junit.jupiter.api.*;
  * <p>
  * Setup:
  * <ul>
- * 	<li>{@code Parent} declares {@code @Rest(mixins=BasicSwaggerUiResource.class)}.
- * 	<li>{@code Child} extends {@code Parent} and declares {@code @Rest(mixins=BasicRedocResource.class)}.
+ * 	<li>{@code Parent} declares {@code @Rest(mixins=SwaggerUiMixin.class)}.
+ * 	<li>{@code Child} extends {@code Parent} and declares {@code @Rest(mixins=RedocMixin.class)}.
  * </ul>
  *
  * <p>
  * Acceptance:
  * <ul>
  * 	<li>{@code Child}'s {@code mixinContexts} map contains all four mixin classes
- * 		({@code BasicSwaggerUiResource}, {@code BasicSwaggerResource} via transitive,
- * 		{@code BasicRedocResource}, {@code BasicOpenApiResource} via transitive).
+ * 		({@code SwaggerUiMixin}, {@code SwaggerMixin} via transitive,
+ * 		{@code RedocMixin}, {@code OpenApiMixin} via transitive).
  * 	<li>All four URL paths resolve correctly.
  * </ul>
  */
 class BasicApiDocs_ParentChain_Test extends TestBase {
 
-	@Rest(mixins=BasicSwaggerUiResource.class)
+	@Rest(mixins=SwaggerUiMixin.class)
 	public static class Parent extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 	}
 
-	@Rest(mixins=BasicRedocResource.class)
+	@Rest(mixins=RedocMixin.class)
 	public static class Child extends Parent {
 		private static final long serialVersionUID = 1L;
 	}
@@ -64,13 +66,18 @@ class BasicApiDocs_ParentChain_Test extends TestBase {
 		var hostCtx = RestContext.getGlobalRegistry().get(Child.class);
 		var contexts = hostCtx.getMixinContexts();
 
-		assertNotNull(contexts.get(BasicSwaggerUiResource.class), "Parent's mixin must propagate to child");
-		assertNotNull(contexts.get(BasicSwaggerResource.class), "Parent's transitive mixin must propagate to child");
-		assertNotNull(contexts.get(BasicRedocResource.class), "Child's mixin must be present");
-		assertNotNull(contexts.get(BasicOpenApiResource.class), "Child's transitive mixin must be present");
+		assertNotNull(contexts.get(SwaggerUiMixin.class), "Parent's mixin must propagate to child");
+		assertNotNull(contexts.get(SwaggerMixin.class), "Parent's transitive mixin must propagate to child");
+		assertNotNull(contexts.get(RedocMixin.class), "Child's mixin must be present");
+		assertNotNull(contexts.get(OpenApiMixin.class), "Child's transitive mixin must be present");
+		// Residual op-mixins contributed by the BasicRestServlet base of the parent chain.
+		assertNotNull(contexts.get(ErrorMixin.class));
+		assertNotNull(contexts.get(HtdocMixin.class));
+		assertNotNull(contexts.get(StatsMixin.class));
+		assertNotNull(contexts.get(FaviconMixin.class));
 
-		assertEquals(4, contexts.size(),
-			"Expected exactly four mixin contexts; got: " + contexts.keySet());
+		assertEquals(8, contexts.size(),
+			"Expected exactly eight mixin contexts; got: " + contexts.keySet());
 	}
 
 	@Test void a02_apiFromParentChain() throws Exception {

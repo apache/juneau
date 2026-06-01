@@ -44,8 +44,8 @@ import org.springframework.mock.env.*;
  *
  * <p>
  * A full {@code @SpringBootTest} bootstrap (with {@code application.yaml} on the classpath) is
- * exercised indirectly through the existing {@code BasicStaticFilesResource_Springboot_Test} and
- * {@code BasicEchoResource_Springboot_Test} smoke tests — those already build a real Spring
+ * exercised indirectly through the existing {@code StaticFilesMixin_Springboot_Test} and
+ * {@code EchoMixin_Springboot_Test} smoke tests — those already build a real Spring
  * context which now installs the bridge automatically via {@link SpringBeanStore}'s constructor.
  * This test keeps the focus on the bridge itself.
  */

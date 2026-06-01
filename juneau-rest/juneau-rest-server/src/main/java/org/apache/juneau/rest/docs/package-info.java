@@ -25,38 +25,38 @@
  * </p>
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.docs.BasicSwaggerResource} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.docs.SwaggerMixin} —
  * 		spec endpoint at {@code /api}, Swagger v2 + Swagger-UI swap.
- * 	<li class='jc'>{@link org.apache.juneau.rest.docs.BasicSwaggerUiResource} —
- * 		HTML-first mount at {@code /swagger}, transitively pulls in {@code BasicSwaggerResource}.
- * 	<li class='jc'>{@link org.apache.juneau.rest.docs.BasicOpenApiResource} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.docs.SwaggerUiMixin} —
+ * 		HTML-first mount at {@code /swagger}, transitively pulls in {@code SwaggerMixin}.
+ * 	<li class='jc'>{@link org.apache.juneau.rest.docs.OpenApiMixin} —
  * 		spec endpoints at {@code /openapi}, {@code /openapi.json}, and {@code /openapi.yaml};
  * 		OpenAPI 3.1 + Redoc swap on the content-negotiated {@code /openapi} mount.
- * 	<li class='jc'>{@link org.apache.juneau.rest.docs.BasicRedocResource} —
- * 		HTML-first mount at {@code /redoc}, transitively pulls in {@code BasicOpenApiResource}.
+ * 	<li class='jc'>{@link org.apache.juneau.rest.docs.RedocMixin} —
+ * 		HTML-first mount at {@code /redoc}, transitively pulls in {@code OpenApiMixin}.
  * </ul>
  *
  * <h5 class='section'>Composition examples:</h5>
  *
  * <p class='bjava'>
  * 	<jc>// OpenAPI 3.1 spec only — /openapi, /openapi.json, /openapi.yaml.</jc>
- * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins=BasicOpenApiResource.<jk>class</jk>)
+ * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins=OpenApiMixin.<jk>class</jk>)
  * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet { ... }
  *
  * 	<jc>// OpenAPI 3.1 + Redoc — /openapi, /openapi.json, /openapi.yaml, /redoc.</jc>
- * 	<jc>// Transitive mixin resolution pulls BasicOpenApiResource in for free.</jc>
- * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins=BasicRedocResource.<jk>class</jk>)
+ * 	<jc>// Transitive mixin resolution pulls OpenApiMixin in for free.</jc>
+ * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins=RedocMixin.<jk>class</jk>)
  * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet { ... }
  *
  * 	<jc>// Everything — /api, /swagger, /openapi, /openapi.json, /openapi.yaml, /redoc.</jc>
- * 	<jc>// This is the post-9.5.0 default for BasicRestServlet / BasicRestObject subclasses.</jc>
- * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins={BasicSwaggerUiResource.<jk>class</jk>, BasicRedocResource.<jk>class</jk>})
+ * 	<jc>// This is the post-9.5.0 default for BasicRestServlet / BasicRestResource subclasses.</jc>
+ * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins={SwaggerUiMixin.<jk>class</jk>, RedocMixin.<jk>class</jk>})
  * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet { ... }
  * </p>
  *
  * <p>
- * The two UI mixins ({@link org.apache.juneau.rest.docs.BasicSwaggerUiResource} and
- * {@link org.apache.juneau.rest.docs.BasicRedocResource}) declare {@code @Rest(defaultAccept="text/html")}
+ * The two UI mixins ({@link org.apache.juneau.rest.docs.SwaggerUiMixin} and
+ * {@link org.apache.juneau.rest.docs.RedocMixin}) declare {@code @Rest(defaultAccept="text/html")}
  * so that bare browser requests (no {@code Accept} header, or {@code Accept: *}{@code /*}) render the
  * HTML view rather than the serializer-default media type. The two spec mixins use Juneau's standard
  * content negotiation unchanged.

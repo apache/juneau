@@ -22,20 +22,20 @@
  * <p>
  * Four sibling mixins compose into the host {@code @Rest}-annotated resource. Each mixin owns its
  * default mount paths and is independently mountable; the four together drop in as a pack via
- * {@code @Rest(mixins={BasicFaviconResource.class, BasicSeoResource.class, BasicVersionResource.class, BasicWellKnownResource.class})}.
+ * {@code @Rest(mixins={FaviconMixin.class, SeoMixin.class, VersionMixin.class, WellKnownMixin.class})}.
  * </p>
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.convention.BasicFaviconResource} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.convention.FaviconMixin} —
  * 		{@code /favicon.ico} with a 30-day {@code Cache-Control} and a default Juneau-branded icon
  * 		on the framework classpath.
- * 	<li class='jc'>{@link org.apache.juneau.rest.convention.BasicSeoResource} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.convention.SeoMixin} —
  * 		{@code /robots.txt} (deny-all by default) and {@code /sitemap.xml} (empty
  * 		{@code <urlset>} by default); both builder-driven.
- * 	<li class='jc'>{@link org.apache.juneau.rest.convention.BasicVersionResource} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.convention.VersionMixin} —
  * 		{@code /version}, {@code /info}, and {@code /about} returning the same JSON metadata
  * 		map; defaults read {@code MANIFEST.MF} + {@code git.properties} from the classpath.
- * 	<li class='jc'>{@link org.apache.juneau.rest.convention.BasicWellKnownResource} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.convention.WellKnownMixin} —
  * 		{@code /.well-known/security.txt} per RFC 9116; 404 unless explicitly configured.
  * </ul>
  *
@@ -45,18 +45,18 @@
  * 	<ja>@Rest</ja>(
  * 		path=<js>"/api"</js>,
  * 		mixins={
- * 			BasicFaviconResource.<jk>class</jk>,
- * 			BasicSeoResource.<jk>class</jk>,
- * 			BasicVersionResource.<jk>class</jk>,
- * 			BasicWellKnownResource.<jk>class</jk>
+ * 			FaviconMixin.<jk>class</jk>,
+ * 			SeoMixin.<jk>class</jk>,
+ * 			VersionMixin.<jk>class</jk>,
+ * 			WellKnownMixin.<jk>class</jk>
  * 		}
  * 	)
  * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet {
- * 		<ja>@Bean</ja> BasicSeoResource seo() {
- * 			<jk>return</jk> BasicSeoResource.<jsm>create</jsm>().robotsAllow(<js>"*"</js>, <js>"/"</js>).build();
+ * 		<ja>@Bean</ja> SeoMixin seo() {
+ * 			<jk>return</jk> SeoMixin.<jsm>create</jsm>().robotsAllow(<js>"*"</js>, <js>"/"</js>).build();
  * 		}
- * 		<ja>@Bean</ja> BasicWellKnownResource wellKnown() {
- * 			<jk>return</jk> BasicWellKnownResource.<jsm>create</jsm>()
+ * 		<ja>@Bean</ja> WellKnownMixin wellKnown() {
+ * 			<jk>return</jk> WellKnownMixin.<jsm>create</jsm>()
  * 				.securityTxt(<js>"Contact: security@example.com\nExpires: 2027-01-01T00:00:00Z\n"</js>)
  * 				.build();
  * 		}

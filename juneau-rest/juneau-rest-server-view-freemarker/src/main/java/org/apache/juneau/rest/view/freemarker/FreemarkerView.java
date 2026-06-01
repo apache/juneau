@@ -27,7 +27,7 @@ import org.apache.juneau.rest.view.*;
  * render an Apache FreeMarker template.
  *
  * <p>
- * Companion to {@link BasicFreemarkerResource} and {@link FreemarkerViewRenderer}: the mixin sets
+ * Companion to {@link FreemarkerMixin} and {@link FreemarkerViewRenderer}: the mixin sets
  * up the {@code /freemarker/*} mount and registers the renderer; the renderer detects
  * {@code FreemarkerView} returns in the response-processor chain and asks the configured
  * {@code freemarker.template.Configuration} to {@code getTemplate(templateName)} and then
@@ -62,7 +62,7 @@ import org.apache.juneau.rest.view.*;
  * <h5 class='section'>Template suffix:</h5>
  *
  * <p>
- * The {@link BasicFreemarkerResource.Builder#templateSuffix(String) templateSuffix(...)} builder
+ * The {@link FreemarkerMixin.Builder#templateSuffix(String) templateSuffix(...)} builder
  * knob lets the bridge append a suffix (e.g. {@code ".ftlh"}) to template names that don't
  * already end with it, so callers can write {@code FreemarkerView.of("hello")} and have the
  * bridge resolve it as {@code "hello.ftlh"} on the classpath (idempotent &mdash; explicit suffix
@@ -77,7 +77,7 @@ import org.apache.juneau.rest.view.*;
  * singleton built once and returned from many handlers).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link BasicFreemarkerResource}
+ * 	<li class='jc'>{@link FreemarkerMixin}
  * 	<li class='jc'>{@link FreemarkerViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport">FreeMarker View Support</a>
  * </ul>
@@ -100,7 +100,7 @@ public final class FreemarkerView implements View {
 	 * {@code "hello.ftlh"} resolves to {@code /templates/hello.ftlh} on the classpath.
 	 *
 	 * @param templateName The template name (configuration-relative, suffix optional when the
-	 * 	mixin's {@link BasicFreemarkerResource.Builder#templateSuffix(String) templateSuffix} is
+	 * 	mixin's {@link FreemarkerMixin.Builder#templateSuffix(String) templateSuffix} is
 	 * 	configured). Must not be {@code null} or blank.
 	 * @return A new {@code FreemarkerView} instance.
 	 * @throws IllegalArgumentException If {@code templateName} is {@code null} or blank.

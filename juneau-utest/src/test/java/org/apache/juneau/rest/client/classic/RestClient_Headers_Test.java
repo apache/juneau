@@ -70,7 +70,7 @@ public class RestClient_Headers_Test extends TestBase {
 	private static ABean bean = ABean.get();
 
 	@Rest(callLogger=CaptureLogger.class)
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestResource {
 		@RestGet(allowedSerializerOptions="simple", allowedParserOptions="addBeanTypes")
 		public String[] headers(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);

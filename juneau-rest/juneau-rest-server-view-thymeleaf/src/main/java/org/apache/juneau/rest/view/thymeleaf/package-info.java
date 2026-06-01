@@ -22,7 +22,7 @@
  * templates:
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.view.thymeleaf.BasicThymeleafResource} &mdash;
+ * 	<li class='jc'>{@link org.apache.juneau.rest.view.thymeleaf.ThymeleafMixin} &mdash;
  * 		mixin that renders raw {@code .html} templates from the importer's classpath under
  * 		{@code /thymeleaf/*} and auto-registers
  * 		{@link org.apache.juneau.rest.view.thymeleaf.ThymeleafViewRenderer}.
@@ -40,11 +40,11 @@
  * <h5 class='figure'>Composition example (microservice):</h5>
  *
  * <p class='bjava'>
- * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=BasicThymeleafResource.<jk>class</jk>)
+ * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=ThymeleafMixin.<jk>class</jk>)
  * 	<jk>public class</jk> AppResource <jk>extends</jk> RestServlet {
  *
- * 		<ja>@Bean</ja> BasicThymeleafResource thymeleaf() {
- * 			<jk>return</jk> BasicThymeleafResource.<jsm>create</jsm>()
+ * 		<ja>@Bean</ja> ThymeleafMixin thymeleaf() {
+ * 			<jk>return</jk> ThymeleafMixin.<jsm>create</jsm>()
  * 				.basePath(<js>"/templates/"</js>)
  * 				.build();
  * 		}
