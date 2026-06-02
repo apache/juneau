@@ -99,7 +99,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends InputStreamParser.Builder {
+	public static class Builder extends InputStreamParser.Builder<Builder> {
 
 		private static final Cache<HashKey,BsonParser> CACHE = Cache.of(HashKey.class, BsonParser.class).build();
 
@@ -163,18 +163,6 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider {
 		@Override /* Parser.Builder */
 		public Builder trimStrings(boolean value) {
 			super.trimStrings(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
 			return this;
 		}
 

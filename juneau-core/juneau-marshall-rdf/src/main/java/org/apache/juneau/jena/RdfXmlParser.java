@@ -87,7 +87,7 @@ public class RdfXmlParser extends RdfParser {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfParser.Builder create() {
+	public static RdfParser.Builder<?> create() {
 		return RdfParser.create().xml();
 	}
 
@@ -96,7 +96,7 @@ public class RdfXmlParser extends RdfParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public RdfXmlParser(RdfParser.Builder builder) {
+	public RdfXmlParser(RdfParser.Builder<?> builder) {
 		super(builder.xml().consumes("text/xml+rdf"));
 	}
 }

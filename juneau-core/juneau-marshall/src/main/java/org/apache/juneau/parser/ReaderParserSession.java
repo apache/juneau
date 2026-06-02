@@ -56,7 +56,7 @@ public class ReaderParserSession extends ParserSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends ParserSession.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends ParserSession.Builder<SELF> {
 
 		private Charset fileCharset;
 		private Charset streamCharset;
@@ -75,21 +75,9 @@ public class ReaderParserSession extends ParserSession {
 			streamCharset = ctx.getStreamCharset();
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		@Override
 		public ReaderParserSession build() {
 			return new ReaderParserSession(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
 		}
 
 		/**
@@ -109,52 +97,16 @@ public class ReaderParserSession extends ParserSession {
 		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder fileCharset(Charset value) {
+		public SELF fileCharset(Charset value) {
 			fileCharset = value;
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder outer(Object value) {
-			super.outer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
+		public SELF property(String key, Object value) {
 			if (key == null) {
 				super.property(key, value);
-				return this;
+				return self();
 			}
 			switch (key) {
 				case PROP_fileCharset, PROP_ReaderParserSession_fileCharset:
@@ -163,20 +115,8 @@ public class ReaderParserSession extends ParserSession {
 					return streamCharset(cvt(value, Charset.class));
 				default:
 					super.property(key, value);
-					return this;
+					return self();
 			}
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schema(HttpPartSchema value) {
-			super.schema(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schemaDefault(HttpPartSchema value) {
-			super.schemaDefault(value);
-			return this;
 		}
 
 		/**
@@ -196,27 +136,20 @@ public class ReaderParserSession extends ParserSession {
 		 * 	<br>Can be <jk>null</jk> (defaults to UTF-8).
 		 * @return This object.
 		 */
-		public Builder streamCharset(Charset value) {
+		public SELF streamCharset(Charset value) {
 			streamCharset = value;
-			return this;
+			return self();
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
+	}
 
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@code create()} path (CRTP terminal).
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
 
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
+		DefaultBuilder(ReaderParser ctx) {
+			super(ctx);
 		}
 	}
 
@@ -227,8 +160,8 @@ public class ReaderParserSession extends ParserSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	public static Builder create(ReaderParser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+	public static Builder<?> create(ReaderParser ctx) {
+		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final ReaderParser ctx;
@@ -240,7 +173,7 @@ public class ReaderParserSession extends ParserSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected ReaderParserSession(Builder builder) {
+	protected ReaderParserSession(Builder<?> builder) {
 		super(builder);
 		ctx = builder.ctx;
 		fileCharset = builder.fileCharset;

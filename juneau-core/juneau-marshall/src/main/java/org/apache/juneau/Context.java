@@ -107,7 +107,18 @@ public abstract class Context {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> {
+
+		/**
+		 * Returns this object cast to the self (CRTP) type.
+		 *
+		 * @return This object.
+		 */
+		@SuppressWarnings("unchecked") // CRTP self-type cast is safe by construction.
+		protected final SELF self() {
+			return (SELF)this;
+		}
+
 
 		private boolean debug;
 		private final AnnotationWorkList applied = AnnotationWorkList.create();
@@ -141,7 +152,7 @@ public abstract class Context {
 		 * @param copyFrom The builder to copy from.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
-		protected Builder(Builder copyFrom) {
+		protected Builder(Builder<?> copyFrom) {
 			assertArgNotNull(ARG_copyFrom, copyFrom);
 			annotations = copyOf(copyFrom.annotations);
 			debug = copyFrom.debug;
@@ -337,10 +348,10 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public Builder annotations(Annotation...values) {
+		public SELF annotations(Annotation...values) {
 			assertArgNoNulls(ARG_values, values);
 			annotations(l(values));
-			return this;
+			return self();
 		}
 
 		/**
@@ -351,9 +362,9 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk> or contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public Builder annotations(List<Annotation> values) {
+		public SELF annotations(List<Annotation> values) {
 			annotations.addAll(assertArgNoNulls(ARG_values, values));
-			return this;
+			return self();
 		}
 
 		/**
@@ -385,11 +396,11 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder apply(AnnotationWorkList work) {
+		public SELF apply(AnnotationWorkList work) {
 			assertArgNotNull(ARG_work, work);
 			applied.addAll(work);
 			work.forEach(x -> builders.forEach(x::apply));
-			return this;
+			return self();
 		}
 
 		/**
@@ -399,7 +410,7 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public Builder applyAnnotations(Class<?>...from) {
+		public SELF applyAnnotations(Class<?>...from) {
 			assertArgNoNulls(ARG_from, from);
 			return applyAnnotations((Object[])from);
 		}
@@ -499,7 +510,7 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public Builder applyAnnotations(Object...from) {
+		public SELF applyAnnotations(Object...from) {
 			assertArgNoNulls(ARG_from, from);
 			var work = AnnotationWorkList.create();
 			Arrays.stream(from).forEach(x -> traverse(work, x));
@@ -553,7 +564,7 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return An {@link Optional} containing this builder cast to the subtype, or empty if not an instance.
 		 */
-		public <T extends Builder> Optional<T> asSubtype(Class<T> subtype) {
+		public <T extends Builder<?>> Optional<T> asSubtype(Class<T> subtype) {
 			return opt(assertArgNotNull(ARG_subtype, subtype).isInstance(this) ? subtype.cast(this) : null);
 		}
 
@@ -599,9 +610,9 @@ public abstract class Context {
 		 * 	<br>Can be <jk>null</jk> (disables caching, each build creates a new instance).
 		 * @return This object.
 		 */
-		public Builder cache(Cache<HashKey,? extends Context> value) {
+		public SELF cache(Cache<HashKey,? extends Context> value) {
 			cache = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -620,7 +631,7 @@ public abstract class Context {
 		 *
 		 * @return A new mutable copy of this builder.
 		 */
-		public abstract Builder copy();
+		public abstract SELF copy();
 
 		/**
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Debug mode.
@@ -669,7 +680,7 @@ public abstract class Context {
 		 *
 		 * @return This object.
 		 */
-		public Builder debug() {
+		public SELF debug() {
 			return debug(true);
 		}
 
@@ -679,9 +690,9 @@ public abstract class Context {
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public Builder debug(boolean value) {
+		public SELF debug(boolean value) {
 			debug = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -723,9 +734,9 @@ public abstract class Context {
 		 * 	<br>Can be <jk>null</jk> (normal build process will continue).
 		 * @return This object.
 		 */
-		public Builder impl(Context value) {
+		public SELF impl(Context value) {
 			impl = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -752,9 +763,9 @@ public abstract class Context {
 		 * 	<br>Can be <jk>null</jk> (will cause {@link #build()} to throw an exception).
 		 * @return This object.
 		 */
-		public Builder type(Class<? extends Context> value) {
+		public SELF type(Class<? extends Context> value) {
 			type = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -961,7 +972,7 @@ public abstract class Context {
 	 *
 	 * @return A new session builder.
 	 */
-	public ContextSession.Builder createSession() {
+	public ContextSession.Builder<?> createSession() {
 		throw unsupportedOp();
 	}
 

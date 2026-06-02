@@ -72,7 +72,7 @@ public class N3Serializer extends RdfSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfSerializer.Builder create() {
+	public static RdfSerializer.Builder<?> create() {
 		return RdfSerializer.create().n3();
 	}
 
@@ -81,7 +81,7 @@ public class N3Serializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public N3Serializer(RdfSerializer.Builder builder) {
+	public N3Serializer(RdfSerializer.Builder<?> builder) {
 		super(builder.n3());
 	}
 }

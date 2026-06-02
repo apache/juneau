@@ -68,8 +68,8 @@ public class ComboRoundTrip_Tester<T> {
 		private Type type;
 		private Map<String,String> expected = map();
 		private List<Tuple2<Class<?>,Consumer<?>>> applies = list();
-		private Consumer<Serializer.Builder> serializerApply = x -> {};
-		private Consumer<Parser.Builder> parserApply = x -> {};
+		private Consumer<Serializer.Builder<?>> serializerApply = x -> {};
+		private Consumer<Parser.Builder<?>> parserApply = x -> {};
 
 		public Builder(int index, String label, Type type, T in) {
 			this.index = index;
@@ -101,9 +101,9 @@ public class ComboRoundTrip_Tester<T> {
 
 		public Builder<T> swaps(Class<?>...c) { swaps.addAll(l(c)); return this; }
 
-		public Builder<T> serializerApply(Consumer<Serializer.Builder> v) { serializerApply = v; return this; }
+		public Builder<T> serializerApply(Consumer<Serializer.Builder<?>> v) { serializerApply = v; return this; }
 
-		public Builder<T> parserApply(Consumer<Parser.Builder> v) { parserApply = v; return this; }
+		public Builder<T> parserApply(Consumer<Parser.Builder<?>> v) { parserApply = v; return this; }
 
 		public Builder<T> json(String value) { expected.put("json", value); return this; }
 		public Builder<T> jsonT(String value) { expected.put("jsonT", value); return this; }

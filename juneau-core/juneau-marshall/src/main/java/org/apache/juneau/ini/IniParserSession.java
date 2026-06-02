@@ -58,7 +58,7 @@ public class IniParserSession extends ReaderParserSession {
 	/**
 	 * Builder for INI parser session.
 	 */
-	public static class Builder extends ReaderParserSession.Builder {
+	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
 		protected Builder(IniParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));

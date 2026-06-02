@@ -67,7 +67,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder extends MarshallingSession.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingSession.Builder<SELF> {
 
 		private MarshallingTraverseContext ctx;
 		private int initialDepth;
@@ -84,42 +84,6 @@ public class MarshallingTraverseSession extends MarshallingSession {
 			initialDepth = ctx.getInitialDepth();
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
 
 		/**
 		 * Initial depth.
@@ -127,43 +91,26 @@ public class MarshallingTraverseSession extends MarshallingSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder initialDepth(int value) {
+		public SELF initialDepth(int value) {
 			initialDepth = value;
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
+		public SELF property(String key, Object value) {
 			if (key == null) {
 				super.property(key, value);
-				return this;
+				return self();
 			}
 			switch (key) {
 				case PROP_initialDepth, PROP_BeanTraverseSession_initialDepth:
 					return initialDepth(cvt(value, Integer.class));
 				default:
 					super.property(key, value);
-					return this;
+					return self();
 			}
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
-		}
 	}
 
 	private class StackElement {
@@ -207,7 +154,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected MarshallingTraverseSession(Builder builder) {
+	protected MarshallingTraverseSession(Builder<?> builder) {
 		super(builder);
 		ctx = builder.ctx;
 		indent = builder.initialDepth;

@@ -45,7 +45,7 @@ public class SqlStore extends ConfigStore {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends ConfigStore.Builder {
+	public static class Builder extends ConfigStore.Builder<Builder> {
 
 		String jdbcUrl;
 		String tableName;

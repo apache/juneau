@@ -86,7 +86,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 	/**
 	 * Builder for parser sessions.
 	 */
-	public static class Builder extends InputStreamParserSession.Builder {
+	public static class Builder extends InputStreamParserSession.Builder<Builder> {
 
 		private ParquetParser ctx;
 

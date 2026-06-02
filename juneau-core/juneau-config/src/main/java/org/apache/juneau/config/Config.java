@@ -84,7 +84,7 @@ public class Config extends Context implements ConfigEventListener {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends Context.Builder {
+	public static class Builder extends Context.Builder<Builder> {
 
 		private BinaryFormat binaryFormat;
 		private boolean multiLineValuesOnSeparateLines;
@@ -156,36 +156,6 @@ public class Config extends Context implements ConfigEventListener {
 			varResolver = copyFrom.varResolver;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder annotations(List<Annotation> values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
 		/**
 		 * Binary value format.
 		 *
@@ -241,33 +211,9 @@ public class Config extends Context implements ConfigEventListener {
 			return build(Config.class);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
 		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
 		}
 
 		/**
@@ -446,12 +392,6 @@ public class Config extends Context implements ConfigEventListener {
 		 */
 		public Builder store(ConfigStore value) {
 			store = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
 			return this;
 		}
 

@@ -46,7 +46,7 @@ public class HjsonParserSession extends ReaderParserSession {
 	/**
 	 * Builder for Hjson parser session.
 	 */
-	public static class Builder extends ReaderParserSession.Builder {
+	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
 		protected Builder(HjsonParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));

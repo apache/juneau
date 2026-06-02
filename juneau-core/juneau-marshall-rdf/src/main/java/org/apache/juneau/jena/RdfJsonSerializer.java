@@ -70,7 +70,7 @@ public class RdfJsonSerializer extends RdfSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfSerializer.Builder create() {
+	public static RdfSerializer.Builder<?> create() {
 		return RdfSerializer.create().rdfJson();
 	}
 
@@ -79,7 +79,7 @@ public class RdfJsonSerializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public RdfJsonSerializer(RdfSerializer.Builder builder) {
+	public RdfJsonSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.rdfJson());
 	}
 }

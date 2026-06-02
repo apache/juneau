@@ -62,7 +62,18 @@ public abstract class ContextSession {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> {
+
+		/**
+		 * Returns this object cast to the self (CRTP) type.
+		 *
+		 * @return This object.
+		 */
+		@SuppressWarnings("unchecked") // CRTP self-type cast is safe by construction.
+		protected final SELF self() {
+			return (SELF)this;
+		}
+
 		private Boolean debug;
 		private boolean unmodifiable;
 		private Context ctx;
@@ -101,10 +112,10 @@ public abstract class ContextSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+		public <T> SELF apply(Class<T> type, Consumer<T> apply) {
 			if (assertArgNotNull(ARG_type, type).isInstance(this))
 				assertArgNotNull(ARG_apply, apply).accept(type.cast(this));
-			return this;
+			return self();
 		}
 
 		/**
@@ -135,9 +146,9 @@ public abstract class ContextSession {
 		 * 	<br>If <jk>null</jk>, defaults to {@link Context#isDebug()}.
 		 * @return This object.
 		 */
-		public Builder debug(Boolean value) {
+		public SELF debug(Boolean value) {
 			debug = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -152,11 +163,11 @@ public abstract class ContextSession {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder properties(Map<String,Object> value) {
+		public SELF properties(Map<String,Object> value) {
 			assertArgNotNull(ARG_value, value);
 			properties.reset();
 			value.forEach(this::property);
-			return this;
+			return self();
 		}
 
 		/**
@@ -173,7 +184,7 @@ public abstract class ContextSession {
 		 * 	<br>Can be <jk>null</jk> (resets typed properties to their default; removes raw properties).
 		 * @return This object.
 		 */
-		public Builder property(String key, Object value) {
+		public SELF property(String key, Object value) {
 			assertArgNotNull(ARG_key, key);
 			switch (key) {
 				case PROP_debug, PROP_ContextSession_debug:
@@ -185,7 +196,7 @@ public abstract class ContextSession {
 					} else {
 						map.put(key, value);
 					}
-					return this;
+					return self();
 			}
 		}
 
@@ -197,9 +208,9 @@ public abstract class ContextSession {
 		 *
 		 * @return This object.
 		 */
-		public Builder unmodifiable() {
+		public SELF unmodifiable() {
 			unmodifiable = true;
-			return this;
+			return self();
 		}
 	}
 
@@ -215,7 +226,7 @@ public abstract class ContextSession {
 	 * @param builder The builder for this object.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
-	protected ContextSession(Builder builder) {
+	protected ContextSession(Builder<?> builder) {
 		assertArgNotNull(ARG_builder, builder);
 		ctx = builder.ctx;
 		debug = opt(builder.debug).orElse(ctx.isDebug());

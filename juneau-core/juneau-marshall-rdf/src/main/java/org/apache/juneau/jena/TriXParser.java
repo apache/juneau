@@ -75,7 +75,7 @@ public class TriXParser extends RdfParser {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfParser.Builder create() {
+	public static RdfParser.Builder<?> create() {
 		return RdfParser.create().triX();
 	}
 
@@ -84,7 +84,7 @@ public class TriXParser extends RdfParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public TriXParser(RdfParser.Builder builder) {
+	public TriXParser(RdfParser.Builder<?> builder) {
 		super(builder.triX().consumes("application/trix+xml"));
 	}
 }

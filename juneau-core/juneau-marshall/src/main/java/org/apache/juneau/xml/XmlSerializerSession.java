@@ -79,7 +79,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends WriterSerializerSession.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends WriterSerializerSession.Builder<SELF> {
 
 		private boolean addNamespaceUrisToRoot;
 		private boolean autoDetectNamespaces;
@@ -104,57 +104,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			textNodeDelimiter = ctx.getTextNodeDelimiter();
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		@Override
 		public XmlSerializerSession build() {
 			return new XmlSerializerSession(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
 		}
 
 		/**
@@ -163,9 +115,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder addNamespaceUrisToRoot(boolean value) {
+		public SELF addNamespaceUrisToRoot(boolean value) {
 			addNamespaceUrisToRoot = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -174,9 +126,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder autoDetectNamespaces(boolean value) {
+		public SELF autoDetectNamespaces(boolean value) {
 			autoDetectNamespaces = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -185,9 +137,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder defaultNamespace(String value) {
+		public SELF defaultNamespace(String value) {
 			defaultNamespace = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -196,9 +148,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder enableNamespaces(boolean value) {
+		public SELF enableNamespaces(boolean value) {
 			enableNamespaces = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -207,14 +159,14 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder textNodeDelimiter(String value) {
+		public SELF textNodeDelimiter(String value) {
 			textNodeDelimiter = value == null ? "" : value;
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			if (key == null) { super.property(key, value); return this; }
+		public SELF property(String key, Object value) {
+			if (key == null) { super.property(key, value); return self(); }
 			switch (key) {
 				case PROP_addNamespaceUrisToRoot, PROP_XmlSerializerSession_addNamespaceUrisToRoot:
 					return addNamespaceUrisToRoot(cvt(value, Boolean.class));
@@ -228,62 +180,19 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					return textNodeDelimiter(cvt(value, String.class));
 				default:
 					super.property(key, value);
-					return this;
+					return self();
 			}
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder resolver(VarResolverSession value) {
-			super.resolver(value);
-			return this;
-		}
+	}
 
-		@Override /* Overridden from Builder */
-		public Builder schema(HttpPartSchema value) {
-			super.schema(value);
-			return this;
-		}
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@code create()} path (CRTP terminal).
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
 
-		@Override /* Overridden from Builder */
-		public Builder schemaDefault(HttpPartSchema value) {
-			super.schemaDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useWhitespace(Boolean value) {
-			super.useWhitespace(value);
-			return this;
+		DefaultBuilder(XmlSerializer ctx) {
+			super(ctx);
 		}
 	}
 
@@ -338,8 +247,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	public static Builder create(XmlSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+	public static Builder<?> create(XmlSerializer ctx) {
+		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final String textNodeDelimiter;
@@ -355,7 +264,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected XmlSerializerSession(Builder builder) {
+	protected XmlSerializerSession(Builder<?> builder) {
 		super(builder);
 		ctx = builder.ctx;
 		addNamespaceUrisToRoot = builder.addNamespaceUrisToRoot;

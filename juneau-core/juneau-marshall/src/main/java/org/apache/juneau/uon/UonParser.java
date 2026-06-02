@@ -80,7 +80,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends ReaderParser.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends ReaderParser.Builder<SELF> {
 
 		private static final Cache<HashKey,UonParser> CACHE = Cache.of(HashKey.class, UonParser.class).build();
 
@@ -102,7 +102,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * @param copyFrom The builder to copy from.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
-		protected Builder(Builder copyFrom) {
+		protected Builder(Builder<?> copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			decoding = copyFrom.decoding;
 			validateEnd = copyFrom.validateEnd;
@@ -120,225 +120,13 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 			validateEnd = copyFrom.validateEnd;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams() {
-			super.autoCloseStreams();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams(boolean value) {
-			super.autoCloseStreams(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanClassVisibility(Visibility value) {
-			super.beanClassVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanConstructorVisibility(Visibility value) {
-			super.beanConstructorVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder marshallingContext(MarshallingContext value) {
-			super.marshallingContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder marshallingContext(MarshallingContext.Builder value) {
-			super.marshallingContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanDictionary(java.lang.Class<?>...values) {
-			super.beanDictionary(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanFieldVisibility(Visibility value) {
-			super.beanFieldVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.commons.bean.BeanInterceptor<?>> value) {
-			super.beanInterceptor(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMapPutReturnsOldValue() {
-			super.beanMapPutReturnsOldValue();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMethodVisibility(Visibility value) {
-			super.beanMethodVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(String beanClassName, String properties) {
-			super.beanProperties(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
-			super.beanPropertiesExcludes(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
-			super.beanPropertiesReadOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
-			super.beanPropertiesWriteOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireDefaultConstructor() {
-			super.beansRequireDefaultConstructor();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSerializable() {
-			super.beansRequireSerializable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSettersForGetters() {
-			super.beansRequireSettersForGetters();
-			return this;
-		}
-
 		@Override /* Overridden from Context.Builder */
 		public UonParser build() {
 			return cache(CACHE).build(UonParser.class);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder consumes(String value) {
-			super.consumes(value);
-			return this;
-		}
-
 		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debugOutputLines(int value) {
-			super.debugOutputLines(value);
-			return this;
-		}
+		public abstract SELF copy();
 
 		/**
 		 * Decode <js>"%xx"</js> sequences.
@@ -361,7 +149,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 *
 		 * @return This object.
 		 */
-		public Builder decoding() {
+		public SELF decoding() {
 			return decoding(true);
 		}
 
@@ -371,75 +159,9 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public Builder decoding(boolean value) {
+		public SELF decoding(boolean value) {
 			decoding = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
-			super.dictionaryOn(on, values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableBeansRequireSomeProperties() {
-			super.disableBeansRequireSomeProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreMissingSetters() {
-			super.disableIgnoreMissingSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreTransientFields() {
-			super.disableIgnoreTransientFields();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreUnknownNullBeanProperties() {
-			super.disableIgnoreUnknownNullBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableInterfaceProxies() {
-			super.disableInterfaceProxies();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters() {
-			super.findFluentSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters(Class<?> on) {
-			super.findFluentSetters(on);
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Context.Builder */
@@ -453,222 +175,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 			// @formatter:on
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnGetters() {
-			super.ignoreInvocationExceptionsOnGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnSetters() {
-			super.ignoreInvocationExceptionsOnSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownEnumValues() {
-			super.ignoreUnknownEnumValues();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			super.implClass(interfaceClass, implClass);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			super.implClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			super.interfaceClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
-			super.interfaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
-			super.listener(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanClasses(java.lang.Class<?>...values) {
-			super.notBeanClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanPackages(String...values) {
-			super.notBeanPackages(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.commons.bean.PropertyNamer> value) {
-			super.propertyNamer(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.commons.bean.PropertyNamer> value) {
-			super.propertyNamer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unsortedProperties() {
-			super.unsortedProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unsortedProperties(java.lang.Class<?>...on) {
-			super.unsortedProperties(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder stopClass(Class<?> on, Class<?> value) {
-			super.stopClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder trimStrings() {
-			super.trimStrings();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder trimStrings(boolean value) {
-			super.trimStrings(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unbuffered() {
-			super.unbuffered();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unbuffered(boolean value) {
-			super.unbuffered(value);
-			return this;
-		}
-
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
 
 		/**
 		 * Validate end.
@@ -692,7 +198,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 *
 		 * @return This object.
 		 */
-		public Builder validateEnd() {
+		public SELF validateEnd() {
 			return validateEnd(true);
 		}
 
@@ -702,9 +208,30 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public Builder validateEnd(boolean value) {
+		public SELF validateEnd(boolean value) {
 			validateEnd = value;
-			return this;
+			return self();
+		}
+	}
+
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@link UonParser#create()} / {@link UonParser#copy()} path.
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
+
+		DefaultBuilder() {}
+
+		DefaultBuilder(UonParser copyFrom) {
+			super(copyFrom);
+		}
+
+		DefaultBuilder(Builder<?> copyFrom) {
+			super(copyFrom);
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public DefaultBuilder copy() {
+			return new DefaultBuilder(this);
 		}
 	}
 
@@ -719,7 +246,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 *
 		 * @param builder The builder for this object.
 		 */
-		public Decoding(Builder builder) {
+		public Decoding(Builder<?> builder) {
 			super(builder.decoding());
 		}
 	}
@@ -734,8 +261,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 *
 	 * @return A new builder.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder<?> create() {
+		return new DefaultBuilder();
 	}
 
 	protected final boolean decoding;
@@ -749,19 +276,19 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public UonParser(Builder builder) {
+	public UonParser(Builder<?> builder) {
 		super(builder);
 		decoding = builder.decoding;
 		validateEnd = builder.validateEnd;
 	}
 
 	@Override /* Overridden from Context */
-	public Builder copy() {
-		return new Builder(this);
+	public Builder<?> copy() {
+		return new DefaultBuilder(this);
 	}
 
 	@Override /* Overridden from Context */
-	public UonParserSession.Builder createSession() {
+	public UonParserSession.Builder<?> createSession() {
 		return UonParserSession.create(this);
 	}
 

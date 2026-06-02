@@ -142,7 +142,7 @@ public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvid
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends WriterSerializer.Builder {
+	public static class Builder extends WriterSerializer.Builder<Builder> {
 
 		private static final Cache<HashKey, HjsonSerializer> CACHE = Cache.of(HashKey.class, HjsonSerializer.class).build();
 
@@ -255,18 +255,6 @@ public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvid
 		@Override /* Overridden from WriterSerializer.Builder */
 		public Builder ws() {
 			return useWhitespace();
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
 		}
 
 		@Override

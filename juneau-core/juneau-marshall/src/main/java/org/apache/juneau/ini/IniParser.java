@@ -98,7 +98,7 @@ public class IniParser extends ReaderParser implements IniMetaProvider {
 	/**
 	 * Builder for {@link IniParser}.
 	 */
-	public static class Builder extends ReaderParser.Builder {
+	public static class Builder extends ReaderParser.Builder<Builder> {
 
 		private static final Cache<HashKey,IniParser> CACHE = Cache.of(HashKey.class, IniParser.class).build();
 
@@ -112,18 +112,6 @@ public class IniParser extends ReaderParser implements IniMetaProvider {
 
 		protected Builder(IniParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
 		}
 
 		@Override

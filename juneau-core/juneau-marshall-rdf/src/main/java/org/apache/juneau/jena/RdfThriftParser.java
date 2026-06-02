@@ -69,7 +69,7 @@ public class RdfThriftParser extends RdfStreamParser {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfStreamParser.Builder create() {
+	public static RdfStreamParser.Builder<?> create() {
 		return RdfStreamParser.create()
 			.language(Constants.LANG_RDFTHRIFT)
 			.consumes("application/vnd.apache.thrift.binary");
@@ -80,7 +80,7 @@ public class RdfThriftParser extends RdfStreamParser {
 	 *
 	 * @param builder The builder.
 	 */
-	public RdfThriftParser(RdfStreamParser.Builder builder) {
+	public RdfThriftParser(RdfStreamParser.Builder<?> builder) {
 		super(builder);
 	}
 }

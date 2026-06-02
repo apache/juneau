@@ -105,7 +105,7 @@ public class JsonlSerializer extends JsonSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static JsonSerializer.Builder create() {
+	public static JsonSerializer.Builder<?> create() {
 		return JsonSerializer.create()
 			.produces("application/jsonl")
 			.accept("application/jsonl,application/x-ndjson,text/jsonl")
@@ -118,7 +118,7 @@ public class JsonlSerializer extends JsonSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public JsonlSerializer(JsonSerializer.Builder builder) {
+	public JsonlSerializer(JsonSerializer.Builder<?> builder) {
 		super(builder.useWhitespace(false));
 	}
 

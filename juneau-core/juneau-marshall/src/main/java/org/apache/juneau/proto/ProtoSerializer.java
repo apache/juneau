@@ -133,7 +133,7 @@ public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvid
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends WriterSerializer.Builder {
+	public static class Builder extends WriterSerializer.Builder<Builder> {
 
 		private static final Cache<HashKey, ProtoSerializer> CACHE =
 			Cache.of(HashKey.class, ProtoSerializer.class).build();
@@ -195,18 +195,6 @@ public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvid
 		@Override
 		public Builder useWhitespace(boolean value) {
 			super.useWhitespace(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
 			return this;
 		}
 

@@ -65,7 +65,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 	/**
 	 * Builder for serializer sessions.
 	 */
-	public static class Builder extends OutputStreamSerializerSession.Builder {
+	public static class Builder extends OutputStreamSerializerSession.Builder<Builder> {
 
 		private ParquetSerializer ctx;
 

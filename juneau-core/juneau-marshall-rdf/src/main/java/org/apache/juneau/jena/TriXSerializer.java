@@ -82,7 +82,7 @@ public class TriXSerializer extends RdfSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfSerializer.Builder create() {
+	public static RdfSerializer.Builder<?> create() {
 		return RdfSerializer.create().triX();
 	}
 
@@ -91,7 +91,7 @@ public class TriXSerializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public TriXSerializer(RdfSerializer.Builder builder) {
+	public TriXSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.triX());
 	}
 }

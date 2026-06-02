@@ -63,7 +63,7 @@ public class RdfProtoSerializer extends RdfStreamSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfStreamSerializer.Builder create() {
+	public static RdfStreamSerializer.Builder<?> create() {
 		return RdfStreamSerializer.create()
 			.language(Constants.LANG_RDFPROTO)
 			.produces("application/vnd.apache.protobuf")
@@ -75,7 +75,7 @@ public class RdfProtoSerializer extends RdfStreamSerializer {
 	 *
 	 * @param builder The builder.
 	 */
-	public RdfProtoSerializer(RdfStreamSerializer.Builder builder) {
+	public RdfProtoSerializer(RdfStreamSerializer.Builder<?> builder) {
 		super(builder);
 	}
 }

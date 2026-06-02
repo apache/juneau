@@ -247,7 +247,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends Context.Builder {
+	public static class Builder extends Context.Builder<Builder> {
 
 		private static final Cache<HashKey,MarshallingContext> CACHE = Cache.of(HashKey.class, MarshallingContext.class).build();
 
@@ -469,30 +469,6 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
 			validateSchema = copyFrom.validateSchema;
 			beanStore = copyFrom.beanStore;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
 		}
 
 		/**
@@ -1849,27 +1825,9 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			return cache(CACHE).build(MarshallingContext.class);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends Context> value) {
-			super.cache(value);
-			return this;
-		}
-
 		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
 		}
 
 		/**
@@ -2622,12 +2580,6 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 */
 		public Builder ignoreUnknownEnumValues(boolean value) {
 			ignoreUnknownEnumValues = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
 			return this;
 		}
 
@@ -4183,7 +4135,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	}
 
 	@Override /* Overridden from Context */
-	public MarshallingSession.Builder createSession() {
+	public MarshallingSession.Builder<?> createSession() {
 		return MarshallingSession.create(this);
 	}
 

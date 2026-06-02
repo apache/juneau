@@ -51,7 +51,7 @@ public class JsonlParserSession extends JsonParserSession {
 	@SuppressWarnings({
 		"unused" // ctx passed to super(); parent uses it; Builder stores for constructor chain
 	})
-	public static class Builder extends JsonParserSession.Builder {
+	public static class Builder extends JsonParserSession.Builder<Builder> {
 
 		private JsonlParser ctx;
 

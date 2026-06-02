@@ -229,19 +229,19 @@ class RestClient_Response_Test extends TestBase {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static RestClient.Builder client() {
+	private static RestClient.Builder<?> client() {
 		return MockRestClient.create(A.class).json();
 	}
 
-	private static RestClient.Builder client(Class<?> c) {
+	private static RestClient.Builder<?> client(Class<?> c) {
 		return MockRestClient.create(c).json();
 	}
 
-	private static RestClient.Builder checkFooClient(Class<?> c) {
+	private static RestClient.Builder<?> checkFooClient(Class<?> c) {
 		return MockRestClient.create(c).json5().header("Check","Foo");
 	}
 
-	private static RestClient.Builder checkClient(Class<?> c, String headerToCheck) {
+	private static RestClient.Builder<?> checkClient(Class<?> c, String headerToCheck) {
 		return MockRestClient.create(c).json5().header("Check",headerToCheck);
 	}
 }

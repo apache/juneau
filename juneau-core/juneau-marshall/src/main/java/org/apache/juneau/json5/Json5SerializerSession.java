@@ -46,7 +46,7 @@ public class Json5SerializerSession extends JsonSerializerSession {
 	@SuppressWarnings({
 		"java:S110" // Inheritance depth acceptable for Builder extends JsonSerializerSession.Builder hierarchy
 	})
-	public static class Builder extends JsonSerializerSession.Builder {
+	public static class Builder extends JsonSerializerSession.Builder<Builder> {
 
 		/**
 		 * Constructor

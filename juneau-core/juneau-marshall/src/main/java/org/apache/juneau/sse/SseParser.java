@@ -61,7 +61,7 @@ public class SseParser extends ReaderParser {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends ReaderParser.Builder {
+	public static class Builder extends ReaderParser.Builder<Builder> {
 
 		private static final Cache<HashKey,SseParser> CACHE = Cache.of(HashKey.class, SseParser.class).build();
 

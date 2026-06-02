@@ -48,7 +48,7 @@ public class MemoryStore extends ConfigStore {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends ConfigStore.Builder {
+	public static class Builder extends ConfigStore.Builder<Builder> {
 
 		/**
 		 * Constructor, default settings.
@@ -76,39 +76,9 @@ public class MemoryStore extends ConfigStore {
 			type(copyFrom.getClass());
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
 		@Override /* Overridden from Context.Builder */
 		public MemoryStore build() {
 			return build(MemoryStore.class);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
 		}
 
 		@Override /* Overridden from Context.Builder */
@@ -116,29 +86,6 @@ public class MemoryStore extends ConfigStore {
 			return new Builder(this);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
 	}
 
 	/** Default memory store, all default values.*/

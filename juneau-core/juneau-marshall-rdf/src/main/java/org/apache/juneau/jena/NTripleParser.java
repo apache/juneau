@@ -76,7 +76,7 @@ public class NTripleParser extends RdfParser {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfParser.Builder create() {
+	public static RdfParser.Builder<?> create() {
 		return RdfParser.create().ntriple();
 	}
 
@@ -85,7 +85,7 @@ public class NTripleParser extends RdfParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public NTripleParser(RdfParser.Builder builder) {
+	public NTripleParser(RdfParser.Builder<?> builder) {
 		super(builder.ntriple().consumes("text/n-triple"));
 	}
 }

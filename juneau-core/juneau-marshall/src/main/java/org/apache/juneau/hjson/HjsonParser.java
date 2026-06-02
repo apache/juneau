@@ -129,7 +129,7 @@ public class HjsonParser extends ReaderParser implements HjsonMetaProvider {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends ReaderParser.Builder {
+	public static class Builder extends ReaderParser.Builder<Builder> {
 
 		protected Builder() {
 			consumes("application/hjson,application/hjson+json");
@@ -153,23 +153,6 @@ public class HjsonParser extends ReaderParser implements HjsonMetaProvider {
 			return new Builder(this);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
-		}
 	}
 
 	/** Default parser. */

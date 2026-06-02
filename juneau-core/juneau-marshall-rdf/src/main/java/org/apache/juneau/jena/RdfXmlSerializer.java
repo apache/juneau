@@ -83,7 +83,7 @@ public class RdfXmlSerializer extends RdfSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfSerializer.Builder create() {
+	public static RdfSerializer.Builder<?> create() {
 		return RdfSerializer.create().xml();
 	}
 
@@ -92,7 +92,7 @@ public class RdfXmlSerializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public RdfXmlSerializer(RdfSerializer.Builder builder) {
+	public RdfXmlSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.xml());
 	}
 }

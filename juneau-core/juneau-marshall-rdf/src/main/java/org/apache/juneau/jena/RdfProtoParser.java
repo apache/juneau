@@ -69,7 +69,7 @@ public class RdfProtoParser extends RdfStreamParser {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfStreamParser.Builder create() {
+	public static RdfStreamParser.Builder<?> create() {
 		return RdfStreamParser.create()
 			.language(Constants.LANG_RDFPROTO)
 			.consumes("application/vnd.apache.protobuf");
@@ -80,7 +80,7 @@ public class RdfProtoParser extends RdfStreamParser {
 	 *
 	 * @param builder The builder.
 	 */
-	public RdfProtoParser(RdfStreamParser.Builder builder) {
+	public RdfProtoParser(RdfStreamParser.Builder<?> builder) {
 		super(builder);
 	}
 }

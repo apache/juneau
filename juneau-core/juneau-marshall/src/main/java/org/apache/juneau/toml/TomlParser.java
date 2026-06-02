@@ -102,7 +102,7 @@ public class TomlParser extends ReaderParser {
 	/**
 	 * Builder for {@link TomlParser}.
 	 */
-	public static class Builder extends ReaderParser.Builder {
+	public static class Builder extends ReaderParser.Builder<Builder> {
 
 		private static final Cache<HashKey,TomlParser> CACHE = Cache.of(HashKey.class, TomlParser.class).build();
 
@@ -130,18 +130,6 @@ public class TomlParser extends ReaderParser {
 		 */
 		public Builder nullValue(String value) {
 			nullValue = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
 			return this;
 		}
 

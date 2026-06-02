@@ -97,7 +97,7 @@ public class JsonlParser extends JsonParser {
 	 *
 	 * @return A new builder.
 	 */
-	public static JsonParser.Builder create() {
+	public static JsonParser.Builder<?> create() {
 		return JsonParser.create()
 			.consumes("application/jsonl,application/x-ndjson,text/jsonl")
 			.type(JsonlParser.class);
@@ -108,7 +108,7 @@ public class JsonlParser extends JsonParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public JsonlParser(JsonParser.Builder builder) {
+	public JsonlParser(JsonParser.Builder<?> builder) {
 		super(builder);
 	}
 

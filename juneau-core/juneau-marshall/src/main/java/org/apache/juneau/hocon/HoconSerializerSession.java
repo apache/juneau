@@ -46,7 +46,7 @@ public class HoconSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder for HOCON serializer session.
 	 */
-	public static class Builder extends WriterSerializerSession.Builder {
+	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
 		private HoconSerializer ctx;
 

@@ -52,7 +52,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder extends Context.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends Context.Builder<SELF> {
 
 		/**
 		 * Constructor, default settings.
@@ -64,7 +64,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 		 *
 		 * @param copyFrom The builder to copy from.
 		 */
-		protected Builder(Builder copyFrom) {
+		protected Builder(Builder<?> copyFrom) {
 			super(copyFrom);
 		}
 
@@ -77,62 +77,6 @@ public abstract class ConfigStore extends Context implements Closeable {
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public abstract Builder copy();
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
 	}
 
 	private final ConcurrentHashMap<String,ConfigMap> configMaps = new ConcurrentHashMap<>();

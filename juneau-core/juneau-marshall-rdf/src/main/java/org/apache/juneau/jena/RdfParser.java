@@ -82,7 +82,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends ReaderParser.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends ReaderParser.Builder<SELF> {
 
 		private static final Cache<HashKey,RdfParser> CACHE = Cache.of(HashKey.class, RdfParser.class).build();
 
@@ -117,7 +117,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @param copyFrom The builder to copy from.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
-		protected Builder(Builder copyFrom) {
+		protected Builder(Builder<?> copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			collectionFormat = copyFrom.collectionFormat;
 			juneauBpNs = copyFrom.juneauBpNs;
@@ -145,207 +145,9 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams() {
-			super.autoCloseStreams();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams(boolean value) {
-			super.autoCloseStreams(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanClassVisibility(Visibility value) {
-			super.beanClassVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanConstructorVisibility(Visibility value) {
-			super.beanConstructorVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder marshallingContext(MarshallingContext value) {
-			super.marshallingContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder marshallingContext(MarshallingContext.Builder value) {
-			super.marshallingContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanDictionary(java.lang.Class<?>...values) {
-			super.beanDictionary(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanFieldVisibility(Visibility value) {
-			super.beanFieldVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.commons.bean.BeanInterceptor<?>> value) {
-			super.beanInterceptor(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMapPutReturnsOldValue() {
-			super.beanMapPutReturnsOldValue();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMethodVisibility(Visibility value) {
-			super.beanMethodVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(String beanClassName, String properties) {
-			super.beanProperties(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
-			super.beanPropertiesExcludes(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
-			super.beanPropertiesReadOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
-			super.beanPropertiesWriteOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireDefaultConstructor() {
-			super.beansRequireDefaultConstructor();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSerializable() {
-			super.beansRequireSerializable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSettersForGetters() {
-			super.beansRequireSettersForGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
-		}
-
 		@Override /* Overridden from Context.Builder */
 		public RdfParser build() {
 			return cache(CACHE).build(RdfParser.class);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
 		}
 
 		/**
@@ -368,105 +170,13 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder collectionFormat(RdfCollectionFormat value) {
+		public SELF collectionFormat(RdfCollectionFormat value) {
 			collectionFormat = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder consumes(String value) {
-			super.consumes(value);
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debugOutputLines(int value) {
-			super.debugOutputLines(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
-			super.dictionaryOn(on, values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableBeansRequireSomeProperties() {
-			super.disableBeansRequireSomeProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreMissingSetters() {
-			super.disableIgnoreMissingSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreTransientFields() {
-			super.disableIgnoreTransientFields();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreUnknownNullBeanProperties() {
-			super.disableIgnoreUnknownNullBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableInterfaceProxies() {
-			super.disableInterfaceProxies();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters() {
-			super.findFluentSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters(Class<?> on) {
-			super.findFluentSetters(on);
-			return this;
-		}
+		public abstract SELF copy();
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
@@ -484,60 +194,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			// @formatter:on
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnGetters() {
-			super.ignoreInvocationExceptionsOnGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnSetters() {
-			super.ignoreInvocationExceptionsOnSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownEnumValues() {
-			super.ignoreUnknownEnumValues();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			super.implClass(interfaceClass, implClass);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			super.implClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			super.interfaceClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
-			super.interfaces(value);
-			return this;
-		}
-
 		/**
 		 * Default XML namespace for bean properties.
 		 *
@@ -547,9 +203,9 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder juneauBpNs(Namespace value) {
+		public SELF juneauBpNs(Namespace value) {
 			juneauBpNs = assertArgNotNull(ARG_value, value);
-			return this;
+			return self();
 		}
 
 		/**
@@ -561,9 +217,9 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder juneauNs(Namespace value) {
+		public SELF juneauNs(Namespace value) {
 			juneauNs = assertArgNotNull(ARG_value, value);
-			return this;
+			return self();
 		}
 
 		/**
@@ -610,21 +266,9 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder language(String value) {
+		public SELF language(String value) {
 			language = assertArgNotNull(ARG_value, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
-			super.listener(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
+			return self();
 		}
 
 		/**
@@ -676,7 +320,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder looseCollections() {
+		public SELF looseCollections() {
 			return looseCollections(true);
 		}
 
@@ -686,15 +330,9 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder looseCollections(boolean value) {
+		public SELF looseCollections(boolean value) {
 			looseCollections = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
+			return self();
 		}
 
 		/**
@@ -705,7 +343,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder n3() {
+		public SELF n3() {
 			return language(Constants.LANG_N3);
 		}
 
@@ -717,7 +355,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder n3_disableAbbrevBaseUri() {
+		public SELF n3_disableAbbrevBaseUri() {
 			return n3_disableAbbrevBaseUri(true);
 		}
 
@@ -731,7 +369,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder n3_disableAbbrevBaseUri(boolean value) {
+		public SELF n3_disableAbbrevBaseUri(boolean value) {
 			return jena("n3.disableAbbrevBaseUri", value);
 		}
 
@@ -743,7 +381,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder n3_disableObjectLists() {
+		public SELF n3_disableObjectLists() {
 			return n3_disableObjectLists(true);
 		}
 
@@ -757,7 +395,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder n3_disableObjectLists(boolean value) {
+		public SELF n3_disableObjectLists(boolean value) {
 			return jena("n3.disableObjectLists", value);
 		}
 
@@ -769,7 +407,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder n3_disableUseDoubles() {
+		public SELF n3_disableUseDoubles() {
 			return n3_disableUseDoubles(true);
 		}
 
@@ -783,7 +421,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder n3_disableUseDoubles(boolean value) {
+		public SELF n3_disableUseDoubles(boolean value) {
 			return jena("n3.disableUseDoubles", value);
 		}
 
@@ -795,7 +433,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder n3_disableUsePropertySymbols() {
+		public SELF n3_disableUsePropertySymbols() {
 			return n3_disableUsePropertySymbols(true);
 		}
 
@@ -809,7 +447,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder n3_disableUsePropertySymbols(boolean value) {
+		public SELF n3_disableUsePropertySymbols(boolean value) {
 			return jena("n3.disableUsePropertySymbols", value);
 		}
 
@@ -821,7 +459,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder n3_disableUseTripleQuotedStrings() {
+		public SELF n3_disableUseTripleQuotedStrings() {
 			return n3_disableUseTripleQuotedStrings(true);
 		}
 
@@ -835,7 +473,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder n3_disableUseTripleQuotedStrings(boolean value) {
+		public SELF n3_disableUseTripleQuotedStrings(boolean value) {
 			return jena("n3.disableUseTripleQuotedStrings", value);
 		}
 
@@ -849,7 +487,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder n3_indentProperty(int value) {
+		public SELF n3_indentProperty(int value) {
 			return jena("n3.indentProperty", value);
 		}
 
@@ -863,7 +501,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder n3_minGap(int value) {
+		public SELF n3_minGap(int value) {
 			return jena("n3.minGap", value);
 		}
 
@@ -877,7 +515,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder n3_propertyColumn(int value) {
+		public SELF n3_propertyColumn(int value) {
 			return jena("n3.propertyColumn", value);
 		}
 
@@ -891,7 +529,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder n3_subjectColumn(int value) {
+		public SELF n3_subjectColumn(int value) {
 			return jena("n3.subjectColumn", value);
 		}
 
@@ -906,20 +544,8 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder n3_widePropertyLen(int value) {
+		public SELF n3_widePropertyLen(int value) {
 			return jena("n3.widePropertyLen", value);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanClasses(java.lang.Class<?>...values) {
-			super.notBeanClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanPackages(String...values) {
-			super.notBeanPackages(values);
-			return this;
 		}
 
 		/**
@@ -930,20 +556,8 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder ntriple() {
+		public SELF ntriple() {
 			return language(Constants.LANG_NTRIPLE);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.commons.bean.PropertyNamer> value) {
-			super.propertyNamer(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.commons.bean.PropertyNamer> value) {
-			super.propertyNamer(value);
-			return this;
 		}
 
 		/**
@@ -954,7 +568,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder rdfxml_allowBadUris() {
+		public SELF rdfxml_allowBadUris() {
 			return rdfxml_allowBadUris(true);
 		}
 
@@ -968,7 +582,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_allowBadUris(boolean value) {
+		public SELF rdfxml_allowBadUris(boolean value) {
 			return jena("rdfXml.allowBadURIs", value);
 		}
 
@@ -982,7 +596,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_attributeQuoteChar(char value) {
+		public SELF rdfxml_attributeQuoteChar(char value) {
 			return jena("rdfXml.attributeQuoteChar", value);
 		}
 
@@ -998,7 +612,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_blockRules(String value) {
+		public SELF rdfxml_blockRules(String value) {
 			return jena("rdfXml.blockRules", value);
 		}
 
@@ -1013,7 +627,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder rdfxml_disableShowDoctypeDeclaration() {
+		public SELF rdfxml_disableShowDoctypeDeclaration() {
 			return rdfxml_disableShowDoctypeDeclaration(true);
 		}
 
@@ -1030,7 +644,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_disableShowDoctypeDeclaration(boolean value) {
+		public SELF rdfxml_disableShowDoctypeDeclaration(boolean value) {
 			return jena("rdfXml.disableShowDoctypeDeclaration", value);
 		}
 
@@ -1047,7 +661,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder rdfxml_embedding() {
+		public SELF rdfxml_embedding() {
 			return rdfxml_embedding(true);
 		}
 
@@ -1066,7 +680,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_embedding(boolean value) {
+		public SELF rdfxml_embedding(boolean value) {
 			return jena("rdfXml.embedding", value);
 		}
 
@@ -1101,7 +715,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_errorMode(String value) {
+		public SELF rdfxml_errorMode(String value) {
 			return jena("rdfXml.error-mode", value);
 		}
 
@@ -1129,7 +743,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_iriRules(String value) {
+		public SELF rdfxml_iriRules(String value) {
 			return jena("rdfXml.iri-rules", value);
 		}
 
@@ -1142,7 +756,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder rdfxml_longId() {
+		public SELF rdfxml_longId() {
 			return rdfxml_longId(true);
 		}
 
@@ -1157,7 +771,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_longId(boolean value) {
+		public SELF rdfxml_longId(boolean value) {
 			return jena("rdfXml.longId", value);
 		}
 
@@ -1193,7 +807,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_relativeUris(String value) {
+		public SELF rdfxml_relativeUris(String value) {
 			return jena("rdfXml.relativeURIs", value);
 		}
 
@@ -1215,7 +829,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_showXmlDeclaration(String value) {
+		public SELF rdfxml_showXmlDeclaration(String value) {
 			return jena("rdfXml.showXmlDeclaration", value);
 		}
 
@@ -1229,7 +843,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_tab(int value) {
+		public SELF rdfxml_tab(int value) {
 			return jena("rdfXml.tab", value);
 		}
 
@@ -1243,74 +857,8 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder rdfxml_xmlbase(String value) {
+		public SELF rdfxml_xmlbase(String value) {
 			return jena("rdfXml.xmlbase", value);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unsortedProperties() {
-			super.unsortedProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unsortedProperties(java.lang.Class<?>...on) {
-			super.unsortedProperties(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder stopClass(Class<?> on, Class<?> value) {
-			super.stopClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder trimStrings() {
-			super.trimStrings();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder trimStrings(boolean value) {
-			super.trimStrings(value);
-			return this;
 		}
 
 		/**
@@ -1331,7 +879,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder trimWhitespace() {
+		public SELF trimWhitespace() {
 			return trimWhitespace(true);
 		}
 
@@ -1342,9 +890,9 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder trimWhitespace(boolean value) {
+		public SELF trimWhitespace(boolean value) {
 			trimWhitespace = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -1352,7 +900,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder turtle() {
+		public SELF turtle() {
 			return language(Constants.LANG_TURTLE);
 		}
 
@@ -1361,7 +909,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder jsonLd() {
+		public SELF jsonLd() {
 			return language(Constants.LANG_JSONLD);
 		}
 
@@ -1370,7 +918,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder nQuads() {
+		public SELF nQuads() {
 			return language(Constants.LANG_NQUADS);
 		}
 
@@ -1379,7 +927,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder triG() {
+		public SELF triG() {
 			return language(Constants.LANG_TRIG);
 		}
 
@@ -1388,7 +936,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder triX() {
+		public SELF triX() {
 			return language(Constants.LANG_TRIX);
 		}
 
@@ -1397,59 +945,17 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder rdfJson() {
+		public SELF rdfJson() {
 			return language(Constants.LANG_RDFJSON);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unbuffered() {
-			super.unbuffered();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unbuffered(boolean value) {
-			super.unbuffered(value);
-			return this;
-		}
-
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
 
 		/**
 		 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>.
 		 *
 		 * @return This object.
 		 */
-		public Builder xml() {
+		public SELF xml() {
 			return language(Constants.LANG_RDF_XML);
 		}
 
@@ -1458,13 +964,34 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 *
 		 * @return This object.
 		 */
-		public Builder xmlabbrev() {
+		public SELF xmlabbrev() {
 			return language(Constants.LANG_RDF_XML_ABBREV);
 		}
 
-		Builder jena(String key, Object value) {
+		SELF jena(String key, Object value) {
 			jenaSettings.put(key, value);
-			return this;
+			return self();
+		}
+	}
+
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@link RdfParser#create()} / {@link RdfParser#copy()} path.
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
+
+		DefaultBuilder() {}
+
+		DefaultBuilder(RdfParser copyFrom) {
+			super(copyFrom);
+		}
+
+		DefaultBuilder(Builder<?> copyFrom) {
+			super(copyFrom);
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public DefaultBuilder copy() {
+			return new DefaultBuilder(this);
 		}
 	}
 
@@ -1473,11 +1000,11 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 *
 	 * @return A new builder.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder<?> create() {
+		return new DefaultBuilder();
 	}
 
-	private static String getConsumes(Builder builder) {
+	private static String getConsumes(Builder<?> builder) {
 		if (nn(builder.getConsumes()))
 			return builder.getConsumes();
 		return switch (builder.language) {
@@ -1519,7 +1046,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public RdfParser(Builder builder) {
+	public RdfParser(Builder<?> builder) {
 		super(builder.consumes(getConsumes(builder)));
 
 		collectionFormat = builder.collectionFormat;
@@ -1532,8 +1059,8 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	}
 
 	@Override /* Overridden from Context */
-	public Builder copy() {
-		return new Builder(this);
+	public Builder<?> copy() {
+		return new DefaultBuilder(this);
 	}
 
 	@Override /* Overridden from Context */

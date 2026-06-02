@@ -49,7 +49,7 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BaseHttpPartSerializer.Builder {
+	public static class Builder extends BaseHttpPartSerializer.Builder<Builder> {
 
 		private static final Cache<HashKey,SimplePartSerializer> CACHE = Cache.of(HashKey.class, SimplePartSerializer.class).build();
 
@@ -71,12 +71,6 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 		@Override
 		public SimplePartSerializer build() {
 			return cache(CACHE).build(SimplePartSerializer.class);
-		}
-
-		@Override /* Overridden from Context */
-		public Builder cache(Cache<HashKey,? extends Context> value) {
-			super.cache(value);
-			return this;
 		}
 
 		@Override

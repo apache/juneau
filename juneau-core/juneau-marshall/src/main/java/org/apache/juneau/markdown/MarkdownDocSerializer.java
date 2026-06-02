@@ -84,7 +84,7 @@ public class MarkdownDocSerializer extends MarkdownSerializer {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends MarkdownSerializer.Builder {
+	public static class Builder extends MarkdownSerializer.Builder<Builder> {
 
 		private static final Cache<HashKey,MarkdownDocSerializer> CACHE = Cache.of(HashKey.class, MarkdownDocSerializer.class).build();
 
@@ -205,17 +205,6 @@ public class MarkdownDocSerializer extends MarkdownSerializer {
 			return new Builder(this);
 		}
 
-		@Override /* Overridden from MarkdownSerializer.Builder */
-		public Builder nullValue(String value) {
-			super.nullValue(value);
-			return this;
-		}
-
-		@Override /* Overridden from MarkdownSerializer.Builder */
-		public Builder showHeaders(boolean value) {
-			super.showHeaders(value);
-			return this;
-		}
 	}
 
 	/**

@@ -101,7 +101,7 @@ public class ProtoParser extends ReaderParser implements ProtoMetaProvider {
 	/**
 	 * Builder for {@link ProtoParser}.
 	 */
-	public static class Builder extends ReaderParser.Builder {
+	public static class Builder extends ReaderParser.Builder<Builder> {
 
 		private static final Cache<HashKey, ProtoParser> CACHE =
 			Cache.of(HashKey.class, ProtoParser.class).build();
@@ -116,18 +116,6 @@ public class ProtoParser extends ReaderParser implements ProtoMetaProvider {
 
 		protected Builder(ProtoParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
 		}
 
 		@Override

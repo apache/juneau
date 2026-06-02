@@ -92,7 +92,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends InputStreamParser.Builder {
+	public static class Builder extends InputStreamParser.Builder<Builder> {
 
 		private static final Cache<HashKey,CborParser> CACHE = Cache.of(HashKey.class, CborParser.class).build();
 
@@ -121,27 +121,9 @@ public class CborParser extends InputStreamParser implements CborMetaProvider {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
-		}
-
 		@Override /* Overridden from Context.Builder */
 		public CborParser build() {
 			return cache(CACHE).build(CborParser.class);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder binaryFormat(BinaryFormat value) {
-			super.binaryFormat(value);
-			return this;
 		}
 
 		@Override /* Overridden from Context.Builder */

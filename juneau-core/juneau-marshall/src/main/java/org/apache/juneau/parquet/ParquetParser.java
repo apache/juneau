@@ -55,7 +55,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends InputStreamParser.Builder {
+	public static class Builder extends InputStreamParser.Builder<Builder> {
 
 		private static final Cache<HashKey,ParquetParser> CACHE = Cache.of(HashKey.class, ParquetParser.class).build();
 
@@ -96,18 +96,6 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 		@Override /* InputStreamParser.Builder */
 		public Builder copy() {
 			return new Builder(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
 		}
 
 		@Override

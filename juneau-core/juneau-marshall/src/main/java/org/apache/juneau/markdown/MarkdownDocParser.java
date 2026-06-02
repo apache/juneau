@@ -68,7 +68,7 @@ public class MarkdownDocParser extends MarkdownParser {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends MarkdownParser.Builder {
+	public static class Builder extends MarkdownParser.Builder<Builder> {
 
 		private static final Cache<HashKey,MarkdownDocParser> CACHE = Cache.of(HashKey.class, MarkdownDocParser.class).build();
 
@@ -133,11 +133,6 @@ public class MarkdownDocParser extends MarkdownParser {
 			return new Builder(this);
 		}
 
-		@Override /* Overridden from MarkdownParser.Builder */
-		public Builder nullValue(String value) {
-			super.nullValue(value);
-			return this;
-		}
 	}
 
 	/**

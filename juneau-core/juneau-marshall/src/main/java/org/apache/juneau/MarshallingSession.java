@@ -75,7 +75,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends ContextSession.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends ContextSession.Builder<SELF> {
 
 		private MarshallingContext ctx;
 		private Locale locale;
@@ -95,12 +95,6 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 			timeZone = ctx.getTimeZone();
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		/**
 		 * Build the object.
 		 *
@@ -109,12 +103,6 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		@Override
 		public MarshallingSession build() {
 			return new MarshallingSession(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
 		}
 
 		/**
@@ -136,9 +124,9 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * 	<br>If <jk>null</jk> defaults to {@link MarshallingContext#getLocale()}
 		 * @return This object.
 		 */
-		public Builder locale(Locale value) {
+		public SELF locale(Locale value) {
 			locale = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -160,9 +148,9 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * 	<br>If <jk>null</jk> defaults to {@link MarshallingContext#getMediaType()}.
 		 * @return This object.
 		 */
-		public Builder mediaType(MediaType value) {
+		public SELF mediaType(MediaType value) {
 			mediaType = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -173,23 +161,17 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 		 * @return This object.
 		 */
-		public Builder mediaTypeDefault(MediaType value) {
+		public SELF mediaTypeDefault(MediaType value) {
 			if (mediaType == null)
 				mediaType = value;
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
+		public SELF property(String key, Object value) {
 			if (key == null) {
 				super.property(key, value);  // delegates null-key validation to base class
-				return this;
+				return self();
 			}
 			switch (key) {
 				case PROP_locale, PROP_BeanSession_locale:
@@ -200,7 +182,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 					return timeZone(cvt(value, TimeZone.class));
 				default:
 					super.property(key, value);
-					return this;
+					return self();
 			}
 		}
 
@@ -223,9 +205,9 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * 	<br>If <jk>null</jk> defaults to {@link MarshallingContext#getTimeZone()}.
 		 * @return This object.
 		 */
-		public Builder timeZone(TimeZone value) {
+		public SELF timeZone(TimeZone value) {
 			timeZone = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -236,16 +218,21 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 		 * @return This object.
 		 */
-		public Builder timeZoneDefault(TimeZone value) {
+		public SELF timeZoneDefault(TimeZone value) {
 			if (timeZone == null)
 				timeZone = value;
-			return this;
+			return self();
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
+	}
+
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@code create()} path (CRTP terminal).
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
+
+		DefaultBuilder(MarshallingContext ctx) {
+			super(ctx);
 		}
 	}
 
@@ -258,8 +245,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	public static Builder create(MarshallingContext ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+	public static Builder<?> create(MarshallingContext ctx) {
+		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	/**
@@ -281,7 +268,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected MarshallingSession(Builder builder) {
+	protected MarshallingSession(Builder<?> builder) {
 		super(builder);
 		ctx = builder.ctx;
 		locale = opt(builder.locale).orElse(ctx.getLocale());

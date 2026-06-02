@@ -63,7 +63,7 @@ public class RdfThriftSerializer extends RdfStreamSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfStreamSerializer.Builder create() {
+	public static RdfStreamSerializer.Builder<?> create() {
 		return RdfStreamSerializer.create()
 			.language(Constants.LANG_RDFTHRIFT)
 			.produces("application/vnd.apache.thrift.binary")
@@ -75,7 +75,7 @@ public class RdfThriftSerializer extends RdfStreamSerializer {
 	 *
 	 * @param builder The builder.
 	 */
-	public RdfThriftSerializer(RdfStreamSerializer.Builder builder) {
+	public RdfThriftSerializer(RdfStreamSerializer.Builder<?> builder) {
 		super(builder);
 	}
 }

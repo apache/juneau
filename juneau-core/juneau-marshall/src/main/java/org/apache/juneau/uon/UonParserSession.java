@@ -69,7 +69,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends ReaderParserSession.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends ReaderParserSession.Builder<SELF> {
 
 		private boolean decoding;
 		private boolean validateEnd;
@@ -85,21 +85,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			validateEnd = ctx.isValidateEnd();
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		@Override
 		public UonParserSession build() {
 			return new UonParserSession(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
 		}
 
 		/**
@@ -108,56 +96,14 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder decoding(boolean value) {
+		public SELF decoding(boolean value) {
 			decoding = value;
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder outer(Object value) {
-			super.outer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			if (key == null) { super.property(key, value); return this; }
+		public SELF property(String key, Object value) {
+			if (key == null) { super.property(key, value); return self(); }
 			switch (key) {
 				case PROP_decoding:
 					return decoding(cvt(value, Boolean.class));
@@ -165,7 +111,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					return validateEnd(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
-					return this;
+					return self();
 			}
 		}
 
@@ -175,45 +121,20 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder validateEnd(boolean value) {
+		public SELF validateEnd(boolean value) {
 			validateEnd = value;
-			return this;
+			return self();
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder schema(HttpPartSchema value) {
-			super.schema(value);
-			return this;
-		}
+	}
 
-		@Override /* Overridden from Builder */
-		public Builder schemaDefault(HttpPartSchema value) {
-			super.schemaDefault(value);
-			return this;
-		}
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@code create()} path (CRTP terminal).
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
 
-		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
+		DefaultBuilder(UonParser ctx) {
+			super(ctx);
 		}
 	}
 
@@ -231,8 +152,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * @param ctx The context creating this session.
 	 * @return A new builder.
 	 */
-	public static Builder create(UonParser ctx) {
-		return new Builder(ctx);
+	public static Builder<?> create(UonParser ctx) {
+		return new DefaultBuilder(ctx);
 	}
 
 	/*
@@ -267,7 +188,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected UonParserSession(Builder builder) {
+	protected UonParserSession(Builder<?> builder) {
 		super(builder);
 		decoding = builder.decoding;
 		validateEnd = builder.validateEnd;

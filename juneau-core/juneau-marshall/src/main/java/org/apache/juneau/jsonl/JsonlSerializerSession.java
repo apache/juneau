@@ -50,7 +50,7 @@ public class JsonlSerializerSession extends JsonSerializerSession {
 	@SuppressWarnings({
 		"unused" // ctx passed to super(); parent uses it; Builder stores for constructor chain
 	})
-	public static class Builder extends JsonSerializerSession.Builder {
+	public static class Builder extends JsonSerializerSession.Builder<Builder> {
 
 		private JsonlSerializer ctx;
 

@@ -43,7 +43,7 @@ public class HoconParserSession extends ReaderParserSession {
 	/**
 	 * Builder for HOCON parser session.
 	 */
-	public static class Builder extends ReaderParserSession.Builder {
+	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
 		private HoconParser hoconParser;
 

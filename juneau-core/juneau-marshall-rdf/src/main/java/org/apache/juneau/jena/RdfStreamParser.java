@@ -51,7 +51,7 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends InputStreamParser.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends InputStreamParser.Builder<SELF> {
 
 		private static final Cache<HashKey,RdfStreamParser> CACHE = Cache.of(HashKey.class, RdfStreamParser.class).build();
 
@@ -70,7 +70,7 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 		 *
 		 * @param copyFrom The builder to copy from.
 		 */
-		protected Builder(Builder copyFrom) {
+		protected Builder(Builder<?> copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			language = copyFrom.language;
 			rdfParser = copyFrom.rdfParser;
@@ -93,22 +93,10 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 		 * @param value The RDF language.
 		 * @return This object.
 		 */
-		public Builder language(String value) {
+		public SELF language(String value) {
 			language = value;
 			rdfParser = null; // Rebuild on next get
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
+			return self();
 		}
 
 		@Override
@@ -117,15 +105,13 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 		}
 
 		@Override
-		public Builder consumes(String value) {
+		public SELF consumes(String value) {
 			super.consumes(value);
-			return this;
+			return self();
 		}
 
-		@Override
-		public Builder copy() {
-			return new Builder(this);
-		}
+		@Override /* Overridden from Context.Builder */
+		public abstract SELF copy();
 
 		@Override
 		public HashKey hashKey() {
@@ -140,12 +126,33 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 	}
 
 	/**
+	 * Concrete default builder leaf for the non-subclassed {@link RdfStreamParser#create()} / {@link RdfStreamParser#copy()} path.
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
+
+		DefaultBuilder() {}
+
+		DefaultBuilder(RdfStreamParser copyFrom) {
+			super(copyFrom);
+		}
+
+		DefaultBuilder(Builder<?> copyFrom) {
+			super(copyFrom);
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public DefaultBuilder copy() {
+			return new DefaultBuilder(this);
+		}
+	}
+
+	/**
 	 * Creates a new builder.
 	 *
 	 * @return A new builder.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder<?> create() {
+		return new DefaultBuilder();
 	}
 
 	private final String language;
@@ -156,13 +163,13 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public RdfStreamParser(Builder builder) {
+	public RdfStreamParser(Builder<?> builder) {
 		super(assertArgNotNull(ARG_builder, builder).consumes(getConsumes(builder)));
 		language = builder.language;
 		rdfParser = builder.getRdfParser();
 	}
 
-	private static String getConsumes(Builder builder) {
+	private static String getConsumes(Builder<?> builder) {
 		if (builder.getConsumes() != null)
 			return builder.getConsumes();
 		return switch (builder.language) {
@@ -173,8 +180,8 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 	}
 
 	@Override
-	public Builder copy() {
-		return new Builder(this);
+	public Builder<?> copy() {
+		return new DefaultBuilder(this);
 	}
 
 	@Override

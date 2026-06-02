@@ -47,7 +47,7 @@ public class ProtoParserSession extends ReaderParserSession {
 	/**
 	 * Builder for Proto parser session.
 	 */
-	public static class Builder extends ReaderParserSession.Builder {
+	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
 		protected Builder(ProtoParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));

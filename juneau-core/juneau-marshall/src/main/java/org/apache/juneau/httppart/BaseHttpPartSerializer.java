@@ -44,7 +44,7 @@ public abstract class BaseHttpPartSerializer extends MarshallingContextable impl
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder extends MarshallingContextable.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingContextable.Builder<SELF> {
 
 		/**
 		 * Constructor.

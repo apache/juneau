@@ -58,7 +58,7 @@ public class CborParserSession extends InputStreamParserSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends InputStreamParserSession.Builder {
+	public static class Builder extends InputStreamParserSession.Builder<Builder> {
 
 		/**
 		 * Constructor
@@ -70,94 +70,11 @@ public class CborParserSession extends InputStreamParserSession {
 			super(assertArgNotNull(ARG_ctx, ctx));
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		@Override
 		public CborParserSession build() {
 			return new CborParserSession(this);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder outer(Object value) {
-			super.outer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schema(HttpPartSchema value) {
-			super.schema(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schemaDefault(HttpPartSchema value) {
-			super.schemaDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
-		}
 	}
 
 	/**

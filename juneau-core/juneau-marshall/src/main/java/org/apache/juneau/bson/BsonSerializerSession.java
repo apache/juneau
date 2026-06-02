@@ -59,7 +59,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends OutputStreamSerializerSession.Builder {
+	public static class Builder extends OutputStreamSerializerSession.Builder<Builder> {
 
 		private BsonSerializer ctx;
 

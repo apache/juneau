@@ -48,7 +48,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder extends MarshallingContextable.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingContextable.Builder<SELF> {
 
 		/**
 		 * Constructor.

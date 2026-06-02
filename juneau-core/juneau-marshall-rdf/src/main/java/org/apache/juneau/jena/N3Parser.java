@@ -72,7 +72,7 @@ public class N3Parser extends RdfParser {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfParser.Builder create() {
+	public static RdfParser.Builder<?> create() {
 		return RdfParser.create().n3();
 	}
 
@@ -81,7 +81,7 @@ public class N3Parser extends RdfParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public N3Parser(RdfParser.Builder builder) {
+	public N3Parser(RdfParser.Builder<?> builder) {
 		super(builder.n3().consumes("text/n3"));
 	}
 }

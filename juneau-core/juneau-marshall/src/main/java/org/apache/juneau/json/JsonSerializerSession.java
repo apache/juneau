@@ -65,7 +65,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends WriterSerializerSession.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends WriterSerializerSession.Builder<SELF> {
 
 		private boolean escapeSolidus;
 		private JsonSerializer ctx;
@@ -82,57 +82,9 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			escapeSolidus = ctx.isEscapeSolidus();
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		@Override
 		public JsonSerializerSession build() {
 			return new JsonSerializerSession(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
 		}
 
 		/**
@@ -141,75 +93,32 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder escapeSolidus(boolean value) {
+		public SELF escapeSolidus(boolean value) {
 			escapeSolidus = value;
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			if (key == null) { super.property(key, value); return this; }
+		public SELF property(String key, Object value) {
+			if (key == null) { super.property(key, value); return self(); }
 			switch (key) {
 				case PROP_escapeSolidus, PROP_JsonSerializerSession_escapeSolidus:
 					return escapeSolidus(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
-					return this;
+					return self();
 			}
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder resolver(VarResolverSession value) {
-			super.resolver(value);
-			return this;
-		}
+	}
 
-		@Override /* Overridden from Builder */
-		public Builder schema(HttpPartSchema value) {
-			super.schema(value);
-			return this;
-		}
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@code create()} path (CRTP terminal).
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
 
-		@Override /* Overridden from Builder */
-		public Builder schemaDefault(HttpPartSchema value) {
-			super.schemaDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useWhitespace(Boolean value) {
-			super.useWhitespace(value);
-			return this;
+		DefaultBuilder(JsonSerializer ctx) {
+			super(ctx);
 		}
 	}
 
@@ -220,8 +129,8 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	public static Builder create(JsonSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+	public static Builder<?> create(JsonSerializer ctx) {
+		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final JsonSerializer ctx;
@@ -232,7 +141,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected JsonSerializerSession(Builder builder) {
+	protected JsonSerializerSession(Builder<?> builder) {
 		super(builder);
 		this.ctx = builder.ctx;
 		escapeSolidus = builder.escapeSolidus;

@@ -69,7 +69,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends ReaderParserSession.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends ReaderParserSession.Builder<SELF> {
 
 		String nullValue;
 
@@ -83,105 +83,20 @@ public class MarkdownParserSession extends ReaderParserSession {
 			nullValue = ctx.getNullValue();
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		@Override
 		public MarkdownParserSession build() {
 			return new MarkdownParserSession(this);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
+	}
 
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@code create()} path (CRTP terminal).
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
 
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder outer(Object value) {
-			super.outer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schema(HttpPartSchema value) {
-			super.schema(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schemaDefault(HttpPartSchema value) {
-			super.schemaDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
+		DefaultBuilder(MarkdownParser ctx) {
+			super(ctx);
 		}
 	}
 
@@ -191,8 +106,8 @@ public class MarkdownParserSession extends ReaderParserSession {
 	 * @param ctx The context creating this session.
 	 * @return A new builder.
 	 */
-	public static Builder create(MarkdownParser ctx) {
-		return new Builder(ctx);
+	public static Builder<?> create(MarkdownParser ctx) {
+		return new DefaultBuilder(ctx);
 	}
 
 	/**
@@ -200,7 +115,7 @@ public class MarkdownParserSession extends ReaderParserSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected MarkdownParserSession(Builder builder) {
+	protected MarkdownParserSession(Builder<?> builder) {
 		super(builder);
 		nullValue = builder.nullValue != null ? builder.nullValue : "*null*";
 	}

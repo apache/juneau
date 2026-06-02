@@ -73,7 +73,7 @@ public class TurtleSerializer extends RdfSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfSerializer.Builder create() {
+	public static RdfSerializer.Builder<?> create() {
 		return RdfSerializer.create().turtle();
 	}
 
@@ -82,7 +82,7 @@ public class TurtleSerializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public TurtleSerializer(RdfSerializer.Builder builder) {
+	public TurtleSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.turtle());
 	}
 }

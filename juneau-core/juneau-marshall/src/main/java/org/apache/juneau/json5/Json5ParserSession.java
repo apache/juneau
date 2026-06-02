@@ -56,7 +56,7 @@ public class Json5ParserSession extends JsonParserSession {
 	@SuppressWarnings({
 		"java:S110" // Inheritance depth is intentional across parser session builders
 	})
-	public static class Builder extends JsonParserSession.Builder {
+	public static class Builder extends JsonParserSession.Builder<Builder> {
 
 		/**
 		 * Constructor

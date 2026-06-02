@@ -49,7 +49,7 @@ public class TomlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder for TOML serializer session.
 	 */
-	public static class Builder extends WriterSerializerSession.Builder {
+	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
 		private TomlSerializer ctx;
 

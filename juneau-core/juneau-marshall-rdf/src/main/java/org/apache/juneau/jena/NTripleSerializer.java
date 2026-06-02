@@ -72,7 +72,7 @@ public class NTripleSerializer extends RdfSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfSerializer.Builder create() {
+	public static RdfSerializer.Builder<?> create() {
 		return RdfSerializer.create().ntriple();
 	}
 
@@ -81,7 +81,7 @@ public class NTripleSerializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public NTripleSerializer(RdfSerializer.Builder builder) {
+	public NTripleSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.ntriple());
 	}
 }

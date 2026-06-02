@@ -113,7 +113,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends MarshallingTraverseSession.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingTraverseSession.Builder<SELF> {
 
 		private static final String ARG_ctx = "ctx";
 
@@ -152,21 +152,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 			trimEmptyMaps = ctx.isTrimEmptyMaps();
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		@Override
 		public SerializerSession build() {
 			return new SerializerSession(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
 		}
 
 		/**
@@ -177,41 +165,17 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * 	<br>Can be <jk>null</jk> (value will not be set, existing value will be kept).
 		 * @return This object.
 		 */
-		public Builder javaMethod(Method value) {
+		public SELF javaMethod(Method value) {
 			if (nn(value))
 				javaMethod = value;
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
+		public SELF property(String key, Object value) {
 			if (key == null) {
 				super.property(key, value);
-				return this;
+				return self();
 			}
 			switch (key) {
 				case PROP_javaMethod, PROP_SerializerSession_javaMethod:
@@ -240,7 +204,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 					return trimEmptyMaps(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
-					return this;
+					return self();
 			}
 		}
 
@@ -255,10 +219,10 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * 	<br>Can be <jk>null</jk> (value will not be set, defaults to session created by {@link VarResolver#DEFAULT} when accessed).
 		 * @return This object.
 		 */
-		public Builder resolver(VarResolverSession value) {
+		public SELF resolver(VarResolverSession value) {
 			if (nn(value))
 				resolver = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -272,10 +236,10 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * 	<br>Can be <jk>null</jk> (value will not be set, existing value will be kept).
 		 * @return This object.
 		 */
-		public Builder schema(HttpPartSchema value) {
+		public SELF schema(HttpPartSchema value) {
 			if (nn(value))
 				schema = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -286,28 +250,10 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
 		 * @return This object.
 		 */
-		public Builder schemaDefault(HttpPartSchema value) {
+		public SELF schemaDefault(HttpPartSchema value) {
 			if (nn(value) && schema == null)
 				schema = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
+			return self();
 		}
 
 		/**
@@ -324,10 +270,10 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * 	<br>Can be <jk>null</jk> (value will not be set, defaults to {@link Serializer.Builder#uriContext(UriContext)} from context).
 		 * @return This object.
 		 */
-		public Builder uriContext(UriContext value) {
+		public SELF uriContext(UriContext value) {
 			if (nn(value))
 				uriContext = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -336,9 +282,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder keepNullProperties(boolean value) {
+		public SELF keepNullProperties(boolean value) {
 			keepNullProperties = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -347,9 +293,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder trimStrings(boolean value) {
+		public SELF trimStrings(boolean value) {
 			trimStrings = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -358,9 +304,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder addBeanTypes(boolean value) {
+		public SELF addBeanTypes(boolean value) {
 			addBeanTypes = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -369,9 +315,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder addRootType(boolean value) {
+		public SELF addRootType(boolean value) {
 			addRootType = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -380,9 +326,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder sortCollections(boolean value) {
+		public SELF sortCollections(boolean value) {
 			sortCollections = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -391,9 +337,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder sortMaps(boolean value) {
+		public SELF sortMaps(boolean value) {
 			sortMaps = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -402,9 +348,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder trimEmptyCollections(boolean value) {
+		public SELF trimEmptyCollections(boolean value) {
 			trimEmptyCollections = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -413,9 +359,19 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder trimEmptyMaps(boolean value) {
+		public SELF trimEmptyMaps(boolean value) {
 			trimEmptyMaps = value;
-			return this;
+			return self();
+		}
+	}
+
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@code create()} path (CRTP terminal).
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
+
+		DefaultBuilder(Serializer ctx) {
+			super(ctx);
 		}
 	}
 
@@ -426,8 +382,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	public static Builder create(Serializer ctx) {
-		return new Builder(assertArgNotNull("ctx", ctx));
+	public static Builder<?> create(Serializer ctx) {
+		return new DefaultBuilder(assertArgNotNull("ctx", ctx));
 	}
 
 	/**
@@ -508,7 +464,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected SerializerSession(Builder builder) {
+	protected SerializerSession(Builder<?> builder) {
 		super(builder);
 		ctx = builder.ctx;
 		javaMethod = builder.javaMethod;

@@ -82,7 +82,7 @@ public class RdfXmlAbbrevSerializer extends RdfSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfSerializer.Builder create() {
+	public static RdfSerializer.Builder<?> create() {
 		return RdfSerializer.create().xmlabbrev();
 	}
 
@@ -91,7 +91,7 @@ public class RdfXmlAbbrevSerializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public RdfXmlAbbrevSerializer(RdfSerializer.Builder builder) {
+	public RdfXmlAbbrevSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.xmlabbrev());
 	}
 }

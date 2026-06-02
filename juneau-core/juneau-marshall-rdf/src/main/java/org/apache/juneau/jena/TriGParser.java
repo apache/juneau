@@ -72,7 +72,7 @@ public class TriGParser extends RdfParser {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfParser.Builder create() {
+	public static RdfParser.Builder<?> create() {
 		return RdfParser.create().triG();
 	}
 
@@ -81,7 +81,7 @@ public class TriGParser extends RdfParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public TriGParser(RdfParser.Builder builder) {
+	public TriGParser(RdfParser.Builder<?> builder) {
 		super(builder.triG().consumes("application/trig"));
 	}
 }

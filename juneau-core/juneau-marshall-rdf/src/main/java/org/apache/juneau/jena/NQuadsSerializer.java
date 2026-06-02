@@ -72,7 +72,7 @@ public class NQuadsSerializer extends RdfSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfSerializer.Builder create() {
+	public static RdfSerializer.Builder<?> create() {
 		return RdfSerializer.create().nQuads();
 	}
 
@@ -81,7 +81,7 @@ public class NQuadsSerializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public NQuadsSerializer(RdfSerializer.Builder builder) {
+	public NQuadsSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.nQuads());
 	}
 }

@@ -52,7 +52,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder extends MarshallingContextable.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingContextable.Builder<SELF> {
 
 		private boolean detectRecursions;
 		private boolean ignoreRecursions;
@@ -87,201 +87,12 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 *
 		 * @param copyFrom The builder to copy from.
 		 */
-		protected Builder(Builder copyFrom) {
+		protected Builder(Builder<?> copyFrom) {
 			super(copyFrom);
 			detectRecursions = copyFrom.detectRecursions;
 			ignoreRecursions = copyFrom.ignoreRecursions;
 			initialDepth = copyFrom.initialDepth;
 			maxDepth = copyFrom.maxDepth;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanClassVisibility(Visibility value) {
-			super.beanClassVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanConstructorVisibility(Visibility value) {
-			super.beanConstructorVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder marshallingContext(MarshallingContext value) {
-			super.marshallingContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder marshallingContext(MarshallingContext.Builder value) {
-			super.marshallingContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanDictionary(java.lang.Class<?>...values) {
-			super.beanDictionary(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanFieldVisibility(Visibility value) {
-			super.beanFieldVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.commons.bean.BeanInterceptor<?>> value) {
-			super.beanInterceptor(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMapPutReturnsOldValue() {
-			super.beanMapPutReturnsOldValue();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMethodVisibility(Visibility value) {
-			super.beanMethodVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(String beanClassName, String properties) {
-			super.beanProperties(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
-			super.beanPropertiesExcludes(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
-			super.beanPropertiesReadOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
-			super.beanPropertiesWriteOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireDefaultConstructor() {
-			super.beansRequireDefaultConstructor();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSerializable() {
-			super.beansRequireSerializable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSettersForGetters() {
-			super.beansRequireSettersForGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public abstract Builder copy();
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
 		}
 
 		/**
@@ -321,7 +132,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 *
 		 * @return This object.
 		 */
-		public Builder detectRecursions() {
+		public SELF detectRecursions() {
 			return detectRecursions(true);
 		}
 
@@ -331,69 +142,9 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public Builder detectRecursions(boolean value) {
+		public SELF detectRecursions(boolean value) {
 			detectRecursions = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
-			super.dictionaryOn(on, values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableBeansRequireSomeProperties() {
-			super.disableBeansRequireSomeProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreMissingSetters() {
-			super.disableIgnoreMissingSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreTransientFields() {
-			super.disableIgnoreTransientFields();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreUnknownNullBeanProperties() {
-			super.disableIgnoreUnknownNullBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableInterfaceProxies() {
-			super.disableInterfaceProxies();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters() {
-			super.findFluentSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters(Class<?> on) {
-			super.findFluentSetters(on);
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Context.Builder */
@@ -407,18 +158,6 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 				maxDepth
 			);
 			// @formatter:on
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnGetters() {
-			super.ignoreInvocationExceptionsOnGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnSetters() {
-			super.ignoreInvocationExceptionsOnSetters();
-			return this;
 		}
 
 		/**
@@ -461,7 +200,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 *
 		 * @return This object.
 		 */
-		public Builder ignoreRecursions() {
+		public SELF ignoreRecursions() {
 			return ignoreRecursions(true);
 		}
 
@@ -471,51 +210,9 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public Builder ignoreRecursions(boolean value) {
+		public SELF ignoreRecursions(boolean value) {
 			ignoreRecursions = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownEnumValues() {
-			super.ignoreUnknownEnumValues();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			super.implClass(interfaceClass, implClass);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			super.implClasses(values);
-			return this;
+			return self();
 		}
 
 		/**
@@ -545,27 +242,9 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * 	<br>The default is <c>0</c>.
 		 * @return This object.
 		 */
-		public Builder initialDepth(int value) {
+		public SELF initialDepth(int value) {
 			initialDepth = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			super.interfaceClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
-			super.interfaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
+			return self();
 		}
 
 		/**
@@ -598,119 +277,12 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * 	<br>The default is <c>100</c>.
 		 * @return This object.
 		 */
-		public Builder maxDepth(int value) {
+		public SELF maxDepth(int value) {
 			maxDepth = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanClasses(java.lang.Class<?>...values) {
-			super.notBeanClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanPackages(String...values) {
-			super.notBeanPackages(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.commons.bean.PropertyNamer> value) {
-			super.propertyNamer(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.commons.bean.PropertyNamer> value) {
-			super.propertyNamer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unsortedProperties() {
-			super.unsortedProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unsortedProperties(java.lang.Class<?>...on) {
-			super.unsortedProperties(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder stopClass(Class<?> on, Class<?> value) {
-			super.stopClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends Context> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
+			return self();
 		}
 
 
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
 	}
 
 	private final boolean detectRecursions;
@@ -736,7 +308,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 	}
 
 	@Override /* Overridden from Context */
-	public abstract Builder copy();
+	public abstract Builder<?> copy();
 
 	/**
 	 * Initial depth.

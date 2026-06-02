@@ -120,7 +120,7 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends OutputStreamSerializer.Builder {
+	public static class Builder extends OutputStreamSerializer.Builder<Builder> {
 
 		private static final Cache<HashKey,CborSerializer> CACHE = Cache.of(HashKey.class, CborSerializer.class).build();
 
@@ -198,27 +198,9 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder binaryFormat(BinaryFormat value) {
-			super.binaryFormat(value);
-			return this;
-		}
-
 		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
 		}
 
 		@Override /* Overridden from Context.Builder */

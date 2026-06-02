@@ -58,7 +58,7 @@ public class XmlDocSerializer extends XmlSerializer {
 		 * @param builder The builder for this object.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
-		public Ns(XmlSerializer.Builder builder) {
+		public Ns(XmlSerializer.Builder<?> builder) {
 			super(assertArgNotNull(ARG_builder, builder).enableNamespaces());
 		}
 	}
@@ -68,8 +68,8 @@ public class XmlDocSerializer extends XmlSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static Builder create() {
-		return new Builder().type(XmlDocSerializer.class);
+	public static Builder<?> create() {
+		return new DefaultBuilder().type(XmlDocSerializer.class);
 	}
 
 	/**
@@ -78,13 +78,13 @@ public class XmlDocSerializer extends XmlSerializer {
 	 * @param builder The builder for this object.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
-	public XmlDocSerializer(XmlSerializer.Builder builder) {
+	public XmlDocSerializer(XmlSerializer.Builder<?> builder) {
 		super(assertArgNotNull(ARG_builder, builder));
 	}
 
 	@Override /* Overridden from Context */
-	public Builder copy() {
-		return new Builder(this);
+	public Builder<?> copy() {
+		return new DefaultBuilder(this);
 	}
 
 	@Override /* Overridden from Context */

@@ -108,7 +108,7 @@ public class IniSerializer extends WriterSerializer implements IniMetaProvider {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends WriterSerializer.Builder {
+	public static class Builder extends WriterSerializer.Builder<Builder> {
 
 		private static final Cache<HashKey,IniSerializer> CACHE = Cache.of(HashKey.class, IniSerializer.class).build();
 
@@ -193,18 +193,6 @@ public class IniSerializer extends WriterSerializer implements IniMetaProvider {
 		@Override
 		public Builder ws() {
 			return useWhitespace();
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
 		}
 
 		@Override

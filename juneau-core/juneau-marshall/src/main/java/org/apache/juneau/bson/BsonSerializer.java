@@ -121,7 +121,7 @@ public class BsonSerializer extends OutputStreamSerializer implements BsonMetaPr
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends OutputStreamSerializer.Builder {
+	public static class Builder extends OutputStreamSerializer.Builder<Builder> {
 
 		private static final Cache<HashKey,BsonSerializer> CACHE = Cache.of(HashKey.class, BsonSerializer.class).build();
 
@@ -229,18 +229,6 @@ public class BsonSerializer extends OutputStreamSerializer implements BsonMetaPr
 		@Override /* Serializer.Builder */
 		public Builder addRootType(boolean value) {
 			super.addRootType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
 			return this;
 		}
 

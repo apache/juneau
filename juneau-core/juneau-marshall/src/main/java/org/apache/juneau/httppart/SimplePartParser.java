@@ -66,7 +66,7 @@ public class SimplePartParser extends BaseHttpPartParser {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends BaseHttpPartParser.Builder {
+	public static class Builder extends BaseHttpPartParser.Builder<Builder> {
 
 		private static final Cache<HashKey,SimplePartParser> CACHE = Cache.of(HashKey.class, SimplePartParser.class).build();
 
@@ -88,12 +88,6 @@ public class SimplePartParser extends BaseHttpPartParser {
 		@Override
 		public SimplePartParser build() {
 			return cache(CACHE).build(SimplePartParser.class);
-		}
-
-		@Override /* Overridden from Context */
-		public Builder cache(Cache<HashKey,? extends Context> value) {
-			super.cache(value);
-			return this;
 		}
 
 		@Override

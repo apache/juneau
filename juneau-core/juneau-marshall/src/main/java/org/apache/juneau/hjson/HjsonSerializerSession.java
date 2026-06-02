@@ -46,7 +46,7 @@ public class HjsonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder for Hjson serializer session.
 	 */
-	public static class Builder extends WriterSerializerSession.Builder {
+	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
 		private HjsonSerializer ctx;
 

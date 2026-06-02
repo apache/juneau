@@ -51,7 +51,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends JsonSerializerSession.Builder {
+	public static class Builder extends JsonSerializerSession.Builder<Builder> {
 
 		/**
 		 * Constructor

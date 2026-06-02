@@ -50,7 +50,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends OutputStreamSerializer.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends OutputStreamSerializer.Builder<SELF> {
 
 		private static final Cache<HashKey,RdfStreamSerializer> CACHE = Cache.of(HashKey.class, RdfStreamSerializer.class).build();
 
@@ -69,7 +69,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 		 *
 		 * @param copyFrom The builder to copy from.
 		 */
-		protected Builder(Builder copyFrom) {
+		protected Builder(Builder<?> copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			language = copyFrom.language;
 			rdfSerializer = copyFrom.rdfSerializer;
@@ -92,34 +92,22 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 		 * @param value The RDF language.
 		 * @return This object.
 		 */
-		public Builder language(String value) {
+		public SELF language(String value) {
 			language = value;
 			rdfSerializer = null; // Rebuild on next get
-			return this;
+			return self();
 		}
 
 		@Override
-		public Builder produces(String value) {
+		public SELF produces(String value) {
 			super.produces(value);
-			return this;
+			return self();
 		}
 
 		@Override
-		public Builder accept(String value) {
+		public SELF accept(String value) {
 			super.accept(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
+			return self();
 		}
 
 		@Override
@@ -127,10 +115,8 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 			return cache(CACHE).build(RdfStreamSerializer.class);
 		}
 
-		@Override
-		public Builder copy() {
-			return new Builder(this);
-		}
+		@Override /* Overridden from Context.Builder */
+		public abstract SELF copy();
 
 		@Override
 		public HashKey hashKey() {
@@ -145,12 +131,33 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 	}
 
 	/**
+	 * Concrete default builder leaf for the non-subclassed {@link RdfStreamSerializer#create()} / {@link RdfStreamSerializer#copy()} path.
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
+
+		DefaultBuilder() {}
+
+		DefaultBuilder(RdfStreamSerializer copyFrom) {
+			super(copyFrom);
+		}
+
+		DefaultBuilder(Builder<?> copyFrom) {
+			super(copyFrom);
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public DefaultBuilder copy() {
+			return new DefaultBuilder(this);
+		}
+	}
+
+	/**
 	 * Creates a new builder.
 	 *
 	 * @return A new builder.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder<?> create() {
+		return new DefaultBuilder();
 	}
 
 	private final String language;
@@ -161,19 +168,19 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 	 *
 	 * @param builder The builder.
 	 */
-	public RdfStreamSerializer(Builder builder) {
+	public RdfStreamSerializer(Builder<?> builder) {
 		super(assertArgNotNull(ARG_builder, builder).produces(getProduces(builder)).accept(getAccept(builder)));
 		language = builder.language;
 		rdfSerializer = builder.getRdfSerializer();
 	}
 
-	private static String getAccept(Builder builder) {
+	private static String getAccept(Builder<?> builder) {
 		if (builder.getAccept() != null)
 			return builder.getAccept();
 		return getProduces(builder);
 	}
 
-	private static String getProduces(Builder builder) {
+	private static String getProduces(Builder<?> builder) {
 		if (builder.getProduces() != null)
 			return builder.getProduces();
 		return switch (builder.language) {
@@ -184,8 +191,8 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 	}
 
 	@Override
-	public Builder copy() {
-		return new Builder(this);
+	public Builder<?> copy() {
+		return new DefaultBuilder(this);
 	}
 
 	@Override

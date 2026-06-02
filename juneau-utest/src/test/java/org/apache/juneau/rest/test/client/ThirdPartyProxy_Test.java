@@ -2489,7 +2489,7 @@ class ThirdPartyProxy_Test extends TestBase {
 			return new Builder();
 		}
 
-		public static class Builder extends BaseHttpPartSerializer.Builder {
+		public static class Builder extends BaseHttpPartSerializer.Builder<Builder> {
 
 			Builder() {
 			}

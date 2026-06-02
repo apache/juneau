@@ -107,7 +107,7 @@ public class JcsSerializer extends JsonSerializer {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends JsonSerializer.Builder {
+	public static class Builder extends JsonSerializer.Builder<Builder> {
 
 		/**
 		 * Constructor, default settings for JCS canonical output.

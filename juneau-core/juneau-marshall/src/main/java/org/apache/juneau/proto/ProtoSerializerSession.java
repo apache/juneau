@@ -63,7 +63,7 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder for Proto serializer session.
 	 */
-	public static class Builder extends WriterSerializerSession.Builder {
+	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
 		private ProtoSerializer ctx;
 

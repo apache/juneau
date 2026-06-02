@@ -58,7 +58,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends SerializerSession.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends SerializerSession.Builder<SELF> {
 
 		private OutputStreamSerializer ctx;
 
@@ -73,99 +73,20 @@ public class OutputStreamSerializerSession extends SerializerSession {
 			this.ctx = ctx;
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		@Override
 		public OutputStreamSerializerSession build() {
 			return new OutputStreamSerializerSession(this);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
+	}
 
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@code create()} path (CRTP terminal).
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
 
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder resolver(VarResolverSession value) {
-			super.resolver(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schema(HttpPartSchema value) {
-			super.schema(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schemaDefault(HttpPartSchema value) {
-			super.schemaDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
+		DefaultBuilder(OutputStreamSerializer ctx) {
+			super(ctx);
 		}
 	}
 
@@ -176,8 +97,8 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	public static Builder create(OutputStreamSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+	public static Builder<?> create(OutputStreamSerializer ctx) {
+		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final OutputStreamSerializer ctx;
@@ -187,7 +108,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected OutputStreamSerializerSession(Builder builder) {
+	protected OutputStreamSerializerSession(Builder<?> builder) {
 		super(builder);
 		ctx = builder.ctx;
 	}

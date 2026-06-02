@@ -57,7 +57,7 @@ public class BsonParserSession extends InputStreamParserSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends InputStreamParserSession.Builder {
+	public static class Builder extends InputStreamParserSession.Builder<Builder> {
 
 		private final String nullKeyString;
 

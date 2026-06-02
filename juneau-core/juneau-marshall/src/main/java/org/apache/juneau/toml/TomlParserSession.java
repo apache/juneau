@@ -57,7 +57,7 @@ public class TomlParserSession extends ReaderParserSession {
 	/**
 	 * Builder for TOML parser session.
 	 */
-	public static class Builder extends ReaderParserSession.Builder {
+	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
 		private TomlParser ctx;
 

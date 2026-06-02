@@ -46,7 +46,7 @@ public class SseSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends WriterSerializerSession.Builder {
+	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
 		/**
 		 * Constructor.

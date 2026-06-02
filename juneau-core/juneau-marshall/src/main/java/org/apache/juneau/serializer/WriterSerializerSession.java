@@ -74,7 +74,7 @@ public class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends SerializerSession.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends SerializerSession.Builder<SELF> {
 
 		private boolean useWhitespace;
 		private Charset fileCharset;
@@ -97,21 +97,9 @@ public class WriterSerializerSession extends SerializerSession {
 			quoteChar = ctx.getQuoteChar();
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		@Override
 		public WriterSerializerSession build() {
 			return new WriterSerializerSession(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
 		}
 
 		/**
@@ -131,40 +119,10 @@ public class WriterSerializerSession extends SerializerSession {
 		 * 	<br>Can be <jk>null</jk> (value will not be set, defaults to JVM system default charset).
 		 * @return This object.
 		 */
-		public Builder fileCharset(Charset value) {
+		public SELF fileCharset(Charset value) {
 			if (nn(value))
 				fileCharset = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
+			return self();
 		}
 
 		/**
@@ -173,16 +131,16 @@ public class WriterSerializerSession extends SerializerSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder maxIndent(int value) {
+		public SELF maxIndent(int value) {
 			maxIndent = value;
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
+		public SELF property(String key, Object value) {
 			if (key == null) {
 				super.property(key, value);
-				return this;
+				return self();
 			}
 			switch (key) {
 				case PROP_fileCharset, PROP_WriterSerializerSession_fileCharset:
@@ -197,7 +155,7 @@ public class WriterSerializerSession extends SerializerSession {
 					return quoteChar(cvt(value, Character.class));
 				default:
 					super.property(key, value);
-					return this;
+					return self();
 			}
 		}
 
@@ -207,27 +165,9 @@ public class WriterSerializerSession extends SerializerSession {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder quoteChar(char value) {
+		public SELF quoteChar(char value) {
 			quoteChar = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder resolver(VarResolverSession value) {
-			super.resolver(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schema(HttpPartSchema value) {
-			super.schema(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schemaDefault(HttpPartSchema value) {
-			super.schemaDefault(value);
-			return this;
+			return self();
 		}
 
 		/**
@@ -247,34 +187,10 @@ public class WriterSerializerSession extends SerializerSession {
 		 * 	<br>Can be <jk>null</jk> (value will not be set, defaults to UTF-8).
 		 * @return This object.
 		 */
-		public Builder streamCharset(Charset value) {
+		public SELF streamCharset(Charset value) {
 			if (nn(value))
 				streamCharset = value;
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
+			return self();
 		}
 
 		/**
@@ -288,10 +204,20 @@ public class WriterSerializerSession extends SerializerSession {
 		 * 	<br>Can be <jk>null</jk> (value will not be set, existing value from context will be kept).
 		 * @return This object.
 		 */
-		public Builder useWhitespace(Boolean value) {
+		public SELF useWhitespace(Boolean value) {
 			if (nn(value))
 				useWhitespace = value;
-			return this;
+			return self();
+		}
+	}
+
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@code create()} path (CRTP terminal).
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
+
+		DefaultBuilder(WriterSerializer ctx) {
+			super(ctx);
 		}
 	}
 
@@ -302,8 +228,8 @@ public class WriterSerializerSession extends SerializerSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	public static Builder create(WriterSerializer ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+	public static Builder<?> create(WriterSerializer ctx) {
+		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	private final boolean useWhitespace;
@@ -317,7 +243,7 @@ public class WriterSerializerSession extends SerializerSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected WriterSerializerSession(Builder builder) {
+	protected WriterSerializerSession(Builder<?> builder) {
 		super(builder);
 		fileCharset = builder.fileCharset;
 		streamCharset = builder.streamCharset;

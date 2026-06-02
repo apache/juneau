@@ -76,7 +76,7 @@ public class JsonLdParser extends RdfParser {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfParser.Builder create() {
+	public static RdfParser.Builder<?> create() {
 		return RdfParser.create().jsonLd();
 	}
 
@@ -85,7 +85,7 @@ public class JsonLdParser extends RdfParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public JsonLdParser(RdfParser.Builder builder) {
+	public JsonLdParser(RdfParser.Builder<?> builder) {
 		super(builder.jsonLd().consumes("application/ld+json"));
 	}
 }

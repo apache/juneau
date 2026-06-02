@@ -83,7 +83,7 @@ public class ParserSession extends MarshallingSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends MarshallingSession.Builder {
+	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingSession.Builder<SELF> {
 
 		private HttpPartSchema schema;
 		private Method javaMethod;
@@ -104,21 +104,9 @@ public class ParserSession extends MarshallingSession {
 			trimStrings = ctx.isTrimStrings();
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		@Override
 		public ParserSession build() {
 			return new ParserSession(this);
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
 		}
 
 		/**
@@ -129,29 +117,11 @@ public class ParserSession extends MarshallingSession {
 		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder javaMethod(Method value) {
+		public SELF javaMethod(Method value) {
 			javaMethod = value;
-			return this;
+			return self();
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
 
 		/**
 		 * The outer object for instantiating top-level non-static inner classes.
@@ -161,22 +131,16 @@ public class ParserSession extends MarshallingSession {
 		 * 	<br>Can be <jk>null</jk> (no outer object will be used, suitable for static or top-level classes).
 		 * @return This object.
 		 */
-		public Builder outer(Object value) {
+		public SELF outer(Object value) {
 			outer = value;
-			return this;
+			return self();
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
+		public SELF property(String key, Object value) {
 			if (key == null) {
 				super.property(key, value);
-				return this;
+				return self();
 			}
 			switch (key) {
 				case PROP_javaMethod, PROP_ParserSession_javaMethod:
@@ -189,7 +153,7 @@ public class ParserSession extends MarshallingSession {
 					return trimStrings(cvt(value, Boolean.class));
 				default:
 					super.property(key, value);
-					return this;
+					return self();
 			}
 		}
 
@@ -199,9 +163,9 @@ public class ParserSession extends MarshallingSession {
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder trimStrings(boolean value) {
+		public SELF trimStrings(boolean value) {
 			trimStrings = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -215,10 +179,10 @@ public class ParserSession extends MarshallingSession {
 		 * 	<br>Can be <jk>null</jk> (will not set the value, keeps existing schema or remains <jk>null</jk>).
 		 * @return This object.
 		 */
-		public Builder schema(HttpPartSchema value) {
+		public SELF schema(HttpPartSchema value) {
 			if (nn(value))
 				schema = value;
-			return this;
+			return self();
 		}
 
 		/**
@@ -229,28 +193,21 @@ public class ParserSession extends MarshallingSession {
 		 * 	<br>If <jk>null</jk>, the value will not be set (keeps existing schema or remains <jk>null</jk>).
 		 * @return This object.
 		 */
-		public Builder schemaDefault(HttpPartSchema value) {
+		public SELF schemaDefault(HttpPartSchema value) {
 			if (nn(value) && schema == null)
 				schema = value;
-			return this;
+			return self();
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
+	}
 
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@code create()} path (CRTP terminal).
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
 
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
+		DefaultBuilder(Parser ctx) {
+			super(ctx);
 		}
 	}
 
@@ -261,8 +218,8 @@ public class ParserSession extends MarshallingSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
-	public static Builder create(Parser ctx) {
-		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+	public static Builder<?> create(Parser ctx) {
+		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
 	/**
@@ -323,7 +280,7 @@ public class ParserSession extends MarshallingSession {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected ParserSession(Builder builder) {
+	protected ParserSession(Builder<?> builder) {
 		super(builder);
 		ctx = builder.ctx;
 		javaMethod = builder.javaMethod;

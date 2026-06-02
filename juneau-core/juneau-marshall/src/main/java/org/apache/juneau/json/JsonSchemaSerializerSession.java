@@ -49,7 +49,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends JsonSerializerSession.Builder {
+	public static class Builder extends JsonSerializerSession.Builder<Builder> {
 
 		private JsonSchemaSerializer ctx;
 
@@ -63,118 +63,11 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 			this.ctx = ctx;
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
 		@Override
 		public JsonSchemaSerializerSession build() {
 			return new JsonSchemaSerializerSession(this);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaTypeDefault(MediaType value) {
-			super.mediaTypeDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder resolver(VarResolverSession value) {
-			super.resolver(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schema(HttpPartSchema value) {
-			super.schema(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder schemaDefault(HttpPartSchema value) {
-			super.schemaDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useWhitespace(Boolean value) {
-			super.useWhitespace(value);
-			return this;
-		}
 	}
 
 	/**

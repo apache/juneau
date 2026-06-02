@@ -76,7 +76,7 @@ public class TurtleParser extends RdfParser {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfParser.Builder create() {
+	public static RdfParser.Builder<?> create() {
 		return RdfParser.create().turtle();
 	}
 
@@ -85,7 +85,7 @@ public class TurtleParser extends RdfParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public TurtleParser(RdfParser.Builder builder) {
+	public TurtleParser(RdfParser.Builder<?> builder) {
 		super(builder.turtle().consumes("text/turtle"));
 	}
 }

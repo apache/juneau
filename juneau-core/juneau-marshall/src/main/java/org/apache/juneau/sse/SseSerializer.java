@@ -83,7 +83,7 @@ public class SseSerializer extends WriterSerializer {
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends WriterSerializer.Builder {
+	public static class Builder extends WriterSerializer.Builder<Builder> {
 
 		private static final Cache<HashKey,SseSerializer> CACHE = Cache.of(HashKey.class, SseSerializer.class).build();
 

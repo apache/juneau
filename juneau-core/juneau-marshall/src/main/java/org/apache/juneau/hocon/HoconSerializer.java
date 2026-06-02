@@ -153,7 +153,7 @@ public class HoconSerializer extends WriterSerializer implements HoconMetaProvid
 	/**
 	 * Builder class.
 	 */
-	public static class Builder extends WriterSerializer.Builder {
+	public static class Builder extends WriterSerializer.Builder<Builder> {
 
 		private static final Cache<HashKey, HoconSerializer> CACHE = Cache.of(HashKey.class, HoconSerializer.class).build();
 
@@ -280,18 +280,6 @@ public class HoconSerializer extends WriterSerializer implements HoconMetaProvid
 		@Override /* Overridden from WriterSerializer.Builder */
 		public Builder ws() {
 			return useWhitespace();
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema() {
-			super.validateSchema();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder validateSchema(boolean value) {
-			super.validateSchema(value);
-			return this;
 		}
 
 		@Override

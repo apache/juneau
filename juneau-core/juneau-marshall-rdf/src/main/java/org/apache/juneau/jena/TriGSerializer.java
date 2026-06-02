@@ -72,7 +72,7 @@ public class TriGSerializer extends RdfSerializer {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfSerializer.Builder create() {
+	public static RdfSerializer.Builder<?> create() {
 		return RdfSerializer.create().triG();
 	}
 
@@ -81,7 +81,7 @@ public class TriGSerializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public TriGSerializer(RdfSerializer.Builder builder) {
+	public TriGSerializer(RdfSerializer.Builder<?> builder) {
 		super(builder.triG());
 	}
 }

@@ -72,7 +72,7 @@ public class NQuadsParser extends RdfParser {
 	 *
 	 * @return A new builder.
 	 */
-	public static RdfParser.Builder create() {
+	public static RdfParser.Builder<?> create() {
 		return RdfParser.create().nQuads();
 	}
 
@@ -81,7 +81,7 @@ public class NQuadsParser extends RdfParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public NQuadsParser(RdfParser.Builder builder) {
+	public NQuadsParser(RdfParser.Builder<?> builder) {
 		super(builder.nQuads().consumes("application/n-quads"));
 	}
 }

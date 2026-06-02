@@ -50,7 +50,7 @@ public class IniSerializerSession extends WriterSerializerSession {
 	/**
 	 * Builder for INI serializer session.
 	 */
-	public static class Builder extends WriterSerializerSession.Builder {
+	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
 		private IniSerializer ctx;
 
