@@ -44,7 +44,7 @@ public abstract class BaseHttpPartSerializer extends MarshallingContextable impl
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingContextable.Builder<SELF> {
+	public abstract static class Builder<R extends Builder<R>> extends MarshallingContextable.Builder<R> {
 
 		/**
 		 * Constructor.
@@ -56,7 +56,7 @@ public abstract class BaseHttpPartSerializer extends MarshallingContextable impl
 		 * @param builder The existing builder to copy.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
-		protected Builder(Builder builder) {
+		protected Builder(Builder<R> builder) {
 			super(assertArgNotNull(ARG_builder, builder));
 		}
 	}
@@ -66,7 +66,7 @@ public abstract class BaseHttpPartSerializer extends MarshallingContextable impl
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected BaseHttpPartSerializer(Builder builder) {
+	protected BaseHttpPartSerializer(Builder<?> builder) {
 		super(builder);
 	}
 

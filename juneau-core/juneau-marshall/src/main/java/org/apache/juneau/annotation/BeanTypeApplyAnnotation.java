@@ -47,6 +47,7 @@ public class BeanTypeApplyAnnotation {
 	 * method handles unwrapping the nested {@link BeanType @BeanType} from {@link BeanTypeApply#value()} and registering it
 	 * under the targets specified by {@link BeanTypeApply#on()} and {@link BeanTypeApply#onClass()}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<BeanTypeApply,Context.Builder> {
 
 		/**
@@ -175,16 +176,6 @@ public class BeanTypeApplyAnnotation {
 		@Override /* Overridden from BeanTypeApply */
 		public BeanType value() {
 			return value;
-		}
-
-		@Override /* Overridden from BeanTypeApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from BeanTypeApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

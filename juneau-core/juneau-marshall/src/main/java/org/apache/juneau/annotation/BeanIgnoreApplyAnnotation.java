@@ -47,6 +47,7 @@ public class BeanIgnoreApplyAnnotation {
 	 * method handles unwrapping the nested {@link BeanIgnore @BeanIgnore} from {@link BeanIgnoreApply#value()} and
 	 * registering it under the targets specified by {@link BeanIgnoreApply#on()} and {@link BeanIgnoreApply#onClass()}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<BeanIgnoreApply,Context.Builder> {
 
 		/**
@@ -175,16 +176,6 @@ public class BeanIgnoreApplyAnnotation {
 		@Override /* Overridden from BeanIgnoreApply */
 		public BeanIgnore value() {
 			return value;
-		}
-
-		@Override /* Overridden from BeanIgnoreApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from BeanIgnoreApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

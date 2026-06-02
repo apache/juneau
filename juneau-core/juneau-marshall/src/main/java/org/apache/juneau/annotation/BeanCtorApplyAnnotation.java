@@ -47,6 +47,7 @@ public class BeanCtorApplyAnnotation {
 	 * method handles unwrapping the nested {@link BeanCtor @BeanCtor} from {@link BeanCtorApply#value()} and registering it
 	 * under the targets specified by {@link BeanCtorApply#on()} and {@link BeanCtorApply#onClass()}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<BeanCtorApply,Context.Builder> {
 
 		/**
@@ -175,16 +176,6 @@ public class BeanCtorApplyAnnotation {
 		@Override /* Overridden from BeanCtorApply */
 		public BeanCtor value() {
 			return value;
-		}
-
-		@Override /* Overridden from BeanCtorApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from BeanCtorApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

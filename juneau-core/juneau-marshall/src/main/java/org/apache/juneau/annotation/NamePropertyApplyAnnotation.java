@@ -46,6 +46,7 @@ public class NamePropertyApplyAnnotation {
 	 * method handles unwrapping the nested {@link NameProperty @NameProperty} from {@link NamePropertyApply#value()} and registering it
 	 * under the targets specified by {@link NamePropertyApply#on()}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<NamePropertyApply,Context.Builder> {
 
 		/**
@@ -150,11 +151,6 @@ public class NamePropertyApplyAnnotation {
 		@Override /* Overridden from NamePropertyApply */
 		public NameProperty value() {
 			return value;
-		}
-
-		@Override /* Overridden from NamePropertyApply */
-		public String[] on() {
-			return super.on();
 		}
 	}
 

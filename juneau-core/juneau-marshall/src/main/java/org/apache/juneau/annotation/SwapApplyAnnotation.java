@@ -46,6 +46,7 @@ public class SwapApplyAnnotation {
 	 * method handles unwrapping the nested {@link Swap @Swap} from {@link SwapApply#value()} and registering it
 	 * under the targets specified by {@link SwapApply#on()} and {@link SwapApply#onClass()}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<SwapApply,Context.Builder> {
 
 		/**
@@ -174,16 +175,6 @@ public class SwapApplyAnnotation {
 		@Override /* Overridden from SwapApply */
 		public Swap value() {
 			return value;
-		}
-
-		@Override /* Overridden from SwapApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from SwapApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

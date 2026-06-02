@@ -46,6 +46,7 @@ public class UriApplyAnnotation {
 	 * method handles unwrapping the nested {@link Uri @Uri} from {@link UriApply#value()} and registering it
 	 * under the targets specified by {@link UriApply#on()} and {@link UriApply#onClass()}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<UriApply,Context.Builder> {
 
 		/**
@@ -174,16 +175,6 @@ public class UriApplyAnnotation {
 		@Override /* Overridden from UriApply */
 		public Uri value() {
 			return value;
-		}
-
-		@Override /* Overridden from UriApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from UriApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

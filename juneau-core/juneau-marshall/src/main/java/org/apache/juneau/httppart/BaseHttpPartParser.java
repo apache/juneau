@@ -48,7 +48,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingContextable.Builder<SELF> {
+	public abstract static class Builder<R extends Builder<R>> extends MarshallingContextable.Builder<R> {
 
 		/**
 		 * Constructor.
@@ -61,7 +61,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 		 * @param builder The builder to copy.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
-		protected Builder(Builder builder) {
+		protected Builder(Builder<R> builder) {
 			super(assertArgNotNull(ARG_builder, builder));
 		}
 	}
@@ -71,7 +71,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected BaseHttpPartParser(Builder builder) {
+	protected BaseHttpPartParser(Builder<?> builder) {
 		super(builder);
 	}
 

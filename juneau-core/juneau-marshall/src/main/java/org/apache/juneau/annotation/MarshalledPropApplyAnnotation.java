@@ -40,6 +40,7 @@ public class MarshalledPropApplyAnnotation {
 	/**
 	 * Applies targeted {@link MarshalledPropApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<MarshalledPropApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class MarshalledPropApplyAnnotation {
 		@Override /* Overridden from MarshalledPropApply */
 		public MarshalledProp value() {
 			return value;
-		}
-
-		@Override /* Overridden from MarshalledPropApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from MarshalledPropApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

@@ -40,6 +40,7 @@ public class MarshalledIgnoreApplyAnnotation {
 	/**
 	 * Applies targeted {@link MarshalledIgnoreApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<MarshalledIgnoreApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class MarshalledIgnoreApplyAnnotation {
 		@Override /* Overridden from MarshalledIgnoreApply */
 		public MarshalledIgnore value() {
 			return value;
-		}
-
-		@Override /* Overridden from MarshalledIgnoreApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from MarshalledIgnoreApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

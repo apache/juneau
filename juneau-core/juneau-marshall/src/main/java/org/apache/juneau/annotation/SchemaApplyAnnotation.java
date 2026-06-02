@@ -46,6 +46,7 @@ public class SchemaApplyAnnotation {
 	 * method handles unwrapping the nested {@link Schema @Schema} from {@link SchemaApply#value()} and registering it
 	 * under the targets specified by {@link SchemaApply#on()} and {@link SchemaApply#onClass()}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<SchemaApply,Context.Builder> {
 
 		/**

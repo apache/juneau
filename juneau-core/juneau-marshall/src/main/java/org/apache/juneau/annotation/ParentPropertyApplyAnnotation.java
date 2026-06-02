@@ -46,6 +46,7 @@ public class ParentPropertyApplyAnnotation {
 	 * method handles unwrapping the nested {@link ParentProperty @ParentProperty} from {@link ParentPropertyApply#value()} and registering it
 	 * under the targets specified by {@link ParentPropertyApply#on()}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<ParentPropertyApply,Context.Builder> {
 
 		/**
@@ -150,11 +151,6 @@ public class ParentPropertyApplyAnnotation {
 		@Override /* Overridden from ParentPropertyApply */
 		public ParentProperty value() {
 			return value;
-		}
-
-		@Override /* Overridden from ParentPropertyApply */
-		public String[] on() {
-			return super.on();
 		}
 	}
 

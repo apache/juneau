@@ -46,6 +46,7 @@ public class MarshalledApplyAnnotation {
 	 * method handles unwrapping the nested {@link Marshalled @Marshalled} from {@link MarshalledApply#value()} and registering it
 	 * under the targets specified by {@link MarshalledApply#on()} and {@link MarshalledApply#onClass()}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<MarshalledApply,Context.Builder> {
 
 		/**
@@ -174,16 +175,6 @@ public class MarshalledApplyAnnotation {
 		@Override /* Overridden from MarshalledApply */
 		public Marshalled value() {
 			return value;
-		}
-
-		@Override /* Overridden from MarshalledApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from MarshalledApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

@@ -46,6 +46,7 @@ public class ExampleApplyAnnotation {
 	 * method handles unwrapping the nested {@link Example @Example} from {@link ExampleApply#value()} and registering it
 	 * under the targets specified by {@link ExampleApply#on()} and {@link ExampleApply#onClass()}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<ExampleApply,Context.Builder> {
 
 		/**
@@ -174,16 +175,6 @@ public class ExampleApplyAnnotation {
 		@Override /* Overridden from ExampleApply */
 		public Example value() {
 			return value;
-		}
-
-		@Override /* Overridden from ExampleApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from ExampleApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 
