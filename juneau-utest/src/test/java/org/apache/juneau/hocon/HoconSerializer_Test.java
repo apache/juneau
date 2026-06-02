@@ -18,8 +18,10 @@ package org.apache.juneau.hocon;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.commons.lang.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -225,5 +227,25 @@ class HoconSerializer_Test {
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("outer") && hocon.contains("inner") && hocon.contains("value"));
 		assertTrue(hocon.contains("\n"));
+	}
+
+	@Test
+	void a20_quoteValueCharsCoverUnquotedForbidden() throws Exception {
+		var forbidden = (String)getPrivateStaticField(HoconTokenizer.class, "UNQUOTED_FORBIDDEN");
+		var quoteValueChars = (AsciiSet)getPrivateStaticField(HoconWriter.class, "QUOTE_VALUE_CHARS");
+
+		for (var i = 0; i < forbidden.length(); i++) {
+			var c = forbidden.charAt(i);
+			assertTrue(
+				quoteValueChars.contains(c),
+				() -> "Missing serializer quote coverage for parser-forbidden character: '" + c + "'"
+			);
+		}
+	}
+
+	private static Object getPrivateStaticField(Class<?> c, String fieldName) throws Exception {
+		var f = c.getDeclaredField(fieldName);
+		f.setAccessible(true);
+		return f.get(null);
 	}
 }

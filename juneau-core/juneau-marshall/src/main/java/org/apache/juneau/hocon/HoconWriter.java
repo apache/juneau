@@ -46,7 +46,9 @@ public class HoconWriter extends SerializerWriter {
 	//         BASIC_ISO_DATE timezone offset, e.g. `20240615+0900`).
 	//   `$` — first half of `${...}` substitution, and forbidden in unquoted strings (also
 	//         ClassFormat.BINARY_NAME inner-class delimiter, e.g. `java.util.Map$Entry`).
-	private static final AsciiSet QUOTE_VALUE_CHARS = AsciiSet.of(" \t\n\r{},:=+$\"'#");
+	//   `^ \ ? ! @ * &` — forbidden in unquoted strings by the HOCON tokenizer/spec, so values
+	//         containing them must be quoted for serializer->parser round-trip fidelity.
+	private static final AsciiSet QUOTE_VALUE_CHARS = AsciiSet.of(" \t\n\r{}[],:=+$\"'#^\\?!@*&");
 	private static final AsciiSet ENCODED_CHARS = AsciiSet.of("\n\t\b\f\r\"\\");
 
 	/** Use newlines instead of commas between members. */

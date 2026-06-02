@@ -62,6 +62,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		private int pageSize = 1024 * 1024;
 		private boolean addBeanTypesParquet = false;
 		private boolean writeDatesAsTimestamp = true;
+		private boolean emitLogicalTypes = false;
 		private ParquetCycleHandling cycleHandling = ParquetCycleHandling.NULL;
 		private String nullKeyString;
 
@@ -71,6 +72,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		protected Builder() {
 			produces("application/vnd.apache.parquet");
 			accept("application/vnd.apache.parquet");
+			emitLogicalTypes = env("ParquetSerializer.emitLogicalTypes", false);
 			nullKeyString = env("ParquetSerializer.nullKeyString", "<NULL>");
 		}
 
@@ -86,6 +88,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 			pageSize = copyFrom.pageSize;
 			addBeanTypesParquet = copyFrom.addBeanTypesParquet;
 			writeDatesAsTimestamp = copyFrom.writeDatesAsTimestamp;
+			emitLogicalTypes = copyFrom.emitLogicalTypes;
 			cycleHandling = copyFrom.cycleHandling;
 			nullKeyString = copyFrom.nullKeyString;
 		}
@@ -102,6 +105,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 			pageSize = copyFrom.pageSize;
 			addBeanTypesParquet = copyFrom.addBeanTypesParquet;
 			writeDatesAsTimestamp = copyFrom.writeDatesAsTimestamp;
+			emitLogicalTypes = copyFrom.emitLogicalTypes;
 			cycleHandling = copyFrom.cycleHandling;
 			nullKeyString = copyFrom.nullKeyString;
 		}
@@ -162,6 +166,29 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		}
 
 		/**
+		 * Emits explicit logical-type discriminator metadata for ambiguous physical representations.
+		 *
+		 * <p>
+		 * Disabled by default, which preserves the current Parquet wire shape (physical type plus
+		 * {@code convertedType} only). Modeled on JSON's optional <js>_type</js> discriminator: when enabled,
+		 * the serializer additionally writes the Parquet <c>LogicalType</c> union into the file footer for
+		 * columns whose physical encoding is otherwise ambiguous.
+		 *
+		 * <p>
+		 * First-pass scope is UUID only — the one type whose round-trip relies on the
+		 * {@code FIXED_LEN_BYTE_ARRAY} physical-type signal. The legacy {@code convertedType} field is still
+		 * emitted alongside the union, so readers that consume only the legacy field (including older Juneau
+		 * versions) continue to work unchanged, while modern readers can route on {@code logicalType}.
+		 *
+		 * @param value Whether to emit logical-type discriminator metadata.
+		 * @return This object.
+		 */
+		public Builder emitLogicalTypes(boolean value) {
+			emitLogicalTypes = value;
+			return this;
+		}
+
+		/**
 		 * Sets how to handle cyclic references during serialization.
 		 *
 		 * @param value THROW to fail with {@link SerializeException};
@@ -201,7 +228,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 
 		@Override
 		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), compressionCodec, rowGroupSize, pageSize, addBeanTypesParquet, writeDatesAsTimestamp, cycleHandling, nullKeyString);
+			return HashKey.of(super.hashKey(), compressionCodec, rowGroupSize, pageSize, addBeanTypesParquet, writeDatesAsTimestamp, emitLogicalTypes, cycleHandling, nullKeyString);
 		}
 	}
 
@@ -219,6 +246,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 	final int pageSize;
 	final boolean addBeanTypesParquet;
 	final boolean writeDatesAsTimestamp;
+	final boolean emitLogicalTypes;
 	final ParquetCycleHandling cycleHandling;
 	final String nullKeyString;
 
@@ -237,6 +265,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		pageSize = builder.pageSize;
 		addBeanTypesParquet = builder.addBeanTypesParquet;
 		writeDatesAsTimestamp = builder.writeDatesAsTimestamp;
+		emitLogicalTypes = builder.emitLogicalTypes;
 		cycleHandling = builder.cycleHandling;
 		nullKeyString = builder.nullKeyString;
 	}

@@ -815,7 +815,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 			enc.writeFieldBegin(ThriftCompactEncoder.LIST, 2);
 			enc.writeListBegin(ThriftCompactEncoder.STRUCT, schema.size());
 			for (var e : schema)
-				e.writeTo(enc);
+				e.writeTo(enc, ctx.emitLogicalTypes);
 			enc.writeFieldBegin(ThriftCompactEncoder.I64, 3);
 			enc.writeI64(numRows);
 			enc.writeFieldBegin(ThriftCompactEncoder.LIST, 4);

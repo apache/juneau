@@ -159,10 +159,20 @@ public final class ParquetSchemaElement {
 	/**
 	 * Writes this schema element to the Thrift Compact Protocol encoder.
 	 *
+	 * <p>
+	 * When {@code emitLogicalTypes} is <jk>false</jk> (the default) only the physical type and the legacy
+	 * {@code convertedType} discriminant are written, matching the historical wire shape. When
+	 * <jk>true</jk>, an explicit {@code LogicalType} union (parquet.thrift field 10) is additionally
+	 * emitted for ambiguous physical representations. The first-pass scope is UUID only: the one type whose
+	 * round-trip currently relies on the {@code FIXED_LEN_BYTE_ARRAY} physical-type signal alone. The
+	 * {@code convertedType} field is still written alongside the union so that readers that consume only
+	 * the legacy field (including older Juneau versions) continue to work unchanged.
+	 *
 	 * @param enc The encoder.
+	 * @param emitLogicalTypes If <jk>true</jk>, additionally emit the {@code LogicalType} union for UUID columns.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public void writeTo(ThriftCompactEncoder enc) throws IOException {
+	public void writeTo(ThriftCompactEncoder enc, boolean emitLogicalTypes) throws IOException {
 		enc.writeStructBegin();
 		if (type != null) {
 			enc.writeFieldBegin(ThriftCompactEncoder.I32, 1);
@@ -194,9 +204,19 @@ public final class ParquetSchemaElement {
 			enc.writeFieldBegin(ThriftCompactEncoder.I32, 8);
 			enc.writeI32(precision);
 		}
-		// ConvertedType is sufficient for the current implementation.
-		// LogicalType encoding can be added back once the nested Thrift union
-		// layout is verified against the Parquet spec.
+		// Opt-in only, UUID-first scope: emit the LogicalType union (field 10) so readers can route
+		// FIXED_LEN_BYTE_ARRAY deterministically instead of relying on the "FLBA == UUID" physical-type
+		// assumption. The union member for UUID is field 14 (UUIDType, an empty struct). Other logical
+		// types (STRING/TIMESTAMP/DECIMAL) are intentionally not emitted yet — they round-trip fine via
+		// convertedType + physical type today.
+		if (emitLogicalTypes && logicalType != null && logicalType == LOGICAL_TYPE_UUID) {
+			enc.writeFieldBegin(ThriftCompactEncoder.STRUCT, 10);
+			enc.writeStructBegin();
+			enc.writeFieldBegin(ThriftCompactEncoder.STRUCT, LOGICAL_TYPE_UUID);
+			enc.writeStructBegin();
+			enc.writeStructEnd();
+			enc.writeStructEnd();
+		}
 		enc.writeStructEnd();
 	}
 
