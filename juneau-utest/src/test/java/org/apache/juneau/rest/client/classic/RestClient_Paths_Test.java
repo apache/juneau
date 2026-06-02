@@ -91,7 +91,7 @@ class RestClient_Paths_Test extends TestBase {
 		return serializedPart(name, val).schema(schema);
 	}
 
-	private static RestClient.Builder client() {
+	private static RestClient.Builder<?> client() {
 		return MockRestClient.create(A.class).json5();
 	}
 }

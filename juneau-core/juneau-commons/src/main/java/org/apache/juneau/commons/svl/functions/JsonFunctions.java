@@ -70,7 +70,7 @@ public final class JsonFunctions {
 					current = ((Map<String, Object>) m).get(seg);
 				} else if (current instanceof List<?> l) {
 					int idx;
-					try { idx = Integer.parseInt(seg); } catch (NumberFormatException e) { return null; }
+					try { idx = Integer.parseInt(seg); } catch (@SuppressWarnings("unused") NumberFormatException e) { return null; }
 					if (idx < 0 || idx >= l.size()) return null;
 					current = l.get(idx);
 				} else {
@@ -97,7 +97,7 @@ public final class JsonFunctions {
 			}
 			if (v instanceof List<?> l) {
 				int idx;
-				try { idx = Integer.parseInt(key); } catch (NumberFormatException e) { return ""; }
+				try { idx = Integer.parseInt(key); } catch (@SuppressWarnings("unused") NumberFormatException e) { return ""; }
 				if (idx < 0 || idx >= l.size()) return "";
 				var x = l.get(idx);
 				return x == null ? "" : MiniJson.render(x);

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.uon;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -24,10 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.util.*;
-import java.util.function.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.lang.*;
@@ -815,7 +811,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Decode <js>"%xx"</js> sequences.
 	 *
-	 * @see UonParser.Builder#decoding()
+	 * @see UonParser.Builder<?>#decoding()
 	 * @return
 	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * 	before being passed to this parser.
@@ -825,7 +821,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Validate end.
 	 *
-	 * @see UonParser.Builder#validateEnd()
+	 * @see UonParser.Builder<?>#validateEnd()
 	 * @return
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.

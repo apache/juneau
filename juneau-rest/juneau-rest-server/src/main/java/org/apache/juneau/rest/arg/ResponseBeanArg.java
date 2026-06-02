@@ -30,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
  * Resolves method parameters and parameter types annotated with {@link Response} on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value must be of type {@link Value} that accepts a value that is then set via:
+ * The parameter value must be of type {@link org.apache.juneau.commons.inject.Value} that accepts a value that is then set via:
  * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getResponse() getResponse}()

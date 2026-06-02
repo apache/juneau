@@ -24,13 +24,11 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.config.event.*;
@@ -206,12 +204,12 @@ public class Config extends Context implements ConfigEventListener {
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Config build() {
 			return build(Config.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}

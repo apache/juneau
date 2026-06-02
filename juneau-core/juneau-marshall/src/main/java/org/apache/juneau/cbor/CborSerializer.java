@@ -198,17 +198,17 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public CborSerializer build() {
 			return cache(CACHE).build(CborSerializer.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			return HashKey.of(super.hashKey(), addBeanTypesCbor, useTags);
 		}

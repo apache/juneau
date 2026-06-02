@@ -67,7 +67,7 @@ class ContentRange_Test extends TestBase {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static RestClient.Builder client() {
+	private static RestClient.Builder<?> client() {
 		return MockRestClient.create(A.class);
 	}
 }

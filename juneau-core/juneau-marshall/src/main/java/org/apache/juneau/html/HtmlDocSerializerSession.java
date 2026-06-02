@@ -16,16 +16,10 @@
  */
 package org.apache.juneau.html;
 
-import org.apache.juneau.commons.http.MediaType;
 import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
-import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.FluentMap;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.svl.*;
 
@@ -114,10 +108,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializer.Builder#navlinks(String...)} setting value in this context.
+	 * Returns the {@link HtmlDocSerializer.Builder<?>#navlinks(String...)} setting value in this context.
 	 *
 	 * @return
-	 * 	The {@link HtmlDocSerializer.Builder#navlinks(String...)} setting value in this context.
+	 * 	The {@link HtmlDocSerializer.Builder<?>#navlinks(String...)} setting value in this context.
 	 * 	<jk>null</jk> if not specified.
 	 * 	Never an empty map.
 	 */
@@ -161,7 +155,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * Performs an action on all widgets defined in his session.
 	 *
 	 * @param action The action to perform.
-	 * @see HtmlDocSerializer.Builder#widgets(Class...)
+	 * @see HtmlDocSerializer.Builder<?>#widgets(Class...)
 	 * @return This object.
 	 */
 	protected final HtmlDocSerializerSession forEachWidget(Consumer<HtmlWidget> action) {
@@ -172,7 +166,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Aside section contents.
 	 *
-	 * @see HtmlDocSerializer.Builder#aside(String...)
+	 * @see HtmlDocSerializer.Builder<?>#aside(String...)
 	 * @return
 	 * 	The overridden contents of the aside section on the HTML page.
 	 */
@@ -181,7 +175,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Aside section contents float.
 	 *
-	 * @see HtmlDocSerializer.Builder#asideFloat(AsideFloat)
+	 * @see HtmlDocSerializer.Builder<?>#asideFloat(AsideFloat)
 	 * @return
 	 * 	The location of where to place the aside section.
 	 */
@@ -190,7 +184,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Footer section contents.
 	 *
-	 * @see HtmlDocSerializer.Builder#footer(String...)
+	 * @see HtmlDocSerializer.Builder<?>#footer(String...)
 	 * @return
 	 * 	The overridden contents of the footer section on the HTML page.
 	 */
@@ -199,7 +193,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Additional head section content.
 	 *
-	 * @see HtmlDocSerializer.Builder#head(String...)
+	 * @see HtmlDocSerializer.Builder<?>#head(String...)
 	 * @return
 	 * 	HTML content to add to the head section of the HTML page.
 	 */
@@ -208,7 +202,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Header section contents.
 	 *
-	 * @see HtmlDocSerializer.Builder#header(String...)
+	 * @see HtmlDocSerializer.Builder<?>#header(String...)
 	 * @return
 	 * 	The overridden contents of the header section on the HTML page.
 	 */
@@ -217,7 +211,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Nav section contents.
 	 *
-	 * @see HtmlDocSerializer.Builder#nav(String...)
+	 * @see HtmlDocSerializer.Builder<?>#nav(String...)
 	 * @return
 	 * 	The overridden contents of the nav section on the HTML page.
 	 */
@@ -226,7 +220,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Page navigation links.
 	 *
-	 * @see HtmlDocSerializer.Builder#navlinks(String...)
+	 * @see HtmlDocSerializer.Builder<?>#navlinks(String...)
 	 * @return
 	 * 	Navigation links to add to the HTML page.
 	 */
@@ -238,7 +232,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * No-results message.
 	 *
-	 * @see HtmlDocSerializer.Builder#noResultsMessage(String)
+	 * @see HtmlDocSerializer.Builder<?>#noResultsMessage(String)
 	 * @return
 	 * 	The message used when serializing an empty array or empty list.
 	 */
@@ -247,7 +241,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Javascript code.
 	 *
-	 * @see HtmlDocSerializer.Builder#script(String...)
+	 * @see HtmlDocSerializer.Builder<?>#script(String...)
 	 * @return
 	 * 	Arbitrary Javascript to add to the HTML page.
 	 */
@@ -256,7 +250,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * CSS style code.
 	 *
-	 * @see HtmlDocSerializer.Builder#style(String...)
+	 * @see HtmlDocSerializer.Builder<?>#style(String...)
 	 * @return
 	 * 	The CSS instructions to add to the HTML page.
 	 */
@@ -265,7 +259,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Stylesheet import URLs.
 	 *
-	 * @see HtmlDocSerializer.Builder#stylesheet(String...)
+	 * @see HtmlDocSerializer.Builder<?>#stylesheet(String...)
 	 * @return
 	 * 	The link to the stylesheet of the HTML page.
 	 */
@@ -274,7 +268,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * HTML document template.
 	 *
-	 * @see HtmlDocSerializer.Builder#template(Class)
+	 * @see HtmlDocSerializer.Builder<?>#template(Class)
 	 * @return
 	 * 	The template to use for serializing the page.
 	 */
@@ -283,7 +277,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Prevent word wrap on page.
 	 *
-	 * @see HtmlDocSerializer.Builder#nowrap()
+	 * @see HtmlDocSerializer.Builder<?>#nowrap()
 	 * @return
 	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> should be added to the CSS instructions on the page to prevent word wrapping.
 	 */
@@ -292,7 +286,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Resolve $ variables in serialized POJO.
 	 *
-	 * @see HtmlDocSerializer.Builder#resolveBodyVars()
+	 * @see HtmlDocSerializer.Builder<?>#resolveBodyVars()
 	 * @return
 	 * 	<jk>true</jk> if $ variables in serialized POJO should be resolved.
 	 */

@@ -16,14 +16,12 @@
  */
 package org.apache.juneau.jsonschema;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.lang.annotation.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
@@ -32,8 +30,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
@@ -285,12 +281,12 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public JsonSchemaGenerator build() {
 			return cache(CACHE).build(JsonSchemaGenerator.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}
@@ -309,7 +305,7 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 */
 		public JsonSerializer.Builder<?> getJsonSerializerBuilder() { return jsonSerializerBuilder; }
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(

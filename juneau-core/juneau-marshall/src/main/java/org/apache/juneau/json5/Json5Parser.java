@@ -16,17 +16,9 @@
  */
 package org.apache.juneau.json5;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.lang.annotation.*;
-import java.nio.charset.*;
-import java.util.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.JsonParser;
 
 /**
@@ -103,12 +95,12 @@ public class Json5Parser extends JsonParser {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Json5Parser build() {
 			return cache(CACHE).build(Json5Parser.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}
@@ -142,7 +134,7 @@ public class Json5Parser extends JsonParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	public Json5Parser(JsonParser.Builder builder) {
+	public Json5Parser(JsonParser.Builder<?> builder) {
 		super(builder);
 	}
 

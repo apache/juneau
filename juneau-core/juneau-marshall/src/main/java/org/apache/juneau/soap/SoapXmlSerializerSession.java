@@ -16,20 +16,12 @@
  */
 package org.apache.juneau.soap;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.util.*;
-import java.util.function.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.xml.*;
 
 /**

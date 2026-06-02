@@ -16,20 +16,12 @@
  */
 package org.apache.juneau.serializer;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.nio.charset.*;
-import java.util.*;
-import java.util.function.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.FluentMap;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.svl.*;
 
 /**
  * Subclass of {@link SerializerSession} for character-based serializers.
@@ -300,7 +292,7 @@ public class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Maximum indentation.
 	 *
-	 * @see WriterSerializer.Builder#maxIndent(int)
+	 * @see WriterSerializer.Builder<?>#maxIndent(int)
 	 * @return
 	 * 	The maximum indentation level in the serialized document.
 	 */
@@ -309,7 +301,7 @@ public class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Quote character.
 	 *
-	 * @see WriterSerializer.Builder#quoteChar(char)
+	 * @see WriterSerializer.Builder<?>#quoteChar(char)
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
@@ -318,7 +310,7 @@ public class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Use whitespace.
 	 *
-	 * @see WriterSerializer.Builder#useWhitespace()
+	 * @see WriterSerializer.Builder<?>#useWhitespace()
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */

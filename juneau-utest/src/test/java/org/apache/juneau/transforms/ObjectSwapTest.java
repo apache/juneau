@@ -74,6 +74,7 @@ class ObjectSwapTest extends TestBase {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test void doTest() throws Exception {
 
 		var s = SerializerSet.create()

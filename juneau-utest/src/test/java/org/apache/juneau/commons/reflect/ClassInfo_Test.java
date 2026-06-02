@@ -124,13 +124,14 @@ public class ClassInfo_Test extends TestBase {
 		int value();
 	}
 
-	public static class AConfigApply extends AnnotationApplier<AConfig,Context.Builder> {
+	public static class AConfigApply extends AnnotationApplier<AConfig,Context.Builder<?>> {
+		@SuppressWarnings({"unchecked","rawtypes"})
 		protected AConfigApply(VarResolverSession vr) {
-			super(AConfig.class, Context.Builder.class, vr);
+			super(AConfig.class, (Class)Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<AConfig> a, Context.Builder b) {}
+		public void apply(AnnotationInfo<AConfig> a, Context.Builder<?> b) {}
 	}
 
 	private static void check(String expected, Object o) {

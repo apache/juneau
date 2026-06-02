@@ -52,7 +52,7 @@ import org.apache.juneau.yaml.*;
  * {@code org.apache.juneau.rest.docs} api-docs mixin pack.
  *
  * <p>
- * The mixin declares {@link Rest#serializers() @Rest(serializers={YamlSerializer.class})} so the
+ * The mixin declares {@link Rest#serializers() @Rest(serializers=&#123;YamlSerializer.class&#125;)} so the
  * {@code /openapi} content-negotiated endpoint can serve {@code application/yaml} when explicitly
  * requested via {@code Accept}. Sub-context inheritance (per the mixin sub-context model) confines this
  * contribution to this mixin's endpoints &mdash; the host's other endpoints retain their own serializer set.

@@ -873,7 +873,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		return partList(pairs);
 	}
 
-	private static RestClient.Builder client(Class<?> c) {
+	private static RestClient.Builder<?> client(Class<?> c) {
 		return MockRestClient.create(c);
 	}
 

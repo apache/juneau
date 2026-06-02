@@ -66,7 +66,7 @@ public class ContentComboTestBase extends RestTestcase {
 	}
 
 	@SafeVarargs
-	protected final RestClient getClient(String label, Serializer serializer, Parser parser, Consumer<RestClient.Builder>...postApply) {
+	protected final RestClient getClient(String label, Serializer serializer, Parser parser, Consumer<RestClient.Builder<?>>...postApply) {
 		if (! clients.containsKey(label)) {
 			var b = SamplesMicroservice.client(serializer, parser);
 			for (var c : postApply)

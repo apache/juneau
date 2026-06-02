@@ -16,19 +16,14 @@
  */
 package org.apache.juneau.cbor;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.cbor.DataType.*;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.util.*;
-import java.util.function.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.commons.bean.BeanMap;

@@ -16,17 +16,11 @@
  */
 package org.apache.juneau.parser;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.nio.charset.*;
-import java.util.*;
-import java.util.function.*;
-
 import org.apache.juneau.commons.collections.FluentMap;
-import org.apache.juneau.httppart.*;
 
 /**
  * Subclass of parser session objects for character-based parsers.
@@ -192,11 +186,11 @@ public class ReaderParserSession extends ParserSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder<?>#streamCharset(Charset)}).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder<?>#streamCharset(Charset)}).
 	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder<?>#streamCharset(Charset)}).
 	 * 	</ul>
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.

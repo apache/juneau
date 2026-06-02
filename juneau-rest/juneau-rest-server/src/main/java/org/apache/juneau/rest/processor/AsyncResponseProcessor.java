@@ -87,7 +87,7 @@ import org.apache.juneau.rest.*;
  * <p>
  * Anything carried via {@link ThreadLocal} (SLF4J MDC, security contexts) does NOT survive the
  * async boundary — the {@code whenComplete} callback typically runs on a different thread than the
- * one that produced the future. {@link RequestAttributes}, {@link org.apache.juneau.svl.VarResolverSession},
+ * one that produced the future. {@code RequestAttributes}, {@link org.apache.juneau.commons.svl.VarResolverSession},
  * and {@link java.util.Locale} are request-scoped and survive correctly.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -140,7 +140,7 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 		return NEXT;
 	}
 
-	private int processAsync(RestOpSession opSession, CompletionStage<?> stage) throws IOException, BasicHttpException {
+	private int processAsync(RestOpSession opSession, CompletionStage<?> stage) throws BasicHttpException {
 		var timeoutMs = resolveTimeoutMillis(opSession);
 		var cf = stage.toCompletableFuture();
 		var req = opSession.getRequest().getHttpServletRequest();

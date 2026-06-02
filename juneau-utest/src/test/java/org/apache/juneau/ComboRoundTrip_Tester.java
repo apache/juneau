@@ -274,7 +274,7 @@ public class ComboRoundTrip_Tester<T> {
 		jsonForEquivalency = (JsonSerializer) serializers.get("json");
 	}
 
-	private void applySerializerBuilderContext(Builder<?> tb, Serializer.Builder sb) {
+	private void applySerializerBuilderContext(Builder<?> tb, Serializer.Builder<?> sb) {
 		tb.serializerApply.accept(sb);
 		sb.swaps(tb.swaps);
 		tb.applies.forEach(x -> {
@@ -283,20 +283,20 @@ public class ComboRoundTrip_Tester<T> {
 		});
 	}
 
-	private void applySerializerBuilderSubtypeApplies(Builder<?> tb, Serializer.Builder sb) {
+	private void applySerializerBuilderSubtypeApplies(Builder<?> tb, Serializer.Builder<?> sb) {
 		tb.applies.forEach(x -> {
 			if (!x.getA().equals(MarshallingContext.Builder.class) && x.getA().isInstance(sb))
 				sb.asSubtype(Serializer.Builder.class).ifPresent((Consumer<Serializer.Builder>) x.getB());
 		});
 	}
 
-	private Serializer create(Builder<?> tb, Serializer.Builder sb) {
+	private Serializer create(Builder<?> tb, Serializer.Builder<?> sb) {
 		applySerializerBuilderContext(tb, sb);
 		applySerializerBuilderSubtypeApplies(tb, sb);
 		return sb.build();
 	}
 
-	private Parser create(Builder<?> tb, Parser.Builder pb) {
+	private Parser create(Builder<?> tb, Parser.Builder<?> pb) {
 		tb.parserApply.accept(pb);
 		pb.swaps(tb.swaps);
 		tb.applies.forEach(x -> {

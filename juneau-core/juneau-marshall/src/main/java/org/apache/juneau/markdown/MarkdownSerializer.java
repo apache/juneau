@@ -16,18 +16,13 @@
  */
 package org.apache.juneau.markdown;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.lang.annotation.*;
-import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -162,17 +157,17 @@ public class MarkdownSerializer extends WriterSerializer implements MarkdownMeta
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			return HashKey.of(super.hashKey(), nullValue, showHeaders);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public MarkdownSerializer build() {
 			return cache(CACHE).build(MarkdownSerializer.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
 
@@ -193,7 +188,7 @@ public class MarkdownSerializer extends WriterSerializer implements MarkdownMeta
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}

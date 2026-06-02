@@ -16,20 +16,15 @@
  */
 package org.apache.juneau.json;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.lang.annotation.*;
-import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json5.Json5Parser;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
@@ -64,7 +59,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * 		JSON objects (<js>"{...}"</js>) are converted to {@link JsonMap JsonMaps}.
  * 		<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an
  * 		attempt is made to convert the object to an instance of the specified Java bean class.
- * 		See the {@link org.apache.juneau.MarshallingContext.Builder#typePropertyName(String)} setting for more information about parsing
+ * 		See the {@link org.apache.juneau.MarshallingContext.Builder<?>#typePropertyName(String)} setting for more information about parsing
  * 		beans from JSON.
  * 	<li>
  * 		JSON arrays (<js>"[...]"</js>) are converted to {@link JsonList JsonLists}.
@@ -172,15 +167,15 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 			validateEnd = copyFrom.validateEnd;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public JsonParser build() {
 			return cache(CACHE).build(JsonParser.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			return HashKey.of(super.hashKey(), validateEnd);
 		}
@@ -239,7 +234,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}

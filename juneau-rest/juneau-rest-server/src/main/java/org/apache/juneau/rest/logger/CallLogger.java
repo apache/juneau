@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.logger;
 
-import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;

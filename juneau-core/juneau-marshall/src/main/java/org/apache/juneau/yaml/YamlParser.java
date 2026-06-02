@@ -16,17 +16,9 @@
  */
 package org.apache.juneau.yaml;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.lang.annotation.*;
-import java.nio.charset.*;
-import java.util.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.JsonParser;
 import org.apache.juneau.parser.*;
 
@@ -130,17 +122,17 @@ public class YamlParser extends ReaderParser {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public YamlParser build() {
 			return cache(CACHE).build(YamlParser.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			return HashKey.of(super.hashKey());
 		}

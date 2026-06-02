@@ -170,7 +170,7 @@ final class MiniJson {
 		}
 		var text = src.substring(start, pos);
 		if (isFloating) return Double.parseDouble(text);
-		try { return Long.parseLong(text); } catch (NumberFormatException e) { return Double.parseDouble(text); }
+		try { return Long.parseLong(text); } catch (@SuppressWarnings("unused") NumberFormatException e) { return Double.parseDouble(text); }
 	}
 
 	private char peek() {

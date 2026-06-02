@@ -24,7 +24,7 @@ import java.time.*;
  * <p>
  * One {@code record(...)} call fires after every {@code @RestOp} handler invocation &mdash; including
  * exception paths. Bridge implementations translate the event into the format their downstream
- * registry expects (Micrometer {@link io.micrometer.core.instrument.Timer Timer}, OpenTelemetry
+ * registry expects (Micrometer {@code io.micrometer.core.instrument.Timer}, OpenTelemetry
  * metric instruments, Dropwizard {@code MetricRegistry}, etc.).
  *
  * <h5 class='topic'>Off-by-default contract</h5>

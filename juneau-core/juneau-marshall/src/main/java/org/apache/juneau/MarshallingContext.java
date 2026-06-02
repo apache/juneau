@@ -31,7 +31,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.beans.*;
 import java.io.*;
-import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.math.*;
 import java.net.*;
@@ -676,7 +675,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 		 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
 		 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
-		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(ClassInfo...)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder<?>#beanDictionary(ClassInfo...)}
 		 * </ul>
 		 *
 		 * @param values
@@ -1806,7 +1805,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		<ja>@Autowired</ja> ApplicationContext <jv>ctx</jv>;
 		 *
 		 * 		<ja>@Override</ja>
-		 * 		<jk>protected</jk> MarshallingContext createBeanContext(MarshallingContext.Builder <jv>builder</jv>) {
+		 * 		<jk>protected</jk> MarshallingContext createBeanContext(MarshallingContext.Builder<?> <jv>builder</jv>) {
 		 * 			<jk>return</jk> <jv>builder</jv>.beanStore(<jk>new</jk> SpringBeanStore(<jv>ctx</jv>)).build();
 		 * 		}
 		 * 	}
@@ -1820,12 +1819,12 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public MarshallingContext build() {
 			return cache(CACHE).build(MarshallingContext.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}
@@ -2304,7 +2303,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			return annotations(BeanTypeApplyAnnotation.create(on).value(BeanTypeAnnotation.create().findFluentSetters(true).build()).build());
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(
@@ -3645,7 +3644,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 *
 		 * <p>
 		 * Sets the classloader used when parsing wire-format class names (e.g. FQCN or binary-name strings
-		 * written by {@link ClassFormatSwap}).  When <jk>null</jk>, the thread-context classloader is
+		 * written by {@link org.apache.juneau.swaps.ClassFormatSwap}).  When <jk>null</jk>, the thread-context classloader is
 		 * used as a fallback — which is the historical behavior.
 		 *
 		 * <p>
@@ -4142,7 +4141,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Minimum bean class visibility.
 	 *
-	 * @see MarshallingContext.Builder#beanClassVisibility(Visibility)
+	 * @see MarshallingContext.Builder<?>#beanClassVisibility(Visibility)
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
@@ -4151,7 +4150,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Minimum bean constructor visibility.
 	 *
-	 * @see MarshallingContext.Builder#beanConstructorVisibility(Visibility)
+	 * @see MarshallingContext.Builder<?>#beanConstructorVisibility(Visibility)
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
@@ -4160,7 +4159,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * The bean store used for factory-based instantiation.
 	 *
-	 * @see MarshallingContext.Builder#beanStore(BeanStore)
+	 * @see MarshallingContext.Builder<?>#beanStore(BeanStore)
 	 * @return The bean store, or <jk>null</jk> if none configured.
 	 */
 	public final BeanStore getBeanStore() { return beanStore; }
@@ -4168,7 +4167,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Bean dictionary.
 	 *
-	 * @see MarshallingContext.Builder#beanDictionary()
+	 * @see MarshallingContext.Builder<?>#beanDictionary()
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 * 	<br>Never <jk>null</jk>.
@@ -4196,7 +4195,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * Minimum bean field visibility.
 	 *
 	 *
-	 * @see MarshallingContext.Builder#beanFieldVisibility(Visibility)
+	 * @see MarshallingContext.Builder<?>#beanFieldVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
@@ -4680,7 +4679,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Minimum bean method visibility.
 	 *
-	 * @see MarshallingContext.Builder#beanMethodVisibility(Visibility)
+	 * @see MarshallingContext.Builder<?>#beanMethodVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */
@@ -4690,7 +4689,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Bean type property name.
 	 *
-	 * @see MarshallingContext.Builder#typePropertyName(String)
+	 * @see MarshallingContext.Builder<?>#typePropertyName(String)
 	 * @return
 	 * The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
@@ -4790,7 +4789,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Locale.
 	 *
-	 * @see MarshallingContext.Builder#locale(Locale)
+	 * @see MarshallingContext.Builder<?>#locale(Locale)
 	 * @return
 	 * 	The default locale for serializer and parser sessions.
 	 */
@@ -4799,7 +4798,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Media type.
 	 *
-	 * @see MarshallingContext.Builder#mediaType(MediaType)
+	 * @see MarshallingContext.Builder<?>#mediaType(MediaType)
 	 * @return
 	 * 	The default media type value for serializer and parser sessions.
 	 */
@@ -4808,7 +4807,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Time zone.
 	 *
-	 * @see MarshallingContext.Builder#timeZone(TimeZone)
+	 * @see MarshallingContext.Builder<?>#timeZone(TimeZone)
 	 * @return
 	 * 	The default timezone for serializer and parser sessions.
 	 */
@@ -4817,7 +4816,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Bean package exclusions.
 	 *
-	 * @see MarshallingContext.Builder#notBeanPackages(String...)
+	 * @see MarshallingContext.Builder<?>#notBeanPackages(String...)
 	 * @return
 	 * 	The set of fully-qualified package names to exclude from being classified as beans.
 	 * 	<br>Never <jk>null</jk>.
@@ -4829,7 +4828,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Bean property namer.
 	 *
-	 * @see MarshallingContext.Builder#propertyNamer(Class)
+	 * @see MarshallingContext.Builder<?>#propertyNamer(Class)
 	 * @return
 	 * 	The interface used to calculate bean property names.
 	 */
@@ -4841,7 +4840,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Java object swaps.
 	 *
-	 * @see MarshallingContext.Builder#swaps(Class...)
+	 * @see MarshallingContext.Builder<?>#swaps(Class...)
 	 * @return
 	 * 	The list POJO swaps defined.
 	 * 	<br>Never <jk>null</jk>.
@@ -4867,7 +4866,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * BeanMap.put() returns old property value.
 	 *
-	 * @see MarshallingContext.Builder#beanMapPutReturnsOldValue()
+	 * @see MarshallingContext.Builder<?>#beanMapPutReturnsOldValue()
 	 * @return
 	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
 	 * 	<br>Otherwise, it returns <jk>null</jk>.
@@ -4877,7 +4876,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Beans require no-arg constructors.
 	 *
-	 * @see MarshallingContext.Builder#beansRequireDefaultConstructor()
+	 * @see MarshallingContext.Builder<?>#beansRequireDefaultConstructor()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -4887,7 +4886,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Beans require Serializable interface.
 	 *
-	 * @see MarshallingContext.Builder#beansRequireSerializable()
+	 * @see MarshallingContext.Builder<?>#beansRequireSerializable()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -4897,7 +4896,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Beans require setters for getters.
 	 *
-	 * @see MarshallingContext.Builder#beansRequireSettersForGetters()
+	 * @see MarshallingContext.Builder<?>#beansRequireSettersForGetters()
 	 * @return
 	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
 	 * 	<br>Otherwise, they are ignored.
@@ -4907,7 +4906,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Beans require at least one property.
 	 *
-	 * @see MarshallingContext.Builder#disableBeansRequireSomeProperties()
+	 * @see MarshallingContext.Builder<?>#disableBeansRequireSomeProperties()
 	 * @return
 	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
@@ -4920,7 +4919,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 *
-	 * @see MarshallingContext.Builder#findFluentSetters()
+	 * @see MarshallingContext.Builder<?>#findFluentSetters()
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
@@ -4929,7 +4928,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Ignore invocation errors on getters.
 	 *
-	 * @see MarshallingContext.Builder#ignoreInvocationExceptionsOnGetters()
+	 * @see MarshallingContext.Builder<?>#ignoreInvocationExceptionsOnGetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
 	 */
@@ -4938,7 +4937,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Ignore invocation errors on setters.
 	 *
-	 * @see MarshallingContext.Builder#ignoreInvocationExceptionsOnSetters()
+	 * @see MarshallingContext.Builder<?>#ignoreInvocationExceptionsOnSetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
 	 */
@@ -4947,7 +4946,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Silently ignore missing setters.
 	 *
-	 * @see MarshallingContext.Builder#disableIgnoreMissingSetters()
+	 * @see MarshallingContext.Builder<?>#disableIgnoreMissingSetters()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
@@ -4956,7 +4955,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Ignore unknown properties.
 	 *
-	 * @see MarshallingContext.Builder#ignoreUnknownBeanProperties()
+	 * @see MarshallingContext.Builder<?>#ignoreUnknownBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
@@ -4966,7 +4965,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Schema validation mode.
 	 *
-	 * @see MarshallingContext.Builder#validateSchema()
+	 * @see MarshallingContext.Builder<?>#validateSchema()
 	 * @return
 	 * 	<jk>true</jk> if bean property values should be validated against their {@code @Schema}-declared constraints
 	 * 	during parsing and serialization.
@@ -4977,7 +4976,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Ignore unknown enum values.
 	 *
-	 * @see MarshallingContext.Builder#ignoreUnknownEnumValues()
+	 * @see MarshallingContext.Builder<?>#ignoreUnknownEnumValues()
 	 * @return
 	 * 	<jk>true</jk> if unknown enum values should be set as <jk>null</jk> instead of throwing an exception.
 	 */
@@ -4986,7 +4985,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Ignore unknown properties with null values.
 	 *
-	 * @see MarshallingContext.Builder#disableIgnoreUnknownNullBeanProperties()
+	 * @see MarshallingContext.Builder<?>#disableIgnoreUnknownNullBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should throw a {@link BeanRuntimeException}.
 	 */
@@ -4995,7 +4994,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Returns whether bean properties are unsorted (i.e. in natural JVM order rather than alphabetical).
 	 *
-	 * @see MarshallingContext.Builder#unsortedProperties()
+	 * @see MarshallingContext.Builder<?>#unsortedProperties()
 	 * @return
 	 * 	<jk>true</jk> if bean properties are in natural JVM order; <jk>false</jk> (the default) means alphabetical order.
 	 */
@@ -5004,7 +5003,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Use interface proxies.
 	 *
-	 * @see MarshallingContext.Builder#disableInterfaceProxies()
+	 * @see MarshallingContext.Builder<?>#disableInterfaceProxies()
 	 * @return
 	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
@@ -5014,7 +5013,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Use Java Introspector.
 	 *
-	 * @see MarshallingContext.Builder#useJavaBeanIntrospector()
+	 * @see MarshallingContext.Builder<?>#useJavaBeanIntrospector()
 	 * @return
 	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
 	 */
@@ -5116,7 +5115,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Bean class exclusions.
 	 *
-	 * @see MarshallingContext.Builder#notBeanClasses(ClassInfo...)
+	 * @see MarshallingContext.Builder<?>#notBeanClasses(ClassInfo...)
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
 	 * 	<br>Never <jk>null</jk>.
@@ -5250,7 +5249,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Ignore transient fields.
 	 *
-	 * @see MarshallingContext.Builder#disableIgnoreTransientFields()
+	 * @see MarshallingContext.Builder<?>#disableIgnoreTransientFields()
 	 * @return
 	 * 	<jk>true</jk> if fields and methods marked as transient should not be ignored.
 	 */

@@ -18,7 +18,6 @@ package org.apache.juneau.httppart;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 
 /**

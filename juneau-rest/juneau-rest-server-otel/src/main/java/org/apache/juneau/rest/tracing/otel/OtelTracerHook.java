@@ -58,7 +58,7 @@ import io.opentelemetry.context.propagation.*;
  *
  * <p>
  * Incoming {@code traceparent} / {@code tracestate} request headers are extracted via the configured
- * {@link TextMapPropagator} (default: {@link W3CTraceContextPropagator}) so the server span continues
+ * {@link TextMapPropagator} (default: {@link io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator}) so the server span continues
  * a caller-supplied distributed trace. Downstream HTTP calls made from inside the handler will pick
  * up the active span's context automatically when the consumer's outbound HTTP client honors the OTel
  * {@link Context#current() current context} (the standard OTel client instrumentations do).

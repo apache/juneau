@@ -35,7 +35,6 @@ import static org.apache.juneau.rest.RestSharedConstants.*;
 import static org.apache.juneau.rest.client.classic.RestOperation.*;
 
 import java.io.*;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
 import java.net.*;
@@ -71,7 +70,6 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.inject.*;
@@ -136,7 +134,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * Breaking apart the fluent call, we can see the classes being used:
  * <p class='bjava'>
- * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().json5();
+ * 	RestClient.Builder<?> <jv>builder</jv> = RestClient.<jsm>create</jsm>().json5();
  * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
  * 	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
  * 	RestResponse <jv>res</jv> = <jv>req</jv>.run();
@@ -909,7 +907,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * Enabling debug mode has the following effects:
  * <ul>
- * 	<li>{@link org.apache.juneau.Context.Builder#debug()} is enabled.
+ * 	<li>{@link org.apache.juneau.Context.Builder<?>#debug()} is enabled.
  * 	<li>{@link Builder#detectLeaks()} is enabled.
  * 	<li>{@link Builder#logToConsole()} is called.
  * </ul>
@@ -1019,13 +1017,13 @@ import org.apache.juneau.xml.*;
  * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
  *
  * 		<jc>// Must provide this constructor!</jc>
- * 		<jk>public</jk> MyRestClient(RestClient.Builder <jv>builder</jv>) {
+ * 		<jk>public</jk> MyRestClient(RestClient.Builder<?> <jv>builder</jv>) {
  * 			<jk>super</jk>(<jv>builder</jv>);
  * 		}
  *
  * 		<jd>/** Optionally override to customize builder settings before initialization. </jd>
  * 		<ja>@Override</ja>
- * 		<jk>protected void</jk> init(RestClient.Builder) {...}
+ * 		<jk>protected void</jk> init(RestClient.Builder<?>) {...}
  *
  * 		<jd>/** Optionally override to provide post-initialization (e.g. setting up SAML handshakes, etc...). </jd>
  * 		<ja>@Override</ja>
@@ -1208,7 +1206,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1329,7 +1327,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addRootType()}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#addRootType()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -1382,7 +1380,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public RestClient build() {
 			return build(RestClient.class);
 		}
@@ -1589,7 +1587,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			return headers(ContentType.of(value));
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public SELF copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
@@ -1639,7 +1637,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#debugOutputLines(int)}
+		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder<?>#debugOutputLines(int)}
 		 * </ul>
 		 *
 		 * @param value
@@ -1762,7 +1760,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * when the <c>finalize</c> methods are invoked.
 		 *
 		 * <p>
-		 * Automatically enabled with {@link org.apache.juneau.Context.Builder#debug()}.
+		 * Automatically enabled with {@link org.apache.juneau.Context.Builder<?>#debug()}.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -1826,7 +1824,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#detectRecursions()}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder<?>#detectRecursions()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2044,7 +2042,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "foo=bar" form-data parameter on every request.</jc>
-		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	RestClient.Builder<?> <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 		 * 	<jv>builder</jv>.formData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
@@ -2255,7 +2253,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "Foo: bar" header on every request.</jc>
-		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	RestClient.Builder<?> <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 		 * 	<jv>builder</jv>.headerData().setDefault(<js>"Foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
@@ -2684,7 +2682,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#ignoreRecursions()}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder<?>#ignoreRecursions()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -2725,7 +2723,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#initialDepth(int)}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder<?>#initialDepth(int)}
 		 * </ul>
 		 *
 		 * @param value
@@ -3059,7 +3057,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#keepNullProperties()}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#keepNullProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -3296,7 +3294,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#maxDepth(int)}
+		 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder<?>#maxDepth(int)}
 		 * </ul>
 		 *
 		 * @param value
@@ -3331,7 +3329,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#maxIndent(int)}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder<?>#maxIndent(int)}
 		 * </ul>
 		 *
 		 * @param value
@@ -3666,7 +3664,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormat(ParamFormat)}
+		 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder<?>#paramFormat(ParamFormat)}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -3708,7 +3706,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormatPlain()}
+		 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder<?>#paramFormatPlain()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -4026,7 +4024,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses "bar" for the "{foo}" path variable on every request.</jc>
-		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	RestClient.Builder<?> <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 		 * 	<jv>builder</jv>.pathData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
@@ -4280,7 +4278,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "foo=bar" query parameter on every request.</jc>
-		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	RestClient.Builder<?> <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 		 * 	<jv>builder</jv>.queryData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
@@ -4508,7 +4506,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder<?>#quoteChar(char)}
 		 * </ul>
 		 *
 		 * @param value
@@ -4997,7 +4995,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#sortCollections()}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#sortCollections()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -5035,7 +5033,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#sortMaps()}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#sortMaps()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -5076,7 +5074,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder<?>#quoteChar(char)}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -5187,7 +5185,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimEmptyCollections()}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#trimEmptyCollections()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -5231,7 +5229,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimEmptyMaps()}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#trimEmptyMaps()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -5268,7 +5266,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#trimStrings()}
+		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder<?>#trimStrings()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -5303,7 +5301,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimStrings()}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#trimStrings()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -5479,7 +5477,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriContext(UriContext)}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#uriContext(UriContext)}
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
 		 *
@@ -5514,7 +5512,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriRelativity(UriRelativity)}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#uriRelativity(UriRelativity)}
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
 		 *
@@ -5553,7 +5551,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriResolution(UriResolution)}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#uriResolution(UriResolution)}
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
 		 *
@@ -5679,7 +5677,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#useWhitespace()}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder<?>#useWhitespace()}
 		 * </ul>
 		 * @return This object.
 		 */
@@ -5715,7 +5713,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#useWhitespace()}
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder<?>#useWhitespace()}
 		 * </ul>
 		 *
 		 * @return This object.

@@ -104,7 +104,7 @@ public class ObservabilityNoopBenchmark {
 	 *
 	 * <p>
 	 * The {@link Blackhole} parameter prevents the JIT from discarding the scope reference after
-	 * {@link Scope#close()} — keeping the virtual-dispatch chain alive for accurate allocation
+	 * {@link org.apache.juneau.rest.tracing.Scope#close()} — keeping the virtual-dispatch chain alive for accurate allocation
 	 * measurement.
 	 *
 	 * @param bh JMH blackhole to prevent dead-code elimination.

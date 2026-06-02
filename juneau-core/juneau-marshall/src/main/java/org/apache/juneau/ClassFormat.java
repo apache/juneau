@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * Supported wire formats for {@link Class} values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder#classFormat(ClassFormat)},
+ * Used by {@link MarshallingContext.Builder<?>#classFormat(ClassFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#classFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#classFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#classFormat()} to control how {@link Class} values
@@ -63,7 +63,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<li>{@link org.apache.juneau.annotation.Marshalled#classFormat() @Marshalled(classFormat=…)} on the bean class.
  * 	<li>{@link org.apache.juneau.annotation.MarshalledConfig#classFormat() @MarshalledConfig(classFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
- * 	<li>Programmatic {@link MarshallingContext.Builder#classFormat(ClassFormat)}.
+ * 	<li>Programmatic {@link MarshallingContext.Builder<?>#classFormat(ClassFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.classFormat</c>.
  * 	<li>The default constant ({@link #FQCN}).
  * </ol>

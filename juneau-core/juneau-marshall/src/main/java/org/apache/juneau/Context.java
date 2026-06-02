@@ -552,9 +552,9 @@ public abstract class Context {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	Builder <jv>b</jv> = JsonSerializer.<jsm>create</jsm>();
-		 * 	Optional&lt;JsonSerializer.Builder&gt; <jv>jsonBuilder</jv> = <jv>b</jv>.asSubtype(JsonSerializer.Builder.<jk>class</jk>);
+		 * 	Optional&lt;JsonSerializer.Builder<?>&gt; <jv>jsonBuilder</jv> = <jv>b</jv>.asSubtype(JsonSerializer.Builder.<jk>class</jk>);
 		 * 	<jk>if</jk> (<jv>jsonBuilder</jv>.isPresent()) {
-		 * 		<jc>// Use JsonSerializer.Builder-specific methods</jc>
+		 * 		<jc>// Use JsonSerializer.Builder<?>-specific methods</jc>
 		 * 		<jv>jsonBuilder</jv>.get().pretty();
 		 * 	}
 		 * </p>
@@ -643,7 +643,7 @@ public abstract class Context {
 		 * 		When bean getters throws exceptions, the exception includes the object stack information
 		 * 		in order to determine how that method was invoked.
 		 * 	<li>
-		 * 		Enables {@link MarshallingTraverseContext.Builder#detectRecursions()}.
+		 * 		Enables {@link MarshallingTraverseContext.Builder<?>#detectRecursions()}.
 		 * </ul>
 		 *
 		 * <p>
@@ -675,7 +675,7 @@ public abstract class Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#debug()}
-		 * 	<li class='jm'>{@link ContextSession.Builder#debug(Boolean)}
+		 * 	<li class='jm'>{@link ContextSession.Builder<?>#debug(Boolean)}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -777,6 +777,7 @@ public abstract class Context {
 		 * @param values The builders to add to the list of builders.
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 */
+		@SuppressWarnings("unchecked")
 		protected void registerBuilders(Object...values) {
 			assertArgNoNulls(ARG_values, values);
 			for (var b : values) {
@@ -932,6 +933,7 @@ public abstract class Context {
 	 * @param builder The builder for this class.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
+	@SuppressWarnings("unchecked")
 	protected Context(Builder builder) {
 		assertArgNotNull(ARG_builder, builder);
 		init(builder);
@@ -996,7 +998,7 @@ public abstract class Context {
 	/**
 	 * Debug mode.
 	 *
-	 * @see Context.Builder#debug()
+	 * @see Context.Builder<?>#debug()
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */

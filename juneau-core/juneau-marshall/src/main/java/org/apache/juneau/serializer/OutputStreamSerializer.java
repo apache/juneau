@@ -16,16 +16,9 @@
  */
 package org.apache.juneau.serializer;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.lang.annotation.*;
-import java.util.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
@@ -73,12 +66,12 @@ public class OutputStreamSerializer extends Serializer {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public OutputStreamSerializer build() {
 			return build(OutputStreamSerializer.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
 
@@ -99,7 +92,7 @@ public class OutputStreamSerializer extends Serializer {
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}

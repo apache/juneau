@@ -232,11 +232,11 @@ public class RestClient_Headers_Test extends TestBase {
 		return serializedHeader(name, val).schema(schema);
 	}
 
-	private static RestClient.Builder checkFooClient() {
+	private static RestClient.Builder<?> checkFooClient() {
 		return MockRestClient.create(A.class).json().header("Check","Foo");
 	}
 
-	private static RestClient.Builder checkClient(String headerToCheck) {
+	private static RestClient.Builder<?> checkClient(String headerToCheck) {
 		return MockRestClient.create(A.class).json().header("Check",headerToCheck).noTrace();
 	}
 }

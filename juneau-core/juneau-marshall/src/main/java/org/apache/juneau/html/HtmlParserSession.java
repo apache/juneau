@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.html;
 
-import org.apache.juneau.commons.http.MediaType;
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -26,10 +25,7 @@ import static org.apache.juneau.html.HtmlTag.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.util.*;
-import java.util.function.*;
-
 import javax.xml.stream.*;
 
 import org.apache.juneau.*;
@@ -37,7 +33,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;

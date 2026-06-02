@@ -73,7 +73,7 @@ import java.util.*;
 public interface VarFunction {
 
 	/**
-	 * The function's invocation name as it appears between {@code #{} and the opening
+	 * The function's invocation name as it appears between {@code #{}} and the opening
 	 * parenthesis in the template. Must consist of ASCII letters, digits, and underscores; must
 	 * begin with a letter.
 	 *

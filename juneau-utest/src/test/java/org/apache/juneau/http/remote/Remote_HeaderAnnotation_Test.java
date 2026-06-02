@@ -801,7 +801,7 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 		return basicHeader(key,val);
 	}
 
-	private static RestClient.Builder client(Class<?> c) {
+	private static RestClient.Builder<?> client(Class<?> c) {
 		return MockRestClient.create(c);
 	}
 

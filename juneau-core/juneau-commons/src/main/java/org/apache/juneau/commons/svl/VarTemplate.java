@@ -327,6 +327,7 @@ public final class VarTemplate {
 	 * @param out The writer to append to.
 	 * @return {@code out}.
 	 */
+	@SuppressWarnings("resource")  // 'out' and 'session' are caller-owned; this method must not close them.
 	public Writer resolveToUnchecked(VarResolverSession session, Writer out) {
 		try {
 			return resolveTo(session, out);

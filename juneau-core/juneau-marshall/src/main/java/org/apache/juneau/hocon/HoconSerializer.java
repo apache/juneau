@@ -277,7 +277,7 @@ public class HoconSerializer extends WriterSerializer implements HoconMetaProvid
 			return this;
 		}
 
-		@Override /* Overridden from WriterSerializer.Builder */
+		@Override /* Overridden from WriterSerializer.Builder<?> */
 		public Builder ws() {
 			return useWhitespace();
 		}

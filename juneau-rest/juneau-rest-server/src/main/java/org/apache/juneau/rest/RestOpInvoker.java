@@ -142,7 +142,8 @@ public class RestOpInvoker extends MethodInvoker {
 	}
 
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for the dispatch hot path.
+		"java:S3776", // Cognitive complexity acceptable for the dispatch hot path.
+		"resource"    // BeanStore is not owned here; its lifecycle is managed by RestContext.
 	})
 	private void invoke(RestOpSession opSession, boolean observable) throws Exception {
 		var args = new Object[opArgs.length];

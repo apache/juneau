@@ -16,20 +16,15 @@
  */
 package org.apache.juneau.uon;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.lang.annotation.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.parser.*;
@@ -120,12 +115,12 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 			validateEnd = copyFrom.validateEnd;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public UonParser build() {
 			return cache(CACHE).build(UonParser.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
 		/**
@@ -164,7 +159,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(
@@ -229,7 +224,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}

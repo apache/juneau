@@ -76,6 +76,7 @@ class OAuthFlowBuilder_Test extends TestBase {
 		assertTrue(q.contains("code_challenge="));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test void c01_resourceOwner_requiredFields() {
 		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create().build());
 		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create()
@@ -83,6 +84,7 @@ class OAuthFlowBuilder_Test extends TestBase {
 			.clientId("id").clientSecret("secret").username("alice").build());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test void c02_resourceOwner_buildsWithMinimum() {
 		var f = OAuthResourceOwnerFlow.create()
 			.tokenEndpoint(URI.create("https://x.example.com/token"))

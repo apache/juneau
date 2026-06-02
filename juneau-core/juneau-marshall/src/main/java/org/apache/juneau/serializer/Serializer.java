@@ -25,7 +25,6 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.lang.annotation.*;
 import java.net.URI;
 import java.net.URL;
 import java.util.*;
@@ -34,8 +33,6 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json5.Json5Serializer;
 import org.apache.juneau.soap.*;
 
@@ -322,12 +319,12 @@ public class Serializer extends MarshallingTraverseContext {
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Serializer build() {
 			return build(Serializer.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
 		/**
@@ -344,7 +341,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 */
 		public String getProduces() { return produces; }
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(
@@ -828,7 +825,7 @@ public class Serializer extends MarshallingTraverseContext {
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}
@@ -1056,7 +1053,7 @@ public class Serializer extends MarshallingTraverseContext {
 	 * <p>
 	 * For writer-based serializers, this is identical to calling {@link #serialize(Object)}.
 	 * <br>For stream-based serializers, this converts the returned byte array to a string based on
-	 * the {@link OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)} setting.
+	 * the {@link OutputStreamSerializer.Builder<?>#binaryFormat(BinaryFormat)} setting.
 	 *
 	 * @param o The object to serialize.
 	 * @return The output serialized to a string.
@@ -1082,7 +1079,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * Serializer listener.
 	 *
-	 * @see Serializer.Builder#listener(Class)
+	 * @see Serializer.Builder<?>#listener(Class)
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during serialization.
 	 */
@@ -1091,7 +1088,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * URI context bean.
 	 *
-	 * @see Serializer.Builder#uriContext(UriContext)
+	 * @see Serializer.Builder<?>#uriContext(UriContext)
 	 * @return
 	 * 	Bean used for resolution of URIs to absolute or root-relative form.
 	 */
@@ -1100,7 +1097,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * URI relativity.
 	 *
-	 * @see Serializer.Builder#uriRelativity(UriRelativity)
+	 * @see Serializer.Builder<?>#uriRelativity(UriRelativity)
 	 * @return
 	 * 	Defines what relative URIs are relative to when serializing any of the following:
 	 */
@@ -1109,7 +1106,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * URI resolution.
 	 *
-	 * @see Serializer.Builder#uriResolution(UriResolution)
+	 * @see Serializer.Builder<?>#uriResolution(UriResolution)
 	 * @return
 	 * 	Defines the resolution level for URIs when serializing URIs.
 	 */
@@ -1118,7 +1115,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see Serializer.Builder#addBeanTypes()
+	 * @see Serializer.Builder<?>#addBeanTypes()
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -1128,7 +1125,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * Add type attribute to root nodes.
 	 *
-	 * @see Serializer.Builder#addRootType()
+	 * @see Serializer.Builder<?>#addRootType()
 	 * @return
 	 * 	<jk>true</jk> if type property should be added to root node.
 	 */
@@ -1137,7 +1134,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * Don't trim null bean property values.
 	 *
-	 * @see Serializer.Builder#keepNullProperties()
+	 * @see Serializer.Builder<?>#keepNullProperties()
 	 * @return
 	 * 	<jk>true</jk> if null bean values are serialized to the output.
 	 */
@@ -1146,7 +1143,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * Sort arrays and collections alphabetically.
 	 *
-	 * @see Serializer.Builder#sortCollections()
+	 * @see Serializer.Builder<?>#sortCollections()
 	 * @return
 	 * 	<jk>true</jk> if arrays and collections are copied and sorted before serialization.
 	 */
@@ -1155,7 +1152,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * Sort maps alphabetically.
 	 *
-	 * @see Serializer.Builder#sortMaps()
+	 * @see Serializer.Builder<?>#sortMaps()
 	 * @return
 	 * 	<jk>true</jk> if maps are copied and sorted before serialization.
 	 */
@@ -1164,7 +1161,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * Trim empty lists and arrays.
 	 *
-	 * @see Serializer.Builder#trimEmptyCollections()
+	 * @see Serializer.Builder<?>#trimEmptyCollections()
 	 * @return
 	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
 	 */
@@ -1173,7 +1170,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * Trim empty maps.
 	 *
-	 * @see Serializer.Builder#trimEmptyMaps()
+	 * @see Serializer.Builder<?>#trimEmptyMaps()
 	 * @return
 	 * 	<jk>true</jk> if empty map values are not serialized to the output.
 	 */
@@ -1182,7 +1179,7 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * Trim strings.
 	 *
-	 * @see Serializer.Builder#trimStrings()
+	 * @see Serializer.Builder<?>#trimStrings()
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */

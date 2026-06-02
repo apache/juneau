@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.view.jsp;
 
-import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;

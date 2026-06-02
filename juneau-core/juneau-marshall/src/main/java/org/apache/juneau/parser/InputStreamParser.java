@@ -16,16 +16,9 @@
  */
 package org.apache.juneau.parser;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.lang.annotation.*;
-import java.util.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 
 /**
  * Subclass of {@link Parser} for byte-based parsers.
@@ -81,12 +74,12 @@ public class InputStreamParser extends Parser {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public InputStreamParser build() {
 			return build(InputStreamParser.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
 
@@ -107,7 +100,7 @@ public class InputStreamParser extends Parser {
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}

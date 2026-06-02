@@ -145,7 +145,7 @@ final class ArgCoercer {
 				return parseStringArray(fnName, argIndex, s);
 			if (target == Object.class)
 				return s;
-		} catch (NumberFormatException e) {
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
 			throw illegalArg("Function ''{0}'' arg {1}: cannot coerce ''{2}'' to {3}",
 				fnName, argIndex, s, target.getSimpleName());
 		}

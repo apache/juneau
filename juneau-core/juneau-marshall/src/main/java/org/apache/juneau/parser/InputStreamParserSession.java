@@ -16,16 +16,10 @@
  */
 package org.apache.juneau.parser;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.function.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.httppart.*;
 
 /**
  * Subclass of parser session objects for byte-based parsers.
@@ -116,7 +110,7 @@ public class InputStreamParserSession extends ParserSession {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.MarshallingContext.Builder#binaryFormat(BinaryFormat)} setting.
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.MarshallingContext.Builder<?>#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
@@ -135,7 +129,7 @@ public class InputStreamParserSession extends ParserSession {
 	/**
 	 * Binary input format.
 	 *
-	 * @see MarshallingContext.Builder#binaryFormat(BinaryFormat)
+	 * @see MarshallingContext.Builder<?>#binaryFormat(BinaryFormat)
 	 * @return
 	 * 	The format to use when converting strings to byte arrays.
 	 */

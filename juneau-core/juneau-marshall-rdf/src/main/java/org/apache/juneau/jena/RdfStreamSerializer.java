@@ -115,7 +115,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 			return cache(CACHE).build(RdfStreamSerializer.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
 		@Override
@@ -145,7 +145,7 @@ public class RdfStreamSerializer extends OutputStreamSerializer implements RdfMe
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}

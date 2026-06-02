@@ -34,11 +34,11 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
 
 /**
- * Resolves method parameters annotated with {@link Header} of type {@link Value} representing response headers
+ * Resolves method parameters annotated with {@link Header} of type {@link org.apache.juneau.commons.inject.Value} representing response headers
  * on {@link RestOp}-annotated Java methods.
  *
  * <p>
- * The parameter value must be of type {@link Value} that accepts a value that is then set via:
+ * The parameter value must be of type {@link org.apache.juneau.commons.inject.Value} that accepts a value that is then set via:
  * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getResponse() getResponse}()

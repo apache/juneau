@@ -16,13 +16,10 @@
  */
 package org.apache.juneau.xml;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.lang.annotation.*;
-import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -32,8 +29,6 @@ import javax.xml.stream.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.commons.bean.BeanMeta;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
@@ -154,12 +149,12 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 			resolver = copyFrom.resolver;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public XmlParser build() {
 			return cache(CACHE).build(XmlParser.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
 		/**
@@ -177,7 +172,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(
@@ -310,7 +305,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}

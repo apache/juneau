@@ -53,7 +53,7 @@ public @interface RdfConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
+	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -62,7 +62,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addBeanTypes()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#addBeanTypes()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -78,7 +78,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addLiteralTypes()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#addLiteralTypes()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -103,7 +103,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addRootProperty()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#addRootProperty()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -135,8 +135,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#collectionFormat(RdfCollectionFormat)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#collectionFormat(RdfCollectionFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#collectionFormat(RdfCollectionFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#collectionFormat(RdfCollectionFormat)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -159,7 +159,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#disableAutoDetectNamespaces()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#disableAutoDetectNamespaces()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -184,7 +184,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#disableUseXmlNamespaces()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#disableUseXmlNamespaces()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -200,8 +200,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#juneauBpNs(Namespace)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#juneauBpNs(Namespace)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#juneauBpNs(Namespace)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#juneauBpNs(Namespace)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -217,8 +217,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#juneauNs(Namespace)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#juneauNs(Namespace)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#juneauNs(Namespace)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#juneauNs(Namespace)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -265,8 +265,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#language(String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#language(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#language(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#language(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -295,8 +295,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#looseCollections()}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#looseCollections()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#looseCollections()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#looseCollections()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -315,8 +315,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableAbbrevBaseUri()}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableAbbrevBaseUri()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#n3_disableAbbrevBaseUri()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#n3_disableAbbrevBaseUri()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -335,8 +335,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableObjectLists()}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableObjectLists()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#n3_disableObjectLists()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#n3_disableObjectLists()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -355,8 +355,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUseDoubles()}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUseDoubles()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#n3_disableUseDoubles()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#n3_disableUseDoubles()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -375,8 +375,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUsePropertySymbols()}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUsePropertySymbols()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#n3_disableUsePropertySymbols()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#n3_disableUsePropertySymbols()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -395,8 +395,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUseTripleQuotedStrings()}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUseTripleQuotedStrings()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#n3_disableUseTripleQuotedStrings()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#n3_disableUseTripleQuotedStrings()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -415,8 +415,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_indentProperty(int)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_indentProperty(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#n3_indentProperty(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#n3_indentProperty(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -435,8 +435,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_minGap(int)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_minGap(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#n3_minGap(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#n3_minGap(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -455,8 +455,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_propertyColumn(int)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_propertyColumn(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#n3_propertyColumn(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#n3_propertyColumn(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -475,8 +475,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_subjectColumn(int)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_subjectColumn(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#n3_subjectColumn(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#n3_subjectColumn(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -496,8 +496,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_widePropertyLen(int)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_widePropertyLen(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#n3_widePropertyLen(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#n3_widePropertyLen(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -516,7 +516,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#namespaces(Namespace...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#namespaces(Namespace...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -545,8 +545,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_allowBadUris()}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_allowBadUris()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#rdfxml_allowBadUris()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#rdfxml_allowBadUris()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -565,8 +565,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_attributeQuoteChar(char)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_attributeQuoteChar(char)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#rdfxml_attributeQuoteChar(char)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#rdfxml_attributeQuoteChar(char)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -587,8 +587,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_blockRules(String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_blockRules(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#rdfxml_blockRules(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#rdfxml_blockRules(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -610,8 +610,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_disableShowDoctypeDeclaration()}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_disableShowDoctypeDeclaration()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#rdfxml_disableShowDoctypeDeclaration()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#rdfxml_disableShowDoctypeDeclaration()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -715,8 +715,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_longId()}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_longId()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#rdfxml_longId()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#rdfxml_longId()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -757,8 +757,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_relativeUris(String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_relativeUris(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#rdfxml_relativeUris(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#rdfxml_relativeUris(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -785,8 +785,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_showXmlDeclaration(String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_showXmlDeclaration(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#rdfxml_showXmlDeclaration(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#rdfxml_showXmlDeclaration(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -805,8 +805,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_tab(int)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_tab(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#rdfxml_tab(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#rdfxml_tab(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -825,8 +825,8 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_xmlbase(String)}
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_xmlbase(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder<?>#rdfxml_xmlbase(String)}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#rdfxml_xmlbase(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -845,7 +845,7 @@ public @interface RdfConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#trimWhitespace()}
+	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder<?>#trimWhitespace()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

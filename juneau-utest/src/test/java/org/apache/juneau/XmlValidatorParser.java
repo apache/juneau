@@ -49,7 +49,7 @@ public class XmlValidatorParser extends XmlParser {
 	}
 
 	@Override /* Context */
-	public XmlParserSession.Builder createSession() {
+	public XmlParserSession.Builder<?> createSession() {
 		return new XmlParserSession.Builder(XmlParser.DEFAULT) {
 			@Override
 			public XmlParserSession build() {

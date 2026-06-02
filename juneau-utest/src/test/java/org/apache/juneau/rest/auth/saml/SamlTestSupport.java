@@ -33,7 +33,6 @@ import org.opensaml.saml.common.SAMLObjectBuilder;
 import org.opensaml.saml.saml2.core.*;
 import org.opensaml.security.credential.BasicCredential;
 import org.opensaml.security.credential.UsageType;
-import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.impl.SignatureBuilder;
 import org.opensaml.xmlsec.signature.support.SignatureConstants;
 import org.opensaml.xmlsec.signature.support.Signer;
@@ -45,7 +44,7 @@ import org.opensaml.xmlsec.signature.support.Signer;
  * Centralizes the OpenSAML builder boilerplate so individual test classes stay focused on the assertion
  * shapes they care about.
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings("unchecked")
 final class SamlTestSupport {
 
 	static {

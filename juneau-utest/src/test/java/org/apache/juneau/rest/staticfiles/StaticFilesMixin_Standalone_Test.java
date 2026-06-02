@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.staticfiles;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.junit.jupiter.api.*;

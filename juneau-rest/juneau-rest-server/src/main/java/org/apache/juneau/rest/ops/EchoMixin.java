@@ -67,7 +67,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
- * pinned at the op level by {@link RestOp @RestOp(path="/${juneau.echo.path:echo}/*")} on
+ * pinned at the op level by {@link RestOp @RestOp(path="/&#123;juneau.echo.path:echo&#125;/*")} on
  * {@link #echo}; a class-level {@code @Rest(paths=...)} declaration would be silently ignored
  * under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *

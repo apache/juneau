@@ -73,7 +73,7 @@ public @interface MarshalledProp {
 	 * 	<li class='ja'>{@link Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder<?>#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * <p>

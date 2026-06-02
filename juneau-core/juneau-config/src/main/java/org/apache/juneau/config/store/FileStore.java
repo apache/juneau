@@ -26,15 +26,12 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.lang.annotation.*;
 import java.nio.*;
 import java.nio.channels.*;
 import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.collections.FluentMap;
 
 /**
@@ -119,7 +116,7 @@ public class FileStore extends ConfigStore {
 			watcherSensitivity = copyFrom.watcherSensitivity;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public FileStore build() {
 			return build(FileStore.class);
 		}
@@ -146,7 +143,7 @@ public class FileStore extends ConfigStore {
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}

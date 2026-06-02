@@ -231,7 +231,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <p>
-	 * Use {@link #noInherit() @Rest(noInherit={...})} on a mixin class to cut off inheritance for a specific
+	 * Use {@link #noInherit() @Rest(noInherit=&#123;...&#125;)} on a mixin class to cut off inheritance for a specific
 	 * property — same token set as the host's {@code noInherit} machinery (e.g. {@code "serializers"},
 	 * {@code "guards"}, {@code "messages"}).
 	 *
@@ -499,7 +499,7 @@ public @interface Rest {
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
-	 * 		These debug settings can be overridden by the {@link Rest#debugOn()} annotation or at runtime by directly
+	 * 		These debug settings can be overridden by the {@link Rest#debug()} annotation or at runtime by directly
 	 * 		calling {@link RestRequest#setDebug()}.
 	 * </ul>
 	 *
@@ -744,7 +744,7 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * When enabled, every {@code @RestOp}-annotated handler invocation on this resource is submitted to a
-	 * {@link java.util.concurrent.Executors#newVirtualThreadPerTaskExecutor() virtual-thread-per-task executor}
+	 * {@code Executors.newVirtualThreadPerTaskExecutor()} virtual-thread-per-task executor
 	 * lazily built by the {@link org.apache.juneau.rest.RestContext}. The platform request thread blocks on
 	 * the virtual thread's completion (so the handler's return value, exceptions, and observability hooks are
 	 * preserved verbatim), but blocking I/O inside the handler now parks a virtual thread instead of the
@@ -1263,7 +1263,7 @@ public @interface Rest {
 	 * 	<li>The element runs through
 	 * 		<a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL</a>
 	 * 		variable substitution (e.g. {@code $C{health.paths}}, {@code $E{HEALTH_PATHS,/healthz}},
-	 * 		{@code $S{my.system.prop,/healthz}}) using the bootstrap {@link org.apache.juneau.svl.VarResolver
+	 * 		{@code $S{my.system.prop,/healthz}}) using the bootstrap {@link org.apache.juneau.commons.svl.VarResolver
 	 * 		VarResolver} on the bean store.
 	 * 	<li>The post-SVL value is split on {@code ,}; each piece is trimmed and empty pieces are dropped.
 	 * 		A single template element can therefore expand to zero, one, or many mount paths.
@@ -1589,8 +1589,8 @@ public @interface Rest {
 	 * Used to retrieve localized files to be served up as static files through the REST API via the following
 	 * predefined methods:
 	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link BasicRestResource#getHtdoc(String, Locale)}.
-	 * 	<li class='jm'>{@link BasicRestServlet#getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@code BasicRestResource.getHtdoc(String, Locale)}.
+	 * 	<li class='jm'>{@code BasicRestServlet.getHtdoc(String, Locale)}.
 	 * </ul>
 	 *
 	 * <p>

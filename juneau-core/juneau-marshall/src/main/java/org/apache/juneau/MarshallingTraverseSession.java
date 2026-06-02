@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -168,7 +167,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	/**
 	 * Initial depth.
 	 *
-	 * @see MarshallingTraverseContext.Builder#initialDepth(int)
+	 * @see MarshallingTraverseContext.Builder<?>#initialDepth(int)
 	 * @return
 	 * 	The initial indentation level at the root.
 	 */
@@ -194,7 +193,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	/**
 	 * Max traversal depth.
 	 *
-	 * @see MarshallingTraverseContext.Builder#maxDepth(int)
+	 * @see MarshallingTraverseContext.Builder<?>#maxDepth(int)
 	 * @return
 	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
 	 *	<br>If this depth is exceeded, an exception is thrown.
@@ -204,7 +203,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	/**
 	 * Automatically detect POJO recursions.
 	 *
-	 * @see MarshallingTraverseContext.Builder#detectRecursions()
+	 * @see MarshallingTraverseContext.Builder<?>#detectRecursions()
 	 * @return
 	 * 	<jk>true</jk> if recursions should be checked for during traversal.
 	 */
@@ -213,7 +212,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	/**
 	 * Ignore recursion errors.
 	 *
-	 * @see MarshallingTraverseContext.Builder#ignoreRecursions()
+	 * @see MarshallingTraverseContext.Builder<?>#ignoreRecursions()
 	 * @return
 	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * 	<br>Otherwise, a {@link MarshallingRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
@@ -387,7 +386,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if {@link MarshallingTraverseContext.Builder#detectRecursions()} is enabled, and the specified
+	 * Returns <jk>true</jk> if {@link MarshallingTraverseContext.Builder<?>#detectRecursions()} is enabled, and the specified
 	 * object is already higher up in the traversal chain.
 	 *
 	 * @param attrName The bean property attribute name, or some other identifier.

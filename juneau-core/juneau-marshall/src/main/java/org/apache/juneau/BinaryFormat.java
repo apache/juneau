@@ -25,7 +25,7 @@ import java.util.*;
  * Supported wire formats for <code><jk>byte</jk>[]</code> values and stream-based serialization output.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder#binaryFormat(BinaryFormat)},
+ * Used by {@link MarshallingContext.Builder<?>#binaryFormat(BinaryFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#binaryFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#binaryFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#binaryFormat()} to control how

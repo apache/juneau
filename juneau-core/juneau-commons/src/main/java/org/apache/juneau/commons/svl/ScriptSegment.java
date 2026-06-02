@@ -25,7 +25,7 @@ import java.util.*;
  *
  * <p>
  * Built by {@link VarTemplateCompiler}'s recursive-descent parser. The function {@link #name} is
- * the literal token between {@code #{} and the opening parenthesis; {@link #argTemplates} hold
+ * the literal token between {@code #{}} and the opening parenthesis; {@link #argTemplates} hold
  * the parsed arguments — each is itself a {@link VarTemplate} so that nested {@code ${...}} and
  * {@code #{...}} resolve naturally per arg.
  *

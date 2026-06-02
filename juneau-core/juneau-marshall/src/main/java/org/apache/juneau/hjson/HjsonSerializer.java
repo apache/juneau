@@ -68,7 +68,7 @@ import org.apache.juneau.swap.ObjectSwap;
  * The types above are considered "Hjson-primitive" object types.
  * Any non-Hjson-primitive object types are transformed into Hjson-primitive object types through
  * {@link ObjectSwap ObjectSwaps} associated through the
- * {@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...) MarshallingContext.Builder.swaps(Class...)} method.
+ * {@link org.apache.juneau.MarshallingContext.Builder<?>#swaps(Class...) MarshallingContext.Builder.swaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc.
  *
  * <h5 class='section'>Example:</h5>
@@ -252,7 +252,7 @@ public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvid
 			return this;
 		}
 
-		@Override /* Overridden from WriterSerializer.Builder */
+		@Override /* Overridden from WriterSerializer.Builder<?> */
 		public Builder ws() {
 			return useWhitespace();
 		}

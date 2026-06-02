@@ -48,7 +48,7 @@ import org.apache.juneau.rest.servlet.*;
  * <h5 class='section'>Hardcoded mount path:</h5>
  *
  * <p>
- * Unlike the sibling api-docs and ops mixins (see {@link SwaggerMixin},
+ * Unlike the sibling api-docs and ops mixins (see {@link org.apache.juneau.rest.docs.SwaggerMixin},
  * {@link VersionMixin}, etc.), the mount path here is <b>not</b> SVL-configurable
  * &mdash; {@code /.well-known/security.txt} is fixed by
  * <a href="https://www.rfc-editor.org/rfc/rfc8615">RFC 8615</a> (Well-Known URIs) and
@@ -126,7 +126,7 @@ public class WellKnownMixin extends RestMixin {
 	 * Builder constructor.
 	 *
 	 * <p>
-	 * Stashes the programmatic {@link RestBuilder} (the builder itself, carrying any {@code @Rest}-level
+	 * Stashes the programmatic {@link RestBuilder<?>} (the builder itself, carrying any {@code @Rest}-level
 	 * overrides such as {@code path}) via {@code super(builder)} so those values take precedence over this
 	 * mixin's own {@link Rest @Rest} annotation (TODO-143 &sect;2.4).
 	 *
@@ -172,8 +172,8 @@ public class WellKnownMixin extends RestMixin {
 	 * Builder for {@link WellKnownMixin} instances.
 	 *
 	 * <p>
-	 * Extends {@link RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke {@link #securityTxt(String)}
-	 * setter chains with true covariant returns alongside the inherited {@link RestBuilder} surface (e.g.
+	 * Extends {@link org.apache.juneau.rest.servlet.RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke {@link #securityTxt(String)}
+	 * setter chains with true covariant returns alongside the inherited {@link RestBuilder<?>} surface (e.g.
 	 * {@code path}, {@code roleGuard}).
 	 */
 	public static class Builder extends RestMixin.Builder<WellKnownMixin, Builder> {

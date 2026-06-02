@@ -41,19 +41,19 @@ import org.apache.juneau.commons.lang.AsciiSet;
  * 		{@link VarResolverSession#resolveTo(String, java.io.Writer)} semantics for {@code \\}/{@code \$};
  * 		{@code \#} is added new for symmetry with {@code \$}).
  * 	<li><b>{@code ${...}} / {@code $X{...}} parse:</b> after seeing {@code $}, an optional
- * 		ASCII-letter prefix is captured up to the {@code {}; bodies are collected with brace
+ * 		ASCII-letter prefix is captured up to the {@code {}}; bodies are collected with brace
  * 		depth tracking; inner {@code \\} escapes inside the body are recognized for
  * 		state-machine purposes (don't close on {@code \}}) but the captured body string preserves
  * 		backslashes verbatim. Unknown prefix → fallthrough emits the original substring with
  * 		{@code \\\$\{\}} unescaped per the legacy {@code AS2} set.
- * 	<li><b>{@code #{...}} parse:</b> when {@code #} is followed immediately by {@code {}, body
+ * 	<li><b>{@code #{...}} parse:</b> when {@code #} is followed immediately by {@code {}}, body
  * 		collection enters script mode (same depth/escape tracking as {@code ${...}} bodies). On
  * 		close, the body is parsed via the recursive-descent parser implemented below.
  * 	<li><b>{@code ${...}} shortcut:</b> empty prefix triggers the
  * 		{@link VarResolverSession DOLLAR_BRACE_VAR} fallback, with the first top-level {@code ':'}
  * 		in the body rewritten to {@code ','} <i>at compile time</i> on the body source string.
- * 	<li><b>End-of-input:</b> dangling {@code $} (state S2), open {@code $X{} (state S3), or open
- * 		{@code #{} (state S3H) preserve the legacy fallthrough — the relevant prefix + body
+ * 	<li><b>End-of-input:</b> dangling {@code $} (state S2), open {@code $X{}} (state S3), or open
+ * 		{@code #{}} (state S3H) preserve the legacy fallthrough — the relevant prefix + body
  * 		fragment is appended verbatim (with the legacy {@code AS1}/{@code AS2} unescaping) so a
  * 		malformed input round-trips identically through both legacy and compiled paths.
  * </ul>
@@ -338,7 +338,7 @@ final class VarTemplateCompiler {
 	 * Parses a captured script body string into a {@link ScriptSegment}.
 	 *
 	 * @param fullInput The full template input (for diagnostic context).
-	 * @param body The captured body — everything between {@code #{} and the matching {@code }}.
+	 * @param body The captured body — everything between {@code #{}} and the matching {@code }}.
 	 * @param x2 Index of the opening {@code #} in {@code fullInput}.
 	 * @param closeIndex Index of the matching {@code }} in {@code fullInput}.
 	 */
@@ -364,7 +364,7 @@ final class VarTemplateCompiler {
 	 * 	<li>{@code v} is non-{@code null}.
 	 * 	<li>{@code v.isStable()} returns {@code true}.
 	 * 	<li>The compiled body is a pure literal — no nested live markers, including the legacy
-	 * 		{@code hasInternalVar} flag set by the state machine on inner {@code {} characters.
+	 * 		{@code hasInternalVar} flag set by the state machine on inner {@code {}} characters.
 	 * 	<li>The var is a {@link SimpleVar} (streamed vars are excluded — folding a stream loses
 	 * 		the writer-direct optimization for no compile-time gain).
 	 * 	<li>{@link Var#canResolve(VarResolverSession)} on a fresh no-bean session returns
@@ -399,7 +399,7 @@ final class VarTemplateCompiler {
 			if (v.allowRecurse() && resolved.indexOf('$') != -1)
 				return null;
 			return resolved;
-		} catch (Exception e) {
+		} catch (@SuppressWarnings("unused") Exception e) {
 			return null;
 		}
 	}

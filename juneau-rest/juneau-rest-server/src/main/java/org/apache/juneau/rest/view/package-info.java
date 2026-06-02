@@ -35,7 +35,7 @@
  *
  * <p>
  * Any {@link org.apache.juneau.rest.processor.ResponseProcessor ResponseProcessor} implementing
- * {@link ViewRenderer} is automatically repositioned to run before the first
+ * {@link org.apache.juneau.rest.view.ViewRenderer} is automatically repositioned to run before the first
  * {@link org.apache.juneau.rest.processor.CatchAllResponseProcessor CatchAllResponseProcessor}
  * (i.e. {@link org.apache.juneau.rest.processor.SerializedPojoProcessor SerializedPojoProcessor})
  * during {@link org.apache.juneau.rest.processor.ResponseProcessorList ResponseProcessorList}
@@ -45,7 +45,7 @@
  * matching renderer without the user having to enumerate a full custom processor chain.
  *
  * <p>
- * Third-party renderers gain the same ordering guarantee by implementing {@link ViewRenderer}.
+ * Third-party renderers gain the same ordering guarantee by implementing {@link org.apache.juneau.rest.view.ViewRenderer}.
  *
  * @since 9.5.0
  */

@@ -202,47 +202,47 @@ public class BsonSerializer extends OutputStreamSerializer implements BsonMetaPr
 			return this;
 		}
 
-		@Override /* OutputStreamSerializer.Builder */
+		@Override /* OutputStreamSerializer.Builder<?> */
 		public Builder binaryFormat(BinaryFormat value) {
 			super.binaryFormat(value);
 			return this;
 		}
 
-		@Override /* Serializer.Builder */
+		@Override /* Serializer.Builder<?> */
 		public Builder keepNullProperties() {
 			super.keepNullProperties();
 			return this;
 		}
 
-		@Override /* Serializer.Builder */
+		@Override /* Serializer.Builder<?> */
 		public Builder keepNullProperties(boolean value) {
 			super.keepNullProperties(value);
 			return this;
 		}
 
-		@Override /* Serializer.Builder */
+		@Override /* Serializer.Builder<?> */
 		public Builder addRootType() {
 			super.addRootType();
 			return this;
 		}
 
-		@Override /* Serializer.Builder */
+		@Override /* Serializer.Builder<?> */
 		public Builder addRootType(boolean value) {
 			super.addRootType(value);
 			return this;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Context.Builder<?> */
 		public BsonSerializer build() {
 			return cache(CACHE).build(BsonSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Context.Builder<?> */
 		public HashKey hashKey() {
 			return HashKey.of(super.hashKey(), addBeanTypesBson, nullKeyString, writeDatesAsDatetime);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}

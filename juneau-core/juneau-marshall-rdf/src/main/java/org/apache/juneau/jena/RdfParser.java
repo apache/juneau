@@ -16,19 +16,14 @@
  */
 package org.apache.juneau.jena;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.lang.annotation.*;
-import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
@@ -145,7 +140,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public RdfParser build() {
 			return cache(CACHE).build(RdfParser.class);
 		}
@@ -175,10 +170,10 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(
@@ -256,10 +251,10 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link RdfParser.Builder#n3()}
-		 * 	<li class='jm'>{@link RdfParser.Builder#ntriple()}
-		 * 	<li class='jm'>{@link RdfParser.Builder#turtle()}
-		 * 	<li class='jm'>{@link RdfParser.Builder#xml()}
+		 * 	<li class='jm'>{@link RdfParser.Builder<?>#n3()}
+		 * 	<li class='jm'>{@link RdfParser.Builder<?>#ntriple()}
+		 * 	<li class='jm'>{@link RdfParser.Builder<?>#turtle()}
+		 * 	<li class='jm'>{@link RdfParser.Builder<?>#xml()}
 		 * </ul>
 		 *
 		 * @param value The new value for this property.
@@ -989,7 +984,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}
@@ -1104,7 +1099,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * RDF format for representing collections and arrays.
 	 *
-	 * @see RdfParser.Builder#collectionFormat(RdfCollectionFormat)
+	 * @see RdfParser.Builder<?>#collectionFormat(RdfCollectionFormat)
 	 * @return
 	 * 	RDF format for representing collections and arrays.
 	 */
@@ -1121,7 +1116,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * Default XML namespace for bean properties.
 	 *
-	 * @see RdfParser.Builder#juneauBpNs(Namespace)
+	 * @see RdfParser.Builder<?>#juneauBpNs(Namespace)
 	 * @return
 	 * 	Default XML namespace for bean properties.
 	 */
@@ -1130,7 +1125,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * XML namespace for Juneau properties.
 	 *
-	 * @see RdfParser.Builder#juneauNs(Namespace)
+	 * @see RdfParser.Builder<?>#juneauNs(Namespace)
 	 * @return
 	 * 	XML namespace for Juneau properties.
 	 */
@@ -1139,7 +1134,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * RDF language.
 	 *
-	 * @see RdfParser.Builder#language(String)
+	 * @see RdfParser.Builder<?>#language(String)
 	 * @return
 	 * 	The RDF language to use.
 	 */
@@ -1148,7 +1143,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * Collections should be serialized and parsed as loose collections.
 	 *
-	 * @see RdfParser.Builder#looseCollections()
+	 * @see RdfParser.Builder<?>#looseCollections()
 	 * @return
 	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
 	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
@@ -1158,7 +1153,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * Trim whitespace from text elements.
 	 *
-	 * @see RdfParser.Builder#trimWhitespace()
+	 * @see RdfParser.Builder<?>#trimWhitespace()
 	 * @return
 	 * 	<jk>true</jk> if whitespace in text elements will be automatically trimmed.
 	 */

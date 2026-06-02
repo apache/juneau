@@ -59,7 +59,7 @@ public @interface Html {
 	 * </p>
 	 *
 	 * <p>
-	 * This overrides the behavior specified by {@link org.apache.juneau.html.HtmlSerializer.Builder#uriAnchorText(AnchorText)}.
+	 * This overrides the behavior specified by {@link org.apache.juneau.html.HtmlSerializer.Builder<?>#uriAnchorText(AnchorText)}.
 	 *
 	 * @return The annotation value.
 	 */
@@ -115,7 +115,7 @@ public @interface Html {
 	 * When <jk>true</jk>, don't add headers to tables.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder#addKeyValueTableHeaders()}
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder<?>#addKeyValueTableHeaders()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

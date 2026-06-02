@@ -81,11 +81,11 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * The programmatic configuration builder stashed on this instance (TODO-143 &sect;2.4), or <jk>null</jk> when the
 	 * resource was constructed without a builder.  Mutable so it can be written by either the
-	 * {@link #RestServlet(RestBuilder)} constructor or {@link Builder#build()} (the no-arg-only setter-stash path).
+	 * {@link #RestServlet(RestBuilder<?>)} constructor or {@link Builder#build()} (the no-arg-only setter-stash path).
 	 * Read non-reflectively by {@link RestContext} during construction so builder-supplied values take precedence
 	 * over {@link Rest @Rest} annotation values.
 	 */
-	RestBuilder restBuilder;
+	RestBuilder<?> restBuilder;
 
 	/**
 	 * Default constructor.
@@ -97,7 +97,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @param builder The programmatic configuration builder.  May be <jk>null</jk>.
 	 */
-	protected RestServlet(RestBuilder builder) {
+	protected RestServlet(RestBuilder<?> builder) {
 		this.restBuilder = builder;
 	}
 
@@ -107,7 +107,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The stashed builder, or <jk>null</jk>.
 	 * @since 9.5.0
 	 */
-	public RestBuilder getRestBuilder() {
+	public RestBuilder<?> getRestBuilder() {
 		return restBuilder;
 	}
 
@@ -357,7 +357,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * <p>
 	 * This is the subclassable, self-typed (CRTP) flavor builder.  Its {@code SELF} type parameter is left open so
 	 * a user subclass's bespoke setters chain with true covariant returns alongside the inherited
-	 * {@link RestBuilder} surface (TODO-143 Option B).  For the common case where the builder is not subclassed,
+	 * {@link RestBuilder<?>} surface (TODO-143 Option B).  For the common case where the builder is not subclassed,
 	 * use {@link RestServlet#builder(Class)} which returns the concrete {@link DefaultBuilder} leaf.
 	 *
 	 * @param <R> The resource type produced by {@link #build()}.

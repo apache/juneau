@@ -585,13 +585,13 @@ class MarshalledConfig_Test extends TestBase {
 	public static class DummyPojoSwapC extends MapSwap<C> {}
 	public static class C {}
 
-	private static void assertSameCache(Parser.Builder p1b, Parser.Builder p2b) {
+	private static void assertSameCache(Parser.Builder<?> p1b, Parser.Builder<?> p2b) {
 		var p1 = p1b.build();
 		var p2 = p2b.build();
 		assertTrue(p1.getMarshallingContext().hasSameCache(p2.getMarshallingContext()));
 	}
 
-	private static void assertDifferentCache(Parser.Builder p1b, Parser.Builder p2b) {
+	private static void assertDifferentCache(Parser.Builder<?> p1b, Parser.Builder<?> p2b) {
 		var p1 = p1b.build();
 		var p2 = p2b.build();
 		assertFalse(p1.getMarshallingContext().hasSameCache(p2.getMarshallingContext()));

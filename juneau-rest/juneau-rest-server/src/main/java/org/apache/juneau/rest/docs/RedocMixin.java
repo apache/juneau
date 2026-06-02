@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.*;
  * {@code org.apache.juneau.rest.docs} api-docs mixin pack.
  *
  * <p>
- * Declares {@link Rest#mixins() @Rest(mixins={OpenApiMixin.class})} so transitive resolution
+ * Declares {@link Rest#mixins() @Rest(mixins=&#123;OpenApiMixin.class&#125;)} so transitive resolution
  * pulls in {@code OpenApiMixin} (and its {@code /openapi*} mounts) automatically when this
  * mixin is composed into a host.
  *
@@ -58,7 +58,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
- * pinned at the op level by {@link RestGet @RestGet(path="/${juneau.redoc.path:redoc}/*")} on
+ * pinned at the op level by {@link RestGet @RestGet(path="/&#123;juneau.redoc.path:redoc&#125;/*")} on
  * {@link #getRedoc}; a class-level {@code @Rest(paths=...)} declaration would be silently
  * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *

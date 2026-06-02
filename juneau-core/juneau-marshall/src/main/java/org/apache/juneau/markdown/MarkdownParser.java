@@ -16,18 +16,13 @@
  */
 package org.apache.juneau.markdown;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.lang.annotation.*;
-import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json5.Json5Parser;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
@@ -136,17 +131,17 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			return HashKey.of(super.hashKey(), nullValue);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public MarkdownParser build() {
 			return cache(CACHE).build(MarkdownParser.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
 
@@ -167,7 +162,7 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}

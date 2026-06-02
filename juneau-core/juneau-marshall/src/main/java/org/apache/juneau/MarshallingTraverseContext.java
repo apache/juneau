@@ -16,15 +16,9 @@
  */
 package org.apache.juneau;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.lang.annotation.*;
-import java.util.*;
-
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 
 /**
  * Parent class for all classes that traverse POJOs.
@@ -147,7 +141,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(

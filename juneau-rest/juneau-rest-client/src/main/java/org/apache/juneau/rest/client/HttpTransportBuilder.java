@@ -22,7 +22,7 @@ package org.apache.juneau.rest.client;
  * <p>
  * Transport modules (Apache HC, Java HTTP Client, OkHttp, etc.) implement this interface to expose their
  * configuration options in a transport-agnostic way.  The built transport is then passed to
- * {@link RestClient.Builder#transport(HttpTransport)}.
+ * {@link RestClient.Builder<?>#transport(HttpTransport)}.
  *
  * <p>
  * Example usage:

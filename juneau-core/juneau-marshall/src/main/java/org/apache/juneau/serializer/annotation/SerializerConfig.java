@@ -60,8 +60,8 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note the differences between the following settings:
 	 * <ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addRootType()} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
 	 * <ul class='values'>
@@ -75,7 +75,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -96,8 +96,8 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note the differences between the following settings:
 	 * <ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addRootType()} - Affects whether <js>'_type'</js> is added to root node.
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
 	 * <ul class='values'>
@@ -111,7 +111,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addRootType()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#addRootType()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -137,7 +137,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.OutputStreamSerializer.Builder<?>#binaryFormat(BinaryFormat)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -156,7 +156,7 @@ public @interface SerializerConfig {
 	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 	 *
 	 * <p>
-	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.MarshallingTraverseContext.Builder#ignoreRecursions()}.
+	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.MarshallingTraverseContext.Builder<?>#ignoreRecursions()}.
 	 *
 	 * <p>
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
@@ -179,7 +179,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#detectRecursions()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder<?>#detectRecursions()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -209,7 +209,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#fileCharset(java.nio.charset.Charset)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder<?>#fileCharset(java.nio.charset.Charset)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -220,7 +220,7 @@ public @interface SerializerConfig {
 	 * Ignore recursion errors.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.MarshallingTraverseContext.Builder#detectRecursions()}.
+	 * Used in conjunction with {@link org.apache.juneau.MarshallingTraverseContext.Builder<?>#detectRecursions()}.
 	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <js>"false"</js>.
 	 *
 	 * <p>
@@ -238,7 +238,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#ignoreRecursions()}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder<?>#ignoreRecursions()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -262,7 +262,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#initialDepth(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder<?>#initialDepth(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -293,7 +293,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#keepNullProperties()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#keepNullProperties()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -307,7 +307,7 @@ public @interface SerializerConfig {
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#listener(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#listener(Class)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -331,7 +331,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder#maxDepth(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingTraverseContext.Builder<?>#maxDepth(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -356,7 +356,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#maxIndent(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder<?>#maxIndent(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -379,7 +379,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder<?>#quoteChar(char)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -416,7 +416,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#sortCollections()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#sortCollections()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -443,7 +443,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#sortMaps()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#sortMaps()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -471,7 +471,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#streamCharset(Charset)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder<?>#streamCharset(Charset)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -504,7 +504,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimEmptyCollections()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#trimEmptyCollections()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -535,7 +535,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimEmptyMaps()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#trimEmptyMaps()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -559,7 +559,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimStrings()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#trimStrings()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -581,7 +581,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriContext(UriContext)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#uriContext(UriContext)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -610,7 +610,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriRelativity(UriRelativity)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#uriRelativity(UriRelativity)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 	 * </ul>
 	 *
@@ -641,7 +641,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriResolution(UriResolution)}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder<?>#uriResolution(UriResolution)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 	 * </ul>
 	 *
@@ -666,7 +666,7 @@ public @interface SerializerConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#useWhitespace()}
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder<?>#useWhitespace()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

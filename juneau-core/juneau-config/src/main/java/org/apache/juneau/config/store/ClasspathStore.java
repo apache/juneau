@@ -20,11 +20,8 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.lang.annotation.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 
 /**
@@ -80,12 +77,12 @@ public class ClasspathStore extends ConfigStore {
 			type(copyFrom.getClass());
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public ClasspathStore build() {
 			return build(ClasspathStore.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}

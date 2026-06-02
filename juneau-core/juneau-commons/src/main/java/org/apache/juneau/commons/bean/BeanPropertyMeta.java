@@ -868,7 +868,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
 	 * 	<li>Dictionary defined via {@code @MarshalledProp(dictionary)}.
-	 * 	<li>Dictionary defined via {@code MarshallingContext.Builder#beanDictionary(Class...)}.
+	 * 	<li>Dictionary defined via {@code MarshallingContext.Builder<?>#beanDictionary(Class...)}.
 	 * </ol>
 	 *
 	 * <p>

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.html;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
@@ -26,8 +25,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 
 import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
@@ -38,9 +35,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
@@ -782,7 +777,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Link label parameter name.
 	 *
-	 * @see HtmlSerializer.Builder#labelParameter(String)
+	 * @see HtmlSerializer.Builder<?>#labelParameter(String)
 	 * @return
 	 * 	The parameter name to look for when resolving link labels.
 	 */
@@ -791,7 +786,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Anchor text source.
 	 *
-	 * @see HtmlSerializer.Builder#uriAnchorText(AnchorText)
+	 * @see HtmlSerializer.Builder<?>#uriAnchorText(AnchorText)
 	 * @return
 	 * 	When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * 	<xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
@@ -804,7 +799,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Add key/value headers on bean/map tables.
 	 *
-	 * @see HtmlSerializer.Builder#addKeyValueTableHeaders()
+	 * @see HtmlSerializer.Builder<?>#addKeyValueTableHeaders()
 	 * @return
 	 * 	<jk>true</jk> if <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 	 */
@@ -813,7 +808,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Look for link labels in URIs.
 	 *
-	 * @see HtmlSerializer.Builder#disableDetectLabelParameters()
+	 * @see HtmlSerializer.Builder<?>#disableDetectLabelParameters()
 	 * @return
 	 * 	<jk>true</jk> if we should ook for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
@@ -822,7 +817,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Look for URLs in {@link String Strings}.
 	 *
-	 * @see HtmlSerializer.Builder#disableDetectLinksInStrings()
+	 * @see HtmlSerializer.Builder<?>#disableDetectLinksInStrings()
 	 * @return
 	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
 	 */

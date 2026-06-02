@@ -72,7 +72,7 @@ public class FakeWriterSerializer extends WriterSerializer implements HttpPartSe
 	// Builder
 	//-------------------------------------------------------------------------------------------------------------------
 
-	public static class Builder extends WriterSerializer.Builder {
+	public static class Builder extends WriterSerializer.Builder<Builder> {
 		Function2<WriterSerializerSession,Object,String> function = (s,o) -> s(o);
 		Function3<HttpPartType,HttpPartSchema,Object,String> partFunction = (t,s,o) -> s(o);
 		Function<WriterSerializerSession,Map<String,String>> headers = s -> Collections.emptyMap();

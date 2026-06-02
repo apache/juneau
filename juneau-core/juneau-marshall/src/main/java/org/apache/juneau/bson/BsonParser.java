@@ -133,7 +133,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider {
 			nullKeyString = copyFrom.nullKeyString;
 		}
 
-		@Override /* InputStreamParser.Builder */
+		@Override /* InputStreamParser.Builder<?> */
 		public Builder binaryFormat(BinaryFormat value) {
 			super.binaryFormat(value);
 			return this;
@@ -154,29 +154,29 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider {
 			return this;
 		}
 
-		@Override /* Parser.Builder */
+		@Override /* Parser.Builder<?> */
 		public Builder trimStrings() {
 			super.trimStrings();
 			return this;
 		}
 
-		@Override /* Parser.Builder */
+		@Override /* Parser.Builder<?> */
 		public Builder trimStrings(boolean value) {
 			super.trimStrings(value);
 			return this;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Context.Builder<?> */
 		public BsonParser build() {
 			return cache(CACHE).build(BsonParser.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Context.Builder<?> */
 		public HashKey hashKey() {
 			return HashKey.of(super.hashKey(), nullKeyString);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}

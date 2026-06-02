@@ -62,7 +62,7 @@ final class VarRefSegment extends TemplateSegment {
 	private final VarTemplate body;
 
 	/**
-	 * {@code true} if the body contained any {@code {} during outer state-machine collection —
+	 * {@code true} if the body contained any {@code {}} during outer state-machine collection —
 	 * equivalent to the legacy tokenizer's {@code hasInternalVar} flag. Drives whether
 	 * {@link #resolve(VarResolverSession, StringBuilder)} re-resolves the body via
 	 * {@link VarTemplate#resolve(VarResolverSession)} or passes the raw source verbatim. Match

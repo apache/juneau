@@ -320,7 +320,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 
 	public static class A7 extends RestClient {
 		private static String lastMessage;
-		public A7(RestClient.Builder builder) {
+		public A7(RestClient.Builder<?> builder) {
 			super(builder);
 		}
 		@Override

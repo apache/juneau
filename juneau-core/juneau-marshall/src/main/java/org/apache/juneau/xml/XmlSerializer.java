@@ -16,20 +16,15 @@
  */
 package org.apache.juneau.xml;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.lang.annotation.*;
-import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.bean.BeanMeta;
@@ -232,7 +227,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * through reflection.
 		 *
 		 * <p>
-		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
+		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()} setting and is
 		 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 		 *
 		 * @return This object.
@@ -282,12 +277,12 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public XmlSerializer build() {
 			return cache(CACHE).build(XmlSerializer.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
 		/**
@@ -408,7 +403,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(
@@ -508,7 +503,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}

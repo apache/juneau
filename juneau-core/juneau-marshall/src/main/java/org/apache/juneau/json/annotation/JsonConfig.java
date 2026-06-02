@@ -49,7 +49,7 @@ public @interface JsonConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
+	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 	 *
 	 * <ul class='values'>
@@ -63,7 +63,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#addBeanTypesJson()}
+	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder<?>#addBeanTypesJson()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -90,7 +90,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#escapeSolidus()}
+	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder<?>#escapeSolidus()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -125,7 +125,7 @@ public @interface JsonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonParser.Builder#validateEnd()}
+	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonParser.Builder<?>#validateEnd()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

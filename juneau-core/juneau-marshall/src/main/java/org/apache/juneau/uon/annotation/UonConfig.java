@@ -50,7 +50,7 @@ public @interface UonConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
+	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 	 *
 	 * <ul class='values'>
@@ -64,7 +64,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#addBeanTypesUon()}
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder<?>#addBeanTypesUon()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -89,7 +89,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#decoding()}
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder<?>#decoding()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -118,7 +118,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#encoding()}
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder<?>#encoding()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -142,7 +142,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormat(ParamFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder<?>#paramFormat(ParamFormat)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -177,7 +177,7 @@ public @interface UonConfig {
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#validateEnd()}
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder<?>#validateEnd()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

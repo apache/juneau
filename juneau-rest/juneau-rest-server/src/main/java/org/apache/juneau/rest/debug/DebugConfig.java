@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.debug;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -190,6 +189,7 @@ public class DebugConfig {
 		return resolveInternal(context.getContext().getResourceClass(), context.getJavaMethod(), req);
 	}
 
+	@SuppressWarnings("unused")
 	private DebugResult resolveInternal(Class<?> resourceClass, Method method, HttpServletRequest req) {
 		var enabled = false;
 		if (req != null) {

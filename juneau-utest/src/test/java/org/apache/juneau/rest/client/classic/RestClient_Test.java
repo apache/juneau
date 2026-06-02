@@ -78,7 +78,7 @@ class RestClient_Test extends TestBase {
 	// Override client and builder.
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class A2 extends RestClient.Builder {
+	public static class A2 extends RestClient.Builder<A2> {
 		public A2() {}
 	}
 
@@ -125,7 +125,7 @@ class RestClient_Test extends TestBase {
 
 	public static class B4 extends RestClient {
 		private static boolean createRequestCalled, createResponseCalled;
-		public B4(RestClient.Builder b) {
+		public B4(RestClient.Builder<?> b) {
 			super(b);
 		}
 		@Override
@@ -419,11 +419,11 @@ class RestClient_Test extends TestBase {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static RestClient.Builder client() {
+	private static RestClient.Builder<?> client() {
 		return MockRestClient.create(A.class).json();
 	}
 
-	private static RestClient.Builder client(Class<?> c) {
+	private static RestClient.Builder<?> client(Class<?> c) {
 		return MockRestClient.create(c).noTrace().json();
 	}
 

@@ -16,15 +16,12 @@
  */
 package org.apache.juneau.uon;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
@@ -36,7 +33,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.conversion.BasicConverter;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -315,7 +311,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	/**
 	 * Format to use for query/form-data/header values.
 	 *
-	 * @see UonSerializer.Builder#paramFormat(ParamFormat)
+	 * @see UonSerializer.Builder<?>#paramFormat(ParamFormat)
 	 * @return
 	 * 	Specifies the format to use for URL GET parameter keys and values.
 	 */
@@ -343,7 +339,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	/**
 	 * Encode non-valid URI characters.
 	 *
-	 * @see UonSerializer.Builder#encoding()
+	 * @see UonSerializer.Builder<?>#encoding()
 	 * @return
 	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
 	 */

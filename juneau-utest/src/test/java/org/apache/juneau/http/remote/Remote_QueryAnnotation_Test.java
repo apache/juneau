@@ -868,7 +868,7 @@ class Remote_QueryAnnotation_Test extends TestBase {
 		return basicPart(key,val);
 	}
 
-	private static RestClient.Builder client(Class<?> c) {
+	private static RestClient.Builder<?> client(Class<?> c) {
 		return MockRestClient.create(c);
 	}
 

@@ -94,7 +94,6 @@ import org.apache.juneau.rest.servlet.RestResource;
 import org.apache.juneau.rest.servlet.RestServlet;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.rrpc.*;
-import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.rest.openapi.*;
@@ -242,7 +241,7 @@ public class RestContext extends Context {
 		BeanStore overridingParent,
 		String[] paths,
 		boolean mixinContext,
-		RestBuilder restBuilder
+		RestBuilder<?> restBuilder
 	) {
 
 		/**
@@ -454,7 +453,7 @@ public class RestContext extends Context {
 			return this;
 		}
 
-		@Override /* Context.Builder is abstract - copy() is not meaningful for the transient RestContext bootstrap state. */
+		@Override /* Context.Builder<?> is abstract - copy() is not meaningful for the transient RestContext bootstrap state. */
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
@@ -725,7 +724,7 @@ public class RestContext extends Context {
 	 * annotation built from its set members is prepended to {@link #getRestAnnotations()} so builder-supplied
 	 * values take precedence over the resource class's own {@code @Rest} annotation values.
 	 */
-	private final RestBuilder restBuilder;
+	private final RestBuilder<?> restBuilder;
 
 	/**
 	 * The synthetic {@code @Rest} annotation built from {@link #restBuilder}'s set members, or <jk>null</jk> when
@@ -2544,7 +2543,7 @@ public class RestContext extends Context {
 	 * @param r The resource instance.
 	 * @return The stashed builder, or <jk>null</jk>.
 	 */
-	private static RestBuilder stashedRestBuilder(Object r) {
+	private static RestBuilder<?> stashedRestBuilder(Object r) {
 		if (r instanceof RestServlet x)
 			return x.getRestBuilder();
 		if (r instanceof RestResource x)
@@ -3548,7 +3547,7 @@ public class RestContext extends Context {
 	 * 	<li><b>Annotation default</b> &mdash; {@link Rest#paths()}, walked top-down across the resource-class
 	 * 		hierarchy with the most-derived non-empty value winning. Each element is
 	 * 		<a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL</a>-resolved
-	 * 		against the bootstrap {@link org.apache.juneau.svl.VarResolver VarResolver}, then comma-split (trim
+	 * 		against the bootstrap {@link org.apache.juneau.commons.svl.VarResolver VarResolver}, then comma-split (trim
 	 * 		each piece, drop empties).  A single element like {@code "$C{health.paths}"} can therefore expand
 	 * 		to multiple mount paths.
 	 * </ol>

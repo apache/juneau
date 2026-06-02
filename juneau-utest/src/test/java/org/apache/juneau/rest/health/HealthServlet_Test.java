@@ -29,6 +29,7 @@ class HealthServlet_Test extends TestBase {
 
 	@Rest
 	public static class A extends HealthServlet {
+		private static final long serialVersionUID = 1L;
 		@Override
 		protected Map<String,HealthIndicator> indicators() {
 			return Map.of(
@@ -40,6 +41,7 @@ class HealthServlet_Test extends TestBase {
 
 	@Rest
 	public static class B extends HealthServlet {
+		private static final long serialVersionUID = 1L;
 		@Override
 		protected Map<String,HealthIndicator> indicators() {
 			return Map.of(

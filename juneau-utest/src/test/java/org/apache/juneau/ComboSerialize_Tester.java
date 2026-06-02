@@ -64,7 +64,7 @@ public class ComboSerialize_Tester<T> {
 		private List<Class<?>> swaps = list();
 		private Map<String,String> expected = map();
 		private List<Tuple2<Class<?>,Consumer<?>>> applies = list();
-		private Consumer<Serializer.Builder> serializerApply = x -> {};
+		private Consumer<Serializer.Builder<?>> serializerApply = x -> {};
 
 		public Builder(int index, String label, T in) {
 			this.index = index;
@@ -88,7 +88,7 @@ public class ComboSerialize_Tester<T> {
 
 		public Builder<T> swaps(Class<?>...c) { swaps.addAll(l(c)); return this; }
 
-		public Builder<T> serializerApply(Consumer<Serializer.Builder> v) { serializerApply = v; return this; }
+		public Builder<T> serializerApply(Consumer<Serializer.Builder<?>> v) { serializerApply = v; return this; }
 
 		public Builder<T> json(String value) { expected.put("json", value); return this; }
 		public Builder<T> jsonT(String value) { expected.put("jsonT", value); return this; }
@@ -202,7 +202,7 @@ public class ComboSerialize_Tester<T> {
 		serializers.put("markdown", create(b, MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType()));
 	}
 
-	private Serializer create(Builder<?> tb, Serializer.Builder sb) {
+	private Serializer create(Builder<?> tb, Serializer.Builder<?> sb) {
 		tb.serializerApply.accept(sb);
 		sb.swaps(tb.swaps);
 		tb.applies.forEach(x -> {

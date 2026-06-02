@@ -20,7 +20,7 @@ package org.apache.juneau.rest.client;
  * Lifecycle interceptor for REST calls made by {@link RestClient}.
  *
  * <p>
- * Registered on the client builder via {@link RestClient.Builder#interceptors(RestCallInterceptor...)}.
+ * Registered on the client builder via {@link RestClient.Builder<?>#interceptors(RestCallInterceptor...)}.
  * All callbacks have default no-op implementations so implementations only need to override the hooks they care about.
  *
  * <h5 class='section'>Example:</h5>

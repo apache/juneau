@@ -66,7 +66,9 @@ class AuthFilterChain_GuardIntegration_Test extends TestBase {
 	// Shared fixtures.
 	// -----------------------------------------------------------------------------------------
 
+	@SuppressWarnings("unused")
 	private static final Principal ALICE = () -> "alice";
+	@SuppressWarnings("unused")
 	private static final Principal BOB = () -> "bob";
 
 	/** TokenValidator: "bearer-user" → ClaimsPrincipal(alice, roles=[user]) */

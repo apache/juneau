@@ -16,11 +16,9 @@
  */
 package org.apache.juneau.msgpack;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.lang.annotation.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -28,8 +26,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -145,7 +141,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 * through reflection.
 		 *
 		 * <p>
-		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
+		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()} setting and is
 		 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 		 *
 		 * @return This object.
@@ -165,17 +161,17 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public MsgPackSerializer build() {
 			return cache(CACHE).build(MsgPackSerializer.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			return HashKey.of(super.hashKey(), addBeanTypesMsgPack);
 		}

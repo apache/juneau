@@ -24,7 +24,7 @@ import java.util.*;
  * Supported wire formats for {@link UUID} values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder#uuidFormat(UuidFormat)},
+ * Used by {@link MarshallingContext.Builder<?>#uuidFormat(UuidFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#uuidFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#uuidFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#uuidFormat()} to control how {@link UUID} values
@@ -40,7 +40,7 @@ import java.util.*;
  * 	<li>{@link org.apache.juneau.annotation.Marshalled#uuidFormat() @Marshalled(uuidFormat=…)} on the bean class.
  * 	<li>{@link org.apache.juneau.annotation.MarshalledConfig#uuidFormat() @MarshalledConfig(uuidFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
- * 	<li>Programmatic {@link MarshallingContext.Builder#uuidFormat(UuidFormat)}.
+ * 	<li>Programmatic {@link MarshallingContext.Builder<?>#uuidFormat(UuidFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.uuidFormat</c>.
  * 	<li>The default constant ({@link #STANDARD}).
  * </ol>

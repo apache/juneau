@@ -30,7 +30,7 @@ import org.apache.juneau.swaps.*;
  * Supported wire formats for {@link Calendar} values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder#calendarFormat(CalendarFormat)},
+ * Used by {@link MarshallingContext.Builder<?>#calendarFormat(CalendarFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#calendarFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#calendarFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#calendarFormat()} to control how

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.csv;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -24,11 +23,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.util.*;
-import java.util.function.*;
-
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import java.time.*;
@@ -38,10 +33,8 @@ import java.util.Date;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 

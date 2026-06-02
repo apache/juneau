@@ -24,7 +24,7 @@ import org.apache.juneau.commons.settings.*;
  * process-wide {@link Settings} singleton.
  *
  * <p>
- * Discovered by {@link Settings.Builder#useServiceLoader() ServiceLoader-based wiring} through a
+ * Discovered by {@link org.apache.juneau.commons.settings.Settings.Builder#useServiceLoader() ServiceLoader-based wiring} through a
  * {@code META-INF/services/org.apache.juneau.commons.settings.PropertySourceProvider} entry
  * shipped in this module.
  *
@@ -145,7 +145,7 @@ public class ConfigPropertySourceProvider implements PropertySourceProvider {
 						RESOLVING.set(Boolean.TRUE);
 						try {
 							cfg = Config.getSystemDefault();
-						} catch (Throwable t) {
+						} catch (@SuppressWarnings("unused") Throwable t) {
 							// Defense-in-depth: a Config-side init failure the <clinit> sniff
 							// missed. Return missing() without memoizing so the next lookup can
 							// retry once Config init has completed.

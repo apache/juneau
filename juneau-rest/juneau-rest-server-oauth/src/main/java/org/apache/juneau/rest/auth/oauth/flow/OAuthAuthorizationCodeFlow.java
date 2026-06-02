@@ -237,6 +237,7 @@ public class OAuthAuthorizationCodeFlow {
 	 * @param codeChallenge The PKCE code challenge.  Must not be <jk>null</jk>.  Always uses S256.
 	 * @return The authorization URL.
 	 */
+	@SuppressWarnings("deprecation")  // Nimbus CodeChallenge overload is deprecated; no simpler alternative yet.
 	public URI buildAuthorizationUrl(String state, CodeChallenge codeChallenge) {
 		assertArgNotNullOrBlank("state", state);
 		assertArgNotNull("codeChallenge", codeChallenge);
@@ -263,7 +264,7 @@ public class OAuthAuthorizationCodeFlow {
 	 *
 	 * <p>
 	 * The configured {@code scope(...)} set is used as-is; OIDC requires it to contain {@code openid}.
-	 * The optional {@code customizer} receives the underlying {@link AuthenticationRequest.Builder} so
+	 * The optional {@code customizer} receives the underlying {@link com.nimbusds.openid.connect.sdk.AuthenticationRequest.Builder} so
 	 * callers can set OIDC-specific parameters (e.g. {@code prompt}, {@code max_age}, {@code acr_values})
 	 * without this module needing to surface each one.
 	 *
@@ -271,10 +272,11 @@ public class OAuthAuthorizationCodeFlow {
 	 * 	blank.
 	 * @param codeChallenge The PKCE code challenge.  Must not be <jk>null</jk>.  Always uses S256.
 	 * @param nonce The OIDC {@code nonce} value.  Must not be <jk>null</jk> or blank.
-	 * @param customizer Optional hook on the {@link AuthenticationRequest.Builder} for OIDC-specific
+	 * @param customizer Optional hook on the {@link com.nimbusds.openid.connect.sdk.AuthenticationRequest.Builder} for OIDC-specific
 	 * 	parameters.  May be <jk>null</jk>.
 	 * @return The authorization URL.
 	 */
+	@SuppressWarnings("deprecation")  // Nimbus CodeChallenge overload is deprecated; no simpler alternative yet.
 	public URI buildAuthenticationUrl(String state, CodeChallenge codeChallenge, String nonce, Consumer<AuthenticationRequest.Builder> customizer) {
 		assertArgNotNullOrBlank("state", state);
 		assertArgNotNull("codeChallenge", codeChallenge);

@@ -16,14 +16,11 @@
  */
 package org.apache.juneau.json;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
@@ -31,9 +28,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -279,7 +274,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Prefix solidus <js>'/'</js> characters with escapes.
 	 *
-	 * @see JsonSerializer.Builder#escapeSolidus()
+	 * @see JsonSerializer.Builder<?>#escapeSolidus()
 	 * @return
 	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
 	 */

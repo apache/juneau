@@ -190,17 +190,17 @@ public class MarkdownDocSerializer extends MarkdownSerializer {
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			return HashKey.of(super.hashKey(), title, headingLevel, addHorizontalRules, headerContent, footerContent);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public MarkdownDocSerializer build() {
 			return cache(CACHE).build(MarkdownDocSerializer.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}

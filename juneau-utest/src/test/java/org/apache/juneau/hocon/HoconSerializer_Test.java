@@ -18,7 +18,6 @@ package org.apache.juneau.hocon;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.commons.lang.*;

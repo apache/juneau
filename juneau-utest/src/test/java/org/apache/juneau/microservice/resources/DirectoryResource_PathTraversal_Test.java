@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.microservice.resources.DirectoryResource.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -101,6 +100,7 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 		allowedMethodParams="*"
 	)
 	public static class TestDirResource extends DirectoryResource {
+		private static final long serialVersionUID = 1L;
 
 		public TestDirResource() {
 			super(buildConfig());

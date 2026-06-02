@@ -27,7 +27,6 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.time.*;
 import java.util.*;
-import java.util.function.*;
 import java.util.logging.*;
 
 import org.apache.juneau.annotation.*;
@@ -112,11 +111,11 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * Specifies the default locale for serializer and parser sessions.
 		 *
 		 * <p>
-		 * If not specified, defaults to {@link MarshallingContext.Builder#locale(Locale)}.
+		 * If not specified, defaults to {@link MarshallingContext.Builder<?>#locale(Locale)}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#locale()}
-		 * 	<li class='jm'>{@link MarshallingContext.Builder#locale(Locale)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder<?>#locale(Locale)}
 		 * </ul>
 		 *
 		 * @param value
@@ -136,11 +135,11 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * Specifies the default media type value for serializer and parser sessions.
 		 *
 		 * <p>
-		 * If not specified, defaults to {@link MarshallingContext.Builder#mediaType(MediaType)}.
+		 * If not specified, defaults to {@link MarshallingContext.Builder<?>#mediaType(MediaType)}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#mediaType()}
-		 * 	<li class='jm'>{@link MarshallingContext.Builder#mediaType(MediaType)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder<?>#mediaType(MediaType)}
 		 * </ul>
 		 *
 		 * @param value
@@ -193,11 +192,11 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * Specifies the default timezone for serializer and parser sessions.
 		 *
 		 * <p>
-		 * If not specified, defaults to {@link MarshallingContext.Builder#timeZone(TimeZone)}.
+		 * If not specified, defaults to {@link MarshallingContext.Builder<?>#timeZone(TimeZone)}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#timeZone()}
-		 * 	<li class='jm'>{@link MarshallingContext.Builder#timeZone(TimeZone)}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder<?>#timeZone(TimeZone)}
 		 * </ul>
 		 *
 		 * @param value
@@ -507,7 +506,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Minimum bean class visibility.
 	 *
-	 * @see MarshallingContext.Builder#beanClassVisibility(Visibility)
+	 * @see MarshallingContext.Builder<?>#beanClassVisibility(Visibility)
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
@@ -516,7 +515,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Minimum bean constructor visibility.
 	 *
-	 * @see MarshallingContext.Builder#beanConstructorVisibility(Visibility)
+	 * @see MarshallingContext.Builder<?>#beanConstructorVisibility(Visibility)
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
@@ -525,7 +524,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Bean dictionary.
 	 *
-	 * @see MarshallingContext.Builder#beanDictionary(ClassInfo...)
+	 * @see MarshallingContext.Builder<?>#beanDictionary(ClassInfo...)
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 * 	<br>Never <jk>null</jk>.
@@ -537,7 +536,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * Minimum bean field visibility.
 	 *
 	 *
-	 * @see MarshallingContext.Builder#beanFieldVisibility(Visibility)
+	 * @see MarshallingContext.Builder<?>#beanFieldVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
@@ -561,14 +560,14 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Minimum bean method visibility.
 	 *
-	 * @see MarshallingContext.Builder#beanMethodVisibility(Visibility)
+	 * @see MarshallingContext.Builder<?>#beanMethodVisibility(Visibility)
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */
 	public final Visibility getBeanMethodVisibility() { return ctx.getBeanMethodVisibility(); }
 
 	/**
-	 * Returns the bean registry defined in this bean context defined by {@link MarshallingContext.Builder#beanDictionary(ClassInfo...)}.
+	 * Returns the bean registry defined in this bean context defined by {@link MarshallingContext.Builder<?>#beanDictionary(ClassInfo...)}.
 	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
@@ -577,14 +576,14 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Bean type property name.
 	 *
-	 * @see MarshallingContext.Builder#typePropertyName(String)
+	 * @see MarshallingContext.Builder<?>#typePropertyName(String)
 	 * @return
 	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
 	public final String getBeanTypePropertyName() { return ctx.getBeanTypePropertyName(); }
 
 	/**
-	 * Returns the type property name as defined by {@link MarshallingContext.Builder#typePropertyName(String)}.
+	 * Returns the type property name as defined by {@link MarshallingContext.Builder<?>#typePropertyName(String)}.
 	 *
 	 * @param cm
 	 * 	The class meta of the type we're trying to resolve the type name for.
@@ -676,11 +675,11 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * The locale is determined in the following order:
 	 * <ol>
 	 * 	<li><c>locale</c> parameter passed in through constructor.
-	 * 	<li>{@link MarshallingContext.Builder#locale(Locale)} setting on bean context.
+	 * 	<li>{@link MarshallingContext.Builder<?>#locale(Locale)} setting on bean context.
 	 * 	<li>Locale returned by {@link Locale#getDefault()}.
 	 * </ol>
 	 *
-	 * @see MarshallingContext.Builder#locale(Locale)
+	 * @see MarshallingContext.Builder<?>#locale(Locale)
 	 * @return The session locale.
 	 */
 	public Locale getLocale() { return locale; }
@@ -691,7 +690,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * <p>
 	 * For example, <js>"application/json"</js>.
 	 *
-	 * @see MarshallingContext.Builder#mediaType(MediaType)
+	 * @see MarshallingContext.Builder<?>#mediaType(MediaType)
 	 * @return The media type for this session, or <jk>null</jk> if not specified.
 	 */
 	public final MediaType getMediaType() { return mediaType; }
@@ -699,7 +698,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Bean class exclusions.
 	 *
-	 * @see MarshallingContext.Builder#notBeanClasses(ClassInfo...)
+	 * @see MarshallingContext.Builder<?>#notBeanClasses(ClassInfo...)
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
 	 * 	<br>Never <jk>null</jk>.
@@ -710,7 +709,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Bean package exclusions.
 	 *
-	 * @see MarshallingContext.Builder#notBeanPackages(String...)
+	 * @see MarshallingContext.Builder<?>#notBeanPackages(String...)
 	 * @return
 	 * 	The set of fully-qualified package names to exclude from being classified as beans.
 	 * 	<br>Never <jk>null</jk>.
@@ -721,7 +720,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Bean property namer.
 	 *
-	 * @see MarshallingContext.Builder#propertyNamer(Class)
+	 * @see MarshallingContext.Builder<?>#propertyNamer(Class)
 	 * @return
 	 * 	The interface used to calculate bean property names.
 	 */
@@ -731,7 +730,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * Session classloader.
 	 *
 	 * <p>
-	 * Returns the classloader explicitly configured via {@link MarshallingContext.Builder#classLoader(ClassLoader)},
+	 * Returns the classloader explicitly configured via {@link MarshallingContext.Builder<?>#classLoader(ClassLoader)},
 	 * or <jk>null</jk> if none was set (callers should fall back to the thread-context classloader).
 	 *
 	 * @return The session classloader, or <jk>null</jk> if not set.
@@ -741,7 +740,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Java object swaps.
 	 *
-	 * @see MarshallingContext.Builder#swaps(Class...)
+	 * @see MarshallingContext.Builder<?>#swaps(Class...)
 	 * @return
 	 * 	The list POJO swaps defined.
 	 * 	<br>Never <jk>null</jk>.
@@ -756,10 +755,10 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * The timezone is determined in the following order:
 	 * <ol>
 	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link MarshallingContext.Builder#timeZone(TimeZone)} setting on bean context.
+	 * 	<li>{@link MarshallingContext.Builder<?>#timeZone(TimeZone)} setting on bean context.
 	 * </ol>
 	 *
-	 * @see MarshallingContext.Builder#timeZone(TimeZone)
+	 * @see MarshallingContext.Builder<?>#timeZone(TimeZone)
 	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
 	 */
 	public final TimeZone getTimeZone() { return timeZone; }
@@ -771,10 +770,10 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * The timezone is determined in the following order:
 	 * <ol>
 	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link MarshallingContext.Builder#timeZone(TimeZone)} setting on bean context.
+	 * 	<li>{@link MarshallingContext.Builder<?>#timeZone(TimeZone)} setting on bean context.
 	 * </ol>
 	 *
-	 * @see MarshallingContext.Builder#timeZone(TimeZone)
+	 * @see MarshallingContext.Builder<?>#timeZone(TimeZone)
 	 * @return The session timezone, or the system timezone if not specified.  Never <jk>null</jk>.
 	 */
 	public final ZoneId getTimeZoneId() { return timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId(); }
@@ -804,7 +803,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * BeanMap.put() returns old property value.
 	 *
-	 * @see MarshallingContext.Builder#beanMapPutReturnsOldValue()
+	 * @see MarshallingContext.Builder<?>#beanMapPutReturnsOldValue()
 	 * @return
 	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
 	 * 	<br>Otherwise, it returns <jk>null</jk>.
@@ -814,7 +813,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Beans require no-arg constructors.
 	 *
-	 * @see MarshallingContext.Builder#beansRequireDefaultConstructor()
+	 * @see MarshallingContext.Builder<?>#beansRequireDefaultConstructor()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -824,7 +823,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Beans require Serializable interface.
 	 *
-	 * @see MarshallingContext.Builder#beansRequireSerializable()
+	 * @see MarshallingContext.Builder<?>#beansRequireSerializable()
 	 * @return
 	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
@@ -834,7 +833,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Beans require setters for getters.
 	 *
-	 * @see MarshallingContext.Builder#beansRequireSettersForGetters()
+	 * @see MarshallingContext.Builder<?>#beansRequireSettersForGetters()
 	 * @return
 	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
 	 * 	<br>Otherwise, they are ignored.
@@ -844,7 +843,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Beans require at least one property.
 	 *
-	 * @see MarshallingContext.Builder#disableBeansRequireSomeProperties()
+	 * @see MarshallingContext.Builder<?>#disableBeansRequireSomeProperties()
 	 * @return
 	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
@@ -857,7 +856,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 *
-	 * @see MarshallingContext.Builder#findFluentSetters()
+	 * @see MarshallingContext.Builder<?>#findFluentSetters()
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
@@ -866,7 +865,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Ignore invocation errors on getters.
 	 *
-	 * @see MarshallingContext.Builder#ignoreInvocationExceptionsOnGetters()
+	 * @see MarshallingContext.Builder<?>#ignoreInvocationExceptionsOnGetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
 	 */
@@ -875,7 +874,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Ignore invocation errors on setters.
 	 *
-	 * @see MarshallingContext.Builder#ignoreInvocationExceptionsOnSetters()
+	 * @see MarshallingContext.Builder<?>#ignoreInvocationExceptionsOnSetters()
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
 	 */
@@ -884,7 +883,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Silently ignore missing setters.
 	 *
-	 * @see MarshallingContext.Builder#disableIgnoreMissingSetters()
+	 * @see MarshallingContext.Builder<?>#disableIgnoreMissingSetters()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
@@ -893,7 +892,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Ignore unknown properties.
 	 *
-	 * @see MarshallingContext.Builder#ignoreUnknownBeanProperties()
+	 * @see MarshallingContext.Builder<?>#ignoreUnknownBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
@@ -903,7 +902,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Schema validation mode.
 	 *
-	 * @see MarshallingContext.Builder#validateSchema()
+	 * @see MarshallingContext.Builder<?>#validateSchema()
 	 * @return
 	 * 	<jk>true</jk> if bean property values should be validated against their {@code @Schema}-declared constraints
 	 * 	during parsing and serialization.
@@ -914,7 +913,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Ignore unknown properties with null values.
 	 *
-	 * @see MarshallingContext.Builder#disableIgnoreUnknownNullBeanProperties()
+	 * @see MarshallingContext.Builder<?>#disableIgnoreUnknownNullBeanProperties()
 	 * @return
 	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should not throw a {@link BeanRuntimeException}.
 	 */
@@ -923,7 +922,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Unsorted properties.
 	 *
-	 * @see MarshallingContext.Builder#unsortedProperties()
+	 * @see MarshallingContext.Builder<?>#unsortedProperties()
 	 * @return
 	 * 	<jk>true</jk> if bean properties are serialized in natural JVM-dependent order instead of alphabetically.
 	 */
@@ -932,7 +931,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Use interface proxies.
 	 *
-	 * @see MarshallingContext.Builder#disableInterfaceProxies()
+	 * @see MarshallingContext.Builder<?>#disableInterfaceProxies()
 	 * @return
 	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
@@ -942,7 +941,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Use Java Introspector.
 	 *
-	 * @see MarshallingContext.Builder#useJavaBeanIntrospector()
+	 * @see MarshallingContext.Builder<?>#useJavaBeanIntrospector()
 	 * @return
 	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
 	 */

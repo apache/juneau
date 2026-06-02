@@ -268,7 +268,7 @@ public class ParserSet {
 		 */
 		public boolean canApply(AnnotationWorkList work) {
 		for (var o : entries)
-			if (o instanceof Parser.Builder o2 && o2.canApply(work))
+			if (o instanceof Parser.Builder<?> o2 && o2.canApply(work))
 				return true;
 			return false;
 		}
@@ -300,7 +300,7 @@ public class ParserSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		public <B extends Parser.Builder> Builder forEach(Class<B> type, Consumer<B> action) {
+		public <B extends Parser.Builder<?>> Builder forEach(Class<B> type, Consumer<B> action) {
 			builders(type).forEach(action);
 			return this;
 		}
@@ -311,8 +311,9 @@ public class ParserSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		public Builder forEach(Consumer<Parser.Builder> action) {
-			builders(Parser.Builder.class).forEach(action);
+		@SuppressWarnings({"rawtypes","unchecked"})
+		public Builder forEach(Consumer<Parser.Builder<?>> action) {
+			builders(Parser.Builder.class).forEach((Consumer)action);
 			return this;
 		}
 
@@ -322,8 +323,9 @@ public class ParserSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		public Builder forEachISP(Consumer<InputStreamParser.Builder> action) {
-			return forEach(InputStreamParser.Builder.class, action);
+		@SuppressWarnings({"rawtypes","unchecked"})
+		public Builder forEachISP(Consumer<InputStreamParser.Builder<?>> action) {
+			return forEach((Class)InputStreamParser.Builder.class, (Consumer)action);
 		}
 
 		/**
@@ -332,8 +334,9 @@ public class ParserSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		public Builder forEachRP(Consumer<ReaderParser.Builder> action) {
-			return forEach(ReaderParser.Builder.class, action);
+		@SuppressWarnings({"rawtypes","unchecked"})
+		public Builder forEachRP(Consumer<ReaderParser.Builder<?>> action) {
+			return forEach((Class)ReaderParser.Builder.class, (Consumer)action);
 		}
 
 		/**
@@ -348,14 +351,14 @@ public class ParserSet {
 		}
 
 		/**
-		 * Returns direct access to the {@link Parser} and {@link Parser.Builder} objects in this builder.
+		 * Returns direct access to the {@link Parser} and {@link Parser.Builder<?>} objects in this builder.
 		 *
 		 * <p>
 		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
 		 * as re-ordering/adding/removing entries.
 		 *
 		 * <p>
-		 * Note that it is up to the user to ensure that the list only contains {@link Parser} and {@link Parser.Builder} objects.
+		 * Note that it is up to the user to ensure that the list only contains {@link Parser} and {@link Parser.Builder<?>} objects.
 		 *
 		 * @return The inner list of entries in this builder.
 		 */
@@ -408,13 +411,13 @@ public class ParserSet {
 		}
 
 
-		private <T extends Parser.Builder> Stream<T> builders(Class<T> type) {
+		private <T extends Parser.Builder<?>> Stream<T> builders(Class<T> type) {
 			return entries.stream().filter(type::isInstance).map(type::cast);
 		}
 
 		private Object copyBuilder(Object o) {
-			if (o instanceof Parser.Builder x) {
-				Parser.Builder x2 = x.copy();
+			if (o instanceof Parser.Builder<?> x) {
+				Parser.Builder<?> x2 = x.copy();
 				if (neq(x.getClass(), x2.getClass()))
 					throw rex("Copy method not implemented on class {0}", cn(x));
 				x = x2;
@@ -437,7 +440,7 @@ public class ParserSet {
 				@SuppressWarnings({
 					"unchecked" // Type erasure requires unchecked casts
 				})
-				Parser.Builder b = Parser.createParserBuilder((Class<? extends Parser>)o);
+				Parser.Builder<?> b = Parser.createParserBuilder((Class<? extends Parser>)o);
 				if (nn(bcBuilder))
 					b.marshallingContext(bcBuilder);
 				o = b;
@@ -448,7 +451,7 @@ public class ParserSet {
 		private String toString(Object o) {
 			if (o == null)
 				return "null";
-			if (o instanceof Parser.Builder)
+			if (o instanceof Parser.Builder<?>)
 				return "builder:" + cn(o);
 			return "parser:" + cn(o);
 		}
@@ -471,7 +474,7 @@ public class ParserSet {
 	 * Used by {@link ParserSet.Builder#set(Class...)}
 	 */
 	public abstract static class Inherit extends Parser {
-		protected Inherit(Parser.Builder builder) {
+		protected Inherit(Parser.Builder<?> builder) {
 			super(builder);
 		}
 	}
@@ -482,7 +485,7 @@ public class ParserSet {
 	 * Used by {@link ParserSet.Builder#add(Class...)}
 	 */
 	public abstract static class NoInherit extends Parser {
-		protected NoInherit(Parser.Builder builder) {
+		protected NoInherit(Parser.Builder<?> builder) {
 			super(builder);
 		}
 	}
@@ -629,6 +632,6 @@ public class ParserSet {
 	private Parser build(Object o) {
 		if (o instanceof Parser o2)
 			return o2;
-		return ((Parser.Builder)o).build();
+		return ((Parser.Builder<?>)o).build();
 	}
 }

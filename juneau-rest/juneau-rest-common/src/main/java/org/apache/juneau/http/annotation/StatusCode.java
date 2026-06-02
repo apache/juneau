@@ -21,8 +21,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.commons.lang.*;
-
 /**
  * REST response status annotation.
  *
@@ -51,7 +49,7 @@ import org.apache.juneau.commons.lang.*;
  * </p>
  *
  * <p>
- * The parameter type must be {@link Value} with a parameterized type of {@link Integer}.
+ * The parameter type must be {@link org.apache.juneau.commons.inject.Value} with a parameterized type of {@link Integer}.
  *
  * <h5 class='topic'>Public methods of <ja>@Response</ja>-annotated types</h5>
  *

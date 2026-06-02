@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
 
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
 import jakarta.servlet.http.*;

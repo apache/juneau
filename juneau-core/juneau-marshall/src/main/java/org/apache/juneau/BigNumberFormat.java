@@ -24,7 +24,7 @@ import java.math.*;
  * Supported wire formats for {@link BigInteger} and {@link BigDecimal} values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder#bigNumberFormat(BigNumberFormat)},
+ * Used by {@link MarshallingContext.Builder<?>#bigNumberFormat(BigNumberFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#bigNumberFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#bigNumberFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#bigNumberFormat()} to control how
@@ -48,7 +48,7 @@ import java.math.*;
  * 	<li>{@link org.apache.juneau.annotation.Marshalled#bigNumberFormat() @Marshalled(bigNumberFormat=…)} on the bean class.
  * 	<li>{@link org.apache.juneau.annotation.MarshalledConfig#bigNumberFormat() @MarshalledConfig(bigNumberFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
- * 	<li>Programmatic {@link MarshallingContext.Builder#bigNumberFormat(BigNumberFormat)}.
+ * 	<li>Programmatic {@link MarshallingContext.Builder<?>#bigNumberFormat(BigNumberFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.bigNumberFormat</c>.
  * 	<li>The default constant ({@link #NUMBER}).
  * </ol>

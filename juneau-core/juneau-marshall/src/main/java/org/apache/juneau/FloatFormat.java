@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * ({@link Double#NaN NaN}, {@link Double#POSITIVE_INFINITY +Infinity}, {@link Double#NEGATIVE_INFINITY -Infinity}).
  *
  * <p>
- * Used by {@link MarshallingContext.Builder#floatFormat(FloatFormat)},
+ * Used by {@link MarshallingContext.Builder<?>#floatFormat(FloatFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#floatFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#floatFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#floatFormat()} to control how non-finite
@@ -40,7 +40,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<li>{@link org.apache.juneau.annotation.Marshalled#floatFormat() @Marshalled(floatFormat=…)} on the bean class.
  * 	<li>{@link org.apache.juneau.annotation.MarshalledConfig#floatFormat() @MarshalledConfig(floatFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
- * 	<li>Programmatic {@link MarshallingContext.Builder#floatFormat(FloatFormat)}.
+ * 	<li>Programmatic {@link MarshallingContext.Builder<?>#floatFormat(FloatFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.floatFormat</c>.
  * 	<li>The default constant ({@link #NaN_AS_NULL}).
  * </ol>

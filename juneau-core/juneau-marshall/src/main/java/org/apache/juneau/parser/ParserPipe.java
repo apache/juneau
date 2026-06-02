@@ -194,7 +194,7 @@ public class ParserPipe implements Closeable {
 	 * Returns the input to this parser as a plain string.
 	 *
 	 * <p>
-	 * This method only returns a value if {@link org.apache.juneau.Context.Builder#debug()} is enabled.
+	 * This method only returns a value if {@link org.apache.juneau.Context.Builder<?>#debug()} is enabled.
 	 *
 	 * @return The input as a string, or <jk>null</jk> if debug mode not enabled.
 	 */

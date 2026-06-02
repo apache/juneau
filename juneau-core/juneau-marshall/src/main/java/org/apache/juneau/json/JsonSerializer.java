@@ -16,21 +16,16 @@
  */
 package org.apache.juneau.json;
 
-import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.swap.ObjectSwap;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.lang.annotation.*;
-import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json5.Json5Serializer;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
@@ -75,7 +70,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * The types above are considered "JSON-primitive" object types.
  * Any non-JSON-primitive object types are transformed into JSON-primitive object types through
  * {@link ObjectSwap ObjectSwaps} associated through the
- * {@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...)} method.
+ * {@link org.apache.juneau.MarshallingContext.Builder<?>#swaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
  *
  * <p>
@@ -192,7 +187,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * through reflection.
 		 *
 		 * <p>
-		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
+		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()} setting and is
 		 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 		 *
 		 * @return This object.
@@ -212,12 +207,12 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public JsonSerializer build() {
 			return cache(CACHE).build(JsonSerializer.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
 		/**
@@ -261,7 +256,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(
@@ -290,7 +285,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}

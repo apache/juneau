@@ -16,17 +16,10 @@
  */
 package org.apache.juneau.serializer;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.function.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.svl.*;
 
 /**
  * Subclass of {@link SerializerSession} for stream-based serializers.
@@ -153,7 +146,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	/**
 	 * Binary output format.
 	 *
-	 * @see MarshallingContext.Builder#binaryFormat(BinaryFormat)
+	 * @see MarshallingContext.Builder<?>#binaryFormat(BinaryFormat)
 	 * @return
 	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
 	 */

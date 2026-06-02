@@ -29,7 +29,7 @@
  *
  * <ul>
  * 	<li>{@code juneau-rest-server-micrometer} ships {@code MicrometerMetricsRecorder} backed by an
- * 		{@link io.micrometer.core.instrument.MeterRegistry MeterRegistry}.
+ * 		{@code io.micrometer.core.instrument.MeterRegistry}.
  * 	<li>Custom backends (Dropwizard {@code MetricRegistry}, application-specific stat counters, etc.)
  * 		can implement {@link org.apache.juneau.rest.metrics.MetricsRecorder} directly &mdash; the SPI
  * 		intentionally has no Micrometer / OpenTelemetry dependency on the core surface.

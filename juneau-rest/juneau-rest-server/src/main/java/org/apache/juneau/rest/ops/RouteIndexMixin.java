@@ -68,7 +68,7 @@ import org.apache.juneau.rest.beans.*;
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
- * pinned at the op level by {@link RestGet @RestGet(path="/${juneau.routeindex.path:options}")}
+ * pinned at the op level by {@link RestGet @RestGet(path="/&#123;juneau.routeindex.path:options&#125;")}
  * on {@link #getRoutes}; a class-level {@code @Rest(paths=...)} declaration would be silently
  * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc). Note also
  * that the route-index walks the host's {@link RestContext} via {@link #resolveHostContext}

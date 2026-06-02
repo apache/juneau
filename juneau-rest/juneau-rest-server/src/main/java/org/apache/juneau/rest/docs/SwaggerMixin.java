@@ -57,7 +57,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
- * pinned at the op level by {@link RestGet @RestGet(path="/${juneau.swagger.path:api}/*")} on
+ * pinned at the op level by {@link RestGet @RestGet(path="/&#123;juneau.swagger.path:api&#125;/*")} on
  * {@link #getSwagger}; a class-level {@code @Rest(paths=...)} declaration would be silently
  * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *

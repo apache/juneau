@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import java.lang.annotation.*;
-
 import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.rest.debug.*;
 

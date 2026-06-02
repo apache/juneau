@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.parser;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -29,8 +28,6 @@ import java.time.temporal.*;
 import java.util.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.function.*;
-
 import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
@@ -296,7 +293,7 @@ public class ParserSession extends MarshallingSession {
 	 *
 	 * <p>
 	 * This always returns a value for input of type {@link CharSequence}.
-	 * <br>For other input types, use {@link org.apache.juneau.Context.Builder#debug()} setting to enable caching to a string
+	 * <br>For other input types, use {@link org.apache.juneau.Context.Builder<?>#debug()} setting to enable caching to a string
 	 * before parsing so that this method returns the input.
 	 *
 	 * @return The input as a string, or <jk>null</jk> if no pipe has been created or we're reading from an uncached reader or input stream source.
@@ -479,11 +476,11 @@ public class ParserSession extends MarshallingSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder<?>#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder<?>#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#fileCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder<?>#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -589,11 +586,11 @@ public class ParserSession extends MarshallingSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder<?>#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder<?>#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#fileCharset(Charset)} property value).
+	 * 			{@link ReaderParser.Builder<?>#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -947,11 +944,11 @@ public class ParserSession extends MarshallingSession {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder<?>#streamCharset(Charset)}).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder<?>#streamCharset(Charset)}).
 	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser.Builder#fileCharset(Charset)}).
+	 * 			{@link ReaderParser.Builder<?>#fileCharset(Charset)}).
 	 * 	</ul>
 	 * 	<br>For byte-based parsers, this can be any of the following types:
 	 * 	<ul>
@@ -959,7 +956,7 @@ public class ParserSession extends MarshallingSession {
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser.Builder<?>#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
@@ -1071,7 +1068,7 @@ public class ParserSession extends MarshallingSession {
 	/**
 	 * Debug output lines.
 	 *
-	 * @see Parser.Builder#debugOutputLines(int)
+	 * @see Parser.Builder<?>#debugOutputLines(int)
 	 * @return
 	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
 	 */
@@ -1091,7 +1088,7 @@ public class ParserSession extends MarshallingSession {
 	/**
 	 * Parser listener.
 	 *
-	 * @see Parser.Builder#listener(Class)
+	 * @see Parser.Builder<?>#listener(Class)
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */
@@ -1124,7 +1121,7 @@ public class ParserSession extends MarshallingSession {
 	/**
 	 * Auto-close streams.
 	 *
-	 * @see Parser.Builder#autoCloseStreams()
+	 * @see Parser.Builder<?>#autoCloseStreams()
 	 * @return
 	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * 	after parsing is complete.
@@ -1134,7 +1131,7 @@ public class ParserSession extends MarshallingSession {
 	/**
 	 * Trim parsed strings.
 	 *
-	 * @see Parser.Builder#trimStrings()
+	 * @see Parser.Builder<?>#trimStrings()
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * 	the POJO.
@@ -1144,7 +1141,7 @@ public class ParserSession extends MarshallingSession {
 	/**
 	 * Unbuffered.
 	 *
-	 * @see Parser.Builder#unbuffered()
+	 * @see Parser.Builder<?>#unbuffered()
 	 * @return
 	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
 	 */
@@ -1298,7 +1295,7 @@ public class ParserSession extends MarshallingSession {
 	 * @param beanMap The bean that doesn't have the expected property.
 	 * @param value The parsed value.
 	 * @throws ParseException
-	 * 	Automatically thrown if {@link org.apache.juneau.MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
+	 * 	Automatically thrown if {@link org.apache.juneau.MarshallingContext.Builder<?>#ignoreUnknownBeanProperties()} setting on this parser is
 	 * 	<jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */

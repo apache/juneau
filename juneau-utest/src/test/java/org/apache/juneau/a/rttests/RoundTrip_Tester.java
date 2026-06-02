@@ -46,11 +46,11 @@ public class RoundTrip_Tester {
 		private String label;
 		public Builder label(String value) { label = value; return this; }
 
-		private Serializer.Builder s;
-		public Builder serializer(Serializer.Builder value) { s = value; return this; }
+		private Serializer.Builder<?> s;
+		public Builder serializer(Serializer.Builder<?> value) { s = value; return this; }
 
-		private Parser.Builder p;
-		public Builder parser(Parser.Builder value) { p = value; return this; }
+		private Parser.Builder<?> p;
+		public Builder parser(Parser.Builder<?> value) { p = value; return this; }
 
 		private boolean validateXmlWhitespace;
 		public Builder validateXmlWhitespace() { validateXmlWhitespace = true; return this; }

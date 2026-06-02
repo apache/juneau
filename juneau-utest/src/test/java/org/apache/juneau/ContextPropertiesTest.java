@@ -32,7 +32,7 @@ class ContextPropertiesTest extends TestBase {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_equalsWithAnnotations() {
-		HtmlSerializer.Builder
+		HtmlSerializer.Builder<?>
 			s1 = HtmlSerializer.create(),
 			s2 = HtmlSerializer.create().applyAnnotations(B1Config.class),
 			s3 = HtmlSerializer.create().applyAnnotations(B1Config.class),

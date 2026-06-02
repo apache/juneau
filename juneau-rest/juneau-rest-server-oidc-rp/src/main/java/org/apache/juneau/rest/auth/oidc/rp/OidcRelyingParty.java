@@ -371,7 +371,7 @@ public class OidcRelyingParty {
 		}
 
 		/**
-		 * Sets a Nimbus {@link AuthenticationRequest.Builder} customizer escape hatch (e.g. {@code prompt},
+		 * Sets a Nimbus {@link com.nimbusds.openid.connect.sdk.AuthenticationRequest.Builder} customizer escape hatch (e.g. {@code prompt},
 		 * {@code max_age}, {@code acr_values}) applied to the authorization redirect.
 		 *
 		 * @param value The callback.  Must not be <jk>null</jk>.
@@ -786,7 +786,7 @@ public class OidcRelyingParty {
 	}
 
 	/**
-	 * Returns a request-time {@link AuthFilter} that resolves this RP's session cookie into a
+	 * Returns a request-time {@link org.apache.juneau.rest.auth.AuthFilter} that resolves this RP's session cookie into a
 	 * {@link ClaimsPrincipal}.
 	 *
 	 * @return A new {@link OidcSessionAuthFilter} bound to this RP's session store + cookie name.
@@ -904,6 +904,7 @@ public class OidcRelyingParty {
 		}
 	}
 
+	@SuppressWarnings("deprecation")  // LogoutTokenValidator(Issuer, ClientID, JWSKeySelector, JWEKeySelector) is deprecated; no alternative in current Nimbus version.
 	private LogoutTokenValidator logoutTokenValidator() {
 		var v = logoutTokenValidatorCache;
 		if (v != null)

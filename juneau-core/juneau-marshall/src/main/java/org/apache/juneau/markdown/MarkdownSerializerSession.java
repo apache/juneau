@@ -16,23 +16,17 @@
  */
 package org.apache.juneau.markdown;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
-import java.util.function.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.commons.bean.BeanMap;
 import org.apache.juneau.commons.bean.BeanMapEntry;

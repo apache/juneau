@@ -18,7 +18,6 @@ package org.apache.juneau.rest.ops;
 
 import java.io.*;
 
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

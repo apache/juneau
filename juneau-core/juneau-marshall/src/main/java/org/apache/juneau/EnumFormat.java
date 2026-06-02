@@ -24,7 +24,7 @@ import java.util.*;
  * Supported wire formats for {@link Enum} values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder#enumFormat(EnumFormat)},
+ * Used by {@link MarshallingContext.Builder<?>#enumFormat(EnumFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#enumFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#enumFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#enumFormat()} to control how

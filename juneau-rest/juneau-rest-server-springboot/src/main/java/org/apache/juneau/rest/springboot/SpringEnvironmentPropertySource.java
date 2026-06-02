@@ -28,7 +28,7 @@ import org.springframework.core.env.*;
  * singleton as a {@link org.apache.juneau.commons.settings.PropertySource PropertySource}.
  *
  * <p>
- * Allows {@link org.apache.juneau.commons.inject.Value @Value("${spring.property.key}")} resolution
+ * Allows {@link org.apache.juneau.commons.inject.Value @Value("&#123;spring.property.key&#125;")} resolution
  * against the same property sources that Spring Boot would resolve through
  * {@code @org.springframework.beans.factory.annotation.Value}: {@code application.yaml},
  * {@code application.properties}, command-line args, environment variables, and any custom

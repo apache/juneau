@@ -78,7 +78,7 @@ import org.thymeleaf.templatemode.*;
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
  * pinned at the op level by
- * {@link RestGet @RestGet(path="/${juneau.thymeleaf.path:thymeleaf}/*")} on {@link #render};
+ * {@link RestGet @RestGet(path="/&#123;juneau.thymeleaf.path:thymeleaf&#125;/*")} on {@link #render};
  * a class-level {@code @Rest(paths=...)} declaration would be silently ignored under the mixin
  * pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
@@ -99,7 +99,7 @@ import org.thymeleaf.templatemode.*;
  * 		control of resolvers, dialects, and template modes.
  * 	<li><b>Bridge default:</b> when nothing is registered, the bridge constructs a default
  * 		{@link org.thymeleaf.TemplateEngine TemplateEngine} with a single
- * 		{@link ClassLoaderTemplateResolver} configured with {@code prefix=basePath},
+ * 		{@link org.thymeleaf.templateresolver.ClassLoaderTemplateResolver} configured with {@code prefix=basePath},
  * 		{@code suffix=".html"}, {@code templateMode=HTML}, and {@code cacheable=cacheTemplates}
  * 		(default {@code true} &mdash; production-safe; set {@code cacheTemplates(false)} on the
  * 		builder for hot-reload during development).

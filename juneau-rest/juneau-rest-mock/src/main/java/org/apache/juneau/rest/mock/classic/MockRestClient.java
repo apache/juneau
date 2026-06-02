@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.mock.classic;
 
-import org.apache.juneau.commons.http.MediaType;
 import static java.util.Collections.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -24,53 +23,27 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.io.*;
-import java.lang.annotation.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.*;
-import java.util.logging.*;
 import java.util.zip.*;
 
-import javax.net.ssl.*;
-
 import org.apache.http.*;
-import org.apache.http.auth.*;
-import org.apache.http.client.*;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.config.*;
-import org.apache.http.client.entity.*;
 import org.apache.http.client.methods.*;
-import org.apache.http.config.*;
 import org.apache.http.conn.*;
-import org.apache.http.conn.routing.*;
-import org.apache.http.conn.socket.*;
-import org.apache.http.conn.util.*;
-import org.apache.http.cookie.*;
 import org.apache.http.entity.*;
-import org.apache.http.impl.client.*;
 import org.apache.http.message.*;
-import org.apache.http.protocol.*;
 import org.apache.juneau.*;
-import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.inject.BeanStoreOverridable;
-import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.client.classic.RestRequest;
-import org.apache.juneau.rest.client.classic.RestResponse;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.uon.*;
 import jakarta.servlet.http.*;
 
 /**
@@ -278,7 +251,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			connectionManager(new MockHttpClientConnectionManager());
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public MockRestClient build() {
 			return super.build(MockRestClient.class);
 		}
@@ -309,12 +282,12 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder debug() {
 			header("Debug", "true");
 			super.debug();
@@ -604,7 +577,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	/**
-	 * Creates a new {@link org.apache.juneau.rest.client.classic.RestClient.Builder} configured with the specified REST implementation bean or bean class.
+	 * Creates a new {@link org.apache.juneau.rest.client.classic.RestClient.Builder<?>} configured with the specified REST implementation bean or bean class.
 	 *
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
@@ -616,7 +589,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	/**
-	 * Creates a new {@link org.apache.juneau.rest.client.classic.RestClient.Builder} configured with the specified REST implementation bean or bean class.
+	 * Creates a new {@link org.apache.juneau.rest.client.classic.RestClient.Builder<?>} configured with the specified REST implementation bean or bean class.
 	 *
 	 * <p>
 	 * Same as {@link #create(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.

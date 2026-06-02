@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.xml;
 
-import org.apache.juneau.commons.http.MediaType;
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -26,17 +25,13 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.util.*;
-import java.util.function.*;
-
 import javax.xml.stream.*;
 import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.commons.bean.BeanMap;
@@ -638,7 +633,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * XML event allocator.
 	 *
-	 * @see XmlParser.Builder#eventAllocator(Class)
+	 * @see XmlParser.Builder<?>#eventAllocator(Class)
 	 * @return
 	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -647,7 +642,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * XML reporter.
 	 *
-	 * @see XmlParser.Builder#reporter(Class)
+	 * @see XmlParser.Builder<?>#reporter(Class)
 	 * @return
 	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -656,7 +651,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * XML resolver.
 	 *
-	 * @see XmlParser.Builder#resolver(Class)
+	 * @see XmlParser.Builder<?>#resolver(Class)
 	 * @return
 	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -707,7 +702,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Preserve root element during generalized parsing.
 	 *
-	 * @see XmlParser.Builder#preserveRootElement()
+	 * @see XmlParser.Builder<?>#preserveRootElement()
 	 * @return
 	 * 	<jk>true</jk> if when parsing into a generic {@link JsonMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
@@ -717,7 +712,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Enable validation.
 	 *
-	 * @see XmlParser.Builder#validating()
+	 * @see XmlParser.Builder<?>#validating()
 	 * @return
 	 * 	<jk>true</jk> if XML document will be validated.
 	 */

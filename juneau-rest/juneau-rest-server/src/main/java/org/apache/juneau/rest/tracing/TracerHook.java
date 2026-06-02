@@ -25,7 +25,7 @@ import org.apache.juneau.rest.*;
  * {@link #startSpan(RestRequest)} fires immediately before every {@code @RestOp} handler runs &mdash;
  * the returned {@link Scope} is closed by the framework after the handler completes (including the
  * exception path). Bridge implementations create whatever the downstream tracer expects (an
- * OpenTelemetry {@link io.opentelemetry.api.trace.Span Span}, a Brave {@code Span}, an application
+ * OpenTelemetry {@code io.opentelemetry.api.trace.Span}, a Brave {@code Span}, an application
  * tracing object, etc.) and surface the close / status / error transitions through the {@code Scope}.
  *
  * <h5 class='topic'>Off-by-default contract</h5>

@@ -48,11 +48,11 @@ public abstract class RestResource {
 	/**
 	 * The programmatic configuration builder stashed on this instance (TODO-143 &sect;2.4), or <jk>null</jk> when the
 	 * resource was constructed without a builder.  Mutable so it can be written by either the
-	 * {@link #RestResource(RestBuilder)} constructor or {@link Builder#build()}.  Read non-reflectively by
+	 * {@link #RestResource(RestBuilder<?>)} constructor or {@link Builder#build()}.  Read non-reflectively by
 	 * {@link RestContext} during construction so builder-supplied values take precedence over {@code @Rest}
 	 * annotation values.
 	 */
-	RestBuilder restBuilder;
+	RestBuilder<?> restBuilder;
 
 	/**
 	 * Default constructor.
@@ -64,7 +64,7 @@ public abstract class RestResource {
 	 *
 	 * @param builder The programmatic configuration builder.  May be <jk>null</jk>.
 	 */
-	protected RestResource(RestBuilder builder) {
+	protected RestResource(RestBuilder<?> builder) {
 		this.restBuilder = builder;
 	}
 
@@ -73,7 +73,7 @@ public abstract class RestResource {
 	 *
 	 * @return The stashed builder, or <jk>null</jk>.
 	 */
-	public RestBuilder getRestBuilder() {
+	public RestBuilder<?> getRestBuilder() {
 		return restBuilder;
 	}
 

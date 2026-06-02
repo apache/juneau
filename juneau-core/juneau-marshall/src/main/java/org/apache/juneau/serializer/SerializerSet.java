@@ -265,7 +265,7 @@ public class SerializerSet {
 		 */
 		public boolean canApply(AnnotationWorkList work) {
 		for (var o : entries)
-			if (o instanceof Serializer.Builder o2 && o2.canApply(work))
+			if (o instanceof Serializer.Builder<?> o2 && o2.canApply(work))
 				return true;
 			return false;
 		}
@@ -297,7 +297,7 @@ public class SerializerSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		public <T extends Serializer.Builder> Builder forEach(Class<T> type, Consumer<T> action) {
+		public <T extends Serializer.Builder<?>> Builder forEach(Class<T> type, Consumer<T> action) {
 			builders(type).forEach(action);
 			return this;
 		}
@@ -308,8 +308,9 @@ public class SerializerSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		public Builder forEach(Consumer<Serializer.Builder> action) {
-			builders(Serializer.Builder.class).forEach(action);
+		@SuppressWarnings({"rawtypes","unchecked"})
+		public Builder forEach(Consumer<Serializer.Builder<?>> action) {
+			builders(Serializer.Builder.class).forEach((Consumer)action);
 			return this;
 		}
 
@@ -319,8 +320,9 @@ public class SerializerSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		public Builder forEachOSS(Consumer<OutputStreamSerializer.Builder> action) {
-			return forEach(OutputStreamSerializer.Builder.class, action);
+		@SuppressWarnings({"rawtypes","unchecked"})
+		public Builder forEachOSS(Consumer<OutputStreamSerializer.Builder<?>> action) {
+			return forEach((Class)OutputStreamSerializer.Builder.class, (Consumer)action);
 		}
 
 		/**
@@ -329,8 +331,9 @@ public class SerializerSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		public Builder forEachWS(Consumer<WriterSerializer.Builder> action) {
-			return forEach(WriterSerializer.Builder.class, action);
+		@SuppressWarnings({"rawtypes","unchecked"})
+		public Builder forEachWS(Consumer<WriterSerializer.Builder<?>> action) {
+			return forEach((Class)WriterSerializer.Builder.class, (Consumer)action);
 		}
 
 		/**
@@ -345,14 +348,14 @@ public class SerializerSet {
 		}
 
 		/**
-		 * Returns direct access to the {@link Serializer} and {@link Serializer.Builder} objects in this builder.
+		 * Returns direct access to the {@link Serializer} and {@link Serializer.Builder<?>} objects in this builder.
 		 *
 		 * <p>
 		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
 		 * as re-ordering/adding/removing entries.
 		 *
 		 * <p>
-		 * Note that it is up to the user to ensure that the list only contains {@link Serializer} and {@link Serializer.Builder} objects.
+		 * Note that it is up to the user to ensure that the list only contains {@link Serializer} and {@link Serializer.Builder<?>} objects.
 		 *
 		 * @return The inner list of entries in this builder.
 		 */
@@ -405,13 +408,13 @@ public class SerializerSet {
 		}
 
 
-		private <T extends Serializer.Builder> Stream<T> builders(Class<T> type) {
+		private <T extends Serializer.Builder<?>> Stream<T> builders(Class<T> type) {
 			return entries.stream().filter(type::isInstance).map(type::cast);
 		}
 
 		private Object copyBuilder(Object o) {
-			if (o instanceof Serializer.Builder x) {
-				Serializer.Builder x2 = x.copy();
+			if (o instanceof Serializer.Builder<?> x) {
+				Serializer.Builder<?> x2 = x.copy();
 				if (neq(x.getClass(), x2.getClass()))
 					throw rex("Copy method not implemented on class {0}", cn(x));
 				x = x2;
@@ -434,7 +437,7 @@ public class SerializerSet {
 				@SuppressWarnings({
 					"unchecked" // Type erasure requires unchecked casts
 				})
-				Serializer.Builder b = Serializer.createSerializerBuilder((Class<? extends Serializer>)o);
+				Serializer.Builder<?> b = Serializer.createSerializerBuilder((Class<? extends Serializer>)o);
 				if (nn(bcBuilder))
 					b.marshallingContext(bcBuilder);
 				o = b;
@@ -445,7 +448,7 @@ public class SerializerSet {
 		private String toString(Object o) {
 			if (o == null)
 				return "null";
-			if (o instanceof Serializer.Builder)
+			if (o instanceof Serializer.Builder<?>)
 				return "builder:" + cn(o);
 			return "serializer:" + cn(o);
 		}
@@ -468,7 +471,7 @@ public class SerializerSet {
 	 * Used by {@link SerializerSet.Builder#set(Class...)}
 	 */
 	public abstract static class Inherit extends Serializer {
-		protected Inherit(Serializer.Builder builder) {
+		protected Inherit(Serializer.Builder<?> builder) {
 			super(builder);
 		}
 	}
@@ -479,7 +482,7 @@ public class SerializerSet {
 	 * Used by {@link SerializerSet.Builder#add(Class...)}
 	 */
 	public abstract static class NoInherit extends Serializer {
-		protected NoInherit(Serializer.Builder builder) {
+		protected NoInherit(Serializer.Builder<?> builder) {
 			super(builder);
 		}
 	}
@@ -692,6 +695,6 @@ public class SerializerSet {
 	private Serializer build(Object o) {
 		if (o instanceof Serializer o2)
 			return o2;
-		return ((Serializer.Builder)o).build();
+		return ((Serializer.Builder<?>)o).build();
 	}
 }

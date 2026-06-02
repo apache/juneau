@@ -16,18 +16,10 @@
  */
 package org.apache.juneau.html;
 
-import org.apache.juneau.commons.http.MediaType;
 import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
-import java.util.*;
-import java.util.function.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
 
 /**
  * Context object that lives for the duration of a single serialization of {@link HtmlSchemaDocSerializer} and its subclasses.

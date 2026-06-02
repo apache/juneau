@@ -44,6 +44,7 @@ public class HealthAggregator {
 	 * @param context The REST context whose bean store supplies the indicators.
 	 * @return The indicator beans keyed by bean name.
 	 */
+	@SuppressWarnings("resource")  // BeanStore is not owned here; its lifecycle is managed by RestContext.
 	public Map<String,HealthIndicator> indicators(RestContext context) {
 		return context.getBeanStore().getBeansOfType(HealthIndicator.class);
 	}
@@ -57,6 +58,7 @@ public class HealthAggregator {
 	 * @param res The response whose status code is set (200 healthy, 503 down).
 	 * @return The aggregated health payload.
 	 */
+	@SuppressWarnings("resource")  // BeanStore is not owned here; its lifecycle is managed by RestContext.
 	public HealthResponse aggregate(RestContext context, Map<String,HealthIndicator> indicators, HealthProbe probe, RestResponse res) {
 		var out = new LinkedHashMap<String,ComponentHealth>();
 		var timeout = context.getBeanStore().getBean(HealthProbeSettings.class).map(HealthProbeSettings::getTimeout).orElse(Duration.ofSeconds(1));

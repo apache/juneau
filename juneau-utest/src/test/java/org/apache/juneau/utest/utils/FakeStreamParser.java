@@ -42,7 +42,7 @@ public class FakeStreamParser extends InputStreamParser {
 	// Builder
 	//-------------------------------------------------------------------------------------------------------------------
 
-	public static class Builder extends InputStreamParser.Builder {
+	public static class Builder extends InputStreamParser.Builder<Builder> {
 		Function3<InputStreamParserSession,byte[],ClassMeta<?>,Object> function;
 
 		public Builder function(Function3<InputStreamParserSession,byte[],ClassMeta<?>,Object> value) {

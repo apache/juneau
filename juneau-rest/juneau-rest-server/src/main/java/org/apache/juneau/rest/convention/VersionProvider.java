@@ -33,7 +33,7 @@ import org.apache.juneau.rest.*;
  * <p>
  * Holds the capability state (the assembled {@code name}/{@code version}/{@code git*}/{@code buildTime}/
  * {@code javaVersion} entry map) and the serve logic (write the map as readable JSON, format-pinned to
- * {@code application/json} so the endpoint serves JSON even on a vanilla {@link RestServlet} host that
+ * {@code application/json} so the endpoint serves JSON even on a vanilla {@link org.apache.juneau.rest.servlet.RestServlet} host that
  * hasn't wired up JSON serializers). The {@link VersionMixin} (mixin), {@link VersionResource} (child),
  * and {@link VersionServlet} (servlet) flavors are independent {@code @Rest} classes that each hold a
  * {@code VersionProvider} worker and delegate to it &mdash; so the three deployment forms cannot drift, and no
@@ -108,7 +108,7 @@ public class VersionProvider {
 	 *
 	 * <p>
 	 * Format-pinned to {@code application/json} &mdash; bypasses the host's content negotiation so
-	 * the endpoint serves JSON even on a vanilla {@link RestServlet} host that hasn't wired up JSON
+	 * the endpoint serves JSON even on a vanilla {@link org.apache.juneau.rest.servlet.RestServlet} host that hasn't wired up JSON
 	 * serializers explicitly.
 	 *
 	 * @param res The current REST response.

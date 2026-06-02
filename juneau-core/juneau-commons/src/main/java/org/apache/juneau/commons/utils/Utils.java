@@ -2234,7 +2234,7 @@ public class Utils {
 	}
 
 	/**
-	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.
+	 * If the specified object is a {@link Supplier} or {@link org.apache.juneau.commons.inject.Value}, returns the inner value, otherwise the same value.
 	 *
 	 * @param o The object to unwrap.
 	 * @return The unwrapped object.

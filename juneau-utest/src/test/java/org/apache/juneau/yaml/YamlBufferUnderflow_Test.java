@@ -18,7 +18,6 @@ package org.apache.juneau.yaml;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;

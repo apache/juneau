@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.*;
  * {@code org.apache.juneau.rest.docs} api-docs mixin pack.
  *
  * <p>
- * Declares {@link Rest#mixins() @Rest(mixins={SwaggerMixin.class})} so transitive resolution
+ * Declares {@link Rest#mixins() @Rest(mixins=&#123;SwaggerMixin.class&#125;)} so transitive resolution
  * pulls in {@code SwaggerMixin} (and its {@code /api} mount) automatically when this mixin
  * is composed into a host. The two endpoints share the same Swagger document; they differ only in
  * URL surface and content-negotiation defaults.
@@ -59,7 +59,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
- * pinned at the op level by {@link RestGet @RestGet(path="/${juneau.swaggerui.path:swagger}/*")}
+ * pinned at the op level by {@link RestGet @RestGet(path="/&#123;juneau.swaggerui.path:swagger&#125;/*")}
  * on {@link #getSwaggerUi}; a class-level {@code @Rest(paths=...)} declaration would be silently
  * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *

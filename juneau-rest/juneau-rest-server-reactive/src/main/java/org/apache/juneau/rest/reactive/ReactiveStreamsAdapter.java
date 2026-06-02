@@ -41,7 +41,7 @@ import java.util.concurrent.*;
  * {@code META-INF/services/org.apache.juneau.rest.reactive.ReactiveStreamsAdapter} file listing the
  * implementation class names. The {@link ReactiveResponseProcessor} loads the providers once (lazily,
  * at first use) and skips any provider whose backing library is absent from the runtime classpath
- * (a {@link NoClassDefFoundError} / {@link ServiceConfigurationError} on instantiation is swallowed).
+ * (a {@link NoClassDefFoundError} / {@link java.util.ServiceConfigurationError} on instantiation is swallowed).
  * This means a single {@code juneau-rest-server-reactor} jar can declare Reactor, RxJava, and
  * Reactive-Streams adapters while the consumer pulls only the {@code provided}-scope libraries they
  * actually want.

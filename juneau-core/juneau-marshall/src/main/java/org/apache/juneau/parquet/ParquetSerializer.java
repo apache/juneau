@@ -216,7 +216,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 			return this;
 		}
 
-		@Override /* OutputStreamSerializer.Builder */
+		@Override /* OutputStreamSerializer.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}

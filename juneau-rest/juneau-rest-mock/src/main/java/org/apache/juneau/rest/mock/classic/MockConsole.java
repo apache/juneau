@@ -28,7 +28,7 @@ import org.apache.juneau.assertions.*;
  * constraints if you heavily use this class.
  *
  * <p>
- * Typically used in conjunction with the {@link org.apache.juneau.rest.client.classic.RestClient.Builder#console(PrintStream)} to capture console output for
+ * Typically used in conjunction with the {@link org.apache.juneau.rest.client.classic.RestClient.Builder<?>#console(PrintStream)} to capture console output for
  * testing purposes.
  *
  * <h5 class='figure'>Example:</h5>

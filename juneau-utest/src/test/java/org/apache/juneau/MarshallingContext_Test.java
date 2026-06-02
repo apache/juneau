@@ -78,7 +78,7 @@ class BeanContext_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// MarshallingContext.Builder locale, mediaType, and timeZone from Settings
+	// MarshallingContext.Builder<?> locale, mediaType, and timeZone from Settings
 	//====================================================================================================
 
 	@Test void c01_locale_fromSettings() {

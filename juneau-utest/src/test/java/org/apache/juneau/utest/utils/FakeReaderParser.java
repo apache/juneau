@@ -44,7 +44,7 @@ public class FakeReaderParser extends ReaderParser implements HttpPartParser {
 	// Builder
 	//-------------------------------------------------------------------------------------------------------------------
 
-	public static class Builder extends ReaderParser.Builder {
+	public static class Builder extends ReaderParser.Builder<Builder> {
 		Function3<ReaderParserSession,String,ClassMeta<?>,Object> function;
 		Function4<HttpPartType,HttpPartSchema,String,ClassMeta<?>,Object> partFunction;
 

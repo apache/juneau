@@ -16,19 +16,10 @@
  */
 package org.apache.juneau.html;
 
-import org.apache.juneau.commons.http.MediaType;
-import java.lang.annotation.*;
-import java.nio.charset.*;
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.xml.*;
 
 /**
  * Serializes POJO metamodels to HTML.
@@ -207,12 +198,12 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HtmlSchemaDocSerializer build() {
 			return build(HtmlSchemaDocSerializer.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}

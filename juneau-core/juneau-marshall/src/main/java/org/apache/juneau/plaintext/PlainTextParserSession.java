@@ -16,18 +16,11 @@
  */
 package org.apache.juneau.plaintext;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 
 import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
-import java.util.*;
-import java.util.function.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 
 /**

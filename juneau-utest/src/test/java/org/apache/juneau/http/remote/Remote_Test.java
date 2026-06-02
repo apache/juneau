@@ -694,7 +694,7 @@ class Remote_Test extends TestBase {
 	// Helper methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static RestClient.Builder client(Class<?> c) {
+	private static RestClient.Builder<?> client(Class<?> c) {
 		return MockRestClient.create(c).noTrace().json5();
 	}
 

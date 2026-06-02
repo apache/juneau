@@ -450,7 +450,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
  * @see
- * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
+ * 	RestClient.Builder<?>#executorService(ExecutorService, boolean) for defining the executor service for creating
  * 	Future instances.
 	 */
 	public <T> Future<T> asFuture(Class<T> type) throws RestCallException {
@@ -476,7 +476,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
  * @see
- * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
+ * 	RestClient.Builder<?>#executorService(ExecutorService, boolean) for defining the executor service for creating
  * 	Future instances.
 	 */
 	public <T> Future<T> asFuture(ClassMeta<T> type) throws RestCallException {
@@ -508,7 +508,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
  * @see
- * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
+ * 	RestClient.Builder<?>#executorService(ExecutorService, boolean) for defining the executor service for creating
  * 	Future instances.
 	 */
 	public <T> Future<T> asFuture(Type type, Type...args) throws RestCallException {
@@ -964,7 +964,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
  * @see
- * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
+ * 	RestClient.Builder<?>#executorService(ExecutorService, boolean) for defining the executor service for creating
  * 	Future instances.
 	 */
 	public Future<String> asStringFuture() throws RestCallException {
@@ -1104,7 +1104,7 @@ public class ResponseContent implements HttpEntity {
 	 * Specifies the parser to use for this body.
 	 *
 	 * <p>
-	 * If not specified, uses the parser defined on the client set via {@link RestClient.Builder#parser(Class)}.
+	 * If not specified, uses the parser defined on the client set via {@link RestClient.Builder<?>#parser(Class)}.
 	 *
 	 * @param value
 	 * 	The new part parser to use for this body.

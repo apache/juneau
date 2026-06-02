@@ -16,17 +16,12 @@
  */
 package org.apache.juneau.oapi;
 
-import org.apache.juneau.commons.http.MediaType;
-import java.lang.annotation.*;
-import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
@@ -89,7 +84,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 			collectionFormat = copyFrom.collectionFormat;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public OpenApiSerializer build() {
 			return cache(CACHE).build(OpenApiSerializer.class);
 		}
@@ -150,7 +145,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}
@@ -209,7 +204,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(

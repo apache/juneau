@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.util.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
 
 /**
  * A POJO structure that describes the list of child resources associated with a resource.

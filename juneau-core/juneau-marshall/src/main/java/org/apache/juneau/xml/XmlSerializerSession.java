@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.xml;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
@@ -27,7 +26,6 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
@@ -36,9 +34,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -723,7 +719,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Default namespace.
 	 *
-	 * @see XmlSerializer.Builder#defaultNamespace(Namespace)
+	 * @see XmlSerializer.Builder<?>#defaultNamespace(Namespace)
 	 * @return
 	 * 	The default namespace URI for this document.
 	 */
@@ -732,7 +728,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Default namespaces.
 	 *
-	 * @see XmlSerializer.Builder#namespaces(Namespace...)
+	 * @see XmlSerializer.Builder<?>#namespaces(Namespace...)
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
 	 * 	<br>Never <jk>null</jk>.
@@ -746,7 +742,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Add JSON type tags.
 	 *
-	 * @see XmlSerializer.Builder#disableJsonTags()
+	 * @see XmlSerializer.Builder<?>#disableJsonTags()
 	 * @return
 	 * 	<jk>true</jk> if plain strings will be wrapped in <js>&lt;string&gt;</js> tags when serialized as root elements.
 	 */
@@ -755,7 +751,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Add namespace URLs to the root element.
 	 *
-	 * @see XmlSerializer.Builder#addNamespaceUrisToRoot()
+	 * @see XmlSerializer.Builder<?>#addNamespaceUrisToRoot()
 	 * @return
 	 * 	<jk>true</jk> if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.
 	 */
@@ -764,7 +760,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Auto-detect namespace usage.
 	 *
-	 * @see XmlSerializer.Builder#disableAutoDetectNamespaces()
+	 * @see XmlSerializer.Builder<?>#disableAutoDetectNamespaces()
 	 * @return
 	 * 	<jk>true</jk> if namespace usage is detected before serialization.
 	 */
@@ -773,7 +769,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Enable support for XML namespaces.
 	 *
-	 * @see XmlSerializer.Builder#enableNamespaces()
+	 * @see XmlSerializer.Builder<?>#enableNamespaces()
 	 * @return
 	 * 	<jk>false</jk> if XML output will not contain any namespaces regardless of any other settings.
 	 */

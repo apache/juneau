@@ -24,7 +24,7 @@ import java.util.*;
  * Supported wire formats for {@link Currency} values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder#currencyFormat(CurrencyFormat)},
+ * Used by {@link MarshallingContext.Builder<?>#currencyFormat(CurrencyFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#currencyFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#currencyFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#currencyFormat()} to control how {@link Currency}
@@ -55,7 +55,7 @@ import java.util.*;
  * 	<li>{@link org.apache.juneau.annotation.Marshalled#currencyFormat() @Marshalled(currencyFormat=…)} on the bean class.
  * 	<li>{@link org.apache.juneau.annotation.MarshalledConfig#currencyFormat() @MarshalledConfig(currencyFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
- * 	<li>Programmatic {@link MarshallingContext.Builder#currencyFormat(CurrencyFormat)}.
+ * 	<li>Programmatic {@link MarshallingContext.Builder<?>#currencyFormat(CurrencyFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.currencyFormat</c>.
  * 	<li>The default constant ({@link #ISO_CODE}).
  * </ol>

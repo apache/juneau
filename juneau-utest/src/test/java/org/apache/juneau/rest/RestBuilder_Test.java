@@ -25,8 +25,8 @@ import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-143 acceptance tests for the fluent {@link RestBuilder} / {@link AbstractRestBuilder} configuration surface:
- * builder-set values override {@code @Rest} annotation values; the constructor trio (no-arg, {@code Foo(RestBuilder)},
+ * TODO-143 acceptance tests for the fluent {@link RestBuilder<?>} / {@link AbstractRestBuilder} configuration surface:
+ * builder-set values override {@code @Rest} annotation values; the constructor trio (no-arg, {@code Foo(RestBuilder<?>)},
  * {@code Foo.Builder}); subclass builders chaining with true covariant returns (Option B); and OQ-11
  * mirror-and-forward per-flavor builders (FaviconMixin) gaining the full REST surface via {@link RestMixin.Builder}.
  */
@@ -43,7 +43,7 @@ class RestBuilder_Test extends TestBase {
 	public static class B extends RestResource {
 		final boolean viaBuilderCtor;
 		public B() { this.viaBuilderCtor = false; }
-		public B(RestBuilder builder) { super(builder); this.viaBuilderCtor = true; }
+		public B(RestBuilder<?> builder) { super(builder); this.viaBuilderCtor = true; }
 	}
 
 	private static RestContext ctx(RestResource r) throws Exception {
@@ -85,7 +85,7 @@ class RestBuilder_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructor trio (no-arg, Foo(RestBuilder), Foo.Builder).
+	// Constructor trio (no-arg, Foo(RestBuilder<?>), Foo.Builder).
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
@@ -96,7 +96,7 @@ class RestBuilder_Test extends TestBase {
 
 	@Test
 	void b02_builderConstructorInjection() {
-		// B declares B(RestBuilder); createResource() must prefer it over the no-arg constructor.
+		// B declares B(RestBuilder<?>); createResource() must prefer it over the no-arg constructor.
 		var builder = RestResource.builder(B.class).path("x");
 		var r = builder.build();
 		assertTrue(r.viaBuilderCtor);

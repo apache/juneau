@@ -139,7 +139,7 @@ final class JwtTestSupport {
 	 * Build a parseable {@code alg: none} JWT (unsigned). Nimbus' {@code PlainJWT} forbids
 	 * setting a signed-style header, so we hand-assemble the three Base64URL segments.
 	 */
-	static String unsignedToken(JWTClaimsSet claims) throws ParseException {
+	static String unsignedToken(JWTClaimsSet claims) {
 		var header = new com.nimbusds.jose.PlainHeader.Builder().build();
 		var jwt = new com.nimbusds.jwt.PlainJWT(header, claims);
 		return jwt.serialize();

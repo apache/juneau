@@ -22,7 +22,7 @@ import java.util.*;
  * Supported wire formats for {@link Locale} values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder#localeFormat(LocaleFormat)},
+ * Used by {@link MarshallingContext.Builder<?>#localeFormat(LocaleFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#localeFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#localeFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#localeFormat()} to control how {@link Locale}
@@ -87,6 +87,7 @@ public enum LocaleFormat {
 		};
 	}
 
+	@SuppressWarnings("deprecation")  // Locale(String, String, String) is deprecated in Java 19; Locale.of() requires Java 19+.
 	private static Locale parseUnderscore(String s) {
 		var parts = s.split("_", -1);
 		return switch (parts.length) {

@@ -38,7 +38,7 @@ import org.apache.juneau.commons.svl.*;
  * <ul>
  * 	<li class='ja'>{@link Rest#debug()}
  * 	<li class='ja'>{@link RestOp#debug()}
- * 	<li class='ja'>{@link Rest#debugOn()}
+ * 	<li class='ja'>{@link Rest#debug()}
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>

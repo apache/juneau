@@ -49,7 +49,7 @@ public class ContextBeanCreator<T> {
 
 	private Class<T> type;
 	private T impl;
-	private Context.Builder builder;
+	private Context.Builder<?> builder;
 
 	/**
 	 * Constructor.
@@ -90,7 +90,7 @@ public class ContextBeanCreator<T> {
 	 * @param c The builder class type.
 	 * @return An optional containing the builder if it exists.
 	 */
-	public <B extends Context.Builder> Optional<B> builder(Class<B> c) {
+	public <B extends Context.Builder<?>> Optional<B> builder(Class<B> c) {
 		return opt(c.isInstance(builder) ? c.cast(builder) : null);
 	}
 
@@ -106,7 +106,7 @@ public class ContextBeanCreator<T> {
 	 * @param operation The operation to apply.
 	 * @return This object.
 	 */
-	public <B extends Context.Builder> ContextBeanCreator<T> builder(Class<B> c, Consumer<B> operation) {
+	public <B extends Context.Builder<?>> ContextBeanCreator<T> builder(Class<B> c, Consumer<B> operation) {
 		if (c.isInstance(builder))
 			operation.accept(c.cast(builder));
 		return this;

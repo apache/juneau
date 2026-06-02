@@ -203,7 +203,7 @@ class LazyChildren_Test extends TestBase {
 		// Use Builder.lazyChildInit(true) to force lazy on a resource that has no annotation.
 		// The Builder is package-private, so this test is in the org.apache.juneau.rest package.
 		var d = new D_EagerParent();
-		var client = MockRestClient.createLax(d).build();
+		MockRestClient.createLax(d).build();
 		var rc = d.getContext();
 
 		// Default is eager; verify annotation-free behavior.

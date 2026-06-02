@@ -20,8 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
-import java.util.function.*;
-
 import org.apache.juneau.TestBase;
 import org.junit.jupiter.api.*;
 import org.slf4j.*;
@@ -155,7 +153,7 @@ class MdcAsyncListener_Test extends TestBase {
 	void cleanup_02_preExistingCompletionThreadMdcIsPreserved() {
 		// Simulate a completion thread that already has its own MDC entries.
 		MDC.put("ownKey", "ownValue");
-		var completionThreadSnap = MdcAsyncListener.snapshot();  // Save for comparison.
+		MdcAsyncListener.snapshot();  // Save for comparison.
 
 		// Request-thread snapshot (a different set of keys).
 		var requestSnap = Map.of("requestId", "req-789");

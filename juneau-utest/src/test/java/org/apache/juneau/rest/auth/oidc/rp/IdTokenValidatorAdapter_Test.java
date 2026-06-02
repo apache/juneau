@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.time.*;
-import java.util.*;
-
 import org.apache.juneau.TestBase;
 import org.apache.juneau.rest.auth.AuthenticationException;
 import org.junit.jupiter.api.*;

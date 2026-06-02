@@ -58,7 +58,7 @@ public class BeanAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@code MarshallingContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@code MarshallingContext.Builder<?>#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderM {

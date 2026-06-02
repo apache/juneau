@@ -143,6 +143,7 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
+	@SuppressWarnings("unchecked")
 	SELF serializers(Class<? extends Serializer>... value);
 
 	/**
@@ -159,6 +160,7 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
+	@SuppressWarnings("unchecked")
 	SELF encoders(Class<? extends Encoder>... value);
 
 	/**
@@ -199,6 +201,7 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
+	@SuppressWarnings("unchecked")
 	SELF responseProcessors(Class<? extends ResponseProcessor>... value);
 
 	/**
@@ -323,6 +326,7 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
+	@SuppressWarnings("unchecked")
 	SELF restOpArgs(Class<? extends RestOpArg>... value);
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -335,6 +339,7 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
+	@SuppressWarnings("unchecked")
 	SELF guards(Class<? extends RestGuard>... value);
 
 	/**
@@ -359,6 +364,7 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
+	@SuppressWarnings("unchecked")
 	SELF converters(Class<? extends RestConverter>... value);
 
 	//-----------------------------------------------------------------------------------------------------------------

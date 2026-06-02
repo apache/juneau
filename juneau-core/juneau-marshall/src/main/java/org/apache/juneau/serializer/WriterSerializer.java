@@ -16,21 +16,14 @@
  */
 package org.apache.juneau.serializer;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.lang.annotation.*;
 import java.nio.charset.*;
-import java.util.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.logging.Logger;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json5.Json5Serializer;
 
 /**
@@ -115,12 +108,12 @@ public class WriterSerializer extends Serializer {
 			useWhitespace = copyFrom.useWhitespace;
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public WriterSerializer build() {
 			return build(WriterSerializer.class);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
 		/**
@@ -155,7 +148,7 @@ public class WriterSerializer extends Serializer {
 			return self();
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(
@@ -408,7 +401,7 @@ public class WriterSerializer extends Serializer {
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
+		@Override /* Overridden from Context.Builder<?> */
 		public DefaultBuilder copy() {
 			return new DefaultBuilder(this);
 		}

@@ -30,6 +30,7 @@ import org.apache.juneau.swap.*;
  */
 class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 
+	@SuppressWarnings("unchecked")
 	private static <T> ComboSerialize_Tester.Builder<T> tester(int index, String label, Supplier<T> bean) {
 		return ComboSerialize_Tester.create(index, label, bean).serializerApply(s -> s.swaps(
 				ContextSwap.class,

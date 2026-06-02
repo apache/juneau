@@ -42,7 +42,7 @@ import org.apache.juneau.rest.servlet.*;
  * <h5 class='section'>Hardcoded mount paths:</h5>
  *
  * <p>
- * Unlike the sibling api-docs and ops mixins (see {@link SwaggerMixin},
+ * Unlike the sibling api-docs and ops mixins (see {@link org.apache.juneau.rest.docs.SwaggerMixin},
  * {@link VersionMixin}, etc.), the two mount paths here are <b>not</b> SVL-configurable.
  * {@code /robots.txt} is fixed by the Robots Exclusion Protocol
  * (<a href="https://www.rfc-editor.org/rfc/rfc9309">RFC 9309</a>) which prescribes that
@@ -133,7 +133,7 @@ public class SeoMixin extends RestMixin {
 	 * Builder constructor.
 	 *
 	 * <p>
-	 * Stashes the programmatic {@link RestBuilder} (the builder itself, carrying any {@code @Rest}-level
+	 * Stashes the programmatic {@link RestBuilder<?>} (the builder itself, carrying any {@code @Rest}-level
 	 * overrides such as {@code path}) via {@code super(builder)} so those values take precedence over this
 	 * mixin's own {@link Rest @Rest} annotation (TODO-143 &sect;2.4).
 	 *
@@ -224,8 +224,8 @@ public class SeoMixin extends RestMixin {
 	 * Builder for {@link SeoMixin} instances.
 	 *
 	 * <p>
-	 * Extends {@link RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke robots/sitemap setters chain
-	 * with true covariant returns alongside the inherited {@link RestBuilder} surface (e.g. {@code path},
+	 * Extends {@link org.apache.juneau.rest.servlet.RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke robots/sitemap setters chain
+	 * with true covariant returns alongside the inherited {@link RestBuilder<?>} surface (e.g. {@code path},
 	 * {@code roleGuard}).
 	 */
 	public static class Builder extends RestMixin.Builder<SeoMixin, Builder> {

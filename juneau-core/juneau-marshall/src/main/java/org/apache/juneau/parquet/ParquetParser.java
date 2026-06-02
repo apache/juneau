@@ -93,7 +93,7 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 			return this;
 		}
 
-		@Override /* InputStreamParser.Builder */
+		@Override /* InputStreamParser.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
 		}

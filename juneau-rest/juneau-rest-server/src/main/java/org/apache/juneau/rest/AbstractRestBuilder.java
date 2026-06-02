@@ -35,12 +35,12 @@ import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Shared abstract base for the {@link RestBuilder} flavor builders ({@code RestServlet.Builder},
+ * Shared abstract base for the {@link RestBuilder<?>} flavor builders ({@code RestServlet.Builder},
  * {@code RestResource.Builder}, {@code RestMixin.Builder}).
  *
  * <p>
  * Each fluent {@code @Rest}-member setter is implemented <b>once</b> here and forwards into a backing
- * {@link RestAnnotation.Builder} &mdash; the override bag.  At {@link RestContext} construction time the bag is
+ * {@code RestAnnotation.Builder} &mdash; the override bag.  At {@link RestContext} construction time the bag is
  * turned into a synthetic, highest-priority {@code @Rest} annotation that is prepended to the resource's
  * {@code @Rest} chain, so builder-supplied values <b>take precedence</b> over the class's own
  * {@link org.apache.juneau.rest.annotation.Rest @Rest} annotation values.
@@ -92,7 +92,7 @@ public abstract class AbstractRestBuilder<R, SELF extends AbstractRestBuilder<R,
 	public abstract R build();
 
 	/**
-	 * Reflectively instantiates the resource type, preferring a {@code (RestBuilder)} constructor (constructor
+	 * Reflectively instantiates the resource type, preferring a {@code (RestBuilder<?>)} constructor (constructor
 	 * injection &mdash; TODO-145 &sect;2.4 constructor trio) and falling back to the no-arg constructor.
 	 *
 	 * <p>
@@ -106,7 +106,7 @@ public abstract class AbstractRestBuilder<R, SELF extends AbstractRestBuilder<R,
 		if (ctor != null)
 			return ctor.accessible().newInstance(this);
 		var noArg = ci.getNoArgConstructor(Visibility.PRIVATE)
-			.orElseThrow(() -> new IllegalStateException("Resource class " + resourceType.getName() + " has no no-arg or RestBuilder constructor."));
+			.orElseThrow(() -> new IllegalStateException("Resource class " + resourceType.getName() + " has no no-arg or RestBuilder<?> constructor."));
 		return noArg.accessible().newInstance();
 	}
 
@@ -155,199 +155,199 @@ public abstract class AbstractRestBuilder<R, SELF extends AbstractRestBuilder<R,
 	// Identity & mounting
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF path(String value) { anno.path(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF paths(String... value) { anno.paths(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF children(Class<?>... value) { anno.children(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF mixins(Class<?>... value) { anno.mixins(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF uriAuthority(String value) { anno.uriAuthority(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF uriContext(String value) { anno.uriContext(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF uriRelativity(String value) { anno.uriRelativity(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF uriResolution(String value) { anno.uriResolution(value); return self(); }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Marshalling
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF serializers(Class<? extends Serializer>... value) { anno.serializers(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF parsers(Class<?>... value) { anno.parsers(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF encoders(Class<? extends Encoder>... value) { anno.encoders(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF partSerializer(Class<? extends HttpPartSerializer> value) { anno.partSerializer(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF partParser(Class<? extends HttpPartParser> value) { anno.partParser(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF consumes(String... value) { anno.consumes(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF produces(String... value) { anno.produces(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF responseProcessors(Class<? extends ResponseProcessor>... value) { anno.responseProcessors(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF allowedSerializerOptions(String... value) { anno.allowedSerializerOptions(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF allowedParserOptions(String... value) { anno.allowedParserOptions(value); return self(); }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Request behavior
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF allowedHeaderParams(String value) { anno.allowedHeaderParams(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF allowedMethodHeaders(String value) { anno.allowedMethodHeaders(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF allowedMethodParams(String value) { anno.allowedMethodParams(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF clientVersionHeader(String value) { anno.clientVersionHeader(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF defaultAccept(String value) { anno.defaultAccept(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF defaultContentType(String value) { anno.defaultContentType(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF defaultCharset(String value) { anno.defaultCharset(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF defaultRequestAttributes(String... value) { anno.defaultRequestAttributes(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF defaultRequestHeaders(String... value) { anno.defaultRequestHeaders(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF defaultResponseHeaders(String... value) { anno.defaultResponseHeaders(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF disableContentParam(String value) { anno.disableContentParam(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF maxInput(String value) { anno.maxInput(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF restOpArgs(Class<? extends RestOpArg>... value) { anno.restOpArgs(value); return self(); }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Security
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF guards(Class<? extends RestGuard>... value) { anno.guards(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF roleGuard(String value) { anno.roleGuard(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF rolesDeclared(String value) { anno.rolesDeclared(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF converters(Class<? extends RestConverter>... value) { anno.converters(value); return self(); }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Lifecycle / perf
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF eagerInit(String value) { anno.eagerInit(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF lazyChildren(String value) { anno.lazyChildren(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF virtualThreads(String value) { anno.virtualThreads(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF asyncTimeoutMillis(String value) { anno.asyncTimeoutMillis(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF asyncCompletionExecutor(String value) { anno.asyncCompletionExecutor(value); return self(); }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Observability / logging / errors
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF callLogger(Class<? extends CallLogger> value) { anno.callLogger(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF debug(String value) { anno.debug(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF observability(String value) { anno.observability(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF renderResponseStackTraces(String value) { anno.renderResponseStackTraces(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF problemDetails(String value) { anno.problemDetails(value); return self(); }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Docs / metadata / i18n / static files
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF title(String... value) { anno.title(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF description(String... value) { anno.description(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF siteName(String value) { anno.siteName(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF swaggerProvider(Class<? extends SwaggerProvider> value) { anno.swaggerProvider(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF openApiProvider(Class<? extends OpenApiProvider> value) { anno.openApiProvider(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF messages(String value) { anno.messages(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF config(String value) { anno.config(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF staticFiles(Class<? extends StaticFiles> value) { anno.staticFiles(value); return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF noInherit(String... value) { anno.noInherit(value); return self(); }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Programmatic-only knob & escape hatch
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF mdcAsyncPropagation(boolean value) { mdcAsyncPropagation = value; return self(); }
 
-	@Override /* RestBuilder */
+	@Override /* RestBuilder<?> */
 	public SELF set(String key, Object value) { extras.put(assertArgNotNull("key", key), value); return self(); }
 }

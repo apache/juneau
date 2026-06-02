@@ -412,7 +412,6 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 			}
 		}
 
-		@SuppressWarnings("unchecked")
 		private void withMdc(Runnable r) {
 			MdcAsyncListener.wrap((BiConsumer<Object,Throwable>) (v, e) -> r.run(), mdc).accept(null, null);
 		}
