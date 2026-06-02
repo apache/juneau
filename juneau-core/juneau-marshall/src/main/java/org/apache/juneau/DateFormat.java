@@ -26,7 +26,7 @@ import org.apache.juneau.swaps.*;
  * Supported wire formats for {@link Date} values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder<?>#dateFormat(DateFormat)},
+ * Used by {@link MarshallingContext.Builder#dateFormat(DateFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#dateFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#dateFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#dateFormat()} to control how {@link Date}

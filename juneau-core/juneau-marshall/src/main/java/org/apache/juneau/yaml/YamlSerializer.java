@@ -61,7 +61,7 @@ import org.apache.juneau.serializer.*;
  * The types above are considered "YAML-primitive" object types.
  * Any non-YAML-primitive object types are transformed into YAML-primitive object types through
  * {@link org.apache.juneau.swap.ObjectSwap ObjectSwaps} associated through the
- * {@link org.apache.juneau.MarshallingContext.Builder<?>#swaps(Class...)} method.
+ * {@link org.apache.juneau.MarshallingContext.Builder#swaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
  *
  * <p>
@@ -182,7 +182,7 @@ public class YamlSerializer extends WriterSerializer {
 		 * through reflection.
 		 *
 		 * <p>
-		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()} setting and is
+		 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 		 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 		 *
 		 * @return This object.

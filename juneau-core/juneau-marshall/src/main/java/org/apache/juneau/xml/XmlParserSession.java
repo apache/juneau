@@ -633,7 +633,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * XML event allocator.
 	 *
-	 * @see XmlParser.Builder<?>#eventAllocator(Class)
+	 * @see XmlParser.Builder#eventAllocator(Class)
 	 * @return
 	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -642,7 +642,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * XML reporter.
 	 *
-	 * @see XmlParser.Builder<?>#reporter(Class)
+	 * @see XmlParser.Builder#reporter(Class)
 	 * @return
 	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -651,7 +651,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * XML resolver.
 	 *
-	 * @see XmlParser.Builder<?>#resolver(Class)
+	 * @see XmlParser.Builder#resolver(Class)
 	 * @return
 	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -702,7 +702,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Preserve root element during generalized parsing.
 	 *
-	 * @see XmlParser.Builder<?>#preserveRootElement()
+	 * @see XmlParser.Builder#preserveRootElement()
 	 * @return
 	 * 	<jk>true</jk> if when parsing into a generic {@link JsonMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
@@ -712,7 +712,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Enable validation.
 	 *
-	 * @see XmlParser.Builder<?>#validating()
+	 * @see XmlParser.Builder#validating()
 	 * @return
 	 * 	<jk>true</jk> if XML document will be validated.
 	 */

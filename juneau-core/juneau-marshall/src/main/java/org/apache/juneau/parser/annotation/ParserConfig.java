@@ -65,7 +65,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder<?>#autoCloseStreams()}
+	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#autoCloseStreams()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -91,7 +91,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.parser.InputStreamParser.Builder<?>#binaryFormat(BinaryFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -115,7 +115,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder<?>#debugOutputLines(int)}
+	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#debugOutputLines(int)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -139,7 +139,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.parser.ReaderParser.Builder<?>#fileCharset(Charset)}
+	 * 	<li class='jm'>{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -153,7 +153,7 @@ public @interface ParserConfig {
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder<?>#listener(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#listener(Class)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -187,7 +187,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.parser.ReaderParser.Builder<?>#streamCharset(Charset)}
+	 * 	<li class='jm'>{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -212,7 +212,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder<?>#trimStrings()}
+	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#trimStrings()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -253,7 +253,7 @@ public @interface ParserConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder<?>#unbuffered()}
+	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#unbuffered()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

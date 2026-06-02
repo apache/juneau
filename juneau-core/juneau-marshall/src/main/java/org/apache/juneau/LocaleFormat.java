@@ -22,7 +22,7 @@ import java.util.*;
  * Supported wire formats for {@link Locale} values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder<?>#localeFormat(LocaleFormat)},
+ * Used by {@link MarshallingContext.Builder#localeFormat(LocaleFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#localeFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#localeFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#localeFormat()} to control how {@link Locale}

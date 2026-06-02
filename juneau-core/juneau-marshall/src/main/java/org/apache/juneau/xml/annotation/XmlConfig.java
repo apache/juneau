@@ -53,7 +53,7 @@ public @interface XmlConfig {
 	 * through reflection.
 	 *
 	 * <p>
-	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()} setting and is
+	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 	 *
 	 * <ul class='values'>
@@ -67,7 +67,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder<?>#addBeanTypesXml()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addBeanTypesXml()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -87,13 +87,13 @@ public @interface XmlConfig {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder<?>#enableNamespaces()} is not enabled.
+	 * 		This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()} is not enabled.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder<?>#addNamespaceUrisToRoot()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 	 * </ul>
 	 *
@@ -113,7 +113,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder<?>#defaultNamespace(Namespace)}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#defaultNamespace(Namespace)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 	 * </ul>
 	 *
@@ -128,7 +128,7 @@ public @interface XmlConfig {
 	 * Don't detect namespace usage before serialization.
 	 *
 	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.xml.XmlSerializer.Builder<?>#addNamespaceUrisToRoot()} to reduce the list of namespace URLs appended to the
+	 * Used in conjunction with {@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()} to reduce the list of namespace URLs appended to the
 	 * root element to only those that will be used in the resulting document.
 	 *
 	 * <p>
@@ -136,7 +136,7 @@ public @interface XmlConfig {
 	 * the root element is serialized.
 	 *
 	 * <p>
-	 * This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder<?>#enableNamespaces()} is not enabled.
+	 * This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()} is not enabled.
 	 *
 	 * <ul class='values'>
 	 * 	<li><js>"true"</js>
@@ -147,13 +147,13 @@ public @interface XmlConfig {
 	 * 	<li class='warn'>
 	 * 		Auto-detection of namespaces can be costly performance-wise.
 	 * 		<br>In high-performance environments, it's recommended that namespace detection be
-	 * 		disabled, and that namespaces be manually defined through the {@link org.apache.juneau.xml.XmlSerializer.Builder<?>#namespaces(Namespace...)} property.
+	 * 		disabled, and that namespaces be manually defined through the {@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)} property.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder<?>#disableAutoDetectNamespaces()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 	 * </ul>
 	 *
@@ -178,7 +178,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder<?>#enableNamespaces()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 	 * </ul>
 	 *
@@ -193,7 +193,7 @@ public @interface XmlConfig {
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder<?>#eventAllocator(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#eventAllocator(Class)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -212,7 +212,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder<?>#namespaces(Namespace...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 	 * </ul>
 	 *
@@ -238,7 +238,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder<?>#preserveRootElement()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#preserveRootElement()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -267,7 +267,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder<?>#reporter(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#reporter(Class)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -281,7 +281,7 @@ public @interface XmlConfig {
 	 * Associates an {@link XMLResolver} with this parser.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder<?>#resolver(Class)}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#resolver(Class)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -308,7 +308,7 @@ public @interface XmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder<?>#validating()}
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#validating()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

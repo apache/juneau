@@ -35,7 +35,7 @@ import java.io.*;
  *
  * <p>
  * Implementations are discovered automatically via {@link HttpTransportProvider} using {@link java.util.ServiceLoader},
- * or set explicitly via {@code RestClient.Builder<?>#transport(HttpTransport)}.
+ * or set explicitly via {@code RestClient.Builder#transport(HttpTransport)}.
  *
  * <p>
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack

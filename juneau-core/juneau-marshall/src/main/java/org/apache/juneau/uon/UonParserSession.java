@@ -811,7 +811,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Decode <js>"%xx"</js> sequences.
 	 *
-	 * @see UonParser.Builder<?>#decoding()
+	 * @see UonParser.Builder#decoding()
 	 * @return
 	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * 	before being passed to this parser.
@@ -821,7 +821,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	/**
 	 * Validate end.
 	 *
-	 * @see UonParser.Builder<?>#validateEnd()
+	 * @see UonParser.Builder#validateEnd()
 	 * @return
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.

@@ -777,7 +777,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Link label parameter name.
 	 *
-	 * @see HtmlSerializer.Builder<?>#labelParameter(String)
+	 * @see HtmlSerializer.Builder#labelParameter(String)
 	 * @return
 	 * 	The parameter name to look for when resolving link labels.
 	 */
@@ -786,7 +786,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Anchor text source.
 	 *
-	 * @see HtmlSerializer.Builder<?>#uriAnchorText(AnchorText)
+	 * @see HtmlSerializer.Builder#uriAnchorText(AnchorText)
 	 * @return
 	 * 	When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * 	<xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
@@ -799,7 +799,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Add key/value headers on bean/map tables.
 	 *
-	 * @see HtmlSerializer.Builder<?>#addKeyValueTableHeaders()
+	 * @see HtmlSerializer.Builder#addKeyValueTableHeaders()
 	 * @return
 	 * 	<jk>true</jk> if <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 	 */
@@ -808,7 +808,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Look for link labels in URIs.
 	 *
-	 * @see HtmlSerializer.Builder<?>#disableDetectLabelParameters()
+	 * @see HtmlSerializer.Builder#disableDetectLabelParameters()
 	 * @return
 	 * 	<jk>true</jk> if we should ook for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
@@ -817,7 +817,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Look for URLs in {@link String Strings}.
 	 *
-	 * @see HtmlSerializer.Builder<?>#disableDetectLinksInStrings()
+	 * @see HtmlSerializer.Builder#disableDetectLinksInStrings()
 	 * @return
 	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
 	 */

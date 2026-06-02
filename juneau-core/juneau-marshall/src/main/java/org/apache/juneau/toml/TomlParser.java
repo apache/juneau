@@ -42,7 +42,7 @@ import org.apache.juneau.parser.*;
  * 		(e.g. <c>Map&lt;Integer,String&gt;</c>) are converted via {@link org.apache.juneau.parser.ParserSession#convertAttrToType(Object, String, org.apache.juneau.ClassMeta) convertAttrToType}.
  * 		Null keys are serialized as the string <c>null</c> and converted back to Java null during parsing.
  * 	<li><b>Polymorphic types</b> — Parsing to interfaces or abstract classes requires a
- * 		{@link org.apache.juneau.MarshallingContext.Builder<?>#beanDictionary(Class[]) bean dictionary}
+ * 		{@link org.apache.juneau.MarshallingContext.Builder#beanDictionary(Class[]) bean dictionary}
  * 		when no <c>_type</c> discriminator is present in the document.
  * 	<li><b>Duration</b> — TOML has no native duration type. Quoted ISO-8601 duration strings
  * 		(e.g. <c>"PT1H30M"</c>) are parsed to <c>Duration</c> via {@link org.apache.juneau.utils.Iso8601Utils}.

@@ -357,7 +357,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * <p>
 	 * This is the subclassable, self-typed (CRTP) flavor builder.  Its {@code SELF} type parameter is left open so
 	 * a user subclass's bespoke setters chain with true covariant returns alongside the inherited
-	 * {@link RestBuilder<?>} surface (TODO-143 Option B).  For the common case where the builder is not subclassed,
+	 * {@link RestBuilder}surface (TODO-143 Option B).  For the common case where the builder is not subclassed,
 	 * use {@link RestServlet#builder(Class)} which returns the concrete {@link DefaultBuilder} leaf.
 	 *
 	 * @param <R> The resource type produced by {@link #build()}.

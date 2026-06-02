@@ -351,14 +351,14 @@ public class ParserSet {
 		}
 
 		/**
-		 * Returns direct access to the {@link Parser} and {@link Parser.Builder<?>} objects in this builder.
+		 * Returns direct access to the {@link Parser} and {@link Parser.Builder}objects in this builder.
 		 *
 		 * <p>
 		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
 		 * as re-ordering/adding/removing entries.
 		 *
 		 * <p>
-		 * Note that it is up to the user to ensure that the list only contains {@link Parser} and {@link Parser.Builder<?>} objects.
+		 * Note that it is up to the user to ensure that the list only contains {@link Parser} and {@link Parser.Builder}objects.
 		 *
 		 * @return The inner list of entries in this builder.
 		 */

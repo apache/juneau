@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * Supported wire formats for {@link Boolean} / <code><jk>boolean</jk></code> values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder<?>#booleanFormat(BooleanFormat)},
+ * Used by {@link MarshallingContext.Builder#booleanFormat(BooleanFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#booleanFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#booleanFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#booleanFormat()} to control how boolean values
@@ -38,7 +38,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<li>{@link org.apache.juneau.annotation.Marshalled#booleanFormat() @Marshalled(booleanFormat=…)} on the bean class.
  * 	<li>{@link org.apache.juneau.annotation.MarshalledConfig#booleanFormat() @MarshalledConfig(booleanFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
- * 	<li>Programmatic {@link MarshallingContext.Builder<?>#booleanFormat(BooleanFormat)}.
+ * 	<li>Programmatic {@link MarshallingContext.Builder#booleanFormat(BooleanFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.booleanFormat</c>.
  * 	<li>The default constant ({@link #TRUE_FALSE}).
  * </ol>

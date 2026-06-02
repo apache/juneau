@@ -512,7 +512,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * RDF format for representing collections and arrays.
 	 *
-	 * @see RdfParser.Builder<?>#collectionFormat(RdfCollectionFormat)
+	 * @see RdfParser.Builder#collectionFormat(RdfCollectionFormat)
 	 * @return
 	 * 	RDF format for representing collections and arrays.
 	 */
@@ -529,7 +529,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * Default XML namespace for bean properties.
 	 *
-	 * @see RdfParser.Builder<?>#juneauBpNs(Namespace)
+	 * @see RdfParser.Builder#juneauBpNs(Namespace)
 	 * @return
 	 * 	Default XML namespace for bean properties.
 	 */
@@ -538,7 +538,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * XML namespace for Juneau properties.
 	 *
-	 * @see RdfParser.Builder<?>#juneauNs(Namespace)
+	 * @see RdfParser.Builder#juneauNs(Namespace)
 	 * @return
 	 * 	XML namespace for Juneau properties.
 	 */
@@ -547,7 +547,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * RDF language.
 	 *
-	 * @see RdfParser.Builder<?>#language(String)
+	 * @see RdfParser.Builder#language(String)
 	 * @return
 	 * 	The RDF language to use.
 	 */
@@ -596,7 +596,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * Collections should be serialized and parsed as loose collections.
 	 *
-	 * @see RdfParser.Builder<?>#looseCollections()
+	 * @see RdfParser.Builder#looseCollections()
 	 * @return
 	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
 	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
@@ -606,7 +606,7 @@ public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * Trim whitespace from text elements.
 	 *
-	 * @see RdfParser.Builder<?>#trimWhitespace()
+	 * @see RdfParser.Builder#trimWhitespace()
 	 * @return
 	 * 	<jk>true</jk> if whitespace in text elements will be automatically trimmed.
 	 */

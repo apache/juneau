@@ -146,7 +146,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	/**
 	 * Binary output format.
 	 *
-	 * @see MarshallingContext.Builder<?>#binaryFormat(BinaryFormat)
+	 * @see MarshallingContext.Builder#binaryFormat(BinaryFormat)
 	 * @return
 	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
 	 */

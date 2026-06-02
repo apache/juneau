@@ -143,7 +143,7 @@ public class FaviconMixin extends RestMixin {
 	 *
 	 * <p>
 	 * Used by {@link Builder#build()} to both delegate to the shared {@link FaviconProvider} worker and stash the
-	 * programmatic {@link RestBuilder<?>} (carrying any {@code @Rest}-level overrides such as {@code path}) so those
+	 * programmatic {@link RestBuilder}(carrying any {@code @Rest}-level overrides such as {@code path}) so those
 	 * values take precedence over the mixin class's own {@link Rest @Rest} annotation.
 	 *
 	 * <h5 class='section'>Why worker + builder, not the flavor Builder:</h5>
@@ -151,7 +151,7 @@ public class FaviconMixin extends RestMixin {
 	 * 	<li>Takes the already-built <b>worker bean</b> (not the flavor {@link Builder}) so the flavor can be
 	 * 		constructed from ANY independently-supplied worker &mdash; e.g. a user's own {@code @Bean FaviconProvider}
 	 * 		or BeanStore bean, per the delegate-bean model &mdash; not only via this flavor's own builder.
-	 * 	<li>Takes the generic {@link RestBuilder<?>} (here {@code this} from {@link Builder#build()}) so it honors the
+	 * 	<li>Takes the generic {@link RestBuilder}(here {@code this} from {@link Builder#build()}) so it honors the
 	 * 		uniform &sect;2.4 {@code Foo(RestBuilder<?>)} injection contract the base class and DI resolution key on; the
 	 * 		base knows nothing about the concrete flavor builder or the worker type.
 	 * 	<li>Holds the finished worker product (the {@code final} {@link FaviconProvider} field), not a transient
@@ -193,7 +193,7 @@ public class FaviconMixin extends RestMixin {
 	 * <p>
 	 * Extends {@link org.apache.juneau.rest.servlet.RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke worker-config setters
 	 * ({@link #bytes(byte[])}, {@link #classpath(String)}, {@link #cacheControl(String)}) chain with true
-	 * covariant returns alongside the inherited {@link RestBuilder<?>} surface (e.g. {@code path}, {@code roleGuard}).
+	 * covariant returns alongside the inherited {@link RestBuilder}surface (e.g. {@code path}, {@code roleGuard}).
 	 * This is how a multi-flavor capability avoids triplicating its REST-level config: the worker config is
 	 * forwarded once into {@link FaviconProvider.Builder}, and the REST config is inherited once from
 	 * {@link AbstractRestBuilder}.

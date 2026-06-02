@@ -643,7 +643,7 @@ public abstract class Context {
 		 * 		When bean getters throws exceptions, the exception includes the object stack information
 		 * 		in order to determine how that method was invoked.
 		 * 	<li>
-		 * 		Enables {@link MarshallingTraverseContext.Builder<?>#detectRecursions()}.
+		 * 		Enables {@link MarshallingTraverseContext.Builder#detectRecursions()}.
 		 * </ul>
 		 *
 		 * <p>
@@ -675,7 +675,7 @@ public abstract class Context {
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#debug()}
-		 * 	<li class='jm'>{@link ContextSession.Builder<?>#debug(Boolean)}
+		 * 	<li class='jm'>{@link ContextSession.Builder#debug(Boolean)}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -998,7 +998,7 @@ public abstract class Context {
 	/**
 	 * Debug mode.
 	 *
-	 * @see Context.Builder<?>#debug()
+	 * @see Context.Builder#debug()
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */

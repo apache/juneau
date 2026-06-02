@@ -274,7 +274,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Prefix solidus <js>'/'</js> characters with escapes.
 	 *
-	 * @see JsonSerializer.Builder<?>#escapeSolidus()
+	 * @see JsonSerializer.Builder#escapeSolidus()
 	 * @return
 	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
 	 */

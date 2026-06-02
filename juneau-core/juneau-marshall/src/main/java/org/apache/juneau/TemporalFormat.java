@@ -35,7 +35,7 @@ import org.apache.juneau.swaps.*;
  * Supported wire formats for {@link TemporalAccessor} values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder<?>#temporalFormat(TemporalFormat)},
+ * Used by {@link MarshallingContext.Builder#temporalFormat(TemporalFormat)},
  * {@link Marshalled#temporalFormat()},
  * {@link MarshalledProp#temporalFormat()}, and
  * {@link MarshalledConfig#temporalFormat()} to control how

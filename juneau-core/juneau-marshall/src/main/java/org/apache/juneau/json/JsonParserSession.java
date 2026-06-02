@@ -851,7 +851,7 @@ public class JsonParserSession extends ReaderParserSession {
 	/**
 	 * Validate end.
 	 *
-	 * @see JsonParser.Builder<?>#validateEnd()
+	 * @see JsonParser.Builder#validateEnd()
 	 * @return
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.

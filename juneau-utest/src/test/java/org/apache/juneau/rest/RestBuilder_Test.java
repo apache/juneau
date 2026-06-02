@@ -25,7 +25,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-143 acceptance tests for the fluent {@link RestBuilder<?>} / {@link AbstractRestBuilder} configuration surface:
+ * TODO-143 acceptance tests for the fluent {@link RestBuilder}/ {@link AbstractRestBuilder} configuration surface:
  * builder-set values override {@code @Rest} annotation values; the constructor trio (no-arg, {@code Foo(RestBuilder<?>)},
  * {@code Foo.Builder}); subclass builders chaining with true covariant returns (Option B); and OQ-11
  * mirror-and-forward per-flavor builders (FaviconMixin) gaining the full REST surface via {@link RestMixin.Builder}.

@@ -311,7 +311,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	/**
 	 * Format to use for query/form-data/header values.
 	 *
-	 * @see UonSerializer.Builder<?>#paramFormat(ParamFormat)
+	 * @see UonSerializer.Builder#paramFormat(ParamFormat)
 	 * @return
 	 * 	Specifies the format to use for URL GET parameter keys and values.
 	 */
@@ -339,7 +339,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	/**
 	 * Encode non-valid URI characters.
 	 *
-	 * @see UonSerializer.Builder<?>#encoding()
+	 * @see UonSerializer.Builder#encoding()
 	 * @return
 	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
 	 */

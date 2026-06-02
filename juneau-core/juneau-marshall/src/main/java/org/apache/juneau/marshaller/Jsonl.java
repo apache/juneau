@@ -119,11 +119,11 @@ public class Jsonl extends CharMarshaller {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder<?>#streamCharset(Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder<?>#streamCharset(Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder<?>#fileCharset(Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * @param type The object type to create.
 	 * @return The parsed object.
@@ -149,11 +149,11 @@ public class Jsonl extends CharMarshaller {
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
 	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder<?>#streamCharset(java.nio.charset.Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(java.nio.charset.Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder<?>#streamCharset(java.nio.charset.Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(java.nio.charset.Charset)} property value).
 	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder<?>#fileCharset(java.nio.charset.Charset)} property value).
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(java.nio.charset.Charset)} property value).
 	 * 	</ul>
 	 * @param type
 	 * 	The object type to create.

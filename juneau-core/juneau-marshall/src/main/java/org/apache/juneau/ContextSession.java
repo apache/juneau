@@ -135,11 +135,11 @@ public abstract class ContextSession {
 		 * </ul>
 		 *
 		 * <p>
-		 * If not specified, defaults to {@link Context.Builder<?>#debug()}.
+		 * If not specified, defaults to {@link Context.Builder#debug()}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.MarshalledConfig#debug()}
-		 * 	<li class='jm'>{@link org.apache.juneau.Context.Builder<?>#debug()}
+		 * 	<li class='jm'>{@link org.apache.juneau.Context.Builder#debug()}
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -288,7 +288,7 @@ public abstract class ContextSession {
 	/**
 	 * Debug mode enabled.
 	 *
-	 * @see Context.Builder<?>#debug()
+	 * @see Context.Builder#debug()
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */

@@ -44,7 +44,7 @@ import org.apache.juneau.rest.annotation.*;
  * <h5 class='section'>Builder support:</h5>
  *
  * <p>
- * The fluent programmatic-builder surface ({@link RestBuilder<?>} / {@link Builder}) lets a mixin be configured
+ * The fluent programmatic-builder surface ({@link RestBuilder}/ {@link Builder}) lets a mixin be configured
  * programmatically rather than (or in addition to) by annotation &mdash; builder-supplied values take precedence
  * over {@link Rest @Rest} annotation values.  Use {@link #builder(Class)} for the common case, or subclass
  * {@link Builder} for capability mixins that add their own setters (TODO-143 Option B).
@@ -180,7 +180,7 @@ public abstract class RestMixin {
 	 * <p>
 	 * Subclassable, self-typed (CRTP) flavor builder (TODO-143 Option B).  Capability mixins (e.g.
 	 * {@code FaviconMixin}) extend this and add their own worker-config setters, which chain with true covariant
-	 * returns alongside the inherited {@link RestBuilder<?>} surface.  For the common (non-subclassed) case use
+	 * returns alongside the inherited {@link RestBuilder}surface.  For the common (non-subclassed) case use
 	 * {@link RestMixin#builder(Class)} which returns the concrete {@link DefaultBuilder} leaf.
 	 *
 	 * @param <R> The mixin type produced by {@link #build()}.

@@ -1104,7 +1104,7 @@ public class ResponseContent implements HttpEntity {
 	 * Specifies the parser to use for this body.
 	 *
 	 * <p>
-	 * If not specified, uses the parser defined on the client set via {@link RestClient.Builder<?>#parser(Class)}.
+	 * If not specified, uses the parser defined on the client set via {@link RestClient.Builder#parser(Class)}.
 	 *
 	 * @param value
 	 * 	The new part parser to use for this body.

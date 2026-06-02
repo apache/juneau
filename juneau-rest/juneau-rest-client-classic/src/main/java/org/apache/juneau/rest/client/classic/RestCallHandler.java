@@ -28,7 +28,7 @@ import org.apache.http.protocol.*;
  *
  * <p>
  * Providing this implementation is the equivalent to overriding the {@link RestClient#execute(HttpHost,HttpRequest,HttpContext)}.
- * <br>This can also be accomplished by providing your own {@link RestClient.Builder<?>#connectionManager(org.apache.http.conn.HttpClientConnectionManager) connection manager}
+ * <br>This can also be accomplished by providing your own {@link RestClient.Builder#connectionManager(org.apache.http.conn.HttpClientConnectionManager) connection manager}
  * or subclassing {@link RestClient}, but this provides a simpler way of handling the requests yourself.
  *
  * <p>
@@ -60,7 +60,7 @@ import org.apache.http.protocol.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jm'>{@link RestClient.Builder<?>#callHandler()}
+ * 	<li class='jm'>{@link RestClient.Builder#callHandler()}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */

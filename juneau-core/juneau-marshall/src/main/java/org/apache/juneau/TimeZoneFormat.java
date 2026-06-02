@@ -23,7 +23,7 @@ import java.util.*;
  * Supported wire formats for {@link TimeZone} and {@link ZoneId} values.
  *
  * <p>
- * Used by {@link MarshallingContext.Builder<?>#timeZoneFormat(TimeZoneFormat)},
+ * Used by {@link MarshallingContext.Builder#timeZoneFormat(TimeZoneFormat)},
  * {@link org.apache.juneau.annotation.Marshalled#timeZoneFormat()},
  * {@link org.apache.juneau.annotation.MarshalledProp#timeZoneFormat()}, and
  * {@link org.apache.juneau.annotation.MarshalledConfig#timeZoneFormat()} to control how time-zone

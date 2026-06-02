@@ -62,7 +62,7 @@ public class ParserListener {
 	 * Gets called when an unknown bean property is detected in a document.
 	 *
 	 * <p>
-	 * This method only gets called if {@link org.apache.juneau.MarshallingContext.Builder<?>#ignoreUnknownBeanProperties()} setting is <jk>true</jk>.
+	 * This method only gets called if {@link org.apache.juneau.MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting is <jk>true</jk>.
 	 * Otherwise, the parser will throw a {@link ParseException}.
 	 *
 	 * @param <T> The class type of the bean.

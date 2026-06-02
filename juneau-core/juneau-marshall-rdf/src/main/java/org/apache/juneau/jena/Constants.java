@@ -83,7 +83,7 @@ public class Constants {
 	 * Property added to root nodes to help identify them as root elements during parsing.
 	 *
 	 * <p>
-	 * Added if {@link RdfSerializer.Builder<?>#addRootProperty()} setting is enabled.
+	 * Added if {@link RdfSerializer.Builder#addRootProperty()} setting is enabled.
 	 */
 	public static final String RDF_juneauNs_ROOT = "root";
 
@@ -94,7 +94,7 @@ public class Constants {
 	 * Property added to bean resources to identify the class type.
 	 *
 	 * <p>
-	 * Added if {@link org.apache.juneau.serializer.Serializer.Builder<?>#addBeanTypes()} setting is enabled.
+	 * Added if {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting is enabled.
 	 */
 	public static final String RDF_juneauNs_TYPE = "_type";
 

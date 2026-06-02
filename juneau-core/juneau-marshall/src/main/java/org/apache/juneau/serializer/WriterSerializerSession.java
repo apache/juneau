@@ -292,7 +292,7 @@ public class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Maximum indentation.
 	 *
-	 * @see WriterSerializer.Builder<?>#maxIndent(int)
+	 * @see WriterSerializer.Builder#maxIndent(int)
 	 * @return
 	 * 	The maximum indentation level in the serialized document.
 	 */
@@ -301,7 +301,7 @@ public class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Quote character.
 	 *
-	 * @see WriterSerializer.Builder<?>#quoteChar(char)
+	 * @see WriterSerializer.Builder#quoteChar(char)
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
@@ -310,7 +310,7 @@ public class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Use whitespace.
 	 *
-	 * @see WriterSerializer.Builder<?>#useWhitespace()
+	 * @see WriterSerializer.Builder#useWhitespace()
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */

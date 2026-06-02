@@ -133,7 +133,7 @@ public class SeoMixin extends RestMixin {
 	 * Builder constructor.
 	 *
 	 * <p>
-	 * Stashes the programmatic {@link RestBuilder<?>} (the builder itself, carrying any {@code @Rest}-level
+	 * Stashes the programmatic {@link RestBuilder}(the builder itself, carrying any {@code @Rest}-level
 	 * overrides such as {@code path}) via {@code super(builder)} so those values take precedence over this
 	 * mixin's own {@link Rest @Rest} annotation (TODO-143 &sect;2.4).
 	 *
@@ -225,7 +225,7 @@ public class SeoMixin extends RestMixin {
 	 *
 	 * <p>
 	 * Extends {@link org.apache.juneau.rest.servlet.RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke robots/sitemap setters chain
-	 * with true covariant returns alongside the inherited {@link RestBuilder<?>} surface (e.g. {@code path},
+	 * with true covariant returns alongside the inherited {@link RestBuilder}surface (e.g. {@code path},
 	 * {@code roleGuard}).
 	 */
 	public static class Builder extends RestMixin.Builder<SeoMixin, Builder> {
