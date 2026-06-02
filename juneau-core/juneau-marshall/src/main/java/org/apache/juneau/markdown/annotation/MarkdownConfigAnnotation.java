@@ -31,6 +31,7 @@ public class MarkdownConfigAnnotation {
 	/**
 	 * Applies {@link MarkdownConfig} annotations to a {@link org.apache.juneau.markdown.MarkdownParser.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class ParserApply extends AnnotationApplier<MarkdownConfig,MarkdownParser.Builder> {
 
 		/**
@@ -51,6 +52,7 @@ public class MarkdownConfigAnnotation {
 	/**
 	 * Applies {@link MarkdownConfig} annotations to a {@link org.apache.juneau.markdown.MarkdownSerializer.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class SerializerApply extends AnnotationApplier<MarkdownConfig,MarkdownSerializer.Builder> {
 
 		/**

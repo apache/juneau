@@ -33,6 +33,7 @@ public class SoapXmlApplyAnnotation {
 
 	private SoapXmlApplyAnnotation() {}
 
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<SoapXmlApply,Context.Builder> {
 
 		public Applier(VarResolverSession vr) {
@@ -89,8 +90,6 @@ public class SoapXmlApplyAnnotation {
 		}
 
 		@Override public SoapXml value() { return value; }
-		@Override public String[] on() { return super.on(); }
-		@Override public Class<?>[] onClass() { return super.onClass(); }
 	}
 
 	public static final SoapXmlApply DEFAULT = create().build();

@@ -33,6 +33,7 @@ import org.apache.juneau.commons.collections.*;
  *
  */
 @SuppressWarnings({
+	"rawtypes",
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_detectRecursions)
 })
 public abstract class MarshallingTraverseContext extends MarshallingContextable {
@@ -46,7 +47,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingContextable.Builder<SELF> {
+	public abstract static class Builder<R extends Builder<R>> extends MarshallingContextable.Builder<R> {
 
 		private boolean detectRecursions;
 		private boolean ignoreRecursions;
@@ -126,7 +127,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 *
 		 * @return This object.
 		 */
-		public SELF detectRecursions() {
+		public R detectRecursions() {
 			return detectRecursions(true);
 		}
 
@@ -136,7 +137,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public SELF detectRecursions(boolean value) {
+		public R detectRecursions(boolean value) {
 			detectRecursions = value;
 			return self();
 		}
@@ -194,7 +195,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 *
 		 * @return This object.
 		 */
-		public SELF ignoreRecursions() {
+		public R ignoreRecursions() {
 			return ignoreRecursions(true);
 		}
 
@@ -204,7 +205,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public SELF ignoreRecursions(boolean value) {
+		public R ignoreRecursions(boolean value) {
 			ignoreRecursions = value;
 			return self();
 		}
@@ -236,7 +237,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * 	<br>The default is <c>0</c>.
 		 * @return This object.
 		 */
-		public SELF initialDepth(int value) {
+		public R initialDepth(int value) {
 			initialDepth = value;
 			return self();
 		}
@@ -271,7 +272,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * 	<br>The default is <c>100</c>.
 		 * @return This object.
 		 */
-		public SELF maxDepth(int value) {
+		public R maxDepth(int value) {
 			maxDepth = value;
 			return self();
 		}

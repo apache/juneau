@@ -40,6 +40,7 @@ public class HoconApplyAnnotation {
 	/**
 	 * Applies targeted {@link HoconApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<HoconApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class HoconApplyAnnotation {
 		@Override /* Overridden from HoconApply */
 		public Hocon value() {
 			return value;
-		}
-
-		@Override /* Overridden from HoconApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from HoconApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

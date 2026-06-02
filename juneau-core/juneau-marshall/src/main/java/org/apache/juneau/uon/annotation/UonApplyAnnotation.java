@@ -33,6 +33,7 @@ public class UonApplyAnnotation {
 
 	private UonApplyAnnotation() {}
 
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<UonApply,Context.Builder> {
 
 		public Applier(VarResolverSession vr) {
@@ -89,8 +90,6 @@ public class UonApplyAnnotation {
 		}
 
 		@Override public Uon value() { return value; }
-		@Override public String[] on() { return super.on(); }
-		@Override public Class<?>[] onClass() { return super.onClass(); }
 	}
 
 	public static final UonApply DEFAULT = create().build();

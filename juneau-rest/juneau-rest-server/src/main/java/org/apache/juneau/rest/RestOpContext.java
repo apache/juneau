@@ -79,6 +79,7 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 @SuppressWarnings({
+	"rawtypes",
 	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_defaultRequestFormData)
 	"java:S1200", // High coupling is intentional in this central operation context aggregator.
 	"java:S6539", // RestOpContext intentionally centralizes op wiring and annotation resolution.

@@ -69,7 +69,7 @@ public final class DateFunctions {
 			var fmt = DateTimeFormatter.ofPattern(format);
 			try {
 				return String.valueOf(LocalDateTime.parse(s, fmt).toInstant(ZoneOffset.UTC).toEpochMilli());
-			} catch (DateTimeParseException ignored) {
+			} catch (@SuppressWarnings("unused") DateTimeParseException e) {
 				// Try as a date-only pattern.
 			}
 			return String.valueOf(LocalDate.parse(s, fmt).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli());
@@ -80,10 +80,10 @@ public final class DateFunctions {
 			"java:S1166", // Exceptions swallowed intentionally — this is a try-each-format chain.
 		})
 		private static long parseIso(String s) {
-			try { return Instant.parse(s).toEpochMilli(); } catch (DateTimeParseException ignored) { /* fall through */ }
-			try { return OffsetDateTime.parse(s).toInstant().toEpochMilli(); } catch (DateTimeParseException ignored) { /* fall through */ }
-			try { return ZonedDateTime.parse(s).toInstant().toEpochMilli(); } catch (DateTimeParseException ignored) { /* fall through */ }
-			try { return LocalDateTime.parse(s).toInstant(ZoneOffset.UTC).toEpochMilli(); } catch (DateTimeParseException ignored) { /* fall through */ }
+			try { return Instant.parse(s).toEpochMilli(); } catch (@SuppressWarnings("unused") DateTimeParseException e) { /* fall through */ }
+			try { return OffsetDateTime.parse(s).toInstant().toEpochMilli(); } catch (@SuppressWarnings("unused") DateTimeParseException e) { /* fall through */ }
+			try { return ZonedDateTime.parse(s).toInstant().toEpochMilli(); } catch (@SuppressWarnings("unused") DateTimeParseException e) { /* fall through */ }
+			try { return LocalDateTime.parse(s).toInstant(ZoneOffset.UTC).toEpochMilli(); } catch (@SuppressWarnings("unused") DateTimeParseException e) { /* fall through */ }
 			return LocalDate.parse(s).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
 		}
 	}

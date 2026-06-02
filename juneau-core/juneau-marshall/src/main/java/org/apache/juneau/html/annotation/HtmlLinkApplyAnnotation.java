@@ -39,6 +39,7 @@ public class HtmlLinkApplyAnnotation {
 	/**
 	 * Applies targeted {@link HtmlLinkApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<HtmlLinkApply,Context.Builder> {
 
 		/**
@@ -143,16 +144,6 @@ public class HtmlLinkApplyAnnotation {
 		@Override /* Overridden from HtmlLinkApply */
 		public HtmlLink value() {
 			return value;
-		}
-
-		@Override /* Overridden from HtmlLinkApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from HtmlLinkApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

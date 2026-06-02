@@ -43,6 +43,7 @@ import org.apache.juneau.config.internal.*;
  * </ul>
 */
 @SuppressWarnings({
+	"rawtypes",
 	"resource" // ConfigStore manages Closeable resources
 })
 public abstract class ConfigStore extends Context implements Closeable {
@@ -50,7 +51,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder<SELF extends Builder<SELF>> extends Context.Builder<SELF> {
+	public abstract static class Builder<R extends Builder<R>> extends Context.Builder<R> {
 
 		/**
 		 * Constructor, default settings.

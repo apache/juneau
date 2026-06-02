@@ -137,6 +137,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @SuppressWarnings({
+	"rawtypes",
 	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_autoCloseStreams)
 })
 public class Parser extends MarshallingContextable {
@@ -151,7 +152,7 @@ public class Parser extends MarshallingContextable {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingContextable.Builder<SELF> {
+	public abstract static class Builder<R extends Builder<R>> extends MarshallingContextable.Builder<R> {
 
 		private boolean autoCloseStreams;
 		private boolean trimStrings;
@@ -225,7 +226,7 @@ public class Parser extends MarshallingContextable {
 		 *
 		 * @return This object.
 		 */
-		public SELF autoCloseStreams() {
+		public R autoCloseStreams() {
 			return autoCloseStreams(true);
 		}
 
@@ -235,7 +236,7 @@ public class Parser extends MarshallingContextable {
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public SELF autoCloseStreams(boolean value) {
+		public R autoCloseStreams(boolean value) {
 			autoCloseStreams = value;
 			return self();
 		}
@@ -252,13 +253,13 @@ public class Parser extends MarshallingContextable {
 		 * 	<br>Can be <jk>null</jk> (treated as empty string, no media types will be specified).
 		 * @return This object.
 		 */
-		public SELF consumes(String value) {
+		public R consumes(String value) {
 			consumes = value;
 			return self();
 		}
 
 		@Override /* Overridden from Context.Builder<?> */
-		public abstract SELF copy();
+		public abstract R copy();
 
 		/**
 		 * Debug output lines.
@@ -289,7 +290,7 @@ public class Parser extends MarshallingContextable {
 		 * 	<br>The default value is <c>5</c>.
 		 * @return This object.
 		 */
-		public SELF debugOutputLines(int value) {
+		public R debugOutputLines(int value) {
 			debugOutputLines = value;
 			return self();
 		}
@@ -363,7 +364,7 @@ public class Parser extends MarshallingContextable {
 		 * 	<br>Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public SELF listener(Class<? extends ParserListener> value) {
+		public R listener(Class<? extends ParserListener> value) {
 			listener = value;
 			return self();
 		}
@@ -393,7 +394,7 @@ public class Parser extends MarshallingContextable {
 		 *
 		 * @return This object.
 		 */
-		public SELF trimStrings() {
+		public R trimStrings() {
 			return trimStrings(true);
 		}
 
@@ -403,7 +404,7 @@ public class Parser extends MarshallingContextable {
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public SELF trimStrings(boolean value) {
+		public R trimStrings(boolean value) {
 			trimStrings = value;
 			return self();
 		}
@@ -454,7 +455,7 @@ public class Parser extends MarshallingContextable {
 		 *
 		 * @return This object.
 		 */
-		public SELF unbuffered() {
+		public R unbuffered() {
 			return unbuffered(true);
 		}
 
@@ -464,7 +465,7 @@ public class Parser extends MarshallingContextable {
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public SELF unbuffered(boolean value) {
+		public R unbuffered(boolean value) {
 			unbuffered = value;
 			return self();
 		}
@@ -510,7 +511,7 @@ public class Parser extends MarshallingContextable {
 	 *
 	 * @return A new builder.
 	 */
-	public static Builder<?> create() {
+	public static Builder create() {
 		return new DefaultBuilder();
 	}
 

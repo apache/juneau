@@ -40,6 +40,7 @@ public class XmlApplyAnnotation {
 	/**
 	 * Applies targeted {@link XmlApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<XmlApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class XmlApplyAnnotation {
 		@Override /* Overridden from XmlApply */
 		public Xml value() {
 			return value;
-		}
-
-		@Override /* Overridden from XmlApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from XmlApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

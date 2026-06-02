@@ -86,6 +86,8 @@ import org.apache.juneau.yaml.annotation.*;
  *
  */
 @SuppressWarnings({
+	"unchecked",
+	"rawtypes",
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
 public abstract class Context {
@@ -107,16 +109,15 @@ public abstract class Context {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder<SELF extends Builder<SELF>> {
+	public abstract static class Builder<R extends Builder<R>> {
 
 		/**
 		 * Returns this object cast to the self (CRTP) type.
 		 *
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked") // CRTP self-type cast is safe by construction.
-		protected final SELF self() {
-			return (SELF)this;
+		protected final R self() {
+			return (R)this;
 		}
 
 
@@ -132,9 +133,6 @@ public abstract class Context {
 		 * Constructor.
 		 * Default settings.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires cast for Builder pattern
-		})
 		protected Builder() {
 			debug = env("Context.debug", false);
 			annotations = list();
@@ -348,7 +346,7 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public SELF annotations(Annotation...values) {
+		public R annotations(Annotation...values) {
 			assertArgNoNulls(ARG_values, values);
 			annotations(l(values));
 			return self();
@@ -362,7 +360,7 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk> or contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public SELF annotations(List<Annotation> values) {
+		public R annotations(List<Annotation> values) {
 			annotations.addAll(assertArgNoNulls(ARG_values, values));
 			return self();
 		}
@@ -396,7 +394,7 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public SELF apply(AnnotationWorkList work) {
+		public R apply(AnnotationWorkList work) {
 			assertArgNotNull(ARG_work, work);
 			applied.addAll(work);
 			work.forEach(x -> builders.forEach(x::apply));
@@ -410,7 +408,7 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public SELF applyAnnotations(Class<?>...from) {
+		public R applyAnnotations(Class<?>...from) {
 			assertArgNoNulls(ARG_from, from);
 			return applyAnnotations((Object[])from);
 		}
@@ -510,7 +508,7 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public SELF applyAnnotations(Object...from) {
+		public R applyAnnotations(Object...from) {
 			assertArgNoNulls(ARG_from, from);
 			var work = AnnotationWorkList.create();
 			Arrays.stream(from).forEach(x -> traverse(work, x));
@@ -585,9 +583,6 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return The built context bean.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires cast to T for context build
-		})
 		public final <T extends Context> T build(Class<T> c) {
 			if (type == null || ! assertArgNotNull(ARG_c, c).isAssignableFrom(type))
 				type = c;
@@ -610,7 +605,7 @@ public abstract class Context {
 		 * 	<br>Can be <jk>null</jk> (disables caching, each build creates a new instance).
 		 * @return This object.
 		 */
-		public SELF cache(Cache<HashKey,? extends Context> value) {
+		public R cache(Cache<HashKey,? extends Context> value) {
 			cache = value;
 			return self();
 		}
@@ -631,7 +626,7 @@ public abstract class Context {
 		 *
 		 * @return A new mutable copy of this builder.
 		 */
-		public abstract SELF copy();
+		public abstract R copy();
 
 		/**
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Debug mode.
@@ -680,7 +675,7 @@ public abstract class Context {
 		 *
 		 * @return This object.
 		 */
-		public SELF debug() {
+		public R debug() {
 			return debug(true);
 		}
 
@@ -690,7 +685,7 @@ public abstract class Context {
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public SELF debug(boolean value) {
+		public R debug(boolean value) {
 			debug = value;
 			return self();
 		}
@@ -734,7 +729,7 @@ public abstract class Context {
 		 * 	<br>Can be <jk>null</jk> (normal build process will continue).
 		 * @return This object.
 		 */
-		public SELF impl(Context value) {
+		public R impl(Context value) {
 			impl = value;
 			return self();
 		}
@@ -763,7 +758,7 @@ public abstract class Context {
 		 * 	<br>Can be <jk>null</jk> (will cause {@link #build()} to throw an exception).
 		 * @return This object.
 		 */
-		public SELF type(Class<? extends Context> value) {
+		public R type(Class<? extends Context> value) {
 			type = value;
 			return self();
 		}
@@ -777,7 +772,6 @@ public abstract class Context {
 		 * @param values The builders to add to the list of builders.
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 */
-		@SuppressWarnings("unchecked")
 		protected void registerBuilders(Object...values) {
 			assertArgNoNulls(ARG_values, values);
 			for (var b : values) {
@@ -933,7 +927,6 @@ public abstract class Context {
 	 * @param builder The builder for this class.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
 	protected Context(Builder builder) {
 		assertArgNotNull(ARG_builder, builder);
 		init(builder);
@@ -974,7 +967,7 @@ public abstract class Context {
 	 *
 	 * @return A new session builder.
 	 */
-	public ContextSession.Builder<?> createSession() {
+	public ContextSession.Builder createSession() {
 		throw unsupportedOp();
 	}
 

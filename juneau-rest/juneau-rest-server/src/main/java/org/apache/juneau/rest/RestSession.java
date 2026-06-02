@@ -60,6 +60,7 @@ public class RestSession extends ContextSession {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Builder extends ContextSession.Builder {
 
 		private CallLogger logger;

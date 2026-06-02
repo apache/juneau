@@ -31,6 +31,7 @@ public class JsonlConfigAnnotation {
 	/**
 	 * Applies {@link JsonlConfig} annotations to a {@link org.apache.juneau.json.JsonParser.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class ParserApply extends AnnotationApplier<JsonlConfig, JsonParser.Builder> {
 
 		/**
@@ -51,6 +52,7 @@ public class JsonlConfigAnnotation {
 	/**
 	 * Applies {@link JsonlConfig} annotations to a {@link org.apache.juneau.json.JsonSerializer.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class SerializerApply extends AnnotationApplier<JsonlConfig, JsonSerializer.Builder> {
 
 		/**

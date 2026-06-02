@@ -40,6 +40,7 @@ public class BsonApplyAnnotation {
 	/**
 	 * Applies targeted {@link BsonApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<BsonApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class BsonApplyAnnotation {
 		@Override /* Overridden from BsonApply */
 		public Bson value() {
 			return value;
-		}
-
-		@Override /* Overridden from BsonApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from BsonApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

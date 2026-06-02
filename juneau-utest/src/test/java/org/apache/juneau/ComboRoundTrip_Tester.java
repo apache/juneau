@@ -48,6 +48,7 @@ import org.apache.juneau.markdown.*;
  * @param <T>
  */
 @SuppressWarnings({
+	"rawtypes",
 	"unchecked" // Consumer/Builder casts and generic round-trip in test infra
 })
 public class ComboRoundTrip_Tester<T> {

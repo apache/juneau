@@ -34,7 +34,7 @@ public final class StringFunctions {
 	private StringFunctions() {}
 
 	/** All function classes in this category, in registration order. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked","java:S2368"})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Substring.class, Upper.class, Lower.class, Trim.class, StripLeading.class,
 		StripTrailing.class, StripSlashes.class, PathToken.class, Len.class, Replace.class,
@@ -242,8 +242,8 @@ public final class StringFunctions {
 	}
 
 	/**
-	 * {@code #{format(pattern, args...)}} — {@link String#format Java {@code Formatter}}-style
-	 * formatting. Pattern uses Java {@link java.util.Formatter} syntax (e.g. {@code %s},
+	 * {@code #{format(pattern, args...)}} — {@link String#format Java formatter-style
+	 * formatting}. Pattern uses Java {@link java.util.Formatter} syntax (e.g. {@code %s},
 	 * {@code %d}, {@code %.2f}). Variadic args; coerced per Java {@code Formatter} rules at
 	 * invocation.
 	 *
@@ -276,8 +276,8 @@ public final class StringFunctions {
 		private static Object coerceArgForFormat(String s) {
 			if (s == null) return "";
 			var t = s.trim();
-			try { return Long.parseLong(t); } catch (NumberFormatException ignored) { /* fall through */ }
-			try { return Double.parseDouble(t); } catch (NumberFormatException ignored) { /* fall through */ }
+			try { return Long.parseLong(t); } catch (@SuppressWarnings("unused") NumberFormatException e) { /* fall through */ }
+			try { return Double.parseDouble(t); } catch (@SuppressWarnings("unused") NumberFormatException e) { /* fall through */ }
 			return s;
 		}
 	}

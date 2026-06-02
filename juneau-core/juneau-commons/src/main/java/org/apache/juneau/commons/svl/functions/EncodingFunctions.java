@@ -139,7 +139,7 @@ public final class EncodingFunctions {
 					else
 						cp = Integer.parseInt(entity.substring(1));
 					return new String(Character.toChars(cp));
-				} catch (NumberFormatException ignored) {
+				} catch (@SuppressWarnings("unused") NumberFormatException e) {
 					return null;
 				}
 			}

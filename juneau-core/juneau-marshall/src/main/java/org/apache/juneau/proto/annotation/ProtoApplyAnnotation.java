@@ -40,6 +40,7 @@ public class ProtoApplyAnnotation {
 	/**
 	 * Applies targeted {@link ProtoApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<ProtoApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class ProtoApplyAnnotation {
 		@Override /* Overridden from ProtoApply */
 		public Proto value() {
 			return value;
-		}
-
-		@Override /* Overridden from ProtoApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from ProtoApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

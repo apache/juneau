@@ -279,7 +279,6 @@ public class VarResolver {
 	 * none). Third-party functions discovered via {@link ServiceLoader} register <i>after</i>
 	 * this list, so they override built-ins on name collision.
 	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	private static final Class<? extends VarFunction>[] BUILTIN_FUNCTION_CLASSES = (Class<? extends VarFunction>[]) concat(
 		StringFunctions.ALL,
 		TypeConversionFunctions.ALL,
@@ -294,11 +293,11 @@ public class VarResolver {
 	);
 
 	@SafeVarargs
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({"unchecked"})
 	private static <T> Class<? extends T>[] concat(Class<? extends T>[]... arrays) {
 		var total = 0;
 		for (var a : arrays) total += a.length;
-		var out = (Class<? extends T>[]) new Class[total];
+		var out = new Class[total];
 		var idx = 0;
 		for (var a : arrays) {
 			System.arraycopy(a, 0, out, idx, a.length);

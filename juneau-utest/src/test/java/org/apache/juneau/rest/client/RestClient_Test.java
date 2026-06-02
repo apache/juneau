@@ -166,7 +166,6 @@ public class RestClient_Test {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	void c02_header_httpHeaderBean() throws Exception {
 		var transport = MockHttpTransport.builder()

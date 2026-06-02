@@ -40,6 +40,7 @@ public class UrlEncodingApplyAnnotation {
 	/**
 	 * Applies targeted {@link UrlEncodingApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<UrlEncodingApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class UrlEncodingApplyAnnotation {
 		@Override /* Overridden from UrlEncodingApply */
 		public UrlEncoding value() {
 			return value;
-		}
-
-		@Override /* Overridden from UrlEncodingApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from UrlEncodingApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

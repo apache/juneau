@@ -39,6 +39,7 @@ public class RdfConfigAnnotation {
 	/**
 	 * Applies {@link RdfConfig} annotations to a {@link org.apache.juneau.jena.RdfParser.Builder}.
 	 */
+	@SuppressWarnings("rawtypes") 
 	public static class ParserApply extends AnnotationApplier<RdfConfig,RdfParser.Builder> {
 
 		/**
@@ -88,6 +89,7 @@ public class RdfConfigAnnotation {
 	/**
 	 * Applies {@link RdfConfig} annotations to a {@link org.apache.juneau.jena.RdfSerializer.Builder}.
 	 */
+	@SuppressWarnings("rawtypes") 
 	public static class SerializerApply extends AnnotationApplier<RdfConfig,RdfSerializer.Builder> {
 
 		/**

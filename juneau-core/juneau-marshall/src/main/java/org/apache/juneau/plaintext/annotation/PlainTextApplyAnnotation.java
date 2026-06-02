@@ -40,6 +40,7 @@ public class PlainTextApplyAnnotation {
 	/**
 	 * Applies targeted {@link PlainTextApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<PlainTextApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class PlainTextApplyAnnotation {
 		@Override /* Overridden from PlainTextApply */
 		public PlainText value() {
 			return value;
-		}
-
-		@Override /* Overridden from PlainTextApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from PlainTextApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

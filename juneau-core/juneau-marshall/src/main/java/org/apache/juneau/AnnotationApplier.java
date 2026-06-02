@@ -32,7 +32,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.commons.svl.*;
 
 /**
- * Class used to add properties to a context builder (e.g. {@link MarshallingContext.Builder<?>}) from an annotation (e.g. {@link MarshalledConfig}).
+ * Class used to add properties to a context builder (e.g. {@link MarshallingContext.Builder}) from an annotation (e.g. {@link MarshalledConfig}).
  *
  * <p>
  * Used by {@link Context.Builder#applyAnnotations(Class...)} and {@link Context.Builder#applyAnnotations(Object...)} to apply

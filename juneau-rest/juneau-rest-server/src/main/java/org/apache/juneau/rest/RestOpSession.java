@@ -56,6 +56,7 @@ public class RestOpSession extends ContextSession {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Builder extends ContextSession.Builder {
 
 		protected final RestOpContext ctx;

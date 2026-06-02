@@ -40,6 +40,7 @@ public class CborApplyAnnotation {
 	/**
 	 * Applies targeted {@link CborApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<CborApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class CborApplyAnnotation {
 		@Override /* Overridden from CborApply */
 		public Cbor value() {
 			return value;
-		}
-
-		@Override /* Overridden from CborApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from CborApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

@@ -40,6 +40,7 @@ public class MsgPackApplyAnnotation {
 	/**
 	 * Applies targeted {@link MsgPackApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<MsgPackApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class MsgPackApplyAnnotation {
 		@Override /* Overridden from MsgPackApply */
 		public MsgPack value() {
 			return value;
-		}
-
-		@Override /* Overridden from MsgPackApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from MsgPackApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

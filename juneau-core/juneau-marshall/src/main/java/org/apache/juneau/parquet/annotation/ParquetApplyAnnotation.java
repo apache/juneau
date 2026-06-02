@@ -40,6 +40,7 @@ public class ParquetApplyAnnotation {
 	/**
 	 * Applies targeted {@link ParquetApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<ParquetApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class ParquetApplyAnnotation {
 		@Override /* Overridden from ParquetApply */
 		public Parquet value() {
 			return value;
-		}
-
-		@Override /* Overridden from ParquetApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from ParquetApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

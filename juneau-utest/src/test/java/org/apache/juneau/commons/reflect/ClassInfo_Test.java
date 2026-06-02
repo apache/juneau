@@ -125,7 +125,7 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	public static class AConfigApply extends AnnotationApplier<AConfig,Context.Builder<?>> {
-		@SuppressWarnings({"unchecked","rawtypes"})
+		@SuppressWarnings({"unchecked"})
 		protected AConfigApply(VarResolverSession vr) {
 			super(AConfig.class, (Class)Context.Builder.class, vr);
 		}

@@ -30,6 +30,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.matcher.*;
+import org.apache.juneau.rest.metrics.MetricsRecorder;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.serializer.*;
@@ -763,7 +764,7 @@ public @interface RestOp {
 	 * Per-operation metric name override.
 	 *
 	 * <p>
-	 * Overrides the metric name passed to {@link org.apache.juneau.rest.metrics.MetricsRecorder#record record()}
+	 * Overrides the metric name passed to {@link MetricsRecorder#record(String, String, String, int, java.time.Duration, Throwable, String, String) record()}
 	 * for this operation.  When empty (default), the recorder uses its own default name derivation (typically the
 	 * fully-qualified operation name).
 	 *
@@ -783,7 +784,7 @@ public @interface RestOp {
 	 * Per-operation metric tags.
 	 *
 	 * <p>
-	 * Additional metric tags to pass to {@link org.apache.juneau.rest.metrics.MetricsRecorder#record record()}.
+	 * Additional metric tags to pass to {@link MetricsRecorder#record(String, String, String, int, java.time.Duration, Throwable, String, String) record()}.
 	 * Format: comma-separated {@code key=value} pairs, e.g. {@code "team=payments,region=us-east"}.
 	 * When empty (default), no additional tags are passed.
 	 *

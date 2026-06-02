@@ -38,6 +38,7 @@ public class ParserConfigAnnotation {
 	/**
 	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.InputStreamParser.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class InputStreamParserApply extends AnnotationApplier<ParserConfig,InputStreamParser.Builder> {
 
 		/**
@@ -60,6 +61,7 @@ public class ParserConfigAnnotation {
 	/**
 	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.Parser.Builder}.
 	 */
+	@SuppressWarnings({"unchecked","rawtypes"})
 	public static class ParserApply extends AnnotationApplier<ParserConfig,Parser.Builder> {
 
 		/**
@@ -86,6 +88,7 @@ public class ParserConfigAnnotation {
 	/**
 	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.ReaderParser.Builder}.
 	 */
+	@SuppressWarnings({"rawtypes"})
 	public static class ReaderParserApply extends AnnotationApplier<ParserConfig,ReaderParser.Builder> {
 
 		/**

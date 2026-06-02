@@ -40,6 +40,7 @@ public class MarkdownApplyAnnotation {
 	/**
 	 * Applies targeted {@link MarkdownApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<MarkdownApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class MarkdownApplyAnnotation {
 		@Override /* Overridden from MarkdownApply */
 		public Markdown value() {
 			return value;
-		}
-
-		@Override /* Overridden from MarkdownApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from MarkdownApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

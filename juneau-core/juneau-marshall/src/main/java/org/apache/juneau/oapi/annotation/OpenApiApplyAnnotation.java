@@ -40,6 +40,7 @@ public class OpenApiApplyAnnotation {
 	/**
 	 * Applies targeted {@link OpenApiApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<OpenApiApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class OpenApiApplyAnnotation {
 		@Override /* Overridden from OpenApiApply */
 		public OpenApi value() {
 			return value;
-		}
-
-		@Override /* Overridden from OpenApiApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from OpenApiApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

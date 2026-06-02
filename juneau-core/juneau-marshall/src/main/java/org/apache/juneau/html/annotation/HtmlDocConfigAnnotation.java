@@ -38,6 +38,7 @@ public class HtmlDocConfigAnnotation {
 	/**
 	 * Applies {@link HtmlDocConfig} annotations to a {@link org.apache.juneau.html.HtmlDocSerializer.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class SerializerApply extends AnnotationApplier<HtmlDocConfig,HtmlDocSerializer.Builder> {
 
 		/**
@@ -70,7 +71,7 @@ public class HtmlDocConfigAnnotation {
 			bool(a.nowrap()).ifPresent(b::nowrap);
 			bool(a.resolveBodyVars()).ifPresent(b::resolveBodyVars);
 			type(a.template()).ifPresent(b::template);
-			classes(a.widgets()).ifPresent(x -> b.widgets((Class<? extends HtmlWidget>[])x));
+			classes(a.widgets()).ifPresent(b::widgets);
 		}
 	}
 }

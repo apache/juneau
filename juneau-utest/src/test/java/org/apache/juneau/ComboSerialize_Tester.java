@@ -47,6 +47,7 @@ import org.apache.juneau.markdown.*;
  * @param <T>
  */
 @SuppressWarnings({
+	"rawtypes",
 	"unchecked" // Consumer/Builder casts in test infra
 })
 public class ComboSerialize_Tester<T> {

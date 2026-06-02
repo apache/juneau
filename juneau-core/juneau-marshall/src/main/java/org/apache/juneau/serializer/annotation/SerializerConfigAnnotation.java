@@ -38,6 +38,7 @@ public class SerializerConfigAnnotation {
 	/**
 	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.serializer.OutputStreamSerializer.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class OutputStreamSerializerApply extends AnnotationApplier<SerializerConfig,OutputStreamSerializer.Builder> {
 
 		/**
@@ -60,6 +61,7 @@ public class SerializerConfigAnnotation {
 	/**
 	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.serializer.Serializer.Builder}.
 	 */
+	@SuppressWarnings({"unchecked","rawtypes"})
 	public static class SerializerApply extends AnnotationApplier<SerializerConfig,Serializer.Builder> {
 
 		/**
@@ -97,6 +99,7 @@ public class SerializerConfigAnnotation {
 	/**
 	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.serializer.WriterSerializer.Builder}.
 	 */
+	@SuppressWarnings({"rawtypes"})
 	public static class WriterSerializerApply extends AnnotationApplier<SerializerConfig,WriterSerializer.Builder> {
 
 		/**

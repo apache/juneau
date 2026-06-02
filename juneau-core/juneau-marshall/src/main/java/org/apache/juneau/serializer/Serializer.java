@@ -73,7 +73,8 @@ import org.apache.juneau.soap.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"rawtypes"
 })
 public class Serializer extends MarshallingTraverseContext {
 
@@ -848,7 +849,7 @@ public class Serializer extends MarshallingTraverseContext {
 	 *
 	 * @return A new builder.
 	 */
-	public static Builder<?> create() {
+	public static Builder create() {
 		return new DefaultBuilder();
 	}
 

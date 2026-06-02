@@ -33,6 +33,7 @@ public class BsonAnnotation {
 	 * Prevents instantiation.
 	 */
 	private BsonAnnotation() {}
+
 	/**
 	 * Builder class.
 	 */

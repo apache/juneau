@@ -33,6 +33,7 @@ public class CsvApplyAnnotation {
 
 	private CsvApplyAnnotation() {}
 
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<CsvApply,Context.Builder> {
 
 		public Applier(VarResolverSession vr) {
@@ -89,8 +90,6 @@ public class CsvApplyAnnotation {
 		}
 
 		@Override public Csv value() { return value; }
-		@Override public String[] on() { return super.on(); }
-		@Override public Class<?>[] onClass() { return super.onClass(); }
 	}
 
 	public static final CsvApply DEFAULT = create().build();

@@ -40,6 +40,7 @@ public class HjsonApplyAnnotation {
 	/**
 	 * Applies targeted {@link HjsonApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<HjsonApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class HjsonApplyAnnotation {
 		@Override /* Overridden from HjsonApply */
 		public Hjson value() {
 			return value;
-		}
-
-		@Override /* Overridden from HjsonApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from HjsonApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

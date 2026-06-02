@@ -286,6 +286,7 @@ public class RestContext extends Context {
 	 * {@link RestContext} via the public {@link #RestContext(Args)} constructor; this Builder
 	 * exists only as internal bootstrap state for the framework and is slated for inlining in a later phase.
 	 */
+	@SuppressWarnings("rawtypes")
 	static class Builder extends Context.Builder implements ServletConfig {
 
 		private final Class<?> resourceClass;

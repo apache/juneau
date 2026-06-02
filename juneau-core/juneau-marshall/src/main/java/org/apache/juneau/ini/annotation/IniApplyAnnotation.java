@@ -40,6 +40,7 @@ public class IniApplyAnnotation {
 	/**
 	 * Applies targeted {@link IniApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<IniApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class IniApplyAnnotation {
 		@Override /* Overridden from IniApply */
 		public Ini value() {
 			return value;
-		}
-
-		@Override /* Overridden from IniApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from IniApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

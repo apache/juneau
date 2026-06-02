@@ -40,6 +40,7 @@ public class RdfApplyAnnotation {
 	/**
 	 * Applies targeted {@link RdfApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
+	@SuppressWarnings("rawtypes") 
 	public static class Applier extends AnnotationApplier<RdfApply,Context.Builder> {
 
 		/**
@@ -168,16 +169,6 @@ public class RdfApplyAnnotation {
 		@Override /* Overridden from RdfApply */
 		public Rdf value() {
 			return value;
-		}
-
-		@Override /* Overridden from RdfApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from RdfApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

@@ -46,6 +46,7 @@ public class JsonApplyAnnotation {
 	 * method handles unwrapping the nested {@link Json @Json} from {@link JsonApply#value()} and registering it
 	 * under the targets specified by {@link JsonApply#on()} and {@link JsonApply#onClass()}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class Applier extends AnnotationApplier<JsonApply,Context.Builder> {
 
 		/**
@@ -174,16 +175,6 @@ public class JsonApplyAnnotation {
 		@Override /* Overridden from JsonApply */
 		public Json value() {
 			return value;
-		}
-
-		@Override /* Overridden from JsonApply */
-		public String[] on() {
-			return super.on();
-		}
-
-		@Override /* Overridden from JsonApply */
-		public Class<?>[] onClass() {
-			return super.onClass();
 		}
 	}
 

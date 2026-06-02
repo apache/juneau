@@ -38,6 +38,7 @@ public class UonConfigAnnotation {
 	/**
 	 * Applies {@link UonConfig} annotations to a {@link org.apache.juneau.uon.UonParser.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class ParserApply extends AnnotationApplier<UonConfig,UonParser.Builder> {
 
 		/**
@@ -61,6 +62,7 @@ public class UonConfigAnnotation {
 	/**
 	 * Applies {@link UonConfig} annotations to a {@link org.apache.juneau.uon.UonSerializer.Builder}.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static class SerializerApply extends AnnotationApplier<UonConfig,UonSerializer.Builder> {
 
 		/**
