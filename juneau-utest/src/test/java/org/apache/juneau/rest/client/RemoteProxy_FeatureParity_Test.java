@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.http.HttpParts;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.HttpHeaderList;
@@ -50,10 +51,13 @@ import org.junit.jupiter.api.*;
  * </ul>
  *
  * <p>
- * Capabilities the beta engine does not yet support are landed as <b>{@code @Disabled}</b> specs whose bodies assert the
- * <i>desired</i> parity behavior, so each flips green when its gap closes.  Gap ids (G1&ndash;G11) match the plan's gap
- * inventory.  The synthetic interface, DTOs, enums, and the shared {@code @Rest} fixture are nested static types below
- * (house convention, mirroring {@code RemoteClient_Test}).
+ * Capabilities were originally landed as <b>{@code @Disabled}</b> specs whose bodies assert the <i>desired</i> parity
+ * behavior, each flipping green as its gap closed.  Gap ids (G1&ndash;G12) match the plan's gap inventory; as of the
+ * G6 + G12 slice <b>all gaps are closed</b> and all 72 cells are active (no remaining {@code @Disabled} specs) &mdash;
+ * G6 adds part-serializer/{@code @Schema} coverage ({@code b33}/{@code b34}/{@code c44}/{@code c45}) and G12 adds
+ * {@code @PathRemainder} coverage ({@code b35}/{@code c46}).  The synthetic interface, DTOs,
+ * enums, and the shared {@code @Rest} fixture are nested static types below (house convention, mirroring
+ * {@code RemoteClient_Test}).
  *
  * <p>
  * Cross-walk: each synthetic method's comment names the feature id (F-row) it exercises.
@@ -133,7 +137,7 @@ class RemoteProxy_FeatureParity_Test {
 		@RemoteGet(path="/ping", returns=RemoteReturn.RESPONSE) RestResponse pingResponse();    // RemoteReturn.RESPONSE
 		@RemoteGet("/ping")                                     void pingVoid();                // void return
 
-		// ---- Gap rows (present-but-@Disabled) -----------------------------------------------------------------------
+		// ---- Former gap rows (all now supported) --------------------------------------------------------------------
 
 		@RemotePost("/beanContent")               String postBean(@Content A_Bean bean);          // F12 @Content bean            (G1)
 		@RemotePost("/listContent")               String postList(@Content List<A_Bean> beans);   // F13 @Content List<bean>      (G1)
@@ -169,6 +173,13 @@ class RemoteProxy_FeatureParity_Test {
 
 		@RemoteGet("/list")                       java.util.concurrent.CompletableFuture<List<A_Bean>> getListAsync(); // G11 async return
 		@RemoteGet("/bean")                       Optional<A_Bean> getBeanOptional();             // G11 Optional return
+
+		// G6 — part serializer honors @Schema (collection format, skipIfEmpty) instead of toString()/enum-name luck
+		@RemoteGet("/csv")                        String getPipes(@Query(name="tags", schema=@Schema(collectionFormat="pipes")) String[] tags);     // G6 collectionFormat=pipes
+		@RemoteGet("/skip")                       String getSkip(@Query(name="q", schema=@Schema(skipIfEmpty=true)) String q, @Query("keep") String keep); // G6 skipIfEmpty
+
+		// G12 — @PathRemainder appended as the trailing path remainder
+		@RemoteGet("/remainder")                  String getRemainder(@PathRemainder String remainder);  // G12 @PathRemainder
 	}
 
 	/** Tiny secondary interface to assert {@code @RemoteOp} verb resolution (F-row verb completeness). */
@@ -228,6 +239,9 @@ class RemoteProxy_FeatureParity_Test {
 		@RestGet("/rest/dynh")  public String dynH(@Header("a") String a, @Header("b") String b) { return "a=" + a + ",b=" + b; }
 		@RestPost("/rest/dynf") public String dynF(@FormData("a") String a, @FormData("b") String b) { return "a=" + a + ",b=" + b; }
 		@RestGet("/rest/def")   public String def(@Query("view") String view) { return "view=" + view; }
+		@RestGet("/rest/csv")   public String csv(@Query("tags") String tags) { return "tags=" + tags; }
+		@RestGet("/rest/skip")  public String skip(@Query("q") String q, @Query("keep") String keep) { return "q=" + q + ",keep=" + keep; }
+		@RestGet("/rest/remainder/*") public String remainder(@PathRemainder String r) { return "r=" + r; }
 	}
 
 	// =================================================================================================================
@@ -383,9 +397,8 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		// ---- Gap cells (response/body-centric) — @Disabled --------------------------------------------------------
+		// ---- Former gap cells (response/body-centric) — now active ------------------------------------------------
 
-		@Disabled("G1: next-gen RemoteClient stringifies @Content beans via String.valueOf instead of serializing with the configured serializer (RemoteClient.java:180-187; RestRequest.java:232 has no serializer in the converter chain).")
 		@Test void b20_contentBean_serialized_F12() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				var b = new A_Bean(); b.setName("na44");
@@ -393,7 +406,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G1: next-gen RemoteClient does not serialize @Content List<bean> via the configured serializer (RemoteClient.java:180-187; RestRequest.java:232).")
 		@Test void b21_contentList_serialized_F13() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				var b = new A_Bean(); b.setName("na44");
@@ -401,14 +413,12 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G7: Reader is not a convertible request-body type in the next-gen converter chain (RestRequest.java:238-245); RemoteClient stringifies it (RemoteClient.java:180-187).")
 		@Test void b22_contentReader_streamed_F14() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("hello", proxy(mrc).postReader(new StringReader("hello")));
 			}
 		}
 
-		@Disabled("G2: next-gen RemoteClient returns the raw body String for bean return types; ResponseBody has no as(Class) parser hook (RemoteClient.java:201-215; ResponseBody.java).")
 		@Test void b23_returnBean_parsed_F15() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				var bean = proxy(mrc).getBean();
@@ -416,7 +426,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G2: next-gen RemoteClient cannot parse a response body into List<bean> (RemoteClient.java:201-215; ResponseBody.java).")
 		@Test void b24_returnList_parsed_F16() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				var l = proxy(mrc).getList();
@@ -425,130 +434,133 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G2: next-gen RemoteClient cannot parse a response body into a Map (RemoteClient.java:201-215; ResponseBody.java).")
 		@Test void b25_returnMap_parsed_F17() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("v", proxy(mrc).getMap().get("k"));
 			}
 		}
 
-		@Disabled("G2: next-gen RemoteClient cannot parse a numeric response body into Integer (returns the raw String) (RemoteClient.java:201-215).")
 		@Test void b26_returnInteger_parsed_F18() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals(Integer.valueOf(5), proxy(mrc).patchCount("x"));
 			}
 		}
 
-		@Disabled("G2: next-gen RemoteClient returns the raw String for an Object return type instead of a parsed POJO (RemoteClient.java:213).")
 		@Test void b27_returnObject_parsed_F19() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals(123, proxy(mrc).getObject());
 			}
 		}
 
-		@Disabled("G2/G3: next-gen RemoteClient cannot materialize an HTTP-response bean (Ok); RemoteReturn.BEAN throws UnsupportedOperationException (RemoteClient.java:227).")
 		@Test void b28_returnResponseBean_F21() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertNotNull(proxy(mrc).postOk("x"));
 			}
 		}
 
-		@Disabled("G4: next-gen RemoteClient has no error-status -> typed-exception mapping (RemoteClient.java:201-230).")
 		@Test void b29_typedException_onErrorStatus_F22() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertThrows(NotFound.class, () -> proxy(mrc).getOrThrow("missing"));
 			}
 		}
 
-		@Disabled("G5: @FormData parameters are not bound by next-gen RemoteClient.buildRequest (RemoteClient.java:151-195).")
 		@Test void b30_formData_bound_G5() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=v", proxy(mrc).postForm("v"));
 			}
 		}
 
-		@Disabled("G5: @Request beans are not expanded into parts by next-gen RemoteClient.buildRequest (RemoteClient.java:151-195).")
 		@Test void b31_requestBean_expanded_G5() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=ra", proxy(mrc).getReq(new A_RequestBean()));
 			}
 		}
 
-		@Disabled("G11: next-gen RemoteClient does not implement Optional<T> returns (RemoteClient.java:201-229); classic engine does.")
 		@Test void b32_optionalReturn_G11() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertTrue(proxy(mrc).getBeanOptional().isPresent());
 			}
 		}
 
-		// ---- G8: dynamic name/value pairs (round-trip) — server echoes the N distinct parts it received ----------
-		// Desired parity: each map/part-list/bean expands to TWO distinct parts (a=1, b=2). The engine currently
-		// stringifies the whole argument into a single bogus part, so each cell is @Disabled until G8 closes.
+		// ---- G6 (part serializer / @Schema) + G12 (@PathRemainder) — final slice -----------------------------------
 
-		@Disabled("G8: @Query Map is not expanded into distinct query params — engine stringifies the whole map as one value (RemoteClient.java:166-170). Classic: RestRequest.java:2801-2825; Query.java:124-164.")
+		@Test void b33_partSerializer_collectionFormat_G6() throws Exception {
+			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
+				// @Schema(collectionFormat="pipes") -> "a|b|c" rather than the array's toString()
+				assertEquals("tags=a|b|c", proxy(mrc).getPipes(new String[]{"a", "b", "c"}));
+			}
+		}
+
+		@Test void b34_partSerializer_skipIfEmpty_G6() throws Exception {
+			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
+				// @Schema(skipIfEmpty=true) on an empty value omits the "q" param entirely
+				assertEquals("q=null,keep=y", proxy(mrc).getSkip("", "y"));
+			}
+		}
+
+		@Test void b35_pathRemainder_G12() throws Exception {
+			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
+				assertEquals("r=abc", proxy(mrc).getRemainder("abc"));
+			}
+		}
+
+		// ---- G8: dynamic name/value pairs (round-trip) — server echoes the N distinct parts it received ----------
+		// Parity: each map/part-list/bean expands to TWO distinct parts (a=1, b=2) rather than one bogus part (G8 closed).
+
 		@Test void b40_dynQueryMap_G8() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=1,b=2", proxy(mrc).dynQueryMap(Map.<String,Object>of("a", "1", "b", "2")));
 			}
 		}
 
-		@Disabled("G8: @Query(\"*\") Map dynamic-pairs contract not honored (RemoteClient.java:166-170). Classic: RestRequest.java:2801-2825; Query.java:124-164.")
 		@Test void b41_dynQueryMapStar_G8() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=1,b=2", proxy(mrc).dynQueryMapStar(Map.<String,Object>of("a", "1", "b", "2")));
 			}
 		}
 
-		@Disabled("G8: @Query(\"*\") PartList (NameValuePairs) form not expanded into distinct query params (RemoteClient.java:166-170). Classic: RestRequest.java:2801-2825.")
 		@Test void b42_dynQueryPartList_G8() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=1,b=2", proxy(mrc).dynQueryPartList(PartList.of(HttpParts.part("a", "1"), HttpParts.part("b", "2"))));
 			}
 		}
 
-		@Disabled("G8: @Query bean not expanded into per-property query params (RemoteClient.java:166-170). Classic: RestRequest.java:2801-2825; Query.java:124-164.")
 		@Test void b43_dynQueryBean_G8() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=1,b=2", proxy(mrc).dynQueryBean(A_PairBean.of("1", "2")));
 			}
 		}
 
-		@Disabled("G8: @Header Map is not expanded into distinct headers (RemoteClient.java:173-178). Classic: RestRequest.java:2733-2767; Header.java:116-171.")
 		@Test void b44_dynHeaderMap_G8() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=1,b=2", proxy(mrc).dynHeaderMap(Map.<String,Object>of("a", "1", "b", "2")));
 			}
 		}
 
-		@Disabled("G8: @Header(\"*\") Map dynamic-pairs contract not honored (RemoteClient.java:173-178). Classic: RestRequest.java:2733-2767; Header.java:116-171.")
 		@Test void b45_dynHeaderMapStar_G8() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=1,b=2", proxy(mrc).dynHeaderMapStar(Map.<String,Object>of("a", "1", "b", "2")));
 			}
 		}
 
-		@Disabled("G8: @Header(\"*\") HttpHeaderList (NameValuePairs) form not expanded into distinct headers (RemoteClient.java:173-178). Classic: RestRequest.java:2733-2767.")
 		@Test void b46_dynHeaderList_G8() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=1,b=2", proxy(mrc).dynHeaderList(HttpHeaderList.ofPairs("a", "1", "b", "2")));
 			}
 		}
 
-		@Disabled("G8: @Header bean not expanded into per-property headers (RemoteClient.java:173-178). Classic: RestRequest.java:2733-2767; Header.java:116-171.")
 		@Test void b47_dynHeaderBean_G8() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=1,b=2", proxy(mrc).dynHeaderBean(A_PairBean.of("1", "2")));
 			}
 		}
 
-		@Disabled("G8: @FormData Map is not bound/expanded into distinct form fields by next-gen RemoteClient (@FormData unbound: RemoteClient.java:151-195; G5/G8). Classic: RestRequest.java:formDataArg.")
 		@Test void b48_dynFormDataMap_G8() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=1,b=2", proxy(mrc).dynFormDataMap(Map.<String,Object>of("a", "1", "b", "2")));
 			}
 		}
 
-		@Disabled("G8: @FormData(\"*\") Map dynamic-pairs not bound/expanded by next-gen RemoteClient (@FormData unbound: RemoteClient.java:151-195; G5/G8). Classic: RestRequest.java:formDataArg.")
 		@Test void b49_dynFormDataMapStar_G8() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				assertEquals("a=1,b=2", proxy(mrc).dynFormDataMapStar(Map.<String,Object>of("a", "1", "b", "2")));
@@ -657,9 +669,8 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		// ---- Gap cells (request-serialization-centric) — @Disabled ------------------------------------------------
+		// ---- Former gap cells (request-serialization-centric) — now active ----------------------------------------
 
-		@Disabled("G1: @Content bean is stringified via String.valueOf rather than serialized to JSON (RemoteClient.java:180-187; RestRequest.java:232).")
 		@Test void c20_contentBean_serializedRequest_F12() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -669,7 +680,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G7: Reader is not a convertible request-body type (RestRequest.java:238-245); RemoteClient stringifies it (RemoteClient.java:180-187).")
 		@Test void c21_contentReader_streamedRequest_F14() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -680,7 +690,6 @@ class RemoteProxy_FeatureParity_Test {
 
 		// ---- G8: dynamic name/value pairs (request shape) — assert TWO distinct parts are emitted from the map ----
 
-		@Disabled("G8: @Query Map is not expanded into separate query params — the engine stringifies the whole map as one value (RemoteClient.java:166-170). Classic: RestRequest.java:2801-2825; Query.java:124-164.")
 		@Test void c22_dynQueryMap_G8() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -690,7 +699,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G8: @Query(\"*\") Map dynamic-pairs contract not honored (RemoteClient.java:166-170). Classic: RestRequest.java:2801-2825; Query.java:124-164.")
 		@Test void c23_dynQueryMapStar_G8() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -700,7 +708,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G8: @Query(\"*\") PartList (NameValuePairs) form not expanded into separate query params (RemoteClient.java:166-170). Classic: RestRequest.java:2801-2825.")
 		@Test void c24_dynQueryPartList_G8() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -710,7 +717,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G8: @Query bean not expanded into per-property query params (RemoteClient.java:166-170). Classic: RestRequest.java:2801-2825; Query.java:124-164.")
 		@Test void c25_dynQueryBean_G8() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -720,7 +726,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G8: @Header Map is not expanded into separate headers (RemoteClient.java:173-178). Classic: RestRequest.java:2733-2767; Header.java:116-171.")
 		@Test void c26_dynHeaderMap_G8() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -730,7 +735,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G8: @Header(\"*\") Map dynamic-pairs contract not honored (RemoteClient.java:173-178). Classic: RestRequest.java:2733-2767; Header.java:116-171.")
 		@Test void c27_dynHeaderMapStar_G8() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -740,7 +744,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G8: @Header(\"*\") HttpHeaderList (NameValuePairs) form not expanded into separate headers (RemoteClient.java:173-178). Classic: RestRequest.java:2733-2767.")
 		@Test void c28_dynHeaderList_G8() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -750,7 +753,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G8: @Header bean not expanded into per-property headers (RemoteClient.java:173-178). Classic: RestRequest.java:2733-2767; Header.java:116-171.")
 		@Test void c29_dynHeaderBean_G8() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -760,7 +762,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G8/G5: @FormData Map is neither bound nor expanded into separate form fields by next-gen RemoteClient (RemoteClient.java:151-195). Classic: RestRequest.java:formDataArg.")
 		@Test void c30_dynFormDataMap_G8() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -770,7 +771,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G8/G5: @FormData(\"*\") Map dynamic-pairs neither bound nor expanded by next-gen RemoteClient (RemoteClient.java:151-195). Classic: RestRequest.java:formDataArg.")
 		@Test void c31_dynFormDataMapStar_G8() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -780,7 +780,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G9: @Query(def=...) parameter default is not applied for a null argument — the engine skips null args entirely (RemoteClient.java:156). Classic applies parameter defaults (RestClient.java:7244-7255).")
 		@Test void c40_paramDefault_G9() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -789,7 +788,6 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G5: @FormData is not bound to a form-data part by next-gen RemoteClient (RemoteClient.java:151-195).")
 		@Test void c41_formData_request_G5() throws Exception {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
@@ -798,16 +796,51 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
-		@Disabled("G11: CompletableFuture<T> async returns are not implemented by next-gen RemoteClient (RemoteClient.java:201-229); classic engine submits to an executor (RestClient.java:7330-7349).")
 		@Test void c42_asyncReturn_G11() throws Exception {
-			var captured = new ArrayList<TransportRequest>();
-			try (var c = client(captured)) {
+			// Dedicated transport: the shared capture stub returns the literal body "result" (asserted by c01/c10),
+			// which is not valid JSON for List<A_Bean>; this stub returns a parseable list so the async return can be verified.
+			var t = MockHttpTransport.builder()
+				.fallback(req -> TransportResponse.builder().statusCode(200).body(new ByteArrayInputStream("[{\"name\":\"na44\"}]".getBytes())).build())
+				.build();
+			try (var c = RestClient.builder().transport(t).rootUrl("http://x.com").build()) {
 				var f = c.remote(A_ParityClient.class).getListAsync();
-				assertNotNull(f.get());
+				var list = f.get();
+				assertNotNull(list);
+				assertEquals(1, list.size());
+				assertEquals("na44", list.get(0).getName());
 			}
 		}
 
-		@Disabled("G2/G1 (F23): full JSON serializer+parser request/response round-trip not wired through the next-gen RemoteClient (RemoteClient.java:180-215; RestRequest.java:232; ResponseBody.java).")
+		// ---- G6 (part serializer / @Schema) + G12 (@PathRemainder) — request-shape ---------------------------------
+
+		@Test void c44_partSerializer_collectionFormat_G6() throws Exception {
+			var captured = new ArrayList<TransportRequest>();
+			try (var c = client(captured)) {
+				c.remote(A_ParityClient.class).getPipes(new String[]{"a", "b", "c"});
+				var uri = java.net.URLDecoder.decode(captured.get(0).getUri().toString(), java.nio.charset.StandardCharsets.UTF_8);
+				assertTrue(uri.contains("tags=a|b|c"), uri);
+			}
+		}
+
+		@Test void c45_partSerializer_skipIfEmpty_G6() throws Exception {
+			var captured = new ArrayList<TransportRequest>();
+			try (var c = client(captured)) {
+				c.remote(A_ParityClient.class).getSkip("", "y");
+				var uri = captured.get(0).getUri().toString();
+				assertTrue(uri.contains("keep=y"), uri);
+				assertFalse(uri.contains("q="), uri);
+			}
+		}
+
+		@Test void c46_pathRemainder_G12() throws Exception {
+			var captured = new ArrayList<TransportRequest>();
+			try (var c = client(captured)) {
+				c.remote(A_ParityClient.class).getRemainder("a/b/c");  // multi-segment: slashes preserved
+				var path = captured.get(0).getUri().getPath();
+				assertTrue(path.endsWith("/rest/remainder/a/b/c"), path);
+			}
+		}
+
 		@Test void c43_jsonRoundTrip_F23() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
 				var svc = mrc.getClient().remote(A_ParityClient.class);

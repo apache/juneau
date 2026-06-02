@@ -406,11 +406,38 @@ public final class RestRequest {
 
 	private String applyPathSubstitutions(String template) {
 		var result = template;
+		Object remainder = null;
 		for (var entry : pathData.entrySet()) {
+			if ("/*".equals(entry.getKey())) {
+				remainder = entry.getValue();  // @PathRemainder — applied after named substitutions
+				continue;
+			}
 			var replacement = entry.getValue() != null ? entry.getValue().toString() : "";
 			result = result.replace("{" + entry.getKey() + "}", urlEncode(replacement));
 		}
+		if (remainder != null) {
+			var r = remainder.toString();
+			if (! r.isEmpty()) {
+				if (result.endsWith("/*"))
+					result = result.substring(0, result.length() - 2);
+				if (! result.endsWith("/"))
+					result += "/";
+				result += urlEncodePath(r);
+			}
+		}
 		return result;
+	}
+
+	/** URL-encodes a path remainder while preserving {@code /} segment separators. */
+	private static String urlEncodePath(String value) {
+		var segments = value.split("/", -1);
+		var sb = new StringBuilder();
+		for (var i = 0; i < segments.length; i++) {
+			if (i > 0)
+				sb.append('/');
+			sb.append(urlEncode(segments[i]));
+		}
+		return sb.toString();
 	}
 
 	private URI appendQuery(String baseUrl) {
