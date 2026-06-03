@@ -71,8 +71,7 @@ import org.apache.juneau.rest.annotation.*;
  * ({@code -Djuneau.freemarker.path=views}), environment variable
  * ({@code JUNEAU_FREEMARKER_PATH=views}), or {@code Config} key
  * ({@code juneau.freemarker.path = views}) to change the runtime mount without subclassing.
- * Resolution happens once at {@link RestContext} construction time; see
- * {@code FINISHED-99-svl-in-op-paths.md} for the full resolution chain.
+ * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
  * <h5 class='section'>Mixin-only deployment:</h5>
  *

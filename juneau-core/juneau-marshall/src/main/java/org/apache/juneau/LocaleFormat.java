@@ -87,7 +87,9 @@ public enum LocaleFormat {
 		};
 	}
 
-	@SuppressWarnings("deprecation")  // Locale(String, String, String) is deprecated in Java 19; Locale.of() requires Java 19+.
+	@SuppressWarnings({
+		"deprecation" // Locale(String, String, String) is deprecated in Java 19; Locale.of() requires Java 19+.
+	})
 	private static Locale parseUnderscore(String s) {
 		var parts = s.split("_", -1);
 		return switch (parts.length) {

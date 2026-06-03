@@ -178,7 +178,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 *
 	 * <p>
 	 * Calling {@code attach(...)} a second time before {@link #detach()} is permitted &mdash; the most recent
-	 * attachment wins.  If never called, the extension stays in Mode INJECT (Phase 1&ndash;5 back-compat).
+	 * attachment wins.  If never called, the extension stays in Mode INJECT.
 	 *
 	 * @param store The bean store to push/pop overlays against.  Must not be <jk>null</jk>.
 	 * @return This extension, for fluent chaining.
@@ -388,7 +388,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 *
 	 * <p>
 	 * Mixing {@code Mode.INJECT} and {@code Mode.OVERLAY} declarations in the same scope throws an
-	 * {@link IllegalStateException} (per TODO-35 OQ3 &mdash; loud failure rather than silent degradation).
+	 * {@link IllegalStateException}.
 	 */
 	static ScopedStore buildClassScopeStoreWithMode(Class<?> testClass) {
 		var store = new TestBeanStore();
@@ -403,7 +403,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 *
 	 * <p>
 	 * Mixing {@code Mode.INJECT} and {@code Mode.OVERLAY} declarations in the same scope throws an
-	 * {@link IllegalStateException} (per TODO-35 OQ3 &mdash; loud failure rather than silent degradation).
+	 * {@link IllegalStateException}.
 	 */
 	static ScopedStore buildMethodScopeStoreWithMode(Object testInstance, TestBeanStore classScopeParent) {
 		var store = new TestBeanStore(classScopeParent);
@@ -450,7 +450,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * field or method.
 	 *
 	 * <p>
-	 * Honors both instance and static members per the locked decision in {@code TODO-35} ("behave consistently with
+	 * Honors both instance and static members ("behave consistently with
 	 * non-static" for {@code scope = METHOD} on static fields).
 	 */
 	private static void populateInstanceOverrides(TestBeanStore store, Object testInstance, ModeTracker modeTracker) {
@@ -478,7 +478,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 
 	/**
 	 * Tracks the {@link Mode} of {@code @TestBean} declarations encountered within a single scope and rejects
-	 * mixed-mode declarations per TODO-35 OQ3.
+	 * mixed-mode declarations.
 	 */
 	private static final class ModeTracker {
 		private final Scope scope;

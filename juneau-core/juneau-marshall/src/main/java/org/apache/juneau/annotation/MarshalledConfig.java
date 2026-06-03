@@ -35,8 +35,8 @@ import org.apache.juneau.swap.*;
  * Used primarily for specifying marshalling configuration properties on REST classes and methods.
  *
  * <p>
- * This annotation is the marshalling-only sibling of {@code @BeanConfig}. After the Phase 3 split,
- * bean-modeling attributes (visibility settings, fluent-setter detection, property naming, not-bean
+ * This annotation is the marshalling-only sibling of {@code @BeanConfig}.
+ * Bean-modeling attributes (visibility settings, fluent-setter detection, property naming, not-bean
  * exclusions, etc.) live on {@link BeanConfig @BeanConfig} in
  * {@code juneau-commons}. Attributes that affect wire format, type discriminators, swap classes,
  * locale/media-type/timezone, and debug mode stay here on {@code @MarshalledConfig}.

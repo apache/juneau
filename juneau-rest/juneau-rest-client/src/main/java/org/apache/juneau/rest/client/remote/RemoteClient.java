@@ -103,7 +103,9 @@ public final class RemoteClient {
 	 * @return A proxy instance. Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If {@code iface} is not an interface or not annotated with {@link Remote}.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+	})
 	public <T> T create(Class<T> iface) {
 		assertArgNotNull("iface", iface);
 		var meta = RrpcInterfaceMeta.of(iface);

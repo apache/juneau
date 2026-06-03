@@ -789,7 +789,7 @@ public @interface Rest {
 	 * Per-resource observability opt-in / opt-out control.
 	 *
 	 * <p>
-	 * Controls whether the FINISHED-67 observability block ({@link org.apache.juneau.rest.metrics.MetricsRecorder} /
+	 * Controls whether the observability block ({@link org.apache.juneau.rest.metrics.MetricsRecorder} /
 	 * {@link org.apache.juneau.rest.tracing.TracerHook}) fires for operations on this resource.
 	 * Per-operation overrides are available via {@link RestOp#observability()} (and the verb annotations).
 	 *
@@ -892,7 +892,7 @@ public @interface Rest {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		MDC propagation (TODO-117) still works when this executor is set — the
+	 * 		MDC propagation still works when this executor is set — the
 	 * 		{@link org.apache.juneau.rest.processor.MdcAsyncListener} wraps the callback <em>before</em> it is
 	 * 		routed through the executor, so the MDC snapshot is restored on whichever thread the executor picks.
 	 * </ul>

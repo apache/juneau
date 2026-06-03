@@ -59,7 +59,9 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 * @param bean The bean instance.  Can be <jk>null</jk>.
 	 * @return The bean.
 	 */
-	@SuppressWarnings("resource") // addBean returns this; the discarded return is the store the caller already holds
+	@SuppressWarnings({
+		"resource" // addBean returns this; the discarded return is the store the caller already holds
+	})
 	default <T> T add(Class<T> beanType, T bean) {
 		addBean(beanType, bean);
 		return bean;
@@ -74,7 +76,9 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The bean.
 	 */
-	@SuppressWarnings("resource") // addBean returns this; the discarded return is the store the caller already holds
+	@SuppressWarnings({
+		"resource" // addBean returns this; the discarded return is the store the caller already holds
+	})
 	default <T> T add(Class<T> beanType, T bean, String name) {
 		addBean(beanType, bean, name);
 		return bean;
@@ -229,7 +233,9 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 * @param configTypes The configuration types.
 	 * @return This object.
 	 */
-	@SuppressWarnings("resource") // registerConfiguration returns this; the discarded return is the store the caller already holds
+	@SuppressWarnings({
+		"resource" // registerConfiguration returns this; the discarded return is the store the caller already holds
+	})
 	default WritableBeanStore registerConfigurations(Class<?>... configTypes) {
 		if (configTypes != null)
 			for (var c : configTypes)

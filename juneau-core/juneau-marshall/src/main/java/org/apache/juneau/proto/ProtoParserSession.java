@@ -363,8 +363,7 @@ public class ProtoParserSession extends ReaderParserSession {
 		}
 		// String → byte[] dispatch at the collection-element / map-value / top-level call site.
 		// Mirrors the Bug #12 top-level fix in doParse but for the collection-element path that
-		// was intentionally carved out of that turn (see Bug #11/#12 a04-residual note in
-		// todo/TODO-57-format-round-trip-tests.md).  Two routes:
+		// was intentionally carved out of that turn.  Two routes:
 		//   (1) non-NOT_SET: consult the variant BinarySwap installed on byte[].class via
 		//       targetType.getSwap(this); the wire is a hex / base64 string emitted by the
 		//       swap's swap() on the serializer side.

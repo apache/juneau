@@ -320,7 +320,10 @@ public class BeanMeta<T> {
 	private final ClassInfo classInfo;                                         // Pure-reflection view of the bean class that decouples bean modeling from ClassMeta.  Always non-null.
 	private final Supplier<String> dictionaryName;                             // The @Marshalled(typeName) annotation defined on this bean class.
 	private final BeanPropertyMeta dynaProperty;                               // "extras" property.
-	@SuppressWarnings("rawtypes") private final Class<? extends BeanFactory> factoryClass;  // @BeanType(factory=X.class) — null means no factory.
+	@SuppressWarnings({
+		"rawtypes" // Raw type required at this call site; generic type is verified at runtime
+	})
+	private final Class<? extends BeanFactory> factoryClass;  // @BeanType(factory=X.class) — null means no factory.
 	private final boolean fluentSetters;                                       // Whether fluent setters are enabled.
 	private final Map<Method,String> getterProps;                              // The getter properties on the target class.
 	private final Map<String,BeanPropertyMeta> hiddenProperties;               // The hidden properties on the target class.

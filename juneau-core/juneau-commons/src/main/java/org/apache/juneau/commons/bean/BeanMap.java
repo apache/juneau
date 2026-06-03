@@ -84,7 +84,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param bean The bean being wrapped.
 	 * @return A new {@link BeanMap} instance wrapping the bean.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: map parameterization is verified at construction.
+	})
 	public static <T> BeanMap<T> of(T bean) {
 		return new BeanMap<>(bean, BeanMeta.of((Class<T>) bean.getClass()));
 	}
@@ -279,7 +281,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param action The action to perform.
 	 * @return The list of all bean property values.
 	 */
-	@SuppressWarnings("java:S3776") // Cognitive complexity acceptable for bean property filtering with predicate
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for bean property filtering with predicate
+	})
 	public BeanMap<T> forEachValue(Predicate<Object> valueFilter, BeanPropertyConsumer action) {
 
 		// Normal bean.

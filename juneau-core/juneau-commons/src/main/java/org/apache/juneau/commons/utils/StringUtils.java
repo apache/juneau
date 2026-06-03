@@ -6537,7 +6537,7 @@ public class StringUtils {
 	 * @return The tokens, or <jk>null</jk> if the string was null.
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: splita used widely; null propagates from split(). Consider empty array. See BasicCsvHeader, etc.
+		"java:S1168"     // splita used widely; null propagates from split(). Consider empty array. See BasicCsvHeader, etc.
 	})
 	public static String[] splita(String s, char c, int limit) {
 		if (s == null)
@@ -6554,7 +6554,7 @@ public class StringUtils {
 	 * @return The tokens, or null if the input array was null
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: splita used widely. Consider empty array. See BasicCsvHeader, etc.
+		"java:S1168"     // splita used widely. Consider empty array. See BasicCsvHeader, etc.
 	})
 	public static String[] splita(String[] s, char c) {
 		if (s == null)

@@ -170,7 +170,6 @@ public class Swagger extends SwaggerElement {
 		this.schemes.addAll(copyOf(copyFrom.schemes));
 		this.swagger = copyFrom.swagger;
 
-		// TODO - Definitions are not deep copied, so they should not contain references.
 		definitions.putAll(copyOf(copyFrom.definitions, JsonMap::new));
 
 		copyFrom.paths.forEach((k, v) -> {

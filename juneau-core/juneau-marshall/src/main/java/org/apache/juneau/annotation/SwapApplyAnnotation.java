@@ -46,7 +46,9 @@ public class SwapApplyAnnotation {
 	 * method handles unwrapping the nested {@link Swap @Swap} from {@link SwapApply#value()} and registering it
 	 * under the targets specified by {@link SwapApply#on()} and {@link SwapApply#onClass()}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<SwapApply,Context.Builder> {
 
 		/**

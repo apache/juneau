@@ -191,7 +191,9 @@ public enum BigNumberFormat {
 	 * @return The parsed value, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 * @throws IllegalArgumentException If the value cannot be parsed as a number or {@code targetType} is unsupported.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: parameterized by caller.
+	})
 	public static <T extends Number> T parse(String value, BigNumberFormat format, Class<T> targetType) {
 		if (value == null)
 			return null;

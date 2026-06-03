@@ -55,7 +55,9 @@ public final class JavaHttpTransportBuilder {
 	 *
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Not owned here; lifecycle is managed by the surrounding context
+	})
 	public JavaHttpTransport build() {
 		return new JavaHttpTransport(this);
 	}

@@ -80,6 +80,7 @@ import jakarta.servlet.http.*;
  */
 @SuppressWarnings({
 	"rawtypes",
+	"java:S112",  // throws Exception intentional - callback/lifecycle methods throughout this class
 	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_defaultRequestFormData)
 	"java:S1200", // High coupling is intentional in this central operation context aggregator.
 	"java:S6539", // RestOpContext intentionally centralizes op wiring and annotation resolution.
@@ -552,7 +553,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * ({@link RestGet}, etc.) imply their fixed verb. Falls back to
 	 * {@link HttpUtils#detectHttpMethod} when no annotation declares a verb.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity: annotation-driven HTTP method dispatch benefits from consolidated linear scan.
+	})
 	private final Memoizer<String> httpMethod = memoizer(() -> {
 		var vr = varResolver();
 		for (var ai : getRestOpAnnotations()) {
@@ -854,7 +857,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * (derived from the method name via {@link HttpUtils#detectHttpPath}) is intentionally
 	 * <i>not</i> SVL-resolved &mdash; it is framework-derived, not user input.
 	 */
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity: annotation-driven path-matcher construction benefits from consolidated linear scan.
+	})
 	private final Memoizer<UrlPathMatcher[]> pathMatchers = memoizer(() -> {
 		var v = Holder.of(UrlPathMatcherList.create());
 		var vr = varResolver();
@@ -1219,7 +1224,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 	}
 
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity: reflective annotation dispatch is intentionally consolidated for JIT inlining.
+	})
 	private static String httpMethodFromAnnotation(Annotation a, VarResolver vr) {
 		if (a instanceof RestGet)
 			return "get";
@@ -1405,9 +1412,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The wrapped request object.
 	 * @throws Exception If any errors occur trying to interpret the request.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public RestRequest createRequest(RestSession session) throws Exception {
 		return new RestRequest(this, session);
 	}
@@ -1421,9 +1425,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return The wrapped response object.
 	 * @throws Exception If any errors occur trying to interpret the request or response.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public RestResponse createResponse(RestSession session, RestRequest req) throws Exception {
 		return new RestResponse(this, session, req);
 	}
@@ -1435,9 +1436,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * @return A new REST operation session.
 	 * @throws Exception If op session could not be created.
 	 */
-	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - callback/lifecycle method
-	})
 	public RestOpSession.Builder createSession(RestSession session) throws Exception {
 		return RestOpSession.create(this, session).logger(getCallLogger()).debug(debugConfig.get().resolve(this, session.getRequest()).enabled());
 	}
@@ -1608,7 +1606,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	/**
 	 * Returns the effective {@link java.util.concurrent.Executor} for routing
-	 * {@link java.util.concurrent.CompletableFuture} completion callbacks on this operation (TODO-118), or
+	 * {@link java.util.concurrent.CompletableFuture} completion callbacks on this operation, or
 	 * {@code null} when neither the op nor the resource configures an executor (natural completion thread).
 	 *
 	 * @return The executor, or {@code null} if no async-completion executor is configured.
@@ -1720,8 +1718,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			var a = ClassInfo.of(c).getAnnotations(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 			if (nn(a)) {
 				var schema = HttpPartSchema.create(a);
-				@SuppressWarnings("unchecked")
-				var serializer = createPartSerializer((Class<? extends HttpPartSerializer>)schema.getSerializer(), getPartSerializer());
+			@SuppressWarnings({
+				"unchecked" // Cast is safe: type parameter is verified by caller context.
+			})
+			var serializer = createPartSerializer((Class<? extends HttpPartSerializer>)schema.getSerializer(), getPartSerializer());
 				pm = new ResponsePartMeta(HEADER, schema, serializer);
 			}
 			if (pm == null)
@@ -1859,7 +1859,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type parameter is verified by caller context.
+	})
 	private static <T> Class<? extends T>[] classArray(Class<? extends T> value) {
 		return (Class<? extends T>[])new Class<?>[] { value };
 	}

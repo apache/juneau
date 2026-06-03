@@ -47,8 +47,7 @@ import org.apache.juneau.rest.annotation.*;
  * ({@code -Djuneau.redoc.path=docs}), environment variable
  * ({@code JUNEAU_REDOC_PATH=docs}), or {@code Config} key
  * ({@code juneau.redoc.path = docs}) to change the runtime mount without subclassing.
- * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
- * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
  * <p>
  * Override accepts bare token ({@code redoc}), leading slash ({@code /redoc}), trailing slash

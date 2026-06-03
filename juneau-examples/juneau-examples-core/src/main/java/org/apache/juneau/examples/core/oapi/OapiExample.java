@@ -36,7 +36,9 @@ public class OapiExample {
 	 * @param args Unused.
 	 * @throws Exception Unused.
 	 */
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused" // args required by JVM entry-point signature; unused in examples
+	})
 	public static void main(String[] args) throws Exception {
 
 		var oapiSerializer = OpenApiSerializer.DEFAULT;

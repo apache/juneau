@@ -60,7 +60,9 @@ import org.apache.juneau.serializer.*;
 })
 public class SseSerializer extends WriterSerializer {
 
-	@SuppressWarnings("java:S115") // Match AssertionUtils arg-name style used throughout Juneau.
+	@SuppressWarnings({
+		"java:S115" // Match AssertionUtils arg-name style used throughout Juneau.
+	})
 	private static final String ARG_w = "w";
 
 	/**

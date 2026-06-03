@@ -132,7 +132,9 @@ public abstract class AuthFilter implements Filter {
 	 * @param e The authentication failure.
 	 * @throws IOException If writing to the response fails.
 	 */
-	@SuppressWarnings("resource")  // Writer lifecycle is servlet-managed; do not close.
+	@SuppressWarnings({
+		"resource" // Writer lifecycle is servlet-managed; do not close.
+	})
 	static void sendChallenge(HttpServletResponse resp, AuthenticationException e) throws IOException {
 		e.getHeaders().stream()
 			.filter(h -> WWW_AUTHENTICATE.equalsIgnoreCase(h.getName()))

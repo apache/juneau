@@ -268,7 +268,9 @@ public class SamlAuthFilter extends AuthFilter {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+	})
 	private Set<String> extractRoles(Principal principal) {
 		if (principal instanceof ClaimsPrincipal cp) {
 			var v = cp.getClaims().get(rolesClaim);

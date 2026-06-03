@@ -186,7 +186,9 @@ public final class BeanValidator {
 		return getDefaultValidator();
 	}
 
-	@SuppressWarnings("resource")  // ValidatorFactory is intentionally not closed; it is cached for the process lifetime.
+	@SuppressWarnings({
+		"resource" // ValidatorFactory is intentionally not closed; it is cached for the process lifetime.
+	})
 	private static Validator getDefaultValidator() {
 		if (DEFAULT_PROVIDER_UNAVAILABLE.get())
 			return null;

@@ -263,7 +263,9 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast from raw type is safe by checked conditional above.
+	})
 	private void serializeArray(BsonOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		var elementType = type.getElementType();
 		c = sort(c);
@@ -272,7 +274,9 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 			writeElement(out, String.valueOf(idx++), x, elementType, null);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast from raw type is safe by checked conditional above.
+	})
 	private void serializeMap(BsonOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
 		var valueType = type.getValueType();
 		var keyType = type.getKeyType();

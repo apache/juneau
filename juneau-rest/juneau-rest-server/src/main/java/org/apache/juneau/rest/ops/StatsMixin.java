@@ -27,9 +27,9 @@ import org.apache.juneau.rest.stats.*;
  *
  * <p>
  * Single-responsibility op-mixin carved out of the former {@code BasicRestOperations} interface. Carries
- * the per-method {@link HtmlDocConfig @HtmlDocConfig} that customizes the {@code /stats} HTML page (per
- * OQ-8 &mdash; the per-method config travels with the op, while the host-wide navlinks/JSON-schema config
- * lives at the class level on {@link BasicRestServlet}).
+ * the per-method {@link HtmlDocConfig @HtmlDocConfig} that customizes the {@code /stats} HTML page.
+ * The per-method config travels with the op, while the host-wide navlinks/JSON-schema config
+ * lives at the class level on {@link BasicRestServlet}.
  *
  * @since 9.5.0
  */

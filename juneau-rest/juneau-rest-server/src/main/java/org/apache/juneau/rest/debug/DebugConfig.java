@@ -71,7 +71,6 @@ public class DebugConfig {
 		public Builder rule(String target, Consumer<DebugRule.Builder> value) {
 			var b = DebugRule.create();
 			value.accept(b);
-			// TODO-20 Phase 2: Persist full DebugRule metadata per target.
 			return this;
 		}
 
@@ -189,7 +188,9 @@ public class DebugConfig {
 		return resolveInternal(context.getContext().getResourceClass(), context.getJavaMethod(), req);
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused" // Method and parameter are reflectively available to subclasses; kept for API stability.
+	})
 	private DebugResult resolveInternal(Class<?> resourceClass, Method method, HttpServletRequest req) {
 		var enabled = false;
 		if (req != null) {

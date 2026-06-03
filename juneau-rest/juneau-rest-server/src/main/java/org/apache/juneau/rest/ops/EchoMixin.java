@@ -48,8 +48,7 @@ import org.apache.juneau.rest.annotation.*;
  * ({@code -Djuneau.echo.path=introspect}), environment variable
  * ({@code JUNEAU_ECHO_PATH=introspect}), or {@code Config} key
  * ({@code juneau.echo.path = introspect}) to change the runtime mount without subclassing.
- * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
- * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
  * <p>
  * Override accepts bare token ({@code echo}), leading slash ({@code /echo}), trailing slash
@@ -59,7 +58,7 @@ import org.apache.juneau.rest.annotation.*;
  * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at both
  * {@code /echo/*} <i>and</i> {@code /debug/echo/*} as historical aliases on a single op. That
  * dual default has been collapsed to a single SVL-configurable mount as part of the
- * "single path per op" principle (see FINISHED-101). Deployers who relied on the
+ * "single path per op" principle. Deployers who relied on the
  * {@code /debug/echo/*} alias must now either set {@code -Djuneau.echo.path=debug/echo} or
  * compose a second instance with the override.
  *

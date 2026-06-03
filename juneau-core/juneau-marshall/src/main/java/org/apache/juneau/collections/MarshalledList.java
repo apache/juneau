@@ -349,8 +349,9 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @return This object.
 	 */
 	public MarshalledList appendReverse(List<?> values) {
-		for (ListIterator<?> i = values.listIterator(values.size()); i.hasPrevious();)
-			add(i.previous());
+		if (nn(values))
+			for (ListIterator<?> i = values.listIterator(values.size()); i.hasPrevious();)
+				add(i.previous());
 		return this;
 	}
 
@@ -364,8 +365,9 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @return This object.
 	 */
 	public MarshalledList appendReverse(Object...values) {
-		for (var i = values.length - 1; i >= 0; i--)
-			add(values[i]);
+		if (values != null)
+			for (var i = values.length - 1; i >= 0; i--)
+				add(values[i]);
 		return this;
 	}
 

@@ -36,7 +36,9 @@ public final class RegexFunctions {
 	private RegexFunctions() {}
 
 	/** All function classes in this category. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type verified by caller context.
+	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Match.class, Extract.class, ReplaceRegex.class
 	};

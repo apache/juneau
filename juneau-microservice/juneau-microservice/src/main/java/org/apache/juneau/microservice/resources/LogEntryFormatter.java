@@ -100,14 +100,14 @@ public class LogEntryFormatter extends Formatter {
 
 		// @formatter:off
 		format = format
-			.replaceAll("\\{date\\}", "%1\\$s")
-			.replaceAll("\\{class\\}", "%2\\$s")
-			.replaceAll("\\{method\\}", "%3\\$s")
-			.replaceAll("\\{logger\\}", "%4\\$s")
-			.replaceAll("\\{level\\}", "%5\\$s")
-			.replaceAll("\\{msg\\}", "%6\\$s")
-			.replaceAll("\\{threadid\\}", "%7\\$s")
-			.replaceAll("\\{exception\\}", "%8\\$s");
+			.replace("{date}", "%1$s")
+			.replace("{class}", "%2$s")
+			.replace("{method}", "%3$s")
+			.replace("{logger}", "%4$s")
+			.replace("{level}", "%5$s")
+			.replace("{msg}", "%6$s")
+			.replace("{threadid}", "%7$s")
+			.replace("{exception}", "%8$s");
 		// @formatter:on
 
 		this.format = format;

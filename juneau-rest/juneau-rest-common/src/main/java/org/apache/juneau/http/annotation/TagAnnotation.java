@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.annotation.*;
 
 /**
- * Utility classes and methods for the {@link Tag @XXX} annotation.
+ * Utility classes and methods for the {@link Tag @Tag} annotation.
  *
  */
 public class TagAnnotation {

@@ -18,8 +18,8 @@
  * OAuth 2.0 / OIDC integration for the Juneau REST server.
  *
  * <p>
- * Layered on the {@link org.apache.juneau.rest.auth.AuthFilter AuthFilter} framework (TODO-94a) and the
- * {@link org.apache.juneau.rest.auth.TokenValidator TokenValidator} SPI (FINISHED-69).  Wraps Nimbus's
+ * Layered on the {@link org.apache.juneau.rest.auth.AuthFilter AuthFilter} framework and the
+ * {@link org.apache.juneau.rest.auth.TokenValidator TokenValidator} SPI.  Wraps Nimbus's
  * {@code oauth2-oidc-sdk} (Apache 2.0) for the introspection, flow, and discovery wire shapes.
  *
  * <p>

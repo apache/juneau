@@ -41,11 +41,12 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  *
  */
 @SuppressWarnings({
-	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
-	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"java:S3740", // Raw ClassMeta/ObjectSwap types used throughout serializer session; parameterization requires extensive generic changes
 	"java:S3776", // Cognitive complexity acceptable for doSerialize
 	"java:S6541", // Brain method acceptable for doSerialize / serializeAnything
-	"resource", // MarkdownWriter/Writer lifecycle managed by SerializerPipe
+	"resource",   // MarkdownWriter/Writer lifecycle managed by SerializerPipe
 	"rawtypes",
 })
 public class MarkdownSerializerSession extends WriterSerializerSession {
@@ -299,18 +300,9 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 					w.tableRow(row);
 					continue;
 				}
-				@SuppressWarnings({
-					"java:S3740" // Raw ClassMeta from getClassMetaForObject
-				})
 				ClassMeta itemCm = getClassMetaForObject(item);
-				@SuppressWarnings({
-					"java:S3740" // Raw ObjectSwap from ClassMeta.getSwap
-				})
 				ObjectSwap itemSwap = itemCm.getSwap(this);
 				var swapped = itemSwap != null ? swap(itemSwap, item) : item;
-				@SuppressWarnings({
-					"java:S3740" // Raw ClassMeta from ObjectSwap.getSwapClassMeta
-				})
 				ClassMeta swappedCm = itemSwap != null ? itemSwap.getSwapClassMeta(this) : itemCm;
 
 				var row = new String[finalHeaders.length];
@@ -430,9 +422,6 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 	 * @return The cell string value.
 	 * @throws SerializeException If serialization fails.
 	 */
-	@SuppressWarnings({
-		"java:S3740" // Raw ClassMeta/ObjectSwap from runtime object inspection
-	})
 	protected String serializeInlineValue(Object o) throws SerializeException {
 		if (o == null)
 			return nullValue;
@@ -490,8 +479,7 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 	 * @throws SerializeException If inspection fails.
 	 */
 	@SuppressWarnings({
-		"java:S1168", // null signals list rendering; empty array would incorrectly trigger table mode
-		"java:S3740" // Raw ClassMeta from getClassMetaForObject on collection elements
+		"java:S1168" // null signals list rendering; empty array would incorrectly trigger table mode
 	})
 	protected String[] getTableHeaders(Collection<?> c) throws SerializeException {
 		if (c.isEmpty())

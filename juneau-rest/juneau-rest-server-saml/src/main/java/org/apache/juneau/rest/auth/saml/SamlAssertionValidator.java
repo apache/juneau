@@ -66,18 +66,18 @@ import net.shibboleth.shared.resolver.ResolverException;
  *
  * <ul>
  * 	<li><b>Mandatory signature</b> on every assertion (or, optionally, on the {@code <Response>} envelope).
- * 	<li><b>Strict signature-algorithm allowlist</b> (per OQA Q6) &mdash; only {@code rsa-sha256} and
+ * 	<li><b>Strict signature-algorithm allowlist</b> &mdash; only {@code rsa-sha256} and
  * 		{@code ecdsa-sha256} are accepted out of the box.  SHA-1 is permanently rejected.
- * 	<li><b>Clock skew</b> (per OQA Q7) &mdash; defaults to 60 seconds tolerance on {@code NotBefore} /
+ * 	<li><b>Clock skew</b> &mdash; defaults to 60 seconds tolerance on {@code NotBefore} /
  * 		{@code NotOnOrAfter}; capped at 300 seconds.
  * 	<li><b>Audience restriction</b> &mdash; {@code <AudienceRestriction>} must list the configured SP entity ID.
- * 	<li><b>Encrypted assertions</b> (per OQA Q5) &mdash; if the response contains
+ * 	<li><b>Encrypted assertions</b> &mdash; if the response contains
  * 		{@code <EncryptedAssertion>}, a {@code decryptionCredential} must be configured.
  * </ul>
  *
  * <h5 class='topic'>Marker claim</h5>
  * <p>
- * The returned {@link ClaimsPrincipal} is annotated with {@code issuerType=SAML} (OQA Q1) so downstream code
+ * The returned {@link ClaimsPrincipal} is annotated with {@code issuerType=SAML} so downstream code
  * can distinguish SAML-derived principals from JWT-derived principals without resorting to a subclass:
  *
  * <p class='bjava'>
@@ -105,7 +105,9 @@ import net.shibboleth.shared.resolver.ResolverException;
  *
  * @since 9.5.0
  */
-@SuppressWarnings("java:S6539")  // Suppress "monolithic class" — validator is a single end-to-end pipeline.
+@SuppressWarnings({
+	"java:S6539" // Monolithic class: validator is a single end-to-end pipeline.
+})
 public class SamlAssertionValidator {
 
 	/** Marker claim name on the returned {@link ClaimsPrincipal}. */
@@ -114,10 +116,10 @@ public class SamlAssertionValidator {
 	/** Marker claim value identifying the principal as SAML-issued. */
 	public static final String ISSUER_TYPE_SAML = "SAML";
 
-	/** Maximum clock-skew tolerance the builder will accept (5 minutes, per OQA Q7). */
+	/** Maximum clock-skew tolerance the builder will accept (5 minutes). */
 	private static final Duration MAX_CLOCK_SKEW = Duration.ofSeconds(300);
 
-	/** Default allowlist of XML signature algorithms (per OQA Q6). */
+	/** Default allowlist of XML signature algorithms. */
 	private static final Set<String> DEFAULT_ALGORITHMS = Set.of(
 		SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256,
 		SignatureConstants.ALGO_ID_SIGNATURE_ECDSA_SHA256
@@ -177,7 +179,7 @@ public class SamlAssertionValidator {
 		}
 
 		/**
-		 * Sets the credential used to decrypt {@code <EncryptedAssertion>} elements (per OQA Q5).
+		 * Sets the credential used to decrypt {@code <EncryptedAssertion>} elements.
 		 *
 		 * <p>
 		 * If the response contains encrypted assertions and no decryption credential is configured,
@@ -217,7 +219,7 @@ public class SamlAssertionValidator {
 		 * Replaces the default signature-algorithm allowlist with the supplied URIs.
 		 *
 		 * <p>
-		 * SHA-1 algorithms are silently filtered out per OQA Q6 (permanent rejection).
+		 * SHA-1 algorithms are silently filtered out (permanent rejection).
 		 *
 		 * @param values The XML-DSig algorithm URIs to allow.  Must contain at least one non-SHA-1 entry.
 		 * @return This object.
@@ -240,7 +242,7 @@ public class SamlAssertionValidator {
 		/**
 		 * Sets the clock-skew tolerance for {@code NotBefore} / {@code NotOnOrAfter} validation.
 		 *
-		 * @param value The tolerance.  Must be non-negative and not exceed 5 minutes (per OQA Q7).
+		 * @param value The tolerance.  Must be non-negative and not exceed 5 minutes.
 		 * @return This object.
 		 */
 		public Builder clockSkew(Duration value) {
@@ -580,7 +582,9 @@ public class SamlAssertionValidator {
 	/**
 	 * Suppress unused-import warnings for symbols referenced indirectly (kept for API-clarity).
 	 */
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused" // Symbols are referenced indirectly; method exists to keep imports from being flagged.
+	})
 	private static void __apiReferences() {
 		var ignore = new Object[] {
 			SignableXMLObject.class, ValidationContext.class, QName.class, UsageType.class, SignatureConstants.class

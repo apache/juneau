@@ -1143,14 +1143,14 @@ public class CollectionUtils {
 	/**
 	 * Returns a null list.
 	 *
-	 * <p>TODO: SonarLint java:S1168 - Intentional null return for assertion testing. Consider Optional.
+	 * <p>Intentional null return for assertion testing.
 	 *
 	 * @param <T> The element type.
 	 * @param type The element type class.
 	 * @return <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"java:S1168",    // TODO: Intentional null return for assertion testing. Consider Optional.
+		"java:S1168",    // Intentional null return for assertion testing.
 		"java:S1172"     // Parameter type is used for type inference, not runtime behavior
 	})
 	public static <T> List<T> listn(Class<T> type) {
@@ -1911,7 +1911,7 @@ public class CollectionUtils {
 	/**
 	 * Returns a null map.
 	 *
-	 * <p>TODO: SonarLint java:S1168 - Intentional null return for assertion testing. Consider Optional.
+	 * <p>Intentional null return for assertion testing.
 	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
@@ -1920,7 +1920,7 @@ public class CollectionUtils {
 	 * @return <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"java:S1168",    // TODO: Intentional null return for assertion testing. Consider Optional.
+		"java:S1168",    // Intentional null return for assertion testing. Consider Optional.
 		"java:S1172"    // Parameters required for type inference in public API
 	})
 	public static <K,V> Map<K,V> mapn(Class<K> keyType, Class<V> valueType) {
@@ -1946,14 +1946,14 @@ public class CollectionUtils {
 	/**
 	 * Returns <jk>null</jk> for the specified array type.
 	 *
-	 * <p>TODO: SonarLint java:S1168 - Intentional null return for assertion testing. Consider Optional.
+	 * <p>Intentional null return for assertion testing.
 	 *
 	 * @param <T> The component type.
 	 * @param type The component type class.
 	 * @return <jk>null</jk>.
 	 */
 	@SuppressWarnings({
-		"java:S1168",    // TODO: Intentional null return for assertion testing. Consider Optional.
+		"java:S1168",    // Intentional null return for assertion testing. 
 		"java:S1172"     // Parameter type is used for type inference, not runtime behavior
 	})
 	public static <T> T[] na(Class<T> type) {
@@ -2298,7 +2298,7 @@ public class CollectionUtils {
 	 * @return The wrapped list.
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: Pass-through null by design. Consider empty list.
+		"java:S1168"     // Pass-through null by design. Consider empty list.
 	})
 	public static <E> List<E> synced(List<E> value) {
 		return value == null ? null : Collections.synchronizedList(value);
@@ -2313,7 +2313,7 @@ public class CollectionUtils {
 	 * @return The wrapped map.
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: Pass-through null by design. Consider empty map.
+		"java:S1168"     // Pass-through null by design. Consider empty map.
 	})
 	public static <K,V> Map<K,V> synced(Map<K,V> value) {
 		return value == null ? null : Collections.synchronizedMap(value);
@@ -2327,7 +2327,7 @@ public class CollectionUtils {
 	 * @return The wrapped set.
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: Pass-through null by design. Consider empty set.
+		"java:S1168"     // Pass-through null by design. Consider empty set.
 	})
 	public static <E> Set<E> synced(Set<E> value) {
 		return value == null ? null : Collections.synchronizedSet(value);

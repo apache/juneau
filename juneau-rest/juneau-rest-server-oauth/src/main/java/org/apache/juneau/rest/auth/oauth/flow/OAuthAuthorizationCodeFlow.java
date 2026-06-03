@@ -237,7 +237,9 @@ public class OAuthAuthorizationCodeFlow {
 	 * @param codeChallenge The PKCE code challenge.  Must not be <jk>null</jk>.  Always uses S256.
 	 * @return The authorization URL.
 	 */
-	@SuppressWarnings("deprecation")  // Nimbus CodeChallenge overload is deprecated; no simpler alternative yet.
+	@SuppressWarnings({
+		"deprecation" // Nimbus CodeChallenge overload is deprecated; no simpler alternative yet.
+	})
 	public URI buildAuthorizationUrl(String state, CodeChallenge codeChallenge) {
 		assertArgNotNullOrBlank("state", state);
 		assertArgNotNull("codeChallenge", codeChallenge);
@@ -276,7 +278,9 @@ public class OAuthAuthorizationCodeFlow {
 	 * 	parameters.  May be <jk>null</jk>.
 	 * @return The authorization URL.
 	 */
-	@SuppressWarnings("deprecation")  // Nimbus CodeChallenge overload is deprecated; no simpler alternative yet.
+	@SuppressWarnings({
+		"deprecation" // Nimbus CodeChallenge overload is deprecated; no simpler alternative yet.
+	})
 	public URI buildAuthenticationUrl(String state, CodeChallenge codeChallenge, String nonce, Consumer<AuthenticationRequest.Builder> customizer) {
 		assertArgNotNullOrBlank("state", state);
 		assertArgNotNull("codeChallenge", codeChallenge);

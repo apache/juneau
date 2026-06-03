@@ -130,7 +130,9 @@ public class ClaimsPrincipal implements Principal {
 		return claims.containsKey(claimName);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type parameter is verified by isInstance check before casting.
+	})
 	private static <T> T coerce(Object v, Class<T> type) {
 		if (type.isInstance(v))
 			return (T) v;

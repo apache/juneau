@@ -44,9 +44,11 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
-	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115" // Constants use UPPER_snakeCase naming convention
+	"resource",   // Resource management handled externally
+	"rawtypes",   // Raw types necessary for generic collection/map serialization throughout this session
+	"unchecked",  // Type erasure requires unchecked casts throughout this session
+	"java:S110",  // Inheritance depth acceptable for this class hierarchy
+	"java:S115"   // Constants use UPPER_snakeCase naming convention
 })
 public class JsonSerializerSession extends WriterSerializerSession {
 
@@ -178,10 +180,6 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	}
 
 	
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic collection/map serialization
-		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
-	})
 	private SerializerWriter serializeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
 		var elementType = type.getElementType();
@@ -214,10 +212,6 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	}
 
 	
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic collection/map serialization
-		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
-	})
 	protected SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		var keyType = type.getKeyType();
@@ -297,7 +291,6 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 */
 	
 	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type handling
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 	})
 	protected JsonWriter serializeAnything(JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {

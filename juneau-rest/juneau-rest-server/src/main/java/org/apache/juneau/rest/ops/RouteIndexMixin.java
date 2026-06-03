@@ -49,8 +49,7 @@ import org.apache.juneau.rest.beans.*;
  * ({@code -Djuneau.routeindex.path=routes}), environment variable
  * ({@code JUNEAU_ROUTEINDEX_PATH=routes}), or {@code Config} key
  * ({@code juneau.routeindex.path = routes}) to change the runtime mount without subclassing.
- * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
- * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
  * <p>
  * Override accepts bare token ({@code options}), leading slash ({@code /options}), or trailing
@@ -60,7 +59,7 @@ import org.apache.juneau.rest.beans.*;
  * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at both
  * {@code /options} <i>and</i> {@code /routes} as historical aliases on a single op. That dual
  * default has been collapsed to a single SVL-configurable mount as part of the
- * "single path per op" principle (see FINISHED-101). Deployers who relied on the
+ * "single path per op" principle. Deployers who relied on the
  * {@code /routes} alias must now set {@code -Djuneau.routeindex.path=routes} or compose a
  * second instance with the override.
  *
@@ -208,7 +207,9 @@ public class RouteIndexMixin {
 		);
 	}
 
-	@SuppressWarnings("java:S3776") // Cognitive-complexity: linear walk over a small annotation list; splitting hurts JIT.
+	@SuppressWarnings({
+		"java:S3776" // Cognitive-complexity: linear walk over a small annotation list; splitting hurts JIT.
+	})
 	private static boolean isHiddenFromIndex(Method m) {
 		for (var aClass : REST_OP_ANNOTATIONS) {
 			var a = m.getAnnotation(aClass);
@@ -231,7 +232,9 @@ public class RouteIndexMixin {
 		return m.getDeclaringClass() == RouteIndexMixin.class;
 	}
 
-	@SuppressWarnings("java:S3776") // Same as isHiddenFromIndex — short loop, single concern.
+	@SuppressWarnings({
+		"java:S3776" // Same as isHiddenFromIndex — short loop, single concern.
+	})
 	private static String readSummary(Method m) {
 		for (var aClass : REST_OP_ANNOTATIONS) {
 			var a = m.getAnnotation(aClass);
@@ -248,7 +251,9 @@ public class RouteIndexMixin {
 		return "";
 	}
 
-	@SuppressWarnings("java:S3776") // Same as isHiddenFromIndex — short loop, single concern.
+	@SuppressWarnings({
+		"java:S3776" // Same as isHiddenFromIndex — short loop, single concern.
+	})
 	private static String readDescription(Method m) {
 		for (var aClass : REST_OP_ANNOTATIONS) {
 			var a = m.getAnnotation(aClass);

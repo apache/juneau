@@ -33,7 +33,9 @@ public class CsvApplyAnnotation {
 
 	private CsvApplyAnnotation() {}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<CsvApply,Context.Builder> {
 
 		public Applier(VarResolverSession vr) {

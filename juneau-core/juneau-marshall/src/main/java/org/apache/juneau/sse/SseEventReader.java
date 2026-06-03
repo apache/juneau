@@ -59,7 +59,9 @@ import java.util.*;
 })
 public class SseEventReader implements Iterator<SseEvent>, Closeable {
 
-	@SuppressWarnings("java:S115") // Match AssertionUtils arg-name style used throughout Juneau.
+	@SuppressWarnings({
+		"java:S115" // Match AssertionUtils arg-name style used throughout Juneau.
+	})
 	private static final String ARG_in = "in";
 
 	/** UTF-8 BOM character that must be stripped exactly once from the start of an SSE stream. */
@@ -233,7 +235,9 @@ public class SseEventReader implements Iterator<SseEvent>, Closeable {
 		}
 	}
 
-	@SuppressWarnings("java:S3776") // SSE line parsing is a deliberate lexical state machine.
+	@SuppressWarnings({
+		"java:S3776" // SSE line parsing is a deliberate lexical state machine.
+	})
 	private String readLine() throws IOException {
 		var sb = new StringBuilder();
 		int c;

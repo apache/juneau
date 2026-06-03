@@ -50,7 +50,9 @@ final class JsonShortcut {
 	 * array of the raw string when the input does not start with {@code [} / end with
 	 * {@code ]}, mirroring {@code ArgCoercer.parseStringArray}.
 	 */
-	@SuppressWarnings("java:S3776") // Cognitive complexity: small inline parser.
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity: small inline parser.
+	})
 	static String[] decodeArray(String s) {
 		if (s == null) return new String[0];
 		var t = s.trim();

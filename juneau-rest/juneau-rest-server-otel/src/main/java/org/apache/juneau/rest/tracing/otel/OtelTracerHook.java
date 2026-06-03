@@ -177,7 +177,7 @@ public class OtelTracerHook implements TracerHook {
 		Span span = spanBuilder.startSpan();
 		Context spanContext = extracted.with(span);
 
-		// TODO-114: Render the W3C trace-context headers from the server-started span's context (the only
+		// Render the W3C trace-context headers from the server-started span's context (the only
 		// point where it's reliably active) and stash them as request attributes for
 		// TraceContextResponseProcessor to write on the response. The configured propagator only injects
 		// traceparent when the span context is valid, and tracestate only when non-empty, so both guards are

@@ -42,7 +42,7 @@ import com.nimbusds.oauth2.sdk.id.ClientID;
  *
  * <p>
  * Filed under {@link Deprecated &#64;Deprecated(since = "9.5.0")} from day-1 to surface the warning at IDE
- * compile time, per OQA Q4.  Wraps Nimbus's {@link ResourceOwnerPasswordCredentialsGrant}.
+ * compile time to surface the deprecation warning.  Wraps Nimbus's {@link ResourceOwnerPasswordCredentialsGrant}.
  *
  * @since 9.5.0
  * @deprecated Use {@link OAuthAuthorizationCodeFlow} (with PKCE) wherever possible.  The

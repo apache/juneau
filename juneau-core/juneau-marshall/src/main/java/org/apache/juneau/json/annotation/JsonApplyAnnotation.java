@@ -46,7 +46,9 @@ public class JsonApplyAnnotation {
 	 * method handles unwrapping the nested {@link Json @Json} from {@link JsonApply#value()} and registering it
 	 * under the targets specified by {@link JsonApply#on()} and {@link JsonApply#onClass()}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<JsonApply,Context.Builder> {
 
 		/**

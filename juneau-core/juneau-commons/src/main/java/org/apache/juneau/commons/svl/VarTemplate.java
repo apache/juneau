@@ -266,7 +266,7 @@ public final class VarTemplate {
 	}
 
 	/**
-	 * Package-private accessor for the compiled segments. Used by tests and by Phase 2's
+	 * Package-private accessor for the compiled segments. Used by tests and by the
 	 * stable-value folding pass.
 	 *
 	 * @return The compiled segments. The array is shared (not copied); callers must not mutate.
@@ -327,7 +327,9 @@ public final class VarTemplate {
 	 * @param out The writer to append to.
 	 * @return {@code out}.
 	 */
-	@SuppressWarnings("resource")  // 'out' and 'session' are caller-owned; this method must not close them.
+	@SuppressWarnings({
+		"resource" // 'out' and 'session' are caller-owned; this method must not close them.
+	})
 	public Writer resolveToUnchecked(VarResolverSession session, Writer out) {
 		try {
 			return resolveTo(session, out);

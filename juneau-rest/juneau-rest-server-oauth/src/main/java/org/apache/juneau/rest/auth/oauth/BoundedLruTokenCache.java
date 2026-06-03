@@ -31,7 +31,7 @@ import java.util.*;
  *
  * <ul>
  * 	<li><b>Size cap</b> &mdash; when the entry count would exceed {@code maxEntries}, the least-recently-used
- * 		entry is removed before the new entry is inserted.  Default {@code maxEntries=1000} (per OQA Q1).
+ * 		entry is removed before the new entry is inserted.  Default {@code maxEntries=1000}.
  * 	<li><b>TTL eviction</b> &mdash; on lookup, an entry whose stored expiry instant has passed (relative to
  * 		the supplied {@code now} clock) is removed and treated as a miss.
  * </ul>
@@ -40,7 +40,7 @@ import java.util.*;
  */
 public class BoundedLruTokenCache implements TokenCache {
 
-	/** Default maximum entry count (per OQA Q1). */
+	/** Default maximum entry count. */
 	public static final int DEFAULT_MAX_ENTRIES = 1000;
 
 	/**

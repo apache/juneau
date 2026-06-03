@@ -49,7 +49,9 @@ public final class JavaHttpTransportProvider implements HttpTransportProvider {
 	}
 
 	@Override /* HttpTransportProvider */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Not owned here; lifecycle is managed by the surrounding context
+	})
 	public HttpTransport create() {
 		return JavaHttpTransport.create();
 	}

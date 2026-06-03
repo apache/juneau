@@ -50,7 +50,9 @@ package org.apache.juneau.commons.inject;
  *
  * @since 9.5.0
  */
-@SuppressWarnings("resource")  // owner and frame are not owned by Snapshot; their lifecycle is managed externally.
+@SuppressWarnings({
+	"resource" // owner and frame are not owned by Snapshot; their lifecycle is managed externally.
+})
 public final class Snapshot {
 
 	private final WritableBeanStore owner;

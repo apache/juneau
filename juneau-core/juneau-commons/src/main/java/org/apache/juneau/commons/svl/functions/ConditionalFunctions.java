@@ -23,15 +23,16 @@ import org.apache.juneau.commons.svl.*;
  *
  * <p>
  * These four functions replaced the legacy {@code IfVar}, {@code SwitchVar}, {@code CoalesceVar},
- * and {@code NotEmptyVar} classes when the {@code #{...}} script syntax landed in 9.5.0. See
- * {@code FINISHED-102-svl-scripting.md} for the migration table.
+ * and {@code NotEmptyVar} classes when the {@code #{...}} script syntax landed in 9.5.0.
  */
 public final class ConditionalFunctions {
 
 	private ConditionalFunctions() {}
 
 	/** All function classes in this category. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type verified by caller context.
+	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		If.class, Switch.class, Coalesce.class, NotEmpty.class
 	};
@@ -41,7 +42,7 @@ public final class ConditionalFunctions {
 	 *
 	 * <p>
 	 * Returns {@code then} if {@code cond} is truthy, {@code else} otherwise. Truthiness rules
-	 * match {@link ArgCoercer}'s boolean coercion table (per OQA #8: explicit table, no
+	 * match {@link ArgCoercer}'s boolean coercion table (explicit table, no
 	 * implicit truthiness).
 	 */
 	public static class If extends TypedFunction {

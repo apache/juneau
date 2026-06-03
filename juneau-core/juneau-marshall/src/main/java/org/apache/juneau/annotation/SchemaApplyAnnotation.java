@@ -46,7 +46,9 @@ public class SchemaApplyAnnotation {
 	 * method handles unwrapping the nested {@link Schema @Schema} from {@link SchemaApply#value()} and registering it
 	 * under the targets specified by {@link SchemaApply#on()} and {@link SchemaApply#onClass()}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<SchemaApply,Context.Builder> {
 
 		/**

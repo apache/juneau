@@ -97,9 +97,10 @@ class BooleanFormat_Test {
 
 	@Test void b03_parse_nullAndBlank() {
 		for (var f : BooleanFormat.values()) {
-			assertNull(BooleanFormat.parse(null, f), "format=" + f);
-			assertNull(BooleanFormat.parse("", f), "format=" + f);
-			assertNull(BooleanFormat.parse("   ", f), "format=" + f);
+			var fmt = f;
+			assertThrows(IllegalArgumentException.class, () -> BooleanFormat.parse(null, fmt), "format=" + fmt);
+			assertThrows(IllegalArgumentException.class, () -> BooleanFormat.parse("", fmt), "format=" + fmt);
+			assertThrows(IllegalArgumentException.class, () -> BooleanFormat.parse("   ", fmt), "format=" + fmt);
 		}
 	}
 

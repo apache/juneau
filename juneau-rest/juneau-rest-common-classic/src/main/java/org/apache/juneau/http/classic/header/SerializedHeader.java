@@ -27,8 +27,6 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * TODO
- *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>

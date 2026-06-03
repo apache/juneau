@@ -46,8 +46,7 @@ import org.apache.juneau.rest.servlet.*;
  * ({@code -Djuneau.version.path=build-info}), environment variable
  * ({@code JUNEAU_VERSION_PATH=build-info}), or {@code Config} key
  * ({@code juneau.version.path = build-info}) to change the runtime mount without subclassing.
- * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
- * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ * Resolution happens once at {@link RestContext} construction time.
  *
  * <p>
  * Override accepts bare token ({@code version}), leading slash ({@code /version}), or trailing
@@ -57,7 +56,7 @@ import org.apache.juneau.rest.servlet.*;
  * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at three
  * historical aliases &mdash; {@code /version}, {@code /info}, and {@code /about} &mdash; on a
  * single op. That multi-path default has been collapsed to a single SVL-configurable mount as
- * part of the "single path per op" principle (see FINISHED-101). Deployers who relied on the
+ * part of the "single path per op" principle. Deployers who relied on the
  * {@code /info} or {@code /about} aliases must now either set
  * {@code -Djuneau.version.path=info} (or {@code about}), compose a second instance with the
  * desired override, or subclass and supply their own {@code @RestGet(path=...)} method.
@@ -186,7 +185,7 @@ public class VersionMixin extends RestMixin {
 	}
 
 	/**
-	 * Worker + builder constructor (TODO-143 OQ-11 / &sect;2.4).
+	 * Worker + builder constructor.
 	 *
 	 * <p>
 	 * Used by {@link Builder#build()} to both delegate to the shared {@link VersionProvider} worker and stash the
@@ -245,10 +244,10 @@ public class VersionMixin extends RestMixin {
 	 * <p>
 	 * Mirrors {@link VersionProvider.Builder}'s configuration methods on the mixin's own surface and
 	 * forwards each call to an underlying {@link VersionProvider.Builder}, which builds the shared worker
-	 * the mixin delegates to (TODO-145 &sect;2.3.1 / OQ-11).
+	 * the mixin delegates to.
 	 *
 	 * <p>
-	 * Extends {@link org.apache.juneau.rest.servlet.RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke worker-config setters chain
+	 * Extends {@link org.apache.juneau.rest.servlet.RestMixin.Builder} so the mixin's bespoke worker-config setters chain
 	 * with true covariant returns alongside the inherited {@link RestBuilder}surface (e.g. {@code path},
 	 * {@code roleGuard}). The worker config is forwarded once into {@link VersionProvider.Builder} and the REST
 	 * config is inherited once from {@link AbstractRestBuilder} &mdash; no triplication across the Version flavors.

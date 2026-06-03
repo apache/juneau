@@ -151,7 +151,9 @@ public class MarshallingContextConverter implements Converter {
 	 * @return The converted object, or <jk>null</jk> if the input object is <jk>null</jk>.
 	 * @throws InvalidDataConversionException If the object cannot be converted to the specified type.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type parameter verified by caller context.
+	})
 	@Override
 	public <T> T to(Object o, Object memberOf, ConverterSession session, Type mainType, Type... args) {
 		var rawType = (Class<T>) (mainType instanceof ParameterizedType pt ? pt.getRawType() : (Class<?>) mainType);

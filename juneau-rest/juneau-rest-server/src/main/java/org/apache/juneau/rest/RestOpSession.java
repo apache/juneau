@@ -56,7 +56,9 @@ public class RestOpSession extends ContextSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required: annotation type parameter is unknown at static analysis time.
+	})
 	public static class Builder extends ContextSession.Builder {
 
 		protected final RestOpContext ctx;
@@ -149,7 +151,7 @@ public class RestOpSession extends ContextSession {
 	 * @return This object.
 	 */
 	public RestOpSession finish() {
-		// TODO-70: when AsyncResponseProcessor has handed off to a real AsyncContext, the response will be
+		// When AsyncResponseProcessor has handed off to a real AsyncContext, the response will be
 		// committed by AsyncContext.complete() inside the future's whenComplete callback — synchronously
 		// flushing here would commit the response prematurely.
 		if (AsyncResponseProcessor.isAsyncDispatchOwned(this))

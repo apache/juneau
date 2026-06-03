@@ -56,7 +56,9 @@ public final class NoOpTracerHook implements TracerHook {
 	 * incoming trace context is unparseable) can return {@link #INSTANCE} instead of implementing a
 	 * private equivalent.
 	 */
-	@SuppressWarnings("resource")  // Singleton; intentionally held for the process lifetime.
+	@SuppressWarnings({
+		"resource" // Singleton; intentionally held for the process lifetime.
+	})
 	public static final class NoOpScope implements Scope {
 
 		/** Process-wide singleton instance. */

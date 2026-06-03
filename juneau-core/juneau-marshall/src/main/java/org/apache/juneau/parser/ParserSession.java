@@ -59,7 +59,9 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"rawtypes",   // Raw types necessary for generic type handling throughout parser session
+	"unchecked"   // Type erasure requires unchecked casts throughout parser session
 })
 public class ParserSession extends MarshallingSession {
 
@@ -230,10 +232,6 @@ public class ParserSession extends MarshallingSession {
 	 * @param name The name to set.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({
-		"rawtypes",  // Raw types necessary for generic name property handling
-		"unchecked"  // Type erasure requires unchecked operations
-	})
 	protected static final void setName(ClassMeta<?> cm, Object o, Object name) throws ExecutableException {
 		if (nn(cm)) {
 			Property m = cm.getNameProperty();
@@ -251,10 +249,6 @@ public class ParserSession extends MarshallingSession {
 	 * @param parent The parent to set.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked operations
-		"rawtypes"   // Raw types necessary for generic parent property handling
-	})
 	protected static final void setParent(ClassMeta<?> cm, Object o, Object parent) throws ExecutableException {
 		if (cm == null)
 			return;
@@ -331,9 +325,6 @@ public class ParserSession extends MarshallingSession {
 	 * @param c The listener class to cast to.
 	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for listener retrieval
-	})
 	public <T extends ParserListener> T getListener(Class<T> c) {
 		return (T)listener;
 	}
@@ -504,9 +495,6 @@ public class ParserSession extends MarshallingSession {
 	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 * @throws IOException Thrown by the underlying stream.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for generic type parsing
-	})
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
 		try (var p = createPipe(input)) {
 			return (T)parseInner(p, getClassMeta(type, args));
@@ -613,9 +601,6 @@ public class ParserSession extends MarshallingSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for generic type parsing
-	})
 	public final <T> T parse(String input, Type type, Type...args) throws ParseException {
 		try (var p = createPipe(input)) {
 			return (T)parseInner(p, getClassMeta(type, args));
@@ -813,9 +798,6 @@ public class ParserSession extends MarshallingSession {
 	 * @throws ParseException If a parse error occurs.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Unchecked cast from Object to T for consumer elements
-	})
 	protected <T> void doParseToBeanConsumer(ParserPipe pipe, BeanConsumer<T> consumer, Class<T> elementType) throws ParseException, IOException {
 		List<T> list = (List<T>) doParse(pipe, getClassMeta(List.class, elementType));
 		if (list == null)
@@ -893,9 +875,6 @@ public class ParserSession extends MarshallingSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for attribute conversion
-	})
 	protected final <T> T convertAttrToType(Object outer, String s, ClassMeta<T> type) throws ParseException {
 		if (s == null)
 			return null;
@@ -1365,9 +1344,6 @@ public class ParserSession extends MarshallingSession {
 	 * @param o The object to trim.
 	 * @return The trimmed string if it's a string.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to K for trim operation
-	})
 	protected final <K> K trim(K o) {
 		if (isTrimStrings() && o instanceof String o2)
 			return (K)o2.trim();
@@ -1405,10 +1381,6 @@ public class ParserSession extends MarshallingSession {
 	 * @return The swapped object.
 	 * @throws ParseException If swap method threw an exception.
 	 */
-	@SuppressWarnings({
-		"rawtypes",  // Raw types necessary for swap handling
-		"unchecked"  // Type erasure requires unchecked operations
-	})
 	protected Object unswap(ObjectSwap swap, Object o, ClassMeta<?> eType) throws ParseException {
 		try {
 			return swap.unswap(this, o, eType);

@@ -81,7 +81,9 @@ public class RequestBeanPropertyMeta {
 
 	private final HttpPartSchema schema;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+	})
 	RequestBeanPropertyMeta(Builder b, HttpPartSerializer serializer, HttpPartParser parser) {
 		partType = b.partType;
 		schema = b.schema;

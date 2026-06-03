@@ -297,7 +297,7 @@ public class Lists<E> {
 	 * @return The built list, or {@code null} if {@link #sparse()} is set and the list is empty.
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: Intentional null when sparse+empty. Consider Optional.
+		"java:S1168"     // Intentional null when sparse+empty. TODO - Check current usages and see if empty makes sense.
 	})
 	public List<E> build() {
 		if (sparse && e(list))

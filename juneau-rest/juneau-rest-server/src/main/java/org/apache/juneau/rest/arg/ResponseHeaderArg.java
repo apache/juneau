@@ -93,7 +93,9 @@ public class ResponseHeaderArg implements RestOpArg {
 		this.type = pi.getParameterType().innerType();
 		var schema = HttpPartSchema.create(Header.class, pi);
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+		})
 		var ps = (Class<? extends HttpPartSerializer>)schema.getSerializer();
 		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, nn(ps) ? HttpPartSerializer.creator().type(ps).apply(annotations).create() : null);
 

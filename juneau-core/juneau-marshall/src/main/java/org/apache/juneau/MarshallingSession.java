@@ -1033,7 +1033,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 */
 	@SuppressWarnings({
 		"java:S1168",   // null when BeanMeta not found. Consider empty BeanMap.
-		"java:S1135"    // TODO comment - deferred design consideration
+		"java:S1135"    // Deferred design consideration.
 	})
 	public final <T> BeanMap<T> newBeanMap(Object outer, Class<T> c) {
 		var m = getBeanMeta(c);

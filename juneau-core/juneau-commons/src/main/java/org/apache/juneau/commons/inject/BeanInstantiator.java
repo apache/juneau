@@ -471,7 +471,9 @@ public class BeanInstantiator<T> {
 	public static class Builder<T> {
 
 	final BeanStore parentStore;
-	@SuppressWarnings("resource") // transient build-time scratch store; lifetime is bounded by the Builder itself, no foreign resources are captured
+	@SuppressWarnings({
+		"resource" // transient build-time scratch store; lifetime is bounded by the Builder itself, no foreign resources are captured
+	})
 	final BasicBeanStore store;
 	final ClassInfoTyped<T> beanType;
 	final NullableReference<List<String>> debug = NullableReference.empty();
@@ -713,7 +715,9 @@ public class BeanInstantiator<T> {
 	 * @return This object.
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or its underlying class is not a subclass of {@code beanType}.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Reflective builder lookup returns Object; cast is safe by construction.
+	})
 	public Builder<T> type(ClassInfo value) {
 		assertArgNotNull(ARG_value, value);
 		return type((Class<? extends T>) value.inner());
@@ -1690,7 +1694,7 @@ public class BeanInstantiator<T> {
 		if (builder2 != null) {
 			log("Builder detected: %s", builder2.getClass().getName());
 
-			// Phase 6 hooks: builder initializers, then optional inject, then optional auto-wire.
+			// Initialization hooks: builder initializers, then optional inject, then optional auto-wire.
 			for (var init : builderInitializers)
 				init.accept(builder2);
 			if (injectBuilder) {
@@ -2138,7 +2142,7 @@ public class BeanInstantiator<T> {
 			.map(MethodInfo::getReturnType)
 			.toList();
 		if (! staticBuilderTypes.isEmpty()) {
-			// TODO-143 (Option D): prefer a factory whose builder builds the EXACT requested type (or a
+			// Prefer a factory whose builder builds the EXACT requested type (or a
 			// subtype) over one that only promises a supertype — e.g. an inherited generic builder(Class)
 			// whose build() erases to a base class. A supertype-only factory must not displace a stricter path.
 			var strict = staticBuilderTypes.stream().filter(this::isStrictBuilderType).findFirst();
@@ -2212,7 +2216,7 @@ public class BeanInstantiator<T> {
 	 * as opposed to only promising a supertype.
 	 *
 	 * <p>
-	 * Used by {@link #findBuilderType()} (TODO-143 Option D) to prefer a precise builder over an inherited
+	 * Used by {@link #findBuilderType()} to prefer a precise builder over an inherited
 	 * generic base builder whose {@code build()} erases to a parent class (e.g. a self-typed REST
 	 * {@code DefaultBuilder} whose {@code build()} returns {@code RestMixin}).
 	 *
@@ -2229,7 +2233,7 @@ public class BeanInstantiator<T> {
 	}
 
 	/**
-	 * TODO-143 Option D gate: a builder candidate that only builds a <i>supertype</i> of the requested bean
+	 * A builder candidate that only builds a <i>supertype</i> of the requested bean
 	 * type must not be used when the requested type is concretely instantiable via a direct constructor.
 	 *
 	 * <p>

@@ -139,7 +139,7 @@ public class FaviconMixin extends RestMixin {
 	}
 
 	/**
-	 * Worker + builder constructor (TODO-143 OQ-11 / &sect;2.4).
+	 * Worker + builder constructor.
 	 *
 	 * <p>
 	 * Used by {@link Builder#build()} to both delegate to the shared {@link FaviconProvider} worker and stash the
@@ -188,10 +188,10 @@ public class FaviconMixin extends RestMixin {
 	 * <p>
 	 * Mirrors {@link FaviconProvider.Builder}'s configuration methods on the mixin's own surface and
 	 * forwards each call to an underlying {@link FaviconProvider.Builder}, which builds the shared worker
-	 * the mixin delegates to (TODO-145 &sect;2.3.1 / OQ-11).
+	 * the mixin delegates to.
 	 *
 	 * <p>
-	 * Extends {@link org.apache.juneau.rest.servlet.RestMixin.Builder} (TODO-143 Option B) so the mixin's bespoke worker-config setters
+	 * Extends {@link org.apache.juneau.rest.servlet.RestMixin.Builder} so the mixin's bespoke worker-config setters
 	 * ({@link #bytes(byte[])}, {@link #classpath(String)}, {@link #cacheControl(String)}) chain with true
 	 * covariant returns alongside the inherited {@link RestBuilder}surface (e.g. {@code path}, {@code roleGuard}).
 	 * This is how a multi-flavor capability avoids triplicating its REST-level config: the worker config is

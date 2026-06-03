@@ -27,6 +27,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.logging.*;
@@ -484,7 +485,20 @@ public class TomcatServerComponent implements MicroserviceListener {
 			return f;
 		}
 		try {
-			var f = Files.createTempDirectory("juneau-tomcat").toFile();
+			Path dirPath;
+			try {
+				// Explicitly restrict to owner-only access (rwx------) on POSIX file systems.
+				Set<PosixFilePermission> ownerOnly = EnumSet.of(
+					PosixFilePermission.OWNER_READ,
+					PosixFilePermission.OWNER_WRITE,
+					PosixFilePermission.OWNER_EXECUTE);
+				dirPath = Files.createTempDirectory("juneau-tomcat",
+					PosixFilePermissions.asFileAttribute(ownerOnly));
+			} catch (UnsupportedOperationException e) {
+				// Non-POSIX filesystem (e.g. Windows) — fall back to default temp-dir creation.
+				dirPath = Files.createTempDirectory("juneau-tomcat");
+			}
+			var f = dirPath.toFile();
 			ownsBaseDir.set(true);
 			baseDir.set(f);
 			return f;

@@ -35,7 +35,9 @@ public final class EncodingFunctions {
 	private EncodingFunctions() {}
 
 	/** All function classes in this category. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type verified by caller context.
+	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Base64Encode.class, Base64Decode.class, UrlEncode.class, UrlDecode.class,
 		HtmlEscape.class, HtmlUnescape.class
@@ -104,7 +106,9 @@ public final class EncodingFunctions {
 	 * ({@code &#NNNN;}) and named ({@code &amp;} / {@code &lt;} / {@code &gt;} /
 	 * {@code &quot;} / {@code &apos;} / {@code &#39;}) entities.
 	 */
-	@SuppressWarnings("java:S3776") // Cognitive complexity: small inline entity decoder.
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity: small inline entity decoder.
+	})
 	public static class HtmlUnescape extends TypedFunction {
 		@Override public String name() { return "htmlUnescape"; }
 		public String invoke(String s) {

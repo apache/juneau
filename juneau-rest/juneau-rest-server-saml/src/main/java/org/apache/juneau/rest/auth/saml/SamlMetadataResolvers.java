@@ -37,7 +37,7 @@ import org.w3c.dom.Element;
  * Convenience factories for building {@link MetadataResolver} instances backed by an OpenSAML implementation.
  *
  * <p>
- * Per the TODO-94b plan and OQA Q2, Juneau ships <i>convenience factories only</i> &mdash; no bundled default
+ * Juneau ships <i>convenience factories only</i> &mdash; no bundled default
  * {@link MetadataResolver} singleton.  Applications either:
  * <ul>
  * 	<li>Call {@link #file(File)} for a local SAML metadata file (typical dev/staging setup).

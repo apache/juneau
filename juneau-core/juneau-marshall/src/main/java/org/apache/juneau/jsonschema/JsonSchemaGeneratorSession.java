@@ -270,7 +270,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	}
 
 	@SuppressWarnings({
-		"java:S1168",    // TODO: null when type ignored. Consider empty schema.
+		"java:S1168",    // TODO: null when type ignored. Consider returning empty schema instead?
 		"java:S3776", // Cognitive complexity acceptable for schema generation over type categories
 		"java:S6541", // Brain Method — unified getSchema branching over serializers/types is intentional
 		"rawtypes", // Raw types necessary for generic type handling

@@ -121,7 +121,9 @@ public class MethodExecStats {
 		 * @param value The setting value.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+		})
 		public Builder type(Class<?> value) {
 			type = (Class<? extends MethodExecStats>) value;
 			return this;

@@ -31,7 +31,9 @@ public final class ArithmeticFunctions {
 	private ArithmeticFunctions() {}
 
 	/** All function classes in this category. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type verified by caller context.
+	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Add.class, Subtract.class, Multiply.class, Divide.class, Modulo.class,
 		Min.class, Max.class, Abs.class

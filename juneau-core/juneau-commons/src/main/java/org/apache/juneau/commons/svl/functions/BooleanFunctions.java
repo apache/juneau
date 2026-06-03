@@ -31,7 +31,9 @@ public final class BooleanFunctions {
 	private BooleanFunctions() {}
 
 	/** All function classes in this category. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type verified by caller context.
+	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		And.class, Or.class, Not.class, Xor.class,
 		Eq.class, Neq.class, Lt.class, Lte.class, Gt.class, Gte.class

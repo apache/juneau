@@ -183,7 +183,9 @@ public class SignedCookieSessionStore implements SessionStore {
 	}
 
 	@Override /* Overridden from SessionStore */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+	})
 	public Optional<OidcSession> lookup(String cookieValue) {
 		assertArgNotNull("cookieValue", cookieValue);
 		try {

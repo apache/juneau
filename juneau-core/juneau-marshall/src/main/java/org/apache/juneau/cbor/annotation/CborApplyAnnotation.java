@@ -40,7 +40,9 @@ public class CborApplyAnnotation {
 	/**
 	 * Applies targeted {@link CborApply} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<CborApply,Context.Builder> {
 
 		/**

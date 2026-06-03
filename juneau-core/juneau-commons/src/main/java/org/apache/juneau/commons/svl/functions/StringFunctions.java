@@ -27,14 +27,17 @@ import org.apache.juneau.commons.svl.*;
  * Each public static nested class is a {@link TypedFunction} registered under the function name
  * shown in its {@link VarFunction#name()} method. The {@code Replaces} annotation in each
  * nested-class Javadoc names the legacy {@code Var} class that was retired in 9.5.0 in favor of
- * the function form (see {@code FINISHED-102-svl-scripting.md} for the full migration table).
+ * the function form.
  */
 public final class StringFunctions {
 
 	private StringFunctions() {}
 
 	/** All function classes in this category, in registration order. */
-	@SuppressWarnings({"unchecked","java:S2368"})
+	@SuppressWarnings({
+		"unchecked",   // Array initializer with parameterized element type; class literals are always erased at runtime.
+		"java:S2368"   // Public array field is intentional: ALL is a compile-time registry constant, not a mutable collection.
+	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Substring.class, Upper.class, Lower.class, Trim.class, StripLeading.class,
 		StripTrailing.class, StripSlashes.class, PathToken.class, Len.class, Replace.class,
@@ -132,7 +135,7 @@ public final class StringFunctions {
 	 * </ul>
 	 *
 	 * <p>
-	 * Used in SVL-configurable mixin paths (FINISHED-101 retrofit) so users can supply
+	 * Used in SVL-configurable mixin paths so users can supply
 	 * {@code "jsp"}, {@code "/jsp"}, {@code "/jsp/"}, {@code "/jsp/*"}, or {@code "jsp/*"} and
 	 * the template {@code /#{pathToken(${juneau.jsp.path:jsp})}/*} always resolves to a clean
 	 * {@code /jsp/*}.
@@ -272,7 +275,9 @@ public final class StringFunctions {
 		 * string. This keeps {@code %s} as the safe default while letting numeric specifiers
 		 * work without a separate {@code numericFormat(...)} entry point.
 		 */
-		@SuppressWarnings("java:S1166") // Exception swallowed — coercion is best-effort.
+		@SuppressWarnings({
+			"java:S1166" // Exception swallowed — coercion is best-effort.
+		})
 		private static Object coerceArgForFormat(String s) {
 			if (s == null) return "";
 			var t = s.trim();

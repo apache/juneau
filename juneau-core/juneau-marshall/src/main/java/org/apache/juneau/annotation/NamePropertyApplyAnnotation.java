@@ -46,7 +46,9 @@ public class NamePropertyApplyAnnotation {
 	 * method handles unwrapping the nested {@link NameProperty @NameProperty} from {@link NamePropertyApply#value()} and registering it
 	 * under the targets specified by {@link NamePropertyApply#on()}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<NamePropertyApply,Context.Builder> {
 
 		/**

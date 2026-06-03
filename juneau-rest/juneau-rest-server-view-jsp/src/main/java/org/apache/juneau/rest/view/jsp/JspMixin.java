@@ -67,8 +67,7 @@ import org.apache.juneau.rest.annotation.*;
  * ({@code -Djuneau.jsp.path=views}), environment variable
  * ({@code JUNEAU_JSP_PATH=views}), or {@code Config} key
  * ({@code juneau.jsp.path = views}) to change the runtime mount without subclassing.
- * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
- * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
  * <p>
  * Override accepts bare token ({@code jsp}), leading slash ({@code /jsp}), trailing slash

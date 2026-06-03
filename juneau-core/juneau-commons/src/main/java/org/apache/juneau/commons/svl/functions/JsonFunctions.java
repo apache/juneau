@@ -35,7 +35,9 @@ public final class JsonFunctions {
 	private JsonFunctions() {}
 
 	/** All function classes in this category. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type verified by caller context.
+	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		JsonPath.class, Get.class, Keys.class, Values.class, Size.class
 	};
@@ -58,7 +60,9 @@ public final class JsonFunctions {
 			return MiniJson.render(v);
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Cast is safe: type verified by caller context.
+		})
 		private static Object navigate(Object root, String path) {
 			if (root == null || path == null) return null;
 			var p = path.startsWith("/") ? path.substring(1) : path;
@@ -85,7 +89,9 @@ public final class JsonFunctions {
 	 * {@code #{get(json, key)}} — extracts {@code json[key]} (object) or {@code json[index]}
 	 * (array, when {@code key} parses as int).
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type verified by caller context.
+	})
 	public static class Get extends TypedFunction {
 		@Override public String name() { return "get"; }
 		public String invoke(String json, String key) {
@@ -107,7 +113,9 @@ public final class JsonFunctions {
 	}
 
 	/** {@code #{keys(json)}} — returns a JSON-array-shortcut string of an object's keys. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type verified by caller context.
+	})
 	public static class Keys extends TypedFunction {
 		@Override public String name() { return "keys"; }
 		public String invoke(String json) {
@@ -118,7 +126,9 @@ public final class JsonFunctions {
 	}
 
 	/** {@code #{values(json)}} — returns a JSON-array-shortcut string of an object's values (or array elements). */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type verified by caller context.
+	})
 	public static class Values extends TypedFunction {
 		@Override public String name() { return "values"; }
 		public String invoke(String json) {

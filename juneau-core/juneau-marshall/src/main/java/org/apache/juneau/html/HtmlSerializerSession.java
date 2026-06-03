@@ -53,10 +53,12 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @SuppressWarnings({
-	"resource", // Resource management handled externally
-	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115", // Constants use UPPER_snakeCase naming convention
-	"java:S6541" // Brain method acceptable for serializeAnything; refactoring would reduce clarity
+	"resource",   // Resource management handled externally
+	"rawtypes",   // Raw types necessary for generic type handling throughout HTML serializer session
+	"unchecked",  // Type erasure requires unchecked casts throughout HTML serializer session
+	"java:S110",  // Inheritance depth acceptable for this class hierarchy
+	"java:S115",  // Constants use UPPER_snakeCase naming convention
+	"java:S6541"  // Brain method acceptable for serializeAnything; refactoring would reduce clarity
 })
 public class HtmlSerializerSession extends XmlSerializerSession {
 
@@ -335,10 +337,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type handling
-		"unchecked", // Type erasure requires unchecked casts
-	})
 	private String getStyle(HtmlSerializerSession session, BeanPropertyMeta pMeta, Object value) {
 		// Check for annotation style first
 		if (nn(pMeta)) {
@@ -357,13 +355,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * Returns an empty array if it should be treated as a table but without headers.
 	 * 2-dimensional tables are used for collections of objects that all have the same set of property names.
 	 *
-	 * TODO: SonarLint java:S1168 - null vs empty array have distinct semantics here (don't use table vs table with no headers).
+	 * Null vs empty array have distinct semantics here (don't use table vs table with no headers).
 	 * Consider Optional or separate method to avoid null return.
 	 */
 	@SuppressWarnings({
-		"rawtypes",       // Collection uses raw type for mixed beans/maps
-		"unchecked",      // Type erasure in generic collection handling
-		"java:S1168",     // TODO: null vs empty array have distinct semantics (don't use table vs table with no headers)
+		"java:S1168",     // Null vs empty array have distinct semantics (don't use table vs table with no headers)
 		"java:S3776"      // Cognitive complexity acceptable for table header resolution
 	})
 	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta bpHtml) throws SerializeException {
@@ -502,8 +498,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	
 	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type handling
-		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
@@ -665,10 +659,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	
-	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type handling
-		"unchecked", // Type erasure requires unchecked casts in collection/map serialization
-	})
 	private void serializeMap(XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		var keyType = eKeyType == null ? string() : eKeyType;
@@ -697,9 +687,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		out.ie(i).eTag(TAG_table).nl(i);
 	}
 
-	@SuppressWarnings({
-		"rawtypes" // Raw types necessary for generic type handling
-	})
 	private void serializeMapEntry(XmlWriter out, Map.Entry e, ClassMeta<?> keyType, ClassMeta<?> valueType, int i, BeanPropertyMeta ppMeta) throws SerializeException {
 		Object key = generalize(e.getKey(), keyType);
 		Object value = null;
@@ -844,8 +831,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	
 	@SuppressWarnings({
-		"rawtypes", // Raw types necessary for generic type handling
-		"unchecked", // Type erasure requires unchecked casts
 		"null", // Null handling verified by context or framework
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S107", // Method has many parameters; acceptable for builder/configuration methods
@@ -1064,9 +1049,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return cr;
 	}
 
-	@SuppressWarnings({
-		"rawtypes" // Raw types necessary for XmlSerializerSession override
-	})
 	@Override /* Overridden from XmlSerializerSession */
 	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
 		boolean isMixed, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {

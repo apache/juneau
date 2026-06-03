@@ -32,7 +32,9 @@ public final class TypeConversionFunctions {
 	private TypeConversionFunctions() {}
 
 	/** All function classes in this category. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type verified by caller context.
+	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		ToInt.class, ToLong.class, ToDouble.class, ToBool.class
 	};

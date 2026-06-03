@@ -136,7 +136,9 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 					return beanProps.equals(ih2.beanProps);
 				}
 			}
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({
+				"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+			})
 			var argMeta = (BeanMeta<Object>) BeanMeta.of(arg.getClass(), meta.getConfig());
 			return eq(beanProps, BeanMap.of(arg, argMeta));
 		}

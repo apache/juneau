@@ -67,7 +67,9 @@ public class DotenvPropertySource implements PropertySource {
 		return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(opt(value));
 	}
 
-	@SuppressWarnings("java:S3776") // line-oriented dotenv parsing intentionally keeps all validation branches in one place.
+	@SuppressWarnings({
+		"java:S3776" // line-oriented dotenv parsing intentionally keeps all validation branches in one place.
+	})
 	private static Map<String,String> load(Path path) {
 		if (path == null || ! Files.exists(path))
 			return Collections.emptyMap();

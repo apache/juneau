@@ -182,7 +182,10 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 	 * @return The {@link Problem} to emit, or {@code null} when no mapper opined and the exception is not a
 	 * 	{@link BasicHttpException}.
 	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})  // ProblemMapper#map is parameterized over the matched throwable subtype.
+	@SuppressWarnings({
+		"unchecked", // ProblemMapper#map is parameterized over the matched throwable subtype.
+		"rawtypes"   // ProblemMapper#map is parameterized over the matched throwable subtype.
+	})
 	private static Problem mapException(RestOpSession opSession, Throwable thrown) {
 		for (var mapper : resolveMappers(opSession, thrown.getClass())) {
 			var result = ((ProblemMapper) mapper).map(thrown);
@@ -200,7 +203,9 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 	 * consulted first; a single {@link ProblemMapper} bean (if no list is registered) is consulted as a
 	 * fallback. Registration order serves as the tiebreaker for mappers at the same hierarchy depth.
 	 */
-	@SuppressWarnings("resource") // RestOpSession owns this bean store lifecycle.
+	@SuppressWarnings({
+		"resource" // RestOpSession owns this bean store lifecycle.
+	})
 	private static List<ProblemMapper<?>> resolveMappers(RestOpSession opSession, Class<?> thrownClass) {
 		var bs = opSession.getBeanStore();
 		var candidates = new ArrayList<ProblemMapper<?>>();
@@ -235,7 +240,9 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 	}
 
 	private static Problem localize(RestOpSession opSession, Problem problem) {
-		@SuppressWarnings("resource") // RestOpSession owns this bean store lifecycle.
+		@SuppressWarnings({
+			"resource" // RestOpSession owns this bean store lifecycle.
+		})
 		var strategy = opSession.getBeanStore().getBean(ProblemLocalizationStrategy.class).orElse(ProblemLocalizationStrategy.IDENTITY);
 		var locale = opSession.getRequest().getLocale();
 		var result = strategy.localize(problem, locale);

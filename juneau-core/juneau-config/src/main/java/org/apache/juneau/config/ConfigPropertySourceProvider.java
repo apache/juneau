@@ -104,7 +104,9 @@ public class ConfigPropertySourceProvider implements PropertySourceProvider {
 	 * 		{@link PropertyLookupResult#missing()} without memoizing the failure.
 	 * </ol>
 	 */
-	@SuppressWarnings("java:S1181") // Intentional broad Throwable catch — see Javadoc.
+	@SuppressWarnings({
+		"java:S1181" // Intentional broad Throwable catch — see Javadoc.
+	})
 	static final class LazyConfigPropertySource implements PropertySource {
 
 		// Thread-local re-entrance guard. Static so it covers both the lazy-init path and any

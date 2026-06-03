@@ -42,7 +42,7 @@ import com.nimbusds.oauth2.sdk.token.BearerAccessToken;
  *
  * <p>
  * Wraps Nimbus's {@code TokenIntrospectionRequest} / {@code TokenIntrospectionResponse} for the HTTP
- * round-trip and the JSON parsing.  A {@link TokenCache} (default: bounded LRU per OQA Q1) short-circuits
+ * round-trip and the JSON parsing.  A {@link TokenCache} (default: bounded LRU cache) short-circuits
  * the round-trip on repeated lookups within the configured TTL window.
  *
  * <h5 class='topic'>Usage</h5>
@@ -58,9 +58,9 @@ import com.nimbusds.oauth2.sdk.token.BearerAccessToken;
  *
  * <h5 class='topic'>Defaults</h5>
  * <ul>
- * 	<li>Cache TTL: 5 minutes (per OQA Q1), capped at 1 hour.
- * 	<li>Cache size: 1000 entries (per OQA Q1).
- * 	<li>Required scopes: none (per OQA Q6 enforcement lives here, not on the filter).
+ * 	<li>Cache TTL: 5 minutes, capped at 1 hour.
+ * 	<li>Cache size: 1000 entries.
+ * 	<li>Required scopes: none (scope enforcement lives on the validator, not the filter).
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>
@@ -74,10 +74,10 @@ import com.nimbusds.oauth2.sdk.token.BearerAccessToken;
  */
 public class OAuthIntrospectionValidator implements TokenValidator {
 
-	/** Default cache TTL (per OQA Q1). */
+	/** Default cache TTL. */
 	public static final Duration DEFAULT_CACHE_TTL = Duration.ofMinutes(5);
 
-	/** Maximum cache TTL (per OQA Q1). */
+	/** Maximum cache TTL. */
 	public static final Duration MAX_CACHE_TTL = Duration.ofHours(1);
 
 	/**
@@ -182,7 +182,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		}
 
 		/**
-		 * Adds required scopes (per OQA Q6 &mdash; scope enforcement lives on the validator).
+		 * Adds required scopes (scope enforcement lives on the validator, not the filter).
 		 *
 		 * <p>
 		 * If any required scope is missing from the introspection response's {@code scope} claim, the
@@ -216,7 +216,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 		 * Sets a callback that customizes the Nimbus {@link HTTPRequest} before it is sent.
 		 *
 		 * <p>
-		 * Per OQA Q2 this is the escape hatch for custom HTTP behavior (proxies, TLS overrides,
+		 * This is the escape hatch for custom HTTP behavior (proxies, TLS overrides,
 		 * timeouts).  The callback is invoked on every introspection call.
 		 *
 		 * @param value The configurator callback.  Must not be <jk>null</jk>.

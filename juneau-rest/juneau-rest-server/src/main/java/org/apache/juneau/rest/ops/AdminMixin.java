@@ -62,8 +62,7 @@ import org.apache.juneau.rest.guard.RateLimitGuard.BucketState;
  * prefix. Set via system property ({@code -Djuneau.admin.path=ops}), environment variable
  * ({@code JUNEAU_ADMIN_PATH=ops}), or {@code Config} key
  * ({@code juneau.admin.path = ops}) to change the runtime mount without subclassing.
- * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
- * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
  * <p>
  * Override accepts bare token ({@code admin}), leading slash ({@code /admin}), trailing slash
@@ -274,7 +273,7 @@ public class AdminMixin {
 	 * <p>
 	 * Mirrors {@link AdminProvider.Builder}'s configuration methods on the mixin's own surface and forwards
 	 * each call to an underlying {@link AdminProvider.Builder}, which builds the shared worker the mixin
-	 * delegates to (TODO-145 &sect;2.3.1 / OQ-11).
+	 * delegates to.
 	 */
 	public static class Builder {
 

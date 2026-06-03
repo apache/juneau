@@ -92,7 +92,7 @@ import org.apache.juneau.sse.*;
  * <h5 class='topic'>Threading, executors, and MDC</h5>
  * <p>
  * Buffer-shape responses route through {@link AsyncResponseProcessor} and therefore honor
- * {@code @Rest(asyncCompletionExecutor)} (TODO-118) and the SLF4J MDC bridge (TODO-117). Streaming-shape
+ * {@code @Rest(asyncCompletionExecutor)} and the SLF4J MDC bridge. Streaming-shape
  * frame writes happen on whichever thread the publisher emits on (the Reactor / RxJava scheduler); this
  * processor does not impose a {@code subscribeOn(...)} so it never fights the library's scheduler model.
  * When MDC propagation is enabled, the request-thread MDC snapshot is reinstalled around each
@@ -232,7 +232,9 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		res.setHeader("Content-Encoding", "identity");
 	}
 
-	@SuppressWarnings("java:S2142") // Interrupt flag restored before returning.
+	@SuppressWarnings({
+		"java:S2142" // Interrupt flag restored before returning.
+	})
 	private static void awaitSync(CompletableFuture<Void> done, long timeoutMs) {
 		try {
 			done.get(timeoutMs, TimeUnit.MILLISECONDS);

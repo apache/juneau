@@ -19,7 +19,9 @@ package org.apache.juneau.bean.mcp;
 /**
  * MCP protocol version strings carried in {@code initialize} requests and results.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constant names encode protocol version dates verbatim (e.g., VERSION_2025_06_18).
+})
 public final class McpProtocol {
 
 	private McpProtocol() {}

@@ -123,7 +123,9 @@ public class MethodExecStore {
 		 * @param value The setting value.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+		})
 		public Builder type(Class<?> value) {
 			type = (Class<? extends MethodExecStore>) value;
 			return this;

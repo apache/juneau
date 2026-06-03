@@ -46,7 +46,7 @@ public abstract class RestResource {
 	private AtomicReference<RestContext> context = new AtomicReference<>();
 
 	/**
-	 * The programmatic configuration builder stashed on this instance (TODO-143 &sect;2.4), or <jk>null</jk> when the
+	 * The programmatic configuration builder stashed on this instance, or <jk>null</jk> when the
 	 * resource was constructed without a builder.  Mutable so it can be written by either the
 	 * {@link #RestResource(RestBuilder<?>)} constructor or {@link Builder#build()}.  Read non-reflectively by
 	 * {@link RestContext} during construction so builder-supplied values take precedence over {@code @Rest}
@@ -60,7 +60,7 @@ public abstract class RestResource {
 	protected RestResource() {}
 
 	/**
-	 * Builder-injection constructor (TODO-145 &sect;2.4 constructor trio).
+	 * Builder-injection constructor.
 	 *
 	 * @param builder The programmatic configuration builder.  May be <jk>null</jk>.
 	 */
@@ -225,7 +225,7 @@ public abstract class RestResource {
 	 * Fluent builder for programmatically configuring a {@link RestResource} subclass.
 	 *
 	 * <p>
-	 * Subclassable, self-typed (CRTP) flavor builder (TODO-143 Option B).  For the common (non-subclassed) case
+	 * Subclassable, self-typed (CRTP) flavor builder.  For the common (non-subclassed) case
 	 * use {@link RestResource#builder(Class)} which returns the concrete {@link DefaultBuilder} leaf.
 	 *
 	 * @param <R> The resource type produced by {@link #build()}.

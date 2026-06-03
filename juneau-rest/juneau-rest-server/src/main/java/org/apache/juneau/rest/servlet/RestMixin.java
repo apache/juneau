@@ -47,7 +47,7 @@ import org.apache.juneau.rest.annotation.*;
  * The fluent programmatic-builder surface ({@link RestBuilder}/ {@link Builder}) lets a mixin be configured
  * programmatically rather than (or in addition to) by annotation &mdash; builder-supplied values take precedence
  * over {@link Rest @Rest} annotation values.  Use {@link #builder(Class)} for the common case, or subclass
- * {@link Builder} for capability mixins that add their own setters (TODO-143 Option B).
+ * {@link Builder} for capability mixins that add their own setters.
  *
  * <h5 class='section'>Reaching the host resource:</h5>
  *
@@ -87,7 +87,7 @@ public abstract class RestMixin {
 	private final AtomicReference<RestContext> context = new AtomicReference<>();
 
 	/**
-	 * The programmatic configuration builder stashed on this instance (TODO-143 &sect;2.4), or <jk>null</jk> when the
+	 * The programmatic configuration builder stashed on this instance, or <jk>null</jk> when the
 	 * mixin was constructed without a builder.  Mutable so it can be written by either the
 	 * {@link #RestMixin(RestBuilder<?>)} constructor or {@link Builder#build()}.  Read non-reflectively by
 	 * {@link RestContext} during mixin sub-context construction so builder-supplied values take precedence over
@@ -101,7 +101,7 @@ public abstract class RestMixin {
 	protected RestMixin() {}
 
 	/**
-	 * Builder-injection constructor (TODO-145 &sect;2.4 constructor trio).
+	 * Builder-injection constructor.
 	 *
 	 * @param builder The programmatic configuration builder.  May be <jk>null</jk>.
 	 */
@@ -178,7 +178,7 @@ public abstract class RestMixin {
 	 * Fluent builder for programmatically configuring a {@link RestMixin} subclass.
 	 *
 	 * <p>
-	 * Subclassable, self-typed (CRTP) flavor builder (TODO-143 Option B).  Capability mixins (e.g.
+	 * Subclassable, self-typed (CRTP) flavor builder.  Capability mixins (e.g.
 	 * {@code FaviconMixin}) extend this and add their own worker-config setters, which chain with true covariant
 	 * returns alongside the inherited {@link RestBuilder}surface.  For the common (non-subclassed) case use
 	 * {@link RestMixin#builder(Class)} which returns the concrete {@link DefaultBuilder} leaf.

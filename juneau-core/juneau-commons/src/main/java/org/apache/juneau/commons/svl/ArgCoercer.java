@@ -116,8 +116,8 @@ final class ArgCoercer {
 	}
 
 	/**
-	 * Coerce a single raw argument to the requested type. Public-static so tests and Phase C
-	 * function impls can exercise the coercion table directly.
+	 * Coerce a single raw argument to the requested type. Public-static so tests
+	 * and function impls can exercise the coercion table directly.
 	 *
 	 * @param fnName Function name (for diagnostic messages).
 	 * @param argIndex Zero-based arg position (for diagnostic messages).
@@ -154,7 +154,7 @@ final class ArgCoercer {
 	}
 
 	/**
-	 * Parse the explicit truthiness table from OQA #7. Throws {@link IllegalArgumentException}
+	 * Parse the explicit truthiness table. Throws {@link IllegalArgumentException}
 	 * on inputs that don't match any TRUE or FALSE token.
 	 */
 	private static boolean parseBoolean(String fnName, int argIndex, String s) {

@@ -38,7 +38,9 @@ public class JsonConfigAnnotation {
 	/**
 	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.json.JsonParser.Builder}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class ParserApply extends AnnotationApplier<JsonConfig,JsonParser.Builder> {
 
 		/**
@@ -61,7 +63,9 @@ public class JsonConfigAnnotation {
 	/**
 	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.json.JsonSerializer.Builder}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class SerializerApply extends AnnotationApplier<JsonConfig,JsonSerializer.Builder> {
 
 		/**

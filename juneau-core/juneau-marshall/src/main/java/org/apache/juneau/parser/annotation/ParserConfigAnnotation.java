@@ -38,7 +38,9 @@ public class ParserConfigAnnotation {
 	/**
 	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.InputStreamParser.Builder}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class InputStreamParserApply extends AnnotationApplier<ParserConfig,InputStreamParser.Builder> {
 
 		/**
@@ -61,7 +63,10 @@ public class ParserConfigAnnotation {
 	/**
 	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.Parser.Builder}.
 	 */
-	@SuppressWarnings({"unchecked","rawtypes"})
+	@SuppressWarnings({
+		"unchecked", // Raw types required for reflective annotation application.
+		"rawtypes"   // Raw types required for reflective annotation application.
+	})
 	public static class ParserApply extends AnnotationApplier<ParserConfig,Parser.Builder> {
 
 		/**
@@ -88,7 +93,9 @@ public class ParserConfigAnnotation {
 	/**
 	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.ReaderParser.Builder}.
 	 */
-	@SuppressWarnings({"rawtypes"})
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class ReaderParserApply extends AnnotationApplier<ParserConfig,ReaderParser.Builder> {
 
 		/**

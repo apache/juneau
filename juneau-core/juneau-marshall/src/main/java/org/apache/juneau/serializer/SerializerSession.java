@@ -78,7 +78,9 @@ import org.apache.juneau.commons.bean.BeanPropertyValue;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"rawtypes",   // Raw types necessary for generic type handling throughout serializer session
+	"unchecked"   // Type erasure requires unchecked casts throughout serializer session
 })
 public class SerializerSession extends MarshallingTraverseSession {
 
@@ -566,9 +568,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param consumer The map entry consumer.
 	 */
 	@SuppressWarnings({
-		"unchecked", // Type erasure requires unchecked cast
-		"rawtypes",  // Raw types necessary for generic map handling
-		"cast"       // Cast required for generic type safety
+		"cast" // Cast required for generic type safety
 	})
 	public final <K,V> void forEachEntry(Map<K,V> m, Consumer<Map.Entry<K,V>> consumer) {
 		if (m == null || m.isEmpty())
@@ -591,10 +591,6 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param consumer The entry consumer.
 	 * @since 9.2.1
 	 */
-	@SuppressWarnings({
-		"rawtypes",  // Raw types necessary for generic streamable handling
-		"unchecked"  // Type erasure requires unchecked operations
-	})
 	public final void forEachStreamableEntry(Object o, ClassMeta<?> type, Consumer consumer) {
 		if (o == null)
 			return;
@@ -663,9 +659,6 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param c The listener class to cast to.
 	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to T for listener retrieval
-	})
 	public <T extends SerializerListener> T getListener(Class<T> c) {
 		return (T)listener;
 	}
@@ -1067,10 +1060,6 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @return The generalized object, or <jk>null</jk> if the object is <jk>null</jk>.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	@SuppressWarnings({
-		"rawtypes",  // Raw types necessary for swap handling
-		"unchecked"  // Type erasure requires unchecked operations
-	})
 	protected final Object generalize(Object o, ClassMeta<?> type) throws SerializeException {
 		try {
 			if (o == null)
@@ -1439,10 +1428,6 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @return The swapped object.
 	 * @throws SerializeException If swap method threw an exception.
 	 */
-	@SuppressWarnings({
-		"rawtypes",  // Raw types necessary for swap handling
-		"unchecked"  // Type erasure requires unchecked operations
-	})
 	protected Object swap(ObjectSwap swap, Object o) throws SerializeException {
 		try {
 			if (swap == null)

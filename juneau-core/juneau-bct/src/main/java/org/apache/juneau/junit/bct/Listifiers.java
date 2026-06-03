@@ -141,7 +141,6 @@ public class Listifiers {
 	public static Listifier<Collection> collectionListifier() {
 		return (bc, collection) -> {
 			if (collection instanceof Set && ! (collection instanceof SortedSet) && ! (collection instanceof LinkedHashSet) && BctConfiguration.get(BCT_SORT_COLLECTIONS, false)) {
-				// TODO - This is too unreliable.
 				var collection2 = new TreeSet<>(flexibleComparator(bc));
 				collection2.addAll(collection);
 				collection = collection2;

@@ -539,7 +539,6 @@ public class XmlParserSession extends ReaderParserSession {
 		int depth = 0;
 		for (var i = 0; i < r.getAttributeCount(); i++) {
 			var a = r.getAttributeLocalName(i);
-			// TODO - Need better handling of namespaces here.
 			if (! isSpecialAttr(a)) {
 				K key = trim(convertAttrToType(m, a, keyType));
 				V value = trim(convertAttrToType(m, r.getAttributeValue(i), valueType));

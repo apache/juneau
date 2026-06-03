@@ -46,7 +46,9 @@ public class ExampleApplyAnnotation {
 	 * method handles unwrapping the nested {@link Example @Example} from {@link ExampleApply#value()} and registering it
 	 * under the targets specified by {@link ExampleApply#on()} and {@link ExampleApply#onClass()}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<ExampleApply,Context.Builder> {
 
 		/**

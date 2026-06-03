@@ -171,7 +171,10 @@ public class Json5ParserSession extends JsonParserSession {
 
 		skipCommentsAndSpace(r);
 		if (r.peek() == '+') {
-			@SuppressWarnings("unused") int ignored = r.read();
+			@SuppressWarnings({
+				"unused" // Intentionally unused; variable/parameter is required by the interface contract
+			})
+			int ignored = r.read();
 			skipCommentsAndSpace(r);
 			s += parseString(r);
 		}

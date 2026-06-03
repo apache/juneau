@@ -48,8 +48,7 @@ import org.apache.juneau.rest.annotation.*;
  * ({@code -Djuneau.swaggerui.path=docs}), environment variable
  * ({@code JUNEAU_SWAGGERUI_PATH=docs}), or {@code Config} key
  * ({@code juneau.swaggerui.path = docs}) to change the runtime mount without subclassing.
- * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
- * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
  * <p>
  * Override accepts bare token ({@code swagger}), leading slash ({@code /swagger}), trailing slash
@@ -81,7 +80,7 @@ import org.apache.juneau.rest.annotation.*;
  * </p>
  *
  * <p>
- * Sub-context inheritance from FINISHED-81 confines the {@code defaultAccept} contribution to this
+ * Sub-context inheritance confines the {@code defaultAccept} contribution to this
  * mixin's endpoints — the host's other endpoints retain their own content-negotiation defaults.
  * </p>
  *

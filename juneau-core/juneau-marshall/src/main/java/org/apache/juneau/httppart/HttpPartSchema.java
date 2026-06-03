@@ -3522,7 +3522,7 @@ public class HttpPartSchema {
 	}
 
 	@SuppressWarnings({
-		"java:S1168"     // TODO: null when input null. Consider empty map.
+		"java:S1168"     // Null when input null. Consider empty map.
 	})
 	private static Map<String,HttpPartSchema> build(Map<String,Object> in, boolean noValidate) {
 		if (in == null)
@@ -3533,7 +3533,7 @@ public class HttpPartSchema {
 	}
 
 	@SuppressWarnings({
-		"java:S1168"     // TODO: null for null input. Consider default schema.
+		"java:S1168"     // Null for null input. Consider default schema.
 	})
 	private static HttpPartSchema build(Object in, boolean noValidate) {
 		if (in == null)
@@ -3559,7 +3559,7 @@ public class HttpPartSchema {
 	}
 
 	@SuppressWarnings({
-		"java:S1168"     // TODO: null for empty input. Consider empty set.
+		"java:S1168"     // Null for empty input. Consider empty set.
 	})
 	static final Set<String> toSet(String s) {
 		if (isEmpty(s))
@@ -3570,7 +3570,7 @@ public class HttpPartSchema {
 	}
 
 	@SuppressWarnings({
-		"java:S1168"     // TODO: null when all arrays empty. Consider empty set.
+		"java:S1168"     // Null when all arrays empty. Consider empty set.
 	})
 	static final Set<String> toSet(String[]...s) {
 		var isNotEmpty = false;

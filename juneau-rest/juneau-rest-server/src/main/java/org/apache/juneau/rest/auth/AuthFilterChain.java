@@ -270,7 +270,9 @@ public class AuthFilterChain implements Filter {
 	 * @param failures The list of failures to aggregate.
 	 * @throws IOException If writing to the response fails.
 	 */
-	@SuppressWarnings("resource")  // Writer lifecycle is servlet-managed; do not close.
+	@SuppressWarnings({
+		"resource" // Writer lifecycle is servlet-managed; do not close.
+	})
 	private static void sendAggregatedChallenge(HttpServletResponse resp, List<AuthenticationException> failures)
 			throws IOException {
 		var wwwAuth = failures.stream()

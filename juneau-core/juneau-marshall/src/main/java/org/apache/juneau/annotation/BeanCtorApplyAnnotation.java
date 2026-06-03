@@ -47,7 +47,9 @@ public class BeanCtorApplyAnnotation {
 	 * method handles unwrapping the nested {@link BeanCtor @BeanCtor} from {@link BeanCtorApply#value()} and registering it
 	 * under the targets specified by {@link BeanCtorApply#on()} and {@link BeanCtorApply#onClass()}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<BeanCtorApply,Context.Builder> {
 
 		/**

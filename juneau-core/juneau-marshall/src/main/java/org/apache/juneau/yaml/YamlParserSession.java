@@ -86,7 +86,9 @@ public class YamlParserSession extends ReaderParserSession {
 		return new Builder(ctx);
 	}
 
-	@SuppressWarnings("unused") // Stored for API consistency with Builder.create(YamlParser)
+	@SuppressWarnings({
+		"unused" // Stored for API consistency with Builder.create(YamlParser)
+	})
 	private final YamlParser ctx;
 
 	/**

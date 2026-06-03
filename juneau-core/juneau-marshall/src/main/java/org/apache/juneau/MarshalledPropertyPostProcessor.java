@@ -177,7 +177,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 
 		// Install swap-aware read/write transforms on the builder.
 		// Previously lived as a private static helper on {@link BeanMeta}; moved here during Task-5 Step 8b-ii
-		// Phase C Task 3 so {@link BeanMeta} no longer references {@link ObjectSwap}/{@link ParseException}/{@link SerializeException}.
+		// so {@link BeanMeta} no longer references {@link ObjectSwap}/{@link ParseException}/{@link SerializeException}.
 		installSwapAwareTransforms(b);
 
 		// Install schema-validation transforms (wraps any existing readTransform/writeTransform) when a
@@ -398,13 +398,13 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		if (ci.isAssignableTo(ObjectSwap.class)) {
 			var ps = BeanInstantiator.of(ObjectSwap.class).type(ci).run();
 			if (nn(ps.forMediaTypes()))
-				throw unsupportedOp("TODO - Media types on swaps not yet supported on bean properties.");
+				throw unsupportedOp("Media types on swaps not yet supported on bean properties.");
 			if (nn(ps.withTemplate()))
-				throw unsupportedOp("TODO - Templates on swaps not yet supported on bean properties.");
+				throw unsupportedOp("Templates on swaps not yet supported on bean properties.");
 			return ps;
 		}
 		if (ci.isAssignableTo(Surrogate.class))
-			throw unsupportedOp("TODO - Surrogate swaps not yet supported on bean properties.");
+			throw unsupportedOp("Surrogate swaps not yet supported on bean properties.");
 		throw rex("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", cn(c));
 	}
 
@@ -496,7 +496,9 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			b.swap = classSwap(m.classFormat());
 	}
 
-	@SuppressWarnings("java:S3776") // Cognitive-complexity threshold is advisory; consolidated per-type dispatch keeps JIT inlining effective per AGENTS.md policy.
+	@SuppressWarnings({
+		"java:S3776" // Cognitive-complexity threshold is advisory; consolidated per-type dispatch keeps JIT inlining effective per AGENTS.md policy.
+	})
 	private static void applyContextFormats(BeanPropertyMeta.Builder b, MarshallingContext bc, Class<?> propertyClass) {
 		if (Duration.class.equals(propertyClass))
 			b.swap = durationSwap(bc.getDurationFormat());
@@ -784,7 +786,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		// without a native byte-array wire type (hasNativeBytes()==false: Parquet, binary RDF) and
 		// textual sessions receive the formatted String.  Mirrors the variant-output pattern used by
 		// {@link #calendarSwap(CalendarFormat)} / {@link #temporalSwap(TemporalFormat, Class)}.  See
-		// TODO-57 OQ 10 (b) for the capability-check rationale.
 		return new ObjectSwap<>(byte[].class, Object.class) {
 			@Override /* ObjectSwap */
 			public Object swap(MarshallingSession session, byte[] o) {
@@ -867,7 +868,9 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		};
 	}
 
-	@SuppressWarnings("java:S3776") // Cognitive-complexity threshold is advisory; consolidated BigInteger/BigDecimal dispatch keeps JIT inlining effective per AGENTS.md policy.
+	@SuppressWarnings({
+		"java:S3776" // Cognitive-complexity threshold is advisory; consolidated BigInteger/BigDecimal dispatch keeps JIT inlining effective per AGENTS.md policy.
+	})
 	private static ObjectSwap<?,?> bigNumberSwap(BigNumberFormat format, Class<?> propertyClass) {
 		// Variant swap class (Object) — text serializers may receive either a Number (for NUMBER / AUTO-safe
 		// values) or a String (for STRING / AUTO-out-of-range values); binary serializers always receive the
@@ -933,9 +936,6 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			}
 
 			@Override /* ObjectSwap */
-			@SuppressWarnings({
-				"java:S2447" // Null is intentional here to preserve boxed-Boolean null semantics in swap contract.
-			})
 			public Boolean unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 				if (o == null)
 					return null;
@@ -943,7 +943,10 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 					return b;
 				if (o instanceof Number n)
 					return n.intValue() != 0;
-				return BooleanFormat.parse(o.toString(), format);
+				var str = o.toString();
+				if (str.trim().isEmpty())
+					return null;
+				return BooleanFormat.parse(str, format);
 			}
 		};
 	}

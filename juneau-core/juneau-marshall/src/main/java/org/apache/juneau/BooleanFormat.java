@@ -165,27 +165,27 @@ public enum BooleanFormat {
 	}
 
 	/**
-	 * Parses the specified wire value into a {@link Boolean}.
+	 * Parses the specified wire value into a primitive {@code boolean}.
 	 *
 	 * <p>
 	 * Lenient parsing — accepts any of the textual shapes ({@code true}/{@code false}, {@code 1}/{@code 0},
 	 * {@code yes}/{@code no}, {@code y}/{@code n}, {@code on}/{@code off}) regardless of the {@code format}
 	 * hint, case-insensitive. The hint is informational only.
 	 *
-	 * @param value The wire value. Can be <jk>null</jk> or blank.
+	 * @param value The wire value. Must not be <jk>null</jk> or blank.
 	 * @param format The configured format hint (informational only — parsing is format-agnostic). Can be <jk>null</jk>.
-	 * @return The parsed boolean, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
-	 * @throws IllegalArgumentException If the value does not match any supported boolean textual shape.
+	 * @return The parsed boolean value.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>, blank, or does not match any supported boolean textual shape.
 	 */
-	public static Boolean parse(String value, BooleanFormat format) {
+	public static boolean parse(String value, BooleanFormat format) {
 		if (value == null)
-			return null;
+			throw illegalArg("Cannot parse a null value as Boolean");
 		var s = value.trim();
 		if (s.isEmpty())
-			return null;
+			throw illegalArg("Cannot parse a blank value as Boolean");
 		return switch (s.toLowerCase()) {
-			case "true", "1", "yes", "y", "on" -> Boolean.TRUE;
-			case "false", "0", "no", "n", "off" -> Boolean.FALSE;
+			case "true", "1", "yes", "y", "on" -> true;
+			case "false", "0", "no", "n", "off" -> false;
 			default -> throw illegalArg("Invalid boolean value ''{0}'' for format {1}", value, format);
 		};
 	}

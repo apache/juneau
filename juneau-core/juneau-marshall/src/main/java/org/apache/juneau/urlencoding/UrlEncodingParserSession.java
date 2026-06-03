@@ -164,7 +164,10 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 		int c = r.peekSkipWs();
 		if (c == '?') {
-			@SuppressWarnings("unused") int ignored = r.read();
+			@SuppressWarnings({
+				"unused" // Intentionally unused; variable/parameter is required by the interface contract
+			})
+			int ignored = r.read();
 		}
 
 		Object o;
@@ -226,7 +229,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	}
 
 	@SuppressWarnings({
-		"java:S1168",    // TODO: null when currAttr is '%00'. Parser state machine.
+		"java:S1168",    // Null when currAttr is '%00'. Parser state machine.
 		"java:S2177",    // Intentional: UrlEncodingParserSession provides its own private parseIntoBeanMap() with expanded-params logic
 		"java:S125",     // State-machine comments (S1: ..., S2: ...)
 		"java:S2583",    // State variables persist across loop iterations
@@ -481,7 +484,10 @@ public class UrlEncodingParserSession extends UonParserSession {
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		try (var r = getUonReader(pipe, true)) {
 			if (r.peekSkipWs() == '?') {
-				@SuppressWarnings("unused") int ignored = r.read();
+				@SuppressWarnings({
+					"unused" // Intentionally unused; variable/parameter is required by the interface contract
+				})
+				int ignored = r.read();
 			}
 			m = parseIntoMap2(r, m, getClassMeta(Map.class, keyType, valueType), null);
 			return m;

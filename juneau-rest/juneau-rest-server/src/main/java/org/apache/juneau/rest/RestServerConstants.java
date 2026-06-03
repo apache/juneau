@@ -96,7 +96,7 @@ public final class RestServerConstants {
 	 * The {@code "asyncCompletionExecutor"} annotation attribute name — names a {@link java.util.concurrent.Executor}
 	 * bean (resolved from the resource's {@link org.apache.juneau.commons.inject.BeanStore}) that routes
 	 * {@link java.util.concurrent.CompletableFuture} completion callbacks through a dedicated thread pool instead of
-	 * the future's natural completion thread (TODO-118). Empty string (default) = no override.
+	 * the future's natural completion thread. Empty string (default) = no override.
 	 */
 	public static final String PROPERTY_asyncCompletionExecutor = "asyncCompletionExecutor";
 

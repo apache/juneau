@@ -904,7 +904,9 @@ public class OidcRelyingParty {
 		}
 	}
 
-	@SuppressWarnings("deprecation")  // LogoutTokenValidator(Issuer, ClientID, JWSKeySelector, JWEKeySelector) is deprecated; no alternative in current Nimbus version.
+	@SuppressWarnings({
+		"deprecation" // LogoutTokenValidator(Issuer, ClientID, JWSKeySelector, JWEKeySelector) is deprecated; no alternative in current Nimbus version.
+	})
 	private LogoutTokenValidator logoutTokenValidator() {
 		var v = logoutTokenValidatorCache;
 		if (v != null)

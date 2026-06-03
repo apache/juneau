@@ -46,7 +46,9 @@ public class UriApplyAnnotation {
 	 * method handles unwrapping the nested {@link Uri @Uri} from {@link UriApply#value()} and registering it
 	 * under the targets specified by {@link UriApply#on()} and {@link UriApply#onClass()}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<UriApply,Context.Builder> {
 
 		/**

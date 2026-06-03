@@ -101,7 +101,9 @@ public class PathRemainderArg implements RestOpArg {
 		this.def = findDef(paramInfo).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = HttpPartSchema.create(PathRemainder.class, paramInfo);
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+		})
 		var pp = (Class<? extends HttpPartParser>)schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 	}

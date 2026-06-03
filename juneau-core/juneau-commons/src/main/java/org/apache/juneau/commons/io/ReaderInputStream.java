@@ -84,7 +84,9 @@ public class ReaderInputStream extends InputStream {
 	private static final String ARG_encoder = "encoder";
 	private static final String ARG_reader = "reader";
 
-	@SuppressWarnings("resource") // Intentionally not owned; caller retains responsibility for closing the underlying Reader
+	@SuppressWarnings({
+		"resource" // Intentionally not owned; caller retains responsibility for closing the underlying Reader
+	})
 	private final Reader reader;
 	private final CharsetEncoder encoder;
 

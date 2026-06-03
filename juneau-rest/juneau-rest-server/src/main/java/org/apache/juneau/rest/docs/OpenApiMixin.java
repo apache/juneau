@@ -67,8 +67,7 @@ import org.apache.juneau.yaml.*;
  * ({@code -Djuneau.openapi.path=v1/openapi}), environment variable
  * ({@code JUNEAU_OPENAPI_PATH=v1/openapi}), or {@code Config} key
  * ({@code juneau.openapi.path = v1/openapi}) to change the runtime mount without subclassing.
- * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
- * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
  * <p>
  * Override accepts bare token ({@code openapi}), leading slash ({@code /openapi}), trailing slash

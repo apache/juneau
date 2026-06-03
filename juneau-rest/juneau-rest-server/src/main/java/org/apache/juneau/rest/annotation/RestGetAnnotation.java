@@ -423,14 +423,7 @@ public class RestGetAnnotation {
 			this.value = value;
 			return this;
 		}
-
 	}
-
-	// Phase D-2 (work item 16, 2026-04-19): RestOpContextApply removed entirely. All previously-applied
-	// settings (serializers/encoders/converters/guards/matchers/clientVersion/headers/attributes/path
-	// etc.) are now resolved via direct annotation walking on the corresponding {@code findXxx()}
-	// memoizers in {@link org.apache.juneau.rest.RestOpContext}; the {@code @ContextApply} reference
-	// on {@code @RestGet} has been dropped.
 
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods

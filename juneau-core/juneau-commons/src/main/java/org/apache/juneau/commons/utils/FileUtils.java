@@ -373,7 +373,9 @@ public class FileUtils {
 	 * String-level path normalization for forward-slash separated virtual paths.
 	 * Returns {@code null} if a {@code ..} segment would pop above the root.
 	 */
-	@SuppressWarnings("java:S3776") // Cognitive complexity: small loop with three early-exit cases; splitting hurts readability.
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity: small loop with three early-exit cases; splitting hurts readability.
+	})
 	private static String normalizeVirtualPath(String path) {
 		if (path == null)
 			return null;

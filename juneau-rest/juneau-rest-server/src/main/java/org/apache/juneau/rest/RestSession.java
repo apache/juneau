@@ -60,7 +60,9 @@ public class RestSession extends ContextSession {
 	/**
 	 * Builder class.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required: annotation type parameter is unknown at static analysis time.
+	})
 	public static class Builder extends ContextSession.Builder {
 
 		private CallLogger logger;
@@ -290,7 +292,7 @@ public class RestSession extends ContextSession {
 			if (nn(opSession))
 				opSession.finish();
 			else if (! org.apache.juneau.rest.processor.AsyncResponseProcessor.isAsyncDispatchOwned(req)) {
-				// TODO-70: skip flush when AsyncContext has been started — see AsyncResponseProcessor.
+				// Skip flush when AsyncContext has been started — see AsyncResponseProcessor.
 				res.flushBuffer();
 			}
 		} catch (Exception e) {

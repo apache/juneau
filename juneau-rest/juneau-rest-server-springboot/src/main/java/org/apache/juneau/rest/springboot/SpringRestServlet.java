@@ -53,7 +53,9 @@ public abstract class SpringRestServlet extends RestServlet {
 	 * @return A {@link WritableBeanStore} backed by Spring's {@link ApplicationContext}.
 	 */
 	@Bean
-	@SuppressWarnings("resource") // Spring takes ownership of the returned bean and manages its lifecycle
+	@SuppressWarnings({
+		"resource" // Spring takes ownership of the returned bean and manages its lifecycle
+	})
 	public WritableBeanStore createBeanStore(Optional<BeanStore> parent) {
 		return new SpringBeanStore(appContext.orElse(null), parent.orElse(null));
 	}

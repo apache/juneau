@@ -82,7 +82,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * call any mutating methods on it &mdash; doing so would leak state between unrelated callers.
 	 * Code that legitimately needs to add beans should construct its own {@code new BasicBeanStore()}.
 	 */
-	@SuppressWarnings("resource") // intentional process-lifetime sentinel; never closed because it has no state to release
+	@SuppressWarnings({
+		"resource" // intentional process-lifetime sentinel; never closed because it has no state to release
+	})
 	public static final BasicBeanStore INSTANCE = new BasicBeanStore();
 
 	// Property name constants
@@ -150,7 +152,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @param parent The parent bean store, used as a fallback after local entries.  Can be <jk>null</jk>.
 	 * @param overridingParent The overriding parent bean store, consulted before local entries.  Can be <jk>null</jk>.
 	 */
-	@SuppressWarnings("resource") // self-registration via addSupplier returns this; no foreign resource is being captured
+	@SuppressWarnings({
+		"resource" // self-registration via addSupplier returns this; no foreign resource is being captured
+	})
 	public BasicBeanStore(BeanStore parent, BeanStore overridingParent) {
 		this.parent = parent;
 		this.overridingParent = overridingParent;
@@ -191,7 +195,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @return The bean.
 	 */
 	@Override
-	@SuppressWarnings("resource") // addBean returns this; the discarded return is the store we already own
+	@SuppressWarnings({
+		"resource" // addBean returns this; the discarded return is the store we already own
+	})
 	public <T> T add(Class<T> beanType, T bean, String name) {
 		addBean(beanType, bean, name);
 		return bean;
@@ -206,7 +212,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
-	@SuppressWarnings("resource") // fluent self-return; receiver already owns the store, no new resource is handed out
+	@SuppressWarnings({
+		"resource" // fluent self-return; receiver already owns the store, no new resource is handed out
+	})
 	public <T> BasicBeanStore addBean(Class<T> beanType, T bean) {
 		return addBean(beanType, bean, null);
 	}
@@ -221,7 +229,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
-	@SuppressWarnings("resource") // fluent self-return; receiver already owns the store, no new resource is handed out
+	@SuppressWarnings({
+		"resource" // fluent self-return; receiver already owns the store, no new resource is handed out
+	})
 	public <T> BasicBeanStore addBean(Class<T> beanType, T bean, String name) {
 		return addSupplier(beanType, () -> bean, name);
 	}
@@ -238,7 +248,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
-	@SuppressWarnings("resource") // fluent self-return; receiver already owns the store, no new resource is handed out
+	@SuppressWarnings({
+		"resource" // fluent self-return; receiver already owns the store, no new resource is handed out
+	})
 	public <T> BasicBeanStore addSupplier(Class<T> beanType, Supplier<T> bean) {
 		return addSupplier(beanType, bean, null);
 	}
@@ -280,7 +292,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @return This object.
 	 */
 	@Override
-	@SuppressWarnings("resource") // fluent self-return; receiver already owns the store, no new resource is handed out
+	@SuppressWarnings({
+		"resource" // fluent self-return; receiver already owns the store, no new resource is handed out
+	})
 	public <T> BasicBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> supplier) {
 		return addDefaultSupplier(beanType, supplier, null);
 	}
@@ -531,7 +545,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @param name The bean name.  Can be <jk>null</jk> for unnamed beans.
 	 * @return The locally-registered default supplier, or {@link Optional#empty()} if not present.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: parameterization is verified at construction.
+	})
 	public <T> Optional<Supplier<T>> getDefaultSupplier(Class<T> beanType, String name) {
 		var typeMap = defaults.get(beanType);
 		if (typeMap == null)
@@ -577,7 +593,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: parameterization is verified at construction.
+	})
 	public <T> Optional<Class<? extends T>> getBeanType(Class<T> beanType) {
 		var v = (Class<? extends T>) typeBindings.get(beanType);
 		if (nn(v))
@@ -783,7 +801,9 @@ public class BasicBeanStore implements WritableBeanStore {
 			throw errors;
 	}
 
-	@SuppressWarnings("unchecked") // reflective @Bean discovery — element types resolve at runtime to the value's actual class
+	@SuppressWarnings({
+		"unchecked" // reflective @Bean discovery — element types resolve at runtime to the value's actual class
+	})
 	private void registerConfiguration(Class<?> configType, Set<Class<?>> visited) {
 		if (!visited.add(configType))
 			return;

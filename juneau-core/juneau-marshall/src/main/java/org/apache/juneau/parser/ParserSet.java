@@ -311,7 +311,10 @@ public class ParserSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({"rawtypes","unchecked"})
+		@SuppressWarnings({
+			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
+			"unchecked"  // Cast is safe: caller's Consumer<Parser.Builder<?>> is compatible at runtime.
+		})
 		public Builder forEach(Consumer<Parser.Builder<?>> action) {
 			builders(Parser.Builder.class).forEach((Consumer)action);
 			return this;
@@ -323,7 +326,10 @@ public class ParserSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({"rawtypes","unchecked"})
+		@SuppressWarnings({
+			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
+			"unchecked"  // Cast is safe: caller's Consumer<InputStreamParser.Builder<?>> is compatible at runtime.
+		})
 		public Builder forEachISP(Consumer<InputStreamParser.Builder<?>> action) {
 			return forEach((Class)InputStreamParser.Builder.class, (Consumer)action);
 		}
@@ -334,7 +340,10 @@ public class ParserSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({"rawtypes","unchecked"})
+		@SuppressWarnings({
+			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
+			"unchecked"  // Cast is safe: caller's Consumer<ReaderParser.Builder<?>> is compatible at runtime.
+		})
 		public Builder forEachRP(Consumer<ReaderParser.Builder<?>> action) {
 			return forEach((Class)ReaderParser.Builder.class, (Consumer)action);
 		}

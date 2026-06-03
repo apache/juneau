@@ -99,7 +99,9 @@ public class SseResponseSupport implements AutoCloseable {
 	 * @return This object.
 	 * @throws IOException If an I/O error occurred.
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // SSE stream resource lifecycle is managed by the servlet container.
+	})
 	public SseResponseSupport sendEvent(String name, Object data) throws IOException {
 		return sendEvent(new SseEvent(name, data == null ? null : data.toString()));
 	}

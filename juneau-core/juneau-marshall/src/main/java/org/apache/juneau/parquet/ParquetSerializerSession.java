@@ -257,7 +257,9 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 	}
 
 	/** Simple bean for wrapping non-bean values (Map is not convertible to BeanMap). */
-	@SuppressWarnings("java:S1104") // Public field required for Parquet schema
+	@SuppressWarnings({
+		"java:S1104" // Public field required for Parquet schema
+	})
 	public static class ValueHolder {
 		/** The wrapped value. */
 		public Object value;

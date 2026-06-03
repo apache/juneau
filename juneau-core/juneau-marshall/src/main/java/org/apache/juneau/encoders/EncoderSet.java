@@ -321,7 +321,9 @@ public class EncoderSet {
 		if (o instanceof Encoder o2)
 			return o2;
 		try {
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({
+				"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+			})
 			var subType = (Class<? extends Encoder>) o;
 			return BeanInstantiator.of(Encoder.class, bs).type(subType).run();
 		} catch (ExecutableException e) {

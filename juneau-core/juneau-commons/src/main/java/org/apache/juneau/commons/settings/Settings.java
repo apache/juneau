@@ -384,7 +384,7 @@ public class Settings {
 	 * <p>
 	 * Intended primarily for tests that need to verify nothing has leaked extra sources into the
 	 * process-wide {@link #get() Settings.get()} singleton &mdash; the historical failure mode
-	 * documented in {@code FINISHED-79-phase6-discovery-report.md} where a per-{@code RestContext}
+	 * documented where a per-{@code RestContext}
 	 * config bridge added a {@code ConfigPropertySource} per cached {@code RestContext} via
 	 * {@link #addSource(PropertySource)} and never removed it.
 	 *

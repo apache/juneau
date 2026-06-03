@@ -173,7 +173,7 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 	 * @throws SerializeException If serialization fails.
 	 */
 	protected void serializeBeanWithHeadings(MarkdownWriter w, BeanMap<?> bm, int level) throws IOException, SerializeException {
-		// Phase 1: collect simple properties for the key/value table
+		// Collect simple properties for the key/value table
 		var simpleProps = new java.util.LinkedHashMap<String, Object>();
 		var complexProps = new java.util.LinkedHashMap<String, Object>();
 

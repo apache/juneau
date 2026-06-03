@@ -29,7 +29,7 @@ import org.apache.juneau.commons.function.*;
  * programmatically without requiring it to be declared on a program element at compile time.
  *
  * <p>
- * Phase 1 of the bean-layer split keeps this builder pure-data: it captures the annotation attribute
+ * This builder is pure-data: it captures the annotation attribute
  * values and produces an annotation instance that is functionally equivalent to a declared one, but
  * does <i>not</i> apply itself to a marshalling context. The application logic remains in
  * <c>juneau-marshall</c> (see {@code MarshalledAnnotation}) until later phases move that machinery
@@ -40,6 +40,9 @@ import org.apache.juneau.commons.function.*;
  * 	<li class='jc'>{@link AnnotationObject}
  * </ul>
  */
+@SuppressWarnings({
+	"rawtypes" // Raw types required for reflective annotation application.
+})
 public class BeanTypeAnnotation {
 
 	/**
@@ -56,7 +59,6 @@ public class BeanTypeAnnotation {
 		private Class<?> interfaceClass = void.class;
 		private Class<?> stopClass = void.class;
 		private Class<? extends PropertyNamer> propertyNamer = PropertyNamer.Void.class;
-		@SuppressWarnings("rawtypes")
 		private Class<? extends BeanFactory> factory = BeanFactory.Void.class;
 		private String excludeProperties = "";
 		private String p = "";
@@ -113,7 +115,6 @@ public class BeanTypeAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		@SuppressWarnings("rawtypes")
 		public Builder factory(Class<? extends BeanFactory> value) {
 			factory = value;
 			return this;
@@ -264,7 +265,6 @@ public class BeanTypeAnnotation {
 		private final Class<? extends PropertyNamer> propertyNamer;
 		private final Class<?> interfaceClass;
 		private final Class<?> stopClass;
-		@SuppressWarnings("rawtypes")
 		private final Class<? extends BeanFactory> factory;
 		private final String excludeProperties;
 		private final String p;
@@ -305,7 +305,6 @@ public class BeanTypeAnnotation {
 		}
 
 		@Override /* Overridden from BeanType */
-		@SuppressWarnings("rawtypes")
 		public Class<? extends BeanFactory> factory() {
 			return factory;
 		}

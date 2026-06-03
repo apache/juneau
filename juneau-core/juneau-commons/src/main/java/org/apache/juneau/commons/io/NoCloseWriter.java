@@ -80,7 +80,9 @@ public class NoCloseWriter extends Writer {
 	private static final String ARG_str = "str";
 	private static final String ARG_w = "w";
 
-	@SuppressWarnings("resource") // Intentionally not owned; this wrapper deliberately does not close the underlying writer
+	@SuppressWarnings({
+		"resource" // Intentionally not owned; this wrapper deliberately does not close the underlying writer
+	})
 	private final Writer w;
 
 	/**

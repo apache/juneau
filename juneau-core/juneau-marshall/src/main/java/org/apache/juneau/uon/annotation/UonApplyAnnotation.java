@@ -33,7 +33,9 @@ public class UonApplyAnnotation {
 
 	private UonApplyAnnotation() {}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<UonApply,Context.Builder> {
 
 		public Applier(VarResolverSession vr) {

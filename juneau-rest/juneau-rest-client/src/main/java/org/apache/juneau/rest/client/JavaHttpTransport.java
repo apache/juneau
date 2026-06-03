@@ -69,13 +69,17 @@ public final class JavaHttpTransport implements HttpTransport {
 	 *
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Not owned here; lifecycle is managed by the surrounding context
+	})
 	public static JavaHttpTransport create() {
 		return builder().build();
 	}
 
 	@Override /* HttpTransport */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Not owned here; lifecycle is managed by the surrounding context
+	})
 	public TransportResponse execute(TransportRequest request) throws TransportException {
 		var jdkRequest = buildJdkRequest(request);
 		HttpResponse<InputStream> jdkResponse;
@@ -136,7 +140,9 @@ public final class JavaHttpTransport implements HttpTransport {
 		});
 	}
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource" // Not owned here; lifecycle is managed by the surrounding context
+	})
 	private static TransportResponse buildTransportResponse(HttpResponse<InputStream> jdkResponse) {
 		var builder = TransportResponse.builder()
 			.statusCode(jdkResponse.statusCode())

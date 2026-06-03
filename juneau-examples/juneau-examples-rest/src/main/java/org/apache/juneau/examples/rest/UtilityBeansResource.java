@@ -86,7 +86,9 @@ public class UtilityBeansResource extends BasicRestResource {
 		}
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused" // serialVersionUID required for Serializable compliance; unused in code paths
+	})
 	private static final long serialVersionUID = 1L;
 
 	/**

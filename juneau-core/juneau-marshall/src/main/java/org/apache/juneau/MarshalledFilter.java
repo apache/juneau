@@ -146,7 +146,9 @@ public class MarshalledFilter implements BeanFilter {
 		 * @param annotations The annotations to apply.
 		 * @return This object.
 		 */
-		@SuppressWarnings("java:S3776")
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity: filter-apply dispatch is intentionally consolidated for JIT inlining.
+		})
 		public Builder applyBeanTypeAnnotations(List<BeanType> annotations) {
 
 			annotations.forEach(x -> {
@@ -314,7 +316,9 @@ public class MarshalledFilter implements BeanFilter {
 		 * 	<br>The default value is {@link BeanInterceptor}.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Cast is safe: type parameter verified by caller.
+		})
 		public Builder interceptor(Class<?> value) {
 			interceptor.type((Class<? extends BeanInterceptor>) value);
 			return this;

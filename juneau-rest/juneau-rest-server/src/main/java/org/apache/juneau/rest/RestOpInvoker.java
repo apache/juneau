@@ -88,7 +88,7 @@ public class RestOpInvoker extends MethodInvoker {
 	 * {@link RestContext#postCall(RestOpSession)}) continue to use {@link #invoke(RestOpSession)} so the
 	 * observability boundary stays anchored on the user-facing handler.
 	 *
-	 * <h5 class='section'>Virtual-thread dispatch (TODO-70)</h5>
+	 * <h5 class='section'>Virtual-thread dispatch</h5>
 	 * <p>
 	 * When the operation opts into virtual threads via {@code @Rest(virtualThreads=true)} or
 	 * {@code @RestOp(virtualThreads=true)} and the runtime is Java 21+, the entire body of this method
@@ -97,7 +97,7 @@ public class RestOpInvoker extends MethodInvoker {
 	 * That keeps observability scoping correct (open and close run on the same thread) while letting
 	 * blocking I/O inside the handler park a virtual thread instead of the carrier.
 	 *
-	 * <h5 class='section'>{@link CompletableFuture} returns (TODO-70)</h5>
+	 * <h5 class='section'>{@link CompletableFuture} returns</h5>
 	 * <p>
 	 * When the handler returns a {@link CompletionStage}, the observability close is deferred to the
 	 * future's {@code whenComplete} callback so metrics and traces capture the actual completion time

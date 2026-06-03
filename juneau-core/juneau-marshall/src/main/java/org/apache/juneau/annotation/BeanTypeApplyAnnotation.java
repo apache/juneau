@@ -47,7 +47,9 @@ public class BeanTypeApplyAnnotation {
 	 * method handles unwrapping the nested {@link BeanType @BeanType} from {@link BeanTypeApply#value()} and registering it
 	 * under the targets specified by {@link BeanTypeApply#on()} and {@link BeanTypeApply#onClass()}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<BeanTypeApply,Context.Builder> {
 
 		/**

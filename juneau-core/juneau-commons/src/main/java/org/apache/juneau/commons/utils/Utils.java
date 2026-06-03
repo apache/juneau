@@ -56,7 +56,7 @@ import org.apache.juneau.commons.settings.*;
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention
 	"java:S1118", // Utility class with static methods only
-	"java:S1135"  // TODO comment retained as documentation for future refactoring
+	"java:S1135"  // Marks an unfinished public API element — intentional placeholder.
 })
 public class Utils {
 

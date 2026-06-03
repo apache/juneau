@@ -130,7 +130,9 @@ public final class MdcAsyncListener {
 	 *
 	 * @return A copy of the current MDC map, or {@code null}.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+	})
 	public static Map<String, String> snapshot() {
 		if (!AVAILABLE)
 			return null;
@@ -185,7 +187,9 @@ public final class MdcAsyncListener {
 		};
 	}
 
-	@SuppressWarnings("java:S3011") // Reflective access to MDC methods — intentional; SLF4J is not a compile dep.
+	@SuppressWarnings({
+		"java:S3011" // Reflective access to MDC methods — intentional; SLF4J is not a compile dep.
+	})
 	static void setContextMap(Map<String, String> map) {
 		try {
 			SET_CONTEXT_MAP.invoke(null, map);
@@ -194,7 +198,9 @@ public final class MdcAsyncListener {
 		}
 	}
 
-	@SuppressWarnings("java:S3011") // Reflective access to MDC methods — intentional.
+	@SuppressWarnings({
+		"java:S3011" // Reflective access to MDC methods — intentional.
+	})
 	static void mdcClear() {
 		try {
 			CLEAR.invoke(null);

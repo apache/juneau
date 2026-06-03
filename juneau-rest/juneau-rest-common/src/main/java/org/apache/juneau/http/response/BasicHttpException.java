@@ -47,7 +47,11 @@ import org.apache.juneau.http.header.*;
  *
  * @since 9.2.1
  */
-@SuppressWarnings({"java:S3008", "java:S1948", "java:S1165"})
+@SuppressWarnings({
+	"java:S3008", // Concrete subclasses use UPPER_CASE singleton instance constants (e.g., INSTANCE fields).
+	"java:S1948", // HttpHeaderList is not Java-serializable; HTTP exceptions are not designed for Java serialization transport.
+	"java:S1165"  // Mutable exception fields are intentional: HTTP exceptions support builder-style fluent setters.
+})
 public class BasicHttpException extends RuntimeException implements HttpResponseMessage {
 
 	private static final long serialVersionUID = 1L;

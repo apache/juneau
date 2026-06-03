@@ -726,7 +726,7 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * Overrides the resource-level {@link Rest#observability()} setting for this specific operation.
-	 * Controls whether the FINISHED-67 observability block ({@link org.apache.juneau.rest.metrics.MetricsRecorder} /
+	 * Controls whether the observability block ({@link org.apache.juneau.rest.metrics.MetricsRecorder} /
 	 * {@link org.apache.juneau.rest.tracing.TracerHook}) fires for this operation.
 	 *
 	 * <ul class='values'>

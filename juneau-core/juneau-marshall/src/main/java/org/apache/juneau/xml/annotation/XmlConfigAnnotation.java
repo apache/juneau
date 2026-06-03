@@ -38,7 +38,10 @@ public class XmlConfigAnnotation {
 	/**
 	 * Applies {@link XmlConfig} annotations to a {@link org.apache.juneau.xml.XmlParser.Builder}.
 	 */
-	@SuppressWarnings({"unchecked","rawtypes"})
+	@SuppressWarnings({
+		"unchecked", // Raw types required for reflective annotation application.
+		"rawtypes"   // Raw types required for reflective annotation application.
+	})
 	public static class ParserApply extends AnnotationApplier<XmlConfig,XmlParser.Builder> {
 
 		/**
@@ -65,7 +68,9 @@ public class XmlConfigAnnotation {
 	/**
 	 * Applies {@link XmlConfig} annotations to a {@link org.apache.juneau.xml.XmlSerializer.Builder}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class SerializerApply extends AnnotationApplier<XmlConfig,XmlSerializer.Builder> {
 
 		/**

@@ -33,7 +33,7 @@ import java.util.*;
  * 		callback with the same {@code state} fails.
  * 	<li><b>TTL-bounded</b> &mdash; entries older than the configured TTL are treated as a miss and swept.
  * 	<li><b>Size-bounded</b> &mdash; an LRU cap (default 10 000) prevents unbounded growth from abandoned
- * 		login attempts; eviction mirrors the {@code BoundedLruTokenCache} shape from FINISHED-94c.
+ * 		login attempts; eviction mirrors the {@code BoundedLruTokenCache} shape.
  * </ul>
  *
  * <p>

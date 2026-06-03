@@ -118,7 +118,9 @@ public class Parquet extends StreamMarshaller {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+	})
 	public static <T> List<T> to(Object input, Class<T> type) throws ParseException, IOException {
 		return (List<T>) DEFAULT.read(input, List.class, type);
 	}
@@ -144,7 +146,9 @@ public class Parquet extends StreamMarshaller {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+	})
 	public static <T> List<T> to(Object input, Type type) throws ParseException, IOException {
 		return (List<T>) DEFAULT.read(input, List.class, type);
 	}
@@ -158,7 +162,9 @@ public class Parquet extends StreamMarshaller {
 	 * @return The parsed list of beans.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+	})
 	public static <T> List<T> to(byte[] input, Class<T> type) throws ParseException {
 		return (List<T>) DEFAULT.read(input, List.class, type);
 	}
@@ -172,7 +178,9 @@ public class Parquet extends StreamMarshaller {
 	 * @return The parsed list.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+	})
 	public static <T> List<T> to(byte[] input, Type type) throws ParseException {
 		return (List<T>) DEFAULT.read(input, List.class, type);
 	}

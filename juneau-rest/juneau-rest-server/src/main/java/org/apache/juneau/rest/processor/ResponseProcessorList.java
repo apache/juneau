@@ -129,7 +129,9 @@ public class ResponseProcessorList {
 		return new Builder(beanStore);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+	})
 	private static ResponseProcessor instantiate(Object o, BeanStore bs) {
 		if (o instanceof ResponseProcessor o2)
 			return o2;

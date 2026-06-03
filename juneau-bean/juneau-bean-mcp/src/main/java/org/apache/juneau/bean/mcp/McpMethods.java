@@ -19,7 +19,9 @@ package org.apache.juneau.bean.mcp;
 /**
  * JSON-RPC method names used by MCP over HTTP.
  */
-@SuppressWarnings("java:S115")
+@SuppressWarnings({
+	"java:S115" // Constant names mirror MCP protocol field names exactly (e.g., TOOLS_LIST = "tools/list").
+})
 public final class McpMethods {
 
 	private McpMethods() {}

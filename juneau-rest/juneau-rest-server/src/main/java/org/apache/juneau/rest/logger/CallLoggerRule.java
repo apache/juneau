@@ -55,7 +55,9 @@ public class CallLoggerRule {
 	 */
 	public static class Builder {
 
-		@SuppressWarnings("unused")
+		@SuppressWarnings({
+			"unused" // BeanStore is injected for potential subclass use; not consumed in this builder.
+		})
 		private final BeanStore beanStore;
 		Predicate<Integer> statusFilter;
 		Predicate<HttpServletRequest> requestFilter;

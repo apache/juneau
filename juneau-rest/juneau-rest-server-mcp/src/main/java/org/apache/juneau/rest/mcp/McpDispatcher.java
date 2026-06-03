@@ -218,7 +218,9 @@ public class McpDispatcher {
 		return strParam(asMap(params), "cursor");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type parameter verified by MCP protocol contract.
+	})
 	private static Map<String, Object> asMap(Object params) {
 		if (params == null)
 			return Map.of();
@@ -232,7 +234,9 @@ public class McpDispatcher {
 		return v == null ? null : v.toString();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type parameter verified by MCP protocol contract.
+	})
 	private static Map<String, Object> mapParam(Map<String, Object> p, String key) {
 		var v = p.get(key);
 		if (v == null)

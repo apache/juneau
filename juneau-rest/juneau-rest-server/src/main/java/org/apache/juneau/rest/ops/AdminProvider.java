@@ -36,7 +36,7 @@ import org.apache.juneau.rest.guard.RateLimitGuard.BucketState;
  * rate-limit-bucket inspection). The {@link AdminMixin} (mixin), {@link AdminResource} (child), and
  * {@link AdminServlet} (servlet) flavors are independent {@code @Rest} classes that each hold an
  * {@code AdminProvider} worker and delegate to it &mdash; so the three deployment forms cannot drift, and no
- * flavor is another flavor's worker (TODO-145 &sect;2.3.1).
+ * flavor is another flavor's worker.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link AdminMixin}

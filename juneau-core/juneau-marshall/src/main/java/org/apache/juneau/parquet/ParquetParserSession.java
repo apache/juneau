@@ -705,7 +705,9 @@ public class ParquetParserSession extends InputStreamParserSession {
 	 * {@code stacks[0]} is the outermost list (what will be placed in the row),
 	 * {@code stacks[N-1]} is the innermost list being appended to.
 	 */
-	@SuppressWarnings({"unchecked"}) // Generic array creation for stacks
+	@SuppressWarnings({
+		"unchecked" // Generic array creation for stacks.
+	})
 	private static List<Object> reconstructNestedListColumn(List<Object[]> flattened, int numRows, int depth, int maxDef) {
 		var result = new ArrayList<>(numRows);
 		var stacks = new ArrayList[depth];
@@ -1185,7 +1187,9 @@ public class ParquetParserSession extends InputStreamParserSession {
 	 * Replaces keys equal to {@link ParquetParser#nullKeyString} (default <js>"&lt;NULL&gt;"</js>)
 	 * with actual <jk>null</jk> in maps. Enables round-trip of maps with null keys in flat (column-per-key) format.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: Parquet schema type is verified at parse time.
+	})
 	private void replaceNullKeySentinel(Object obj) {
 		if (obj == null)
 			return;

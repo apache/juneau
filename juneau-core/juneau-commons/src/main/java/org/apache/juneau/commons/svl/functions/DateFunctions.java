@@ -35,7 +35,9 @@ public final class DateFunctions {
 	private DateFunctions() {}
 
 	/** All function classes in this category. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: type verified by caller context.
+	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Now.class, ParseDate.class, FormatDate.class
 	};

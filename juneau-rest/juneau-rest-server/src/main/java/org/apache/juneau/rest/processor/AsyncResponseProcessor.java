@@ -81,7 +81,7 @@ import org.apache.juneau.rest.*;
  * switches from {@code future.whenComplete(callback)} to {@code future.whenCompleteAsync(callback, executor)},
  * routing the response-handler work through the named {@link java.util.concurrent.Executor} bean. The MDC
  * snapshot (see below) is taken on the request thread <em>before</em> the executor routing so the MDC context
- * is always available regardless of which thread the executor picks (TODO-118).
+ * is always available regardless of which thread the executor picks.
  *
  * <h5 class='section'>Thread-local caveats</h5>
  * <p>
@@ -216,10 +216,10 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 			}
 		});
 
-		// MDC bridge (TODO-117): snapshot request-thread MDC at dispatch time, then restore it on the
+		// MDC bridge: snapshot request-thread MDC at dispatch time, then restore it on the
 		// completion thread so log statements inside the whenComplete callback see the same diagnostic
 		// context (requestId, userId, etc.) that was set by upstream filters.
-		// NOTE: the MDC wrap happens BEFORE the executor routing (TODO-118) so the snapshot is always
+		// NOTE: the MDC wrap happens BEFORE the executor routing so the snapshot is always
 		// available regardless of which thread the executor picks.
 		var mdcSnapshot = opSession.getRestContext().isMdcAsyncPropagation()
 			? MdcAsyncListener.snapshot()
@@ -230,7 +230,7 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 			mdcSnapshot
 		);
 
-		// TODO-118: if a per-op or resource-level completion executor is configured, route the callback
+		// If a per-op or resource-level completion executor is configured, route the callback
 		// through it via whenCompleteAsync; otherwise use the natural completion thread.
 		var executor = opSession.getContext().getAsyncCompletionExecutor();
 		if (executor != null)

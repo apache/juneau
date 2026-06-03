@@ -62,7 +62,9 @@ public interface McpEndpoint {
 	 * @param restReq The current REST request.
 	 * @return The response, or {@code null} for notifications.
 	 */
-	@SuppressWarnings("resource") // request-scoped scratch BasicBeanStore; lifetime is bounded by this handler invocation, no foreign resources are captured
+	@SuppressWarnings({
+		"resource" // Request-scoped scratch BasicBeanStore; lifetime is bounded by this handler invocation, no foreign resources are captured.
+	})
 	@RestPost(path = "/mcp")
 	default JsonRpcResponse handleMcpRequest(@Content JsonRpcRequest req, RestRequest restReq) {
 		var bs = new BasicBeanStore(restReq.getContext().getBeanStore())

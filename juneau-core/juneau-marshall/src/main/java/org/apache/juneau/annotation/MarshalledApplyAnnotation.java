@@ -46,7 +46,9 @@ public class MarshalledApplyAnnotation {
 	 * method handles unwrapping the nested {@link Marshalled @Marshalled} from {@link MarshalledApply#value()} and registering it
 	 * under the targets specified by {@link MarshalledApply#on()} and {@link MarshalledApply#onClass()}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<MarshalledApply,Context.Builder> {
 
 		/**

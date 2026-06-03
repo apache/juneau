@@ -198,7 +198,9 @@ public class HeaderArg implements RestOpArg {
 
 		this.def = findDef(pi).or(() -> Optional.ofNullable(classLevelHeader).filter(h -> ne(h.def())).map(Header::def)).orElse(null);
 		this.type = pi.getParameterType();
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+		})
 		var pp = (Class<? extends HttpPartParser>)schema.getParser();
 		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;

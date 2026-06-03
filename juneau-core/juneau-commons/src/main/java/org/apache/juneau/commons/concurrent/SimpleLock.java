@@ -100,7 +100,9 @@ public class SimpleLock implements AutoCloseable {
 	 * 	<li class='note'>This instance wraps a <jk>null</jk> lock, so no actual locking occurs.
 	 * </ul>
 	 */
-	@SuppressWarnings("resource") // Intentional singleton; wraps a null lock so close() is a no-op
+	@SuppressWarnings({
+		"resource" // Intentional singleton; wraps a null lock so close() is a no-op
+	})
 	public static final SimpleLock NO_OP = new SimpleLock(null);
 
 	private final Lock lock;
@@ -134,9 +136,19 @@ public class SimpleLock implements AutoCloseable {
 	 * @param lock The {@link Lock} being wrapped. Can be <jk>null</jk> to create a no-op lock.
 	 */
 	public SimpleLock(Lock lock) {
-		this.lock = lock;
-		if (nn(lock))
+		if (nn(lock)) {
+			boolean acquired = false;
 			lock.lock();
+			try {
+				this.lock = lock;
+				acquired = true;
+			} finally {
+				if (!acquired)
+					lock.unlock();
+			}
+		} else {
+			this.lock = null;
+		}
 	}
 
 	/**
@@ -169,12 +181,7 @@ public class SimpleLock implements AutoCloseable {
 	 */
 	@Override
 	public void close() {
-		if (nn(lock)) {
-			try {
-				// Lock release in finally ensures unlock on all execution paths
-			} finally {
-				lock.unlock();
-			}
-		}
+		if (nn(lock))
+			lock.unlock();
 	}
 }

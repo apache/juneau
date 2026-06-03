@@ -34,7 +34,7 @@ import org.apache.juneau.http.response.*;
  * The {@link FaviconMixin} (mixin), {@link FaviconResource} (child), and {@link FaviconServlet}
  * (servlet) flavors are independent {@code @Rest} classes that each hold a {@code FaviconProvider} worker
  * and delegate to it &mdash; so the three deployment forms cannot drift, and no flavor is another
- * flavor's worker (TODO-145 &sect;2.3.1).
+ * flavor's worker.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link FaviconMixin}

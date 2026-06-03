@@ -349,8 +349,8 @@ final class VarTemplateCompiler {
 		var args = p.parseArgList();
 		p.expect(')');
 		p.expectEnd();
-		// Phase C: bind the function at compile time. Unknown functions stay null and fail
-		// lazily at resolve time per OQA #4.
+		// Bind the function at compile time. Unknown functions stay null and fail
+		// lazily at resolve time.
 		var fn = resolver.getFunctionMap().get(name);
 		return new ScriptSegment(fn, name, args.toArray(new VarTemplate[0]));
 	}
@@ -375,7 +375,9 @@ final class VarTemplateCompiler {
 	 * <p>
 	 * Returns the folded literal text, or {@code null} if folding is skipped for any reason.
 	 */
-	@SuppressWarnings("java:S1166")  // Exception swallowed intentionally — fold-or-skip contract
+	@SuppressWarnings({
+		"java:S1166" // Exception swallowed intentionally — fold-or-skip contract.
+	})
 	private String tryFoldStableVar(Var v, VarTemplate body, boolean hasInternalVar) {
 		if (v == null || !v.isStable() || hasInternalVar || !(v instanceof SimpleVar))
 			return null;

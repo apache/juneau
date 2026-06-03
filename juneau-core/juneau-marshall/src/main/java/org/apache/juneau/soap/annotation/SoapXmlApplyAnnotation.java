@@ -33,7 +33,9 @@ public class SoapXmlApplyAnnotation {
 
 	private SoapXmlApplyAnnotation() {}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<SoapXmlApply,Context.Builder> {
 
 		public Applier(VarResolverSession vr) {

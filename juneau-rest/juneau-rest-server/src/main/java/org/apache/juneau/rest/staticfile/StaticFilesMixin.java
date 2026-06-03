@@ -43,8 +43,7 @@ import org.apache.juneau.rest.annotation.*;
  * ({@code -Djuneau.staticfiles.path=assets}), environment variable
  * ({@code JUNEAU_STATICFILES_PATH=assets}), or {@code Config} key
  * ({@code juneau.staticfiles.path = assets}) to change the runtime mount without subclassing.
- * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
- * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
  * <p>
  * Override accepts bare token ({@code static}), leading slash ({@code /static}), trailing slash
@@ -54,7 +53,7 @@ import org.apache.juneau.rest.annotation.*;
  * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at both
  * {@code /static/*} <i>and</i> {@code /htdocs/*} as historical convenience aliases &mdash; that
  * dual default has been collapsed to a single SVL-configurable mount as part of the
- * "single path per op" principle (see FINISHED-101). Deployers who relied on the {@code /htdocs/*}
+ * "single path per op" principle. Deployers who relied on the {@code /htdocs/*}
  * alias must now either set {@code -Djuneau.staticfiles.path=htdocs} or compose a second
  * resource mounted with the {@code htdocs} override. The default {@link StaticFiles} classpath
  * search root still walks both {@code static/} and {@code htdocs/} directories &mdash; only the

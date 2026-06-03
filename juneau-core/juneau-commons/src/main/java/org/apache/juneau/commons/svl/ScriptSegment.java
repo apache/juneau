@@ -29,24 +29,12 @@ import java.util.*;
  * the parsed arguments — each is itself a {@link VarTemplate} so that nested {@code ${...}} and
  * {@code #{...}} resolve naturally per arg.
  *
- * <h5 class='section'>Phase B (this class as shipped here):</h5>
- * <ul>
- * 	<li>Tokenizer + parser produce {@link ScriptSegment} instances. The {@link #cachedFn} field
- * 		is always {@code null} until Phase C wires the function registry.
- * 	<li>{@link #resolve(VarResolverSession, StringBuilder) resolve} throws
- * 		{@link IllegalArgumentException} per OQA #4's lazy-fail contract: "{@code No such
- * 		function 'foo'}".
- * </ul>
- *
- * <h5 class='section'>Phase C (function dispatch):</h5>
- * <ul>
- * 	<li>The compiler caches a {@link VarFunction} reference into {@link #cachedFn} at compile time
- * 		using the four-channel discovery chain (built-in / ServiceLoader / BeanStore / explicit).
- * 	<li>{@link #resolve(VarResolverSession, StringBuilder) resolve} dispatches to
- * 		{@link VarFunction#invoke(VarResolverSession, List)} after resolving each
- * 		{@link #argTemplates arg template} and coercing it via {@code ArgCoercer} to the
- * 		function's declared parameter type.
- * </ul>
+ * <p>
+ * The {@link #cachedFn} field is set at compile time via the four-channel discovery chain
+ * (built-in / ServiceLoader / BeanStore / explicit). When null, the function name was
+ * unregistered at compile time; {@link #resolve(VarResolverSession, StringBuilder) resolve}
+ * then throws {@link IllegalArgumentException} with a lazy-fail message:
+ * "{@code No such function 'foo'}".
  *
  * <p>
  * If a function reference is unregistered at compile time, the compiler still produces a valid
@@ -57,8 +45,8 @@ import java.util.*;
 final class ScriptSegment extends TemplateSegment {
 
 	/**
-	 * The function reference cached at compile time. {@code null} in Phase B (always) and in
-	 * Phase C when the function name is unregistered (lazy-fail per OQA #4).
+	 * The function reference cached at compile time. {@code null} when the function name is
+	 * unregistered (lazy-fail: error surfaces at resolve time).
 	 */
 	final VarFunction cachedFn;
 

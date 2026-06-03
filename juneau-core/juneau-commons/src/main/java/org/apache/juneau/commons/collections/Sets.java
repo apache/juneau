@@ -314,7 +314,7 @@ public class Sets<E> {
 	 * @return The built set, or {@code null} if {@link #sparse()} is set and the set is empty.
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: Intentional null when sparse+empty. Consider Optional.
+		"java:S1168"     // Intentional null when sparse+empty. TODO - Determine usages and whether empty sets should be returned.
 	})
 	public Set<E> build() {
 		if (sparse && e(set))

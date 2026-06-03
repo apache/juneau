@@ -46,7 +46,9 @@ public class ParentPropertyApplyAnnotation {
 	 * method handles unwrapping the nested {@link ParentProperty @ParentProperty} from {@link ParentPropertyApply#value()} and registering it
 	 * under the targets specified by {@link ParentPropertyApply#on()}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class Applier extends AnnotationApplier<ParentPropertyApply,Context.Builder> {
 
 		/**

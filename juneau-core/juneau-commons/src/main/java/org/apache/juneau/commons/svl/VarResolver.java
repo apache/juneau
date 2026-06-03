@@ -293,7 +293,9 @@ public class VarResolver {
 	);
 
 	@SafeVarargs
-	@SuppressWarnings({"unchecked"})
+	@SuppressWarnings({
+		"unchecked" // Array allocation with generic component type; safe since the concat result is immediately typed by the return.
+	})
 	private static <T> Class<? extends T>[] concat(Class<? extends T>[]... arrays) {
 		var total = 0;
 		for (var a : arrays) total += a.length;
@@ -347,7 +349,9 @@ public class VarResolver {
 
 	private static Var toVar(BeanStore bs, Object o) {
 		if (o instanceof Class<?> o2) {
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({
+				"unchecked" // Cast is safe: parameterized by caller.
+			})
 			var subType = (Class<? extends Var>) o2;
 			return BeanInstantiator.of(Var.class, bs).type(subType).run();
 		}

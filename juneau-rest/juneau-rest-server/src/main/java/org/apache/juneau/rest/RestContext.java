@@ -260,7 +260,7 @@ public class RestContext extends Context {
 		 * Back-compatible constructor without the {@code restBuilder} component (defaults it to <jk>null</jk>).
 		 *
 		 * <p>
-		 * The {@code restBuilder} (TODO-143) is then resolved during {@link RestContext} construction from the
+		 * The {@code restBuilder} is then resolved during {@link RestContext} construction from the
 		 * resource instance's stashed builder, so call sites that don't carry one keep working unchanged.
 		 *
 		 * @param resourceClass The resource class.
@@ -286,7 +286,9 @@ public class RestContext extends Context {
 	 * {@link RestContext} via the public {@link #RestContext(Args)} constructor; this Builder
 	 * exists only as internal bootstrap state for the framework and is slated for inlining in a later phase.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required: annotation type parameter is unknown at static analysis time.
+	})
 	static class Builder extends Context.Builder implements ServletConfig {
 
 		private final Class<?> resourceClass;
@@ -416,7 +418,7 @@ public class RestContext extends Context {
 		/**
 		 * Programmatically sets the {@link java.util.concurrent.Executor} bean name used to route
 		 * {@link java.util.concurrent.CompletableFuture} completion callbacks through a dedicated thread pool
-		 * (TODO-118). Equivalent to {@link Rest#asyncCompletionExecutor()} on the resource class.
+		 * Equivalent to {@link Rest#asyncCompletionExecutor()} on the resource class.
 		 *
 		 * <p>
 		 * The value is looked up by name in the resource's bean store at context-build time. If the name does
@@ -719,7 +721,7 @@ public class RestContext extends Context {
 	private AnnotationWorkList annotationWork;
 
 	/**
-	 * The programmatic configuration builder for this resource (TODO-143), or <jk>null</jk> when configured purely
+	 * The programmatic configuration builder for this resource, or <jk>null</jk> when configured purely
 	 * by annotation.  Resolved during construction from {@link Args#restBuilder()} or, failing that, from the
 	 * resource instance's stashed builder.  When non-<jk>null</jk>, a synthetic highest-priority {@code @Rest}
 	 * annotation built from its set members is prepended to {@link #getRestAnnotations()} so builder-supplied
@@ -1172,7 +1174,7 @@ public class RestContext extends Context {
 	/**
 	 * Env-driven default controlling whether the {@link TraceContextResponseProcessor} is registered so the
 	 * server writes W3C {@code traceparent} / {@code tracestate} response headers when a {@link TracerHook} is
-	 * active (TODO-114). Defaults to {@code true} (on-when-tracer); set {@code RestContext.responseTraceparent=false}
+	 * active. Defaults to {@code true} (on-when-tracer); set {@code RestContext.responseTraceparent=false}
 	 * to keep the processor out of the chain entirely.
 	 */
 	@Value("${RestContext.responseTraceparent:true}")
@@ -1181,7 +1183,7 @@ public class RestContext extends Context {
 	/**
 	 * Env-driven default controlling whether {@link org.apache.juneau.rest.processor.MdcAsyncListener} propagates
 	 * the request thread's SLF4J MDC map to {@link java.util.concurrent.CompletableFuture} completion threads
-	 * (TODO-117). Defaults to {@code true} (on when SLF4J is detected). Set
+	 * Defaults to {@code true} (on when SLF4J is detected). Set
 	 * {@code RestContext.mdcAsyncPropagation=false} to disable globally, or call
 	 * {@link Builder#mdcAsyncPropagation(boolean)} per resource.
 	 */
@@ -1723,12 +1725,12 @@ public class RestContext extends Context {
 		// ResponseProcessorList.Builder.add(...) uses addAll (append) — final order: [DefaultConfig, parent, child].
 		var bs = beanStore();
 		var b = ResponseProcessorList.create(bs);
-		// TODO-114: When enabled (default on-when-tracer), front-load the W3C trace-context processor so it
+		// When enabled (default on-when-tracer), front-load the W3C trace-context processor so it
 		// writes traceparent/tracestate headers before the body-rendering processors run. It short-circuits
 		// at request time when no TracerHook stashed a trace context, so it's zero-cost on the no-tracer path.
 		if (defaultResponseTraceparent)
 			b.add(TraceContextResponseProcessor.class);
-		// TODO-119/120 refactor: front-load any module-contributed ResponseProcessors discovered via
+		// Front-load any module-contributed ResponseProcessors discovered via
 		// ServiceLoader (e.g. the opt-in juneau-rest-server-reactive module's ReactiveResponseProcessor,
 		// which must run ahead of AsyncResponseProcessor). Inert on a bare juneau-rest-server classpath —
 		// when no module ships a META-INF/services/...ResponseProcessor provider file the list is empty and
@@ -1985,7 +1987,10 @@ public class RestContext extends Context {
 	 * guard below short-circuits the flat-inheritance rule (a mixin's {@code @Rest(mixins=B)} is collected at
 	 * the host level, not nested under A).
 	 */
-	@SuppressWarnings({"java:S3776", "java:S1141"})
+	@SuppressWarnings({
+		"java:S3776", // High cognitive complexity is inherent in REST operation set initialization.
+		"java:S1141"  // Nested try/catch blocks required for granular error reporting during initialization.
+	})
 	private final Memoizer<RestOperations> restOperations = memoizer(() -> safe(() -> {
 		initializeFrameworkBeansForRestOps();
 		var bs = beanStore();
@@ -2118,7 +2123,10 @@ public class RestContext extends Context {
 	 * @param builder The builder containing the settings for this bean.
 	 * @throws Exception If any initialization problems were encountered.
 	 */
-	@SuppressWarnings({"java:S3776", "java:S1141"})
+	@SuppressWarnings({
+		"java:S3776", // High cognitive complexity is inherent in REST context constructor initialization.
+		"java:S1141"  // Nested try/catch blocks required for granular error reporting during initialization.
+	})
 	private RestContext(Builder builder) throws Exception {
 		super(builder);
 
@@ -2137,7 +2145,7 @@ public class RestContext extends Context {
 			var rs = new ResourceSupplier(resourceClass, assertArgNotNull("resource", builder.args.resource()));
 			resource = rs;
 
-			// TODO-143: resolve the programmatic configuration builder.  Prefer the one carried on Args (set by
+			// Resolve the programmatic configuration builder.  Prefer the one carried on Args (set by
 			// RestServlet.init()); otherwise read the builder stashed on the resource instance (non-reflective) so
 			// programmatic construction via MockRestClient, child mounting, and mixin composition all honor it.
 			var rb = builder.args.restBuilder();
@@ -2161,8 +2169,8 @@ public class RestContext extends Context {
 			//
 			// For mixin sub-contexts, the parent is the host's FULL beanStore (not just the bootstrap layer)
 			// so that resource-class-level @Bean factory methods declared on the host class are visible to
-			// the mixin's resolution chain.  This matches the FINISHED-72 behavior where mixin endpoints
-			// resolved through the host's beanStore directly; with per-mixin sub-contexts, the same effect is
+			// the mixin's resolution chain.  Mixin endpoints resolved through the host's beanStore directly;
+			// with per-mixin sub-contexts, the same effect is
 			// achieved by parent-linking the mixin's beanStore to the host's full beanStore.
 			//
 			// For top-level resources and @Rest(children) sub-resources, the parent remains the bootstrap
@@ -2177,8 +2185,8 @@ public class RestContext extends Context {
 
 			// Build the initial beanStore; honor an optional @Bean WritableBeanStore override.
 			// In the new 9.5 precedence model, the parent (Spring or parent-resource bootstrap) is
-			// installed as the overriding parent so it wins over local entries.  Phase 1 of TODO-35
-			// threads Args.overridingParent into the per-resource (final beanStore) overridingParent
+			// installed as the overriding parent so it wins over local entries.
+			// Args.overridingParent threads into the per-resource (final beanStore) overridingParent
 			// slot so test-time overlays (TestBeanStore) resolve at tier 1 of the chain ahead of
 			// any @Bean factory result registered as a local entry below.
 			// @formatter:off
@@ -2384,7 +2392,7 @@ public class RestContext extends Context {
 		// supplied. The check runs after all @Bean method injection so that consumer-provided beans are visible.
 		checkObservabilityBackendPresent();
 
-		// Startup-fail (TODO-118): if asyncCompletionExecutor is configured (either by annotation or
+		// Startup-fail: if asyncCompletionExecutor is configured (either by annotation or
 		// programmatically), force-evaluate the memoizer now so "bean not found" surfaces at context
 		// init time rather than lazily on the first request.
 		checkAsyncCompletionExecutorPresent();
@@ -2521,7 +2529,7 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Prepends the synthetic builder-supplied {@code @Rest} annotation (TODO-143) at the most-derived (child)
+	 * Prepends the synthetic builder-supplied {@code @Rest} annotation at the most-derived (child)
 	 * position so its set members win in both child-first ({@code findFirst}) and parent-to-child
 	 * ({@code reduce-last}) resolution walks.  Returns {@code base} unchanged when there is no programmatic builder.
 	 *
@@ -2538,8 +2546,8 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Non-reflectively reads the programmatic configuration builder stashed on a resource/mixin instance
-	 * (TODO-143 &sect;2.4), or returns <jk>null</jk> when the instance carries none or is not a builder-aware base type.
+	 * Non-reflectively reads the programmatic configuration builder stashed on a resource/mixin instance,
+	 * or returns <jk>null</jk> when the instance carries none or is not a builder-aware base type.
 	 *
 	 * @param r The resource instance.
 	 * @return The stashed builder, or <jk>null</jk>.
@@ -2659,7 +2667,7 @@ public class RestContext extends Context {
 
 	/**
 	 * Whether the resource opts into per-request virtual-thread dispatch on Java 21+; resolved from
-	 * {@code @Rest(virtualThreads)} (TODO-70).
+	 * {@code @Rest(virtualThreads)}.
 	 *
 	 * <p>
 	 * Detection happens at context-init via {@link #mergeReplacedBooleanAttribute(String, boolean)}; on JVMs older
@@ -2681,7 +2689,7 @@ public class RestContext extends Context {
 
 	/**
 	 * Configurable async-response timeout (milliseconds) applied by {@code AsyncResponseProcessor} to
-	 * {@link CompletableFuture}-returning handlers; resolved from {@code @Rest(asyncTimeoutMillis)} (TODO-70).
+	 * {@link CompletableFuture}-returning handlers; resolved from {@code @Rest(asyncTimeoutMillis)}.
 	 *
 	 * <p>
 	 * {@code 0} disables the timeout. The default 30-second fallback is applied by {@code AsyncResponseProcessor}
@@ -2705,7 +2713,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * The memoizer throws {@link IllegalStateException} at first access if the bean name was supplied but no
-	 * matching {@link Executor} bean is found — this surfaces as a startup failure, not a silent no-op (TODO-118).
+	 * matching {@link Executor} bean is found — this surfaces as a startup failure, not a silent no-op.
 	 */
 	private final Memoizer<Executor> asyncCompletionExecutor = memoizer(() -> {
 		// Programmatic override takes priority over the annotation chain.
@@ -2737,7 +2745,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * On Java 17/18/19/20 the supplier returns {@code null} and emits a one-shot {@code WARNING} log so the
-	 * resource degrades gracefully to caller-thread dispatch (TODO-70 graceful-degradation contract).
+	 * resource degrades gracefully to caller-thread dispatch.
 	 */
 	private final Memoizer<Executor> virtualThreadExecutor = memoizer(() -> {
 		// NOTE: Intentionally not gated on resource-level {@code virtualThreadsEnabled.get()} — per-op
@@ -2760,7 +2768,7 @@ public class RestContext extends Context {
 		}
 	});
 
-	/** Logger for async / virtual-thread setup events (TODO-70). Used at memoizer init before {@link #getLogger()} may be wired up. */
+	/** Logger for async / virtual-thread setup events. Used at memoizer init before {@link #getLogger()} may be wired up. */
 	private static final Logger ASYNC_LOG = Logger.getLogger(RestContext.class.getName() + ".async");
 
 	/**
@@ -4000,7 +4008,7 @@ public class RestContext extends Context {
 
 	/**
 	 * Returns whether the server writes W3C {@code traceparent} / {@code tracestate} response headers when a
-	 * {@link TracerHook} is active on the request (TODO-114).
+	 * {@link TracerHook} is active on the request.
 	 *
 	 * <p>
 	 * Defaults to {@code true} (on-when-tracer); resolved from the {@code RestContext.responseTraceparent}
@@ -4015,7 +4023,7 @@ public class RestContext extends Context {
 
 	/**
 	 * Returns whether SLF4J MDC propagation is enabled for {@link java.util.concurrent.CompletableFuture}
-	 * completion threads on this resource (TODO-117).
+	 * completion threads on this resource.
 	 *
 	 * <p>
 	 * Defaults to {@code true}; resolved first from the programmatic {@link Builder#mdcAsyncPropagation(boolean)}
@@ -4051,7 +4059,7 @@ public class RestContext extends Context {
 
 	/**
 	 * Returns the {@link java.util.concurrent.Executor} configured for routing
-	 * {@link java.util.concurrent.CompletableFuture} completion callbacks on this resource (TODO-118), or
+	 * {@link java.util.concurrent.CompletableFuture} completion callbacks on this resource, or
 	 * {@code null} when {@code @Rest(asyncCompletionExecutor)} is unset (natural completion thread).
 	 *
 	 * @return The executor, or {@code null} if no async-completion executor is configured.
@@ -4190,7 +4198,7 @@ public class RestContext extends Context {
 
 	/**
 	 * Eagerly evaluates the {@link #asyncCompletionExecutor} memoizer when the annotation or programmatic
-	 * override is non-blank, ensuring "bean not found" surfaces as a startup failure (TODO-118).
+	 * override is non-blank, ensuring "bean not found" surfaces as a startup failure.
 	 *
 	 * @throws IllegalStateException if the named executor bean is not in the bean store.
 	 */

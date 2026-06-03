@@ -103,9 +103,6 @@ public class LogsResource extends BasicRestServlet {
 	/** File or directory details for REST response. */
 	@Response(schema = @Schema(description = "File or directory details"))
 	@BeanType(properties = "type,name,size,lastModified,actions,files")
-	@SuppressWarnings({
-		"java:S1135" // TODO in getFiles() - will address later
-	})
 	public static class FileResource {
 		static final FileFilter FILE_FILTER = f2 -> f2.isDirectory() || f2.getName().endsWith(".log");
 		static final Comparator<FileResource> FILE_COMPARATOR = (o1, o2) -> {
@@ -161,7 +158,7 @@ public class LogsResource extends BasicRestServlet {
 		 * @return Child files, or <jk>null</jk> when this is a file or includeChildren is false.
 		 */
 		@SuppressWarnings({
-			"java:S1168"     // TODO: Intentional null when file or !includeChildren. Consider empty set.
+			"java:S1168"     // Intentional null when file or !includeChildren.
 		})
 		public Set<FileResource> getFiles() {
 			if (f.isFile() || ! includeChildren)

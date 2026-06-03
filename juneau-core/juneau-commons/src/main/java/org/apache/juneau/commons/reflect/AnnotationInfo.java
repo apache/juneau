@@ -122,7 +122,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param a The annotation instance.
 	 */
 	AnnotationInfo(Annotatable on, T a) {
-		this.annotatable = on;  // TODO - Shouldn't allow null.
+		this.annotatable = on;  // TODO - Shouldn't allow null.  Add an assertion and see if anything breaks.
 		this.a = assertArgNotNull(ARG_a, a);
 		this.rank = findRank(a);
 		this.toString = memoize(this::findToString);

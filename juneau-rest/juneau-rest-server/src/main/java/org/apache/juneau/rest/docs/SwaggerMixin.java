@@ -46,8 +46,7 @@ import org.apache.juneau.rest.annotation.*;
  * ({@code -Djuneau.swagger.path=swagger}), environment variable
  * ({@code JUNEAU_SWAGGER_PATH=swagger}), or {@code Config} key
  * ({@code juneau.swagger.path = swagger}) to change the runtime mount without subclassing.
- * Resolution happens once at {@link RestContext} construction time; see the FINISHED-99 archive
- * (SVL resolution in {@code @RestOp(path)}) for the full resolution chain.
+ * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
  * <p>
  * Override accepts bare token ({@code api}), leading slash ({@code /api}), trailing slash

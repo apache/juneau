@@ -38,7 +38,9 @@ public class IoUtils {
 	public static final Charset UTF8 = StandardCharsets.UTF_8;
 
 	/** Reusable empty input stream. */
-	@SuppressWarnings("resource") // Intentional singleton; read() always returns -1 and close() is a no-op
+	@SuppressWarnings({
+		"resource" // Intentional singleton; read() always returns -1 and close() is a no-op
+	})
 	public static final InputStream EMPTY_INPUT_STREAM = new InputStream() {
 		@Override
 		public int read() {
@@ -83,7 +85,9 @@ public class IoUtils {
 	}
 
 	/** Reusable empty reader. */
-	@SuppressWarnings("resource") // Intentional singleton; read() always returns -1 and close() is a no-op
+	@SuppressWarnings({
+		"resource" // Intentional singleton; read() always returns -1 and close() is a no-op
+	})
 	public static final Reader EMPTY_READER = new Reader() {
 		@Override
 		public void close() throws IOException { /* no-op */ }

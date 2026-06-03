@@ -58,7 +58,9 @@ public class HtmlConfigAnnotation {
 	/**
 	 * Applies {@link HtmlConfig} annotations to a {@link org.apache.juneau.html.HtmlSerializer.Builder}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class SerializerApply extends AnnotationApplier<HtmlConfig,HtmlSerializer.Builder> {
 
 		/**

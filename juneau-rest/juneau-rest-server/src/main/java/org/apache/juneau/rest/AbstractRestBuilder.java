@@ -94,7 +94,7 @@ public abstract class AbstractRestBuilder<R, SELF extends AbstractRestBuilder<R,
 
 	/**
 	 * Reflectively instantiates the resource type, preferring a {@code (RestBuilder<?>)} constructor (constructor
-	 * injection &mdash; TODO-145 &sect;2.4 constructor trio) and falling back to the no-arg constructor.
+	 * injection) and falling back to the no-arg constructor.
 	 *
 	 * <p>
 	 * Flavor builder {@code build()} implementations call this then stash {@code this} on the returned instance.

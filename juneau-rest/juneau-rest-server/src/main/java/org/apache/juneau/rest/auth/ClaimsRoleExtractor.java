@@ -39,7 +39,9 @@ class ClaimsRoleExtractor {
 	 * @param claimName The claim name to read (e.g. {@code "roles"}).
 	 * @return The extracted role names.  Never {@code null}; may be empty.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast is safe: list element type is verified by instanceof check before casting.
+	})
 	static Set<String> extractRoles(Principal principal, String claimName) {
 		if (principal instanceof ClaimsPrincipal cp) {
 			var v = cp.getClaims().get(claimName);

@@ -37,7 +37,7 @@ import org.apache.juneau.rest.*;
  * hasn't wired up JSON serializers). The {@link VersionMixin} (mixin), {@link VersionResource} (child),
  * and {@link VersionServlet} (servlet) flavors are independent {@code @Rest} classes that each hold a
  * {@code VersionProvider} worker and delegate to it &mdash; so the three deployment forms cannot drift, and no
- * flavor is another flavor's worker (TODO-145 &sect;2.3.1).
+ * flavor is another flavor's worker.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link VersionMixin}

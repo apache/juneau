@@ -104,10 +104,10 @@ public class TraceContextResponseProcessor implements ResponseProcessor {
 
 		var res = opSession.getResponse();
 
-		// Headers already flushed (e.g. streaming / SSE response) — cannot set; skip without throwing.
+		// Headers already flushed (e.g. streaming / SSE response) — body was also written; chain is done.
 		if (res.getHttpServletResponse().isCommitted()) {
 			LOG.log(Level.FINE, () -> "Response already committed; skipping traceparent/tracestate header injection.");
-			return NEXT;
+			return FINISHED;
 		}
 
 		res.setHeader(HEADER_TRACEPARENT, traceparent);

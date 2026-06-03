@@ -308,7 +308,10 @@ public class SerializerSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({"rawtypes","unchecked"})
+		@SuppressWarnings({
+			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
+			"unchecked"  // Cast is safe: caller's Consumer<Serializer.Builder<?>> is compatible at runtime.
+		})
 		public Builder forEach(Consumer<Serializer.Builder<?>> action) {
 			builders(Serializer.Builder.class).forEach((Consumer)action);
 			return this;
@@ -320,7 +323,10 @@ public class SerializerSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({"rawtypes","unchecked"})
+		@SuppressWarnings({
+			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
+			"unchecked"  // Cast is safe: caller's Consumer<OutputStreamSerializer.Builder<?>> is compatible at runtime.
+		})
 		public Builder forEachOSS(Consumer<OutputStreamSerializer.Builder<?>> action) {
 			return forEach((Class)OutputStreamSerializer.Builder.class, (Consumer)action);
 		}
@@ -331,7 +337,10 @@ public class SerializerSet {
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		@SuppressWarnings({"rawtypes","unchecked"})
+		@SuppressWarnings({
+			"rawtypes",  // Raw Consumer type required for generic builder dispatch across parameterized builder hierarchy.
+			"unchecked"  // Cast is safe: caller's Consumer<WriterSerializer.Builder<?>> is compatible at runtime.
+		})
 		public Builder forEachWS(Consumer<WriterSerializer.Builder<?>> action) {
 			return forEach((Class)WriterSerializer.Builder.class, (Consumer)action);
 		}

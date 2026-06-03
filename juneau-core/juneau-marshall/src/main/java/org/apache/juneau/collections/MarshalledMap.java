@@ -1070,7 +1070,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 			r = toStringArray(l(s3));
 		else
 			r = StringUtils.splita(s(s));
-		return (r.length == 0 ? def : r);
+		return (r == null || r.length == 0) ? def : r;
 	}
 
 	/**
@@ -1185,7 +1185,8 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
 	public boolean is(String key, boolean defVal) {
-		return getWithDefault(key, defVal, Boolean.class);
+		Boolean result = getWithDefault(key, defVal, Boolean.class);
+		return result != null ? result : defVal;
 	}
 
 	/**
@@ -1496,14 +1497,17 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 
 				// Iterate through all the entries in the map and set the individual field values.
 				forEach((k, v) -> {
-					if (! k.equals(bs.getBeanTypePropertyName(cm))) {
+				if (! k.equals(bs.getBeanTypePropertyName(cm))) {
 
-						// Attempt to recursively cast child maps.
-						if (v instanceof MarshalledMap v2)
-							v = v2.cast((ClassMeta<?>) bm.getProperty(k).getMeta().getBeanInfo());
-
-						bm.put(k, v);
+					// Attempt to recursively cast child maps.
+					if (v instanceof MarshalledMap v2) {
+						var pm = bm.getProperty(k);
+						if (pm != null)
+							v = v2.cast((ClassMeta<?>) pm.getMeta().getBeanInfo());
 					}
+
+					bm.put(k, v);
+				}
 				});
 
 				return bm.getBean();

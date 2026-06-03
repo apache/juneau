@@ -38,7 +38,9 @@ public class HtmlDocConfigAnnotation {
 	/**
 	 * Applies {@link HtmlDocConfig} annotations to a {@link org.apache.juneau.html.HtmlDocSerializer.Builder}.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
 	public static class SerializerApply extends AnnotationApplier<HtmlDocConfig,HtmlDocSerializer.Builder> {
 
 		/**
