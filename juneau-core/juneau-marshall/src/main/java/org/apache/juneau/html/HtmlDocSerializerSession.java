@@ -93,6 +93,9 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @param ctx The context creating this session.
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
+	})
 	public static Builder<?> create(HtmlDocSerializer ctx) {
 		return new DefaultBuilder(ctx);
 	}

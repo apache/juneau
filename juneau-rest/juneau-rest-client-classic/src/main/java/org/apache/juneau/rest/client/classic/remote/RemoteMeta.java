@@ -57,6 +57,9 @@ public class RemoteMeta {
 	 *
 	 * @param c The interface class annotated with a {@link org.apache.juneau.http.remote.Remote @Remote} annotation (optional).
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for remote interface metadata construction dispatch
+	})
 	public RemoteMeta(Class<?> c) {
 		var path = "";
 

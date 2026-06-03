@@ -136,6 +136,9 @@ import org.apache.juneau.rest.servlet.*;
  */
 // @formatter:off
 @Rest
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are REST endpoint paths and content-type values; intentional
+})
 public class VersionMixin extends RestMixin {
 
 	/** Sentinel value returned for entries that the worker couldn't resolve. */

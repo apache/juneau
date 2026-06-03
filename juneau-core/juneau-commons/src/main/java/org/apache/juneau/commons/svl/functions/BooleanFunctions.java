@@ -26,6 +26,9 @@ import org.apache.juneau.commons.svl.*;
  * truthiness table. Comparison functions ({@code lt}, {@code gt}, etc.) compare numerically;
  * {@code eq} / {@code neq} compare strings.
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are SVL operator names used in annotation/config keys; intentional
+})
 public final class BooleanFunctions {
 
 	private BooleanFunctions() {}

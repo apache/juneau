@@ -61,6 +61,9 @@ public class DotenvPropertySource implements PropertySource {
 	}
 
 	@Override
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for dotenv property lookup and parsing logic
+	})
 	public PropertyLookupResult get(String name) {
 		var values = map.updateAndGet(existing -> existing != null ? existing : load(path));
 		var value = values.get(name);

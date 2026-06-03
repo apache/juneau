@@ -40,6 +40,9 @@ import org.apache.juneau.*;
 
  * </ul>
  */
+@SuppressWarnings({
+	"java:S115" // ARG_xxx constants use camelCase after prefix intentionally (constructor arg name keys, not enum-style constants)
+})
 public class InputStreamParser extends Parser {
 
 	private static final String ARG_copyFrom = "copyFrom";
@@ -114,6 +117,9 @@ public class InputStreamParser extends Parser {
 	 *
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+	})
 	public static Builder<?> create() {
 		return new DefaultBuilder();
 	}

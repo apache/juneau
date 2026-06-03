@@ -43,6 +43,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S115",  // PROP_xxx constants use camelCase after prefix intentionally (property keys, not enum-style constants)
 	"rawtypes",   // Raw types necessary for generic type handling
 	"unchecked",  // Type erasure requires unchecked casts
 	"resource",   // Resource management handled externally

@@ -31,6 +31,7 @@ import org.junit.jupiter.api.*;
 /**
  * First end-to-end tests for the next-generation REST client using {@link MockHttpTransport}.
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 public class RestClient_Test {
 
 	// =================================================================================================================

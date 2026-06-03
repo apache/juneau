@@ -93,6 +93,9 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
+	})
 	public static Builder<?> create(OutputStreamSerializer ctx) {
 		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
 	}

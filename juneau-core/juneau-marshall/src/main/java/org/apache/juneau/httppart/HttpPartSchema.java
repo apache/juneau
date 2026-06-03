@@ -4258,7 +4258,7 @@ public class HttpPartSchema {
 						throw new SchemaValidationException("Duplicate items not allowed.");
 					HttpPartSchema items2 = getItems();
 					if (nn(items2))
-						c.forEach(x -> items2.validateOutput(x));
+						c.forEach(items2::validateOutput);
 				}
 				break;
 			}

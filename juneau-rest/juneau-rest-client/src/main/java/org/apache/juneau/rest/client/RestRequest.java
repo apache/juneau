@@ -43,7 +43,8 @@ import org.apache.juneau.http.part.*;
  * @since 9.2.1
  */
 @SuppressWarnings({
-	"resource" // client is not owned here; run() transfers RestResponse ownership to caller
+	"java:S1192", // Duplicate string literals are HTTP header names and REST protocol wire values; intentional
+	"resource"    // client is not owned here; run() transfers RestResponse ownership to caller
 })
 public final class RestRequest {
 

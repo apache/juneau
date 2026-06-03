@@ -32,7 +32,8 @@ import org.apache.juneau.commons.bean.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"rawtypes" // Raw types necessary for generic Map delegation
+	"rawtypes",  // Raw types necessary for generic Map delegation
+	"java:S110"  // Inheritance depth inherited from JsonMap -> MarshalledMap -> LinkedHashMap chain; intentional
 })
 public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	private static final long serialVersionUID = 1L;

@@ -66,7 +66,7 @@ import org.apache.juneau.rest.servlet.*;
 public class NavigationMixin extends RestMixin {
 
 	/** No-arg constructor &mdash; navigation has no configurable state. */
-	public NavigationMixin() {}
+	public NavigationMixin() { /* intentionally empty */ }
 
 	/**
 	 * [GET /] - Get child resources.

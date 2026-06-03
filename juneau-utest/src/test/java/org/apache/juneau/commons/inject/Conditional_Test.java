@@ -42,20 +42,20 @@ class Conditional_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------
 
 	public static class SvcA { public final String tag; public SvcA(String tag) { this.tag = tag; } }
-	public static class SvcB { public SvcB() {} }
+	public static class SvcB { public SvcB() { /* intentionally empty */ } }
 
 	public static class AlwaysTrue implements Condition {
-		public AlwaysTrue() {}
+		public AlwaysTrue() { /* intentionally empty */ }
 		@Override public boolean matches(ConditionContext ctx) { return true; }
 	}
 
 	public static class AlwaysFalse implements Condition {
-		public AlwaysFalse() {}
+		public AlwaysFalse() { /* intentionally empty */ }
 		@Override public boolean matches(ConditionContext ctx) { return false; }
 	}
 
 	public static class HasBeanProperty implements Condition {
-		public HasBeanProperty() {}
+		public HasBeanProperty() { /* intentionally empty */ }
 		@Override public boolean matches(ConditionContext ctx) {
 			return ctx.settings().get("conditional.test.enabled").isPresent();
 		}
@@ -69,7 +69,7 @@ class Conditional_Test extends TestBase {
 	 * {@link HasBeanProperty}).
 	 */
 	public static class FullContextSnapshot implements Condition {
-		public FullContextSnapshot() {}
+		public FullContextSnapshot() { /* intentionally empty */ }
 		@Override public boolean matches(ConditionContext ctx) {
 			return ctx.beanStore() != null
 				&& ctx.classLoader() != null
@@ -81,32 +81,32 @@ class Conditional_Test extends TestBase {
 	@Configuration
 	@Conditional(FullContextSnapshot.class)
 	public static class FullContextGatedConfig {
-		public FullContextGatedConfig() {}
+		public FullContextGatedConfig() { /* intentionally empty */ }
 		@Bean public SvcA svcA() { return new SvcA("full-context"); }
 	}
 
 	@Configuration
 	public static class ClassLevelTrueConfig {
-		public ClassLevelTrueConfig() {}
+		public ClassLevelTrueConfig() { /* intentionally empty */ }
 		@Bean public SvcA svcA() { return new SvcA("class-level-true"); }
 	}
 
 	@Configuration
 	@Conditional(AlwaysFalse.class)
 	public static class ClassLevelFalseConfig {
-		public ClassLevelFalseConfig() {}
+		public ClassLevelFalseConfig() { /* intentionally empty */ }
 		@Bean public SvcA svcA() { return new SvcA("class-level-false"); }
 	}
 
 	@Configuration(imports = { ClassLevelFalseConfig.class })
 	public static class ImporterOfFalse {
-		public ImporterOfFalse() {}
+		public ImporterOfFalse() { /* intentionally empty */ }
 		@Bean public SvcB svcB() { return new SvcB(); }
 	}
 
 	@Configuration
 	public static class MemberLevelConfig {
-		public MemberLevelConfig() {}
+		public MemberLevelConfig() { /* intentionally empty */ }
 		@Bean @Conditional(AlwaysTrue.class) public SvcA enabled() { return new SvcA("enabled"); }
 		@Bean @Conditional(AlwaysFalse.class) public SvcB disabled() { return new SvcB(); }
 	}
@@ -119,7 +119,7 @@ class Conditional_Test extends TestBase {
 	 */
 	@Configuration
 	public static class FieldConditionalConfig {
-		public FieldConditionalConfig() {}
+		public FieldConditionalConfig() { /* intentionally empty */ }
 		@Bean(name = "enabled") @Conditional(AlwaysTrue.class) public SvcA enabledField = new SvcA("enabled-field");
 		@Bean(name = "disabled") @Conditional(AlwaysFalse.class) public SvcA disabledField = new SvcA("disabled-field");
 		@Bean(name = "second") public SvcA secondField = new SvcA("second-field");
@@ -127,14 +127,14 @@ class Conditional_Test extends TestBase {
 
 	@Configuration
 	public static class OnClassConfig {
-		public OnClassConfig() {}
+		public OnClassConfig() { /* intentionally empty */ }
 		@Bean @ConditionalOnClass("java.lang.String") public SvcA presentBean() { return new SvcA("present"); }
 		@Bean @ConditionalOnClass("definitely.does.not.Exist") public SvcB absentBean() { return new SvcB(); }
 	}
 
 	@Configuration
 	public static class OnMissingBeanConfig {
-		public OnMissingBeanConfig() {}
+		public OnMissingBeanConfig() { /* intentionally empty */ }
 		@Bean(name = "second") @ConditionalOnMissingBean(SvcA.class) public SvcA conditional() {
 			return new SvcA("conditional");
 		}
@@ -142,7 +142,7 @@ class Conditional_Test extends TestBase {
 
 	@Configuration
 	public static class OnMissingBeanNamedConfig {
-		public OnMissingBeanNamedConfig() {}
+		public OnMissingBeanNamedConfig() { /* intentionally empty */ }
 		// type=Object.class signals "match by bean name only". The conditional bean is skipped if a
 		// bean of any type already exists under "primaryName" in the local store.
 		@Bean(name = "secondary")
@@ -152,7 +152,7 @@ class Conditional_Test extends TestBase {
 
 	@Configuration
 	public static class OnPropertyConfig {
-		public OnPropertyConfig() {}
+		public OnPropertyConfig() { /* intentionally empty */ }
 		@Bean @ConditionalOnProperty(name = "conditional.test.enabled") public SvcA enabled() {
 			return new SvcA("enabled");
 		}
@@ -163,7 +163,7 @@ class Conditional_Test extends TestBase {
 
 	@Configuration
 	public static class OnPropertyHavingValueConfig {
-		public OnPropertyHavingValueConfig() {}
+		public OnPropertyHavingValueConfig() { /* intentionally empty */ }
 		// Property must equal "expected" — when it's present but different, registration is skipped.
 		@Bean @ConditionalOnProperty(name = "conditional.test.matchedValue", havingValue = "expected")
 		public SvcA matched() { return new SvcA("matched"); }
@@ -171,7 +171,7 @@ class Conditional_Test extends TestBase {
 
 	@Configuration
 	public static class CustomConditionalConfig {
-		public CustomConditionalConfig() {}
+		public CustomConditionalConfig() { /* intentionally empty */ }
 		@Bean @Conditional(HasBeanProperty.class) public SvcA gated() { return new SvcA("gated"); }
 	}
 
@@ -400,7 +400,7 @@ class Conditional_Test extends TestBase {
 	@org.apache.juneau.commons.inject.Configuration
 	@ConditionalOnClass("definitely.does.not.Exist")
 	public static class ClassLevelOnClassMissingConfig {
-		public ClassLevelOnClassMissingConfig() {}
+		public ClassLevelOnClassMissingConfig() { /* intentionally empty */ }
 		@Bean public SvcA svcA() { return new SvcA("never"); }
 	}
 

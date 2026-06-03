@@ -296,6 +296,9 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 *
 		 * @return The JSON serializer builder.
 		 */
+		@SuppressWarnings({
+			"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		})
 		public JsonParser.Builder<?> getJsonParserBuilder() { return jsonParserBuilder; }
 
 		/**
@@ -303,6 +306,9 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		 *
 		 * @return The JSON serializer builder.
 		 */
+		@SuppressWarnings({
+			"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+		})
 		public JsonSerializer.Builder<?> getJsonSerializerBuilder() { return jsonSerializerBuilder; }
 
 		@Override /* Overridden from Context.Builder<?> */

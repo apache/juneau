@@ -38,6 +38,7 @@ import org.junit.jupiter.api.extension.*;
  * spawning a nested JUnit launcher.
  */
 @ExtendWith(JuneauBeanStoreExtension.class)
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class JuneauBeanStoreExtension_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

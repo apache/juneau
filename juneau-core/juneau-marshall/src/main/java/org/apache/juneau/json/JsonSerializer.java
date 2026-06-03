@@ -318,6 +318,9 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 *
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+	})
 	public static Builder<?> create() {
 		return new DefaultBuilder();
 	}

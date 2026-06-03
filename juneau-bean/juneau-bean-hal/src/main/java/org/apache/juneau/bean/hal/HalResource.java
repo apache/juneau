@@ -78,7 +78,7 @@ public class HalResource {
 	 * Default constructor.
 	 */
 	public HalResource() {
-		// Intentionally empty: required public no-arg constructor for bean creation/decoding.
+		/* intentionally empty — required public no-arg constructor for bean creation/decoding */
 	}
 
 	/**

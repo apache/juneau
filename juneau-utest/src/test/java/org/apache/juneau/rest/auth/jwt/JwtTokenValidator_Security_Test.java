@@ -33,6 +33,7 @@ import com.nimbusds.jose.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class JwtTokenValidator_Security_Test extends TestBase {
 
 	private static final Clock CLOCK = Clock.fixed(Instant.parse("2026-01-01T00:00:00Z"), ZoneOffset.UTC);

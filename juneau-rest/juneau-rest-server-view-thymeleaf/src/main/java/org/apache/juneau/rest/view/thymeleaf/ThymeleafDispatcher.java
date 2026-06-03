@@ -51,6 +51,9 @@ import org.thymeleaf.templateresolver.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are Thymeleaf template attribute keys; intentional
+})
 public class ThymeleafDispatcher implements RawTemplateDispatcher {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */

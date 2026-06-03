@@ -50,7 +50,7 @@ public class JsonApiRelationship {
 	/**
 	 * Default constructor.
 	 */
-	public JsonApiRelationship() {}
+	public JsonApiRelationship() { /* intentionally empty */ }
 
 	/**
 	 * Bean property getter:  <property>data</property>.

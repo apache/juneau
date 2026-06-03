@@ -37,7 +37,7 @@ public class JsonApiErrorSource {
 	/**
 	 * Default constructor.
 	 */
-	public JsonApiErrorSource() {}
+	public JsonApiErrorSource() { /* intentionally empty */ }
 
 	/**
 	 * Bean property getter:  <property>pointer</property>.

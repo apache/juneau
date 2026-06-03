@@ -74,6 +74,9 @@ import org.apache.juneau.rest.guard.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are HTTP header names and API key parameter names; intentional
+})
 public class ApiKeyGuard extends RestGuard {
 
 	/** WWW-Authenticate response header name (RFC 7235 §4.1). */

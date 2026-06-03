@@ -185,6 +185,7 @@ public class JettyServerComponent implements MicroserviceListener {
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for server creation logic
 		"java:S1141", // Nested try blocks scope checked-exception translation tightly to single call sites
+		"java:S6541", // Brain Method acceptable for server startup wiring logic
 		"resource"    // ms.getBeanStore() is owned by the microservice lifecycle; do not close here.
 	})
 	public void onStart(Microservice ms) {

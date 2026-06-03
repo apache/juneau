@@ -33,6 +33,7 @@ import com.nimbusds.jose.jwk.RSAKey;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class IdTokenValidatorAdapter_Test extends TestBase {
 
 	private static final String ISS = "https://stub-idp.example.com";

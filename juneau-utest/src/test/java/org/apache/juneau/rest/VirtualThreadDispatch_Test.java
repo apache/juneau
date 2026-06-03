@@ -142,8 +142,8 @@ class VirtualThreadDispatch_Test extends TestBase {
 				if (r.getLevel() == Level.WARNING)
 					captured.append(r.getMessage());
 			}
-			@Override public void flush() {}
-			@Override public void close() {}
+			@Override public void flush() { /* intentionally empty */ }
+			@Override public void close() { /* intentionally empty */ }
 		};
 		logger.addHandler(handler);
 		try {

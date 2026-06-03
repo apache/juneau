@@ -134,7 +134,8 @@ public class UriResolver {
 	 * @return The same appendable passed in.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for URI resolution logic
+		"java:S3776", // Cognitive complexity acceptable for URI resolution logic
+		"java:S6541"  // Brain Method acceptable for URI resolution state machine
 	})
 	public Appendable append(Appendable a, Object o) {
 

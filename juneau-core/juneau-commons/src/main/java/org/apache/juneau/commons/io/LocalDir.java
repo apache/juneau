@@ -246,6 +246,9 @@ public class LocalDir {
 	 * @throws IllegalArgumentException If the resolved path escapes the configured root (filesystem branch),
 	 *                                  or if the path contains {@code ..} segments (classpath branch).
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for local file path resolution logic
+	})
 	public LocalFile resolve(String path) {
 		assertArgNotNull(ARG_path, path);
 		if (nn(clazz)) {

@@ -81,7 +81,7 @@ public class HttpDateHeader extends HttpHeaderBean {
 
 	protected HttpDateHeader(String name, Supplier<?> supplier, int lazyMode) {
 		super(name, lazyMode == LAZY_WIRE_STRING
-			? () -> ((Supplier<String>) supplier).get()
+			? ((Supplier<String>) supplier)::get
 			: () -> {
 				var z = ((Supplier<ZonedDateTime>) supplier).get();
 				return z == null ? null : RFC_1123_DATE_TIME.format(z);

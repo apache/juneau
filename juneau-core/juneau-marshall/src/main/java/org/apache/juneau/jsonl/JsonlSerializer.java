@@ -105,6 +105,9 @@ public class JsonlSerializer extends JsonSerializer {
 	 *
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+	})
 	public static JsonSerializer.Builder<?> create() {
 		return JsonSerializer.create()
 			.produces("application/jsonl")

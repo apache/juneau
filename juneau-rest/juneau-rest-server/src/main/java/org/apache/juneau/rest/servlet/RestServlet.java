@@ -85,7 +85,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * Read non-reflectively by {@link RestContext} during construction so builder-supplied values take precedence
 	 * over {@link Rest @Rest} annotation values.
 	 */
-	RestBuilder<?> restBuilder;
+	transient RestBuilder<?> restBuilder;
 
 	/**
 	 * Default constructor.
@@ -107,6 +107,9 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The stashed builder, or <jk>null</jk>.
 	 * @since 9.5.0
 	 */
+	@SuppressWarnings({
+		"java:S1452" // RestBuilder<?> wildcard return intentional; concrete builder type varies by REST resource class
+	})
 	public RestBuilder<?> getRestBuilder() {
 		return restBuilder;
 	}

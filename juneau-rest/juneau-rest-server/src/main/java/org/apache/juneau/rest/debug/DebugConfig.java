@@ -58,7 +58,7 @@ public class DebugConfig {
 		 */
 		protected Builder(BeanStore beanStore) {
 			this.beanStore = beanStore;
-			defaultFormat = beanStore.getBean(BasicTextFormat.class).orElseGet(() -> new BasicTextFormat());
+			defaultFormat = beanStore.getBean(BasicTextFormat.class).orElseGet(BasicTextFormat::new);
 		}
 
 		/**

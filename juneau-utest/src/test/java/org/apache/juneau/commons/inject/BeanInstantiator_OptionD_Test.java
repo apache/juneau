@@ -56,7 +56,7 @@ class BeanInstantiator_OptionD_Test extends TestBase {
 	public static class A_Base {
 		static boolean builderUsed;
 		public static Builder create() { return new Builder(); }
-		public A_Base() {}
+		public A_Base() { /* intentionally empty */ }
 		public static class Builder {
 			public A_Base build() { builderUsed = true; return new A_Base(); }
 		}
@@ -92,7 +92,7 @@ class BeanInstantiator_OptionD_Test extends TestBase {
 	public static class C_Base {
 		static boolean factoryUsed;
 		public static <R extends C_Base> DefaultBuilder<R> builder(Class<R> type) { return new DefaultBuilder<>(type); }
-		public C_Base() {}
+		public C_Base() { /* intentionally empty */ }
 		public static class DefaultBuilder<R extends C_Base> {
 			private final Class<R> type;
 			DefaultBuilder(Class<R> type) { this.type = type; }
@@ -125,7 +125,7 @@ class BeanInstantiator_OptionD_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static class D_Base {
-		public D_Base() {}
+		public D_Base() { /* intentionally empty */ }
 	}
 
 	public static class D_Sub extends D_Base {

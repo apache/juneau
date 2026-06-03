@@ -59,6 +59,9 @@ import com.nimbusds.oauth2.sdk.id.ClientID;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are OAuth protocol parameter names (e.g. "grant_type", "client_id"); intentional
+})
 public class OAuthClientCredentialsFlow {
 
 	/**

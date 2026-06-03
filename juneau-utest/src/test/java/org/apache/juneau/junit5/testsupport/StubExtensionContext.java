@@ -171,10 +171,10 @@ public final class StubExtensionContext {
 					}
 					if (args.length == 2) {
 						var fn = (Function) args[1];
-						return backing.computeIfAbsent(args[0], k -> fn.apply(k));
+						return backing.computeIfAbsent(args[0], fn::apply);
 					}
 					var fn2 = (Function) args[1];
-					var typed = backing.computeIfAbsent(args[0], k -> fn2.apply(k));
+					var typed = backing.computeIfAbsent(args[0], fn2::apply);
 					return ((Class<?>) args[2]).cast(typed);
 				case "equals":
 					return proxy == args[0];

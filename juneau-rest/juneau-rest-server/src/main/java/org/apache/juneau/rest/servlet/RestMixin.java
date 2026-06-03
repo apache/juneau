@@ -114,6 +114,9 @@ public abstract class RestMixin {
 	 *
 	 * @return The stashed builder, or <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // RestBuilder<?> wildcard return intentional; concrete builder type varies by REST resource class
+	})
 	public RestBuilder<?> getRestBuilder() {
 		return restBuilder;
 	}

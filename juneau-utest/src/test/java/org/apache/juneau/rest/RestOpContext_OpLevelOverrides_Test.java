@@ -53,7 +53,7 @@ class RestOpContext_OpLevelOverrides_Test extends TestBase {
 	@Rest(defaultCharset = "UTF-8")
 	public static class A {
 		@RestGet(defaultCharset = "ISO-8859-1")
-		public void get() {}
+		public void get() { /* intentionally empty */ }
 	}
 
 	@Test void a01_opLevelDefaultCharset_overridesClassLevel() throws Exception {
@@ -65,7 +65,7 @@ class RestOpContext_OpLevelOverrides_Test extends TestBase {
 	@Rest(maxInput = "1M")
 	public static class B {
 		@RestOp(method = "get", maxInput = "9M")
-		public void get() {}
+		public void get() { /* intentionally empty */ }
 	}
 
 	@Test void b01_opLevelMaxInput_overridesClassLevel() throws Exception {
@@ -77,7 +77,7 @@ class RestOpContext_OpLevelOverrides_Test extends TestBase {
 	@Rest
 	public static class C {
 		@RestGet(debug="true")
-		public void get() {}
+		public void get() { /* intentionally empty */ }
 	}
 
 	@Test void c01_opLevelDebug_buildsSuccessfully() throws Exception {

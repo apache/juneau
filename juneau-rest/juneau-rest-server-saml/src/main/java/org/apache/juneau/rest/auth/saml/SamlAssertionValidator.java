@@ -106,7 +106,8 @@ import net.shibboleth.shared.resolver.ResolverException;
  * @since 9.5.0
  */
 @SuppressWarnings({
-	"java:S6539" // Monolithic class: validator is a single end-to-end pipeline.
+	"java:S1192", // Duplicate string literals are SAML protocol claim names and JWT-style field keys; intentional
+	"java:S6539"  // Monolithic class: validator is a single end-to-end pipeline.
 })
 public class SamlAssertionValidator {
 
@@ -420,6 +421,9 @@ public class SamlAssertionValidator {
 		return assertions.get(0);
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for multi-step SAML signature verification
+	})
 	private void verifySignature(Assertion assertion) throws AuthenticationException {
 		var signature = assertion.getSignature();
 		if (signature == null)

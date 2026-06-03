@@ -17,7 +17,6 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -44,7 +43,7 @@ public class ParserListener {
 	 * @param p The bean property we had an issue on.
 	 */
 	public void onBeanSetterException(ParserSession session, Throwable t, BeanPropertyMeta p) {
-		onError(session, t, f("Could not call setValue() on property '%s' of class '%s', exception = %s", p.getName(), p.getBeanMeta().getBeanInfo(), lm(t)));
+		onError(session, t, String.format("Could not call setValue() on property '%s' of class '%s', exception = %s", p.getName(), p.getBeanMeta().getBeanInfo(), lm(t)));
 	}
 
 	/**
@@ -72,6 +71,6 @@ public class ParserListener {
 	 * @param bean The bean.
 	 */
 	public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean) {
-		onError(session, null, f("Unknown property '%s' encountered while trying to parse into class '%s' at location %s", propertyName, beanClass, session.getPosition()));
+		onError(session, null, String.format("Unknown property '%s' encountered while trying to parse into class '%s' at location %s", propertyName, beanClass, session.getPosition()));
 	}
 }

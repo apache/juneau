@@ -89,6 +89,9 @@ public interface BeanSession {
 	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
 	 * @return The parsed map.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Map<?,?> wildcard return intentional; the key/value types are determined by the JSON content at runtime
+	})
 	java.util.Map<?,?> parseToMap(CharSequence value);
 
 	/**
@@ -105,6 +108,9 @@ public interface BeanSession {
 	 * @param value The JSON-formatted character sequence to parse.  Must not be <jk>null</jk>.
 	 * @return The parsed collection.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Collection<?> wildcard return intentional; the element type is determined by the JSON content at runtime
+	})
 	java.util.Collection<?> parseToList(CharSequence value);
 
 	/**

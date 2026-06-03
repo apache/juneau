@@ -59,6 +59,9 @@ import com.nimbusds.openid.connect.sdk.validators.IDTokenValidator;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are OIDC/JWT claim names (e.g. "iss", "aud", "exp"); intentional
+})
 public class IdTokenValidatorAdapter {
 
 	/**

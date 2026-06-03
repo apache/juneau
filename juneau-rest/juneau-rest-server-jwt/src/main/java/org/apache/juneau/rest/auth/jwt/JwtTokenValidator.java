@@ -101,6 +101,9 @@ import com.nimbusds.jwt.proc.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are JWT claim names and algorithm identifiers; intentional
+})
 public class JwtTokenValidator implements TokenValidator {
 
 	/** Maximum clock-skew tolerance the builder will accept. */

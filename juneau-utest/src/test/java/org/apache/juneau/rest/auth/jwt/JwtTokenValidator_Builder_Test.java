@@ -34,6 +34,7 @@ import com.nimbusds.jose.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class JwtTokenValidator_Builder_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------

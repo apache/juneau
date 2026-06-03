@@ -63,7 +63,7 @@ public class HttpMediaTypeHeader extends HttpHeaderBean {
 
 	protected HttpMediaTypeHeader(String name, Supplier<?> supplier, int lazyMode) {
 		super(name, lazyMode == LAZY_WIRE_STRING
-			? () -> ((Supplier<String>) supplier).get()
+			? ((Supplier<String>) supplier)::get
 			: () -> {
 				var m = ((Supplier<MediaType>) supplier).get();
 				return m == null ? null : m.toString();

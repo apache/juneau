@@ -155,6 +155,9 @@ public class ResponseProcessorList {
 	 *
 	 * @param builder The builder containing the contents for this list.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for response-processor list construction and ordering logic
+	})
 	protected ResponseProcessorList(Builder builder) {
 		var bs = builder.beanStore();
 		// Instantiate all entries first.
@@ -168,7 +171,7 @@ public class ResponseProcessorList {
 			if (p instanceof ViewRenderer)
 				viewRenderers.add(p);
 
-		var hasCatchAll = list.stream().anyMatch(p -> p instanceof CatchAllResponseProcessor);
+		var hasCatchAll = list.stream().anyMatch(CatchAllResponseProcessor.class::isInstance);
 
 		if (!viewRenderers.isEmpty() && hasCatchAll) {
 			// Build new list: non-ViewRenderer entries in original order, then insert all

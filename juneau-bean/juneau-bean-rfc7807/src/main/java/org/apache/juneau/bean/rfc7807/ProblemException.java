@@ -43,7 +43,7 @@ public class ProblemException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Problem problem;
+	private final transient Problem problem;
 
 	/**
 	 * Constructor.

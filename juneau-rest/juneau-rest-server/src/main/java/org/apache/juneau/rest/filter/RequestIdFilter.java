@@ -74,6 +74,9 @@ import jakarta.servlet.http.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are HTTP header names (e.g. X-Request-ID); intentional
+})
 public class RequestIdFilter {
 
 	/** Standard request and response header name for the request id. */

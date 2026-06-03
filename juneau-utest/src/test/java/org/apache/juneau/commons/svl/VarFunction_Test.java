@@ -27,6 +27,7 @@ import org.junit.jupiter.api.*;
  * Tests the {@link VarFunction} SPI + {@link TypedFunction} reflection-based dispatch +
  * builder registration + lazy-fail for unknown functions.
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class VarFunction_Test extends TestBase {
 
 	/** Simple typed-function: upper-case its single string arg. */

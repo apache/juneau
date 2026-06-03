@@ -456,6 +456,9 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	guard failed).
 	 * @throws IllegalArgumentException If {@code response} is <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for HTTP precondition checks (If-Match, If-None-Match, If-Modified-Since, etc.)
+	})
 	public Optional<BasicHttpException> checkPreconditions(RestResponse response) {
 		assertArgNotNull("response", response);
 		var resTagStr = response.getHeader(ETag.NAME);

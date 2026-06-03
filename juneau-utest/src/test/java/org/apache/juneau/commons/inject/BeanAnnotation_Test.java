@@ -67,8 +67,8 @@ class BeanAnnotation_Test extends TestBase {
 	}
 
 	public static class A04Target {
-		public void method1() {}
-		public void method2() {}
+		public void method1() { /* intentionally empty */ }
+		public void method2() { /* intentionally empty */ }
 	}
 
 	@Test

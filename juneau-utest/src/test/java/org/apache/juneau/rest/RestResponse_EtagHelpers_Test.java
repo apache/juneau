@@ -30,6 +30,7 @@ import org.junit.jupiter.api.*;
  * Tests for the conditional-GET response helpers on {@link RestResponse}:
  * {@code eTag(...)}, {@code lastModified(...)}, and {@code cacheControl(...)}.
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class RestResponse_EtagHelpers_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

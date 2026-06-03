@@ -39,6 +39,7 @@ import io.opentelemetry.sdk.trace.export.*;
  * to capture and assert against real {@link io.opentelemetry.sdk.trace.data.SpanData SpanData}
  * produced by the bridge during {@code @RestOp} invocations.
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class OtelTracerHook_Test extends TestBase {
 
 	// Static init so the SDK is wired before MockRestClient.buildLax() in the @Rest classes runs.

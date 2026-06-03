@@ -31,6 +31,7 @@ import jakarta.validation.constraints.*;
  * Direct unit tests for {@link BeanValidator}, exercising the entrypoint contract independent of the
  * REST argument-resolver wiring covered elsewhere.
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class BeanValidator_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -38,9 +39,9 @@ class BeanValidator_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	static class A_Holder {
-		void noMarker(String x) {}
-		void jakartaValid(@jakarta.validation.Valid String x) {}
-		void deprecated(@Deprecated String x) {}
+		void noMarker(String x) { /* intentionally empty */ }
+		void jakartaValid(@jakarta.validation.Valid String x) { /* intentionally empty */ }
+		void deprecated(@Deprecated String x) { /* intentionally empty */ }
 	}
 
 	@Test

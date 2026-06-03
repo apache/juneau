@@ -222,7 +222,7 @@ class AdminMixin_RateLimitSnapshot_Test extends TestBase {
 		@Override public RateLimitGuard.Storage.AcquireResult tryAcquire(String key, int capacity, double permitsPerSecond) {
 			return new RateLimitGuard.Storage.AcquireResult(true, capacity, 0L);
 		}
-		@Override public void evict(Duration ttl) {}
+		@Override public void evict(Duration ttl) { /* intentionally empty */ }
 	}
 
 	static final RateLimitGuard E_GUARD = RateLimitGuard.create()

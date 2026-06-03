@@ -49,6 +49,9 @@ public interface BeanTypeResolver {
 	 * @param typeVarImpls Resolved type-variable substitutions for the enclosing class.
 	 * @return The resolved type-info, or {@code null} if no resolution was possible.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // BeanInfo<?> wildcard return intentional; the concrete bean type is not statically known at this API level
+	})
 	BeanInfo<?> resolveType(AnnotationInfo<BeanProp> lastBeanProp, ClassInfo type, TypeVariables typeVarImpls);
 
 	/**
@@ -57,6 +60,9 @@ public interface BeanTypeResolver {
 	 *
 	 * @return Non-{@code null} type-info for {@code Object.class}.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // BeanInfo<?> wildcard return intentional; used as a polymorphic fallback type for unparameterized collections
+	})
 	BeanInfo<?> objectType();
 
 	/**

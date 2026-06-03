@@ -64,6 +64,9 @@ import jakarta.servlet.http.HttpServletRequest;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are OAuth protocol header names and grant type values; intentional
+})
 public class OAuthFilter extends AuthFilter {
 
 	private static final String DEFAULT_ROLES_CLAIM = "scope";

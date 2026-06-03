@@ -118,6 +118,9 @@ public class ConfigPropertySourceProvider implements PropertySourceProvider {
 		private volatile ConfigPropertySource delegate;
 
 		@Override
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for lazy config property source resolution
+		})
 		public PropertyLookupResult get(String name) {
 
 			// Re-entrant guard: Config.findSystemDefault() walks Settings.get("juneau.configFile"),

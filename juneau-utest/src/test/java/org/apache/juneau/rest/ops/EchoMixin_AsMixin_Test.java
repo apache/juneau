@@ -47,6 +47,7 @@ import org.junit.jupiter.api.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class EchoMixin_AsMixin_Test extends TestBase {
 
 	/** Default-host mounting the mixin without {@code @Rest(debug)}. */

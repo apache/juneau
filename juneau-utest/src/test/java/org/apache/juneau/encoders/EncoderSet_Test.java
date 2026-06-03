@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class EncoderSet_Test extends TestBase {
 
 	//====================================================================================================

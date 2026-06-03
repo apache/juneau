@@ -328,6 +328,9 @@ public class Args {
 		 * @param argv The arguments.  Can be <jk>null</jk> (treated as an empty argv).
 		 * @return A new immutable {@link Args} instance.
 		 */
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for argument prefix resolution and parsing logic
+		})
 		public Args build(String[] argv) {
 			var prefixes = resolvePrefixes();
 			var positional = new ArrayList<String>();

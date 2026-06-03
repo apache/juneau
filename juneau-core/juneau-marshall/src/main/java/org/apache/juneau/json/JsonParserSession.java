@@ -47,6 +47,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S115",  // PROP_xxx constants use camelCase after prefix intentionally (property keys, not enum-style constants)
 	"java:S125",  // State-machine and parse-path comments (S1: ..., Let o be null) are documentation, not commented-out code
 	"java:S6541", // Brain method acceptable for JSON parser dispatch and state machines
 	"unchecked", // Type erasure requires unchecked casts
@@ -129,6 +130,9 @@ public class JsonParserSession extends ReaderParserSession {
 	 * @param ctx The context creating this session.
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
+	})
 	public static Builder<?> create(JsonParser ctx) {
 		return new DefaultBuilder(ctx);
 	}

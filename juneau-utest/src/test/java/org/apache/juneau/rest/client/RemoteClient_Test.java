@@ -634,8 +634,8 @@ public class RemoteClient_Test {
 		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(B01_ItemService.class);
 			// These invoke Object.class methods directly on the handler — should not throw
-			assertDoesNotThrow(() -> svc.toString());
-			assertDoesNotThrow(() -> svc.hashCode());
+			assertDoesNotThrow(svc::toString);
+			assertDoesNotThrow(svc::hashCode);
 			assertDoesNotThrow(() -> svc.equals(svc));
 		}
 	}

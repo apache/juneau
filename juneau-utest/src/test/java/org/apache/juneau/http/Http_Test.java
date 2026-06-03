@@ -36,6 +36,7 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for all http classes: headers, parts, bodies, response, and static factory helpers.
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 public class Http_Test {
 
 	// ------------------------------------------------------------------------------------------------------------------

@@ -74,6 +74,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * {@code double} / {@code decimal128}; CBOR's tag 22 / 23 / 24 for special floats; MsgPack {@code float64}).
  * This setting only affects text-based serializers.
  */
+@SuppressWarnings({
+	"java:S115" // NaN_AS_* enum constants use the IEEE 754 abbreviation 'NaN' which includes lowercase letters; intentional
+})
 public enum FloatFormat {
 
 	/** Sentinel meaning "no value configured" — falls through to the next-higher precedence level. */

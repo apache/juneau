@@ -29,6 +29,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Nested;
 import org.apache.juneau.commons.bean.*;
 
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class RdfParser_Test extends TestBase {
 
 	public static class NamedBean {

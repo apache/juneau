@@ -270,11 +270,11 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 	}
 
 	@SuppressWarnings({
-		"java:S1168",    // TODO: null when type ignored. Consider returning empty schema instead?
-		"java:S3776", // Cognitive complexity acceptable for schema generation over type categories
-		"java:S6541", // Brain Method — unified getSchema branching over serializers/types is intentional
-		"rawtypes", // Raw types necessary for generic type handling
-		"unchecked", // Type erasure requires unchecked casts
+		"java:S1168",  // Intentional null when type is ignored — signals "no schema" to callers; null is filtered by JsonMap serialization
+		"java:S3776",  // Cognitive complexity acceptable for schema generation over type categories
+		"java:S6541",  // Brain Method — unified getSchema branching over serializers/types is intentional
+		"rawtypes",    // Raw types necessary for generic type handling
+		"unchecked"    // Type erasure requires unchecked casts
 	})
 	private JsonMap getSchema(ClassMeta<?> eType, String attrName, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
 		throws MarshallingRecursionException, SerializeException {
@@ -410,7 +410,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 
 			} else if (tc == MAP) {
 				var om = getSchema(sType.getValueType(), PROP_additionalProperties, exampleAdded, descriptionAdded, null);
-				if (! om.isEmpty())
+				if (om != null && ! om.isEmpty())
 					out.put(PROP_additionalProperties, om);
 
 			}

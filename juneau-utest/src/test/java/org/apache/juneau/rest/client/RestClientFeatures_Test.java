@@ -32,6 +32,7 @@ import org.junit.jupiter.api.*;
  * Tests for RestCallInterceptor, RestLogger, RestLogEntry, RestLogLevelResolver,
  * BasicRestLogger, BodyConverter, and related RestClient features.
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 public class RestClientFeatures_Test {
 
 	// =================================================================================================================
@@ -1011,7 +1012,7 @@ public class RestClientFeatures_Test {
 			var body = new HttpBody() {
 				@Override public String getContentType() { return null; }
 				@Override public long getContentLength() { return 0; }
-				@Override public void writeTo(java.io.OutputStream out) {}
+				@Override public void writeTo(java.io.OutputStream out) { /* intentionally empty */ }
 				@Override public boolean isRepeatable() { return true; }
 			};
 			return TransportBody.of(body);

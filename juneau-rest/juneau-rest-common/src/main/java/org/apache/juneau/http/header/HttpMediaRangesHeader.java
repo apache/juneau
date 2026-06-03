@@ -85,7 +85,7 @@ public class HttpMediaRangesHeader extends HttpHeaderBean {
 	 */
 	protected HttpMediaRangesHeader(String name, Supplier<?> supplier, int lazyMode) {
 		super(name, lazyMode == LAZY_WIRE_STRING
-			? () -> ((Supplier<String>) supplier).get()
+			? ((Supplier<String>) supplier)::get
 			: () -> {
 				var m = ((Supplier<MediaRanges>) supplier).get();
 				return m == null ? null : m.toString();

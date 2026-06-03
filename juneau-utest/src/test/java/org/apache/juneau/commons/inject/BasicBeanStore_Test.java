@@ -1396,7 +1396,7 @@ class BasicBeanStore_Test extends TestBase {
 	}
 
 	static class SimpleNoArgBean {
-		public SimpleNoArgBean() {}
+		public SimpleNoArgBean() { /* intentionally empty */ }
 	}
 
 	@Test
@@ -1553,7 +1553,7 @@ class BasicBeanStore_Test extends TestBase {
 	 */
 	@Configuration
 	public static class Z02_OnMissingNamedConfig {
-		public Z02_OnMissingNamedConfig() {}
+		public Z02_OnMissingNamedConfig() { /* intentionally empty */ }
 		@Bean(name = "secondary")
 		@ConditionalOnMissingBean(name = "primaryName")
 		public TestBean tb() { return new TestBean("conditional"); }
@@ -1578,7 +1578,7 @@ class BasicBeanStore_Test extends TestBase {
 	 */
 	@Configuration
 	public static class Z03_MixedFieldConfig {
-		public Z03_MixedFieldConfig() {}
+		public Z03_MixedFieldConfig() { /* intentionally empty */ }
 		public String nonBeanField = "ignored";
 		@Bean public TestBean tb = new TestBean("z03");
 		@SuppressWarnings("unused") public String helperMethod() { return "not a bean"; }
@@ -1603,13 +1603,13 @@ class BasicBeanStore_Test extends TestBase {
 	 */
 	@Configuration
 	public static class Z04_FirstFieldConfig {
-		public Z04_FirstFieldConfig() {}
+		public Z04_FirstFieldConfig() { /* intentionally empty */ }
 		@Bean(name = "shared") public TestBean tb = new TestBean("first");
 	}
 
 	@Configuration
 	public static class Z04_DuplicateFieldConfig {
-		public Z04_DuplicateFieldConfig() {}
+		public Z04_DuplicateFieldConfig() { /* intentionally empty */ }
 		@Bean(name = "shared") public TestBean tb = new TestBean("second");
 	}
 

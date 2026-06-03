@@ -17,7 +17,6 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
@@ -44,7 +43,7 @@ public class SerializerListener {
 	 * @param p The bean property we had an issue on.
 	 */
 	public void onBeanGetterException(SerializerSession session, Throwable t, BeanPropertyMeta p) {
-		onError(session, t, f("Could not call getValue() on property '%s' of class '%s', exception = %s", p.getName(), p.getBeanMeta().getBeanInfo(), lm(t)));
+		onError(session, t, String.format("Could not call getValue() on property '%s' of class '%s', exception = %s", p.getName(), p.getBeanMeta().getBeanInfo(), lm(t)));
 	}
 
 	/**

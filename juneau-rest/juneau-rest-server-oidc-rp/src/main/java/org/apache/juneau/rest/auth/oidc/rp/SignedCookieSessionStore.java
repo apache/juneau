@@ -53,6 +53,9 @@ import com.nimbusds.jwt.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are cookie attribute names and session field names; intentional
+})
 public class SignedCookieSessionStore implements SessionStore {
 
 	/** Default maximum serialized cookie size in bytes. */

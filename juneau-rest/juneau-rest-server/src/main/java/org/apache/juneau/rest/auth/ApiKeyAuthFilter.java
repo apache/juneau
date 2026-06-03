@@ -60,6 +60,9 @@ import jakarta.servlet.http.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are HTTP header names and error message fragments; intentional
+})
 public class ApiKeyAuthFilter extends AuthFilter {
 
 	/** Source of the API-key string. */

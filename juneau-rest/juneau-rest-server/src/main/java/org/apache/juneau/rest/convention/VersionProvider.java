@@ -49,6 +49,9 @@ import org.apache.juneau.rest.*;
  * @since 9.5.0
  */
 // @formatter:off
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are version-related property keys; intentional
+})
 public class VersionProvider {
 
 	/** Sentinel value returned for entries that the worker couldn't resolve. */

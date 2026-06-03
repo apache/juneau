@@ -37,6 +37,7 @@ import org.junit.jupiter.api.*;
  * Unit tests for BasicBeanConverter.
  */
 @DisplayName("BasicBeanConverter")
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class BasicBeanConverter_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -410,7 +411,7 @@ class BasicBeanConverter_Test extends TestBase {
 	}
 
 	public static class NoSizeAtAll {
-		public NoSizeAtAll() {}
+		public NoSizeAtAll() { /* intentionally empty */ }
 		public String name() { return "test"; }
 		public String name(String prefix) { return prefix + "test"; }
 	}

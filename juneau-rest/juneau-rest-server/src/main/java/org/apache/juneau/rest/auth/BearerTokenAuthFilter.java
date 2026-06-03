@@ -61,6 +61,9 @@ import jakarta.servlet.http.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are HTTP header names and bearer token format strings; intentional
+})
 public class BearerTokenAuthFilter extends AuthFilter {
 
 	private static final String DEFAULT_ROLES_CLAIM = "roles";

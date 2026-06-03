@@ -40,7 +40,8 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"rawtypes", // Raw types used for generic testing scenarios
-	"unchecked" // Cast from Object to List/Map in config tests
+	"unchecked",  // Cast from Object to List/Map in config tests
+	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
 class Config_Test extends TestBase {
 

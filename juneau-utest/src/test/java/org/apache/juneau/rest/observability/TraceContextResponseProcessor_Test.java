@@ -195,7 +195,7 @@ class TraceContextResponseProcessor_Test extends TestBase {
 
 		var p = new TraceContextResponseProcessor();
 		var rc = assertDoesNotThrow(() -> p.process(opSession));
-		assertEquals(ResponseProcessor.NEXT, rc);
+		assertEquals(ResponseProcessor.FINISHED, rc);
 		// Committed ⇒ no header write attempted.
 		verify(res, never()).setHeader(eq("traceparent"), anyString());
 	}

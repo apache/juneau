@@ -420,6 +420,9 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * Non-static {@code scope = CLASS} declarations are rejected with an {@link ExtensionContextException} &mdash;
 	 * instance state isn't available at {@code beforeAll} time.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for hierarchical test bean override wiring
+	})
 	private static void populateStaticOverrides(TestBeanStore store, Class<?> testClass, ModeTracker modeTracker) {
 		for (var c : classHierarchy(testClass)) {
 			for (var f : c.getDeclaredFields()) {
@@ -453,6 +456,9 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * Honors both instance and static members ("behave consistently with
 	 * non-static" for {@code scope = METHOD} on static fields).
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for hierarchical test bean instance override wiring
+	})
 	private static void populateInstanceOverrides(TestBeanStore store, Object testInstance, ModeTracker modeTracker) {
 		var testClass = testInstance.getClass();
 		for (var c : classHierarchy(testClass)) {

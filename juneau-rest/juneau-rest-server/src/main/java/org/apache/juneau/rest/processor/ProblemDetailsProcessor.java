@@ -111,7 +111,8 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 
 	@Override /* Overridden from ResponseProcessor */
 	@SuppressWarnings({
-		"resource"  // negotiated output stream owned by the response; closed by the container/RestCall
+		"resource",  // negotiated output stream owned by the response; closed by the container/RestCall
+		"java:S3776" // Cognitive complexity acceptable for RFC-9457 problem-details response dispatch
 	})
 	public int process(RestOpSession opSession) throws IOException {
 

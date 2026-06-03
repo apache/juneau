@@ -54,10 +54,10 @@ class RestOpContext_HttpMethodResolution_Test extends TestBase {
 	@Rest
 	public static class A {
 		@RestPatch
-		public void doPatch() {}
+		public void doPatch() { /* intentionally empty */ }
 
 		@RestOptions
-		public void doOptions() {}
+		public void doOptions() { /* intentionally empty */ }
 	}
 
 	@Test void a01_restPatch_yieldsPATCH() throws Exception {
@@ -73,13 +73,13 @@ class RestOpContext_HttpMethodResolution_Test extends TestBase {
 	@Rest
 	public static class B {
 		@RestOp(method = "head")
-		public void someName() {}
+		public void someName() { /* intentionally empty */ }
 
 		@RestOp("trace /x")
-		public void valueWithSpace() {}
+		public void valueWithSpace() { /* intentionally empty */ }
 
 		@RestOp("connect")
-		public void valueNoSpace() {}
+		public void valueNoSpace() { /* intentionally empty */ }
 	}
 
 	@Test void b01_restOpMethodAttribute_explicitVerb() throws Exception {
@@ -101,11 +101,11 @@ class RestOpContext_HttpMethodResolution_Test extends TestBase {
 	public static class C {
 		// "METHOD" wildcard literal must be normalized to "*".
 		@RestOp(method = "method")
-		public void wildcardVerb() {}
+		public void wildcardVerb() { /* intentionally empty */ }
 
 		// No verb anywhere; falls back to detectHttpMethod() which picks up the "doGet"-style prefix.
 		@RestOp(path = "/x")
-		public void doGet() {}
+		public void doGet() { /* intentionally empty */ }
 	}
 
 	@Test void c01_methodLiteral_normalizesToWildcard() throws Exception {

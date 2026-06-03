@@ -85,6 +85,9 @@ public class InputStreamParserSession extends ParserSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
+	})
 	public static Builder<?> create(InputStreamParser ctx) {
 		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
 	}

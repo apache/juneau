@@ -97,6 +97,9 @@ public class JsonlParser extends JsonParser {
 	 *
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+	})
 	public static JsonParser.Builder<?> create() {
 		return JsonParser.create()
 			.consumes("application/jsonl,application/x-ndjson,text/jsonl")

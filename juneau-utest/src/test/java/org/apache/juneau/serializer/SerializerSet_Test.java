@@ -25,6 +25,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class SerializerSet_Test extends TestBase {
 
 	//====================================================================================================

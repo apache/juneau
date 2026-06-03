@@ -26,6 +26,7 @@ import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class RateLimitGuard_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

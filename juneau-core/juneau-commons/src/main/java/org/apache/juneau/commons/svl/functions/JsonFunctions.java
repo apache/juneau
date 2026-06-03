@@ -61,7 +61,8 @@ public final class JsonFunctions {
 		}
 
 		@SuppressWarnings({
-			"unchecked" // Cast is safe: type verified by caller context.
+			"unchecked",  // Cast is safe: type verified by caller context.
+			"java:S3776"  // Cognitive complexity acceptable for JSON path navigation dispatch
 		})
 		private static Object navigate(Object root, String path) {
 			if (root == null || path == null) return null;

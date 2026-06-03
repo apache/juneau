@@ -113,6 +113,9 @@ public enum EnumFormat {
 	 * @return The parsed enum constant, or <jk>null</jk> if {@code value} is <jk>null</jk> or blank.
 	 * @throws IllegalArgumentException If the value does not match any enum constant.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for enum format parsing dispatch
+	})
 	public static <E extends Enum<E>> E parse(String value, Class<E> enumClass) {
 		if (value == null)
 			return null;

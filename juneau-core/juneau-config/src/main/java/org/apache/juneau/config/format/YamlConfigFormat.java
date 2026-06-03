@@ -43,6 +43,9 @@ public class YamlConfigFormat implements ConfigFormat {
 	}
 
 	@Override /* ConfigFormat */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for YAML-to-INI format conversion logic
+	})
 	public String toInternal(String contents) throws IOException {
 		if (contents == null)
 			return "";

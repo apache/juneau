@@ -76,6 +76,9 @@ public class TurtleParser extends RdfParser {
 	 *
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+	})
 	public static RdfParser.Builder<?> create() {
 		return RdfParser.create().turtle();
 	}

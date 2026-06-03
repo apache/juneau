@@ -2095,7 +2095,8 @@ public class BeanInstantiator<T> {
 	 * 3. Autodetect from static methods or inner classes
 	 */
 	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to ClassInfo for builder type
+		"unchecked",  // Type erasure requires cast to ClassInfo for builder type
+		"java:S3776"  // Cognitive complexity acceptable for multi-strategy builder-type resolution
 	})
 	private ClassInfo findBuilderType() {
 		log("Finding builder type...");

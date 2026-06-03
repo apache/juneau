@@ -34,6 +34,7 @@ import jakarta.servlet.http.HttpServletRequest;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class OAuthFilter_Test extends TestBase {
 
 	private static final Principal ALICE = () -> "alice";

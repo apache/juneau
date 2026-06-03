@@ -204,7 +204,8 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 	private final Class<?> unswapType;
 
 	@SuppressWarnings({
-		"null" // Method info variables are checked for null before use in method body
+		"null",      // Method info variables are checked for null before use in method body
+		"java:S3776" // Cognitive complexity acceptable for auto-number swap constructor dispatch
 	})
 	private AutoNumberSwap(MarshallingContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
 		super(ci.inner(), swapMethod.inner().getReturnType());

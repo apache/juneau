@@ -75,6 +75,7 @@ import org.apache.juneau.commons.collections.*;
 public class AnnotationInfo<T extends Annotation> {
 
 	// Argument name constants for assertArgNotNull
+	private static final String ARG_on = "on";
 	private static final String ARG_a = "a";
 
 	/**
@@ -122,7 +123,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param a The annotation instance.
 	 */
 	AnnotationInfo(Annotatable on, T a) {
-		this.annotatable = on;  // TODO - Shouldn't allow null.  Add an assertion and see if anything breaks.
+		this.annotatable = assertArgNotNull(ARG_on, on);
 		this.a = assertArgNotNull(ARG_a, a);
 		this.rank = findRank(a);
 		this.toString = memoize(this::findToString);

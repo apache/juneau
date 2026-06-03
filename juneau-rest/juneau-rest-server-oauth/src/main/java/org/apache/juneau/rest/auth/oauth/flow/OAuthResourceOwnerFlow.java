@@ -49,6 +49,9 @@ import com.nimbusds.oauth2.sdk.id.ClientID;
  * 	resource-owner password-credentials grant was removed from OAuth 2.1.
  */
 @Deprecated(since = "9.5.0", forRemoval = false)
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are OAuth protocol parameter names (e.g. "grant_type", "username"); intentional
+})
 public class OAuthResourceOwnerFlow {
 
 	/**

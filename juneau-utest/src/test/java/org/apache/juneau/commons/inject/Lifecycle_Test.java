@@ -46,7 +46,7 @@ class Lifecycle_Test extends TestBase {
 
 	public static class PostConstructBean {
 		public boolean postConstructCalled;
-		public PostConstructBean() {}
+		public PostConstructBean() { /* intentionally empty */ }
 		@PostConstruct public void init() { postConstructCalled = true; }
 	}
 

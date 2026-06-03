@@ -32,6 +32,7 @@ import org.junit.jupiter.api.*;
  * @since 9.5.0
  */
 @org.apache.juneau.testing.annotations.SpringbootTest
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class JuneauServletRegistrations_Test extends TestBase {
 
 	@Test void a01_derivesMappingFromAnnotation() {

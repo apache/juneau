@@ -68,7 +68,7 @@ public class TomcatConfiguration {
 	/**
 	 * Constructor.
 	 */
-	public TomcatConfiguration() {}
+	public TomcatConfiguration() { /* intentionally empty */ }
 
 	/**
 	 * Contributes the default Tomcat server factory used to build the

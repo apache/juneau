@@ -106,6 +106,9 @@ public class RestOpInvoker extends MethodInvoker {
 	 * @param opSession The REST call.
 	 * @throws Exception If an error occurred during either parameter resolution or method invocation.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for REST operation invocation dispatch (virtual-thread + observability paths)
+	})
 	public void invokeOp(RestOpSession opSession) throws Exception {
 		var vtExec = opSession.getContext().isVirtualThreadsEnabled()
 			? opSession.getRestContext().getVirtualThreadExecutor()

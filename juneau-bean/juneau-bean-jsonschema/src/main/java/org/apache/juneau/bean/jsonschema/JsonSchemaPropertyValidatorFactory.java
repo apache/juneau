@@ -43,6 +43,7 @@ public final class JsonSchemaPropertyValidatorFactory implements PropertyValidat
 
 	/** Public no-arg constructor required by {@link java.util.ServiceLoader ServiceLoader}. */
 	public JsonSchemaPropertyValidatorFactory() {
+		/* intentionally empty — required public no-arg constructor for ServiceLoader */
 	}
 
 	@Override

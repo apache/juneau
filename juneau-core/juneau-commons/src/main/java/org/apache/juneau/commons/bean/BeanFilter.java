@@ -40,6 +40,9 @@ public interface BeanFilter {
 	/**
 	 * @return The bean class that this filter applies to, or <jk>null</jk> if this is a non-bean filter.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // ClassInfoTyped<?> wildcard return intentional; callers use it polymorphically without needing the concrete type
+	})
 	ClassInfoTyped<?> getBeanClass();
 
 	/**

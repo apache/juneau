@@ -392,6 +392,9 @@ public class WriterSerializer extends Serializer {
 	/**
 	 * Concrete default builder leaf for the non-subclassed {@link WriterSerializer#create()} / {@link WriterSerializer#copy()} path.
 	 */
+	@SuppressWarnings({
+		"java:S110" // Inheritance depth follows the serializer builder chain; intentional layered design
+	})
 	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
 
 		DefaultBuilder() {}
@@ -415,6 +418,9 @@ public class WriterSerializer extends Serializer {
 	 *
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+	})
 	public static Builder<?> create() {
 		return new DefaultBuilder();
 	}

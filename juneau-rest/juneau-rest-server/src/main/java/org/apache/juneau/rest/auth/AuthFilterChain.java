@@ -193,6 +193,9 @@ public class AuthFilterChain implements Filter {
 	 * See the class-level Javadoc for the full decision flow.
 	 */
 	@Override /* Overridden from Filter */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for auth filter chain dispatch
+	})
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
 		var hreq = (HttpServletRequest) req;

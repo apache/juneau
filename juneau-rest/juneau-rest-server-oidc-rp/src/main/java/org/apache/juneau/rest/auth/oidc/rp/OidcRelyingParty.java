@@ -112,6 +112,9 @@ import jakarta.servlet.http.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are OIDC protocol parameter names and claim names; intentional
+})
 public class OidcRelyingParty {
 
 	private static final String DEFAULT_COOKIE_NAME = "JUNEAU_OIDC_SESSION";

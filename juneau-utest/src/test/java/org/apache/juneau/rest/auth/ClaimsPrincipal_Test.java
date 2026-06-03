@@ -27,6 +27,7 @@ import org.junit.jupiter.api.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class ClaimsPrincipal_Test extends TestBase {
 
 	@Test void a01_nameAndClaims() {

@@ -31,6 +31,7 @@ import org.junit.jupiter.api.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class RateLimitGuard_Snapshot_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -124,7 +125,7 @@ class RateLimitGuard_Snapshot_Test extends TestBase {
 		@Override public Storage.AcquireResult tryAcquire(String key, int capacity, double permitsPerSecond) {
 			return new Storage.AcquireResult(true, capacity - 1, 0L);
 		}
-		@Override public void evict(Duration ttl) {}
+		@Override public void evict(Duration ttl) { /* intentionally empty */ }
 	}
 
 	@Test void c01_customStorageWithoutSnapshotOverrideReturnsEmptyMap() {

@@ -69,6 +69,9 @@ public class RdfThriftParser extends RdfStreamParser {
 	 *
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+	})
 	public static RdfStreamParser.Builder<?> create() {
 		return RdfStreamParser.create()
 			.language(Constants.LANG_RDFTHRIFT)

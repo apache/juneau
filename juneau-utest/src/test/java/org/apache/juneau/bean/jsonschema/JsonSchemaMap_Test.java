@@ -25,7 +25,8 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"removal" // Tests deprecated getId() / setId() for backward compatibility
+	"removal",  // Tests deprecated getId() / setId() for backward compatibility
+	"java:S5778" // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
 class JsonSchemaMap_Test extends TestBase {
 
@@ -111,7 +112,7 @@ class JsonSchemaMap_Test extends TestBase {
 						throw new java.io.IOException("Simulated IO error");
 					}
 					@Override
-					public void close() {}
+					public void close() { /* intentionally empty */ }
 				};
 			}
 		};

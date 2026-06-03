@@ -220,6 +220,9 @@ public class ParserSession extends MarshallingSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
+	})
 	public static Builder<?> create(Parser ctx) {
 		return new DefaultBuilder(assertArgNotNull(ARG_ctx, ctx));
 	}
@@ -875,6 +878,9 @@ public class ParserSession extends MarshallingSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for type-conversion dispatch across all supported target types
+	})
 	protected final <T> T convertAttrToType(Object outer, String s, ClassMeta<T> type) throws ParseException {
 		if (s == null)
 			return null;

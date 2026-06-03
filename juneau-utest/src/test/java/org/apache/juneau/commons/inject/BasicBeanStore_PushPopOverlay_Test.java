@@ -31,6 +31,7 @@ import org.junit.jupiter.api.*;
  * happy-path lookup-shadow-then-restore semantics that the {@code JuneauBeanStoreExtension} Mode OVERLAY
  * machinery depends on.
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class BasicBeanStore_PushPopOverlay_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

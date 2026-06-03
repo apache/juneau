@@ -41,6 +41,9 @@ import com.nimbusds.oauth2.sdk.token.RefreshToken;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are OAuth protocol parameter names (e.g. "grant_type", "refresh_token"); intentional
+})
 public class OAuthRefreshTokenFlow {
 
 	/**

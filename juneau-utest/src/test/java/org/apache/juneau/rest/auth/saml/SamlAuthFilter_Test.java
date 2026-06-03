@@ -37,6 +37,7 @@ import jakarta.servlet.http.HttpServletRequest;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class SamlAuthFilter_Test extends TestBase {
 
 	private static SamlAssertionValidator validator(java.util.function.Function<String,java.security.Principal> impl) throws Exception {

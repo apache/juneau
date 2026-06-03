@@ -39,6 +39,9 @@ import org.apache.juneau.http.response.*;
  * Detection: an object is considered a "legacy HTTP response" if it implements
  * {@code org.apache.http.HttpResponse}. Detection caches the loaded class once per VM.
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are HTTP header names and MIME type strings; intentional
+})
 final class LegacyHttpResponseAdapter {
 
 	private static final Class<?> LEGACY_HTTP_RESPONSE = tryLoad("org.apache.http.HttpResponse");

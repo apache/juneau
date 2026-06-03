@@ -69,7 +69,7 @@ class BeanCtorAnnotation_Test extends TestBase {
 			description={ "a" },
 			properties="c"
 		)
-		public D1() {}
+		public D1() { /* intentionally empty */ }
 	}
 
 	public static class D2 {
@@ -77,7 +77,7 @@ class BeanCtorAnnotation_Test extends TestBase {
 			description={ "a" },
 			properties="c"
 		)
-		public D2() {}
+		public D2() { /* intentionally empty */ }
 	}
 
 	BeanCtor d1, d2;

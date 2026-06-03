@@ -314,8 +314,8 @@ public class Maps<K,V> {
 	 * @return The built map, or {@code null} if {@link #sparse()} is set and the map is empty.
 	 */
 	@SuppressWarnings({
-		"java:S1168",    // Intentional null when sparse+empty. TODO - Evaluate usages and determine if empty maps should be returned.
-		"java:S3776"     // Cognitive complexity acceptable for map builder
+		"java:S1168",  // Intentional null when sparse+empty — null is the absent/not-set sentinel used by callers (e.g. OpenAPI bean setters)
+		"java:S3776"   // Cognitive complexity acceptable for map builder
 	})
 	public Map<K,V> build() {
 

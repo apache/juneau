@@ -45,7 +45,7 @@ public class JsonApiError {
 	/**
 	 * Default constructor.
 	 */
-	public JsonApiError() {}
+	public JsonApiError() { /* intentionally empty */ }
 
 	/**
 	 * Bean property getter:  <property>id</property>.

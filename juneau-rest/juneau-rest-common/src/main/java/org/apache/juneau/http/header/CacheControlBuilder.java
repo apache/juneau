@@ -49,6 +49,9 @@ import java.util.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S115" // ARG_xxx constants use camelCase after prefix intentionally (constructor arg name keys, not enum-style constants)
+})
 public class CacheControlBuilder {
 
 	private static final String ARG_value = "value";

@@ -52,5 +52,5 @@ public class ErrorMixin extends RestMixin {
 			"(such as an WWW-Authenticate response header)."
 		}
 	)
-	public void error() {}
+	public void error() { /* intentionally empty — triggers the exception handler for all error conditions */ }
 }

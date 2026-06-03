@@ -94,6 +94,9 @@ import org.apache.juneau.rest.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are HTTP header names and rate-limit response field names; intentional
+})
 public class RateLimitGuard extends RestGuard {
 
 	/** Response header name for the advisory ceiling (tokens per refill window). */

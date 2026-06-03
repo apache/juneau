@@ -386,6 +386,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
+	})
 	public static Builder<?> create(Serializer ctx) {
 		return new DefaultBuilder(assertArgNotNull("ctx", ctx));
 	}
@@ -591,6 +594,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param consumer The entry consumer.
 	 * @since 9.2.1
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for streamable-entry dispatch logic
+	})
 	public final void forEachStreamableEntry(Object o, ClassMeta<?> type, Consumer consumer) {
 		if (o == null)
 			return;

@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class EphemeralStore_Test extends TestBase {
 
 	private static EphemeralStore store(Clock clock) {

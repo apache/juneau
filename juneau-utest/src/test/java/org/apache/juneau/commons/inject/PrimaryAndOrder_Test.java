@@ -44,7 +44,7 @@ class PrimaryAndOrder_Test extends TestBase {
 
 	@Configuration
 	public static class SinglePrimaryConfig {
-		public SinglePrimaryConfig() {}
+		public SinglePrimaryConfig() { /* intentionally empty */ }
 		@Bean(name = "a") public Plugin a() { return new Plugin("a"); }
 		@Bean(name = "b") @Primary public Plugin b() { return new Plugin("b"); }
 		@Bean(name = "c") public Plugin c() { return new Plugin("c"); }
@@ -52,14 +52,14 @@ class PrimaryAndOrder_Test extends TestBase {
 
 	@Configuration
 	public static class MultiplePrimaryConfig {
-		public MultiplePrimaryConfig() {}
+		public MultiplePrimaryConfig() { /* intentionally empty */ }
 		@Bean(name = "a") @Primary public Plugin a() { return new Plugin("a"); }
 		@Bean(name = "b") @Primary public Plugin b() { return new Plugin("b"); }
 	}
 
 	@Configuration
 	public static class OrderedConfig {
-		public OrderedConfig() {}
+		public OrderedConfig() { /* intentionally empty */ }
 		@Bean(name = "low") @Order(10) public Plugin low() { return new Plugin("low"); }
 		@Bean(name = "high") @Order(1) public Plugin high() { return new Plugin("high"); }
 		@Bean(name = "mid") @Order(5) public Plugin mid() { return new Plugin("mid"); }
@@ -67,7 +67,7 @@ class PrimaryAndOrder_Test extends TestBase {
 
 	@Configuration
 	public static class PriorityConfig {
-		public PriorityConfig() {}
+		public PriorityConfig() { /* intentionally empty */ }
 		@Bean(name = "alpha", priority = 100) public Plugin alpha() { return new Plugin("alpha"); }
 		@Bean(name = "beta", priority = 50) public Plugin beta() { return new Plugin("beta"); }
 		@Bean(name = "gamma", priority = 75) public Plugin gamma() { return new Plugin("gamma"); }
@@ -75,7 +75,7 @@ class PrimaryAndOrder_Test extends TestBase {
 
 	@Configuration
 	public static class OrderWinsOverPriorityConfig {
-		public OrderWinsOverPriorityConfig() {}
+		public OrderWinsOverPriorityConfig() { /* intentionally empty */ }
 		@Bean(name = "x", priority = 1) @Order(100) public Plugin x() { return new Plugin("x"); }
 		@Bean(name = "y", priority = 100) @Order(1) public Plugin y() { return new Plugin("y"); }
 	}

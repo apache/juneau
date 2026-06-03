@@ -190,7 +190,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 		// so that all serializers treat it as a sequence, not a bean.
 		BeanChannel<String> a = new BeanChannel<>() {
 			@Override public Iterator<String> iterator() { return List.of("hello").iterator(); }
-			@Override public void acceptThrows(String item) {}
+			@Override public void acceptThrows(String item) { /* intentionally empty */ }
 		};
 		assertDoesNotThrow(() -> t.getSerializer().serialize(a));
 	}

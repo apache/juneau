@@ -104,6 +104,9 @@ public enum DurationFormat {
 		return Duration.ofSeconds(seconds, nanos);
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for ISO-8601 duration formatting logic
+	})
 	private static String formatIso8601WithDays(Duration value) {
 		boolean neg = value.isNegative();
 		Duration d = neg ? value.abs() : value;

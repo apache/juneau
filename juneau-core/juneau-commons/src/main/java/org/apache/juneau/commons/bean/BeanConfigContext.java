@@ -73,7 +73,8 @@ import org.apache.juneau.commons.reflect.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S107" // Builder.build() invokes a multi-arg constructor; high cardinality is inherent to a configuration POJO.
+	"java:S107",  // Builder.build() invokes a multi-arg constructor; high cardinality is inherent to a configuration POJO.
+	"java:S1192"  // Duplicate string literals are annotation attribute values and protocol-wire keys; intentional
 })
 public final class BeanConfigContext {
 
@@ -404,6 +405,9 @@ public final class BeanConfigContext {
 	 * @param ci The class info being tested.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the class is excluded from bean detection.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for bean-exclusion predicate dispatch
+	})
 	public boolean isNotABean(ClassInfo ci) {
 		assertArgNotNull("ci", ci);
 		if (notABeanPredicate != null)

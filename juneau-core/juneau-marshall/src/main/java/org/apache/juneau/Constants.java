@@ -34,7 +34,6 @@ public class Constants {
 	 * Sentinel value to indicate that a default value is not specified.
 	 *
 	 * @see org.apache.juneau.commons.Constants#NONE
-	 * TODO - Inline this
 	 */
 	public static final String NONE = org.apache.juneau.commons.Constants.NONE;
 }

@@ -27,7 +27,7 @@ public class McpException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	private int code;
-	private Object data;
+	private transient Object data;
 
 	/**
 	 * Constructor.

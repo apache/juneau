@@ -50,7 +50,8 @@ import org.apache.juneau.rest.swagger.BasicSwaggerProviderSession;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Field/constant identifiers mirror OpenAPI/Swagger wire-format keys (camelCase, dollar-prefixed)
+	"java:S115",  // Field/constant identifiers mirror OpenAPI/Swagger wire-format keys (camelCase, dollar-prefixed)
+	"java:S1192"  // Duplicate string literals are OpenAPI wire-format keys used in JSON map construction; intentional
 })
 public class BasicOpenApiProviderSession {
 
@@ -367,6 +368,10 @@ public class BasicOpenApiProviderSession {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for OpenAPI operation transformation logic
+		"java:S6541"  // Brain Method acceptable for OpenAPI operation transformation dispatch
+	})
 	private static Json5Map transformOperation(Json5Map op, List<String> topConsumes, List<String> topProduces) {
 		var newOp = new Json5Map();
 		for (var e : op.entrySet()) {
@@ -446,6 +451,9 @@ public class BasicOpenApiProviderSession {
 		return newOp;
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for OpenAPI body-parameter to request-body conversion
+	})
 	private static Json5Map bodyParameterToRequestBody(Json5Map p, List<String> consumes) {
 		var rb = new Json5Map();
 		if (p.containsKey(K_description))

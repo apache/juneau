@@ -58,7 +58,7 @@ public class ListBeanChannel<T> implements BeanChannel<T> {
 	/**
 	 * Constructor.
 	 */
-	public ListBeanChannel() {}
+	public ListBeanChannel() { /* intentionally empty */ }
 
 	@Override
 	public void acceptThrows(T item) {

@@ -152,6 +152,8 @@ import jakarta.servlet.http.*;
 	"java:S112",  // RuntimeException used in memoizer lambdas to re-wrap checked exceptions (ServletException/Exception) that Supplier<T> cannot declare
 	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_allowContentParam)
 	"java:S1200", // Class has many dependencies; acceptable for this core context class
+	"java:S1192", // Duplicate string literals are property key names and REST annotation attribute values; intentional
+	"java:S3776", // Cognitive complexity in field-initializer lambdas (memoizer wiring); cannot annotate at lambda scope
 	"java:S6539", // Monster class; RestContext is intentionally a central hub for REST framework configuration
 	"resource"    // Streams and session objects returned to callers; lifecycle managed by the servlet container or RestCall
 })
@@ -935,6 +937,9 @@ public class RestContext extends Context {
 	 * slot. That single {@code rawConfig} is still registered so user-supplied {@code Config}s flow
 	 * through to {@code @Value} resolution.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for multi-source REST config property collection
+	})
 	private List<PropertySource> collectRestConfigPropertySources() {
 		var bs = beanStore();
 		var vr = bs.getBean(VarResolver.class, PROP_bootstrapVarResolver).orElseGet(this::getBootstrapVarResolver);
@@ -3099,7 +3104,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking servlet-destroy method '%s'.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> String.format("Error occurred invoking servlet-destroy method '%s'.", x.getFullName()));
 			}
 		}
 		if (!isMixinContext) {
@@ -3107,7 +3112,7 @@ public class RestContext extends Context {
 				try {
 					mctx.destroy();
 				} catch (Exception e) {
-					getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred destroying mixin sub-context '%s'.", mctx.getResourceClass().getName()));
+					getLogger().log(Level.WARNING, unwrap(e), () -> String.format("Error occurred destroying mixin sub-context '%s'.", mctx.getResourceClass().getName()));
 				}
 			}
 		}
@@ -4325,7 +4330,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(session.getBeanStore(), getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking finish-call method '%s'.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> String.format("Error occurred invoking finish-call method '%s'.", x.getFullName()));
 			}
 		}
 	}
@@ -4605,7 +4610,7 @@ public class RestContext extends Context {
 		var pathInfo = session.getPathInfo();
 		var methodUC = session.getMethod();
 		var rc = session.getStatus();
-		var onPath = pathInfo == null ? " on no pathInfo" : f(" on path '%s'", pathInfo);
+		var onPath = pathInfo == null ? " on no pathInfo" : (" on path '" + pathInfo + "'");
 		if (rc == SC_NOT_FOUND)
 			throw new NotFound("Method ''{0}'' not found on resource with matching pattern{1}.", methodUC, onPath);
 		else if (rc == SC_PRECONDITION_FAILED)

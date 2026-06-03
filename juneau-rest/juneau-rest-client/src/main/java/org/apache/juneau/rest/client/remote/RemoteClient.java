@@ -134,6 +134,9 @@ public final class RemoteClient {
 		}
 
 		@Override
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for remote proxy invocation dispatch
+		})
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 			// Handle Object methods directly
 			if (method.getDeclaringClass() == Object.class)
@@ -182,6 +185,9 @@ public final class RemoteClient {
 		 * {@code @Request}.  {@code @Query}/{@code @Header}/{@code @FormData} honor dynamic name/value expansion
 		 * (Map / {@code "*"} / part-list / bean) and parameter-level {@code def()} defaults for {@code null} args.
 		 */
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for multi-part-type parameter binding dispatch
+		})
 		private void bindParam(RestRequest req, Parameter param, Object arg, boolean soleParam) throws IOException {
 			var path = param.getAnnotation(Path.class);
 			if (path != null) {
@@ -292,6 +298,9 @@ public final class RemoteClient {
 		 * name/value parts.  Map/bean values are part-serialized; {@link PartList}/{@link HttpHeaderList} entries
 		 * are already string-valued and passed through.
 		 */
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for multi-type argument expansion dispatch
+		})
 		private static void expandPairs(HttpPartType partType, Object arg, BiConsumer<String,String> adder) {
 			if (arg instanceof Map<?,?> m) {
 				m.forEach((k, v) -> { if (k != null && v != null) adder.accept(String.valueOf(k), serializePart(partType, null, v)); });

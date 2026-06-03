@@ -65,7 +65,7 @@ public class JsonApiDocument {
 	/**
 	 * Default constructor.
 	 */
-	public JsonApiDocument() {}
+	public JsonApiDocument() { /* intentionally empty */ }
 
 	/**
 	 * Bean property getter:  <property>data</property>.

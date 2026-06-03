@@ -69,6 +69,9 @@ import com.nimbusds.openid.connect.sdk.Nonce;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are OAuth protocol parameter names (e.g. "code", "grant_type"); intentional
+})
 public class OAuthAuthorizationCodeFlow {
 
 	/**

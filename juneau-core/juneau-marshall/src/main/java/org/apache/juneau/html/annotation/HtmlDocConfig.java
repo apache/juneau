@@ -24,7 +24,6 @@ import java.lang.annotation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.commons.svl.*;
 
 /**
  * Annotation for specifying config properties defined in {@link HtmlSerializer}, {@link HtmlParser}, and {@link HtmlDocSerializer}.

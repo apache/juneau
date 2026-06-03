@@ -97,6 +97,9 @@ import io.micrometer.core.instrument.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S115" // TAG_xxx and ARG_xxx constants use camelCase after prefix intentionally (metric/arg key names, not enum-style constants)
+})
 public class MicrometerMetricsRecorder implements MetricsRecorder {
 
 	/** Default timer name {@code "http.server.requests"} &mdash; matches Spring Boot's convention. */

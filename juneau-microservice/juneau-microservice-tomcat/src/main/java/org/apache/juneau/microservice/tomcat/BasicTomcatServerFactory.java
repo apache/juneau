@@ -38,7 +38,7 @@ public class BasicTomcatServerFactory implements TomcatServerFactory {
 	/**
 	 * Constructor.
 	 */
-	public BasicTomcatServerFactory() {}
+	public BasicTomcatServerFactory() { /* intentionally empty */ }
 
 	@Override /* Overridden from TomcatServerFactory */
 	public Tomcat create(File baseDir) throws Exception {

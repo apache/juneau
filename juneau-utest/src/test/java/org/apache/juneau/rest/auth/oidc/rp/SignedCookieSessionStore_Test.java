@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class SignedCookieSessionStore_Test extends TestBase {
 
 	private static final String KEY = "0123456789abcdef0123456789abcdef";  // 32 bytes

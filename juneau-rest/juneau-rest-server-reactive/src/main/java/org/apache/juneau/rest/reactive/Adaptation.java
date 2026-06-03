@@ -80,6 +80,9 @@ public final class Adaptation {
 	 *
 	 * @return The completion stage, or {@code null}.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // CompletionStage<?> wildcard return intentional; callers only need the base stage type for chaining
+	})
 	public CompletionStage<?> single() {
 		return single;
 	}
@@ -89,6 +92,9 @@ public final class Adaptation {
 	 *
 	 * @return The publisher, or {@code null}.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Publisher<?> wildcard return intentional; callers only need the base publisher type for consumption
+	})
 	public java.util.concurrent.Flow.Publisher<?> stream() {
 		return stream;
 	}

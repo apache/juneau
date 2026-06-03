@@ -27,6 +27,7 @@ import org.junit.jupiter.api.*;
  * Unit tests for {@link BeanFactory}, {@link BeanConsumer}, {@link BeanSupplier},
  * {@link BeanChannel}, and {@link ListBeanChannel}.
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class BeanChannel_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -126,7 +127,7 @@ class BeanChannel_Test extends TestBase {
 	@Test void d02_beanChannel_defaultLifecycleMethods() throws Exception {
 		BeanChannel<String> a = new BeanChannel<>() {
 			@Override public Iterator<String> iterator() { return Collections.emptyIterator(); }
-			@Override public void acceptThrows(String item) {}
+			@Override public void acceptThrows(String item) { /* intentionally empty */ }
 		};
 		// begin and complete are no-ops by default
 		a.begin();

@@ -88,7 +88,8 @@ import org.apache.juneau.yaml.annotation.*;
 @SuppressWarnings({
 	"unchecked",
 	"rawtypes",
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"java:S3740"  // Raw Builder types in reflection-based context creation; parameterization is not possible at call sites
 })
 public abstract class Context {
 

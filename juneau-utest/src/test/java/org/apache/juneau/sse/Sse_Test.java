@@ -536,7 +536,7 @@ class Sse_Test extends TestBase {
 	@Test void d08_ioExceptionWrapped() {
 		var failingReader = new Reader() {
 			@Override public int read(char[] cbuf, int off, int len) throws IOException { throw new IOException("boom"); }
-			@Override public void close() {}
+			@Override public void close() { /* intentionally empty */ }
 		};
 		var r = new SseEventReader(failingReader);
 		var ex = assertThrows(UncheckedIOException.class, r::hasNext);
@@ -546,7 +546,7 @@ class Sse_Test extends TestBase {
 	@Test void d09_toListPropagatesIo() {
 		var failingReader = new Reader() {
 			@Override public int read(char[] cbuf, int off, int len) throws IOException { throw new IOException("boom"); }
-			@Override public void close() {}
+			@Override public void close() { /* intentionally empty */ }
 		};
 		var r = new SseEventReader(failingReader);
 		var ex = assertThrows(IOException.class, r::toList);

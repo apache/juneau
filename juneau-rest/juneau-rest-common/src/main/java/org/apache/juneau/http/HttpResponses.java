@@ -46,6 +46,9 @@ import org.apache.juneau.http.response.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are HTTP response reason phrases and status labels; intentional
+})
 public final class HttpResponses {
 
 	private HttpResponses() {}

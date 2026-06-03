@@ -19,7 +19,6 @@ package org.apache.juneau.bean.atom;
 import java.net.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 
 /**
  * Various useful static methods for creating ATOM elements.

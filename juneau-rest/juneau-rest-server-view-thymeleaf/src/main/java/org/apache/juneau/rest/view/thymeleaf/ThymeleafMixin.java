@@ -136,6 +136,9 @@ import org.thymeleaf.templatemode.*;
 @Rest(
 	responseProcessors={ThymeleafViewRenderer.class}
 )
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are Thymeleaf MIME type strings and template attribute keys; intentional
+})
 public class ThymeleafMixin {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */

@@ -80,6 +80,9 @@ import jakarta.servlet.http.HttpServletRequest;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are SAML attribute names and HTTP header values; intentional
+})
 public class SamlAuthFilter extends AuthFilter {
 
 	private static final String DEFAULT_CONSUMER_PATH = "/saml/acs";

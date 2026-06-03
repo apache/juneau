@@ -194,7 +194,7 @@ public class BootTimeBenchmark {
 	}
 
 	private static double warmMedian(Sample[] s) {
-		return median(warmValues(s, x -> x.totalMs()));
+		return median(warmValues(s, Sample::totalMs));
 	}
 
 	private static double warmMedian(Sample[] s, boolean build) {

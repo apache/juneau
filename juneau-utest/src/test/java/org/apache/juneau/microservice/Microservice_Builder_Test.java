@@ -32,6 +32,7 @@ import org.junit.jupiter.api.*;
  * Tests for {@link Microservice.Builder} methods.
  */
 @org.apache.juneau.testing.annotations.JettyMicroserviceTest
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class Microservice_Builder_Test extends TestBase {
 
 	@Test void a01_create() {

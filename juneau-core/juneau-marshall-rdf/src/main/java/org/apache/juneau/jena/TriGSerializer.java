@@ -72,6 +72,9 @@ public class TriGSerializer extends RdfSerializer {
 	 *
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers chain via fluent API without needing the concrete type
+	})
 	public static RdfSerializer.Builder<?> create() {
 		return RdfSerializer.create().triG();
 	}

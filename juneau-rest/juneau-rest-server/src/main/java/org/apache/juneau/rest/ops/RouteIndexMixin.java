@@ -131,6 +131,9 @@ import org.apache.juneau.rest.beans.*;
  */
 // @formatter:off
 @Rest
+@SuppressWarnings({
+	"java:S1192" // Duplicate string literals are REST media type strings and path names; intentional
+})
 public class RouteIndexMixin {
 
 	private static final List<Class<? extends Annotation>> REST_OP_ANNOTATIONS = List.of(
@@ -138,7 +141,7 @@ public class RouteIndexMixin {
 		RestPatch.class, RestOptions.class, RestOp.class);
 
 	/** No-arg constructor &mdash; route-index has no configurable state. */
-	public RouteIndexMixin() {}
+	public RouteIndexMixin() { /* intentionally empty */ }
 
 	/**
 	 * [GET /options] &mdash; return the route index as a content-negotiated POJO.

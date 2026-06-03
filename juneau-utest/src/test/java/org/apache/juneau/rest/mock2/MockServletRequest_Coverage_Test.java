@@ -404,8 +404,8 @@ class MockServletRequest_Coverage_Test extends TestBase {
 	@Test void b12_getRequestDispatcher() {
 		var req = MockServletRequest.create("GET", "/test");
 		req.requestDispatcher("/path", new jakarta.servlet.RequestDispatcher() {
-			@Override public void forward(jakarta.servlet.ServletRequest r, jakarta.servlet.ServletResponse s) {}
-			@Override public void include(jakarta.servlet.ServletRequest r, jakarta.servlet.ServletResponse s) {}
+			@Override public void forward(jakarta.servlet.ServletRequest r, jakarta.servlet.ServletResponse s) { /* intentionally empty */ }
+			@Override public void include(jakarta.servlet.ServletRequest r, jakarta.servlet.ServletResponse s) { /* intentionally empty */ }
 		});
 		assertNotNull(req.getRequestDispatcher("/path"));
 	}

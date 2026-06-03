@@ -42,6 +42,7 @@ import org.junit.jupiter.api.*;
  * 	<li>{@code Optional<Supplier<T>>} nesting is not specially handled.
  * </ul>
  */
+@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class Value_SupplierTypedFieldType_Test extends TestBase {
 
 	private static final String P_KEY = "Value_SupplierTypedFieldType_Test.key";
