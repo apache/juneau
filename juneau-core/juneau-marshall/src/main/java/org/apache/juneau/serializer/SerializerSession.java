@@ -112,6 +112,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingTraverseSession.Builder<SELF> {
 
 		private static final String ARG_ctx = "ctx";

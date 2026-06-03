@@ -51,7 +51,10 @@ public abstract class ConfigStore extends Context implements Closeable {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder<R extends Builder<R>> extends Context.Builder<R> {
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
+	public abstract static class Builder<SELF extends Builder<SELF>> extends Context.Builder<SELF> {
 
 		/**
 		 * Constructor, default settings.

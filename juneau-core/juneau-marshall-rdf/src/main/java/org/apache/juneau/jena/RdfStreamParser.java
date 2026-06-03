@@ -51,6 +51,9 @@ public class RdfStreamParser extends InputStreamParser implements RdfMetaProvide
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends InputStreamParser.Builder<SELF> {
 
 		private static final Cache<HashKey,RdfStreamParser> CACHE = Cache.of(HashKey.class, RdfStreamParser.class).build();

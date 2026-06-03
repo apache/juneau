@@ -109,15 +109,18 @@ public abstract class Context {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder<R extends Builder<R>> {
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
+	public abstract static class Builder<SELF extends Builder<SELF>> {
 
 		/**
 		 * Returns this object cast to the self (CRTP) type.
 		 *
 		 * @return This object.
 		 */
-		protected final R self() {
-			return (R)this;
+		protected final SELF self() {
+			return (SELF)this;
 		}
 
 
@@ -346,7 +349,7 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R annotations(Annotation...values) {
+		public SELF annotations(Annotation...values) {
 			assertArgNoNulls(ARG_values, values);
 			annotations(l(values));
 			return self();
@@ -360,7 +363,7 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk> or contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R annotations(List<Annotation> values) {
+		public SELF annotations(List<Annotation> values) {
 			annotations.addAll(assertArgNoNulls(ARG_values, values));
 			return self();
 		}
@@ -394,7 +397,7 @@ public abstract class Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R apply(AnnotationWorkList work) {
+		public SELF apply(AnnotationWorkList work) {
 			assertArgNotNull(ARG_work, work);
 			applied.addAll(work);
 			work.forEach(x -> builders.forEach(x::apply));
@@ -408,7 +411,7 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R applyAnnotations(Class<?>...from) {
+		public SELF applyAnnotations(Class<?>...from) {
 			assertArgNoNulls(ARG_from, from);
 			return applyAnnotations((Object[])from);
 		}
@@ -508,7 +511,7 @@ public abstract class Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R applyAnnotations(Object...from) {
+		public SELF applyAnnotations(Object...from) {
 			assertArgNoNulls(ARG_from, from);
 			var work = AnnotationWorkList.create();
 			Arrays.stream(from).forEach(x -> traverse(work, x));
@@ -605,7 +608,7 @@ public abstract class Context {
 		 * 	<br>Can be <jk>null</jk> (disables caching, each build creates a new instance).
 		 * @return This object.
 		 */
-		public R cache(Cache<HashKey,? extends Context> value) {
+		public SELF cache(Cache<HashKey,? extends Context> value) {
 			cache = value;
 			return self();
 		}
@@ -626,7 +629,7 @@ public abstract class Context {
 		 *
 		 * @return A new mutable copy of this builder.
 		 */
-		public abstract R copy();
+		public abstract SELF copy();
 
 		/**
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Debug mode.
@@ -675,7 +678,7 @@ public abstract class Context {
 		 *
 		 * @return This object.
 		 */
-		public R debug() {
+		public SELF debug() {
 			return debug(true);
 		}
 
@@ -685,7 +688,7 @@ public abstract class Context {
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public R debug(boolean value) {
+		public SELF debug(boolean value) {
 			debug = value;
 			return self();
 		}
@@ -729,7 +732,7 @@ public abstract class Context {
 		 * 	<br>Can be <jk>null</jk> (normal build process will continue).
 		 * @return This object.
 		 */
-		public R impl(Context value) {
+		public SELF impl(Context value) {
 			impl = value;
 			return self();
 		}
@@ -758,7 +761,7 @@ public abstract class Context {
 		 * 	<br>Can be <jk>null</jk> (will cause {@link #build()} to throw an exception).
 		 * @return This object.
 		 */
-		public R type(Class<? extends Context> value) {
+		public SELF type(Class<? extends Context> value) {
 			type = value;
 			return self();
 		}

@@ -101,6 +101,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends HtmlStrippedDocSerializer.Builder<SELF> {
 
 		private static final Cache<HashKey,HtmlDocSerializer> CACHE = Cache.of(HashKey.class, HtmlDocSerializer.class).build();

@@ -63,6 +63,9 @@ import org.apache.juneau.serializer.*;
  * @param <SELF> The concrete builder type (self type).
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+})
 public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -143,7 +146,9 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Generic varargs parameter; no heap pollution from this declaration.
+	})
 	SELF serializers(Class<? extends Serializer>... value);
 
 	/**
@@ -160,7 +165,9 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Generic varargs parameter; no heap pollution from this declaration.
+	})
 	SELF encoders(Class<? extends Encoder>... value);
 
 	/**
@@ -201,7 +208,9 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Generic varargs parameter; no heap pollution from this declaration.
+	})
 	SELF responseProcessors(Class<? extends ResponseProcessor>... value);
 
 	/**
@@ -326,7 +335,9 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Generic varargs parameter; no heap pollution from this declaration.
+	})
 	SELF restOpArgs(Class<? extends RestOpArg>... value);
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -339,7 +350,9 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Generic varargs parameter; no heap pollution from this declaration.
+	})
 	SELF guards(Class<? extends RestGuard>... value);
 
 	/**
@@ -364,7 +377,9 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Generic varargs parameter; no heap pollution from this declaration.
+	})
 	SELF converters(Class<? extends RestConverter>... value);
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -77,6 +77,9 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends ReaderParser.Builder<SELF> {
 
 		private static final Cache<HashKey,RdfParser> CACHE = Cache.of(HashKey.class, RdfParser.class).build();

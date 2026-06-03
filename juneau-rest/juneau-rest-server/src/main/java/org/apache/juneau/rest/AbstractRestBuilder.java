@@ -57,7 +57,8 @@ import org.apache.juneau.serializer.*;
  */
 @SuppressWarnings({
 	"unchecked", // CRTP self-type cast in self() is safe by construction.
-	"java:S1452"  // Wildcard return on getResourceType() is intentional.
+	"java:S1452", // Wildcard return on getResourceType() is intentional.
+	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 })
 public abstract class AbstractRestBuilder<R, SELF extends AbstractRestBuilder<R, SELF>> implements RestBuilder<SELF> {
 

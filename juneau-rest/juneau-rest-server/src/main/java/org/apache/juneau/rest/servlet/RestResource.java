@@ -231,6 +231,9 @@ public abstract class RestResource {
 	 * @param <R> The resource type produced by {@link #build()}.
 	 * @param <SELF> The concrete builder type (self type).
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public static class Builder<R extends RestResource, SELF extends Builder<R, SELF>> extends AbstractRestBuilder<R, SELF> {
 
 		/**

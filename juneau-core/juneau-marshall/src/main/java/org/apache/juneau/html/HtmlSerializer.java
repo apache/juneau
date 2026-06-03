@@ -164,6 +164,9 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends XmlSerializer.Builder<SELF> {
 
 		private static final Cache<HashKey,HtmlSerializer> CACHE = Cache.of(HashKey.class, HtmlSerializer.class).build();

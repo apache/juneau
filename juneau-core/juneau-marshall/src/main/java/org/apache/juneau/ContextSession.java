@@ -62,6 +62,9 @@ public abstract class ContextSession {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public abstract static class Builder<SELF extends Builder<SELF>> {
 
 		/**
@@ -69,7 +72,9 @@ public abstract class ContextSession {
 		 *
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked") // CRTP self-type cast is safe by construction.
+		@SuppressWarnings({
+			"unchecked" // CRTP self-type cast is safe by construction.
+		})
 		protected final SELF self() {
 			return (SELF)this;
 		}

@@ -66,6 +66,9 @@ public class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends SerializerSession.Builder<SELF> {
 
 		private boolean useWhitespace;

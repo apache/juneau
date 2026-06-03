@@ -48,7 +48,10 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder<R extends Builder<R>> extends MarshallingContextable.Builder<R> {
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
+	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingContextable.Builder<SELF> {
 
 		/**
 		 * Constructor.
@@ -61,7 +64,7 @@ public abstract class BaseHttpPartParser extends MarshallingContextable implemen
 		 * @param builder The builder to copy.
 		 * 	<br>Cannot be <jk>null</jk>.
 		 */
-		protected Builder(Builder<R> builder) {
+		protected Builder(Builder<SELF> builder) {
 			super(assertArgNotNull(ARG_builder, builder));
 		}
 	}

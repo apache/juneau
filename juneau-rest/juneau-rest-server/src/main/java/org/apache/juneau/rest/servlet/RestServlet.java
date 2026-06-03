@@ -364,6 +364,9 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param <SELF> The concrete builder type (self type).
 	 * @since 9.5.0
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public static class Builder<R extends RestServlet, SELF extends Builder<R, SELF>> extends AbstractRestBuilder<R, SELF> {
 
 		/**

@@ -186,6 +186,9 @@ public abstract class RestMixin {
 	 * @param <R> The mixin type produced by {@link #build()}.
 	 * @param <SELF> The concrete builder type (self type).
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public static class Builder<R extends RestMixin, SELF extends Builder<R, SELF>> extends AbstractRestBuilder<R, SELF> {
 
 		/**

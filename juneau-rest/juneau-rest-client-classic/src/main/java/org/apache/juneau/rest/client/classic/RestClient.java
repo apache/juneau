@@ -1093,7 +1093,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder<R extends Builder<R>> extends MarshallingContextable.Builder<R> {
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
+	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingContextable.Builder<SELF> {
 
 		private BeanInstantiator.Builder<RestCallHandler> callHandler;
 		private WritableBeanStore beanStore = new BasicBeanStore();
@@ -1145,7 +1148,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #headers()
 		 */
-		public R accept(String value) {
+		public SELF accept(String value) {
 			return headers(Accept.of(value));
 		}
 
@@ -1160,7 +1163,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #headers()
 		 */
-		public R acceptCharset(String value) {
+		public SELF acceptCharset(String value) {
 			return headers(AcceptCharset.of(value));
 		}
 
@@ -1212,7 +1215,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R addBeanTypes() {
+		public SELF addBeanTypes() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addBeanTypes);
 			return self();
 		}
@@ -1229,7 +1232,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
 		 */
-		public R addInterceptorFirst(HttpRequestInterceptor itcp) {
+		public SELF addInterceptorFirst(HttpRequestInterceptor itcp) {
 			httpClientBuilder().addInterceptorFirst(assertArgNotNull(ARG_itcp, itcp));
 			return self();
 		}
@@ -1246,7 +1249,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
 		 */
-		public R addInterceptorFirst(HttpResponseInterceptor itcp) {
+		public SELF addInterceptorFirst(HttpResponseInterceptor itcp) {
 			httpClientBuilder().addInterceptorFirst(assertArgNotNull(ARG_itcp, itcp));
 			return self();
 		}
@@ -1263,7 +1266,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
 		 */
-		public R addInterceptorLast(HttpRequestInterceptor itcp) {
+		public SELF addInterceptorLast(HttpRequestInterceptor itcp) {
 			httpClientBuilder().addInterceptorLast(assertArgNotNull(ARG_itcp, itcp));
 			return self();
 		}
@@ -1280,7 +1283,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
 		 */
-		public R addInterceptorLast(HttpResponseInterceptor itcp) {
+		public SELF addInterceptorLast(HttpResponseInterceptor itcp) {
 			httpClientBuilder().addInterceptorLast(assertArgNotNull(ARG_itcp, itcp));
 			return self();
 		}
@@ -1333,7 +1336,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R addRootType() {
+		public SELF addRootType() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addRootType);
 			return self();
 		}
@@ -1346,7 +1349,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setBackoffManager(BackoffManager)
 		 */
-		public R backoffManager(BackoffManager backoffManager) {
+		public SELF backoffManager(BackoffManager backoffManager) {
 			httpClientBuilder().setBackoffManager(backoffManager);
 			return self();
 		}
@@ -1372,7 +1375,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (will use empty string).
 		 * @return This object.
 		 */
-		public R basicAuth(String host, int port, String user, String pw) {
+		public SELF basicAuth(String host, int port, String user, String pw) {
 			var scope = new AuthScope(host, port);
 			var up = new UsernamePasswordCredentials(user, pw);
 			var p = new BasicCredentialsProvider();
@@ -1447,7 +1450,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #callHandler()
 		 */
-		public R callHandler(Class<? extends RestCallHandler> value) {
+		public SELF callHandler(Class<? extends RestCallHandler> value) {
 			callHandler().type(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -1463,7 +1466,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #headers()
 		 */
-		public R clientVersion(String value) {
+		public SELF clientVersion(String value) {
 			return headers(ClientVersion.of(value));
 		}
 
@@ -1475,7 +1478,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)
 		 */
-		public R connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
+		public SELF connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
 			httpClientBuilder().setConnectionBackoffStrategy(connectionBackoffStrategy);
 			return self();
 		}
@@ -1488,7 +1491,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
 		 */
-		public R connectionManager(HttpClientConnectionManager value) {
+		public SELF connectionManager(HttpClientConnectionManager value) {
 			connectionManager = value;
 			httpClientBuilder().setConnectionManager(value);
 			return self();
@@ -1505,7 +1508,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
 		 */
-		public R connectionManagerShared(boolean shared) {
+		public SELF connectionManagerShared(boolean shared) {
 			httpClientBuilder().setConnectionManagerShared(shared);
 			return self();
 		}
@@ -1518,7 +1521,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)
 		 */
-		public R connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
+		public SELF connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
 			httpClientBuilder().setConnectionReuseStrategy(reuseStrategy);
 			return self();
 		}
@@ -1536,7 +1539,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
 		 */
-		public R connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
+		public SELF connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
 			httpClientBuilder().setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
 			return self();
 		}
@@ -1552,7 +1555,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (defaults to <c>System.err</c>).
 		 * @return This object.
 		 */
-		public R console(PrintStream value) {
+		public SELF console(PrintStream value) {
 			console = value;
 			return self();
 		}
@@ -1565,7 +1568,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
 		 */
-		public R contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
+		public SELF contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
 			httpClientBuilder().setContentDecoderRegistry(contentDecoderMap);
 			return self();
 		}
@@ -1584,12 +1587,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #headers()
 		 */
-		public R contentType(String value) {
+		public SELF contentType(String value) {
 			return headers(ContentType.of(value));
 		}
 
 		@Override /* Overridden from Context.Builder<?> */
-		public R copy() {
+		public SELF copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
 
@@ -1603,7 +1606,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see #headers()
 		 */
 		@Override
-		public R debug() {
+		public SELF debug() {
 			super.debug();
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::debug);
 			return headers(Debug.TRUE);
@@ -1646,7 +1649,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default value is <c>5</c>.
 		 * @return This object.
 		 */
-		public R debugOutputLines(int value) {
+		public SELF debugOutputLines(int value) {
 			parsers().forEach(x -> x.debugOutputLines(value));
 			return self();
 		}
@@ -1659,7 +1662,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
 		 */
-		public R defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
+		public SELF defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
 			httpClientBuilder().setDefaultAuthSchemeRegistry(authSchemeRegistry);
 			return self();
 		}
@@ -1676,7 +1679,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
 		 */
-		public R defaultConnectionConfig(ConnectionConfig config) {
+		public SELF defaultConnectionConfig(ConnectionConfig config) {
 			httpClientBuilder().setDefaultConnectionConfig(config);
 			return self();
 		}
@@ -1689,7 +1692,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
 		 */
-		public R defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
+		public SELF defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
 			httpClientBuilder().setDefaultCookieSpecRegistry(cookieSpecRegistry);
 			return self();
 		}
@@ -1702,7 +1705,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCookieStore(CookieStore)
 		 */
-		public R defaultCookieStore(CookieStore cookieStore) {
+		public SELF defaultCookieStore(CookieStore cookieStore) {
 			httpClientBuilder().setDefaultCookieStore(cookieStore);
 			return self();
 		}
@@ -1715,7 +1718,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)
 		 */
-		public R defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
+		public SELF defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
 			httpClientBuilder().setDefaultCredentialsProvider(credentialsProvider);
 			return self();
 		}
@@ -1728,7 +1731,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultRequestConfig(RequestConfig)
 		 */
-		public R defaultRequestConfig(RequestConfig config) {
+		public SELF defaultRequestConfig(RequestConfig config) {
 			httpClientBuilder().setDefaultRequestConfig(config);
 			return self();
 		}
@@ -1745,7 +1748,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
 		 */
-		public R defaultSocketConfig(SocketConfig config) {
+		public SELF defaultSocketConfig(SocketConfig config) {
 			httpClientBuilder().setDefaultSocketConfig(config);
 			return self();
 		}
@@ -1777,7 +1780,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R detectLeaks() {
+		public SELF detectLeaks() {
 			detectLeaks = true;
 			return self();
 		}
@@ -1830,7 +1833,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R detectRecursions() {
+		public SELF detectRecursions() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::detectRecursions);
 			return self();
 		}
@@ -1845,7 +1848,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#disableAuthCaching()
 		 */
-		public R disableAuthCaching() {
+		public SELF disableAuthCaching() {
 			httpClientBuilder().disableAuthCaching();
 			return self();
 		}
@@ -1856,7 +1859,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#disableAutomaticRetries()
 		 */
-		public R disableAutomaticRetries() {
+		public SELF disableAutomaticRetries() {
 			httpClientBuilder().disableAutomaticRetries();
 			return self();
 		}
@@ -1867,7 +1870,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#disableConnectionState()
 		 */
-		public R disableConnectionState() {
+		public SELF disableConnectionState() {
 			httpClientBuilder().disableConnectionState();
 			return self();
 		}
@@ -1882,7 +1885,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#disableContentCompression()
 		 */
-		public R disableContentCompression() {
+		public SELF disableContentCompression() {
 			httpClientBuilder().disableContentCompression();
 			return self();
 		}
@@ -1897,7 +1900,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#disableCookieManagement()
 		 */
-		public R disableCookieManagement() {
+		public SELF disableCookieManagement() {
 			httpClientBuilder().disableCookieManagement();
 			return self();
 		}
@@ -1908,7 +1911,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#disableRedirectHandling()
 		 */
-		public R disableRedirectHandling() {
+		public SELF disableRedirectHandling() {
 			httpClientBuilder().disableRedirectHandling();
 			return self();
 		}
@@ -1934,7 +1937,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R errorCodes(Predicate<Integer> value) {
+		public SELF errorCodes(Predicate<Integer> value) {
 			errorCodes = assertArgNotNull(ARG_value, value);
 			return self();
 		}
@@ -1951,7 +1954,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#evictExpiredConnections()
 		 */
-		public R evictExpiredConnections() {
+		public SELF evictExpiredConnections() {
 			httpClientBuilder().evictExpiredConnections();
 			return self();
 		}
@@ -1971,7 +1974,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#evictIdleConnections(long,TimeUnit)
 		 */
-		public R evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
+		public SELF evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
 			httpClientBuilder().evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 			return self();
 		}
@@ -2027,7 +2030,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
 		 * @return This object.
 		 */
-		public R executorService(ExecutorService executorService, boolean shutdownOnClose) {
+		public SELF executorService(ExecutorService executorService, boolean shutdownOnClose) {
 			this.executorService = executorService;
 			this.executorServiceShutdownOnClose = shutdownOnClose;
 			return self();
@@ -2090,7 +2093,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #formData()
 		 */
-		public R formData(NameValuePair...parts) {
+		public SELF formData(NameValuePair...parts) {
 			formData().append(parts);
 			return self();
 		}
@@ -2116,7 +2119,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #formData()
 		 */
-		public R formData(String name, String value) {
+		public SELF formData(String name, String value) {
 			formData().append(name, value);
 			return self();
 		}
@@ -2142,7 +2145,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #formData()
 		 */
-		public R formData(String name, Supplier<String> value) {
+		public SELF formData(String name, Supplier<String> value) {
 			formData().append(name, value);
 			return self();
 		}
@@ -2169,7 +2172,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #formData()
 		 */
-		public R formDataDefault(NameValuePair...parts) {
+		public SELF formDataDefault(NameValuePair...parts) {
 			formData().setDefault(parts);
 			return self();
 		}
@@ -2213,7 +2216,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #headers()
 		 */
-		public R header(String name, String value) {
+		public SELF header(String name, String value) {
 			headers().append(name, value);
 			return self();
 		}
@@ -2239,7 +2242,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #headers()
 		 */
-		public R header(String name, Supplier<String> value) {
+		public SELF header(String name, Supplier<String> value) {
 			headers().append(name, value);
 			return self();
 		}
@@ -2309,7 +2312,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #headers()
 		 */
-		public R headers(Header...parts) {
+		public SELF headers(Header...parts) {
 			headers().append(parts);
 			return self();
 		}
@@ -2336,7 +2339,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #headers()
 		 */
-		public R headersDefault(Header...parts) {
+		public SELF headersDefault(Header...parts) {
 			headers().setDefault(parts);
 			return self();
 		}
@@ -2352,7 +2355,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (default is not set by this method).
 		 * @return This object.
 		 */
-		public R serializerSessionOptionsHeader(String json5) {
+		public SELF serializerSessionOptionsHeader(String json5) {
 			if (json5 != null)
 				headersDefault(basicHeader(HEADER_JuneauSerializerOptions, json5));
 			return self();
@@ -2369,7 +2372,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (default is not set by this method).
 		 * @return This object.
 		 */
-		public R parserSessionOptionsHeader(String json5) {
+		public SELF parserSessionOptionsHeader(String json5) {
 			if (json5 != null)
 				headersDefault(basicHeader(HEADER_JuneauParserOptions, json5));
 			return self();
@@ -2383,7 +2386,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (treated as an empty map).
 		 * @return This object.
 		 */
-		public R serializerSessionOptionsHeader(Map<String,?> properties) {
+		public SELF serializerSessionOptionsHeader(Map<String,?> properties) {
 			try {
 				return serializerSessionOptionsHeader(isEmpty(properties) ? null : Json5.of(properties));
 			} catch (SerializeException e) {
@@ -2399,7 +2402,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (treated as an empty map).
 		 * @return This object.
 		 */
-		public R parserSessionOptionsHeader(Map<String,?> properties) {
+		public SELF parserSessionOptionsHeader(Map<String,?> properties) {
 			try {
 				return parserSessionOptionsHeader(isEmpty(properties) ? null : Json5.of(properties));
 			} catch (SerializeException e) {
@@ -2448,7 +2451,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R html() {
+		public SELF html() {
 			return serializer(HtmlSerializer.class).parser(HtmlParser.class);
 		}
 
@@ -2493,7 +2496,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R htmlDoc() {
+		public SELF htmlDoc() {
 			return serializer(HtmlDocSerializer.class).parser(HtmlParser.class);
 		}
 
@@ -2538,7 +2541,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R htmlStrippedDoc() {
+		public SELF htmlStrippedDoc() {
 			return serializer(HtmlStrippedDocSerializer.class).parser(HtmlParser.class);
 		}
 
@@ -2561,7 +2564,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (a default client will be created).
 		 * @return This object.
 		 */
-		public R httpClient(CloseableHttpClient value) {
+		public SELF httpClient(CloseableHttpClient value) {
 			httpClient = value;
 			return self();
 		}
@@ -2596,7 +2599,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (a default builder will be created).
 		 * @return This object.
 		 */
-		public R httpClientBuilder(HttpClientBuilder value) {
+		public SELF httpClientBuilder(HttpClientBuilder value) {
 			httpClientBuilder = value;
 			return self();
 		}
@@ -2608,7 +2611,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
 		 */
-		public R httpProcessor(HttpProcessor httpprocessor) {
+		public SELF httpProcessor(HttpProcessor httpprocessor) {
 			httpClientBuilder().setHttpProcessor(httpprocessor);
 			return self();
 		}
@@ -2636,7 +2639,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R ignoreErrors() {
+		public SELF ignoreErrors() {
 			ignoreErrors = true;
 			return self();
 		}
@@ -2688,7 +2691,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R ignoreRecursions() {
+		public SELF ignoreRecursions() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::ignoreRecursions);
 			return self();
 		}
@@ -2732,7 +2735,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default is <c>0</c>.
 		 * @return This object.
 		 */
-		public R initialDepth(int value) {
+		public SELF initialDepth(int value) {
 			serializers().forEach(x -> x.initialDepth(value));
 			return self();
 		}
@@ -2792,7 +2795,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		@SuppressWarnings({
 			"java:S112" // throws Exception intentional - callback/lifecycle method
 		})
-		public R interceptors(Class<?>...values) throws Exception {
+		public SELF interceptors(Class<?>...values) throws Exception {
 			for (var c : values) {
 				if (c == null)
 					continue;
@@ -2860,7 +2863,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		@SuppressWarnings({
 			"java:S3776" // Cognitive complexity acceptable for interceptor configuration
 		})
-		public R interceptors(Object...value) {
+		public SELF interceptors(Object...value) {
 			List<RestCallInterceptor> l = list();
 			for (var o : value) {
 				if (o == null)
@@ -2922,7 +2925,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R json() {
+		public SELF json() {
 			return serializer(JsonSerializer.class).parser(JsonParser.class);
 		}
 
@@ -2968,7 +2971,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R json5() {
+		public SELF json5() {
 			return serializer(Json5Serializer.class).parser(Json5Parser.class);
 		}
 
@@ -2985,7 +2988,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R jcs() {
+		public SELF jcs() {
 			return serializer(JcsSerializer.class).parser(JsonParser.class);
 		}
 
@@ -2997,7 +3000,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)
 		 */
-		public R keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
+		public SELF keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
 			httpClientBuilder().setKeepAliveStrategy(keepAliveStrategy);
 			return self();
 		}
@@ -3022,7 +3025,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R keepHttpClientOpen() {
+		public SELF keepHttpClientOpen() {
 			keepHttpClientOpen = true;
 			return self();
 		}
@@ -3063,7 +3066,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R keepNullProperties() {
+		public SELF keepNullProperties() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::keepNullProperties);
 			return self();
 		}
@@ -3095,7 +3098,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (defaults to <c>Logger.getLogger(RestClient.class.getName())</c>).
 		 * @return This object.
 		 */
-		public R logger(Logger value) {
+		public SELF logger(Logger value) {
 			logger = value;
 			return self();
 		}
@@ -3147,7 +3150,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @param test A predicate to use per-request to see if the request should be logged.  If <jk>null</jk>, always logs.
 		 * @return This object.
 		 */
-		public R logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
+		public SELF logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
 			logRequests = detail;
 			logRequestsLevel = level;
 			logRequestsPredicate = test;
@@ -3172,7 +3175,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R logToConsole() {
+		public SELF logToConsole() {
 			logToConsole = true;
 			return self();
 		}
@@ -3202,7 +3205,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (value will not be set, existing serializers and parsers will be kept).
 		 * @return This object.
 		 */
-		public R marshaller(Marshaller value) {
+		public SELF marshaller(Marshaller value) {
 			if (nn(value))
 				serializer(value.getSerializer()).parser(value.getParser());
 			return self();
@@ -3233,7 +3236,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can contain <jk>null</jk> values (ignored).
 		 * @return This object.
 		 */
-		public R marshallers(Marshaller...value) {
+		public SELF marshallers(Marshaller...value) {
 			for (var m : value)
 				if (nn(m))
 					serializer(m.getSerializer()).parser(m.getParser());
@@ -3251,7 +3254,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setMaxConnPerRoute(int)
 		 */
-		public R maxConnPerRoute(int maxConnPerRoute) {
+		public SELF maxConnPerRoute(int maxConnPerRoute) {
 			httpClientBuilder().setMaxConnPerRoute(maxConnPerRoute);
 			return self();
 		}
@@ -3267,7 +3270,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setMaxConnTotal(int)
 		 */
-		public R maxConnTotal(int maxConnTotal) {
+		public SELF maxConnTotal(int maxConnTotal) {
 			httpClientBuilder().setMaxConnTotal(maxConnTotal);
 			return self();
 		}
@@ -3303,7 +3306,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default is <c>100</c>.
 		 * @return This object.
 		 */
-		public R maxDepth(int value) {
+		public SELF maxDepth(int value) {
 			serializers().forEach(x -> x.maxDepth(value));
 			return self();
 		}
@@ -3338,7 +3341,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default is <c>100</c>.
 		 * @return This object.
 		 */
-		public R maxIndent(int value) {
+		public SELF maxIndent(int value) {
 			serializers().forEachWS(x -> x.maxIndent(value));
 			return self();
 		}
@@ -3358,7 +3361,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see #headers()
 		 */
 		@Override
-		public R mediaType(MediaType value) {
+		public SELF mediaType(MediaType value) {
 			super.mediaType(value);
 			return headers(Accept.of(value), ContentType.of(value));
 		}
@@ -3377,7 +3380,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #headers()
 		 */
-		public R mediaType(String value) {
+		public SELF mediaType(String value) {
 			super.mediaType(MediaType.of(value));
 			return headers(Accept.of(value), ContentType.of(value));
 		}
@@ -3391,7 +3394,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R bson() {
+		public SELF bson() {
 			return serializer(BsonSerializer.class).parser(BsonParser.class);
 		}
 
@@ -3436,7 +3439,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R msgPack() {
+		public SELF msgPack() {
 			return serializer(MsgPackSerializer.class).parser(MsgPackParser.class);
 		}
 
@@ -3456,7 +3459,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #headers()
 		 */
-		public R noTrace() {
+		public SELF noTrace() {
 			return headers(NoTrace.of(true));
 		}
 
@@ -3514,7 +3517,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R oapiCollectionFormat(HttpPartCollectionFormat value) {
+		public SELF oapiCollectionFormat(HttpPartCollectionFormat value) {
 			serializers().forEach(OpenApiSerializer.Builder.class, x -> x.collectionFormat(value));
 			parsers().forEach(OpenApiParser.Builder.class, x -> x.collectionFormat(value));
 			partSerializer().builder(OpenApiSerializer.Builder.class, x -> x.collectionFormat(value));
@@ -3573,7 +3576,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R oapiFormat(HttpPartFormat value) {
+		public SELF oapiFormat(HttpPartFormat value) {
 			serializers().forEach(OpenApiSerializer.Builder.class, x -> x.format(value));
 			parsers().forEach(OpenApiParser.Builder.class, x -> x.format(value));
 			partSerializer().builder(OpenApiSerializer.Builder.class).ifPresent(x -> x.format(value));
@@ -3625,7 +3628,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R openApi() {
+		public SELF openApi() {
 			return serializer(OpenApiSerializer.class).parser(OpenApiParser.class);
 		}
 
@@ -3672,7 +3675,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R paramFormat(ParamFormat value) {
+		public SELF paramFormat(ParamFormat value) {
 			serializers().forEach(UonSerializer.Builder.class, x -> x.paramFormat(value));
 			return self();
 		}
@@ -3712,7 +3715,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R paramFormatPlain() {
+		public SELF paramFormatPlain() {
 			serializers().forEach(UonSerializer.Builder.class, org.apache.juneau.uon.UonSerializer.Builder::paramFormatPlain);
 			return self();
 		}
@@ -3748,7 +3751,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires unchecked casts
 		})
-		public R parser(Class<? extends Parser> value) {
+		public SELF parser(Class<? extends Parser> value) {
 			return parsers(value);
 		}
 
@@ -3782,7 +3785,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R parser(Parser value) {
+		public SELF parser(Parser value) {
 			return parsers(value);
 		}
 
@@ -3832,7 +3835,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires unchecked casts
 		})
-		public R parsers(Class<? extends Parser>...value) {
+		public SELF parsers(Class<? extends Parser>...value) {
 			assertArgNoNulls(ARG_value, value);
 			parsers().add(value);
 			return self();
@@ -3871,7 +3874,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
 		 * @return This object.
 		 */
-		public R parsers(Parser...value) {
+		public SELF parsers(Parser...value) {
 			assertArgNoNulls(ARG_value, value);
 			parsers().add(value);
 			return self();
@@ -3912,7 +3915,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R partParser(Class<? extends HttpPartParser> value) {
+		public SELF partParser(Class<? extends HttpPartParser> value) {
 			partParser().type(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -3941,7 +3944,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R partParser(HttpPartParser value) {
+		public SELF partParser(HttpPartParser value) {
 			partParser().impl(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -3981,7 +3984,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R partSerializer(Class<? extends HttpPartSerializer> value) {
+		public SELF partSerializer(Class<? extends HttpPartSerializer> value) {
 			partSerializer().type(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -4010,7 +4013,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R partSerializer(HttpPartSerializer value) {
+		public SELF partSerializer(HttpPartSerializer value) {
 			partSerializer().impl(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -4072,7 +4075,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #pathData()
 		 */
-		public R pathData(NameValuePair...parts) {
+		public SELF pathData(NameValuePair...parts) {
 			pathData().append(parts);
 			return self();
 		}
@@ -4098,7 +4101,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #pathData()
 		 */
-		public R pathData(String name, String value) {
+		public SELF pathData(String name, String value) {
 			pathData().append(name, value);
 			return self();
 		}
@@ -4124,7 +4127,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #pathData()
 		 */
-		public R pathData(String name, Supplier<String> value) {
+		public SELF pathData(String name, Supplier<String> value) {
 			pathData().set(name, value);
 			return self();
 		}
@@ -4151,7 +4154,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #pathData()
 		 */
-		public R pathDataDefault(NameValuePair...parts) {
+		public SELF pathDataDefault(NameValuePair...parts) {
 			pathData().setDefault(parts);
 			return self();
 		}
@@ -4198,7 +4201,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R plainText() {
+		public SELF plainText() {
 			return serializer(PlainTextSerializer.class).parser(PlainTextParser.class);
 		}
 
@@ -4217,7 +4220,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R pooled() {
+		public SELF pooled() {
 			this.pooled = true;
 			return self();
 		}
@@ -4234,7 +4237,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setProxy(HttpHost)
 		 */
-		public R proxy(HttpHost proxy) {
+		public SELF proxy(HttpHost proxy) {
 			httpClientBuilder().setProxy(proxy);
 			return self();
 		}
@@ -4247,7 +4250,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)
 		 */
-		public R proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
+		public SELF proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
 			httpClientBuilder().setProxyAuthenticationStrategy(proxyAuthStrategy);
 			return self();
 		}
@@ -4264,7 +4267,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
 		 */
-		public R publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
+		public SELF publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
 			httpClientBuilder().setPublicSuffixMatcher(publicSuffixMatcher);
 			return self();
 		}
@@ -4326,7 +4329,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #queryData()
 		 */
-		public R queryData(NameValuePair...parts) {
+		public SELF queryData(NameValuePair...parts) {
 			queryData().append(parts);
 			return self();
 		}
@@ -4352,7 +4355,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #queryData()
 		 */
-		public R queryData(String name, String value) {
+		public SELF queryData(String name, String value) {
 			queryData().append(name, value);
 			return self();
 		}
@@ -4378,7 +4381,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #queryData()
 		 */
-		public R queryData(String name, Supplier<String> value) {
+		public SELF queryData(String name, Supplier<String> value) {
 			queryData().append(name, value);
 			return self();
 		}
@@ -4405,7 +4408,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see #queryData()
 		 */
-		public R queryDataDefault(NameValuePair...parts) {
+		public SELF queryDataDefault(NameValuePair...parts) {
 			queryData().setDefault(parts);
 			return self();
 		}
@@ -4421,7 +4424,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (default is not set by this method).
 		 * @return This object.
 		 */
-		public R serializerSessionOptionsQueryDefault(String uon) {
+		public SELF serializerSessionOptionsQueryDefault(String uon) {
 			if (uon != null)
 				queryDataDefault(stringPart(QUERY_juneauSerializerOptions, uon));
 			return self();
@@ -4438,7 +4441,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (default is not set by this method).
 		 * @return This object.
 		 */
-		public R parserSessionOptionsQueryDefault(String uon) {
+		public SELF parserSessionOptionsQueryDefault(String uon) {
 			if (uon != null)
 				queryDataDefault(stringPart(QUERY_juneauParserOptions, uon));
 			return self();
@@ -4452,7 +4455,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (treated as an empty map).
 		 * @return This object.
 		 */
-		public R serializerSessionOptionsQueryDefault(Map<String,?> properties) {
+		public SELF serializerSessionOptionsQueryDefault(Map<String,?> properties) {
 			try {
 				return serializerSessionOptionsQueryDefault(isEmpty(properties) ? null : Uon.of(properties));
 			} catch (SerializeException e) {
@@ -4468,7 +4471,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (treated as an empty map).
 		 * @return This object.
 		 */
-		public R parserSessionOptionsQueryDefault(Map<String,?> properties) {
+		public SELF parserSessionOptionsQueryDefault(Map<String,?> properties) {
 			try {
 				return parserSessionOptionsQueryDefault(isEmpty(properties) ? null : Uon.of(properties));
 			} catch (SerializeException e) {
@@ -4515,7 +4518,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default is <js>'"'</js>.
 		 * @return This object.
 		 */
-		public R quoteChar(char value) {
+		public SELF quoteChar(char value) {
 			serializers().forEachWS(x -> x.quoteChar(value));
 			return self();
 		}
@@ -4532,7 +4535,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setRedirectStrategy(RedirectStrategy)
 		 */
-		public R redirectStrategy(RedirectStrategy redirectStrategy) {
+		public SELF redirectStrategy(RedirectStrategy redirectStrategy) {
 			httpClientBuilder().setRedirectStrategy(redirectStrategy);
 			return self();
 		}
@@ -4545,7 +4548,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)
 		 */
-		public R requestExecutor(HttpRequestExecutor requestExec) {
+		public SELF requestExecutor(HttpRequestExecutor requestExec) {
 			httpClientBuilder().setRequestExecutor(requestExec);
 			return self();
 		}
@@ -4562,7 +4565,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
 		 */
-		public R retryHandler(HttpRequestRetryHandler retryHandler) {
+		public SELF retryHandler(HttpRequestRetryHandler retryHandler) {
 			httpClientBuilder().setRetryHandler(retryHandler);
 			return self();
 		}
@@ -4596,7 +4599,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (no root URL will be set).
 		 * @return This object.
 		 */
-		public R rootUrl(Object value) {
+		public SELF rootUrl(Object value) {
 			var s = s(value);
 			if (ne(s))
 				s = s.replaceAll("\\/$", "");
@@ -4654,7 +4657,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Can be <jk>null</jk> (no root URL will be set).
 		 * @return This object.
 		 */
-		public R rootUrl(Supplier<String> value) {
+		public SELF rootUrl(Supplier<String> value) {
 			rootUrl = value;
 			return self();
 		}
@@ -4667,7 +4670,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)
 		 */
-		public R routePlanner(HttpRoutePlanner routePlanner) {
+		public SELF routePlanner(HttpRoutePlanner routePlanner) {
 			httpClientBuilder().setRoutePlanner(routePlanner);
 			return self();
 		}
@@ -4680,7 +4683,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setSchemePortResolver(SchemePortResolver)
 		 */
-		public R schemePortResolver(SchemePortResolver schemePortResolver) {
+		public SELF schemePortResolver(SchemePortResolver schemePortResolver) {
 			httpClientBuilder().setSchemePortResolver(schemePortResolver);
 			return self();
 		}
@@ -4717,7 +4720,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires unchecked casts
 		})
-		public R serializer(Class<? extends Serializer> value) {
+		public SELF serializer(Class<? extends Serializer> value) {
 			return serializers(value);
 		}
 
@@ -4751,7 +4754,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R serializer(Serializer value) {
+		public SELF serializer(Serializer value) {
 			return serializers(value);
 		}
 
@@ -4802,7 +4805,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires unchecked casts
 		})
-		public R serializers(Class<? extends Serializer>...value) {
+		public SELF serializers(Class<? extends Serializer>...value) {
 			assertArgNoNulls(ARG_value, value);
 			serializers().add(value);
 			return self();
@@ -4841,7 +4844,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default is {@link JsonSerializer}.
 		 * @return This object.
 		 */
-		public R serializers(Serializer...value) {
+		public SELF serializers(Serializer...value) {
 			assertArgNoNulls(ARG_value, value);
 			serializers().add(value);
 			return self();
@@ -4855,7 +4858,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
 		 */
-		public R serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
+		public SELF serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
 			httpClientBuilder().setServiceUnavailableRetryStrategy(serviceUnavailStrategy);
 			return self();
 		}
@@ -4872,7 +4875,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R skipEmptyFormData() {
+		public SELF skipEmptyFormData() {
 			return skipEmptyFormData(true);
 		}
 
@@ -4891,7 +4894,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default is <jk>false</jk>.
 		 * @return This object.
 		 */
-		public R skipEmptyFormData(boolean value) {
+		public SELF skipEmptyFormData(boolean value) {
 			skipEmptyFormData = true;
 			return self();
 		}
@@ -4908,7 +4911,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R skipEmptyHeaderData() {
+		public SELF skipEmptyHeaderData() {
 			return skipEmptyHeaderData(true);
 		}
 
@@ -4927,7 +4930,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default is <jk>false</jk>.
 		 * @return This object.
 		 */
-		public R skipEmptyHeaderData(boolean value) {
+		public SELF skipEmptyHeaderData(boolean value) {
 			skipEmptyHeaderData = true;
 			return self();
 		}
@@ -4944,7 +4947,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R skipEmptyQueryData() {
+		public SELF skipEmptyQueryData() {
 			return skipEmptyQueryData(true);
 		}
 
@@ -4963,7 +4966,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>The default is <jk>false</jk>.
 		 * @return This object.
 		 */
-		public R skipEmptyQueryData(boolean value) {
+		public SELF skipEmptyQueryData(boolean value) {
 			skipEmptyQueryData = true;
 			return self();
 		}
@@ -5001,7 +5004,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R sortCollections() {
+		public SELF sortCollections() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::sortCollections);
 			return self();
 		}
@@ -5039,7 +5042,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R sortMaps() {
+		public SELF sortMaps() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::sortMaps);
 			return self();
 		}
@@ -5080,7 +5083,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R sq() {
+		public SELF sq() {
 			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::sq);
 			return self();
 		}
@@ -5098,7 +5101,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setSSLContext(SSLContext)
 		 */
-		public R sslContext(SSLContext sslContext) {
+		public SELF sslContext(SSLContext sslContext) {
 			httpClientBuilder().setSSLContext(sslContext);
 			return self();
 		}
@@ -5116,7 +5119,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
 		 */
-		public R sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
+		public SELF sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
 			httpClientBuilder().setSSLHostnameVerifier(hostnameVerifier);
 			return self();
 		}
@@ -5133,7 +5136,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
 		 */
-		public R sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
+		public SELF sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
 			httpClientBuilder().setSSLSocketFactory(sslSocketFactory);
 			return self();
 		}
@@ -5146,7 +5149,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)
 		 */
-		public R targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
+		public SELF targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
 			httpClientBuilder().setTargetAuthenticationStrategy(targetAuthStrategy);
 			return self();
 		}
@@ -5191,7 +5194,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R trimEmptyCollections() {
+		public SELF trimEmptyCollections() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimEmptyCollections);
 			return self();
 		}
@@ -5235,7 +5238,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R trimEmptyMaps() {
+		public SELF trimEmptyMaps() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimEmptyMaps);
 			return self();
 		}
@@ -5272,7 +5275,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R trimStringsOnRead() {
+		public SELF trimStringsOnRead() {
 			parsers().forEach(org.apache.juneau.parser.Parser.Builder::trimStrings);
 			return self();
 		}
@@ -5307,7 +5310,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R trimStringsOnWrite() {
+		public SELF trimStringsOnWrite() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimStrings);
 			return self();
 		}
@@ -5347,7 +5350,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires unchecked casts
 		})
-		public R universal() {
+		public SELF universal() {
 			// @formatter:off
 			return
 				serializers(
@@ -5438,7 +5441,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R uon() {
+		public SELF uon() {
 			return serializer(UonSerializer.class).parser(UonParser.class);
 		}
 
@@ -5486,7 +5489,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R uriContext(UriContext value) {
+		public SELF uriContext(UriContext value) {
 			serializers().forEach(x -> x.uriContext(assertArgNotNull(ARG_value, value)));
 			return self();
 		}
@@ -5523,7 +5526,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R uriRelativity(UriRelativity value) {
+		public SELF uriRelativity(UriRelativity value) {
 			serializers().forEach(x -> x.uriRelativity(assertArgNotNull(ARG_value, value)));
 			return self();
 		}
@@ -5562,7 +5565,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R uriResolution(UriResolution value) {
+		public SELF uriResolution(UriResolution value) {
 			serializers().forEach(x -> x.uriResolution(assertArgNotNull(ARG_value, value)));
 			return self();
 		}
@@ -5607,7 +5610,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R urlEnc() {
+		public SELF urlEnc() {
 			return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);
 		}
 
@@ -5635,7 +5638,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#setUserTokenHandler(UserTokenHandler)
 		 */
-		public R userTokenHandler(UserTokenHandler userTokenHandler) {
+		public SELF userTokenHandler(UserTokenHandler userTokenHandler) {
 			httpClientBuilder().setUserTokenHandler(userTokenHandler);
 			return self();
 		}
@@ -5646,7 +5649,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 * @see HttpClientBuilder#useSystemProperties()
 		 */
-		public R useSystemProperties() {
+		public SELF useSystemProperties() {
 			httpClientBuilder().useSystemProperties();
 			return self();
 		}
@@ -5682,7 +5685,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </ul>
 		 * @return This object.
 		 */
-		public R useWhitespace() {
+		public SELF useWhitespace() {
 			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::useWhitespace);
 			return self();
 		}
@@ -5719,7 +5722,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R ws() {
+		public SELF ws() {
 			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::ws);
 			return self();
 		}
@@ -5762,7 +5765,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * @return This object.
 		 */
-		public R xml() {
+		public SELF xml() {
 			return serializer(XmlSerializer.class).parser(XmlParser.class);
 		}
 

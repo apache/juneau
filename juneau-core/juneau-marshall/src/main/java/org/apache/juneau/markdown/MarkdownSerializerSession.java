@@ -59,7 +59,8 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 	 * Builder class.
 	 */
 	@SuppressWarnings({
-		"java:S110" // Inheritance depth acceptable for serializer session builder hierarchy
+		"java:S110", // Inheritance depth acceptable for serializer session builder hierarchy
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
 	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends WriterSerializerSession.Builder<SELF> {
 

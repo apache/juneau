@@ -154,6 +154,9 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends WriterSerializer.Builder<SELF> {
 
 		private static final Cache<HashKey,XmlSerializer> CACHE = Cache.of(HashKey.class, XmlSerializer.class).build();

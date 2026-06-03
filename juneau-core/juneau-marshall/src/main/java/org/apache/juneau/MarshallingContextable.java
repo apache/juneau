@@ -78,7 +78,10 @@ public abstract class MarshallingContextable extends Context {
 	/**
 	 * Builder class.
 	 */
-	public abstract static class Builder<R extends Builder<R>> extends Context.Builder<R> {
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
+	public abstract static class Builder<SELF extends Builder<SELF>> extends Context.Builder<SELF> {
 
 		private MarshallingContext.Builder bcBuilder;
 		private MarshallingContext bc;
@@ -117,7 +120,7 @@ public abstract class MarshallingContextable extends Context {
 		}
 
 		@Override /* Overridden from Context.Builder<?> */
-		public R annotations(Annotation...value) {
+		public SELF annotations(Annotation...value) {
 			bcBuilder.annotations(value);
 			super.annotations(value);
 			return self();
@@ -166,7 +169,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanClassVisibility(Visibility value) {
+		public SELF beanClassVisibility(Visibility value) {
 			bcBuilder.beanClassVisibility(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -215,7 +218,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanConstructorVisibility(Visibility value) {
+		public SELF beanConstructorVisibility(Visibility value) {
 			bcBuilder.beanConstructorVisibility(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -241,7 +244,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R marshallingContext(MarshallingContext value) {
+		public SELF marshallingContext(MarshallingContext value) {
 			bc = assertArgNotNull(ARG_value, value);
 			return self();
 		}
@@ -258,7 +261,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R marshallingContext(MarshallingContext.Builder value) {
+		public SELF marshallingContext(MarshallingContext.Builder value) {
 			bcBuilder = assertArgNotNull(ARG_value, value);
 			return self();
 		}
@@ -366,7 +369,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R beanDictionary(Class<?>...values) {
+		public SELF beanDictionary(Class<?>...values) {
 			assertArgNoNulls(ARG_values, values);
 			bcBuilder.beanDictionary(values);
 			return self();
@@ -425,7 +428,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanFieldVisibility(Visibility value) {
+		public SELF beanFieldVisibility(Visibility value) {
 			bcBuilder.beanFieldVisibility(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -482,7 +485,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
+		public SELF beanInterceptor(Class<?> on, Class<? extends BeanInterceptor<?>> value) {
 			bcBuilder.beanInterceptor(assertArgNotNull(ARG_on, on), assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -517,7 +520,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R beanMapPutReturnsOldValue() {
+		public SELF beanMapPutReturnsOldValue() {
 			bcBuilder.beanMapPutReturnsOldValue();
 			return self();
 		}
@@ -565,7 +568,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanMethodVisibility(Visibility value) {
+		public SELF beanMethodVisibility(Visibility value) {
 			bcBuilder.beanMethodVisibility(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -626,7 +629,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanProperties(Class<?> beanClass, String properties) {
+		public SELF beanProperties(Class<?> beanClass, String properties) {
 			bcBuilder.beanProperties(beanClass, assertArgNotNull(ARG_properties, properties));
 			return self();
 		}
@@ -689,7 +692,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanProperties(Map<String,Object> values) {
+		public SELF beanProperties(Map<String,Object> values) {
 			bcBuilder.beanProperties(assertArgNotNull(ARG_values, values));
 			return self();
 		}
@@ -753,7 +756,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanProperties(String beanClassName, String properties) {
+		public SELF beanProperties(String beanClassName, String properties) {
 			bcBuilder.beanProperties(assertArgNotNull(ARG_beanClassName, beanClassName), assertArgNotNull(ARG_properties, properties));
 			return self();
 		}
@@ -806,7 +809,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanPropertiesExcludes(Class<?> beanClass, String properties) {
+		public SELF beanPropertiesExcludes(Class<?> beanClass, String properties) {
 			bcBuilder.beanPropertiesExcludes(beanClass, assertArgNotNull(ARG_properties, properties));
 			return self();
 		}
@@ -861,7 +864,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanPropertiesExcludes(Map<String,Object> values) {
+		public SELF beanPropertiesExcludes(Map<String,Object> values) {
 			bcBuilder.beanPropertiesExcludes(assertArgNotNull(ARG_values, values));
 			return self();
 		}
@@ -917,7 +920,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanPropertiesExcludes(String beanClassName, String properties) {
+		public SELF beanPropertiesExcludes(String beanClassName, String properties) {
 			bcBuilder.beanPropertiesExcludes(assertArgNotNull(ARG_beanClassName, beanClassName), assertArgNotNull(ARG_properties, properties));
 			return self();
 		}
@@ -973,7 +976,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+		public SELF beanPropertiesReadOnly(Class<?> beanClass, String properties) {
 			bcBuilder.beanPropertiesReadOnly(beanClass, assertArgNotNull(ARG_properties, properties));
 			return self();
 		}
@@ -1031,7 +1034,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanPropertiesReadOnly(Map<String,Object> values) {
+		public SELF beanPropertiesReadOnly(Map<String,Object> values) {
 			bcBuilder.beanPropertiesReadOnly(assertArgNotNull(ARG_values, values));
 			return self();
 		}
@@ -1090,7 +1093,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanPropertiesReadOnly(String beanClassName, String properties) {
+		public SELF beanPropertiesReadOnly(String beanClassName, String properties) {
 			bcBuilder.beanPropertiesReadOnly(assertArgNotNull(ARG_beanClassName, beanClassName), assertArgNotNull(ARG_properties, properties));
 			return self();
 		}
@@ -1145,7 +1148,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+		public SELF beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
 			bcBuilder.beanPropertiesWriteOnly(beanClass, assertArgNotNull(ARG_properties, properties));
 			return self();
 		}
@@ -1202,7 +1205,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanPropertiesWriteOnly(Map<String,Object> values) {
+		public SELF beanPropertiesWriteOnly(Map<String,Object> values) {
 			bcBuilder.beanPropertiesWriteOnly(assertArgNotNull(ARG_values, values));
 			return self();
 		}
@@ -1260,7 +1263,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R beanPropertiesWriteOnly(String beanClassName, String properties) {
+		public SELF beanPropertiesWriteOnly(String beanClassName, String properties) {
 			bcBuilder.beanPropertiesWriteOnly(assertArgNotNull(ARG_beanClassName, beanClassName), assertArgNotNull(ARG_properties, properties));
 			return self();
 		}
@@ -1313,7 +1316,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R beansRequireDefaultConstructor() {
+		public SELF beansRequireDefaultConstructor() {
 			bcBuilder.beansRequireDefaultConstructor();
 			return self();
 		}
@@ -1361,7 +1364,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R beansRequireSerializable() {
+		public SELF beansRequireSerializable() {
 			bcBuilder.beansRequireSerializable();
 			return self();
 		}
@@ -1407,16 +1410,16 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R beansRequireSettersForGetters() {
+		public SELF beansRequireSettersForGetters() {
 			bcBuilder.beansRequireSettersForGetters();
 			return self();
 		}
 
 		@Override /* Overridden from Context.Builder<?> */
-		public abstract R copy();
+		public abstract SELF copy();
 
 		@Override /* Overridden from Context.Builder<?> */
-		public R debug() {
+		public SELF debug() {
 			bcBuilder.debug();
 			super.debug();
 			return self();
@@ -1467,7 +1470,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R dictionaryOn(Class<?> on, Class<?>...values) {
+		public SELF dictionaryOn(Class<?> on, Class<?>...values) {
 			assertArgNoNulls(ARG_values, values);
 			bcBuilder.dictionaryOn(assertArgNotNull(ARG_on, on), values);
 			return self();
@@ -1511,7 +1514,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R disableBeansRequireSomeProperties() {
+		public SELF disableBeansRequireSomeProperties() {
 			bcBuilder.disableBeansRequireSomeProperties();
 			return self();
 		}
@@ -1553,7 +1556,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R disableIgnoreMissingSetters() {
+		public SELF disableIgnoreMissingSetters() {
 			bcBuilder.disableIgnoreMissingSetters();
 			return self();
 		}
@@ -1592,7 +1595,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R disableIgnoreTransientFields() {
+		public SELF disableIgnoreTransientFields() {
 			bcBuilder.disableIgnoreTransientFields();
 			return self();
 		}
@@ -1628,7 +1631,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R disableIgnoreUnknownNullBeanProperties() {
+		public SELF disableIgnoreUnknownNullBeanProperties() {
 			bcBuilder.disableIgnoreUnknownNullBeanProperties();
 			return self();
 		}
@@ -1648,7 +1651,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R disableInterfaceProxies() {
+		public SELF disableInterfaceProxies() {
 			bcBuilder.disableInterfaceProxies();
 			return self();
 		}
@@ -1699,7 +1702,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Can be <jk>null</jk> or empty (treated as no example).
 		 * @return This object.
 		 */
-		public <T> R example(Class<T> pojoClass, String json) {
+		public <T> SELF example(Class<T> pojoClass, String json) {
 			bcBuilder.example(assertArgNotNull(ARG_pojoClass, pojoClass), json);
 			return self();
 		}
@@ -1750,7 +1753,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Can be <jk>null</jk> (will be serialized as <js>"null"</js>).
 		 * @return This object.
 		 */
-		public <T> R example(Class<T> pojoClass, T o) {
+		public <T> SELF example(Class<T> pojoClass, T o) {
 			bcBuilder.example(assertArgNotNull(ARG_pojoClass, pojoClass), o);
 			return self();
 		}
@@ -1800,7 +1803,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R findFluentSetters() {
+		public SELF findFluentSetters() {
 			bcBuilder.findFluentSetters();
 			return self();
 		}
@@ -1841,7 +1844,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R findFluentSetters(Class<?> on) {
+		public SELF findFluentSetters(Class<?> on) {
 			bcBuilder.findFluentSetters(assertArgNotNull(ARG_on, on));
 			return self();
 		}
@@ -1890,7 +1893,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R ignoreInvocationExceptionsOnGetters() {
+		public SELF ignoreInvocationExceptionsOnGetters() {
 			bcBuilder.ignoreInvocationExceptionsOnGetters();
 			return self();
 		}
@@ -1928,7 +1931,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R ignoreInvocationExceptionsOnSetters() {
+		public SELF ignoreInvocationExceptionsOnSetters() {
 			bcBuilder.ignoreInvocationExceptionsOnSetters();
 			return self();
 		}
@@ -1964,7 +1967,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R ignoreUnknownBeanProperties() {
+		public SELF ignoreUnknownBeanProperties() {
 			bcBuilder.ignoreUnknownBeanProperties();
 			return self();
 		}
@@ -2009,7 +2012,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @return This object.
 		 * @since 9.5.0
 		 */
-		public R validateSchema() {
+		public SELF validateSchema() {
 			bcBuilder.validateSchema();
 			return self();
 		}
@@ -2021,7 +2024,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @return This object.
 		 * @since 9.5.0
 		 */
-		public R validateSchema(boolean value) {
+		public SELF validateSchema(boolean value) {
 			bcBuilder.validateSchema(value);
 			return self();
 		}
@@ -2039,7 +2042,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R ignoreUnknownEnumValues() {
+		public SELF ignoreUnknownEnumValues() {
 			bcBuilder.ignoreUnknownEnumValues();
 			return self();
 		}
@@ -2080,7 +2083,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R implClass(Class<?> interfaceClass, Class<?> implClass) {
+		public SELF implClass(Class<?> interfaceClass, Class<?> implClass) {
 			bcBuilder.implClass(assertArgNotNull(ARG_interfaceClass, interfaceClass), assertArgNotNull(ARG_implClass, implClass));
 			return self();
 		}
@@ -2120,7 +2123,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R implClasses(Map<Class<?>,Class<?>> values) {
+		public SELF implClasses(Map<Class<?>,Class<?>> values) {
 			bcBuilder.implClasses(assertArgNotNull(ARG_values, values));
 			return self();
 		}
@@ -2168,7 +2171,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R interfaceClass(Class<?> on, Class<?> value) {
+		public SELF interfaceClass(Class<?> on, Class<?> value) {
 			bcBuilder.interfaceClass(assertArgNotNull(ARG_on, on), assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -2214,7 +2217,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R interfaces(Class<?>...value) {
+		public SELF interfaces(Class<?>...value) {
 			assertArgNoNulls(ARG_value, value);
 			bcBuilder.interfaces(value);
 			return self();
@@ -2259,7 +2262,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R locale(Locale value) {
+		public SELF locale(Locale value) {
 			bcBuilder.locale(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -2303,7 +2306,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Can be <jk>null</jk> (no default media type will be set).
 		 * @return This object.
 		 */
-		public R mediaType(MediaType value) {
+		public SELF mediaType(MediaType value) {
 			bcBuilder.mediaType(value);
 			return self();
 		}
@@ -2363,7 +2366,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R notBeanClasses(Class<?>...values) {
+		public SELF notBeanClasses(Class<?>...values) {
 			assertArgNoNulls(ARG_values, values);
 			bcBuilder.notBeanClasses(values);
 			return self();
@@ -2410,7 +2413,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R notBeanPackages(String...values) {
+		public SELF notBeanPackages(String...values) {
 			assertArgNoNulls(ARG_values, values);
 			bcBuilder.notBeanPackages(values);
 			return self();
@@ -2453,7 +2456,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
+		public SELF propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
 			bcBuilder.propertyNamer(assertArgNotNull(ARG_on, on), assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -2500,7 +2503,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R propertyNamer(Class<? extends PropertyNamer> value) {
+		public SELF propertyNamer(Class<? extends PropertyNamer> value) {
 			bcBuilder.propertyNamer(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -2517,7 +2520,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R unsortedProperties() {
+		public SELF unsortedProperties() {
 			bcBuilder.unsortedProperties();
 			return self();
 		}
@@ -2534,7 +2537,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R unsortedProperties(Class<?>...on) {
+		public SELF unsortedProperties(Class<?>...on) {
 			assertArgNoNulls(ARG_on, on);
 			bcBuilder.unsortedProperties(on);
 			return self();
@@ -2582,7 +2585,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R stopClass(Class<?> on, Class<?> value) {
+		public SELF stopClass(Class<?> on, Class<?> value) {
 			bcBuilder.stopClass(assertArgNotNull(ARG_on, on), assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -2609,7 +2612,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public <T,S> R swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> SELF swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			bcBuilder.swap(assertArgNotNull(ARG_normalClass, normalClass), assertArgNotNull(ARG_swappedClass, swappedClass), assertArgNotNull(ARG_swapFunction, swapFunction));
 			return self();
 		}
@@ -2638,7 +2641,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public <T,S> R swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> SELF swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			bcBuilder.swap(assertArgNotNull(ARG_normalClass, normalClass), assertArgNotNull(ARG_swappedClass, swappedClass), assertArgNotNull(ARG_swapFunction, swapFunction), assertArgNotNull(ARG_unswapFunction, unswapFunction));
 			return self();
 		}
@@ -2656,7 +2659,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R swaps(Class<?>...values) {
+		public SELF swaps(Class<?>...values) {
 			assertArgNoNulls(ARG_values, values);
 			bcBuilder.swaps(values);
 			return self();
@@ -2748,7 +2751,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
-		public R swaps(Object...values) {
+		public SELF swaps(Object...values) {
 			assertArgNoNulls(ARG_values, values);
 			bcBuilder.swaps(values);
 			return self();
@@ -2792,7 +2795,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Can be <jk>null</jk> (timezone will not be set, defaults to system timezone).
 		 * @return This object.
 		 */
-		public R timeZone(TimeZone value) {
+		public SELF timeZone(TimeZone value) {
 			bcBuilder.timeZone(value);
 			return self();
 		}
@@ -2803,7 +2806,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R durationFormat(DurationFormat value) {
+		public SELF durationFormat(DurationFormat value) {
 			bcBuilder.durationFormat(value);
 			return self();
 		}
@@ -2814,7 +2817,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R periodFormat(PeriodFormat value) {
+		public SELF periodFormat(PeriodFormat value) {
 			bcBuilder.periodFormat(value);
 			return self();
 		}
@@ -2825,7 +2828,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R calendarFormat(CalendarFormat value) {
+		public SELF calendarFormat(CalendarFormat value) {
 			bcBuilder.calendarFormat(value);
 			return self();
 		}
@@ -2836,7 +2839,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R dateFormat(DateFormat value) {
+		public SELF dateFormat(DateFormat value) {
 			bcBuilder.dateFormat(value);
 			return self();
 		}
@@ -2847,7 +2850,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R temporalFormat(TemporalFormat value) {
+		public SELF temporalFormat(TemporalFormat value) {
 			bcBuilder.temporalFormat(value);
 			return self();
 		}
@@ -2858,7 +2861,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R timeZoneFormat(TimeZoneFormat value) {
+		public SELF timeZoneFormat(TimeZoneFormat value) {
 			bcBuilder.timeZoneFormat(value);
 			return self();
 		}
@@ -2869,7 +2872,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R localeFormat(LocaleFormat value) {
+		public SELF localeFormat(LocaleFormat value) {
 			bcBuilder.localeFormat(value);
 			return self();
 		}
@@ -2880,7 +2883,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R binaryFormat(BinaryFormat value) {
+		public SELF binaryFormat(BinaryFormat value) {
 			bcBuilder.binaryFormat(value);
 			return self();
 		}
@@ -2891,7 +2894,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R enumFormat(EnumFormat value) {
+		public SELF enumFormat(EnumFormat value) {
 			bcBuilder.enumFormat(value);
 			return self();
 		}
@@ -2902,7 +2905,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R uuidFormat(UuidFormat value) {
+		public SELF uuidFormat(UuidFormat value) {
 			bcBuilder.uuidFormat(value);
 			return self();
 		}
@@ -2913,7 +2916,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R bigNumberFormat(BigNumberFormat value) {
+		public SELF bigNumberFormat(BigNumberFormat value) {
 			bcBuilder.bigNumberFormat(value);
 			return self();
 		}
@@ -2924,7 +2927,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R booleanFormat(BooleanFormat value) {
+		public SELF booleanFormat(BooleanFormat value) {
 			bcBuilder.booleanFormat(value);
 			return self();
 		}
@@ -2935,7 +2938,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R floatFormat(FloatFormat value) {
+		public SELF floatFormat(FloatFormat value) {
 			bcBuilder.floatFormat(value);
 			return self();
 		}
@@ -2946,7 +2949,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R currencyFormat(CurrencyFormat value) {
+		public SELF currencyFormat(CurrencyFormat value) {
 			bcBuilder.currencyFormat(value);
 			return self();
 		}
@@ -2957,7 +2960,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R classFormat(ClassFormat value) {
+		public SELF classFormat(ClassFormat value) {
 			bcBuilder.classFormat(value);
 			return self();
 		}
@@ -2968,7 +2971,7 @@ public abstract class MarshallingContextable extends Context {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public R classLoader(ClassLoader value) {
+		public SELF classLoader(ClassLoader value) {
 			bcBuilder.classLoader(value);
 			return self();
 		}
@@ -3015,7 +3018,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R typeName(Class<?> on, String value) {
+		public SELF typeName(Class<?> on, String value) {
 			bcBuilder.typeName(on, assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -3062,7 +3065,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R typePropertyName(Class<?> on, String value) {
+		public SELF typePropertyName(Class<?> on, String value) {
 			bcBuilder.typePropertyName(on, assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -3120,7 +3123,7 @@ public abstract class MarshallingContextable extends Context {
 		 * 	<br>Cannot be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public R typePropertyName(String value) {
+		public SELF typePropertyName(String value) {
 			bcBuilder.typePropertyName(assertArgNotNull(ARG_value, value));
 			return self();
 		}
@@ -3147,7 +3150,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @return This object.
 		 */
-		public R useJavaBeanIntrospector() {
+		public SELF useJavaBeanIntrospector() {
 			bcBuilder.useJavaBeanIntrospector();
 			return self();
 		}

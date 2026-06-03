@@ -98,6 +98,9 @@ public class Serializer extends MarshallingTraverseContext {
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingTraverseContext.Builder<SELF> {
 
 		private boolean addBeanTypes;
@@ -849,7 +852,10 @@ public class Serializer extends MarshallingTraverseContext {
 	 *
 	 * @return A new builder.
 	 */
-	public static Builder create() {
+	@SuppressWarnings({
+		"java:S1452" // Self-typed builder: Builder<?> is the only non-raw, leaf-free return; chaining + build() unaffected.
+	})
+	public static Builder<?> create() {
 		return new DefaultBuilder();
 	}
 

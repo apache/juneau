@@ -138,6 +138,9 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	/**
 	 * Builder class.
 	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends WriterSerializer.Builder<SELF> {
 
 		private static final Cache<HashKey,JsonSerializer> CACHE = Cache.of(HashKey.class, JsonSerializer.class).build();

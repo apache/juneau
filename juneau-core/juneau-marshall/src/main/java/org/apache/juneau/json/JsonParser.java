@@ -130,8 +130,16 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 
 	/**
 	 * Builder class.
+	 *
+	 * <p>
+	 * Unlike the abstract context builders, this builder is concrete <i>and</i> generic: it terminates the CRTP
+	 * recursion via the leaf-free {@code new Builder<>()} pattern (see {@link JsonParser#create()} /
+	 * {@link JsonParser#copy()}) rather than via a separate concrete {@code DefaultBuilder} leaf.
 	 */
-	public abstract static class Builder<SELF extends Builder<SELF>> extends ReaderParser.Builder<SELF> {
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
+	public static class Builder<SELF extends Builder<SELF>> extends ReaderParser.Builder<SELF> {
 
 		private static final Cache<HashKey,JsonParser> CACHE = Cache.of(HashKey.class, JsonParser.class).build();
 
@@ -173,7 +181,12 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Context.Builder<?> */
-		public abstract SELF copy();
+		@SuppressWarnings({
+			"unchecked" // CRTP self-type cast on the leaf-free Builder copy is safe by construction.
+		})
+		public SELF copy() {
+			return (SELF) new Builder<>(this);
+		}
 
 		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
@@ -222,23 +235,23 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	/**
 	 * Concrete default builder leaf for the non-subclassed {@link JsonParser#create()} / {@link JsonParser#copy()} path.
 	 */
-	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
-
-		DefaultBuilder() {}
-
-		DefaultBuilder(JsonParser copyFrom) {
-			super(copyFrom);
-		}
-
-		DefaultBuilder(Builder<?> copyFrom) {
-			super(copyFrom);
-		}
-
-		@Override /* Overridden from Context.Builder<?> */
-		public DefaultBuilder copy() {
-			return new DefaultBuilder(this);
-		}
-	}
+//	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
+//
+//		DefaultBuilder() {}
+//
+//		DefaultBuilder(JsonParser copyFrom) {
+//			super(copyFrom);
+//		}
+//
+//		DefaultBuilder(Builder<?> copyFrom) {
+//			super(copyFrom);
+//		}
+//
+//		@Override /* Overridden from Context.Builder<?> */
+//		public DefaultBuilder copy() {
+//			return new DefaultBuilder(this);
+//		}
+//	}
 
 	/** Default parser, all default settings.*/
 	public static final JsonParser DEFAULT = new JsonParser(create());
@@ -248,14 +261,18 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	 *
 	 * @return A new builder.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Self-typed builder: Builder<?> is the only non-raw, leaf-free return; chaining + build() unaffected.
+	})
 	public static Builder<?> create() {
-		return new DefaultBuilder();
+		return new Builder<>();
 	}
 
 	protected final boolean validateEnd;
 
 	private final Map<BeanPropertyMeta,JsonBeanPropertyMeta> jsonBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
+	
 
 	/**
 	 * Constructor.
@@ -269,7 +286,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 
 	@Override /* Overridden from Context */
 	public Builder<?> copy() {
-		return new DefaultBuilder(this);
+		return new Builder<>(this);
 	}
 
 	@Override /* Overridden from Context */
