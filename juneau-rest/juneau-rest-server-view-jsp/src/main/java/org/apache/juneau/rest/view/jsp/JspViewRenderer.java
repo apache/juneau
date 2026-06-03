@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.view.jsp;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.commons.utils.*;
@@ -173,7 +175,7 @@ public class JspViewRenderer implements ViewRenderer {
 	 * 	{@code ..} segments.
 	 */
 	static String joinPath(String basePath, String template) {
-		var bp = (basePath == null || basePath.isEmpty()) ? "/" : basePath;
+		var bp = isEmpty(basePath) ? "/" : basePath;
 		return FileUtils.resolveVirtualPathSafely(bp, template);
 	}
 }

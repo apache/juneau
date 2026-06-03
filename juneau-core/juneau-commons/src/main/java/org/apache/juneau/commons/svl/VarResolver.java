@@ -101,7 +101,7 @@ public class VarResolver {
 			this.beanStore = copyFrom.beanStore;
 			vars = VarList.of(copyFrom.vars);
 			userBeans = new LinkedHashMap<>();
-			functions = new ArrayList<>(Arrays.asList(copyFrom.functions));
+			functions = list(copyFrom.functions);
 		}
 
 		/**

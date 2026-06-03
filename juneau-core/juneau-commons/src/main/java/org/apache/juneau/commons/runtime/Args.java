@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.runtime;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -366,7 +367,7 @@ public class Args {
 		private List<String> resolvePrefixes() {
 			List<String> p;
 			if (customPrefix != null) {
-				p = new ArrayList<>(Arrays.asList(customPrefix));
+				p = list(customPrefix);
 			} else {
 				p = new ArrayList<>();
 				if (allowLongFlags)

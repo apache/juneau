@@ -222,9 +222,9 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 				msg = msg.replace('<', ' ').replace('>', ' ').replace('&', ' ');
 			var cls = cns(e);
 			if (msg == null)
-				sb.append(f("\nCaused by ({0})", cls));
+				sb.append(f("\nCaused by (%s)", cls));
 			else
-				sb.append(f("\nCaused by ({0}): {1}", cls, msg));
+				sb.append(f("\nCaused by (%s): %s", cls, msg));
 			e = e.getCause();
 		}
 		return sb.toString();

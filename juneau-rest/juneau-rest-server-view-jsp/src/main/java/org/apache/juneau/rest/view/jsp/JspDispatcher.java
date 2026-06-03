@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.view.jsp;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
@@ -134,7 +135,7 @@ public class JspDispatcher implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder basePath(String value) {
-			basePath = (value == null || value.isBlank()) ? DEFAULT_BASE_PATH : value;
+			basePath = isBlank(value) ? DEFAULT_BASE_PATH : value;
 			return this;
 		}
 

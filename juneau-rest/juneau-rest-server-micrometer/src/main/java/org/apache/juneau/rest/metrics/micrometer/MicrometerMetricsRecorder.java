@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.metrics.micrometer;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.time.*;
 
@@ -171,6 +172,6 @@ public class MicrometerMetricsRecorder implements MetricsRecorder {
 	}
 
 	private static String defaultIfBlank(String value, String fallback) {
-		return (value == null || value.isEmpty()) ? fallback : value;
+		return isEmpty(value) ? fallback : value;
 	}
 }

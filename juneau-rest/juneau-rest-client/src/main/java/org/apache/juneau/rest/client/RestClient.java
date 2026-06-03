@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.assertArgNotNull;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -385,7 +386,7 @@ public final class RestClient implements Closeable {
 		 * @return This object.
 		 */
 		public Builder bodyConverters(BodyConverter<?>... value) {
-			bodyConverters = new ArrayList<>(Arrays.asList(value));
+			bodyConverters = list(value);
 			return this;
 		}
 

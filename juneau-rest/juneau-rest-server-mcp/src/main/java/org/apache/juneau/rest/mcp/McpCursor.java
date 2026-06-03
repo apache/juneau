@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.mcp;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.inject.BeanStore;
@@ -89,7 +91,7 @@ public interface McpCursor {
 	 * @return Parsed offset.
 	 */
 	static int parseOffset(String cursor) {
-		if (cursor == null || cursor.isEmpty())
+		if (isEmpty(cursor))
 			return 0;
 		try {
 			var v = Integer.parseInt(cursor);

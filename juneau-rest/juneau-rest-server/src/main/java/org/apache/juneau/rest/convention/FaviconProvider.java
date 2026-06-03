@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.convention;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -90,9 +92,7 @@ public class FaviconProvider {
 	 * 	configured {@code Cache-Control} header.
 	 */
 	public HttpResource serve() {
-		var hdrs = new ArrayList<HttpHeader>();  // TODO - Use Utils.list()
-		hdrs.add(ContentType.of("image/x-icon"));
-		hdrs.add(CacheControl.of(cacheControl));
+		List<HttpHeader> hdrs = list(ContentType.of("image/x-icon"), CacheControl.of(cacheControl));
 		return HttpResourceBean.of(ByteArrayBody.of(bytes, "image/x-icon"), hdrs);
 	}
 

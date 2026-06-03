@@ -28,6 +28,8 @@ import org.apache.juneau.commons.function.Memoizer;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.swap.BuilderSwap;
+import org.apache.juneau.swap.ObjectSwap;
 
 /**
  * Session object for {@link MarkdownParser}.
@@ -141,8 +143,8 @@ public class MarkdownParserSession extends ReaderParserSession {
 		if (eType == null)
 			eType = (ClassMeta<T>) object();
 
-		var swap = (org.apache.juneau.swap.ObjectSwap<T,Object>) eType.getSwap(this);
-		var builder = (org.apache.juneau.swap.BuilderSwap<T,Object>) eType.getBuilderSwap(this);
+		var swap = (ObjectSwap<T,Object>) eType.getSwap(this);
+		var builder = (BuilderSwap<T,Object>) eType.getBuilderSwap(this);
 		ClassMeta<?> sType;
 		if (builder != null)
 			sType = builder.getBuilderClassMeta(this);

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.view.mustache;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
@@ -110,7 +111,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	 * @return The template name with the configured suffix appended (if applicable).
 	 */
 	public String applyTemplateSuffix(String name) {
-		if (templateSuffix == null || templateSuffix.isEmpty())
+		if (isEmpty(templateSuffix))
 			return name;
 		if (name.endsWith(templateSuffix))
 			return name;
@@ -181,7 +182,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	 * @return The mustache.java resource root (never {@code null}).
 	 */
 	static String toResourceRoot(String base) {
-		if (base == null || base.isBlank())
+		if (isBlank(base))
 			return "";
 		var s = base;
 		while (s.startsWith("/"))
@@ -259,7 +260,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	 * 	{@code "/templates/"} and resolved {@code "/templates/hello.mustache"}).
 	 */
 	static String stripBasePath(String base, String resolved) {
-		var bp = (base == null || base.isEmpty()) ? "/" : base;
+		var bp = isEmpty(base) ? "/" : base;
 		if (! bp.endsWith("/"))
 			bp = bp + "/";
 		if (! bp.startsWith("/"))
@@ -288,7 +289,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder basePath(String value) {
-			basePath = (value == null || value.isBlank()) ? DEFAULT_BASE_PATH : value;
+			basePath = isBlank(value) ? DEFAULT_BASE_PATH : value;
 			return this;
 		}
 

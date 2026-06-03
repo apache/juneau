@@ -944,10 +944,10 @@ public class RestContext extends Context {
 		var anns = AnnotationProvider.INSTANCE.find(Rest.class, info(resourceClass));
 		for (var i = 0; i < anns.size(); i++) {
 			var raw = anns.get(i).inner().config();
-			if (raw == null || raw.isEmpty())
+			if (isEmpty(raw))
 				continue;
 			var resolvedName = vr.resolve(raw);
-			if (resolvedName == null || resolvedName.isEmpty())
+			if (isEmpty(resolvedName))
 				continue;
 			if (! seen.add(resolvedName))
 				continue;
@@ -2697,7 +2697,7 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<Long> asyncTimeoutMillis = memoizer(() -> {
 		var s = mergeReplacedStringAttribute(PROPERTY_asyncTimeoutMillis, null);
-		if (s == null || s.isEmpty())
+		if (isEmpty(s))
 			return -1L;
 		try {
 			return Long.parseLong(s.trim());
@@ -2718,7 +2718,7 @@ public class RestContext extends Context {
 	private final Memoizer<Executor> asyncCompletionExecutor = memoizer(() -> {
 		// Programmatic override takes priority over the annotation chain.
 		var name = resolveAsyncCompletionExecutorName();
-		if (name == null || name.isBlank())
+		if (isBlank(name))
 			return null;
 		var resolved = beanStore().getBean(Executor.class, name);
 		// Try ExecutorService as well (a common supertype users supply that is-a Executor).
@@ -3099,7 +3099,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking servlet-destroy method '%s'.", x.getFullName()));
 			}
 		}
 		if (!isMixinContext) {
@@ -3107,7 +3107,7 @@ public class RestContext extends Context {
 				try {
 					mctx.destroy();
 				} catch (Exception e) {
-					getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred destroying mixin sub-context ''{0}''.", mctx.getResourceClass().getName()));
+					getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred destroying mixin sub-context '%s'.", mctx.getResourceClass().getName()));
 				}
 			}
 		}
@@ -4325,7 +4325,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(session.getBeanStore(), getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking finish-call method '%s'.", x.getFullName()));
 			}
 		}
 	}
@@ -4605,7 +4605,7 @@ public class RestContext extends Context {
 		var pathInfo = session.getPathInfo();
 		var methodUC = session.getMethod();
 		var rc = session.getStatus();
-		var onPath = pathInfo == null ? " on no pathInfo" : String.format(" on path '%s'", pathInfo);
+		var onPath = pathInfo == null ? " on no pathInfo" : f(" on path '%s'", pathInfo);
 		if (rc == SC_NOT_FOUND)
 			throw new NotFound("Method ''{0}'' not found on resource with matching pattern{1}.", methodUC, onPath);
 		else if (rc == SC_PRECONDITION_FAILED)

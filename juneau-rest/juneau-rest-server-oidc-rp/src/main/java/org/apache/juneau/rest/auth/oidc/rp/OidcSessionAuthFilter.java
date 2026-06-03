@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
 
@@ -76,7 +77,7 @@ public class OidcSessionAuthFilter extends AuthFilter {
 				break;
 			}
 		}
-		if (value == null || value.isBlank())
+		if (isBlank(value))
 			return Optional.empty();
 		var session = sessionStore.lookup(value);
 		if (session.isEmpty())

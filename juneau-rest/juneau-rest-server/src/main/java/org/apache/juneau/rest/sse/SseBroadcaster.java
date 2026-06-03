@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.sse;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.concurrent.*;
@@ -65,7 +66,7 @@ public class SseBroadcaster {
 		"resource" // Returned subscription is caller-owned and closed by the caller/framework.
 	})
 	public SseSubscription subscribe(String id) {
-		if (id == null || id.isEmpty())
+		if (isEmpty(id))
 			throw illegalArg("id cannot be null or empty.");
 		var subscription = new SseSubscription(id, queueSize, this::removeSubscriber);
 		var previous = subscriptions.put(id, subscription);

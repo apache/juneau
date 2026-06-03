@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.mcp;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.util.*;
 import java.util.stream.*;
 
@@ -74,7 +76,7 @@ public class McpDispatcher {
 		var id = req.getId();
 		var method = req.getMethod();
 
-		if (method == null || method.isEmpty())
+		if (isEmpty(method))
 			return notification(id) ? null : errorResponse(id, CODE_INVALID_REQUEST, "Missing method", null);
 
 		try {

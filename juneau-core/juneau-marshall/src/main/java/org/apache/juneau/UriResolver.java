@@ -84,7 +84,7 @@ public class UriResolver {
 	}
 
 	private static boolean isSpecialUri(String s) {
-		if (s == null || s.isEmpty())
+		if (isEmpty(s))
 			return false;
 		var c = s.charAt(0);
 		if (c != 's' && c != 'c' && c != 'r')

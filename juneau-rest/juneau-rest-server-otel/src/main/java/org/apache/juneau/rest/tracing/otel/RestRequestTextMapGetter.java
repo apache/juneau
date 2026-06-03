@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.tracing.otel;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.rest.*;
@@ -58,6 +60,6 @@ public final class RestRequestTextMapGetter implements TextMapGetter<RestRequest
 		if (! header.isPresent())
 			return null;
 		var value = header.orElse(null);
-		return (value == null || value.isEmpty()) ? null : value;
+		return isEmpty(value) ? null : value;
 	}
 }

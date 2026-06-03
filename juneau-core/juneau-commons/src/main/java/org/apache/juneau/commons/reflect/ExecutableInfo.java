@@ -122,7 +122,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		this.parameterTypes = memoize(() -> getParameters().stream().map(ParameterInfo::getParameterType).toList());
 		this.exceptions = memoize(() -> stream(inner.getExceptionTypes()).map(ClassInfo::of).map(ClassInfo.class::cast).toList());
 		this.declaredAnnotations = memoize(() -> stream(inner.getDeclaredAnnotations()).flatMap(AnnotationUtils::streamRepeated).map(a -> ai((Annotatable)this, a)).toList());
-		this.nameShort = memoize(() -> f("{0}({1})", getNameSimple(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
+		this.nameShort = memoize(() -> f("%s(%s)", getNameSimple(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(","))));
 		this.nameFull = memoize(this::findNameFull);
 		this.toString = memoize(this::findToString);
 	}
@@ -966,9 +966,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	private void checkIndex(int index) {
 		int pc = getParameterCount();
 		if (pc == 0)
-			throw new IndexOutOfBoundsException(f("Invalid index ''{0}''.  No parameters.", index));
+			throw new IndexOutOfBoundsException(f("Invalid index '%d'.  No parameters.", index));
 		if (index < 0 || index >= pc)
-			throw new IndexOutOfBoundsException(f("Invalid index ''{0}''.  Parameter count: {1}", index, pc));
+			throw new IndexOutOfBoundsException(f("Invalid index '%d'.  Parameter count: %d", index, pc));
 	}
 
 	private String findNameFull() {

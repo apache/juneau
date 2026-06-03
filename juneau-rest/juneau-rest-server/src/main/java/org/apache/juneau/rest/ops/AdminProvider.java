@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.ops;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.io.*;
 import java.lang.management.*;
 import java.util.*;
@@ -286,7 +288,7 @@ public class AdminProvider {
 		 * @return This object.
 		 */
 		public Builder cacheFlush(String name, Runnable hook) {
-			if (name == null || name.isBlank())
+			if (isBlank(name))
 				throw new IllegalArgumentException("Argument 'name' must not be null or blank");
 			if (hook == null)
 				throw new IllegalArgumentException("Argument 'hook' must not be null");

@@ -299,7 +299,7 @@ public class RestUtils {
 	 * @return The converted path.
 	 */
 	public static String toValidContextPath(String s) {
-		if (s == null || s.isEmpty())
+		if (isEmpty(s))
 			return "";
 		s = trimTrailingSlashes(s);
 		if (s.isEmpty())

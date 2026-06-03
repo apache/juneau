@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.tracing;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.io.*;
 import java.util.logging.*;
 
@@ -99,7 +101,7 @@ public class TraceContextResponseProcessor implements ResponseProcessor {
 
 		// NoOp short-circuit: no active tracer stashed a trace context for this request.
 		var traceparent = req.getAttribute(ATTR_TRACEPARENT).as(String.class).orElse(null);
-		if (traceparent == null || traceparent.isEmpty())
+		if (isEmpty(traceparent))
 			return NEXT;
 
 		var res = opSession.getResponse();

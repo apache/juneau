@@ -74,7 +74,7 @@ public enum TypeCategory {
 	 * @return A comma-delimited list of values into a set of {@link TypeCategory} values.
 	 */
 	public static Set<TypeCategory> parse(String s) {
-		if (s == null || s.isEmpty())
+		if (isEmpty(s))
 			return Collections.emptySet();
 		Set<TypeCategory> set = CollectionUtils.set();
 		split(s, x -> set.add(valueOf(x.toUpperCase())));
@@ -88,7 +88,7 @@ public enum TypeCategory {
 	 * @return A comma-delimited list of values into an array of {@link TypeCategory} values.
 	 */
 	public static TypeCategory[] parseArray(String s) {
-		if (s == null || s.isEmpty())
+		if (isEmpty(s))
 			return new TypeCategory[0];
 		List<TypeCategory> list = list();
 		split(s, x -> list.add(valueOf(x.toUpperCase())));

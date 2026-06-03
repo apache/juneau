@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -1010,7 +1011,7 @@ public class OidcRelyingParty {
 	 * {@code redirect} parameter).
 	 */
 	private static String safeRelativePath(String value) {
-		if (value == null || value.isBlank())
+		if (isBlank(value))
 			return null;
 		if (! value.startsWith("/"))
 			return null;

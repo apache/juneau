@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.auth.saml;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -198,7 +199,7 @@ public class SamlAuthFilter extends AuthFilter {
 		if (!matchesPath(req))
 			return Optional.empty();
 		var raw = req.getParameter(SAML_RESPONSE_PARAM);
-		if (raw == null || raw.isEmpty())
+		if (isEmpty(raw))
 			return Optional.empty();
 		var xml = decodeSamlResponse(raw);
 		var principal = runValidator(xml);

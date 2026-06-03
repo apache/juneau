@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.bean;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.util.*;
 
 /**
@@ -141,7 +143,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 			return true;
 		if (!(obj instanceof Map.Entry<?,?> other))
 			return false;
-		return Objects.equals(getKey(), other.getKey()) && Objects.equals(getValue(), other.getValue());
+		return eq(getKey(), other.getKey()) && eq(getValue(), other.getValue());
 	}
 
 	/**

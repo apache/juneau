@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.ops;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -371,7 +373,7 @@ public class EchoMixin {
 		 * @return This object.
 		 */
 		public Builder redactHeader(String value) {
-			if (value == null || value.isBlank())
+			if (isBlank(value))
 				throw new IllegalArgumentException("Argument 'value' must not be null or blank");
 			redactedHeaders.add(value);
 			return this;

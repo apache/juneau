@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.auth.jwt;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.net.*;
 import java.security.*;
@@ -462,7 +463,7 @@ public class JwtTokenValidator implements TokenValidator {
 		verifyClaims(claims);
 
 		var subject = claims.getSubject();
-		if (subject == null || subject.isBlank())
+		if (isBlank(subject))
 			subject = "<no-sub>";
 		return new ClaimsPrincipal(subject, claims.toJSONObject());
 	}
@@ -470,7 +471,7 @@ public class JwtTokenValidator implements TokenValidator {
 	private void verifyClaims(JWTClaimsSet claims) throws AuthenticationException {
 		// Required claims: iss, aud, exp, nbf are non-negotiable defaults.
 		var iss = claims.getIssuer();
-		if (iss == null || iss.isBlank())
+		if (isBlank(iss))
 			throw reject("\"iss\" claim is required");
 		if (! issuer.equals(iss))
 			throw reject("\"iss\" claim does not match expected issuer");

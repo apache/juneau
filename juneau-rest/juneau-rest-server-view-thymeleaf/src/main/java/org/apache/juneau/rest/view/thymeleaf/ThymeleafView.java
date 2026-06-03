@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.view.thymeleaf;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
@@ -87,7 +88,7 @@ public final class ThymeleafView implements View {
 	 * @throws IllegalArgumentException If {@code templateName} is {@code null} or blank.
 	 */
 	public static ThymeleafView of(String templateName) {
-		if (templateName == null || templateName.isBlank())
+		if (isBlank(templateName))
 			throw illegalArg("templateName must not be null or blank");
 		return new ThymeleafView(templateName, Map.of(), Map.of());
 	}
@@ -117,7 +118,7 @@ public final class ThymeleafView implements View {
 	 * 	is {@code null}.
 	 */
 	public ThymeleafView attr(String key, Object value) {
-		if (key == null || key.isBlank())
+		if (isBlank(key))
 			throw illegalArg("attribute key must not be null or blank");
 		if (value == null)
 			throw illegalArg("attribute value must not be null (attribute ''{0}'')", key);
@@ -141,7 +142,7 @@ public final class ThymeleafView implements View {
 			return this;
 		var copy = new LinkedHashMap<>(attributes);
 		values.forEach((k, v) -> {
-			if (k == null || k.isBlank())
+			if (isBlank(k))
 				throw illegalArg("attribute key must not be null or blank");
 			if (v == null)
 				throw illegalArg("attribute value must not be null (attribute ''{0}'')", k);
@@ -166,7 +167,7 @@ public final class ThymeleafView implements View {
 	 * 	is {@code null}.
 	 */
 	public ThymeleafView header(String name, String value) {
-		if (name == null || name.isBlank())
+		if (isBlank(name))
 			throw illegalArg("header name must not be null or blank");
 		if (value == null)
 			throw illegalArg("header value must not be null (header ''{0}'')", name);

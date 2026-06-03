@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.view.freemarker;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
@@ -125,7 +126,7 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	 * @return The template name with the configured suffix appended (if applicable).
 	 */
 	public String applyTemplateSuffix(String name) {
-		if (templateSuffix == null || templateSuffix.isEmpty())
+		if (isEmpty(templateSuffix))
 			return name;
 		if (name.endsWith(templateSuffix))
 			return name;
@@ -212,7 +213,7 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	 * 	{@code "/"}).
 	 */
 	static String toResourceRoot(String base) {
-		if (base == null || base.isBlank())
+		if (isBlank(base))
 			return "/";
 		var s = base;
 		while (s.endsWith("/") && s.length() > 1)
@@ -293,7 +294,7 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	 * 	{@code "/templates/"} and resolved {@code "/templates/hello.ftlh"}).
 	 */
 	static String stripBasePath(String base, String resolved) {
-		var bp = (base == null || base.isEmpty()) ? "/" : base;
+		var bp = isEmpty(base) ? "/" : base;
 		if (! bp.endsWith("/"))
 			bp = bp + "/";
 		if (! bp.startsWith("/"))
@@ -323,7 +324,7 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		 * @return This object.
 		 */
 		public Builder basePath(String value) {
-			basePath = (value == null || value.isBlank()) ? DEFAULT_BASE_PATH : value;
+			basePath = isBlank(value) ? DEFAULT_BASE_PATH : value;
 			return this;
 		}
 

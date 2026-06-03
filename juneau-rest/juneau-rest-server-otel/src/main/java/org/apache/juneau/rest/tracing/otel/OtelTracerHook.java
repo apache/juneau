@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.tracing.otel;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
@@ -231,7 +232,7 @@ public class OtelTracerHook implements TracerHook {
 	}
 
 	private static String defaultIfBlank(String value, String fallback) {
-		return (value == null || value.isEmpty()) ? fallback : value;
+		return isEmpty(value) ? fallback : value;
 	}
 
 	private static final class OtelScope implements Scope {

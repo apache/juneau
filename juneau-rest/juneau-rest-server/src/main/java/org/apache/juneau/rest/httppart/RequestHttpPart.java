@@ -522,7 +522,7 @@ public class RequestHttpPart {
 	public boolean equals(Object o) {
 		if (o instanceof org.apache.juneau.http.HttpPart hp)
 			return eq(getName(), hp.getName()) && eq(getValue(), hp.getValue());
-		if (o instanceof org.apache.juneau.http.HttpHeader hh)
+		if (o instanceof HttpHeader hh)
 			return eq(getName(), hh.getName()) && eq(getValue(), hh.getValue());
 		return false;
 	}

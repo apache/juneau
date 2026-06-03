@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.processor;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -250,7 +252,7 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 	}
 
 	private static boolean acceptsProblemJson(String accept) {
-		if (accept == null || accept.isEmpty())
+		if (isEmpty(accept))
 			return true;
 		return accept.contains(PROBLEM_JSON) || accept.contains("*/*");
 	}

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.sse;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
@@ -175,10 +177,10 @@ public class SseEvent {
 			return true;
 		if (!(o instanceof SseEvent o2))
 			return false;
-		return Objects.equals(event, o2.event)
-			&& Objects.equals(data, o2.data)
-			&& Objects.equals(id, o2.id)
-			&& Objects.equals(retry, o2.retry);
+		return eq(event, o2.event)
+			&& eq(data, o2.data)
+			&& eq(id, o2.id)
+			&& eq(retry, o2.retry);
 	}
 
 	@Override /* Overridden from Object */

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.auth;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.security.*;
@@ -203,7 +204,7 @@ public class AuthFilterChain implements Filter {
 		var path = (contextPath != null && !contextPath.isEmpty() && uri.startsWith(contextPath))
 			? uri.substring(contextPath.length())
 			: uri;
-		if (path == null || path.isEmpty())
+		if (isEmpty(path))
 			path = "/";
 		var urlPath = UrlPath.of(path);
 

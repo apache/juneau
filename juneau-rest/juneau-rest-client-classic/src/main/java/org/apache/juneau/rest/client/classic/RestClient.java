@@ -1216,7 +1216,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF addBeanTypes() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addBeanTypes);
+			serializers().forEach(Serializer.Builder::addBeanTypes);
 			return self();
 		}
 
@@ -1337,7 +1337,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF addRootType() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addRootType);
+			serializers().forEach(Serializer.Builder::addRootType);
 			return self();
 		}
 
@@ -1608,7 +1608,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		@Override
 		public SELF debug() {
 			super.debug();
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::debug);
+			serializers().forEach(Serializer.Builder::debug);
 			return headers(Debug.TRUE);
 		}
 
@@ -1834,7 +1834,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF detectRecursions() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::detectRecursions);
+			serializers().forEach(Serializer.Builder::detectRecursions);
 			return self();
 		}
 
@@ -2692,7 +2692,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF ignoreRecursions() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::ignoreRecursions);
+			serializers().forEach(Serializer.Builder::ignoreRecursions);
 			return self();
 		}
 
@@ -3067,7 +3067,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF keepNullProperties() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::keepNullProperties);
+			serializers().forEach(Serializer.Builder::keepNullProperties);
 			return self();
 		}
 
@@ -3716,7 +3716,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF paramFormatPlain() {
-			serializers().forEach(UonSerializer.Builder.class, org.apache.juneau.uon.UonSerializer.Builder::paramFormatPlain);
+			serializers().forEach(UonSerializer.Builder.class, UonSerializer.Builder::paramFormatPlain);
 			return self();
 		}
 
@@ -5005,7 +5005,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF sortCollections() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::sortCollections);
+			serializers().forEach(Serializer.Builder::sortCollections);
 			return self();
 		}
 
@@ -5043,7 +5043,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF sortMaps() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::sortMaps);
+			serializers().forEach(Serializer.Builder::sortMaps);
 			return self();
 		}
 
@@ -5084,7 +5084,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF sq() {
-			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::sq);
+			serializers().forEachWS(WriterSerializer.Builder::sq);
 			return self();
 		}
 
@@ -5195,7 +5195,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF trimEmptyCollections() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimEmptyCollections);
+			serializers().forEach(Serializer.Builder::trimEmptyCollections);
 			return self();
 		}
 
@@ -5239,7 +5239,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF trimEmptyMaps() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimEmptyMaps);
+			serializers().forEach(Serializer.Builder::trimEmptyMaps);
 			return self();
 		}
 
@@ -5276,7 +5276,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF trimStringsOnRead() {
-			parsers().forEach(org.apache.juneau.parser.Parser.Builder::trimStrings);
+			parsers().forEach(Parser.Builder::trimStrings);
 			return self();
 		}
 
@@ -5311,7 +5311,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF trimStringsOnWrite() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimStrings);
+			serializers().forEach(Serializer.Builder::trimStrings);
 			return self();
 		}
 
@@ -5686,7 +5686,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF useWhitespace() {
-			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::useWhitespace);
+			serializers().forEachWS(WriterSerializer.Builder::useWhitespace);
 			return self();
 		}
 
@@ -5723,7 +5723,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return This object.
 		 */
 		public SELF ws() {
-			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::ws);
+			serializers().forEachWS(WriterSerializer.Builder::ws);
 			return self();
 		}
 
