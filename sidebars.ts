@@ -2366,6 +2366,17 @@ const sidebars: SidebarsConfig = {
 			items: [
 				{
 					type: 'category',
+					label: 'Version 10.x',
+					items: [
+						{
+							type: 'doc',
+							id: 'release-notes/10.0.0',
+							label: '10.0.0',
+						},
+					],
+				},
+				{
+					type: 'category',
 					label: 'Version 9.x',
 					items: [
 						{

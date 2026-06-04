@@ -69,7 +69,7 @@ Apache Juneau™ excels in the following scenarios:
 <dependency>
     <groupId>org.apache.juneau</groupId>
     <artifactId>juneau-shaded-all</artifactId>
-    <version>9.5.0</version>
+    <version>10.0.0</version>
 </dependency>
 ```
 
